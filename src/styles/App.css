@@ -1,0 +1,50 @@
+/* Global Styles for VietEdu Light Theme (Updated Fonts: Sora & Inter) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-viet-green: #76c034;
+  --color-viet-bg: #fffbf0;
+  --color-viet-border: #e8e8e8;
+  --color-viet-text: #1a1a1a;
+  --color-viet-text-light: #666666;
+  --font-sora: "Sora", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+body {
+  font-family: var(--font-inter);
+  background-color: var(--color-viet-bg);
+  color: var(--color-viet-text);
+  overflow-x: hidden;
+}
+
+/* Global Heading Rule: All titles use Sora */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sora);
+}
+
+.viet-btn-green {
+  @apply px-6 py-3 rounded-2xl bg-viet-green text-white font-black uppercase tracking-tight
+         transition-all hover:scale-105 active:scale-95 shadow-lg shadow-viet-green/20;
+  font-family: var(--font-sora);
+}
+
+.viet-card {
+  @apply bg-white rounded-[32px] border border-viet-border p-8 shadow-sm transition-all
+         hover:shadow-xl hover:border-viet-green/20;
+}
+
+.mask-fade-right {
+  mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
+
+.nav-link {
+  @apply px-4 py-2 rounded-xl text-[13px] font-black uppercase tracking-widest text-viet-text-light
+         transition-all hover:text-viet-green hover:bg-viet-green/5 flex items-center gap-2;
+  font-family: var(--font-sora);
+}
+
+.nav-link-active {
+  @apply bg-viet-green/10 text-viet-green;
+}
