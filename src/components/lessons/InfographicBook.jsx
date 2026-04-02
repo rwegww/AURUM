@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import InfographicPage from './InfographicPage';
+import { useAuth } from '@/context/AuthContext';
 
-const InfographicBook = ({ isOpen, onClose, lessons, grade }) => {
+const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) => {
+  const { user } = useAuth();
   const [currentPage, setCurrentPage] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -94,7 +96,11 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade }) => {
                 exit="exit"
                 className="w-full max-w-3xl h-full shadow-[20px_40px_100px_rgba(0,0,0,0.5)] rounded-[40px] preserve-3d"
               >
-                 <InfographicPage lesson={currentLesson} pageNumber={currentPage + 1} />
+                 <InfographicPage 
+                   lesson={currentLesson} 
+                   pageNumber={currentPage + 1} 
+                   isCompleted={user?.role === 'admin' || user?.role === 'teacher' || (unlockedLessons && unlockedLessons.includes(currentLesson.lessonId))}
+                 />
               </motion.div>
             </AnimatePresence>
 

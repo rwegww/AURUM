@@ -54,7 +54,8 @@ BEGIN
     COALESCE(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'username', split_part(new.email, '@', 1)),
     new.email,
     COALESCE(new.raw_user_meta_data->>'role', 'student')
-  );
+  )
+  ON CONFLICT (id) DO NOTHING; -- Prevent duplicate errors
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

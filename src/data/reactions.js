@@ -1,11 +1,13 @@
 // Cơ sở dữ liệu phản ứng hóa học phổ thông (Lớp 8-12)
-// Mỗi phản ứng bao gồm: chất tham gia, sản phẩm, hệ số, điều kiện, loại, hiện tượng
+// Đồng bộ từ cơ sở dữ liệu dự án KL
+// Bổ sung: Năng lượng phản ứng, hiệu ứng hoạt ảnh, điều kiện mở khóa và phần thưởng
 
 export const reactions = [
   // === LỚP 8 ===
   {
     id: "rx_001",
-    name: "Đốt cháy Hydro trong Oxy",
+    name: "Tổng hợp nước (Đốt cháy H₂)",
+    type: "combination",
     reactants: [
       { formula: "H₂", coeff: 2, name: "Khí Hydro" },
       { formula: "O₂", coeff: 1, name: "Khí Oxy" }
@@ -13,16 +15,18 @@ export const reactions = [
     products: [
       { formula: "H₂O", coeff: 2, name: "Nước" }
     ],
-    type: "combination",
-    conditions: "Đốt cháy",
-    observation: "Ngọn lửa xanh nhạt cháy sáng. Hơi nước ngưng tụ thành giọt trên thành ống nghiệm.",
     equation: "2H₂ + O₂ → 2H₂O",
     gradeLevel: 8,
-    category: "Phi kim"
+    category: "Phi kim",
+    conditions: "Đốt cháy hoặc tia lửa điện",
+    observation: "Ngọn lửa xanh nhạt, tiếng nổ nhẹ. Hơi nước ngưng tụ trên thành ống nghiệm.",
+    energy: -571.66, // kJ/mol (tỏa nhiệt mạnh)
+    animation: "explosion"
   },
   {
     id: "rx_002",
     name: "Đốt cháy Sắt trong Oxy",
+    type: "combination",
     reactants: [
       { formula: "Fe", coeff: 3, name: "Sắt" },
       { formula: "O₂", coeff: 2, name: "Khí Oxy" }
@@ -30,16 +34,18 @@ export const reactions = [
     products: [
       { formula: "Fe₃O₄", coeff: 1, name: "Oxit sắt từ" }
     ],
-    type: "combination",
-    conditions: "Đốt cháy trong bình chứa O₂",
-    observation: "Sắt cháy sáng chói, tóe các tia lửa sáng. Tạo ra các hạt nóng chảy màu nâu đen.",
     equation: "3Fe + 2O₂ → Fe₃O₄",
     gradeLevel: 8,
-    category: "Kim loại"
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao (t°)",
+    observation: "Sắt cháy sáng chói, không có ngọn lửa, tóe các tia lửa sáng.",
+    energy: -1118.4,
+    animation: "burn"
   },
   {
     id: "rx_003",
-    name: "Phản ứng Kẽm với Axit Clohidric",
+    name: "Kẽm tác dụng với Axit Clohidric",
+    type: "single-replacement",
     reactants: [
       { formula: "Zn", coeff: 1, name: "Kẽm" },
       { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
@@ -48,33 +54,37 @@ export const reactions = [
       { formula: "ZnCl₂", coeff: 1, name: "Kẽm Clorua" },
       { formula: "H₂", coeff: 1, name: "Khí Hydro" }
     ],
-    type: "single-replacement",
-    conditions: "Nhiệt độ thường",
-    observation: "Viên kẽm tan dần. Bọt khí sủi lên mạnh (H₂). Dung dịch trong suốt.",
     equation: "Zn + 2HCl → ZnCl₂ + H₂↑",
     gradeLevel: 8,
-    category: "Kim loại"
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Viên kẽm tan dần, bọt khí không màu thoát ra mạnh mẽ.",
+    energy: -153.89,
+    animation: "fizz"
   },
   {
     id: "rx_004",
     name: "Nung đá vôi (Phân hủy CaCO₃)",
+    type: "decomposition",
     reactants: [
-      { formula: "CaCO₃", coeff: 1, name: "Canxi Cacbonat (Đá vôi)" }
+      { formula: "CaCO₃", coeff: 1, name: "Đá vôi" }
     ],
     products: [
-      { formula: "CaO", coeff: 1, name: "Canxi Oxit (Vôi sống)" },
+      { formula: "CaO", coeff: 1, name: "Vôi sống" },
       { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" }
     ],
-    type: "decomposition",
-    conditions: "Nhiệt độ cao (~900°C)",
-    observation: "Đá vôi chuyển thành bite trắng bite xốp (vôi sống). Khí CO₂ thoát ra.",
     equation: "CaCO₃ →(t°) CaO + CO₂↑",
     gradeLevel: 8,
-    category: "Oxit"
+    category: "Oxit",
+    conditions: "Nhiệt độ cao (~900°C)",
+    observation: "Đá vôi chuyển thành bite trắng bite xốp. Khí thoát ra làm đục nước vôi trong.",
+    energy: 178.3, // Thu nhiệt
+    animation: "smoke"
   },
   {
     id: "rx_005",
-    name: "Natri tác dụng với nước",
+    name: "Natri phản ứng với nước",
+    type: "single-replacement",
     reactants: [
       { formula: "Na", coeff: 2, name: "Natri" },
       { formula: "H₂O", coeff: 2, name: "Nước" }
@@ -83,35 +93,59 @@ export const reactions = [
       { formula: "NaOH", coeff: 2, name: "Natri Hidroxit" },
       { formula: "H₂", coeff: 1, name: "Khí Hydro" }
     ],
-    type: "single-replacement",
-    conditions: "Nhiệt độ thường",
-    observation: "Natri chạy trên mặt nước, tan nhanh. Có tiếng xì xì, bốc khói. Dung dịch chuyển hồng với phenolphtalein.",
     equation: "2Na + 2H₂O → 2NaOH + H₂↑",
     gradeLevel: 8,
-    category: "Kim loại kiềm"
+    category: "Kim loại kiềm",
+    conditions: "Nhiệt độ thường",
+    observation: "Natri nóng chảy thành viên tròn chạy trên mặt nước, tan nhanh và bốc khói.",
+    energy: -368.6,
+    animation: "mix"
   },
   // === LỚP 9 ===
   {
     id: "rx_006",
-    name: "Trung hòa: NaOH + HCl",
+    name: "Phản ứng trung hòa Axit-Bazơ",
+    type: "double-replacement",
     reactants: [
-      { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" },
-      { formula: "HCl", coeff: 1, name: "Axit Clohidric" }
+      { formula: "HCl", coeff: 1, name: "Axit Clohidric" },
+      { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "NaCl", coeff: 1, name: "Natri Clorua (Muối ăn)" },
+      { formula: "NaCl", coeff: 1, name: "Natri Clorua" },
       { formula: "H₂O", coeff: 1, name: "Nước" }
     ],
-    type: "double-replacement",
-    conditions: "Nhiệt độ thường",
-    observation: "Không có hiện tượng rõ rệt. Dung dịch từ kiềm chuyển trung tính (pH = 7).",
-    equation: "NaOH + HCl → NaCl + H₂O",
+    equation: "HCl + NaOH → NaCl + H₂O",
     gradeLevel: 9,
-    category: "Axit - Bazơ"
+    category: "Axit - Bazơ",
+    conditions: "Nhiệt độ thường",
+    observation: "Phản ứng tỏa nhiệt. Nếu có chỉ thị màu sẽ thấy sự đổi màu dung dịch.",
+    energy: -57.32,
+    animation: "mix"
   },
   {
     id: "rx_007",
-    name: "Phản ứng tạo kết tủa: BaCl₂ + Na₂SO₄",
+    name: "Sắt đẩy Đồng ra khỏi muối",
+    type: "single-replacement",
+    reactants: [
+      { formula: "Fe", coeff: 1, name: "Sắt" },
+      { formula: "CuSO₄", coeff: 1, name: "Đồng(II) Sunfat" }
+    ],
+    products: [
+      { formula: "FeSO₄", coeff: 1, name: "Sắt(II) Sunfat" },
+      { formula: "Cu", coeff: 1, name: "Đồng" }
+    ],
+    equation: "Fe + CuSO₄ → FeSO₄ + Cu↓",
+    gradeLevel: 9,
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Một lớp kim loại màu đỏ (Cu) bám ngoài đinh sắt. Dung dịch xanh lam nhạt dần.",
+    energy: -149.7,
+    animation: "color-change"
+  },
+  {
+    id: "rx_008",
+    name: "Phản ứng tạo kết tủa Trắng",
+    type: "double-replacement",
     reactants: [
       { formula: "BaCl₂", coeff: 1, name: "Bari Clorua" },
       { formula: "Na₂SO₄", coeff: 1, name: "Natri Sunfat" }
@@ -120,146 +154,159 @@ export const reactions = [
       { formula: "BaSO₄", coeff: 1, name: "Bari Sunfat" },
       { formula: "NaCl", coeff: 2, name: "Natri Clorua" }
     ],
-    type: "double-replacement",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa trắng BaSO₄ không tan trong nước và axit.",
     equation: "BaCl₂ + Na₂SO₄ → BaSO₄↓ + 2NaCl",
     gradeLevel: 9,
-    category: "Muối"
-  },
-  {
-    id: "rx_008",
-    name: "Sắt + Dung dịch CuSO₄",
-    reactants: [
-      { formula: "Fe", coeff: 1, name: "Sắt" },
-      { formula: "CuSO₄", coeff: 1, name: "Đồng Sunfat" }
-    ],
-    products: [
-      { formula: "FeSO₄", coeff: 1, name: "Sắt (II) Sunfat" },
-      { formula: "Cu", coeff: 1, name: "Đồng" }
-    ],
-    type: "single-replacement",
+    category: "Muối",
     conditions: "Nhiệt độ thường",
-    observation: "Đinh sắt phủ lớp đồng đỏ. Dung dịch từ xanh lam nhạt dần.",
-    equation: "Fe + CuSO₄ → FeSO₄ + Cu",
-    gradeLevel: 9,
-    category: "Kim loại"
+    observation: "Xuất hiện kết tủa trắng (BaSO₄) lắng xuống đáy ống nghiệm.",
+    energy: -24.5,
+    animation: "precipitation"
   },
-  // === LỚP 10 ===
+  // === LỚP 10-12 ===
   {
     id: "rx_009",
-    name: "Đốt cháy Lưu huỳnh",
+    name: "Tổng hợp Amoniac (Haber)",
+    type: "combination",
     reactants: [
-      { formula: "S", coeff: 1, name: "Lưu huỳnh" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+      { formula: "N₂", coeff: 1, name: "Khí Nitơ" },
+      { formula: "H₂", coeff: 3, name: "Khí Hydro" }
     ],
     products: [
-      { formula: "SO₂", coeff: 1, name: "Khí Lưu huỳnh Dioxit" }
+      { formula: "NH₃", coeff: 2, name: "Amoniac" }
     ],
-    type: "combination",
-    conditions: "Đốt cháy",
-    observation: "Lưu huỳnh cháy với ngọn lửa xanh lam. Mùi hắc khó chịu.",
-    equation: "S + O₂ → SO₂",
+    equation: "N₂ + 3H₂ ⇌ 2NH₃",
     gradeLevel: 10,
-    category: "Phi kim"
+    category: "Phi kim",
+    conditions: "450-500°C, 200atm, xúc tác Fe",
+    observation: "Khí tạo thành có mùi khai đặc trưng.",
+    energy: -92.4,
+    animation: "synthesis"
   },
   {
     id: "rx_010",
-    name: "Phản ứng giữa MnO₂ và HCl đặc",
-    reactants: [
-      { formula: "MnO₂", coeff: 1, name: "Mangan Dioxit" },
-      { formula: "HCl", coeff: 4, name: "Axit Clohidric đặc" }
-    ],
-    products: [
-      { formula: "MnCl₂", coeff: 1, name: "Mangan Clorua" },
-      { formula: "Cl₂", coeff: 1, name: "Khí Clo" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
-    ],
-    type: "redox",
-    conditions: "Đun nóng",
-    observation: "Khí vàng lục (Cl₂) thoát ra, mùi hắc. Dung dịch chuyển màu.",
-    equation: "MnO₂ + 4HCl(đặc) →(t°) MnCl₂ + Cl₂↑ + 2H₂O",
-    gradeLevel: 10,
-    category: "Halogen"
-  },
-  // === LỚP 11 ===
-  {
-    id: "rx_011",
     name: "Phản ứng cháy Metan",
+    type: "combustion",
     reactants: [
-      { formula: "CH₄", coeff: 1, name: "Metan" },
+      { formula: "CH₄", coeff: 1, name: "Khí Metan" },
       { formula: "O₂", coeff: 2, name: "Khí Oxy" }
     ],
     products: [
       { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" },
       { formula: "H₂O", coeff: 2, name: "Nước" }
     ],
-    type: "combustion",
-    conditions: "Đốt cháy",
-    observation: "Ngọn lửa xanh nhạt. Hơi nước ngưng tụ. Nước vôi trong vẩn đục.",
     equation: "CH₄ + 2O₂ → CO₂ + 2H₂O",
     gradeLevel: 11,
-    category: "Hữu cơ"
+    category: "Hữu cơ",
+    conditions: "Đốt cháy",
+    observation: "Ngọn lửa xanh nhẹ tỏa nhiều nhiệt. Làm đục nước vôi trong.",
+    energy: -890.3,
+    animation: "burn"
+  },
+  {
+    id: "rx_011",
+    name: "Tổng hợp Axit Clohidric",
+    type: "combination",
+    reactants: [
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" },
+      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
+    ],
+    products: [
+      { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
+    ],
+    equation: "H₂ + Cl₂ → 2HCl",
+    gradeLevel: 8,
+    category: "Axit",
+    conditions: "Ánh sáng hoặc Nhiệt độ",
+    observation: "Hỗn hợp khí nổ nhẹ (nếu tỉ lệ 1:1), tạo khói trắng.",
+    energy: -184.6,
+    animation: "fizz",
+    requiresHeat: true
   },
   {
     id: "rx_012",
-    name: "Etanol + Natri",
+    name: "Phân hủy thuốc tím (KMnO₄)",
+    type: "decomposition",
     reactants: [
-      { formula: "C₂H₅OH", coeff: 2, name: "Rượu Etylic (Etanol)" },
-      { formula: "Na", coeff: 2, name: "Natri" }
+      { formula: "KMnO₄", coeff: 2, name: "Kali Pemanganat" }
     ],
     products: [
-      { formula: "C₂H₅ONa", coeff: 2, name: "Natri Etylat" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "K₂MnO₄", coeff: 1, name: "Kali Manganat" },
+      { formula: "MnO₂", coeff: 1, name: "Mangan Đioxit" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
     ],
-    type: "single-replacement",
-    conditions: "Nhiệt độ thường",
-    observation: "Na tan dần trong rượu. Khí H₂ sủi bọt nhẹ.",
-    equation: "2C₂H₅OH + 2Na → 2C₂H₅ONa + H₂↑",
-    gradeLevel: 11,
-    category: "Hữu cơ"
+    equation: "2KMnO₄ →(t°) K₂MnO₄ + MnO₂ + O₂↑",
+    gradeLevel: 9,
+    category: "Muối",
+    conditions: "Nhiệt độ cao (t°)",
+    observation: "Chất rắn màu tím đen phân hủy thành bột màu xanh đen và khí làm que đốm bùng sáng.",
+    energy: 50,
+    animation: "smoke",
+    requiresHeat: true
   },
-  // === LỚP 12 ===
   {
     id: "rx_013",
-    name: "Điện phân dung dịch NaCl",
+    name: "Nhiệt phân Kali Clorat",
+    type: "decomposition",
     reactants: [
-      { formula: "NaCl", coeff: 2, name: "Natri Clorua" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "KClO₃", coeff: 2, name: "Kali Clorat" }
     ],
     products: [
-      { formula: "Cl₂", coeff: 1, name: "Khí Clo" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" },
-      { formula: "NaOH", coeff: 2, name: "Natri Hidroxit" }
+      { formula: "KCl", coeff: 2, name: "Kali Clorua" },
+      { formula: "O₂", coeff: 3, name: "Khí Oxy" }
     ],
-    type: "electrolysis",
-    conditions: "Điện phân dung dịch (có màng ngăn)",
-    observation: "Khí vàng lục (Cl₂) ở anod. Khí không màu (H₂) ở catod. DD kiềm tạo thành.",
-    equation: "2NaCl + 2H₂O →(đp) Cl₂↑ + H₂↑ + 2NaOH",
-    gradeLevel: 12,
-    category: "Điện hóa"
+    equation: "2KClO₃ →(t°, MnO₂) 2KCl + 3O₂↑",
+    gradeLevel: 10,
+    category: "Muối",
+    conditions: "Nhiệt độ cao, xúc tác MnO₂",
+    observation: "Chất rắn chảy lỏng, bọt khí thoát ra mạnh mẽ làm que đốm cháy sáng.",
+    energy: -45,
+    animation: "fizz",
+    requiresHeat: true
   },
   {
     id: "rx_014",
-    name: "Thủy phân Saccarozơ",
+    name: "Sắt tác dụng với Lưu huỳnh",
+    type: "combination",
     reactants: [
-      { formula: "C₁₂H₂₂O₁₁", coeff: 1, name: "Saccarozơ (Đường)" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Fe", coeff: 1, name: "Sắt" },
+      { formula: "S", coeff: 1, name: "Lưu huỳnh" }
     ],
     products: [
-      { formula: "C₆H₁₂O₆", coeff: 1, name: "Glucozơ" },
-      { formula: "C₆H₁₂O₆", coeff: 1, name: "Fructozơ" }
+      { formula: "FeS", coeff: 1, name: "Sắt(II) Sunfua" }
     ],
-    type: "hydrolysis",
-    conditions: "Axit H₂SO₄ loãng, đun nóng",
-    observation: "Dung dịch đường tan hoàn toàn. Sản phẩm tạo kết tủa đỏ gạch với Cu(OH)₂ khi đun nóng.",
-    equation: "C₁₂H₂₂O₁₁ + H₂O →(H⁺,t°) C₆H₁₂O₆ + C₆H₁₂O₆",
-    gradeLevel: 12,
-    category: "Hữu cơ"
+    equation: "Fe + S →(t°) FeS",
+    gradeLevel: 8,
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao (t°)",
+    observation: "Hỗn hợp cháy sáng mạnh, tạo chất rắn màu xám đen.",
+    energy: -100,
+    animation: "burn",
+    requiresHeat: true
   },
   {
     id: "rx_015",
-    name: "Đốt cháy Magiê",
+    name: "Tổng hợp Hydro Sunfua",
+    type: "combination",
+    reactants: [
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" },
+      { formula: "S", coeff: 1, name: "Lưu huỳnh" }
+    ],
+    products: [
+      { formula: "H₂S", coeff: 1, name: "Hydro Sunfua" }
+    ],
+    equation: "H₂ + S →(t°) H₂S",
+    gradeLevel: 10,
+    category: "Phi kim",
+    conditions: "Nhiệt độ cao (350-400°C)",
+    observation: "Khí tạo thành có mùi trứng thối đặc trưng.",
+    energy: -20,
+    animation: "fizz",
+    requiresHeat: true
+  },
+  {
+    id: "rx_016",
+    name: "Magiê cháy trong Oxy",
+    type: "combination",
     reactants: [
       { formula: "Mg", coeff: 2, name: "Magiê" },
       { formula: "O₂", coeff: 1, name: "Khí Oxy" }
@@ -267,82 +314,108 @@ export const reactions = [
     products: [
       { formula: "MgO", coeff: 2, name: "Magiê Oxit" }
     ],
-    type: "combination",
-    conditions: "Đốt cháy",
-    observation: "Ngọn lửa trắng sáng chói. Tạo bột trắng MgO.",
-    equation: "2Mg + O₂ → 2MgO",
+    equation: "2Mg + O₂ →(t°) 2MgO",
     gradeLevel: 8,
-    category: "Kim loại"
+    category: "Kim loại",
+    conditions: "Đốt cháy",
+    observation: "Magiê cháy sáng chói với ngọn lửa trắng, tạo bột trắng (MgO).",
+    energy: -601,
+    animation: "burn",
+    requiresHeat: true
   },
   {
-    id: "rx_016",
-    name: "Axit Sunfuric + Đồng Oxit",
+    id: "rx_017",
+    name: "Natri cháy trong Clo",
+    type: "combination",
     reactants: [
-      { formula: "H₂SO₄", coeff: 1, name: "Axit Sunfuric" },
-      { formula: "CuO", coeff: 1, name: "Đồng (II) Oxit" }
+      { formula: "Na", coeff: 2, name: "Natri" },
+      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
     ],
     products: [
-      { formula: "CuSO₄", coeff: 1, name: "Đồng Sunfat" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "NaCl", coeff: 2, name: "Natri Clorua" }
     ],
-    type: "double-replacement",
-    conditions: "Đun nóng nhẹ",
-    observation: "Bột CuO đen tan dần. Dung dịch chuyển sang màu xanh lam đặc trưng.",
-    equation: "H₂SO₄ + CuO → CuSO₄ + H₂O",
-    gradeLevel: 9,
-    category: "Axit - Bazơ"
+    equation: "2Na + Cl₂ →(t°) 2NaCl",
+    gradeLevel: 10,
+    category: "Halogen",
+    conditions: "Nhiệt độ cao",
+    observation: "Natri nóng chảy và cháy trong khí clo với ngọn lửa vàng chói, tạo tinh thể muối trắng.",
+    energy: -411,
+    animation: "smoke",
+    requiresHeat: true
   },
 ];
 
-// Danh sách hóa chất đơn có sẵn để chọn
+// Danh sách hóa chất khả dụng trong Lab
 export const chemicals = [
-  { formula: "H₂", name: "Khí Hydro", state: "gas", category: "Phi kim" },
-  { formula: "O₂", name: "Khí Oxy", state: "gas", category: "Phi kim" },
-  { formula: "N₂", name: "Khí Nitơ", state: "gas", category: "Phi kim" },
-  { formula: "Cl₂", name: "Khí Clo", state: "gas", category: "Halogen" },
-  { formula: "S", name: "Lưu huỳnh", state: "solid", category: "Phi kim" },
-  { formula: "C", name: "Cacbon", state: "solid", category: "Phi kim" },
-  { formula: "Fe", name: "Sắt", state: "solid", category: "Kim loại" },
-  { formula: "Na", name: "Natri", state: "solid", category: "Kim loại kiềm" },
-  { formula: "Mg", name: "Magiê", state: "solid", category: "Kim loại" },
-  { formula: "Zn", name: "Kẽm", state: "solid", category: "Kim loại" },
-  { formula: "Cu", name: "Đồng", state: "solid", category: "Kim loại" },
-  { formula: "Al", name: "Nhôm", state: "solid", category: "Kim loại" },
-  { formula: "Ca", name: "Canxi", state: "solid", category: "Kim loại" },
-  { formula: "H₂O", name: "Nước", state: "liquid", category: "Dung môi" },
-  { formula: "HCl", name: "Axit Clohidric", state: "liquid", category: "Axit" },
-  { formula: "H₂SO₄", name: "Axit Sunfuric", state: "liquid", category: "Axit" },
-  { formula: "NaOH", name: "Natri Hidroxit", state: "solid", category: "Bazơ" },
-  { formula: "CaCO₃", name: "Đá vôi", state: "solid", category: "Muối" },
-  { formula: "CuO", name: "Đồng (II) Oxit", state: "solid", category: "Oxit" },
-  { formula: "MnO₂", name: "Mangan Dioxit", state: "solid", category: "Oxit" },
-  { formula: "CuSO₄", name: "Đồng Sunfat", state: "solid", category: "Muối" },
-  { formula: "BaCl₂", name: "Bari Clorua", state: "solid", category: "Muối" },
-  { formula: "Na₂SO₄", name: "Natri Sunfat", state: "solid", category: "Muối" },
-  { formula: "NaCl", name: "Natri Clorua", state: "solid", category: "Muối" },
-  { formula: "CH₄", name: "Metan", state: "gas", category: "Hữu cơ" },
-  { formula: "C₂H₅OH", name: "Rượu Etylic", state: "liquid", category: "Hữu cơ" },
-  { formula: "C₁₂H₂₂O₁₁", name: "Saccarozơ", state: "solid", category: "Hữu cơ" },
+  { id: "H2", formula: "H₂", name: "Khí Hydro", state: "gas", category: "Phi kim", molarMass: 2.016, color: "#e2e8f0", isStarter: true },
+  { id: "O2", formula: "O₂", name: "Khí Oxy", state: "gas", category: "Phi kim", molarMass: 31.998, color: "#cbd5e1", isStarter: true },
+  { id: "N2", formula: "N₂", name: "Khí Nitơ", state: "gas", category: "Phi kim", molarMass: 28.014, color: "#f8fafc", isStarter: true },
+  { id: "Cl2", formula: "Cl₂", name: "Khí Clo", state: "gas", category: "Halogen", molarMass: 70.90, color: "#bef264", isStarter: true },
+  { id: "Fe", formula: "Fe", name: "Sắt", state: "solid", category: "Kim loại", molarMass: 55.845, color: "#94a3b8", isStarter: true },
+  { id: "Na", formula: "Na", name: "Natri", state: "solid", category: "Kim loại kiềm", molarMass: 22.99, color: "#e2e8f0", isStarter: true },
+  { id: "Mg", formula: "Mg", name: "Magiê", state: "solid", category: "Kim loại", molarMass: 24.305, color: "#cbd5e1", isStarter: true },
+  { id: "Zn", formula: "Zn", name: "Kẽm", state: "solid", category: "Kim loại", molarMass: 65.38, color: "#94a3b8", isStarter: true },
+  { id: "Cu", formula: "Cu", name: "Đồng", state: "solid", category: "Kim loại", molarMass: 63.546, color: "#f97316", isStarter: true },
+  { id: "H2O", formula: "H₂O", name: "Nước", state: "liquid", category: "Dung môi", molarMass: 18.015, color: "#38bdf8" },
+  { id: "HCl", formula: "HCl", name: "Axit Clohidric", state: "liquid", category: "Axit", molarMass: 36.46, color: "#f87171" },
+  { id: "NaOH", formula: "NaOH", name: "Natri Hidroxit", state: "solid", category: "Bazơ", molarMass: 40.00, color: "#818cf8" },
+  { id: "CuSO4", formula: "CuSO₄", name: "Đồng(II) Sunfat", state: "solid", category: "Muối", molarMass: 159.61, color: "#3b82f6" },
+  { id: "BaCl2", formula: "BaCl₂", name: "Bari Clorua", state: "solid", category: "Muối", molarMass: 208.23, color: "#f1f5f9" },
+  { id: "Na2SO4", formula: "Na₂SO₄", name: "Natri Sunfat", state: "solid", category: "Muối", molarMass: 142.04, color: "#f8fafc" },
+  { id: "CaCO3", formula: "CaCO₃", name: "Đá vôi", state: "solid", category: "Muối", molarMass: 100.09, color: "#e2e8f0" },
+  { id: "CH4", formula: "CH₄", name: "Khí Metan", state: "gas", category: "Hữu cơ", molarMass: 16.04, color: "#f1f5f9" },
+  { id: "KMnO4", formula: "KMnO₄", name: "Thuốc tím", state: "solid", category: "Muối", molarMass: 158.03, color: "#4c1d95", isStarter: true },
+  { id: "KClO3", formula: "KClO₃", name: "Kali Clorat", state: "solid", category: "Muối", molarMass: 122.55, color: "#f8fafc" },
+  { id: "MnO2", formula: "MnO₂", name: "Mangan Đioxit", state: "solid", category: "Oxit", molarMass: 86.93, color: "#1e293b" },
+  { id: "S", formula: "S", name: "Lưu huỳnh", state: "solid", category: "Phi kim", molarMass: 32.06, color: "#eab308", isStarter: true },
+  { id: "FeS", formula: "FeS", name: "Sắt(II) Sunfua", state: "solid", category: "Muối", molarMass: 87.91, color: "#475569" },
+  { id: "H2S", formula: "H₂S", name: "Hydro Sunfua", state: "gas", category: "Phi kim", molarMass: 34.08, color: "#f1f5f9" },
+  { id: "MgO", formula: "MgO", name: "Magiê Oxit", state: "solid", category: "Oxit", molarMass: 40.30, color: "#f8fafc" },
 ];
 
-// Tìm phản ứng giữa 2 chất
-export const findReaction = (chem1, chem2) => {
+// Hệ thống điều kiện mở khóa (Gamification)
+export const unlockRequirements = {
+  chemicals: {
+    'H2O': { level: 1, required: [] },
+    'HCl': { level: 1, required: [] },
+    'NaOH': { level: 1, required: [] },
+    'O2': { level: 2, required: [] },
+    'H2': { level: 2, required: [] },
+    'Fe': { level: 3, required: [] },
+    'CuSO4': { level: 4, required: [] },
+    'Na': { level: 5, required: ['rx_001'] },
+  },
+  reactions: {
+    'rx_001': { level: 2, requiredChemicals: ['H2', 'O2'] },
+    'rx_006': { level: 1, requiredChemicals: ['HCl', 'NaOH'] },
+    'rx_007': { level: 3, requiredChemicals: ['Fe', 'CuSO4'] },
+  }
+};
+
+// Tìm phản ứng giữa các chất tham gia
+export const findReaction = (reactantFormulas, isHeating = false) => {
+  if (!reactantFormulas || reactantFormulas.length === 0) return null;
+  
+  // Clean nulls from A/B selection
+  const formulas = reactantFormulas.filter(f => f !== null && f !== undefined);
+  
   return reactions.find(rx => {
-    const reactantFormulas = rx.reactants.map(r => r.formula);
-    return (
-      (reactantFormulas.includes(chem1) && reactantFormulas.includes(chem2)) ||
-      (reactantFormulas.length === 1 && reactantFormulas.includes(chem1)) ||
-      (reactantFormulas.length === 1 && reactantFormulas.includes(chem2))
-    );
+    const rxReactantFormulas = rx.reactants.map(r => r.formula);
+    
+    // Match number of reactants
+    if (rxReactantFormulas.length !== formulas.length) return false;
+    
+    // Match exact formulas
+    const matchReactants = formulas.every(f => rxReactantFormulas.includes(f));
+    
+    // Check heat condition if required
+    if (rx.requiresHeat && !isHeating) return false;
+    
+    return matchReactants;
   });
 };
 
-// Lọc phản ứng theo lớp
-export const getReactionsByGrade = (grade) => {
-  return reactions.filter(rx => rx.gradeLevel === grade);
-};
-
-// Loại phản ứng
+// Loại phản ứng (Tiếng Việt)
 export const reactionTypes = {
   "combination": "Phản ứng hóa hợp",
   "decomposition": "Phản ứng phân hủy",
@@ -350,6 +423,4 @@ export const reactionTypes = {
   "double-replacement": "Phản ứng trao đổi",
   "combustion": "Phản ứng cháy",
   "redox": "Phản ứng oxi hóa-khử",
-  "electrolysis": "Phản ứng điện phân",
-  "hydrolysis": "Phản ứng thủy phân",
 };

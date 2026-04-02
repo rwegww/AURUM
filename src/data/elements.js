@@ -2,7 +2,7 @@ export const elements = [
   {
     "number": 1,
     "symbol": "H",
-    "name": "Hydro",
+    "name": "Hiđro",
     "weight": "1.008",
     "category": "diatomic-nonmetal",
     "x": 1,
@@ -10,25 +10,25 @@ export const elements = [
     "shells": [
       1
     ],
-    "desc": "Nguyên tố số 1 trong bảng tuần hoàn."
+    "desc": "Nguyên tố nhẹ nhất và phổ biến nhất trong vũ trụ. Thành phần chính của nước."
   },
   {
     "number": 2,
     "symbol": "He",
     "name": "Heli",
-    "weight": "4.0026",
+    "weight": "4.003",
     "category": "noble-gas",
     "x": 18,
     "y": 1,
     "shells": [
       2
     ],
-    "desc": "Nguyên tố số 2 trong bảng tuần hoàn."
+    "desc": "Khí trơ, nhẹ thứ hai sau Hydro. Phát hiện trên mặt trời trước khi tìm thấy trên Trái Đất."
   },
   {
     "number": 3,
     "symbol": "Li",
-    "name": "Lithi",
+    "name": "Liti",
     "weight": "6.94",
     "category": "alkali-metal",
     "x": 1,
@@ -37,13 +37,13 @@ export const elements = [
       2,
       1
     ],
-    "desc": "Nguyên tố số 3 trong bảng tuần hoàn."
+    "desc": "Kim loại kiềm nhẹ nhất, mềm và có màu bạc."
   },
   {
     "number": 4,
     "symbol": "Be",
-    "name": "Beryli",
-    "weight": "9.0122",
+    "name": "Beri",
+    "weight": "9.012",
     "category": "alkaline-earth-metal",
     "x": 2,
     "y": 2,
@@ -51,12 +51,12 @@ export const elements = [
       2,
       2
     ],
-    "desc": "Nguyên tố số 4 trong bảng tuần hoàn."
+    "desc": "Kim loại kiềm thổ nhẹ, cứng, màu xám thép."
   },
   {
     "number": 5,
     "symbol": "B",
-    "name": "Bor",
+    "name": "Bo",
     "weight": "10.81",
     "category": "metalloid",
     "x": 13,
@@ -65,13 +65,13 @@ export const elements = [
       2,
       3
     ],
-    "desc": "Nguyên tố số 5 trong bảng tuần hoàn."
+    "desc": "Á kim cứng, màu đen, có tính bán dẫn."
   },
   {
     "number": 6,
     "symbol": "C",
     "name": "Cacbon",
-    "weight": "12.011",
+    "weight": "12.01",
     "category": "polyatomic-nonmetal",
     "x": 14,
     "y": 2,
@@ -79,13 +79,13 @@ export const elements = [
       2,
       4
     ],
-    "desc": "Nguyên tố số 6 trong bảng tuần hoàn."
+    "desc": "Nguyên tố cơ bản của sự sống trên Trái Đất."
   },
   {
     "number": 7,
     "symbol": "N",
     "name": "Nitơ",
-    "weight": "14.007",
+    "weight": "14.01",
     "category": "diatomic-nonmetal",
     "x": 15,
     "y": 2,
@@ -93,13 +93,13 @@ export const elements = [
       2,
       5
     ],
-    "desc": "Nguyên tố số 7 trong bảng tuần hoàn."
+    "desc": "Khí chiếm 78% khí quyển Trái Đất."
   },
   {
     "number": 8,
     "symbol": "O",
-    "name": "Oxy",
-    "weight": "15.999",
+    "name": "Oxi",
+    "weight": "16.00",
     "category": "diatomic-nonmetal",
     "x": 16,
     "y": 2,
@@ -107,13 +107,13 @@ export const elements = [
       2,
       6
     ],
-    "desc": "Nguyên tố số 8 trong bảng tuần hoàn."
+    "desc": "Duy trì sự sống và sự cháy, chiếm 21% không khí."
   },
   {
     "number": 9,
     "symbol": "F",
-    "name": "Fluor",
-    "weight": "18.998",
+    "name": "Flo",
+    "weight": "19.00",
     "category": "diatomic-nonmetal",
     "x": 17,
     "y": 2,
@@ -121,7 +121,7 @@ export const elements = [
       2,
       7
     ],
-    "desc": "Nguyên tố số 9 trong bảng tuần hoàn."
+    "desc": "Phi kim hoạt động mạnh nhất, có độ âm điện lớn nhất."
   },
   {
     "number": 10,
@@ -135,7 +135,7 @@ export const elements = [
       2,
       8
     ],
-    "desc": "Nguyên tố số 10 trong bảng tuần hoàn."
+    "desc": "Khí hiếm phát ra ánh sáng đỏ cam trong đèn quảng cáo."
   },
   {
     "number": 11,
@@ -150,13 +150,13 @@ export const elements = [
       8,
       1
     ],
-    "desc": "Nguyên tố số 11 trong bảng tuần hoàn."
+    "desc": "Kim loại mềm, phản ứng mạnh với nước tạo ngọn lửa vàng."
   },
   {
     "number": 12,
     "symbol": "Mg",
-    "name": "Magnesi",
-    "weight": "24.305",
+    "name": "Magie",
+    "weight": "24.31",
     "category": "alkaline-earth-metal",
     "x": 2,
     "y": 3,
@@ -165,13 +165,13 @@ export const elements = [
       8,
       2
     ],
-    "desc": "Nguyên tố số 12 trong bảng tuần hoàn."
+    "desc": "Kim loại nhẹ, cháy sáng với ngọn lửa trắng chói."
   },
   {
     "number": 13,
     "symbol": "Al",
     "name": "Nhôm",
-    "weight": "26.982",
+    "weight": "26.98",
     "category": "post-transition-metal",
     "x": 13,
     "y": 3,
@@ -180,13 +180,13 @@ export const elements = [
       8,
       3
     ],
-    "desc": "Nguyên tố số 13 trong bảng tuần hoàn."
+    "desc": "Kim loại phổ biến nhất trong vỏ Trái Đất, nhẹ và bền."
   },
   {
     "number": 14,
     "symbol": "Si",
     "name": "Silic",
-    "weight": "28.085",
+    "weight": "28.09",
     "category": "metalloid",
     "x": 14,
     "y": 3,
@@ -195,13 +195,13 @@ export const elements = [
       8,
       4
     ],
-    "desc": "Nguyên tố số 14 trong bảng tuần hoàn."
+    "desc": "Á kim bán dẫn, thành phần chính của cát và thạch anh."
   },
   {
     "number": 15,
     "symbol": "P",
-    "name": "Phosphor",
-    "weight": "30.974",
+    "name": "Photpho",
+    "weight": "30.97",
     "category": "polyatomic-nonmetal",
     "x": 15,
     "y": 3,
@@ -210,13 +210,13 @@ export const elements = [
       8,
       5
     ],
-    "desc": "Nguyên tố số 15 trong bảng tuần hoàn."
+    "desc": "Phi kim quan trọng cho DNA và xương, có thù hình trắng và đỏ."
   },
   {
     "number": 16,
     "symbol": "S",
     "name": "Lưu huỳnh",
-    "weight": "32.06",
+    "weight": "32.07",
     "category": "polyatomic-nonmetal",
     "x": 16,
     "y": 3,
@@ -225,12 +225,12 @@ export const elements = [
       8,
       6
     ],
-    "desc": "Nguyên tố số 16 trong bảng tuần hoàn."
+    "desc": "Phi kim màu vàng, có trong núi lửa và tạo ra H2SO4."
   },
   {
     "number": 17,
     "symbol": "Cl",
-    "name": "Chlor",
+    "name": "Clo",
     "weight": "35.45",
     "category": "diatomic-nonmetal",
     "x": 17,
@@ -240,13 +240,13 @@ export const elements = [
       8,
       7
     ],
-    "desc": "Nguyên tố số 17 trong bảng tuần hoàn."
+    "desc": "Khí vàng lục, độc, dùng để khử trùng nước."
   },
   {
     "number": 18,
     "symbol": "Ar",
-    "name": "Argon",
-    "weight": "39.948",
+    "name": "Agon",
+    "weight": "39.95",
     "category": "noble-gas",
     "x": 18,
     "y": 3,
@@ -255,13 +255,13 @@ export const elements = [
       8,
       8
     ],
-    "desc": "Nguyên tố số 18 trong bảng tuần hoàn."
+    "desc": "Khí hiếm phổ biến nhất trong không khí, hoàn toàn trơ."
   },
   {
     "number": 19,
     "symbol": "K",
     "name": "Kali",
-    "weight": "39.098",
+    "weight": "39.10",
     "category": "alkali-metal",
     "x": 1,
     "y": 4,
@@ -271,13 +271,13 @@ export const elements = [
       8,
       1
     ],
-    "desc": "Nguyên tố số 19 trong bảng tuần hoàn."
+    "desc": "Kim loại kiềm mềm, phản ứng mãnh liệt với nước."
   },
   {
     "number": 20,
     "symbol": "Ca",
-    "name": "Calci",
-    "weight": "40.078",
+    "name": "Canxi",
+    "weight": "40.08",
     "category": "alkaline-earth-metal",
     "x": 2,
     "y": 4,
@@ -287,13 +287,13 @@ export const elements = [
       8,
       2
     ],
-    "desc": "Nguyên tố số 20 trong bảng tuần hoàn."
+    "desc": "Kim loại kiềm thổ, thành phần chính của xương và răng."
   },
   {
     "number": 21,
     "symbol": "Sc",
     "name": "Scandi",
-    "weight": "44.956",
+    "weight": "44.96",
     "category": "transition-metal",
     "x": 3,
     "y": 4,
@@ -303,13 +303,13 @@ export const elements = [
       9,
       2
     ],
-    "desc": "Nguyên tố số 21 trong bảng tuần hoàn."
+    "desc": "Kim loại chuyển tiếp nhẹ, bền, dùng trong hợp kim nhôm."
   },
   {
     "number": 22,
     "symbol": "Ti",
-    "name": "Titani",
-    "weight": "47.867",
+    "name": "Titan",
+    "weight": "47.87",
     "category": "transition-metal",
     "x": 4,
     "y": 4,
@@ -319,13 +319,13 @@ export const elements = [
       10,
       2
     ],
-    "desc": "Nguyên tố số 22 trong bảng tuần hoàn."
+    "desc": "Kim loại mạnh, nhẹ, chống ăn mòn tuyệt vời, dùng trong y tế."
   },
   {
     "number": 23,
     "symbol": "V",
     "name": "Vanadi",
-    "weight": "50.942",
+    "weight": "50.94",
     "category": "transition-metal",
     "x": 5,
     "y": 4,
@@ -335,13 +335,13 @@ export const elements = [
       11,
       2
     ],
-    "desc": "Nguyên tố số 23 trong bảng tuần hoàn."
+    "desc": "Kim loại cứng, chống ăn mòn, dùng trong thép hợp kim siêu bền."
   },
   {
     "number": 24,
     "symbol": "Cr",
     "name": "Crom",
-    "weight": "51.996",
+    "weight": "52.00",
     "category": "transition-metal",
     "x": 6,
     "y": 4,
@@ -351,13 +351,13 @@ export const elements = [
       13,
       1
     ],
-    "desc": "Nguyên tố số 24 trong bảng tuần hoàn."
+    "desc": "Kim loại cứng nhất, bóng, dùng để mạ bảo vệ và thép không gỉ."
   },
   {
     "number": 25,
     "symbol": "Mn",
     "name": "Mangan",
-    "weight": "54.938",
+    "weight": "54.94",
     "category": "transition-metal",
     "x": 7,
     "y": 4,
@@ -367,13 +367,13 @@ export const elements = [
       13,
       2
     ],
-    "desc": "Nguyên tố số 25 trong bảng tuần hoàn."
+    "desc": "Kim loại quan trọng để sản xuất thép và pin kiềm."
   },
   {
     "number": 26,
     "symbol": "Fe",
     "name": "Sắt",
-    "weight": "55.845",
+    "weight": "55.85",
     "category": "transition-metal",
     "x": 8,
     "y": 4,
@@ -383,13 +383,13 @@ export const elements = [
       14,
       2
     ],
-    "desc": "Nguyên tố số 26 trong bảng tuần hoàn."
+    "desc": "Kim loại phổ biến nhất, lõi Trái Đất và hemoglobin trong máu."
   },
   {
     "number": 27,
     "symbol": "Co",
     "name": "Coban",
-    "weight": "58.933",
+    "weight": "58.93",
     "category": "transition-metal",
     "x": 9,
     "y": 4,
@@ -399,13 +399,13 @@ export const elements = [
       15,
       2
     ],
-    "desc": "Nguyên tố số 27 trong bảng tuần hoàn."
+    "desc": "Kim loại có từ tính, dùng trong hợp kim chịu nhiệt và pin."
   },
   {
     "number": 28,
     "symbol": "Ni",
     "name": "Niken",
-    "weight": "58.693",
+    "weight": "58.69",
     "category": "transition-metal",
     "x": 10,
     "y": 4,
@@ -415,13 +415,13 @@ export const elements = [
       16,
       2
     ],
-    "desc": "Nguyên tố số 28 trong bảng tuần hoàn."
+    "desc": "Kim loại trắng bạc, chống ăn mòn, thành phần của thép không gỉ."
   },
   {
     "number": 29,
     "symbol": "Cu",
     "name": "Đồng",
-    "weight": "63.546",
+    "weight": "63.55",
     "category": "transition-metal",
     "x": 11,
     "y": 4,
@@ -431,7 +431,7 @@ export const elements = [
       18,
       1
     ],
-    "desc": "Nguyên tố số 29 trong bảng tuần hoàn."
+    "desc": "Kim loại màu đỏ, dẫn điện và nhiệt tốt thứ hai sau bạc."
   },
   {
     "number": 30,
@@ -447,13 +447,13 @@ export const elements = [
       18,
       2
     ],
-    "desc": "Nguyên tố số 30 trong bảng tuần hoàn."
+    "desc": "Kim loại xám xanh, dùng mạ kẽm chống gỉ và trong hệ miễn dịch."
   },
   {
     "number": 31,
     "symbol": "Ga",
     "name": "Gali",
-    "weight": "69.723",
+    "weight": "69.72",
     "category": "post-transition-metal",
     "x": 13,
     "y": 4,
@@ -463,12 +463,12 @@ export const elements = [
       18,
       3
     ],
-    "desc": "Nguyên tố số 31 trong bảng tuần hoàn."
+    "desc": "Kim loại nóng chảy ở nhiệt độ gần nhiệt độ phòng, dùng trong LED."
   },
   {
     "number": 32,
     "symbol": "Ge",
-    "name": "Germani",
+    "name": "Gecmani",
     "weight": "72.63",
     "category": "metalloid",
     "x": 14,
@@ -479,13 +479,13 @@ export const elements = [
       18,
       4
     ],
-    "desc": "Nguyên tố số 32 trong bảng tuần hoàn."
+    "desc": "Á kim màu trắng xám, bán dẫn, linh hồn của các thiết bị quang học."
   },
   {
     "number": 33,
     "symbol": "As",
-    "name": "Arsenic",
-    "weight": "74.922",
+    "name": "Asen",
+    "weight": "74.92",
     "category": "metalloid",
     "x": 15,
     "y": 4,
@@ -495,13 +495,13 @@ export const elements = [
       18,
       5
     ],
-    "desc": "Nguyên tố số 33 trong bảng tuần hoàn."
+    "desc": "Á kim có tiếng là độc chất, nhưng cực kỳ quan trọng trong bán dẫn."
   },
   {
     "number": 34,
     "symbol": "Se",
-    "name": "Seleni",
-    "weight": "78.971",
+    "name": "Selen",
+    "weight": "78.97",
     "category": "polyatomic-nonmetal",
     "x": 16,
     "y": 4,
@@ -511,13 +511,13 @@ export const elements = [
       18,
       6
     ],
-    "desc": "Nguyên tố số 34 trong bảng tuần hoàn."
+    "desc": "Phi kim bán dẫn, dẫn điện tốt khi được chiếu sáng."
   },
   {
     "number": 35,
     "symbol": "Br",
     "name": "Brom",
-    "weight": "79.904",
+    "weight": "79.90",
     "category": "diatomic-nonmetal",
     "x": 17,
     "y": 4,
@@ -527,13 +527,13 @@ export const elements = [
       18,
       7
     ],
-    "desc": "Nguyên tố số 35 trong bảng tuần hoàn."
+    "desc": "Phi kim duy nhất ở thể lỏng ở nhiệt độ phòng, màu đỏ nâu, độc."
   },
   {
     "number": 36,
     "symbol": "Kr",
-    "name": "Krypton",
-    "weight": "83.798",
+    "name": "Kripton",
+    "weight": "83.80",
     "category": "noble-gas",
     "x": 18,
     "y": 4,
@@ -543,13 +543,13 @@ export const elements = [
       18,
       8
     ],
-    "desc": "Nguyên tố số 36 trong bảng tuần hoàn."
+    "desc": "Khí hiếm phát ra ánh sáng trắng rực rỡ trong đèn flash."
   },
   {
     "number": 37,
     "symbol": "Rb",
     "name": "Rubidi",
-    "weight": "85.468",
+    "weight": "85.47",
     "category": "alkali-metal",
     "x": 1,
     "y": 5,
@@ -560,7 +560,7 @@ export const elements = [
       8,
       1
     ],
-    "desc": "Nguyên tố số 37 trong bảng tuần hoàn."
+    "desc": "Kim loại kiềm cực kỳ hoạt động, tự cháy trong không khí."
   },
   {
     "number": 38,
@@ -577,13 +577,13 @@ export const elements = [
       8,
       2
     ],
-    "desc": "Nguyên tố số 38 trong bảng tuần hoàn."
+    "desc": "Kim loại kiềm thổ mềm, màu bạc, dùng tạo pháo hoa màu đỏ rực."
   },
   {
     "number": 39,
     "symbol": "Y",
     "name": "Ytri",
-    "weight": "88.906",
+    "weight": "88.91",
     "category": "transition-metal",
     "x": 3,
     "y": 5,
@@ -594,13 +594,13 @@ export const elements = [
       9,
       2
     ],
-    "desc": "Nguyên tố số 39 trong bảng tuần hoàn."
+    "desc": "Kim loại màu bạc, linh hồn của các bộ khuếch đại laser."
   },
   {
     "number": 40,
     "symbol": "Zr",
     "name": "Zirconi",
-    "weight": "91.224",
+    "weight": "91.22",
     "category": "transition-metal",
     "x": 4,
     "y": 5,
@@ -611,7 +611,7 @@ export const elements = [
       10,
       2
     ],
-    "desc": "Nguyên tố số 40 trong bảng tuần hoàn."
+    "desc": "Kim loại chống ăn mòn cực tốt, dùng trong vỏ thanh nhiên liệu hạt nhân."
   },
   {
     "number": 41,
@@ -1919,7 +1919,7 @@ export const elements = [
       18,
       2
     ],
-    "desc": "Nguyên tố số 112 trong bảng tuần hoàn."
+    "desc": "Nguyên tố nhân tạo siêu nặng, được đặt tên theo Nicolaus Copernicus."
   },
   {
     "number": 113,
@@ -1938,7 +1938,7 @@ export const elements = [
       18,
       3
     ],
-    "desc": "Nguyên tố số 113 trong bảng tuần hoàn."
+    "desc": "Nguyên tố siêu nặng đầu tiên được khám phá tại châu Á (Nhật Bản)."
   },
   {
     "number": 114,
@@ -1957,7 +1957,7 @@ export const elements = [
       18,
       4
     ],
-    "desc": "Nguyên tố số 114 trong bảng tuần hoàn."
+    "desc": "Nguyên tố siêu nặng nhân tạo, được nghiên cứu tại Phòng thí nghiệm Flerov."
   },
   {
     "number": 115,
@@ -1976,7 +1976,7 @@ export const elements = [
       18,
       5
     ],
-    "desc": "Nguyên tố số 115 trong bảng tuần hoàn."
+    "desc": "Nguyên tố siêu nặng vinh danh vùng Moscow của Nga."
   },
   {
     "number": 116,
@@ -1995,14 +1995,14 @@ export const elements = [
       18,
       6
     ],
-    "desc": "Nguyên tố số 116 trong bảng tuần hoàn."
+    "desc": "Nguyên tố siêu nặng vinh danh Phòng thí nghiệm Quốc gia Livermore."
   },
   {
     "number": 117,
     "symbol": "Ts",
     "name": "Tennessin",
     "weight": "294",
-    "category": "metalloid",
+    "category": "halogen",
     "x": 17,
     "y": 7,
     "shells": [
@@ -2014,7 +2014,7 @@ export const elements = [
       18,
       7
     ],
-    "desc": "Nguyên tố số 117 trong bảng tuần hoàn."
+    "desc": "Halogen siêu nặng, được đặt tên theo bang Tennessee của Hoa Kỳ."
   },
   {
     "number": 118,
@@ -2033,7 +2033,7 @@ export const elements = [
       18,
       8
     ],
-    "desc": "Nguyên tố số 118 trong bảng tuần hoàn."
+    "desc": "Nguyên tố cuối cùng của bảng tuần hoàn hiện tại, siêu nặng và nhân tạo."
   }
 ];
 

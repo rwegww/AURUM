@@ -2,6 +2,8 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import InfographicBook from '@/components/lessons/InfographicBook';
+import PlacementTestModal from '@/components/lessons/PlacementTestModal';
+import { useAuth } from '@/context/AuthContext';
 
 const GradeThemes = {
   8: { title: "Hành Trình Khởi Đầu", subtitle: "Làm chủ các nguyên tố cơ bản", color: "bg-viet-green" },
@@ -12,9 +14,11 @@ const GradeThemes = {
 const GradeJourney = () => {
   const { grade } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isBookOpen, setIsBookOpen] = useState(false);
+  const [isTestOpen, setIsTestOpen] = useState(false);
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -60,9 +64,11 @@ const GradeJourney = () => {
     }
   }, [loading, grade]);
 
-  const handleStageClick = (lesson, index) => {
+  const handleStageClick = (lesson, index, isLocked) => {
+    if (isLocked) return;
     navigate(`/classroom/${grade}/journey/${lesson.lessonId}/intro?order=${index + 1}`);
   };
+
 
   const theme = GradeThemes[grade] || GradeThemes[8];
 
@@ -97,50 +103,97 @@ const GradeJourney = () => {
           {/* Path Line */}
           <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-3 bg-viet-green/5 rounded-full" />
           
+          {/* Placement Test Banner for Higher Grades */}
+          {grade !== '8' && lessons.length > 0 && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mb-16 relative z-10"
+            >
+               <div className="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-[32px] p-8 text-white shadow-xl overflow-hidden relative group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+                     <span className="text-[120px] font-black italic">TEST</span>
+                  </div>
+                  <div className="relative z-10">
+                     <span className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/30">Hành Trình Học Vượt</span>
+                     <h2 className="text-3xl font-black font-sora italic mt-4 mb-2 uppercase">Khai Mở Tiềm Năng Lớp {grade}</h2>
+                     <p className="max-w-[500px] text-blue-100 font-medium text-sm leading-relaxed mb-8">
+                       Chào mừng Nhà Hóa học tài ba! Thử thách bản thân với bài test học vượt để mở khóa chương trình lớp {grade} ngay lập tức mà không cần chờ đợi.
+                     </p>
+                     <button 
+                       onClick={() => setIsTestOpen(true)}
+                       className="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg hover:shadow-indigo-500/40 hover:-translate-y-1 active:translate-y-0 transition-all flex items-center gap-3"
+                     >
+                        Bắt đầu test ➔
+                     </button>
+                  </div>
+               </div>
+            </motion.div>
+          )}
+
           <div className="flex flex-col gap-16 relative z-10">
             {lessons.map((lesson, index) => {
               const isEven = index % 2 === 0;
+              
+              // Unlocking logic update:
+              // 1. Admin/Teacher always unlocked
+              // 2. Grade 8 First lesson is default unlocked
+              // 3. Higher grades (9-12) First lesson is NOT default unlocked (requires test)
+              // 4. Successive lessons unlocked if PREVIOUS is in user.unlockedLessons
+              // 5. Lesson unlocked if its OWN ID in user.unlockedLessons
+              const isFirstLessonDefaultUnlocked = grade === '8';
+              const previousLessonCompleted = index > 0 && user?.unlockedLessons?.includes(lessons[index-1].lessonId);
+              const isCompleted = user?.unlockedLessons?.includes(lesson.lessonId);
+              const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && isFirstLessonDefaultUnlocked) || previousLessonCompleted || isCompleted;
+              const isLocked = !isUnlocked;
+
               return (
                 <motion.div
                   key={lesson.id}
                   initial={{ opacity: 0, x: isEven ? -50 : 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  className={`flex items-center w-full ${isEven ? 'flex-row' : 'flex-row-reverse'}`}
+                  className={`flex items-center w-full ${isEven ? 'flex-row' : 'flex-row-reverse'} ${isLocked ? 'opacity-50 grayscale pointer-events-none' : ''}`}
                 >
                   {/* Stage Card */}
                   <div className={`w-[42%] flex ${isEven ? 'justify-end' : 'justify-start'}`}>
                     <button
-                      onClick={() => handleStageClick(lesson, index)}
-                      className="group relative"
+                      onClick={() => handleStageClick(lesson, index, isLocked)}
+                      className={`group relative ${isLocked ? 'cursor-not-allowed' : ''}`}
+                      disabled={isLocked}
                     >
-                      <div className="viet-card p-6 w-full max-w-[280px] hover:scale-105 transition-all cursor-pointer border-2 hover:border-viet-green/40 bg-white">
-                         <h4 className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-2">Stage {index + 1}</h4>
-                         <h3 className="text-[14px] font-bold text-viet-text leading-tight group-hover:text-viet-green transition-colors">
+                      <div className={`viet-card p-6 w-full max-w-[280px] transition-all border-2 bg-white ${isLocked ? 'border-gray-200' : 'hover:scale-105 cursor-pointer hover:border-viet-green/40'}`}>
+                         <div className="flex justify-between items-start mb-2">
+                           <h4 className="text-[10px] font-black text-viet-green uppercase tracking-widest">Stage {index + 1}</h4>
+                           {isLocked && <span className="text-gray-400">🔒</span>}
+                         </div>
+                         <h3 className={`text-[14px] font-bold leading-tight transition-colors ${isLocked ? 'text-gray-400' : 'text-viet-text group-hover:text-viet-green'}`}>
                             {lesson.title.split(': ').pop()}
                          </h3>
                       </div>
                       
                       {/* Floating Tooltip */}
-                      <div className={`absolute top-1/2 -translate-y-1/2 bg-viet-green text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap
-                        ${isEven ? '-left-4 -translate-x-full' : '-right-4 translate-x-full'}
-                      `}>
-                         Nhiệm vụ ➔
-                      </div>
+                      {!isLocked && (
+                        <div className={`absolute top-1/2 -translate-y-1/2 bg-viet-green text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap
+                          ${isEven ? '-left-4 -translate-x-full' : '-right-4 translate-x-full'}
+                        `}>
+                           Nhiệm vụ ➔
+                        </div>
+                      )}
                     </button>
                   </div>
 
                   {/* Connector Node */}
                   <div className="w-[16%] flex justify-center relative">
-                     <div className="w-12 h-12 bg-white rounded-2xl border-4 border-viet-green flex items-center justify-center shadow-xl z-10 group cursor-pointer hover:scale-125 transition-all">
-                        <span className="text-[14px] font-black text-viet-green">{index + 1}</span>
+                     <div className={`w-12 h-12 bg-white rounded-2xl border-4 flex items-center justify-center shadow-xl z-10 transition-all ${isLocked ? 'border-gray-200 grayscale' : 'border-viet-green group cursor-pointer hover:scale-125'}`}>
+                        <span className={`text-[14px] font-black ${isLocked ? 'text-gray-300' : 'text-viet-green'}`}>{index + 1}</span>
                      </div>
                   </div>
 
                   {/* Narrative Spacer */}
                   <div className="w-[42%] px-6">
-                     <p className="text-[13px] font-medium text-viet-text-light italic line-clamp-3">
-                        {lesson.description || "Hãy chuẩn bị tâm thế để khai mở bí mật của nguyên tố này."}
+                     <p className={`text-[13px] font-medium italic line-clamp-3 ${isLocked ? 'text-gray-300' : 'text-viet-text-light'}`}>
+                        {isLocked ? "Chương này vẫn còn là một ẩn số đối với bạn..." : (lesson.description || "Hãy chuẩn bị tâm thế để khai mở bí mật của nguyên tố này.")}
                      </p>
                   </div>
                 </motion.div>
@@ -187,6 +240,23 @@ const GradeJourney = () => {
             onClose={() => setIsBookOpen(false)} 
             lessons={lessons}
             grade={grade}
+            unlockedLessons={user?.unlockedLessons}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Placement Test Modal */}
+      <AnimatePresence>
+        {isTestOpen && (
+          <PlacementTestModal
+            isOpen={isTestOpen}
+            onClose={() => setIsTestOpen(false)}
+            grade={grade}
+            firstLessonId={lessons[0]?.lessonId}
+            onPass={() => {
+              setIsTestOpen(false);
+              // Refreshing or notification could go here
+            }}
           />
         )}
       </AnimatePresence>

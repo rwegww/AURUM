@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase.js';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const mapUser = (user) => {
   if (!user) return null;
@@ -14,12 +15,21 @@ const mapUser = (user) => {
 };
 
 export const User = {
-  async findOne({ username }) {
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('username', username)
-      .single();
+  async findOne(filter) {
+    let query = supabase.from('users').select('*');
+    
+    if (filter.username && filter.email) {
+      // Use quotes for values in .or() to handle special characters like '@'
+      query = query.or(`username.eq."${filter.username}",email.eq."${filter.email}"`);
+    } else if (filter.username) {
+      query = query.eq('username', filter.username);
+    } else if (filter.email) {
+      query = query.eq('email', filter.email);
+    } else if (filter.id) {
+      query = query.eq('id', filter.id);
+    }
+
+    const { data, error } = await query.single();
     
     if (error && error.code !== 'PGRST116') {
       throw error;
@@ -42,17 +52,28 @@ export const User = {
 
   async create(userData) {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
+    
+    // Construct insert object
+    const insertData = {
+      username: userData.username,
+      email: userData.email,
+      password: hashedPassword,
+      role: userData.role || 'student',
+      inventory: userData.inventory || { ingredients: [], craftedItems: [] },
+      unlocked_lessons: userData.unlockedLessons || []
+    };
+
+    // Only include ID if explicitly provided (e.g. from Firebase/Google)
+    // Otherwise generate a random UUID to satisfy DB constraint
+    if (userData.id) {
+      insertData.id = userData.id;
+    } else {
+      insertData.id = crypto.randomUUID();
+    }
+
     const { data, error } = await supabase
       .from('users')
-      .insert([{
-        id: userData.id, // Allow custom ID (Firebase UID)
-        username: userData.username,
-        email: userData.email,
-        password: hashedPassword,
-        role: userData.role || 'student',
-        inventory: userData.inventory || { ingredients: [], craftedItems: [] },
-        unlocked_lessons: userData.unlockedLessons || []
-      }])
+      .insert([insertData])
       .select()
       .single();
     

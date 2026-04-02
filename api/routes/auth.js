@@ -97,7 +97,9 @@ router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    const user = await User.findOne({ username });
+    // Attempt to find user by username OR email
+    const user = await User.findOne({ username, email: username });
+    
     if (!user) {
       return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
     }

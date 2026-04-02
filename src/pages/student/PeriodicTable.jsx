@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { elements } from '@/data/elements';
 import { enrichElement } from '@/data/elementEnrichment';
@@ -9,6 +9,12 @@ const PeriodicTable = () => {
   const [hoveredElement, setHoveredElement] = useState(null);
   const [filter, setFilter] = useState('all');
   const [detailTab, setDetailTab] = useState('overview');
+  const [imgError, setImgError] = useState(false);
+
+  // Reset image error state when a new element is selected
+  useEffect(() => {
+    setImgError(false);
+  }, [selectedElement]);
 
   const categories = [
     { id: 'all', label: 'Tất cả', color: 'bg-viet-green' },
@@ -45,94 +51,150 @@ const PeriodicTable = () => {
     setDetailTab('overview');
   };
 
+  const getStableWikiUrl = (url) => {
+    if (!url || !url.includes('wikimedia.org')) return url;
+    const parts = url.split('/');
+    // Check if it's a thumb URL (format: .../commons/thumb/h1/h2/FILENAME/xxxpx-FILENAME)
+    if (url.includes('/thumb/')) {
+      return `https://en.wikipedia.org/wiki/Special:Redirect/file/${encodeURIComponent(parts[parts.length - 2])}?width=500`;
+    }
+    // Standard URL (format: .../commons/h1/h2/FILENAME)
+    return `https://en.wikipedia.org/wiki/Special:Redirect/file/${encodeURIComponent(parts[parts.length - 1])}?width=500`;
+  };
+
   return (
-    <div className="min-h-screen bg-viet-bg pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1600px] mx-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <motion.h1
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-4xl font-black text-viet-text italic tracking-tighter uppercase mb-2"
-            >
-              Bảng tuần hoàn <span className="text-viet-green underline decoration-4 underline-offset-8">nguyên tố</span>
-            </motion.h1>
-            <p className="text-viet-text-light font-bold">Khám phá vũ trụ của các nguyên tử trong giao diện Lab hiện đại</p>
-          </div>
-          <div className="flex flex-wrap gap-2 justify-end bg-white/50 p-2 rounded-2xl border border-viet-border h-fit">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setFilter(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border ${
-                  filter === cat.id
-                    ? 'bg-viet-green text-white border-viet-green shadow-lg shadow-viet-green/20 scale-105'
-                    : 'bg-white text-viet-text-light border-viet-border hover:border-viet-green/30'
-                }`}
+    <div className="min-h-screen bg-[#fffcf5] pt-28 pb-12 shadow-[inset_0_0_100px_rgba(0,0,0,0.02)]">
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-multiply"
+        style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/natural-paper.png")' }} />
+
+      <div className="max-w-[1600px] mx-auto relative z-10 px-4 md:px-8">
+        <div className="bg-white rounded-[40px] md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] border border-viet-border/30 overflow-hidden flex flex-col md:flex-row h-auto min-h-[850px]">
+
+          {/* Sidebar */}
+          <div className="w-full md:w-72 bg-[#fbf9f2]/50 border-b md:border-b-0 md:border-r border-viet-border/20 p-6 md:p-8 flex flex-col shrink-0">
+            <div className="mb-6 md:mb-10">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
               >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Periodic Table Grid */}
-        <div className="relative overflow-x-auto pb-12 mask-fade-right">
-          <div className="grid grid-cols-18 gap-2 min-w-[1200px]">
-            {elements.map((el) => {
-              const isActive = filter === 'all' || el.category === filter;
-              const isHighlighted = hoveredElement && hoveredElement.number === el.number;
-              return (
-                <motion.div
-                  key={el.symbol}
-                  layoutId={`element-${el.symbol}`}
-                  onClick={() => handleSelect(el)}
-                  onHoverStart={() => setHoveredElement(el)}
-                  onHoverEnd={() => setHoveredElement(null)}
-                  style={{ gridColumn: el.x, gridRow: el.y }}
-                  className={`relative aspect-square cursor-pointer transition-all duration-300 group ${
-                    isActive ? 'opacity-100 scale-100' : 'opacity-20 scale-90 grayscale'
-                  }`}
-                >
-                  <div className={`absolute inset-0 rounded-xl border bg-gradient-to-br shadow-sm transition-all duration-500 ${getCategoryColor(el.category)} 
-                    ${isHighlighted ? 'ring-4 ring-viet-green/30 shadow-2xl z-10 -translate-y-2' : ''}`}>
-                    <div className="p-1 px-1.5 h-full flex flex-col justify-between">
-                      <span className="text-[10px] font-bold opacity-60 leading-none">{el.number}</span>
-                      <div className="flex flex-col items-center justify-center flex-1 -mt-1">
-                        <span className="text-sm font-black leading-none">{el.symbol}</span>
-                        <span className="text-[7px] font-bold opacity-70 truncate w-full text-center mt-0.5">{el.name}</span>
-                      </div>
-                      <span className="text-[7px] font-bold opacity-40 leading-none text-right">
-                        {parseFloat(el.weight).toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div className="mt-8 flex flex-wrap gap-6 justify-center bg-white p-6 rounded-[30px] border border-viet-border shadow-sm">
-          {categories.slice(1).map(cat => (
-            <div key={cat.id} className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full border ${getCategoryColor(cat.id).split(' ')[2]}`}></div>
-              <span className="text-[10px] text-viet-text-light font-bold uppercase tracking-wider">{cat.label}</span>
+                <span className="text-viet-green text-[8px] md:text-[9px] font-black uppercase tracking-[5px] mb-2 block">Database Alpha</span>
+                <h1 className="text-2xl md:text-3xl font-black text-viet-text leading-none italic uppercase tracking-tighter mb-3 md:mb-4">
+                  Bảng tuần <br className="hidden md:block" /> hoàn
+                  <span className="text-viet-green underline decoration-4 underline-offset-4 md:underline-offset-8"> nguyên tố</span>
+                </h1>
+                <p className="text-viet-text-light text-[10px] md:text-[11px] font-bold leading-relaxed opacity-70 uppercase tracking-widest hidden sm:block">
+                  Hệ thống tra cứu <br className="hidden md:block" /> nguyên tử đa chiều
+                </p>
+              </motion.div>
             </div>
-          ))}
+
+            <div className="flex flex-col gap-2">
+              <h3 className="text-[9px] md:text-[10px] font-black text-viet-text/40 uppercase tracking-[4px] mb-2 md:mb-3 px-2">Phân loại</h3>
+              <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 px-2 md:px-0 scrollbar-hide">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setFilter(cat.id)}
+                    className={`whitespace-nowrap md:whitespace-normal px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all text-left flex items-center gap-4 md:justify-between group shrink-0
+                        ${filter === cat.id
+                        ? 'bg-viet-green text-white shadow-xl shadow-viet-green/20 md:-translate-x-1'
+                        : 'text-viet-text-light hover:bg-white hover:text-viet-green border border-transparent hover:border-viet-border/20'
+                      }`}
+                  >
+                    <span>{cat.label}</span>
+                    <span className={`w-2 h-2 rounded-full border transition-colors ${filter === cat.id ? 'bg-white border-white' : getCategoryColor(cat.id).split(' ')[2]}`} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-auto pt-6 border-t border-viet-border/20 hidden md:block">
+              <div className="flex flex-col gap-4 opacity-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 rounded bg-viet-text/10" />
+                  <span className="text-[8px] font-black text-viet-text uppercase tracking-widest">Technical Manual v1.0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Display Area */}
+          <div className="flex-1 p-4 md:p-6 lg:p-8 flex flex-col bg-[#fafafa]/50 overflow-hidden relative">
+            {/* Grid texture overlay */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none hidden md:block"
+              style={{ backgroundImage: 'radial-gradient(#000 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
+
+            <div className="relative flex-1 flex items-center justify-center overflow-x-auto custom-scrollbar overflow-y-hidden">
+              <div className="grid grid-cols-18 gap-1 md:gap-1.5 min-w-[700px] lg:min-w-[900px] xl:min-w-[1000px] p-4 scale-[0.65] sm:scale-[0.73] lg:scale-[0.81] xl:scale-[0.85] 2xl:scale-[0.94] origin-center transition-all duration-500">
+                {elements.map((el) => {
+                  const isActive = filter === 'all' || el.category === filter;
+                  const isHighlighted = hoveredElement && hoveredElement.number === el.number;
+                  return (
+                    <motion.div
+                      key={el.symbol}
+                      layoutId={`element-${el.symbol}`}
+                      onClick={() => handleSelect(el)}
+                      onHoverStart={() => setHoveredElement(el)}
+                      onHoverEnd={() => setHoveredElement(null)}
+                      style={{ gridColumn: el.x, gridRow: el.y }}
+                      className={`relative aspect-square cursor-pointer transition-all duration-300 group ${isActive ? 'opacity-100 scale-100' : 'opacity-10 scale-90 grayscale'
+                        }`}
+                    >
+                      <div className={`absolute inset-0 rounded-2xl border bg-gradient-to-br shadow-sm transition-all duration-500 ${getCategoryColor(el.category)} 
+                        ${isHighlighted ? 'ring-4 ring-viet-green/30 shadow-2xl z-10 -translate-y-2' : ''}`}>
+                        <div className="p-1 px-1.5 h-full flex flex-col justify-between overflow-hidden">
+                          <span className="text-[9px] font-black opacity-40 leading-none">{el.number}</span>
+                          <div className="flex flex-col items-center justify-center flex-1">
+                            <span className="text-sm font-black leading-none">{el.symbol}</span>
+                            <span className="text-[5px] font-black uppercase opacity-60 truncate w-full text-center mt-1 tracking-tighter">{el.name}</span>
+                          </div>
+                          <span className="text-[6px] font-black opacity-30 leading-none text-right">
+                            {parseFloat(el.weight).toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bottom Panel / Key */}
+            <div className="mt-auto pt-8 border-t border-viet-border/10 flex items-center justify-between">
+              <div className="flex items-center gap-8">
+                <div className="flex flex-col">
+                  <span className="text-[8px] font-black text-viet-text/40 uppercase tracking-widest mb-1">Tra cứu nhanh</span>
+                  <p className="text-[12px] font-bold text-viet-text italic">Nhấn vào từng ô để xem mô phỏng nguyên tử 3D</p>
+                </div>
+                <div className="h-8 w-[1px] bg-viet-border/30" />
+                <div className="flex gap-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-red-400" />
+                    <span className="text-[9px] font-black text-viet-text-light uppercase tracking-widest">Nhiệt độ sôi cao</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-blue-400" />
+                    <span className="text-[9px] font-black text-viet-text-light uppercase tracking-widest">Trạng thái khí</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <span className="text-[9px] font-black text-viet-green uppercase tracking-[3px]">Chemistry Odyssey Dashboard</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Enhanced Modal */}
+      {/* Element Detail Modal */}
       <AnimatePresence>
         {selectedElement && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-white/80 backdrop-blur-md"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-white/80 backdrop-blur-xl"
             onClick={() => setSelectedElement(null)}
           >
             <motion.div
@@ -140,89 +202,69 @@ const PeriodicTable = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white border border-viet-border rounded-[40px] max-w-5xl w-full max-h-[90vh] overflow-y-auto relative shadow-[0_30px_100px_-20px_rgba(118,192,52,0.15)]"
+              className="bg-white border border-viet-border rounded-[32px] md:rounded-[48px] max-w-5xl w-full h-[95vh] md:h-auto md:max-h-[90vh] overflow-y-auto relative shadow-[0_50px_120px_-30px_rgba(0,0,0,0.2)]"
             >
-              {/* Close Button */}
               <button
                 onClick={() => setSelectedElement(null)}
-                className="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#f8f9fa] border border-viet-border flex items-center justify-center hover:bg-white hover:border-viet-green/50 transition-all shadow-sm z-20"
+                className="absolute top-4 right-4 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#f8f9fa] border border-viet-border flex items-center justify-center hover:bg-white hover:border-viet-green/50 transition-all shadow-sm z-[60]"
               >
-                <svg className="w-4 h-4 text-viet-text-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                ✕
               </button>
 
-              {/* Header */}
-              <div className="p-8 pb-0">
-                <div className="flex items-center gap-6 mb-6">
-                  <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br flex items-center justify-center ${getCategoryColor(selectedElement.category)}`}>
-                    <span className="text-4xl font-black">{selectedElement.symbol}</span>
+              <div className="p-6 md:p-12">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6 md:gap-8 mb-8 md:mb-10">
+                  <div className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-gradient-to-br flex items-center justify-center ${getCategoryColor(selectedElement.category)}`}>
+                    <span className="text-4xl md:text-5xl font-black">{selectedElement.symbol}</span>
                   </div>
                   <div>
-                    <h2 className="text-3xl font-black text-viet-text">{selectedElement.name}</h2>
-                    <p className={`text-[12px] font-black uppercase tracking-[0.2em] mt-1 ${getCategoryColor(selectedElement.category).split(' ')[3]}`}>
-                      {selectedElement.category.replace(/-/g, ' ')}
+                    <h2 className="text-3xl md:text-4xl font-black text-viet-text font-sora italic">{selectedElement.name}</h2>
+                    <p className={`text-[10px] md:text-[12px] font-black uppercase tracking-[0.3em] mt-1 md:mt-2 ${getCategoryColor(selectedElement.category).split(' ')[3]}`}>
+                      Category: {selectedElement.category.replace(/-/g, ' ')}
                     </p>
                   </div>
-                  <div className="ml-auto flex gap-3">
-                    <div className="text-center px-4 py-2 bg-[#f8f9fa] rounded-xl border border-viet-border">
-                      <p className="text-[9px] font-black text-viet-text-light uppercase tracking-widest">Số hiệu</p>
-                      <p className="text-xl font-black text-viet-text">{selectedElement.number}</p>
+                  <div className="sm:ml-auto flex gap-3 md:gap-4">
+                    <div className="flex-1 sm:flex-none text-center px-4 md:px-6 py-2 md:py-3 bg-[#fbf9f2] rounded-xl md:rounded-2xl border border-viet-border">
+                      <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">Atomic No.</p>
+                      <p className="text-lg md:text-2xl font-black text-viet-text">{selectedElement.number}</p>
                     </div>
-                    <div className="text-center px-4 py-2 bg-[#f8f9fa] rounded-xl border border-viet-border">
-                      <p className="text-[9px] font-black text-viet-text-light uppercase tracking-widest">Khối lượng</p>
-                      <p className="text-xl font-black text-viet-text">{parseFloat(selectedElement.weight).toFixed(4)}</p>
+                    <div className="flex-1 sm:flex-none text-center px-4 md:px-6 py-2 md:py-3 bg-[#fbf9f2] rounded-xl md:rounded-2xl border border-viet-border">
+                      <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">Mass Wt.</p>
+                      <p className="text-lg md:text-2xl font-black text-viet-text">{parseFloat(selectedElement.weight).toFixed(2)}</p>
                     </div>
-                    {selectedElement.electronegativity && (
-                      <div className="text-center px-4 py-2 bg-viet-green/5 rounded-xl border border-viet-green/10">
-                        <p className="text-[9px] font-black text-viet-green uppercase tracking-widest">Độ âm điện</p>
-                        <p className="text-xl font-black text-viet-green">{selectedElement.electronegativity}</p>
-                      </div>
-                    )}
                   </div>
                 </div>
 
-                {/* Tabs */}
-                <div className="flex gap-1 bg-[#f0f2f5] p-1 rounded-xl">
+                <div className="flex gap-2 bg-gray-50 p-1.5 rounded-2xl mb-10">
                   {[
-                    { id: 'overview', label: '📋 Tổng quan' },
-                    { id: 'properties', label: '🔬 Tính chất' },
+                    { id: 'overview', label: '📊 Tổng quan' },
                     { id: 'discover', label: '🌟 Khám phá' },
                   ].map(tab => (
                     <button
                       key={tab.id}
                       onClick={() => setDetailTab(tab.id)}
-                      className={`flex-1 py-2.5 rounded-lg text-[12px] font-black uppercase tracking-wider transition-all ${
-                        detailTab === tab.id
+                      className={`flex-1 py-3.5 rounded-xl text-[12px] font-black uppercase tracking-wider transition-all ${detailTab === tab.id
                           ? 'bg-white text-viet-green shadow-sm'
                           : 'text-viet-text-light hover:text-viet-text'
-                      }`}
+                        }`}
                     >
                       {tab.label}
                     </button>
                   ))}
                 </div>
-              </div>
 
-              {/* Tab Content */}
-              <div className="p-8">
                 <AnimatePresence mode="wait">
                   {detailTab === 'overview' && (
-                    <motion.div key="overview" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Bohr Model */}
-                        <div className="flex flex-col items-center gap-6">
-                          <div className="relative w-64 h-64 flex items-center justify-center bg-[#fdfaf1] rounded-full border border-viet-border/50">
+                    <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                        <div className="flex flex-col items-center gap-6 md:gap-8 bg-[#fdfaf1]/50 p-6 md:p-10 rounded-[32px] border border-viet-border/30 min-h-0 md:min-h-[450px] justify-center">
+                          <div className="scale-75 md:scale-100 origin-center transition-transform">
                             <AtomicModel shells={selectedElement.shells} symbol={selectedElement.symbol} />
                           </div>
-                          <div className="text-center space-y-2">
-                            <p className="text-[11px] font-black text-viet-text-light uppercase tracking-[0.4em]">Cấu hình electron</p>
-                            <p className="text-lg font-black text-viet-green tracking-tight">
-                              {selectedElement.electron_configuration || selectedElement.shells?.join('-')}
-                            </p>
-                            <div className="flex gap-2 justify-center mt-2">
+                          <div className="text-center">
+                            <p className="text-[8px] md:text-[10px] font-black text-viet-text-light uppercase tracking-[3px] md:tracking-[5px] mb-2">Bohr Shell Configuration</p>
+                            <div className="flex gap-1.5 md:gap-2 justify-center flex-wrap">
                               {selectedElement.shells?.map((s, i) => (
-                                <div key={i} className="px-3 py-1 bg-white rounded-lg text-[11px] text-viet-text font-bold border border-viet-border shadow-sm">
+                                <div key={i} className="px-3 md:px-4 py-1.5 md:py-2 bg-white rounded-lg md:rounded-xl text-[12px] md:text-[14px] text-viet-text font-black border border-viet-border">
                                   {s}
                                 </div>
                               ))}
@@ -230,144 +272,123 @@ const PeriodicTable = () => {
                           </div>
                         </div>
 
-                        {/* Info Grid */}
-                        <div className="space-y-4">
-                          <p className="text-viet-text font-medium leading-relaxed">{selectedElement.desc}</p>
-
-                          <div className="grid grid-cols-2 gap-3">
-                            {selectedElement.state && (
-                              <div className="p-3 bg-[#f8f9fa] rounded-xl border border-viet-border">
-                                <p className="text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">Trạng thái</p>
-                                <p className="text-[14px] font-black text-viet-text">{selectedElement.state}</p>
-                              </div>
-                            )}
-                            {selectedElement.meltingPoint !== undefined && (
-                              <div className="p-3 bg-[#f8f9fa] rounded-xl border border-viet-border">
-                                <p className="text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">Nhiệt độ nóng chảy</p>
-                                <p className="text-[14px] font-black text-viet-text">{selectedElement.meltingPoint}°C</p>
-                              </div>
-                            )}
-                            {selectedElement.boilingPoint !== undefined && (
-                              <div className="p-3 bg-[#f8f9fa] rounded-xl border border-viet-border">
-                                <p className="text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">Nhiệt độ sôi</p>
-                                <p className="text-[14px] font-black text-viet-text">{selectedElement.boilingPoint}°C</p>
-                              </div>
-                            )}
-                            {selectedElement.density && (
-                              <div className="p-3 bg-[#f8f9fa] rounded-xl border border-viet-border">
-                                <p className="text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">Mật độ</p>
-                                <p className="text-[14px] font-black text-viet-text">{selectedElement.density}</p>
-                              </div>
-                            )}
+                        <div className="space-y-6">
+                          <div className="p-6 bg-viet-green/5 rounded-3xl border border-viet-green/10">
+                            <h3 className="text-[10px] md:text-[11px] font-black text-viet-green uppercase tracking-widest mb-3">Brief Introduction</h3>
+                            <p className="text-viet-text font-medium leading-relaxed italic text-base md:text-lg pr-4 line-clamp-6">
+                              "{selectedElement.desc}"
+                            </p>
                           </div>
 
-                          {selectedElement.discoveredBy && (
-                            <div className="p-4 bg-viet-green/5 rounded-2xl border border-viet-green/10">
-                              <p className="text-[9px] font-black text-viet-green uppercase tracking-widest mb-1">Phát hiện bởi</p>
-                              <p className="text-[14px] font-bold text-viet-text">
-                                {selectedElement.discoveredBy}
-                                {selectedElement.yearDiscovered && ` (${selectedElement.yearDiscovered})`}
-                              </p>
-                            </div>
-                          )}
+                          <div className="grid grid-cols-2 gap-3 md:gap-4">
+                            {['state', 'meltingPoint', 'boilingPoint', 'density'].map((key) => {
+                              if (!selectedElement[key]) return null;
+                              return (
+                                <div key={key} className="p-3 md:p-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
+                                  <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">
+                                    {key.replace(/([A-Z])/g, ' $1')}
+                                  </p>
+                                  <p className="text-[13px] md:text-[15px] font-black text-viet-text">
+                                    {selectedElement[key]}{key.includes('Point') ? '°C' : ''}
+                                  </p>
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                     </motion.div>
                   )}
 
-                  {detailTab === 'properties' && (
-                    <motion.div key="properties" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                      {selectedElement.properties ? (
-                        <div className="space-y-6">
-                          <h3 className="text-[13px] font-black text-viet-green uppercase tracking-widest">Tính chất đặc trưng</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            {selectedElement.properties.map((prop, i) => (
-                              <div key={i} className="flex items-start gap-3 p-4 bg-[#f8f9fa] rounded-2xl border border-viet-border">
-                                <div className="w-7 h-7 rounded-lg bg-viet-green/10 flex items-center justify-center shrink-0 mt-0.5">
-                                  <span className="text-[12px] font-black text-viet-green">{i + 1}</span>
-                                </div>
-                                <p className="text-[14px] font-medium text-viet-text leading-relaxed">{prop}</p>
-                              </div>
-                            ))}
-                          </div>
 
-                          {selectedElement.uses && (
-                            <>
-                              <h3 className="text-[13px] font-black text-viet-green uppercase tracking-widest mt-8">Ứng dụng thực tế</h3>
-                              <div className="flex flex-wrap gap-2">
-                                {selectedElement.uses.map((use, i) => (
-                                  <span key={i} className="px-4 py-2 bg-white rounded-xl border border-viet-border text-[13px] font-bold text-viet-text">
-                                    {use}
-                                  </span>
-                                ))}
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="text-center py-12">
-                          <span className="text-5xl opacity-30 block mb-4">🔬</span>
-                          <p className="text-viet-text-light font-bold">Dữ liệu tính chất chi tiết cho nguyên tố này đang được cập nhật.</p>
-                        </div>
-                      )}
-                    </motion.div>
-                  )}
 
                   {detailTab === 'discover' && (
-                    <motion.div key="discover" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                      {selectedElement.funFact ? (
-                        <div className="space-y-6">
-                          {/* Fun Fact */}
-                          <div className="bg-gradient-to-br from-viet-green/5 to-[#fdfaf1] p-8 rounded-[28px] border border-viet-green/10 relative overflow-hidden">
-                            <div className="absolute top-4 right-4 text-6xl opacity-10">💡</div>
-                            <h3 className="text-[13px] font-black text-viet-green uppercase tracking-widest mb-4">Bạn có biết?</h3>
-                            <p className="text-[17px] font-medium text-viet-text leading-relaxed relative z-10">
-                              {selectedElement.funFact}
-                            </p>
-                          </div>
-
-                          {/* Quick Stats */}
-                          <div className="grid grid-cols-3 gap-4">
-                            <div className="text-center p-5 bg-white rounded-2xl border border-viet-border">
-                              <p className="text-3xl font-black text-viet-text">{selectedElement.number}</p>
-                              <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mt-1">Proton</p>
-                            </div>
-                            <div className="text-center p-5 bg-white rounded-2xl border border-viet-border">
-                              <p className="text-3xl font-black text-viet-text">{selectedElement.number}</p>
-                              <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mt-1">Electron</p>
-                            </div>
-                            <div className="text-center p-5 bg-white rounded-2xl border border-viet-border">
-                              <p className="text-3xl font-black text-viet-text">{Math.round(parseFloat(selectedElement.weight)) - selectedElement.number}</p>
-                              <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mt-1">Neutron</p>
+                    <motion.div key="discover" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}>
+                      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
+                        {/* Image/Media Section */}
+                        <div className="lg:col-span-2 relative group">
+                          <div className="aspect-square rounded-[30px] md:rounded-[40px] overflow-hidden border-4 border-white shadow-2xl relative">
+                            {selectedElement.imageUrl && !imgError ? (
+                              <img
+                                src={getStableWikiUrl(selectedElement.imageUrl)}
+                                alt={selectedElement.name}
+                                referrerPolicy="no-referrer"
+                                onError={() => setImgError(true)}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                <span className="text-4xl opacity-10 font-black">IMAGE</span>
+                              </div>
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                              <p className="text-white text-[10px] font-black uppercase tracking-widest">Wikipedia Reference Sample</p>
                             </div>
                           </div>
 
-                          {selectedElement.discoveredBy && (
-                            <div className="bg-blue-50/50 p-6 rounded-2xl border border-blue-200/50">
-                              <h3 className="text-[12px] font-black text-blue-600 uppercase tracking-widest mb-2">📜 Lịch sử khám phá</h3>
-                              <p className="text-[14px] font-medium text-viet-text">
-                                Nguyên tố <strong>{selectedElement.name}</strong> được phát hiện bởi <strong>{selectedElement.discoveredBy}</strong>
-                                {selectedElement.yearDiscovered ? ` vào năm ${selectedElement.yearDiscovered}` : ' từ thời cổ đại'}.
-                              </p>
+                          {/* Discovery Badge */}
+                          <div className="mt-4 md:mt-6 p-4 md:p-6 bg-[#fbf9f2] rounded-2xl md:rounded-3xl border border-viet-border/30">
+                            <span className="text-[8px] md:text-[9px] font-black text-viet-text/40 uppercase tracking-widest mb-2 md:mb-3 block">Lịch sử khám phá</span>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <p className="text-[8px] md:text-[10px] font-bold text-viet-text-light uppercase">Năm phát hiện</p>
+                                <p className="text-lg md:text-xl font-black text-viet-green">{selectedElement.yearDiscovered || 'Cổ đại'}</p>
+                              </div>
+                              <div>
+                                <p className="text-[8px] md:text-[10px] font-bold text-viet-text-light uppercase">Người phát hiện</p>
+                                <p className="text-xs md:text-sm font-black text-viet-text leading-tight">{selectedElement.discoveredBy || 'Chưa rõ'}</p>
+                              </div>
                             </div>
-                          )}
+                          </div>
                         </div>
-                      ) : (
-                        <div className="text-center py-12">
-                          <span className="text-5xl opacity-30 block mb-4">🌟</span>
-                          <p className="text-viet-text-light font-bold">Thông tin khám phá thú vị cho nguyên tố này đang được bổ sung.</p>
+
+                        {/* Info Section */}
+                        <div className="lg:col-span-3 flex flex-col gap-4 md:gap-6">
+                          {/* Fun Facts */}
+                          <div className="bg-gradient-to-br from-viet-green to-[#a0d96d] p-6 md:p-8 rounded-[30px] md:rounded-[40px] text-white shadow-xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12">
+                              <span className="text-[80px] md:text-[120px] font-black italic">!</span>
+                            </div>
+                            <div className="relative z-10">
+                              <span className="px-3 py-1 bg-white/20 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest mb-3 md:mb-4 block w-fit">Sự thật thú vị</span>
+                              <div className="space-y-3 md:space-y-4">
+                                {selectedElement.facts && selectedElement.facts.length > 0 ? (
+                                  selectedElement.facts.map((fact, i) => (
+                                    <p key={i} className="text-base md:text-lg font-black font-sora italic leading-tight border-l-2 border-white/30 pl-4 py-1">
+                                      {fact}
+                                    </p>
+                                  ))
+                                ) : (
+                                  <p className="text-base md:text-lg font-black font-sora italic leading-tight">
+                                    {selectedElement.funFact || 'Thông tin đang được cập nhật...'}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Applications */}
+                          <div className="p-6 md:p-8 bg-white border border-viet-border/30 rounded-[30px] md:rounded-[40px] shadow-sm">
+                            <span className="text-[8px] md:text-[9px] font-black text-viet-text/40 uppercase tracking-widest mb-3 md:mb-4 block uppercase">Ứng dụng thực tế</span>
+                            <div className="flex flex-wrap gap-2">
+                              {selectedElement.uses?.map((use, i) => (
+                                <span key={i} className="px-3 md:px-4 py-1.5 md:py-2 bg-[#fbf9f2] text-viet-text text-[10px] md:text-[11px] font-black rounded-lg md:rounded-xl border border-viet-border/20 lowercase tracking-tight">
+                                  # {use}
+                                </span>
+                              )) || <p className="text-viet-text-light italic text-[10px]">Đang cập nhật danh sách ứng dụng...</p>}
+                            </div>
+                          </div>
+
+                          <button className="w-full py-3 md:py-4 bg-viet-text text-white rounded-xl md:rounded-2xl text-[10px] md:text-[12px] font-black uppercase tracking-widest hover:bg-viet-green transition-all shadow-lg shadow-black/5" onClick={() => window.open(`https://en.wikipedia.org/wiki/${selectedElement.name}`, '_blank')}>
+                            Xem chi tiết trên Wikipedia
+                          </button>
                         </div>
-                      )}
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
 
-              {/* Footer */}
-              <div className="px-8 pb-8">
-                <button onClick={() => setSelectedElement(null)} className="viet-btn-green w-full">
-                  Đóng chi tiết
-                </button>
+
               </div>
             </motion.div>
           </motion.div>

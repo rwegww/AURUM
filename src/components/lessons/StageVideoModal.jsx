@@ -5,6 +5,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [isVideoEnded, setIsVideoEnded] = useState(false);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -35,120 +36,136 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[150] bg-[#fffbf0] flex flex-col items-center justify-center p-4 md:p-8 overflow-hidden font-inter"
+      className="fixed inset-0 z-[150] bg-[#fffcf5] flex flex-col items-center justify-between py-6 px-4 md:px-8 overflow-hidden font-inter"
     >
-      {/* Soft Light Background Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_#ffffff_0%,_#fffbf0_100%)] pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.4] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(#76c034 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }} />
+      {/* Texture Layer */}
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-multiply" 
+           style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/natural-paper.png")' }} />
+      
+      {/* Decorative Accents */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-viet-green/0 via-viet-green/30 to-viet-green/0" />
+      <div className="absolute top-10 left-10 w-20 h-20 border-l-2 border-t-2 border-viet-green/20 rounded-tl-3xl pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-20 h-20 border-r-2 border-b-2 border-viet-green/20 rounded-br-3xl pointer-events-none" />
 
-      {/* Top Floating Header (Light) */}
+      {/* Top Header Bar */}
       <motion.div 
-        initial={{ y: -100, opacity: 0 }}
+        initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.2, type: 'spring', damping: 20 }}
-        className="absolute top-6 md:top-10 left-1/2 -translate-x-1/2 w-full max-w-5xl px-6 flex items-center justify-between z-20"
+        className="w-full max-w-4xl px-4 md:px-8 flex items-center justify-between z-20 shrink-0"
       >
-        {/* New Enhanced Back Button */}
         <button 
           onClick={onBack}
-          className="group flex items-center gap-3 px-6 py-3 bg-white/70 hover:bg-white text-viet-text-light hover:text-viet-green rounded-[24px] text-[11px] font-black uppercase tracking-widest backdrop-blur-xl transition-all border border-viet-border hover:border-viet-green/30 shadow-sm hover:shadow-lg active:scale-95"
+          className="flex items-center gap-2 text-viet-text-light hover:text-viet-green transition-colors py-1.5 px-3 rounded-lg hover:bg-white/50"
         >
-          <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
-          <span className="font-sora">Quay lại</span>
+          <span className="text-lg">←</span>
+          <span className="text-[9px] font-black uppercase tracking-widest font-sora">Quay lại</span>
         </button>
 
-        <div className="hidden md:flex items-center gap-4 bg-white/70 backdrop-blur-xl border border-viet-green/20 px-6 py-3 rounded-[24px] shadow-xl shadow-viet-green/5">
-           <div className="w-2.5 h-2.5 rounded-full bg-viet-green animate-pulse" />
-           <div className="flex flex-col">
-              <span className="text-viet-green text-[9px] font-black uppercase tracking-[3px]">Mission Briefing</span>
-              <h2 className="text-viet-text text-sm md:text-base font-bold font-sora truncate max-w-[200px] md:max-w-md">
-                {lessonTitle}
-              </h2>
+        <div className="flex flex-col items-center max-w-[60%]">
+           <div className="flex items-center gap-2 mb-0.5">
+              <span className="w-1 h-1 rounded-full bg-viet-green animate-pulse" />
+              <span className="text-viet-green text-[8px] font-black uppercase tracking-[4px]">Mission Insight</span>
            </div>
+           <h2 className="text-viet-text text-base md:text-lg font-black font-sora uppercase italic tracking-tight text-center line-clamp-1">
+              {lessonTitle.split(': ').pop()}
+           </h2>
         </div>
 
-        <button 
-          onClick={onSkip}
-          className="group relative px-6 py-3 bg-white/70 hover:bg-white text-viet-text-light hover:text-viet-text rounded-[24px] text-[10px] font-black uppercase tracking-widest backdrop-blur-xl transition-all border border-viet-border overflow-hidden"
-        >
-          <span className="relative z-10 flex items-center gap-2">Bỏ qua clip <span className="text-xs group-hover:translate-x-1 transition-transform">➔</span></span>
-        </button>
-      </motion.div>
-
-      {/* Premium Video Container (Light Frame) */}
-      <motion.div 
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-        className="relative w-full max-w-5xl aspect-video rounded-[32px] md:rounded-[48px] overflow-hidden ring-8 ring-white shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] group flex items-center justify-center bg-white"
-      >
-        <video
-          ref={videoRef}
-          src={videoSrc}
-          autoPlay
-          className="w-full h-full object-cover"
-          onEnded={onComplete}
-          onClick={handlePlayPause}
-        />
-        
-        {/* Subtle Overlay Hint (Visual Decor) */}
-        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white/20 to-transparent pointer-events-none z-10" />
-
-        {/* Play/Pause Overlay (Light) */}
-        <AnimatePresence>
-          {!isPlaying && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.5 }}
-              className="absolute inset-0 flex items-center justify-center bg-white/20 backdrop-blur-[4px] pointer-events-none z-20"
-            >
-              <div className="w-24 h-24 rounded-full bg-white/80 backdrop-blur-lg flex items-center justify-center border border-white shadow-2xl">
-                <span className="text-viet-green text-4xl ml-2">▶</span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Control Bars Overlay (Light) */}
-        <div className="absolute inset-x-0 bottom-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
-           {/* Sound Control */}
-           <div className="flex items-center gap-4 pointer-events-auto">
-              <button 
-                onClick={toggleMute}
-                className="w-12 h-12 rounded-2xl bg-white/90 backdrop-blur-md flex items-center justify-center border border-viet-border shadow-sm hover:border-viet-green/30 transition-all hover:scale-110 active:scale-95"
-              >
-                <span className="text-viet-text text-xl">{isMuted ? '🔇' : '🔊'}</span>
-              </button>
-           </div>
+        <div className="hidden md:flex items-center gap-2 py-1 px-3 bg-viet-green/5 rounded-full border border-viet-green/10 shrink-0">
+           <span className="text-[8px] font-black text-viet-green/60 uppercase tracking-widest">Status:</span>
+           <span className="text-[9px] font-bold text-viet-text uppercase">{isVideoEnded ? 'Ready' : 'Analyzing'}</span>
         </div>
+
       </motion.div>
 
-      {/* Engagement Footer (Light) */}
+      {/* Main Video Section */}
+      <div className="relative w-full max-w-4xl flex flex-col items-center justify-center flex-1 my-4">
+         {/* Video Canvas */}
+         <motion.div 
+           initial={{ scale: 0.98, opacity: 0 }}
+           animate={{ scale: 1, opacity: 1 }}
+           className="relative w-full aspect-video rounded-[32px] overflow-hidden bg-white shadow-[0_30px_70px_-15px_rgba(0,0,0,0.1)] border-[8px] border-white group"
+         >
+            <video
+              ref={videoRef}
+              src={videoSrc}
+              autoPlay
+              className="w-full h-full object-cover"
+              onEnded={() => setIsVideoEnded(true)}
+              onClick={handlePlayPause}
+            />
+
+            {/* Play/Pause Indicator Overlay */}
+            <AnimatePresence>
+              {!isPlaying && (
+                <motion.div 
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[2px] cursor-pointer"
+                  onClick={handlePlayPause}
+                >
+                  <div className="w-20 h-20 rounded-full bg-white/90 shadow-2xl flex items-center justify-center">
+                    <span className="text-viet-green text-3xl ml-1">▶</span>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Video Controls Decor */}
+            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+               <button 
+                 onClick={toggleMute}
+                 className="w-10 h-10 rounded-full bg-white/80 backdrop-blur shadow-sm border border-gray-100 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
+               >
+                 <span className="text-lg">{isMuted ? '🔇' : '🔊'}</span>
+               </button>
+            </div>
+         </motion.div>
+
+         {/* Technical Label Below Video */}
+         <div className="absolute -bottom-8 left-10 flex items-center gap-6 opacity-30 select-none">
+            <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">Source: Laboratory Camera 01</span>
+            <div className="w-20 h-[1px] bg-viet-text" />
+            <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">Format: 1080p Digital Feed</span>
+         </div>
+      </div>
+
+      {/* Tactical Entry Button */}
       <motion.div 
-        initial={{ y: 50, opacity: 0 }}
+        initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.6, type: 'spring', damping: 20 }}
-        className="mt-12 flex flex-col items-center gap-6 z-20"
+        className="flex flex-col items-center gap-3 z-20 shrink-0 mb-4"
       >
         <button 
-          onClick={onComplete}
-          className="group relative px-12 py-5 bg-viet-green text-white rounded-[24px] font-black text-[14px] uppercase tracking-[4px] shadow-[0_20px_40px_rgba(118,192,52,0.2)] hover:shadow-[0_25px_50px_rgba(118,192,52,0.3)] transition-all hover:-translate-y-1 active:scale-95 flex items-center gap-4 overflow-hidden"
+          onClick={isVideoEnded ? onComplete : null}
+          disabled={!isVideoEnded}
+          className={`group relative px-12 py-4 rounded-[24px] font-black text-[13px] uppercase tracking-[4px] transition-all duration-500 overflow-hidden flex items-center gap-3
+            ${isVideoEnded 
+              ? 'bg-viet-green text-white shadow-[0_15px_40px_-8px_rgba(118,192,52,0.3)] hover:shadow-[0_25px_50px_-10px_rgba(118,192,52,0.5)] hover:-translate-y-1 active:scale-95 cursor-pointer' 
+              : 'bg-white text-gray-300 border-2 border-gray-100 cursor-not-allowed opacity-80'}
+          `}
         >
-          <span className="relative z-10 font-sora">VÀO NHIỆM VỤ</span>
-          <span className="relative z-10 text-xl group-hover:translate-x-2 transition-transform duration-300">🚀</span>
-          <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+          {/* Animated Background for Enabled State */}
+          {isVideoEnded && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+          )}
+
+          <span className="relative z-10 font-sora">
+            {isVideoEnded ? "Tiếp nhận nhiệm vụ" : "Đang xử lý dữ liệu..."}
+          </span>
+          <span className={`relative z-10 text-xl transition-all duration-300 ${isVideoEnded ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`}>
+            {isVideoEnded ? '🚀' : '⏳'}
+          </span>
         </button>
 
-        <div className="flex items-center gap-3 py-3 px-8 bg-white/60 backdrop-blur-md rounded-full border border-viet-green/20 shadow-sm">
-           <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-viet-green opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-viet-green"></span>
-           </span>
-           <p className="text-viet-text-light text-[11px] font-bold tracking-wide uppercase">
-             Gợi ý: Theo dõi clip kỹ để chuẩn bị cho thử thách nhé!
+        <div className={`flex items-center gap-3 py-3 px-10 rounded-full border transition-all duration-700
+          ${isVideoEnded ? 'bg-viet-green/10 border-viet-green/20' : 'bg-gray-50 border-gray-100'}
+        `}>
+           <p className={`text-[10px] font-black uppercase tracking-widest transition-colors
+             ${isVideoEnded ? 'text-viet-green' : 'text-gray-400'}
+           `}>
+             {isVideoEnded 
+               ? "Dữ liệu đã sẵn sàng! Chúc Nhà Hóa học thành công." 
+               : "Gợi ý: Theo dõi clip kỹ để chuẩn bị cho thử thách nhé!"}
            </p>
         </div>
       </motion.div>

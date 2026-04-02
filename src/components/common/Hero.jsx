@@ -1,6 +1,9 @@
 import React from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
+  const { isLoggedIn, user } = useAuth();
   return (
     <section className="relative min-h-[90vh] pt-32 pb-20 overflow-hidden bg-viet-bg">
       {/* Background Orbs - Adjusted for Light BG */}
@@ -29,12 +32,15 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
-            <button className="btn-primary flex items-center gap-3">
-              <span>Bắt đầu hành trình</span>
+            <Link 
+              to={isLoggedIn ? "/classroom" : "/login"} 
+              className="px-8 py-4 bg-viet-green text-white rounded-2xl font-black uppercase tracking-widest text-[13px] flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-viet-green/20"
+            >
+              <span>{isLoggedIn ? `Chào, ${user?.username}!` : "Bắt đầu hành trình →"}</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
                 <path d="M5 12h14m-7-7 7 7-7 7" />
               </svg>
-            </button>
+            </Link>
             <button className="btn-secondary flex items-center gap-3">
               <span>Khám phá thư viện</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
