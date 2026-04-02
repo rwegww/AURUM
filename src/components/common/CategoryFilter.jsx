@@ -17,7 +17,7 @@ const CategoryFilter = ({ activeCategory, onCategoryChange }) => {
         <button
           key={cat.id}
           onClick={() => onCategoryChange && onCategoryChange(cat.id)}
-          className={`px-6 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all border-2 ${
+          className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all border-2 ${
             activeCategory === cat.id
               ? 'bg-viet-green border-viet-green text-white shadow-lg shadow-viet-green/20'
               : 'bg-white border-viet-border text-viet-text-light hover:border-viet-green/30 hover:text-viet-green'

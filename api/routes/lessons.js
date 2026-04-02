@@ -11,9 +11,7 @@ router.get('/', async (req, res) => {
     if (classId) query.classId = parseInt(classId);
     if (programId) query.programId = programId;
 
-    const lessons = await Lesson.find(query)
-      .select('lessonId classId title chapter order isPremium description')
-      .sort({ classId: 1, order: 1 });
+    const lessons = await Lesson.find(query);
     
     res.json(lessons);
   } catch (err) {
@@ -25,7 +23,7 @@ router.get('/', async (req, res) => {
 router.get('/:lessonId', async (req, res) => {
   try {
     const { lessonId } = req.params;
-    const lesson = await Lesson.findOne({ lessonId });
+    const lesson = await Lesson.findById(lessonId);
     
     if (!lesson) {
       return res.status(404).json({ message: 'Không tìm thấy bài học' });

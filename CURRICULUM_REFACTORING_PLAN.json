@@ -1,0 +1,445 @@
+{
+  "project": "Curriculum Files Refactoring",
+  "objective": "Split monolithic curriculum files into individual lesson files while maintaining export structure",
+  "current_state": {
+    "structure": "5 large files (class8.js through class12.js) each containing all lessons in a single export",
+    "files": [
+      {
+        "filename": "class8.js",
+        "current_lessons": 12,
+        "size_estimate": "Large"
+      },
+      {
+        "filename": "class9.js",
+        "current_lessons": 19,
+        "size_estimate": "Very Large"
+      },
+      {
+        "filename": "class10.js",
+        "current_lessons": 7,
+        "size_estimate": "Large"
+      },
+      {
+        "filename": "class11.js",
+        "current_lessons": 8,
+        "size_estimate": "Large"
+      },
+      {
+        "filename": "class12.js",
+        "current_lessons": 9,
+        "size_estimate": "Large"
+      }
+    ]
+  },
+  "target_state": {
+    "structure": "Modular folder structure with individual lesson files + index.js per class",
+    "folder_pattern": "src/data/curriculum/classX/"
+  },
+  "folder_structure_to_create": {
+    "directories": [
+      "src/data/curriculum/class8/",
+      "src/data/curriculum/class9/",
+      "src/data/curriculum/class10/",
+      "src/data/curriculum/class11/",
+      "src/data/curriculum/class12/"
+    ]
+  },
+  "class_breakdown": {
+    "class8": {
+      "total_lessons": 12,
+      "curriculum_type": "ketnoi",
+      "lessons": [
+        {
+          "lesson_id": 1,
+          "internal_id": "hoa8_kntt_bai1",
+          "title": "Bài 1: Sử dụng một số hóa chất, thiết bị cơ bản trong phòng thí nghiệm",
+          "chapter": "Chương mở đầu",
+          "file_to_create": "src/data/curriculum/class8/lesson-1.js",
+          "content_summary": "Laboratory safety, basic chemical apparatus, proper use of equipment"
+        },
+        {
+          "lesson_id": 2,
+          "internal_id": "hoa8_kntt_bai2",
+          "title": "Bài 2: Phản ứng hóa học",
+          "chapter": "Chương 1: Phản ứng hóa học",
+          "file_to_create": "src/data/curriculum/class8/lesson-2.js",
+          "content_summary": "Physical vs chemical changes, chemical reaction characteristics, energy in reactions"
+        },
+        {
+          "lesson_id": 3,
+          "internal_id": "hoa8_kntt_bai3",
+          "title": "Bài 3: Mol và tỉ khối chất khí",
+          "chapter": "Chương 1: Phản ứng hóa học",
+          "file_to_create": "src/data/curriculum/class8/lesson-3.js",
+          "content_summary": "Mole concept, Avogadro's number, molar mass, gas density ratios"
+        },
+        {
+          "lesson_id": 4,
+          "internal_id": "hoa8_kntt_bai4",
+          "title": "Bài 4: Dung dịch và Nồng độ",
+          "chapter": "Chương 1: Phản ứng hóa học",
+          "file_to_create": "src/data/curriculum/class8/lesson-4.js",
+          "content_summary": "Solutions, solubility, concentration percentage, molar concentration, solution preparation"
+        },
+        {
+          "lesson_id": 5,
+          "internal_id": "hoa8_kntt_bai5",
+          "title": "Bài 5: [Additional lesson]",
+          "chapter": "Chương 1: Phản ứng hóa học",
+          "file_to_create": "src/data/curriculum/class8/lesson-5.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 6,
+          "internal_id": "hoa8_kntt_bai6",
+          "title": "Bài 6: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-6.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 7,
+          "internal_id": "hoa8_kntt_bai7",
+          "title": "Bài 7: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-7.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 8,
+          "internal_id": "hoa8_kntt_bai8",
+          "title": "Bài 8: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-8.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 9,
+          "internal_id": "hoa8_kntt_bai9",
+          "title": "Bài 9: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-9.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 10,
+          "internal_id": "hoa8_kntt_bai10",
+          "title": "Bài 10: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-10.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 11,
+          "internal_id": "hoa8_kntt_bai11",
+          "title": "Bài 11: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-11.js",
+          "content_summary": "[Content to be determined from full file]"
+        },
+        {
+          "lesson_id": 12,
+          "internal_id": "hoa8_kntt_bai12",
+          "title": "Bài 12: [Additional lesson]",
+          "chapter": "[To be determined]",
+          "file_to_create": "src/data/curriculum/class8/lesson-12.js",
+          "content_summary": "[Content to be determined from full file]"
+        }
+      ],
+      "index_file": "src/data/curriculum/class8/index.js",
+      "export_structure": "Import all lesson objects and export as class8Data = { ketnoi: [...] }"
+    },
+    "class9": {
+      "total_lessons": 19,
+      "curriculum_type": "ketnoi",
+      "lessons_summary": [
+        {
+          "lesson_id": 1,
+          "title": "Bài 1: Tính chất chung của kim loại",
+          "chapter": "Chương 6: Kim loại"
+        },
+        {
+          "lesson_id": 2,
+          "title": "Bài 2: Dãy hoạt động hóa học",
+          "chapter": "Chương 6: Kim loại"
+        },
+        {
+          "lesson_id": 3,
+          "title": "Bài 3: Tách kim loại và việc sử dụng hợp kim",
+          "chapter": "Chương 6: Kim loại"
+        },
+        {
+          "lesson_id": 4,
+          "title": "Bài 4: Sự khác nhau cơ bản giữa phi kim và kim loại",
+          "chapter": "Chương 6: Kim loại"
+        },
+        {
+          "lesson_id": 5,
+          "title": "Bài 5: Giới thiệu về hợp chất hữu cơ",
+          "chapter": "Chương 7: Hydrocarbon và nhiên liệu"
+        },
+        {
+          "lesson_id": 6,
+          "title": "Bài 6: Alkane",
+          "chapter": "Chương 7: Hydrocarbon và nhiên liệu"
+        },
+        {
+          "lesson_id": 7,
+          "title": "Bài 7: Alkene",
+          "chapter": "Chương 7: Hydrocarbon và nhiên liệu"
+        },
+        {
+          "lesson_id": 8,
+          "title": "Bài 8: Nguồn nhiên liệu",
+          "chapter": "Chương 7: Hydrocarbon và nhiên liệu"
+        },
+        {
+          "lesson_id": "9-19",
+          "title": "Bài 9-19: [Additional lessons to be identified]",
+          "chapter": "[Multiple chapters]"
+        }
+      ],
+      "file_structure": "19 individual lesson files (lesson-1.js through lesson-19.js) + index.js"
+    },
+    "class10": {
+      "total_lessons": 7,
+      "curriculum_type": "ketnoi",
+      "lessons_summary": [
+        {
+          "lesson_id": 1,
+          "title": "Bài 1: Thành phần của nguyên tử",
+          "chapter": "Chương 1: Cấu tạo nguyên tử"
+        },
+        {
+          "lesson_id": 2,
+          "title": "Bài 2: Nguyên tố hóa học",
+          "chapter": "Chương 1: Cấu tạo nguyên tử"
+        },
+        {
+          "lesson_id": 3,
+          "title": "Bài 3: Cấu trúc lớp vỏ electron nguyên tử",
+          "chapter": "Chương 1: Cấu tạo nguyên tử"
+        },
+        {
+          "lesson_id": 4,
+          "title": "Bài 4: Ôn tập chương 1",
+          "chapter": "Chương 1: Cấu tạo nguyên tử"
+        },
+        {
+          "lesson_id": 5,
+          "title": "Bài 5: Cấu tạo của bảng tuần hoàn",
+          "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học"
+        },
+        {
+          "lesson_id": 6,
+          "title": "Bài 6: Xu hướng biến đổi tính chất của nguyên tử",
+          "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học"
+        },
+        {
+          "lesson_id": 7,
+          "title": "Bài 7: Xu hướng biến đổi tính chất của hợp chất",
+          "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học"
+        }
+      ],
+      "file_structure": "7 individual lesson files (lesson-1.js through lesson-7.js) + index.js"
+    },
+    "class11": {
+      "total_lessons": 8,
+      "curriculum_type": "ketnoi",
+      "lessons_summary": [
+        {
+          "lesson_id": 1,
+          "title": "Bài 1: Khái niệm về cân bằng hóa học",
+          "chapter": "Chương 1: Cân bằng hóa học"
+        },
+        {
+          "lesson_id": 2,
+          "title": "Bài 2: Cân bằng trong dung dịch nước",
+          "chapter": "Chương 1: Cân bằng hóa học"
+        },
+        {
+          "lesson_id": 3,
+          "title": "Bài 3: Ôn tập chương 1",
+          "chapter": "Chương 1: Cân bằng hóa học"
+        },
+        {
+          "lesson_id": 4,
+          "title": "Bài 4: Nitrogen",
+          "chapter": "Chương 2: Nitrogen – Sulfur"
+        },
+        {
+          "lesson_id": 5,
+          "title": "Bài 5: Ammonia – Muối ammonium",
+          "chapter": "Chương 2: Nitrogen – Sulfur"
+        },
+        {
+          "lesson_id": 6,
+          "title": "Bài 6: Một số hợp chất của nitrogen với oxygen",
+          "chapter": "Chương 2: Nitrogen – Sulfur"
+        },
+        {
+          "lesson_id": 7,
+          "title": "Bài 7: Sulfur và sulfur dioxide",
+          "chapter": "Chương 2: Nitrogen – Sulfur"
+        },
+        {
+          "lesson_id": 8,
+          "title": "Bài 8: Sulfuric acid và muối sulfate",
+          "chapter": "Chương 2: Nitrogen – Sulfur"
+        }
+      ],
+      "file_structure": "8 individual lesson files (lesson-1.js through lesson-8.js) + index.js"
+    },
+    "class12": {
+      "total_lessons": 9,
+      "curriculum_type": "ketnoi",
+      "lessons_summary": [
+        {
+          "lesson_id": 1,
+          "title": "Bài 1: Ester – Lipid",
+          "chapter": "Chương 1: Ester – lipid"
+        },
+        {
+          "lesson_id": 2,
+          "title": "Bài 2: Xà phòng và chất giặt rửa",
+          "chapter": "Chương 1: Ester – lipid"
+        },
+        {
+          "lesson_id": 3,
+          "title": "Bài 3: Ôn tập chương 1",
+          "chapter": "Chương 1: Ester – lipid"
+        },
+        {
+          "lesson_id": 4,
+          "title": "Bài 4: Giới thiệu về carbohydrate. Glucose và fructose",
+          "chapter": "Chương 2: Carbohydrate"
+        },
+        {
+          "lesson_id": 5,
+          "title": "Bài 5: Saccharose và maltose",
+          "chapter": "Chương 2: Carbohydrate"
+        },
+        {
+          "lesson_id": 6,
+          "title": "Bài 6: Tinh bột và cellulose",
+          "chapter": "Chương 2: Carbohydrate"
+        },
+        {
+          "lesson_id": 7,
+          "title": "Bài 7: Ôn tập chương 2",
+          "chapter": "Chương 2: Carbohydrate"
+        },
+        {
+          "lesson_id": 8,
+          "title": "Bài 8: Amine",
+          "chapter": "Chương 3: Hợp chất chứa nitrogen"
+        },
+        {
+          "lesson_id": 9,
+          "title": "Bài 9: Amino acid và peptide",
+          "chapter": "Chương 3: Hợp chất chứa nitrogen"
+        }
+      ],
+      "file_structure": "9 individual lesson files (lesson-1.js through lesson-9.js) + index.js"
+    }
+  },
+  "implementation_details": {
+    "file_pattern_per_lesson": {
+      "description": "Each lesson file will contain a single lesson object exported as default",
+      "example": "src/data/curriculum/class8/lesson-1.js",
+      "content_structure": [
+        "export const bai1 = {",
+        "  id: 'hoa8_kntt_bai1',",
+        "  classId: 8,",
+        "  lessonId: 1,",
+        "  programId: 'ketnoi',",
+        "  curriculumType: 'ketnoi',",
+        "  title: '...',",
+        "  chapter: '...',",
+        "  order: 1,",
+        "  isPremium: false,",
+        "  description: '...',",
+        "  [all other properties from original file]",
+        "};"
+      ]
+    },
+    "index_file_pattern": {
+      "description": "Index file that re-exports all lessons in original structure",
+      "example": "src/data/curriculum/class8/index.js",
+      "content_structure": [
+        "import { bai1 } from './lesson-1.js';",
+        "import { bai2 } from './lesson-2.js';",
+        "// ... import all lessons ...",
+        "import { bai12 } from './lesson-12.js';",
+        "",
+        "export const class8Data = {",
+        "  ketnoi: [",
+        "    bai1,",
+        "    bai2,",
+        "    // ... all lessons in order ...",
+        "    bai12",
+        "  ]",
+        "};",
+        "",
+        "// Alternative: export individual lessons",
+        "export { bai1, bai2, /* ... */ bai12 };"
+      ]
+    }
+  },
+  "migration_strategy": {
+    "step_1": "Read entire content of class8.js, class9.js, class10.js, class11.js, class12.js",
+    "step_2": "Create folder structures: src/data/curriculum/class8/ through class12/",
+    "step_3": "For each lesson in each class, create lesson-N.js file with single lesson object",
+    "step_4": "Create index.js in each class folder that imports all lessons and re-exports in original format",
+    "step_5": "Verify that app imports continue to work (may need to update import paths)",
+    "step_6": "Delete or archive original monolithic files"
+  },
+  "benefits": {
+    "maintainability": "Easier to find and modify specific lessons",
+    "development": "Team can work on different lessons simultaneously without conflict",
+    "testing": "Individual lesson files can be tested independently",
+    "code_organization": "Clearer file structure follows single responsibility principle",
+    "scalability": "Easy to add new lessons by creating new lesson-N.js files"
+  },
+  "total_files_to_create": {
+    "class8": {
+      "lesson_files": 12,
+      "index_file": 1,
+      "total": 13
+    },
+    "class9": {
+      "lesson_files": 19,
+      "index_file": 1,
+      "total": 20
+    },
+    "class10": {
+      "lesson_files": 7,
+      "index_file": 1,
+      "total": 8
+    },
+    "class11": {
+      "lesson_files": 8,
+      "index_file": 1,
+      "total": 9
+    },
+    "class12": {
+      "lesson_files": 9,
+      "index_file": 1,
+      "total": 10
+    },
+    "grand_total_files": 60,
+    "new_directories": 5
+  },
+  "import_path_changes_required": {
+    "current_imports": "import { class8Data } from 'src/data/curriculum/class8.js'",
+    "new_imports": "import { class8Data } from 'src/data/curriculum/class8/index.js'",
+    "note": "If using barrel exports, path remains the same but structure changes internally"
+  },
+  "execution_notes": {
+    "note_1": "Ensure no curriculum data is modified during migration - only structure changes",
+    "note_2": "All original properties, arrays, and objects must be preserved exactly",
+    "note_3": "Each lesson-N.js file is independently functional but designed to be imported by index.js",
+    "note_4": "The index.js acts as an adapter maintaining backward compatibility",
+    "note_5": "Consider keeping original monolithic files as backup until migration is fully tested"
+  }
+}

@@ -1,10 +1,11 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import lessonRoutes from './routes/lessons.js';
 import userRoutes from './routes/user.js';
+import mediaRoutes from './routes/media.js';
+import adminRoutes from './routes/admin.js';
 
 dotenv.config();
 
@@ -14,26 +15,34 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Database Connection
-let isConnected = false;
-const connectDB = async () => {
-  if (isConnected) return;
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    isConnected = true;
-    console.log('MongoDB Connected');
-  } catch (err) {
-    console.error('MongoDB Connection Error:', err);
-  }
-};
-
 // Routes
-app.use('/api/auth', async (req, res, next) => { await connectDB(); next(); }, authRoutes);
-app.use('/api/lessons', async (req, res, next) => { await connectDB(); next(); }, lessonRoutes);
-app.use('/api/user', async (req, res, next) => { await connectDB(); next(); }, userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/lessons', lessonRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/media', mediaRoutes);
+app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'Chemistry Odyssey API is running' });
+  res.status(200).json({ status: 'ok', message: 'Chemistry Odyssey API is running on Supabase' });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('❌ Server Error:', err);
+  res.status(500).json({ 
+    message: 'Internal Server Error', 
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined 
+  });
 });
 
 export default app;
+
+// Local Server Listener (only for 'npm run server')
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  // Use 127.0.0.1 explicitly to match Vite's proxy target and avoid IPv6 issues on Windows
+  app.listen(PORT, '127.0.0.1', () => {
+    console.log(`🚀 Chemistry Odyssey API running on http://127.0.0.1:${PORT}`);
+    console.log(`🔗 Health Check: http://127.0.0.1:${PORT}/api/health`);
+  });
+}

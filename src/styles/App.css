@@ -19,6 +19,11 @@ body {
   overflow-x: hidden;
 }
 
+body.no-scroll {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0px); /* Prevent layout shift if possible */
+}
+
 /* Global Heading Rule: All titles use Sora */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-sora);

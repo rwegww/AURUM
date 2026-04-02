@@ -22,7 +22,7 @@ const ElementCard = ({ element, onClick }) => {
       onClick={() => onClick && onClick(element)}
       className={`relative aspect-square cursor-pointer transition-all duration-300 group ${getCategoryColor(element.category)}`}
     >
-      <div className={`absolute inset-0 rounded-xl border bg-gradient-to-br shadow-sm transition-all duration-500 hover:ring-4 hover:ring-viet-green/30 hover:shadow-2xl hover:z-10 hover:-translate-y-2`}>
+      <div className={`absolute inset-0 rounded-2xl border bg-gradient-to-br shadow-sm transition-all duration-500 hover:ring-4 hover:ring-viet-green/30 hover:shadow-2xl hover:z-10 hover:-translate-y-2`}>
         <div className="p-1 px-1.5 h-full flex flex-col justify-between">
           <span className="text-[10px] font-bold opacity-60 leading-none">{element.number}</span>
           <div className="flex flex-col items-center justify-center flex-1 -mt-1">

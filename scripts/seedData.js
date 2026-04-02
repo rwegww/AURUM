@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { class8Data } from '../src/data/curriculum/class8.js';
 import { class9Data } from '../src/data/curriculum/class9.js';
@@ -19,19 +18,17 @@ const allData = [
 
 async function seed() {
   try {
-    console.log('Connecting to MongoDB...');
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected!');
-
-    console.log('Cleaning old lessons...');
-    await Lesson.deleteMany({});
+    console.log('🚀 Starting Supabase Seeding...');
     
-    console.log(`Preparing to seed ${allData.length} lessons...`);
+    console.log('🧹 Cleaning old lessons...');
+    await Lesson.deleteMany();
+    
+    console.log(`📦 Preparing to seed ${allData.length} lessons...`);
     
     const formattedData = allData
-      .filter(l => l && l.id) // Ensure we only take items with an ID
+      .filter(l => l && (l.id || l.lessonId)) // Ensure we only take items with an ID
       .map(l => ({
-        lessonId: l.id,
+        lessonId: l.id || l.lessonId,
         classId: l.classId,
         programId: l.programId || 'ketnoi',
         title: l.title,
@@ -40,7 +37,13 @@ async function seed() {
         description: l.description,
         theoryModules: l.theoryModules || [],
         videoModules: l.videoModules || [],
+        challenges: l.challenges || [],
         quizzes: l.quizzes || [],
+        storySlides: l.classId === 8 ? [
+          { character: 'professor', text: `Chào mừng bạn đến với ${l.title}! Tôi là Giáo sư Mole, người sẽ đồng hành cùng bạn.` },
+          { character: 'robot', text: `Tôi là Robot Chem-E! Để khám phá bài học này, chúng ta cần hoàn thành các thử thách phía trước.` },
+          { character: 'professor', text: 'Bạn đã sẵn sàng để trở thành một nhà giả kim thực thụ chưa? Hãy bắt đầu thôi!' }
+        ] : (l.storySlides || []),
         game: l.game || {},
         isPremium: l.isPremium || false
       }));
@@ -49,12 +52,13 @@ async function seed() {
       throw new Error('No valid lesson data found to seed!');
     }
 
+    console.log('⌛ Inserting lessons into Supabase...');
     await Lesson.insertMany(formattedData);
-    console.log(`Successfully seeded ${formattedData.length} lessons! 🎉`);
+    console.log(`✅ Successfully seeded ${formattedData.length} lessons! 🎉`);
     
     process.exit(0);
   } catch (error) {
-    console.error('Seed error:', error);
+    console.error('❌ Seed error:', error);
     process.exit(1);
   }
 }

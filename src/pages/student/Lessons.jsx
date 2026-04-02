@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 const storyParts = {
@@ -39,15 +39,20 @@ const storyParts = {
 const Lessons = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const { grade } = useParams();
+  const [searchParams] = useSearchParams();
+  const queryGrade = searchParams.get('grade');
+  
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/lessons/8/hoa8_kntt_bai1');
+    const activeGrade = grade || queryGrade;
+    if (activeGrade) {
+      setSelectedGrade(parseInt(activeGrade));
     }
-  }, [isLoggedIn, navigate]);
+  }, [grade, queryGrade]);
 
   const fetchLessons = async (grade) => {
     setLoading(true);

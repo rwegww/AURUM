@@ -67,7 +67,7 @@ const DiscussionBoard = () => {
         {/* Sample Comment */}
         <div className="viet-card p-5 border-[#faefd4] bg-[#fffbf0]/50 relative overflow-visible">
           <div className="flex gap-4">
-            <div className="w-10 h-10 rounded-[12px] bg-[#f8f9fa] border border-viet-border overflow-hidden shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-[#f8f9fa] border border-viet-border overflow-hidden shrink-0">
                <img src="https://ui-avatars.com/api/?name=Quynh&background=random" alt="User" />
             </div>
             <div className="flex-1">
@@ -77,7 +77,7 @@ const DiscussionBoard = () => {
               </div>
               <p className="text-[12px] text-viet-text-light font-medium mb-3">Học sinh • Trường Tiểu học</p>
               
-              <div className="bg-white border border-[#f0ede4] rounded-[15px] p-4 text-[14px] text-viet-text mb-3 shadow-sm italic">
+              <div className="bg-white border border-[#f0ede4] rounded-2xl p-4 text-[14px] text-viet-text mb-3 shadow-sm italic">
                  Nhớ học bài nha các em
               </div>
 

@@ -7,7 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 
 const Home = () => {
   const { isLoggedIn } = useAuth();
-  const lessonPath = isLoggedIn ? "/lessons/8/hoa8_kntt_bai1" : "/lessons";
+  const lessonPath = "/classroom";
 
   return (
     <div className="min-h-screen bg-viet-bg pt-20 pb-12">

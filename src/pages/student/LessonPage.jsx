@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import TheoryRenderer from '@/components/lessons/TheoryRenderer';
 import QuizModule from '@/components/lessons/QuizModule';
 import LessonSidebar from '@/components/navigation/LessonSidebar';
 import DiscussionBoard from '@/components/lessons/DiscussionBoard';
+import StoryIntro from '@/components/lessons/StoryIntro';
 
 const LessonPage = () => {
   const { grade, lessonId } = useParams();
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode');
+  
   const [lesson, setLesson] = useState(null);
   const [gradeLessons, setGradeLessons] = useState([]);
   const [activeTab, setActiveTab] = useState('theory'); // 'theory' or 'quiz'
   const [loading, setLoading] = useState(true);
+  const [showStory, setShowStory] = useState(false);
   const { isLoggedIn } = useAuth();
 
   const fetchLessonData = async () => {
@@ -29,6 +34,11 @@ const LessonPage = () => {
       
       setLesson(lessonData);
       setGradeLessons(listData);
+
+      // Show story if not in lecture mode and slides exist
+      if (mode !== 'lecture' && lessonData.storySlides?.length > 0) {
+        setShowStory(true);
+      }
     } catch (err) {
       console.error('Lỗi tải dữ liệu bài học:', err);
     } finally {
@@ -59,6 +69,13 @@ const LessonPage = () => {
 
   return (
     <div className="min-h-screen bg-viet-bg pt-[70px]">
+      {showStory && lesson.storySlides?.length > 0 && (
+        <StoryIntro 
+          slides={lesson.storySlides} 
+          onComplete={() => setShowStory(false)}
+          onSkip={() => setShowStory(false)}
+        />
+      )}
       <div className="flex">
         {/* Sidebar - Only show for logged in users or if desired for all */}
         {isLoggedIn && (
@@ -100,12 +117,18 @@ const LessonPage = () => {
                    <span className="text-[14px] font-black text-blue-600 italic">FPT</span>
                 </div>
              </div>
-             <iframe 
-                className="w-full h-full pt-[60px]"
-                src={video.url.replace('watch?v=', 'embed/')} 
-                title={video.title}
-                allowFullScreen
-              />
+             {video.url ? (
+               <iframe 
+                  className="w-full h-full pt-[60px]"
+                  src={video.url.replace('watch?v=', 'embed/')} 
+                  title={video.title}
+                  allowFullScreen
+                />
+             ) : (
+               <div className="w-full h-full pt-[60px] flex items-center justify-center bg-gray-100 text-gray-400 font-medium">
+                 Video không khả dụng
+               </div>
+             )}
           </div>
 
           {isLoggedIn && (
