@@ -4,16 +4,10 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const FeedbackManager = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!authLoading && (!user || (user.role !== 'admin' && user.role !== 'teacher'))) {
-      navigate('/');
-    }
-  }, [user, authLoading, navigate]);
 
   const fetchFeedbacks = async () => {
     try {
@@ -49,8 +43,6 @@ const FeedbackManager = () => {
     }
   };
 
-  if (authLoading) return null;
-
   const getTypeStyle = (type) => {
     switch (type) {
       case 'bug': return 'bg-red-50 text-red-600 ring-red-200';
@@ -61,7 +53,7 @@ const FeedbackManager = () => {
   };
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-24 px-8 pb-12">
+    <div className="p-8 pb-12">
       <div className="max-w-6xl mx-auto">
         <header className="mb-12">
           <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Dashboard</Link>

@@ -4,16 +4,9 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [stats, setStats] = useState({ lessons: 0, users: 0, uploads: 0 });
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!authLoading && (!user || user.role === 'student')) {
-      navigate('/');
-    }
-  }, [user, authLoading, navigate]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -33,9 +26,9 @@ const AdminDashboard = () => {
     fetchStats();
   }, []);
 
-  if (authLoading || loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="w-16 h-16 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
+  if (loading) {
+    return <div className="h-full w-full flex items-center justify-center">
+      <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
     </div>;
   }
 
@@ -47,7 +40,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-24 px-8 pb-12">
+    <div className="p-8 pb-12">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12">
           <div className="flex items-center gap-3 mb-2">
@@ -90,10 +83,10 @@ const AdminDashboard = () => {
             <section className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
               <h2 className="text-xl font-bold text-viet-text mb-6">Thao tác nhanh</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <Link to="/admin/lessons/new" className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all">
+                <button onClick={() => alert('Chức năng Thêm bài học mới đang được hoàn thiện!')} className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">➕</div>
                   <span className="text-sm font-bold text-viet-text">Thêm bài học</span>
-                </Link>
+                </button>
                 <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">✉️</div>
                   <span className="text-sm font-bold text-viet-text">Gửi thông báo</span>

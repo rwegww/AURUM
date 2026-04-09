@@ -6,25 +6,54 @@
 // Parse chemical formula like "Fe2O3" → { Fe: 2, O: 3 }
 export function parseFormula(formula) {
   const elements = {};
-  // Remove subscript unicode characters and convert to numbers
-  const cleaned = formula
+  
+  // Helper to handle cleaning and normalization
+  const clean = (f) => f
     .replace(/₀/g, '0').replace(/₁/g, '1').replace(/₂/g, '2')
     .replace(/₃/g, '3').replace(/₄/g, '4').replace(/₅/g, '5')
     .replace(/₆/g, '6').replace(/₇/g, '7').replace(/₈/g, '8').replace(/₉/g, '9')
-    .replace(/[↑↓]/g, '') // Remove arrow symbols
-    .replace(/\(.*?\)/g, '') // Simplified: remove parenthetical groups for now
+    .replace(/[↑↓]/g, '')
     .trim();
-  
-  const regex = /([A-Z][a-z]?)(\d*)/g;
-  let match;
-  while ((match = regex.exec(cleaned)) !== null) {
-    if (match[1]) {
-      const element = match[1];
-      const count = match[2] ? parseInt(match[2]) : 1;
-      elements[element] = (elements[element] || 0) + count;
+
+  function parse(f) {
+    let result = {};
+    let i = 0;
+    while (i < f.length) {
+      if (f[i] === '(') {
+        let pMatch = 1;
+        let start = i + 1;
+        while (pMatch > 0 && ++i < f.length) {
+          if (f[i] === '(') pMatch++;
+          if (f[i] === ')') pMatch--;
+        }
+        let sub = f.substring(start, i);
+        i++;
+        let multiplierMatch = f.substring(i).match(/^\d+/);
+        let multiplier = 1;
+        if (multiplierMatch) {
+          multiplier = parseInt(multiplierMatch[0]);
+          i += multiplierMatch[0].length;
+        }
+        let subRes = parse(sub);
+        for (let el in subRes) {
+          result[el] = (result[el] || 0) + subRes[el] * multiplier;
+        }
+      } else {
+        let match = f.substring(i).match(/^([A-Z][a-z]*)(\d*)/);
+        if (match) {
+          const sym = match[1];
+          const count = parseInt(match[2] || "1");
+          result[sym] = (result[sym] || 0) + count;
+          i += match[0].length;
+        } else {
+          i++;
+        }
+      }
     }
+    return result;
   }
-  return elements;
+
+  return parse(clean(formula));
 }
 
 // Balance a simple equation using brute force (up to coeff 10)

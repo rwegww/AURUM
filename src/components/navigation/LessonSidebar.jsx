@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
+  const navigate = useNavigate();
   const [expandedSections, setExpandedSections] = React.useState({});
 
   // Group lessons by chapter
@@ -43,10 +44,13 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
       <div className="mb-6">
         <label className="text-[11px] font-bold text-[#b4bac2] uppercase tracking-[1px] mb-2 block">Lớp học</label>
         <div className="relative">
-          <select className="w-full h-[45px] bg-[#f8f9fa] border border-viet-border rounded-xl px-4 text-[14px] font-semibold text-viet-text appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-viet-green/10">
-            <option>Hóa học Lớp {grade}</option>
-            {[8, 9, 10, 11, 12].filter(g => g !== parseInt(grade)).map(g => (
-              <option key={g}>Hóa học Lớp {g}</option>
+          <select 
+            value={grade}
+            onChange={(e) => navigate(`/lessons/${e.target.value}`)}
+            className="w-full h-[45px] bg-[#f8f9fa] border border-viet-border rounded-xl px-4 text-[14px] font-semibold text-viet-text appearance-none cursor-pointer outline-none focus:ring-2 focus:ring-viet-green/10"
+          >
+            {[8, 9, 10, 11, 12].map(g => (
+              <option key={g} value={g}>Hóa học Lớp {g}</option>
             ))}
           </select>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">

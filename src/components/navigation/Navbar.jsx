@@ -1,60 +1,132 @@
 import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import Avatar from '@/components/common/Avatar';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const { isLoggedIn, user, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [unreadCount, setUnreadCount] = React.useState(0);
   
   const lessonPath = isLoggedIn ? "/lessons/8/hoa8_kntt_bai1" : "/lessons";
   const isAdmin = user?.role === 'admin' || user?.role === 'teacher';
 
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      fetchUnreadStats();
+      const interval = setInterval(fetchUnreadStats, 30000); // Check every 30s
+      
+      window.addEventListener('classroom_read', fetchUnreadStats);
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('classroom_read', fetchUnreadStats);
+      };
+    }
+  }, [isLoggedIn]);
+
+  const fetchUnreadStats = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/classes/stats', { headers: { 'Authorization': `Bearer ${token}` }});
+      if (res.ok) {
+        const stats = await res.json();
+        let total = 0;
+        const lastReadData = JSON.parse(localStorage.getItem('classroom_last_read') || '{}');
+        
+        Object.keys(stats).forEach(classId => {
+          const classStats = stats[classId];
+          const lastReadAt = lastReadData[classId] || 0;
+          if (new Date(classStats.latest) > new Date(lastReadAt)) {
+             // In a real app, we might want to store exact read IDs, 
+             // but here we just flag if the latest is newer.
+             // Let's assume there's at least 1 new if latest > lastReadAt
+             total += 1; 
+          }
+        });
+        setUnreadCount(total);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#fffbf0]/80 backdrop-blur-md border-b border-viet-border h-[70px] flex items-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 sm:gap-3 group">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-viet-green flex items-center justify-center text-white text-base sm:text-xl shadow-lg shadow-viet-green/20 group-hover:rotate-12 transition-all">
-            🎓
+    <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent h-[90px] flex items-center px-6 lg:px-12">
+      <div className="w-full flex items-center justify-between gap-4">
+        <Link to="/" className="flex items-center gap-2 group shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 relative flex items-center justify-center shrink-0">
+            {/* Custom SVG Logo matching the image */}
+            <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green group-hover:rotate-180 transition-transform duration-700">
+              <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="180 40" strokeLinecap="round" />
+              <circle cx="20" cy="20" r="10" fill="currentColor" />
+              <circle cx="80" cy="80" r="8" fill="currentColor" />
+              <circle cx="15" cy="65" r="6" fill="currentColor" />
+            </svg>
           </div>
-          <span className="text-base sm:text-xl font-black text-viet-text italic tracking-tighter uppercase">
-            Chemistry <span className="text-viet-green">Odyssey</span>
-          </span>
+          <div className="flex flex-col justify-center">
+            <span className="text-xl sm:text-2xl font-black text-viet-text leading-none tracking-tight">
+              Chemistry
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-viet-text leading-none tracking-tight">
+              Odyssey
+            </span>
+          </div>
         </Link>
 
         {/* Links */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-4 xl:gap-8 overflow-x-auto custom-scrollbar py-2">
           {isAdmin && (
-            <NavLink to="/admin" className={({isActive}) => `nav-link ${isActive ? 'bg-red-50 text-red-600' : 'text-red-500 font-black'}`}>
+            <NavLink to="/admin" className={({isActive}) => `nav-link !text-red-500 hover:!text-red-600 ${isActive ? 'bg-red-50' : ''}`}>
               QUẢN TRỊ
             </NavLink>
           )}
-          <NavLink to="/lectures" className={({isActive}) => `nav-link ${isActive ? 'bg-viet-green/5 text-viet-green' : ''}`}>
+          <NavLink to="/lectures" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
             BÀI GIẢNG
           </NavLink>
-          <NavLink to="/classroom" className={({isActive}) => `nav-link ${isActive ? 'bg-viet-green/5 text-viet-green' : ''}`}>
+          <NavLink to="/classroom" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
             LỚP HỌC
           </NavLink>
-          <NavLink to="/periodic-table" className={({isActive}) => `nav-link ${isActive ? 'bg-viet-green/5 text-viet-green' : ''}`}>
+          {isLoggedIn && (
+             <NavLink to="/my-class" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all relative ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
+               LỚP CỦA TÔI
+               {unreadCount > 0 && (
+                 <span className="absolute -top-1.5 -right-4 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-sm px-1 animate-bounce">
+                   {unreadCount > 9 ? '9+' : unreadCount}
+                 </span>
+               )}
+             </NavLink>
+          )}
+          <NavLink to="/periodic-table" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
             BẢNG TUẦN HOÀN
           </NavLink>
-          <NavLink to="/lab" className={({isActive}) => `nav-link ${isActive ? 'bg-viet-green/5 text-viet-green' : ''}`}>
+          <NavLink to="/library" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
+            THƯ VIỆN
+          </NavLink>
+          <NavLink to="/lab" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
             PHÒNG LAB
           </NavLink>
-          <NavLink to="/arena" className={({isActive}) => `nav-link ${isActive ? 'bg-viet-green/5 text-viet-green' : ''}`}>
+          <NavLink to="/arena" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
              ĐẤU TRƯỜNG
+          </NavLink>
+          <NavLink to="/missions" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
+             NHIỆM VỤ
           </NavLink>
         </div>
 
-        {/* User Info */}
-        <div className="flex items-center gap-4">
+        {/* User Info & Mobile Toggle */}
+        <div className="flex items-center gap-4 shrink-0">
           {isLoggedIn ? (
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-3 bg-viet-green px-5 py-2 rounded-full shadow-lg shadow-viet-green/20 group animate-fade-in transition-all">
-                <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-white font-black text-[10px] border border-white/30 group-hover:rotate-12 transition-transform">
-                  {user?.username?.charAt(0).toUpperCase() || '👤'}
-                </div>
-                <span className="text-[11px] font-black text-white uppercase tracking-widest leading-tight">
-                  {user?.username}
-                </span>
+            <div className="hidden sm:flex items-center gap-2">
+              <div className="flex items-center gap-2 sm:gap-3 bg-viet-green px-3 sm:px-5 py-1.5 sm:py-2 rounded-full shadow-lg shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
+                <Link to="/profile" className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30 group-hover:rotate-12 transition-transform shrink-0 p-0.5">
+                  <Avatar seed={user.avatarSeed || user.username} size={32} className="w-full h-full object-cover scale-125 translate-y-1" />
+                </Link>
+                <Link to="/profile" className="flex items-center gap-2 group/user max-w-[80px] sm:max-w-[1200px]">
+                  <span className="text-[10px] sm:text-[11px] font-black text-white uppercase tracking-widest leading-tight block truncate group-hover/user:underline">
+                    {user?.username}
+                  </span>
+                </Link>
                 <div className="w-px h-3 bg-white/20 mx-1"></div>
                 <button 
                   onClick={logout}
@@ -66,12 +138,121 @@ const Navbar = () => {
               </div>
             </div>
           ) : (
-            <Link to="/login" className="px-4 sm:px-6 py-2 bg-viet-green text-white text-[10px] sm:text-[11px] font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all shadow-lg shadow-viet-green/10">
-               Đăng nhập ngay →
+            <Link to="/login" className="hidden sm:block px-6 py-2.5 border border-viet-border bg-white/50 backdrop-blur-sm text-viet-text text-[12px] font-bold uppercase tracking-widest rounded-full hover:bg-white hover:shadow-sm transition-all whitespace-nowrap">
+               Đăng nhập
             </Link>
           )}
+
+          {/* Mobile Menu Button */}
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white rounded-2xl shadow-sm border border-viet-border relative z-[100]"
+          >
+            <motion.span 
+              animate={isMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+              className="w-6 h-0.5 bg-viet-text rounded-full"
+            />
+            <motion.span 
+              animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+              className="w-6 h-0.5 bg-viet-text rounded-full"
+            />
+            <motion.span 
+              animate={isMenuOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+              className="w-6 h-0.5 bg-viet-text rounded-full"
+            />
+          </button>
         </div>
       </div>
+
+      {/* Mobile Menu Drawer */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 bg-viet-text/40 backdrop-blur-sm z-[80] lg:hidden"
+            />
+            
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-[300px] bg-white z-[90] lg:hidden shadow-2xl overflow-y-auto"
+            >
+              <div className="flex flex-col h-full p-8 pt-24">
+                <div className="flex flex-col gap-4 mb-auto">
+                  {[
+                    { path: "/lectures", label: "BÀI GIẢNG", icon: "📚" },
+                    { path: "/classroom", label: "LỚP HỌC", icon: "🏫" },
+                    { path: "/my-class", label: "LỚP CỦA TÔI", icon: "👥", requiresAuth: true },
+                    { path: "/periodic-table", label: "BẢNG TUẦN HOÀN", icon: "⚛️" },
+                    { path: "/library", label: "THƯ VIỆN", icon: "📖" },
+                    { path: "/lab", label: "PHÒNG LAB", icon: "🧪" },
+                    { path: "/arena", label: "ĐẤU TRƯỜNG", icon: "⚔️" },
+                    { path: "/missions", label: "NHIỆM VỤ", icon: "🎯" },
+                  ].filter(item => !item.requiresAuth || isLoggedIn).map((item) => (
+                      <NavLink 
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={({isActive}) => `flex items-center gap-4 p-4 rounded-2xl transition-all ${isActive ? 'bg-viet-green/10 text-viet-green' : 'text-viet-text hover:bg-slate-50'}`}
+                      >
+                        <span className="text-xl">{item.icon}</span>
+                        <span className="text-[13px] font-black tracking-widest uppercase relative">{item.label}
+                          {item.path === '/my-class' && unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-4 min-w-[16px] h-[16px] bg-red-500 text-white text-[8px] font-black flex items-center justify-center rounded-full px-1 shadow-sm">
+                              {unreadCount}
+                            </span>
+                          )}
+                        </span>
+                      </NavLink>
+                  ))}
+                </div>
+
+                <div className="mt-8 pt-8 border-t border-viet-border space-y-4">
+                  {isLoggedIn ? (
+                    <div className="space-y-4">
+                      <Link 
+                        to="/profile" 
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl group"
+                      >
+                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-viet-green p-0.5 bg-white">
+                          <Avatar seed={user.avatarSeed || user.username} size={40} className="w-full h-full object-cover scale-150 translate-y-1" />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[14px] font-black text-viet-text leading-tight">{user.username}</span>
+                          <span className="text-[10px] font-bold text-viet-green uppercase tracking-widest">Hồ sơ cá nhân</span>
+                        </div>
+                      </Link>
+                      <button 
+                        onClick={() => { logout(); setIsMenuOpen(false); }}
+                        className="w-full py-4 text-center text-red-500 font-extrabold text-[12px] uppercase tracking-widest hover:bg-red-50 rounded-xl transition-all"
+                      >
+                        Đăng xuất
+                      </button>
+                    </div>
+                  ) : (
+                    <Link 
+                      to="/login"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block w-full py-5 bg-viet-text text-white text-center font-black text-[13px] uppercase tracking-[3px] rounded-2xl shadow-xl shadow-viet-text/20"
+                    >
+                      Đăng nhập ngay
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

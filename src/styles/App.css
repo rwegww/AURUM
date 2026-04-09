@@ -1,5 +1,5 @@
-/* Global Styles for VietEdu Light Theme (Updated Fonts: Sora & Inter) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700;800&display=swap');
+/* Global Styles for VietEdu Light Theme (Updated Fonts: Be Vietnam Pro) */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -8,12 +8,20 @@
   --color-viet-border: #e8e8e8;
   --color-viet-text: #1a1a1a;
   --color-viet-text-light: #666666;
-  --font-sora: "Sora", sans-serif;
-  --font-inter: "Inter", sans-serif;
+  --font-be-vietnam: "Be Vietnam Pro", sans-serif;
+  --font-sora: "Be Vietnam Pro", sans-serif; /* fallback mapping */
+  --font-inter: "Be Vietnam Pro", sans-serif; /* fallback mapping */
+  
+  /* Laboratory Theme Tokens */
+  --color-lab-bg: #0a0c10;
+  --color-lab-card: rgba(26, 28, 35, 0.6);
+  --color-lab-border: rgba(255, 255, 255, 0.08);
+  --color-glow-green: rgba(118, 192, 52, 0.2);
+  --glass-blur: 24px;
 }
 
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-be-vietnam);
   background-color: var(--color-viet-bg);
   color: var(--color-viet-text);
   overflow-x: hidden;
@@ -24,20 +32,20 @@ body.no-scroll {
   padding-right: var(--scrollbar-width, 0px); /* Prevent layout shift if possible */
 }
 
-/* Global Heading Rule: All titles use Sora */
+/* Global Heading Rule: All titles use Be Vietnam Pro */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sora);
+  font-family: var(--font-be-vietnam);
 }
 
 .viet-btn-green {
   @apply px-6 py-3 rounded-2xl bg-viet-green text-white font-black uppercase tracking-tight
-         transition-all hover:scale-105 active:scale-95 shadow-lg shadow-viet-green/20;
-  font-family: var(--font-sora);
+         transition-all hover:brightness-110 active:scale-95;
+  font-family: var(--font-be-vietnam);
 }
 
 .viet-card {
-  @apply bg-white rounded-[32px] border border-viet-border p-8 shadow-sm transition-all
-         hover:shadow-xl hover:border-viet-green/20;
+  @apply bg-white rounded-[32px] border border-viet-border p-8 transition-all
+         hover:border-viet-green/20;
 }
 
 .mask-fade-right {
@@ -45,11 +53,86 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link {
-  @apply px-4 py-2 rounded-xl text-[13px] font-black uppercase tracking-widest text-viet-text-light
-         transition-all hover:text-viet-green hover:bg-viet-green/5 flex items-center gap-2;
-  font-family: var(--font-sora);
+  @apply px-3 xl:px-4 py-2 rounded-xl text-[12px] xl:text-[13px] font-black uppercase tracking-widest text-viet-text-light
+         transition-all hover:text-viet-green hover:bg-viet-green/5 flex items-center gap-2 whitespace-nowrap;
+  font-family: var(--font-be-vietnam);
 }
 
 .nav-link-active {
   @apply bg-viet-green/10 text-viet-green;
+}
+
+/* Custom Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(118, 192, 52, 0.4); /* viet-green with transparency */
+}
+
+/* Global scrollbar for the whole site */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0c10;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1c23;
+  border-radius: 20px;
+  border: 2px solid #0a0c10;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #76c034;
+}
+
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: var(--color-lab-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--color-lab-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Laboratory Specific Effects */
+.lab-glow {
+  box-shadow: 0 0 20px var(--color-glow-green);
+}
+
+.lab-glow-blue {
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.lab-ambient-bg {
+  background: radial-gradient(circle at center, #1a1c23 0%, #0a0c10 100%);
+}
+
+.lab-grid-overlay {
+  background-image: radial-gradient(rgba(118, 192, 52, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
 }

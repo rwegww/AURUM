@@ -5,18 +5,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import MediaUploader from '@/components/admin/MediaUploader';
 
 const LessonManager = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [editingLesson, setEditingLesson] = useState(null);
-
-  useEffect(() => {
-    if (!authLoading && (!user || user.role === 'student')) {
-      navigate('/');
-    }
-  }, [user, authLoading, navigate]);
 
   const fetchLessons = async (grade) => {
     setLoading(true);
@@ -55,10 +49,8 @@ const LessonManager = () => {
     alert('Chức năng lưu đang được hoàn thiện!');
   };
 
-  if (authLoading) return null;
-
   return (
-    <div className="min-h-screen bg-viet-bg pt-24 px-8 pb-12">
+    <div className="p-8 pb-12">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>

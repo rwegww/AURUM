@@ -1,69 +1,128 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import ReactionSimulator from '@/components/lab/ReactionSimulator';
-import EquationBalancer from '@/components/lab/EquationBalancer';
-import MoleculeViewer from '@/components/lab/MoleculeViewer';
-import CraftingStation from '@/components/lab/CraftingStation';
+import { Link } from 'react-router-dom';
 
-const tabs = [
-  { id: 'reaction', label: 'Mô phỏng phản ứng', icon: '⚗️', desc: 'Chọn hóa chất và cho phản ứng' },
-  { id: 'balance', label: 'Cân bằng phương trình', icon: '⚖️', desc: 'Luyện tập cân bằng PTHH' },
-  { id: 'molecule', label: 'Mô hình phân tử', icon: '🔬', desc: 'Xem cấu trúc phân tử 2D' },
-  { id: 'craft', label: 'Phòng chế tạo', icon: '🧬', desc: 'Thu thập & chế tạo chất mới' },
+const labModules = [
+  { 
+    id: 'reaction', 
+    label: 'Mô phỏng phản ứng', 
+    icon: '⚗️', 
+    desc: 'Chọn hóa chất và thực hiện các phản ứng hóa học trực quan.',
+    path: '/lab/simulator',
+    color: 'from-blue-500 to-blue-600'
+  },
+  { 
+    id: 'balance', 
+    label: 'Cân bằng phương trình', 
+    icon: '⚖️', 
+    desc: 'Rèn luyện kỹ năng cân bằng PTHH với hàng nghìn bài tập.',
+    path: '/lab/balancer',
+    color: 'from-amber-500 to-amber-600'
+  },
+  { 
+    id: 'molecule', 
+    label: 'Mô hình phân tử', 
+    icon: '🔬', 
+    desc: 'Xem cấu trúc phân tử 3D và không gian của các chất hóa học.',
+    path: '/lab/molecules',
+    color: 'from-emerald-500 to-emerald-600'
+  },
 ];
 
 const ChemLab = () => {
-  const [activeTab, setActiveTab] = useState('reaction');
-
   return (
-    <div className="min-h-screen bg-viet-bg pt-[70px] pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+    <div className="min-h-screen bg-[#fffbf0] pb-24 pt-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-20"
         >
-          <h1 className="text-4xl md:text-5xl font-black text-viet-text italic tracking-tighter uppercase mb-3">
-            Phòng thí nghiệm <span className="text-viet-green underline decoration-4 underline-offset-8">ảo</span>
+          <div className="inline-block px-4 py-1.5 bg-viet-green/10 rounded-full mb-6">
+            <span className="text-viet-green font-black text-xs uppercase tracking-widest italic">
+              Trung tâm thí nghiệm ảo
+            </span>
+          </div>
+          <h1 className="text-4xl md:text-6xl font-black text-viet-text italic tracking-tighter uppercase mb-6 leading-tight">
+            Khám phá thế giới <br /> 
+            <span className="text-viet-green underline decoration-8 underline-offset-8">Hóa học</span> kỳ diệu
           </h1>
           <p className="text-viet-text-light font-bold text-lg max-w-2xl mx-auto">
-            Khám phá, thí nghiệm và sáng tạo với hàng trăm phản ứng hóa học
+            Lựa chọn mô-đun học tập và bắt đầu hành trình chinh phục tri thức của bạn ngay hôm nay.
           </p>
         </motion.div>
 
-        {/* Tab Navigation */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          {tabs.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`group px-6 py-4 rounded-2xl transition-all border-2 text-left flex items-center gap-4 min-w-[220px] ${
-                activeTab === tab.id
-                  ? 'bg-viet-green text-white border-viet-green shadow-xl shadow-viet-green/20 scale-105'
-                  : 'bg-white border-viet-border text-viet-text hover:border-viet-green/30 hover:shadow-lg'
-              }`}
+        {/* Module Selection Hub */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {labModules.map((module, index) => (
+            <motion.div
+              key={module.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
             >
-              <span className="text-2xl">{tab.icon}</span>
-              <div>
-                <p className={`text-[13px] font-black ${activeTab === tab.id ? 'text-white' : ''}`}>{tab.label}</p>
-                <p className={`text-[10px] font-bold ${activeTab === tab.id ? 'text-white/70' : 'text-viet-text-light'}`}>{tab.desc}</p>
-              </div>
-            </button>
+              <Link 
+                to={module.path}
+                className="group relative flex flex-col h-full bg-white rounded-3xl border-2 border-viet-border hover:border-viet-green transition-all duration-500 hover:shadow-2xl hover:shadow-viet-green/10 hover:-translate-y-2 overflow-hidden"
+              >
+                {/* Visual Accent */}
+                <div className={`h-2 w-full bg-gradient-to-r ${module.color}`}></div>
+                
+                <div className="p-8 flex flex-col h-full">
+                  <div className="w-16 h-16 rounded-2xl bg-viet-bg border-2 border-viet-border flex items-center justify-center text-4xl mb-6 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500">
+                    {module.icon}
+                  </div>
+                  
+                  <h3 className="text-2xl font-black text-viet-text italic tracking-tighter uppercase mb-4 group-hover:text-viet-green transition-colors">
+                    {module.label}
+                  </h3>
+                  
+                  <p className="text-viet-text-light font-bold text-sm leading-relaxed mb-8 flex-grow">
+                    {module.desc}
+                  </p>
+                  
+                  <div className="flex items-center gap-2 text-viet-green font-black text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
+                    Bắt đầu ngay <span>→</span>
+                  </div>
+                </div>
+
+                {/* Background Decoration */}
+                <div className="absolute -bottom-6 -right-6 text-8xl opacity-[0.03] group-hover:opacity-[0.06] transition-opacity font-black">
+                  {module.icon}
+                </div>
+              </Link>
+            </motion.div>
           ))}
         </div>
 
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+        {/* Stats/Footer Decoration */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-24 p-8 rounded-[40px] bg-viet-text border border-white/10 text-center relative overflow-hidden"
         >
-          {activeTab === 'reaction' && <ReactionSimulator />}
-          {activeTab === 'balance' && <EquationBalancer />}
-          {activeTab === 'molecule' && <MoleculeViewer />}
-          {activeTab === 'craft' && <CraftingStation />}
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-around gap-8">
+            <div className="text-center">
+              <p className="text-4xl font-black text-viet-green mb-1">3,000+</p>
+              <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Hóa chất mô phỏng</p>
+            </div>
+            <div className="w-px h-12 bg-white/10 hidden md:block"></div>
+            <div className="text-center">
+              <p className="text-4xl font-black text-viet-green mb-1">10,000+</p>
+              <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Phản ứng khám phá</p>
+            </div>
+            <div className="w-px h-12 bg-white/10 hidden md:block"></div>
+            <div className="text-center">
+              <p className="text-4xl font-black text-white mb-1">∞</p>
+              <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Khả năng sáng tạo</p>
+            </div>
+          </div>
+          
+          {/* Decorative Circle */}
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-viet-green/5 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-viet-green/5 rounded-full blur-3xl"></div>
         </motion.div>
       </div>
     </div>

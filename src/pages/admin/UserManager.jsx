@@ -4,17 +4,11 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 
 const UserManager = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    if (!authLoading && (!user || (user.role !== 'admin' && user.role !== 'teacher'))) {
-      navigate('/');
-    }
-  }, [user, authLoading, navigate]);
 
   const fetchUsers = async () => {
     try {
@@ -39,10 +33,8 @@ const UserManager = () => {
     u.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (authLoading) return null;
-
   return (
-    <div className="min-h-screen bg-viet-bg pt-24 px-8 pb-12">
+    <div className="p-8 pb-12">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>

@@ -1,9 +1,20 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules, bondTypeLabels, elementColors, elementRadii } from '../../data/molecules';
+import { useAuth } from '@/context/AuthContext';
+
+const normalize = (f) => {
+  if (!f) return "";
+  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
+};
 
 const MoleculeViewer = () => {
-  const [selectedMolecule, setSelectedMolecule] = useState(molecules[0]);
+  const { user, isLoggedIn } = useAuth();
+  const [allChemicals, setAllChemicals] = useState([]);
+  const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedMolecule, setSelectedMolecule] = useState(null);
   const [viewMode, setViewMode] = useState('ball-stick'); // 'ball-stick' or 'space-fill'
   const [showLabels, setShowLabels] = useState(true);
   const [showBondInfo, setShowBondInfo] = useState(true);
@@ -13,16 +24,123 @@ const MoleculeViewer = () => {
   const [rotation, setRotation] = useState({ x: 0.3, y: 0.5 }); // Initial tilt
   const [isDragging, setIsDragging] = useState(false);
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
+  const viewportRef = useRef(null);
+
+  // Sync with Laboratory Cabinet data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const res = await fetch('/api/lab/chemicals', { headers });
+        const chemsData = await res.json();
+        setAllChemicals(chemsData);
+        
+        // Progression Logic (matches ReactionSimulator)
+        const starters = chemsData.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
+        
+        if (isLoggedIn && user) {
+          setDiscoveredFormulas(Array.from(new Set([...starters, ...(user.unlockedChemicals || [])])));
+        } else {
+          const saved = localStorage.getItem('chem_odyssey_discovered');
+          if (saved) {
+            try {
+              setDiscoveredFormulas(Array.from(new Set([...starters, ...JSON.parse(saved)])));
+            } catch (e) { setDiscoveredFormulas(starters); }
+          } else {
+            setDiscoveredFormulas(starters);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to sync molecule library:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [user, isLoggedIn]);
+
+  const synchronizedMolecules = useMemo(() => {
+    const normDiscovered = discoveredFormulas.map(f => normalize(f));
+    
+    // Sub-function to generate a simple visual structure for unknown molecules
+    const generateFallbackModel = (formula, name) => {
+      let norm = formula.toString();
+      const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+      norm = norm.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]);
+      
+      const parts = norm.match(/([A-Z][a-z]?)(\d*)/g) || [];
+      let atoms = [];
+      let idCounter = 0;
+      
+      parts.forEach(part => {
+        const elemMatch = part.match(/[A-Z][a-z]?/);
+        const countMatch = part.match(/\d+/);
+        const elem = elemMatch ? elemMatch[0] : 'Unknown';
+        const count = countMatch ? parseInt(countMatch[0]) : 1;
+        
+        for(let i=0; i<count; i++) {
+           atoms.push({ id: idCounter++, element: elem, position: [0, 0, 0] });
+        }
+      });
+
+      // Distribute positions
+      if (atoms.length > 1) {
+          atoms[0].position = [0, 0, 0]; // Center atom
+          for(let i=1; i<atoms.length; i++) {
+              const angle = (i - 1) * (Math.PI * 2) / (atoms.length - 1);
+              // Slight spacing for generic bonds
+              atoms[i].position = [Math.cos(angle) * 1.2, Math.sin(angle) * 1.2, (i%2)*0.2];
+          }
+      }
+
+      const bonds = [];
+      for(let i=1; i<atoms.length; i++) {
+          bonds.push({ from: 0, to: i, type: "single" });
+      }
+
+      return {
+        id: formula.toLowerCase(),
+        name: name,
+        formula: formula,
+        description: "Mô hình cấu trúc giả lập cơ bản.",
+        atoms,
+        bonds
+      };
+    };
+
+    // Merge API chemical meta with static 3D coordinate data
+    return allChemicals
+      .filter(chem => normDiscovered.includes(normalize(chem.formula)))
+      .map(chem => {
+        const model3d = molecules.find(m => normalize(m.formula) === normalize(chem.formula));
+        const finalModel = model3d || generateFallbackModel(chem.formula, chem.name);
+        
+        return {
+          ...finalModel,
+          name: chem.name, // Use name from API
+          category: chem.type || finalModel.category || 'Khác', // Use type from API as category
+          gradeLevel: chem.grade_level || finalModel.gradeLevel || 8
+        };
+      });
+  }, [allChemicals, discoveredFormulas]);
+
+  useEffect(() => {
+    if (synchronizedMolecules.length > 0 && !selectedMolecule) {
+        setSelectedMolecule(synchronizedMolecules[0]);
+    }
+  }, [synchronizedMolecules]);
 
   const categories = useMemo(() => {
-    const cats = new Set(molecules.map(m => m.category));
-    return ['all', ...cats];
-  }, []);
+    const cats = new Set(synchronizedMolecules.map(m => m.category));
+    return ['all', ...Array.from(cats)];
+  }, [synchronizedMolecules]);
 
   const filteredMolecules = useMemo(() => {
-    if (filterCategory === 'all') return molecules;
-    return molecules.filter(m => m.category === filterCategory);
-  }, [filterCategory]);
+    if (filterCategory === 'all') return synchronizedMolecules;
+    return synchronizedMolecules.filter(m => m.category === filterCategory);
+  }, [filterCategory, synchronizedMolecules]);
 
   // 3D Projection & Rotation Logic
   const projectedData = useMemo(() => {
@@ -108,6 +226,15 @@ const MoleculeViewer = () => {
     setZoom(prev => Math.max(0.2, Math.min(5, prev + delta)));
   }, []);
 
+  // Attach non-passive wheel listener manually to allow preventDefault()
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (viewport) {
+      viewport.addEventListener('wheel', handleWheel, { passive: false });
+      return () => viewport.removeEventListener('wheel', handleWheel);
+    }
+  }, [handleWheel]);
+
   const resetView = () => {
     setZoom(1.5);
     setRotation({ x: 0.3, y: 0.5 });
@@ -137,7 +264,7 @@ const MoleculeViewer = () => {
             x1={fromAtom.projX} y1={fromAtom.projY}
             x2={toAtom.projX} y2={toAtom.projY}
             stroke={bondColor} strokeWidth={strokeWidth} strokeLinecap="round" 
-            opacity={opacity} strokeDasharray={bond.type === 'ionic' ? "8,6" : "none"}
+            opacity={0.8} strokeDasharray={bond.type === 'ionic' ? "8,6" : "none"}
           />
         );
       case 'double':
@@ -170,7 +297,7 @@ const MoleculeViewer = () => {
   const renderAtom = (atom) => {
     const isHovered = hoveredAtom === atom.id;
     const baseR = viewMode === 'space-fill' ? atom.radius * 2.8 : atom.radius;
-    const r = baseR * (1 + atom.projZ / 8); // Perspective scaling
+    const r = baseR; // Flattened: Removed perspective scaling
 
     return (
       <g
@@ -180,18 +307,14 @@ const MoleculeViewer = () => {
         style={{ cursor: 'pointer' }}
       >
         <defs>
-          <radialGradient id={`grad-${atom.id}`} cx="35%" cy="35%">
-            <stop offset="0%" stopColor={lightenColor(atom.color, 45)} />
-            <stop offset="70%" stopColor={atom.color} />
-            <stop offset="100%" stopColor={darkenColor(atom.color, 25)} />
-          </radialGradient>
+           {/* Flattened: Removed radial gradients */}
         </defs>
         <circle
           cx={atom.projX} cy={atom.projY} r={r}
-          fill={`url(#grad-${atom.id})`}
-          stroke={isHovered ? '#76c034' : darkenColor(atom.color, 15)}
-          strokeWidth={isHovered ? 3 : 1}
-          opacity={Math.max(0.4, (atom.projZ + 2) / 4 + 0.6)}
+          fill={atom.color}
+          stroke={isHovered ? '#76c034' : atom.color}
+          strokeWidth={isHovered ? 2 : 0}
+          opacity={1}
         />
         {showLabels && (
           <text
@@ -206,6 +329,23 @@ const MoleculeViewer = () => {
       </g>
     );
   };
+
+  if (isLoading) return (
+    <div className="flex-1 flex flex-col items-center justify-center min-h-[600px] text-viet-text">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-viet-green border-t-transparent rounded-full mb-6" />
+      <h2 className="text-xl font-black italic tracking-widest uppercase animate-pulse">Đang đồng bộ dữ liệu...</h2>
+    </div>
+  );
+
+  if (synchronizedMolecules.length === 0) return (
+    <div className="flex-1 flex flex-col items-center justify-center min-h-[600px] text-center p-8">
+      <div className="text-6xl mb-6">🔬</div>
+      <h2 className="text-2xl font-black text-viet-text italic uppercase mb-2">Thư viện đang trống</h2>
+      <p className="text-viet-text-light font-bold max-w-md mx-auto">
+        Vào "Mô phỏng phản ứng" để khám phá thêm các chất mới. Mỗi chất bạn phát hiện sẽ xuất hiện tại đây dưới dạng mô hình 3D.
+      </p>
+    </div>
+  );
 
   return (
     <div className="space-y-6">
@@ -252,7 +392,7 @@ const MoleculeViewer = () => {
         </div>
 
         {/* Right Side: Visualizer */}
-        <div className="bg-white rounded-[28px] border border-viet-border shadow-sm overflow-hidden flex flex-col h-[700px]">
+        <div className="bg-white rounded-[28px] border border-viet-border flex flex-col h-[700px]">
           {/* Top Bar */}
           <div className="flex items-center justify-between px-8 py-5 border-b border-viet-border bg-[#fdfaf1]">
             <div className="flex items-center gap-4">
@@ -278,23 +418,23 @@ const MoleculeViewer = () => {
                     <span className="text-[11px] font-bold w-12 text-center">{Math.round(zoom * 100)}%</span>
                     <button onClick={() => setZoom(z => Math.min(4, z + 0.2))} className="text-xl font-bold hover:text-viet-green transition-colors">+</button>
                 </div>
-                <button onClick={resetView} className="px-5 py-2 rounded-xl text-[10px] font-black text-viet-text-light border border-gray-200 bg-white hover:bg-gray-50 uppercase tracking-widest">Reset View</button>
+                <button onClick={resetView} className="px-5 py-2 rounded-xl text-[10px] font-black text-viet-text-light border border-gray-200 bg-white hover:bg-gray-50 uppercase tracking-widest">Đặt lại góc nhìn</button>
             </div>
           </div>
 
           {/* 3D Viewport */}
           <div
+            ref={viewportRef}
             className="flex-grow relative bg-[#fafbfc] cursor-grab active:cursor-grabbing touch-none select-none overflow-hidden"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            onWheel={handleWheel}
           >
             {/* Depth Gradients */}
             <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,_#ffffff_0%,_#f8fafc_100%)]" />
             
-            <svg viewBox="0 0 420 360" className="w-full h-full relative z-10 drop-shadow-2xl">
+            <svg viewBox="0 0 420 360" className="w-full h-full relative z-10">
               {zOrderedItems.map(item => 
                 item.type === 'bond' ? renderBond(item.data) : renderAtom(item.data)
               )}
@@ -302,7 +442,7 @@ const MoleculeViewer = () => {
 
             {/* Interaction Help */}
             <div className="absolute top-8 left-8 space-y-3">
-                <div className="bg-white/90 backdrop-blur-md rounded-2xl border border-viet-border p-4 shadow-xl">
+                <div className="bg-white rounded-2xl border border-viet-border p-4">
                     <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-2">Góc quan sát</p>
                     <div className="space-y-1">
                         <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
@@ -314,8 +454,8 @@ const MoleculeViewer = () => {
             </div>
 
             <div className="absolute bottom-8 right-8 text-[10px] font-black text-viet-text-light/50 flex flex-col items-end gap-1 uppercase tracking-widest">
-                <span>Hold mouse to rotate</span>
-                <span>Scroll to zoom</span>
+                <span>Giữ chuột để xoay</span>
+                <span>Cuộn để thu phóng</span>
             </div>
           </div>
 
@@ -324,23 +464,23 @@ const MoleculeViewer = () => {
             <div className="flex items-start justify-between mb-6">
               <div>
                 <motion.h2 
-                    key={selectedMolecule.id}
+                    key={selectedMolecule?.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-black text-viet-text mb-2 font-sora italic"
                 >
-                    {selectedMolecule.formula}
+                    {selectedMolecule?.formula}
                 </motion.h2>
-                <p className="text-lg font-bold text-viet-green uppercase tracking-[3px]">{selectedMolecule.name}</p>
+                <p className="text-lg font-bold text-viet-green uppercase tracking-[3px]">{selectedMolecule?.name}</p>
               </div>
               <div className="px-6 py-2 bg-viet-green text-white rounded-full text-[11px] font-black uppercase tracking-[2px] shadow-lg shadow-viet-green/20">
-                {selectedMolecule.category}
+                {selectedMolecule?.category}
               </div>
             </div>
             
             <div className="bg-[#fbf9f2] p-6 rounded-[32px] border border-viet-border/50">
                 <p className="text-[16px] text-viet-text font-medium leading-relaxed italic">
-                    "{selectedMolecule.description}"
+                    "{selectedMolecule?.description}"
                 </p>
             </div>
           </div>

@@ -10,6 +10,12 @@ const TheoryRenderer = ({ modules }) => {
   const markdownPlugins = [remarkGfm, remarkMath];
   const rehypePlugins = [rehypeKatex];
 
+  // Helper to fix literal \n strings in content
+  const formatContent = (text) => {
+    if (typeof text !== 'string') return text;
+    return text.replace(/\\n/g, '\n');
+  };
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {modules.map((module, index) => {
@@ -26,7 +32,12 @@ const TheoryRenderer = ({ modules }) => {
                   content.level === 'h3' ? 'text-2xl mt-8' : 'text-3xl mb-6'
                 }`}
               >
-                {content.text}
+                <ReactMarkdown 
+                  remarkPlugins={markdownPlugins}
+                  rehypePlugins={rehypePlugins}
+                >
+                  {formatContent(content.text)}
+                </ReactMarkdown>
               </HeadingTag>
             );
 
@@ -37,7 +48,7 @@ const TheoryRenderer = ({ modules }) => {
                   remarkPlugins={markdownPlugins}
                   rehypePlugins={rehypePlugins}
                 >
-                  {content.text}
+                  {formatContent(content.text)}
                 </ReactMarkdown>
               </div>
             );
@@ -52,7 +63,7 @@ const TheoryRenderer = ({ modules }) => {
                       remarkPlugins={markdownPlugins}
                       rehypePlugins={rehypePlugins}
                     >
-                      {item}
+                      {formatContent(item)}
                     </ReactMarkdown>
                   </li>
                 ))}
@@ -71,14 +82,21 @@ const TheoryRenderer = ({ modules }) => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
-                  <h4 className="font-black text-blue-700 text-lg uppercase tracking-wider">{content.title}</h4>
+                  <h4 className="font-black text-blue-700 text-lg uppercase tracking-wider">
+                    <ReactMarkdown 
+                      remarkPlugins={markdownPlugins}
+                      rehypePlugins={rehypePlugins}
+                    >
+                      {formatContent(content.title)}
+                    </ReactMarkdown>
+                  </h4>
                 </div>
                 <div className="text-viet-text font-medium leading-relaxed prose max-w-none prose-p:text-viet-text">
                   <ReactMarkdown 
                     remarkPlugins={markdownPlugins}
                     rehypePlugins={rehypePlugins}
                   >
-                    {content.content}
+                    {formatContent(content.content)}
                   </ReactMarkdown>
                 </div>
               </div>
@@ -96,14 +114,21 @@ const TheoryRenderer = ({ modules }) => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   </div>
-                  <h4 className="font-black text-orange-700 text-lg uppercase tracking-wider">{content.title}</h4>
+                  <h4 className="font-black text-orange-700 text-lg uppercase tracking-wider">
+                    <ReactMarkdown 
+                      remarkPlugins={markdownPlugins}
+                      rehypePlugins={rehypePlugins}
+                    >
+                      {formatContent(content.title)}
+                    </ReactMarkdown>
+                  </h4>
                 </div>
                 <div className="text-viet-text font-medium leading-relaxed prose max-w-none prose-p:text-viet-text">
                   <ReactMarkdown 
                     remarkPlugins={markdownPlugins}
                     rehypePlugins={rehypePlugins}
                   >
-                    {content.content}
+                    {formatContent(content.content)}
                   </ReactMarkdown>
                 </div>
               </div>

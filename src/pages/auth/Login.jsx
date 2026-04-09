@@ -14,10 +14,15 @@ const Login = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    const saved = localStorage.getItem('rememberEmail');
-    if (saved) {
-      setEmail(saved);
+    const savedEmail = localStorage.getItem('rememberEmail');
+    const savedPassword = localStorage.getItem('rememberPassword');
+    
+    if (savedEmail) {
+      setEmail(savedEmail);
       setRememberMe(true);
+    }
+    if (savedPassword) {
+      setPassword(savedPassword);
     }
   }, []);
 
@@ -25,11 +30,23 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    const result = await login(email, password);
+    const result = await login(email, password, rememberMe);
     if (result.success) {
-      if (rememberMe) localStorage.setItem('rememberEmail', email);
-      else localStorage.removeItem('rememberEmail');
-      navigate('/lessons');
+      if (rememberMe) {
+        localStorage.setItem('rememberEmail', email);
+        localStorage.setItem('rememberPassword', password); // Basic implementation for cookie-like behavior without actual cookies in LocalStorage
+      } else {
+        localStorage.removeItem('rememberEmail');
+        localStorage.removeItem('rememberPassword');
+      }
+
+      if (result.user?.role === 'admin') {
+        navigate('/admin');
+      } else if (result.user?.role === 'teacher') {
+        navigate('/teacher');
+      } else {
+        navigate('/lessons');
+      }
     } else {
       setError(result.message || 'Sai email hoặc mật khẩu');
       setLoading(false);

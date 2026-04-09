@@ -3,7 +3,6 @@ import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import TheoryRenderer from '@/components/lessons/TheoryRenderer';
-import QuizModule from '@/components/lessons/QuizModule';
 import LessonSidebar from '@/components/navigation/LessonSidebar';
 import DiscussionBoard from '@/components/lessons/DiscussionBoard';
 import StoryIntro from '@/components/lessons/StoryIntro';
@@ -15,7 +14,6 @@ const LessonPage = () => {
   
   const [lesson, setLesson] = useState(null);
   const [gradeLessons, setGradeLessons] = useState([]);
-  const [activeTab, setActiveTab] = useState('theory'); // 'theory' or 'quiz'
   const [loading, setLoading] = useState(true);
   const [showStory, setShowStory] = useState(false);
   const { isLoggedIn } = useAuth();
@@ -92,8 +90,6 @@ const LessonPage = () => {
               <span className="px-3 py-1 bg-viet-green text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
                 HÓA HỌC LỚP {grade}
               </span>
-              <span className="text-viet-text-light text-[14px]">/</span>
-              <span className="text-viet-text-light text-[14px] font-medium">Học kì 1</span>
             </div>
             <h1 className="text-[28px] font-bold text-viet-text leading-tight">
               {lesson.title}
@@ -109,12 +105,12 @@ const LessonPage = () => {
                   </svg>
                 </div>
                 <div className="flex flex-col">
-                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{lesson.title} | VioEdu TV</h2>
-                   <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">VioEdu TV</span>
+                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{lesson.title} | Odyssey TV</h2>
+                   <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Chemistry Odyssey</span>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                    <span className="text-[10px] text-viet-text-light font-bold">Phát triển bởi</span>
-                   <span className="text-[14px] font-black text-blue-600 italic">FPT</span>
+                   <span className="text-[14px] font-black text-viet-green italic">Odyssey Team</span>
                 </div>
              </div>
              {video.url ? (
@@ -131,56 +127,20 @@ const LessonPage = () => {
              )}
           </div>
 
-          {isLoggedIn && (
-            <div className="viet-card p-4 mb-6 bg-white flex items-center gap-6">
-              <div className="w-12 h-12 rounded-full border-[3px] border-[#fce8cc] flex items-center justify-center shrink-0">
-                  <span className="text-[11px] font-bold text-[#d97706]">0%</span>
-              </div>
-              <div className="flex-1">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="text-[13px] font-bold text-viet-text">Đã xem: 0%</h3>
-                    <span className="text-[10px] text-viet-text-light font-medium">Tự động hoàn thành khi xem đạt 75%</span>
-                  </div>
-                  <div className="w-full h-2.5 bg-[#f0f2f5] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#f9b800] w-[0%]" />
-                  </div>
-              </div>
-            </div>
-          )}
 
-          <div className="flex bg-[#76c034] p-1.5 rounded-[20px] mb-8">
-            <button
-              onClick={() => setActiveTab('theory')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-[15px] transition-all text-[14px] font-bold ${
-                activeTab === 'theory' ? 'bg-white text-[#76c034] shadow-lg' : 'text-white/70 hover:text-white'
-              }`}
-            >Lý thuyết</button>
-            <button
-              onClick={() => setActiveTab('quiz')}
-              className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-[15px] transition-all text-[14px] font-bold ${
-                activeTab === 'quiz' ? 'bg-white text-[#76c034] shadow-lg' : 'text-white/70 hover:text-white'
-              }`}
-            >Bài tập củng cố</button>
-          </div>
 
           <div className="mb-12">
-            {activeTab === 'theory' ? (
-              <div className="viet-card p-8 min-h-[400px]">
-                <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
-                   <h3 className="text-[20px] font-bold">Nội dung bài học</h3>
-                </div>
-                <div className="prose prose-slate max-w-none">
-                  <TheoryRenderer modules={lesson.theoryModules} />
-                </div>
+            <div className="viet-card p-8 min-h-[400px]">
+              <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
+                 <h3 className="text-[20px] font-bold">Nội dung bài học</h3>
               </div>
-            ) : (
-              <div className="viet-card p-8 min-h-[400px]">
-                 <QuizModule quizData={lesson.game?.basic || lesson.quizzes || []} />
+              <div className="prose prose-slate max-w-none">
+                <TheoryRenderer modules={lesson.theoryModules} />
               </div>
-            )}
+            </div>
           </div>
 
-          <DiscussionBoard />
+          <DiscussionBoard lessonId={lesson.lessonId} />
         </main>
       </div>
     </div>

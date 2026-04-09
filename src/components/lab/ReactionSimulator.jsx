@@ -1,39 +1,82 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { chemicals, findReaction, reactionTypes } from '@/data/reactions';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import DiscoveryMap from './DiscoveryMap';
 
-// --- Sub-components for Visual Lab Equipment ---
+const reactionTypesTranslate = {
+  "combination": "Phản ứng hóa hợp",
+  "decomposition": "Phản ứng phân hủy",
+  "single-replacement": "Phản ứng thế",
+  "double-replacement": "Phản ứng trao đổi",
+  "combustion": "Phản ứng cháy",
+  "redox": "Phản ứng oxi hóa-khử",
+};
 
-const Liquid = ({ color, level, isReacting }) => (
+const normalize = (f) => {
+  if (!f) return "";
+  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
+};
+
+// --- Specialized Lab Equipment Components ---
+
+const Liquid = ({ color, level, isReacting, isGas }) => (
   <motion.div
     className="absolute bottom-0 left-0 right-0 overflow-hidden"
     initial={{ height: 0 }}
-    animate={{ height: `${level}%` }}
+    animate={{ height: isGas ? '100%' : `${level}%` }}
     transition={{ duration: 1, ease: "easeOut" }}
-    style={{ backgroundColor: color }}
+    style={{ backgroundColor: isGas ? 'transparent' : color }}
   >
-    {level > 0 && !isReacting && (
+    {/* Surface Tension / Reflection */}
+    {!isGas && (
+      <div className="absolute top-0 left-0 right-0 h-2 bg-white/20 blur-[1px] z-10" />
+    )}
+    
+    {isGas && (
       <div className="absolute inset-0">
-        {[...Array(5)].map((_, i) => (
+        {[...Array(24)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute bg-white/30 rounded-full"
+            className="absolute rounded-full blur-md"
             style={{
-              width: Math.random() * 8 + 4,
-              height: Math.random() * 8 + 4,
+              width: Math.random() * 40 + 20,
+              height: Math.random() * 40 + 20,
               left: `${Math.random() * 100}%`,
-              bottom: '-10%',
+              top: `${Math.random() * 100}%`,
+              backgroundColor: color,
+              opacity: 0.2
             }}
-            animate={{
-              y: [0, -100],
-              opacity: [0, 1, 0],
-              x: Math.sin(i) * 10,
+            animate={isReacting ? {
+              scale: [1, 1.3, 1],
+              opacity: [0.1, 0.4, 0.1],
+              x: [0, Math.random() * 30 - 15, 0],
+              y: [0, Math.random() * 30 - 15, 0]
+            } : {
+              opacity: 0.15,
+              y: [0, -10, 0]
             }}
-            transition={{
-              duration: Math.random() * 2 + 1,
-              repeat: Infinity,
-              delay: Math.random() * 2,
+            transition={{ duration: 3 + Math.random() * 3, repeat: Infinity }}
+          />
+        ))}
+      </div>
+    )}
+    {!isGas && level > 0 && (
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+        {isReacting && [...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute bg-white/60 rounded-full blur-[1px]"
+            style={{
+              width: Math.random() * 3 + 2,
+              height: Math.random() * 3 + 2,
+              left: `${Math.random() * 100}%`,
+              bottom: 0,
             }}
+            animate={{ y: -150, opacity: [0, 1, 0], x: Math.random() * 20 - 10 }}
+            transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.15 }}
           />
         ))}
       </div>
@@ -41,34 +84,20 @@ const Liquid = ({ color, level, isReacting }) => (
   </motion.div>
 );
 
-const GasTube = ({ color, status, isActive }) => (
+const GasTube = ({ color, isActive }) => (
   <AnimatePresence>
     {isActive && (
       <motion.div
-        initial={{ opacity: 0, scaleY: 0 }}
-        animate={{ opacity: 1, scaleY: 1 }}
-        exit={{ opacity: 0, scaleY: 0 }}
-        style={{ originY: 0 }}
-        className={`absolute top-4 ${status === 'left' ? 'left-[4rem]' : 'right-[4rem]'} z-20 pointer-events-none`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 z-30 pointer-events-none"
       >
-        <svg width="160" height="280" viewBox="0 0 160 280" fill="none">
-           {/* Tube Path: From cylinder to Erlenmeyer center */}
-           <path 
-             d={status === 'left' ? "M0 0 C 40 0, 100 0, 100 60 V220" : "M160 0 C 120 0, 60 0, 60 60 V220"} 
-             stroke="rgba(255,255,255,0.4)" 
-             strokeWidth="6" 
-             strokeLinecap="round"
-             className="drop-shadow-sm"
-           />
-           {/* Inner Gas Flow Particles */}
+        <svg width="100%" height="100%" viewBox="0 0 1000 400" preserveAspectRatio="none" fill="none">
+           <path d="M750 150 H250 V280" stroke="rgba(255,255,255,0.4)" strokeWidth="8" strokeLinecap="round" />
            <motion.path 
-             d={status === 'left' ? "M0 0 C 40 0, 100 0, 100 60 V220" : "M160 0 C 120 0, 60 0, 60 60 V220"} 
-             stroke={color} 
-             strokeWidth="3" 
-             strokeLinecap="round"
-             strokeDasharray="4 12"
-             animate={{ strokeDashoffset: [0, -32] }}
-             transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+             d="M750 150 H250 V280" stroke={color} strokeWidth="4" strokeLinecap="round" strokeDasharray="10 20"
+             animate={{ strokeDashoffset: [0, -60] }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
            />
         </svg>
       </motion.div>
@@ -76,59 +105,24 @@ const GasTube = ({ color, status, isActive }) => (
   </AnimatePresence>
 );
 
-const Spatula = ({ color, status, isActive }) => (
+const Spatula = ({ color, isActive, direction = 'left' }) => (
   <AnimatePresence>
     {isActive && (
       <motion.div
-        initial={{ 
-          opacity: 0, 
-          x: status === 'left' ? -80 : 80, 
-          y: -40, 
-          rotate: status === 'left' ? -45 : 45 
-        }}
-        animate={{ 
-          opacity: 1, 
-          x: status === 'left' ? 120 : -120, 
-          y: 60, 
-          rotate: status === 'left' ? 15 : -15 
-        }}
-        exit={{ 
-          opacity: 0,
-          scale: 0.5,
-          transition: { duration: 0.3 }
-        }}
-        className={`absolute top-0 ${status === 'left' ? 'left-8' : 'right-8'} z-40 pointer-events-none`}
+        initial={{ opacity: 0, left: direction === 'left' ? "75%" : "25%", top: "20%", rotate: direction === 'left' ? 45 : -45, x: direction === 'left' ? -24 : 24, scaleX: direction === 'left' ? 1 : -1 }}
+        animate={{ opacity: 1, left: direction === 'left' ? "25%" : "75%", top: "45%", rotate: direction === 'left' ? -15 : 15, x: direction === 'left' ? -24 : 24, scaleX: direction === 'left' ? 1 : -1 }}
+        exit={{ opacity: 0, scale: 0.5 }}
+        className="absolute -translate-y-1/2 z-50 pointer-events-none"
+        style={{ transformOrigin: "24px center" }}
       >
-         <div className="relative">
-            {/* Spatula Handle (Metallic) */}
-            <div className={`w-36 h-2 bg-gradient-to-r ${status === 'left' ? 'from-slate-500 to-slate-200' : 'from-slate-200 to-slate-500'} rounded-full shadow-lg border border-white/20`} />
-            
-            {/* Spatula Scoop */}
-            <div className={`absolute ${status === 'left' ? 'right-0' : 'left-0'} top-1/2 -translate-y-1/2 w-8 h-5 bg-gradient-to-b from-slate-100 to-slate-300 rounded-lg shadow-inner flex items-center justify-center border border-slate-400`}>
-               {/* Scooped Solid */}
-               <motion.div 
-                 className="w-4 h-3 rounded-full" 
-                 style={{ backgroundColor: color }}
-                 initial={{ scale: 0 }}
-                 animate={{ scale: 1 }}
-               />
+         <div className="relative scale-75 md:scale-100 origin-[24px_center] transition-transform">
+            <div className="w-56 h-3 bg-gradient-to-r from-slate-200 to-slate-500 rounded-full shadow-2xl border border-white/20" />
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-8 bg-gradient-to-b from-slate-100 to-slate-300 rounded-lg shadow-inner flex items-center justify-center border border-slate-400">
+               <motion.div className="w-6 h-5 rounded-full" style={{ backgroundColor: color }} initial={{ scale: 0 }} animate={{ scale: 1 }} />
             </div>
-
-            {/* Dropping Particles Animation */}
-            <div className={`absolute ${status === 'left' ? 'right-1' : 'left-1'} top-5 flex flex-col items-center`}>
-               {[...Array(4)].map((_, i) => (
-                 <motion.div
-                   key={i}
-                   className="w-1.5 h-1.5 rounded-full shadow-sm"
-                   style={{ backgroundColor: color }}
-                   animate={{ 
-                     y: [0, 80], 
-                     x: [0, (Math.random() - 0.5) * 10],
-                     opacity: [1, 0],
-                     scale: [1, 0.5]
-                   }}
-                   transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
-                 />
+            <div className="absolute left-[20px] top-6">
+               {[...Array(5)].map((_, i) => (
+                 <motion.div key={i} className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} animate={{ y: [0, 150], opacity: [1, 0], scale: [1, 0.5] }} transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }} />
                ))}
             </div>
          </div>
@@ -137,133 +131,149 @@ const Spatula = ({ color, status, isActive }) => (
   </AnimatePresence>
 );
 
-const Vessel = ({ type = 'beaker', chemical, isPouring, isTarget, liquidLevel = 60, status }) => {
+const Pipette = ({ color, isActive, direction = 'left' }) => (
+  <AnimatePresence>
+    {isActive && (
+      <motion.div
+        initial={{ opacity: 0, left: direction === 'left' ? "75%" : "25%", top: "20%" }}
+        animate={{ opacity: 1, left: direction === 'left' ? "25%" : "75%", top: "40%" }}
+        exit={{ opacity: 0, scale: 0.5 }}
+        className="absolute -translate-y-1/2 -translate-x-1/2 z-50 pointer-events-none"
+      >
+         <div className="relative flex flex-col items-center scale-75 md:scale-100 origin-center transition-transform">
+            <div className="w-8 h-12 bg-red-400 rounded-t-full border border-red-500 shadow-md z-10" />
+            <div className="w-4 h-24 bg-white/40 border-x border-b border-white/60 rounded-b-full shadow-inner flex flex-col justify-end overflow-hidden pb-1">
+               <motion.div className="w-full rounded-b-full" style={{ backgroundColor: color }} initial={{ height: "80%" }} animate={{ height: "10%" }} transition={{ duration: 3, delay: 0.5 }} />
+            </div>
+            <div className="absolute top-[130px] flex flex-col items-center">
+               {[...Array(5)].map((_, i) => (
+                 <motion.div key={i} className="w-3 h-4" style={{ backgroundColor: color, borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%' }} initial={{ y: 0, opacity: 0, scale: 0 }} animate={{ y: [0, 100], opacity: [0, 1, 0], scale: [0, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 + i * 0.3 }} />
+               ))}
+            </div>
+         </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+const TTube = ({ colorA, colorB, isActive }) => (
+  <AnimatePresence>
+    {isActive && (
+      <motion.div
+        initial={{ opacity: 0, scaleY: 0 }}
+        animate={{ opacity: 1, scaleY: 1 }}
+        exit={{ opacity: 0, scaleY: 0 }}
+        style={{ originY: 0 }}
+        className="absolute inset-0 z-30 pointer-events-none"
+      >
+        <svg width="100%" height="100%" viewBox="0 0 1000 400" preserveAspectRatio="none" fill="none">
+           <path d="M250 150 H750" stroke="rgba(255,255,255,0.4)" strokeWidth="10" strokeLinecap="round" />
+           <path d="M500 150 V280" stroke="rgba(255,255,255,0.2)" strokeWidth="10" strokeLinecap="round" />
+           <motion.path 
+             d="M250 150 H500" stroke={colorA} strokeWidth="5" strokeLinecap="round" strokeDasharray="10 20"
+             animate={{ strokeDashoffset: [0, -60] }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+           />
+           <motion.path 
+             d="M750 150 H500" stroke={colorB} strokeWidth="5" strokeLinecap="round" strokeDasharray="10 20"
+             animate={{ strokeDashoffset: [0, 60] }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+           />
+           <motion.path 
+             d="M500 150 V280" stroke="white" strokeWidth="6" strokeLinecap="round" strokeDasharray="10 20"
+             animate={{ strokeDashoffset: [0, -60] }} transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+           />
+        </svg>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+const Crucible = ({ colorA, colorB, isActive }) => (
+  <AnimatePresence>
+    {isActive && (
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 50 }}
+        className="absolute bottom-[20px] left-1/2 -translate-x-1/2 z-30"
+      >
+        <div className="w-40 h-28 bg-gradient-to-b from-slate-300 to-slate-400 rounded-b-full shadow-[0_10px_40px_rgba(0,0,0,0.5)] border-4 border-slate-500/50 flex flex-col items-center justify-center relative overflow-hidden">
+           <div className="flex gap-3 mb-2 z-10">
+              <motion.div animate={{ rotate: [12, 15, 12] }} transition={{ duration: 2, repeat: Infinity }} className="w-8 h-8 rounded-sm shadow-lg" style={{ backgroundColor: colorA }} />
+              <motion.div animate={{ rotate: [-12, -15, -12] }} transition={{ duration: 2, repeat: Infinity }} className="w-8 h-8 rounded-sm shadow-lg" style={{ backgroundColor: colorB }} />
+           </div>
+           <motion.div className="absolute inset-0 bg-orange-500/10 blur-xl rounded-full" animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.4, 0.1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
+
+const Vessel = ({ chemical, status, isReacting, interactionMode }) => {
   const color = chemical?.color || '#38bdf8';
-  const isSolid = chemical?.state === 'solid';
-  const isGas = chemical?.state === 'gas';
+  const state = chemical?.state || 'liquid';
+
+  let animState = { rotate: 0, x: 0, y: 0 };
+  const isRight = status === 'right';
+
+  if (isReacting && isRight) {
+    if (interactionMode === 'mix' && state === 'liquid') {
+      animState = { rotate: -45, x: -150, y: 50 };
+    } else if (interactionMode === 'drop' && state === 'liquid') {
+      animState = { rotate: -20, x: -160, y: 20 };
+    } else if (interactionMode === 'solid-liquid' && state === 'liquid') {
+      // In case the user swapped slots, if B is liquid and they selected 'thả rắn', 
+      // the liquid would theoretically pour. But the solid's container should remain still.
+      animState = { rotate: -45, x: -150, y: 50 };
+    }
+  }
 
   return (
-    <div className="relative">
-      {/* Specialized Interaction Tools */}
-      {!isTarget && isGas && <GasTube color={color} status={status} isActive={isPouring} />}
-      {!isTarget && isSolid && <Spatula color={color} status={status} isActive={isPouring} />}
-
+    <div className="relative h-[200px] flex items-end justify-center">
       <motion.div
-        className="relative"
-        animate={isPouring ? (
-          isTarget ? { scale: [1, 1.02, 1] } : (
-            isGas || isSolid ? { x: 0, y: 0, rotate: 0 } : {
-              rotate: status === 'left' ? 45 : -45,
-              x: status === 'left' ? 60 : -60,
-              y: 20
-            }
-          )
-        ) : { rotate: 0, x: 0, y: 0 }}
+        className="relative z-30"
+        initial={{ rotate: 0, x: 0, y: 0 }}
+        animate={animState}
+        transition={{ duration: 0.8, ease: "easeInOut" }}
       >
-        {/* Vessel Shape Rendering */}
-        {type === 'erlenmeyer' ? (
-          <div className="w-24 h-28 relative flex items-end justify-center">
-            <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-2xl">
-               <path d="M35 10 H65 V40 L95 110 H5 L35 40 Z" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.4)" strokeWidth="4" />
-               <clipPath id="flaskClip">
-                 <path d="M35 10 H65 V40 L95 110 H5 L35 40 Z" />
-               </clipPath>
-               {chemical && (
-                 <motion.rect 
-                   x="0" y={110 - (liquidLevel * 1.1)} width="100" height="120" 
-                   fill={color} 
-                   clipPath="url(#flaskClip)"
-                   initial={{ height: 0 }}
-                   animate={{ height: 120 }}
-                 />
-               )}
-               {/* Deep Bubbling Effect for Gas */}
-               {isTarget && isPouring && chemical?.formula === '???' && (
-                 <g clipPath="url(#flaskClip)">
-                   {[...Array(12)].map((_, i) => (
-                     <motion.circle
-                       key={i}
-                       r={Math.random() * 3 + 1}
-                       fill="white"
-                       fillOpacity="0.4"
-                       animate={{ 
-                         cy: [110, 30], 
-                         cx: [50, 50 + (Math.random() - 0.5) * 20],
-                         opacity: [0, 1, 0],
-                         scale: [0.5, 1.5, 1]
-                       }}
-                       transition={{ 
-                         duration: Math.random() * 0.8 + 0.4, 
-                         repeat: Infinity, 
-                         delay: i * 0.1 
-                       }}
-                     />
-                   ))}
-                 </g>
-               )}
-            </svg>
-          </div>
-        ) : (
-          <div className="flex flex-col items-center">
-            {isGas ? (
-              // Pressurized Gas Cylinder
-              <div className="w-16 h-36 relative">
-                 <div className="w-full h-full bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 rounded-t-full rounded-b-xl border-2 border-white/20 shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-6 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full border border-white/30 bg-slate-400/20 flex items-center justify-center">
-                       <div className="w-0.5 h-3 bg-red-500 rounded-full origin-bottom" style={{ transform: 'rotate(45deg)' }} />
-                    </div>
-                    {chemical && (
-                      <motion.div 
-                        className="absolute inset-0 opacity-20" 
-                        style={{ backgroundColor: color }}
-                        animate={{ opacity: [0.1, 0.3, 0.1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      />
-                    )}
-                    <div className="absolute bottom-4 left-2 right-2 h-4 bg-white/5 rounded-full" />
-                 </div>
-                 {/* Valve on top */}
-                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-4 bg-slate-500 rounded-t-lg border-x border-t border-white/30" />
-              </div>
-            ) : isSolid ? (
-              // Wide-mouth Solid Jar
-              <div className="w-20 h-24 bg-gradient-to-b from-white/10 to-white/5 border-2 border-white/30 rounded-xl relative overflow-hidden shadow-xl">
-                <div className="absolute top-0 left-0 right-0 h-5 bg-white/20 border-b border-white/30" />
+        {state === 'gas' ? (
+          <div className="w-16 h-40 relative group">
+             <div className="w-full h-full bg-gradient-to-r from-slate-800 via-slate-600 to-slate-800 rounded-t-full rounded-b-xl border-2 border-white/20 shadow-2xl relative overflow-hidden glass-panel">
                 {chemical && (
-                  <div className="absolute bottom-2 left-2 right-2 top-8 flex flex-wrap gap-1 content-end">
-                    {[...Array(15)].map((_, i) => (
-                      <div key={i} className="w-3 h-3 rounded-sm shadow-inner" style={{ backgroundColor: color, opacity: 0.7 }} />
-                    ))}
-                  </div>
+                  <motion.div className="absolute inset-0" style={{ backgroundColor: color }} animate={{ opacity: [0.1, 0.4, 0.1] }} transition={{ duration: 3, repeat: Infinity }} />
                 )}
-                <div className="absolute inset-0 bg-white/5 pointer-events-none" />
-              </div>
-            ) : (
-              // Precision Liquid Beaker
-              <div className="w-24 h-28 border-x-4 border-b-4 rounded-b-xl relative bg-white/5 border-white/40 shadow-inner">
-                <div className="absolute left-1 top-4 w-3 h-[2px] bg-white/40" />
-                <div className="absolute left-1 top-10 w-4 h-[2px] bg-white/40" />
-                <div className="absolute left-1 top-16 w-3 h-[2px] bg-white/40" />
-                <div className="absolute left-1 top-22 w-4 h-[2px] bg-white/40" />
-                {chemical && <Liquid color={color} level={liquidLevel} isReacting={false} />}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
+             </div>
+             <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-6 bg-slate-500 rounded-t-lg border-2 border-white/30 shadow-lg" />
+          </div>
+        ) : state === 'solid' ? (
+          <div className="w-24 h-28 bg-gradient-to-b from-white/10 to-transparent border-2 border-white/20 rounded-xl relative overflow-hidden shadow-2xl glass-panel">
+            <div className="absolute top-0 left-0 right-0 h-6 bg-white/10 border-b border-white/20" />
+            {chemical && (
+              <div className="absolute bottom-2 left-2 right-2 top-8 flex flex-wrap gap-1 content-end">
+                {[...Array(12)].map((_, i) => (
+                  <motion.div 
+                    key={i} 
+                    animate={{ y: [0, -2, 0], rotate: [0, 5, 0] }} 
+                    transition={{ duration: 2 + Math.random(), repeat: Infinity }}
+                    className="w-4 h-4 rounded-sm shadow-lg border border-white/10" 
+                    style={{ backgroundColor: color, opacity: 0.9 }} 
+                  />
+                ))}
               </div>
             )}
           </div>
+        ) : (
+          <div className="w-28 h-32 border-x-4 border-b-4 rounded-b-2xl relative bg-white/5 border-white/40 overflow-hidden">
+            {chemical && <Liquid color={color} level={60} isReacting={isReacting} isGas={state === 'gas'} />}
+          </div>
         )}
       </motion.div>
-
-      {/* Chemical Identity Label */}
       {chemical && (
-        <motion.div 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute -top-16 left-1/2 -translate-x-1/2 text-center w-32"
-        >
-          <span className="text-[9px] font-black text-white/50 uppercase tracking-[2px] block mb-1">
-            {chemical.state === 'gas' ? 'Cylinder' : chemical.state === 'solid' ? 'Solid Jar' : 'Beaker'}
-          </span>
-          <div className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg border border-white/20 shadow-xl inline-block">
-            <span className="text-[14px] font-black text-white tracking-widest">{chemical.formula}</span>
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="absolute -top-14 left-1/2 -translate-x-1/2 z-50">
+          <div className="px-5 py-2 glass-pill min-w-[80px] text-center">
+            <span className="text-lg font-black text-white tracking-widest leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+              {chemical.formula}
+            </span>
           </div>
         </motion.div>
       )}
@@ -271,7 +281,14 @@ const Vessel = ({ type = 'beaker', chemical, isPouring, isTarget, liquidLevel = 
   );
 };
 
+// --- Main Simulator Component ---
+
 const ReactionSimulator = () => {
+  const { user, isLoggedIn, refreshUser } = useAuth();
+  const navigate = useNavigate();
+  const [chemicals, setChemicals] = useState([]);
+  const [reactions, setReactions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedA, setSelectedA] = useState(null);
   const [selectedB, setSelectedB] = useState(null);
   const [result, setResult] = useState(null);
@@ -282,447 +299,539 @@ const ReactionSimulator = () => {
   const [activeSlot, setActiveSlot] = useState('A'); 
   const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
   const [newDiscovery, setNewDiscovery] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [selectedInteraction, setSelectedInteraction] = useState('mix');
+  const [showDiscoveryJournal, setShowDiscoveryJournal] = useState(false);
+  const containerRef = useRef(null);
 
-  // Initialize and Load Progress
   useEffect(() => {
-    const saved = localStorage.getItem('chem_odyssey_discovered');
-    const starters = chemicals.filter(c => c.isStarter).map(c => c.formula);
-    
-    if (saved) {
+    const fetchData = async () => {
       try {
-        const parsed = JSON.parse(saved);
-        const combined = Array.from(new Set([...starters, ...parsed]));
-        setDiscoveredFormulas(combined);
-      } catch (e) {
-        setDiscoveredFormulas(starters);
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        const [chemsRes, rxsRes] = await Promise.all([
+          fetch('/api/lab/chemicals', { headers }),
+          fetch('/api/lab/reactions', { headers })
+        ]);
+        const chemsData = await chemsRes.json();
+        const rxsData = await rxsRes.json();
+        setChemicals(chemsData);
+        setReactions(rxsData);
+        
+        // --- Initial Progression Logic ---
+        const starters = chemsData.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
+        
+        // Sync with LocalStorage as a baseline (for guests or before auth loads)
+        const saved = localStorage.getItem('chem_odyssey_discovered');
+        if (saved) {
+          try {
+            setDiscoveredFormulas(Array.from(new Set([...starters, ...JSON.parse(saved)])));
+          } catch (e) { setDiscoveredFormulas(starters); }
+        } else {
+          setDiscoveredFormulas(starters);
+          localStorage.setItem('chem_odyssey_discovered', JSON.stringify(starters));
+        }
+      } catch (err) {
+        console.error("Failed to fetch lab data:", err);
+      } finally {
+        setIsLoading(false);
       }
-    } else {
-      setDiscoveredFormulas(starters);
-      localStorage.setItem('chem_odyssey_discovered', JSON.stringify(starters));
-    }
+    };
+    fetchData();
   }, []);
+
+  // --- Dynamic Sync for Authenticated Users ---
+  // When 'user' finishes loading asynchronously, sync their chemicals into state
+  useEffect(() => {
+    if (isLoggedIn && user && user.unlockedChemicals && chemicals.length > 0) {
+      setDiscoveredFormulas(prev => {
+        const starters = chemicals.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
+        return Array.from(new Set([...prev, ...starters, ...user.unlockedChemicals]));
+      });
+    }
+  }, [user, isLoggedIn, chemicals]);
+
+  const findReaction = (reactantFormulas, isHeating = false) => {
+    if (!reactantFormulas || reactantFormulas.length === 0) return null;
+    const formulas = reactantFormulas.filter(f => f !== null && f !== undefined);
+    
+    return reactions.find(rx => {
+      const rxReactantFormulas = rx.reactants.map(r => r.formula);
+      if (rxReactantFormulas.length !== formulas.length) return false;
+      const matchReactants = formulas.every(f => rxReactantFormulas.includes(f));
+      if (rx.requires_heat && !isHeating) return false;
+      return matchReactants;
+    });
+  };
+
+  // --- Derived Progression State ---
+  const starterFormulas = useMemo(() => 
+    chemicals.filter(c => c.is_starter).map(c => c.formula)
+  , [chemicals]);
+
+  const totalDiscoverable = useMemo(() => 
+    chemicals.filter(c => !c.is_starter).length
+  , [chemicals]);
+
+  const discoveredProductsCount = useMemo(() => 
+    discoveredFormulas.filter(f => !starterFormulas.includes(f)).length
+  , [discoveredFormulas, starterFormulas]);
+
+  const progressPercent = useMemo(() => 
+    totalDiscoverable > 0 ? Math.round((discoveredProductsCount / totalDiscoverable) * 100) : 0
+  , [discoveredProductsCount, totalDiscoverable]);
 
   const categories = useMemo(() => {
     const discoveredChems = chemicals.filter(c => discoveredFormulas.includes(c.formula));
-    const cats = new Set(discoveredChems.map(c => c.category));
+    const cats = new Set(discoveredChems.map(c => c.type));
     return ['all', ...Array.from(cats)];
-  }, [discoveredFormulas]);
+  }, [chemicals, discoveredFormulas]);
 
   const filteredChemicals = useMemo(() => {
     return chemicals.filter(c => {
       const isDiscovered = discoveredFormulas.includes(c.formula);
       if (!isDiscovered) return false;
-
-      const matchCategory = filterCategory === 'all' || c.category === filterCategory;
+      const matchCategory = filterCategory === 'all' || c.type === filterCategory;
       const matchSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.formula.includes(search);
       return matchCategory && matchSearch;
     });
-  }, [filterCategory, search, discoveredFormulas]);
+  }, [chemicals, filterCategory, search, discoveredFormulas]);
 
   const handleReact = () => {
     if (!selectedA && !selectedB) return;
+
+    // Phase 3: Interaction Mode Validation
+    const stateA = selectedA?.state || 'liquid';
+    const stateB = selectedB?.state || 'liquid';
+    const hasGas = stateA === 'gas' || stateB === 'gas';
+    const hasSolid = stateA === 'solid' || stateB === 'solid';
+    const hasLiquid = stateA === 'liquid' || stateB === 'liquid';
+
+    let expectedInteractions = ['mix'];
+    if (hasGas && hasLiquid) expectedInteractions = ['bubble'];
+    else if (hasSolid && hasLiquid) expectedInteractions = ['solid-liquid', 'drop'];
+    else if (stateA === 'solid' && stateB === 'solid') expectedInteractions = ['mix']; // Nung nóng 2 rắn
+    else if (stateA === 'liquid' && stateB === 'liquid') expectedInteractions = ['mix'];
+
+    if (selectedA && selectedB && !expectedInteractions.includes(selectedInteraction)) {
+      setResult('wrong-interaction');
+      return;
+    }
+
     setIsReacting(true);
     setResult(null);
-
-    // Dynamic timeout based on complex animations (Spatula takes effort!)
     setTimeout(() => {
       const formulas = [selectedA?.formula, selectedB?.formula];
       const found = findReaction(formulas, isHeating);
-      setResult(found || 'no-reaction');
-      setIsReacting(false);
 
       if (found && found.products) {
-        const newProducts = found.products.filter(p => !discoveredFormulas.includes(p.formula));
+        const normalizedDiscovered = discoveredFormulas.map(f => normalize(f));
+        const newProducts = found.products.filter(p => !normalizedDiscovered.includes(normalize(p.formula)));
+        
         if (newProducts.length > 0) {
-          const chemicalObjects = newProducts.map(p => chemicals.find(c => c.formula === p.formula)).filter(Boolean);
-          if (chemicalObjects.length > 0) {
-            setNewDiscovery(chemicalObjects[0]); 
-            const updatedFormulas = Array.from(new Set([...discoveredFormulas, ...newProducts.map(p => p.formula)]));
-            setDiscoveredFormulas(updatedFormulas);
-            localStorage.setItem('chem_odyssey_discovered', JSON.stringify(updatedFormulas));
+          // Keep the first one for the "Wow!" modal if it exists in the master list
+          const targetNorm = normalize(newProducts[0].formula);
+          const chemObj = chemicals.find(c => normalize(c.formula) === targetNorm);
+          if (chemObj) setNewDiscovery(chemObj);
+
+          const allNewFormulas = newProducts.map(p => p.formula);
+          const updated = Array.from(new Set([...discoveredFormulas, ...allNewFormulas]));
+          setDiscoveredFormulas(updated);
+          
+          if (isLoggedIn) {
+            const token = localStorage.getItem('token');
+            fetch('/api/lab/unlock', {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ formulas: allNewFormulas })
+            }).then(() => {
+              refreshUser();
+            }).catch(err => console.error("Failed to save progress:", err));
+          } else {
+            localStorage.setItem('chem_odyssey_discovered', JSON.stringify(updated));
           }
         }
+
+        // Phase 4: Hazard / Safety System Check
+        const toxicGases = ['Cl2', 'H2S', 'NO2', 'SO2', 'CO', 'PH3'];
+        const isHazard = found.animation === 'explosion' || 
+                        found.products?.some(p => toxicGases.includes(normalize(p.formula)));
+        
+        if (isHazard) {
+           setResult({ type: 'hazard', ...found });
+           setIsReacting(false);
+           return;
+        }
       }
-    }, 3500);
+
+      setResult(found || 'no-reaction');
+      setIsReacting(false);
+    }, 4000);
   };
 
   const resetAll = () => {
-    setSelectedA(null);
-    setSelectedB(null);
-    setIsHeating(false);
-    setResult(null);
-    setSearch('');
-    setNewDiscovery(null);
+    setSelectedA(null); setSelectedB(null); setIsHeating(false); setResult(null); setSearch('');
   };
 
-  const resetProgress = () => {
-    if (window.confirm('Bạn có muốn xóa tiến trình khám phá và bắt đầu lại từ đầu?')) {
-      const starters = chemicals.filter(c => c.isStarter).map(c => c.formula);
-      setDiscoveredFormulas(starters);
-      localStorage.setItem('chem_odyssey_discovered', JSON.stringify(starters));
-      window.location.reload();
+  const collectProduct = () => {
+    if (!result || result === 'no-reaction') return;
+    const mainProduct = result.products[0];
+    const chemData = chemicals.find(c => c.formula === mainProduct.formula);
+    if (chemData) {
+      setSelectedA(chemData); setSelectedB(null); setResult(null);
     }
   };
 
+  const handleExit = () => {
+    navigate('/classroom');
+  };
+
+  const toggleFullScreen = async () => {
+    if (!containerRef.current) return;
+    try {
+      if (!document.fullscreenElement) {
+        await containerRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+          setIsFullscreen(false);
+        }
+      }
+    } catch (err) {
+      console.error(`Error attempting to toggle full-screen mode: ${err.message}`);
+    }
+  };
+
+  useEffect(() => {
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handleFsChange);
+    return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
+
+  if (isLoading) return (
+    <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0c10] text-white">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-viet-green border-t-transparent rounded-full mb-6" />
+      <h2 className="text-2xl font-black italic tracking-widest uppercase animate-pulse">Đang chuẩn bị dụng cụ...</h2>
+      <p className="mt-2 text-white/40 font-bold uppercase text-xs tracking-[4px]">Hệ thống Lab v2.2</p>
+    </div>
+  );
+
   return (
-    <div className="space-y-12 pb-20">
-      {/* Discovery Modal Overlay */}
+    <div ref={containerRef} className={`relative flex-1 flex flex-col md:flex-row gap-6 p-4 md:p-8 lab-ambient-bg min-h-[600px] overflow-hidden transition-all duration-700 ${isFullscreen ? 'fixed inset-0 z-[100]' : ''} rounded-[48px]`}>
+      <div className="absolute inset-0 lab-grid-overlay pointer-events-none opacity-20" />
+
+      {/* Modals and Overlays */}
       <AnimatePresence>
+        {/* New Discovery Modal */}
         {newDiscovery && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#1a1c23]/90 backdrop-blur-xl"
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              className="max-w-md w-full bg-white rounded-[48px] p-10 text-center shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] relative overflow-hidden"
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-xl">
+             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-white rounded-[48px] p-12 text-center max-w-md">
+                <div className="text-6xl mb-6">✨</div>
+                <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase italic">Phát hiện mới!</h2>
+                <div className="text-5xl font-black text-viet-green mb-2">{newDiscovery.formula}</div>
+                <p className="text-slate-500 mb-8 font-medium">{newDiscovery.name}</p>
+                <button onClick={() => setNewDiscovery(null)} className="px-8 py-4 bg-slate-900 text-white rounded-2xl w-full font-black uppercase tracking-widest hover:scale-105 transition-transform">Tiếp tục hành trình</button>
+             </motion.div>
+          </motion.div>
+        )}
+
+        {/* Discovery Journal Modal */}
+        {showDiscoveryJournal && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ scale: 0.9, y: 50, opacity: 0 }} 
+              animate={{ scale: 1, y: 0, opacity: 1 }} 
+              className="bg-[#0a0c10] w-[95vw] h-[90vh] rounded-[56px] border border-white/5 shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-viet-green via-blue-400 to-viet-green animate-shimmer" />
-              
-              <div className="w-24 h-24 bg-viet-green/10 rounded-3xl flex items-center justify-center mx-auto mb-6 text-4xl shadow-inner">
-                 ✨
-              </div>
-              
-              <span className="text-viet-green text-[10px] font-black uppercase tracking-[5px] mb-2 block">New Formula Discovered</span>
-              <h2 className="text-3xl font-black text-viet-text italic uppercase mb-2">Phát hiện mới!</h2>
-              <div className="py-6 border-y border-viet-border/30 my-6">
-                 <span className="text-5xl font-black text-viet-green tracking-tighter block mb-2">{newDiscovery.formula}</span>
-                 <p className="text-lg font-bold text-viet-text-light uppercase tracking-widest">{newDiscovery.name}</p>
-              </div>
-              
-              <p className="text-[13px] text-viet-text-light font-medium mb-8 leading-relaxed px-6">
-                Tuyệt vời! Bạn đã tổng hợp thành công một hợp chất mới. Nó đã được thêm vào tủ hóa chất để phục vụ cho các thí nghiệm tiếp theo.
-              </p>
-              
-              <button
-                onClick={() => setNewDiscovery(null)}
-                className="w-full py-4 bg-viet-text text-white rounded-2xl text-[12px] font-black uppercase tracking-widest hover:bg-viet-green transition-all shadow-xl shadow-black/10"
+              <button 
+                onClick={() => setShowDiscoveryJournal(false)} 
+                className="absolute top-8 right-8 w-14 h-14 bg-white/5 rounded-full flex items-center justify-center text-white/50 hover:text-white hover:bg-red-500 hover:scale-110 active:scale-90 transition-all z-[210] border border-white/10 backdrop-blur-xl"
               >
-                Tiếp tục khám phá
+                <span className="text-xl">✕</span>
               </button>
+              
+              <div className="absolute top-10 left-10 z-20 pointer-events-none">
+                <span className="text-viet-green text-[12px] font-black uppercase tracking-[12px] mb-3 block opacity-40">Mạng lưới khám phá</span>
+                <h2 className="text-4xl lg:text-5xl font-black text-white italic uppercase tracking-tighter">
+                  Synthesis <span className="text-viet-green">Nexus</span>
+                </h2>
+              </div>
+
+              <div className="flex-1 w-full h-full">
+                <DiscoveryMap 
+                  chemicals={chemicals} 
+                  reactions={reactions} 
+                  discoveredFormulas={discoveredFormulas} 
+                />
+              </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Laboratory Environment */}
-      <div className="relative bg-[#1a1c23] rounded-[48px] p-8 md:p-16 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border-t border-white/10 overflow-hidden">
-        {/* Background Haze */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-viet-green/5 blur-[120px] rounded-full" />
-        
-        {/* Lab Title */}
-        <div className="relative z-10 text-center mb-16">
-           <span className="text-viet-green text-[10px] font-black uppercase tracking-[8px] mb-3 block">Digital Laboratory v2.0</span>
-           <h2 className="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tighter">Phòng thí nghiệm <span className="text-viet-green">biến hình</span></h2>
+      {/* LEFT SIDEBAR: Chemical Cabinet & Tools */}
+      <motion.aside initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="lg:w-80 flex flex-col gap-6 glass-panel rounded-[40px] p-6 max-h-[calc(100vh-4rem)] lg:sticky lg:top-8 overflow-hidden z-20">
+        <div className="flex justify-between items-center px-2">
+          <h3 className="text-xl font-black italic uppercase tracking-tighter text-white/90">Phòng <span className="text-viet-green">vật tư</span></h3>
+          <button onClick={() => setShowDiscoveryJournal(true)} className="w-10 h-10 glass-pill text-viet-green flex items-center justify-center hover:bg-viet-green hover:text-white transition-all shadow-lg" title="Sổ tay Hành trình">📖</button>
         </div>
 
-        {/* The Lab Bench */}
-        <div className="relative z-10 flex flex-col items-center gap-12">
-           <div className="flex items-end justify-center gap-12 md:gap-24 relative min-h-[400px]">
-              {/* Vessel A Slot */}
-              <div 
-                onClick={() => setActiveSlot('A')}
-                className={`cursor-pointer transition-all duration-300 ${activeSlot === 'A' ? 'scale-110' : 'opacity-60 hover:opacity-100'} z-10`}
-              >
-                 <Vessel 
-                   chemical={selectedA} 
-                   isPouring={isReacting} 
-                   status="left"
-                 />
-                 <div className={`mt-4 h-1 w-full rounded-full transition-all ${activeSlot === 'A' ? 'bg-viet-green shadow-[0_0_15px_#4ade80]' : 'bg-white/10'}`} />
-              </div>
-
-              {/* Mixing Station (Target) */}
-              <div className="relative pt-16">
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-40 h-40 bg-white/5 rounded-full blur-3xl animate-pulse" />
-                <Vessel 
-                   type="erlenmeyer" 
-                   chemical={isReacting ? { color: '#ffffff', formula: '???' } : (result && result !== 'no-reaction' ? result.products[0] : null)} 
-                   isTarget 
-                   liquidLevel={isReacting ? 80 : (result && result !== 'no-reaction' ? 60 : (isHeating ? 10 : 0))}
-                 />
-                 
-                 {/* Reaction Effects Overlay */}
-                 <AnimatePresence>
-                   {(isReacting || isHeating) && (
-                     <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="absolute inset-0 pointer-events-none flex items-center justify-center pt-32"
-                     >
-                       {/* Bunsen Burner Fire */}
-                       {isHeating && (
-                         <div className="absolute -bottom-16 flex flex-col items-center">
-                            <motion.div 
-                              animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }}
-                              transition={{ duration: 0.5, repeat: Infinity }}
-                              className="w-24 h-28 bg-gradient-to-t from-orange-600 via-orange-400 to-transparent blur-3xl rounded-full" 
-                            />
-                            <div className="flex gap-1 relative -top-20">
-                              {[...Array(6)].map((_, i) => (
-                                <motion.div
-                                  key={i}
-                                  className="w-3.5 h-16 bg-gradient-to-t from-orange-500 via-yellow-400 to-transparent rounded-full"
-                                  animate={{ height: [50, 80, 50], y: [0, -15, 0], opacity: [0.7, 1, 0.7] }}
-                                  transition={{ duration: 0.4, delay: i * 0.08, repeat: Infinity }}
-                                />
-                              ))}
-                            </div>
-                         </div>
-                       )}
-
-                       {/* Interactive Sparks */}
-                       {isReacting && (
-                         <div className="absolute inset-0">
-                           {[...Array(20)].map((_, i) => (
-                             <motion.div
-                               key={i}
-                               className="absolute w-2 h-2 rounded-full bg-white shadow-[0_0_15px_#fff]"
-                               animate={{
-                                 scale: [1, 2, 0],
-                                 y: [0, -180],
-                                 x: (Math.random() - 0.5) * 200,
-                                 opacity: [0, 1, 0]
-                               }}
-                               transition={{ duration: 1, repeat: Infinity, delay: i * 0.05 }}
-                             />
-                           ))}
-                           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-6xl animate-bounce drop-shadow-[0_0_20px_rgba(255,255,255,0.9)]">⚡</div>
-                         </div>
-                       )}
-                     </motion.div>
-                   )}
-                 </AnimatePresence>
-              </div>
-
-              {/* Vessel B Slot */}
-              <div 
-                onClick={() => setActiveSlot('B')}
-                className={`cursor-pointer transition-all duration-300 ${activeSlot === 'B' ? 'scale-110' : 'opacity-60 hover:opacity-100'} z-10`}
-              >
-                 <Vessel 
-                   chemical={selectedB} 
-                   isPouring={isReacting} 
-                   status="right"
-                 />
-                 <div className={`mt-4 h-1 w-full rounded-full transition-all ${activeSlot === 'B' ? 'bg-viet-green shadow-[0_0_15px_#4ade80]' : 'bg-white/10'}`} />
-              </div>
-           </div>
-
-           {/* High-Tech Bench Surface */}
-           <div className="w-full max-w-4xl h-8 bg-gradient-to-b from-[#2a2d3a] via-[#12141a] to-[#0a0c10] rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden mt-8 border border-white/5">
-             <div className="absolute inset-0 bg-white/5 opacity-10" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 30px, #fff 31px)' }} />
-             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-viet-green to-transparent opacity-30" />
-           </div>
-
-           {/* Bench Controls */}
-           <div className="flex flex-wrap justify-center gap-6 mt-12">
-              <button
-                onClick={() => setIsHeating(!isHeating)}
-                className={`px-8 py-5 rounded-3xl text-[12px] font-black uppercase tracking-widest transition-all flex items-center gap-4 border-2 ${
-                  isHeating 
-                    ? 'bg-orange-500 border-orange-400 text-white shadow-[0_15px_45px_-10px_rgba(249,115,22,0.6)] scale-105' 
-                    : 'bg-white/5 border-white/10 text-white/40 hover:text-white/80 hover:border-white/30 hover:bg-white/[0.08]'
+        <div className="space-y-6 flex-1 overflow-hidden flex flex-col">
+          <div className="space-y-3">
+             <span className="text-[10px] font-black uppercase tracking-[4px] text-white/30 px-2">Kho hóa chất</span>
+             <div className="space-y-4">
+               <input type="text" placeholder="Tìm kiếm..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:border-viet-green/50 outline-none transition-all focus:bg-white/10 placeholder:text-white/20" />
+               <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-[10px] font-black uppercase tracking-widest outline-none appearance-none cursor-pointer hover:bg-white/10 transition-all">
+                 {categories.map(cat => <option key={cat} value={cat} className="bg-slate-900">{cat}</option>)}
+               </select>
+             </div>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar grid grid-cols-2 gap-3 min-h-0">
+            {filteredChemicals.map((chem) => (
+              <motion.div 
+                key={chem.formula} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                onClick={() => { if (activeSlot === 'A') setSelectedA(chem); else setSelectedB(chem); }}
+                className={`p-4 rounded-3xl cursor-pointer transition-all border-2 text-center group ${
+                  (selectedA?.formula === chem.formula || selectedB?.formula === chem.formula)
+                  ? 'bg-viet-green/20 border-viet-green shadow-[0_0_20px_rgba(118,192,52,0.3)]' : 'bg-white/5 border-white/5 hover:bg-white/10'
                 }`}
               >
-                 <span className={isHeating ? 'animate-bounce text-lg' : 'text-lg'}>🔥</span>
-                 {isHeating ? 'Đèn cồn đang cháy' : 'Bật đèn cồn'}
-              </button>
+                <div className="text-xl font-black mb-1 group-hover:scale-110 transition-transform" style={{ color: (selectedA?.formula === chem.formula || selectedB?.formula === chem.formula) ? '#76c034' : chem.color }}>{chem.formula}</div>
+                <div className="text-[8px] font-black uppercase opacity-40 truncate group-hover:opacity-100 transition-opacity">{chem.name}</div>
+              </motion.div>
+            ))}
+          </div>
 
-              <button
-                onClick={handleReact}
-                disabled={(!selectedA && !selectedB) || isReacting}
-                className={`px-12 py-5 rounded-3xl text-[15px] font-black uppercase tracking-[5px] transition-all relative overflow-hidden group ${
-                  (selectedA || selectedB) && !isReacting
-                    ? 'bg-viet-green text-white shadow-[0_25px_50px_-15px_rgba(74,222,128,0.5)] hover:-translate-y-1 hover:brightness-110'
-                    : 'bg-white/5 text-white/20 cursor-not-allowed border border-white/10'
-                }`}
-              >
-                {isReacting ? 'Đang thực hiện...' : 'Bắt đầu thí nghiệm'}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-              </button>
-              
-              {(selectedA || selectedB) && (
-                <button
-                  onClick={resetAll}
-                  className="px-8 py-5 rounded-3xl text-[12px] font-black text-white/40 uppercase tracking-widest border border-white/10 hover:border-red-500/50 hover:text-red-400 hover:bg-red-500/5 transition-all"
-                >
-                  Dọn dẹp bàn
-                </button>
+        </div>
+      </motion.aside>
+
+      {/* CENTER AREA: Lab & Controls */}
+      <main className="flex-1 flex flex-col gap-8">
+        <div className="relative glass-panel rounded-[56px] p-8 md:p-12 flex flex-col items-center shadow-inner overflow-hidden">
+          <div className="absolute -top-24 -left-24 w-64 h-64 bg-viet-green/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none" />
+          {/* Lab Control Bar */}
+          <div className="absolute top-6 left-6 z-50 flex items-center gap-3">
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleExit}
+              className="px-6 py-3 bg-viet-green text-white rounded-full font-black text-[11px] uppercase tracking-[3px] hover:brightness-110 transition-all flex items-center gap-2"
+            >
+              <span>THOÁT</span>
+            </motion.button>
+
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleFullScreen}
+              className="p-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/20 rounded-2xl transition-all shadow-2xl group"
+              title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
+            >
+              {isFullscreen ? (
+                <svg className="w-6 h-6 text-white group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6 text-white group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 3h6m0 0v6m0-6L14 10M9 21H3m0 0v-6m0 6l7-7" />
+                </svg>
               )}
-           </div>
-        </div>
-      </div>
+            </motion.button>
+          </div>
 
-      {/* Chemical Selection Cabinet */}
-      <div className="bg-white rounded-[48px] border border-viet-border p-8 md:p-16 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
-           <div>
-              <h3 className="text-3xl font-black text-viet-text italic -tracking-wider uppercase">Tủ hóa chất <span className="text-viet-green">Alpha</span></h3>
-              <div className="flex items-center gap-4 mt-2">
-                <p className="text-[12px] font-bold text-viet-text-light uppercase tracking-widest opacity-70">Lựa chọn cho: {activeSlot === 'A' ? 'Bình trái (Vessel 1)' : 'Bình phải (Vessel 2)'}</p>
-                <button 
-                  onClick={resetProgress}
-                  className="text-[10px] font-black text-red-500/50 uppercase tracking-widest hover:text-red-500 transition-colors bg-red-50 px-2 py-1 rounded-md"
-                >
-                  Reset Tiến trình
-                </button>
-              </div>
-           </div>
-           
-           <div className="flex flex-wrap gap-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Mã hóa chất (H2, HCl...)"
-                  className="h-14 bg-[#f8f9fa] border border-viet-border rounded-2xl px-6 text-[14px] text-viet-text font-black outline-none focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 md:w-80 transition-all shadow-inner"
-                />
-              </div>
-              <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide max-w-lg">
-                {categories.map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => setFilterCategory(cat)}
-                    className={`px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-[2px] transition-all whitespace-nowrap ${
-                      filterCategory === cat
-                        ? 'bg-viet-green text-white shadow-xl shadow-viet-green/20 scale-105'
-                        : 'bg-[#f8f9fa] text-viet-text-light border border-viet-border/30 hover:border-viet-green/50'
-                    }`}
-                  >
-                    {cat === 'all' ? 'Tất cả' : cat}
-                  </button>
-                ))}
-              </div>
-           </div>
-        </div>
+          <div className="text-center mb-14 relative z-10">
+            <span className="text-viet-green text-[10px] font-black uppercase tracking-[8px] mb-2 block">Phòng thí nghiệm v2.2</span>
+            <h2 className="text-3xl font-black text-white italic uppercase">Hệ thống <span className="text-viet-green">phản ứng</span></h2>
+          </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-           {filteredChemicals.map(chem => (
-             <motion.button
-               key={chem.formula}
-               whileHover={{ y: -6, scale: 1.05 }}
-               whileTap={{ scale: 0.95 }}
-               onClick={() => {
-                 if (activeSlot === 'A') setSelectedA(chem);
-                 else setSelectedB(chem);
-               }}
-               className={`p-6 rounded-[32px] border-2 transition-all flex flex-col items-center text-center gap-4 relative group ${
-                 (selectedA?.formula === chem.formula || selectedB?.formula === chem.formula)
-                  ? 'bg-viet-green border-viet-green shadow-2xl shadow-viet-green/30'
-                  : 'bg-white border-viet-border/30 hover:border-viet-green/50'
-               }`}
-             >
-                <div 
-                  className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-inner transition-all group-hover:rotate-12 ${
-                    (selectedA?.formula === chem.formula || selectedB?.formula === chem.formula) ? 'bg-white/20' : 'bg-slate-50'
-                  }`}
-                >
-                   <span style={{ color: chem.color }}>
-                     {chem.state === 'gas' ? '☁️' : chem.state === 'solid' ? '💎' : '💧'}
-                   </span>
-                </div>
-                <div>
-                   <p className={`text-[17px] font-black tracking-tighter ${selectedA?.formula === chem.formula || selectedB?.formula === chem.formula ? 'text-white' : 'text-viet-text'}`}>{chem.formula}</p>
-                   <p className={`text-[10px] font-bold uppercase tracking-widest ${selectedA?.formula === chem.formula || selectedB?.formula === chem.formula ? 'text-white/70' : 'text-viet-text-light'}`}>{chem.name}</p>
-                </div>
+          <div className="relative z-20 w-full aspect-[2/1] bg-black/20 rounded-[48px] border border-white/10 p-4">
+            {isReacting && selectedA && selectedB && (
+              <>
+                {selectedB.state === 'gas' && selectedA.state !== 'gas' && <GasTube color={selectedB.color} isActive={isReacting} />}
                 
-                {/* Selection Counter */}
-                {(selectedA?.formula === chem.formula || selectedB?.formula === chem.formula) && (
-                   <div className="absolute top-4 right-4 w-6 h-6 bg-white rounded-full flex items-center justify-center text-[11px] font-black text-viet-green shadow-lg">
-                      {selectedA?.formula === chem.formula ? '1' : '2'}
-                   </div>
+                {selectedInteraction === 'solid-liquid' && (
+                  <Spatula 
+                    color={selectedA.state === 'solid' ? selectedA.color : selectedB.color} 
+                    isActive={isReacting} 
+                    direction={selectedA.state === 'solid' ? 'right' : 'left'} 
+                  />
                 )}
-             </motion.button>
-           ))}
-        </div>
-      </div>
 
-      {/* Result Display Overlays */}
-      <AnimatePresence>
-        {result && !isReacting && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed inset-x-0 bottom-12 z-[150] px-6 pointer-events-none"
-          >
-            <div className="max-w-5xl mx-auto bg-[#1a1c23]/95 border border-white/10 rounded-[56px] p-10 md:p-12 shadow-[0_60px_120px_-30px_rgba(0,0,0,0.6)] flex flex-col md:flex-row gap-12 pointer-events-auto backdrop-blur-3xl overflow-hidden relative">
-               <div className="absolute inset-0 bg-gradient-to-br from-viet-green/5 to-transparent pointer-events-none" />
-               
-               {result === 'no-reaction' ? (
-                 <div className="w-full text-center py-10">
-                    <div className="text-7xl mb-8 animate-pulse">🧪</div>
-                    <h3 className="text-3xl font-black text-white italic uppercase tracking-tighter mb-6">Phản ứng chưa được ghi nhận</h3>
-                    <p className="text-white/50 font-bold max-w-xl mx-auto leading-loose text-lg">
-                      Không có hiện tượng gì xảy ra với <span className="text-white">{selectedA?.formula}</span> và <span className="text-white">{selectedB?.formula}</span>. 
-                      <br/>Hãy thử thay đổi chất tham gia hoặc bật đèn cồn nếu phản ứng cần nhiệt độ!
+                {selectedInteraction === 'drop' && (
+                  <Pipette 
+                    color={selectedA.state === 'liquid' ? selectedA.color : selectedB.color} 
+                    isActive={isReacting} 
+                    direction={selectedA.state === 'liquid' ? 'right' : 'left'} 
+                  />
+                )}
+
+                {selectedA.state === 'gas' && selectedB.state === 'gas' && <TTube colorA={selectedA.color} colorB={selectedB.color} isActive={isReacting} />}
+                {selectedA.state === 'solid' && selectedB.state === 'solid' && <Crucible colorA={selectedA.color} colorB={selectedB.color} isActive={isReacting} />}
+              </>
+            )}
+            <AnimatePresence>
+              {isHeating && (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }} 
+                  exit={{ opacity: 0 }} 
+                  className={`absolute bottom-4 -translate-x-1/2 z-15 transition-all duration-500 ${(selectedA?.state === 'gas' && selectedB?.state === 'gas') ? 'left-1/2' : activeSlot === 'B' ? 'left-3/4' : 'left-1/4'}`}
+                >
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div key={i} className="w-3 h-20 bg-gradient-to-t from-orange-500 via-yellow-300 to-transparent rounded-full" animate={{ height: [30, 80, 30], y: [0, -15, 0] }} transition={{ duration: 0.4, delay: i * 0.1, repeat: Infinity }} />
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div className="absolute inset-x-0 bottom-8 flex justify-center items-end h-[200px] pointer-events-none">
+              {/* Slot A */}
+              <div onClick={(e) => { e.stopPropagation(); setActiveSlot('A'); }} className={`absolute left-1/4 -translate-x-1/2 bottom-0 cursor-pointer transition-all duration-500 pointer-events-auto ${activeSlot === 'A' ? 'z-40 scale-110' : 'z-20 opacity-40'}`}>
+                <Vessel chemical={selectedA} status="left" isReacting={isReacting} interactionMode={selectedInteraction} />
+                <div className={`mt-4 h-1.5 w-full rounded-full ${activeSlot === 'A' ? 'bg-viet-green shadow-lg' : 'bg-white/10'}`} />
+              </div>
+
+              {/* Middle Slot (Collection) - Show if reactants are both gas OR products are all gas */}
+              <AnimatePresence>
+                {((selectedA?.state === 'gas' && selectedB?.state === 'gas') || 
+                  (result && result !== 'no-reaction' && result.products?.every(p => chemicals.find(c => c.formula === p.formula)?.state === 'gas'))) && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    className="absolute left-1/2 -translate-x-1/2 bottom-0 z-30"
+                  >
+                    <Vessel
+                      chemical={result && result !== 'no-reaction' && result.products ? (chemicals.find(c => c.formula === result.products[0]?.formula)) : null} 
+                      isReacting={isReacting} 
+                      interactionMode="mix"
+                    />
+                    <div className="mt-4 h-1.5 w-full bg-white/10 rounded-full" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div onClick={(e) => { e.stopPropagation(); setActiveSlot('B'); }} className={`absolute left-3/4 -translate-x-1/2 bottom-0 cursor-pointer transition-all duration-500 pointer-events-auto ${activeSlot === 'B' ? 'z-40 scale-110' : 'z-20 opacity-40'}`}>
+                <Vessel chemical={selectedB} status="right" isReacting={isReacting} interactionMode={selectedInteraction} />
+                <div className={`mt-4 h-1.5 w-full rounded-full ${activeSlot === 'B' ? 'bg-viet-green shadow-lg' : 'bg-white/10'}`} />
+              </div>
+            </div>
+          </div>
+
+          {/* Interaction Mode Selection */}
+          <div className="flex flex-wrap justify-center gap-2 mt-8 w-full z-20">
+            {['mix', 'bubble', 'solid-liquid', 'drop'].map(mode => (
+              <button 
+                key={mode}
+                onClick={() => setSelectedInteraction(mode)}
+                className={`px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${selectedInteraction === mode ? 'bg-viet-green/20 border-viet-green text-viet-green shadow-lg scale-105' : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white'}`}
+              >
+                {mode === 'mix' ? '💧 Trộn dung dịch' : mode === 'bubble' ? '💨 Sục khí' : mode === 'solid-liquid' ? '🪨 Thả rắn vào lỏng' : '🧪 Nhỏ giọt lên rắn'}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex justify-center flex-wrap gap-4 mt-6 w-full z-20">
+            <button onClick={() => setIsHeating(!isHeating)} className={`px-8 py-4 rounded-3xl text-[10px] font-black uppercase tracking-[2px] transition-all border-2 ${isHeating ? 'bg-orange-600 border-orange-400 text-white shadow-xl scale-105' : 'bg-white/5 border-white/10 text-white/40 hover:text-white'}`}>
+              🔥 {isHeating ? 'Đang bật' : 'Gia nhiệt'}
+            </button>
+            <button onClick={handleReact} disabled={(!selectedA && !selectedB) || isReacting} className="px-10 py-4 rounded-3xl text-[10px] font-black uppercase tracking-[2px] bg-gradient-to-r from-viet-green to-blue-500 text-white shadow-xl hover:scale-105 disabled:opacity-30">
+              {isReacting ? '⌛ Đang xử lý...' : '⚡ Phản ứng'}
+            </button>
+            <button onClick={resetAll} className="px-8 py-4 rounded-3xl text-[10px] font-black uppercase tracking-[2px] bg-white/5 border border-white/10 text-white/40 hover:text-white transition-all">
+              Đặt lại
+            </button>
+          </div>
+        </div>
+
+
+      </main>
+
+      {/* RIGHT SIDEBAR: Result Panel */}
+      <motion.aside initial={{ x: 100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="lg:w-80 flex flex-col glass-panel rounded-[40px] p-6 lg:sticky lg:top-8 h-[calc(100vh-4rem)]">
+        <div className="flex flex-col items-center gap-2 mb-8">
+           <span className="text-viet-green text-[10px] font-black uppercase tracking-[6px] opacity-40">Màn hình giám sát</span>
+           <h3 className="text-xl font-black italic uppercase tracking-tighter text-white/90">Báo cáo <span className="text-viet-green">kết quả</span></h3>
+        </div>
+        <AnimatePresence mode="wait">
+          {!result && !isReacting ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center p-8 text-center border-2 border-dashed border-white/10 rounded-[32px] gap-4">
+              <span className="text-4xl">🧪</span>
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/30 italic">Đang chờ phản ứng...</p>
+            </motion.div>
+          ) : isReacting ? (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center p-8 text-center bg-white/5 rounded-[32px] gap-4">
+              <div className="w-12 h-12 border-4 border-viet-green border-t-transparent rounded-full animate-spin" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-green italic">Đang phân tích...</p>
+            </motion.div>
+          ) : (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`p-6 rounded-[32px] border-2 shadow-inner ${(result === 'no-reaction' || result === 'wrong-interaction') ? 'bg-orange-500/10 border-orange-500/20' : result?.type === 'hazard' ? 'bg-red-900/40 border-red-500' : 'bg-viet-green/10 border-viet-green/20'}`}>
+               {result === 'wrong-interaction' ? (
+                 <div className="text-center space-y-4">
+                    <span className="text-4xl block">❌</span>
+                    <p className="text-sm font-black text-orange-400">SAI THAO TÁC</p>
+                    <p className="text-[10px] text-white/60 italic leading-relaxed">
+                      Hai chất hóa học này không thể tương tác bằng phương thức bạn vừa chọn. Vui lòng quan sát trạng thái của chất (Rắn/Lỏng/Khí) và chọn lại cách thích hợp.
                     </p>
-                    <button onClick={() => setResult(null)} className="mt-10 px-12 py-4 bg-white/10 text-white rounded-2xl text-[12px] font-black uppercase tracking-[3px] hover:bg-white/20 hover:scale-105 transition-all outline-none">Tôi hiểu rồi</button>
+                 </div>
+               ) : result?.type === 'hazard' ? (
+                 <div className="text-center space-y-4">
+                    <span className="text-5xl block animate-bounce">☢️</span>
+                    <h4 className="text-lg font-black text-red-500 uppercase">Sự cố nguy hiểm!</h4>
+                    <p className="text-[10px] text-red-200 bg-red-950/50 p-4 rounded-xl border border-red-500/30 leading-relaxed text-justify">
+                      Phản ứng sinh ra cháy nổ hoặc khí độc. Trong môi trường thực tế, thao tác này cực kỳ nghiêm trọng và phải được thực hiện trong tủ hút có bảo hộ. <br/><br/>Hệ thống đã tự động dừng thí nghiệm để đảm bảo an toàn.
+                    </p>
+                     <div className="flex flex-col items-center gap-3">
+                        <span className="text-[10px] font-black uppercase text-red-400 tracking-[4px]">Sản phẩm nguy hại</span>
+                        <div className="flex flex-wrap justify-center gap-2">
+                           {result.products.map((p, i) => (
+                             <div key={i} className="bg-red-500/30 px-3 py-1 rounded-lg text-sm font-black text-white">{p.formula}</div>
+                           ))}
+                        </div>
+                     </div>
+                     <div className="flex gap-2 mt-4">
+                        <button onClick={collectProduct} className="flex-1 py-3 bg-red-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 shadow-lg">
+                           📦 Thu hoạch khí
+                        </button>
+                        <button onClick={resetAll} className="flex-1 py-3 bg-white/10 text-white/60 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/20">
+                           Hủy bỏ
+                        </button>
+                     </div>
+                 </div>
+               ) : result === 'no-reaction' ? (
+                 <div className="text-center space-y-4">
+                    <span className="text-4xl block">⚠️</span>
+                    <p className="text-sm font-black text-orange-200">KHÔNG PHẢN ỨNG</p>
+                    <p className="text-[10px] text-white/40 italic">Vui lòng kiểm tra lại 2 chất tham gia hoặc điều kiện nhiệt độ.</p>
                  </div>
                ) : (
-                 <>
-                   {/* Visual/Equation Pane */}
-                   <div className="md:w-1/2 flex flex-col justify-center gap-10 border-b md:border-b-0 md:border-r border-white/10 pb-12 md:pb-0 md:pr-12">
-                      <div>
-                         <span className="text-viet-green text-[12px] font-black uppercase tracking-[8px] mb-3 block">Báo cáo Thí nghiệm</span>
-                         <h3 className="text-4xl font-black text-white italic leading-[1.1] tracking-tight">{result.name}</h3>
-                      </div>
-                      
-                      <div className="bg-white/5 p-10 rounded-[40px] border border-white/10 text-center relative overflow-hidden group">
-                         <div className="absolute top-0 right-0 p-4 opacity-5 text-4xl">⚗️</div>
-                         <p className="text-[11px] font-black text-white/30 uppercase tracking-[4px] mb-6 underline decoration-viet-green decoration-2 underline-offset-8 text-center">Phương trình thực tế</p>
-                         <p className="text-3xl font-black text-viet-green tracking-tighter break-words drop-shadow-[0_0_10px_rgba(74,222,128,0.3)]">{result.equation}</p>
-                      </div>
-
-                      <div className="flex flex-wrap gap-3">
-                         {result.products.map(p => (
-                           <div key={p.formula} className="px-5 py-3 bg-white/5 rounded-2xl border border-white/10 flex items-center gap-3 hover:bg-white/[0.08] transition-all">
-                              <span className="text-viet-green text-xl font-black">{p.formula}</span>
-                              <span className="text-[11px] text-white/60 font-bold uppercase tracking-widest">{p.name}</span>
-                           </div>
-                         ))}
-                      </div>
-                   </div>
-
-                   {/* Observation Pane */}
-                   <div className="md:w-1/2 space-y-10">
-                      <div className="space-y-6">
-                        <div className="flex items-center gap-4">
-                           <div className="w-10 h-10 rounded-xl bg-viet-green/20 flex items-center justify-center text-viet-green text-xl shadow-lg shadow-viet-green/10">🔍</div>
-                           <p className="text-[13px] font-black text-white uppercase tracking-[4px]">Kết quả Quan sát</p>
-                        </div>
-                        <div className="grid grid-cols-1 gap-6">
-                           <div className="p-7 bg-white/5 rounded-[32px] border border-white/5 hover:border-white/10 transition-all">
-                              <p className="text-[11px] font-black text-white/20 uppercase tracking-[3px] mb-3 group-hover:text-white/40">Mô tả hiện tượng</p>
-                              <p className="text-lg font-bold text-white/90 leading-relaxed italic border-l-4 border-viet-green pl-5 pr-2">"{result.observation}"</p>
-                           </div>
-                           <div className="p-7 bg-white/5 rounded-[32px] border border-white/5 hover:border-white/10 transition-all">
-                              <p className="text-[11px] font-black text-white/20 uppercase tracking-[3px] mb-3 group-hover:text-white/40">Điều kiện lý tưởng</p>
-                              <p className="text-md font-bold text-white/80 leading-relaxed pl-1 flex items-center gap-3">
-                                 <span className="text-yellow-400">⚡</span> {result.conditions}
-                              </p>
-                           </div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-4 pt-6">
-                         <button onClick={resetAll} className="flex-1 py-5 bg-viet-green text-white rounded-[24px] text-[13px] font-black uppercase tracking-[3px] shadow-2xl shadow-viet-green/30 hover:scale-105 active:scale-95 transition-all">Làm sạch bàn cân</button>
-                         <button onClick={() => setResult(null)} className="px-10 py-5 bg-white/10 text-white rounded-[24px] text-[13px] font-black uppercase tracking-[3px] hover:bg-white/20 transition-all">Dừng xem</button>
-                      </div>
-                   </div>
-                 </>
+                 <div className="space-y-6">
+                    <div className="flex flex-col items-center gap-3">
+                       <span className="text-[10px] font-black uppercase text-viet-green tracking-[4px]">Sản phẩm</span>
+                       <div className="flex flex-wrap justify-center gap-2">
+                          {result.products.map((p, i) => (
+                            <div key={i} className="bg-viet-green/30 px-3 py-1 rounded-lg text-sm font-black">{p.formula}</div>
+                          ))}
+                       </div>
+                    </div>
+                    <p className="text-[10px] text-white/60 italic leading-relaxed text-center">{result.observation || result.description}</p>
+                    <button onClick={collectProduct} className="w-full py-4 bg-viet-green text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 shadow-lg">
+                      📦 Thu hoạch
+                    </button>
+                 </div>
                )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          ) }
+        </AnimatePresence>
+      </motion.aside>
     </div>
   );
 };

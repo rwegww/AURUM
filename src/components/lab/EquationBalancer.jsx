@@ -1,286 +1,209 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { balancingExercises } from '@/utils/balancer';
+import { useAuth } from '@/context/AuthContext';
+import EquationSkillTree from './EquationSkillTree';
 
 const EquationBalancer = () => {
-  const [mode, setMode] = useState('practice'); // 'practice' or 'free'
-  const [currentEx, setCurrentEx] = useState(0);
-  const [userCoeffs, setUserCoeffs] = useState([]);
-  const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [score, setScore] = useState(0);
-  const [showHint, setShowHint] = useState(false);
-  const [completedExercises, setCompletedExercises] = useState([]);
+  const { user } = useAuth();
+  const [view, setView] = useState('tree'); // 'tree' or 'stage'
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
+  const [progress, setProgress] = useState({
+    completedNodeIds: [],
+    completedCount: 0
+  });
 
-  // Free mode state
-  const [freeReactants, setFreeReactants] = useState('');
-  const [freeProducts, setFreeProducts] = useState('');
-
-  const exercise = balancingExercises[currentEx];
-
-  // Initialize user coefficients when exercise changes
-  React.useEffect(() => {
-    if (exercise) {
-      const totalCompounds = exercise.reactants.length + exercise.products.length;
-      setUserCoeffs(new Array(totalCompounds).fill(1));
-      setShowResult(false);
-      setShowHint(false);
-      setIsCorrect(false);
-    }
-  }, [currentEx, exercise]);
-
-  const updateCoeff = (index, delta) => {
-    setUserCoeffs(prev => {
-      const next = [...prev];
-      next[index] = Math.max(1, Math.min(10, next[index] + delta));
-      return next;
+  // Mock progress for now
+  useEffect(() => {
+    // In production, fetch from user_balancing_progress
+    setProgress({
+        completedNodeIds: [1], // Level 1 done
+        completedCount: 6
     });
-  };
+  }, [user]);
 
-  const checkAnswer = () => {
-    const correct = exercise.answer.every((a, i) => a === userCoeffs[i]);
-    setIsCorrect(correct);
-    setShowResult(true);
-    if (correct && !completedExercises.includes(currentEx)) {
-      setScore(prev => prev + 1);
-      setCompletedExercises(prev => [...prev, currentEx]);
-    }
+  const handleSelectNode = (nodeId) => {
+    setSelectedNodeId(nodeId);
+    setView('stage');
   };
-
-  const nextExercise = () => {
-    if (currentEx + 1 < balancingExercises.length) {
-      setCurrentEx(currentEx + 1);
-    }
-  };
-
-  const prevExercise = () => {
-    if (currentEx > 0) {
-      setCurrentEx(currentEx - 1);
-    }
-  };
-
-  const getDifficultyColor = (d) => {
-    switch (d) {
-      case 'easy': return 'bg-emerald-100 text-emerald-700';
-      case 'medium': return 'bg-orange-100 text-orange-700';
-      case 'hard': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
-  };
-
-  const getDifficultyLabel = (d) => {
-    switch (d) {
-      case 'easy': return 'Cơ bản';
-      case 'medium': return 'Trung bình';
-      case 'hard': return 'Nâng cao';
-      default: return d;
-    }
-  };
-
-  const allFormulas = exercise ? [...exercise.reactants, ...exercise.products] : [];
 
   return (
-    <div className="space-y-8">
-      {/* Mode Toggle */}
-      <div className="flex bg-[#f0f2f5] p-1.5 rounded-2xl max-w-md mx-auto">
-        <button
-          onClick={() => setMode('practice')}
-          className={`flex-1 py-3 rounded-xl text-[13px] font-black uppercase tracking-wider transition-all ${
-            mode === 'practice' ? 'bg-white text-viet-green shadow-sm' : 'text-viet-text-light'
-          }`}
-        >
-          🎯 Luyện tập
-        </button>
-        <button
-          onClick={() => setMode('free')}
-          className={`flex-1 py-3 rounded-xl text-[13px] font-black uppercase tracking-wider transition-all ${
-            mode === 'free' ? 'bg-white text-viet-green shadow-sm' : 'text-viet-text-light'
-          }`}
-        >
-          ✏️ Tự do
-        </button>
-      </div>
-
-      {mode === 'practice' ? (
-        <>
-          {/* Progress Bar */}
-          <div className="bg-white rounded-2xl border border-viet-border p-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-black text-viet-text-light uppercase tracking-widest">
-                Tiến trình: {score}/{balancingExercises.length}
-              </span>
-              <span className={`text-[10px] font-black px-2 py-1 rounded-lg uppercase ${getDifficultyColor(exercise?.difficulty)}`}>
-                {getDifficultyLabel(exercise?.difficulty)}
-              </span>
-            </div>
-            <div className="w-full h-2 bg-[#f0f2f5] rounded-full overflow-hidden">
-              <div className="h-full bg-viet-green transition-all duration-500" style={{ width: `${(score / balancingExercises.length) * 100}%` }} />
-            </div>
-          </div>
-
-          {/* Exercise Navigation */}
-          <div className="flex items-center justify-center gap-2">
-            {balancingExercises.map((ex, i) => (
-              <button
-                key={ex.id}
-                onClick={() => setCurrentEx(i)}
-                className={`w-10 h-10 rounded-xl text-[13px] font-black transition-all border-2 ${
-                  i === currentEx
-                    ? 'bg-viet-green text-white border-viet-green shadow-lg shadow-viet-green/20'
-                    : completedExercises.includes(i)
-                    ? 'bg-emerald-100 text-emerald-600 border-emerald-200'
-                    : 'bg-white text-viet-text-light border-viet-border hover:border-viet-green/30'
-                }`}
-              >
-                {completedExercises.includes(i) ? '✓' : i + 1}
-              </button>
-            ))}
-          </div>
-
-          {/* Equation Display with Coefficient Controls */}
-          {exercise && (
-            <div className="bg-white rounded-[28px] border border-viet-border p-8 shadow-sm">
-              <h3 className="text-[12px] font-black text-viet-green uppercase tracking-widest mb-8 text-center">
-                Cân bằng phương trình sau
-              </h3>
-
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                {allFormulas.map((formula, i) => (
-                  <React.Fragment key={i}>
-                    {i === exercise.reactants.length && (
-                      <span className="text-3xl text-viet-green font-black mx-2">→</span>
-                    )}
-                    {i > 0 && i !== exercise.reactants.length && (
-                      <span className="text-2xl text-viet-text-light font-bold">+</span>
-                    )}
-                    <div className="flex flex-col items-center gap-2">
-                      {/* Coefficient Control */}
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={() => updateCoeff(i, -1)}
-                          disabled={showResult}
-                          className="w-8 h-8 rounded-lg bg-[#f0f2f5] border border-viet-border text-viet-text font-bold hover:bg-viet-green/10 hover:border-viet-green/30 transition-all text-lg leading-none disabled:opacity-40"
-                        >
-                          −
-                        </button>
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-black border-2 transition-all ${
-                          showResult
-                            ? userCoeffs[i] === exercise.answer[i]
-                              ? 'bg-emerald-100 border-emerald-400 text-emerald-700'
-                              : 'bg-red-100 border-red-400 text-red-700'
-                            : 'bg-white border-viet-green/30 text-viet-text'
-                        }`}>
-                          {userCoeffs[i]}
-                        </div>
-                        <button
-                          onClick={() => updateCoeff(i, 1)}
-                          disabled={showResult}
-                          className="w-8 h-8 rounded-lg bg-[#f0f2f5] border border-viet-border text-viet-text font-bold hover:bg-viet-green/10 hover:border-viet-green/30 transition-all text-lg leading-none disabled:opacity-40"
-                        >
-                          +
-                        </button>
-                      </div>
-                      {/* Formula */}
-                      <span className="text-2xl font-black text-viet-text">{formula}</span>
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
-
-              {/* Hint Button */}
-              <div className="mt-8 text-center">
-                {!showHint ? (
-                  <button
-                    onClick={() => setShowHint(true)}
-                    className="text-[12px] font-bold text-blue-500 hover:text-blue-700 transition-colors"
-                  >
-                    💡 Xem gợi ý
-                  </button>
-                ) : (
-                  <motion.p
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-[13px] font-medium text-blue-600 bg-blue-50 rounded-xl p-3 inline-block"
-                  >
-                    💡 {exercise.hint}
-                  </motion.p>
-                )}
-              </div>
-
-              {/* Check / Next Buttons */}
-              <div className="flex justify-center gap-4 mt-8">
-                {!showResult ? (
-                  <button onClick={checkAnswer} className="viet-btn-green px-10 py-3 text-[14px]">
-                    Kiểm tra kết quả
-                  </button>
-                ) : (
-                  <div className="text-center space-y-4">
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className={`p-4 rounded-2xl ${isCorrect ? 'bg-emerald-50' : 'bg-red-50'}`}
-                    >
-                      <p className={`text-lg font-black ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}>
-                        {isCorrect ? '🎉 Chính xác!' : '❌ Chưa đúng'}
-                      </p>
-                      {!isCorrect && (
-                        <p className="text-[13px] font-medium text-viet-text-light mt-2">
-                          Đáp án đúng: {exercise.answer.join(', ')}
-                        </p>
-                      )}
-                    </motion.div>
-                    <div className="flex gap-3 justify-center">
-                      <button onClick={prevExercise} disabled={currentEx === 0} className="px-6 py-2 rounded-xl border border-viet-border font-bold text-viet-text-light disabled:opacity-30">
-                        ← Trước
-                      </button>
-                      <button onClick={nextExercise} disabled={currentEx >= balancingExercises.length - 1} className="viet-btn-green px-6 py-2">
-                        Tiếp theo →
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </>
-      ) : (
-        /* Free Mode */
-        <div className="bg-white rounded-[28px] border border-viet-border p-8 shadow-sm">
-          <h3 className="text-[12px] font-black text-viet-green uppercase tracking-widest mb-6 text-center">
-            Nhập phương trình cần cân bằng
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-end">
-            <div>
-              <label className="text-[11px] font-black text-viet-text-light uppercase tracking-widest mb-2 block">Chất tham gia</label>
-              <input
-                type="text"
-                value={freeReactants}
-                onChange={(e) => setFreeReactants(e.target.value)}
-                placeholder="VD: Fe + O₂"
-                className="w-full h-[50px] bg-[#f8f9fa] border border-viet-border rounded-xl px-4 text-[16px] text-viet-text font-bold outline-none focus:border-viet-green/50"
-              />
-            </div>
-            <div className="text-3xl font-black text-viet-green text-center py-2">→</div>
-            <div>
-              <label className="text-[11px] font-black text-viet-text-light uppercase tracking-widest mb-2 block">Sản phẩm</label>
-              <input
-                type="text"
-                value={freeProducts}
-                onChange={(e) => setFreeProducts(e.target.value)}
-                placeholder="VD: Fe₂O₃"
-                className="w-full h-[50px] bg-[#f8f9fa] border border-viet-border rounded-xl px-4 text-[16px] text-viet-text font-bold outline-none focus:border-viet-green/50"
-              />
-            </div>
-          </div>
-          <div className="mt-8 p-6 bg-[#fdfaf1] rounded-2xl border border-viet-border text-center">
-            <p className="text-viet-text-light font-medium text-[14px]">
-              ⚗️ Chức năng cân bằng tự do đang được phát triển. Hãy sử dụng chế độ <strong>Luyện tập</strong> để rèn luyện kỹ năng!
-            </p>
-          </div>
-        </div>
-      )}
+    <div className="max-w-4xl mx-auto py-8">
+      <AnimatePresence mode="wait">
+        {view === 'tree' ? (
+          <motion.div
+            key="tree"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+          >
+             <EquationSkillTree 
+                progress={progress} 
+                onSelectNode={handleSelectNode} 
+             />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="stage"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+          >
+            <EquationStage 
+                nodeId={selectedNodeId} 
+                onBack={() => setView('tree')}
+                onComplete={(qCount) => {
+                    setProgress(prev => ({
+                        completedCount: prev.completedCount + qCount,
+                        completedNodeIds: [...prev.completedNodeIds, selectedNodeId]
+                    }));
+                    setView('tree');
+                }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
+};
+
+// Sub-component for the 6-question stage
+const EquationStage = ({ nodeId, onBack, onComplete }) => {
+    const [questions, setQuestions] = useState([]);
+    const [currentStep, setCurrentStep] = useState(0);
+    const [userCoeffs, setUserCoeffs] = useState([]);
+    const [showResult, setShowResult] = useState(false);
+    const [isCorrect, setIsCorrect] = useState(false);
+    const [stepStatus, setStepStatus] = useState(new Array(6).fill('idle'));
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/lab/balancing/${nodeId}`);
+                const data = await res.json();
+                
+                if (data && data.length > 0) {
+                    // Shuffle the questions as requested
+                    const shuffled = [...data].sort(() => Math.random() - 0.5);
+                    setQuestions(shuffled.slice(0, 6)); // Ensure we only take 6
+                    setStepStatus(new Array(Math.min(data.length, 6)).fill('idle'));
+                } else {
+                    setQuestions([]);
+                }
+            } catch (err) {
+                console.error('Error fetching questions:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchQuestions();
+    }, [nodeId]);
+
+    const currentQuestion = questions[currentStep];
+    const allFormulas = currentQuestion ? [...currentQuestion.reactants, ...currentQuestion.products] : [];
+
+    useEffect(() => {
+        if (allFormulas.length > 0) {
+            setUserCoeffs(new Array(allFormulas.length).fill(1));
+            setShowResult(false);
+            setIsCorrect(false);
+        }
+    }, [currentStep, questions]);
+
+    const checkAnswer = () => {
+        const correct = currentQuestion.answer.every((a, i) => a === userCoeffs[i]);
+        setIsCorrect(correct);
+        setShowResult(true);
+        setStepStatus(prev => {
+            const next = [...prev];
+            next[currentStep] = correct ? 'correct' : 'wrong';
+            return next;
+        });
+    };
+
+    const handleNext = () => {
+        if (currentStep < questions.length - 1) {
+            setCurrentStep(currentStep + 1);
+        } else {
+            onComplete(questions.length);
+        }
+    };
+
+    if (loading) return (
+        <div className="bg-white rounded-[32px] border border-viet-border p-20 flex flex-col items-center justify-center min-h-[400px]">
+            <div className="w-12 h-12 border-4 border-viet-green border-t-transparent rounded-full animate-spin mb-4" />
+            <p className="text-viet-green font-black uppercase tracking-widest text-[10px]">Đang tải thử thách...</p>
+        </div>
+    );
+
+    if (!questions || questions.length === 0) return (
+        <div className="bg-white rounded-[32px] border border-viet-border p-20 text-center">
+            <p className="text-red-500 font-bold mb-4">Rất tiếc, không tìm thấy câu hỏi cho chặng này!</p>
+            <button onClick={onBack} className="viet-btn-pill px-8 py-2">Quay lại cây kỹ năng</button>
+        </div>
+    );
+
+    return (
+        <div className="bg-white rounded-[32px] border border-viet-border p-10 shadow-sm relative overflow-hidden">
+            <button onClick={onBack} className="absolute top-8 left-8 text-viet-text-light font-bold hover:text-viet-green transition-colors">← Thoát</button>
+            <div className="text-center mb-12">
+                <span className="text-[10px] font-black text-viet-green uppercase tracking-[4px]">Chặng số {nodeId}</span>
+                <h2 className="text-2xl font-black text-viet-text italic">THỬ THÁCH CÂN BẰNG</h2>
+            </div>
+
+            {/* Step Indicators (the 6 dots/tabs) */}
+            <div className="flex justify-center gap-3 mb-12">
+                {stepStatus.map((status, i) => (
+                    <div 
+                        key={i}
+                        className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all border-2 ${
+                            i === currentStep ? 'bg-viet-green text-white border-viet-green shadow-lg' :
+                            status === 'correct' ? 'bg-emerald-100 border-emerald-300 text-emerald-600' :
+                            status === 'wrong' ? 'bg-red-100 border-red-300 text-red-600' :
+                            'bg-gray-50 border-gray-100 text-gray-300'
+                        }`}
+                    >
+                        {i + 1}
+                    </div>
+                ))}
+            </div>
+
+            <div className="bg-[#fdfaf1] rounded-[24px] p-12 border border-viet-border/50 text-center">
+                 <p className="text-[11px] font-black text-viet-green uppercase tracking-[3px] mb-8">Cân bằng phương trình sau</p>
+                 
+                 <div className="flex flex-wrap items-center justify-center gap-6 mb-12">
+                    {allFormulas.map((f, i) => (
+                        <React.Fragment key={i}>
+                            {i === currentQuestion.reactants.length && <span className="text-3xl font-black text-viet-green">→</span>}
+                            {i > 0 && i !== currentQuestion.reactants.length && <span className="text-2xl font-bold text-gray-300">+</span>}
+                            <div className="flex flex-col items-center gap-3">
+                                <div className="flex items-center gap-1">
+                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.max(1, next[i]-1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">−</button>
+                                    <div className="w-12 h-12 rounded-xl bg-white border-2 border-viet-green/20 flex items-center justify-center text-xl font-black">{userCoeffs[i]}</div>
+                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.min(20, next[i]+1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">+</button>
+                                </div>
+                                <span className="text-2xl font-black text-viet-text">{f}</span>
+                            </div>
+                        </React.Fragment>
+                    ))}
+                 </div>
+
+                 {showResult ? (
+                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                        <p className={`text-lg font-black mb-6 ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}>
+                            {isCorrect ? '✨ TUYỆT VỜI, CHÍNH XÁC!' : `❌ SAI RỒI! ĐÁP ÁN LÀ: ${currentQuestion.answer.join(', ')}`}
+                        </p>
+                        <button onClick={handleNext} className="viet-btn-green px-12 py-4 shadow-xl">
+                            {currentStep < 5 ? 'Câu tiếp theo →' : 'Hoàn thành chặng'}
+                        </button>
+                    </motion.div>
+                 ) : (
+                    <button onClick={checkAnswer} className="viet-btn-green px-12 py-4 shadow-xl">Kiểm tra kết quả</button>
+                 )}
+            </div>
+        </div>
+    );
 };
 
 export default EquationBalancer;

@@ -15,8 +15,10 @@ export default {
         'lab-border': '#30363D',
       },
       fontFamily: {
-        sora: ['Sora', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
+        'be-vietnam': ['"Be Vietnam Pro"', 'sans-serif'],
+        sora: ['"Be Vietnam Pro"', 'sans-serif'], // Map old classes to new font
+        inter: ['"Be Vietnam Pro"', 'sans-serif'], // Map old classes to new font
+        sans: ['"Be Vietnam Pro"', 'sans-serif'],
       },
       gridTemplateColumns: {
         '18': 'repeat(18, minmax(0, 1fr))',

@@ -55,6 +55,24 @@ const auth = async (req, res, next) => {
   }
 };
 
+// Get Leaderboard (Public)
+router.get('/leaderboard', async (req, res) => {
+  try {
+    const students = await User.findStudents();
+    // Return only top 10 and strip sensitive data if any
+    const topStudents = students.slice(0, 10).map(s => ({
+      username: s.username,
+      xp: s.xp || 0,
+      level: s.level || 1,
+      role: s.role,
+      avatarSeed: s.avatarSeed
+    }));
+    res.json(topStudents);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi tải bảng xếp hạng', error: err.message });
+  }
+});
+
 // Get Profile
 router.get('/profile', auth, async (req, res) => {
   res.json({
@@ -64,8 +82,22 @@ router.get('/profile', auth, async (req, res) => {
     xp: req.user.xp,
     level: req.user.level,
     inventory: req.user.inventory,
-    unlockedLessons: req.user.unlockedLessons
+    unlockedLessons: req.user.unlockedLessons,
+    unlockedChemicals: req.user.unlockedChemicals || [],
+    avatarSeed: req.user.avatarSeed,
+    arenaStats: req.user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 },
+    arenaAvatar: req.user.arena_avatar || { seed: 'Chem Master', aura: '#a855f7' },
   });
+});
+
+// Update Profile
+router.patch('/profile', auth, async (req, res) => {
+  try {
+    const updatedUser = await User.update(req.user.id, req.body);
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
+  }
 });
 
 // Update XP & Progress

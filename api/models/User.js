@@ -9,7 +9,11 @@ const mapUser = (user) => {
     id: user.id,
     createdAt: user.created_at,
     unlockedLessons: user.unlocked_lessons || [],
+    unlockedChemicals: user.unlocked_chemicals || [],
+    avatarSeed: user.avatar_seed || user.username,
     unlocked_lessons: undefined,
+    unlocked_chemicals: undefined,
+    avatar_seed: undefined,
     created_at: undefined
   };
 };
@@ -60,7 +64,8 @@ export const User = {
       password: hashedPassword,
       role: userData.role || 'student',
       inventory: userData.inventory || { ingredients: [], craftedItems: [] },
-      unlocked_lessons: userData.unlockedLessons || []
+      unlocked_lessons: userData.unlockedLessons || [],
+      unlocked_chemicals: userData.unlockedChemicals || []
     };
 
     // Only include ID if explicitly provided (e.g. from Firebase/Google)
@@ -87,6 +92,14 @@ export const User = {
       pgUpdateData.unlocked_lessons = updateData.unlockedLessons;
       delete pgUpdateData.unlockedLessons;
     }
+    if (updateData.unlockedChemicals) {
+      pgUpdateData.unlocked_chemicals = updateData.unlockedChemicals;
+      delete pgUpdateData.unlockedChemicals;
+    }
+    if (updateData.avatarSeed) {
+      pgUpdateData.avatar_seed = updateData.avatarSeed;
+      delete pgUpdateData.avatarSeed;
+    }
 
     const { data, error } = await supabase
       .from('users')
@@ -102,7 +115,7 @@ export const User = {
   async findStudents() {
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, role, xp, level, inventory, unlocked_lessons')
+      .select('id, username, role, xp, level, inventory, unlocked_lessons, avatar_seed')
       .eq('role', 'student')
       .order('xp', { ascending: false });
     

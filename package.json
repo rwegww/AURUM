@@ -9,9 +9,13 @@
     "seed": "node scripts/seedData.js",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "migrate-lab": "node scripts/migrateLabData.js"
   },
   "dependencies": {
+    "@dicebear/core": "^9.4.2",
+    "@dicebear/lorelei": "^9.4.2",
+    "@multiavatar/multiavatar": "^1.0.7",
     "@supabase/supabase-js": "^2.101.1",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
