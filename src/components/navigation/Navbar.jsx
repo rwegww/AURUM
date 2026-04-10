@@ -3,9 +3,12 @@ import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '@/components/common/Avatar';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Navbar = () => {
   const { isLoggedIn, user, logout } = useAuth();
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [unreadCount, setUnreadCount] = React.useState(0);
   
@@ -38,9 +41,6 @@ const Navbar = () => {
           const classStats = stats[classId];
           const lastReadAt = lastReadData[classId] || 0;
           if (new Date(classStats.latest) > new Date(lastReadAt)) {
-             // In a real app, we might want to store exact read IDs, 
-             // but here we just flag if the latest is newer.
-             // Let's assume there's at least 1 new if latest > lastReadAt
              total += 1; 
           }
         });
@@ -77,20 +77,19 @@ const Navbar = () => {
             {/* JOURNEY GROUP */}
             <div className="relative group/nav">
                <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
-                  HÀNH TRÌNH <span className="text-[10px] opacity-30">▼</span>
+                  {t('nav.journey')} <span className="text-[10px] opacity-30">▼</span>
                </button>
                <div className="absolute top-[80%] left-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
-                  {/* Invisible bridge to prevent hover loss */}
                   <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                   <NavLink to="/lectures" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> BÀI GIẢNG
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> {t('nav.lectures')}
                   </NavLink>
                   <NavLink to="/classroom" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> LỚP HỌC
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> {t('nav.classroom')}
                   </NavLink>
                   {isLoggedIn && (
                     <NavLink to="/my-class" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all relative group/item">
-                      <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> LỚP CỦA TÔI
+                      <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> {t('nav.my_class')}
                       {unreadCount > 0 && <span className="w-2 h-2 bg-red-500 rounded-full animate-ping absolute top-3 right-3" />}
                     </NavLink>
                   )}
@@ -100,15 +99,15 @@ const Navbar = () => {
             {/* VAULT GROUP */}
             <div className="relative group/nav">
                <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
-                  KHO TÀNG <span className="text-[10px] opacity-30">▼</span>
+                  {t('nav.vault')} <span className="text-[10px] opacity-30">▼</span>
                </button>
                <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                   <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                   <NavLink to="/periodic-table" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"/></svg> BẢNG TUẦN HOÀN
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"/></svg> {t('nav.periodic_table')}
                   </NavLink>
                   <NavLink to="/library" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> THƯ VIỆN
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg> {t('nav.library')}
                   </NavLink>
                </div>
             </div>
@@ -116,18 +115,18 @@ const Navbar = () => {
             {/* ARENA GROUP */}
             <div className="relative group/nav">
                <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
-                  THỬ THÁCH <span className="text-[10px] opacity-30">▼</span>
+                  {t('nav.arena')} <span className="text-[10px] opacity-30">▼</span>
                </button>
                <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                   <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                   <NavLink to="/lab" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10 2v7.5"/><path d="M14 2v7.5"/><path d="M8.5 2h7"/><path d="M14 9.32a4 4 0 1 1-4 0"/><path d="M8.5 15h7"/></svg> PHÒNG LAB
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10 2v7.5"/><path d="M14 2v7.5"/><path d="M8.5 2h7"/><path d="M14 9.32a4 4 0 1 1-4 0"/><path d="M8.5 15h7"/></svg> {t('nav.lab')}
                   </NavLink>
                   <NavLink to="/arena" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19"/></svg> ĐẤU TRƯỜNG
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19"/></svg> {t('nav.arena_link')}
                   </NavLink>
                   <NavLink to="/missions" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> NHIỆM VỤ
+                     <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> {t('nav.missions')}
                   </NavLink>
                </div>
             </div>
@@ -140,8 +139,10 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* User Info & Mobile Toggle */}
-        <div className="flex items-center gap-4 shrink-0">
+        {/* User Info, Language & Mobile Toggle */}
+        <div className="flex items-center gap-4 xl:gap-6 shrink-0">
+          <LanguageSwitcher />
+          
           {isLoggedIn ? (
             <div className="hidden sm:flex items-center gap-2">
               <div className="flex items-center gap-2 bg-viet-green px-3 py-1.5 rounded-full shadow-md shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
@@ -157,15 +158,15 @@ const Navbar = () => {
                 <button 
                   onClick={logout}
                   className="text-[10px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-1"
-                  title="Đăng xuất"
+                  title={t('nav.logout')}
                 >
-                  Thoát
+                  {t('nav.logout')}
                 </button>
               </div>
             </div>
           ) : (
             <Link to="/login" className="hidden sm:block px-6 py-2.5 border border-viet-border bg-white/50 backdrop-blur-sm text-viet-text text-[12px] font-bold uppercase tracking-widest rounded-full hover:bg-white hover:shadow-sm transition-all whitespace-nowrap">
-               Đăng nhập
+               {t('nav.login')}
             </Link>
           )}
 
@@ -173,6 +174,8 @@ const Navbar = () => {
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white rounded-2xl shadow-sm border border-viet-border relative z-[100]"
+          >
+er border-viet-border relative z-[100]"
           >
             <motion.span 
               animate={isMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}

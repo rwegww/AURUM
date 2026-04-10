@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "journey": "HÀNH TRÌNH",
+    "vault": "KHO TÀNG",
+    "arena": "THỬ THÁCH",
+    "lectures": "BÀI GIẢNG",
+    "classroom": "LỚP HỌC",
+    "my_class": "LỚP CỦA TÔI",
+    "periodic_table": "BẢNG TUẦN HOÀN",
+    "library": "THƯ VIỆN",
+    "lab": "PHÒNG LAB",
+    "arena_link": "ĐẤU TRƯỜNG",
+    "missions": "NHIỆM VỤ",
+    "logout": "Thoát",
+    "login": "Đăng nhập",
+    "login_now": "Đăng nhập ngay"
+  },
+  "home": {
+    "hero_statement": "Nền tảng học thuật Hóa học số 1 kết hợp mô phỏng tương tác và thi đấu trực tuyến.",
+    "enter_classroom": "Vào Lớp Học",
+    "enter_lab": "Vào Phòng Lab"
+  }
+}

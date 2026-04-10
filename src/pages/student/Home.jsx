@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
 
 // --- Reused SVG Icons (Scaled up for Feature Sections) ---
 
@@ -144,6 +146,8 @@ const FeatureSection = ({ title, highlight, description, reverse, graphic, linkT
 );
 
 const Home = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen font-sans bg-[#fffbf0]">
       {/* --- HERO SECTION --- */}
@@ -176,16 +180,15 @@ const Home = () => {
           </div>
 
           <h1 className="text-[28px] md:text-[36px] font-black text-[#666] mb-12 max-w-3xl leading-[1.4] tracking-tight">
-            Nền tảng học thuật Hóa học <strong className="text-viet-green">số 1</strong> kết hợp <br/>
-            mô phỏng tương tác và thi đấu trực tuyến.
+             {t('home.hero_statement')}
           </h1>
 
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
             <Link to="/classroom" className="bg-viet-green text-white text-[18px] font-black px-12 py-5 rounded-full shadow-[0_12px_24px_rgba(118,192,52,0.3)] hover:scale-105 active:scale-95 transition-all outline outline-offset-2 outline-transparent hover:outline-viet-green whitespace-nowrap">
-              Vào Lớp Học →
+              {t('home.enter_classroom')} →
             </Link>
             <Link to="/lab" className="bg-white text-viet-text border border-viet-border text-[18px] font-black px-12 py-5 rounded-full shadow-sm hover:border-viet-green hover:text-viet-green transition-all whitespace-nowrap">
-              Vào Phòng Lab
+              {t('home.enter_lab')}
             </Link>
           </div>
         </div>

@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "journey": "JOURNEY",
+    "vault": "VAULT",
+    "arena": "CHALLENGES",
+    "lectures": "LECTURES",
+    "classroom": "CLASSROOM",
+    "my_class": "MY CLASSES",
+    "periodic_table": "PERIODIC TABLE",
+    "library": "LIBRARY",
+    "lab": "CHEM LAB",
+    "arena_link": "ARENA",
+    "missions": "MISSIONS",
+    "logout": "Logout",
+    "login": "Login",
+    "login_now": "Login Now"
+  },
+  "home": {
+    "hero_statement": "The #1 Chemistry academic platform combining interactive simulations and online competition.",
+    "enter_classroom": "Enter Classroom",
+    "enter_lab": "Enter Lab"
+  }
+}
