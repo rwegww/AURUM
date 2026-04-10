@@ -8,22 +8,31 @@ const mapUser = (user) => {
     ...user,
     id: user.id,
     createdAt: user.created_at,
-    unlockedLessons: user.unlocked_lessons || [],
-    unlockedChemicals: user.unlocked_chemicals || [],
+    // Flatten normalized arrays if they exist in the joined record
+    unlockedLessons: user.unlocked_lessons ? user.unlocked_lessons.map(l => l.lesson_id) : (user.unlockedLessons || []),
+    unlockedChemicals: user.unlocked_chemicals ? user.unlocked_chemicals.map(c => c.chemical_formula) : (user.unlockedChemicals || []),
     avatarSeed: user.avatar_seed || user.username,
+    arenaStats: user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 },
+    arenaAvatar: user.arena_avatar || { seed: 'Chem Master', aura: '#a855f7' },
+    // Cleanup
     unlocked_lessons: undefined,
     unlocked_chemicals: undefined,
     avatar_seed: undefined,
+    arena_stats: undefined,
+    arena_avatar: undefined,
     created_at: undefined
   };
 };
 
 export const User = {
   async findOne(filter) {
-    let query = supabase.from('users').select('*');
+    let query = supabase.from('users').select(`
+      *,
+      unlocked_lessons:user_unlocked_lessons(lesson_id),
+      unlocked_chemicals:user_unlocked_chemicals(chemical_formula)
+    `);
     
     if (filter.username && filter.email) {
-      // Use quotes for values in .or() to handle special characters like '@'
       query = query.or(`username.eq."${filter.username}",email.eq."${filter.email}"`);
     } else if (filter.username) {
       query = query.eq('username', filter.username);
@@ -33,89 +42,114 @@ export const User = {
       query = query.eq('id', filter.id);
     }
 
-    const { data, error } = await query.single();
+    const { data, error } = await query.maybeSingle();
     
-    if (error && error.code !== 'PGRST116') {
-      throw error;
-    }
+    if (error) throw error;
     return mapUser(data);
   },
 
   async findById(id) {
     const { data, error } = await supabase
       .from('users')
-      .select('*')
+      .select(`
+        *,
+        unlocked_lessons:user_unlocked_lessons(lesson_id),
+        unlocked_chemicals:user_unlocked_chemicals(chemical_formula)
+      `)
       .eq('id', id)
-      .single();
+      .maybeSingle();
     
-    if (error && error.code !== 'PGRST116') {
-      throw error;
-    }
+    if (error) throw error;
     return mapUser(data);
   },
 
   async create(userData) {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const userId = userData.id || crypto.randomUUID();
     
-    // Construct insert object
-    const insertData = {
-      username: userData.username,
-      email: userData.email,
-      password: hashedPassword,
-      role: userData.role || 'student',
-      inventory: userData.inventory || { ingredients: [], craftedItems: [] },
-      unlocked_lessons: userData.unlockedLessons || [],
-      unlocked_chemicals: userData.unlockedChemicals || []
-    };
-
-    // Only include ID if explicitly provided (e.g. from Firebase/Google)
-    // Otherwise generate a random UUID to satisfy DB constraint
-    if (userData.id) {
-      insertData.id = userData.id;
-    } else {
-      insertData.id = crypto.randomUUID();
-    }
-
+    // 1. Create User
     const { data, error } = await supabase
       .from('users')
-      .insert([insertData])
+      .insert([{
+        id: userId,
+        username: userData.username,
+        email: userData.email,
+        password: hashedPassword,
+        role: userData.role || 'student',
+        inventory: userData.inventory || { ingredients: [], craftedItems: [] },
+        avatar_seed: userData.avatarSeed || userData.username
+      }])
       .select()
       .single();
     
     if (error) throw error;
-    return mapUser(data);
+
+    // 2. Initial Unlocked Content (if any)
+    if (userData.unlockedLessons?.length > 0) {
+      await supabase.from('user_unlocked_lessons').insert(
+        userData.unlockedLessons.map(lessonId => ({ user_id: userId, lesson_id: lessonId }))
+      );
+    }
+    if (userData.unlockedChemicals?.length > 0) {
+      await supabase.from('user_unlocked_chemicals').insert(
+        userData.unlockedChemicals.map(chem => ({ user_id: userId, chemical_formula: chem }))
+      );
+    }
+
+    return this.findById(userId);
   },
 
   async update(id, updateData) {
     const pgUpdateData = { ...updateData };
-    if (updateData.unlockedLessons) {
-      pgUpdateData.unlocked_lessons = updateData.unlockedLessons;
-      delete pgUpdateData.unlockedLessons;
-    }
-    if (updateData.unlockedChemicals) {
-      pgUpdateData.unlocked_chemicals = updateData.unlockedChemicals;
-      delete pgUpdateData.unlockedChemicals;
-    }
+    
+    // Handle special mappings
     if (updateData.avatarSeed) {
       pgUpdateData.avatar_seed = updateData.avatarSeed;
       delete pgUpdateData.avatarSeed;
     }
-
-    const { data, error } = await supabase
-      .from('users')
-      .update(pgUpdateData)
-      .eq('id', id)
-      .select()
-      .single();
     
-    if (error) throw error;
-    return mapUser(data);
+    // 1. Update Core User Data (excluding junction lists)
+    const junctionLessons = updateData.unlockedLessons;
+    const junctionChemicals = updateData.unlockedChemicals;
+    delete pgUpdateData.unlockedLessons;
+    delete pgUpdateData.unlockedChemicals;
+
+    if (Object.keys(pgUpdateData).length > 0) {
+      const { error } = await supabase
+        .from('users')
+        .update(pgUpdateData)
+        .eq('id', id);
+      if (error) throw error;
+    }
+
+    // 2. Update Junction Tables for Unlocked Content
+    // NOTE: This implementation is simple "add if missing". 
+    // For a full replacement, we'd need to delete first if that's the intent.
+    if (junctionLessons) {
+      for (const lessonId of junctionLessons) {
+        await supabase.from('user_unlocked_lessons')
+          .upsert({ user_id: id, lesson_id: lessonId }, { onConflict: 'user_id,lesson_id' });
+      }
+    }
+
+    if (junctionChemicals) {
+      for (const chem of junctionChemicals) {
+        await supabase.from('user_unlocked_chemicals')
+          .upsert({ user_id: id, chemical_formula: chem }, { onConflict: 'user_id,chemical_formula' });
+      }
+    }
+
+    return this.findById(id);
   },
 
   async findStudents() {
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, role, xp, level, inventory, unlocked_lessons, avatar_seed')
+      .select(`
+        id, username, role, xp, level, inventory, avatar_seed,
+        unlocked_lessons:user_unlocked_lessons(lesson_id),
+        unlocked_chemicals:user_unlocked_chemicals(chemical_formula)
+      `)
       .eq('role', 'student')
       .order('xp', { ascending: false });
     
@@ -151,7 +185,5 @@ export const User = {
     return await bcrypt.compare(plainPassword, hashedPassword);
   }
 };
-
-
 
 export default User;

@@ -16,7 +16,8 @@ const auth = async (req, res, next) => {
     let user;
 
     // 1. Try to verify as Supabase token
-    const { data: { user: sbUser }, error: sbError } = await supabase.auth.getUser(token);
+    const { data, error: sbError } = await supabase.auth.getUser(token);
+    const sbUser = data?.user;
     
     if (sbUser && !sbError) {
       userId = sbUser.id;

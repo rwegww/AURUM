@@ -90,7 +90,7 @@ const Profile = () => {
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
                  <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
-                 <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">Student</span>
+                 <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">Học sinh</span>
               </div>
               <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">Thành viên ưu tú của Học viện Hóa học Odyssey. <br/>Đã đồng hành từ {new Date(user.createdAt).toLocaleDateString('vi-VN')}</p>
               
@@ -157,7 +157,7 @@ const Profile = () => {
                      <div className="w-12 h-12 bg-viet-green/10 rounded-2xl flex items-center justify-center">
                         <span className="text-xl font-black text-viet-green">{formula}</span>
                      </div>
-                     <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">Discovery</span>
+                     <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">Khám phá</span>
                    </motion.div>
                  ))
                ) : (
@@ -190,7 +190,7 @@ const Profile = () => {
                    </div>
                    <div className="pt-4">
                       <div className="flex justify-between text-[11px] font-black uppercase tracking-widest text-white/40 mb-3">
-                         <span>Tổ số thắng</span>
+                         <span>Tỉ lệ thắng</span>
                          <span>{user.arenaStats?.total > 0 ? Math.round((user.arenaStats.wins / user.arenaStats.total) * 100) : 0}%</span>
                       </div>
                       <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">

@@ -18,6 +18,9 @@ const MyClass = () => {
   const [sending, setSending] = useState(false);
   const [viewingAssignment, setViewingAssignment] = useState(null);
   const [isIframeLoading, setIsIframeLoading] = useState(true);
+  const [activeQuiz, setActiveQuiz] = useState(null);
+  const [quizAnswers, setQuizAnswers] = useState({});
+  const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
 
   useEffect(() => {
     fetchClasses();
@@ -98,20 +101,50 @@ const MyClass = () => {
     }
   };
 
-  const handleCompleteAssignment = async (postId) => {
+  const handleCompleteAssignment = async (postId, answers = null, score = null) => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/classes/assignments/${postId}/submit`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ answers, score })
       });
       if (res.ok) {
-        // Refresh posts to show updated state (though we'd need to fetch status)
         const currentClass = selectedClass;
         if (currentClass) selectClass(currentClass);
+        setActiveQuiz(null);
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const calculateScore = (questions, answers) => {
+    const mcQuestions = questions.filter(q => (q.type || 'multiple_choice') === 'multiple_choice');
+    if (mcQuestions.length === 0) return null; // All essay — needs manual grading
+    
+    let correctCount = 0;
+    questions.forEach((q, idx) => {
+      if ((q.type || 'multiple_choice') === 'multiple_choice') {
+        if (answers[idx] === q.correct_index) correctCount++;
+      }
+    });
+    return Math.round((correctCount / mcQuestions.length) * 10);
+  };
+
+  const handleSubmitQuiz = async () => {
+    setIsSubmittingQuiz(true);
+    const score = calculateScore(activeQuiz.questions, quizAnswers);
+    const hasEssay = activeQuiz.questions.some(q => q.type === 'essay');
+    await handleCompleteAssignment(activeQuiz.id, quizAnswers, score);
+    setIsSubmittingQuiz(false);
+    if (hasEssay && score !== null) {
+      alert(`Phần trắc nghiệm: ${score}/10 điểm.\nPhần tự luận sẽ được giáo viên chấm riêng.`);
+    } else if (hasEssay) {
+      alert('Bài tập đã nộp thành công! Giáo viên sẽ chấm bài tự luận của bạn.');
     }
   };
 
@@ -355,7 +388,8 @@ const MyClass = () => {
 
                      {post.type === 'assignment' && (
                         <div className="mt-2 flex flex-col gap-2">
-                          {post.media_url && (
+                          {/* Only show file link if NO interactive questions exist */}
+                          {post.media_url && (!post.questions || post.questions.length === 0) && (
                            <button 
                                onClick={() => {
                                  setViewingAssignment(post);
@@ -372,9 +406,33 @@ const MyClass = () => {
                           )}
                           
                           {post.is_completed ? (
-                            <div className="w-full py-3 bg-slate-100 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
-                              <span>✓</span> Đã hoàn thành bài tập
+                            <div className="flex flex-col gap-2">
+                                <div className="w-full py-4 bg-emerald-50 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
+                                  <span>✓</span> Đã hoàn thành bài tập
+                                </div>
+                                {post.user_submission?.score !== null && post.user_submission?.score !== undefined && (
+                                   <div className="flex items-center justify-between p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-sm">
+                                      <div className="flex flex-col">
+                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Kết quả của bạn:</span>
+                                         <span className="text-lg font-black text-viet-text uppercase tracking-tight">Trực tuyến</span>
+                                      </div>
+                                      <div className="flex items-center gap-2 bg-viet-green text-white px-4 py-2 rounded-xl shadow-lg shadow-viet-green/20">
+                                         <span className="text-xl font-black">{post.user_submission.score}</span>
+                                         <span className="text-[10px] font-black opacity-60">/ 10</span>
+                                      </div>
+                                   </div>
+                                )}
                             </div>
+                          ) : post.questions && post.questions.length > 0 ? (
+                            <button 
+                              onClick={() => {
+                                setActiveQuiz(post);
+                                setQuizAnswers({});
+                              }}
+                              className="w-full py-4 bg-viet-green text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all border-b-4 border-emerald-700"
+                            >
+                              🚀 Làm bài trực tuyến ({post.questions.length} câu)
+                            </button>
                           ) : (
                             <button 
                               onClick={() => handleCompleteAssignment(post.id)}
@@ -554,6 +612,97 @@ const MyClass = () => {
                     className="flex-1 py-4 bg-viet-text text-white font-black text-[10px] uppercase tracking-widest rounded-xl text-center"
                   >Tải tệp xuống 📥</a>
                </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Interactive Quiz Modal */}
+      <AnimatePresence>
+        {activeQuiz && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-viet-text/80 backdrop-blur-xl">
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-white w-full max-w-4xl max-h-[90vh] rounded-[40px] overflow-hidden shadow-2xl flex flex-col border border-white/20"
+            >
+              <div className="p-8 bg-slate-50 border-b border-viet-border flex justify-between items-center shrink-0">
+                <div>
+                   <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/10 px-3 py-1 rounded-full mb-2 inline-block">BÀI TẬP TRỰC TUYẾN</span>
+                   <h3 className="text-2xl font-black text-viet-text uppercase tracking-tight">{activeQuiz.content}</h3>
+                </div>
+                <button onClick={() => setActiveQuiz(null)} className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center text-viet-text-light hover:text-red-500 transition-all font-black text-xl shadow-sm">✕</button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
+                {activeQuiz.questions.map((q, qIdx) => (
+                  <div key={qIdx} className="space-y-6">
+                    <div className="flex gap-4">
+                      <span className="shrink-0 w-10 h-10 bg-viet-green text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-lg shadow-viet-green/20">
+                        {qIdx + 1}
+                      </span>
+                      <p className="text-xl font-bold text-viet-text leading-relaxed pt-1">{q.question}</p>
+                    </div>
+                    
+                    <div className="flex-1 pl-14 space-y-4">
+                      {(q.type || 'multiple_choice') === 'multiple_choice' ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {q.options.map((opt, oIdx) => (
+                            <button 
+                              key={oIdx}
+                              onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: oIdx })}
+                              className={`p-5 rounded-2xl border-2 text-left transition-all flex items-center gap-4 group ${
+                                quizAnswers[qIdx] === oIdx 
+                                ? 'border-viet-green bg-emerald-50 shadow-md shadow-viet-green/10' 
+                                : 'border-slate-100 bg-white hover:border-slate-200'
+                              }`}
+                            >
+                              <span className={`w-8 h-8 shrink-0 rounded-xl flex items-center justify-center font-black text-xs transition-all ${
+                                quizAnswers[qIdx] === oIdx 
+                                ? 'bg-viet-green text-white' 
+                                : 'bg-slate-100 text-slate-400 group-hover:bg-slate-200'
+                              }`}>
+                                {String.fromCharCode(65 + oIdx)}
+                              </span>
+                              <span className={`text-sm font-bold ${quizAnswers[qIdx] === oIdx ? 'text-viet-green' : 'text-viet-text'}`}>{opt}</span>
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="relative group">
+                          <textarea 
+                            value={quizAnswers[qIdx] || ''}
+                            onChange={(e) => setQuizAnswers({ ...quizAnswers, [qIdx]: e.target.value })}
+                            placeholder="Nhập câu trả lời tự luận của bạn vào đây..."
+                            className="w-full min-h-[160px] p-5 bg-slate-50 border-2 border-slate-100 rounded-[32px] outline-none focus:border-blue-400 focus:bg-white transition-all text-sm font-medium resize-none shadow-inner"
+                          />
+                          <div className="absolute bottom-4 right-6 text-[10px] font-black text-slate-300 uppercase tracking-widest pointer-events-none">
+                            Phần tự luận
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="p-8 bg-slate-50 border-t border-viet-border flex items-center justify-between shrink-0">
+                <div className="flex flex-col">
+                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiến độ:</span>
+                   <span className="text-sm font-black text-viet-text uppercase">{Object.keys(quizAnswers).length} / {activeQuiz.questions.length} CÂU ĐÃ LÀM</span>
+                </div>
+                <button 
+                  onClick={handleSubmitQuiz}
+                  disabled={isSubmittingQuiz || Object.keys(quizAnswers).length < activeQuiz.questions.length}
+                  className={`px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl ${
+                    Object.keys(quizAnswers).length < activeQuiz.questions.length
+                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
+                    : 'bg-viet-green text-white hover:scale-[1.05] shadow-viet-green/20 active:scale-[0.98]'
+                  }`}
+                >
+                  {isSubmittingQuiz ? 'Đang nộp...' : 'Nộp bài ngay ➔'}
+                </button>
+              </div>
             </motion.div>
           </div>
         )}

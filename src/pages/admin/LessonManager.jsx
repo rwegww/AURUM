@@ -11,6 +11,14 @@ const LessonManager = () => {
   const [loading, setLoading] = useState(true);
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [editingLesson, setEditingLesson] = useState(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    classId: 8,
+    chapter: 'Chương 1',
+    programId: 'ketnoi'
+  });
 
   const fetchLessons = async (grade) => {
     setLoading(true);
@@ -31,22 +39,88 @@ const LessonManager = () => {
   }, [selectedGrade]);
 
   const handleEdit = async (lessonId) => {
-    // Fetch full lesson data for editing
     try {
       const res = await fetch(`/api/lessons/${lessonId}`);
       const data = await res.json();
       setEditingLesson(data);
+      setFormData({
+        title: data.title,
+        description: data.description,
+        classId: data.classId,
+        chapter: data.chapter,
+        programId: data.programId || 'ketnoi'
+      });
+      setIsCreating(false);
     } catch (err) {
       console.error('Lỗi tải chi tiết bài học:', err);
     }
   };
 
+  const handleCreateNew = () => {
+    setEditingLesson(null);
+    setIsCreating(true);
+    setFormData({
+      title: '',
+      description: '',
+      classId: selectedGrade || 8,
+      chapter: 'Chương 1',
+      programId: 'ketnoi'
+    });
+  };
+
+  const handleDelete = async (lessonId) => {
+    if (!window.confirm('Bạn có chắc chắn muốn xóa bài học này?')) return;
+    
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/admin/lessons/${lessonId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (res.ok) {
+        setLessons(prev => prev.filter(l => l.lessonId !== lessonId));
+      } else {
+        const error = await res.json();
+        alert(`Lỗi: ${error.message}`);
+      }
+    } catch (err) {
+      console.error('Lỗi xóa bài học:', err);
+    }
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
-    // Implementation for saving (PUT /api/lessons/:id) will go here
-    // For now, let's just close the modal
-    setEditingLesson(null);
-    alert('Chức năng lưu đang được hoàn thiện!');
+    try {
+      const token = localStorage.getItem('token');
+      const method = isCreating ? 'POST' : 'PUT';
+      const url = isCreating ? '/api/admin/lessons' : `/api/admin/lessons/${editingLesson.lessonId}`;
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (res.ok) {
+        const savedLesson = await res.json();
+        if (isCreating) {
+          setLessons(prev => [...prev, savedLesson]);
+        } else {
+          setLessons(prev => prev.map(l => l.lessonId === savedLesson.lessonId ? savedLesson : l));
+        }
+        setEditingLesson(null);
+        setIsCreating(false);
+      } else {
+        const error = await res.json();
+        alert(`Lỗi: ${error.message}`);
+      }
+    } catch (err) {
+      console.error('Lỗi lưu bài học:', err);
+    }
   };
 
   return (
@@ -54,23 +128,31 @@ const LessonManager = () => {
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Dashboard</Link>
+            <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
             <h1 className="text-3xl font-bold text-viet-text tracking-tight">Quản lý <span className="text-viet-green">Học liệu</span></h1>
             <p className="text-viet-text-light mt-1 font-medium italic">Tùy chỉnh nội dung bài học, lý thuyết và bài tập.</p>
           </div>
           
-          <div className="flex gap-2 p-1.5 bg-white rounded-2xl border border-viet-border shadow-sm">
-             {[null, 8, 9, 10, 11, 12].map(g => (
-               <button 
-                 key={g} 
-                 onClick={() => setSelectedGrade(g)}
-                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-                   selectedGrade === g ? 'bg-viet-green text-white shadow-md' : 'text-viet-text-light hover:bg-gray-50'
-                 }`}
-               >
-                 {g ? `Lớp ${g}` : 'Tất cả'}
-               </button>
-             ))}
+          <div className="flex gap-4">
+            <button 
+              onClick={handleCreateNew}
+              className="px-6 py-2.5 bg-viet-green text-white rounded-xl text-xs font-bold shadow-lg shadow-viet-green/20 hover:scale-105 transition-all flex items-center gap-2"
+            >
+              <span>➕</span> Thêm bài học
+            </button>
+            <div className="flex gap-2 p-1.5 bg-white rounded-2xl border border-viet-border shadow-sm">
+               {[null, 8, 9, 10, 11, 12].map(g => (
+                 <button 
+                   key={g} 
+                   onClick={() => setSelectedGrade(g)}
+                   className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                     selectedGrade === g ? 'bg-viet-green text-white shadow-md' : 'text-viet-text-light hover:bg-gray-50'
+                   }`}
+                 >
+                   {g ? `Lớp ${g}` : 'Tất cả'}
+                 </button>
+               ))}
+            </div>
           </div>
         </header>
 
@@ -97,7 +179,10 @@ const LessonManager = () => {
                         onClick={() => handleEdit(lesson.lessonId)}
                         className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-all"
                       >✎</button>
-                      <button className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-all">🗑</button>
+                      <button 
+                        onClick={() => handleDelete(lesson.lessonId)}
+                        className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-all"
+                      >🗑</button>
                    </div>
                 </div>
                 <h3 className="text-lg font-bold text-viet-text mb-2 line-clamp-2">{lesson.title}</h3>
@@ -114,9 +199,9 @@ const LessonManager = () => {
           </div>
         )}
 
-        {/* Edit Modal (Simplified for now) */}
+        {/* Edit/Create Modal */}
         <AnimatePresence>
-          {editingLesson && (
+          {(editingLesson || isCreating) && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -130,11 +215,11 @@ const LessonManager = () => {
                >
                   <div className="p-8 border-b border-viet-border flex items-center justify-between bg-viet-bg/30">
                      <div>
-                        <h2 className="text-2xl font-bold text-viet-text">Chỉnh sửa bài học</h2>
-                        <p className="text-sm text-viet-text-light font-medium">{editingLesson.title}</p>
+                        <h2 className="text-2xl font-bold text-viet-text">{isCreating ? 'Thêm bài học mới' : 'Chỉnh sửa bài học'}</h2>
+                        <p className="text-sm text-viet-text-light font-medium">{isCreating ? 'Nhập thông tin cho học liệu mới' : editingLesson.title}</p>
                      </div>
                      <button 
-                       onClick={() => setEditingLesson(null)}
+                       onClick={() => { setEditingLesson(null); setIsCreating(false); }}
                        className="w-10 h-10 rounded-full bg-white border border-viet-border flex items-center justify-center text-viet-text hover:bg-red-50 hover:text-red-500 transition-all"
                      >✕</button>
                   </div>
@@ -145,24 +230,53 @@ const LessonManager = () => {
                            <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Tiêu đề bài học</label>
                            <input 
                              type="text" 
-                             defaultValue={editingLesson.title}
+                             value={formData.title}
+                             onChange={(e) => setFormData({...formData, title: e.target.value})}
                              className="w-full h-12 px-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-bold"
+                             required
                            />
                         </div>
                         <div className="space-y-4">
                            <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Chương / Phần</label>
                            <input 
                              type="text" 
-                             defaultValue={editingLesson.chapter}
+                             value={formData.chapter}
+                             onChange={(e) => setFormData({...formData, chapter: e.target.value})}
                              className="w-full h-12 px-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-bold"
+                             required
                            />
+                        </div>
+                        <div className="space-y-4">
+                           <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Lớp</label>
+                           <select 
+                             value={formData.classId}
+                             onChange={(e) => setFormData({...formData, classId: parseInt(e.target.value)})}
+                             className="w-full h-12 px-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-bold"
+                           >
+                              {[8, 9, 10, 11, 12].map(g => (
+                                <option key={g} value={g}>Lớp {g}</option>
+                              ))}
+                           </select>
+                        </div>
+                        <div className="space-y-4">
+                           <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Bộ sách</label>
+                           <select 
+                             value={formData.programId}
+                             onChange={(e) => setFormData({...formData, programId: e.target.value})}
+                             className="w-full h-12 px-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-bold"
+                           >
+                              <option value="ketnoi">Kết nối tri thức</option>
+                              <option value="canhdieu">Cánh diều</option>
+                              <option value="chantroi">Chân trời sáng tạo</option>
+                           </select>
                         </div>
                      </div>
 
                      <div className="space-y-4">
                         <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Mô tả bài tập</label>
                         <textarea 
-                          defaultValue={editingLesson.description}
+                          value={formData.description}
+                          onChange={(e) => setFormData({...formData, description: e.target.value})}
                           className="w-full p-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-medium h-32 resize-none"
                         />
                      </div>
@@ -176,13 +290,13 @@ const LessonManager = () => {
                   <div className="p-8 border-t border-viet-border bg-viet-bg/30 flex justify-end gap-4">
                      <button 
                        type="button"
-                       onClick={() => setEditingLesson(null)}
+                       onClick={() => { setEditingLesson(null); setIsCreating(false); }}
                        className="px-8 py-3 rounded-2xl font-bold text-viet-text-light hover:bg-white hover:shadow-sm transition-all"
                      >Hủy bỏ</button>
                      <button 
                         onClick={handleSave}
                         className="px-10 py-3 rounded-2xl bg-viet-green text-white font-bold shadow-lg shadow-viet-green/20 hover:scale-105 transition-all"
-                     >Lưu thay đổi</button>
+                     >{isCreating ? 'Tạo bài học' : 'Lưu thay đổi'}</button>
                   </div>
                </motion.div>
             </motion.div>

@@ -38,7 +38,7 @@ const UserManager = () => {
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Dashboard</Link>
+            <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
             <h1 className="text-3xl font-bold text-viet-text tracking-tight">Thống kê <span className="text-viet-green">Học sinh</span></h1>
             <p className="text-viet-text-light mt-1 font-medium italic">Theo dõi quá trình rèn luyện và tiến độ của học viên.</p>
           </div>
@@ -69,7 +69,7 @@ const UserManager = () => {
                     <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Cấp độ</th>
                     <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Kinh nghiệm (XP)</th>
                     <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Tiến trình</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Hành động</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Thao tác</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-viet-border">
@@ -88,7 +88,7 @@ const UserManager = () => {
                           </div>
                           <div>
                             <p className="text-sm font-bold text-viet-text">{u.username}</p>
-                            <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Học tập từ {new Date(u.createdAt).toLocaleDateString()}</p>
+                            <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Học tập từ {new Date(u.createdAt).toLocaleDateString('vi-VN')}</p>
                           </div>
                         </div>
                       </td>
@@ -110,7 +110,12 @@ const UserManager = () => {
                          </div>
                       </td>
                       <td className="px-8 py-6 text-right">
-                         <button className="text-[10px] font-black text-viet-green hover:underline uppercase tracking-tight">Xem chi tiết ➔</button>
+                         <Link 
+                           to={`/admin/users/${u.id}`}
+                           className="text-[10px] font-black text-viet-green hover:underline uppercase tracking-tight"
+                         >
+                           Xem chi tiết ➔
+                         </Link>
                       </td>
                     </motion.tr>
                   ))}

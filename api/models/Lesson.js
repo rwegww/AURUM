@@ -23,6 +23,23 @@ const mapLesson = (lesson) => {
   };
 };
 
+const mapToPostgres = (l) => ({
+  id: l.lessonId || l.id,
+  class_id: l.classId,
+  program_id: l.programId,
+  title: l.title,
+  chapter: l.chapter,
+  order: l.order,
+  description: l.description,
+  theory_modules: l.theoryModules || [],
+  video_modules: l.videoModules || [],
+  quizzes: l.quizzes || [],
+  story_slides: l.storySlides || [],
+  challenges: l.challenges || [],
+  game: l.game || {},
+  is_premium: l.isPremium || false
+});
+
 export const Lesson = {
   async find(query = {}) {
     let supabaseQuery = supabase
@@ -76,7 +93,46 @@ export const Lesson = {
     return mapLesson(data);
   },
 
+  async create(lessonData) {
+    const pgData = mapToPostgres(lessonData);
+    const { data, error } = await supabase
+      .from('lessons')
+      .insert(pgData)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return mapLesson(data);
+  },
+
+  async update(lessonId, lessonData) {
+    const pgData = mapToPostgres(lessonData);
+    // Remove ID from update data to prevent primary key mutation errors
+    delete pgData.id;
+
+    const { data, error } = await supabase
+      .from('lessons')
+      .update(pgData)
+      .eq('id', lessonId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return mapLesson(data);
+  },
+
+  async delete(lessonId) {
+    const { error } = await supabase
+      .from('lessons')
+      .delete()
+      .eq('id', lessonId);
+    
+    if (error) throw error;
+    return true;
+  },
+
   async updateProgress(lessonId, updateData) {
+    // Keep this for backward compatibility if used elsewhere, but ideally use update()
     const pgUpdateData = { ...updateData };
     if (updateData.classId) pgUpdateData.class_id = updateData.classId;
     if (updateData.programId) pgUpdateData.program_id = updateData.programId;
@@ -113,22 +169,7 @@ export const Lesson = {
   async insertMany(lessons) {
     const { data, error } = await supabase
       .from('lessons')
-      .insert(lessons.map(l => ({
-        id: l.lessonId || l.id,
-        class_id: l.classId,
-        program_id: l.programId,
-        title: l.title,
-        chapter: l.chapter,
-        order: l.order,
-        description: l.description,
-        theory_modules: l.theoryModules || [],
-        video_modules: l.videoModules || [],
-        quizzes: l.quizzes || [],
-        story_slides: l.storySlides || [],
-        challenges: l.challenges || [],
-        game: l.game || {},
-        is_premium: l.isPremium || false
-      })));
+      .insert(lessons.map(mapToPostgres));
     
     if (error) throw error;
     return data;

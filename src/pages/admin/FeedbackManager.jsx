@@ -56,7 +56,7 @@ const FeedbackManager = () => {
     <div className="p-8 pb-12">
       <div className="max-w-6xl mx-auto">
         <header className="mb-12">
-          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Dashboard</Link>
+          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
           <h1 className="text-3xl font-bold text-viet-text tracking-tight">Hòm thư <span className="text-viet-green">Góp ý</span></h1>
           <p className="text-viet-text-light mt-1 font-medium italic">Lắng nghe ý kiến của học sinh để cải thiện hệ thống.</p>
         </header>
@@ -89,13 +89,13 @@ const FeedbackManager = () => {
                           {f.username?.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-viet-text">{f.username}</p>
-                          <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">{new Date(f.createdAt).toLocaleString()}</p>
+                          <p className="text-sm font-bold text-viet-text">{f.username === 'Anonymous' ? 'Ẩn danh' : f.username}</p>
+                          <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">{new Date(f.createdAt).toLocaleString('vi-VN')}</p>
                         </div>
                      </div>
                      <div className="flex items-center gap-3">
                         <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ${getTypeStyle(f.type)}`}>
-                           {f.type}
+                           {f.type === 'suggestion' ? 'Góp ý' : f.type === 'bug' ? 'Báo lỗi' : f.type === 'praise' ? 'Khen ngợi' : f.type}
                         </span>
                         {f.status === 'unread' ? (
                            <button 

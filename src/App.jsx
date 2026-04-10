@@ -30,6 +30,7 @@ import AuthCallback from '@/pages/auth/AuthCallback'
 import AdminDashboard from '@/pages/admin/AdminDashboard'
 import LessonManager from '@/pages/admin/LessonManager'
 import UserManager from '@/pages/admin/UserManager'
+import UserDetail from '@/pages/admin/UserDetail'
 import FeedbackManager from '@/pages/admin/FeedbackManager'
 import TeacherDashboard from '@/pages/teacher/TeacherDashboard'
 import ClassManager from '@/pages/teacher/ClassManager'
@@ -95,6 +96,7 @@ function AppContent() {
            <Route index element={<AdminDashboard />} />
            <Route path="lessons" element={<LessonManager />} />
            <Route path="users" element={<UserManager />} />
+           <Route path="users/:id" element={<UserDetail />} />
            <Route path="feedback" element={<FeedbackManager />} />
         </Route>
 

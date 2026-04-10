@@ -3,7 +3,7 @@ import ManagementLayout from './ManagementLayout';
 
 const AdminLayout = () => {
   const adminMenu = [
-    { label: 'Dashboard', path: '/admin', icon: '📊' },
+    { label: 'Bảng điều khiển', path: '/admin', icon: '📊' },
     { label: 'Học liệu', path: '/admin/lessons', icon: '📚' },
     { label: 'Người dùng', path: '/admin/users', icon: '👤' },
     { label: 'Phản hồi', path: '/admin/feedback', icon: '💬' },

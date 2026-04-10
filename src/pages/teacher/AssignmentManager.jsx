@@ -18,6 +18,9 @@ const AssignmentManager = () => {
     const [isUploading, setIsUploading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [uploadedFile, setUploadedFile] = useState(null);
+    const [parsedQuestions, setParsedQuestions] = useState([]);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [showQuestionsReview, setShowQuestionsReview] = useState(false);
     
     // Filters
     const [filterClass, setFilterClass] = useState('all');
@@ -91,6 +94,14 @@ const AssignmentManager = () => {
                 const data = await res.json();
                 setUploadedFile({ name: file.name, url: data.url });
                 setNewAssignment({ ...newAssignment, lesson_id: data.url });
+                
+                // Automatically trigger analysis for PDF/Docx/Doc
+                if (file.type === 'application/pdf' || 
+                    file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+                    file.type === 'application/msword' ||
+                    file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
+                    handleAnalyzeFile(file);
+                }
             } else {
                 alert('Tải tập tin thất bại. Vui lòng thử lại.');
             }
@@ -98,6 +109,62 @@ const AssignmentManager = () => {
             console.error(err);
         } finally {
             setIsUploading(false);
+        }
+    };
+
+    const handleAnalyzeFile = async (file) => {
+        console.log('Analyzing file:', file.name, 'Type:', file.type, 'Size:', file.size, 'bytes');
+        
+        // Validate file size - a real Word doc should be at least 1KB
+        if (file.size < 1000) {
+            alert(`File "${file.name}" quá nhỏ (${file.size} bytes). Đây có thể không phải file Word/PDF hợp lệ. Vui lòng kiểm tra lại file trên máy tính.`);
+            setParsedQuestions([{ question: '', options: ['', '', '', ''], correct_index: 0 }]);
+            setShowQuestionsReview(true);
+            return;
+        }
+        
+        setIsAnalyzing(true);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/analyze/analyze-file', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.questions && data.questions.length > 0) {
+                    setParsedQuestions(data.questions);
+                    setShowQuestionsReview(true);
+                } else {
+                    alert('Hệ thống không tự động nhận diện được câu hỏi từ file này. Bạn có thể nhập câu hỏi thủ công bên dưới.');
+                    setParsedQuestions([{ question: '', options: ['', '', '', ''], correct_index: 0 }]);
+                    setShowQuestionsReview(true);
+                }
+            } else {
+                const errorData = await res.json().catch(() => ({ message: 'Lỗi không xác định từ máy chủ' }));
+                console.error('Analysis API Error:', errorData);
+                if (errorData.debug) {
+                    console.error('Debug info:', errorData.debug);
+                }
+                // Fall back to manual entry instead of just showing error
+                const useManual = window.confirm(
+                    `${errorData.message || 'Máy chủ gặp sự cố khi đọc file.'}\n\nBạn có muốn nhập câu hỏi thủ công không?`
+                );
+                if (useManual) {
+                    setParsedQuestions([{ question: '', options: ['', '', '', ''], correct_index: 0 }]);
+                    setShowQuestionsReview(true);
+                }
+            }
+        } catch (err) {
+            console.error('Analysis failed:', err);
+            alert('Không thể kết nối tới máy chủ để phân tích file.');
+        } finally {
+            setIsAnalyzing(false);
         }
     };
 
@@ -118,15 +185,18 @@ const AssignmentManager = () => {
                     type: 'assignment',
                     content: newAssignment.content,
                     deadline: newAssignment.deadline,
-                    media_url: newAssignment.lesson_id // Stores either the pasted link or the uploaded file URL
+                    media_url: newAssignment.lesson_id, // Stores either the pasted link or the uploaded file URL
+                    questions: parsedQuestions
                 })
             });
 
             if (res.ok) {
                 fetchInitialData();
                 setIsModalOpen(false);
+                setShowQuestionsReview(false);
                 setNewAssignment({ class_id: '', lesson_id: '', content: '', deadline: '' });
                 setUploadedFile(null);
+                setParsedQuestions([]);
                 setUploadMethod('link');
             }
         } catch (err) {
@@ -303,7 +373,7 @@ const AssignmentManager = () => {
                             />
                             <motion.div 
                                 initial={{ scale: 0.9, y: 20, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }} exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                                className="relative bg-white rounded-[40px] shadow-2xl w-full max-w-xl p-10 border border-white/20 overflow-hidden"
+                                className="relative bg-white rounded-[40px] shadow-2xl w-full max-w-xl p-10 border border-white/20 max-h-[90vh] overflow-y-auto flex flex-col custom-scrollbar"
                             >
                                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-viet-green to-emerald-400"></div>
                                 <h2 className="text-3xl font-black text-viet-text mb-8 uppercase tracking-tight">➕ Giao Bài Tập Mới</h2>
@@ -332,7 +402,7 @@ const AssignmentManager = () => {
                                                         }}
                                                         className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${uploadMethod === m ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400'}`}
                                                     >
-                                                        {m === 'link' ? '🔗 Dán Link' : '📁 Tải Tệp'}
+                                                        {m === 'link' ? '🔗 Dán Link' : '📄 Tải file & Phân tích'}
                                                     </button>
                                                 ))}
                                             </div>
@@ -367,7 +437,7 @@ const AssignmentManager = () => {
                                                         ) : (
                                                             <div className="flex items-center gap-2 text-slate-400">
                                                                 <span className="text-lg">☁️</span>
-                                                                <span className="text-xs font-bold uppercase tracking-widest">Chọn tệp Word/PDF</span>
+                                                                <span className="text-xs font-bold uppercase tracking-widest text-center">Tải file PDF/Word để hệ thống tự động đọc và tạo câu hỏi</span>
                                                             </div>
                                                         )}
                                                     </label>
@@ -404,12 +474,126 @@ const AssignmentManager = () => {
                                         </button>
                                         <button 
                                             type="submit"
-                                            disabled={isSubmitting || isUploading}
-                                            className={`flex-1 py-5 text-white font-black rounded-2xl shadow-xl transition-all uppercase tracking-widest text-xs border-b-4 ${isSubmitting || isUploading ? 'bg-slate-300 border-slate-400 cursor-not-allowed' : 'bg-viet-green border-emerald-700 hover:bg-emerald-600 shadow-viet-green/20'}`}
+                                            disabled={isSubmitting || isUploading || isAnalyzing}
+                                            className={`flex-1 py-5 text-white font-black rounded-2xl shadow-xl transition-all uppercase tracking-widest text-xs border-b-4 ${isSubmitting || isUploading || isAnalyzing ? 'bg-slate-300 border-slate-400 cursor-not-allowed' : 'bg-viet-green border-emerald-700 hover:bg-emerald-600 shadow-viet-green/20'}`}
                                         >
-                                            {isSubmitting ? 'Đang xử lý...' : 'Xác nhận giao bài'}
+                                            {isSubmitting ? 'Đang xử lý...' : isAnalyzing ? 'Đang phân tích...' : showQuestionsReview ? 'Lưu bài tập & Câu hỏi' : 'Xác nhận giao bài'}
                                         </button>
                                     </div>
+                                    
+                                    {/* Questions Review Section */}
+                                    {showQuestionsReview && (
+                                        <div className="mt-8 pt-8 border-t-4 border-viet-green/20 space-y-6">
+                                            <div className="flex items-center justify-between bg-emerald-50 p-4 rounded-2xl border border-viet-green/20">
+                                                <div>
+                                                   <h3 className="text-sm font-black text-viet-text uppercase tracking-widest">📋 DANH SÁCH CÂU HỎI ({parsedQuestions.length})</h3>
+                                                   <p className="text-[10px] font-bold text-viet-green uppercase mt-1">Học sinh sẽ làm trực tuyến trên danh sách này</p>
+                                                </div>
+                                                <div className="flex gap-2">
+                                                    <button type="button" onClick={() => setParsedQuestions([...parsedQuestions, { type: 'multiple_choice', question: '', options: ['', '', '', ''], correct_index: 0 }])} className="text-[10px] font-black bg-viet-green text-white uppercase px-3 py-2 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-viet-green/20">+ Trắc nghiệm</button>
+                                                    <button type="button" onClick={() => setParsedQuestions([...parsedQuestions, { type: 'essay', question: '', options: [], correct_index: null, sample_answer: '' }])} className="text-[10px] font-black bg-blue-500 text-white uppercase px-3 py-2 rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20">+ Tự luận</button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                                {parsedQuestions.map((q, qIdx) => (
+                                                    <div key={qIdx} className={`p-5 rounded-2xl border relative group ${q.type === 'essay' ? 'bg-blue-50/50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => setParsedQuestions(parsedQuestions.filter((_, i) => i !== qIdx))}
+                                                            className="absolute top-2 right-2 w-6 h-6 bg-red-50 text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                                                        >✕</button>
+                                                        
+                                                        <div className="space-y-4">
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Câu {qIdx + 1}</span>
+                                                                <select 
+                                                                    value={q.type || 'multiple_choice'}
+                                                                    onChange={(e) => {
+                                                                        const newQ = [...parsedQuestions];
+                                                                        const newType = e.target.value;
+                                                                        newQ[qIdx].type = newType;
+                                                                        if (newType === 'essay') {
+                                                                            newQ[qIdx].options = [];
+                                                                            newQ[qIdx].correct_index = null;
+                                                                            newQ[qIdx].sample_answer = newQ[qIdx].sample_answer || '';
+                                                                        } else {
+                                                                            newQ[qIdx].options = newQ[qIdx].options?.length >= 2 ? newQ[qIdx].options : ['', '', '', ''];
+                                                                            newQ[qIdx].correct_index = 0;
+                                                                        }
+                                                                        setParsedQuestions(newQ);
+                                                                    }}
+                                                                    className="text-[9px] font-black uppercase tracking-widest bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none"
+                                                                >
+                                                                    <option value="multiple_choice">🔘 Trắc nghiệm</option>
+                                                                    <option value="essay">📝 Tự luận</option>
+                                                                </select>
+                                                            </div>
+                                                            <div>
+                                                                <textarea 
+                                                                    value={q.question}
+                                                                    onChange={(e) => {
+                                                                        const newQ = [...parsedQuestions];
+                                                                        newQ[qIdx].question = e.target.value;
+                                                                        setParsedQuestions(newQ);
+                                                                    }}
+                                                                    placeholder="Nhập nội dung câu hỏi..."
+                                                                    className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold font-VietEdu outline-none focus:border-viet-green"
+                                                                />
+                                                            </div>
+                                                            
+                                                            {(q.type || 'multiple_choice') === 'multiple_choice' ? (
+                                                                <div className="grid grid-cols-2 gap-3">
+                                                                    {(q.options || ['', '', '', '']).map((opt, oIdx) => (
+                                                                        <div key={oIdx} className="flex flex-col gap-1">
+                                                                            <div className="flex items-center justify-between px-1">
+                                                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{String.fromCharCode(65 + oIdx)}.</span>
+                                                                                <input 
+                                                                                    type="radio" 
+                                                                                    name={`q-${qIdx}-correct`} 
+                                                                                    checked={q.correct_index === oIdx}
+                                                                                    onChange={() => {
+                                                                                        const newQ = [...parsedQuestions];
+                                                                                        newQ[qIdx].correct_index = oIdx;
+                                                                                        setParsedQuestions(newQ);
+                                                                                    }}
+                                                                                    className="w-3 h-3 accent-viet-green"
+                                                                                />
+                                                                            </div>
+                                                                            <input 
+                                                                                value={opt}
+                                                                                onChange={(e) => {
+                                                                                    const newQ = [...parsedQuestions];
+                                                                                    newQ[qIdx].options[oIdx] = e.target.value;
+                                                                                    setParsedQuestions(newQ);
+                                                                                }}
+                                                                                placeholder={`Đáp án ${String.fromCharCode(65 + oIdx)}`}
+                                                                                className={`w-full bg-white border rounded-xl p-2.5 text-[11px] font-medium outline-none transition-all ${q.correct_index === oIdx ? 'border-viet-green bg-emerald-50/50' : 'border-slate-200 focus:border-viet-green'}`}
+                                                                            />
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            ) : (
+                                                                <div>
+                                                                    <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1 block">Đáp án mẫu (tùy chọn - dùng để tham khảo khi chấm bài)</span>
+                                                                    <textarea 
+                                                                        value={q.sample_answer || ''}
+                                                                        onChange={(e) => {
+                                                                            const newQ = [...parsedQuestions];
+                                                                            newQ[qIdx].sample_answer = e.target.value;
+                                                                            setParsedQuestions(newQ);
+                                                                        }}
+                                                                        placeholder="Nhập đáp án mẫu để tham khảo khi chấm bài (không bắt buộc)..."
+                                                                        className="w-full bg-white border border-blue-200 rounded-xl p-3 text-xs font-medium outline-none focus:border-blue-400 min-h-[80px] resize-none"
+                                                                    />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
                                 </form>
                             </motion.div>
                         </div>
@@ -474,30 +658,97 @@ const AssignmentManager = () => {
                                             )}
 
                                             {grading.studentId === sub.student.id && (
-                                                <div className="mt-4 p-4 bg-white rounded-2xl border-2 border-viet-green shadow-inner space-y-3">
-                                                    <div className="flex items-center gap-3">
-                                                        <input 
-                                                            type="number" min="0" max="10" placeholder="Điểm"
-                                                            value={grading.score}
-                                                            onChange={(e) => setGrading({...grading, score: e.target.value})}
-                                                            className="w-20 p-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-bold outline-none focus:border-viet-green"
-                                                        />
-                                                        <input 
-                                                            type="text" placeholder="Ghi chú nhận xét..."
-                                                            value={grading.feedback}
-                                                            onChange={(e) => setGrading({...grading, feedback: e.target.value})}
-                                                            className="flex-1 p-2 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-viet-green"
-                                                        />
+                                                <div className="mt-4 p-5 bg-white rounded-3xl border-2 border-viet-green shadow-xl shadow-viet-green/5 space-y-6">
+                                                    <div className="space-y-4">
+                                                        <h4 className="text-[10px] font-black text-viet-text uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2">
+                                                            <span>📋</span> Chi tiết bài làm
+                                                        </h4>
+                                                        <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                                            {viewingSubmissions.questions.map((q, qIdx) => {
+                                                                const studentAnswer = sub.answers ? sub.answers[qIdx] : null;
+                                                                const isMC = (q.type || 'multiple_choice') === 'multiple_choice';
+                                                                
+                                                                return (
+                                                                    <div key={qIdx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                                                                        <div className="flex gap-2">
+                                                                            <span className="shrink-0 w-6 h-6 bg-slate-200 text-viet-text rounded-lg flex items-center justify-center text-[10px] font-black">
+                                                                                {qIdx + 1}
+                                                                            </span>
+                                                                            <p className="text-[11px] font-bold text-viet-text leading-tight">{q.question}</p>
+                                                                        </div>
+                                                                        
+                                                                        {isMC ? (
+                                                                            <div className="grid grid-cols-2 gap-2 pl-8">
+                                                                                {q.options.map((opt, oIdx) => {
+                                                                                    const isChosen = studentAnswer === oIdx;
+                                                                                    const isCorrect = q.correct_index === oIdx;
+                                                                                    let statusClass = 'bg-white border-slate-100 text-slate-400';
+                                                                                    if (isChosen && isCorrect) statusClass = 'bg-emerald-500 border-emerald-600 text-white';
+                                                                                    else if (isChosen && !isCorrect) statusClass = 'bg-red-500 border-red-600 text-white';
+                                                                                    else if (!isChosen && isCorrect) statusClass = 'bg-emerald-100 border-emerald-200 text-emerald-700';
+                                                                                    
+                                                                                    return (
+                                                                                        <div key={oIdx} className={`px-3 py-1.5 rounded-xl border text-[10px] font-bold ${statusClass}`}>
+                                                                                            {String.fromCharCode(65 + oIdx)}. {opt}
+                                                                                        </div>
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div className="pl-8 space-y-2">
+                                                                                <div className="p-3 bg-white border-2 border-blue-100 rounded-xl">
+                                                                                    <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest block mb-1">Câu trả lời của học sinh:</span>
+                                                                                    <p className="text-[11px] font-medium text-viet-text italic whitespace-pre-wrap">
+                                                                                        {studentAnswer || '(Chưa trả lời)'}
+                                                                                    </p>
+                                                                                </div>
+                                                                                {q.sample_answer && (
+                                                                                    <div className="p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl">
+                                                                                        <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest block mb-1">Đáp án mẫu tham khảo:</span>
+                                                                                        <p className="text-[10px] font-medium text-emerald-800 whitespace-pre-wrap">
+                                                                                            {q.sample_answer}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
                                                     </div>
-                                                    <div className="flex gap-2">
-                                                        <button 
-                                                            onClick={() => setGrading({...grading, studentId: null})}
-                                                            className="flex-1 text-[9px] font-black uppercase tracking-widest text-viet-text-light hover:text-red-500"
-                                                        >Hủy</button>
-                                                        <button 
-                                                            onClick={() => handleGrade(sub.student.id)}
-                                                            className="flex-1 py-2 bg-viet-green text-white font-black text-[10px] uppercase tracking-widest rounded-lg"
-                                                        >Lưu điểm</button>
+
+                                                    <div className="bg-slate-50 p-4 rounded-2xl space-y-3">
+                                                        <h4 className="text-[10px] font-black text-viet-text uppercase tracking-widest flex items-center gap-2">
+                                                            <span>✍️</span> Chấm điểm & Nhận xét
+                                                        </h4>
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="relative">
+                                                                <input 
+                                                                    type="number" min="0" max="10" step="0.5" placeholder="0"
+                                                                    value={grading.score}
+                                                                    onChange={(e) => setGrading({...grading, score: e.target.value})}
+                                                                    className="w-20 p-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-black text-center outline-none focus:border-viet-green focus:shadow-lg focus:shadow-viet-green/10"
+                                                                />
+                                                                <span className="absolute -top-2 -right-2 bg-viet-green text-white text-[8px] font-black px-1.5 py-0.5 rounded-md shadow-sm">/10</span>
+                                                            </div>
+                                                            <input 
+                                                                type="text" placeholder="Ghi chú nhận xét cho học sinh..."
+                                                                value={grading.feedback}
+                                                                onChange={(e) => setGrading({...grading, feedback: e.target.value})}
+                                                                className="flex-1 p-3 bg-white border-2 border-slate-200 rounded-xl text-sm font-bold outline-none focus:border-viet-green focus:shadow-lg focus:shadow-viet-green/10"
+                                                            />
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button 
+                                                                onClick={() => setGrading({...grading, studentId: null})}
+                                                                className="flex-1 py-3 text-[10px] font-black uppercase tracking-widest text-viet-text-light hover:text-red-500 transition-colors"
+                                                            >Hủy bỏ</button>
+                                                            <button 
+                                                                onClick={() => handleGrade(sub.student.id)}
+                                                                className="flex-1 py-3 bg-viet-green text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                                                            >Lưu kết quả ➔</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             )}

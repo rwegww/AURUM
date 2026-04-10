@@ -32,7 +32,9 @@ const ManagementSidebar = ({ menuItems, title }) => {
           </div>
           <div>
             <p className="text-sm font-bold text-viet-text leading-tight">{user?.username}</p>
-            <p className="text-xs text-viet-green font-bold capitalize">{user?.role}</p>
+            <p className="text-xs text-viet-green font-bold capitalize">
+              {user?.role === 'admin' ? 'Quản trị viên' : user?.role === 'teacher' ? 'Giáo viên' : user?.role}
+            </p>
           </div>
         </div>
       </div>

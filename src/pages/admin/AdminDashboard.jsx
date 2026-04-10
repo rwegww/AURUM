@@ -36,7 +36,7 @@ const AdminDashboard = () => {
     { title: "Bài Học", value: stats.totalLessons, icon: "📚", color: "bg-blue-50 text-blue-600", link: "/admin/lessons" },
     { title: "Học Sinh", value: stats.totalUsers, icon: "👤", color: "bg-green-50 text-green-600", link: "/admin/users" },
     { title: "Phản Hồi", value: stats.unreadFeedback, icon: "💬", color: "bg-orange-50 text-orange-600", link: "/admin/feedback" },
-    { title: "Tổng Kinh Nghiệm", value: stats.totalXP?.toLocaleString(), icon: "✨", color: "bg-yellow-50 text-yellow-600", link: "/admin/users" },
+
   ];
 
   return (
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
         <header className="mb-12">
           <div className="flex items-center gap-3 mb-2">
             <span className="px-3 py-1 bg-red-100 text-red-600 text-[10px] font-bold rounded-full uppercase tracking-wider">
-              Control Panel
+              Bảng Điều Khiển
             </span>
           </div>
           <h1 className="text-4xl font-bold text-viet-text tracking-tight">
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
           <p className="text-viet-text-light mt-2 font-medium">Hệ thống quản trị nội dung Chemistry Odyssey.</p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {statCards.map((card, i) => (
             <motion.div
               key={i}
@@ -103,16 +103,16 @@ const AdminDashboard = () => {
              <h2 className="text-xl font-bold text-viet-text mb-6">Trạng thái hệ thống</h2>
              <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">API Status</span>
-                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ONLINE</span>
+                   <span className="text-sm font-bold text-viet-text-light">Trạng thái API</span>
+                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ĐANG HOẠT ĐỘNG</span>
                 </div>
                 <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">DB Latency</span>
+                   <span className="text-sm font-bold text-viet-text-light">Độ trễ DB</span>
                    <span className="text-sm font-black text-viet-text">~42ms</span>
                 </div>
                 <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">Cloudinary</span>
-                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">CONNECTED</span>
+                   <span className="text-sm font-bold text-viet-text-light">Dịch vụ Media</span>
+                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ĐÃ KẾT NỐI</span>
                 </div>
              </div>
           </aside>

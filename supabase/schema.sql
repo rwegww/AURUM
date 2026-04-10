@@ -1,4 +1,3 @@
--- Create users table (public profile)
 CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY, -- Changed from UUID to TEXT for Firebase UID compatibility
     username TEXT UNIQUE NOT NULL,
@@ -8,16 +7,30 @@ CREATE TABLE IF NOT EXISTS users (
     xp INTEGER DEFAULT 0,
     level INTEGER DEFAULT 1,
     inventory JSONB DEFAULT '{"ingredients": [], "craftedItems": []}',
-    unlocked_lessons TEXT[] DEFAULT '{}',
-    unlocked_chemicals TEXT[] DEFAULT '{}', -- List of chemical formulas unlocked
+    avatar_seed TEXT, -- For student avatars
+    arena_stats JSONB DEFAULT '{"total": 0, "wins": 0, "losses": 0, "points": 0}',
+    arena_avatar JSONB DEFAULT '{"seed": "Chem Master", "aura": "#a855f7"}',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Central Hub: Grade Levels (Khối lớp)
+CREATE TABLE IF NOT EXISTS grade_levels (
+    id INTEGER PRIMARY KEY, -- 8, 9, 10, 11
+    name TEXT NOT NULL,      -- 'Khối 8', etc.
+    description TEXT
+);
+
+-- Seed Grades
+INSERT INTO grade_levels (id, name) VALUES 
+(8, 'Khối 8'), (9, 'Khối 9'), (10, 'Khối 10'), (11, 'Khối 11'), (12, 'Khối 12')
+ON CONFLICT (id) DO NOTHING;
+
+
 -- Create lessons table
 CREATE TABLE IF NOT EXISTS lessons (
     id TEXT PRIMARY KEY,
-    class_id INTEGER NOT NULL,
+    class_id INTEGER NOT NULL REFERENCES grade_levels(id) ON DELETE CASCADE,
     program_id TEXT DEFAULT 'ketnoi',
     title TEXT NOT NULL,
     chapter TEXT,
@@ -102,13 +115,15 @@ CREATE TABLE IF NOT EXISTS periodic_elements (
     color_hex TEXT,
     electron_configuration TEXT,
     is_discovered_by_default BOOLEAN DEFAULT false,
+    grade_level INTEGER REFERENCES grade_levels(id) ON DELETE CASCADE, -- Link to relevant grade
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Create arena questions bank
 CREATE TABLE IF NOT EXISTS arena_questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    grade_level INTEGER NOT NULL DEFAULT 8,
+    grade_level INTEGER NOT NULL DEFAULT 8 REFERENCES grade_levels(id) ON DELETE CASCADE,
     difficulty TEXT DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard', 'super', 'auto')),
     question TEXT NOT NULL,
     options JSONB NOT NULL DEFAULT '[]', -- e.g., ["Oxi", "Hidro", "Cacbon", "Nito"]
@@ -159,7 +174,8 @@ CREATE TABLE IF NOT EXISTS lab_reactions (
     equation TEXT NOT NULL,
     reactants JSONB NOT NULL, -- [{formula, coeff, name}]
     products JSONB NOT NULL,  -- [{formula, coeff, name}]
-    grade_level INTEGER,
+    grade_level INTEGER REFERENCES grade_levels(id) ON DELETE CASCADE,
+    lesson_id TEXT REFERENCES lessons(id) ON DELETE SET NULL, -- Link to specific lesson
     category TEXT,
     conditions TEXT,
     observation TEXT,
@@ -170,6 +186,17 @@ CREATE TABLE IF NOT EXISTS lab_reactions (
     safety_warning TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Bridge Table: Reaction Ingredients (ERD Connectivity)
+-- This creates a physical line between a chemical and a reaction in diagrams
+CREATE TABLE IF NOT EXISTS reaction_ingredients (
+    reaction_id TEXT REFERENCES lab_reactions(id) ON DELETE CASCADE,
+    chemical_id UUID REFERENCES lab_chemicals(id) ON DELETE CASCADE,
+    role TEXT CHECK (role IN ('reactant', 'product', 'catalyst')),
+    coeff INTEGER DEFAULT 1,
+    PRIMARY KEY (reaction_id, chemical_id, role)
+);
+
 
 -- Enable RLS
 ALTER TABLE lab_chemicals ENABLE ROW LEVEL SECURITY;
@@ -271,11 +298,13 @@ CREATE TABLE IF NOT EXISTS balancing_questions (
     answer JSONB NOT NULL,       -- [2, 1, 2]
     difficulty TEXT CHECK (difficulty IN ('easy', 'medium', 'hard')),
     category TEXT,               -- "Hóa hợp", "Thế", "Oxi hóa khử"
-    grade_level INTEGER DEFAULT 8,
+    grade_level INTEGER DEFAULT 8 REFERENCES grade_levels(id) ON DELETE CASCADE,
+    lesson_id TEXT REFERENCES lessons(id) ON DELETE SET NULL, -- Link to specific lesson
     equation_string TEXT,        -- "2H2 + O2 -> 2H2O"
     node_id INTEGER NOT NULL,    -- Maps to a specific Skill Tree node
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- User Progress for Balancing Roadmap
 CREATE TABLE IF NOT EXISTS user_balancing_progress (
@@ -312,7 +341,7 @@ CREATE POLICY "Users can update own balancing progress" ON user_balancing_progre
 CREATE TABLE IF NOT EXISTS classes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    grade_level INTEGER NOT NULL,
+    grade_level INTEGER NOT NULL REFERENCES grade_levels(id) ON DELETE CASCADE,
     teacher_id TEXT REFERENCES users(id) ON DELETE CASCADE,
     description TEXT,
     code TEXT UNIQUE NOT NULL, -- Join code for students
@@ -337,6 +366,7 @@ CREATE TABLE IF NOT EXISTS class_posts (
     media_url TEXT,
     deadline TIMESTAMP WITH TIME ZONE,
     target_student_id TEXT REFERENCES users(id) ON DELETE CASCADE, -- If null, it's for everyone
+    questions JSONB DEFAULT '[]', -- Structured questions for the assignment
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -359,6 +389,7 @@ CREATE TABLE IF NOT EXISTS class_assignment_submissions (
     status TEXT DEFAULT 'submitted' CHECK (status IN ('submitted', 'graded')),
     score NUMERIC,
     feedback TEXT,
+    answers JSONB DEFAULT '[]', -- Student's answers to structured questions
     submitted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(post_id, student_id)
 );
@@ -397,3 +428,94 @@ DROP POLICY IF EXISTS "Allow students to insert submissions" ON class_assignment
 CREATE POLICY "Allow students to insert submissions" ON class_assignment_submissions FOR INSERT WITH CHECK (true);
 DROP POLICY IF EXISTS "Allow teachers to update submissions" ON class_assignment_submissions;
 CREATE POLICY "Allow teachers to update submissions" ON class_assignment_submissions FOR UPDATE USING (true);
+
+-- =========================================================
+-- DISCUSSION & NOTES MODULE
+-- =========================================================
+
+-- Lesson Discussions (Comments)
+CREATE TABLE IF NOT EXISTS lesson_discussions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lesson_id TEXT REFERENCES lessons(id) ON DELETE CASCADE,
+    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    parent_id UUID REFERENCES lesson_discussions(id) ON DELETE CASCADE,
+    likes INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- User Private Notes
+CREATE TABLE IF NOT EXISTS user_notes (
+    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    lesson_id TEXT REFERENCES lessons(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, lesson_id)
+);
+
+-- =========================================================
+-- USER PROGRESS JUNCTION TABLES (NORMALIZATION)
+-- =========================================================
+
+-- Track which lessons each student has unlocked/completed
+CREATE TABLE IF NOT EXISTS user_unlocked_lessons (
+    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    lesson_id TEXT REFERENCES lessons(id) ON DELETE CASCADE,
+    unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, lesson_id)
+);
+
+-- Track which chemical formulas each student has discovered
+CREATE TABLE IF NOT EXISTS user_unlocked_chemicals (
+    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    chemical_formula TEXT NOT NULL, -- Logical link to lab_chemicals or simple formula
+    unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, chemical_formula)
+);
+
+
+-- =========================================================
+-- MISSION & ACHIEVEMENT SYSTEM
+-- =========================================================
+
+-- Missions (Global List)
+CREATE TABLE IF NOT EXISTS missions (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    type TEXT CHECK (type IN ('daily', 'achievement')),
+    action_type TEXT NOT NULL, 
+    target_count INTEGER NOT NULL,
+    xp_reward INTEGER DEFAULT 100,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- User Mission Progress (Join Table)
+CREATE TABLE IF NOT EXISTS user_missions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
+    mission_id TEXT REFERENCES missions(id) ON DELETE CASCADE,
+    current_count INTEGER DEFAULT 0,
+    is_completed BOOLEAN DEFAULT FALSE,
+    is_claimed BOOLEAN DEFAULT FALSE,
+    last_reset_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, mission_id)
+);
+
+-- =========================================================
+-- PERFORMANCE INDEXES
+-- =========================================================
+
+CREATE INDEX IF NOT EXISTS idx_lessons_grade ON lessons(class_id);
+CREATE INDEX IF NOT EXISTS idx_lessons_program ON lessons(program_id);
+CREATE INDEX IF NOT EXISTS idx_feedback_user ON feedback(user_id);
+CREATE INDEX IF NOT EXISTS idx_discussions_lesson ON lesson_discussions(lesson_id);
+CREATE INDEX IF NOT EXISTS idx_user_missions_user ON user_missions(user_id);
+CREATE INDEX IF NOT EXISTS idx_class_members_student ON class_members(student_id);
+CREATE INDEX IF NOT EXISTS idx_class_posts_class ON class_posts(class_id);
+CREATE INDEX IF NOT EXISTS idx_submissions_post ON class_assignment_submissions(post_id);
+CREATE INDEX IF NOT EXISTS idx_periodic_grade ON periodic_elements(grade_level);
+CREATE INDEX IF NOT EXISTS idx_reactions_lesson ON lab_reactions(lesson_id);
+CREATE INDEX IF NOT EXISTS idx_balancing_lesson ON balancing_questions(lesson_id);
+CREATE INDEX IF NOT EXISTS idx_reaction_ingredients_chem ON reaction_ingredients(chemical_id);

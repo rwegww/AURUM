@@ -112,7 +112,7 @@ const GradeJourney = () => {
             >
                <div className="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-[32px] p-8 text-white shadow-xl overflow-hidden relative group">
                   <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
-                     <span className="text-[120px] font-black italic">TEST</span>
+                     <span className="text-[120px] font-black italic">KIỂM TRA</span>
                   </div>
                   <div className="relative z-10">
                      <span className="px-3 py-1 bg-white/20 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/30">Hành Trình Học Vượt</span>
@@ -164,7 +164,7 @@ const GradeJourney = () => {
                     >
                       <div className={`viet-card p-6 w-full max-w-[280px] transition-all border-2 bg-white ${isLocked ? 'border-gray-200' : 'hover:scale-105 cursor-pointer hover:border-viet-green/40'}`}>
                          <div className="flex justify-between items-start mb-2">
-                           <h4 className="text-[10px] font-black text-viet-green uppercase tracking-widest">Stage {index + 1}</h4>
+                           <h4 className="text-[10px] font-black text-viet-green uppercase tracking-widest">Giai đoạn {index + 1}</h4>
                            {isLocked && <span className="text-gray-400">🔒</span>}
                          </div>
                          <h3 className={`text-[14px] font-bold leading-tight transition-colors ${isLocked ? 'text-gray-400' : 'text-viet-text group-hover:text-viet-green'}`}>
@@ -215,12 +215,12 @@ const GradeJourney = () => {
                 {/* Book Container */}
                 <div className="relative w-24 h-24 bg-white rounded-2xl border-4 border-viet-green shadow-2xl flex flex-col items-center justify-center overflow-hidden transition-transform group-hover:rotate-6">
                    <div className="text-5xl">📖</div>
-                   <div className="absolute bottom-1 w-full text-center text-[10px] font-black text-viet-green/40 uppercase tracking-widest">Guide</div>
+                   <div className="absolute bottom-1 w-full text-center text-[10px] font-black text-viet-green/40 uppercase tracking-widest">Cẩm nang</div>
                 </div>
 
                 {/* Badge */}
                 <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg animate-bounce">
-                  NEW
+                  MỚI
                 </div>
              </motion.button>
              

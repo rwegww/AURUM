@@ -77,6 +77,17 @@ router.get('/users', adminOnly, async (req, res) => {
   }
 });
 
+// GET /api/admin/users/:id - Get single user detail
+router.get('/users/:id', adminOnly, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'Không tìm thấy học sinh' });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi lấy thông tin học sinh', error: err.message });
+  }
+});
+
 // GET /api/admin/feedback - List all feedbacks
 router.get('/feedback', adminOnly, async (req, res) => {
   try {
@@ -142,6 +153,40 @@ router.patch('/feedback/:id', adminOnly, async (req, res) => {
     res.json({ message: 'Đã giải quyết phản hồi' });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật phản hồi', error: err.message });
+  }
+});
+
+// ==========================================
+// LESSON MANAGEMENT
+// ==========================================
+
+// POST /api/admin/lessons - Create new lesson
+router.post('/lessons', adminOnly, async (req, res) => {
+  try {
+    const lesson = await Lesson.create(req.body);
+    res.status(201).json(lesson);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi tạo bài học', error: err.message });
+  }
+});
+
+// PUT /api/admin/lessons/:id - Update lesson
+router.put('/lessons/:id', adminOnly, async (req, res) => {
+  try {
+    const lesson = await Lesson.update(req.params.id, req.body);
+    res.json(lesson);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi cập nhật bài học', error: err.message });
+  }
+});
+
+// DELETE /api/admin/lessons/:id - Delete lesson
+router.delete('/lessons/:id', adminOnly, async (req, res) => {
+  try {
+    await Lesson.delete(req.params.id);
+    res.json({ message: 'Đã xóa bài học thành công' });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi xóa bài học', error: err.message });
   }
 });
 

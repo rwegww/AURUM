@@ -14,7 +14,8 @@ const auth = async (req, res, next) => {
     let userId;
     let user;
 
-    const { data: { user: sbUser }, error: sbError } = await supabase.auth.getUser(token);
+    const { data, error: sbError } = await supabase.auth.getUser(token);
+    const sbUser = data?.user;
     
     if (sbUser && !sbError) {
       userId = sbUser.id;
@@ -42,8 +43,11 @@ const auth = async (req, res, next) => {
 // Get all classes for a teacher or student
 router.get('/', auth, async (req, res) => {
   try {
-    const { role, id } = req.user; // Assuming authMiddleware sets req.user
-    let query = supabase.from('classes').select('*, teacher:teacher_id(username)');
+    const { role, id } = req.user;
+    
+    // Select class properties and count members
+    let query = supabase.from('classes')
+      .select('*, teacher:teacher_id(username), student_count:class_members(count)');
 
     if (role === 'teacher' || role === 'admin') {
       query = query.eq('teacher_id', id);
@@ -56,7 +60,14 @@ router.get('/', auth, async (req, res) => {
 
     const { data, error } = await query;
     if (error) throw error;
-    res.json(data);
+    
+    // Format response to flatten student_count
+    const formattedData = data.map(cls => ({
+        ...cls,
+        student_count: cls.student_count?.[0]?.count || 0
+    }));
+
+    res.json(formattedData);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -100,6 +111,42 @@ router.get('/stats', auth, async (req, res) => {
     });
 
     res.json(stats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get total summary for teacher dashboard
+router.get('/teacher-summary', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+       return res.status(403).json({ error: 'Chỉ dành cho giáo viên' });
+    }
+
+    // 1. Get all class IDs for this teacher
+    const { data: classes } = await supabase.from('classes').select('id').eq('teacher_id', userId);
+    const classIds = classes?.map(c => c.id) || [];
+
+    if (classIds.length === 0) {
+      return res.json({ total_students: 0, active_assignments: 0 });
+    }
+
+    // 2. Count unique students
+    const { data: members } = await supabase.from('class_members').select('student_id').in('class_id', classIds);
+    const uniqueStudents = new Set(members?.map(m => m.student_id));
+
+    // 3. Count active assignments
+    const { count: assignmentCount } = await supabase
+      .from('class_posts')
+      .select('*', { count: 'exact', head: true })
+      .in('class_id', classIds)
+      .eq('type', 'assignment');
+
+    res.json({
+      total_students: uniqueStudents.size,
+      active_assignments: assignmentCount || 0
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -192,18 +239,26 @@ router.get('/:id/posts', auth, async (req, res) => {
 
     let { data: posts, error: postErr } = await query;
     if (postErr) throw postErr;
+    if (!posts) posts = [];
 
     // For students, check if each assignment is completed
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      const { data: submissions } = await supabase
+      const { data: submissions, error: subErr } = await supabase
         .from('class_assignment_submissions')
-        .select('post_id')
+        .select('post_id, score, answers, status')
         .eq('student_id', req.user.id);
       
-      const submittedPostIds = submissions?.map(s => s.post_id) || [];
+      if (subErr) console.error('Submissions fetch error:', subErr);
+
+      const submissionMap = {};
+      (submissions || []).forEach(s => {
+        submissionMap[s.post_id] = s;
+      });
+
       posts = posts.map(p => ({
         ...p,
-        is_completed: p.type === 'assignment' && submittedPostIds.includes(p.id)
+        is_completed: p.type === 'assignment' && !!submissionMap[p.id],
+        user_submission: p.type === 'assignment' ? submissionMap[p.id] : null
       }));
     }
 
@@ -241,7 +296,8 @@ router.post('/:id/posts', auth, async (req, res) => {
       content,
       media_url: media_url || null,
       deadline: deadline || null,
-      target_student_id: target_student_id || null
+      target_student_id: target_student_id || null,
+      questions: req.body.questions || []
     };
 
     const { data, error } = await supabase
@@ -353,11 +409,18 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 router.post('/assignments/:postId/submit', auth, async (req, res) => {
   try {
     const { postId } = req.params;
+    const { answers, score } = req.body;
     const student_id = req.user.id;
 
     const { data, error } = await supabase
       .from('class_assignment_submissions')
-      .upsert([{ post_id: postId, student_id, status: 'submitted' }], { onConflict: 'post_id, student_id' })
+      .upsert([{ 
+        post_id: postId, 
+        student_id, 
+        status: score !== undefined ? 'graded' : 'submitted',
+        answers: answers || [],
+        score: score
+      }], { onConflict: 'post_id, student_id' })
       .select()
       .single();
 
