@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ContactInfo = ({ icon, label, value }) => (
   <div className="flex items-center gap-6 p-6 bg-white rounded-3xl border border-viet-border hover:border-viet-green/20 transition-all shadow-sm">
@@ -14,6 +15,7 @@ const ContactInfo = ({ icon, label, value }) => (
 );
 
 const Contact = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
 
@@ -37,19 +39,22 @@ const Contact = () => {
                 whileInView={{ opacity: 1 }}
                 className="text-viet-green font-black text-[13px] uppercase tracking-[4px] mb-4 block"
               >
-                Kết nối với chúng tôi
+                {t('contact.badge')}
               </motion.span>
-              <h1 className="text-4xl md:text-5xl font-black text-viet-text mb-6">Liên hệ với <br/> Đội ngũ sáng lập</h1>
+              <h1 className="text-4xl md:text-5xl font-black text-viet-text mb-6">
+                <Trans i18nKey="contact.title">
+                  Liên hệ với <br/> Đội ngũ sáng lập
+                </Trans>
+              </h1>
               <p className="text-[16px] text-viet-text-light font-medium leading-relaxed max-w-lg">
-                Chúng tôi luôn sẵn lòng lắng nghe ý kiến đóng góp, phản hồi hoặc yêu cầu hợp tác từ bạn. 
-                Đừng ngần ngại liên hệ qua các kênh chính thức dưới đây.
+                {t('contact.description')}
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <ContactInfo icon="📞" label="Hotline" value="0334 681 752" />
+              <ContactInfo icon="📞" label={t('contact.info.hotline')} value="0334 681 752" />
               <a href="https://maps.app.goo.gl/6Xye2dPzwe4GqhjX9" target="_blank" rel="noopener noreferrer">
-                <ContactInfo icon="📍" label="Địa chỉ" value="Xem trên Google Maps →" />
+                <ContactInfo icon="📍" label={t('contact.info.address')} value={t('contact.info.google_maps')} />
               </a>
             </div>
 
@@ -74,33 +79,33 @@ const Contact = () => {
                whileInView={{ opacity: 1, x: 0 }}
                className="bg-white rounded-[40px] p-10 shadow-2xl border border-viet-border sticky top-[150px]"
              >
-                <h2 className="text-2xl font-black text-viet-text mb-8">Gửi tin nhắn cho bạn</h2>
+                <h2 className="text-2xl font-black text-viet-text mb-8">{t('contact.form.title')}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
                    <div>
-                      <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">Tên của bạn</label>
+                      <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">{t('contact.form.name_label')}</label>
                       <input 
                         type="text" 
                         required
                         className="w-full px-6 py-4 bg-[#f8f9fa] border border-viet-border rounded-2xl outline-none focus:border-viet-green transition-all font-medium text-[15px]" 
-                        placeholder="Nhập họ và tên..."
+                        placeholder={t('contact.form.name_placeholder')}
                       />
                    </div>
                    <div>
-                      <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">Email liên hệ</label>
+                      <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">{t('contact.form.email_label')}</label>
                       <input 
                         type="email" 
                         required
                         className="w-full px-6 py-4 bg-[#f8f9fa] border border-viet-border rounded-2xl outline-none focus:border-viet-green transition-all font-medium text-[15px]" 
-                        placeholder="email@example.com"
+                        placeholder={t('contact.form.email_placeholder')}
                       />
                    </div>
                    <div>
-                      <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">Nội dung tin nhắn</label>
+                      <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">{t('contact.form.message_label')}</label>
                       <textarea 
                         required
                         rows={4}
                         className="w-full px-6 py-4 bg-[#f8f9fa] border border-viet-border rounded-2xl outline-none focus:border-viet-green transition-all font-medium text-[15px] resize-none" 
-                        placeholder="Bạn muốn trao đổi điều gì..."
+                        placeholder={t('contact.form.message_placeholder')}
                       ></textarea>
                    </div>
                    <button 
@@ -108,7 +113,7 @@ const Contact = () => {
                      disabled={sent}
                      className={`w-full py-5 rounded-2xl font-black text-[15px] shadow-lg transition-all ${sent ? 'bg-viet-green text-white' : 'bg-viet-text text-white hover:bg-viet-green shadow-viet-text/10'}`}
                    >
-                     {sent ? 'Đã gửi thành công! ✓' : 'Gửi liên hệ ngay'}
+                     {sent ? t('contact.form.success') : t('contact.form.submit')}
                    </button>
                 </form>
              </motion.div>

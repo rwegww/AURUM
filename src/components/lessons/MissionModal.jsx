@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
+  const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [selected, setSelected] = useState(null);
   const [inputValue, setInputValue] = useState("");
@@ -22,10 +24,10 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
       "/assets/images/lab-equipment/graduated-cylinder.png",
       "/assets/images/lab-equipment/erlenmeyer-flask.png"
     ],
-    question: "Đâu là hình ảnh mô tả đúng nhất về 'Cốc thủy tinh' (Beaker)?",
+    question: t('mission_modal.image_selection.fallback_question', { defaultValue: "Đâu là hình ảnh mô tả đúng nhất về 'Cốc thủy tinh' (Beaker)?" }),
     correctAnswer: 0,
-    targetType: "dụng cụ",
-    source: "Tư liệu thực hành"
+    targetType: t('mission_modal.labels.target_type_fallback', { defaultValue: "dụng cụ" }),
+    source: t('mission_modal.source_fallback')
   };
 
   const type = currentChallenge.type || 'multiple-choice';
@@ -83,11 +85,11 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
 
   // Determine header label
   const typeLabels = {
-    'multiple-choice': 'Trắc nghiệm',
-    'image-selection': 'Nhận biết hình ảnh',
-    'fill-in-the-blank': 'Điền đáp án',
-    'drag-drop': 'Sắp xếp',
-    'matching': 'Nối cột A - B'
+    'multiple-choice': t('mission_modal.labels.multiple-choice'),
+    'image-selection': t('mission_modal.labels.image-selection'),
+    'fill-in-the-blank': t('mission_modal.labels.fill-in-the-blank'),
+    'drag-drop': t('mission_modal.labels.drag-drop'),
+    'matching': t('mission_modal.labels.matching')
   };
 
   return (
@@ -115,12 +117,12 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                    {type === 'image-selection' ? '🔍' : '🧭'}
                 </div>
                 <div>
-                   <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">{typeLabels[type] || 'Nhiệm vụ'}</h3>
+                   <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">{typeLabels[type] || t('mission_modal.labels.mission')}</h3>
                    <h2 className="text-xl font-bold text-viet-text line-clamp-1">{lessonTitle}</h2>
                 </div>
              </div>
              <div className="text-right">
-                <div className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">Mục tiêu</div>
+                <div className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">{t('mission_modal.labels.goal')}</div>
                 <div className="text-lg font-black text-viet-green">
                    {currentStep + 1}<span className="text-viet-text-light/30"> / {challenges.length}</span>
                 </div>
@@ -145,7 +147,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                   />
                   <div className="bg-white px-4 py-3 rounded-2xl border border-viet-border text-[14px] font-medium text-viet-text-light relative shadow-sm">
                      <div className="absolute top-4 -left-2 w-4 h-4 bg-white border-l border-b border-viet-border rotate-45" />
-                     {currentChallenge.narrative || "Hãy sử dụng kiến thức của bạn để hoàn thành thử thách này!"}
+                     {currentChallenge.narrative || t('mission_modal.narrative_fallback')}
                   </div>
                </div>
 
@@ -194,7 +196,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                            >
                               <img 
                                 src={imgSrc} 
-                                alt={`Lựa chọn ${imageLabels[i]}`} 
+                                alt={t('mission_modal.image_selection.label_prefix') + imageLabels[i]} 
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 referrerPolicy="no-referrer"
                               />
@@ -239,7 +241,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                       onClick={() => validateAnswer(selected)}
                       className="mt-4 w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 shadow-lg"
                     >
-                      Xác nhận lựa chọn {imageLabels[selected]} ➔
+                      {t('mission_modal.image_selection.confirm', { label: imageLabels[selected] })}
                     </motion.button>
                   )}
 
@@ -270,7 +272,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                          type="text"
                          value={inputValue}
                          onChange={(e) => setInputValue(e.target.value)}
-                         placeholder={currentChallenge.placeholder || "Gõ câu trả lời..."}
+                         placeholder={currentChallenge.placeholder || t('mission_modal.fill_blank.placeholder')}
                          className={`w-full px-6 py-4 rounded-2xl border-2 text-center text-[15px] font-bold outline-none transition-all
                            ${isCorrect === true ? 'border-viet-green bg-viet-green/5 text-viet-green' : 
                              isCorrect === false ? 'border-red-500 bg-red-50 text-red-500' : 'border-viet-border focus:border-viet-green'}
@@ -282,7 +284,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                          disabled={!inputValue || isCorrect !== null}
                          className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50"
                        >
-                         Xác nhận
+                         {t('mission_modal.fill_blank.confirm')}
                        </button>
                     </div>
                   )}
@@ -290,7 +292,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                   {/* ---- DRAG & DROP ---- */}
                   {type === 'drag-drop' && (
                     <div className="flex flex-col gap-6">
-                       <p className="text-[10px] text-center font-black text-viet-text-light/50 uppercase tracking-widest">Kéo để sắp xếp lại thứ tự đúng</p>
+                       <p className="text-[10px] text-center font-black text-viet-text-light/50 uppercase tracking-widest">{t('mission_modal.drag_drop.instruction')}</p>
                        <Reorder.Group axis="y" values={dragItems} onReorder={setDragItems} className="flex flex-col gap-2">
                           {dragItems.map((item) => (
                             <Reorder.Item 
@@ -309,7 +311,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                          disabled={isCorrect !== null}
                          className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50 shadow-lg"
                        >
-                         Xác nhận thứ tự ➔
+                         {t('mission_modal.drag_drop.confirm')}
                        </button>
                     </div>
                   )}
@@ -320,7 +322,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                        <div className="grid grid-cols-2 gap-8 items-start relative">
                           {/* Column A (Static) */}
                           <div className="flex flex-col gap-2">
-                             <div className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mb-2 px-2">Cột A</div>
+                             <div className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mb-2 px-2">{t('mission_modal.matching.col_a')}</div>
                              {currentChallenge.leftItems.map((item, idx) => (
                                <div key={idx} className="h-[52px] px-6 py-3 bg-viet-green/5 border-2 border-viet-green/10 rounded-xl font-bold text-viet-green text-sm flex items-center shadow-sm">
                                   {item.label}
@@ -330,7 +332,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                           
                           {/* Column B (Draggable) */}
                           <div className="flex flex-col gap-2">
-                             <div className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mb-2 px-2 text-right">Cột B (Kéo thả)</div>
+                             <div className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mb-2 px-2 text-right">{t('mission_modal.matching.instruction')}</div>
                              <Reorder.Group axis="y" values={dragItems} onReorder={setDragItems} className="flex flex-col gap-2">
                                 {dragItems.map((item) => (
                                   <Reorder.Item 
@@ -357,7 +359,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                          disabled={isCorrect !== null}
                          className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50 shadow-xl"
                        >
-                         Xác nhận liên kết ➔
+                         {t('mission_modal.matching.confirm')}
                        </button>
                     </div>
                   )}
@@ -371,18 +373,18 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                onClick={onCancel}
                className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest hover:text-red-500 transition-colors"
              >
-               Hủy lộ trình
+               {t('mission_modal.footer.cancel')}
              </button>
              
              <AnimatePresence>
                {isCorrect === true && (
                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-viet-green font-black text-[12px] uppercase flex items-center gap-2">
-                   <span>✨ Chính xác! {isFinalStep ? "Hoàn thành nhiệm vụ!" : "Tiếp theo..."}</span>
+                   <span>{t('mission_modal.footer.correct', { status: isFinalStep ? t('mission_modal.footer.status_final') : t('mission_modal.footer.status_next') })}</span>
                  </motion.div>
                )}
                {isCorrect === false && (
                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-red-500 font-black text-[12px] uppercase flex items-center gap-2">
-                   <span>❌ Chưa đúng, hãy thử lại!</span>
+                   <span>{t('mission_modal.footer.wrong')}</span>
                  </motion.div>
                )}
              </AnimatePresence>

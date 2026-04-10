@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation, Trans } from 'react-i18next';
 
 const MyClass = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [classes, setClasses] = useState([]);
   const [joinCode, setJoinCode] = useState('');
@@ -91,7 +93,7 @@ const MyClass = () => {
       });
       
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Lỗi tham gia lớp');
+      if (!res.ok) throw new Error(data.error || t('common.error_joining_class', { defaultValue: 'Lỗi tham gia lớp' }));
       
       setJoinCode('');
       setError('');
@@ -142,9 +144,9 @@ const MyClass = () => {
     await handleCompleteAssignment(activeQuiz.id, quizAnswers, score);
     setIsSubmittingQuiz(false);
     if (hasEssay && score !== null) {
-      alert(`Phần trắc nghiệm: ${score}/10 điểm.\nPhần tự luận sẽ được giáo viên chấm riêng.`);
+      alert(t('my_class.quiz.score_msg', { score }));
     } else if (hasEssay) {
-      alert('Bài tập đã nộp thành công! Giáo viên sẽ chấm bài tự luận của bạn.');
+      alert(t('my_class.quiz.success_msg'));
     }
   };
 
@@ -158,12 +160,13 @@ const MyClass = () => {
   };
 
   const getFileLabel = (url) => {
-    if (!url) return 'Xem tài liệu';
+    if (!url) return t('my_class.feed.assignment.file_Default');
     const lowerUrl = url.toLowerCase();
-    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return 'Mở File PDF';
-    if (lowerUrl.includes('docx') || lowerUrl.includes('word') || lowerUrl.endsWith('.doc')) return 'Mở File Word';
-    if (lowerUrl.includes('xlsx') || lowerUrl.includes('excel') || lowerUrl.endsWith('.xls')) return 'Mở File Excel';
-    return 'Dán đường link';
+    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return t('my_class.feed.assignment.file_PDF');
+    if (lowerUrl.includes('docx') || lowerUrl.includes('word') || lowerUrl.endsWith('.doc')) return t('my_class.feed.assignment.file_Word');
+    if (lowerUrl.includes('xlsx') || lowerUrl.includes('excel') || lowerUrl.endsWith('.xls')) return t('my_class.feed.assignment.file_Excel');
+    if (lowerUrl.startsWith('http')) return t('my_class.feed.assignment.file_Link');
+    return t('my_class.feed.assignment.file_Placeholder');
   };
 
   const getEmbedUrl = (url) => {
@@ -176,10 +179,9 @@ const MyClass = () => {
       return processedUrl;
     }
 
-    // Cloudinary URL cleanup (ensuring extension is present for the viewer)
+    // Cloudinary URL cleanup
     if (url.includes('res.cloudinary.com')) {
       const lowerUrl = url.toLowerCase();
-      // If extension is missing, add it based on what we detected
       if (!lowerUrl.endsWith('.pdf') && !lowerUrl.endsWith('.docx') && !lowerUrl.endsWith('.doc')) {
         if (lowerUrl.includes('/pdf')) processedUrl += '.pdf';
         else if (lowerUrl.includes('word') || lowerUrl.includes('docx')) processedUrl += '.docx';
@@ -193,7 +195,6 @@ const MyClass = () => {
                   lowerProcessedUrl.endsWith('.xlsx') || lowerProcessedUrl.endsWith('.xls') || 
                   lowerProcessedUrl.endsWith('.pptx') || lowerProcessedUrl.endsWith('.ppt');
     
-    // PDFs can usually be displayed directly in iframe
     if (isPdf) return processedUrl;
 
     if (isDoc && !processedUrl.includes('google.com/viewer')) {
@@ -219,14 +220,14 @@ const MyClass = () => {
         body: JSON.stringify({
           type: 'announcement',
           content: privateMessage,
-          target_student_id: selectedClass.teacher_id, // Send specifically to the teacher
+          target_student_id: selectedClass.teacher_id,
         })
       });
 
       if (res.ok) {
         setPrivateMessage('');
         setIsMessageModalOpen(false);
-        selectClass(selectedClass); // Refresh feed
+        selectClass(selectedClass);
       }
     } catch (err) {
       console.error(err);
@@ -254,16 +255,16 @@ const MyClass = () => {
           <div className="w-20 h-20 bg-viet-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <span className="text-4xl text-viet-green">🏫</span>
           </div>
-          <h2 className="text-2xl font-black text-viet-text mb-2 uppercase tracking-tight">Chưa có lớp học</h2>
+          <h2 className="text-2xl font-black text-viet-text mb-2 uppercase tracking-tight">{t('my_class.empty.title')}</h2>
           <p className="text-sm font-medium text-viet-text-light mb-8">
-            Bạn chưa tham gia bất kỳ lớp học nào. Vui lòng nhập mã lớp do giáo viên cung cấp để bắt đầu.
+            {t('my_class.empty.desc')}
           </p>
 
           <form onSubmit={handleJoinClass} className="space-y-4">
             {error && <div className="text-xs font-bold text-red-500 bg-red-50 p-3 rounded-xl">{error}</div>}
             <input 
               type="text" 
-              placeholder="Nhập mã lớp (VD: XYZ1A2)"
+              placeholder={t('my_class.empty.placeholder')}
               value={joinCode}
               onChange={(e) => setJoinCode(e.target.value)}
               className="w-full h-14 bg-slate-50 border-2 border-transparent focus:border-viet-green focus:bg-white rounded-2xl text-center font-black tracking-[4px] text-lg uppercase outline-none transition-all placeholder:tracking-normal placeholder:font-medium"
@@ -272,7 +273,7 @@ const MyClass = () => {
               type="submit"
               className="w-full h-14 bg-viet-green text-white font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              Tham gia ngay
+              {t('my_class.empty.submit')}
             </button>
           </form>
         </motion.div>
@@ -286,7 +287,7 @@ const MyClass = () => {
         
         {/* Lớp Sidebar */}
         <div className="lg:col-span-3 space-y-4">
-          <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">Lớp của bạn</h2>
+          <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">{t('my_class.sidebar.title')}</h2>
           {classes.map(cls => (
             <button
               key={cls.id}
@@ -299,23 +300,23 @@ const MyClass = () => {
             >
               <h3 className={`text-lg font-black leading-tight ${selectedClass?.id === cls.id ? 'text-white' : 'text-viet-text'}`}>{cls.name}</h3>
               <p className={`text-[11px] font-bold uppercase tracking-wider ${selectedClass?.id === cls.id ? 'text-white/80' : 'text-viet-text-light'}`}>
-                GV: {cls.teacher?.username} • Lớp {cls.grade_level}
+                {t('my_class.sidebar.teacher_prefix')} {cls.teacher?.username} • {t('my_class.sidebar.grade_label', { grade: cls.grade_level })}
               </p>
             </button>
           ))}
           
           <div className="pt-4 mt-6 border-t border-viet-border">
-            <p className="text-[10px] font-bold text-viet-text-light mb-3 tracking-widest pl-2 uppercase">Tham gia lớp khác</p>
+            <p className="text-[10px] font-bold text-viet-text-light mb-3 tracking-widest pl-2 uppercase">{t('my_class.sidebar.join_other')}</p>
              <form onSubmit={handleJoinClass} className="flex gap-2">
                <input 
                   type="text" 
-                  placeholder="Mã lớp"
+                  placeholder={t('my_class.sidebar.code_placeholder')}
                   value={joinCode}
                   onChange={(e) => setJoinCode(e.target.value)}
                   className="flex-1 h-11 bg-white border border-viet-border rounded-xl px-4 text-sm font-bold uppercase outline-none focus:border-viet-green transition-colors"
                 />
                 <button type="submit" className="h-11 px-4 bg-viet-text text-white rounded-xl font-black text-xs hover:bg-black transition-colors">
-                  VÀO
+                  {t('my_class.sidebar.join_btn')}
                 </button>
              </form>
              {error && <p className="text-[10px] text-red-500 font-bold mt-2 pl-2">{error}</p>}
@@ -327,18 +328,18 @@ const MyClass = () => {
           <div className="lg:col-span-6 space-y-6">
             <header className="bg-white p-8 rounded-[32px] border border-viet-border flex flex-col gap-2 relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-               <span className="px-3 py-1 bg-viet-green/10 text-viet-green text-[10px] font-black tracking-widest uppercase rounded-lg w-max">HOẠT ĐỘNG CHUNG</span>
+               <span className="px-3 py-1 bg-viet-green/10 text-viet-green text-[10px] font-black tracking-widest uppercase rounded-lg w-max">{t('my_class.header.badge')}</span>
                <h1 className="text-3xl font-black text-viet-text uppercase tracking-tight">{selectedClass.name}</h1>
                <p className="text-sm font-medium text-viet-text-light">{selectedClass.description}</p>
             </header>
 
             <div className="space-y-6">
-              <h2 className="text-sm font-black text-viet-text uppercase tracking-widest">Bảng tin lớp học</h2>
+              <h2 className="text-sm font-black text-viet-text uppercase tracking-widest">{t('my_class.feed.title')}</h2>
               
               {posts.length === 0 ? (
                 <div className="bg-white border text-center border-viet-border border-dashed p-12 rounded-[32px]">
                    <span className="text-4xl block mb-2 opacity-30">📭</span>
-                   <p className="text-viet-text-light font-bold text-sm">Chưa có thông báo hoặc bài học nào từ giáo viên.</p>
+                   <p className="text-viet-text-light font-bold text-sm">{t('my_class.feed.empty')}</p>
                 </div>
               ) : (
                 posts.map((post) => (
@@ -353,15 +354,15 @@ const MyClass = () => {
                            <img src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${post.author?.username}`} alt="Avatar" className="w-full h-full object-cover" />
                         </div>
                         <div>
-                           <p className="text-sm font-black text-viet-text">{post.author?.username === user?.username ? "Bạn" : post.author?.username}</p>
+                           <p className="text-sm font-black text-viet-text">{post.author?.username === user?.username ? t('my_class.feed.author_you') : post.author?.username}</p>
                            <p className="text-[10px] font-bold text-viet-text-light uppercase">{new Date(post.created_at).toLocaleString()}</p>
                         </div>
                         <div className="ml-auto flex items-center gap-2">
-                           {post.target && <span className="px-2 py-1 bg-purple-50 text-purple-600 font-black text-[10px] rounded-lg tracking-widest uppercase flex items-center gap-1">🔒 TIN NHẮN RIÊNG</span>}
-                           {post.author_id === user?.id && post.target_student_id && <span className="px-2 py-1 bg-slate-100 text-viet-text-light font-black text-[10px] rounded-lg tracking-widest uppercase">Đã gửi cho GV</span>}
-                           {post.type === 'video' && <span className="px-2 py-1 bg-red-50 text-red-500 font-black text-[10px] rounded-lg tracking-widest uppercase">VIDEO</span>}
-                           {post.type === 'assignment' && <span className="px-2 py-1 bg-blue-50 text-blue-500 font-black text-[10px] rounded-lg tracking-widest uppercase">BÀI TẬP</span>}
-                           {post.type === 'announcement' && !post.target && <span className="px-2 py-1 bg-orange-50 text-orange-500 font-black text-[10px] rounded-lg tracking-widest uppercase">THÔNG BÁO</span>}
+                           {post.target && <span className="px-2 py-1 bg-purple-50 text-purple-600 font-black text-[10px] rounded-lg tracking-widest uppercase flex items-center gap-1">{t('my_class.feed.private_badge')}</span>}
+                           {post.author_id === user?.id && post.target_student_id && <span className="px-2 py-1 bg-slate-100 text-viet-text-light font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.sent_to_teacher')}</span>}
+                           {post.type === 'video' && <span className="px-2 py-1 bg-red-50 text-red-500 font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.type_video')}</span>}
+                           {post.type === 'assignment' && <span className="px-2 py-1 bg-blue-50 text-blue-500 font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.type_assignment')}</span>}
+                           {post.type === 'announcement' && !post.target && <span className="px-2 py-1 bg-orange-50 text-orange-500 font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.type_announcement')}</span>}
                         </div>
                      </div>
                      
@@ -381,14 +382,13 @@ const MyClass = () => {
 
                      {post.deadline && (
                         <div className="mt-2 py-3 px-4 bg-red-50 border border-red-100 rounded-xl flex items-center justify-between">
-                           <span className="text-red-500 text-[11px] font-black uppercase tracking-widest">Hạn nộp bài</span>
+                           <span className="text-red-500 text-[11px] font-black uppercase tracking-widest">{t('my_class.feed.deadline')}</span>
                            <span className="text-red-600 font-bold text-sm bg-white px-3 py-1 rounded-lg border border-red-100 shadow-sm">{new Date(post.deadline).toLocaleString()}</span>
                         </div>
                      )}
 
                      {post.type === 'assignment' && (
                         <div className="mt-2 flex flex-col gap-2">
-                          {/* Only show file link if NO interactive questions exist */}
                           {post.media_url && (!post.questions || post.questions.length === 0) && (
                            <button 
                                onClick={() => {
@@ -408,13 +408,13 @@ const MyClass = () => {
                           {post.is_completed ? (
                             <div className="flex flex-col gap-2">
                                 <div className="w-full py-4 bg-emerald-50 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
-                                  <span>✓</span> Đã hoàn thành bài tập
+                                  <span>✓</span> {t('my_class.feed.assignment.completed')}
                                 </div>
                                 {post.user_submission?.score !== null && post.user_submission?.score !== undefined && (
                                    <div className="flex items-center justify-between p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-sm">
                                       <div className="flex flex-col">
-                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Kết quả của bạn:</span>
-                                         <span className="text-lg font-black text-viet-text uppercase tracking-tight">Trực tuyến</span>
+                                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{t('my_class.feed.assignment.result_label')}</span>
+                                         <span className="text-lg font-black text-viet-text uppercase tracking-tight">{t('my_class.feed.assignment.online_label')}</span>
                                       </div>
                                       <div className="flex items-center gap-2 bg-viet-green text-white px-4 py-2 rounded-xl shadow-lg shadow-viet-green/20">
                                          <span className="text-xl font-black">{post.user_submission.score}</span>
@@ -431,14 +431,14 @@ const MyClass = () => {
                               }}
                               className="w-full py-4 bg-viet-green text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all border-b-4 border-emerald-700"
                             >
-                              🚀 Làm bài trực tuyến ({post.questions.length} câu)
+                              🚀 {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
                             </button>
                           ) : (
                             <button 
                               onClick={() => handleCompleteAssignment(post.id)}
                               className="w-full py-3 bg-viet-green text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all"
                             >
-                              Xác nhận đã hoàn thành bài tập
+                              {t('my_class.feed.assignment.confirm_btn')}
                             </button>
                           )}
                         </div>
@@ -455,12 +455,12 @@ const MyClass = () => {
           <div className="lg:col-span-3 space-y-6">
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span>📅</span> Lịch học sắp tới
+                 <span>📅</span> {t('my_class.schedules.title')}
                </h3>
                
                <div className="space-y-3">
                  {schedules.length === 0 ? (
-                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">Không có lịch học nào</p>
+                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.schedules.empty')}</p>
                  ) : (
                    schedules.map(sch => (
                      <div key={sch.id} className="p-3 border border-viet-border rounded-xl hover:border-viet-green transition-colors group">
@@ -470,7 +470,7 @@ const MyClass = () => {
                        </p>
                        {sch.meet_url && (
                           <a href={sch.meet_url} target="_blank" rel="noreferrer" className="block w-full py-2 bg-viet-text text-white text-[10px] font-black uppercase text-center rounded-lg mt-1 group-hover:bg-viet-green transition-colors">
-                            Tham gia Meet
+                            {t('my_class.schedules.join_meet')}
                           </a>
                        )}
                      </div>
@@ -481,13 +481,13 @@ const MyClass = () => {
 
             <div className="bg-gradient-to-br from-viet-green to-emerald-600 p-6 rounded-[32px] shadow-lg shadow-viet-green/20 relative overflow-hidden">
                <div className="relative z-10">
-                  <h3 className="text-white font-black text-lg mb-2">Bạn cần hỗ trợ?</h3>
-                  <p className="text-white/80 text-xs font-medium mb-4">Liên hệ riêng với giáo viên qua hệ thống để được giải đáp bài tập.</p>
+                  <h3 className="text-white font-black text-lg mb-2">{t('my_class.support.title')}</h3>
+                  <p className="text-white/80 text-xs font-medium mb-4">{t('my_class.support.desc')}</p>
                   <button 
                     onClick={() => setIsMessageModalOpen(true)}
                     className="w-full bg-white text-viet-green font-black text-xs uppercase tracking-widest py-3 rounded-xl shadow-sm hover:scale-[1.02] transition-all"
                   >
-                    Gửi tin nhắn riêng
+                    {t('my_class.support.btn')}
                   </button>
                </div>
                <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">💬</div>
@@ -505,15 +505,15 @@ const MyClass = () => {
                     >
                        <div className="p-6 bg-slate-50 border-b border-viet-border flex justify-between items-center">
                           <div>
-                             <h3 className="text-lg font-black text-viet-text uppercase tracking-tight">Nhắn tin cho Giáo viên</h3>
-                             <p className="text-[10px] font-bold text-viet-green uppercase tracking-widest">Lớp: {selectedClass.name}</p>
+                             <h3 className="text-lg font-black text-viet-text uppercase tracking-tight">{t('my_class.message_modal.title')}</h3>
+                             <p className="text-[10px] font-bold text-viet-green uppercase tracking-widest">{t('my_class.message_modal.class_prefix')} {selectedClass.name}</p>
                           </div>
                           <button onClick={() => setIsMessageModalOpen(false)} className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-viet-text-light transition-colors">✕</button>
                        </div>
                        <form onSubmit={handleSendToTeacher} className="p-6 space-y-4">
                           <textarea 
                              className="w-full h-32 p-4 bg-slate-50 border border-viet-border rounded-2xl outline-none focus:border-viet-green focus:bg-white transition-all text-sm font-medium resize-none shadow-inner"
-                             placeholder="Nhập nội dung thắc mắc hoặc câu hỏi của bạn..."
+                             placeholder={t('my_class.message_modal.placeholder')}
                              value={privateMessage}
                              onChange={(e) => setPrivateMessage(e.target.value)}
                              required
@@ -522,7 +522,7 @@ const MyClass = () => {
                              disabled={sending}
                              className="w-full py-4 bg-viet-green text-white font-black uppercase tracking-widest text-xs rounded-2xl shadow-lg shadow-viet-green/20 flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all disabled:opacity-50"
                           >
-                             {sending ? 'Đang gửi...' : 'Gửi tin nhắn ➔'}
+                             {sending ? t('my_class.message_modal.sending') : t('my_class.message_modal.send_btn')}
                           </button>
                        </form>
                     </motion.div>
@@ -553,7 +553,7 @@ const MyClass = () => {
                            {getFileLabel(viewingAssignment.media_url)}
                         </h3>
                         <p className="text-[10px] font-bold text-viet-text-light uppercase tracking-widest">
-                           Của {viewingAssignment.author?.username} • Hạn nộp: {viewingAssignment.deadline ? new Date(viewingAssignment.deadline).toLocaleString() : 'Không có'}
+                           {t('my_class.viewer.from')} {viewingAssignment.author?.username} • {t('my_class.viewer.deadline')} {viewingAssignment.deadline ? new Date(viewingAssignment.deadline).toLocaleString() : t('my_class.viewer.no_deadline')}
                         </p>
                      </div>
                   </div>
@@ -565,7 +565,7 @@ const MyClass = () => {
                         rel="noreferrer"
                         className="hidden sm:flex px-6 py-3 bg-white border-2 border-slate-200 text-viet-text font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-slate-50 transition-all items-center gap-2"
                      >
-                        <span>📥</span> Tải tệp xuống
+                        <span>📥</span> {t('my_class.viewer.download')}
                      </a>
                      <button 
                         onClick={() => setViewingAssignment(null)} 
@@ -578,7 +578,7 @@ const MyClass = () => {
                   {isIframeLoading && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 z-10 transition-opacity">
                        <div className="w-12 h-12 border-4 border-blue-100 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-                       <p className="text-xs font-black text-slate-400 uppercase tracking-widest animate-pulse">Đang chuẩn bị nội dung...</p>
+                       <p className="text-xs font-black text-slate-400 uppercase tracking-widest animate-pulse">{t('my_class.viewer.loading')}</p>
                     </div>
                   )}
 
@@ -589,7 +589,6 @@ const MyClass = () => {
                     onLoad={() => setIsIframeLoading(false)}
                   />
                   
-                  {/* Overlay help if blocked or empty */}
                   {!isIframeLoading && (
                     <div className="absolute bottom-6 right-6 z-20">
                        <a 
@@ -598,7 +597,7 @@ const MyClass = () => {
                          rel="noreferrer"
                          className="px-6 py-3 bg-white/90 backdrop-blur shadow-xl border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all flex items-center gap-2"
                        >
-                         <span>🔗</span> Mở trong tab mới nếu lỗi
+                         <span>🔗</span> {t('my_class.viewer.tab_fallback')}
                        </a>
                     </div>
                   )}
@@ -610,7 +609,7 @@ const MyClass = () => {
                     target="_blank" 
                     rel="noreferrer"
                     className="flex-1 py-4 bg-viet-text text-white font-black text-[10px] uppercase tracking-widest rounded-xl text-center"
-                  >Tải tệp xuống 📥</a>
+                  >{t('my_class.viewer.download')} 📥</a>
                </div>
             </motion.div>
           </div>
@@ -628,7 +627,7 @@ const MyClass = () => {
             >
               <div className="p-8 bg-slate-50 border-b border-viet-border flex justify-between items-center shrink-0">
                 <div>
-                   <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/10 px-3 py-1 rounded-full mb-2 inline-block">BÀI TẬP TRỰC TUYẾN</span>
+                   <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/10 px-3 py-1 rounded-full mb-2 inline-block">{t('my_class.quiz.badge')}</span>
                    <h3 className="text-2xl font-black text-viet-text uppercase tracking-tight">{activeQuiz.content}</h3>
                 </div>
                 <button onClick={() => setActiveQuiz(null)} className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center text-viet-text-light hover:text-red-500 transition-all font-black text-xl shadow-sm">✕</button>
@@ -673,11 +672,11 @@ const MyClass = () => {
                           <textarea 
                             value={quizAnswers[qIdx] || ''}
                             onChange={(e) => setQuizAnswers({ ...quizAnswers, [qIdx]: e.target.value })}
-                            placeholder="Nhập câu trả lời tự luận của bạn vào đây..."
+                            placeholder={t('my_class.quiz.essay_placeholder')}
                             className="w-full min-h-[160px] p-5 bg-slate-50 border-2 border-slate-100 rounded-[32px] outline-none focus:border-blue-400 focus:bg-white transition-all text-sm font-medium resize-none shadow-inner"
                           />
                           <div className="absolute bottom-4 right-6 text-[10px] font-black text-slate-300 uppercase tracking-widest pointer-events-none">
-                            Phần tự luận
+                            {t('my_class.quiz.essay_badge')}
                           </div>
                         </div>
                       )}
@@ -688,8 +687,8 @@ const MyClass = () => {
 
               <div className="p-8 bg-slate-50 border-t border-viet-border flex items-center justify-between shrink-0">
                 <div className="flex flex-col">
-                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiến độ:</span>
-                   <span className="text-sm font-black text-viet-text uppercase">{Object.keys(quizAnswers).length} / {activeQuiz.questions.length} CÂU ĐÃ LÀM</span>
+                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('my_class.quiz.progress')}</span>
+                   <span className="text-sm font-black text-viet-text uppercase">{t('my_class.quiz.count_done', { done: Object.keys(quizAnswers).length, total: activeQuiz.questions.length })}</span>
                 </div>
                 <button 
                   onClick={handleSubmitQuiz}
@@ -700,7 +699,7 @@ const MyClass = () => {
                     : 'bg-viet-green text-white hover:scale-[1.05] shadow-viet-green/20 active:scale-[0.98]'
                   }`}
                 >
-                  {isSubmittingQuiz ? 'Đang nộp...' : 'Nộp bài ngay ➔'}
+                  {isSubmittingQuiz ? t('my_class.quiz.submitting') : t('my_class.quiz.submit_btn')}
                 </button>
               </div>
             </motion.div>

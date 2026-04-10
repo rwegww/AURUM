@@ -1,7 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) => {
+  const { t } = useTranslation();
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -58,7 +60,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
           className="flex items-center gap-2 text-viet-text-light hover:text-viet-green transition-colors py-1.5 px-3 rounded-lg hover:bg-white/50"
         >
           <span className="text-lg">←</span>
-          <span className="text-[9px] font-black uppercase tracking-widest font-sora">Quay lại</span>
+          <span className="text-[9px] font-black uppercase tracking-widest font-sora">{t('stage_video.back_btn')}</span>
         </button>
 
         <div className="flex flex-col items-center max-w-[60%]">
@@ -72,8 +74,8 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
         </div>
 
         <div className="hidden md:flex items-center gap-2 py-1 px-3 bg-viet-green/5 rounded-full border border-viet-green/10 shrink-0">
-           <span className="text-[8px] font-black text-viet-green/60 uppercase tracking-widest">Status:</span>
-           <span className="text-[9px] font-bold text-viet-text uppercase">{isVideoEnded ? 'Ready' : 'Analyzing'}</span>
+           <span className="text-[8px] font-black text-viet-green/60 uppercase tracking-widest">{t('stage_video.status.label')}</span>
+           <span className="text-[9px] font-bold text-viet-text uppercase">{isVideoEnded ? t('stage_video.status.ready') : t('stage_video.status.analyzing')}</span>
         </div>
 
       </motion.div>
@@ -123,9 +125,9 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
 
          {/* Technical Label Below Video */}
          <div className="absolute -bottom-8 left-10 flex items-center gap-6 opacity-30 select-none">
-            <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">Source: Laboratory Camera 01</span>
+            <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">{t('stage_video.metadata.source')}</span>
             <div className="w-20 h-[1px] bg-viet-text" />
-            <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">Format: 1080p Digital Feed</span>
+            <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">{t('stage_video.metadata.format')}</span>
          </div>
       </div>
 
@@ -150,7 +152,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
           )}
 
           <span className="relative z-10 font-sora">
-            {isVideoEnded ? "Tiếp nhận nhiệm vụ" : "Đang xử lý dữ liệu..."}
+            {isVideoEnded ? t('stage_video.action_btn.ready') : t('stage_video.action_btn.processing')}
           </span>
           <span className={`relative z-10 text-xl transition-all duration-300 ${isVideoEnded ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`}>
             {isVideoEnded ? '🚀' : '⏳'}
@@ -164,8 +166,8 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
              ${isVideoEnded ? 'text-viet-green' : 'text-gray-400'}
            `}>
              {isVideoEnded 
-               ? "Dữ liệu đã sẵn sàng! Chúc Nhà Hóa học thành công." 
-               : "Gợi ý: Theo dõi clip kỹ để chuẩn bị cho thử thách nhé!"}
+               ? t('stage_video.hints.ready') 
+               : t('stage_video.hints.processing')}
            </p>
         </div>
       </motion.div>

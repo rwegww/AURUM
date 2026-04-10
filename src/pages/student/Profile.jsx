@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
+import { useTranslation, Trans } from 'react-i18next';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div 
@@ -18,6 +19,7 @@ const ProfileCard = ({ title, value, icon, color }) => (
 );
 
 const Profile = () => {
+  const { t, i18n } = useTranslation();
   const { user, updateUser } = useAuth();
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSaving, setIsSaving] = useState(false);
@@ -42,8 +44,8 @@ const Profile = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-viet-bg px-6">
         <div className="text-center">
-          <h2 className="text-3xl font-black text-viet-text mb-6">Bạn chưa đăng nhập</h2>
-          <Link to="/login" className="px-10 py-4 bg-viet-green text-white rounded-full font-black text-[15px] shadow-lg shadow-viet-green/20">Đăng nhập để xem hồ sơ</Link>
+          <h2 className="text-3xl font-black text-viet-text mb-6">{t('profile.not_logged_in')}</h2>
+          <Link to="/login" className="px-10 py-4 bg-viet-green text-white rounded-full font-black text-[15px] shadow-lg shadow-viet-green/20">{t('profile.login_to_view')}</Link>
         </div>
       </div>
     );
@@ -70,7 +72,7 @@ const Profile = () => {
                 <button 
                   onClick={handleRandomizeAvatar}
                   className="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-xl hover:scale-110 transition-transform"
-                  title="Đổi nhân vật ngẫu nhiên"
+                  title={t('profile.change_avatar')}
                 >
                   🎲
                 </button>
@@ -79,7 +81,7 @@ const Profile = () => {
                     onClick={handleSaveAvatar}
                     disabled={isSaving}
                     className="w-12 h-12 bg-viet-green text-white rounded-2xl shadow-xl flex items-center justify-center text-xl hover:scale-110 transition-transform disabled:opacity-50"
-                    title="Lưu thay đổi"
+                    title={t('profile.save_changes')}
                   >
                     {isSaving ? '...' : '✓'}
                   </button>
@@ -90,14 +92,18 @@ const Profile = () => {
             <div className="text-center md:text-left">
               <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
                  <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
-                 <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">Học sinh</span>
+                 <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">{t('profile.member_role')}</span>
               </div>
-              <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {new Date(user.createdAt).toLocaleDateString('vi-VN')}</p>
+              <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">
+                <Trans i18nKey="profile.member_since" values={{ date: new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US') }}>
+                   Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {{date}}
+                </Trans>
+              </p>
               
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                   <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
                     <span className="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></span>
-                    <span className="text-[13px] font-bold text-white/80">Đang trực tuyến</span>
+                    <span className="text-[13px] font-bold text-white/80">{t('profile.online_status')}</span>
                   </div>
               </div>
             </div>
@@ -107,25 +113,25 @@ const Profile = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           <ProfileCard 
-            title="Kinh nghiệm (XP)" 
+            title={t('profile.stats.xp')} 
             value={user.xp || 0} 
             color="bg-amber-500" 
             icon={<svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>}
           />
           <ProfileCard 
-            title="Cấp bậc Hóa sư" 
+            title={t('profile.stats.level_title')} 
             value={user.level || 1} 
             color="bg-viet-green" 
             icon={<svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>}
           />
           <ProfileCard 
-            title="Hóa chất đã mở" 
+            title={t('profile.stats.chemicals')} 
             value={user.unlockedChemicals?.length || 0} 
             color="bg-blue-500" 
             icon={<Avatar seed="lab" size={40} className="scale-150" />}
           />
           <ProfileCard 
-            title="Điểm Đấu trường" 
+            title={t('profile.stats.arena_points')} 
             value={user.arenaStats?.points || 0} 
             icon={<Avatar seed="arena" size={40} className="scale-150 rotate-45" />}
             color="bg-purple-500"
@@ -138,9 +144,9 @@ const Profile = () => {
           {/* Unlocked Chemicals */}
           <div className="lg:col-span-2">
             <div className="flex items-center justify-between mb-8">
-               <h3 className="text-2xl font-black text-viet-text">Bộ sưu tập Hóa chất</h3>
+               <h3 className="text-2xl font-black text-viet-text">{t('profile.collection.title')}</h3>
                <span className="px-4 py-1.5 bg-slate-100 rounded-full text-[12px] font-black text-viet-text-light uppercase tracking-widest">
-                 {user.unlockedChemicals?.length || 0} / 118
+                 {t('profile.collection.unlocked_count', { current: user.unlockedChemicals?.length || 0, total: 118 })}
                </span>
             </div>
             
@@ -157,14 +163,14 @@ const Profile = () => {
                      <div className="w-12 h-12 bg-viet-green/10 rounded-2xl flex items-center justify-center">
                         <span className="text-xl font-black text-viet-green">{formula}</span>
                      </div>
-                     <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">Khám phá</span>
+                     <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">{t('profile.collection.status')}</span>
                    </motion.div>
                  ))
                ) : (
                  <div className="col-span-full py-16 text-center bg-white rounded-[40px] border-2 border-dashed border-viet-border flex flex-col items-center gap-6">
                     <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl">🧪</div>
-                    <p className="text-viet-text-light font-medium">Bạn chưa thực hiện phản ứng nào trong phòng Lab.</p>
-                    <Link to="/lab" className="text-viet-green font-black text-sm uppercase tracking-widest hover:underline">Vào phòng Lab ngay →</Link>
+                    <p className="text-viet-text-light font-medium">{t('profile.collection.empty')}</p>
+                    <Link to="/lab" className="text-viet-green font-black text-sm uppercase tracking-widest hover:underline">{t('profile.collection.go_to_lab')}</Link>
                  </div>
                )}
             </div>
@@ -172,25 +178,25 @@ const Profile = () => {
 
           {/* Arena Performance */}
           <div className="space-y-6">
-             <h2 className="text-2xl font-black text-viet-text px-2">Thống kê Đấu Trường</h2>
+             <h2 className="text-2xl font-black text-viet-text px-2">{t('profile.arena_stats.title')}</h2>
              <div className="bg-viet-text text-white rounded-[32px] p-8 shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                 <div className="space-y-6 relative z-10">
                    <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                      <span className="text-white/60 font-bold uppercase text-[11px] tracking-widest">Tổng số trận</span>
+                      <span className="text-white/60 font-bold uppercase text-[11px] tracking-widest">{t('profile.arena_stats.total_matches')}</span>
                       <span className="text-2xl font-black">{user.arenaStats?.total || 0}</span>
                    </div>
                    <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                      <span className="text-white/60 font-bold uppercase text-[11px] tracking-widest">Số trận thắng</span>
+                      <span className="text-white/60 font-bold uppercase text-[11px] tracking-widest">{t('profile.arena_stats.wins')}</span>
                       <span className="text-2xl font-black text-viet-green">{user.arenaStats?.wins || 0}</span>
                    </div>
                    <div className="flex justify-between items-center border-b border-white/10 pb-4">
-                      <span className="text-white/60 font-bold uppercase text-[11px] tracking-widest">Số trận thua</span>
+                      <span className="text-white/60 font-bold uppercase text-[11px] tracking-widest">{t('profile.arena_stats.losses')}</span>
                       <span className="text-2xl font-black text-red-400">{user.arenaStats?.losses || 0}</span>
                    </div>
                    <div className="pt-4">
                       <div className="flex justify-between text-[11px] font-black uppercase tracking-widest text-white/40 mb-3">
-                         <span>Tỉ lệ thắng</span>
+                         <span>{t('profile.arena_stats.win_rate')}</span>
                          <span>{user.arenaStats?.total > 0 ? Math.round((user.arenaStats.wins / user.arenaStats.total) * 100) : 0}%</span>
                       </div>
                       <div className="w-full h-3 bg-white/10 rounded-full overflow-hidden">
@@ -204,7 +210,7 @@ const Profile = () => {
              </div>
              
              <Link to="/arena" className="block w-full text-center py-4 bg-viet-green/10 text-viet-green rounded-2xl font-black text-[14px] border border-viet-green/20 hover:bg-viet-green hover:text-white transition-all">
-                Thách đấu ngay →
+                {t('profile.arena_stats.challenge_now')}
              </Link>
           </div>
 

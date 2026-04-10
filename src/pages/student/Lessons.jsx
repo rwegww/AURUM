@@ -2,41 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-
-const storyParts = {
-  8: { 
-    id: 1, 
-    title: "Phần 1", 
-    name: "Sự Khởi Đầu Thức Tỉnh", 
-    story: "Bước vào thế giới phân tử nguyên sơ, nơi vạn vật bắt đầu. Nhiệm vụ của bạn là hiểu được bản chất của nguyên tử và làm chủ ngôn ngữ vô hình của Hóa học." 
-  },
-  9: { 
-    id: 2, 
-    title: "Phần 2", 
-    name: "Hành Trình Chuyển Hóa", 
-    story: "Những phản ứng bùng nổ và các chất biến đổi không ngừng. Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác giữa các nguyên tố." 
-  },
-  10: { 
-    id: 3, 
-    title: "Phần 3", 
-    name: "Bước Nhảy Vĩ Mô", 
-    story: "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ phải làm quen với sự cân bằng, nhiệt lượng và động lượng chi phối toàn bộ vũ trụ vật chất." 
-  },
-  11: { 
-    id: 4, 
-    title: "Phần 4", 
-    name: "Ma Trận Hữu Cơ", 
-    story: "Lạc vào mê cung của các nguyên tử Carbon. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên mọi sự sống." 
-  },
-  12: { 
-    id: 5, 
-    title: "Phần 5", 
-    name: "Chạm Đỉnh Tiến Hóa", 
-    story: "Ranh giới cuối cùng của các bậc thầy giả kim. Vượt qua những thử thách điện hóa, khám phá nguyên liệu polyme và sự dung hợp để hoàn thành định mệnh sáng tạo vũ trụ mới." 
-  },
-};
+import { useTranslation } from 'react-i18next';
 
 const Lessons = () => {
+  const { t } = useTranslation();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const { grade } = useParams();
@@ -61,7 +30,7 @@ const Lessons = () => {
       const data = await res.json();
       setLessons(data);
     } catch (err) {
-      console.error('Lỗi tải bài học:', err);
+      console.error(t('lessons.status.err_fetch'), err);
     } finally {
       setLoading(false);
     }
@@ -91,12 +60,15 @@ const Lessons = () => {
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-viet-text mb-4 tracking-tight uppercase italic">
-            {isLoggedIn ? "Hành Trình" : "Thư Viện"} <span className="text-viet-green">{isLoggedIn ? "Khám Phá" : "Học Liệu"}</span>
+            {isLoggedIn ? t('lessons.header.title_journey') : t('lessons.header.title_library')}{' '}
+            <span className="text-viet-green">
+              {isLoggedIn ? t('lessons.header.subtitle_explore') : t('lessons.header.subtitle_materials')}
+            </span>
           </h1>
           <p className="text-viet-text-light text-lg max-w-2xl mx-auto font-medium">
             {isLoggedIn 
-              ? "Hoàn thành các cốt truyện để trở thành bậc thầy giả kim thực thụ."
-              : "Hành trình chinh phục tri thức Hóa học từ cơ bản đến chuyên sâu dành cho học sinh lớp 8 - 12."}
+              ? t('lessons.header.desc_logged_in')
+              : t('lessons.header.desc_guest')}
           </p>
         </header>
 
@@ -112,7 +84,7 @@ const Lessons = () => {
                   : 'bg-transparent text-viet-text-light hover:text-viet-green hover:bg-white'
               }`}
             >
-              {isLoggedIn ? storyParts[grade].title : `Lớp ${grade}`}
+              {isLoggedIn ? t(`lessons.story_parts.${grade}.title`) : t('lessons.grade_labels.label', { grade })}
             </button>
           ))}
         </div>
@@ -124,9 +96,11 @@ const Lessons = () => {
             animate={{ opacity: 1, y: 0 }}
             className="mb-12 text-center bg-white border border-viet-green/20 rounded-[30px] p-10 max-w-4xl mx-auto shadow-xl shadow-viet-green/5"
           >
-            <h2 className="text-3xl font-bold text-viet-green mb-4">{storyParts[selectedGrade].name}</h2>
+            <h2 className="text-3xl font-bold text-viet-green mb-4">
+              {t(`lessons.story_parts.${selectedGrade}.name`)}
+            </h2>
             <p className="text-viet-text-light text-lg italic leading-relaxed font-serif">
-              "{storyParts[selectedGrade].story}"
+              "{t(`lessons.story_parts.${selectedGrade}.story`)}"
             </p>
           </motion.div>
         )}
@@ -136,7 +110,7 @@ const Lessons = () => {
           loading ? (
             <div className="flex flex-col items-center justify-center py-24">
               <div className="w-16 h-16 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mb-4"></div>
-              <p className="text-viet-text-light font-bold">Đang tải bài học...</p>
+              <p className="text-viet-text-light font-bold">{t('lessons.status.loading')}</p>
             </div>
           ) : (
             <motion.div
@@ -165,7 +139,7 @@ const Lessons = () => {
                       </p>
                       <div className="flex items-center gap-2 text-viet-green font-bold text-[11px] uppercase tracking-widest border-t border-viet-border pt-4">
                         <span className="w-2 h-2 rounded-full bg-viet-green shadow-[0_0_10px_rgba(118,192,52,0.5)]" />
-                        KHÁM PHÁ NGAY
+                        {t('lessons.card.explore_btn')}
                       </div>
                     </div>
                   </Link>
@@ -177,9 +151,9 @@ const Lessons = () => {
           <div className="text-center py-24 border-4 border-dashed border-viet-border rounded-[40px] bg-white/30">
             <div className="text-7xl mb-8 opacity-20 filter grayscale">🧪</div>
             <h2 className="text-2xl font-bold text-viet-text-light">
-              {isLoggedIn ? "Vui lòng chọn một phần để bắt đầu hành trình" : "Vui lòng chọn khối lớp để hiển thị bài học"}
+              {isLoggedIn ? t('lessons.status.empty_title_logged_in') : t('lessons.status.empty_title_guest')}
             </h2>
-            <p className="mt-2 text-viet-text-light/60 font-medium">Khám phá thế giới hóa học nhiệm màu ngay bây giờ</p>
+            <p className="mt-2 text-viet-text-light/60 font-medium">{t('lessons.status.empty_desc')}</p>
           </div>
         )}
       </div>

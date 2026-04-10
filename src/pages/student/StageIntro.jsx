@@ -3,8 +3,10 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StageVideoModal from '@/components/lessons/StageVideoModal';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const StageIntro = () => {
+  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -71,7 +73,7 @@ const StageIntro = () => {
     <div className="min-h-screen bg-[#fffbf0]">
       <StageVideoModal
         videoSrc={`/assets/curriculum/class${grade}/${grade}-${order}.mp4`}
-        lessonTitle={lesson?.title || "Đang tải..."}
+        lessonTitle={lesson?.title || t('common.loading')}
         onComplete={handleComplete}
         onSkip={handleComplete}
         onBack={handleBack}

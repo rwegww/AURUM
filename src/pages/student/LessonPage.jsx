@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
 import TheoryRenderer from '@/components/lessons/TheoryRenderer';
 import LessonSidebar from '@/components/navigation/LessonSidebar';
@@ -8,6 +9,7 @@ import DiscussionBoard from '@/components/lessons/DiscussionBoard';
 import StoryIntro from '@/components/lessons/StoryIntro';
 
 const LessonPage = () => {
+  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode');
@@ -38,7 +40,7 @@ const LessonPage = () => {
         setShowStory(true);
       }
     } catch (err) {
-      console.error('Lỗi tải dữ liệu bài học:', err);
+      console.error(t('lesson_page.error.fetch'), err);
     } finally {
       setLoading(false);
     }
@@ -55,8 +57,8 @@ const LessonPage = () => {
       <div className="min-h-screen bg-viet-bg flex items-center justify-center text-viet-text">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-xl font-bold mb-4">Đang tải bài học...</h2>
-          <Link to="/lessons" className="text-viet-green hover:underline">Quay lại danh sách</Link>
+          <h2 className="text-xl font-bold mb-4">{t('lesson_page.loading')}</h2>
+          <Link to="/lessons" className="text-viet-green hover:underline">{t('lesson_page.back_btn')}</Link>
         </div>
       </div>
     );
@@ -88,7 +90,7 @@ const LessonPage = () => {
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <span className="px-3 py-1 bg-viet-green text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
-                HÓA HỌC LỚP {grade}
+                {t('lesson_page.grade_label', { grade })}
               </span>
             </div>
             <h1 className="text-[28px] font-bold text-viet-text leading-tight">
@@ -109,7 +111,7 @@ const LessonPage = () => {
                    <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Aurum</span>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
-                   <span className="text-[10px] text-viet-text-light font-bold">Phát triển bởi</span>
+                   <span className="text-[10px] text-viet-text-light font-bold">{t('lesson_page.video.powered_by')}</span>
                    <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
                 </div>
              </div>
@@ -122,7 +124,7 @@ const LessonPage = () => {
                 />
              ) : (
                <div className="w-full h-full pt-[60px] flex items-center justify-center bg-gray-100 text-gray-400 font-medium">
-                 Video không khả dụng
+                 {t('lesson_page.video.placeholder')}
                </div>
              )}
           </div>
@@ -132,7 +134,7 @@ const LessonPage = () => {
           <div className="mb-12">
             <div className="viet-card p-8 min-h-[400px]">
               <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
-                 <h3 className="text-[20px] font-bold">Nội dung bài học</h3>
+                 <h3 className="text-[20px] font-bold">{t('lesson_page.content_title')}</h3>
               </div>
               <div className="prose prose-slate max-w-none">
                 <TheoryRenderer modules={lesson.theoryModules} />

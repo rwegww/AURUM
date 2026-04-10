@@ -175,7 +175,7 @@ const Home = () => {
             </div>
             <div className="flex flex-col items-start justify-center text-left leading-[0.85] tracking-tighter z-10">
               <span className="text-[100px] font-black text-[#1a1a1a] italic uppercase">AURUM</span>
-              <span className="text-[12px] font-bold text-viet-green uppercase tracking-[8px] mt-2 block ml-1">Chemistry Currency</span>
+              <span className="text-[12px] font-bold text-viet-green uppercase tracking-[8px] mt-2 block ml-1">{t('nav.arena_link')} CURRENCY</span>
             </div>
           </div>
 
@@ -197,10 +197,10 @@ const Home = () => {
       {/* --- FEATURE SECTIONS (STORY SCROLL) --- */}
       
       <FeatureSection
-        title="Lộ trình học tập"
-        highlight="Trực tuyến bài bản"
-        description="Từ những khái niệm cơ bản nhất của Hóa học 8 đến các chuyên đề nâng cao của Hóa học 12. Nội dung được số hóa thành các bài học tương tác tịnh tiến, rèn giũa cả lý thuyết và bài tập."
-        linkText="Khám phá Lớp học"
+        title={t('home.features.journey.title')}
+        highlight={t('home.features.journey.highlight')}
+        description={t('home.features.journey.desc')}
+        linkText={t('home.features.journey.link')}
         linkUrl="/classroom"
         graphic={<GraphicClassroom />}
         bgClass="bg-white"
@@ -208,10 +208,10 @@ const Home = () => {
       />
 
       <FeatureSection
-        title="Phòng thí nghiệm"
-        highlight="Tuyệt đối an toàn"
-        description="Không cần hóa chất thực, không lo rủi ro cháy nổ. Thoải mái pha trộn, quan sát sự đổi màu, kết tủa và khí thoát ra ngay trên màn hình. Hỗ trợ hàng trăm phản ứng từ phổ thông đến nâng cao."
-        linkText="Thực hành Lab"
+        title={t('home.features.lab.title')}
+        highlight={t('home.features.lab.highlight')}
+        description={t('home.features.lab.desc')}
+        linkText={t('home.features.lab.link')}
         linkUrl="/lab"
         graphic={<GraphicLab />}
         bgClass="bg-[#fffbf0]"
@@ -219,10 +219,10 @@ const Home = () => {
       />
 
       <FeatureSection
-        title="Đấu trường thi đấu"
-        highlight="Kịch tính căng thẳng"
-        description="Hệ thống xếp hạng thời gian thực. Tạo phòng thi đấu cùng bạn bè hoặc tìm trận ngẫu nhiên. Trả lời chớp nhoáng các câu hỏi Hóa học để tích lũy điểm và mở khóa các bộ Avatar độc quyền."
-        linkText="Tham gia Đấu trường"
+        title={t('home.features.arena.title')}
+        highlight={t('home.features.arena.highlight')}
+        description={t('home.features.arena.desc')}
+        linkText={t('home.features.arena.link')}
         linkUrl="/arena"
         graphic={<GraphicArena />}
         bgClass="bg-white"
@@ -232,10 +232,10 @@ const Home = () => {
       <LeaderboardSection />
 
       <FeatureSection
-        title="Tra cứu toàn diện"
-        highlight="Nhanh chóng, chính xác"
-        description="Thư viện tài liệu số khổng lồ đi kèm Bảng tuần hoàn tương tác. Bấm vào bất kỳ nguyên tố nào để xem cấu hình electron, mức năng lượng và tính chất hóa học chi tiết."
-        linkText="Vào Thư viện"
+        title={t('home.features.library.title')}
+        highlight={t('home.features.library.highlight')}
+        description={t('home.features.library.desc')}
+        linkText={t('home.features.library.link')}
         linkUrl="/library"
         graphic={<GraphicLibrary />}
         bgClass="bg-[#fffbf0]"
@@ -250,13 +250,13 @@ const Home = () => {
               AURUM <span className="text-viet-green">CURRENCY</span>
             </span>
             <p className="text-[13px] font-medium text-viet-text-light/60">
-              © 2026 Chuyên đề Hóa Học KTH. Developed with 💚.
+              {t('home.footer.desc')}
             </p>
           </div>
           <div className="flex items-center gap-8 text-[15px] font-bold text-viet-text-light hover:[&>a]:text-viet-green transition-colors">
-             <Link to="/about">Về chúng tôi</Link>
-             <Link to="/contact">Liên hệ</Link>
-             <Link to="/terms">Điều khoản</Link>
+             <Link to="/about">{t('home.footer.about')}</Link>
+             <Link to="/contact">{t('home.footer.contact')}</Link>
+             <Link to="/terms">{t('home.footer.terms')}</Link>
           </div>
         </div>
       </footer>

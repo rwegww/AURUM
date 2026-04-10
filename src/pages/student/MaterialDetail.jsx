@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const MaterialDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
+  const { t, i18n } = useTranslation();
   
   const [material, setMaterial] = useState(null);
   const [feedback, setFeedback] = useState([]);
@@ -14,6 +16,10 @@ const MaterialDetail = () => {
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(5);
   const [submitting, setSubmitting] = useState(false);
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US');
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,17 +35,17 @@ const MaterialDetail = () => {
         setMaterial(matData);
         setFeedback(Array.isArray(feedData) ? feedData : []);
       } catch (err) {
-        console.error('Lỗi tải dữ liệu:', err);
+        console.error(t('material_detail.feedback.err_fetch'), err);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, t]);
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
-    if (!isLoggedIn) return alert('Vui lòng đăng nhập để gửi phản hồi!');
+    if (!isLoggedIn) return alert(t('material_detail.feedback.alert_login'));
     if (!newComment.trim()) return;
 
     setSubmitting(true);
@@ -60,7 +66,7 @@ const MaterialDetail = () => {
         setNewComment('');
       }
     } catch (err) {
-      console.error('Lỗi gửi phản hồi:', err);
+      console.error(t('material_detail.feedback.err_submit'), err);
     } finally {
       setSubmitting(false);
     }
@@ -74,8 +80,8 @@ const MaterialDetail = () => {
 
   if (!material) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-viet-bg">
-      <h2 className="text-2xl font-black text-viet-text mb-4">Tài liệu không tồn tại</h2>
-      <button onClick={() => navigate('/library')} className="bg-viet-green text-white px-8 py-3 rounded-xl font-bold">Quay lại thư viện</button>
+      <h2 className="text-2xl font-black text-viet-text mb-4">{t('material_detail.not_found')}</h2>
+      <button onClick={() => navigate('/library')} className="bg-viet-green text-white px-8 py-3 rounded-xl font-bold">{t('material_detail.back_btn')}</button>
     </div>
   );
 
@@ -89,7 +95,7 @@ const MaterialDetail = () => {
           onClick={() => navigate('/library')}
           className="flex items-center gap-2 text-viet-text-light font-black uppercase text-xs mb-8 hover:text-viet-green transition-colors"
         >
-          ← Quay lại thư viện
+          ← {t('material_detail.back_btn')}
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -106,8 +112,8 @@ const MaterialDetail = () => {
                     {material.category}
                   </span>
                   <div className="flex gap-4 text-xs font-bold text-viet-text-light uppercase tracking-tighter">
-                    <span>👁️ {material.view_count} lược xem</span>
-                    <span>⬇️ {material.download_count} tải về</span>
+                    <span>👁️ {material.view_count} {t('material_detail.views')}</span>
+                    <span>⬇️ {material.download_count} {t('material_detail.downloads')}</span>
                   </div>
                 </div>
                 <h1 className="text-3xl font-black text-viet-text italic uppercase leading-tight">
@@ -129,14 +135,16 @@ const MaterialDetail = () => {
                 {!isImage && !isPdf && (
                   <div className="text-center p-12">
                     <span className="text-6xl mb-4 block">📁</span>
-                    <p className="text-viet-text-light font-bold">Định dạng #{material.file_type} không hỗ trợ xem trực tiếp</p>
+                    <p className="text-viet-text-light font-bold">
+                      {t('material_detail.unsupported_format', { type: material.file_type })}
+                    </p>
                     <a 
                       href={material.file_url} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="mt-6 inline-block bg-viet-text text-white px-10 py-4 rounded-2xl font-black uppercase text-sm"
                     >
-                      Tải về để xem
+                      {t('material_detail.download_to_view')}
                     </a>
                   </div>
                 )}
@@ -144,7 +152,7 @@ const MaterialDetail = () => {
 
               <div className="p-8 flex items-center justify-between bg-white">
                 <p className="text-viet-text-light font-medium italic">
-                   {material.description || 'Không có mô tả cho tài liệu này.'}
+                   {material.description || t('material_detail.no_desc')}
                 </p>
                 <a 
                   href={material.file_url} 
@@ -152,7 +160,7 @@ const MaterialDetail = () => {
                   target="_blank"
                   className="bg-viet-green text-white px-10 py-5 rounded-[24px] font-black uppercase text-sm shadow-xl shadow-viet-green/20 hover:scale-105 transition-all text-center"
                 >
-                  Tải tài liệu (FREE)
+                  {t('material_detail.download_btn')}
                 </a>
               </div>
             </motion.div>
@@ -164,7 +172,7 @@ const MaterialDetail = () => {
                className="bg-white rounded-[40px] border-2 border-viet-border p-8"
             >
               <h3 className="text-2xl font-black text-viet-text uppercase italic mb-8 flex items-center gap-3">
-                Phản hồi <span className="text-viet-green">Cộng đồng</span>
+                {t('material_detail.feedback.title_main')} <span className="text-viet-green">{t('material_detail.feedback.title_highlight')}</span>
                 <span className="text-sm font-bold text-viet-text-light not-italic">({Array.isArray(feedback) ? feedback.length : 0})</span>
               </h3>
 
@@ -183,7 +191,7 @@ const MaterialDetail = () => {
                     ))}
                   </div>
                   <textarea 
-                    placeholder="Để lại cảm nghĩ của bạn về tài liệu này..."
+                    placeholder={t('material_detail.feedback.placeholder')}
                     className="w-full bg-viet-bg border-2 border-viet-border rounded-3xl p-6 min-h-[120px] outline-none focus:border-viet-green transition-all font-medium text-viet-text"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
@@ -192,13 +200,13 @@ const MaterialDetail = () => {
                     disabled={submitting || !newComment.trim()}
                     className="bg-viet-text text-white px-10 py-4 rounded-2xl font-black uppercase text-sm disabled:opacity-50 hover:bg-viet-green transition-colors"
                   >
-                    {submitting ? 'ĐANG GỬI...' : 'GỬI PHẢN HỒI'}
+                    {submitting ? t('material_detail.feedback.submitting_btn') : t('material_detail.feedback.submit_btn')}
                   </button>
                 </form>
               ) : (
                 <div className="bg-viet-bg rounded-3xl p-8 text-center mb-12">
-                   <p className="text-viet-text-light font-bold mb-4 text-sm">Vui lòng đăng nhập để tham gia thảo luận</p>
-                   <Link to="/login" className="text-viet-green font-black uppercase text-xs border-b-2 border-viet-green pb-1 hover:text-viet-text hover:border-viet-text transition-all">Đến trang đăng nhập</Link>
+                   <p className="text-viet-text-light font-bold mb-4 text-sm">{t('material_detail.feedback.login_required')}</p>
+                   <Link to="/login" className="text-viet-green font-black uppercase text-xs border-b-2 border-viet-green pb-1 hover:text-viet-text hover:border-viet-text transition-all">{t('material_detail.feedback.login_link')}</Link>
                 </div>
               )}
 
@@ -217,9 +225,9 @@ const MaterialDetail = () => {
                             {f.users?.username?.charAt(0) || 'U'}
                           </div>
                           <div>
-                            <p className="font-black text-viet-text text-sm uppercase leading-none">{f.users?.username || 'Người dùng'}</p>
+                            <p className="font-black text-viet-text text-sm uppercase leading-none">{f.users?.username || t('material_detail.feedback.default_user')}</p>
                             <p className="text-[10px] font-bold text-viet-text-light mt-1">
-                              {new Date(f.created_at).toLocaleDateString('vi-VN')}
+                              {formatDate(f.created_at)}
                             </p>
                           </div>
                         </div>
@@ -234,7 +242,7 @@ const MaterialDetail = () => {
                   ))}
                 </AnimatePresence>
                 {(!Array.isArray(feedback) || feedback.length === 0) && (
-                  <p className="text-center py-10 text-viet-text-light/50 font-bold text-xs uppercase tracking-widest italic">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+                  <p className="text-center py-10 text-viet-text-light/50 font-bold text-xs uppercase tracking-widest italic">{t('material_detail.feedback.no_feedback')}</p>
                 )}
               </div>
             </motion.section>
@@ -247,25 +255,25 @@ const MaterialDetail = () => {
                animate={{ opacity: 1, x: 0 }}
                className="bg-viet-text text-white rounded-[40px] p-8"
             >
-               <h4 className="text-xs font-black uppercase tracking-widest text-viet-green mb-6">Thông tin tệp</h4>
+               <h4 className="text-xs font-black uppercase tracking-widest text-viet-green mb-6">{t('material_detail.sidebar.file_info')}</h4>
                <ul className="space-y-4">
                   <li className="flex justify-between border-b border-white/10 pb-4">
-                    <span className="text-[10px] font-bold uppercase opacity-60">Định dạng</span>
+                    <span className="text-[10px] font-bold uppercase opacity-60">{t('material_detail.sidebar.format')}</span>
                     <span className="font-black uppercase text-xs">{material.file_type}</span>
                   </li>
                   <li className="flex justify-between border-b border-white/10 pb-4">
-                    <span className="text-[10px] font-bold uppercase opacity-60">Ngày đăng</span>
-                    <span className="font-black text-xs">{new Date(material.created_at).toLocaleDateString('vi-VN')}</span>
+                    <span className="text-[10px] font-bold uppercase opacity-60">{t('material_detail.sidebar.posted_date')}</span>
+                    <span className="font-black text-xs">{formatDate(material.created_at)}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span className="text-[10px] font-bold uppercase opacity-60">Dung lượng</span>
+                    <span className="text-[10px] font-bold uppercase opacity-60">{t('material_detail.sidebar.size')}</span>
                     <span className="font-black text-xs">FREE</span>
                   </li>
                </ul>
 
                <div className="mt-12 bg-white/5 rounded-3xl p-6 border border-white/10">
                   <p className="text-[10px] font-bold leading-relaxed opacity-70 italic">
-                     "Tất cả học liệu tại Aurum đều được cung cấp miễn phí nhằm hỗ trợ học tập. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của tác giả."
+                     "{t('material_detail.sidebar.disclaimer')}"
                   </p>
                </div>
             </motion.div>

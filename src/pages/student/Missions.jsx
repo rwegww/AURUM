@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation, Trans } from 'react-i18next';
 
 const Missions = () => {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,13 +35,6 @@ const Missions = () => {
 
     return () => clearInterval(timer);
   }, [user, authLoading]);
-
-  // For testing: Simulate a new day by calling fetch (backend will handle reset)
-  const simulateNewDay = async () => {
-    // In a real test, you'd modify DB, but here we just re-fetch 
-    // to trigger the checkAndResetDailies logic if clock was shifted
-    fetchMissions();
-  };
 
   const fetchMissions = async () => {
     try {
@@ -72,7 +67,6 @@ const Missions = () => {
       });
       const data = await res.json();
       if (data.success) {
-        // Optimistic UI update or refresh
         fetchMissions();
       }
     } catch (error) {
@@ -107,13 +101,15 @@ const Missions = () => {
         >
           <div className="inline-block px-4 py-1.5 bg-viet-green/10 rounded-full mb-4">
             <span className="text-viet-green font-black text-xs uppercase tracking-widest italic">
-              Trung tâm huấn luyện
+              {t('missions.badge')}
             </span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-viet-text italic tracking-tighter uppercase mb-2">
-            Hệ thống <span className="text-viet-green">Nhiệm vụ</span>
+            <Trans i18nKey="missions.title">
+              Hệ thống <span className="text-viet-green">Nhiệm vụ</span>
+            </Trans>
           </h1>
-          <p className="text-viet-text-light font-bold">Hoàn thành các thử thách để thăng cấp và nhận phần thưởng giá trị.</p>
+          <p className="text-viet-text-light font-bold">{t('missions.subtitle')}</p>
         </motion.div>
 
         {/* User Stats Card */}
@@ -123,12 +119,12 @@ const Missions = () => {
                 {user?.level || 1}
               </div>
               <div>
-                <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest">Cấp độ hiện tại</p>
-                <p className="text-xl font-black text-viet-text uppercase tracking-tighter italic">Cấp {user?.level || 1}</p>
+                <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest">{t('missions.current_level')}</p>
+                <p className="text-xl font-black text-viet-text uppercase tracking-tighter italic">{t('missions.level_val', { level: user?.level || 1 })}</p>
               </div>
            </div>
            <div className="text-right">
-              <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest text-viet-green">Tổng kinh nhiệm</p>
+              <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest text-viet-green">{t('missions.total_xp')}</p>
               <p className="text-2xl font-black text-viet-text">{user?.xp || 0} XP</p>
            </div>
         </div>
@@ -142,7 +138,9 @@ const Missions = () => {
           >
             <span className="text-amber-500 animate-pulse">⏳</span>
             <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-text-light">
-              Làm mới sau: <span className="text-viet-text">{timeLeft}</span>
+              <Trans i18nKey="missions.reset_in" values={{ time: timeLeft }}>
+                Làm mới sau: <span className="text-viet-text">{{time}}</span>
+              </Trans>
             </p>
           </motion.div>
         )}
@@ -150,8 +148,8 @@ const Missions = () => {
         {/* Tabs */}
         <div className="flex gap-4 mb-8">
           {[
-            { id: 'daily', label: 'Hàng ngày', icon: '📅' },
-            { id: 'achievement', label: 'Thành tựu', icon: '🏆' }
+            { id: 'daily', label: t('missions.tabs.daily'), icon: '📅' },
+            { id: 'achievement', label: t('missions.tabs.achievement'), icon: '🏆' }
           ].map(tab => (
             <button
               key={tab.id}
@@ -204,7 +202,7 @@ const Missions = () => {
                             <div className="relative">
                               <div className="flex justify-between items-center mb-1.5 px-1">
                                 <span className={`text-[10px] font-black uppercase tracking-widest ${isClaimable ? 'text-viet-green' : 'text-viet-text-light/50'}`}>
-                                  Tình trạng: {mission.isClaimed ? 'Đã nhận' : mission.isCompleted ? 'Hoàn thành' : 'Đang thực hiện'}
+                                  {t('missions.card.status')}: {mission.isClaimed ? t('missions.card.claimed') : mission.isCompleted ? t('missions.card.completed') : t('missions.card.in_progress')}
                                 </span>
                                 <span className="text-[10px] font-black text-viet-text tracking-widest">
                                   {mission.currentCount}/{mission.target_count}
@@ -225,7 +223,7 @@ const Missions = () => {
 
                         <div className="flex flex-col items-end gap-3">
                           <div className="px-4 py-2 bg-viet-green shadow-lg shadow-viet-green/20 rounded-xl text-center">
-                            <p className="text-[9px] font-black text-white/50 uppercase tracking-widest leading-none mb-0.5">Thưởng</p>
+                            <p className="text-[9px] font-black text-white/50 uppercase tracking-widest leading-none mb-0.5">{t('missions.card.reward')}</p>
                             <p className="text-sm font-black text-white leading-none">+{mission.xp_reward} XP</p>
                           </div>
 
@@ -237,15 +235,15 @@ const Missions = () => {
                               disabled={claimingId === mission.id}
                               className="px-6 py-3 bg-viet-text text-white rounded-2xl font-black text-xs uppercase tracking-[2px] shadow-xl hover:bg-black transition-all"
                             >
-                              {claimingId === mission.id ? 'Đang nhận...' : 'Nhận XP ⚡'}
+                              {claimingId === mission.id ? t('missions.card.claiming') : t('missions.card.claim_btn')}
                             </motion.button>
                           ) : mission.isClaimed ? (
                             <div className="px-6 py-3 bg-viet-bg text-viet-text-light/30 rounded-2xl font-black text-xs uppercase tracking-[2px] border border-viet-border">
-                              Đã nhận ✓
+                              {t('missions.card.claimed')} ✓
                             </div>
                           ) : (
                             <div className="px-6 py-3 bg-white text-viet-text-light/40 rounded-2xl font-black text-xs uppercase tracking-[2px] border-2 border-dashed border-viet-border">
-                              Chưa đạt
+                              {t('missions.card.not_reached')}
                             </div>
                           )}
                         </div>
@@ -264,7 +262,7 @@ const Missions = () => {
             ) : (
               <div className="bg-white border-2 border-dashed border-viet-border rounded-[32px] p-20 text-center">
                 <span className="text-4xl mb-4 block">💤</span>
-                <p className="text-viet-text-light font-bold">Chưa có nhiệm vụ mới cho ngày hôm nay.</p>
+                <p className="text-viet-text-light font-bold">{t('missions.empty')}</p>
               </div>
             )}
           </AnimatePresence>
@@ -272,7 +270,7 @@ const Missions = () => {
 
         {/* Footer Decoration */}
         <div className="mt-20 text-center">
-          <p className="text-[10px] font-black text-viet-text-light/30 uppercase tracking-[10px]">Hệ thống Aurum v1.0</p>
+          <p className="text-[10px] font-black text-viet-text-light/30 uppercase tracking-[10px]">AURUM CORE v1.0</p>
         </div>
       </div>
     </div>

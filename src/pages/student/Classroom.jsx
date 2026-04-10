@@ -1,62 +1,66 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-
-const classroomData = [
-  {
-    grade: 8,
-    age: "Lớp 8",
-    title: "Khởi Đầu Của Nhà Giả Kim",
-    desc: "Bước vào thế giới phân tử nguyên sơ, làm chủ ngôn ngữ vô hình của Hóa học.",
-    image: "/assets/images/classroom/grade8.png",
-    color: "bg-viet-green"
-  },
-  {
-    grade: 9,
-    age: "Lớp 9",
-    title: "Vương Quốc Chuyển Hóa",
-    desc: "Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác nguyên tố.",
-    image: "/assets/images/classroom/grade9.png",
-    color: "bg-orange-500"
-  },
-  {
-    grade: 10,
-    age: "Lớp 10",
-    title: "Kiến Trúc Sư Nguyên Tử",
-    desc: "Tiến sâu vào động lực học và cấu tạo bảng tuần hoàn, làm quen với sự cân bằng vũ trụ.",
-    image: "/assets/images/classroom/grade10.png",
-    color: "bg-blue-500"
-  },
-  {
-    grade: 11,
-    age: "Lớp 11",
-    title: "Mê Cung Hữu Cơ",
-    desc: "Lạc vào mê cung Carbon, tìm ra quy luật kiến tạo nên mọi sự sống phức tạp.",
-    image: "/assets/images/classroom/grade11.png",
-    color: "bg-emerald-600"
-  },
-  {
-    grade: 12,
-    age: "Lớp 12",
-    title: "Bậc Thầy Dung Hợp",
-    desc: "Ranh giới cuối cùng của các bậc thầy giả kim, hoàn thành định mệnh sáng tạo vũ trụ mới.",
-    image: "/assets/images/classroom/grade12.png",
-    color: "bg-purple-600"
-  }
-];
+import { useTranslation, Trans } from 'react-i18next';
 
 const Classroom = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  const classroomData = [
+    {
+      grade: 8,
+      age: t('common.grade', { grade: 8 }),
+      title: t('classroom.grades.8.title'),
+      desc: t('classroom.grades.8.desc'),
+      image: "/assets/images/classroom/grade8.png",
+      color: "bg-viet-green"
+    },
+    {
+      grade: 9,
+      age: t('common.grade', { grade: 9 }),
+      title: t('classroom.grades.9.title'),
+      desc: t('classroom.grades.9.desc'),
+      image: "/assets/images/classroom/grade9.png",
+      color: "bg-orange-500"
+    },
+    {
+      grade: 10,
+      age: t('common.grade', { grade: 10 }),
+      title: t('classroom.grades.10.title'),
+      desc: t('classroom.grades.10.desc'),
+      image: "/assets/images/classroom/grade10.png",
+      color: "bg-blue-500"
+    },
+    {
+      grade: 11,
+      age: t('common.grade', { grade: 11 }),
+      title: t('classroom.grades.11.title'),
+      desc: t('classroom.grades.11.desc'),
+      image: "/assets/images/classroom/grade11.png",
+      color: "bg-emerald-600"
+    },
+    {
+      grade: 12,
+      age: t('common.grade', { grade: 12 }),
+      title: t('classroom.grades.12.title'),
+      desc: t('classroom.grades.12.desc'),
+      image: "/assets/images/classroom/grade12.png",
+      color: "bg-purple-600"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-16 text-center max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700">
           <h1 className="text-4xl md:text-5xl font-black text-viet-text mb-6 tracking-tight uppercase">
-            Bắt đầu hành trình <span className="text-viet-green">Hóa học</span> của bạn
+            <Trans i18nKey="classroom.title">
+               Bắt đầu hành trình <span className="text-viet-green">Hóa học</span> của bạn
+            </Trans>
           </h1>
           <p className="text-viet-text-light text-lg font-bold">
-            Mỗi cấp độ là một hành trình mới với câu chuyện riêng và thử thách thú vị, giúp bạn khám phá thế giới hóa học một cách tự nhiên nhất.
+            {t('classroom.subtitle')}
           </p>
         </header>
 
@@ -108,7 +112,7 @@ const Classroom = () => {
                        : 'bg-gray-50 border border-viet-border text-viet-text-light hover:bg-viet-green hover:text-white hover:border-viet-green'
                      }`}
                    >
-                     Vào lớp <span className="text-lg">➔</span>
+                     {t('classroom.enter_class')} <span className="text-lg">➔</span>
                    </button>
                 </div>
               </div>

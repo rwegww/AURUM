@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import MissionModal from '@/components/lessons/MissionModal';
 import { useAuth } from '@/context/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 const StageChallenge = () => {
+  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -69,7 +71,7 @@ const StageChallenge = () => {
   return (
     <div className="min-h-screen bg-[#fffbf0]">
       <MissionModal
-        lessonTitle={lesson?.title || "Nhiệm vụ nhận biết"}
+        lessonTitle={lesson?.title || t('mission_modal.labels.mission')}
         challenges={lesson?.challenges && lesson.challenges.length > 0 ? lesson.challenges : [
           {
             type: "image-selection",
@@ -79,10 +81,10 @@ const StageChallenge = () => {
               "/assets/images/lab-equipment/graduated-cylinder.png",
               "/assets/images/lab-equipment/erlenmeyer-flask.png"
             ],
-            question: "Hãy chọn hình ảnh đúng của 'Cốc thủy tinh' để tiếp tục hành trình!",
+            question: t('mission_modal.image_selection.fallback_question'),
             correctAnswer: 0,
-            targetType: "dụng cụ",
-            source: "Tư liệu thực hành"
+            targetType: t('mission_modal.labels.target_type_fallback'),
+            source: t('mission_modal.source_fallback')
           }
         ]}
         onUnlock={handleComplete}

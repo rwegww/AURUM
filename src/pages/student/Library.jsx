@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 
 const Library = () => {
+  const { t } = useTranslation();
   const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('');
@@ -16,7 +18,7 @@ const Library = () => {
       const data = await res.json();
       setMaterials(data);
     } catch (err) {
-      console.error('Lỗi tải tài liệu:', err);
+      console.error(t('library.loading_error'), err);
     } finally {
       setLoading(false);
     }
@@ -27,18 +29,18 @@ const Library = () => {
   }, [category, search]);
 
   const categories = [
-    { id: '', name: 'Tất cả' },
-    { id: 'INFOGRAPHIC HÓA 11', name: 'Infographic 11' },
-    { id: 'INFOGRAPHIC HÓA 12', name: 'Infographic 12' },
-    { id: 'SĐTD HÓA 10', name: 'Sơ đồ tư duy 10' },
-    { id: 'SĐTD HÓA 11', name: 'Sơ đồ tư duy 11' },
-    { id: 'SĐTD HÓA 12', name: 'Sơ đồ tư duy 12' },
-    { id: 'PHIẾU HỌC TẬP HÓA 12', name: 'Phiếu học tập 12' },
-    { id: 'TRUYỆN TRANH HÓA 10', name: 'Truyện tranh 10' },
-    { id: 'TRUYỆN TRANH 11', name: 'Truyện tranh 11' },
-    { id: 'TRUYỆN TRANH HÓA 12', name: 'Truyện tranh 12' },
-    { id: 'PHT HÓA 9', name: 'Phiếu học tập 9' },
-    { id: 'SĐTD KHTN 6', name: 'Sơ đồ tư duy 6' },
+    { id: '', name: t('library.categories.all') },
+    { id: 'INFOGRAPHIC HÓA 11', name: t('library.categories.infographic_11') },
+    { id: 'INFOGRAPHIC HÓA 12', name: t('library.categories.infographic_12') },
+    { id: 'SĐTD HÓA 10', name: t('library.categories.mindmap_10') },
+    { id: 'SĐTD HÓA 11', name: t('library.categories.mindmap_11') },
+    { id: 'SĐTD HÓA 12', name: t('library.categories.mindmap_12') },
+    { id: 'PHIẾU HỌC TẬP HÓA 12', name: t('library.categories.worksheet_12') },
+    { id: 'TRUYỆN TRANH HÓA 10', name: t('library.categories.comic_10') },
+    { id: 'TRUYỆN TRANH 11', name: t('library.categories.comic_11') },
+    { id: 'TRUYỆN TRANH HÓA 12', name: t('library.categories.comic_12') },
+    { id: 'PHT HÓA 9', name: t('library.categories.worksheet_9') },
+    { id: 'SĐTD KHTN 6', name: t('library.categories.mindmap_6') },
   ];
 
   return (
@@ -52,15 +54,17 @@ const Library = () => {
           >
             <div>
               <h1 className="text-[40px] font-black text-viet-text uppercase tracking-tighter italic leading-none mb-4">
-                Thư viện <span className="text-viet-green underline decoration-4 underline-offset-8">Học liệu</span>
+                <Trans i18nKey="library.title">
+                  Thư viện <span className="text-viet-green underline decoration-4 underline-offset-8">Học liệu</span>
+                </Trans>
               </h1>
-              <p className="text-viet-text-light font-bold text-lg">Kho tàng kiến thức Hóa học đa phương tiện</p>
+              <p className="text-viet-text-light font-bold text-lg">{t('library.subtitle')}</p>
             </div>
 
             <div className="relative w-full md:w-96 group">
               <input 
                 type="text" 
-                placeholder="Tìm kiếm tài liệu..."
+                placeholder={t('library.search_placeholder')}
                 className="w-full bg-white border-2 border-viet-border rounded-full py-4 px-12 focus:ring-4 focus:ring-viet-green/10 focus:border-viet-green outline-none transition-all font-bold text-viet-text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -90,7 +94,7 @@ const Library = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-40">
             <div className="w-16 h-16 border-4 border-viet-green/10 border-t-viet-green rounded-full animate-spin mb-6"></div>
-            <p className="text-viet-text-light font-black uppercase tracking-widest animate-pulse">Đang nạp kiến thức...</p>
+            <p className="text-viet-text-light font-black uppercase tracking-widest animate-pulse">{t('library.loading')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -107,7 +111,7 @@ const Library = () => {
                 >
                   <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                      <span className="bg-viet-green text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
-                        Xem chi tiết
+                        {t('library.card.view_details')}
                      </span>
                   </div>
 
@@ -120,7 +124,7 @@ const Library = () => {
                   
                   <div className="flex-1">
                     <span className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-2 block">
-                      {item.category || 'Tài liệu'}
+                      {item.category || t('library.card.default_category')}
                     </span>
                     <h3 className="text-lg font-bold text-viet-text mb-2 leading-tight line-clamp-2">
                        {item.title}
@@ -143,8 +147,8 @@ const Library = () => {
             {materials.length === 0 && (
               <div className="col-span-full py-24 text-center bg-white/50 rounded-[40px] border-4 border-dashed border-viet-border">
                 <span className="text-6xl mb-4 block">📦</span>
-                <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">Không tìm thấy tài liệu phù hợp</p>
-                <button onClick={() => {setCategory(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">Xóa tất cả bộ lọc</button>
+                <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>
+                <button onClick={() => {setCategory(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
               </div>
             )}
           </div>

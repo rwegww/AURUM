@@ -18,6 +18,680 @@
   "home": {
     "hero_statement": "Nền tảng học thuật Hóa học số 1 kết hợp mô phỏng tương tác và thi đấu trực tuyến.",
     "enter_classroom": "Vào Lớp Học",
-    "enter_lab": "Vào Phòng Lab"
+    "enter_lab": "Vào Phòng Lab",
+    "features": {
+      "journey": {
+        "title": "Lộ trình học tập",
+        "highlight": "Trực tuyến bài bản",
+        "desc": "Từ những khái niệm cơ bản nhất của Hóa học 8 đến các chuyên đề nâng cao của Hóa học 12. Nội dung được số hóa thành các bài học tương tác tịnh tiến, rèn giũa cả lý thuyết và bài tập.",
+        "link": "Khám phá Lớp học"
+      },
+      "lab": {
+        "title": "Phòng thí nghiệm",
+        "highlight": "Tuyệt đối an toàn",
+        "desc": "Không cần hóa chất thực, không lo rủi ro cháy nổ. Thoải mái pha trộn, quan sát sự đổi màu, kết tủa và khí thoát ra ngay trên màn hình. Hỗ trợ hàng trăm phản ứng từ phổ thông đến nâng cao.",
+        "link": "Thực hành Lab"
+      },
+      "arena": {
+        "title": "Đấu trường thi đấu",
+        "highlight": "Kịch tính căng thẳng",
+        "desc": "Hệ thống xếp hạng thời gian thực. Tạo phòng thi đấu cùng bạn bè hoặc tìm trận ngẫu nhiên. Trả lời chớp nhoáng các câu hỏi Hóa học để tích lũy điểm và mở khóa các bộ Avatar độc quyền.",
+        "link": "Tham gia Đấu trường"
+      },
+      "library": {
+        "title": "Tra cứu toàn diện",
+        "highlight": "Nhanh chóng, chính xác",
+        "desc": "Thư viện tài liệu số khổng lồ đi kèm Bảng tuần hoàn tương tác. Bấm vào bất kỳ nguyên tố nào để xem cấu hình electron, mức năng lượng và tính chất hóa học chi tiết.",
+        "link": "Vào Thư viện"
+      }
+    },
+    "footer": {
+      "desc": "© 2026 Chuyên đề Hóa Học KTH. Developed with 💚.",
+      "about": "Về chúng tôi",
+      "contact": "Liên hệ",
+      "terms": "Điều khoản"
+    }
+  },
+  "classroom": {
+    "title": "Bắt đầu hành trình <1>Hóa học</1> của bạn",
+    "subtitle": "Mỗi cấp độ là một hành trình mới với câu chuyện riêng và thử thách thú vị, giúp bạn khám phá thế giới hóa học một cách tự nhiên nhất.",
+    "enter_class": "Vào lớp",
+    "grades": {
+      "8": { "title": "Khởi Đầu Của Nhà Giả Kim", "desc": "Bước vào thế giới phân tử nguyên sơ, làm chủ ngôn ngữ vô hình của Hóa học." },
+      "9": { "title": "Vương Quốc Chuyển Hóa", "desc": "Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác nguyên tố." },
+      "10": { "title": "Kiến Trúc Sư Nguyên Tử", "desc": "Tiến sâu vào động lực học và cấu tạo bảng tuần hoàn, làm quen với sự cân bằng vũ trụ." },
+      "11": { "title": "Mê Cung Hữu Cơ", "desc": "Lạc vào mê cung Carbon, tìm ra quy luật kiến tạo nên mọi sự sống phức tạp." },
+      "12": { "title": "Bậc Thầy Dung Hợp", "desc": "Ranh giới cuối cùng của các bậc thầy giả kim, hoàn thành định mệnh sáng tạo vũ trụ mới." }
+    }
+  },
+  "lectures": {
+    "title": "Thư viện <1>Bài giảng</1>",
+    "subtitle": "Tra cứu lý thuyết và video bài giảng theo khối lớp",
+    "search_placeholder": "Tìm kiếm bài giảng...",
+    "grade_filter": "Lớp {{grade}}",
+    "loading": "Đang tải dữ liệu...",
+    "no_results": "Không tìm thấy bài giảng nào khớp với từ khóa",
+    "clear_filters": "Xóa bộ lọc",
+    "metadata": {
+      "video": "1 Video",
+      "theory": "Lý thuyết"
+    }
+  },
+  "about": {
+    "mission_badge": "Sứ mệnh của chúng tôi",
+    "title": "Khơ nguồn đam mê <1/> <2>Hóa học</2> cho thế hệ trẻ",
+    "description": "Aurum không chỉ là một nền tảng học tập, mà là một cuộc hành trình khám phá thế giới vi mô của các nguyên tử và phản ứng. Chúng tôi tin rằng kiến thức chỉ thực sự sống động khi nó được trải nghiệm và tương tác.",
+    "pillars": {
+      "safety": { "title": "An toàn tuyệt đối", "desc": "Mô phỏng 3D giúp học sinh thực hành các phản ứng nguy hiểm mà không cần hóa chất thực." },
+      "gamification": { "title": "Học mà chơi", "desc": "Hệ thống gamification tích hợp điểm thưởng, cấp bậc giúp việc học trở nên lôi cuốn." },
+      "visualization": { "title": "Trực quan hóa", "desc": "Mọi khái niệm trừu tượng đều được số hóa thành hình ảnh sinh động và dễ hiểu." }
+    },
+    "team_section": {
+      "title": "Đội ngũ chuyên gia từ Học viện KTH",
+      "description": "Chúng tôi quy tụ những giảng viên Hóa học tâm huyết và các kỹ sư phần mềm chuyên nghiệp. Với tâm niệm \"Số hóa giáo dục là chìa khóa của tương lai\", chúng tôi không ngừng nỗ lực để hoàn thiện từng bài học và mô phỏng.",
+      "achievements": [
+        "Hơn 1000 bài giảng số hóa chất lượng cao",
+        "Công nghệ mô phỏng phản ứng 3D đỉnh cao",
+        "Cộng đồng học thuật hơn 50.000 học sinh"
+      ]
+    }
+  },
+  "contact": {
+    "badge": "Kết nối với chúng tôi",
+    "title": "Liên hệ với <1/> Đội ngũ sáng lập",
+    "description": "Chúng tôi luôn sẵn lòng lắng nghe ý kiến đóng góp, phản hồi hoặc yêu cầu hợp tác từ bạn. Đừng ngần ngại liên hệ qua các kênh chính thức dưới đây.",
+    "info": {
+      "hotline": "Hotline",
+      "address": "Địa chỉ",
+      "google_maps": "Xem trên Google Maps →"
+    },
+    "form": {
+      "title": "Gửi tin nhắn cho bạn",
+      "name_label": "Tên của bạn",
+      "name_placeholder": "Nhập họ và tên...",
+      "email_label": "Email liên hệ",
+      "email_placeholder": "email@example.com",
+      "message_label": "Nội dung tin nhắn",
+      "message_placeholder": "Bạn muốn trao đổi điều gì...",
+      "submit": "Gửi liên hệ ngay",
+      "success": "Đã gửi thành công! ✓"
+    }
+  },
+  "terms": {
+    "title": "Điều khoản & <1/> Chính sách Bảo mật",
+    "last_updated": "Cập nhật lần cuối: {{date}}",
+    "sections": {
+      "acceptance": { "title": "1. Chấp nhận điều khoản", "p1": "By... (Bằng việc...)", "p2": "We reserve... (Chúng tôi có quyền...)" },
+      "accounts": { "title": "2. Tài khoản người dùng", "p1": "Users are... (Học viên có...)", "p2": "Prohibited... (Nghiêm cấm...)" },
+      "intellectual": { "title": "3. Quyền sở hữu trí tuệ", "p1": "All contents... (Tất cả nội dung...)", "p2": "Any acts... (Mọi hành vi...)" },
+      "privacy": { "title": "4. Chính sách bảo mật", "p1": "Commitment... (Chúng tôi cam kết...)", "p2": "We only... (Chúng tôi chỉ...)" },
+      "liability": { "title": "5. Giới hạn trách nhiệm", "p1": "Simulations are... (Các mô phỏng...)", "p2": "No responsibility... (Chúng tôi không...)" }
+    },
+    "footer_question": "Bạn có câu hỏi về điều khoản? <br/> Vui lòng <1>Liên hệ với chúng tôi</1>."
+  },
+  "profile": {
+    "not_logged_in": "Bạn chưa đăng nhập",
+    "login_to_view": "Đăng nhập để xem hồ sơ",
+    "member_role": "Học sinh",
+    "member_since": "Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {{date}}",
+    "online_status": "Đang trực tuyến",
+    "change_avatar": "Đổi nhân vật ngẫu nhiên",
+    "save_changes": "Lưu thay đổi",
+    "stats": {
+      "xp": "Kinh nghiệm (XP)",
+      "level_title": "Cấp bậc Hóa sư",
+      "chemicals": "Hóa chất đã mở",
+      "arena_points": "Điểm Đấu trường"
+    },
+    "collection": {
+      "title": "Bộ sưu tập Hóa chất",
+      "unlocked_count": "{{current}} / {{total}}",
+      "status": "Khám phá",
+      "empty": "Bạn chưa thực hiện phản ứng nào trong phòng Lab.",
+      "go_to_lab": "Vào phòng Lab ngay →"
+    },
+    "arena_stats": {
+      "title": "Thống kê Đấu Trường",
+      "total_matches": "Tổng số trận",
+      "wins": "Số trận thắng",
+      "losses": "Số trận thua",
+      "win_rate": "Tỉ lệ thắng",
+      "challenge_now": "Thách đấu ngay →"
+    }
+  },
+  "missions": {
+    "badge": "Trung tâm huấn luyện",
+    "title": "Hệ thống <1>Nhiệm vụ</1>",
+    "subtitle": "Hoàn thành các thử thách để thăng cấp và nhận phần thưởng giá trị.",
+    "current_level": "Cấp độ hiện tại",
+    "level_val": "Cấp {{level}}",
+    "total_xp": "Tổng kinh nhiệm",
+    "reset_in": "Làm mới sau: <1>{{time}}</1>",
+    "tabs": {
+      "daily": "Hàng ngày",
+      "achievement": "Thành tựu"
+    },
+    "card": {
+      "status": "Tình trạng",
+      "claimed": "Đã nhận",
+      "completed": "Hoàn thành",
+      "in_progress": "Đang thực hiện",
+      "reward": "Thưởng",
+      "claim_btn": "Nhận XP ⚡",
+      "claiming": "Đang nhận...",
+      "not_reached": "Chưa đạt"
+    },
+    "empty": "Chưa có nhiệm vụ mới cho ngày hôm nay."
+  },
+  "journey": {
+    "badge": "Chương Trình Lớp {{grade}}",
+    "themes": {
+      "8": { "title": "Hành Trình Khởi Đầu", "subtitle": "Làm chủ các nguyên tố cơ bản" },
+      "9": { "title": "Vương Quốc Chuyển Hóa", "subtitle": "Bí thuật phản ứng hóa học" },
+      "10": { "title": "Kiến Trúc Sư Nguyên Tử", "subtitle": "Xây dựng thế giới vi mô" }
+    },
+    "test_banner": {
+      "bg_text": "KIỂM TRA",
+      "badge": "Hành Trình Học Vượt",
+      "title": "Khai Mở Tiềm Năng Lớp {{grade}}",
+      "description": "Chào mừng Nhà Hóa học tài ba! Thử thách bản thân với bài test học vượt để mở khóa chương trình lớp {{grade}} ngay lập tức mà không cần chờ đợi.",
+      "button": "Bắt đầu test ➔"
+    },
+    "stage": {
+      "label": "Giai đoạn {{order}}",
+      "mission": "Nhiệm vụ ➔",
+      "locked_desc": "Chương này vẫn còn là một ẩn số đối với bạn...",
+      "default_desc": "Hãy chuẩn bị tâm thế để khai mở bí mật của nguyên tố này."
+    },
+    "milestone": {
+      "book_badge": "MỚI",
+      "book_label": "Cẩm nang",
+      "title": "Sổ Tay Hành Trình",
+      "subtitle": "Khám phá Infographic tổng hợp lớp {{grade}}"
+    }
+  },
+  "arena": {
+    "badge": "Trung tâm huấn luyện",
+    "title": "ĐẤU TRƯỜNG <1>HÓA HỌC</1>",
+    "subtitle": "Thách đấu & chinh phục tri thức",
+    "online_count": "{{count}} học sinh đang trực tuyến",
+    "character": {
+      "badge": "Nhân vật của bạn",
+      "name_label": "Tên nhân vật:",
+      "aura_label": "Màu hào quang:",
+      "random_btn": "Đổi phong cách",
+      "expand": "↓ Thêm kiểu ({{count}} styles)",
+      "collapse": "↑ Thu gọn",
+      "presets": {
+        "chem_master": "Hóa Học",
+        "lab_wizard": "Nhà Phép",
+        "science_hero": "Khoa Học",
+        "atom_breaker": "Nguyên Tử",
+        "dna_explorer": "DNA",
+        "ion_storm": "Ion",
+        "thermo_king": "Nhiệt Học",
+        "crystal_lord": "Tinh Thể",
+        "proton_rush": "Proton",
+        "quark_force": "Quark",
+        "neutron_star": "Neutron",
+        "plasma_wave": "Plasma"
+      }
+    },
+    "stats": {
+      "badge": "Thống kê của bạn",
+      "rank_label": "Hạng hiện tại",
+      "total_matches": "Tổng trận",
+      "wins": "Thắng",
+      "losses": "Thua",
+      "win_rate": "Tỷ lệ thắng",
+      "total_points": "Tổng điểm",
+      "history": "Lịch sử thi đấu",
+      "empty_history": "Chưa có trận đấu nào gần đây",
+      "leaderboard_btn": "Bảng xếp hạng",
+      "leaderboard_title": "Vinh danh cao thủ",
+      "empty_leaderboard": "Chưa có dữ liệu thi đấu",
+      "history_item": {
+        "just_now": "Vừa xong",
+        "minutes_ago": "{{count}} phút trước",
+        "hours_ago": "{{count}} giờ trước",
+        "days_ago": "{{count}} ngày trước"
+      }
+    },
+    "ranks": {
+      "bronze": "Đồng",
+      "silver": "Bạc",
+      "gold": "Vàng",
+      "diamond": "Kim Cương",
+      "master": "Cao Thủ"
+    },
+    "actions": {
+      "find_match": "Tìm Trận Đấu",
+      "cancel_find": "Hủy Tìm Trận",
+      "create_room": "Tạo Phòng Đấu",
+      "join_pin": "Nhập mã PIN",
+      "lobby": "Sảnh chờ (Phòng)",
+      "pin_placeholder": "MÃ PHÒNG",
+      "close": "Đóng",
+      "enter": "Vào Phòng →",
+      "footer_info": {
+        "summary": "Tổng hợp",
+        "questions": "10 Câu",
+        "time": "30 Giây"
+      }
+    },
+    "create_room": {
+      "title": "MỞ SẢNH <1>THI ĐẤU</1>",
+      "name_label": "Tên Phòng Đấu",
+      "name_placeholder": "VD: Thử thách Hóa 8...",
+      "mode_label": "Thể Thức Trận Đấu",
+      "difficulty_label": "Bộ Đề Câu Hỏi",
+      "admin_badge": "QUẢN TRỊ VIÊN",
+      "auto_grade": "Tự động theo lớp {{grade}}",
+      "submit_btn": "Tạo Trận Đấu Ngay →"
+    },
+    "browser": {
+      "title": "SẢNH CHỜ <1>TRỰC TUYẾN</1>",
+      "refresh": "Làm mới",
+      "scanning": "Đang quét phòng...",
+      "empty_title": "Phòng trống!",
+      "empty_desc": "Hãy tạo phòng đầu tiên để thách đấu",
+      "enter_btn": "Vào →"
+    },
+    "room": {
+      "loading": "Đang tải...",
+      "back_btn": "Quay lại",
+      "waiting": {
+        "title": "SẢNH CHỜ",
+        "mode": "Chế độ",
+        "difficulty": "Độ khó",
+        "players": "Người chơi",
+        "exit_btn": "Thoát",
+        "start_btn": "Bắt đầu ngay"
+      },
+      "battle": {
+        "question": "Câu {{current}}/{{total}}",
+        "score": "Điểm số",
+        "time": "TIME",
+        "status": {
+          "label": "Tình trạng",
+          "claimed": "Đã nhận",
+          "completed": "Hoàn thành",
+          "in_progress": "Đang thực hiện"
+        }
+      }
+    },
+    "moderator": {
+      "instruction": "THAM GIA TẠI <1>AURUM-APPS.COM</1> VỚI MÃ PIN:",
+      "leaderboard_title": "BẢNG XẾP HẠNG THỜI GIAN THỰC",
+      "live_badge": "Trực tiếp",
+      "server_status": "Server Đang Chạy",
+      "close_btn": "Đóng Đấu Trường ✕"
+    },
+    "result": {
+      "win": "XUẤT SẮC!",
+      "lose": "HẸN GẶP LẠI",
+      "win_desc": "Bạn đã chinh phục đấu trường",
+      "lose_desc": "Hãy luyện tập thêm để phục thù",
+      "score": "Điểm số",
+      "rank": "Xếp hạng",
+      "continue_btn": "Tiếp tục nào →"
+    },
+    "difficulties": {
+      "easy": "Cơ bản",
+      "medium": "Trung bình",
+      "hard": "Khó",
+      "super": "Siêu khó"
+    }
+  },
+  "common": {
+    "grade": "Lớp {{grade}}",
+    "lesson": "Bài {{order}}",
+    "loading": "Đang tải...",
+    "back": "Quay lại",
+    "continue": "Tiếp tục",
+    "save": "Lưu"
+  },
+  "my_class": {
+    "sidebar": {
+      "title": "Lớp của bạn",
+      "join_other": "Tham gia lớp khác",
+      "code_placeholder": "Mã lớp",
+      "join_btn": "VÀO",
+      "grade_label": "Lớp {{grade}}",
+      "teacher_prefix": "GV:"
+    },
+    "empty": {
+      "title": "Chưa có lớp học",
+      "desc": "Bạn chưa tham gia bất kỳ lớp học nào. Vui lòng nhập mã lớp do giáo viên cung cấp để bắt đầu.",
+      "placeholder": "Nhập mã lớp (VD: XYZ1A2)",
+      "submit": "Tham gia ngay"
+    },
+    "header": {
+      "badge": "HOẠT ĐỘNG CHUNG"
+    },
+    "feed": {
+      "title": "Bảng tin lớp học",
+      "empty": "Chưa có thông báo hoặc bài học nào từ giáo viên.",
+      "author_you": "Bạn",
+      "private_badge": "🔒 TIN NHẮN RIÊNG",
+      "sent_to_teacher": "Đã gửi cho GV",
+      "type_video": "VIDEO",
+      "type_assignment": "BÀI TẬP",
+      "type_announcement": "THÔNG BÁO",
+      "deadline": "Hạn nộp bài",
+      "assignment": {
+        "completed": "✓ Đã hoàn thành bài tập",
+        "online_label": "Trực tuyến",
+        "result_label": "Kết quả của bạn:",
+        "start_online": "🚀 Làm bài trực tuyến ({{count}} câu)",
+        "confirm_btn": "Xác nhận đã hoàn thành bài tập",
+        "file_PDF": "Mở File PDF",
+        "file_Word": "Mở File Word",
+        "file_Excel": "Mở File Excel",
+        "file_Link": "Mở liên kết",
+        "file_Default": "Xem tài liệu",
+        "file_Placeholder": "Dán đường link"
+      }
+    },
+    "schedules": {
+      "title": "Lịch học sắp tới",
+      "empty": "Không có lịch học nào",
+      "join_meet": "Tham gia Meet"
+    },
+    "support": {
+      "title": "Bạn cần hỗ trợ?",
+      "desc": "Liên hệ riêng với giáo viên qua hệ thống để được giải đáp bài tập.",
+      "btn": "Gửi tin nhắn riêng"
+    },
+    "message_modal": {
+      "title": "Nhắn tin cho Giáo viên",
+      "class_prefix": "Lớp:",
+      "placeholder": "Nhập nội dung thắc mắc hoặc câu hỏi của bạn...",
+      "sending": "Đang gửi...",
+      "send_btn": "Gửi tin nhắn ➔"
+    },
+    "viewer": {
+      "from": "Của",
+      "deadline": "Hạn nộp:",
+      "no_deadline": "Không có",
+      "download": "Tải tệp xuống",
+      "loading": "Đang chuẩn bị nội dung...",
+      "tab_fallback": "Mở trong tab mới nếu lỗi"
+    },
+    "quiz": {
+      "badge": "BÀI TẬP TRỰC TUYẾN",
+      "progress": "Tiến độ:",
+      "count_done": "{{done}} / {{total}} CÂU ĐÃ LÀM",
+      "submitting": "Đang nộp...",
+      "submit_btn": "Nộp bài ngay ➔",
+      "essay_placeholder": "Nhập câu trả lời tự luận của bạn vào đây...",
+      "essay_badge": "Phần tự luận",
+      "score_msg": "Phần trắc nghiệm: {{score}}/10 điểm.\nPhần tự luận sẽ được giáo viên chấm riêng.",
+      "success_msg": "Bài tập đã nộp thành công! Giáo viên sẽ chấm bài tự luận của bạn."
+    }
+  },
+  "periodic_table": {
+    "title_main": "Bảng tuần",
+    "title_sub": " hoàn",
+    "title_highlight": " nguyên tố",
+    "database_label": "Cơ sở dữ liệu Alpha",
+    "system_desc": "Hệ thống tra cứu nguyên tử đa chiều",
+    "categories_title": "Phân loại",
+    "tech_manual": "Tài liệu kỹ thuật v1.0",
+    "quick_guide": {
+      "title": "Tra cứu nhanh",
+      "desc": "Nhấn vào từng ô để xem mô phỏng nguyên tử 3D"
+    },
+    "legend": {
+      "high_boiling": "Nhiệt độ sôi cao",
+      "gas_state": "Trạng thái khí"
+    },
+    "categories": {
+      "all": "Tất cả",
+      "diatomic-nonmetal": "Phi kim đối nguyên tử",
+      "noble-gas": "Khí hiếm",
+      "alkali-metal": "Kim loại kiềm",
+      "alkaline-earth-metal": "Kim loại kiềm thổ",
+      "metalloid": "Á kim",
+      "polyatomic-nonmetal": "Phi kim đa nguyên tử",
+      "post-transition-metal": "Kim loại sau chuyển tiếp",
+      "transition-metal": "Kim loại chuyển tiếp",
+      "lanthanide": "Lanthan",
+      "actinide": "Actini"
+    },
+    "modal": {
+      "atomic_no": "Số hiệu nguyên tử",
+      "mass_wt": "Khối lượng nguyên tử",
+      "category_label": "Phân loại:",
+      "tabs": {
+        "overview": "📊 Tổng quan",
+        "discover": "🌟 Khám phá"
+      },
+      "bohr_config": "Cấu hình vỏ Bohr",
+      "brief_intro": "Giới thiệu sơ lược",
+      "properties": {
+        "state": "Trạng thái",
+        "meltingPoint": "Điểm nóng chảy",
+        "boilingPoint": "Điểm sôi",
+        "density": "Khối lượng riêng",
+        "electronConfig": "Cấu hình Electron"
+      },
+      "discovery": {
+        "title": "Lịch sử khám phá",
+        "year": "Năm phát hiện",
+        "by": "Người phát hiện",
+        "ancient": "Cổ đại",
+        "unknown": "Chưa rõ"
+      },
+      "media_sample": "Mẫu tham chiếu Wikipedia",
+      "facts": {
+        "badge": "Sự thật thú vị",
+        "updating": "Thông tin đang được cập nhật..."
+      },
+      "applications": {
+        "badge": "Ứng dụng thực tế",
+        "updating": "Đang cập nhật danh sách ứng dụng..."
+      },
+      "wiki_btn": "Xem chi tiết trên Wikipedia"
+    }
+  },
+  "chem_lab": {
+    "header": {
+      "badge": "Trung tâm thí nghiệm ảo",
+      "title_1": "Khám phá thế giới",
+      "title_2": "Hóa học",
+      "title_3": "kỳ diệu",
+      "desc": "Lựa chọn mô-đun học tập và bắt đầu hành trình chinh phục tri thức của bạn ngay hôm nay."
+    },
+    "modules": {
+      "reaction": {
+        "label": "Mô phỏng phản ứng",
+        "desc": "Chọn hóa chất và thực hiện các phản ứng hóa học trực quan."
+      },
+      "balance": {
+        "label": "Cân bằng phương trình",
+        "desc": "Rèn luyện kỹ năng cân bằng PTHH với hàng nghìn bài tập."
+      },
+      "molecule": {
+        "label": "Mô hình phân tử",
+        "desc": "Xem cấu trúc phân tử 3D và không gian của các chất hóa học."
+      },
+      "start_btn": "Bắt đầu ngay"
+    },
+    "stats": {
+      "chemicals": "Hóa chất mô phỏng",
+      "reactions": "Phản ứng khám phá",
+      "creativity": "Khả năng sáng tạo"
+    }
+  },
+  "material_detail": {
+    "back_btn": "Quay lại thư viện",
+    "not_found": "Tài liệu không tồn tại",
+    "views": "lược xem",
+    "downloads": "tải về",
+    "unsupported_format": "Định dạng #{{type}} không hỗ trợ xem trực tiếp",
+    "download_to_view": "Tải về để xem",
+    "no_desc": "Không có mô tả cho tài liệu này.",
+    "download_btn": "Tải tài liệu (FREE)",
+    "feedback": {
+      "title_main": "Phản hồi",
+      "title_highlight": "Cộng đồng",
+      "placeholder": "Để lại cảm nghĩ của bạn về tài liệu này...",
+      "submit_btn": "Gửi phản hồi",
+      "submitting_btn": "Đang gửi...",
+      "login_required": "Vui lòng đăng nhập để tham gia thảo luận",
+      "login_link": "Đến trang đăng nhập",
+      "no_feedback": "Chưa có bình luận nào. Hãy là người đầu tiên!",
+      "alert_login": "Vui lòng đăng nhập để gửi phản hồi!",
+      "err_fetch": "Lỗi tải dữ liệu",
+      "err_submit": "Lỗi gửi phản hồi",
+      "default_user": "Người dùng"
+    },
+    "sidebar": {
+      "file_info": "Thông tin tệp",
+      "format": "Định dạng",
+      "posted_date": "Ngày đăng",
+      "size": "Dung lượng",
+      "disclaimer": "Tất cả học liệu tại Aurum đều được cung cấp miễn phí nhằm hỗ trợ học tập. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của tác giả."
+    }
+  },
+  "library": {
+    "title": "Thư viện <1>Học liệu</1>",
+    "subtitle": "Kho tàng tri thức hóa học đa dạng với Infographic, Sơ đồ tư duy và hơn thế nữa.",
+    "search_placeholder": "Tìm kiếm tài liệu...",
+    "loading": "Đang tải tài liệu...",
+    "categories": {
+      "all": "Tất cả học liệu",
+      "infographic_11": "INFOGRAPHIC HÓA 11",
+      "infographic_12": "INFOGRAPHIC HÓA 12",
+      "mindmap_10": "SĐTD HÓA 10",
+      "mindmap_11": "SĐTD HÓA 11",
+      "mindmap_12": "SĐTD HÓA 12",
+      "worksheet_12": "PHIẾU HỌC TẬP HÓA 12",
+      "comic_10": "TRUYỆN TRANH HÓA 10",
+      "comic_11": "TRUYỆN TRANH 11",
+      "comic_12": "TRUYỆN TRANH HÓA 12",
+      "worksheet_9": "PHT HÓA 9",
+      "mindmap_6": "SĐTD KHTN 6"
+    },
+    "card": {
+      "view_details": "Xem chi tiết",
+      "default_category": "Tài liệu"
+    },
+    "empty": {
+      "title": "Không tìm thấy tài liệu phù hợp",
+      "clear_btn": "Xóa bộ lọc và thử lại"
+    }
+  },
+  "lessons": {
+    "header": {
+      "title_journey": "Hành Trình",
+      "title_library": "Thư Viện",
+      "subtitle_explore": "Khám Phá",
+      "subtitle_materials": "Học Liệu",
+      "desc_logged_in": "Hoàn thành các cốt truyện để trở thành bậc thầy giả kim thực thụ.",
+      "desc_guest": "Hành trình chinh phục tri thức Hóa học từ cơ bản đến chuyên sâu dành cho học sinh lớp 8 - 12."
+    },
+    "grade_labels": {
+      "label": "Lớp {{grade}}"
+    },
+    "status": {
+      "loading": "Đang tải bài học...",
+      "empty_title_logged_in": "Vui lòng chọn một phần để bắt đầu hành trình",
+      "empty_title_guest": "Vui lòng chọn khối lớp để hiển thị bài học",
+      "empty_desc": "Khám phá thế giới hóa học nhiệm màu ngay bây giờ",
+      "err_fetch": "Lỗi tải bài học"
+    },
+    "card": {
+      "explore_btn": "KHÁM PHÁ NGAY"
+    },
+    "story_parts": {
+      "8": { "title": "Phần 1", "name": "Sự Khởi Đầu Thức Tỉnh", "story": "Bước vào thế giới phân tử nguyên sơ, nơi vạn vật bắt đầu. Nhiệm vụ của bạn là hiểu được bản chất của nguyên tử và làm chủ ngôn ngữ vô hình của Hóa học." },
+      "9": { "title": "Phần 2", "name": "Hành Trình Chuyển Hóa", "story": "Những phản ứng bùng nổ và các chất biến đổi không ngừng. Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác giữa các nguyên tố." },
+      "10": { "title": "Phần 3", "name": "Bước Nhảy Vĩ Mô", "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ phải làm quen với sự cân bằng, nhiệt lượng và động lượng chi phối toàn bộ vũ trụ vật chất." },
+      "11": { "title": "Phần 4", "name": "Ma Trận Hữu Cơ", "story": "Lạc vào mê cung của các nguyên tử Carbon. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên mọi sự sống." },
+      "12": { "title": "Phần 5", "name": "Chạm Đỉnh Tiến Hóa", "story": "Ranh giới cuối cùng của các bậc thầy giả kim. Vượt qua những thử thách điện hóa, khám phá nguyên liệu polyme và sự dung hợp để hoàn thành định mệnh sáng tạo vũ trụ mới." }
+    }
+  },
+  "lesson_page": {
+    "loading": "Đang tải bài học...",
+    "back_btn": "Quay lại danh sách",
+    "grade_label": "HÓA HỌC LỚP {{grade}}",
+    "content_title": "Nội dung bài học",
+    "video": {
+      "placeholder": "Video không khả dụng",
+      "powered_by": "Phát triển bởi"
+    },
+    "error": {
+      "fetch": "Lỗi tải dữ liệu bài học"
+    }
+  },
+  "mission_modal": {
+    "labels": {
+      "multiple-choice": "Trắc nghiệm",
+      "image-selection": "Nhận biết hình ảnh",
+      "fill-in-the-blank": "Điền đáp án",
+      "drag-drop": "Sắp xếp",
+      "matching": "Nối cột A - B",
+      "mission": "Nhiệm vụ",
+      "goal": "Mục tiêu"
+    },
+    "narrative_fallback": "Hãy sử dụng kiến thức của bạn để hoàn thành thử thách này!",
+    "source_fallback": "Tư liệu",
+    "image_selection": {
+      "confirm": "Xác nhận lựa chọn {{label}} ➔",
+      "label_prefix": "Lựa chọn "
+    },
+    "fill_blank": {
+      "placeholder": "Gõ câu trả lời...",
+      "confirm": "Xác nhận"
+    },
+    "drag_drop": {
+      "instruction": "Kéo để sắp xếp lại thứ tự đúng",
+      "confirm": "Xác nhận thứ tự ➔"
+    },
+    "matching": {
+      "instruction": "Cột B (Kéo thả)",
+      "col_a": "Cột A",
+      "col_b": "Cột B",
+      "confirm": "Xác nhận liên kết ➔"
+    },
+    "footer": {
+      "cancel": "Hủy lộ trình",
+      "correct": "✨ Chính xác! {{status}}",
+      "wrong": "❌ Chưa đúng, hãy thử lại!",
+      "status_final": "Hoàn thành nhiệm vụ!",
+      "status_next": "Tiếp theo..."
+    }
+  },
+  "stage_video": {
+    "back_btn": "Quay lại",
+    "status": {
+      "label": "Trạng thái:",
+      "ready": "Sẵn sàng",
+      "analyzing": "Đang xử lý"
+    },
+    "metadata": {
+      "source": "Nguồn: Camera Phòng Thí Nghiệm 01",
+      "format": "Định dạng: 1080p Digital Feed"
+    },
+    "action_btn": {
+      "ready": "Tiếp nhận nhiệm vụ",
+      "processing": "Đang xử lý dữ liệu..."
+    },
+    "hints": {
+      "ready": "Dữ liệu đã sẵn sàng! Chúc Nhà Hóa học thành công.",
+      "processing": "Gợi ý: Theo dõi clip kỹ để chuẩn bị cho thử thách nhé!"
+    }
+  },
+  "arena_modes": {
+    "solo": "1 VS 1",
+    "3vs3": "Tổ đội 3 (3 VS 3)",
+    "5vs5": "Tổ đội 5 (5 VS 5)",
+    "1vs100": "Battle Royale (1 vs 100)",
+    "solo_short": "1 VS 1",
+    "3vs3_short": "3 VS 3",
+    "5vs5_short": "5 VS 5",
+    "br_short": "Battle Royale"
   }
 }
