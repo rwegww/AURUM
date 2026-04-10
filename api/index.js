@@ -1,9 +1,6 @@
+import './_init.js';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-
-// Initialize environment variables ASAP
-dotenv.config();
 
 import authRoutes from './_routes/auth.js';
 import lessonRoutes from './_routes/lessons.js';
