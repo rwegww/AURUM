@@ -65,11 +65,8 @@ const Navbar = () => {
             </svg>
           </div>
           <div className="flex flex-col justify-center">
-            <span className="text-xl sm:text-2xl font-black text-viet-text leading-none tracking-tight">
-              Chemistry
-            </span>
-            <span className="text-xl sm:text-2xl font-black text-viet-text leading-none tracking-tight">
-              Odyssey
+            <span className="text-2xl sm:text-3xl font-black text-viet-text leading-none tracking-tighter italic mr-2">
+              ALCHEMIX
             </span>
           </div>
         </Link>
@@ -118,19 +115,19 @@ const Navbar = () => {
         <div className="flex items-center gap-4 shrink-0">
           {isLoggedIn ? (
             <div className="hidden sm:flex items-center gap-2">
-              <div className="flex items-center gap-2 bg-viet-green px-3 py-1.5 rounded-full shadow-md shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
-                <Link to="/profile" className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30 group-hover:rotate-12 transition-transform shrink-0 p-0.5">
-                  <Avatar seed={user.avatarSeed || user.username} size={28} className="w-full h-full object-cover scale-125 translate-y-1" />
+              <div className="flex items-center gap-1.5 bg-viet-green px-2 py-1 rounded-full shadow-sm shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
+                <Link to="/profile" className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30 group-hover:rotate-12 transition-transform shrink-0">
+                  <Avatar seed={user.avatarSeed || user.username} size={20} className="w-full h-full object-cover scale-125 translate-y-0.5" />
                 </Link>
-                <Link to="/profile" className="flex items-center group/user max-w-[150px]">
-                  <span className="text-[10px] font-black text-white uppercase tracking-widest leading-tight block truncate group-hover/user:underline">
+                <Link to="/profile" className="flex items-center group/user max-w-[100px]">
+                  <span className="text-[8px] font-black text-white uppercase tracking-wider leading-tight block truncate group-hover/user:underline">
                     {user?.username}
                   </span>
                 </Link>
-                <div className="w-px h-2.5 bg-white/30 mx-0.5"></div>
+                <div className="w-px h-2 bg-white/30 mx-0.5"></div>
                 <button 
                   onClick={logout}
-                  className="text-[9px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-1"
+                  className="text-[8px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-0.5"
                   title="Đăng xuất"
                 >
                   Thoát

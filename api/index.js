@@ -47,7 +47,7 @@ try {
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
-    message: 'Chemistry Odyssey API is running (Mono-Router)',
+    message: 'Alchemix API is running (Mono-Router)',
     timestamp: new Date().toISOString(),
     node_version: process.version
   });
@@ -87,7 +87,7 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
   // Use 127.0.0.1 explicitly to match Vite's proxy target and avoid IPv6 issues on Windows
   app.listen(PORT, '127.0.0.1', () => {
-    console.log(`🚀 Chemistry Odyssey API running on http://127.0.0.1:${PORT}`);
+    console.log(`🚀 Alchemix API running on http://127.0.0.1:${PORT}`);
     console.log(`🔗 Health Check: http://127.0.0.1:${PORT}/api/health`);
   });
 }

@@ -66,7 +66,7 @@ const AuthLayout = ({ children }) => {
            {/* Footer branding subtle */}
            <div className="mt-8 opacity-20 flex items-center gap-2 pointer-events-none">
               <span className="w-4 h-[1px] bg-black" />
-              <span className="text-[10px] font-black uppercase tracking-[3px]">Chemistry Odyssey V2</span>
+              <p className="text-white/60 text-xs font-bold uppercase tracking-widest leading-loose">Hệ thống giáo dục Alchemix v3.0 - Đột phá tri thức số</p>
               <span className="w-4 h-[1px] bg-black" />
            </div>
         </div>

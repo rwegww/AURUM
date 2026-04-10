@@ -31,7 +31,7 @@ const Terms = () => {
 
         <div className="viet-card p-10 md:p-16 border-none shadow-2xl">
           <Section title="1. Chấp nhận điều khoản">
-            <p>Bằng việc truy cập và sử dụng nền tảng Chemistry Odyssey, bạn đồng ý tuân thủ các điều khoản và điều kiện được nêu tại đây.</p>
+            <p>Bằng việc truy cập và sử dụng nền tảng Alchemix, bạn đồng ý tuân thủ các điều khoản và điều kiện được nêu tại đây.</p>
             <p>Chúng tôi có quyền cập nhật, thay đổi hoặc thay thế bất kỳ phần nào của các Điều khoản dịch vụ này bằng cách đăng bản cập nhật lên trang web của mình.</p>
           </Section>
 
