@@ -5,19 +5,19 @@ import dotenv from 'dotenv';
 // Initialize environment variables ASAP
 dotenv.config();
 
-import authRoutes from './routes/auth.js';
-import lessonRoutes from './routes/lessons.js';
-import userRoutes from './routes/user.js';
-import mediaRoutes from './routes/media.js';
-import adminRoutes from './routes/admin.js';
-import arenaRoutes from './routes/arena.js';
-import elementsRoutes from './routes/elements.js';
-import materialsRoutes from './routes/materials.js';
-import labRoutes from './routes/lab.js';
-import missionsRoutes from './routes/missions.js';
-import discussionsRouter from './routes/discussions.js';
-import classesRoutes from './routes/classes.js';
-import analyzeRoutes from './routes/analyze_v3.js';
+import authRoutes from './_routes/auth.js';
+import lessonRoutes from './_routes/lessons.js';
+import userRoutes from './_routes/user.js';
+import mediaRoutes from './_routes/media.js';
+import adminRoutes from './_routes/admin.js';
+import arenaRoutes from './_routes/arena.js';
+import elementsRoutes from './_routes/elements.js';
+import materialsRoutes from './_routes/materials.js';
+import labRoutes from './_routes/lab.js';
+import missionsRoutes from './_routes/missions.js';
+import discussionsRouter from './_routes/discussions.js';
+import classesRoutes from './_routes/classes.js';
+import analyzeRoutes from './_routes/analyze_v3.js';
 
 
 const app = express();
@@ -44,7 +44,12 @@ app.use('/api/analyze', analyzeRoutes);
 
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', message: 'Chemistry Odyssey API is running' });
+  res.status(200).json({ 
+    status: 'ok', 
+    message: 'Chemistry Odyssey API is running (Mono-Router)',
+    timestamp: new Date().toISOString(),
+    node_version: process.version
+  });
 });
 
 // Diagnostic route for environment variables (Masked for security)
