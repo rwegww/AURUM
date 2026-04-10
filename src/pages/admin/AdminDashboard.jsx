@@ -51,7 +51,7 @@ const AdminDashboard = () => {
           <h1 className="text-4xl font-bold text-viet-text tracking-tight">
             Xin chào, <span className="text-viet-green">{user?.username}</span> 👋
           </h1>
-          <p className="text-viet-text-light mt-2 font-medium">Hệ thống quản trị Alchemix.</p>
+          <p className="text-viet-text-light mt-2 font-medium">Hệ thống quản trị Aurum.</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">

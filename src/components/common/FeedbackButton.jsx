@@ -48,7 +48,7 @@ const FeedbackButton = () => {
       >
         <span>💬</span>
         <span className="absolute right-full mr-4 px-4 py-2 bg-viet-text text-white text-xs font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-          Góp ý cho Chemistry Odyssey
+          Góp ý cho Aurum
         </span>
       </button>
 

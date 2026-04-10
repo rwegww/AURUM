@@ -52,7 +52,7 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true }) => {
         <div className="mt-4 pt-4 border-t border-viet-border/40 flex justify-between items-end shrink-0">
           <div className="flex flex-col">
             <span className="text-[7px] font-black text-viet-text-light/30 uppercase tracking-[3px]">Survival Guide</span>
-            <span className="text-[9px] font-bold text-viet-text font-sora">Chemistry Odyssey</span>
+            <span className="text-[9px] font-bold text-viet-text font-sora">Aurum</span>
           </div>
           <div className="text-[11px] font-black text-viet-green font-mono">
             PG.{String(pageNumber).padStart(2, '0')}

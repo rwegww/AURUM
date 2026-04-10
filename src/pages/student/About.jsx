@@ -29,7 +29,7 @@ const About = () => {
             transition={{ delay: 0.1 }}
             className="text-lg md:text-xl text-viet-text-light/80 font-medium leading-relaxed max-w-3xl mx-auto"
           >
-            Alchemix không chỉ là một nền tảng học tập, mà là một cuộc hành trình khám phá 
+            Aurum không chỉ là một nền tảng học tập, mà là một cuộc hành trình khám phá 
             thế giới vi mô của các nguyên tử và phản ứng. Chúng tôi tin rằng kiến thức chỉ thực sự sống động
             khi nó được trải nghiệm và tương tác.
           </motion.p>

@@ -89,7 +89,7 @@ const Classroom = () => {
                 <div className="p-8 flex flex-col flex-1">
                    <div className="flex items-center gap-2 mb-4">
                       <span className={`w-8 h-1 rounded-full ${item.color}`} />
-                      <h1 className="text-[34px] font-black italic text-viet-text leading-none mt-4 drop-shadow-sm">Alchemix</h1>
+                      <span className="text-[10px] font-black text-viet-green uppercase tracking-widest">Aurum</span>
                    </div>
                    
                    <h3 className="text-2xl font-black text-viet-text mb-4 group-hover:text-viet-green transition-colors leading-tight">

@@ -56,59 +56,82 @@ const Navbar = () => {
       <div className="w-full flex items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2 group shrink-0">
           <div className="w-10 h-10 sm:w-12 sm:h-12 relative flex items-center justify-center shrink-0">
-            {/* Custom SVG Logo matching the image */}
-            <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green group-hover:rotate-180 transition-transform duration-700">
-              <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="180 40" strokeLinecap="round" />
-              <circle cx="20" cy="20" r="10" fill="currentColor" />
-              <circle cx="80" cy="80" r="8" fill="currentColor" />
-              <circle cx="15" cy="65" r="6" fill="currentColor" />
+            {/* Styled $ Logo */}
+            <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green group-hover:scale-110 transition-transform duration-500">
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
+              <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-5xl" style={{ fontFamily: 'serif' }}>$</text>
+              <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
             </svg>
           </div>
           <div className="flex flex-col justify-center">
-            <span className="text-2xl sm:text-3xl font-black text-viet-text leading-none tracking-tighter italic mr-2">
-              ALCHEMIX
+            <span className="text-2xl sm:text-3xl font-black text-viet-text leading-none tracking-tighter italic">
+              AURUM
             </span>
+            <span className="text-[8px] font-bold text-viet-green uppercase tracking-[3px] mt-1">Chemistry Currency</span>
           </div>
         </Link>
 
-        {/* Links */}
-        <div className="hidden lg:flex items-center gap-4 xl:gap-8 overflow-x-auto custom-scrollbar py-2">
+        {/* Logical Grouped Links */}
+        <div className="hidden lg:flex items-center gap-6 xl:gap-10">
+          {/* JOURNEY GROUP */}
+          <div className="relative group/nav">
+             <button className="text-[11px] font-black tracking-[2px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-4">
+                JOURNEY <span className="text-[8px] opacity-30">▼</span>
+             </button>
+             <div className="absolute top-full left-0 w-48 bg-white shadow-xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all z-[110]">
+                <NavLink to="/lectures" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">📚</span> BÀI GIẢNG
+                </NavLink>
+                <NavLink to="/classroom" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">🏫</span> LỚP HỌC
+                </NavLink>
+                {isLoggedIn && (
+                  <NavLink to="/my-class" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all relative">
+                    <span className="text-lg">👥</span> LỚP CỦA TÔI
+                    {unreadCount > 0 && <span className="w-2 h-2 bg-red-500 rounded-full animate-ping absolute top-3 right-3" />}
+                  </NavLink>
+                )}
+             </div>
+          </div>
+
+          {/* VAULT GROUP */}
+          <div className="relative group/nav">
+             <button className="text-[11px] font-black tracking-[2px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-4">
+                VAULT <span className="text-[8px] opacity-30">▼</span>
+             </button>
+             <div className="absolute top-full left-1/2 -translate-x-1/2 w-48 bg-white shadow-xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all z-[110]">
+                <NavLink to="/periodic-table" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">⚛️</span> BẢNG TUẦN HOÀN
+                </NavLink>
+                <NavLink to="/library" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">📖</span> THƯ VIỆN
+                </NavLink>
+             </div>
+          </div>
+
+          {/* ARENA GROUP */}
+          <div className="relative group/nav">
+             <button className="text-[11px] font-black tracking-[2px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-4">
+                ARENA <span className="text-[8px] opacity-30">▼</span>
+             </button>
+             <div className="absolute top-full right-0 w-48 bg-white shadow-xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all z-[110]">
+                <NavLink to="/lab" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">🧪</span> PHÒNG LAB
+                </NavLink>
+                <NavLink to="/arena" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">⚔️</span> ĐẤU TRƯỜNG
+                </NavLink>
+                <NavLink to="/missions" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
+                   <span className="text-lg">🎯</span> NHIỆM VỤ
+                </NavLink>
+             </div>
+          </div>
+
           {isAdmin && (
             <NavLink to="/admin" className={({isActive}) => `nav-link !text-red-500 hover:!text-red-600 ${isActive ? 'bg-red-50' : ''}`}>
-              QUẢN TRỊ
+              ADMIN
             </NavLink>
           )}
-          <NavLink to="/lectures" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-            BÀI GIẢNG
-          </NavLink>
-          <NavLink to="/classroom" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-            LỚP HỌC
-          </NavLink>
-          {isLoggedIn && (
-             <NavLink to="/my-class" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all relative ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-               LỚP CỦA TÔI
-               {unreadCount > 0 && (
-                 <span className="absolute -top-1.5 -right-4 min-w-[18px] h-[18px] bg-red-500 text-white text-[9px] font-black flex items-center justify-center rounded-full border-2 border-white shadow-sm px-1 animate-bounce">
-                   {unreadCount > 9 ? '9+' : unreadCount}
-                 </span>
-               )}
-             </NavLink>
-          )}
-          <NavLink to="/periodic-table" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-            BẢNG TUẦN HOÀN
-          </NavLink>
-          <NavLink to="/library" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-            THƯ VIỆN
-          </NavLink>
-          <NavLink to="/lab" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-            PHÒNG LAB
-          </NavLink>
-          <NavLink to="/arena" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-             ĐẤU TRƯỜNG
-          </NavLink>
-          <NavLink to="/missions" className={({isActive}) => `text-[13px] font-bold tracking-widest uppercase transition-all ${isActive ? 'text-viet-green' : 'text-viet-text hover:text-viet-green'}`}>
-             NHIỆM VỤ
-          </NavLink>
         </div>
 
         {/* User Info & Mobile Toggle */}

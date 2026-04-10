@@ -180,7 +180,7 @@ const PeriodicTable = () => {
               </div>
 
               <div className="text-right">
-                <span className="text-[9px] font-black text-viet-green uppercase tracking-[3px]">Chemistry Odyssey Dashboard</span>
+                <span className="text-[9px] font-black text-viet-green uppercase tracking-[3px]">Aurum Dashboard</span>
               </div>
             </div>
           </div>

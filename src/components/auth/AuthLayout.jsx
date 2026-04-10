@@ -43,14 +43,14 @@ const AuthLayout = ({ children }) => {
               </h1>
               <div className="w-16 h-1.5 bg-white/40 rounded-full mb-6" />
               <p className="text-lg font-medium text-white/90 max-w-xs leading-relaxed">
-                Tham gia cộng đồng học thuật Chemistry Odyssey ngay hôm nay.
+                Tham gia cộng đồng học thuật Aurum ngay hôm nay.
               </p>
            </div>
 
            <div className="relative z-10 space-y-6">
               <BenefitItem icon="⚡" title="Thử thách 1:1" desc="Đấu trường tri thức liên trường" />
               <BenefitItem icon="🧪" title="Phòng LAB ảo" desc="Thí nghiệm không giới hạn an toàn" />
-              <BenefitItem icon="🏆" title="Hệ thống Rank" desc="Bảng xếp hạng vinh danh Alchemy" />
+              <BenefitItem icon="🏆" title="Hệ thống Rank" desc="Bảng xếp hạng vinh danh Aurum" />
            </div>
 
            {/* Floating Accent Circle */}
@@ -66,7 +66,7 @@ const AuthLayout = ({ children }) => {
            {/* Footer branding subtle */}
            <div className="mt-8 opacity-20 flex items-center gap-2 pointer-events-none">
               <span className="w-4 h-[1px] bg-black" />
-              <p className="text-white/60 text-xs font-bold uppercase tracking-widest leading-loose">Hệ thống giáo dục Alchemix v3.0 - Đột phá tri thức số</p>
+              <p className="text-black/60 text-xs font-bold uppercase tracking-widest leading-loose">Hệ thống giáo dục Aurum v3.0</p>
               <span className="w-4 h-[1px] bg-black" />
            </div>
         </div>
