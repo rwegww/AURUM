@@ -2,9 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const pdf = require('pdf-parse');
-const WordExtractor = require('word-extractor');
-import mammoth from 'mammoth';
+
 import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
@@ -46,7 +44,7 @@ const teacherOrAdmin = async (req, res, next) => {
 
 router.post('/analyze-file', teacherOrAdmin, upload.single('file'), async (req, res) => {
   try {
-    console.log('--- Analyzing File ---');
+    console.log('--- Analyzing File (Dynamic Load) ---');
     if (!req.file) {
       return res.status(400).json({ message: 'Không có tệp nào được nhận' });
     }
@@ -55,14 +53,17 @@ router.post('/analyze-file', teacherOrAdmin, upload.single('file'), async (req, 
     const mimetype = req.file.mimetype;
 
     if (mimetype === 'application/pdf') {
+      const pdf = require('pdf-parse');
       const data = await pdf(req.file.buffer);
       text = data.text;
     } else if (mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || 
                req.file.originalname.endsWith('.docx')) {
+      const mammoth = await import('mammoth');
       const data = await mammoth.extractRawText({ buffer: req.file.buffer });
       text = data.value;
     } else {
       // Fallback for .doc
+      const WordExtractor = require('word-extractor');
       const extractor = new WordExtractor();
       const doc = await extractor.extract(req.file.buffer);
       text = doc.getBody();
