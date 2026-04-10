@@ -26,11 +26,8 @@ const mapUser = (user) => {
 
 export const User = {
   async findOne(filter) {
-    let query = supabase.from('users').select(`
-      *,
-      unlocked_lessons:user_unlocked_lessons(lesson_id),
-      unlocked_chemicals:user_unlocked_chemicals(chemical_formula)
-    `);
+    // 1. Fetch core user data first (safe)
+    let query = supabase.from('users').select('*');
     
     if (filter.username && filter.email) {
       query = query.or(`username.eq."${filter.username}",email.eq."${filter.email}"`);
@@ -42,25 +39,50 @@ export const User = {
       query = query.eq('id', filter.id);
     }
 
-    const { data, error } = await query.maybeSingle();
+    const { data: user, error: userError } = await query.maybeSingle();
+    if (userError) throw userError;
+    if (!user) return null;
+
+    // 2. Try to fetch junction data (optional, don't crash if tables missing)
+    try {
+      const { data: lessons } = await supabase.from('user_unlocked_lessons').select('lesson_id').eq('user_id', user.id);
+      const { data: chemicals } = await supabase.from('user_unlocked_chemicals').select('chemical_formula').eq('user_id', user.id);
+      
+      user.unlocked_lessons = lessons || [];
+      user.unlocked_chemicals = chemicals || [];
+    } catch (e) {
+      console.warn('Junction tables missing or inaccessible, returning base user.');
+      user.unlocked_lessons = [];
+      user.unlocked_chemicals = [];
+    }
     
-    if (error) throw error;
-    return mapUser(data);
+    return mapUser(user);
   },
 
   async findById(id) {
-    const { data, error } = await supabase
+    // 1. Fetch core (safe)
+    const { data: user, error: userError } = await supabase
       .from('users')
-      .select(`
-        *,
-        unlocked_lessons:user_unlocked_lessons(lesson_id),
-        unlocked_chemicals:user_unlocked_chemicals(chemical_formula)
-      `)
+      .select('*')
       .eq('id', id)
       .maybeSingle();
     
-    if (error) throw error;
-    return mapUser(data);
+    if (userError) throw userError;
+    if (!user) return null;
+
+    // 2. Attempt junction data (fail-safe)
+    try {
+      const { data: lessons } = await supabase.from('user_unlocked_lessons').select('lesson_id').eq('user_id', id);
+      const { data: chemicals } = await supabase.from('user_unlocked_chemicals').select('chemical_formula').eq('user_id', id);
+      
+      user.unlocked_lessons = lessons || [];
+      user.unlocked_chemicals = chemicals || [];
+    } catch (e) {
+      user.unlocked_lessons = [];
+      user.unlocked_chemicals = [];
+    }
+    
+    return mapUser(user);
   },
 
   async create(userData) {
@@ -143,12 +165,12 @@ export const User = {
   },
 
   async findStudents() {
+    // For the leaderboard, we ONLY need names and XP. 
+    // This query is extremely safe because it doesn't use any complex joins.
     const { data, error } = await supabase
       .from('users')
       .select(`
-        id, username, role, xp, level, inventory, avatar_seed,
-        unlocked_lessons:user_unlocked_lessons(lesson_id),
-        unlocked_chemicals:user_unlocked_chemicals(chemical_formula)
+        id, username, role, xp, level, avatar_seed
       `)
       .eq('role', 'student')
       .order('xp', { ascending: false });
