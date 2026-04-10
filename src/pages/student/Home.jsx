@@ -73,14 +73,47 @@ const GraphicLibrary = () => (
 
 // --- Background Decorations ---
 const BackgroundOrbs = () => (
-  <>
-    <div className="absolute top-10 left-10 opacity-30 pointer-events-none" style={{ width: '120px', height: '120px', backgroundImage: 'radial-gradient(#76c034 2px, transparent 2px)', backgroundSize: '20px 20px' }}></div>
-    <svg className="absolute top-40 right-20 w-32 h-32 text-viet-green opacity-40" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3">
-       <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" />
-       <circle cx="50" cy="50" r="15" />
-       <path d="M50 10 v25 M90 30 l-25 15 M90 70 l-25 -15" />
-    </svg>
-  </>
+  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+    {/* Refined Dot Grid Design */}
+    <div className="absolute top-0 left-0 w-full h-[600px] opacity-20">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+             <circle cx="2" cy="2" r="1.5" fill="#76c034" />
+             <circle cx="22" cy="22" r="0.8" fill="#76c034" opacity="0.5" />
+          </pattern>
+          <radialGradient id="fadeGradient" cx="20%" cy="30%" r="50%">
+            <stop offset="0%" stopColor="white" stopOpacity="1" />
+            <stop offset="100%" stopColor="white" stopOpacity="0" />
+          </radialGradient>
+          <mask id="mask">
+            <rect width="100%" height="100%" fill="url(#fadeGradient)" />
+          </mask>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dotGrid)" mask="url(#mask)" />
+      </svg>
+    </div>
+
+    {/* Elegant Hexagon Symbol */}
+    <motion.div 
+      animate={{ 
+        y: [0, -20, 0],
+        rotate: [0, 5, 0]
+      }}
+      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      className="absolute top-40 right-20 w-48 h-48 text-viet-green opacity-20"
+    >
+      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
+         <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
+         <polygon points="50,15 85,32.5 85,67.5 50,85 15,67.5 15,32.5" strokeOpacity="0.5" />
+         <circle cx="50" cy="50" r="10" />
+         <path d="M50 5 v10 M95 27.5 l-10 5 M95 72.5 l-10 -5 M50 95 v-10 M5 72.5 l 10 -5 M5 27.5 l 10 5" />
+      </svg>
+    </motion.div>
+
+    {/* Soft Glows */}
+    <div className="absolute -top-40 -left-40 w-96 h-96 bg-viet-green/5 blur-[120px] rounded-full" />
+  </div>
 );
 
 import LeaderboardSection from '@/components/home/LeaderboardSection';
@@ -117,8 +150,18 @@ const Home = () => {
       <section className="relative pt-[180px] pb-32 overflow-hidden bg-[#fffbf0]">
         <BackgroundOrbs />
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-          <div className="flex items-center justify-center gap-6 mb-10 cursor-default animate-fade-in">
-            <div className="w-28 h-28 relative flex items-center justify-center animate-bounce-slow shrink-0">
+          <div className="flex items-center justify-center gap-6 mb-10 cursor-default animate-fade-in relative">
+            {/* Localized Dot Grid behind logo */}
+            <div className="absolute -top-10 -left-10 w-40 h-40 opacity-20 pointer-events-none z-0">
+               <svg width="100%" height="100%" viewBox="0 0 100 100">
+                  <pattern id="localDots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                     <circle cx="3" cy="3" r="2.5" fill="#76c034" />
+                  </pattern>
+                  <rect width="100%" height="100%" fill="url(#localDots)" />
+               </svg>
+            </div>
+
+            <div className="w-28 h-28 relative flex items-center justify-center animate-bounce-slow shrink-0 z-10">
               {/* Styled $ Logo */}
               <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green">
                 <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
@@ -126,7 +169,7 @@ const Home = () => {
                 <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
               </svg>
             </div>
-            <div className="flex flex-col items-start justify-center text-left leading-[0.85] tracking-tighter">
+            <div className="flex flex-col items-start justify-center text-left leading-[0.85] tracking-tighter z-10">
               <span className="text-[100px] font-black text-[#1a1a1a] italic uppercase">AURUM</span>
               <span className="text-[12px] font-bold text-viet-green uppercase tracking-[8px] mt-2 block ml-1">Chemistry Currency</span>
             </div>
