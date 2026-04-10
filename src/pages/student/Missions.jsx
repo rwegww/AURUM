@@ -139,7 +139,7 @@ const Missions = () => {
             <span className="text-amber-500 animate-pulse">⏳</span>
             <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-text-light">
               <Trans i18nKey="missions.reset_in" values={{ time: timeLeft }}>
-                Làm mới sau: <span className="text-viet-text">{{time}}</span>
+                Làm mới sau: <span className="text-viet-text">{timeLeft}</span>
               </Trans>
             </p>
           </motion.div>

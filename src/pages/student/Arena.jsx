@@ -1,4 +1,7 @@
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import multiavatar from '@multiavatar/multiavatar/esm';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
 
 // ─── AVATAR DATA ──────────────────────────────────────────────────────────────
