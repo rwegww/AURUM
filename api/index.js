@@ -47,6 +47,19 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Chemistry Odyssey API is running' });
 });
 
+// Diagnostic route for environment variables (Masked for security)
+app.get('/api/debug-env', (req, res) => {
+  const mask = (str) => str ? `${str.substring(0, 4)}...${str.substring(str.length - 4)}` : 'MISSING';
+  res.json({
+    node_env: process.env.NODE_ENV,
+    SUPABASE_URL: mask(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL),
+    SUPABASE_KEY_FOUND: !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY),
+    JWT_SECRET_FOUND: !!process.env.JWT_SECRET,
+    CLOUDINARY_CONFIGURED: !!process.env.CLOUDINARY_CLOUD_NAME,
+    FIREBASE_CONFIGURED: !!process.env.FIREBASE_PROJECT_ID
+  });
+});
+
 // Fallback for non-existent API routes
 app.use('/api', (req, res) => {
   console.warn(`[404] Resource not found: ${req.originalUrl}`);
