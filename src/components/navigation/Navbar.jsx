@@ -175,8 +175,6 @@ const Navbar = () => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white rounded-2xl shadow-sm border border-viet-border relative z-[100]"
           >
-er border-viet-border relative z-[100]"
-          >
             <motion.span 
               animate={isMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
               className="w-6 h-0.5 bg-viet-text rounded-full"
