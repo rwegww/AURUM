@@ -113,7 +113,7 @@ const TeacherDashboard = () => {
             <h1 className="text-3xl font-bold text-viet-text tracking-tight">
                Bảng Tóm Tắt Giáo Viên
             </h1>
-            <p className="text-viet-text-light font-medium">Hệ thống quản lý học tập Odyssey v2.0</p>
+            <p className="text-viet-text-light font-medium">Hệ thống quản lý học tập Aurum v2.0</p>
           </div>
         </header>
 

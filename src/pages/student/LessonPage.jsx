@@ -105,12 +105,12 @@ const LessonPage = () => {
                   </svg>
                 </div>
                 <div className="flex flex-col">
-                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{lesson.title} | Odyssey TV</h2>
+                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{lesson.title} | Aurum TV</h2>
                    <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Aurum</span>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                    <span className="text-[10px] text-viet-text-light font-bold">Phát triển bởi</span>
-                   <span className="text-[14px] font-black text-viet-green italic">Odyssey Team</span>
+                   <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
                 </div>
              </div>
              {video.url ? (

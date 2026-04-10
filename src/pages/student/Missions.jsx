@@ -272,7 +272,7 @@ const Missions = () => {
 
         {/* Footer Decoration */}
         <div className="mt-20 text-center">
-          <p className="text-[10px] font-black text-viet-text-light/30 uppercase tracking-[10px]">Hệ thống Odyssey v1.0</p>
+          <p className="text-[10px] font-black text-viet-text-light/30 uppercase tracking-[10px]">Hệ thống Aurum v1.0</p>
         </div>
       </div>
     </div>

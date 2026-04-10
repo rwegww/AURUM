@@ -118,17 +118,17 @@ const Home = () => {
         <BackgroundOrbs />
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center text-center">
           <div className="flex items-center justify-center gap-6 mb-10 cursor-default animate-fade-in">
-            <div className="w-28 h-28 relative flex items-center justify-center animate-bounce-slow">
+            <div className="w-28 h-28 relative flex items-center justify-center animate-bounce-slow shrink-0">
+              {/* Styled $ Logo */}
               <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green">
-                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="8" strokeDasharray="180 40" strokeLinecap="round" />
-                <circle cx="20" cy="20" r="10" fill="currentColor" />
-                <circle cx="80" cy="80" r="8" fill="currentColor" />
-                <circle cx="15" cy="65" r="6" fill="currentColor" />
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
+                <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-6xl" style={{ fontFamily: 'serif' }}>$</text>
+                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
               </svg>
             </div>
-            <div className="flex flex-col items-start justify-center text-left leading-[0.9] tracking-tighter">
-              <span className="text-[72px] font-black text-[#1a1a1a]">Chemistry</span>
-              <span className="text-[72px] font-black text-[#1a1a1a]">Odyssey</span>
+            <div className="flex flex-col items-start justify-center text-left leading-[0.85] tracking-tighter">
+              <span className="text-[100px] font-black text-[#1a1a1a] italic uppercase">AURUM</span>
+              <span className="text-[12px] font-bold text-viet-green uppercase tracking-[8px] mt-2 block ml-1">Chemistry Currency</span>
             </div>
           </div>
 
@@ -200,8 +200,8 @@ const Home = () => {
       <footer className="w-full border-t border-[#e8e8e8] bg-white py-12 relative z-20">
         <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div className="flex flex-col gap-2">
-            <span className="text-xl font-black text-viet-text tracking-tighter">
-              Chemistry <span className="text-viet-green">Odyssey</span>
+            <span className="text-xl font-black text-viet-text tracking-tighter uppercase italic">
+              AURUM <span className="text-viet-green">CURRENCY</span>
             </span>
             <p className="text-[13px] font-medium text-viet-text-light/60">
               © 2026 Chuyên đề Hóa Học KTH. Developed with 💚.

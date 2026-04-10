@@ -11,14 +11,18 @@ const ManagementSidebar = ({ menuItems, title }) => {
     <div className="w-64 h-screen fixed top-0 left-0 bg-white border-r border-viet-border flex flex-col z-40">
       {/* Brand Header */}
       <div className="h-20 flex items-center px-6 border-b border-viet-border">
-        <NavLink to="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-viet-green text-white flex items-center justify-center font-black">
-            C
+        <div className="flex items-center gap-2 group cursor-default">
+          {/* Styled $ Logo Small */}
+          <div className="w-8 h-8 relative flex items-center justify-center shrink-0">
+            <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green group-hover:scale-110 transition-transform">
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3" strokeDasharray="4 4" />
+              <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-6xl" style={{ fontFamily: 'serif' }}>$</text>
+            </svg>
           </div>
-          <span className="font-black text-lg tracking-tight text-viet-text">
-            Chem<span className="text-viet-green">Odyssey</span>
+          <span className="text-xl font-black text-viet-text group-hover:text-viet-green transition-colors italic uppercase tracking-tighter">
+            AURUM
           </span>
-        </NavLink>
+        </div>
       </div>
 
       {/* Role / Context Title */}

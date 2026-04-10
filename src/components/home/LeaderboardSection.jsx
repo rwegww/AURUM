@@ -170,7 +170,7 @@ const LeaderboardSection = () => {
 
       <div className="max-w-[1100px] mx-auto px-6 relative z-10">
         
-        <div className="text-center mb-24">
+        <div className="text-center mb-12">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -189,7 +189,7 @@ const LeaderboardSection = () => {
         </div>
 
         {/* Top 3 Podium (The Islands) */}
-        <div className="flex items-end justify-center gap-3 sm:gap-6 md:gap-14 mb-32 w-full overflow-x-auto pb-8 px-4 no-scrollbar">
+        <div className="flex items-end justify-center gap-3 sm:gap-6 md:gap-14 pt-20 mb-32 w-full overflow-x-auto pb-8 px-4 no-scrollbar">
           <div className="shrink-0 scale-75 sm:scale-90 md:scale-100 origin-bottom">
             <FloatingIsland rank={2} user={topThree[0]} delay={0.2} />
           </div>

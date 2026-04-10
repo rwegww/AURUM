@@ -1092,7 +1092,7 @@ const ModeratorDashboard = ({ room, onLeave }) => {
       >
         <div className="text-center mb-8">
           <p className="text-viet-text-light/40 font-black uppercase tracking-[4px] text-[10px] mb-3">
-            THAM GIA TẠI <span className="text-viet-green">CHEM-ODYSSEY.COM</span> VỚI MÃ PIN:
+            THAM GIA TẠI <span className="text-viet-green">AURUM-APPS.COM</span> VỚI MÃ PIN:
           </p>
           <div className="inline-block px-10 py-6 rounded-[24px] bg-viet-bg border border-viet-border">
             <span className="text-7xl font-black text-viet-text tracking-[16px] select-all">{room.id}</span>

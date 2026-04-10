@@ -265,7 +265,7 @@ const MaterialDetail = () => {
 
                <div className="mt-12 bg-white/5 rounded-3xl p-6 border border-white/10">
                   <p className="text-[10px] font-bold leading-relaxed opacity-70 italic">
-                     "Tất cả học liệu tại Chem Odyssey đều được cung cấp miễn phí nhằm hỗ trợ học tập. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của tác giả."
+                     "Tất cả học liệu tại Aurum đều được cung cấp miễn phí nhằm hỗ trợ học tập. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của tác giả."
                   </p>
                </div>
             </motion.div>

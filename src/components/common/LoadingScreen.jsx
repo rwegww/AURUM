@@ -4,72 +4,37 @@ import { motion } from 'framer-motion';
 const LoadingScreen = () => {
   return (
     <div className="fixed inset-0 z-[9999] bg-[#fffbf0] flex flex-col items-center justify-center">
-      {/* Animated Beaker Icon */}
-      <div className="relative w-24 h-24 mb-6">
-        <motion.svg
-          viewBox="0 0 100 100"
-          className="w-full h-full text-viet-green"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+      {/* Animated Logo */}
+      <div className="w-40 h-40 relative flex items-center justify-center">
+        {/* Main $ Logo for Loading */}
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.05, 1],
+          }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="w-full h-full text-viet-green relative flex items-center justify-center"
         >
-          {/* Beaker Outline */}
-          <motion.path
-            d="M30 20 L30 80 Q30 90 40 90 L60 90 Q70 90 70 80 L70 20"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="4"
-            strokeLinecap="round"
-          />
-          <path d="M25 20 L75 20" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
-          
-          {/* Liquid Level Animation */}
-          <motion.path
-            d="M32 80 L32 50 Q50 55 68 50 L68 80 Q68 85 58 85 L42 85 Q32 85 32 80"
-            fill="currentColor"
-            fillOpacity="0.2"
-            animate={{
-              d: [
-                "M32 80 L32 50 Q50 55 68 50 L68 80 Q68 85 58 85 L42 85 Q32 85 32 80",
-                "M32 80 L32 55 Q50 50 68 55 L68 80 Q68 85 58 85 L42 85 Q32 85 32 80",
-                "M32 80 L32 50 Q50 55 68 50 L68 80 Q68 85 58 85 L42 85 Q32 85 32 80"
-              ]
-            }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          {/* Bubbles */}
-          <motion.circle
-            cx="40" cy="70" r="3"
-            fill="currentColor"
-            animate={{ y: [-10, -40], opacity: [0, 1, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
-          />
-          <motion.circle
-            cx="60" cy="75" r="2.5"
-            fill="currentColor"
-            animate={{ y: [-10, -50], opacity: [0, 1, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, delay: 0.5 }}
-          />
-          <motion.circle
-            cx="50" cy="80" r="2"
-            fill="currentColor"
-            animate={{ y: [-10, -35], opacity: [0, 1, 0] }}
-            transition={{ duration: 1.2, repeat: Infinity, delay: 0.8 }}
-          />
-        </motion.svg>
+          <svg viewBox="0 0 100 100" className="w-[80%] h-[80%] drop-shadow-[0_0_15px_rgba(118,192,52,0.5)]">
+             <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
+             <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-6xl" style={{ fontFamily: 'serif' }}>$</text>
+             <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
+          </svg>
+        </motion.div>
       </div>
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="text-center"
+        className="mt-8 text-center"
       >
-        <h2 className="text-xl font-black text-viet-text tracking-tight mb-2">
-          Chemistry <span className="text-viet-green">Odyssey</span>
+        <h2 className="text-4xl font-black text-viet-text tracking-tighter italic uppercase">
+          AURUM
         </h2>
-        <div className="flex items-center justify-center gap-1">
+        <p className="text-[10px] font-black text-viet-green uppercase tracking-[10px] mt-2 ml-2">
+          Chemistry Currency
+        </p>
+        <div className="flex items-center justify-center gap-1 mt-4">
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}

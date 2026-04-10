@@ -92,7 +92,7 @@ const Profile = () => {
                  <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
                  <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">Học sinh</span>
               </div>
-              <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">Thành viên ưu tú của Học viện Hóa học Odyssey. <br/>Đã đồng hành từ {new Date(user.createdAt).toLocaleDateString('vi-VN')}</p>
+              <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {new Date(user.createdAt).toLocaleDateString('vi-VN')}</p>
               
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                   <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
