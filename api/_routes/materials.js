@@ -80,15 +80,32 @@ router.post('/:id/feedback', async (req, res) => {
 router.get('/:id/feedback', async (req, res) => {
   try {
     const { id: material_id } = req.params;
+    
+    // Attempt join with users (Requires FK relationship)
     const { data, error } = await supabase
       .from('material_feedback')
       .select('*, users(username)')
       .eq('material_id', material_id)
       .order('created_at', { ascending: false });
 
-    if (error) throw error;
+    if (error) {
+      // If Join fails (e.g. missing FK), fallback to simple fetch
+      if (error.code === 'PGRST200' || error.message.includes('relationship')) {
+        const { data: fallbackData, error: fallbackError } = await supabase
+          .from('material_feedback')
+          .select('*')
+          .eq('material_id', material_id)
+          .order('created_at', { ascending: false });
+
+        if (fallbackError) throw fallbackError;
+        return res.json(fallbackData);
+      }
+      throw error;
+    }
+    
     res.json(data);
   } catch (err) {
+    console.error('Lỗi tải phản hồi:', err);
     res.status(500).json({ message: 'Lỗi tải phản hồi', error: err.message });
   }
 });

@@ -27,7 +27,7 @@ const MaterialDetail = () => {
         const feedData = await feedRes.json();
         
         setMaterial(matData);
-        setFeedback(feedData);
+        setFeedback(Array.isArray(feedData) ? feedData : []);
       } catch (err) {
         console.error('Lỗi tải dữ liệu:', err);
       } finally {
@@ -165,7 +165,7 @@ const MaterialDetail = () => {
             >
               <h3 className="text-2xl font-black text-viet-text uppercase italic mb-8 flex items-center gap-3">
                 Phản hồi <span className="text-viet-green">Cộng đồng</span>
-                <span className="text-sm font-bold text-viet-text-light not-italic">({feedback.length})</span>
+                <span className="text-sm font-bold text-viet-text-light not-italic">({Array.isArray(feedback) ? feedback.length : 0})</span>
               </h3>
 
               {isLoggedIn ? (
@@ -204,7 +204,7 @@ const MaterialDetail = () => {
 
               <div className="space-y-6">
                 <AnimatePresence>
-                  {feedback.map((f) => (
+                  {Array.isArray(feedback) && feedback.map((f) => (
                     <motion.div 
                       key={f.id}
                       initial={{ opacity: 0, y: 10 }}
@@ -233,7 +233,7 @@ const MaterialDetail = () => {
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                {feedback.length === 0 && (
+                {(!Array.isArray(feedback) || feedback.length === 0) && (
                   <p className="text-center py-10 text-viet-text-light/50 font-bold text-xs uppercase tracking-widest italic">Chưa có bình luận nào. Hãy là người đầu tiên!</p>
                 )}
               </div>
