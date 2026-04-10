@@ -75,10 +75,12 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-6 xl:gap-10">
           {/* JOURNEY GROUP */}
           <div className="relative group/nav">
-             <button className="text-[11px] font-black tracking-[2px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-4">
-                JOURNEY <span className="text-[8px] opacity-30">▼</span>
+             <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
+                HÀNH TRÌNH <span className="text-[10px] opacity-30">▼</span>
              </button>
-             <div className="absolute top-full left-0 w-48 bg-white shadow-xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all z-[110]">
+             <div className="absolute top-[80%] left-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+                {/* Invisible bridge to prevent hover loss */}
+                <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lectures" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
                    <span className="text-lg">📚</span> BÀI GIẢNG
                 </NavLink>
@@ -96,10 +98,11 @@ const Navbar = () => {
 
           {/* VAULT GROUP */}
           <div className="relative group/nav">
-             <button className="text-[11px] font-black tracking-[2px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-4">
-                VAULT <span className="text-[8px] opacity-30">▼</span>
+             <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
+                KHO TÀNG <span className="text-[10px] opacity-30">▼</span>
              </button>
-             <div className="absolute top-full left-1/2 -translate-x-1/2 w-48 bg-white shadow-xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all z-[110]">
+             <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+                <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/periodic-table" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
                    <span className="text-lg">⚛️</span> BẢNG TUẦN HOÀN
                 </NavLink>
@@ -111,10 +114,11 @@ const Navbar = () => {
 
           {/* ARENA GROUP */}
           <div className="relative group/nav">
-             <button className="text-[11px] font-black tracking-[2px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-4">
-                ARENA <span className="text-[8px] opacity-30">▼</span>
+             <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
+                THỬ THÁCH <span className="text-[10px] opacity-30">▼</span>
              </button>
-             <div className="absolute top-full right-0 w-48 bg-white shadow-xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-2 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all z-[110]">
+             <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+                <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lab" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all">
                    <span className="text-lg">🧪</span> PHÒNG LAB
                 </NavLink>
@@ -138,19 +142,19 @@ const Navbar = () => {
         <div className="flex items-center gap-4 shrink-0">
           {isLoggedIn ? (
             <div className="hidden sm:flex items-center gap-2">
-              <div className="flex items-center gap-1.5 bg-viet-green px-2 py-1 rounded-full shadow-sm shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
-                <Link to="/profile" className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30 group-hover:rotate-12 transition-transform shrink-0">
-                  <Avatar seed={user.avatarSeed || user.username} size={20} className="w-full h-full object-cover scale-125 translate-y-0.5" />
+              <div className="flex items-center gap-2 bg-viet-green px-3 py-1.5 rounded-full shadow-md shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
+                <Link to="/profile" className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30 group-hover:rotate-12 transition-transform shrink-0">
+                  <Avatar seed={user.avatarSeed || user.username} size={28} className="w-full h-full object-cover scale-125 translate-y-0.5" />
                 </Link>
-                <Link to="/profile" className="flex items-center group/user max-w-[100px]">
-                  <span className="text-[8px] font-black text-white uppercase tracking-wider leading-tight block truncate group-hover/user:underline">
+                <Link to="/profile" className="flex items-center group/user max-w-[150px]">
+                  <span className="text-[10px] font-black text-white uppercase tracking-widest leading-tight block truncate group-hover/user:underline">
                     {user?.username}
                   </span>
                 </Link>
-                <div className="w-px h-2 bg-white/30 mx-0.5"></div>
+                <div className="w-px h-3 bg-white/30 mx-1"></div>
                 <button 
                   onClick={logout}
-                  className="text-[8px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-0.5"
+                  className="text-[10px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-1"
                   title="Đăng xuất"
                 >
                   Thoát
