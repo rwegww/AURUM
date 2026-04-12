@@ -14,7 +14,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
         <div className="flex items-center gap-2 group cursor-default">
           {/* Styled $ Logo Small */}
           <div className="w-10 h-10 mb-4 relative flex items-center justify-center shrink-0">
-             <img src="/src/assets/logo.png" alt="Admin" className="w-full h-full object-contain" />
+             <img src="/logo.png" alt="Admin" className="w-full h-full object-contain" />
           </div>
           <span className="text-xl font-black text-viet-text group-hover:text-viet-green transition-colors italic uppercase tracking-tighter">
             AURUM

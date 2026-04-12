@@ -186,7 +186,7 @@ const Home = () => {
             </motion.div>
 
             <div className="w-32 h-32 md:w-48 md:h-48 relative flex items-center justify-center animate-bounce-slow shrink-0 z-10">
-              <img src="/src/assets/logo.png" alt="Aurum Chemistry" className="w-full h-full object-contain" />
+              <img src="/logo.png" alt="Aurum Chemistry" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col items-start justify-center text-left leading-[0.85] tracking-tighter z-10">
               <span className="text-[100px] font-black text-[#1a1a1a] italic uppercase">AURUM</span>

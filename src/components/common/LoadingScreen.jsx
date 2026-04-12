@@ -14,7 +14,7 @@ const LoadingScreen = () => {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="w-full h-full relative flex items-center justify-center"
         >
-          <img src="/src/assets/logo.png" alt="Loading..." className="w-24 h-24 object-contain animate-pulse" />
+          <img src="/logo.png" alt="Loading..." className="w-24 h-24 object-contain animate-pulse" />
         </motion.div>
       </div>
 

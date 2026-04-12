@@ -57,7 +57,7 @@ const Navbar = () => {
         <div className="flex items-center gap-12 xl:gap-20">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
             <div className="w-10 h-10 sm:w-16 sm:h-16 relative flex items-center justify-center shrink-0">
-               <img src="/src/assets/logo.png" alt="Aurum Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
+               <img src="/logo.png" alt="Aurum Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
             </div>
             <div className="flex flex-col justify-center">
               <span className="text-2xl sm:text-3xl font-black text-viet-text leading-none tracking-tighter italic">
