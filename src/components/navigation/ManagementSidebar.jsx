@@ -13,11 +13,8 @@ const ManagementSidebar = ({ menuItems, title }) => {
       <div className="h-20 flex items-center px-6 border-b border-viet-border">
         <div className="flex items-center gap-2 group cursor-default">
           {/* Styled $ Logo Small */}
-          <div className="w-8 h-8 relative flex items-center justify-center shrink-0">
-            <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green group-hover:scale-110 transition-transform">
-              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3" strokeDasharray="4 4" />
-              <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-6xl" style={{ fontFamily: 'serif' }}>$</text>
-            </svg>
+          <div className="w-10 h-10 mb-4 relative flex items-center justify-center shrink-0">
+             <img src="/src/assets/logo.png" alt="Admin" className="w-full h-full object-contain" />
           </div>
           <span className="text-xl font-black text-viet-text group-hover:text-viet-green transition-colors italic uppercase tracking-tighter">
             AURUM

@@ -56,13 +56,8 @@ const Navbar = () => {
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center gap-12 xl:gap-20">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 relative flex items-center justify-center shrink-0">
-              {/* Styled $ Logo */}
-              <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green group-hover:scale-110 transition-transform duration-500">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
-                <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-5xl" style={{ fontFamily: 'serif' }}>$</text>
-                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
-              </svg>
+            <div className="w-10 h-10 sm:w-16 sm:h-16 relative flex items-center justify-center shrink-0">
+               <img src="/src/assets/logo.png" alt="Aurum Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
             </div>
             <div className="flex flex-col justify-center">
               <span className="text-2xl sm:text-3xl font-black text-viet-text leading-none tracking-tighter italic">

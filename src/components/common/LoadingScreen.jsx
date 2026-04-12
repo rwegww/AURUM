@@ -12,13 +12,9 @@ const LoadingScreen = () => {
             scale: [1, 1.05, 1],
           }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-full h-full text-viet-green relative flex items-center justify-center"
+          className="w-full h-full relative flex items-center justify-center"
         >
-          <svg viewBox="0 0 100 100" className="w-[80%] h-[80%] drop-shadow-[0_0_15px_rgba(118,192,52,0.5)]">
-             <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
-             <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-6xl" style={{ fontFamily: 'serif' }}>$</text>
-             <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
-          </svg>
+          <img src="/src/assets/logo.png" alt="Loading..." className="w-24 h-24 object-contain animate-pulse" />
         </motion.div>
       </div>
 

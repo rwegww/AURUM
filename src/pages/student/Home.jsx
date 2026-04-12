@@ -185,13 +185,8 @@ const Home = () => {
                </svg>
             </motion.div>
 
-            <div className="w-28 h-28 relative flex items-center justify-center animate-bounce-slow shrink-0 z-10">
-              {/* Styled $ Logo */}
-              <svg viewBox="0 0 100 100" className="w-full h-full text-viet-green">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" className="animate-spin-slow" />
-                <text x="50" y="65" textAnchor="middle" className="fill-current font-black text-6xl" style={{ fontFamily: 'serif' }}>$</text>
-                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="10 5" />
-              </svg>
+            <div className="w-32 h-32 md:w-48 md:h-48 relative flex items-center justify-center animate-bounce-slow shrink-0 z-10">
+              <img src="/src/assets/logo.png" alt="Aurum Chemistry" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col items-start justify-center text-left leading-[0.85] tracking-tighter z-10">
               <span className="text-[100px] font-black text-[#1a1a1a] italic uppercase">AURUM</span>
