@@ -3,19 +3,41 @@ import { supabase } from '../lib/supabase.js';
 export const Discussion = {
   // Get all discussions for a lesson, joined with user profile info
   async getByLesson(lessonId) {
-    const { data, error } = await supabase
+    // 1. Fetch comments first
+    let { data: comments, error } = await supabase
       .from('lesson_discussions')
-      .select(`
-        *,
-        user:users (id, username, role)
-      `)
+      .select('*')
       .eq('lesson_id', lessonId)
       .order('created_at', { ascending: true });
 
     if (error) throw error;
+    if (!comments || comments.length === 0) return [];
+
+    // 2. Get unique user IDs
+    const userIds = [...new Set(comments.map(c => c.user_id))].filter(Boolean);
+
+    if (userIds.length > 0) {
+      // 3. Fetch user info for corresponding IDs
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id, username, role')
+        .in('id', userIds);
+
+      if (!userError && users) {
+        const userMap = users.reduce((acc, u) => {
+          acc[u.id] = u;
+          return acc;
+        }, {});
+
+        // 4. Manually join
+        comments = comments.map(c => ({
+          ...c,
+          user: userMap[c.user_id] || null
+        }));
+      }
+    }
     
-    // Group replies into their parents if needed, or return flat and handle in frontend
-    return data;
+    return comments;
   },
 
   // Create a new comment or reply

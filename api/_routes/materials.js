@@ -81,28 +81,41 @@ router.get('/:id/feedback', async (req, res) => {
   try {
     const { id: material_id } = req.params;
     
-    const { data, error } = await supabase
+    // 1. Fetch feedbacks first
+    let { data: feedbacks, error } = await supabase
       .from('material_feedback')
-      .select('*, users:users(username)')
+      .select('*')
       .eq('material_id', material_id)
       .order('created_at', { ascending: false });
 
-    if (error) {
-      // If Join fails (e.g. missing FK), fallback to simple fetch
-      if (error.code === 'PGRST200' || error.message.includes('relationship')) {
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('material_feedback')
-          .select('*')
-          .eq('material_id', material_id)
-          .order('created_at', { ascending: false });
+    if (error) throw error;
+    if (!feedbacks || feedbacks.length === 0) return res.json([]);
 
-        if (fallbackError) throw fallbackError;
-        return res.json(fallbackData);
+    // 2. Get unique user IDs
+    const userIds = [...new Set(feedbacks.map(f => f.user_id))].filter(Boolean);
+
+    if (userIds.length > 0) {
+      // 3. Fetch usernames for these IDs
+      const { data: users, error: userError } = await supabase
+        .from('users')
+        .select('id, username')
+        .in('id', userIds);
+
+      if (!userError && users) {
+        const userMap = users.reduce((acc, u) => {
+          acc[u.id] = u;
+          return acc;
+        }, {});
+
+        // 4. Manually join the data
+        feedbacks = feedbacks.map(f => ({
+          ...f,
+          users: userMap[f.user_id] || null
+        }));
       }
-      throw error;
     }
     
-    res.json(data);
+    return res.json(feedbacks);
   } catch (err) {
     console.error('Lỗi tải phản hồi:', err);
     res.status(500).json({ message: 'Lỗi tải phản hồi', error: err.message });
