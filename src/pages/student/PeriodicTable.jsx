@@ -214,39 +214,39 @@ const PeriodicTable = () => {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white border border-viet-border rounded-[32px] md:rounded-[48px] max-w-5xl w-full h-[95vh] md:h-auto md:max-h-[90vh] overflow-y-auto relative shadow-[0_50px_120px_-30px_rgba(0,0,0,0.2)]"
+              className="bg-white border border-viet-border rounded-[32px] md:rounded-[48px] max-w-5xl w-full h-[95vh] md:h-auto md:max-h-[95vh] overflow-y-auto relative shadow-[0_50px_120px_-30px_rgba(0,0,0,0.2)]"
             >
               <button
                 onClick={() => setSelectedElement(null)}
-                className="absolute top-4 right-4 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#f8f9fa] border border-viet-border flex items-center justify-center hover:bg-white hover:border-viet-green/50 transition-all shadow-sm z-[60]"
+                className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#f8f9fa] border border-viet-border flex items-center justify-center hover:bg-white hover:border-viet-green/50 transition-all shadow-sm z-[60]"
               >
                 ✕
               </button>
 
-              <div className="p-6 md:p-12">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-6 md:gap-8 mb-8 md:mb-10">
-                  <div className={`w-20 h-20 md:w-24 md:h-24 rounded-2xl md:rounded-3xl bg-gradient-to-br flex items-center justify-center ${getCategoryColor(selectedElement.category)}`}>
-                    <span className="text-4xl md:text-5xl font-black">{selectedElement.symbol}</span>
+              <div className="p-4 md:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 md:gap-6 mb-6 md:mb-8">
+                  <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl md:rounded-3xl bg-gradient-to-br flex items-center justify-center ${getCategoryColor(selectedElement.category)}`}>
+                    <span className="text-3xl md:text-4xl font-black">{selectedElement.symbol}</span>
                   </div>
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-black text-viet-text font-sora italic">{getElementName(selectedElement)}</h2>
-                    <p className={`text-[10px] md:text-[12px] font-black uppercase tracking-[0.3em] mt-1 md:mt-2 ${getCategoryColor(selectedElement.category).split(' ')[3]}`}>
+                    <h2 className="text-2xl md:text-3xl font-black text-viet-text font-sora italic">{getElementName(selectedElement)}</h2>
+                    <p className={`text-[9px] md:text-[11px] font-black uppercase tracking-[0.3em] mt-0.5 md:mt-1 ${getCategoryColor(selectedElement.category).split(' ')[3]}`}>
                       {t('periodic_table.modal.category_label')} {t(`periodic_table.categories.${selectedElement.category}`)}
                     </p>
                   </div>
-                  <div className="sm:ml-auto flex gap-3 md:gap-4">
-                    <div className="flex-1 sm:flex-none text-center px-4 md:px-6 py-2 md:py-3 bg-[#fbf9f2] rounded-xl md:rounded-2xl border border-viet-border">
-                      <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">{t('periodic_table.modal.atomic_no')}</p>
-                      <p className="text-lg md:text-2xl font-black text-viet-text">{selectedElement.number}</p>
+                  <div className="sm:ml-auto flex gap-2 md:gap-3">
+                    <div className="flex-1 sm:flex-none text-center px-3 md:px-5 py-1.5 md:py-2.5 bg-[#fbf9f2] rounded-xl md:rounded-2xl border border-viet-border">
+                      <p className="text-[7px] md:text-[8px] font-black text-viet-text-light uppercase tracking-widest mb-0.5">{t('periodic_table.modal.atomic_no')}</p>
+                      <p className="text-base md:text-xl font-black text-viet-text">{selectedElement.number}</p>
                     </div>
-                    <div className="flex-1 sm:flex-none text-center px-4 md:px-6 py-2 md:py-3 bg-[#fbf9f2] rounded-xl md:rounded-2xl border border-viet-border">
-                      <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">{t('periodic_table.modal.mass_wt')}</p>
-                      <p className="text-lg md:text-2xl font-black text-viet-text">{parseFloat(selectedElement.weight).toFixed(2)}</p>
+                    <div className="flex-1 sm:flex-none text-center px-3 md:px-5 py-1.5 md:py-2.5 bg-[#fbf9f2] rounded-xl md:rounded-2xl border border-viet-border">
+                      <p className="text-[7px] md:text-[8px] font-black text-viet-text-light uppercase tracking-widest mb-0.5">{t('periodic_table.modal.mass_wt')}</p>
+                      <p className="text-base md:text-xl font-black text-viet-text">{parseFloat(selectedElement.weight).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex gap-2 bg-gray-50 p-1.5 rounded-2xl mb-10">
+                <div className="flex gap-2 bg-gray-50 p-1.5 rounded-2xl mb-6">
                   {[
                     { id: 'overview', label: t('periodic_table.modal.tabs.overview') },
                     { id: 'discover', label: t('periodic_table.modal.tabs.discover') },
@@ -254,7 +254,7 @@ const PeriodicTable = () => {
                     <button
                       key={tab.id}
                       onClick={() => setDetailTab(tab.id)}
-                      className={`flex-1 py-3.5 rounded-xl text-[12px] font-black uppercase tracking-wider transition-all ${detailTab === tab.id
+                      className={`flex-1 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all ${detailTab === tab.id
                           ? 'bg-white text-viet-green shadow-sm'
                           : 'text-viet-text-light hover:text-viet-text'
                         }`}
@@ -267,16 +267,16 @@ const PeriodicTable = () => {
                 <AnimatePresence mode="wait">
                   {detailTab === 'overview' && (
                     <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                        <div className="flex flex-col items-center gap-6 md:gap-8 bg-[#fdfaf1]/50 p-6 md:p-10 rounded-[32px] border border-viet-border/30 min-h-0 md:min-h-[450px] justify-center">
-                          <div className="scale-75 md:scale-100 origin-center transition-transform">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+                        <div className="flex flex-col items-center gap-4 md:gap-6 bg-[#fdfaf1]/50 p-4 md:p-6 rounded-[32px] border border-viet-border/30 min-h-0 md:min-h-[350px] justify-center">
+                          <div className="scale-[0.8] md:scale-100 origin-center transition-transform">
                             <AtomicModel shells={selectedElement.shells} symbol={selectedElement.symbol} />
                           </div>
                           <div className="text-center">
-                            <p className="text-[8px] md:text-[10px] font-black text-viet-text-light uppercase tracking-[3px] md:tracking-[5px] mb-2">{t('periodic_table.modal.bohr_config')}</p>
-                            <div className="flex gap-1.5 md:gap-2 justify-center flex-wrap">
+                            <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-[3px] md:tracking-[4px] mb-1.5">{t('periodic_table.modal.bohr_config')}</p>
+                            <div className="flex gap-1 md:gap-1.5 justify-center flex-wrap">
                               {selectedElement.shells?.map((s, i) => (
-                                <div key={i} className="px-3 md:px-4 py-1.5 md:py-2 bg-white rounded-lg md:rounded-xl text-[12px] md:text-[14px] text-viet-text font-black border border-viet-border">
+                                <div key={i} className="px-2.5 md:px-3 py-1 md:py-1.5 bg-white rounded-lg md:rounded-xl text-[11px] md:text-[13px] text-viet-text font-black border border-viet-border">
                                   {s}
                                 </div>
                               ))}
@@ -284,23 +284,23 @@ const PeriodicTable = () => {
                           </div>
                         </div>
 
-                        <div className="space-y-6">
-                          <div className="p-6 bg-viet-green/5 rounded-3xl border border-viet-green/10">
-                            <h3 className="text-[10px] md:text-[11px] font-black text-viet-green uppercase tracking-widest mb-3">{t('periodic_table.modal.brief_intro')}</h3>
-                            <p className="text-viet-text font-medium leading-relaxed italic text-base md:text-lg pr-4 line-clamp-6">
+                        <div className="space-y-4">
+                          <div className="p-4 md:p-6 bg-viet-green/5 rounded-3xl border border-viet-green/10">
+                            <h3 className="text-[9px] md:text-[10px] font-black text-viet-green uppercase tracking-widest mb-2">{t('periodic_table.modal.brief_intro')}</h3>
+                            <p className="text-viet-text font-medium leading-relaxed italic text-sm md:text-base pr-4 line-clamp-5">
                               "{getElementDesc(selectedElement)}"
                             </p>
                           </div>
 
-                          <div className="grid grid-cols-2 gap-3 md:gap-4">
+                          <div className="grid grid-cols-2 gap-2 md:gap-3">
                             {['state', 'meltingPoint', 'boilingPoint', 'density', 'electronConfig'].map((key) => {
                               if (!selectedElement[key]) return null;
                               return (
-                                <div key={key} className="p-3 md:p-4 bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
-                                  <p className="text-[8px] md:text-[9px] font-black text-viet-text-light uppercase tracking-widest mb-1">
+                                <div key={key} className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
+                                  <p className="text-[7px] md:text-[8px] font-black text-viet-text-light uppercase tracking-widest mb-0.5">
                                     {t(`periodic_table.modal.properties.${key}`)}
                                   </p>
-                                  <p className="text-[13px] md:text-[15px] font-black text-viet-text">
+                                  <p className="text-[12px] md:text-[14px] font-black text-viet-text">
                                     {selectedElement[key]}{key.includes('Point') ? '°C' : ''}
                                   </p>
                                 </div>
@@ -337,39 +337,39 @@ const PeriodicTable = () => {
                           </div>
 
                           {/* Discovery Badge */}
-                          <div className="mt-4 md:mt-6 p-4 md:p-6 bg-[#fbf9f2] rounded-2xl md:rounded-3xl border border-viet-border/30">
-                            <span className="text-[8px] md:text-[9px] font-black text-viet-text/40 uppercase tracking-widest mb-2 md:mb-3 block">{t('periodic_table.modal.discovery.title')}</span>
-                            <div className="grid grid-cols-2 gap-4">
+                          <div className="mt-3 md:mt-4 p-3 md:p-5 bg-[#fbf9f2] rounded-2xl md:rounded-3xl border border-viet-border/30">
+                            <span className="text-[7px] md:text-[8px] font-black text-viet-text/40 uppercase tracking-widest mb-1.5 md:mb-2 block">{t('periodic_table.modal.discovery.title')}</span>
+                            <div className="grid grid-cols-2 gap-3">
                               <div>
-                                <p className="text-[8px] md:text-[10px] font-bold text-viet-text-light uppercase">{t('periodic_table.modal.discovery.year')}</p>
-                                <p className="text-lg md:text-xl font-black text-viet-green">{selectedElement.yearDiscovered || t('periodic_table.modal.discovery.ancient')}</p>
+                                <p className="text-[7px] md:text-[9px] font-bold text-viet-text-light uppercase">{t('periodic_table.modal.discovery.year')}</p>
+                                <p className="text-base md:text-lg font-black text-viet-green">{selectedElement.yearDiscovered || t('periodic_table.modal.discovery.ancient')}</p>
                               </div>
                               <div>
-                                <p className="text-[8px] md:text-[10px] font-bold text-viet-text-light uppercase">{t('periodic_table.modal.discovery.by')}</p>
-                                <p className="text-xs md:text-sm font-black text-viet-text leading-tight">{selectedElement.discoveredBy || t('periodic_table.modal.discovery.unknown')}</p>
+                                <p className="text-[7px] md:text-[9px] font-bold text-viet-text-light uppercase">{t('periodic_table.modal.discovery.by')}</p>
+                                <p className="text-[11px] md:text-[13px] font-black text-viet-text leading-tight">{selectedElement.discoveredBy || t('periodic_table.modal.discovery.unknown')}</p>
                               </div>
                             </div>
                           </div>
                         </div>
 
                         {/* Info Section */}
-                        <div className="lg:col-span-3 flex flex-col gap-4 md:gap-6">
+                        <div className="lg:col-span-3 flex flex-col gap-3 md:gap-4">
                           {/* Fun Facts */}
-                          <div className="bg-gradient-to-br from-viet-green to-[#a0d96d] p-6 md:p-8 rounded-[30px] md:rounded-[40px] text-white shadow-xl relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12">
-                              <span className="text-[80px] md:text-[120px] font-black italic">!</span>
+                          <div className="bg-gradient-to-br from-viet-green to-[#a0d96d] p-5 md:p-6 rounded-[30px] md:rounded-[40px] text-white shadow-xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-3 opacity-10 rotate-12">
+                              <span className="text-[60px] md:text-[90px] font-black italic">!</span>
                             </div>
                             <div className="relative z-10">
-                              <span className="px-3 py-1 bg-white/20 rounded-full text-[8px] md:text-[9px] font-black uppercase tracking-widest mb-3 md:mb-4 block w-fit">{t('periodic_table.modal.facts.badge')}</span>
-                              <div className="space-y-3 md:space-y-4">
+                              <span className="px-2.5 py-0.5 bg-white/20 rounded-full text-[7px] md:text-[8px] font-black uppercase tracking-widest mb-2 md:mb-3 block w-fit">{t('periodic_table.modal.facts.badge')}</span>
+                              <div className="space-y-2 md:space-y-3">
                                 {getElementFacts(selectedElement).length > 0 ? (
                                   getElementFacts(selectedElement).map((fact, i) => (
-                                    <p key={i} className="text-base md:text-lg font-black font-sora italic leading-tight border-l-2 border-white/30 pl-4 py-1">
+                                    <p key={i} className="text-sm md:text-base font-black font-sora italic leading-tight border-l-2 border-white/30 pl-3 py-0.5">
                                       {fact}
                                     </p>
                                   ))
                                 ) : (
-                                  <p className="text-base md:text-lg font-black font-sora italic leading-tight">
+                                  <p className="text-sm md:text-base font-black font-sora italic leading-tight">
                                     {t('periodic_table.modal.facts.updating')}
                                   </p>
                                 )}
@@ -378,22 +378,22 @@ const PeriodicTable = () => {
                           </div>
 
                           {/* Applications */}
-                          <div className="p-6 md:p-8 bg-white border border-viet-border/30 rounded-[30px] md:rounded-[40px] shadow-sm">
-                            <span className="text-[8px] md:text-[9px] font-black text-viet-text/40 uppercase tracking-widest mb-3 md:mb-4 block uppercase">{t('periodic_table.modal.applications.badge')}</span>
-                            <div className="flex flex-wrap gap-2">
+                          <div className="p-5 md:p-6 bg-white border border-viet-border/30 rounded-[30px] md:rounded-[40px] shadow-sm">
+                            <span className="text-[7px] md:text-[8px] font-black text-viet-text/40 uppercase tracking-widest mb-2 md:mb-3 block uppercase">{t('periodic_table.modal.applications.badge')}</span>
+                            <div className="flex flex-wrap gap-1.5">
                               {getElementUses(selectedElement).length > 0 ? (
                                 getElementUses(selectedElement).map((use, i) => (
-                                  <span key={i} className="px-3 md:px-4 py-1.5 md:py-2 bg-[#fbf9f2] text-viet-text text-[10px] md:text-[11px] font-black rounded-lg md:rounded-xl border border-viet-border/20 lowercase tracking-tight">
+                                  <span key={i} className="px-2.5 md:px-3 py-1 md:py-1.5 bg-[#fbf9f2] text-viet-text text-[9px] md:text-[10px] font-black rounded-lg md:rounded-xl border border-viet-border/20 lowercase tracking-tight">
                                     # {use}
                                   </span>
                                 ))
                               ) : (
-                                <p className="text-viet-text-light italic text-[10px]">{t('periodic_table.modal.applications.updating')}</p>
+                                <p className="text-viet-text-light italic text-[9px]">{t('periodic_table.modal.applications.updating')}</p>
                               )}
                             </div>
                           </div>
 
-                          <button className="w-full py-3 md:py-4 bg-viet-text text-white rounded-xl md:rounded-2xl text-[10px] md:text-[12px] font-black uppercase tracking-widest hover:bg-viet-green transition-all shadow-lg shadow-black/5" onClick={() => window.open(`https://${i18n.language === 'vi' ? 'vi' : 'en'}.wikipedia.org/wiki/${selectedElement.symbol === 'H' ? (i18n.language === 'vi' ? 'Hiđrô' : 'Hydrogen') : selectedElement.name}`, '_blank')}>
+                          <button className="w-full py-2.5 md:py-3.5 bg-viet-text text-white rounded-xl md:rounded-2xl text-[9px] md:text-[11px] font-black uppercase tracking-widest hover:bg-viet-green transition-all shadow-lg shadow-black/5" onClick={() => window.open(`https://${i18n.language === 'vi' ? 'vi' : 'en'}.wikipedia.org/wiki/${selectedElement.symbol === 'H' ? (i18n.language === 'vi' ? 'Hiđrô' : 'Hydrogen') : selectedElement.name}`, '_blank')}>
                             {t('periodic_table.modal.wiki_btn')}
                           </button>
                         </div>
