@@ -19,7 +19,7 @@ const auth = async (req, res, next) => {
          // Create profile if missing
          req.user = await User.create({
             id: sbUser.id,
-            username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0],
+            username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
             email: sbUser.email
          });
       }

@@ -137,12 +137,20 @@ const Profile = () => {
             title={t('profile.stats.chemicals')} 
             value={user.unlockedChemicals?.length || 0} 
             color="bg-blue-500" 
-            icon={<Avatar seed="lab" size={40} className="scale-150" />}
+            icon={
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path d="M10 2v7.5"/><path d="M14 2v7.5"/><path d="M8.5 2h7"/><path d="M14 9.32a4 4 0 1 1-4 0"/><path d="M8.5 15h7"/>
+              </svg>
+            }
           />
           <ProfileCard 
             title={t('profile.stats.arena_points')} 
             value={user.arenaStats?.points || 0} 
-            icon={<Avatar seed="arena" size={40} className="scale-150 rotate-45" />}
+            icon={
+              <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19"/>
+              </svg>
+            }
             color="bg-purple-500"
           />
         </div>

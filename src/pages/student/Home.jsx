@@ -73,50 +73,66 @@ const GraphicLibrary = () => (
   </div>
 );
 
-// --- Background Decorations ---
-const BackgroundOrbs = () => (
-  <div className="absolute inset-0 pointer-events-none overflow-hidden">
-    {/* Refined Dot Grid Design */}
-    <div className="absolute top-0 left-0 w-full h-[600px] opacity-20">
-      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="dotGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-             <circle cx="2" cy="2" r="1.5" fill="#76c034" />
-             <circle cx="22" cy="22" r="0.8" fill="#76c034" opacity="0.5" />
-          </pattern>
-          <radialGradient id="fadeGradient" cx="20%" cy="30%" r="50%">
-            <stop offset="0%" stopColor="white" stopOpacity="1" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
-          </radialGradient>
-          <mask id="mask">
-            <rect width="100%" height="100%" fill="url(#fadeGradient)" />
-          </mask>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#dotGrid)" mask="url(#mask)" />
-      </svg>
+// --- Background Decorations (Falling Chemistry Symbols) ---
+const FallingChemistry = () => {
+  const symbols = [
+    { text: 'H₂O', size: 'text-[14px]' },
+    { text: 'CO₂', size: 'text-[12px]' },
+    { text: 'NaCl', size: 'text-[13px]' },
+    { text: 'CH₄', size: 'text-[12px]' },
+    { text: '⚛️', size: 'text-[18px]' },
+    { text: '⬢', size: 'text-[20px]' }, // Benzene ring
+    { text: 'O₂', size: 'text-[11px]' },
+    { text: '+', size: 'text-[16px]' },
+    { text: '-', size: 'text-[16px]' },
+    { text: 'H₂', size: 'text-[12px]' },
+    { text: 'NH₃', size: 'text-[13px]' },
+    { text: '🧪', size: 'text-[15px]' },
+  ];
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden h-full z-0">
+      {[...Array(50)].map((_, i) => {
+        const symbol = symbols[i % symbols.length];
+        const randomX = Math.random() * 100;
+        const duration = 20 + Math.random() * 25;
+        const delay = Math.random() * -40; // Randomized start positions
+        const opacity = 0.02 + Math.random() * 0.1;
+        const blur = Math.random() > 0.7 ? 'blur-[1.5px]' : 'blur-[0.5px]';
+
+        return (
+          <motion.div
+            key={i}
+            initial={{ y: -100, x: `${randomX}%`, opacity: 0, rotate: 0 }}
+            animate={{ 
+              y: '120vh', 
+              opacity: [0, opacity, opacity, 0],
+              rotate: 360,
+              x: `${randomX + (Math.random() * 10 - 5)}%` 
+            }}
+            transition={{ 
+              duration: duration, 
+              delay: delay, 
+              repeat: Infinity, 
+              ease: "linear" 
+            }}
+            className={`absolute font-black text-viet-green select-none ${symbol.size} ${blur}`}
+            style={{ 
+              textShadow: '0 0 10px rgba(118, 192, 52, 0.1)'
+            }}
+          >
+            {symbol.text}
+          </motion.div>
+        );
+      })}
+
+      {/* Soft Glows for ambiance */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-viet-green/[0.03] to-transparent pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-viet-green/[0.05] blur-[120px] rounded-full" />
+      <div className="absolute top-1/2 right-0 w-80 h-80 bg-blue-500/[0.03] blur-[100px] rounded-full" />
     </div>
-
-    {/* Elegant Hexagon Symbol */}
-    <motion.div 
-      animate={{ 
-        y: [0, -20, 0],
-        rotate: [0, 5, 0]
-      }}
-      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-40 right-20 w-48 h-48 text-viet-green opacity-20"
-    >
-      <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
-         <polygon points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" />
-         <polygon points="50,15 85,32.5 85,67.5 50,85 15,67.5 15,32.5" strokeOpacity="0.5" />
-         <circle cx="50" cy="50" r="10" />
-         <path d="M50 5 v10 M95 27.5 l-10 5 M95 72.5 l-10 -5 M50 95 v-10 M5 72.5 l 10 -5 M5 27.5 l 10 5" />
-      </svg>
-    </motion.div>
-
-    {/* Soft Glows */}
-    <div className="absolute -top-40 -left-40 w-96 h-96 bg-viet-green/5 blur-[120px] rounded-full" />
-  </div>
-);
+  );
+};
 
 import LeaderboardSection from '@/components/home/LeaderboardSection';
 
@@ -152,18 +168,21 @@ const Home = () => {
     <div className="min-h-screen font-sans bg-[#fffbf0]">
       {/* --- HERO SECTION --- */}
       <section className="relative pt-[180px] pb-32 overflow-hidden bg-[#fffbf0]">
-        <BackgroundOrbs />
+        <FallingChemistry />
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center text-center">
           <div className="flex items-center justify-center gap-6 mb-10 cursor-default animate-fade-in relative">
-            {/* Localized Dot Grid behind logo */}
-            <div className="absolute -top-10 -left-10 w-40 h-40 opacity-20 pointer-events-none z-0">
+            {/* Dynamic Halo behind logo */}
+            <motion.div 
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              className="absolute -top-10 -left-10 w-40 h-40 opacity-10 pointer-events-none z-0"
+            >
                <svg width="100%" height="100%" viewBox="0 0 100 100">
-                  <pattern id="localDots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                     <circle cx="3" cy="3" r="2.5" fill="#76c034" />
-                  </pattern>
-                  <rect width="100%" height="100%" fill="url(#localDots)" />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#76c034" strokeWidth="0.5" strokeDasharray="10 5" />
+                  <circle cx="50" cy="50" r="30" fill="none" stroke="#76c034" strokeWidth="0.5" strokeDasharray="5 10" />
+                  <path d="M50 5 L50 15 M50 85 L50 95 M5 50 L15 50 M85 50 L95 50" stroke="#76c034" strokeWidth="1" />
                </svg>
-            </div>
+            </motion.div>
 
             <div className="w-28 h-28 relative flex items-center justify-center animate-bounce-slow shrink-0 z-10">
               {/* Styled $ Logo */}

@@ -215,7 +215,7 @@ export const molecules = [
 
 // Bảng màu nguyên tố chuẩn CPK
 export const elementColors = {
-  H: "#ffffff",
+  H: "#e2e8f0", // Light silver/gray instead of pure white to be visible on white bg
   C: "#2c3e50",
   N: "#3498db",
   O: "#e74c3c",

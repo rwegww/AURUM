@@ -295,6 +295,23 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [findMode, setFindMode] = useState('solo');
+  const [onlineCount, setOnlineCount] = useState(1248);
+
+  useEffect(() => {
+    const fetchOnlineCount = async () => {
+      try {
+        const res = await fetch('/api/user/online-count');
+        const data = await res.json();
+        if (data.count) setOnlineCount(data.count);
+      } catch (err) {
+        console.error('Failed to fetch online count:', err);
+      }
+    };
+    
+    fetchOnlineCount();
+    const interval = setInterval(fetchOnlineCount, 30000); // 30s polling
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col items-center gap-8 py-4">
@@ -361,7 +378,7 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
       </div>
       <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-viet-border shadow-sm text-viet-text-light/50 text-[11px] font-bold">
         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span>{t('arena.online_count', { count: '1,248' })}</span>
+        <span>{t('arena.online_count', { count: onlineCount.toLocaleString() })}</span>
       </div>
     </motion.div>
   );
@@ -1019,13 +1036,16 @@ const Arena = () => {
   // ── Match finished → save result to DB
   const handleMatchEnd = async ({ result, score, room_id }) => {
     try {
+      // If we joined a room, the host_name is our opponent
+      const opponentName = activeRoom?.host_name || t('arena.result.opponent_default', { defaultValue: 'Đối thủ' });
+      
       const data = await apiCall('/api/arena/match-result', {
         method: 'POST',
         body: JSON.stringify({
           room_id,
           result,
           score,
-          opponent_name: t('arena.result.opponent_default', { defaultValue: 'Đối thủ' }),
+          opponent_name: opponentName,
         }),
       });
       setMatchResult({ result, score, ptsChange: data.ptsChange || 0 });

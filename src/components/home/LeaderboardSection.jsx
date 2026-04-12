@@ -145,7 +145,7 @@ const LeaderboardSection = () => {
   const others = leaders.slice(3);
 
   return (
-    <section className="relative py-32 bg-viet-bg overflow-hidden">
+    <section className="relative pt-48 pb-32 bg-viet-bg overflow-hidden">
       {/* Dynamic Background Decorations */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-400/5 via-transparent to-transparent" />

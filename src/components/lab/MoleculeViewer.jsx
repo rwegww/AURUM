@@ -193,7 +193,7 @@ const MoleculeViewer = () => {
   // Depth Sorting: Render items from back to front
   const zOrderedItems = useMemo(() => {
     const items = [
-      ...projectedData.atoms.map(a => ({ type: 'atom', z: a.projZ, data: a })),
+      ...projectedData.atoms.map(a => ({ type: 'atom', z: a.projZ + 0.1, data: a })), // Bias atoms forward so they appear on top of bonds
       ...projectedData.bonds.map(b => ({ type: 'bond', z: b.avgZ, data: b }))
     ];
     return items.sort((a, b) => a.z - b.z);

@@ -234,7 +234,7 @@ const DiscussionBoard = ({ lessonId }) => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-[14px] font-bold text-viet-text">{comment.user?.username || 'Người dùng'}</h4>
+                          <h4 className="text-[14px] font-bold text-viet-text">{comment.user?.username || 'Chiến binh Hóa học'}</h4>
                           <span className="text-[11px] text-viet-text-light font-medium">• {new Date(comment.created_at).toLocaleDateString('vi-VN')}</span>
                         </div>
                         <p className="text-[11px] text-viet-text-light font-medium mb-3 opacity-60">
@@ -299,7 +299,7 @@ const DiscussionBoard = ({ lessonId }) => {
                        </div>
                        <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="text-[13px] font-bold text-viet-text">{reply.user?.username}</h4>
+                            <h4 className="text-[13px] font-bold text-viet-text">{reply.user?.username || 'Chiến binh Hóa học'}</h4>
                             <span className="text-[10px] text-viet-text-light font-medium">• {new Date(reply.created_at).toLocaleDateString('vi-VN')}</span>
                           </div>
                           <p className="text-[13px] text-viet-text-light">{reply.content}</p>
