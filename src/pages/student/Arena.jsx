@@ -813,7 +813,7 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
   }, [avatarSeed, selectedAura, user?.id]);
 
   return (
-    <div className="min-h-screen pt-[110px] bg-viet-bg relative overflow-hidden font-inter">
+    <div className="min-h-screen pt-[100px] bg-viet-bg relative overflow-hidden font-inter">
       <Particles />
 
       {/* Decorative BG blobs - softer for light theme */}

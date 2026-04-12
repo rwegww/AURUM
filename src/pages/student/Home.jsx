@@ -103,12 +103,12 @@ const FallingChemistry = () => {
         return (
           <motion.div
             key={i}
-            initial={{ y: -100, x: `${randomX}%`, opacity: 0, rotate: 0 }}
+            initial={{ y: -100, opacity: 0, rotate: 0, x: 0 }}
             animate={{ 
               y: '120vh', 
               opacity: [0, opacity, opacity, 0],
               rotate: 360,
-              x: `${randomX + (Math.random() * 10 - 5)}%` 
+              x: (Math.random() * 40 - 20) // Horizontal drift in pixels
             }}
             transition={{ 
               duration: duration, 
@@ -118,6 +118,7 @@ const FallingChemistry = () => {
             }}
             className={`absolute font-black text-viet-green select-none ${symbol.size} ${blur}`}
             style={{ 
+              left: `${randomX}%`,
               textShadow: '0 0 10px rgba(118, 192, 52, 0.1)'
             }}
           >
@@ -167,7 +168,7 @@ const Home = () => {
   return (
     <div className="min-h-screen font-sans bg-[#fffbf0]">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-[160px] pb-32 overflow-hidden bg-[#fffbf0]">
+      <section className="relative pt-[180px] pb-32 overflow-hidden bg-[#fffbf0]">
         <FallingChemistry />
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center text-center">
           <div className="flex items-center justify-center gap-6 mb-10 cursor-default animate-fade-in relative">

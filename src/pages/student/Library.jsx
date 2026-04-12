@@ -44,7 +44,7 @@ const Library = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-[110px] pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12">
           <motion.div 

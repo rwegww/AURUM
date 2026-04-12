@@ -91,7 +91,7 @@ const Missions = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#fffbf0] pb-24 pt-[110px] px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fffbf0] pb-24 pt-32 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <motion.div

@@ -89,7 +89,7 @@ const MaterialDetail = () => {
   const isPdf = material.file_type === 'pdf';
 
   return (
-    <main className="min-h-screen bg-viet-bg pt-[110px] pb-20 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <button 
           onClick={() => navigate('/library')}
@@ -249,7 +249,7 @@ const MaterialDetail = () => {
           </div>
 
           {/* Sidebar: Info */}
-          <div className="space-y-8">
+          <div className="lg:sticky lg:top-32 space-y-8 h-fit max-h-[calc(100vh-10rem)] overflow-y-auto pr-2 custom-scrollbar">
             <motion.div 
                initial={{ opacity: 0, x: 20 }}
                animate={{ opacity: 1, x: 0 }}
