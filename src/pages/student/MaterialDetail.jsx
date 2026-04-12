@@ -222,7 +222,7 @@ const MaterialDetail = () => {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-viet-green/10 flex items-center justify-center font-black text-viet-green text-sm uppercase">
-                            {f.users?.username?.charAt(0) || 'U'}
+                            {(f.users?.username || t('material_detail.feedback.default_user')).charAt(0)}
                           </div>
                           <div>
                             <p className="font-black text-viet-text text-sm uppercase leading-none">{f.users?.username || t('material_detail.feedback.default_user')}</p>

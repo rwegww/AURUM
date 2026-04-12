@@ -81,10 +81,9 @@ router.get('/:id/feedback', async (req, res) => {
   try {
     const { id: material_id } = req.params;
     
-    // Attempt join with users (Requires FK relationship)
     const { data, error } = await supabase
       .from('material_feedback')
-      .select('*, users(username)')
+      .select('*, users:users(username)')
       .eq('material_id', material_id)
       .order('created_at', { ascending: false });
 
