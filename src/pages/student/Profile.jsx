@@ -52,7 +52,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-[180px] pb-24">
+    <div className="min-h-screen bg-viet-bg pt-[110px] pb-24">
       <div className="max-w-[1200px] mx-auto px-6">
         
         {/* Header Hero */}

@@ -51,7 +51,7 @@ const Classroom = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-viet-bg pt-[110px] pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-16 text-center max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700">
           <h1 className="text-4xl md:text-5xl font-black text-viet-text mb-6 tracking-tight uppercase">

@@ -68,7 +68,7 @@ const LessonPage = () => {
   const video = lesson.videoModules?.[0] || { url: '', title: lesson.title };
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-[70px]">
+    <div className="min-h-screen bg-viet-bg pt-[80px]">
       {showStory && lesson.storySlides?.length > 0 && (
         <StoryIntro 
           slides={lesson.storySlides} 

@@ -167,7 +167,7 @@ const Home = () => {
   return (
     <div className="min-h-screen font-sans bg-[#fffbf0]">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-[180px] pb-32 overflow-hidden bg-[#fffbf0]">
+      <section className="relative pt-[160px] pb-32 overflow-hidden bg-[#fffbf0]">
         <FallingChemistry />
         <div className="max-w-[1200px] mx-auto px-6 relative z-10 flex flex-col items-center text-center">
           <div className="flex items-center justify-center gap-6 mb-10 cursor-default animate-fade-in relative">

@@ -56,7 +56,7 @@ const Lessons = () => {
   };
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-viet-bg pt-[110px] pb-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-viet-text mb-4 tracking-tight uppercase italic">

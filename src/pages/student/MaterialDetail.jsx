@@ -89,7 +89,7 @@ const MaterialDetail = () => {
   const isPdf = material.file_type === 'pdf';
 
   return (
-    <main className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-viet-bg pt-[110px] pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <button 
           onClick={() => navigate('/library')}
