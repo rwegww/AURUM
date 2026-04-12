@@ -95,8 +95,11 @@ const Profile = () => {
                  <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">{t('profile.member_role')}</span>
               </div>
               <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">
-                <Trans i18nKey="profile.member_since" values={{ date: new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US') }}>
-                   Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {{date}}
+                <Trans 
+                  i18nKey="profile.member_since" 
+                  values={{ date: new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US') }}
+                >
+                   Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')}
                 </Trans>
               </p>
               
