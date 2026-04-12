@@ -97,9 +97,15 @@ const Profile = () => {
               <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">
                 <Trans 
                   i18nKey="profile.member_since" 
-                  values={{ date: new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US') }}
+                  values={{ 
+                    date: user?.createdAt 
+                      ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
+                      : (i18n.language === 'vi' ? 'Sớm hơn' : 'Earlier')
+                  }}
                 >
-                   Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')}
+                   Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {user?.createdAt 
+                     ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
+                     : (i18n.language === 'vi' ? 'Thời gian dài' : 'a long time')}
                 </Trans>
               </p>
               

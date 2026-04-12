@@ -49,7 +49,8 @@ router.post('/google-firebase', async (req, res) => {
         xp: user.xp,
         level: user.level,
         inventory: user.inventory,
-        unlockedLessons: user.unlockedLessons
+        unlockedLessons: user.unlockedLessons,
+        createdAt: user.createdAt
       }
     });
   } catch (err) {
@@ -84,7 +85,8 @@ router.post('/register', async (req, res) => {
         username: user.username,
         role: user.role,
         xp: user.xp,
-        level: user.level
+        level: user.level,
+        createdAt: user.createdAt
       }
     });
   } catch (err) {
@@ -124,7 +126,8 @@ router.post('/login', async (req, res) => {
         xp: user.xp,
         level: user.level,
         inventory: user.inventory,
-        unlockedLessons: user.unlockedLessons
+        unlockedLessons: user.unlockedLessons,
+        createdAt: user.createdAt
       }
     });
   } catch (err) {

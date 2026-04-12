@@ -86,6 +86,7 @@ router.get('/profile', auth, async (req, res) => {
     unlockedLessons: req.user.unlockedLessons,
     unlockedChemicals: req.user.unlockedChemicals || [],
     avatarSeed: req.user.avatarSeed,
+    createdAt: req.user.createdAt,
     arenaStats: req.user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 },
     arenaAvatar: req.user.arena_avatar || { seed: 'Chem Master', aura: '#a855f7' },
   });
