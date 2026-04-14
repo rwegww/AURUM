@@ -16,6 +16,8 @@ const formatSubscripts = (f) => {
   return f.toString().replace(/\d/g, (m) => map[m]);
 };
 
+const VI_STOP_WORDS = ["có", "của", "và", "là", "trong", "phản", "ứng", "với", "hỏi", "đáp", "gì", "cho", "biết", "tại", "sao", "thế", "nào", "mấy", "bao", "nhiêu"];
+
 /**
  * AURUM EXPERT ENGINE
  * An advanced data-driven assistant for chemistry.
@@ -61,10 +63,12 @@ class AurumExpertEngine {
    */
   async ask(query, context = {}) {
     const { role = 'student', user = {} } = context;
-    const q = query.toLowerCase().trim();
-
+    
+    // Clean query from stop words before processing
+    let q = query.toLowerCase().trim();
+    
     // 1. Parse Intent and Extract Chemicals
-    const foundTokens = this.extractChemicals(q);
+    const foundTokens = this.extractChemicals(query); // Pass original case for better detection
     const isReactionQuery = q.includes("+") || q.includes("tác dụng") || q.includes("phản ứng");
 
     // 2. Handle Reaction Queries
@@ -89,23 +93,39 @@ class AurumExpertEngine {
     };
   }
 
-  extractChemicals(query) {
+  extractChemicals(originalQuery) {
     const tokens = [];
-    const normalizedQuery = normalizeFormula(query).toLowerCase();
+    const lowerQuery = originalQuery.toLowerCase();
+    
+    // Tokenize the query by spaces and common punctuation
+    const words = lowerQuery.split(/[\s\+\?\.\,\!\(\)]+/);
+    
+    // 1. Filter out stop words to avoid false positives for single letters
+    const filteredWords = words.filter(w => !VI_STOP_WORDS.includes(w));
 
-    // Strategy 1: Look for exact formulas (e.g., KMnO4, H2O)
-    // We sort keys by length descending to match longest possible string first (e.g. NaOH over Na)
+    // 2. Scan the dictionary
     const sortedKeys = Array.from(this.chemicalDict.keys()).sort((a, b) => b.length - a.length);
 
-    let tempQuery = " " + normalizedQuery + " ";
+    // Technique: Match longest possible strings from the filtered word pool
     for (const key of sortedKeys) {
-      const pattern = new RegExp(`(^|[^A-Z0-9])${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Z0-9]|$)`, 'i');
-      if (pattern.test(tempQuery)) {
-        tokens.push(this.chemicalDict.get(key));
-        // Remove the match to prevent redundant partial matches (but be careful with Na in NaOH)
-        // For now, just adding and ensuring longest match first handles most cases.
-        if (tokens.length >= 3) break; 
+      const normKey = normalizeFormula(key).toLowerCase();
+      
+      // Strict matching for single letters
+      if (key.length === 1) {
+        // Only match if isolated in original words and NOT a stop word
+        if (filteredWords.includes(normKey)) {
+          // Additional check: If it's a single letter, it should ideally be uppercase in original or isolated
+          // But for chemistry symbols like C, N, O, we check if it was truly used as a token
+          tokens.push(this.chemicalDict.get(key));
+        }
+      } else {
+        // For multi-char formulas (e.g. H2O, KMnO4), check if present in segments
+        if (filteredWords.some(w => w.includes(normKey)) || lowerQuery.includes(normKey)) {
+          tokens.push(this.chemicalDict.get(key));
+        }
       }
+      
+      if (tokens.length >= 4) break;
     }
 
     // Deduplicate tokens by formula

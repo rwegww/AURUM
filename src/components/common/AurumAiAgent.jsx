@@ -4,6 +4,11 @@ import { Bot, X, Send, Sparkles, MessageSquare, ExternalLink, Beaker, BrainCircu
 import { useAuth } from '@/context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AurumExpert from '@/services/ai/AurumExpert';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
+import 'katex/dist/katex.min.css';
 
 const AurumAiAgent = () => {
   const { user, isLoggedIn } = useAuth();
@@ -123,11 +128,26 @@ const AurumAiAgent = () => {
                       }
                     `}>
                       {msg.confidence && (
-                         <div className="absolute -top-3 left-0 bg-blue-500 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                         <div className="absolute -top-3 left-0 bg-blue-500 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-lg shadow-blue-500/30">
                            Confidence: {(msg.confidence * 100).toFixed(0)}%
                          </div>
                       )}
-                      {msg.text}
+                      <ReactMarkdown 
+                        remarkPlugins={[remarkGfm, remarkMath]} 
+                        rehypePlugins={[rehypeKatex]}
+                        className="markdown-content"
+                        components={{
+                          p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                          strong: ({node, ...props}) => <strong className="font-black text-white" {...props} />,
+                          code: ({node, inline, className, children, ...props}) => (
+                            <code className="bg-white/10 px-1.5 py-0.5 rounded text-blue-400 font-mono text-[11px]" {...props}>
+                              {children}
+                            </code>
+                          )
+                        }}
+                      >
+                        {msg.text}
+                      </ReactMarkdown>
                     </div>
 
                     {/* AI Sub-components: Actions/Data */}
