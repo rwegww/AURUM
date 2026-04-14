@@ -86,8 +86,8 @@ router.post('/ask', async (req, res) => {
       let result;
       let attemptLogs = [];
       
-      // Order: Most available/stable -> Newest/Powerful
-      const modelCandidates = ['gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-pro'];
+      // Order: Prefer newest/stable, fallback to other next-gen models supported by this key
+      const modelCandidates = ['gemini-2.5-flash', 'gemini-3.1-pro-preview', 'gemini-2.0-flash'];
 
       for (const modelName of modelCandidates) {
         try {
