@@ -85,24 +85,32 @@ app.get('/api/debug-env', async (req, res) => {
   }
 
   try {
-    // Force v1 for model listing as well
-    const modelList = await genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' }); 
-    // Wait, listModels is a top level function
-    const listResult = await genAI.listModels();
-    availableModels = listResult.models.map(m => m.name);
-    
-    // Try pinging the first available flash or pro model
-    const preferredModel = availableModels.find(m => m.includes('flash')) || availableModels.find(m => m.includes('pro')) || availableModels[0];
-    
-    if (preferredModel) {
-      const model = genAI.getGenerativeModel({ model: preferredModel.replace('models/', '') }, { apiVersion: 'v1' });
-      const ping = await model.generateContent("ping");
-      geminiTest = ping.response ? `Success with ${preferredModel}` : 'Failed (Empty Response)';
+  try {
+    const candidates = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro', 'gemini-1.5-pro'];
+    let workingModel = null;
+    let errors = [];
+
+    for (const modelName of candidates) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
+        const ping = await model.generateContent("ping");
+        if (ping.response) {
+          workingModel = modelName;
+          break;
+        }
+      } catch (e) {
+        errors.push(`${modelName}: ${e.message}`);
+      }
+    }
+
+    if (workingModel) {
+      geminiTest = `Success with ${workingModel}`;
+      availableModels = [workingModel];
     } else {
-      geminiTest = 'No models available for this key';
+      geminiTest = `All candidates failed. Errors: ${errors.join(' | ')}`;
     }
   } catch (e) {
-    geminiTest = `List/Ping Crash: ${e.message}`;
+    geminiTest = `General Ping Crash: ${e.message}`;
   }
 
   res.json({
