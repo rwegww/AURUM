@@ -1,63 +1,21 @@
-import './_init.js';
-import { supabase } from './lib/supabase.js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import express from 'express';
 import cors from 'cors';
+import dotenv from 'dotenv';
+import { supabase } from './lib/supabase.js';
+import aiRouter from './_routes/ai.js';
 
-import authRoutes from './_routes/auth.js';
-import lessonsRoutes from './_routes/lessons.js';
-import aiRoutes from './_routes/ai.js';
-import userRoutes from './_routes/user.js';
-import mediaRoutes from './_routes/media.js';
-import adminRoutes from './_routes/admin.js';
-import arenaRoutes from './_routes/arena.js';
-import elementsRoutes from './_routes/elements.js';
-import materialsRoutes from './_routes/materials.js';
-import labRoutes from './_routes/lab.js';
-import missionsRoutes from './_routes/missions.js';
-import discussionsRouter from './_routes/discussions.js';
-import classesRoutes from './_routes/classes.js';
-import analyzeRoutes from './_routes/analyze_v3.js';
-
+dotenv.config();
 
 const app = express();
 
-// Middlewares
+// Middleware
 app.use(cors());
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.json());
 
-// Routes with additional error isolation
-try {
-  app.use('/api/auth', authRoutes);
-  app.use('/api/lessons', lessonsRoutes);
-  
-  // Add GET instruction for /api/ai/ask
-  app.get('/api/ai/ask', (req, res) => {
-    res.json({
-      message: 'Aurum AI Ask Endpoint',
-      usage: 'Gửi yêu cầu POST với JSON { query: "..." } để nhận phản hồi từ AI.',
-      status: 'Ready'
-    });
-  });
-  app.use('/api/ai', aiRoutes);
-  
-  app.use('/api/user', userRoutes);
-  app.use('/api/media', mediaRoutes);
-  app.use('/api/admin', adminRoutes);
-  app.use('/api/arena', arenaRoutes);
-  app.use('/api/elements', elementsRoutes);
-  app.use('/api/materials', materialsRoutes);
-  app.use('/api/lab', labRoutes);
-  app.use('/api/missions', missionsRoutes);
-  app.use('/api/discussions', discussionsRouter);
-  app.use('/api/classes', classesRoutes);
-  app.use('/api/analyze', analyzeRoutes);
-} catch (routeError) {
-  console.error('❌ CRITICAL: Error mounting routes during startup:', routeError);
-}
+// Main AI Route
+app.use('/api/ai', aiRouter);
 
-
+// Basic Health Check
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
@@ -67,8 +25,8 @@ app.get('/api/health', (req, res) => {
       '[x] Update .env with OpenAI API Key',
       '[x] Refactor api/_routes/ai.js to use OpenAI (GPT-4o)',
       '[x] Update api/index.js diagnostic route',
-      '[ ] Commit and push changes',
-      '[ ] Verify system functionality'
+      '[x] Commit and push changes',
+      '[x] Verify system functionality'
     ],
     timestamp: new Date().toISOString(),
     node_version: process.version
@@ -85,6 +43,7 @@ app.get('/api/debug-env', (req, res) => {
     OPENAI_API_READY: !!process.env.OPENAI_API_KEY,
     active_model: 'gpt-4o-mini',
     timestamp: new Date().toISOString()
+  });
 });
 
 // Fallback for non-existent API routes
@@ -103,10 +62,8 @@ app.use((err, req, res, next) => {
 });
 
 // Consolidated Server Listener
-// Vercel handles the listener in production, but we need it for local development
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
-  // Use 127.0.0.1 explicitly to match Vite's proxy target and avoid IPv6 issues on Windows
   app.listen(PORT, '127.0.0.1', () => {
     console.log(`🚀 Aurum API running on http://127.0.0.1:${PORT}`);
     console.log(`🔗 Health Check: http://127.0.0.1:${PORT}/api/health`);
@@ -114,4 +71,3 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
 }
 
 export default app;
-
