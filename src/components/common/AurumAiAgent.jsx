@@ -37,28 +37,38 @@ const AurumAiAgent = () => {
     }
   }, [messages, isTyping]);
 
+  // Listen for external triggers (e.g. from ElementCard)
+  useEffect(() => {
+    const handleExternalAsk = (e) => {
+      const { query } = e.detail;
+      setIsOpen(true);
+      performAsk(query);
+    };
+
+    window.addEventListener('aurum-ask', handleExternalAsk);
+    return () => window.removeEventListener('aurum-ask', handleExternalAsk);
+  }, [role, user]);
+
   const getWelcomeMessage = (role) => {
     const messages = {
-      student: "Chào mừng bạn, nhà nghiên cứu trẻ! Tôi là Aurum AI. Bạn cần tôi giúp gì về các phản ứng hóa học hay bài tập hôm nay?",
-      teacher: "Chào bạn đồng nghiệp. Tôi là Trợ thủ Aurum. Tôi có thể hỗ trợ dữ liệu lớp học hoặc gợi ý học liệu cho bạn.",
-      admin: "Chào Admin. Tôi đang trong trạng thái sẵn sàng báo cáo dữ liệu hệ thống.",
-      guest: "Chào bạn. Đăng nhập để tôi có thể hỗ trợ bạn sâu hơn nhé!"
+      student: "Chào mừng bạn! Tôi là Aurum AI. Tôi vừa được nâng cấp **Mạng thần kinh nhân tạo** để dự đoán phản ứng. Bạn cần tôi giúp gì?",
+      teacher: "Chào đồng nghiệp. Trợ thủ AI đã sẵn sàng với bộ máy dự đoán thực tế. Tôi có thể hỗ trợ gì cho bài giảng của bạn?",
+      admin: "Hệ thống Neural AI đã trực tuyến. Chào Admin, mọi dữ liệu đã được đồng bộ.",
+      guest: "Chào bạn. Đăng nhập để trải nghiệm sức mạnh của AI Aurum nhé!"
     };
     return messages[role] || messages.guest;
   };
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
+  const performAsk = async (text) => {
+    if (!text.trim()) return;
 
-    const userMsg = { id: Date.now(), text: inputValue, sender: 'user', timestamp: new Date() };
+    const userMsg = { id: Date.now(), text, sender: 'user', timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
-    setInputValue('');
     setIsTyping(true);
 
     // AI Logic
     setTimeout(async () => {
-      const response = await AurumExpert.ask(userMsg.text, { role, page: location.pathname, user });
+      const response = await AurumExpert.ask(text, { role, page: location.pathname, user });
       
       const aiMsg = { 
         id: Date.now() + 1, 
@@ -73,7 +83,13 @@ const AurumAiAgent = () => {
       
       setMessages(prev => [...prev, aiMsg]);
       setIsTyping(false);
-    }, 800);
+    }, 1000);
+  };
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    performAsk(inputValue);
+    setInputValue('');
   };
 
   const handleActionClick = (action) => {

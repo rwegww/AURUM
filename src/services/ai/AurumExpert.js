@@ -1,5 +1,6 @@
 import { reactions } from '../../data/reactions';
 import { elements } from '../../data/elements';
+import ReactionML from './ReactionML';
 
 /**
  * Clean and normalize formula for comparison
@@ -28,6 +29,7 @@ class AurumExpertEngine {
     this.elements = elements;
     this.chemicalDict = new Map();
     this.init();
+    ReactionML.init(); // Initialize Neural Network
   }
 
   /**
@@ -88,8 +90,8 @@ class AurumExpertEngine {
     // 5. Default Fallback with suggestions from DB
     const randomElements = this.elements.sort(() => 0.5 - Math.random()).slice(0, 2);
     return {
-      message: `Tôi là Aurum AI. Tôi hiểu về ${this.elements.length} nguyên tố và hàng trăm chất hóa học. Hãy thử hỏi về "${randomElements[0].name}" hoặc phản ứng giữa các chất!`,
-      suggestions: [`${randomElements[0].symbol} là gì?`, "Na + H2O", "KMnO4"]
+      message: `Tôi là Aurum AI. Tôi được trang bị **Mạng thần kinh nhân tạo (Neural Network)** để dự đoán các phản ứng hóa học phức tạp. Bạn muốn thử nghiệm chất nào?`,
+      suggestions: [`${randomElements[0].symbol} là gì?`, "Phản ứng Na + Cl2", "Dự đoán Ba + O2"]
     };
   }
 
@@ -97,41 +99,54 @@ class AurumExpertEngine {
     const tokens = [];
     const lowerQuery = originalQuery.toLowerCase();
     
-    // Tokenize the query by spaces and common punctuation
-    const words = lowerQuery.split(/[\s\+\?\.\,\!\(\)]+/);
+    // 1. Normalize the entire query string to handle subscripts -> numbers
+    // This ensures H₂O in the query is seen as H2O
+    const normalizedQuery = normalizeFormula(lowerQuery).toLowerCase();
     
-    // 1. Filter out stop words to avoid false positives for single letters
-    const filteredWords = words.filter(w => !VI_STOP_WORDS.includes(w));
-
-    // 2. Scan the dictionary
+    // 2. Scan the dictionary using Greedy Matching (longest first)
     const sortedKeys = Array.from(this.chemicalDict.keys()).sort((a, b) => b.length - a.length);
 
-    // Technique: Match longest possible strings from the filtered word pool
+    // We'll keep track of which parts of the string are "consumed"
+    let availableQuery = normalizedQuery;
+    const matches = [];
+
     for (const key of sortedKeys) {
       const normKey = normalizeFormula(key).toLowerCase();
       
-      // Strict matching for single letters
-      if (key.length === 1) {
-        // Only match if isolated in original words and NOT a stop word
-        if (filteredWords.includes(normKey)) {
-          // Additional check: If it's a single letter, it should ideally be uppercase in original or isolated
-          // But for chemistry symbols like C, N, O, we check if it was truly used as a token
-          tokens.push(this.chemicalDict.get(key));
-        }
-      } else {
-        // For multi-char formulas (e.g. H2O, KMnO4), check if present in segments
-        if (filteredWords.some(w => w.includes(normKey)) || lowerQuery.includes(normKey)) {
-          tokens.push(this.chemicalDict.get(key));
-        }
+      // Strict matching boundary for single letters or short symbols
+      const isShort = normKey.length <= 2;
+      const pattern = isShort 
+        ? new RegExp(`(^|[^a-z0-9])${normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^a-z0-9]|$)`, 'i')
+        : new RegExp(normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+
+      let match;
+      while ((match = pattern.exec(availableQuery)) !== null) {
+        const matchStr = isShort ? match[0].trim() : match[0];
+        const startIndex = match.index + (isShort && match[0].startsWith(' ') ? 1 : 0);
+        const actualKey = normKey;
+        
+        matches.push({
+          token: this.chemicalDict.get(key),
+          start: startIndex,
+          end: startIndex + actualKey.length
+        });
+
+        // "Black out" the consumed part of the string with spaces to prevent shorter matches
+        const blackout = " ".repeat(actualKey.length);
+        availableQuery = availableQuery.substring(0, startIndex) + blackout + availableQuery.substring(startIndex + actualKey.length);
       }
-      
-      if (tokens.length >= 4) break;
+
+      if (matches.length >= 5) break;
     }
 
-    // Deduplicate tokens by formula
+    // Sort matches by their original position and deduplicate
+    const sortedTokens = matches
+      .sort((a, b) => a.start - b.start)
+      .map(m => m.token);
+
     const unique = [];
     const seen = new Set();
-    tokens.forEach(t => {
+    sortedTokens.forEach(t => {
       const normF = normalizeFormula(t.formula);
       if (!seen.has(normF)) {
         unique.push(t);
@@ -159,19 +174,13 @@ class AurumExpertEngine {
       };
     }
 
-    // ML Simulation for binary reactions
+    // NEURAL NETWORK PREDICTION (Instead of simple simulation)
     if (tokens.length === 2) {
-      const t1 = tokens[0];
-      const t2 = tokens[1];
-      
-      if (t1.name.includes("Kiềm") || t2.name.includes("Kiềm") || t1.formula === 'Na' || t1.formula === 'K') {
-        if (t1.formula === 'H2O' || t2.formula === 'H2O') {
-          return {
-            message: `🤖 [AI Predictor]: Tôi dự đoán **${t1.name} (${t1.formula})** sẽ phản ứng mạnh với **${t2.name} (${t2.formula})** giải phóng nhiệt và khí Hydro (H₂).`,
-            confidence: 0.95
-          };
-        }
-      }
+      const prediction = ReactionML.predict(tokens[0], tokens[1]);
+      return {
+        message: `🤖 **[Neural AI Prediction]**\n\nTôi dự đoán phản ứng này có xác suất xảy ra cao dựa trên mô hình học máy của tôi.\n\n- **Loại phản ứng:** ${prediction.type}\n- **Độ tin cậy:** ${(prediction.confidence * 100).toFixed(1)}%\n\n📖 **Giải cấu trúc:** ${prediction.explanation}`,
+        confidence: prediction.confidence
+      };
     }
 
     return {
