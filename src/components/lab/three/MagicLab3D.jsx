@@ -109,11 +109,23 @@ const MagicLab3D = () => {
         const rxsData = await rxsRes.json();
         
         // Frontend Override: Force KMnO4 to be liquid (solution) as requested
-        const processedChems = chemsData.map(c => {
-          if (normalize(c.formula) === 'KMNO4') {
-            return { ...c, state: 'liquid', color: '#800080', opacity: 0.9 };
+        // Frontend Override: Force all forms of KMnO4 to be liquid (solution)
+        const processedChems = [];
+        const seenFormulas = new Set();
+        
+        chemsData.forEach(c => {
+          const formula = normalize(c.formula).replace(/:/g, '');
+          if (formula === 'KMNO4') {
+            c.state = 'liquid';
+            c.color = '#800080';
+            c.opacity = 0.9;
           }
-          return c;
+          
+          // Deduplicate if formula and name are basically the same
+          if (!seenFormulas.has(c.formula + c.name)) {
+            processedChems.push(c);
+            seenFormulas.add(c.formula + c.name);
+          }
         });
 
         setDbChemicals(processedChems);
@@ -272,7 +284,7 @@ const MagicLab3D = () => {
       </AnimatePresence>
 
       {/* Main UI Layout */}
-      <div className="absolute inset-0 flex flex-col pointer-events-none p-6">
+      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none p-6 z-[10]">
         {/* Top Header */}
         <div className="flex justify-between items-start pointer-events-auto">
           <div className="flex gap-4">
@@ -335,7 +347,7 @@ const MagicLab3D = () => {
         </div>
 
         {/* Bottom Panel */}
-        <div className="flex gap-6 items-end pointer-events-auto h-[280px]">
+        <div className="flex gap-6 items-end pointer-events-auto h-[240px] shrink-0">
           {/* Left Column - Tools */}
           <div className="flex flex-col gap-3">
             <div className="bg-black/30 backdrop-blur-md p-2 rounded-3xl border border-white/10 flex flex-col gap-2">
@@ -378,7 +390,7 @@ const MagicLab3D = () => {
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover/inventory:opacity-100 transition-opacity" />
               
               {/* Search Bar */}
-              <div className="relative mb-6 group px-1">
+              <div className="relative mb-4 group px-1">
                  <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400 transition-colors">
                     <Search size={14} />
                  </div>
@@ -394,15 +406,15 @@ const MagicLab3D = () => {
               {/* Chemicals Grid */}
               <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
 
-              <div className="grid grid-cols-6 gap-3">
+              <div className="grid grid-cols-10 gap-2">
                 {availableChemicals.map((chem) => (
                   <motion.button
-                    key={chem.formula}
-                    whileHover={{ scale: 1.05, y: -4 }}
+                    key={chem.formula + chem.name}
+                    whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleDropToBeaker(chem.formula)}
                     disabled={isPouringFormula !== null}
-                    className={`group relative p-3 rounded-2xl border transition-all ${isPouringFormula === chem.formula ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/10 hover:border-white/30'}`}
+                    className={`group relative p-2 rounded-xl border transition-all ${isPouringFormula === chem.formula ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/10 hover:border-white/30'}`}
                   >
                     {/* Status Badge */}
                     {isPouringFormula === chem.formula && (
@@ -427,9 +439,9 @@ const MagicLab3D = () => {
                     </div>
 
                     {/* Label */}
-                    <div className="flex flex-col items-center">
-                      <span className="text-xs font-black tracking-tight">{chem.formula}</span>
-                      <span className="text-[8px] text-white/40 font-bold uppercase truncate w-full text-center">{chem.name}</span>
+                    <div className="flex flex-col items-center leading-none">
+                      <span className="text-[10px] font-black tracking-tight">{chem.formula}</span>
+                      <span className="text-[7px] text-white/40 font-bold uppercase truncate w-full text-center mt-0.5">{chem.name}</span>
                     </div>
                   </motion.button>
                 ))}
