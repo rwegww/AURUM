@@ -62,6 +62,14 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
     message: 'Aurum API is running (Mono-Router)',
+    tasks: [
+      '[x] Install OpenAI SDK',
+      '[x] Update .env with OpenAI API Key',
+      '[x] Refactor api/_routes/ai.js to use OpenAI (GPT-4o)',
+      '[x] Update api/index.js diagnostic route',
+      '[ ] Commit and push changes',
+      '[ ] Verify system functionality'
+    ],
     timestamp: new Date().toISOString(),
     node_version: process.version
   });
@@ -74,10 +82,9 @@ app.get('/api/debug-env', (req, res) => {
     status: 'Operational',
     node_env: process.env.NODE_ENV,
     SUPABASE_URL: mask(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL),
-    GEMINI_API_READY: !!process.env.GEMINI_API_KEY,
-    active_model: 'gemini-2.5-flash',
+    OPENAI_API_READY: !!process.env.OPENAI_API_KEY,
+    active_model: 'gpt-4o-mini',
     timestamp: new Date().toISOString()
-  });
 });
 
 // Fallback for non-existent API routes

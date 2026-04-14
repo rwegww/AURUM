@@ -1,26 +1,47 @@
 import express from 'express';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import OpenAI from 'openai';
 import { supabase } from '../lib/supabase.js';
 import crypto from 'crypto';
 
 const router = express.Router();
 
-const SYSTEM_INSTRUCTION = `BẠN LÀ AURUM AI EXPERT. 
-PHONG CÁCH PHẢN HỒI BẮT BUỘC:
-- NGẮN GỌN, ĐÚNG TRỌNG TÂM.
-- Ưu tiên gạch đầu dòng và bảng biểu.
-- Không câu dẫn rườm rà.
-QUY TẮC BẢO MẬT: Không tiết lộ dữ liệu người dùng khác.
+const SYSTEM_INSTRUCTION = `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
+PHONG CÁCH PHẢN HỒI: 
+1. Ưu tiên sự NGẮN GỌN, súc tích và ĐÚNG TRỌNG TÂM.
+2. Sử dụng danh sách gạch đầu dòng (-) thay cho các đoạn văn dài.
+3. Nếu có dữ liệu so sánh hoặc tính chất, hãy ưu tiên trình bày dạng BẢNG.
+4. Tránh các câu dẫn rườm rà như "Dưới đây là...", "Tôi xin trả lời...". Đi thẳng vào nội dung chính.
 
-NÔI DUNG CÂU HỎI: `;
+QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
+1. Tuyệt đối không tiết lộ thông tin cá nhân hoặc dữ liệu của người dùng khác.
+2. Chỉ tập trung vào kiến thức hóa học, học thuật và an toàn phòng thí nghiệm.
+3. Nếu câu hỏi liên quan đến chất cháy nổ nguy hiểm ngoài mục đích giáo dục, hãy kích hoạt cảnh báo an toàn.`;
 
-// Initialize Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' }, { apiVersion: 'v1' });
+// Initialize OpenAI
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+/**
+ * Standardized logging utility
+ */
+const logQuery = async (userId, username, query, response, metadata) => {
+  try {
+    await supabase.from('ai_logs').insert({
+      user_id: userId || 'anonymous',
+      username: username || 'Guest',
+      query,
+      response,
+      metadata
+    });
+  } catch (err) {
+    console.error('⚠️ Failed to log query to Supabase:', err.message);
+  }
+};
 
 /**
  * Endpoint: /api/ai/ask
- * logic: Hybrid AI (Knowledge -> Cache -> Gemini)
+ * logic: Hybrid AI (Knowledge -> Cache -> OpenAI)
  */
 router.post('/ask', async (req, res) => {
   try {
@@ -29,147 +50,104 @@ router.post('/ask', async (req, res) => {
 
     if (!query) return res.status(400).json({ error: 'Query is required' });
 
-    const normalizedQuery = query.toLowerCase().trim();
-    const queryHash = crypto.createHash('md5').update(normalizedQuery).digest('hex');
+    const normalizedQuery = query.trim();
+    const queryHash = crypto.createHash('md5').update(normalizedQuery.toLowerCase()).digest('hex');
 
-    // 1. Check Root Knowledge Base (ai_knowledge)
-    let kbMatch = null;
+    // 1. Try Cache
     try {
-      const { data } = await supabase
-        .from('ai_knowledge')
-        .select('*')
-        .filter('patterns', 'cs', `{${normalizedQuery}}`);
-      kbMatch = data;
-    } catch (dbErr) {
-      console.warn('⚠️ Supabase KB Lookup failed, bypassing to Cache/AI:', dbErr.message);
-    }
-
-    if (kbMatch && kbMatch.length > 0) {
-      const result = kbMatch[0];
-      const responseObj = {
-        message: result.explanation || result.message || '',
-        suggestions: result.suggestions || [],
-        actions: result.actions || [],
-        source: 'kb_theory',
-        title: result.title
-      };
-      await logQuery(userId, username, normalizedQuery, responseObj, { source: 'kb_theory' });
-      return res.json(responseObj);
-    }
-
-    // 2. Check AI Cache (ai_cache)
-    let cacheMatch = null;
-    try {
-      const { data } = await supabase
+      const { data: cachedResponse, error: cacheError } = await supabase
         .from('ai_cache')
         .select('response')
         .eq('query_hash', queryHash)
         .maybeSingle();
-      cacheMatch = data;
-    } catch (cacheErr) {
-      console.warn('⚠️ Supabase Cache Lookup failed, bypassing to Gemini:', cacheErr.message);
+
+      if (cachedResponse && !cacheError) {
+        console.log('💎 Cache Hit');
+        return res.json({ ...cachedResponse.response, source: 'cache' });
+      }
+    } catch (e) {
+      console.warn('⚠️ Cache lookup failed, proceeding to OpenAI:', e.message);
     }
 
-    if (cacheMatch) {
-      await logQuery(userId, username, normalizedQuery, cacheMatch.response, { source: 'ai_cache' });
-      return res.json(cacheMatch.response);
-    }
-
-    // 3. Call Gemini AI
-    console.log(`🤖 Gemini Search Starting: "${normalizedQuery}"`);
-
+    console.log(`🤖 OpenAI Search Starting: "${normalizedQuery}"`);
+    
     try {
-      // 3. Call Gemini AI (Enhanced Multi-model Fallback Logic)
+      // 2. Call OpenAI (Primary: gpt-4o-mini, Fallback: gpt-4o)
       const startTime = Date.now();
-      let result;
-      let attemptLogs = [];
+      let responseText = '';
+      let usedModel = 'gpt-4o-mini';
 
-      // Order: Use the latest confirmed models from the user's dashboard (Gemini 3.1 Flash Lite, 2.5 Pro)
-      const modelCandidates = ['gemini-3.1-flash-lite', 'gemini-2.5-pro', 'gemini-2.0-flash'];
-
-      // Fully qualified prompt including instructions
-      const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
-
-      for (const modelName of modelCandidates) {
-        try {
-          console.log(`📡 Attempting Gemini with model: ${modelName}...`);
-          const currentModel = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
-          result = await currentModel.generateContent(fullPrompt);
-          if (result) {
-            console.log(`✅ Success with model: ${modelName}`);
-            attemptLogs.push(`${modelName}: Success`);
-            break; 
-          }
-        } catch (e) {
-          console.warn(`⚠️ Model ${modelName} failed:`, e.message);
-          attemptLogs.push(`${modelName}: ${e.message}`);
-          // Continue to next model
-        }
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: SYSTEM_INSTRUCTION },
+            { role: "user", content: normalizedQuery }
+          ],
+          temperature: 0.7,
+        });
+        responseText = completion.choices[0].message.content;
+      } catch (primaryErr) {
+        console.warn('⚠️ OpenAI Mini failed, retrying with gpt-4o:', primaryErr.message);
+        usedModel = 'gpt-4o';
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            { role: "system", content: SYSTEM_INSTRUCTION },
+            { role: "user", content: normalizedQuery }
+          ],
+        });
+        responseText = completion.choices[0].message.content;
       }
 
-      if (!result) {
-        throw new Error(`All models failed. History: ${attemptLogs.join(' | ')}`);
-      }
-
-      const response = await result.response;
-      const responseText = response.text();
       const duration = Date.now() - startTime;
 
       const responseObj = {
         message: responseText,
-        source: 'gemini_ai',
+        source: 'openai_gpt',
         suggestions: ['Tìm hiểu thêm', 'Ví dụ thực tế', 'Phản ứng liên quan'],
         timestamp: new Date().toISOString(),
         generation_time_ms: duration,
-        engine: attemptLogs[attemptLogs.length - 1]
+        engine: usedModel
       };
 
-      // 4. Persistence (Background)
-      // Save to Cache without blocking the response
+      // 3. Persistence (Background)
       supabase.from('ai_cache').upsert({
         query_hash: queryHash,
         original_query: normalizedQuery,
         response: responseObj
       }).then(({ error }) => {
-        if (error) console.error('⚠️ Failed to cache Gemini response:', error.message);
+        if (error) console.error('⚠️ Failed to cache OpenAI response:', error.message);
       });
 
       // Log Query (Background)
-      logQuery(userId, username, normalizedQuery, responseObj, { source: 'gemini_ai', context, duration_ms: duration });
+      logQuery(userId, username, normalizedQuery, responseObj, { source: 'openai_gpt', context, duration_ms: duration });
 
       return res.json(responseObj);
-    } catch (geminiErr) {
-      console.error('💥 Ultimate AI Failure:', geminiErr.message);
-
+    } catch (openAiErr) {
+      console.error('💥 OpenAI API Error:', openAiErr.message);
       return res.status(503).json({
-        error: 'AI Systems Overloaded',
-        message: 'Tất cả các máy chủ AI của Google hiện đang quá tải hoặc không khả dụng cho khu vực của bạn.',
-        details: geminiErr.message,
-        hint: 'Hãy thử lại sau 1-2 phút hoặc kiểm tra kết nối mạng của bạn.'
+        error: 'AI Service Temporarily Unavailable',
+        message: 'Hệ thống AI đang gặp sự cố. Vui lòng thử lại sau giây lát.',
+        details: openAiErr.message
       });
     }
 
   } catch (err) {
     console.error('💥 Global AI Route Error:', err);
-    res.status(500).json({
-      error: 'Internal System Error',
-      message: err.message
-    });
+    res.status(500).json({ error: 'Internal Server Error', details: err.message });
   }
 });
 
-async function logQuery(userId, username, query, response, metadata = {}) {
-  try {
-    await supabase.from('ai_user_logs').insert({
-      user_id: userId || null,
-      username: username || 'Guest',
-      query,
-      response,
-      metadata
-    });
-  } catch (logErr) {
-    console.error('⚠️ Logging failed:', logErr.message);
-  }
-}
+router.get('/ask', (req, res) => {
+  res.json({
+    message: 'Welcome to Aurum AI Assistant. Please use POST to ask questions.',
+    usage: {
+      endpoint: '/api/ai/ask',
+      method: 'POST',
+      body: { query: 'string', context: 'object' }
+    }
+  });
+});
 
 export default router;
