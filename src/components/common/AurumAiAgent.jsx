@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, Sparkles, MessageSquare, ExternalLink, Beaker, BrainCircuit, ShieldAlert } from 'lucide-react';
+import { Bot, X, Send, Sparkles, MessageSquare, ExternalLink, Beaker, BrainCircuit, ShieldAlert, Shield, FileText } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AurumExpert from '@/services/ai/AurumExpert';
@@ -10,11 +10,15 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
+// Import policy document as raw text
+import policyContent from '../../docs/AI_IDENTITY.md?raw';
+
 const AurumAiAgent = () => {
   const { user, isLoggedIn } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [showPolicy, setShowPolicy] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -112,24 +116,62 @@ const AurumAiAgent = () => {
           >
             {/* Header */}
             <div className="p-6 bg-white/5 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/30">
-                  <Bot size={28} className="text-white" />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md">
+                  <Bot className="text-white" size={24} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-white uppercase tracking-[2px]">Aurum AI Agent</h3>
+                  <h3 className="font-bold text-white text-lg leading-tight">Aurum AI</h3>
                   <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
-                      {role === 'guest' ? 'Smart Assistant' : `${role} Assistant`}
-                    </span>
+                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span className="text-[10px] text-white/70 uppercase tracking-widest font-bold">Neural Engine Online</span>
                   </div>
                 </div>
               </div>
-              <button onClick={() => setIsOpen(false)} className="p-2.5 rounded-xl hover:bg-white/10 text-white/40 transition-all">
-                <X size={20} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => setShowPolicy(true)}
+                  className="text-[10px] bg-white/10 hover:bg-white/20 text-white px-2 py-1.5 rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
+                  title="Chính sách AI & An toàn"
+                >
+                  <Shield size={12} className="text-blue-400" />
+                  <span className="font-bold opacity-80">Chính sách AI</span>
+                </button>
+                <button onClick={() => setIsOpen(false)} className="p-2.5 rounded-xl hover:bg-white/10 text-white/40 transition-all">
+                  <X size={20} />
+                </button>
+              </div>
             </div>
+
+            {/* AI Policy Modal Overlay */}
+            <AnimatePresence>
+              {showPolicy && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col"
+                >
+                  <div className="p-6 border-b border-white/10 flex items-center justify-between bg-blue-600/10">
+                    <div className="flex items-center gap-3 text-white">
+                      <Shield size={20} className="text-blue-400" />
+                      <h4 className="font-bold text-sm uppercase tracking-wider">Hiến chương Aurum AI</h4>
+                    </div>
+                    <button onClick={() => setShowPolicy(false)} className="p-2 rounded-lg hover:bg-white/10 text-white/60">
+                      <X size={20} />
+                    </button>
+                  </div>
+                  <div className="flex-1 overflow-y-auto p-6 text-xs leading-relaxed text-white/80 scroll-smooth custom-scrollbar">
+                    <ReactMarkdown 
+                      remarkPlugins={[remarkGfm]}
+                      className="markdown-content policy-markdown"
+                    >
+                      {policyContent}
+                    </ReactMarkdown>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Messages Body */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth custom-scrollbar">
@@ -143,20 +185,38 @@ const AurumAiAgent = () => {
                         : 'bg-white/5 text-white/90 border border-white/5 rounded-tl-none backdrop-blur-md'
                       }
                     `}>
-                      {msg.confidence && (
-                         <div className="absolute -top-3 left-0 bg-blue-500 text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-lg shadow-blue-500/30">
-                           Confidence: {(msg.confidence * 100).toFixed(0)}%
-                         </div>
+                      {/* Safety & Logic Badges */}
+                      {msg.sender === 'ai' && (
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {msg.confidence && (
+                            <div className="flex items-center gap-1 bg-blue-500/20 text-blue-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-blue-500/30 uppercase tracking-tighter">
+                              <BrainCircuit size={8} />
+                              Confidence: {(msg.confidence * 100).toFixed(0)}%
+                            </div>
+                          )}
+                          {msg.safety && (
+                            <div className={`
+                              flex items-center gap-1 text-[8px] font-black px-1.5 py-0.5 rounded-md border uppercase tracking-tighter
+                              ${msg.safety === 'Danger' ? 'bg-red-500/20 text-red-500 border-red-500/30' :
+                                msg.safety === 'Caution' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' :
+                                'bg-green-500/20 text-green-500 border-green-500/30'}
+                            `}>
+                              <ShieldAlert size={8} />
+                              {msg.safety === 'Danger' ? 'Cảnh báo Nguy hiểm' : msg.safety === 'Caution' ? 'Cần Thận trọng' : 'An toàn Giáo dục'}
+                            </div>
+                          )}
+                        </div>
                       )}
+
                       <ReactMarkdown 
                         remarkPlugins={[remarkGfm, remarkMath]} 
                         rehypePlugins={[rehypeKatex]}
                         className="markdown-content"
                         components={{
                           p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
-                          strong: ({node, ...props}) => <strong className="font-black text-white" {...props} />,
+                          strong: ({node, ...props}) => <strong className="font-black text-white underline decoration-blue-500/50 decoration-2 underline-offset-2" {...props} />,
                           code: ({node, inline, className, children, ...props}) => (
-                            <code className="bg-white/10 px-1.5 py-0.5 rounded text-blue-400 font-mono text-[11px]" {...props}>
+                            <code className="bg-blue-500/20 px-1.5 py-0.5 rounded text-blue-300 font-mono text-[11px] border border-blue-500/20" {...props}>
                               {children}
                             </code>
                           )

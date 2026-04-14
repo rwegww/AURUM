@@ -17,7 +17,16 @@ const formatSubscripts = (f) => {
   return f.toString().replace(/\d/g, (m) => map[m]);
 };
 
-const VI_STOP_WORDS = ["có", "của", "và", "là", "trong", "phản", "ứng", "với", "hỏi", "đáp", "gì", "cho", "biết", "tại", "sao", "thế", "nào", "mấy", "bao", "nhiêu", "tác", "dụng", "không", "như", "đây", "là", "ai", "đâu"];
+const SAFETY_RESTRICTIONS = [
+  "thuốc nổ", "bom", "chế tạo nổ", "bang", "TNT", "Dynamite", "nguy hiểm", "độc hại", "giết", "tấn công"
+];
+
+const PEDAGOGICAL_PROMPTS = [
+  "Bạn có muốn thử mô phỏng phản ứng này trong Lab 3D không?",
+  "Bạn có biết yếu tố nào ảnh hưởng đến tốc độ của phản ứng này không?",
+  "Hãy thử tìm hiểu thêm về ứng dụng thực tế của chất này trong đời sống nhé!",
+  "Bạn có muốn tôi giải thích rõ hơn về cơ chế lớp vỏ electron của phản ứng này không?"
+];
 
 /**
  * AURUM EXPERT ENGINE
@@ -65,12 +74,19 @@ class AurumExpertEngine {
    */
   async ask(query, context = {}) {
     const { role = 'student', user = {} } = context;
-    
-    // Clean query from stop words before processing
     let q = query.toLowerCase().trim();
+
+    // 0. Safety Guardrails (Aurum Constitution)
+    if (SAFETY_RESTRICTIONS.some(word => q.includes(word))) {
+      return {
+        message: "🛡️ **[Thông báo An toàn Aurum]**\n\nTôi là một trợ lý giáo dục và không được phép cung cấp hướng dẫn liên quan đến các chất nguy hiểm, cháy nổ hoặc độc hại ngoài chương trình học.\n\nThay vào đó, bạn có muốn tìm hiểu về các **phản ứng an toàn** trong phòng thí nghiệm ảo của chúng tôi không?",
+        safety: 'Danger',
+        suggestions: ["Axit hữu cơ là gì?", "Phản ứng trung hòa", "Kim loại kiềm"]
+      };
+    }
     
     // 1. Parse Intent and Extract Chemicals
-    const foundTokens = this.extractChemicals(query); // Pass original case for better detection
+    const foundTokens = this.extractChemicals(query); 
     const isReactionQuery = q.includes("+") || q.includes("tác dụng") || q.includes("phản ứng");
 
     // 2. Handle Reaction Queries
@@ -87,7 +103,7 @@ class AurumExpertEngine {
     if (q.includes("vai trò")) return this.handleRoleCheck(role);
     if (q.includes("bài học")) return this.handleLessonHelp(role);
 
-    // 5. Default Fallback with suggestions from DB
+    // 5. Default Fallback
     const randomElements = this.elements.sort(() => 0.5 - Math.random()).slice(0, 2);
     return {
       message: `Tôi là Aurum AI. Tôi được trang bị **Mạng thần kinh nhân tạo (Neural Network)** để dự đoán các phản ứng hóa học phức tạp. Bạn muốn thử nghiệm chất nào?`,
@@ -98,61 +114,38 @@ class AurumExpertEngine {
   extractChemicals(originalQuery) {
     const tokens = [];
     const lowerQuery = originalQuery.toLowerCase();
-    
-    // 1. Normalize the entire query string to handle subscripts -> numbers
-    // This ensures H₂O in the query is seen as H2O
     const normalizedQuery = normalizeFormula(lowerQuery).toLowerCase();
-    
-    // 2. Scan the dictionary using Greedy Matching (longest first)
     const sortedKeys = Array.from(this.chemicalDict.keys()).sort((a, b) => b.length - a.length);
 
-    // We'll keep track of which parts of the string are "consumed"
     let availableQuery = normalizedQuery;
     const matches = [];
 
     for (const key of sortedKeys) {
       const normKey = normalizeFormula(key).toLowerCase();
-      
-      // Strict matching boundary for single letters or short symbols
-      // We use \p{L} to match Unicode letters and \p{N} for numbers.
-      // This ensures "có" is treated as a word and not "c" + boundary.
       const isShort = normKey.length <= 2;
-      
-      // regex mapping: [^\p{L}\p{N}] means "anything NOT a letter or number"
       const pattern = isShort 
         ? new RegExp(`(?:^|[^\\p{L}\\p{N}])${normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?=[^\\p{L}\\p{N}]|$)`, 'iu')
         : new RegExp(normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'iu');
 
       let match;
       while ((match = pattern.exec(availableQuery)) !== null) {
-        // Adjust startIndex because the pattern might start with a boundary character
         let startIndex = match.index;
         if (isShort && match[0].length > normKey.length) {
-            // Find the position of normKey within the match
             const offset = match[0].toLowerCase().indexOf(normKey);
             startIndex += offset;
         }
-        
         const actualKey = normKey;
-        
         matches.push({
           token: this.chemicalDict.get(key),
           start: startIndex,
           end: startIndex + actualKey.length
         });
-
-        // "Black out" the consumed part of the string with spaces to prevent shorter matches
         const blackout = " ".repeat(actualKey.length);
         availableQuery = availableQuery.substring(0, startIndex) + blackout + availableQuery.substring(startIndex + actualKey.length);
       }
-
       if (matches.length >= 6) break;
     }
 
-    // Filter out matches that intersect with VI_STOP_WORDS or are just noise
-    // But since availableQuery is blacked out, we mostly handle overlaps gracefully.
-    
-    // Sort matches by their original position and deduplicate
     const sortedTokens = matches
       .sort((a, b) => a.start - b.start)
       .map(m => m.token);
@@ -172,6 +165,7 @@ class AurumExpertEngine {
 
   handleReactionRequest(tokens) {
     const formulas = tokens.map(t => normalizeFormula(t.formula));
+    const randomPrompt = PEDAGOGICAL_PROMPTS[Math.floor(Math.random() * PEDAGOGICAL_PROMPTS.length)];
     
     // Search DB for exact match
     const match = this.reactions.find(rx => {
@@ -181,52 +175,53 @@ class AurumExpertEngine {
 
     if (match) {
       return {
-        message: `🤖 Tôi đã tìm thấy phản ứng: **${match.name}**\n\n📌 **Phương trình:** ${match.equation}\n\n🔍 **Hiện tượng:** ${match.observation}\n\n⚠️ **Cảnh báo:** ${match.safetyWarning}`,
+        message: `🤖 Tôi đã tìm thấy phản ứng: **${match.name}**\n\n📌 **Phương trình:** ${match.equation}\n\n🔍 **Hiện tượng:** ${match.observation}\n\n⚠️ **Cảnh báo:** ${match.safetyWarning}\n\n🎓 **Gợi ý học tập:** ${randomPrompt}`,
         data: match,
+        safety: match.safetyWarning.toLowerCase().includes('nguy hiểm') ? 'Caution' : 'Safe',
         type: 'reaction'
       };
     }
 
-    // NEURAL NETWORK PREDICTION (Instead of simple simulation)
+    // NEURAL NETWORK PREDICTION
     if (tokens.length === 2) {
       const prediction = ReactionML.predict(tokens[0], tokens[1]);
       return {
-        message: `🤖 **[Neural AI Prediction]**\n\nTôi dự đoán phản ứng này có xác suất xảy ra cao dựa trên mô hình học máy của tôi.\n\n- **Loại phản ứng:** ${prediction.type}\n- **Độ tin cậy:** ${(prediction.confidence * 100).toFixed(1)}%\n\n📖 **Giải cấu trúc:** ${prediction.explanation}`,
-        confidence: prediction.confidence
+        message: `🤖 **[Neural AI Prediction]**\n\nTôi dự đoán phản ứng này có xác suất xảy ra cao dựa trên mô hình học máy của tôi.\n\n- **Loại phản ứng:** ${prediction.type}\n- **Độ tin cậy:** ${(prediction.confidence * 100).toFixed(1)}%\n- **Mức độ an toàn:** ${prediction.safety}\n\n📖 **Giải cấu trúc:** ${prediction.explanation}\n\n🎓 **Gợi ý:** ${randomPrompt}`,
+        confidence: prediction.confidence,
+        safety: prediction.safety
       };
     }
 
     return {
-      message: `Tôi chưa tìm thấy phản ứng chính xác giữa ${tokens.map(t => t.name).join(' và ')} trong thư viện thực hành, nhưng bạn có thể thử xem tính chất riêng của từng chất.`,
+      message: `Tôi chưa tìm thấy phản ứng chính xác trong thư viện thực hành. Tuy nhiên, ${randomPrompt}`,
       suggestions: [`${tokens[0].formula} là gì?`, `${tokens[1].formula} là gì?`]
     };
   }
 
   handleInfoRequest(token) {
+    const randomPrompt = PEDAGOGICAL_PROMPTS[Math.floor(Math.random() * PEDAGOGICAL_PROMPTS.length)];
     if (token.type === 'element') {
       const el = token.data;
       return {
-        message: `🌟 **${el.name} (${el.symbol})**\n\n- **Số hiệu:** ${el.atomic_number || el.number}\n- **Khối lượng:** ${el.atomic_mass || el.weight}\n- **Phân loại:** ${el.category}\n\n📖 **Mô tả:** ${el.desc}`,
+        message: `🌟 **${el.name} (${el.symbol})**\n\n- **Số hiệu:** ${el.atomic_number || el.number}\n- **Khối lượng:** ${el.atomic_mass || el.weight}\n- **Phân loại:** ${el.category}\n\n📖 **Mô tả:** ${el.desc}\n\n🎓 **Hỏi Aurum:** ${randomPrompt}`,
         actions: [{ label: "Xem Chi Tiết Nguyên Tử", link: "/periodic-table" }]
       };
     }
 
-    // Chemical from reactions
     return {
-      message: `🧪 **${token.name} (${formatSubscripts(token.formula)})**\n\nĐây là một chất hóa học có trong chương trình học của chúng ta. Bạn muốn tìm hiểu về các phản ứng liên quan đến chất này không?`,
+      message: `🧪 **${token.name} (${formatSubscripts(token.formula)})**\n\nĐây là một chất hóa học quan trọng. ${randomPrompt}`,
       suggestions: [`Phản ứng có ${token.formula}`, `${token.name} tác dụng với gì?`]
     };
   }
 
   handleRoleCheck(role) {
     const roles = {
-      student: "Chào bạn. Với vai trò Học sinh, tôi sẽ giúp bạn tra cứu nhanh công thức và hiện tượng phản ứng để làm bài tập hiệu quả hơn.",
-      teacher: "Chào đồng nghiệp. Ở vai trò Giáo viên, tôi có thể hỗ trợ bạn liệt kê các phản ứng mẫu cho bài giảng.",
-      admin: "Truy cập Admin. Hệ thống đang hoạt động ổn định với đầy đủ dữ liệu nguyên tố và phản ứng."
+      student: "Chào bạn. Với vai trò Học sinh, tôi tuân thủ các chính sách an toàn giáo dục để hỗ trợ bạn học tập lành mạnh.",
+      teacher: "Chào đồng nghiệp. Ở vai trò Giáo viên, tôi có thể cung cấp thêm các dữ liệu về cảnh báo an toàn cho bài giảng của bạn.",
+      admin: "Truy cập Admin. Hệ thống AI đang vận hành dưới sự giám sát chặt chẽ của các quy chuẩn đạo đức."
     };
     return { message: roles[role] || "Tôi sẵn sàng hỗ trợ bạn!" };
   }
-
   handleLessonHelp(role) {
     return { 
       message: "Lộ trình học tập của bạn đang ở chương 'Phản ứng Hóa học'. Bạn có muốn tôi liệt kê các bài học quan trọng không?",
