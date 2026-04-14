@@ -315,7 +315,7 @@ const MagicLab3D = () => {
         </div>
 
         {/* Middle & Bottom Layout */}
-        <div className="flex-1 flex justify-between items-start pointer-events-none mt-6 relative">
+        <div className="flex-1 flex justify-between items-start pointer-events-none mt-0 relative">
           {/* Floating Reaction Message */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 pointer-events-none z-[50]">
             <AnimatePresence>
