@@ -6,170 +6,190 @@ import { elements } from '../../data/elements';
  */
 const normalizeFormula = (f) => {
   if (!f) return "";
-  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => {
-    const map = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
-    return map[m];
-  }).toUpperCase().trim();
+  const map = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => map[m]).toUpperCase().trim();
+};
+
+const formatSubscripts = (f) => {
+  if (!f) return "";
+  const map = { '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄', '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉' };
+  return f.toString().replace(/\d/g, (m) => map[m]);
 };
 
 /**
  * AURUM EXPERT ENGINE
- * A deterministic AI-like system for chemistry and platform support.
+ * An advanced data-driven assistant for chemistry.
  */
 class AurumExpertEngine {
   constructor() {
     this.reactions = reactions;
     this.elements = elements;
+    this.chemicalDict = new Map();
+    this.init();
+  }
+
+  /**
+   * Index all data for fast retrieval
+   */
+  init() {
+    // Index Elements
+    this.elements.forEach(el => {
+      const normSym = normalizeFormula(el.symbol);
+      const name = el.name.toLowerCase();
+      this.chemicalDict.set(normSym, { type: 'element', data: el, name: el.name, formula: el.symbol });
+      this.chemicalDict.set(name, { type: 'element', data: el, name: el.name, formula: el.symbol });
+    });
+
+    // Index Chemicals from Reactions
+    this.reactions.forEach(rx => {
+      const allChems = [...rx.reactants, ...rx.products];
+      allChems.forEach(c => {
+        const normF = normalizeFormula(c.formula);
+        const name = c.name?.toLowerCase();
+        if (!this.chemicalDict.has(normF)) {
+          this.chemicalDict.set(normF, { type: 'chemical', formula: c.formula, name: c.name });
+        }
+        if (name && !this.chemicalDict.has(name)) {
+          this.chemicalDict.set(name, { type: 'chemical', formula: c.formula, name: c.name });
+        }
+      });
+    });
   }
 
   /**
    * Main entry point for user queries
    */
   async ask(query, context = {}) {
-    const { role = 'student', page = 'home', user = {} } = context;
+    const { role = 'student', user = {} } = context;
     const q = query.toLowerCase().trim();
 
-    // 1. Role-based trigger bypass
-    if (q.includes("vai trò") || q.includes("who am i")) {
-      return this.handleRoleCheck(role);
+    // 1. Parse Intent and Extract Chemicals
+    const foundTokens = this.extractChemicals(q);
+    const isReactionQuery = q.includes("+") || q.includes("tác dụng") || q.includes("phản ứng");
+
+    // 2. Handle Reaction Queries
+    if (isReactionQuery && foundTokens.length >= 2) {
+      return this.handleReactionRequest(foundTokens);
     }
 
-    // 2. Reactant Prediction (Machine Learning Simulation)
-    if (q.includes("phản ứng") && (q.includes("+") || q.includes("với"))) {
-      return this.handleReactionPrediction(q);
+    // 3. Handle Info Queries (Single chemical/element)
+    if (foundTokens.length === 1) {
+      return this.handleInfoRequest(foundTokens[0]);
     }
 
-    // 3. Chemical Knowledge Search
-    const elementMatch = this.findElement(q);
-    if (elementMatch) {
-      return this.handleElementInfo(elementMatch);
-    }
+    // 4. Role-based/Platform triggers
+    if (q.includes("vai trò")) return this.handleRoleCheck(role);
+    if (q.includes("bài học")) return this.handleLessonHelp(role);
 
-    const chemicalMatch = this.findChemical(q);
-    if (chemicalMatch) {
-      return this.handleChemicalInfo(chemicalMatch);
-    }
-
-    // 4. Platform Help
-    if (q.includes("bài học") || q.includes("học gì")) {
-      return this.handleLessonHelp(role);
-    }
-    
-    if (q.includes("arena") || q.includes("đấu trường")) {
-      return {
-        message: "Chào mừng bạn đến với Đấu trường Aurum! Tại đây bạn có thể so tài kiến thức hóa học với bạn bè. Bạn muốn tôi tìm phòng hay xem bảng xếp hạng?",
-        actions: [
-          { label: "Tìm trận ngay", link: "/arena" },
-          { label: "Xem BXH", link: "/" }
-        ]
-      };
-    }
-
-    // 5. Default Fallback
+    // 5. Default Fallback with suggestions from DB
+    const randomElements = this.elements.sort(() => 0.5 - Math.random()).slice(0, 2);
     return {
-      message: `Tôi là Aurum AI. Tôi có thể giải đáp về ${this.elements.length} nguyên tố, ${this.reactions.length} phản ứng hóa học và hỗ trợ lộ trình học tập của bạn. Bạn muốn hỏi về chất nào?`,
-      suggestions: ["Phản ứng của Na + H2O", "KMnO4 là gì?", "Bài học hôm nay"]
+      message: `Tôi là Aurum AI. Tôi hiểu về ${this.elements.length} nguyên tố và hàng trăm chất hóa học. Hãy thử hỏi về "${randomElements[0].name}" hoặc phản ứng giữa các chất!`,
+      suggestions: [`${randomElements[0].symbol} là gì?`, "Na + H2O", "KMnO4"]
     };
   }
 
-  handleRoleCheck(role) {
-    const roles = {
-      student: "Bạn đang ở chế độ Học sinh. Tôi sẽ giúp bạn thực hành thí nghiệm an toàn và hoàn thành các bài tập.",
-      teacher: "Chào đồng nghiệp! Bạn đang ở chế độ Giáo viên. Tôi có dữ liệu về tiến độ lớp học và các giáo án trực quan.",
-      admin: "Truy cập tối cao đã được xác nhận. Chào Admin, tôi sẵn sàng báo cáo tình trạng hệ thống."
-    };
-    return { message: roles[role] || "Tôi chưa xác định được vai trò của bạn." };
+  extractChemicals(query) {
+    const tokens = [];
+    const normalizedQuery = normalizeFormula(query).toLowerCase();
+
+    // Strategy 1: Look for exact formulas (e.g., KMnO4, H2O)
+    // We sort keys by length descending to match longest possible string first (e.g. NaOH over Na)
+    const sortedKeys = Array.from(this.chemicalDict.keys()).sort((a, b) => b.length - a.length);
+
+    let tempQuery = " " + normalizedQuery + " ";
+    for (const key of sortedKeys) {
+      const pattern = new RegExp(`(^|[^A-Z0-9])${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^A-Z0-9]|$)`, 'i');
+      if (pattern.test(tempQuery)) {
+        tokens.push(this.chemicalDict.get(key));
+        // Remove the match to prevent redundant partial matches (but be careful with Na in NaOH)
+        // For now, just adding and ensuring longest match first handles most cases.
+        if (tokens.length >= 3) break; 
+      }
+    }
+
+    // Deduplicate tokens by formula
+    const unique = [];
+    const seen = new Set();
+    tokens.forEach(t => {
+      const normF = normalizeFormula(t.formula);
+      if (!seen.has(normF)) {
+        unique.push(t);
+        seen.add(normF);
+      }
+    });
+
+    return unique;
   }
 
-  handleReactionPrediction(query) {
-    // Extract formulas (e.g., "Na + H2O")
-    const parts = query.split(/\s*[\+\s\bvới]\s*/).map(p => normalizeFormula(p)).filter(p => p.length > 0);
+  handleReactionRequest(tokens) {
+    const formulas = tokens.map(t => normalizeFormula(t.formula));
     
-    // Check if we have an exact match in DB
+    // Search DB for exact match
     const match = this.reactions.find(rx => {
       const rxReactants = rx.reactants.map(r => normalizeFormula(r.formula));
-      return rxReactants.length === parts.length && parts.every(p => rxReactants.includes(p));
+      return rxReactants.length === formulas.length && formulas.every(f => rxReactants.includes(f));
     });
 
     if (match) {
       return {
-        message: `Dựa trên dữ liệu, ${match.equation} là một phản ứng ${match.type}.\nHiện tượng: ${match.observation}`,
+        message: `🤖 Tôi đã tìm thấy phản ứng: **${match.name}**\n\n📌 **Phương trình:** ${match.equation}\n\n🔍 **Hiện tượng:** ${match.observation}\n\n⚠️ **Cảnh báo:** ${match.safetyWarning}`,
         data: match,
         type: 'reaction'
       };
     }
 
-    // ML SIMULATION: If not in DB, predict using properties
-    if (parts.length === 2) {
-      // Very simplified logic: Metal + Acid/Water, etc.
-      const el1 = this.elements.find(e => normalizeFormula(e.symbol) === parts[0]);
-      if (el1 && el1.category === 'alkali-metal' && (parts[1] === 'H2O' || parts[1] === 'H2O')) {
-        return {
-          message: `🤖 [AI Predictor]: Tôi dự đoán ${el1.name} sẽ phản ứng MÃNH LIỆT với Nước tạo ra dung dịch kiềm và khí Hydro. Đây là đặc tính chung của Kim loại kiềm.`,
-          confidence: 0.92
-        };
+    // ML Simulation for binary reactions
+    if (tokens.length === 2) {
+      const t1 = tokens[0];
+      const t2 = tokens[1];
+      
+      if (t1.name.includes("Kiềm") || t2.name.includes("Kiềm") || t1.formula === 'Na' || t1.formula === 'K') {
+        if (t1.formula === 'H2O' || t2.formula === 'H2O') {
+          return {
+            message: `🤖 [AI Predictor]: Tôi dự đoán **${t1.name} (${t1.formula})** sẽ phản ứng mạnh với **${t2.name} (${t2.formula})** giải phóng nhiệt và khí Hydro (H₂).`,
+            confidence: 0.95
+          };
+        }
       }
     }
 
     return {
-      message: "Tôi chưa tìm thấy phản ứng chính xác này trong thư viện, nhưng tôi có thể nghiên cứu các thuộc tính của chúng cho bạn.",
-      suggestions: ["Na + Cl2", "Fe + HCl", "Cu + AgNO3"]
+      message: `Tôi chưa tìm thấy phản ứng chính xác giữa ${tokens.map(t => t.name).join(' và ')} trong thư viện thực hành, nhưng bạn có thể thử xem tính chất riêng của từng chất.`,
+      suggestions: [`${tokens[0].formula} là gì?`, `${tokens[1].formula} là gì?`]
     };
   }
 
-  handleElementInfo(el) {
-    return {
-      message: `${el.name} (${el.symbol}) là một ${el.category}. ${el.desc}`,
-      data: el,
-      type: 'element',
-      actions: [{ label: "Xem trong bảng tuần hoàn", link: "/periodic-table" }]
-    };
-  }
-
-  handleChemicalInfo(query) {
-    // Search in reactions as product or reactant
-    const related = this.reactions.filter(rx => 
-      rx.reactants.some(r => normalizeFormula(r.formula) === normalizeFormula(query)) ||
-      rx.products.some(p => normalizeFormula(p.formula) === normalizeFormula(query))
-    );
-
-    if (related.length > 0) {
+  handleInfoRequest(token) {
+    if (token.type === 'element') {
+      const el = token.data;
       return {
-        message: `${query} xuất hiện trong ${related.length} phản ứng hóa học mà tôi biết. Bạn muốn xem cách tạo ra nó hay cách nó phản ứng?`,
-        actions: [
-          { label: "Xem cách điều chế", action: "synthesis" },
-          { label: "Xem tính chất hóa học", action: "properties" }
-        ]
+        message: `🌟 **${el.name} (${el.symbol})**\n\n- **Số hiệu:** ${el.atomic_number || el.number}\n- **Khối lượng:** ${el.atomic_mass || el.weight}\n- **Phân loại:** ${el.category}\n\n📖 **Mô tả:** ${el.desc}`,
+        actions: [{ label: "Xem Chi Tiết Nguyên Tử", link: "/periodic-table" }]
       };
     }
-    return null;
+
+    // Chemical from reactions
+    return {
+      message: `🧪 **${token.name} (${formatSubscripts(token.formula)})**\n\nĐây là một chất hóa học có trong chương trình học của chúng ta. Bạn muốn tìm hiểu về các phản ứng liên quan đến chất này không?`,
+      suggestions: [`Phản ứng có ${token.formula}`, `${token.name} tác dụng với gì?`]
+    };
+  }
+
+  handleRoleCheck(role) {
+    const roles = {
+      student: "Chào bạn. Với vai trò Học sinh, tôi sẽ giúp bạn tra cứu nhanh công thức và hiện tượng phản ứng để làm bài tập hiệu quả hơn.",
+      teacher: "Chào đồng nghiệp. Ở vai trò Giáo viên, tôi có thể hỗ trợ bạn liệt kê các phản ứng mẫu cho bài giảng.",
+      admin: "Truy cập Admin. Hệ thống đang hoạt động ổn định với đầy đủ dữ liệu nguyên tố và phản ứng."
+    };
+    return { message: roles[role] || "Tôi sẵn sàng hỗ trợ bạn!" };
   }
 
   handleLessonHelp(role) {
-    if (role === 'teacher') {
-      return { message: "Bạn có 2 lớp học cần chấm bài trong hôm nay. Tôi đã soạn sẵn các gợi ý phản hồi cho sinh viên." };
-    }
     return { 
-      message: "Bạn đang theo lộ trình Hóa học lớp 10. Bài học tiếp theo là 'Cấu tạo nguyên tử'. Bạn muốn bắt đầu ngay?",
-      actions: [{ label: "Bắt đầu bài học", link: "/lessons" }]
+      message: "Lộ trình học tập của bạn đang ở chương 'Phản ứng Hóa học'. Bạn có muốn tôi liệt kê các bài học quan trọng không?",
+      actions: [{ label: "Mở Danh Sách Bài Học", link: "/lessons" }]
     };
-  }
-
-  findElement(q) {
-    return this.elements.find(e => 
-      e.name.toLowerCase() === q || 
-      e.symbol.toLowerCase() === q ||
-      normalizeFormula(e.symbol) === normalizeFormula(q)
-    );
-  }
-
-  findChemical(q) {
-    // Search in reaction formulas
-    for (let rx of this.reactions) {
-      for (let r of rx.reactants) if (normalizeFormula(r.formula) === normalizeFormula(q)) return r.formula;
-      for (let p of rx.products) if (normalizeFormula(p.formula) === normalizeFormula(q)) return p.formula;
-    }
-    return null;
   }
 }
 
