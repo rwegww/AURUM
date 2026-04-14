@@ -2,7 +2,22 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { supabase } from './lib/supabase.js';
+
+// Route Imports
 import aiRouter from './_routes/ai.js';
+import authRouter from './_routes/auth.js';
+import userRouter from './_routes/user.js';
+import arenaRouter from './_routes/arena.js';
+import adminRouter from './_routes/admin.js';
+import lessonsRouter from './_routes/lessons.js';
+import materialsRouter from './_routes/materials.js';
+import mediaRouter from './_routes/media.js';
+import elementsRouter from './_routes/elements.js';
+import labRouter from './_routes/lab.js';
+import analyzeRouter from './_routes/analyze_v3.js';
+import missionsRouter from './_routes/missions.js';
+import classesRouter from './_routes/classes.js';
+import discussionsRouter from './_routes/discussions.js';
 
 dotenv.config();
 
@@ -12,22 +27,27 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Main AI Route
+// API Routes Mounting
 app.use('/api/ai', aiRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/arena', arenaRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/lessons', lessonsRouter);
+app.use('/api/materials', materialsRouter);
+app.use('/api/media', mediaRouter);
+app.use('/api/elements', elementsRouter);
+app.use('/api/lab', labRouter);
+app.use('/api/analyze', analyzeRouter);
+app.use('/api/missions', missionsRouter);
+app.use('/api/classes', classesRouter);
+app.use('/api/discussions', discussionsRouter);
 
 // Basic Health Check
 app.get('/api/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
-    message: 'Aurum API is running (Mono-Router)',
-    tasks: [
-      '[x] Install OpenAI SDK',
-      '[x] Update .env with OpenAI API Key',
-      '[x] Refactor api/_routes/ai.js to use OpenAI (GPT-4o)',
-      '[x] Update api/index.js diagnostic route',
-      '[x] Commit and push changes',
-      '[x] Verify system functionality'
-    ],
+    message: 'Aurum API is running (Full-Router)',
     timestamp: new Date().toISOString(),
     node_version: process.version
   });
