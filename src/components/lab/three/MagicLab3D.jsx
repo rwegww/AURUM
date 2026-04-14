@@ -244,6 +244,16 @@ const MagicLab3D = () => {
     <div 
       className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10 bg-[#0a0a0f]"
     >
+      <Canvas
+        shadows
+        camera={{ position: [0, 6, 12], fov: 35 }}
+        className="w-full h-full"
+        style={{ pointerEvents: 'auto', position: 'absolute', top: 0, left: 0 }}
+      >
+        <color attach="background" args={['#0a0a0f']} />
+        <LabScene beakers={beakers} currentBeakerIndex={activeBeakerIndex} />
+      </Canvas>
+
       <SoundManager />
 
       {/* --- Discovery UI Overlays --- */}
@@ -533,16 +543,6 @@ const MagicLab3D = () => {
         reactions={dbReactions} 
         chemicals={dbChemicals}
       />
-
-      <Canvas
-        shadows
-        camera={{ position: [0, 6, 12], fov: 35 }}
-        className="w-full h-full"
-        style={{ pointerEvents: 'auto' }}
-      >
-        <color attach="background" args={['#000000']} />
-        <LabScene beakers={beakers} currentBeakerIndex={activeBeakerIndex} />
-      </Canvas>
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
