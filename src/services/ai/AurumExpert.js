@@ -155,7 +155,15 @@ class AurumExpertEngine {
       return this.handleInfoRequest(foundTokens[0]);
     }
 
-    // 2. Hybrid DB + Gemini Call (The "Brain" upgrade)
+    // 2. Local Theory & Curriculum Lookups (High Priority Curated Content)
+    const theoryMatch = this.findTheoryMatch(q);
+    if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
+
+    if (q.includes('toàn bộ hóa học') || q.includes('sơ đồ hóa học') || q.includes('bản đồ hóa học') || q.includes('bản đồ kiến thức')) {
+      return this.handleTheoryById('chemistry-map');
+    }
+
+    // 3. Hybrid DB + Gemini Call (The "Brain" upgrade)
     try {
       console.log('🔗 Calling Hybrid AI Engine...');
       const response = await fetch('/api/ai/ask', {
@@ -171,19 +179,12 @@ class AurumExpertEngine {
         return await response.json();
       }
     } catch (apiErr) {
-      console.warn('⚠️ Hybrid AI Offline, falling back to local theory:', apiErr.message);
+      console.warn('⚠️ Hybrid AI Offline, following curriculum lookup:', apiErr.message);
     }
 
-    // 3. Local Theory Fallback (If offline)
-    const theoryMatch = this.findTheoryMatch(q);
-    if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
-
-    // 4. Curriculum / Meta triggers
+    // 4. Curriculum / Meta triggers (Fallback)
     if (q.includes('vai trò')) return this.handleRoleCheck(role);
     if (q.includes('bài học') || q.includes('lộ trình')) return this.handleLessonHelp(role);
-    if (q.includes('toàn bộ hóa học') || q.includes('sơ đồ hóa học') || q.includes('bản đồ hóa học') || q.includes('bản đồ kiến thức')) {
-      return this.handleTheoryById('chemistry-map');
-    }
 
     return this.handleFallback();
   }
@@ -202,7 +203,13 @@ class AurumExpertEngine {
   handleTheoryRequest(theory) {
     const formulaBlock = theory.formula ? `\n\n$$\n${theory.formula}\n$$` : '';
     const categoryPrefix = theory.category ? `📚 **${theory.category} — ${theory.title}**` : `📚 **${theory.title}**`;
-    const actions = theory.id === 'chemistry-map' ? [{ label: 'Mở Bản Đồ Tương Tác', link: '/knowledge-map' }] : (theory.actions || []);
+    let actions = theory.actions || [];
+    if (theory.id === 'chemistry-map') {
+      actions = [{ label: 'Mở Bản Đồ Tương Tác', link: '/knowledge-map' }];
+    } else if (theory.id === 'periodic-law') {
+      actions = [{ label: 'Mở Bảng Tuần Hoàn', link: '/periodic-table' }];
+    }
+    
     return {
       message: `${categoryPrefix}${formulaBlock}\n\n${theory.explanation}`,
       actions,

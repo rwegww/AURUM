@@ -41,8 +41,15 @@ router.post('/ask', async (req, res) => {
 
     if (kbMatch && kbMatch.length > 0) {
       const result = kbMatch[0];
-      await logQuery(userId, username, normalizedQuery, result, { source: 'kb_theory' });
-      return res.json(result);
+      const responseObj = {
+        message: result.explanation || result.message || '',
+        suggestions: result.suggestions || [],
+        actions: result.actions || [],
+        source: 'kb_theory',
+        title: result.title
+      };
+      await logQuery(userId, username, normalizedQuery, responseObj, { source: 'kb_theory' });
+      return res.json(responseObj);
     }
 
     // 2. Check AI Cache (ai_cache)

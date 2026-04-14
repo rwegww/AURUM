@@ -122,7 +122,16 @@ export const CHEMISTRY_KNOWLEDGE_BASE = [
     title: 'Một số xu hướng tuần hoàn quan trọng',
     explanation:
       'Trong một chu kì từ trái sang phải, **bán kính nguyên tử thường giảm**, còn **độ âm điện** và **năng lượng ion hóa** thường tăng. Trong một nhóm từ trên xuống, **bán kính nguyên tử tăng**, còn độ âm điện thường giảm. Kim loại mạnh dần khi đi xuống trong nhóm IA; phi kim mạnh thường tăng về phía góc trên bên phải bảng tuần hoàn.',
-    suggestions: ['Liên kết hóa học', 'Tính kim loại phi kim']
+    suggestions: ['Liên kết hóa học', 'Kim loại và phi kim']
+  },
+  {
+    id: 'metals-nonmetals',
+    category: 'Đại cương',
+    patterns: ['kim loại', 'phi kim', 'kim loại và phi kim', 'metalloid', 'á kim', 'tính kim loại'],
+    title: 'Kim loại và phi kim',
+    explanation:
+      '**Kim loại** thường có tính dẫn điện, dẫn nhiệt tốt, có ánh kim và có khuynh hướng nhường electron. **Phi kim** thường không dẫn điện (trừ than chì), dẫn nhiệt kém và có khuynh hướng nhận electron. **Á kim** (metalloid) nằm giữa hai nhóm này, mang đặc tính trung gian.',
+    suggestions: ['Bảng tuần hoàn', 'Phản ứng hóa học']
   },
   {
     id: 'chemical-bonding',
