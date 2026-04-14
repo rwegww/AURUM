@@ -51,9 +51,12 @@ const AuthLayout = ({ children }) => {
                  style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
            
            <div className="relative z-10">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-10 shadow-xl border border-white/30 group hover:rotate-12 transition-transform">
-                🎓
+              <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 md:mb-10 shadow-xl border border-white/30 group hover:rotate-12 transition-transform">
+                <svg className="w-7 h-7 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+                </svg>
               </div>
+
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-4 md:mb-6 font-sora">
                 Mở khóa <br className="hidden md:block" />
                 <span className="text-white/80"> Bí mật </span> <br className="hidden md:block" />
@@ -66,11 +69,23 @@ const AuthLayout = ({ children }) => {
            </div>
 
            <div className="relative z-10 space-y-6 hidden md:block">
-
-              <BenefitItem icon="⚡" title="Thử thách 1:1" desc="Đấu trường tri thức liên trường" />
-              <BenefitItem icon="🧪" title="Phòng LAB ảo" desc="Thí nghiệm không giới hạn an toàn" />
-              <BenefitItem icon="🏆" title="Hệ thống Rank" desc="Bảng xếp hạng vinh danh Aurum" />
+              <BenefitItem 
+                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>} 
+                title="Thử thách 1:1" 
+                desc="Đấu trường tri thức liên trường" 
+              />
+              <BenefitItem 
+                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.183.244l-.28.172a2 2 0 00-.865 2.503l.64 1.53a2 2 0 002.502.864l1.53-.64a2 2 0 00.864-2.502l-.172-.28a2 2 0 01-.244-1.183l.135-2.533a6 6 0 01.517-3.86l.158-.318a6 6 0 01.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.428-1.428a2 2 0 00-2.828 0l-1.428 1.428a2 2 0 00-.547 1.022l-.477 2.387a6 6 0 00.517 3.86l.158.318a6 6 0 00.517 3.86l-.477 2.387a2 2 0 00.547 1.022l1.428 1.428a2 2 0 002.828 0l1.428-1.428z" /></svg>} 
+                title="Phòng LAB ảo" 
+                desc="Thí nghiệm không giới hạn an toàn" 
+              />
+              <BenefitItem 
+                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>} 
+                title="Hệ thống Rank" 
+                desc="Bảng xếp hạng vinh danh Aurum" 
+              />
            </div>
+
 
            {/* Floating Accent Circle */}
            <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-[80px]" />
@@ -101,8 +116,8 @@ const AuthLayout = ({ children }) => {
 
 const BenefitItem = ({ icon, title, desc }) => (
   <div className="flex items-center gap-4 group">
-    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center flex-shrink-0 transition-all border border-white/10 group-hover:scale-110 shadow-lg">
-      <span className="text-xl">{icon}</span>
+    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center flex-shrink-0 transition-all border border-white/10 group-hover:scale-110 shadow-lg text-white">
+      {icon}
     </div>
     <div>
       <h3 className="font-bold text-sm font-sora">{title}</h3>
@@ -110,5 +125,6 @@ const BenefitItem = ({ icon, title, desc }) => (
     </div>
   </div>
 );
+
 
 export default AuthLayout;
