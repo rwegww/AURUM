@@ -39,7 +39,7 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
   };
 
   return (
-    <aside className="w-[300px] h-[calc(100vh-70px)] bg-white border-r border-viet-border fixed top-[70px] left-0 overflow-y-auto p-4 z-40 custom-scrollbar">
+    <aside className="w-[300px] h-[calc(100vh-80px)] bg-white border-r border-viet-border fixed top-[80px] left-0 overflow-y-auto p-4 z-40 custom-scrollbar">
       {/* Grade Selector */}
       <div className="mb-6">
         <label className="text-[11px] font-bold text-[#b4bac2] uppercase tracking-[1px] mb-2 block">Lớp học</label>

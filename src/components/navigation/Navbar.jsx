@@ -52,7 +52,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent h-[90px] flex items-center px-6 lg:px-12">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-viet-border h-[80px] flex items-center px-6 lg:px-12">
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center gap-12 xl:gap-20">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
