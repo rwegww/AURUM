@@ -32,6 +32,7 @@ const About = lazy(() => import('@/pages/student/About'));
 const Contact = lazy(() => import('@/pages/student/Contact'));
 const Terms = lazy(() => import('@/pages/student/Terms'));
 const Profile = lazy(() => import('@/pages/student/Profile'));
+const KnowledgeMap = lazy(() => import('@/pages/student/KnowledgeMap'));
 
 // Lazy Loaded Auth Pages
 const Login = lazy(() => import('@/pages/auth/Login'));
@@ -103,6 +104,7 @@ function AppContent() {
           <Route path="/library/:id" element={<ProtectedRoute><MaterialDetail /></ProtectedRoute>} />
           <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
 
           {/* Protected Admin Routes */}
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>

@@ -721,10 +721,11 @@ export const CHEMISTRY_KNOWLEDGE_BASE = [
 export const CHEMISTRY_CURRICULUM = [
   {
     id: 'chemistry-map',
+    patterns: ['bản đồ kiến thức', 'bản đồ hóa học', 'sơ đồ hóa học', 'toàn bộ hóa học', 'tổng quan hóa học', 'knowledge map'],
     title: 'Bản đồ kiến thức hóa học cốt lõi',
     explanation:
-      'Các mảng lớn nên có trong hệ thống gồm: **đại cương nguyên tử – bảng tuần hoàn**, **liên kết và cấu tạo chất**, **mol – định lượng**, **dung dịch – axit bazơ muối**, **phản ứng hóa học – oxi hóa khử**, **kim loại – phi kim**, **khí**, **nhiệt hóa – động hóa – cân bằng**, **điện hóa**, **hữu cơ**, **an toàn phòng thí nghiệm**.',
-    suggestions: ['Đại cương', 'Hữu cơ', 'An toàn']
+      'Chào mừng bạn đến với **Bản đồ Kiến thức Aurum**. Đây là nơi hội tụ tất cả các mảng kiến thức từ **đại cương nguyên tử – bảng tuần hoàn**, **liên kết hóa học** đến **hóa học hữu cơ** và **an toàn phòng thí nghiệm**. Nhấn nút bên dưới để mở bản đồ tương tác và khám phá chiều sâu của hóa học!',
+    suggestions: ['Khám phá bản đồ', 'Đại cương', 'Hữu cơ', 'An toàn']
   }
 ];
 

@@ -181,7 +181,7 @@ class AurumExpertEngine {
     // 4. Curriculum / Meta triggers
     if (q.includes('vai trò')) return this.handleRoleCheck(role);
     if (q.includes('bài học') || q.includes('lộ trình')) return this.handleLessonHelp(role);
-    if (q.includes('toàn bộ hóa học') || q.includes('sơ đồ hóa học') || q.includes('bản đồ hóa học')) {
+    if (q.includes('toàn bộ hóa học') || q.includes('sơ đồ hóa học') || q.includes('bản đồ hóa học') || q.includes('bản đồ kiến thức')) {
       return this.handleTheoryById('chemistry-map');
     }
 
@@ -202,8 +202,10 @@ class AurumExpertEngine {
   handleTheoryRequest(theory) {
     const formulaBlock = theory.formula ? `\n\n$$\n${theory.formula}\n$$` : '';
     const categoryPrefix = theory.category ? `📚 **${theory.category} — ${theory.title}**` : `📚 **${theory.title}**`;
+    const actions = theory.id === 'chemistry-map' ? [{ label: 'Mở Bản Đồ Tương Tác', link: '/knowledge-map' }] : (theory.actions || []);
     return {
       message: `${categoryPrefix}${formulaBlock}\n\n${theory.explanation}`,
+      actions,
       suggestions: theory.suggestions || []
     };
   }
