@@ -7,16 +7,18 @@ const router = express.Router();
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const model = genAI.getGenerativeModel({ 
-  model: 'gemini-1.5-flash',
-  apiVersion: 'v1',
-  systemInstruction: `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
+const model = genAI.getGenerativeModel(
+  { 
+    model: 'gemini-1.5-flash',
+    systemInstruction: `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
   QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
   1. Tuyệt đối không tiết lộ thông tin cá nhân, lịch sử tìm kiếm hoặc dữ liệu của người dùng này cho người dùng khác.
   2. Nếu người dùng hỏi về thông tin mang tính cá nhân của người khác (ví dụ: "Người dùng A đã hỏi gì?"), hãy từ chối một cách lịch sự nhưng kiên quyết.
-  3. Chỉ tập trung vào kiến thức hóa học, học thuật và an toàn phòng thí nghiệm.
+  3. Chỉ tập trung vào kiến thức hóa học, giáo dục và hỗ trợ tính toán. Tránh các chủ đề chính trị, tôn giáo nhạy cảm.
   4. Nếu câu hỏi liên quan đến chất cháy nổ hoặc nguy hiểm ngoài mục đích giáo dục, hãy kích hoạt cảnh báo an toàn Aurum.`
-});
+  },
+  { apiVersion: 'v1' }
+);
 
 /**
  * Endpoint: /api/ai/ask
