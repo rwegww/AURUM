@@ -47,12 +47,8 @@ const AuthLayout = ({ children }) => {
       >
         {/* Left Side: Branding & Visuals (Desktop) */}
         <div className="hidden md:flex w-full md:w-[45%] bg-gradient-to-br from-[#76c034] to-[#4caf50] p-16 flex-col justify-between text-white relative overflow-hidden">
-           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
-
-
-           {/* Decorative patterns for the left panel */}
-           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
-                style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+            <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
+                 style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
            
            <div className="relative z-10">
               <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-6 md:mb-10 shadow-xl border border-white/30 group hover:rotate-12 transition-transform">
