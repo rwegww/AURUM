@@ -83,7 +83,7 @@ app.get('/api/debug-env', async (req, res) => {
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash', apiVersion: 'v1' });
     const ping = await model.generateContent("ping");
     geminiTest = ping.response ? 'Success (Pong)' : 'Failed (Empty Response)';
   } catch (e) {

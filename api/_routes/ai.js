@@ -9,6 +9,7 @@ const router = express.Router();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 const model = genAI.getGenerativeModel({ 
   model: 'gemini-1.5-flash',
+  apiVersion: 'v1',
   systemInstruction: `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
   QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
   1. Tuyệt đối không tiết lộ thông tin cá nhân, lịch sử tìm kiếm hoặc dữ liệu của người dùng này cho người dùng khác.
