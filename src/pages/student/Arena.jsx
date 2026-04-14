@@ -547,8 +547,8 @@ const RoomBrowserModal = ({ isOpen, onClose, onJoin }) => {
 
 
 // ─── PLAYER ROOM ──────────────────────────────────────────────────────────────
-const PlayerRoom = ({ room, onLeave, onMatchEnd }) => {
-  const { t } = useTranslation();
+const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
+  const { t, i18n } = useTranslation();
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(30);
   const [answered, setAnswered] = useState(null);
@@ -559,8 +559,6 @@ const PlayerRoom = ({ room, onLeave, onMatchEnd }) => {
   const [isWaiting, setIsWaiting] = useState(true);
   const [currentPlayers, setCurrentPlayers] = useState(room.current_players || 1);
   const correctCountRef = useRef(0);
-
-  const padIcons = ['▲', '◆', '●', '■'];
 
   useEffect(() => {
     if (!isWaiting) return;
@@ -628,45 +626,80 @@ const PlayerRoom = ({ room, onLeave, onMatchEnd }) => {
 
   if (loadingQ) {
     return (
-      <div className="min-h-screen bg-viet-bg flex flex-col items-center justify-center p-8">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="text-3xl mb-4">⟳</motion.div>
-        <p className="text-viet-text-light/40 font-black uppercase tracking-widest text-[11px]">{t('arena.room.loading')}</p>
+      <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center p-8">
+        <motion.div 
+          animate={{ rotate: 360 }} 
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} 
+          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-6"
+        />
+        <p className="text-blue-400 font-black uppercase tracking-[4px] text-[12px] animate-pulse">{t('arena.room.loading')}</p>
       </div>
     );
   }
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-viet-bg flex flex-col items-center justify-center p-8 text-center">
-        <span className="text-6xl mb-6">🏜️</span>
-        <button onClick={onLeave} className="px-10 py-4 rounded-2xl font-black text-white bg-viet-text uppercase text-[11px] tracking-widest shadow-xl">{t('arena.room.back_btn')}</button>
+      <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center p-8 text-center text-white">
+        <span className="text-8xl mb-8 filter drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]">🏜️</span>
+        <h2 className="text-2xl font-black mb-4 uppercase tracking-[5px]">TRẬN ĐẤU KHÔNG SẴN SÀNG</h2>
+        <button onClick={onLeave} className="px-12 py-5 rounded-full font-black bg-blue-600 hover:bg-blue-500 transition-all uppercase text-[12px] tracking-widest shadow-2xl">{t('arena.room.back_btn')}</button>
       </div>
     );
   }
 
   if (isWaiting) {
     return (
-      <div className="min-h-screen bg-viet-bg flex flex-col items-center justify-center p-8 relative font-inter">
+      <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center p-8 relative font-inter overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" />
         <Particles />
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-full max-w-lg bg-white border border-viet-border rounded-[40px] p-10 relative z-10 text-center shadow-xl shadow-black/5">
-          <h2 className="text-2xl font-black text-viet-text uppercase tracking-widest mb-2 font-sora">{t('arena.room.waiting.title')}</h2>
-          <div className="text-[5.5rem] font-black text-viet-text tracking-[16px] py-6 rounded-[32px] bg-viet-bg border border-viet-border mb-10 leading-none">{room.id}</div>
-          <div className="flex justify-center items-center gap-6 mb-10">
-            <div className="text-center"><p className="text-[9px] font-black text-viet-text-light/30 uppercase tracking-widest mb-1">{t('arena.room.waiting.mode')}</p><p className="text-viet-green font-black uppercase text-[11px] tracking-widest">{room.mode || '1 VS 1'}</p></div>
-            <div className="w-px h-8 bg-viet-border" />
-            <div className="text-center"><p className="text-[9px] font-black text-viet-text-light/30 uppercase tracking-widest mb-1">{t('arena.room.waiting.difficulty')}</p><p className="text-orange-500 font-black uppercase text-[11px] tracking-widest">{room.difficulty === 'hard' ? t('arena.difficulties.hard') : room.difficulty === 'medium' ? t('arena.difficulties.medium') : t('arena.difficulties.easy')}</p></div>
+        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-full max-w-lg bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[50px] p-12 relative z-10 text-center shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-blue-600/30 blur-[80px] rounded-full pointer-events-none" />
+          
+          <h2 className="text-3xl font-black text-white uppercase tracking-[8px] mb-8 font-sora">{t('arena.room.waiting.title')}</h2>
+          <div className="text-[6.5rem] font-black text-blue-400 tracking-[20px] py-10 rounded-[40px] bg-black/40 border border-white/5 mb-10 leading-none shadow-inner select-all">
+            {room.id}
           </div>
-          <div className="mb-10 text-left px-4">
-             <div className="flex justify-between items-center mb-3">
-               <p className="text-viet-text-light/40 font-black uppercase tracking-widest text-[9px]">{t('arena.room.waiting.players')}: <span className="text-viet-text">{currentPlayers}/{room.max_players || 2}</span></p>
+          
+          <div className="flex justify-center items-center gap-10 mb-12">
+            <div className="text-center">
+              <p className="text-[10px] font-black text-blue-400/40 uppercase tracking-widest mb-2 font-sora">PHÂN LOẠI</p>
+              <p className="text-white font-black uppercase text-[13px] tracking-[2px]">{room.mode || '1 VS 1'}</p>
+            </div>
+            <div className="w-px h-12 bg-white/10" />
+            <div className="text-center">
+              <p className="text-[10px] font-black text-blue-400/40 uppercase tracking-widest mb-2 font-sora">CẤP ĐỘ</p>
+              <p className="text-orange-500 font-black uppercase text-[13px] tracking-[2px]">
+                {room.difficulty === 'hard' ? t('arena.difficulties.hard') : room.difficulty === 'medium' ? t('arena.difficulties.medium') : t('arena.difficulties.easy')}
+              </p>
+            </div>
+          </div>
+
+          <div className="mb-12 text-left px-4">
+             <div className="flex justify-between items-center mb-4">
+               <p className="text-blue-400/40 font-black uppercase tracking-widest text-[10px] font-sora">
+                 NGƯỜI CHƠI SẴN SÀNG: <span className="text-white ml-2">{currentPlayers}/{room.max_players || 2}</span>
+               </p>
              </div>
-             <div className="w-full bg-viet-bg border border-viet-border rounded-full h-3 overflow-hidden relative">
-               <motion.div className="absolute inset-y-0 left-0 bg-viet-green" initial={{ width: 0 }} animate={{ width: `${(currentPlayers / (room.max_players || 2)) * 100}%` }} />
+             <div className="w-full bg-black/40 border border-white/5 rounded-full h-4 overflow-hidden relative p-1 shadow-inner">
+               <motion.div 
+                 className="absolute inset-y-1 left-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full" 
+                 initial={{ width: 0 }} 
+                 animate={{ width: `calc(${(currentPlayers / (room.max_players || 2)) * 100}% - 8px)` }} 
+               />
              </div>
           </div>
-          <div className="flex gap-4">
-            <button onClick={onLeave} className="flex-1 py-4 rounded-2xl font-black text-viet-text-light/40 border border-viet-border hover:bg-gray-50 transition-all uppercase text-[11px] tracking-widest">{t('arena.room.waiting.exit_btn')}</button>
-            <button onClick={() => setIsWaiting(false)} disabled={currentPlayers < (room.max_players || 2)} className="flex-1 py-4 rounded-2xl font-black text-white uppercase text-[11px] tracking-widest transition-all bg-viet-text shadow-xl disabled:opacity-20">{t('arena.room.waiting.start_btn')}</button>
+
+          <div className="flex gap-5">
+            <button onClick={onLeave} className="flex-1 py-5 rounded-[24px] font-black text-white/50 border border-white/10 hover:bg-white/5 transition-all uppercase text-[12px] tracking-widest">{t('arena.room.waiting.exit_btn')}</button>
+            <motion.button 
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setIsWaiting(false)} 
+              disabled={currentPlayers < (room.max_players || 2)} 
+              className="flex-1 py-5 rounded-[24px] font-black text-white uppercase text-[12px] tracking-[3px] transition-all bg-blue-600 shadow-[0_20px_40px_rgba(37,99,235,0.3)] disabled:opacity-20 disabled:grayscale"
+            >
+              {t('arena.room.waiting.start_btn')}
+            </motion.button>
           </div>
         </motion.div>
       </div>
@@ -674,45 +707,137 @@ const PlayerRoom = ({ room, onLeave, onMatchEnd }) => {
   }
 
   return (
-    <div className="min-h-screen bg-viet-bg flex flex-col items-center px-6 py-10 relative font-inter overflow-hidden">
+    <div className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col items-center px-6 py-8 relative font-inter overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none" />
       <Particles />
-      <div className="w-full max-w-4xl flex justify-between items-center mb-10 relative z-10">
-        <div className="flex items-center gap-6">
-          <button onClick={onLeave} className="w-10 h-10 rounded-xl bg-white border border-viet-border flex items-center justify-center text-viet-text-light/40 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm">✕</button>
-          <div className="px-5 py-2.5 rounded-2xl bg-white border border-viet-border shadow-sm flex items-center gap-4">
-            <span className="text-[11px] font-black text-viet-text-light/30 uppercase tracking-widest">{t('arena.room.battle.question', { current: currentQIndex + 1, total: questions.length })}</span>
-            <div className="w-px h-4 bg-viet-border" />
-            <span className="text-[11px] font-black text-viet-green uppercase tracking-[2px]">{room.mode}</span>
+
+      {/* PREMIUM HUD HEADER */}
+      <div className="w-full max-w-7xl flex justify-between items-center mb-12 relative z-10">
+        <div className="flex items-center gap-4">
+          <motion.button 
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={onLeave} 
+            className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all shadow-xl"
+          >
+            <span className="text-xl">✕</span>
+          </motion.button>
+          
+          <div className="flex items-center gap-2 bg-white/5 backdrop-blur-3xl border border-white/10 px-6 py-3 rounded-3xl shadow-2xl">
+            <div className="flex flex-col">
+               <span className="text-[10px] font-black text-blue-400/50 uppercase tracking-[2px] mb-0.5 font-sora">TIẾN TRÌNH</span>
+               <div className="flex items-center gap-3">
+                  <span className="text-[14px] font-black text-white uppercase tracking-widest">{t('arena.room.battle.question', { current: currentQIndex + 1, total: questions.length })}</span>
+                  <div className="w-px h-5 bg-white/10" />
+                  <span className="text-[14px] font-black text-blue-400 uppercase tracking-[2px]">{room.mode}</span>
+               </div>
+            </div>
           </div>
         </div>
-        <div className="px-6 py-2.5 rounded-2xl bg-white border border-viet-border shadow-sm flex items-center gap-3">
-          <span className="text-[11px] font-black text-viet-text-light/30 uppercase tracking-widest">{t('arena.room.battle.score')}</span>
-          <span className="text-lg font-black text-viet-text">{score}</span>
+
+        <div className="flex items-center gap-4">
+          {/* Language Switcher HUD */}
+          <div className="hidden lg:flex items-center gap-1 bg-white/5 backdrop-blur-3xl border border-white/10 p-1.5 rounded-2xl">
+            {['VI', 'EN'].map((lang) => (
+              <button
+                key={lang}
+                onClick={() => i18n.changeLanguage(lang.toLowerCase())}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${i18n.language.toUpperCase() === lang ? 'bg-blue-600 text-white shadow-lg' : 'text-white/30 hover:text-white/60'}`}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-white/5 backdrop-blur-3xl border border-white/10 px-8 py-3 rounded-3xl shadow-2xl flex flex-col items-end">
+            <span className="text-[10px] font-black text-blue-400/50 uppercase tracking-[2px] mb-0.5 font-sora">{t('arena.room.battle.score')}</span>
+            <span className="text-[22px] font-black text-white leading-none font-sora animate-pulse">{score}</span>
+          </div>
+
+          {/* User Profile HUD */}
+          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-3xl border border-white/10 pl-5 pr-3 py-1.5 rounded-[32px] shadow-2xl group cursor-pointer hover:bg-white/10 transition-all">
+             <div className="flex flex-col items-end">
+                <span className="text-[11px] font-black text-white uppercase tracking-widest truncate max-w-[120px]">{user?.username}</span>
+                <span className="text-[8px] font-bold text-blue-400 uppercase tracking-widest">TOP PLAYER</span>
+             </div>
+             <div className="w-10 h-10 rounded-2xl overflow-hidden border border-white/20 bg-white/10 shadow-lg group-hover:scale-105 transition-all">
+                <img src={getSvgDataUrl(user?.avatarSeed || user?.username)} className="w-full h-full object-cover scale-125 translate-y-0.5" alt="profile" />
+             </div>
+          </div>
         </div>
       </div>
-      <div className="w-full max-w-4xl flex-1 flex flex-col gap-8 relative z-10">
-        <motion.div key={currentQIndex} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="bg-white border-2 border-viet-border rounded-[40px] p-10 text-center relative shadow-xl shadow-black/5 min-h-[220px] flex flex-col justify-center overflow-hidden">
-          <div className="absolute -top-1 px-4 py-1.5 left-1/2 -translate-x-1/2 rounded-b-2xl bg-viet-text text-white text-[11px] font-black tracking-widest flex items-center gap-2">
-            <span className="opacity-40">{t('arena.room.battle.time')}</span><span className={timeLeft <= 5 ? 'text-red-400' : ''}>{timeLeft}S</span>
+
+      <div className="w-full max-w-5xl flex-1 flex flex-col gap-10 relative z-10 pt-10">
+        {/* QUESTION CARD */}
+        <motion.div 
+          key={currentQIndex} 
+          initial={{ y: 30, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[60px] p-16 text-center relative shadow-[0_64px_96px_-32px_rgba(0,0,0,0.8)] min-h-[320px] flex flex-col justify-center overflow-hidden"
+        >
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-10 py-3 rounded-b-[30px] shadow-lg shadow-blue-600/30 z-20">
+            <div className="flex items-center gap-4">
+              <span className="text-[11px] font-black uppercase tracking-[4px] opacity-60 font-sora">{t('arena.room.battle.time')}</span>
+              <span className={`text-[20px] font-black font-sora w-12 text-center ${timeLeft <= 5 ? 'text-red-400 animate-bounce' : ''}`}>{timeLeft}S</span>
+            </div>
           </div>
-          <p className="text-xl md:text-2xl font-black text-viet-text leading-tight mt-4">{currentQ.question}</p>
-          <div className="absolute bottom-0 left-0 h-1.5 bg-viet-green transition-all" style={{ width: `${timerPct}%` }} />
+          
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pointer-events-none select-none">
+             <span className="text-[200px] font-black text-white flex items-center justify-center h-full">?</span>
+          </div>
+
+          <p className="text-3xl md:text-4xl font-black text-white leading-tight mt-8 font-sora relative z-10 px-4">{currentQ.question}</p>
+          
+          <div className="absolute bottom-0 left-0 w-full h-2 bg-white/5 overflow-hidden">
+            <motion.div 
+              className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_20px_rgba(37,99,235,0.6)]" 
+              initial={{ width: '100%' }} 
+              animate={{ width: `${timerPct}%` }} 
+              transition={{ duration: 1, ease: 'linear' }}
+            />
+          </div>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
+
+        {/* OPTIONS GRID */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {(currentQ.options || []).map((opt, i) => {
-            let stateStyle = "bg-white border-viet-border text-viet-text";
+            let stateStyle = "bg-white/5 border-white/5 text-white/80 hover:bg-white/10 hover:border-white/20";
+            let iconColor = "bg-white/10 text-white/50";
+            
             if (answered !== null) {
-              if (i === currentQ.correct) stateStyle = "bg-viet-green text-white border-viet-green";
-              else if (answered === i) stateStyle = "bg-red-500 text-white border-red-500";
-              else stateStyle = "opacity-40 bg-white border-viet-border";
+              if (i === currentQ.correct) {
+                stateStyle = "bg-blue-600 text-white border-blue-400 shadow-[0_0_40px_rgba(37,99,235,0.4)] z-10 scale-[1.02]";
+                iconColor = "bg-white/20 text-white";
+              }
+              else if (answered === i) {
+                stateStyle = "bg-red-500/80 text-white border-red-400 opacity-100 z-10";
+                iconColor = "bg-white/20 text-white";
+              }
+              else {
+                stateStyle = "opacity-20 grayscale bg-white/5 border-white/10 text-white/30";
+                iconColor = "bg-white/5 text-transparent";
+              }
             }
+
             return (
-              <motion.button key={i} whileHover={answered === null ? { scale: 1.02, y: -2 } : {}} whileTap={answered === null ? { scale: 0.98 } : {}} onClick={() => handleAnswer(i)} disabled={answered !== null} className={`p-6 rounded-[32px] border-2 text-left flex items-center gap-5 transition-all shadow-sm ${stateStyle}`}>
-                <div className={`w-12 h-12 rounded-[20px] flex items-center justify-center font-black text-lg ${answered !== null && i === currentQ.correct ? 'bg-white/20' : 'bg-viet-bg'}`}>
+              <motion.button 
+                key={i} 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={answered === null ? { scale: 1.03, y: -4, x: i % 2 === 0 ? -2 : 2 } : {}} 
+                whileTap={answered === null ? { scale: 0.97 } : {}} 
+                onClick={() => handleAnswer(i)} 
+                disabled={answered !== null} 
+                className={`p-8 rounded-[40px] border-2 text-left flex items-center gap-6 transition-all shadow-2xl group ${stateStyle}`}
+              >
+                <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center font-black text-xl flex-shrink-0 transition-all ${iconColor}`}>
                   {String.fromCharCode(65 + i)}
                 </div>
-                <span className="text-[15px] font-bold flex-1">{opt}</span>
-                {answered !== null && i === currentQ.correct && <span className="text-2xl">✓</span>}
+                <span className="text-[17px] md:text-[19px] font-extrabold flex-1 leading-snug font-sora">{opt}</span>
+                {answered !== null && i === currentQ.correct && (
+                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-3xl">✓</motion.div>
+                )}
               </motion.button>
             );
           })}
@@ -1068,7 +1193,7 @@ const Arena = () => {
     if (activeRoom.asModerator) {
       return <ModeratorDashboard room={activeRoom} onLeave={handleLeaveRoom} />;
     }
-    return <PlayerRoom room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
+    return <PlayerRoom user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
   }
 
   return (
