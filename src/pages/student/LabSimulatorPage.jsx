@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import ReactionSimulator from '@/components/lab/ReactionSimulator';
+import MagicLab3D from '@/components/lab/three/MagicLab3D';
 
 const LabSimulatorPage = () => {
   return (
@@ -16,7 +16,7 @@ const LabSimulatorPage = () => {
               <span>←</span> Quay lại Phòng Thí Nghiệm
             </Link>
             <h1 className="text-3xl md:text-5xl font-black text-viet-text italic tracking-tighter uppercase">
-              Mô phỏng <span className="text-viet-green">phản ứng</span>
+              Mô phỏng <span className="text-viet-green">phản ứng 3D</span>
             </h1>
           </motion.div>
           
@@ -25,15 +25,17 @@ const LabSimulatorPage = () => {
             animate={{ opacity: 1, x: 0 }}
             className="bg-white p-4 rounded-2xl border-2 border-viet-border flex items-center gap-4 shadow-sm"
           >
-            <div className="w-12 h-12 bg-viet-green/10 rounded-xl flex items-center justify-center text-2xl">⚗️</div>
+            <div className="w-12 h-12 bg-viet-green/10 rounded-xl flex items-center justify-center text-2xl">🧪</div>
             <div>
               <p className="text-xs font-black text-viet-text-light uppercase tracking-widest">Chế độ</p>
-              <p className="text-base font-black text-viet-text">Thí nghiệm tự do</p>
+              <p className="text-base font-black text-viet-text">Phòng Lab Ma Thuật</p>
             </div>
           </motion.div>
         </header>
 
-        <ReactionSimulator />
+        <div className="h-[750px] w-full">
+          <MagicLab3D />
+        </div>
       </div>
     </div>
   );
