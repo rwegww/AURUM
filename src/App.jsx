@@ -53,6 +53,8 @@ const ClassManager = lazy(() => import('@/pages/teacher/ClassManager'));
 const ClassDetail = lazy(() => import('@/pages/teacher/ClassDetail'));
 const AssignmentManager = lazy(() => import('@/pages/teacher/AssignmentManager'));
 
+import AurumAiAgent from '@/components/common/AurumAiAgent'
+
 function AppContent() {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
@@ -69,7 +71,7 @@ function AppContent() {
       {!isAuthPage && !isImmersivePage && !isManagementPage && <Navbar />}
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
-          {/* Public Routes */}
+          {/* ... standard routes ... */}
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
@@ -121,7 +123,8 @@ function AppContent() {
         </Routes>
       </Suspense>
       
-      {/* Floating Student Feedback UI */}
+      {/* Floating Global UI */}
+      <AurumAiAgent />
       {!isManagementPage && <FeedbackButton />}
     </>
   );
