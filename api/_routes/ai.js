@@ -79,14 +79,26 @@ router.post('/ask', async (req, res) => {
 
     // 3. Call Gemini AI
     console.log(`🤖 Gemini Search Starting: "${normalizedQuery}"`);
-    const startTime = Date.now();
     
     try {
-      const prompt = `User Role: ${role || 'student'}\nQuestion: ${query}`;
-      const geminiResult = await model.generateContent(prompt);
-      const responseText = geminiResult.response.text();
+      // 3. Call Gemini AI (Primary attempt with systemInstruction)
+      const startTime = Date.now();
+      let result;
+      let usedModel = model;
+
+      try {
+        result = await model.generateContent(normalizedQuery);
+      } catch (primaryErr) {
+        console.warn('⚠️ Primary Gemini attempt failed, retrying without systemInstruction...', primaryErr.message);
+        // Fallback: Try a model without systemInstruction
+        const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }, { apiVersion: 'v1' });
+        usedModel = fallbackModel;
+        result = await fallbackModel.generateContent(normalizedQuery);
+      }
+
+      const response = await result.response;
+      const responseText = response.text();
       const duration = Date.now() - startTime;
-      console.log(`✅ Gemini Responded in ${duration}ms`);
 
       const responseObj = {
         message: responseText,
@@ -112,11 +124,11 @@ router.post('/ask', async (req, res) => {
       return res.json(responseObj);
     } catch (geminiErr) {
       console.error('💥 Gemini API Error:', geminiErr.message);
-      // If even Gemini fails, we give a more helpful error than just 500
       return res.status(503).json({
         error: 'AI Service Temporarily Unavailable',
         message: 'Hệ thống AI đang bận hoặc gặp lỗi kết nối. Vui lòng thử lại sau giây lát.',
-        logic: 'Check Gemini API Key and Network'
+        details: geminiErr.message,
+        logic: 'Retry mechanism failed'
       });
     }
 
