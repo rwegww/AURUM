@@ -85,12 +85,25 @@ app.get('/api/debug-env', async (req, res) => {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' }, { apiVersion: 'v1' });
-    const ping = await model.generateContent("ping");
-    geminiTest = ping.response ? 'Success with gemini-pro' : 'Failed (Empty Response)';
-    availableModels = ['gemini-pro'];
+    // Raw fetch to bypass SDK and see what Google actually says
+    const apiKey = process.env.GEMINI_API_KEY || '';
+    const rawUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+    const rawRes = await fetch(rawUrl);
+    const rawData = await rawRes.json();
+    
+    if (rawData.models) {
+      availableModels = rawData.models.map(m => m.name);
+      
+      // Try to ping the first one available
+      const firstModel = availableModels[0].replace('models/', '');
+      const model = genAI.getGenerativeModel({ model: firstModel }, { apiVersion: 'v1' });
+      const ping = await model.generateContent("ping");
+      geminiTest = ping.response ? `Success with ${firstModel}` : 'Failed (Empty Response)';
+    } else {
+      geminiTest = `Google returned no models: ${JSON.stringify(rawData)}`;
+    }
   } catch (e) {
-    geminiTest = `Ping Crash: ${e.message}`;
+    geminiTest = `Raw Fetch Crash: ${e.message}`;
   }
 
   res.json({
