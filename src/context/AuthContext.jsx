@@ -1,7 +1,16 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 
+// 1. Define Context and Hook first to ensure they are available to all components immediately
 const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -10,6 +19,7 @@ export const AuthProvider = ({ children }) => {
   const fetchingTokenRef = useRef(null);
   const mountedRef = useRef(true);
 
+  // 2. Define non-dependent functions first
   const logout = useCallback(async () => {
     try {
       const authType = localStorage.getItem('authType');
@@ -26,33 +36,25 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
       }
       
-      // Force return to home page and full reload to clear all React state/activities
       if (window.location.pathname !== '/') {
         window.location.href = '/';
       } else {
-        // Even if on home, force reload to clear state
         window.location.reload();
       }
     }
   }, []);
 
+  // 3. Define functions that depend on others
   const fetchProfile = useCallback(async (token, force = false) => {
     if (!token) {
       if (mountedRef.current) {
-        setUser(prev => {
-          if (prev !== null) return null;
-          return prev;
-        });
-        setIsLoggedIn(prev => {
-          if (prev !== false) return false;
-          return prev;
-        });
+        setUser(prev => (prev !== null ? null : prev));
+        setIsLoggedIn(prev => (prev !== false ? false : prev));
       }
       setLoading(false);
       return;
     }
 
-    // Prevent redundant fetches for the same token — unless forced (e.g. after unlock)
     if (!force && fetchingTokenRef.current === token) {
       setLoading(false);
       return;
@@ -72,13 +74,10 @@ export const AuthProvider = ({ children }) => {
         }
         return userData;
       } else if (res.status === 401) {
-        // Silent logout on 401 (stale/invalid token)
         await logout();
       }
     } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Lỗi tải profile:', err);
-      }
+      if (err.name !== 'AbortError') console.error('Lỗi tải profile:', err);
     } finally {
       fetchingTokenRef.current = null;
       if (mountedRef.current) setLoading(false);
@@ -97,7 +96,7 @@ export const AuthProvider = ({ children }) => {
       try {
         data = await res.json();
       } catch (jsonErr) {
-        throw new Error(`Server trả về phản hồi không hợp lệ (Status: ${res.status})`);
+        throw new Error(`Server status: ${res.status}`);
       }
 
       if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
@@ -120,7 +119,6 @@ export const AuthProvider = ({ children }) => {
           redirectTo: window.location.origin + '/auth/callback'
         }
       });
-      
       if (error) throw error;
       return { success: true };
     } catch (err) {
@@ -137,7 +135,6 @@ export const AuthProvider = ({ children }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, email, role })
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Lỗi đăng ký');
 
@@ -162,12 +159,9 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ xpGain, unlockedLessonId })
       });
-      
       if (res.ok) {
         const data = await res.json();
-        if (mountedRef.current) {
-          setUser(prev => ({ ...prev, ...data }));
-        }
+        if (mountedRef.current) setUser(prev => ({ ...prev, ...data }));
       }
     } catch (err) {
       console.error('Lỗi cập nhật tiến độ:', err);
@@ -176,9 +170,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshUser = useCallback(async () => {
     const token = localStorage.getItem('token');
-    if (token) {
-      await fetchProfile(token, true);
-    }
+    if (token) await fetchProfile(token, true);
   }, [fetchProfile]);
 
   const updateUser = useCallback(async (updateData) => {
@@ -193,12 +185,9 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify(updateData)
       });
-      
       if (res.ok) {
         const data = await res.json();
-        if (mountedRef.current) {
-          setUser(prev => ({ ...prev, ...data }));
-        }
+        if (mountedRef.current) setUser(prev => ({ ...prev, ...data }));
         return { success: true };
       } else {
         const errData = await res.json();
@@ -210,31 +199,25 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isLoggedIn, user]);
 
+  // 4. Initialization Effect
   useEffect(() => {
     mountedRef.current = true;
-    
     const initAuth = async () => {
       try {
         const authType = localStorage.getItem('authType');
         if (authType === 'custom') {
           const token = localStorage.getItem('token');
-          if (token) {
-            await fetchProfile(token);
-          } else {
-            if (mountedRef.current) setLoading(false);
-          }
+          if (token) await fetchProfile(token);
+          else if (mountedRef.current) setLoading(false);
         } else {
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             localStorage.setItem('token', session.access_token);
             localStorage.setItem('authType', 'supabase');
             await fetchProfile(session.access_token);
-          } else {
-            if (mountedRef.current) setLoading(false);
-          }
+          } else if (mountedRef.current) setLoading(false);
         }
       } catch (err) {
-        console.error('Auth Init Error:', err);
         if (mountedRef.current) setLoading(false);
       }
     };
@@ -254,12 +237,10 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             setIsLoggedIn(false);
           }
-          if (window.location.pathname !== '/') {
-            window.location.href = '/';
-          }
+          if (window.location.pathname !== '/') window.location.href = '/';
         }
       } catch (authErr) {
-        console.error('Lỗi Auth State Change:', authErr);
+        console.error('Auth status change error:', authErr);
       }
     });
 
@@ -269,6 +250,7 @@ export const AuthProvider = ({ children }) => {
     };
   }, [fetchProfile]);
 
+  // 5. Memoize Value
   const value = useMemo(() => ({
     user,
     isLoggedIn,
@@ -282,17 +264,5 @@ export const AuthProvider = ({ children }) => {
     updateUser
   }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser]);
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -2,11 +2,11 @@ import React, { lazy, Suspense } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 
 // Common Components (Static - small & frequently used)
+import { AuthProvider } from '@/context/AuthContext'
 import Navbar from '@/components/navigation/Navbar'
 import FeedbackButton from '@/components/common/FeedbackButton'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
-import { AuthProvider } from '@/context/AuthContext'
 
 // Lazy Loaded Student Pages
 const Home = lazy(() => import('@/pages/student/Home'));
