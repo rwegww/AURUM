@@ -1,26 +1,23 @@
 import express from 'express';
 import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { supabase } from '../lib/supabase.js';
 import crypto from 'crypto';
 
 const router = express.Router();
 
-const SYSTEM_INSTRUCTION = `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
-PHONG CÁCH PHẢN HỒI: 
-1. Ưu tiên sự NGẮN GỌN, súc tích và ĐÚNG TRỌNG TÂM.
-2. Sử dụng danh sách gạch đầu dòng (-) thay cho các đoạn văn dài.
-3. Nếu có dữ liệu so sánh hoặc tính chất, hãy ưu tiên trình bày dạng BẢNG.
-4. Tránh các câu dẫn rườm rà như "Dưới đây là...", "Tôi xin trả lời...". Đi thẳng vào nội dung chính.
+const SYSTEM_INSTRUCTION = `BẠN LÀ AURUM AI EXPERT. 
+PHONG CÁCH PHẢN HỒI BẮT BUỘC:
+- NGẮN GỌN, ĐÚNG TRỌNG TÂM.
+- Ưu tiên sử dụng gạch đầu dòng và bảng biểu.
+- Không câu dẫn rườm rà.
+QUY TẮC BẢO MẬT: Không tiết lộ dữ liệu người dùng khác.
 
-QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
-1. Tuyệt đối không tiết lộ thông tin cá nhân hoặc dữ liệu của người dùng khác.
-2. Chỉ tập trung vào kiến thức hóa học, học thuật và an toàn phòng thí nghiệm.
-3. Nếu câu hỏi liên quan đến chất cháy nổ nguy hiểm ngoài mục đích giáo dục, hãy kích hoạt cảnh báo an toàn.`;
+NÔI DUNG: `;
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize Providers
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 /**
  * Standardized logging utility
@@ -41,7 +38,7 @@ const logQuery = async (userId, username, query, response, metadata) => {
 
 /**
  * Endpoint: /api/ai/ask
- * logic: Hybrid AI (Knowledge -> Cache -> OpenAI)
+ * logic: Hybrid AI (Knowledge -> Cache -> OpenAI -> Gemini Fallback)
  */
 router.post('/ask', async (req, res) => {
   try {
@@ -66,70 +63,73 @@ router.post('/ask', async (req, res) => {
         return res.json({ ...cachedResponse.response, source: 'cache' });
       }
     } catch (e) {
-      console.warn('⚠️ Cache lookup failed, proceeding to OpenAI:', e.message);
+      console.warn('⚠️ Cache lookup failed:', e.message);
     }
 
-    console.log(`🤖 OpenAI Search Starting: "${normalizedQuery}"`);
+    console.log(`🤖 Hybrid AI Search Starting: "${normalizedQuery}"`);
     
     try {
-      // 2. Call OpenAI (Primary: gpt-4o-mini, Fallback: gpt-4o)
       const startTime = Date.now();
       let responseText = '';
-      let usedModel = 'gpt-4o-mini';
+      let usedEngine = '';
 
+      // Stage 1: Try OpenAI (Premium)
       try {
+        console.log('📡 Attempting OpenAI (gpt-4o-mini)...');
         const completion = await openai.chat.completions.create({
           model: "gpt-4o-mini",
           messages: [
             { role: "system", content: SYSTEM_INSTRUCTION },
             { role: "user", content: normalizedQuery }
           ],
-          temperature: 0.7,
+          max_tokens: 800,
+          temperature: 0.7
         });
         responseText = completion.choices[0].message.content;
-      } catch (primaryErr) {
-        console.warn('⚠️ OpenAI Mini failed, retrying with gpt-4o:', primaryErr.message);
-        usedModel = 'gpt-4o';
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o",
-          messages: [
-            { role: "system", content: SYSTEM_INSTRUCTION },
-            { role: "user", content: normalizedQuery }
-          ],
-        });
-        responseText = completion.choices[0].message.content;
+        usedEngine = 'openai-gpt-4o-mini';
+      } catch (openAiErr) {
+        console.warn('⚠️ OpenAI Failed (likely quota), falling back to Gemini:', openAiErr.message);
+        
+        // Stage 2: Emergency Fallback to Gemini 1.5 Flash (Free/Stable)
+        console.log('📡 Emergency Fallback to Gemini (1.5-flash)...');
+        const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' });
+        const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
+        const result = await geminiModel.generateContent(fullPrompt);
+        const response = await result.response;
+        responseText = response.text();
+        usedEngine = 'gemini-1.5-flash-fallback';
       }
 
       const duration = Date.now() - startTime;
 
       const responseObj = {
         message: responseText,
-        source: 'openai_gpt',
+        source: 'hybrid_ai',
         suggestions: ['Tìm hiểu thêm', 'Ví dụ thực tế', 'Phản ứng liên quan'],
         timestamp: new Date().toISOString(),
         generation_time_ms: duration,
-        engine: usedModel
+        engine: usedEngine
       };
 
-      // 3. Persistence (Background)
+      // 4. Persistence (Background)
       supabase.from('ai_cache').upsert({
         query_hash: queryHash,
         original_query: normalizedQuery,
         response: responseObj
       }).then(({ error }) => {
-        if (error) console.error('⚠️ Failed to cache OpenAI response:', error.message);
+        if (error) console.error('⚠️ Failed to cache AI response:', error.message);
       });
 
       // Log Query (Background)
-      logQuery(userId, username, normalizedQuery, responseObj, { source: 'openai_gpt', context, duration_ms: duration });
+      logQuery(userId, username, normalizedQuery, responseObj, { source: 'hybrid_ai', engine: usedEngine, context, duration_ms: duration });
 
       return res.json(responseObj);
-    } catch (openAiErr) {
-      console.error('💥 OpenAI API Error:', openAiErr.message);
+    } catch (aiError) {
+      console.error('💥 Ultimate Hybrid AI Failure:', aiError.message);
       return res.status(503).json({
         error: 'AI Service Temporarily Unavailable',
-        message: 'Hệ thống AI đang gặp sự cố. Vui lòng thử lại sau giây lát.',
-        details: openAiErr.message
+        message: 'Tất cả các dịch vụ AI hiện đang bận. Vui lòng thử lại sau giây lát.',
+        details: aiError.message
       });
     }
 
@@ -140,14 +140,7 @@ router.post('/ask', async (req, res) => {
 });
 
 router.get('/ask', (req, res) => {
-  res.json({
-    message: 'Welcome to Aurum AI Assistant. Please use POST to ask questions.',
-    usage: {
-      endpoint: '/api/ai/ask',
-      method: 'POST',
-      body: { query: 'string', context: 'object' }
-    }
-  });
+  res.json({ message: 'Aurum Hybrid AI is ready.' });
 });
 
 export default router;
