@@ -90,8 +90,8 @@ router.post('/ask', async (req, res) => {
       let result;
       let attemptLogs = [];
       
-      // Order: Prefer newest/stable, fallback to other next-gen models supported by this key
-      const modelCandidates = ['gemini-2.5-flash', 'gemini-3.1-pro-preview', 'gemini-2.0-flash'];
+      // Order: Use the latest confirmed models from the user's dashboard (Gemini 3.1 Flash Lite, 2.5 Pro)
+      const modelCandidates = ['gemini-3.1-flash-lite', 'gemini-2.5-pro', 'gemini-2.0-flash'];
 
       for (const modelName of modelCandidates) {
         try {
