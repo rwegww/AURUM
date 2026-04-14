@@ -289,25 +289,7 @@ const MagicLab3D = () => {
       {/* Main UI Layout */}
       <div className="absolute inset-0 flex flex-col justify-between pointer-events-none p-6 z-[10]">
         {/* Top Header */}
-        <div className="flex justify-between items-start pointer-events-auto">
-          <div className="flex gap-4">
-            <button 
-              onClick={() => navigate('/lectures')}
-              className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all group"
-            >
-              <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-            </button>
-            <div className="bg-black/30 backdrop-blur-md px-6 py-2 rounded-2xl border border-white/10 flex flex-col justify-center">
-              <h1 className="text-sm font-black italic uppercase tracking-tighter text-blue-400">Magic Lab 3D</h1>
-              <div className="flex items-center gap-2">
-                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                 <span className="text-[10px] uppercase font-bold text-white/50 tracking-widest">
-                   {activeBeaker.id ? `Cốc: #${activeBeaker.id.toString().slice(-4)}` : 'Sẵn sàng'}
-                 </span>
-              </div>
-            </div>
-          </div>
-
+        <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
             <button 
               onClick={() => setShowDiscoveryJournal(true)}
@@ -333,7 +315,7 @@ const MagicLab3D = () => {
         </div>
 
         {/* Middle & Bottom Layout */}
-        <div className="flex-1 flex justify-between items-center pointer-events-none mt-6 relative">
+        <div className="flex-1 flex justify-between items-start pointer-events-none mt-6 relative">
           {/* Floating Reaction Message */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 pointer-events-none z-[50]">
             <AnimatePresence>
