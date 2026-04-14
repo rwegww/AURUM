@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Bot, Sparkles, MessageSquare, Search, X, ChevronRight, FlaskConical, Beaker as BeakerIcon, Lightbulb } from 'lucide-react';
+import { Bot, Sparkles, MessageSquare, Search, X, FlaskConical, Beaker as BeakerIcon, Lightbulb } from 'lucide-react';
+import useLabStore from './store'; // Correct import
 
 const normalize = (f) => {
   if (!f) return "";
@@ -53,24 +54,15 @@ const getRecipe = (targetFormula, reactions, chemicals) => {
 };
 
 const AiAssistant = ({ chemicals = [], reactions = [] }) => {
-  // We use the store for current active beaker contents
   const [isOpen, setIsOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [recipeResults, setRecipeResults] = useState([]);
 
-  // Use a selector to watch the active beaker's contents
-  const activeBeakerIndex = (state => state.activeBeakerIndex);
-  const beakers = (state => state.beakers);
-  const beakerContents = useMemo(() => {
-    // This is a bit tricky since we're outside a hook here, but we can use the store's hook version in the component
-    return []; // Placeholder for now, handled in useEffect
-  }, []);
-
-  // Real store usage
-  const store = require('./store').default;
-  const currentBeakerContents = store(state => state.beakers[state.activeBeakerIndex]?.contents || []);
+  // Use the store hook to get the active beaker's contents
+  const activeBeakerIndex = useLabStore(state => state.activeBeakerIndex);
+  const currentBeakerContents = useLabStore(state => state.beakers[activeBeakerIndex]?.contents || []);
 
   // Update suggestions when beaker contents change
   useEffect(() => {
@@ -106,7 +98,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
         <div className="bg-blue-600/80 backdrop-blur-xl border border-blue-400/30 p-3 rounded-2xl rounded-tr-none shadow-2xl animate-bounce-soft max-w-[200px] pointer-events-auto">
           <div className="flex gap-2 items-start">
             <Lightbulb size={16} className="text-yellow-400 shrink-0 mt-0.5" />
-            <p className="text-[10px] font-medium leading-tight">
+            <p className="text-[10px] font-medium leading-tight text-white">
               {suggestions[0].text}
             </p>
           </div>
@@ -124,8 +116,8 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
           }
         `}
       >
-        {isOpen ? <X size={24} /> : (
-          <div className="relative">
+        {isOpen ? <X size={24} className="text-white" /> : (
+          <div className="relative text-white">
             <Bot size={30} className="group-hover:animate-pulse" />
             <Sparkles size={14} className="absolute -top-1 -right-1 text-yellow-300 animate-pulse" />
           </div>
@@ -136,7 +128,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
       {isOpen && (
         <div className="w-80 bg-black/80 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-scaleIn pointer-events-auto flex flex-col max-h-[70vh]">
           {/* Header */}
-          <div className="p-5 border-b border-white/10 bg-white/5 flex items-center justify-between">
+          <div className="p-5 border-b border-white/10 bg-white/5 flex items-center justify-between text-white">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-500/20 rounded-xl text-blue-400">
                 <Sparkles size={18} />
@@ -155,7 +147,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
             </button>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar text-white">
             {showSearch ? (
               <div className="space-y-4">
                 <div className="relative">
@@ -164,7 +156,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
                     value={searchQuery}
                     onChange={handleSearch}
                     placeholder="Tìm chất muốn tạo..."
-                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500 outline-none transition-all"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white"
                   />
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
                 </div>
@@ -188,8 +180,10 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
                     <p className="text-center text-[10px] text-white/40 py-4">Không tìm thấy công thức cho "{searchQuery}"</p>
                   ) : (
                     <div className="p-4 text-center space-y-2">
-                      <BeakerIcon size={24} className="mx-auto text-white/10" />
-                      <p className="text-[10px] text-white/40">Nhập tên chất để xem cách điều chế.</p>
+			      <div className="flex justify-center">
+				<BeakerIcon size={24} className="text-white/10" />
+			      </div>
+                              <p className="text-[10px] text-white/40">Nhập tên chất để xem cách điều chế.</p>
                     </div>
                   )}
                 </div>

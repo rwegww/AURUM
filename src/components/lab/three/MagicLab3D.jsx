@@ -9,17 +9,12 @@ import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
 import {
   ArrowLeft,
-  Menu,
   Flame,
   RotateCcw,
   Settings,
-  FlaskConical,
-  Info,
   Plus,
   Scissors,
   Trash2,
-  ChevronLeft,
-  ChevronRight,
   X,
   Volume2,
   VolumeX,
@@ -46,7 +41,7 @@ const GalaxyBackground = () => (
     <div className="absolute inset-0 opacity-80 animate-nebula-drift" style={{ backgroundImage: 'radial-gradient(2px 2px at 10px 10px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 150px 150px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 300px 300px, #fff, rgba(0,0,0,0))', backgroundSize: '250px 250px' }} />
     <div className="absolute inset-0 opacity-60 animate-star-twinkle" style={{ backgroundImage: 'radial-gradient(1.5px 1.5px at 50px 50px, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 200px 100px, #fff, rgba(0,0,0,0))', backgroundSize: '300px 300px' }} />
     <div className="absolute inset-0 opacity-40 animate-cosmic-pulse" style={{ backgroundImage: 'radial-gradient(1px 1px at 80px 120px, #ffcc00, rgba(0,0,0,0)), radial-gradient(1px 1px at 250px 200px, #ffcc00, rgba(0,0,0,0))', backgroundSize: '400px 400px' }} />
-    <div className="absolute inset-0 opacity-10 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] scale-150 animate-float-slow" />
+    <div className="absolute inset-0 opacity-10 mix-blend-overlay bg-[url(\'https://www.transparenttextures.com/patterns/stardust.png\')] scale-150 animate-float-slow" />
   </div>
 );
 
@@ -70,7 +65,6 @@ const MagicLab3D = () => {
   const setOnDiscovery = useLabStore(state => state.setOnDiscovery);
   const beakers = useLabStore(state => state.beakers);
   const activeBeakerIndex = useLabStore(state => state.activeBeakerIndex);
-  const allowedFormulas = useLabStore(state => state.allowedFormulas);
   const isPouringFormula = useLabStore(state => state.isPouringFormula);
   const dropToBeaker = useLabStore(state => state.dropToBeaker);
   const clearBeaker = useLabStore(state => state.clearBeaker);
@@ -79,15 +73,16 @@ const MagicLab3D = () => {
   const removeBeaker = useLabStore(state => state.removeBeaker);
   const setActiveBeaker = useLabStore(state => state.setActiveBeaker);
   const settings = useLabStore(state => state.settings);
-  const updateSettings = useLabStore(state => state.updateSettings);
+  const updateLabSettings = useLabStore(state => state.updateSettings);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
-  const [showSettings, setShowSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState('liquid');
+  const [showLabSettings, setShowLabSettings] = useState(false);
   const [isMessageVisible, setIsMessageVisible] = useState(false);
 
   // Sound Effects
   const { playSound } = useSoundEffects();
-  const { enabled: soundEnabled, toggleSound } = useSoundStore();
+  const { enabled: soundEnabled, toggleSound: toggleLabSound } = useSoundStore();
 
   // --- 1. Fetch Backend Data ---
   useEffect(() => {
@@ -211,8 +206,16 @@ const MagicLab3D = () => {
   const availableChemicals = useMemo(() => {
     const chemicalsMap = useLabStore.getState().chemicals;
     return Object.values(chemicalsMap)
-      .filter(c => discoveredFormulas.includes(c.formula));
-  }, [discoveredFormulas]);
+      .filter(c => discoveredFormulas.includes(c.formula))
+      .filter(c => {
+        if (activeTab === 'all') return true;
+        if (activeTab === 'liquid') return c.state === 'liquid' && !c.type;
+        if (activeTab === 'solid') return c.state === 'solid' && !c.type;
+        if (activeTab === 'metal') return c.type?.includes('metal') && c.type !== 'nonmetal';
+        if (activeTab === 'nonmetal') return c.type?.includes('nonmetal');
+        return true;
+      });
+  }, [activeTab, discoveredFormulas]);
 
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] text-white rounded-3xl min-h-[600px]">
@@ -240,246 +243,320 @@ const MagicLab3D = () => {
                 <p className="text-white/60 mb-8 font-medium text-sm">{newDiscovery.name}</p>
                 <button onClick={() => setNewDiscovery(null)} className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl w-full font-bold uppercase tracking-widest transition-all">Tuyệt quá!</button>
              </motion.div>
-          </motion.div>
-        )}
-
-        {showDiscoveryJournal && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[100] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4">
-             <div className="relative w-full h-full flex flex-col">
-                <button 
-                  onClick={() => setShowDiscoveryJournal(false)} 
-                  className="absolute top-6 right-6 z-50 w-12 h-12 bg-white/5 hover:bg-red-500 rounded-full flex items-center justify-center transition-all border border-white/10"
-                >
-                  <X size={24} />
-                </button>
-                <div className="flex-1">
-                  <DiscoveryMap 
-                    chemicals={dbChemicals} 
-                    reactions={dbReactions} 
-                    discoveredFormulas={discoveredFormulas} 
-                  />
-                </div>
-             </div>
-          </motion.div>
+           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="absolute inset-0 z-0">
-        <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 2, 5], fov: 45 }}>
-           <Suspense fallback={null}>
-             <LabScene />
-           </Suspense>
-        </Canvas>
-        <Loader /> 
-      </div>
+      {/* Main UI Layout */}
+      <div className="absolute inset-0 flex flex-col pointer-events-none p-6">
+        {/* Top Header */}
+        <div className="flex justify-between items-start pointer-events-auto">
+          <div className="flex gap-4">
+            <button 
+              onClick={() => navigate('/lectures')}
+              className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all group"
+            >
+              <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+            </button>
+            <div className="bg-black/30 backdrop-blur-md px-6 py-2 rounded-2xl border border-white/10 flex flex-col justify-center">
+              <h1 className="text-sm font-black italic uppercase tracking-tighter text-blue-400">Magic Lab 3D</h1>
+              <div className="flex items-center gap-2">
+                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                 <span className="text-[10px] uppercase font-bold text-white/50 tracking-widest">
+                   {activeBeaker.id ? `Cốc: #${activeBeaker.id.toString().slice(-4)}` : 'Sẵn sàng'}
+                 </span>
+              </div>
+            </div>
+          </div>
 
-      {/* --- UI OVERLAY --- */}
-      
-      {/* 2. Feedback Log (Top Center) */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 w-full max-w-lg px-4 pointer-events-none">
-        <div className={`
-          bg-black/40 backdrop-blur-xl border border-white/5 rounded-2xl p-4 shadow-2xl text-center transition-all duration-500
-          ${isMessageVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
-        `}>
-           <p className="text-blue-300 font-mono text-sm leading-tight">
-             {activeBeaker.reactionMessage}
-           </p>
+          <div className="flex gap-2">
+            <button 
+              onClick={() => setShowDiscoveryJournal(true)}
+              className="flex items-center gap-2 px-4 h-12 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-all font-bold text-xs uppercase tracking-widest"
+            >
+              <BookOpen size={18} className="text-purple-400" />
+              <span>Sổ tay khám phá ({discoveredFormulas.length})</span>
+            </button>
+            <button 
+              onClick={() => setShowLabSettings(true)}
+              className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all"
+            >
+              <Settings size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Middle Content - Interaction Area */}
+        <div className="flex-1 relative flex items-center justify-center pointer-events-none">
+           {/* Floating Message */}
+           <AnimatePresence>
+             {isMessageVisible && (
+               <motion.div 
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 exit={{ opacity: 0, y: -20 }}
+                 className="absolute top-1/4 bg-blue-600/20 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl text-blue-200 text-sm font-medium shadow-2xl"
+               >
+                 {activeBeaker.reactionMessage}
+               </motion.div>
+             )}
+           </AnimatePresence>
+        </div>
+
+        {/* Bottom Panel */}
+        <div className="flex gap-6 items-end pointer-events-auto h-[280px]">
+          {/* Left Column - Tools */}
+          <div className="flex flex-col gap-3">
+            <div className="bg-black/30 backdrop-blur-md p-2 rounded-3xl border border-white/10 flex flex-col gap-2">
+              <button 
+                onClick={handleToggleHeat}
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${activeBeaker.isHeating ? 'bg-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.4)]' : 'hover:bg-white/5 text-white/50'}`}
+                title="Đun nóng"
+              >
+                <Flame size={24} />
+              </button>
+              <button 
+                onClick={handleClearBeaker}
+                className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-red-500/20 text-white/50 hover:text-red-400 transition-all"
+                title="Dọn dép"
+              >
+                <RotateCcw size={24} />
+              </button>
+              <button 
+                onClick={() => {}} 
+                className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-blue-500/20 text-white/50 hover:text-blue-400 transition-all opacity-30 cursor-not-allowed"
+                title="Cắt lát (Coming Soon)"
+              >
+                <Scissors size={24} />
+              </button>
+            </div>
+
+            <div className="bg-black/30 backdrop-blur-md p-2 rounded-3xl border border-white/10 flex flex-col gap-2">
+               <button 
+                 onClick={addBeaker}
+                 className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:text-green-400 transition-all"
+                 title="Thêm cốc"
+               >
+                 <Plus size={24} />
+               </button>
+            </div>
+          </div>
+
+          {/* Center Column - Chemicals Inventory */}
+          <div className="flex-1 bg-black/30 backdrop-blur-md rounded-[40px] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden group/inventory">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover/inventory:opacity-100 transition-opacity" />
+            
+            {/* Tabs */}
+            <div className="flex gap-4 mb-6">
+              {[
+                { id: 'liquid', label: 'Dung dịch' },
+                { id: 'solid', label: 'Chất rắn' },
+                { id: 'metal', label: 'Kim loại' },
+                { id: 'all', label: 'Tất cả' }
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`text-[10px] uppercase font-black tracking-widest px-4 py-2 rounded-full transition-all ${activeTab === tab.id ? 'bg-blue-600 text-white' : 'text-white/40 hover:text-white/70'}`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Chemicals Grid */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div className="grid grid-cols-6 gap-3">
+                {availableChemicals.map((chem) => (
+                  <motion.button
+                    key={chem.formula}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleDropToBeaker(chem.formula)}
+                    disabled={isPouringFormula !== null}
+                    className={`group relative p-3 rounded-2xl border transition-all ${isPouringFormula === chem.formula ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/10 hover:border-white/30'}`}
+                  >
+                    {/* Status Badge */}
+                    {isPouringFormula === chem.formula && (
+                       <div className="absolute -top-2 -right-2 w-5 h-5 bg-white rounded-full flex items-center justify-center animate-bounce">
+                         <div className="w-2 h-2 bg-blue-600 rounded-full" />
+                       </div>
+                    )}
+                    
+                    {/* Icon/Symbol */}
+                    <div className="aspect-square flex items-center justify-center rounded-xl bg-black/40 mb-2 overflow-hidden relative">
+                      <div 
+                        className="absolute inset-0 opacity-20 blur-lg" 
+                        style={{ backgroundColor: chem.color }} 
+                      />
+                      {chem.state === 'solid' ? (
+                         <div className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)' }} />
+                      ) : (
+                         <div className="w-5 h-7 border-2 border-white/20 rounded-b-lg relative overflow-hidden">
+                           <div className="absolute bottom-0 w-full h-1/2 opacity-60" style={{ backgroundColor: chem.color }} />
+                         </div>
+                      )}
+                    </div>
+
+                    {/* Label */}
+                    <div className="flex flex-col items-center">
+                      <span className="text-xs font-black tracking-tight">{chem.formula}</span>
+                      <span className="text-[8px] text-white/40 font-bold uppercase truncate w-full text-center">{chem.name}</span>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Beakers Selector */}
+          <div className="w-24 bg-black/30 backdrop-blur-md rounded-3xl border border-white/10 p-2 flex flex-col gap-2 overflow-y-auto max-h-full custom-scrollbar">
+            {beakers.map((b, idx) => (
+              <div key={b.id} className="relative group">
+                <button
+                  onClick={() => setActiveBeaker(idx)}
+                  className={`w-full aspect-square rounded-2xl flex flex-col items-center justify-center transition-all border ${activeBeakerIndex === idx ? 'bg-blue-600/20 border-blue-500 ring-2 ring-blue-500/20' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                >
+                  <div className="w-8 h-10 border-2 border-white/30 rounded-b-lg relative overflow-hidden mb-1">
+                    {b.contents.length > 0 && (
+                      <div 
+                        className="absolute bottom-0 w-full transition-all duration-500" 
+                        style={{ 
+                          height: `${Math.min(b.contents.length * 20, 100)}%`,
+                          backgroundColor: b.contents[b.contents.length - 1].color 
+                        }} 
+                      />
+                    )}
+                  </div>
+                  <span className="text-[10px] font-black opacity-50">#{idx + 1}</span>
+                </button>
+                {beakers.length > 1 && (
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); removeBeaker(idx); }}
+                    className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110 active:scale-95"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      <AiAssistant chemicals={dbChemicals} reactions={dbReactions} />
+      {/* Settings Modal */}
+      <AnimatePresence>
+        {showLabSettings && (
+          <div className="fixed inset-0 z-[300] flex items-center justify-center">
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowLabSettings(false)} className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+             <motion.div 
+               initial={{ scale: 0.9, opacity: 0 }} 
+               animate={{ scale: 1, opacity: 1 }}
+               exit={{ scale: 0.9, opacity: 0 }}
+               className="relative bg-[#0d0e12] border border-white/10 rounded-[32px] p-8 w-full max-w-md shadow-2xl"
+             >
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-xl font-black uppercase italic italic">Tùy chỉnh Lab</h2>
+                  <button onClick={() => setShowLabSettings(false)} className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors"><X/></button>
+                </div>
 
-      {/* 3. Beaker Selector (Top Right) */}
-      <div className="absolute top-6 right-6 z-20 hidden md:flex flex-col items-end gap-2">
-         <div className="flex gap-2 bg-black/40 backdrop-blur-md p-2 rounded-2xl border border-white/10">
-            {beakers.map((b, i) => (
-               <button
-                  key={b.id}
-                  onClick={() => setActiveBeaker(i)}
-                  className={`
-                     w-12 h-12 rounded-xl border flex items-center justify-center transition-all relative
-                     ${i === activeBeakerIndex 
-                        ? 'bg-blue-600/30 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]' 
-                        : 'bg-white/5 border-white/10 hover:bg-white/10'
-                     }
-                  `}
-               >
-                  <FlaskConical size={20} className={i === activeBeakerIndex ? 'text-blue-400' : 'text-white/40'} />
-                  {b.contents.length > 0 && (
-                     <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 text-[10px] font-bold rounded-full flex items-center justify-center">
-                        {b.contents.length}
-                     </span>
-                  )}
-               </button>
-            ))}
-            {beakers.length < 4 && (
-               <button
-                  onClick={addBeaker}
-                  className="w-12 h-12 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl flex items-center justify-center transition-all"
-               >
-                  <Plus size={20} />
-               </button>
-            )}
-         </div>
-         <div className="flex gap-2">
-            {beakers.length > 1 && (
-               <button onClick={() => removeBeaker(activeBeakerIndex)} className="text-[10px] text-white/30 hover:text-red-400 px-2 flex items-center gap-1 transition-colors">
-                  <Trash2 size={12} /> Dọn dẹp cốc
-               </button>
-            )}
-         </div>
-      </div>
-
-      {/* 4. Chemical Shelf (Left Side) */}
-      <div className="absolute left-6 top-24 bottom-24 z-20 w-80 pointer-events-none">
-         <div className="h-full bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl p-4 pointer-events-auto flex flex-col shadow-2xl">
-            <div className="flex items-center justify-between mb-4 px-2">
-               <h3 className="font-bold text-lg flex items-center gap-2">
-                  <FlaskConical size={20} className="text-blue-400" />
-                  <span>Kệ Hóa Chất</span>
-               </h3>
-               <button 
-                  onClick={() => setShowDiscoveryJournal(true)}
-                  className="p-2 bg-blue-600/20 text-blue-400 rounded-lg hover:bg-blue-600 hover:text-white transition-all shadow-md"
-                  title="Sổ tay khám phá"
-               >
-                  <BookOpen size={16} />
-               </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-               <div className="grid grid-cols-2 gap-4 pb-4">
-                  {availableChemicals.map((chem) => {
-                  const isBeingPoured = isPouringFormula === chem.formula;
-                  
-                  return (
-                    <button 
-                       key={chem.formula}
-                       disabled={!!isPouringFormula}
-                       onClick={() => handleDropToBeaker(chem.formula)}
-                       className={`
-                          group relative flex flex-col items-center p-3 rounded-2xl border transition-all duration-300 transform
-                          bg-white/5 border-white/10 hover:bg-white/15 hover:border-blue-500/50 hover:-translate-y-1 active:scale-95 cursor-pointer
-                          ${isBeingPoured ? 'ring-2 ring-blue-500 bg-blue-500/20' : ''}
-                       `}
-                    >
-                       <div className="relative w-16 h-16 mb-2 flex items-center justify-center">
-                          <div className="absolute inset-0 rounded-full blur-md opacity-40 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: chem.color || '#ffffff' }} />
-                          <div 
-                             className="w-10 h-10 rounded-full shadow-[inset_-4px_-4px_8px_rgba(0,0,0,0.5),4px_4px_8px_rgba(255,255,255,0.2)] transition-transform group-hover:scale-110"
-                             style={{ background: `radial-gradient(circle at 30% 30%, ${chem.color || '#ffffff'}, #000)`, border: '1px solid rgba(255,255,255,0.1)' }}
-                          />
-                       </div>
-                       <div className="text-center">
-                          <span className="block text-sm font-bold font-mono text-white/90 group-hover:text-white">{chem.formula}</span>
-                          <span className="block text-[8px] text-white/30 truncate w-24 group-hover:text-white/60">{chem.name}</span>
-                       </div>
-                    </button>
-                  );
-               })}
-               </div>
-            </div>
-         </div>
-      </div>
-
-      {/* 6. Bottom Navigation Bar */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-auto">
-         <div className="flex items-center bg-black/60 backdrop-blur-2xl border border-white/10 rounded-full px-12 py-3 space-x-12 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-            <button
-               onClick={handleToggleHeat}
-               className={`
-                  relative p-5 rounded-full transition-all duration-500 transform active:scale-90
-                  ${activeBeaker.isHeating 
-                     ? 'bg-orange-600 text-white shadow-[0_0_30px_rgba(234,88,12,0.6)] scale-110' 
-                     : 'bg-white/10 text-white/40 hover:bg-white/20 hover:text-white/80'
-                  }
-               `}
-            >
-               <Flame size={32} fill={activeBeaker.isHeating ? "currentColor" : "none"} />
-            </button>
-
-            <button
-               onClick={handleClearBeaker}
-               className="p-3 bg-white/5 hover:bg-red-500/20 text-white/40 hover:text-red-400 rounded-full transition-all border border-transparent hover:border-red-500/30"
-            >
-               <RotateCcw size={26} />
-            </button>
-
-            <button 
-               onClick={() => setShowSettings(!showSettings)}
-               className={`p-2 transition-colors ${showSettings ? 'text-blue-400' : 'text-white/40 hover:text-white'}`}
-            >
-               <Settings size={28} />
-            </button>
-         </div>
-      </div>
-
-      {/* 8. Settings Panel */}
-      {showSettings && (
-         <div className="absolute top-24 right-6 z-50 w-72 bg-black/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 shadow-2xl animate-scaleIn">
-            <div className="flex items-center justify-between mb-6">
-               <h3 className="font-bold text-lg">Cài đặt</h3>
-               <button onClick={() => setShowSettings(false)} className="text-white/40 hover:text-white">
-                  <X size={20} />
-               </button>
-            </div>
-            <div className="space-y-6">
-               <div className="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
-                  <span className="text-sm font-medium">Chế độ Galaxy</span>
-                  <button 
-                     onClick={() => updateSettings({ bgType: settings.bgType === 'color' ? 'galaxy' : 'color' })}
-                     className={`w-12 h-6 rounded-full transition-colors relative ${settings.bgType === 'galaxy' ? 'bg-blue-500' : 'bg-white/10'}`}
-                  >
-                     <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${settings.bgType === 'galaxy' ? 'translate-x-6' : 'translate-x-0'}`} />
-                  </button>
-               </div>
-               <div className="border-t border-white/10 pt-6">
-                  <div className="flex items-center justify-between p-3 bg-white/5 rounded-2xl border border-white/5 mb-4">
-                     <div className="flex items-center gap-2">
-                        {soundEnabled ? <Volume2 size={18} className="text-green-400" /> : <VolumeX size={18} className="text-white/40" />}
-                        <span className="text-sm font-medium">Âm thanh</span>
-                     </div>
-                     <button onClick={toggleSound} className={`w-12 h-6 rounded-full transition-all relative ${soundEnabled ? 'bg-green-500' : 'bg-white/10'}`}>
-                        <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${soundEnabled ? 'translate-x-6' : 'translate-x-0'}`} />
-                     </button>
+                <div className="space-y-6">
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/40">Phông nền</label>
+                    <div className="grid grid-cols-2 gap-3">
+                       <button 
+                         onClick={() => updateLabSettings({ bgType: 'galaxy' })}
+                         className={`p-4 rounded-2xl border text-xs font-bold transition-all ${settings.bgType === 'galaxy' ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/5'}`}
+                       >Vũ trụ</button>
+                       <button 
+                         onClick={() => updateLabSettings({ bgType: 'color', bgColor: '#0a0a0f' })}
+                         className={`p-4 rounded-2xl border text-xs font-bold transition-all ${settings.bgType === 'color' ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/5'}`}
+                       >Mặc định</button>
+                    </div>
                   </div>
-               </div>
-            </div>
-         </div>
-      )}
 
-      <div className="absolute bottom-8 right-8 z-20">
-         <div className="group relative">
-            <div className="p-3 bg-white/5 hover:bg-white/10 rounded-full backdrop-blur-md border border-white/10 cursor-help">
-               <Info size={20} className="text-white/40 group-hover:text-blue-400" />
-            </div>
-            <div className="absolute bottom-full right-0 mb-4 w-72 bg-black/90 backdrop-blur-2xl border border-white/10 p-5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all pointer-events-none transform translate-y-4 group-hover:translate-y-0 text-xs shadow-2xl">
-               <p className="font-bold text-blue-400 mb-3 border-b border-blue-400/20 pb-2">HƯỚNG DẪN 3D LAB:</p>
-               <ul className="space-y-2 text-white/70 leading-relaxed">
-                  <li>• Nhấn icon cốc để chuyển đổi cốc.</li>
-                  <li>• Thêm hóa chất để quan sát phản ứng.</li>
-                  <li>• Khám phá các chất mới để mở khóa Nexus Hóa Học.</li>
-               </ul>
-            </div>
-         </div>
-      </div>
+                  <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div className="flex items-center gap-3">
+                      {soundEnabled ? <Volume2 size={20} className="text-blue-400" /> : <VolumeX size={20} className="text-white/30" />}
+                      <span className="text-sm font-bold">Hiệu ứng âm thanh</span>
+                    </div>
+                    <button 
+                      onClick={toggleLabSound}
+                      className={`w-12 h-6 rounded-full transition-all relative ${soundEnabled ? 'bg-blue-600' : 'bg-white/10'}`}
+                    >
+                      <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${soundEnabled ? 'right-1' : 'left-1'}`} />
+                    </button>
+                  </div>
+                </div>
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Discovery Map Overlay */}
+      <AnimatePresence>
+        {showDiscoveryJournal && (
+          <div className="fixed inset-0 z-[400] flex items-center justify-center p-8">
+             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowDiscoveryJournal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-xl" />
+             <motion.div 
+                initial={{ y: 50, opacity: 0 }} 
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 50, opacity: 0 }}
+                className="relative w-full max-w-6xl h-full bg-[#0d0e12]/80 border border-white/10 rounded-[40px] overflow-hidden flex flex-col shadow-3xl"
+             >
+                <div className="p-8 border-b border-white/10 flex justify-between items-center bg-black/20">
+                  <div>
+                    <h2 className="text-2xl font-black uppercase italic tracking-tighter">Synthesis Nexus</h2>
+                    <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Bản đồ tiến trình khám phá hóa học</p>
+                  </div>
+                  <button onClick={() => setShowDiscoveryJournal(false)} className="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all">
+                    <X size={24} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <DiscoveryMap activeView="map" embedded={true} unlockedChemicals={discoveredFormulas} />
+                </div>
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* AI Assistant UI */}
+      <AiAssistant 
+        currentItems={activeBeaker.contents} 
+        reactions={dbReactions} 
+        chemicals={dbChemicals}
+      />
+
+      <Canvas
+        shadows
+        camera={{ position: [0, 6, 12], fov: 35 }}
+        className="w-full h-full"
+        style={{ pointerEvents: 'auto' }}
+      >
+        <color attach="background" args={['#000000']} />
+        <LabScene beakers={beakers} currentBeakerIndex={activeBeakerIndex} />
+      </Canvas>
 
       <style>{`
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-        @keyframes scaleIn { from { transform: scale(0.8) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        @keyframes nebula-drift { 0% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(-20px, 10px) rotate(5deg); } 100% { transform: translate(0, 0) rotate(0deg); } }
-        @keyframes cosmic-pulse { 0%, 100% { transform: scale(1); opacity: 0.3; } 50% { transform: scale(1.1); opacity: 0.6; } }
-        @keyframes star-twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
-        @keyframes pulse-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .animate-nebula-drift { animation: nebula-drift 20s ease-in-out infinite; }
-        .animate-cosmic-pulse { animation: cosmic-pulse 10s ease-in-out infinite; }
-        .animate-star-twinkle { animation: star-twinkle 3s ease-in-out infinite; }
-        .animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+        @keyframes nebula-drift {
+          0%, 100% { transform: scale(1) translate(0, 0); }
+          50% { transform: scale(1.1) translate(20px, 10px); }
+        }
+        .animate-nebula-drift { animation: nebula-drift 30s ease-in-out infinite; }
+        @keyframes cosmic-pulse {
+          0%, 100% { opacity: 0.4; transform: scale(1); }
+          50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        .animate-cosmic-pulse { animation: cosmic-pulse 15s ease-in-out infinite; }
+        @keyframes star-twinkle {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.8; }
+        }
+        .animate-star-twinkle { animation: star-twinkle 4s ease-in-out infinite; }
+        .shadow-3xl { box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.7); }
       `}</style>
     </div>
   );
