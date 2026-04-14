@@ -131,12 +131,18 @@ class AurumExpertEngine {
     // 1. Specialized Local Lookups (Elements, Reactions) - High speed
     if (q.includes('hóa trị')) {
       const tokens = this.extractChemicals(query);
-      if (tokens.length > 0) return this.handleValencyRequest(tokens[0]);
+      if (tokens.length > 0) {
+        const result = this.handleValencyRequest(tokens[0]);
+        if (result) return result;
+      }
     }
 
     if (q.includes('số oxi hóa')) {
       const tokens = this.extractChemicals(query);
-      if (tokens.length > 0) return this.handleOxidationStateRequest(tokens[0]);
+      if (tokens.length > 0) {
+        const result = this.handleOxidationStateRequest(tokens[0]);
+        if (result) return result;
+      }
     }
 
     if (q.includes('ion')) {
@@ -149,15 +155,18 @@ class AurumExpertEngine {
     
     if (isReactionQuery) {
       if (foundTokens.length >= 2) {
-        return this.handleReactionRequest(foundTokens);
+        const result = this.handleReactionRequest(foundTokens);
+        if (result) return result;
       } else if (foundTokens.length === 1) {
         // "Phản ứng có Cl2" - look for reactions containing Cl2
-        return this.handleReactionDiscovery(foundTokens[0]);
+        const result = this.handleReactionDiscovery(foundTokens[0]);
+        if (result) return result;
       }
     }
 
     if (foundTokens.length === 1 && !q.includes('là gì')) {
-      return this.handleInfoRequest(foundTokens[0]);
+      const info = this.handleInfoRequest(foundTokens[0]);
+      if (info) return info;
     }
 
     // 2. Local Theory & Curriculum Lookups (High Priority Curated Content)
@@ -233,10 +242,7 @@ class AurumExpertEngine {
       };
     }
 
-    return {
-      message: `Tôi chưa có dữ liệu hóa trị đủ chắc chắn cho **${token.name} (${symbol})** trong bảng tra nhanh hiện tại.`,
-      suggestions: [`${symbol} là gì?`, 'Bảng hóa trị cơ bản', 'Số oxi hóa là gì?']
-    };
+    return null;
   }
 
   handleOxidationStateRequest(token) {
@@ -344,10 +350,7 @@ class AurumExpertEngine {
       };
     }
 
-    return {
-      message: `Tôi chưa tìm thấy phản ứng chính xác trong thư viện thực hành hiện tại. ${randomPrompt}`,
-      suggestions: [`${tokens[0].formula} là gì?`, `${tokens[1].formula} là gì?`, 'Các loại phản ứng hóa học']
-    };
+    return null;
   }
 
   handleInfoRequest(token) {
@@ -370,6 +373,26 @@ class AurumExpertEngine {
       message: `🧪 **${token.name} (${formatSubscripts(token.formula)})**\n\nĐây là một chất hóa học có trong thư viện phản ứng hoặc từ điển chất của hệ thống. ${randomPrompt}`,
       suggestions: [`Phản ứng có ${token.formula}`, `${token.name} tác dụng với gì?`, 'Phân loại phản ứng']
     };
+  }
+
+  handleReactionDiscovery(token) {
+    const symbol = token.formula || token.data?.symbol;
+    const found = this.reactions.filter(rx => 
+      [...(rx.reactants || []), ...(rx.products || [])].some(c => 
+        normalizeFormula(c.formula) === normalizeFormula(symbol) || 
+        c.name?.toLowerCase() === token.name?.toLowerCase()
+      )
+    );
+
+    if (found.length > 0) {
+      const list = found.slice(0, 3).map(rx => `- \`${rx.reactants.map(r => r.formula).join(' + ')} \\to ${rx.products.map(p => p.formula).join(' + ')}\``).join('\n');
+      return {
+        message: `🔍 **Các phản ứng tiêu biểu liên quan đến ${token.name} (${symbol}):**\n\n${list}\n\nBạn muốn xem chi tiết phản ứng nào trong số này?`,
+        suggestions: found.slice(0, 3).map(rx => rx.reactants.map(r => r.formula).join(' + '))
+      };
+    }
+
+    return null;
   }
 
   handleRoleCheck(role) {
