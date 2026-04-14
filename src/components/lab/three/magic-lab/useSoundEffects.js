@@ -1,38 +1,144 @@
-# 3D Chemistry Lab Backend Integration Walkthrough
+import { create } from 'zustand';
+import { useCallback, useEffect, useRef } from 'react';
 
-The 3D Chemistry Laboratory has been fully integrated with the `chem-odyssey` backend API. It now dynamically fetches chemical data, tracks user progress, and saves new discoveries to the database.
+export const useSoundStore = create((set) => ({
+  enabled: true,
+  toggleSound: () => set((state) => ({ enabled: !state.enabled })),
+}));
 
-## Key Accomplishments
+export const useSoundEffects = () => {
+  const { enabled } = useSoundStore();
+  const audioCtx = useRef(null);
 
-### 1. Dynamic State Management
-The logic was moved from static files to a dynamic Zustand store (`useLabStore`). The lab now initializes by fetching data from:
-- `GET /api/lab/chemicals`: All available substances.
-- `GET /api/lab/reactions`: Database of possible chemical interactions.
+  useEffect(() => {
+    return () => {
+      if (audioCtx.current) {
+        audioCtx.current.close();
+      }
+    };
+  }, []);
 
-### 2. Progression & Discovery System
-- **Synthesis Nexus Integration**: The Discovery Map is now accessible via the 3D interface, allowing students to visualize their learning path.
-- **Progress Saving**: New chemical discoveries are automatically synced to the user's account via `POST /api/lab/unlock`.
-- **Auth Sync**: Logged-in users' existing progress is automatically loaded into the 3D laboratory environment.
+  const initAudio = () => {
+    if (!audioCtx.current) {
+      audioCtx.current = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.current.state === 'suspended') {
+      audioCtx.current.resume();
+    }
+  };
 
-### 3. Procedural Audio & Visuals
-- Maintained the high-fidelity procedural audio engine (`useSoundEffects.js`).
-- Dynamic visual effects (explosions, smoke, color shifts) are now mapped heuristically from backend reaction properties.
+  const playSound = useCallback((type) => {
+    if (!enabled) return;
+    initAudio();
+    const ctx = audioCtx.current;
+    const now = ctx.currentTime;
 
-## Components Updated
+    switch (type) {
+      case 'pour': {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(now + 0.1);
+        break;
+      }
+      case 'bubble': {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400 + Math.random() * 400, now);
+        osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(now + 0.05);
+        break;
+      }
+      case 'fizz': {
+        const bufferSize = ctx.sampleRate * 0.1;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.value = 2000;
+        gain.gain.setValueAtTime(0.02, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+        break;
+      }
+      case 'explosion': {
+        const bufferSize = ctx.sampleRate * 0.5;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1000, now);
+        filter.frequency.exponentialRampToValueAtTime(40, now + 0.4);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start();
+        break;
+      }
+      case 'heat': {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(50, now);
+        osc.frequency.linearRampToValueAtTime(60, now + 0.2);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(now + 0.2);
+        break;
+      }
+      case 'discovery': {
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + i * 0.1);
+          gain.gain.setValueAtTime(0, now + i * 0.1);
+          gain.gain.linearRampToValueAtTime(0.1, now + i * 0.1 + 0.05);
+          gain.gain.linearRampToValueAtTime(0, now + i * 0.1 + 0.2);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + i * 0.1);
+          osc.stop(now + i * 0.1 + 0.3);
+        });
+        break;
+      }
+      default: break;
+    }
+  }, [enabled]);
 
-| Component | Responsibility | Change |
-| :--- | :--- | :--- |
-| [MagicLab3D](file:///c:/Users/nguye/.gemini/antigravity/scratch/chem-odyssey/src/components/lab/three/MagicLab3D.jsx) | UI Orchestration | Integrated API calls, Auth context, and Discovery Map. |
-| [store.js](file:///c:/Users/nguye/.gemini/antigravity/scratch/chem-odyssey/src/components/lab/three/magic-lab/store.js) | Lab Engine | Refactored for dynamic data processing and backend-to-visual mapping. |
-| [AiAssistant](file:///c:/Users/nguye/.gemini/antigravity/scratch/chem-odyssey/src/components/lab/three/magic-lab/AiAssistant.jsx) | AI Lab Guide | Updated to use backend data for recipes and suggestions. |
-| [PouringStream](file:///c:/Users/nguye/.gemini/antigravity/scratch/chem-odyssey/src/components/lab/three/magic-lab/PouringStream.jsx) | Particle FX | Removed static dependencies; uses dynamic color/state from store. |
-
-## Verification Results
-
-- [x] **Data Fetching**: Chemicals and reactions load correctly on lab startup.
-- [x] **Discovery Logic**: New products unlock correctly and trigger the "New Discovery" modal.
-- [x] **Backend Sync**: Progress persists via the `/unlock` API when logged in.
-- [x] **Visual Fidelity**: All 3D effects (explosions, heat, particles) trigger based on backend reaction definitions.
-
-> [!TIP]
-> The lab now supports a "Galaxy Mode" background and procedural audio, creating a premium, immersive experience while maintaining data consistency with the rest of the platform.
+  return { playSound };
+};
