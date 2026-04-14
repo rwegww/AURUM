@@ -1,17 +1,20 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { CHEMICALS } from './reactionDB';
+import useLabStore from './store';
 
 const STREAM_COUNT = 30;
 
 const PouringStream = ({ formula = null }) => {
   const meshRef = useRef();
   const dummy = useMemo(() => new THREE.Object3D(), []);
-
-  const chemical = formula ? CHEMICALS[formula] : null;
+  
+  // Lấy danh sách hóa chất từ store thay vì import cứng từ reactionDB
+  const chemicals = useLabStore(state => state.chemicals);
+  
+  const chemical = formula ? (Object.values(chemicals).find(c => c.formula === formula) || chemicals[formula]) : null;
   const streamColor = chemical?.color || '#cccccc';
-  const isSolid = chemical?.state === 'solid' || chemical?.type === 'metal';
+  const isSolid = chemical?.state === 'solid' || chemical?.type?.includes('metal');
 
   const particles = useMemo(() => {
     return Array.from({ length: STREAM_COUNT }, () => ({
@@ -35,7 +38,7 @@ const PouringStream = ({ formula = null }) => {
         // Rơi thẳng từ trên xuống trong tâm cốc
         y = 2.0 - cycle * 1.6; 
         const spread = cycle * 0.15;
-        x = p.xSpread * spread; // Không có offset sang trái
+        x = p.xSpread * spread; 
         z = p.zSpread * spread;
       } else {
         // Đổ từ bình vào (offset sang trái)

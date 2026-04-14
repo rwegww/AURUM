@@ -1,21 +1,84 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Bot, Sparkles, MessageSquare, Search, X, ChevronRight, FlaskConical, Beaker as BeakerIcon, Lightbulb } from 'lucide-react';
-import { getSuggestions, getRecipe, CHEMICALS } from './reactionDB';
 
-const AiAssistant = ({ beakerContents }) => {
+const normalize = (f) => {
+  if (!f) return "";
+  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
+};
+
+const getSuggestions = (currentItems, reactions, chemicals) => {
+  const currentFormulas = currentItems.map(item => normalize(item.formula));
+  if (currentFormulas.length === 0) return [{ text: "Hãy thử thêm H2O hoặc một kim loại kiềm như Na!", type: 'tip' }];
+
+  const suggestions = [];
+  
+  for (let rx of reactions) {
+    const rxReactants = rx.reactants.map(r => normalize(r.formula));
+    const hasSome = rxReactants.some(req => currentFormulas.includes(req));
+    const isMissingSomething = rxReactants.some(req => !currentFormulas.includes(req));
+    const alreadyMatch = rxReactants.every(req => currentFormulas.includes(req));
+
+    if (hasSome && isMissingSomething && !alreadyMatch) {
+      const missing = rxReactants.filter(req => !currentFormulas.includes(req));
+      const missingNames = missing.map(m => chemicals.find(c => normalize(c.formula) === m)?.name || m).join(', ');
+      suggestions.push({
+        text: `Thêm ${missingNames} để thực hiện phản ứng: ${rx.name || rx.formula}`,
+        type: 'reaction_path',
+        missing: missing
+      });
+    }
+  }
+
+  return suggestions.slice(0, 3);
+};
+
+const getRecipe = (targetFormula, reactions, chemicals) => {
+  const recipes = [];
+  const targetNorm = normalize(targetFormula);
+  
+  for (let rx of reactions) {
+    if (rx.products.some(p => normalize(p.formula) === targetNorm)) {
+      const reactants = rx.reactants.map(r => chemicals.find(c => normalize(c.formula) === normalize(r.formula))?.name || r.formula).join(' + ');
+      recipes.push({
+        target: chemicals.find(c => normalize(c.formula) === targetNorm)?.name || targetFormula,
+        reactants: reactants,
+        conditions: rx.requires_heat ? "Cần đun nóng" : "Điều kiện thường",
+        message: rx.name || ""
+      });
+    }
+  }
+  
+  return recipes;
+};
+
+const AiAssistant = ({ chemicals = [], reactions = [] }) => {
+  // We use the store for current active beaker contents
   const [isOpen, setIsOpen] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [recipeResults, setRecipeResults] = useState([]);
 
-  // Cập nhật gợi ý khi nội dung cốc thay đổi
-  useEffect(() => {
-    const newSuggestions = getSuggestions(beakerContents);
-    setSuggestions(newSuggestions);
-  }, [beakerContents]);
+  // Use a selector to watch the active beaker's contents
+  const activeBeakerIndex = (state => state.activeBeakerIndex);
+  const beakers = (state => state.beakers);
+  const beakerContents = useMemo(() => {
+    // This is a bit tricky since we're outside a hook here, but we can use the store's hook version in the component
+    return []; // Placeholder for now, handled in useEffect
+  }, []);
 
-  // Tìm kiếm công thức
+  // Real store usage
+  const store = require('./store').default;
+  const currentBeakerContents = store(state => state.beakers[state.activeBeakerIndex]?.contents || []);
+
+  // Update suggestions when beaker contents change
+  useEffect(() => {
+    const newSuggestions = getSuggestions(currentBeakerContents, reactions, chemicals);
+    setSuggestions(newSuggestions);
+  }, [currentBeakerContents, reactions, chemicals]);
+
+  // Search recipes
   const handleSearch = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
@@ -25,13 +88,12 @@ const AiAssistant = ({ beakerContents }) => {
       return;
     }
 
-    // Tìm các chất có tên hoặc công thức khớp
-    const matches = Object.entries(CHEMICALS)
-      .filter(([key, c]) => 
+    const matches = chemicals
+      .filter(c => 
         c.name.toLowerCase().includes(query.toLowerCase()) || 
         c.formula.toLowerCase().includes(query.toLowerCase())
       )
-      .map(([key]) => getRecipe(key))
+      .map(c => getRecipe(c.formula, reactions, chemicals))
       .flat();
     
     setRecipeResults(matches);
@@ -95,14 +157,13 @@ const AiAssistant = ({ beakerContents }) => {
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
             {showSearch ? (
-              // Recipe Search UI
               <div className="space-y-4">
                 <div className="relative">
                   <input 
                     type="text" 
                     value={searchQuery}
                     onChange={handleSearch}
-                    placeholder="Tìm chất muốn tạo (vd: PbI2)..."
+                    placeholder="Tìm chất muốn tạo..."
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500 outline-none transition-all"
                   />
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
@@ -128,13 +189,12 @@ const AiAssistant = ({ beakerContents }) => {
                   ) : (
                     <div className="p-4 text-center space-y-2">
                       <BeakerIcon size={24} className="mx-auto text-white/10" />
-                      <p className="text-[10px] text-white/40">Nhập tên chất hoặc công thức để xem cách pha chế.</p>
+                      <p className="text-[10px] text-white/40">Nhập tên chất để xem cách điều chế.</p>
                     </div>
                   )}
                 </div>
               </div>
             ) : (
-              // Suggestion List
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest px-1">
                   <MessageSquare size={12} />
@@ -163,23 +223,10 @@ const AiAssistant = ({ beakerContents }) => {
                       </div>
                     </div>
                   ))}
-                  {suggestions.length === 0 && (
-                    <p className="text-center text-[10px] text-white/40 py-8 italic">Chưa có gợi ý nào mới...</p>
-                  )}
                 </div>
               </div>
             )}
           </div>
-
-          {/* Footer Tip */}
-          {!showSearch && (
-            <div className="p-4 bg-white/5 border-t border-white/10">
-              <div className="flex items-center gap-2 text-blue-400">
-                <ChevronRight size={14} />
-                <span className="text-[10px] font-medium">Nhấn vào icon kính lúp để tra cứu công thức.</span>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
