@@ -18,7 +18,12 @@ import {
   X,
   Volume2,
   VolumeX,
-  BookOpen
+  BookOpen,
+  Search,
+  FlaskConical,
+  Info,
+  Maximize,
+  Minimize
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -29,21 +34,6 @@ const normalize = (f) => {
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
 };
-
-const GalaxyBackground = () => (
-  <div className="absolute inset-0 overflow-hidden z-[-1] pointer-events-none select-none">
-    <div className="absolute inset-0 bg-[#04040a]" />
-    <div className="absolute inset-0 opacity-60 mix-blend-screen overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[80%] h-[80%] bg-[radial-gradient(circle,#4e1a8a_0%,transparent_70%)] animate-nebula-drift blur-[120px]" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[70%] h-[70%] bg-[radial-gradient(circle,#0a4b8a_0%,transparent_70%)] animate-cosmic-pulse blur-[100px]" />
-      <div className="absolute top-[30%] left-[40%] w-[50%] h-[50%] bg-[radial-gradient(circle,#8a1a4e_0%,transparent_60%)] animate-pulse-soft blur-[140px] opacity-40" />
-    </div>
-    <div className="absolute inset-0 opacity-80 animate-nebula-drift" style={{ backgroundImage: 'radial-gradient(2px 2px at 10px 10px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 150px 150px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 300px 300px, #fff, rgba(0,0,0,0))', backgroundSize: '250px 250px' }} />
-    <div className="absolute inset-0 opacity-60 animate-star-twinkle" style={{ backgroundImage: 'radial-gradient(1.5px 1.5px at 50px 50px, #fff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 200px 100px, #fff, rgba(0,0,0,0))', backgroundSize: '300px 300px' }} />
-    <div className="absolute inset-0 opacity-40 animate-cosmic-pulse" style={{ backgroundImage: 'radial-gradient(1px 1px at 80px 120px, #ffcc00, rgba(0,0,0,0)), radial-gradient(1px 1px at 250px 200px, #ffcc00, rgba(0,0,0,0))', backgroundSize: '400px 400px' }} />
-    <div className="absolute inset-0 opacity-10 mix-blend-overlay bg-[url(\'https://www.transparenttextures.com/patterns/stardust.png\')] scale-150 animate-float-slow" />
-  </div>
-);
 
 const MagicLab3D = () => {
   const { user, isLoggedIn, refreshUser } = useAuth();
@@ -76,9 +66,29 @@ const MagicLab3D = () => {
   const updateLabSettings = useLabStore(state => state.updateSettings);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
-  const [activeTab, setActiveTab] = useState('liquid');
   const [showLabSettings, setShowLabSettings] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isMessageVisible, setIsMessageVisible] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // --- Fullscreen Logic ---
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   // Sound Effects
   const { playSound } = useSoundEffects();
@@ -98,11 +108,19 @@ const MagicLab3D = () => {
         const chemsData = await chemsRes.json();
         const rxsData = await rxsRes.json();
         
-        setDbChemicals(chemsData);
+        // Frontend Override: Force KMnO4 to be liquid (solution) as requested
+        const processedChems = chemsData.map(c => {
+          if (normalize(c.formula) === 'KMNO4') {
+            return { ...c, state: 'liquid', color: '#800080', opacity: 0.9 };
+          }
+          return c;
+        });
+
+        setDbChemicals(processedChems);
         setDbReactions(rxsData);
         
         // Initial progression
-        const starters = chemsData.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
+        const starters = processedChems.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
         const saved = localStorage.getItem('chem_odyssey_discovered');
         let initialDiscovered = starters;
         
@@ -113,7 +131,7 @@ const MagicLab3D = () => {
         }
         
         setDiscoveredFormulas(initialDiscovered);
-        setData(chemsData, rxsData, initialDiscovered);
+        setData(processedChems, rxsData, initialDiscovered);
         
       } catch (err) {
         console.error("Failed to fetch lab data:", err);
@@ -205,17 +223,15 @@ const MagicLab3D = () => {
 
   const availableChemicals = useMemo(() => {
     const chemicalsMap = useLabStore.getState().chemicals;
+    const query = searchQuery.toLowerCase().trim();
+    
     return Object.values(chemicalsMap)
       .filter(c => discoveredFormulas.includes(c.formula))
-      .filter(c => {
-        if (activeTab === 'all') return true;
-        if (activeTab === 'liquid') return c.state === 'liquid' && !c.type;
-        if (activeTab === 'solid') return c.state === 'solid' && !c.type;
-        if (activeTab === 'metal') return c.type?.includes('metal') && c.type !== 'nonmetal';
-        if (activeTab === 'nonmetal') return c.type?.includes('nonmetal');
-        return true;
-      });
-  }, [activeTab, discoveredFormulas]);
+      .filter(c => 
+        c.name.toLowerCase().includes(query) || 
+        c.formula.toLowerCase().includes(query)
+      );
+  }, [discoveredFormulas, searchQuery]);
 
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] text-white rounded-3xl min-h-[600px]">
@@ -226,10 +242,8 @@ const MagicLab3D = () => {
 
   return (
     <div 
-      className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10"
-      style={{ backgroundColor: settings.bgType === 'color' ? settings.bgColor : 'transparent' }}
+      className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10 bg-[#0a0a0f]"
     >
-      {settings.bgType === 'galaxy' && <GalaxyBackground />}
       <SoundManager />
 
       {/* --- Discovery UI Overlays --- */}
@@ -276,6 +290,13 @@ const MagicLab3D = () => {
             >
               <BookOpen size={18} className="text-purple-400" />
               <span>Sổ tay khám phá ({discoveredFormulas.length})</span>
+            </button>
+            <button 
+              onClick={toggleFullscreen}
+              className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all text-blue-400"
+              title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
+            >
+              {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
             </button>
             <button 
               onClick={() => setShowLabSettings(true)}
@@ -334,7 +355,7 @@ const MagicLab3D = () => {
             <div className="bg-black/30 backdrop-blur-md p-2 rounded-3xl border border-white/10 flex flex-col gap-2">
                <button 
                  onClick={addBeaker}
-                 className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:text-green-400 transition-all"
+                 className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:bg-green-400 transition-all"
                  title="Thêm cốc"
                >
                  <Plus size={24} />
@@ -342,30 +363,27 @@ const MagicLab3D = () => {
             </div>
           </div>
 
-          {/* Center Column - Chemicals Inventory */}
-          <div className="flex-1 bg-black/30 backdrop-blur-md rounded-[40px] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden group/inventory">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover/inventory:opacity-100 transition-opacity" />
-            
-            {/* Tabs */}
-            <div className="flex gap-4 mb-6">
-              {[
-                { id: 'liquid', label: 'Dung dịch' },
-                { id: 'solid', label: 'Chất rắn' },
-                { id: 'metal', label: 'Kim loại' },
-                { id: 'all', label: 'Tất cả' }
-              ].map(tab => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`text-[10px] uppercase font-black tracking-widest px-4 py-2 rounded-full transition-all ${activeTab === tab.id ? 'bg-blue-600 text-white' : 'text-white/40 hover:text-white/70'}`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+            {/* Chemicals Inventory */}
+            <div className="flex-1 bg-black/30 backdrop-blur-md rounded-[40px] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden group/inventory">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover/inventory:opacity-100 transition-opacity" />
+              
+              {/* Search Bar */}
+              <div className="relative mb-6 group px-1">
+                 <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400 transition-colors">
+                    <Search size={14} />
+                 </div>
+                 <input 
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Tìm hóa chất..."
+                    className="w-full bg-black/40 border border-white/5 rounded-xl py-2 pl-9 pr-4 text-xs outline-none focus:border-blue-500/50 focus:bg-black/60 transition-all placeholder:text-white/20"
+                 />
+              </div>
 
-            {/* Chemicals Grid */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              {/* Chemicals Grid */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+
               <div className="grid grid-cols-6 gap-3">
                 {availableChemicals.map((chem) => (
                   <motion.button
@@ -461,19 +479,7 @@ const MagicLab3D = () => {
                 </div>
 
                 <div className="space-y-6">
-                  <div className="space-y-3">
-                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/40">Phông nền</label>
-                    <div className="grid grid-cols-2 gap-3">
-                       <button 
-                         onClick={() => updateLabSettings({ bgType: 'galaxy' })}
-                         className={`p-4 rounded-2xl border text-xs font-bold transition-all ${settings.bgType === 'galaxy' ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/5'}`}
-                       >Vũ trụ</button>
-                       <button 
-                         onClick={() => updateLabSettings({ bgType: 'color', bgColor: '#0a0a0f' })}
-                         className={`p-4 rounded-2xl border text-xs font-bold transition-all ${settings.bgType === 'color' ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/5'}`}
-                       >Mặc định</button>
-                    </div>
-                  </div>
+                  {/* Background settings removed as per request */}
 
                   <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div className="flex items-center gap-3">
@@ -541,21 +547,6 @@ const MagicLab3D = () => {
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        @keyframes nebula-drift {
-          0%, 100% { transform: scale(1) translate(0, 0); }
-          50% { transform: scale(1.1) translate(20px, 10px); }
-        }
-        .animate-nebula-drift { animation: nebula-drift 30s ease-in-out infinite; }
-        @keyframes cosmic-pulse {
-          0%, 100% { opacity: 0.4; transform: scale(1); }
-          50% { opacity: 0.7; transform: scale(1.05); }
-        }
-        .animate-cosmic-pulse { animation: cosmic-pulse 15s ease-in-out infinite; }
-        @keyframes star-twinkle {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.8; }
-        }
-        .animate-star-twinkle { animation: star-twinkle 4s ease-in-out infinite; }
         .shadow-3xl { box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.7); }
       `}</style>
     </div>
