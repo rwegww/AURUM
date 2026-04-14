@@ -10,6 +10,32 @@ export const AuthProvider = ({ children }) => {
   const fetchingTokenRef = useRef(null);
   const mountedRef = useRef(true);
 
+  const logout = useCallback(async () => {
+    try {
+      const authType = localStorage.getItem('authType');
+      if (authType === 'supabase') {
+        await supabase.auth.signOut();
+      }
+    } catch (err) {
+      console.error('Error during logout:', err);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('authType');
+      if (mountedRef.current) {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
+      
+      // Force return to home page and full reload to clear all React state/activities
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
+      } else {
+        // Even if on home, force reload to clear state
+        window.location.reload();
+      }
+    }
+  }, []);
+
   const fetchProfile = useCallback(async (token, force = false) => {
     if (!token) {
       if (mountedRef.current) {
@@ -58,32 +84,6 @@ export const AuthProvider = ({ children }) => {
       if (mountedRef.current) setLoading(false);
     }
   }, [logout]);
-
-  const logout = useCallback(async () => {
-    try {
-      const authType = localStorage.getItem('authType');
-      if (authType === 'supabase') {
-        await supabase.auth.signOut();
-      }
-    } catch (err) {
-      console.error('Error during logout:', err);
-    } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('authType');
-      if (mountedRef.current) {
-        setUser(null);
-        setIsLoggedIn(false);
-      }
-      
-      // Force return to home page and full reload to clear all React state/activities
-      if (window.location.pathname !== '/') {
-        window.location.href = '/';
-      } else {
-        // Even if on home, force reload to clear state
-        window.location.reload();
-      }
-    }
-  }, []);
 
   const login = useCallback(async (username, password) => {
     try {
