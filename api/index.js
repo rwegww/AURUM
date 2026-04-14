@@ -85,31 +85,12 @@ app.get('/api/debug-env', async (req, res) => {
   }
 
   try {
-    const candidates = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro', 'gemini-1.5-pro'];
-    let workingModel = null;
-    let errors = [];
-
-    for (const modelName of candidates) {
-      try {
-        const model = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
-        const ping = await model.generateContent("ping");
-        if (ping.response) {
-          workingModel = modelName;
-          break;
-        }
-      } catch (e) {
-        errors.push(`${modelName}: ${e.message}`);
-      }
-    }
-
-    if (workingModel) {
-      geminiTest = `Success with ${workingModel}`;
-      availableModels = [workingModel];
-    } else {
-      geminiTest = `All candidates failed. Errors: ${errors.join(' | ')}`;
-    }
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' }, { apiVersion: 'v1' });
+    const ping = await model.generateContent("ping");
+    geminiTest = ping.response ? 'Success with gemini-pro' : 'Failed (Empty Response)';
+    availableModels = ['gemini-pro'];
   } catch (e) {
-    geminiTest = `General Ping Crash: ${e.message}`;
+    geminiTest = `Ping Crash: ${e.message}`;
   }
 
   res.json({
