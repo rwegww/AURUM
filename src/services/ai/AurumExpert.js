@@ -17,7 +17,7 @@ const formatSubscripts = (f) => {
   return f.toString().replace(/\d/g, (m) => map[m]);
 };
 
-const VI_STOP_WORDS = ["có", "của", "và", "là", "trong", "phản", "ứng", "với", "hỏi", "đáp", "gì", "cho", "biết", "tại", "sao", "thế", "nào", "mấy", "bao", "nhiêu"];
+const VI_STOP_WORDS = ["có", "của", "và", "là", "trong", "phản", "ứng", "với", "hỏi", "đáp", "gì", "cho", "biết", "tại", "sao", "thế", "nào", "mấy", "bao", "nhiêu", "tác", "dụng", "không", "như", "đây", "là", "ai", "đâu"];
 
 /**
  * AURUM EXPERT ENGINE
@@ -114,15 +114,25 @@ class AurumExpertEngine {
       const normKey = normalizeFormula(key).toLowerCase();
       
       // Strict matching boundary for single letters or short symbols
+      // We use \p{L} to match Unicode letters and \p{N} for numbers.
+      // This ensures "có" is treated as a word and not "c" + boundary.
       const isShort = normKey.length <= 2;
+      
+      // regex mapping: [^\p{L}\p{N}] means "anything NOT a letter or number"
       const pattern = isShort 
-        ? new RegExp(`(^|[^a-z0-9])${normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}([^a-z0-9]|$)`, 'i')
-        : new RegExp(normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+        ? new RegExp(`(?:^|[^\\p{L}\\p{N}])${normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?=[^\\p{L}\\p{N}]|$)`, 'iu')
+        : new RegExp(normKey.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'iu');
 
       let match;
       while ((match = pattern.exec(availableQuery)) !== null) {
-        const matchStr = isShort ? match[0].trim() : match[0];
-        const startIndex = match.index + (isShort && match[0].startsWith(' ') ? 1 : 0);
+        // Adjust startIndex because the pattern might start with a boundary character
+        let startIndex = match.index;
+        if (isShort && match[0].length > normKey.length) {
+            // Find the position of normKey within the match
+            const offset = match[0].toLowerCase().indexOf(normKey);
+            startIndex += offset;
+        }
+        
         const actualKey = normKey;
         
         matches.push({
@@ -136,9 +146,12 @@ class AurumExpertEngine {
         availableQuery = availableQuery.substring(0, startIndex) + blackout + availableQuery.substring(startIndex + actualKey.length);
       }
 
-      if (matches.length >= 5) break;
+      if (matches.length >= 6) break;
     }
 
+    // Filter out matches that intersect with VI_STOP_WORDS or are just noise
+    // But since availableQuery is blacked out, we mostly handle overlaps gracefully.
+    
     // Sort matches by their original position and deduplicate
     const sortedTokens = matches
       .sort((a, b) => a.start - b.start)
