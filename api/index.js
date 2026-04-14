@@ -29,7 +29,17 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 try {
   app.use('/api/auth', authRoutes);
   app.use('/api/lessons', lessonsRoutes);
+  
+  // Add GET instruction for /api/ai/ask
+  app.get('/api/ai/ask', (req, res) => {
+    res.json({
+      message: 'Aurum AI Ask Endpoint',
+      usage: 'Gửi yêu cầu POST với JSON { query: "..." } để nhận phản hồi từ AI.',
+      status: 'Ready'
+    });
+  });
   app.use('/api/ai', aiRoutes);
+  
   app.use('/api/user', userRoutes);
   app.use('/api/media', mediaRoutes);
   app.use('/api/admin', adminRoutes);
@@ -56,15 +66,38 @@ app.get('/api/health', (req, res) => {
 });
 
 // Diagnostic route for environment variables (Masked for security)
-app.get('/api/debug-env', (req, res) => {
+app.get('/api/debug-env', async (req, res) => {
   const mask = (str) => str ? `${str.substring(0, 4)}...${str.substring(str.length - 4)}` : 'MISSING';
+  
+  let databaseTest = 'Pending';
+  let geminiTest = 'Pending';
+  
+  try {
+    const { data, error } = await supabase.from('ai_cache').select('count', { count: 'exact', head: true });
+    databaseTest = error ? `Error: ${error.message}` : `Success (${data || 0} cached items)`;
+  } catch (e) {
+    databaseTest = `Crash: ${e.message}`;
+  }
+
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const ping = await model.generateContent("ping");
+    geminiTest = ping.response ? 'Success (Pong)' : 'Failed (Empty Response)';
+  } catch (e) {
+    geminiTest = `Crash: ${e.message}`;
+  }
+
   res.json({
     node_env: process.env.NODE_ENV,
     SUPABASE_URL: mask(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL),
     SUPABASE_KEY_FOUND: !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY),
-    JWT_SECRET_FOUND: !!process.env.JWT_SECRET,
-    CLOUDINARY_CONFIGURED: !!process.env.CLOUDINARY_CLOUD_NAME,
-    FIREBASE_CONFIGURED: !!process.env.FIREBASE_PROJECT_ID
+    GEMINI_KEY_FOUND: !!process.env.GEMINI_API_KEY,
+    live_tests: {
+      supabase: databaseTest,
+      gemini: geminiTest
+    },
+    timestamp: new Date().toISOString()
   });
 });
 

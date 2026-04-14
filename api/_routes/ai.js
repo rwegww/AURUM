@@ -32,12 +32,16 @@ router.post('/ask', async (req, res) => {
     const queryHash = crypto.createHash('md5').update(normalizedQuery).digest('hex');
 
     // 1. Check Root Knowledge Base (ai_knowledge)
-    // We search patterns here. (Simple implementation for now)
-    const { data: kbMatch } = await supabase
-      .from('ai_knowledge')
-      .select('*')
-      .filter('patterns', 'cs', `{${normalizedQuery}}`); 
-      // Note: This is an array overlap check. Might need more complex search logic.
+    let kbMatch = null;
+    try {
+      const { data } = await supabase
+        .from('ai_knowledge')
+        .select('*')
+        .filter('patterns', 'cs', `{${normalizedQuery}}`);
+      kbMatch = data;
+    } catch (dbErr) {
+      console.warn('⚠️ Supabase KB Lookup failed, bypassing to Cache/AI:', dbErr.message);
+    }
 
     if (kbMatch && kbMatch.length > 0) {
       const result = kbMatch[0];
@@ -53,11 +57,17 @@ router.post('/ask', async (req, res) => {
     }
 
     // 2. Check AI Cache (ai_cache)
-    const { data: cacheMatch } = await supabase
-      .from('ai_cache')
-      .select('response')
-      .eq('query_hash', queryHash)
-      .maybeSingle();
+    let cacheMatch = null;
+    try {
+      const { data } = await supabase
+        .from('ai_cache')
+        .select('response')
+        .eq('query_hash', queryHash)
+        .maybeSingle();
+      cacheMatch = data;
+    } catch (cacheErr) {
+      console.warn('⚠️ Supabase Cache Lookup failed, bypassing to Gemini:', cacheErr.message);
+    }
 
     if (cacheMatch) {
       await logQuery(userId, username, normalizedQuery, cacheMatch.response, { source: 'ai_cache' });
@@ -65,37 +75,53 @@ router.post('/ask', async (req, res) => {
     }
 
     // 3. Call Gemini AI
-    console.log(`🤖 Gemini Search: "${normalizedQuery}"`);
-    const prompt = `User Role: ${role || 'student'}\nQuestion: ${query}`;
-    const geminiResult = await model.generateContent(prompt);
-    const responseText = geminiResult.response.text();
+    console.log(`🤖 Gemini Search Starting: "${normalizedQuery}"`);
+    const startTime = Date.now();
+    
+    try {
+      const prompt = `User Role: ${role || 'student'}\nQuestion: ${query}`;
+      const geminiResult = await model.generateContent(prompt);
+      const responseText = geminiResult.response.text();
+      const duration = Date.now() - startTime;
+      console.log(`✅ Gemini Responded in ${duration}ms`);
 
-    const responseObj = {
-      message: responseText,
-      source: 'gemini_ai',
-      suggestions: ['Tìm hiểu thêm', 'Ví dụ thực tế', 'Phản ứng liên quan'],
-      timestamp: new Date().toISOString()
-    };
+      const responseObj = {
+        message: responseText,
+        source: 'gemini_ai',
+        suggestions: ['Tìm hiểu thêm', 'Ví dụ thực tế', 'Phản ứng liên quan'],
+        timestamp: new Date().toISOString(),
+        generation_time_ms: duration
+      };
 
-    // 4. Persistence
-    // Save to Cache
-    await supabase.from('ai_cache').upsert({
-      query_hash: queryHash,
-      original_query: normalizedQuery,
-      response: responseObj
-    });
+      // 4. Persistence (Background)
+      // Save to Cache without blocking the response
+      supabase.from('ai_cache').upsert({
+        query_hash: queryHash,
+        original_query: normalizedQuery,
+        response: responseObj
+      }).then(({ error }) => {
+        if (error) console.error('⚠️ Failed to cache Gemini response:', error.message);
+      });
 
-    // Log Query
-    await logQuery(userId, username, normalizedQuery, responseObj, { source: 'gemini_ai', context });
+      // Log Query (Background)
+      logQuery(userId, username, normalizedQuery, responseObj, { source: 'gemini_ai', context, duration_ms: duration });
 
-    return res.json(responseObj);
+      return res.json(responseObj);
+    } catch (geminiErr) {
+      console.error('💥 Gemini API Error:', geminiErr.message);
+      // If even Gemini fails, we give a more helpful error than just 500
+      return res.status(503).json({
+        error: 'AI Service Temporarily Unavailable',
+        message: 'Hệ thống AI đang bận hoặc gặp lỗi kết nối. Vui lòng thử lại sau giây lát.',
+        logic: 'Check Gemini API Key and Network'
+      });
+    }
 
   } catch (err) {
-    console.error('💥 AI Route Error:', err);
+    console.error('💥 Global AI Route Error:', err);
     res.status(500).json({ 
-      error: 'AI Expert System error', 
-      message: err.message,
-      safety: 'Caution'
+      error: 'Internal System Error', 
+      message: err.message
     });
   }
 });
