@@ -5,24 +5,18 @@ import crypto from 'crypto';
 
 const router = express.Router();
 
-const SYSTEM_INSTRUCTION = `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
-PHONG CÁCH PHẢN HỒI: 
-1. Ưu tiên sự NGẮN GỌN, súc tích và ĐÚNG TRỌNG TÂM.
-2. Sử dụng danh sách gạch đầu dòng (-) thay cho các đoạn văn dài.
-3. Nếu có dữ liệu so sánh hoặc tính chất, hãy ưu tiên trình bày dạng BẢNG.
-4. Tránh các câu dẫn rườm rà như "Dưới đây là...", "Tôi xin trả lời...". Đi thẳng vào nội dung chính.
+const SYSTEM_INSTRUCTION = `BẠN LÀ AURUM AI EXPERT. 
+PHONG CÁCH PHẢN HỒI BẮT BUỘC:
+- NGẮN GỌN, ĐÚNG TRỌNG TÂM.
+- Ưu tiên gạch đầu dòng và bảng biểu.
+- Không câu dẫn rườm rà.
+QUY TẮC BẢO MẬT: Không tiết lộ dữ liệu người dùng khác.
 
-QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
-1. Tuyệt đối không tiết lộ thông tin cá nhân hoặc dữ liệu của người dùng khác.
-2. Chỉ tập trung vào kiến thức hóa học, học thuật và an toàn phòng thí nghiệm.
-3. Nếu câu hỏi liên quan đến chất cháy nổ nguy hiểm ngoài mục đích giáo dục, hãy kích hoạt cảnh báo an toàn.`;
+NÔI DUNG CÂU HỎI: `;
 
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-const model = genAI.getGenerativeModel(
-  { model: 'gemini-2.5-flash', systemInstruction: SYSTEM_INSTRUCTION },
-  { apiVersion: 'v1' }
-);
+const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' }, { apiVersion: 'v1' });
 
 /**
  * Endpoint: /api/ai/ask
@@ -83,24 +77,24 @@ router.post('/ask', async (req, res) => {
 
     // 3. Call Gemini AI
     console.log(`🤖 Gemini Search Starting: "${normalizedQuery}"`);
-    
+
     try {
       // 3. Call Gemini AI (Enhanced Multi-model Fallback Logic)
       const startTime = Date.now();
       let result;
       let attemptLogs = [];
-      
+
       // Order: Use the latest confirmed models from the user's dashboard (Gemini 3.1 Flash Lite, 2.5 Pro)
       const modelCandidates = ['gemini-3.1-flash-lite', 'gemini-2.5-pro', 'gemini-2.0-flash'];
+
+      // Fully qualified prompt including instructions
+      const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
 
       for (const modelName of modelCandidates) {
         try {
           console.log(`📡 Attempting Gemini with model: ${modelName}...`);
-          const currentModel = genAI.getGenerativeModel(
-            { model: modelName, systemInstruction: SYSTEM_INSTRUCTION }, 
-            { apiVersion: 'v1' }
-          );
-          result = await currentModel.generateContent(normalizedQuery);
+          const currentModel = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
+          result = await currentModel.generateContent(fullPrompt);
           if (result) {
             console.log(`✅ Success with model: ${modelName}`);
             attemptLogs.push(`${modelName}: Success`);
@@ -146,7 +140,7 @@ router.post('/ask', async (req, res) => {
       return res.json(responseObj);
     } catch (geminiErr) {
       console.error('💥 Ultimate AI Failure:', geminiErr.message);
-      
+
       return res.status(503).json({
         error: 'AI Systems Overloaded',
         message: 'Tất cả các máy chủ AI của Google hiện đang quá tải hoặc không khả dụng cho khu vực của bạn.',
@@ -157,8 +151,8 @@ router.post('/ask', async (req, res) => {
 
   } catch (err) {
     console.error('💥 Global AI Route Error:', err);
-    res.status(500).json({ 
-      error: 'Internal System Error', 
+    res.status(500).json({
+      error: 'Internal System Error',
       message: err.message
     });
   }
