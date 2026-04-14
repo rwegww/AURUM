@@ -31,7 +31,7 @@ const PEDAGOGICAL_PROMPTS = [
 const THEORY_DATABASE = [
   {
     id: 'mol-mass',
-    patterns: ['tính mol', 'số mol', 'khối lượng', 'm/m'],
+    patterns: ['mol theo khối lượng', 'n = m/m', 'mol từ m'],
     title: 'Công thức tính số mol (n) theo khối lượng (m)',
     formula: 'n = \\frac{m}{M}',
     explanation: 'Trong đó:\n- **n**: Số mol (mol)\n- **m**: Khối lượng chất (g)\n- **M**: Khối lượng mol (g/mol)',
@@ -39,7 +39,7 @@ const THEORY_DATABASE = [
   },
   {
     id: 'mol-vol',
-    patterns: ['thể tích', 'đktc', 'khí', 'v/22.4'],
+    patterns: ['mol theo thể tích', 'đktc', 'v/22.4', 'mol khí'],
     title: 'Công thức tính số mol (n) chất khí (đktc)',
     formula: 'n = \\frac{V}{22,4}',
     explanation: 'Trong đó:\n- **n**: Số mol (mol)\n- **V**: Thể tích khí ở đktc (lít)',
@@ -47,7 +47,7 @@ const THEORY_DATABASE = [
   },
   {
     id: 'molar-conc',
-    patterns: ['nồng độ mol', 'cm', 'v dung dịch'],
+    patterns: ['nồng độ mol', 'cm', 'v dung dịch', 'mol/l'],
     title: 'Công thức tính nồng độ Mol (C_M)',
     formula: 'C_M = \\frac{n}{V}',
     explanation: 'Trong đó:\n- **C_M**: Nồng độ mol (mol/l hoặc M)\n- **n**: Số mol chất tan (mol)\n- **V**: Thể tích dung dịch (lít)',
@@ -60,8 +60,23 @@ const THEORY_DATABASE = [
     formula: 'C\\% = \\frac{m_{ct}}{m_{dd}} \\times 100\\%',
     explanation: 'Trong đó:\n- **C%**: Nồng độ phần trăm (%)\n- **m_ct**: Khối lượng chất tan (g)\n- **m_dd**: Khối lượng dung dịch (g)',
     suggestions: ['Cách tính m dung dịch', 'Nồng độ mol']
+  },
+  {
+    id: 'bonding',
+    patterns: ['liên kết gì', 'liên kết hóa học', 'loại liên kết'],
+    title: 'Các loại liên kết hóa học cơ bản',
+    formula: '\\text{Cộng hóa trị} \\longleftrightarrow \\text{Ion} \\longleftrightarrow \\text{Kim loại}',
+    explanation: 'Cấu trúc liên kết phụ thuộc vào độ âm điện:\n- **Cộng hóa trị**: Chia sẻ electron (phi kim - phi kim).\n- **Ion**: Cho/nhận electron (kim loại - phi kim).\n- **Kim loại**: Biển electron dùng chung.',
+    suggestions: ['Liên kết của Nito', 'Độ âm điện là gì?']
   }
 ];
+
+// Map of common valencies for quick lookup
+const VALENCY_MAP = {
+  'H': 'I', 'He': '0', 'Li': 'I', 'Be': 'II', 'B': 'III', 'C': 'II, IV', 'N': 'II, III, IV, V', 'O': 'II', 'F': 'I',
+  'Na': 'I', 'Mg': 'II', 'Al': 'III', 'Si': 'IV', 'P': 'III, V', 'S': 'II, IV, VI', 'Cl': 'I', 'Ar': '0',
+  'K': 'I', 'Ca': 'II', 'Fe': 'II, III', 'Cu': 'I, II', 'Zn': 'II', 'Ag': 'I', 'Ba': 'II'
+};
 
 /**
  * AURUM EXPERT ENGINE
@@ -72,6 +87,7 @@ class AurumExpertEngine {
     this.reactions = reactions;
     this.elements = elements;
     this.theoryDb = THEORY_DATABASE;
+    this.valencyMap = VALENCY_MAP;
     this.chemicalDict = new Map();
     this.init();
     ReactionML.init(); // Initialize Neural Network
@@ -80,7 +96,7 @@ class AurumExpertEngine {
   /**
    * Index all data for fast retrieval
    */
-  init() {
+  async init() {
     // Index Elements
     this.elements.forEach(el => {
       const normSym = normalizeFormula(el.symbol);
@@ -120,8 +136,14 @@ class AurumExpertEngine {
         suggestions: ["Axit hữu cơ là gì?", "Phản ứng trung hòa", "Kim loại kiềm"]
       };
     }
+
+    // 1. Handle Valency Queries (Hóa trị)
+    if (q.includes("hóa trị")) {
+        const tokens = this.extractChemicals(query);
+        if (tokens.length > 0) return this.handleValencyRequest(tokens[0]);
+    }
     
-    // 1. Handle Theory/Formula Queries
+    // 2. Handle Theory/Formula Queries
     const theoryMatch = this.theoryDb.find(t => t.patterns.some(p => q.includes(p)));
     if (theoryMatch) {
       return this.handleTheoryRequest(theoryMatch);
@@ -157,6 +179,23 @@ class AurumExpertEngine {
     return {
       message: `📚 **${theory.title}**\n\n$$\n${theory.formula}\n$$\n\n${theory.explanation}`,
       suggestions: theory.suggestions
+    };
+  }
+
+  handleValencyRequest(token) {
+    const symbol = token.formula || token.data?.symbol;
+    const valency = this.valencyMap[symbol];
+    
+    if (valency) {
+      return {
+        message: `🌟 **Hóa trị của ${token.name} (${symbol})**\n\nTrong các hợp chất phổ biến, **${token.name}** có hóa trị là: **${valency}**.\n\n📖 **Gợi ý:** Bạn có muốn tìm hiểu về các phản ứng của ${token.name} không?`,
+        suggestions: [`Phản ứng có ${symbol}`, `Đặc điểm của ${token.name}`]
+      };
+    }
+
+    return {
+      message: `Tôi nhận thấy bạn đang hỏi về hóa trị của **${token.name}**, nhưng thông tin này hiện chưa có trong cơ sở dữ liệu chuyên sâu của tôi.`,
+      suggestions: [`${symbol} là gì?`, "Bảng hóa trị cơ bản"]
     };
   }
 
