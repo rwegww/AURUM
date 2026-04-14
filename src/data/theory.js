@@ -58,7 +58,9 @@ export const VALENCY_MAP = {
   Na: 'I', Mg: 'II', Al: 'III', Si: 'IV', P: 'III, V', S: 'II, IV, VI', Cl: 'I, III, V, VII', Ar: '0',
   K: 'I', Ca: 'II', Sc: 'III', Ti: 'II, III, IV', V: 'II, III, IV, V', Cr: 'II, III, VI', Mn: 'II, IV, VII',
   Fe: 'II, III', Co: 'II, III', Ni: 'II, III', Cu: 'I, II', Zn: 'II', Br: 'I, III, V, VII', Ag: 'I',
-  Sr: 'II', Sn: 'II, IV', I: 'I, III, V, VII', Ba: 'II', Pb: 'II, IV'
+  Sr: 'II', Sn: 'II, IV', I: 'I, III, V, VII', Ba: 'II', Pb: 'II, IV',
+  Ne: '0', Ar: '0', Kr: '0', Xe: '0', Rn: '0', Og: '0',
+  Mc: 'III, V', Nh: 'I, III', Ts: 'I, III', Lv: 'II, IV'
 };
 
 export const OXIDATION_STATE_MAP = {
@@ -75,7 +77,10 @@ export const OXIDATION_STATE_MAP = {
   Fe: ['+2', '+3'],
   Cu: ['+1', '+2'],
   Mn: ['+2', '+4', '+6', '+7'],
-  Cr: ['+2', '+3', '+6']
+  Cr: ['+2', '+3', '+6'],
+  Na: ['+1'], Mg: ['+2'], Al: ['+3'],
+  Cl: ['-1', '+1', '+3', '+5', '+7'],
+  Br: ['-1', '+1', '+3', '+5', '+7']
 };
 
 export const CHEMISTRY_KNOWLEDGE_BASE = [

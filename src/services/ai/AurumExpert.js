@@ -146,9 +146,14 @@ class AurumExpertEngine {
 
     const foundTokens = this.extractChemicals(query);
     const isReactionQuery = q.includes('+') || q.includes('tác dụng') || q.includes('phản ứng') || q.includes('cho vào') || q.includes('dự đoán');
-
-    if (isReactionQuery && foundTokens.length >= 2) {
-      return this.handleReactionRequest(foundTokens);
+    
+    if (isReactionQuery) {
+      if (foundTokens.length >= 2) {
+        return this.handleReactionRequest(foundTokens);
+      } else if (foundTokens.length === 1) {
+        // "Phản ứng có Cl2" - look for reactions containing Cl2
+        return this.handleReactionDiscovery(foundTokens[0]);
+      }
     }
 
     if (foundTokens.length === 1 && !q.includes('là gì')) {
@@ -262,13 +267,14 @@ class AurumExpertEngine {
   }
 
   extractChemicals(originalQuery) {
-    const normalizedQuery = normalizeFormula((originalQuery || '').toLowerCase()).toLowerCase();
+    // We preserve spaces for accurate word boundary detection of short symbols (Na, Cl, etc.)
+    const preparedQuery = (originalQuery || '').toLowerCase();
     const sortedKeys = Array.from(this.chemicalDict.keys()).sort((a, b) => b.length - a.length);
-    let availableQuery = normalizedQuery;
+    let availableQuery = preparedQuery;
     const matches = [];
 
     for (const key of sortedKeys) {
-      const normKey = normalizeFormula(key).toLowerCase();
+      const normKey = key.toLowerCase();
       const isShort = normKey.length <= 2;
       const pattern = isShort
         ? new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapeRegExp(normKey)}(?=[^\\p{L}\\p{N}]|$)`, 'iu')
