@@ -85,7 +85,6 @@ app.get('/api/debug-env', async (req, res) => {
   }
 
   try {
-  try {
     const candidates = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro', 'gemini-1.5-pro'];
     let workingModel = null;
     let errors = [];
