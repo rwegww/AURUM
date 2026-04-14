@@ -81,20 +81,26 @@ router.post('/ask', async (req, res) => {
     console.log(`🤖 Gemini Search Starting: "${normalizedQuery}"`);
     
     try {
-      // 3. Call Gemini AI (Primary attempt with systemInstruction)
+      // 3. Call Gemini AI (Multi-model Fallback Logic)
       const startTime = Date.now();
       let result;
-      let usedModel = model;
+      let lastError = null;
+      
+      const modelCandidates = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro'];
 
-      try {
-        result = await model.generateContent(normalizedQuery);
-      } catch (primaryErr) {
-        console.warn('⚠️ Primary Gemini attempt failed, retrying without systemInstruction...', primaryErr.message);
-        // Fallback: Try a model without systemInstruction
-        const fallbackModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }, { apiVersion: 'v1' });
-        usedModel = fallbackModel;
-        result = await fallbackModel.generateContent(normalizedQuery);
+      for (const modelName of modelCandidates) {
+        try {
+          const currentModel = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
+          result = await currentModel.generateContent(normalizedQuery);
+          if (result) break; // Found a working model
+        } catch (e) {
+          console.warn(`⚠️ Model ${modelName} failed/overloaded:`, e.message);
+          lastError = e;
+          // Continue to next model
+        }
       }
+
+      if (!result) throw lastError || new Error('All Gemini models are currently unavailable');
 
       const response = await result.response;
       const responseText = response.text();
@@ -124,11 +130,14 @@ router.post('/ask', async (req, res) => {
       return res.json(responseObj);
     } catch (geminiErr) {
       console.error('💥 Gemini API Error:', geminiErr.message);
+      const isHighDemand = geminiErr.message.includes('high demand') || geminiErr.message.includes('503');
+      
       return res.status(503).json({
-        error: 'AI Service Temporarily Unavailable',
-        message: 'Hệ thống AI đang bận hoặc gặp lỗi kết nối. Vui lòng thử lại sau giây lát.',
-        details: geminiErr.message,
-        logic: 'Retry mechanism failed'
+        error: isHighDemand ? 'AI Overloaded' : 'AI Service Error',
+        message: isHighDemand 
+          ? 'Hệ thống AI đang quá tải yêu cầu trên toàn cầu. Vui lòng thử lại sau 30-60 giây.' 
+          : 'Hệ thống AI đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.',
+        details: geminiErr.message
       });
     }
 
