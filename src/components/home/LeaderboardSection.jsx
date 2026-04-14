@@ -148,19 +148,14 @@ const LeaderboardSection = () => {
     <section className="relative pt-48 pb-32 bg-viet-bg overflow-hidden">
       {/* Dynamic Background Decorations */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-400/5 via-transparent to-transparent" />
         {/* Floating Sparks */}
         {[...Array(6)].map((_, i) => (
           <div key={i} className="absolute" style={{ left: `${15 + i * 15}%`, top: `${70 + (i % 3) * 10}%` }}>
             <ChemistrySpark delay={i * 0.7} />
           </div>
         ))}
-        {/* Large Decorative Cloud */}
-        <motion.div 
-          animate={{ x: [-100, 100], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="absolute top-40 -left-60 w-[600px] h-[300px] bg-white rounded-full blur-[120px]" 
-        />
+        
+        {/* Large Decorative Cloud - Transparent Background per user request */}
         <motion.div 
           animate={{ x: [100, -100], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
@@ -174,7 +169,7 @@ const LeaderboardSection = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 bg-viet-green text-white rounded-full text-[11px] font-black uppercase tracking-[3px] mb-6 shadow-lg shadow-viet-green/20"
+            className="inline-flex items-center gap-2 px-4 py-1.5 border border-viet-green text-viet-green rounded-full text-[11px] font-black uppercase tracking-[3px] mb-6 shadow-sm"
           >
             <span className="text-lg">⚔️</span> Bảng Phong Thần
           </motion.div>
