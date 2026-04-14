@@ -65,19 +65,21 @@ const Login = () => {
         transition={{ delay: 0.2 }}
         className="flex flex-col"
       >
-        <header className="mb-3">
-           <div className="flex items-center gap-2 mb-2">
-              <span className="text-[9px] font-black text-viet-green bg-viet-green/5 border border-viet-green/20 px-2 py-0.5 rounded-full uppercase tracking-widest">
+        <header className="mb-8 text-center md:text-left md:mb-3">
+           <div className="hidden md:flex items-center gap-2 mb-1 md:mb-2">
+              <span className="text-[8px] md:text-[9px] font-black text-viet-green bg-viet-green/5 border border-viet-green/20 px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest">
                 Đã sẵn sàng học tập?
               </span>
            </div>
-           <h2 className="text-[22px] font-black text-viet-text tracking-tight uppercase font-sora italic">
-             Đăng nhập <span className="text-viet-green">Học viện</span>
+           <h2 className="text-[28px] md:text-[22px] font-bold md:font-black text-slate-800 md:text-viet-text tracking-tight md:uppercase font-sora md:italic">
+             Đăng nhập
            </h2>
-           <p className="text-[12px] font-bold text-viet-text-light mt-1.5 tracking-tight opacity-70 leading-relaxed">
-             Vui lòng nhập thông tin tài khoản của bạn để tiếp tục cuộc hành trình.
+           <p className="text-[14px] md:text-[12px] font-medium md:font-bold text-slate-500 md:text-viet-text-light mt-2 md:mt-1.5 tracking-tight leading-relaxed">
+             Chào mừng bạn quay trở lại! 👋
            </p>
         </header>
+
+
 
         {error && (
           <motion.div 
@@ -89,92 +91,101 @@ const Login = () => {
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-           <div className="space-y-1.5">
-              <label className="text-[9px] font-black text-viet-text-light uppercase tracking-[1.5px] pl-1 opacity-60">Email đăng nhập</label>
+        <form onSubmit={handleSubmit} className="space-y-5 md:space-y-3">
+           <div className="space-y-2 md:space-y-1.5">
+              <label className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Email</label>
               <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-viet-text-light/40 group-focus-within:text-viet-green transition-colors">
-                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-viet-green transition-colors">
+                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                    </svg>
                 </div>
                 <input 
                   type="email" 
                   required
-                  className="w-full h-11 pl-12 pr-6 rounded-2xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[14px] font-bold text-viet-text placeholder:text-viet-text-light/30"
-                  placeholder="hocvien@email.com"
+                  className="w-full h-12 md:h-11 pl-12 pr-6 rounded-xl md:rounded-2xl bg-[#fdf0e0] md:bg-slate-50 border border-[#f3e3d0] md:border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[15px] md:text-[14px] font-medium md:font-bold text-slate-800 md:text-viet-text placeholder:text-slate-400/50"
+                  placeholder="Nhập địa chỉ email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
            </div>
 
-           <div className="space-y-1.5">
-              <label className="text-[9px] font-black text-viet-text-light uppercase tracking-[1.5px] pl-1 opacity-60">Mật khẩu</label>
+           <div className="space-y-2 md:space-y-1.5">
+              <label className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Mật khẩu</label>
               <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-viet-text-light/40 group-focus-within:text-viet-green transition-colors">
-                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-viet-green transition-colors">
+                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                    </svg>
                 </div>
                 <input 
                   type="password" 
                   required
-                  className="w-full h-11 pl-12 pr-12 rounded-2xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[14px] font-bold text-viet-text placeholder:text-viet-text-light/30"
+                  className="w-full h-12 md:h-11 pl-12 pr-12 rounded-xl md:rounded-2xl bg-[#fdf0e0] md:bg-slate-50 border border-[#f3e3d0] md:border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[15px] md:text-[14px] font-medium md:font-bold text-slate-800 md:text-viet-text placeholder:text-slate-400/50"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-viet-green">
+                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                   </svg>
+                </button>
               </div>
            </div>
+
 
            <div className="flex items-center justify-between pt-0.5">
               <label className="flex items-center gap-2.5 cursor-pointer group">
                   <div className="relative flex items-center">
                     <input 
                       type="checkbox" 
-                      className="peer w-4 h-4 rounded-lg border-2 border-viet-border text-viet-green focus:ring-viet-green transition-all cursor-pointer opacity-0 absolute z-10" 
+                      className="peer w-4 h-4 rounded-full border border-slate-300 text-viet-green focus:ring-viet-green transition-all cursor-pointer opacity-0 absolute z-10" 
                       checked={rememberMe}
                       onChange={() => setRememberMe(!rememberMe)}
                     />
-                    <div className={`w-4 h-4 rounded-lg border-2 transition-all flex items-center justify-center ${rememberMe ? 'bg-viet-green border-viet-green' : 'border-viet-border group-hover:border-viet-green/50'}`}>
-                       {rememberMe && <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                    <div className={`w-5 h-5 rounded-full border transition-all flex items-center justify-center ${rememberMe ? 'bg-viet-green border-viet-green' : 'bg-white border-slate-300 group-hover:border-viet-green/50'}`}>
+                       {rememberMe && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                     </div>
                   </div>
-                  <span className="text-[10px] font-black text-viet-text-light uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity">Ghi nhớ tôi</span>
+                  <span className="text-[13px] md:text-[10px] font-medium md:font-black text-slate-600 md:text-viet-text-light md:uppercase md:tracking-widest">Ghi nhớ đăng nhập</span>
               </label>
-              <Link to="/" className="text-[10px] font-black text-viet-green hover:underline uppercase tracking-widest">Quên mật khẩu?</Link>
+              <Link to="/" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">Quên mật khẩu?</Link>
            </div>
 
            <button 
              type="submit"
              disabled={loading}
-             className="w-full h-11 bg-viet-green text-white text-[11px] font-black uppercase tracking-[2px] rounded-2xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 mt-1"
+             className="w-full h-12 md:h-11 bg-viet-green text-white text-[15px] md:text-[11px] font-bold md:font-black md:uppercase md:tracking-[2px] rounded-xl md:rounded-2xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
            >
-             {loading ? 'Đang xác thực...' : 'Vào học viện ngay ➔'}
+             {loading ? 'Đang xác thực...' : 'Đăng nhập'}
            </button>
         </form>
 
-        <div className="relative my-2.5 text-center">
-           <div className="absolute inset-0 top-1/2 h-[1px] bg-viet-border/50" />
-           <span className="relative z-10 bg-white px-4 text-[9px] font-black text-viet-text-light/40 uppercase tracking-[3px]">Hoặc</span>
+        <div className="relative my-6 md:my-2.5 text-center">
+           <div className="absolute inset-0 top-1/2 h-[1px] bg-slate-200" />
+           <span className="relative z-10 bg-white px-4 text-[13px] md:text-[9px] font-medium md:font-black text-slate-400 md:text-viet-text-light/40 md:uppercase md:tracking-[3px]">Hoặc đăng nhập bằng</span>
         </div>
 
         <button 
           onClick={handleGoogleLogin}
           type="button"
-          className="w-full h-11 bg-white border-2 border-slate-100 rounded-2xl flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-widest text-viet-text hover:bg-slate-50 transition-all mb-3 shadow-sm active:scale-95"
+          className="w-full h-12 md:h-11 bg-[#fdf0e0] md:bg-white border border-[#f3e3d0] md:border-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center gap-3 text-[14px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest text-slate-700 md:text-viet-text hover:bg-slate-50 transition-all mb-6 md:mb-3 shadow-sm active:scale-95"
         >
-           <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4" alt="Google" />
-           Đăng nhập Google
+           <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
+           Google
         </button>
 
-        <p className="text-center text-[10px] font-bold text-viet-text-light">
-           <span className="opacity-50 uppercase tracking-widest text-[8px] block mb-1 font-black">Chưa có mã học viên?</span>
-           <Link to="/register" className="text-viet-green hover:underline uppercase tracking-widest font-black text-[12px]">
-             Tham gia hành trình ngay 🧪
+
+        <div className="text-center text-[14px]">
+           <span className="text-slate-500 font-medium">Chưa có tài khoản? </span>
+           <Link to="/register" className="text-viet-green hover:underline font-bold">
+             Đăng ký ngay
            </Link>
-        </p>
+        </div>
+
       </motion.div>
     </AuthLayout>
   );
