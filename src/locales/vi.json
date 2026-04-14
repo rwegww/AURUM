@@ -127,7 +127,7 @@
       "privacy": { "title": "4. Chính sách bảo mật", "p1": "Commitment... (Chúng tôi cam kết...)", "p2": "We only... (Chúng tôi chỉ...)" },
       "liability": { "title": "5. Giới hạn trách nhiệm", "p1": "Simulations are... (Các mô phỏng...)", "p2": "No responsibility... (Chúng tôi không...)" }
     },
-    "footer_question": "Bạn có câu hỏi về điều khoản? <br/> Vui lòng <1>Liên hệ với chúng tôi</1>."
+    "footer_question": "Bạn có câu hỏi về điều khoản? <br/> Vui lòng <contact>Liên hệ với chúng tôi</contact>."
   },
   "profile": {
     "not_logged_in": "Bạn chưa đăng nhập",

@@ -62,8 +62,14 @@ const Terms = () => {
 
           <div className="mt-20 pt-10 border-t border-viet-border text-center">
              <p className="text-[14px] text-viet-text-light/50 font-medium">
-               <Trans i18nKey="terms.footer_question">
-                 Bạn có câu hỏi về điều khoản? <br/> Vui lòng <a href="/contact" className="text-viet-green font-bold hover:underline">Liên hệ với chúng tôi</a>.
+               <Trans 
+                 i18nKey="terms.footer_question"
+                 components={{ 
+                   br: <br />,
+                   contact: <a href="/contact" className="text-viet-green font-bold hover:underline" /> 
+                 }}
+               >
+                 Bạn có câu hỏi về điều khoản? <br/> Vui lòng <a href="/contact">Liên hệ với chúng tôi</a>.
                </Trans>
              </p>
           </div>

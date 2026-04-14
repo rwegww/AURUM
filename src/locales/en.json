@@ -127,7 +127,7 @@
       "privacy": { "title": "4. Privacy Policy", "p1": "We are committed to protecting the personal information of learners. Your data is encrypted and securely stored on the Supabase/Firebase system.", "p2": "We only use your email to send learning notifications and password recovery." },
       "liability": { "title": "5. Limitation of Liability", "p1": "Lab simulations are designed for visual educational purposes. Results may have minor deviations from reality depending on the simulation environment.", "p2": "We are not responsible for any loss arising from the misuse of information on this platform." }
     },
-    "footer_question": "Have questions about the terms? <br/> Please <1>Contact Us</1>."
+    "footer_question": "Have questions about the terms? <br/> Please <contact>Contact Us</contact>."
   },
   "profile": {
     "not_logged_in": "You are not logged in",
