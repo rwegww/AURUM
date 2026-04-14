@@ -73,7 +73,10 @@ app.get('/api/debug-env', async (req, res) => {
   
   let databaseTest = 'Pending';
   let geminiTest = 'Pending';
+  let availableModels = [];
   
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
   try {
     const { data, error } = await supabase.from('ai_cache').select('count', { count: 'exact', head: true });
     databaseTest = error ? `Error: ${error.message}` : `Success (${data || 0} cached items)`;
@@ -82,12 +85,24 @@ app.get('/api/debug-env', async (req, res) => {
   }
 
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' });
-    const ping = await model.generateContent("ping");
-    geminiTest = ping.response ? 'Success (Pong)' : 'Failed (Empty Response)';
+    // Force v1 for model listing as well
+    const modelList = await genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' }); 
+    // Wait, listModels is a top level function
+    const listResult = await genAI.listModels();
+    availableModels = listResult.models.map(m => m.name);
+    
+    // Try pinging the first available flash or pro model
+    const preferredModel = availableModels.find(m => m.includes('flash')) || availableModels.find(m => m.includes('pro')) || availableModels[0];
+    
+    if (preferredModel) {
+      const model = genAI.getGenerativeModel({ model: preferredModel.replace('models/', '') }, { apiVersion: 'v1' });
+      const ping = await model.generateContent("ping");
+      geminiTest = ping.response ? `Success with ${preferredModel}` : 'Failed (Empty Response)';
+    } else {
+      geminiTest = 'No models available for this key';
+    }
   } catch (e) {
-    geminiTest = `Crash: ${e.message}`;
+    geminiTest = `List/Ping Crash: ${e.message}`;
   }
 
   res.json({
@@ -97,7 +112,8 @@ app.get('/api/debug-env', async (req, res) => {
     GEMINI_KEY_FOUND: !!process.env.GEMINI_API_KEY,
     live_tests: {
       supabase: databaseTest,
-      gemini: geminiTest
+      gemini: geminiTest,
+      available_models: availableModels
     },
     timestamp: new Date().toISOString()
   });
