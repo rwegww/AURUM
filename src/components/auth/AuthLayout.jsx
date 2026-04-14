@@ -31,88 +31,85 @@ const AuthLayout = ({ children }) => {
           </div>
           <span className="text-[13px] font-bold text-slate-600 font-sora">Về trang chủ</span>
         </Link>
-        
-        <div className="flex items-center gap-2">
-          <div className="text-xl">🎓</div>
-          <span className="text-[15px] font-black text-viet-green tracking-tight font-sora">VietEdu Odyssey</span>
-        </div>
+
+
       </div>
 
       {/* Background for Desktop only */}
       <div className="hidden md:block">
         <MemoizedMoleculeBackground />
       </div>
-      
+
       {/* Grid texture for Desktop only */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none hidden md:block" 
-           style={{ backgroundImage: 'radial-gradient(#76c034 1.5px, transparent 1.5px)', backgroundSize: '48px 48px' }} />
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none hidden md:block"
+        style={{ backgroundImage: 'radial-gradient(#76c034 1.5px, transparent 1.5px)', backgroundSize: '48px 48px' }} />
 
       {/* Floating Home Button (Desktop) */}
       <Link to="/" className="fixed top-8 left-8 z-50 hidden md:flex items-center gap-3 px-6 py-3 bg-white/80 hover:bg-white text-viet-text-light hover:text-viet-green rounded-full text-[11px] font-black uppercase tracking-widest backdrop-blur-xl transition-all border border-viet-border shadow-sm hover:shadow-lg active:scale-95 group">
-         <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
-         <span className="font-sora">Trường học</span>
+        <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
+        <span className="font-sora">Trường học</span>
       </Link>
 
       {/* Main Premium Container */}
       <div className="relative z-10 w-full max-w-6xl md:bg-white rounded-t-[32px] md:rounded-[56px] md:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] md:border md:border-[#e8e8e8] overflow-hidden flex flex-col md:flex-row flex-1 md:flex-none md:h-[750px] md:max-h-[90vh]">
         {/* Left Side: Branding & Visuals (Desktop) */}
         <div className="hidden md:flex w-full md:w-[45%] bg-gradient-to-br from-[#76c034] to-[#4caf50] p-16 flex-col justify-between text-white relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
-                 style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-           
-           <div className="relative z-10">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 md:mb-10 shadow-xl border border-white/30 group hover:rotate-12 transition-transform">
-                <svg className="w-7 h-7 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                </svg>
-              </div>
+          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
 
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-4 md:mb-6 font-sora">
-                Mở khóa <br className="hidden md:block" />
-                <span className="text-white/80"> Bí mật </span> <br className="hidden md:block" />
-                Nguyên tử
-              </h1>
-              <div className="w-12 md:w-16 h-1 md:h-1.5 bg-white/40 rounded-full mb-4 md:mb-6" />
-              <p className="text-base md:text-lg font-medium text-white/90 max-w-xs leading-relaxed">
-                Tham gia cộng đồng học thuật Aurum ngay hôm nay.
-              </p>
-           </div>
+          <div className="relative z-10">
+            <div className="w-12 h-12 md:w-14 md:h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 md:mb-10 shadow-xl border border-white/30 group hover:rotate-12 transition-transform">
+              <svg className="w-7 h-7 md:w-8 md:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+              </svg>
+            </div>
 
-           <div className="relative z-10 space-y-6 hidden md:block">
-              <BenefitItem 
-                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>} 
-                title="Thử thách 1:1" 
-                desc="Đấu trường tri thức liên trường" 
-              />
-              <BenefitItem 
-                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.183.244l-.28.172a2 2 0 00-.865 2.503l.64 1.53a2 2 0 002.502.864l1.53-.64a2 2 0 00.864-2.502l-.172-.28a2 2 0 01-.244-1.183l.135-2.533a6 6 0 01.517-3.86l.158-.318a6 6 0 01.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.428-1.428a2 2 0 00-2.828 0l-1.428 1.428a2 2 0 00-.547 1.022l-.477 2.387a6 6 0 00.517 3.86l.158.318a6 6 0 00.517 3.86l-.477 2.387a2 2 0 00.547 1.022l1.428 1.428a2 2 0 002.828 0l1.428-1.428z" /></svg>} 
-                title="Phòng LAB ảo" 
-                desc="Thí nghiệm không giới hạn an toàn" 
-              />
-              <BenefitItem 
-                icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>} 
-                title="Hệ thống Rank" 
-                desc="Bảng xếp hạng vinh danh Aurum" 
-              />
-           </div>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight leading-tight mb-4 md:mb-6 font-sora">
+              Mở khóa <br className="hidden md:block" />
+              <span className="text-white/80"> Bí mật </span> <br className="hidden md:block" />
+              Nguyên tử
+            </h1>
+            <div className="w-12 md:w-16 h-1 md:h-1.5 bg-white/40 rounded-full mb-4 md:mb-6" />
+            <p className="text-base md:text-lg font-medium text-white/90 max-w-xs leading-relaxed">
+              Tham gia cộng đồng học thuật Aurum ngay hôm nay.
+            </p>
+          </div>
+
+          <div className="relative z-10 space-y-6 hidden md:block">
+            <BenefitItem
+              icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>}
+              title="Thử thách 1:1"
+              desc="Đấu trường tri thức liên trường"
+            />
+            <BenefitItem
+              icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.183.244l-.28.172a2 2 0 00-.865 2.503l.64 1.53a2 2 0 002.502.864l1.53-.64a2 2 0 00.864-2.502l-.172-.28a2 2 0 01-.244-1.183l.135-2.533a6 6 0 01.517-3.86l.158-.318a6 6 0 01.517-3.86l-.477-2.387a2 2 0 00-.547-1.022l-1.428-1.428a2 2 0 00-2.828 0l-1.428 1.428a2 2 0 00-.547 1.022l-.477 2.387a6 6 0 00.517 3.86l.158.318a6 6 0 00.517 3.86l-.477 2.387a2 2 0 00.547 1.022l1.428 1.428a2 2 0 002.828 0l1.428-1.428z" /></svg>}
+              title="Phòng LAB ảo"
+              desc="Thí nghiệm không giới hạn an toàn"
+            />
+            <BenefitItem
+              icon={<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>}
+              title="Hệ thống Rank"
+              desc="Bảng xếp hạng vinh danh Aurum"
+            />
+          </div>
 
 
-           {/* Floating Accent Circle */}
-           <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-[80px]" />
+          {/* Floating Accent Circle */}
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-[80px]" />
         </div>
 
         {/* Right Side: Form Area */}
         <div className="w-full md:w-[55%] flex flex-col items-center p-6 md:p-8 lg:p-6 overflow-y-auto bg-white custom-scrollbar min-h-0 md:h-full">
-           <div className="w-full max-w-sm my-auto md:my-auto">
-              {children}
-           </div>
-           
-           {/* Footer branding subtle (Desktop only) */}
-           <div className="mt-8 opacity-20 hidden md:flex items-center gap-2 pointer-events-none">
-              <span className="w-4 h-[1px] bg-black" />
-              <p className="text-black/60 text-xs font-bold uppercase tracking-widest leading-loose">Hệ thống giáo dục Aurum v3.0</p>
-              <span className="w-4 h-[1px] bg-black" />
-           </div>
+          <div className="w-full max-w-sm my-auto md:my-auto">
+            {children}
+          </div>
+
+          {/* Footer branding subtle (Desktop only) */}
+          <div className="mt-8 opacity-20 hidden md:flex items-center gap-2 pointer-events-none">
+            <span className="w-4 h-[1px] bg-black" />
+            <p className="text-black/60 text-xs font-bold uppercase tracking-widest leading-loose">Hệ thống giáo dục Aurum v3.0</p>
+            <span className="w-4 h-[1px] bg-black" />
+          </div>
         </div>
 
       </div>
