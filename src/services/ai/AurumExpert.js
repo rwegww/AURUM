@@ -112,12 +112,14 @@ class AurumExpertEngine {
   }
 
   async ask(query, context = {}) {
-    const { role = 'student' } = context;
+    const role = context.user?.role || context.role || 'student';
+    const userId = context.user?.id || context.userId;
+    const username = context.user?.username || context.username;
     const q = (query || '').toLowerCase().trim();
 
     if (!q) return this.handleFallback();
 
-    // 0. Safety Guardrails
+    // 0. Local Safety Guardrails (Quick filter)
     if (SAFETY_RESTRICTIONS.some((word) => q.includes(word))) {
       return {
         message: '🛡️ **[Thông báo An toàn Aurum]**\n\nTôi là trợ lý giáo dục và không cung cấp hướng dẫn chế tạo, tối ưu hóa hoặc sử dụng các chất nguy hiểm cho mục đích gây hại.\n\nTôi chỉ có thể hỗ trợ kiến thức lý thuyết an toàn, nhận diện nguy cơ, nguyên tắc bảo hộ và các phản ứng học tập an toàn.',
@@ -126,7 +128,7 @@ class AurumExpertEngine {
       };
     }
 
-    // 1. Specialized Lookups
+    // 1. Specialized Local Lookups (Elements, Reactions) - High speed
     if (q.includes('hóa trị')) {
       const tokens = this.extractChemicals(query);
       if (tokens.length > 0) return this.handleValencyRequest(tokens[0]);
@@ -135,7 +137,6 @@ class AurumExpertEngine {
     if (q.includes('số oxi hóa')) {
       const tokens = this.extractChemicals(query);
       if (tokens.length > 0) return this.handleOxidationStateRequest(tokens[0]);
-      return this.handleTheoryById('oxidation-number');
     }
 
     if (q.includes('ion')) {
@@ -143,11 +144,6 @@ class AurumExpertEngine {
       if (ionAnswer) return ionAnswer;
     }
 
-    // 2. Theory Base Search
-    const theoryMatch = this.findTheoryMatch(q);
-    if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
-
-    // 3. Entity Extraction
     const foundTokens = this.extractChemicals(query);
     const isReactionQuery = q.includes('+') || q.includes('tác dụng') || q.includes('phản ứng') || q.includes('cho vào') || q.includes('dự đoán');
 
@@ -155,9 +151,32 @@ class AurumExpertEngine {
       return this.handleReactionRequest(foundTokens);
     }
 
-    if (foundTokens.length === 1) {
+    if (foundTokens.length === 1 && !q.includes('là gì')) {
       return this.handleInfoRequest(foundTokens[0]);
     }
+
+    // 2. Hybrid DB + Gemini Call (The "Brain" upgrade)
+    try {
+      console.log('🔗 Calling Hybrid AI Engine...');
+      const response = await fetch('/api/ai/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          query, 
+          context: { userId, username, role } 
+        })
+      });
+
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (apiErr) {
+      console.warn('⚠️ Hybrid AI Offline, falling back to local theory:', apiErr.message);
+    }
+
+    // 3. Local Theory Fallback (If offline)
+    const theoryMatch = this.findTheoryMatch(q);
+    if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
 
     // 4. Curriculum / Meta triggers
     if (q.includes('vai trò')) return this.handleRoleCheck(role);

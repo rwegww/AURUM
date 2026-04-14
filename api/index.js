@@ -3,7 +3,8 @@ import express from 'express';
 import cors from 'cors';
 
 import authRoutes from './_routes/auth.js';
-import lessonRoutes from './_routes/lessons.js';
+import lessonsRoutes from './_routes/lessons.js';
+import aiRoutes from './_routes/ai.js';
 import userRoutes from './_routes/user.js';
 import mediaRoutes from './_routes/media.js';
 import adminRoutes from './_routes/admin.js';
@@ -27,7 +28,8 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // Routes with additional error isolation
 try {
   app.use('/api/auth', authRoutes);
-  app.use('/api/lessons', lessonRoutes);
+  app.use('/api/lessons', lessonsRoutes);
+  app.use('/api/ai', aiRoutes);
   app.use('/api/user', userRoutes);
   app.use('/api/media', mediaRoutes);
   app.use('/api/admin', adminRoutes);

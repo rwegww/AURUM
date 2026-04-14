@@ -18,6 +18,7 @@
   "dependencies": {
     "@dicebear/core": "^9.4.2",
     "@dicebear/lorelei": "^9.4.2",
+    "@google/generative-ai": "^0.24.1",
     "@multiavatar/multiavatar": "^1.0.7",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.0",
