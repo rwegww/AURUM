@@ -82,7 +82,6 @@ const MagicLab3D = () => {
   const updateSettings = useLabStore(state => state.updateSettings);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
-  const [activeTab, setActiveTab] = useState('liquid');
   const [showSettings, setShowSettings] = useState(false);
   const [isMessageVisible, setIsMessageVisible] = useState(false);
 
@@ -212,16 +211,8 @@ const MagicLab3D = () => {
   const availableChemicals = useMemo(() => {
     const chemicalsMap = useLabStore.getState().chemicals;
     return Object.values(chemicalsMap)
-      .filter(c => discoveredFormulas.includes(c.formula))
-      .filter(c => {
-        if (activeTab === 'all') return true;
-        if (activeTab === 'liquid') return c.state === 'liquid' && !c.type;
-        if (activeTab === 'solid') return c.state === 'solid' && !c.type;
-        if (activeTab === 'metal') return c.type?.includes('metal') && c.type !== 'nonmetal';
-        if (activeTab === 'nonmetal') return c.type?.includes('nonmetal');
-        return true;
-      });
-  }, [activeTab, discoveredFormulas]);
+      .filter(c => discoveredFormulas.includes(c.formula));
+  }, [discoveredFormulas]);
 
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] text-white rounded-3xl min-h-[600px]">
@@ -357,29 +348,6 @@ const MagicLab3D = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-               <div className="flex bg-black/40 p-1 rounded-xl mb-4 overflow-x-auto no-scrollbar gap-1 border border-white/5">
-                  {[
-                    { id: 'liquid', label: 'Dung dịch' },
-                    { id: 'solid', label: 'Chất rắn' },
-                    { id: 'metal', label: 'Kim loại' },
-                    { id: 'all', label: 'Tất cả' }
-                  ].map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        className={`
-                           px-3 py-2 rounded-lg text-[10px] font-bold transition-all whitespace-nowrap flex-1
-                           ${activeTab === tab.id 
-                              ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)]' 
-                              : 'text-white/40 hover:text-white/60 hover:bg-white/5'
-                           }
-                        `}
-                    >
-                        {tab.label}
-                    </button>
-                  ))}
-               </div>
-
                <div className="grid grid-cols-2 gap-4 pb-4">
                   {availableChemicals.map((chem) => {
                   const isBeingPoured = isPouringFormula === chem.formula;
