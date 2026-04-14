@@ -28,6 +28,41 @@ const PEDAGOGICAL_PROMPTS = [
   "Bạn có muốn tôi giải thích rõ hơn về cơ chế lớp vỏ electron của phản ứng này không?"
 ];
 
+const THEORY_DATABASE = [
+  {
+    id: 'mol-mass',
+    patterns: ['tính mol', 'số mol', 'khối lượng', 'm/m'],
+    title: 'Công thức tính số mol (n) theo khối lượng (m)',
+    formula: 'n = \\frac{m}{M}',
+    explanation: 'Trong đó:\n- **n**: Số mol (mol)\n- **m**: Khối lượng chất (g)\n- **M**: Khối lượng mol (g/mol)',
+    suggestions: ['Tính mol theo thể tích', 'Khối lượng mol là gì?']
+  },
+  {
+    id: 'mol-vol',
+    patterns: ['thể tích', 'đktc', 'khí', 'v/22.4'],
+    title: 'Công thức tính số mol (n) chất khí (đktc)',
+    formula: 'n = \\frac{V}{22,4}',
+    explanation: 'Trong đó:\n- **n**: Số mol (mol)\n- **V**: Thể tích khí ở đktc (lít)',
+    suggestions: ['Tính mol theo khối lượng', '22.4 là gì?']
+  },
+  {
+    id: 'molar-conc',
+    patterns: ['nồng độ mol', 'cm', 'v dung dịch'],
+    title: 'Công thức tính nồng độ Mol (C_M)',
+    formula: 'C_M = \\frac{n}{V}',
+    explanation: 'Trong đó:\n- **C_M**: Nồng độ mol (mol/l hoặc M)\n- **n**: Số mol chất tan (mol)\n- **V**: Thể tích dung dịch (lít)',
+    suggestions: ['Nồng độ phần trăm', 'Cách pha loãng dung dịch']
+  },
+  {
+    id: 'percent-conc',
+    patterns: ['nồng độ phần trăm', 'c%', 'm dung dịch'],
+    title: 'Công thức tính nồng độ phần trăm (C%)',
+    formula: 'C\\% = \\frac{m_{ct}}{m_{dd}} \\times 100\\%',
+    explanation: 'Trong đó:\n- **C%**: Nồng độ phần trăm (%)\n- **m_ct**: Khối lượng chất tan (g)\n- **m_dd**: Khối lượng dung dịch (g)',
+    suggestions: ['Cách tính m dung dịch', 'Nồng độ mol']
+  }
+];
+
 /**
  * AURUM EXPERT ENGINE
  * An advanced data-driven assistant for chemistry.
@@ -36,6 +71,7 @@ class AurumExpertEngine {
   constructor() {
     this.reactions = reactions;
     this.elements = elements;
+    this.theoryDb = THEORY_DATABASE;
     this.chemicalDict = new Map();
     this.init();
     ReactionML.init(); // Initialize Neural Network
@@ -85,29 +121,42 @@ class AurumExpertEngine {
       };
     }
     
-    // 1. Parse Intent and Extract Chemicals
+    // 1. Handle Theory/Formula Queries
+    const theoryMatch = this.theoryDb.find(t => t.patterns.some(p => q.includes(p)));
+    if (theoryMatch) {
+      return this.handleTheoryRequest(theoryMatch);
+    }
+    
+    // 2. Parse Intent and Extract Chemicals
     const foundTokens = this.extractChemicals(query); 
     const isReactionQuery = q.includes("+") || q.includes("tác dụng") || q.includes("phản ứng");
 
-    // 2. Handle Reaction Queries
+    // 3. Handle Reaction Queries
     if (isReactionQuery && foundTokens.length >= 2) {
       return this.handleReactionRequest(foundTokens);
     }
 
-    // 3. Handle Info Queries (Single chemical/element)
+    // 4. Handle Info Queries (Single chemical/element)
     if (foundTokens.length === 1) {
       return this.handleInfoRequest(foundTokens[0]);
     }
 
-    // 4. Role-based/Platform triggers
+    // 5. Role-based/Platform triggers
     if (q.includes("vai trò")) return this.handleRoleCheck(role);
     if (q.includes("bài học")) return this.handleLessonHelp(role);
 
-    // 5. Default Fallback
+    // 6. Default Fallback
     const randomElements = this.elements.sort(() => 0.5 - Math.random()).slice(0, 2);
     return {
       message: `Tôi là Aurum AI. Tôi được trang bị **Mạng thần kinh nhân tạo (Neural Network)** để dự đoán các phản ứng hóa học phức tạp. Bạn muốn thử nghiệm chất nào?`,
       suggestions: [`${randomElements[0].symbol} là gì?`, "Phản ứng Na + Cl2", "Dự đoán Ba + O2"]
+    };
+  }
+
+  handleTheoryRequest(theory) {
+    return {
+      message: `📚 **${theory.title}**\n\n$$\n${theory.formula}\n$$\n\n${theory.explanation}`,
+      suggestions: theory.suggestions
     };
   }
 
