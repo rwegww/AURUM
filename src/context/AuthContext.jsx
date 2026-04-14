@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 
 const AuthContext = createContext();
@@ -7,13 +7,20 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
-  const fetchingTokenRef = React.useRef(null);
+  const fetchingTokenRef = useRef(null);
+  const mountedRef = useRef(true);
 
-  const fetchProfile = async (token, force = false) => {
+  const fetchProfile = useCallback(async (token, force = false) => {
     if (!token) {
-      if (user !== null || isLoggedIn !== false) {
-        setUser(null);
-        setIsLoggedIn(false);
+      if (mountedRef.current) {
+        setUser(prev => {
+          if (prev !== null) return null;
+          return prev;
+        });
+        setIsLoggedIn(prev => {
+          if (prev !== false) return false;
+          return prev;
+        });
       }
       setLoading(false);
       return;
@@ -33,8 +40,10 @@ export const AuthProvider = ({ children }) => {
       
       if (res.ok) {
         const userData = await res.json();
-        setUser(userData);
-        setIsLoggedIn(true);
+        if (mountedRef.current) {
+          setUser(userData);
+          setIsLoggedIn(true);
+        }
         return userData;
       } else if (res.status === 401) {
         // Silent logout on 401 (stale/invalid token)
@@ -45,80 +54,38 @@ export const AuthProvider = ({ children }) => {
         console.error('Lỗi tải profile:', err);
       }
     } finally {
-      // Always reset so the next call is never blocked
       fetchingTokenRef.current = null;
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
     }
-  };
+  }, [logout]);
 
-  useEffect(() => {
-    // Rely on onAuthStateChange for initial session as well
-    // but check for manual 'custom' tokens for compatibility
-    const initAuth = async () => {
-      try {
-        const authType = localStorage.getItem('authType');
-        if (authType === 'custom') {
-          const token = localStorage.getItem('token');
-          if (token) {
-            await fetchProfile(token);
-          } else {
-            setLoading(false);
-          }
-        } else {
-          // Check for existing Supabase session manually on start
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            localStorage.setItem('token', session.access_token);
-            localStorage.setItem('authType', 'supabase');
-            await fetchProfile(session.access_token);
-          } else {
-            setLoading(false);
-          }
-        }
-      } catch (err) {
-        console.error('Auth Init Error:', err);
-        setLoading(false);
+  const logout = useCallback(async () => {
+    try {
+      const authType = localStorage.getItem('authType');
+      if (authType === 'supabase') {
+        await supabase.auth.signOut();
       }
-    };
-
-    initAuth();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      try {
-        if (event === 'SIGNED_IN' && session) {
-          localStorage.setItem('token', session.access_token);
-          localStorage.setItem('authType', 'supabase');
-          await fetchProfile(session.access_token);
-        } else if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('authType');
-          setUser(null);
-          setIsLoggedIn(false);
-          
-          // If we were on a page other than home, redirect to home to stop all activities
-          if (window.location.pathname !== '/') {
-            window.location.href = '/';
-          }
-        }
-      } catch (authErr) {
-        console.error('Lỗi Auth State Change:', authErr);
-        // If we get a persistent refresh error, clear everything
-        if (authErr.message?.includes('refresh_token')) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('authType');
-          setUser(null);
-          setIsLoggedIn(false);
-        }
+    } catch (err) {
+      console.error('Error during logout:', err);
+    } finally {
+      localStorage.removeItem('token');
+      localStorage.removeItem('authType');
+      if (mountedRef.current) {
+        setUser(null);
+        setIsLoggedIn(false);
       }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
+      
+      // Force return to home page and full reload to clear all React state/activities
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
+      } else {
+        // Even if on home, force reload to clear state
+        window.location.reload();
+      }
+    }
   }, []);
 
-  const login = async (username, password) => {
+  const login = useCallback(async (username, password) => {
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -142,9 +109,9 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       return { success: false, message: err.message };
     }
-  };
+  }, [fetchProfile]);
 
-  const loginWithGoogle = async () => {
+  const loginWithGoogle = useCallback(async () => {
     try {
       setLoading(true);
       const { error } = await supabase.auth.signInWithOAuth({
@@ -155,17 +122,15 @@ export const AuthProvider = ({ children }) => {
       });
       
       if (error) throw error;
-      
-      // The actual profile sync happens after redirect in the callback or onAuthStateChange
       return { success: true };
     } catch (err) {
       console.error('Google login error:', err.message);
-      setLoading(false);
+      if (mountedRef.current) setLoading(false);
       return { success: false, message: err.message };
     }
-  };
+  }, []);
 
-  const register = async (username, password, email, role = 'student') => {
+  const register = useCallback(async (username, password, email, role = 'student') => {
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -183,28 +148,9 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       return { success: false, message: err.message };
     }
-  };
+  }, [fetchProfile]);
 
-  const logout = async () => {
-    try {
-      const authType = localStorage.getItem('authType');
-      if (authType === 'supabase') {
-        await supabase.auth.signOut();
-      }
-    } catch (err) {
-      console.error('Error during logout:', err);
-    } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('authType');
-      setUser(null);
-      setIsLoggedIn(false);
-      
-      // Force return to home page and full reload to clear all React state/activities
-      window.location.href = '/';
-    }
-  };
-
-  const updateProgress = async (xpGain, unlockedLessonId) => {
+  const updateProgress = useCallback(async (xpGain, unlockedLessonId) => {
     if (!isLoggedIn || !user) return;
     try {
       const token = localStorage.getItem('token');
@@ -219,22 +165,23 @@ export const AuthProvider = ({ children }) => {
       
       if (res.ok) {
         const data = await res.json();
-        setUser(prev => ({ ...prev, ...data }));
+        if (mountedRef.current) {
+          setUser(prev => ({ ...prev, ...data }));
+        }
       }
     } catch (err) {
       console.error('Lỗi cập nhật tiến độ:', err);
     }
-  };
+  }, [isLoggedIn, user]);
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (token) {
-      // force = true: bypass deduplication guard so post-unlock syncs always work
       await fetchProfile(token, true);
     }
-  };
+  }, [fetchProfile]);
 
-  const updateUser = async (updateData) => {
+  const updateUser = useCallback(async (updateData) => {
     if (!isLoggedIn || !user) return;
     try {
       const token = localStorage.getItem('token');
@@ -249,7 +196,9 @@ export const AuthProvider = ({ children }) => {
       
       if (res.ok) {
         const data = await res.json();
-        setUser(prev => ({ ...prev, ...data }));
+        if (mountedRef.current) {
+          setUser(prev => ({ ...prev, ...data }));
+        }
         return { success: true };
       } else {
         const errData = await res.json();
@@ -259,10 +208,82 @@ export const AuthProvider = ({ children }) => {
       console.error('Lỗi cập nhật profile:', err);
       return { success: false, message: err.message };
     }
-  };
+  }, [isLoggedIn, user]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    
+    const initAuth = async () => {
+      try {
+        const authType = localStorage.getItem('authType');
+        if (authType === 'custom') {
+          const token = localStorage.getItem('token');
+          if (token) {
+            await fetchProfile(token);
+          } else {
+            if (mountedRef.current) setLoading(false);
+          }
+        } else {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            localStorage.setItem('token', session.access_token);
+            localStorage.setItem('authType', 'supabase');
+            await fetchProfile(session.access_token);
+          } else {
+            if (mountedRef.current) setLoading(false);
+          }
+        }
+      } catch (err) {
+        console.error('Auth Init Error:', err);
+        if (mountedRef.current) setLoading(false);
+      }
+    };
+
+    initAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      try {
+        if (event === 'SIGNED_IN' && session) {
+          localStorage.setItem('token', session.access_token);
+          localStorage.setItem('authType', 'supabase');
+          await fetchProfile(session.access_token);
+        } else if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('authType');
+          if (mountedRef.current) {
+            setUser(null);
+            setIsLoggedIn(false);
+          }
+          if (window.location.pathname !== '/') {
+            window.location.href = '/';
+          }
+        }
+      } catch (authErr) {
+        console.error('Lỗi Auth State Change:', authErr);
+      }
+    });
+
+    return () => {
+      mountedRef.current = false;
+      subscription.unsubscribe();
+    };
+  }, [fetchProfile]);
+
+  const value = useMemo(() => ({
+    user,
+    isLoggedIn,
+    loading,
+    login,
+    loginWithGoogle,
+    register,
+    logout,
+    updateProgress,
+    refreshUser,
+    updateUser
+  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser]);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, loading }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
