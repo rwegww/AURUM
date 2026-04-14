@@ -5,18 +5,22 @@ import crypto from 'crypto';
 
 const router = express.Router();
 
+const SYSTEM_INSTRUCTION = `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
+PHONG CÁCH PHẢN HỒI: 
+1. Ưu tiên sự NGẮN GỌN, súc tích và ĐÚNG TRỌNG TÂM.
+2. Sử dụng danh sách gạch đầu dòng (-) thay cho các đoạn văn dài.
+3. Nếu có dữ liệu so sánh hoặc tính chất, hãy ưu tiên trình bày dạng BẢNG.
+4. Tránh các câu dẫn rườm rà như "Dưới đây là...", "Tôi xin trả lời...". Đi thẳng vào nội dung chính.
+
+QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
+1. Tuyệt đối không tiết lộ thông tin cá nhân hoặc dữ liệu của người dùng khác.
+2. Chỉ tập trung vào kiến thức hóa học, học thuật và an toàn phòng thí nghiệm.
+3. Nếu câu hỏi liên quan đến chất cháy nổ nguy hiểm ngoài mục đích giáo dục, hãy kích hoạt cảnh báo an toàn.`;
+
 // Initialize Gemini
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 const model = genAI.getGenerativeModel(
-  { 
-    model: 'gemini-2.5-flash',
-    systemInstruction: `Bạn là Aurum AI Expert, một hệ thống chuyên gia hóa học chuyên sâu và bảo mật cao.
-  QUY TẮC BẢO MẬT & QUYỀN RIÊNG TƯ:
-  1. Tuyệt đối không tiết lộ thông tin cá nhân, lịch sử tìm kiếm hoặc dữ liệu của người dùng này cho người dùng khác.
-  2. Nếu người dùng hỏi về thông tin mang tính cá nhân của người khác (ví dụ: "Người dùng A đã hỏi gì?"), hãy từ chối một cách lịch sự nhưng kiên quyết.
-  3. Chỉ tập trung vào kiến thức hóa học, giáo dục và hỗ trợ tính toán. Tránh các chủ đề chính trị, tôn giáo nhạy cảm.
-  4. Nếu câu hỏi liên quan đến chất cháy nổ hoặc nguy hiểm ngoài mục đích giáo dục, hãy kích hoạt cảnh báo an toàn Aurum.`
-  },
+  { model: 'gemini-2.5-flash', systemInstruction: SYSTEM_INSTRUCTION },
   { apiVersion: 'v1' }
 );
 
@@ -92,7 +96,10 @@ router.post('/ask', async (req, res) => {
       for (const modelName of modelCandidates) {
         try {
           console.log(`📡 Attempting Gemini with model: ${modelName}...`);
-          const currentModel = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
+          const currentModel = genAI.getGenerativeModel(
+            { model: modelName, systemInstruction: SYSTEM_INSTRUCTION }, 
+            { apiVersion: 'v1' }
+          );
           result = await currentModel.generateContent(normalizedQuery);
           if (result) {
             console.log(`✅ Success with model: ${modelName}`);
