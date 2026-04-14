@@ -1,4 +1,6 @@
 import './_init.js';
+import { supabase } from './lib/supabase.js';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import express from 'express';
 import cors from 'cors';
 
