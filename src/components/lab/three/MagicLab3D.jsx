@@ -23,7 +23,9 @@ import {
   FlaskConical,
   Info,
   Maximize,
-  Minimize
+  Minimize,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -70,6 +72,7 @@ const MagicLab3D = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMessageVisible, setIsMessageVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // --- Fullscreen Logic ---
   const toggleFullscreen = useCallback(() => {
@@ -329,84 +332,80 @@ const MagicLab3D = () => {
           </div>
         </div>
 
-        {/* Middle Content - Interaction Area */}
-        <div className="flex-1 relative flex items-center justify-center pointer-events-none">
-           {/* Floating Message */}
-           <AnimatePresence>
-             {isMessageVisible && (
-               <motion.div 
-                 initial={{ opacity: 0, y: 20 }}
-                 animate={{ opacity: 1, y: 0 }}
-                 exit={{ opacity: 0, y: -20 }}
-                 className="absolute top-1/4 bg-blue-600/20 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl text-blue-200 text-sm font-medium shadow-2xl"
-               >
-                 {activeBeaker.reactionMessage}
-               </motion.div>
-             )}
-           </AnimatePresence>
-        </div>
+        {/* Middle & Bottom Layout */}
+        <div className="flex-1 flex justify-between items-end pointer-events-none mt-6 relative">
+          {/* Floating Reaction Message */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 pointer-events-none z-[50]">
+            <AnimatePresence>
+              {isMessageVisible && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="bg-blue-600/20 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl text-blue-200 text-sm font-medium shadow-2xl"
+                >
+                  {activeBeaker.reactionMessage}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
-        {/* Bottom Panel */}
-        <div className="flex gap-6 items-end pointer-events-auto h-[240px] shrink-0">
-          {/* Left Column - Tools */}
-          <div className="flex flex-col gap-3">
-            <div className="bg-black/30 backdrop-blur-md p-2 rounded-3xl border border-white/10 flex flex-col gap-2">
+          {/* Left Sidebar - Chemicals & Tools */}
+          <motion.div 
+            initial={false}
+            animate={{ x: isSidebarOpen ? 0 : -340, opacity: isSidebarOpen ? 1 : 0.4 }}
+            className="relative w-[340px] h-[75%] bg-black/50 backdrop-blur-2xl border border-white/10 rounded-[40px] p-6 pointer-events-auto flex flex-col shadow-2xl"
+          >
+            {/* Toggle Button */}
+            <button 
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-20 bg-blue-600 hover:bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-white/20 transition-all"
+            >
+              {isSidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+            </button>
+
+            {/* Tools Area */}
+            <div className="flex justify-between items-center mb-6 bg-white/5 p-2 rounded-2xl border border-white/5">
               <button 
                 onClick={handleToggleHeat}
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${activeBeaker.isHeating ? 'bg-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.4)]' : 'hover:bg-white/5 text-white/50'}`}
+                className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${activeBeaker.isHeating ? 'bg-orange-500 text-white shadow-lg' : 'hover:bg-white/5 text-white/50'}`}
                 title="Đun nóng"
               >
-                <Flame size={24} />
+                <Flame size={20} />
               </button>
               <button 
                 onClick={handleClearBeaker}
-                className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-red-500/20 text-white/50 hover:text-red-400 transition-all"
-                title="Dọn dép"
+                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-red-500/20 text-white/50 hover:text-red-400 transition-all"
+                title="Làm mới cốc"
               >
-                <RotateCcw size={24} />
+                <RotateCcw size={20} />
               </button>
               <button 
-                onClick={() => {}} 
-                className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-blue-500/20 text-white/50 hover:text-blue-400 transition-all opacity-30 cursor-not-allowed"
-                title="Cắt lát (Coming Soon)"
+                onClick={addBeaker}
+                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:text-green-400 transition-all"
+                title="Thêm cốc mới"
               >
-                <Scissors size={24} />
+                <Plus size={20} />
               </button>
             </div>
 
-            <div className="bg-black/30 backdrop-blur-md p-2 rounded-3xl border border-white/10 flex flex-col gap-2">
-               <button 
-                 onClick={addBeaker}
-                 className="w-14 h-14 rounded-2xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:bg-green-400 transition-all"
-                 title="Thêm cốc"
-               >
-                 <Plus size={24} />
-               </button>
+            {/* Search Bar */}
+            <div className="relative mb-4 group">
+               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400">
+                  <Search size={14} />
+               </div>
+               <input 
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Tìm hóa chất..."
+                  className="w-full bg-black/40 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs outline-none focus:border-blue-500/50 transition-all"
+               />
             </div>
-          </div>
 
-            {/* Chemicals Inventory */}
-            <div className="flex-1 bg-black/30 backdrop-blur-md rounded-[40px] border border-white/10 p-6 flex flex-col shadow-2xl relative overflow-hidden group/inventory">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 group-hover/inventory:opacity-100 transition-opacity" />
-              
-              {/* Search Bar */}
-              <div className="relative mb-4 group px-1">
-                 <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400 transition-colors">
-                    <Search size={14} />
-                 </div>
-                 <input 
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Tìm hóa chất..."
-                    className="w-full bg-black/40 border border-white/5 rounded-xl py-2 pl-9 pr-4 text-xs outline-none focus:border-blue-500/50 focus:bg-black/60 transition-all placeholder:text-white/20"
-                 />
-              </div>
-
-              {/* Chemicals Grid */}
-              <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
-
-              <div className="grid grid-cols-10 gap-2">
+            {/* Chemicals Grid */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+              <div className="grid grid-cols-3 gap-2">
                 {availableChemicals.map((chem) => (
                   <motion.button
                     key={chem.formula + chem.name}
@@ -416,29 +415,16 @@ const MagicLab3D = () => {
                     disabled={isPouringFormula !== null}
                     className={`group relative p-2 rounded-xl border transition-all ${isPouringFormula === chem.formula ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/10 hover:border-white/30'}`}
                   >
-                    {/* Status Badge */}
-                    {isPouringFormula === chem.formula && (
-                       <div className="absolute -top-2 -right-2 w-5 h-5 bg-white rounded-full flex items-center justify-center animate-bounce">
-                         <div className="w-2 h-2 bg-blue-600 rounded-full" />
-                       </div>
-                    )}
-                    
-                    {/* Icon/Symbol */}
-                    <div className="aspect-square flex items-center justify-center rounded-xl bg-black/40 mb-2 overflow-hidden relative">
-                      <div 
-                        className="absolute inset-0 opacity-20 blur-lg" 
-                        style={{ backgroundColor: chem.color }} 
-                      />
+                    <div className="aspect-square flex items-center justify-center rounded-lg bg-black/40 mb-1 overflow-hidden relative">
+                      <div className="absolute inset-0 opacity-20 blur-lg" style={{ backgroundColor: chem.color }} />
                       {chem.state === 'solid' ? (
-                         <div className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)' }} />
+                         <div className="w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)' }} />
                       ) : (
-                         <div className="w-5 h-7 border-2 border-white/20 rounded-b-lg relative overflow-hidden">
+                         <div className="w-4 h-6 border-2 border-white/20 rounded-b-md relative overflow-hidden">
                            <div className="absolute bottom-0 w-full h-1/2 opacity-60" style={{ backgroundColor: chem.color }} />
                          </div>
                       )}
                     </div>
-
-                    {/* Label */}
                     <div className="flex flex-col items-center leading-none">
                       <span className="text-[10px] font-black tracking-tight">{chem.formula}</span>
                       <span className="text-[7px] text-white/40 font-bold uppercase truncate w-full text-center mt-0.5">{chem.name}</span>
@@ -447,10 +433,10 @@ const MagicLab3D = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column - Beakers Selector */}
-          <div className="w-24 bg-black/30 backdrop-blur-md rounded-3xl border border-white/10 p-2 flex flex-col gap-2 overflow-y-auto max-h-full custom-scrollbar">
+          <div className="w-24 bg-black/30 backdrop-blur-md rounded-3xl border border-white/10 p-2 flex flex-col gap-2 overflow-y-auto max-h-[75%] custom-scrollbar pointer-events-auto">
             {beakers.map((b, idx) => (
               <div key={b.id} className="relative group">
                 <button
