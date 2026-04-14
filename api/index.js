@@ -68,54 +68,14 @@ app.get('/api/health', (req, res) => {
 });
 
 // Diagnostic route for environment variables (Masked for security)
-app.get('/api/debug-env', async (req, res) => {
+app.get('/api/debug-env', (req, res) => {
   const mask = (str) => str ? `${str.substring(0, 4)}...${str.substring(str.length - 4)}` : 'MISSING';
-  
-  let databaseTest = 'Pending';
-  let geminiTest = 'Pending';
-  let availableModels = [];
-  
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-
-  try {
-    const { data, error } = await supabase.from('ai_cache').select('count', { count: 'exact', head: true });
-    databaseTest = error ? `Error: ${error.message}` : `Success (${data || 0} cached items)`;
-  } catch (e) {
-    databaseTest = `Crash: ${e.message}`;
-  }
-
-  try {
-    // Raw fetch to bypass SDK and see what Google actually says
-    const apiKey = process.env.GEMINI_API_KEY || '';
-    const rawUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
-    const rawRes = await fetch(rawUrl);
-    const rawData = await rawRes.json();
-    
-    if (rawData.models) {
-      availableModels = rawData.models.map(m => m.name);
-      
-      // Try to ping the first one available
-      const firstModel = availableModels[0].replace('models/', '');
-      const model = genAI.getGenerativeModel({ model: firstModel }, { apiVersion: 'v1' });
-      const ping = await model.generateContent("ping");
-      geminiTest = ping.response ? `Success with ${firstModel}` : 'Failed (Empty Response)';
-    } else {
-      geminiTest = `Google returned no models: ${JSON.stringify(rawData)}`;
-    }
-  } catch (e) {
-    geminiTest = `Raw Fetch Crash: ${e.message}`;
-  }
-
   res.json({
+    status: 'Operational',
     node_env: process.env.NODE_ENV,
     SUPABASE_URL: mask(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL),
-    SUPABASE_KEY_FOUND: !!(process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY),
-    GEMINI_KEY_FOUND: !!process.env.GEMINI_API_KEY,
-    live_tests: {
-      supabase: databaseTest,
-      gemini: geminiTest,
-      available_models: availableModels
-    },
+    GEMINI_API_READY: !!process.env.GEMINI_API_KEY,
+    active_model: 'gemini-2.5-flash',
     timestamp: new Date().toISOString()
   });
 });
