@@ -1,9 +1,23 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import MoleculeBackground from './MoleculeBackground';
 
+const MemoizedMoleculeBackground = memo(MoleculeBackground);
+
+const BenefitItem = memo(({ icon, title, desc }) => (
+  <div className="flex items-center gap-4 group">
+    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center flex-shrink-0 transition-all border border-white/10 group-hover:scale-110 shadow-lg text-white">
+      {icon}
+    </div>
+    <div>
+      <h3 className="font-bold text-sm font-sora">{title}</h3>
+      <p className="text-[11px] text-white/60 font-medium mt-0.5">{desc}</p>
+    </div>
+  </div>
+));
+
 const AuthLayout = ({ children }) => {
+
 
   return (
     <div className="min-h-screen w-full flex flex-col md:items-center md:justify-center bg-[#fdf6e3] md:bg-[#fffbf0] overflow-hidden relative md:p-8 font-inter">
@@ -26,7 +40,7 @@ const AuthLayout = ({ children }) => {
 
       {/* Background for Desktop only */}
       <div className="hidden md:block">
-        <MoleculeBackground />
+        <MemoizedMoleculeBackground />
       </div>
       
       {/* Grid texture for Desktop only */}
@@ -40,11 +54,7 @@ const AuthLayout = ({ children }) => {
       </Link>
 
       {/* Main Premium Container */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative z-10 w-full max-w-6xl md:bg-white rounded-t-[32px] md:rounded-[56px] md:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] md:border md:border-[#e8e8e8] overflow-hidden flex flex-col md:flex-row flex-1 md:flex-none md:h-[750px] md:max-h-[90vh]"
-      >
+      <div className="relative z-10 w-full max-w-6xl md:bg-white rounded-t-[32px] md:rounded-[56px] md:shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] md:border md:border-[#e8e8e8] overflow-hidden flex flex-col md:flex-row flex-1 md:flex-none md:h-[750px] md:max-h-[90vh]">
         {/* Left Side: Branding & Visuals (Desktop) */}
         <div className="hidden md:flex w-full md:w-[45%] bg-gradient-to-br from-[#76c034] to-[#4caf50] p-16 flex-col justify-between text-white relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
@@ -105,7 +115,7 @@ const AuthLayout = ({ children }) => {
            </div>
         </div>
 
-      </motion.div>
+      </div>
 
       {/* Decorative background elements outside the container */}
       <div className="fixed -bottom-32 -right-32 w-[500px] h-[500px] bg-viet-green/5 rounded-full blur-[120px] pointer-events-none" />
@@ -114,17 +124,5 @@ const AuthLayout = ({ children }) => {
   );
 };
 
-const BenefitItem = ({ icon, title, desc }) => (
-  <div className="flex items-center gap-4 group">
-    <div className="w-10 h-10 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center flex-shrink-0 transition-all border border-white/10 group-hover:scale-110 shadow-lg text-white">
-      {icon}
-    </div>
-    <div>
-      <h3 className="font-bold text-sm font-sora">{title}</h3>
-      <p className="text-[11px] text-white/60 font-medium mt-0.5">{desc}</p>
-    </div>
-  </div>
-);
-
-
 export default AuthLayout;
+

@@ -11,14 +11,19 @@ export const AuthProvider = ({ children }) => {
 
   const fetchProfile = async (token, force = false) => {
     if (!token) {
-      setUser(null);
-      setIsLoggedIn(false);
+      if (user !== null || isLoggedIn !== false) {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
       setLoading(false);
       return;
     }
 
     // Prevent redundant fetches for the same token — unless forced (e.g. after unlock)
-    if (!force && fetchingTokenRef.current === token) return;
+    if (!force && fetchingTokenRef.current === token) {
+      setLoading(false);
+      return;
+    }
     fetchingTokenRef.current = token;
 
     try {

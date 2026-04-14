@@ -4,7 +4,22 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/auth/AuthLayout';
 
+const RoleCard = ({ active, onClick, title, icon }) => (
+  <button 
+    type="button" onClick={onClick}
+    className={`p-3 md:p-3 rounded-xl border flex items-center gap-3 transition-all ${
+      active ? 'bg-viet-green/5 border-viet-green text-viet-green shadow-lg shadow-viet-green/5' : 'bg-[#fdf0e0] md:bg-white border-[#f3e3d0] md:border-viet-border text-slate-500 opacity-60 hover:opacity-100'
+    }`}
+  >
+    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${active ? 'bg-white shadow-sm' : 'bg-white/50 md:bg-slate-50'}`}>
+       {icon}
+    </div>
+    <span className="text-[13px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest">{title}</span>
+  </button>
+);
+
 const Register = () => {
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -184,21 +199,5 @@ const Register = () => {
     </AuthLayout>
   );
 };
-
-const RoleCard = ({ active, onClick, title, icon }) => (
-  <button 
-    type="button" onClick={onClick}
-    className={`p-3 md:p-3 rounded-xl border flex items-center gap-3 transition-all ${
-      active ? 'bg-viet-green/5 border-viet-green text-viet-green shadow-lg shadow-viet-green/5' : 'bg-[#fdf0e0] md:bg-white border-[#f3e3d0] md:border-viet-border text-slate-500 opacity-60 hover:opacity-100'
-    }`}
-  >
-    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${active ? 'bg-white shadow-sm' : 'bg-white/50 md:bg-slate-50'}`}>
-       {icon}
-    </div>
-    <span className="text-[13px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest">{title}</span>
-  </button>
-);
-
-
 
 export default Register;
