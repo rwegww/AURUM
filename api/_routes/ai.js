@@ -81,26 +81,34 @@ router.post('/ask', async (req, res) => {
     console.log(`🤖 Gemini Search Starting: "${normalizedQuery}"`);
     
     try {
-      // 3. Call Gemini AI (Multi-model Fallback Logic)
+      // 3. Call Gemini AI (Enhanced Multi-model Fallback Logic)
       const startTime = Date.now();
       let result;
-      let lastError = null;
+      let attemptLogs = [];
       
-      const modelCandidates = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro'];
+      // Order: Most available/stable -> Newest/Powerful
+      const modelCandidates = ['gemini-1.5-flash-8b', 'gemini-1.5-flash', 'gemini-2.5-flash', 'gemini-pro'];
 
       for (const modelName of modelCandidates) {
         try {
+          console.log(`📡 Attempting Gemini with model: ${modelName}...`);
           const currentModel = genAI.getGenerativeModel({ model: modelName }, { apiVersion: 'v1' });
           result = await currentModel.generateContent(normalizedQuery);
-          if (result) break; // Found a working model
+          if (result) {
+            console.log(`✅ Success with model: ${modelName}`);
+            attemptLogs.push(`${modelName}: Success`);
+            break; 
+          }
         } catch (e) {
-          console.warn(`⚠️ Model ${modelName} failed/overloaded:`, e.message);
-          lastError = e;
+          console.warn(`⚠️ Model ${modelName} failed:`, e.message);
+          attemptLogs.push(`${modelName}: ${e.message}`);
           // Continue to next model
         }
       }
 
-      if (!result) throw lastError || new Error('All Gemini models are currently unavailable');
+      if (!result) {
+        throw new Error(`All models failed. History: ${attemptLogs.join(' | ')}`);
+      }
 
       const response = await result.response;
       const responseText = response.text();
@@ -111,7 +119,8 @@ router.post('/ask', async (req, res) => {
         source: 'gemini_ai',
         suggestions: ['Tìm hiểu thêm', 'Ví dụ thực tế', 'Phản ứng liên quan'],
         timestamp: new Date().toISOString(),
-        generation_time_ms: duration
+        generation_time_ms: duration,
+        engine: attemptLogs[attemptLogs.length - 1]
       };
 
       // 4. Persistence (Background)
@@ -129,15 +138,13 @@ router.post('/ask', async (req, res) => {
 
       return res.json(responseObj);
     } catch (geminiErr) {
-      console.error('💥 Gemini API Error:', geminiErr.message);
-      const isHighDemand = geminiErr.message.includes('high demand') || geminiErr.message.includes('503');
+      console.error('💥 Ultimate AI Failure:', geminiErr.message);
       
       return res.status(503).json({
-        error: isHighDemand ? 'AI Overloaded' : 'AI Service Error',
-        message: isHighDemand 
-          ? 'Hệ thống AI đang quá tải yêu cầu trên toàn cầu. Vui lòng thử lại sau 30-60 giây.' 
-          : 'Hệ thống AI đang gặp sự cố kỹ thuật. Vui lòng thử lại sau.',
-        details: geminiErr.message
+        error: 'AI Systems Overloaded',
+        message: 'Tất cả các máy chủ AI của Google hiện đang quá tải hoặc không khả dụng cho khu vực của bạn.',
+        details: geminiErr.message,
+        hint: 'Hãy thử lại sau 1-2 phút hoặc kiểm tra kết nối mạng của bạn.'
       });
     }
 
