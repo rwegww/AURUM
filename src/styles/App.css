@@ -62,6 +62,15 @@ h1, h2, h3, h4, h5, h6 {
   @apply bg-viet-green/10 text-viet-green;
 }
 
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 /* Custom Scrollbar Styling */
 .custom-scrollbar::-webkit-scrollbar {
   width: 5px;
@@ -82,24 +91,23 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(118, 192, 52, 0.4); /* viet-green with transparency */
 }
 
-/* Global scrollbar for the whole site */
+/* Global scrollbar for the whole site - Light Theme Optimized */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0c10;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a1c23;
-  border-radius: 20px;
-  border: 2px solid #0a0c10;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #76c034;
+  background: rgba(118, 192, 52, 0.3);
 }
 
 /* Glassmorphism Utilities */
