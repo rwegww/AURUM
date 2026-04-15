@@ -4849,7 +4849,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_206",
+    id: "rx_301",
     name: "Đốt cháy Cacbon",
     type: "combination",
     reactants: [
@@ -4872,7 +4872,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_207",
+    id: "rx_302",
     name: "Canxi tác dụng với nước",
     type: "single-replacement",
     reactants: [
@@ -4895,7 +4895,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_208",
+    id: "rx_303",
     name: "Đốt cháy Canxi",
     type: "combination",
     reactants: [
@@ -4918,7 +4918,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_209",
+    id: "rx_304",
     name: "Liti tác dụng với nước",
     type: "single-replacement",
     reactants: [
@@ -4941,7 +4941,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_210",
+    id: "rx_305",
     name: "Kali tác dụng với nước",
     type: "single-replacement",
     reactants: [
@@ -4964,7 +4964,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_211",
+    id: "rx_306",
     name: "Kali tác dụng với Clo",
     type: "combination",
     reactants: [
@@ -4987,7 +4987,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_212",
+    id: "rx_307",
     name: "Bari tác dụng với nước",
     type: "single-replacement",
     reactants: [
@@ -5010,7 +5010,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_213",
+    id: "rx_308",
     name: "Crom tác dụng với Clo",
     type: "combination",
     reactants: [
@@ -5033,7 +5033,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_214",
+    id: "rx_309",
     name: "Bạc tác dụng với Axit Nitric đặc",
     type: "redox",
     reactants: [
@@ -5057,7 +5057,7 @@ export const reactions = [
     isBlocked: false
   },
   {
-    id: "rx_215",
+    id: "rx_310",
     name: "Oxy hóa Bạc",
     type: "combination",
     reactants: [
