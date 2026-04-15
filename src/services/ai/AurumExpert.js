@@ -153,14 +153,24 @@ class AurumExpertEngine {
     }
 
     const foundTokens = this.extractChemicals(query);
-    const isReactionQuery = q.includes('+') || q.includes('tác dụng') || q.includes('phản ứng') || q.includes('cho vào') || q.includes('dự đoán') || q.includes('tạo ra') || q.includes('điều chế');
+    
+    // 1. Prioritize Hybrid AI (Backend) for Natural Language Knowledge Queries
+    // These queries are better handled by Gemini + DB Context rather than local heuristics
+    const isKnowledgeQuery = q.includes('cách') || q.includes('làm sao') || q.includes('tại sao') || q.includes('là gì') || q.includes('điều chế') || q.includes('tạo ra');
+    
+    if (isKnowledgeQuery) {
+      const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history });
+      if (hybridResult) return hybridResult;
+    }
+
+    // 2. Specialized Local Lookups (Elements, Reactions) - Only for specific patterns
+    const isReactionQuery = q.includes('+') || q.includes('tác dụng') || q.includes('phản ứng') || q.includes('cho vào') || q.includes('dự đoán');
     
     if (isReactionQuery) {
       if (foundTokens.length >= 2) {
         const result = this.handleReactionRequest(foundTokens);
         if (result) return result;
       } else if (foundTokens.length === 1) {
-        // "Phản ứng có Cl2" - look for reactions containing Cl2
         const result = this.handleReactionDiscovery(foundTokens[0]);
         if (result) return result;
       }
@@ -180,15 +190,23 @@ class AurumExpertEngine {
     }
 
     // 3. Hybrid DB + Gemini Call (The "Brain" upgrade)
+    const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history });
+    if (hybridResult) return hybridResult;
+
+    // 4. Curriculum / Meta triggers (Fallback)
+    if (q.includes('vai trò')) return this.handleRoleCheck(role);
+    if (q.includes('bài học') || q.includes('lộ trình')) return this.handleLessonHelp(role);
+
+    return this.handleFallback();
+  }
+
+  async callHybridAI(query, context) {
     try {
       console.log('🔗 Calling Hybrid AI Engine...');
       const response = await fetch('/api/ai/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          query, 
-          context: { userId, username, role, user_api_key, chat_history } 
-        })
+        body: JSON.stringify({ query, context })
       });
 
       const result = await response.json();
@@ -196,21 +214,15 @@ class AurumExpertEngine {
       if (response.ok) {
         return result;
       } else {
-        // Show the actual error message from backend (e.g. quota exceeded)
         return {
           message: `⚠️ **[Hệ thống AI]**\n\n${result.message || 'Hệ thống đang bận, vui lòng thử lại sau.'}`,
           suggestions: result.error === 'AI Service Temporarily Unavailable' ? ['Thiết lập API Key cá nhân'] : []
         };
       }
     } catch (apiErr) {
-      console.warn('⚠️ Hybrid AI Offline, following curriculum lookup:', apiErr.message);
+      console.warn('⚠️ Hybrid AI Offline:', apiErr.message);
+      return null;
     }
-
-    // 4. Curriculum / Meta triggers (Fallback)
-    if (q.includes('vai trò')) return this.handleRoleCheck(role);
-    if (q.includes('bài học') || q.includes('lộ trình')) return this.handleLessonHelp(role);
-
-    return this.handleFallback();
   }
 
   findTheoryMatch(query) {
