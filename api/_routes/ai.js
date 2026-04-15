@@ -78,8 +78,8 @@ router.post('/ask', async (req, res) => {
         console.log('📡 BYOK Active: Using Personal API Key...');
         try {
           const personalGenAI = new GoogleGenerativeAI(context.user_api_key);
-          // Try 1.5-flash as default for new keys
-          const personalModel = personalGenAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' });
+          // Use gemini-2.5-flash (the only model with quota on new Google accounts)
+          const personalModel = personalGenAI.getGenerativeModel({ model: 'gemini-2.5-flash' }, { apiVersion: 'v1' });
           const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
           const result = await personalModel.generateContent(fullPrompt);
           responseText = (await result.response).text();
