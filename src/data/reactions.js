@@ -5079,6 +5079,339 @@ export const reactions = [
     safetyWarning: "Thí nghiệm an toàn",
     isBlocked: false
   },
+  {
+    id: "rx_311",
+    name: "Flo tác dụng với Hydro",
+    type: "combination",
+    reactants: [
+      { formula: "F₂", coeff: 1, name: "Khí Flo" },
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+    ],
+    products: [
+      { formula: "HF", coeff: 2, name: "Hydro Florua" }
+    ],
+    equation: "F₂ + H₂ → 2HF",
+    gradeLevel: 10,
+    category: "Halogen",
+    conditions: "Phản ứng ngay cả trong bóng tối ở nhiệt độ rất thấp",
+    observation: "Phản ứng nổ mạnh ngay cả ở điều kiện khắc nghiệt.",
+    energy: -542,
+    animation: "explosion",
+    dangerLevel: 2,
+    safetyWarning: "Cực kỳ nguy hiểm, phản ứng nổ",
+    isBlocked: false
+  },
+  {
+    id: "rx_312",
+    name: "Flo tác dụng với nước",
+    type: "redox",
+    reactants: [
+      { formula: "F₂", coeff: 2, name: "Khí Flo" },
+      { formula: "H₂O", coeff: 2, name: "Nước" }
+    ],
+    products: [
+      { formula: "HF", coeff: 4, name: "Hydro Florua" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+    ],
+    equation: "2F₂ + 2H₂O → 4HF + O₂↑",
+    gradeLevel: 10,
+    category: "Halogen",
+    conditions: "Nhiệt độ thường",
+    observation: "Flo bốc cháy trong nước, giải phóng Oxy.",
+    energy: -750,
+    animation: "burn",
+    dangerLevel: 2,
+    safetyWarning: "Phản ứng mãnh liệt",
+    isBlocked: false
+  },
+  {
+    id: "rx_313",
+    name: "Silic tác dụng với Magie",
+    type: "combination",
+    reactants: [
+      { formula: "Si", coeff: 1, name: "Silic" },
+      { formula: "Mg", coeff: 2, name: "Magiê" }
+    ],
+    products: [
+      { formula: "Mg₂Si", coeff: 1, name: "Magiê Silixua" }
+    ],
+    equation: "Si + 2Mg →(t°) Mg₂Si",
+    gradeLevel: 11,
+    category: "Á kim",
+    conditions: "Nhiệt độ cao",
+    observation: "Tạo hợp chất silixua kim loại.",
+    energy: -77,
+    animation: "smoke",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_314",
+    name: "Silic tác dụng với Flo",
+    type: "combination",
+    reactants: [
+      { formula: "Si", coeff: 1, name: "Silic" },
+      { formula: "F₂", coeff: 2, name: "Khí Flo" }
+    ],
+    products: [
+      { formula: "SiF₄", coeff: 1, name: "Silic Tetraflorua" }
+    ],
+    equation: "Si + 2F₂ → SiF₄",
+    gradeLevel: 11,
+    category: "Á kim",
+    conditions: "Nhiệt độ thường",
+    observation: "Silic bùng cháy trong luồng khí Flo.",
+    energy: -1615,
+    animation: "burn",
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_315",
+    name: "Bo tác dụng với Oxy",
+    type: "combination",
+    reactants: [
+      { formula: "B", coeff: 4, name: "Bo" },
+      { formula: "O₂", coeff: 3, name: "Khí Oxy" }
+    ],
+    products: [
+      { formula: "B₂O₃", coeff: 2, name: "Bo Trioxit" }
+    ],
+    equation: "4B + 3O₂ →(t°) 2B₂O₃",
+    gradeLevel: 11,
+    category: "Á kim",
+    conditions: "Nhiệt độ cao",
+    observation: "Bo cháy sáng tạo chất rắn màu trắng.",
+    energy: -1273,
+    animation: "burn",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_316",
+    name: "Beri tác dụng với Axit Clohidric",
+    type: "single-replacement",
+    reactants: [
+      { formula: "Be", coeff: 1, name: "Beri" },
+      { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
+    ],
+    products: [
+      { formula: "BeCl₂", coeff: 1, name: "Beri Clorua" },
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+    ],
+    equation: "Be + 2HCl → BeCl₂ + H₂↑",
+    gradeLevel: 10,
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Beri tan dần, sủi bọt khí không màu.",
+    energy: -450,
+    animation: "fizz",
+    dangerLevel: 2,
+    safetyWarning: "Hợp chất Beri rất độc",
+    isBlocked: false
+  },
+  {
+    id: "rx_317",
+    name: "Cacbon khử Đồng(II) Oxit",
+    type: "redox",
+    reactants: [
+      { formula: "C", coeff: 1, name: "Cacbon" },
+      { formula: "CuO", coeff: 2, name: "Đồng(II) Oxit" }
+    ],
+    products: [
+      { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" },
+      { formula: "Cu", coeff: 2, name: "Đồng" }
+    ],
+    equation: "C + 2CuO →(t°) CO₂↑ + 2Cu",
+    gradeLevel: 9,
+    category: "Phi kim",
+    conditions: "Nhiệt độ cao",
+    observation: "Bột màu đen chuyển dần sang màu đỏ của kim loại Đồng.",
+    energy: -80,
+    animation: "color-change",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_318",
+    name: "Cacbon khử Sắt(III) Oxit",
+    type: "redox",
+    reactants: [
+      { formula: "C", coeff: 3, name: "Cacbon" },
+      { formula: "Fe₂O₃", coeff: 2, name: "Sắt(III) Oxit" }
+    ],
+    products: [
+      { formula: "CO₂", coeff: 3, name: "Khí Cacbonic" },
+      { formula: "Fe", coeff: 4, name: "Sắt" }
+    ],
+    equation: "3C + 2Fe₂O₃ →(t°) 3CO₂↑ + 4Fe",
+    gradeLevel: 9,
+    category: "Phi kim",
+    conditions: "Nhiệt độ cao",
+    observation: "Dùng trong công nghiệp luyện gang thép.",
+    energy: -460,
+    animation: "smoke",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_319",
+    name: "Canxi tác dụng với Clo",
+    type: "combination",
+    reactants: [
+      { formula: "Ca", coeff: 1, name: "Canxi" },
+      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
+    ],
+    products: [
+      { formula: "CaCl₂", coeff: 1, name: "Canxi Clorua" }
+    ],
+    equation: "Ca + Cl₂ →(t°) CaCl₂",
+    gradeLevel: 10,
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao",
+    observation: "Canxi cháy sáng trong khí Clo tạo muối trắng.",
+    energy: -795,
+    animation: "smoke",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_320",
+    name: "Bạc tác dụng với Lưu huỳnh",
+    type: "combination",
+    reactants: [
+      { formula: "Ag", coeff: 2, name: "Bạc" },
+      { formula: "S", coeff: 1, name: "Lưu huỳnh" }
+    ],
+    products: [
+      { formula: "Ag₂S", coeff: 1, name: "Bạc Sunfua" }
+    ],
+    equation: "2Ag + S →(t°) Ag₂S",
+    gradeLevel: 10,
+    category: "Kim loại",
+    conditions: "Đun nóng",
+    observation: "Tạo chất rắn màu đen, giải thích hiện tượng bạc bị đen khi tiếp xúc với lưu huỳnh.",
+    energy: -32.6,
+    animation: "color-change",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_321",
+    name: "Khắc thủy tinh bằng HF",
+    type: "double-replacement",
+    reactants: [
+      { formula: "SiO₂", coeff: 1, name: "Silic Đioxit" },
+      { formula: "HF", coeff: 4, name: "Axit Floridric" }
+    ],
+    products: [
+      { formula: "SiF₄", coeff: 1, name: "Silic Tetraflorua" },
+      { formula: "H₂O", coeff: 2, name: "Nước" }
+    ],
+    equation: "SiO₂ + 4HF → SiF₄↑ + 2H₂O",
+    gradeLevel: 11,
+    category: "Phi kim",
+    conditions: "Nhiệt độ thường",
+    observation: "Bề mặt thủy tinh bị ăn mòn, mờ đi.",
+    energy: -191,
+    animation: "fizz",
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_322",
+    name: "Bo tác dụng với Magie",
+    type: "combination",
+    reactants: [
+      { formula: "B", coeff: 2, name: "Bo" },
+      { formula: "Mg", coeff: 3, name: "Magiê" }
+    ],
+    products: [
+      { formula: "Mg₃B₂", coeff: 1, name: "Magiê Borua" }
+    ],
+    equation: "2B + 3Mg →(t°) Mg₃B₂",
+    gradeLevel: 11,
+    category: "Á kim",
+    conditions: "Nhiệt độ cao",
+    observation: "Tạo hợp chất borua kim loại.",
+    energy: -120,
+    animation: "smoke",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_323",
+    name: "Silic tác dụng với Oxy",
+    type: "combination",
+    reactants: [
+      { formula: "Si", coeff: 1, name: "Silic" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+    ],
+    products: [
+      { formula: "SiO₂", coeff: 1, name: "Silic Đioxit" }
+    ],
+    equation: "Si + O₂ →(t°) SiO₂",
+    gradeLevel: 11,
+    category: "Á kim",
+    conditions: "Nhiệt độ cao (>400°C)",
+    observation: "Silic cháy tạo thành cát trắng tinh khiết.",
+    energy: -911,
+    animation: "burn",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_324",
+    name: "Hòa tan Oxit Bạc trong Axit Nitric",
+    type: "double-replacement",
+    reactants: [
+      { formula: "Ag₂O", coeff: 1, name: "Bạc Oxit" },
+      { formula: "HNO₃", coeff: 2, name: "Axit Nitric" }
+    ],
+    products: [
+      { formula: "AgNO₃", coeff: 2, name: "Bạc Nitrat" },
+      { formula: "H₂O", coeff: 1, name: "Nước" }
+    ],
+    equation: "Ag₂O + 2HNO₃ → 2AgNO₃ + H₂O",
+    gradeLevel: 10,
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Bột oxit đen tan trong axit tạo dung dịch không màu.",
+    energy: -85,
+    animation: "mix",
+    dangerLevel: 1,
+    isBlocked: false
+  },
+  {
+    id: "rx_325",
+    name: "Beri tác dụng với Oxy",
+    type: "combination",
+    reactants: [
+      { formula: "Be", coeff: 2, name: "Beri" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+    ],
+    products: [
+      { formula: "BeO", coeff: 2, name: "Beri Oxit" }
+    ],
+    equation: "2Be + O₂ →(t°) 2BeO",
+    gradeLevel: 10,
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao",
+    observation: "Beri cháy sáng tạo lớp oxit trắng.",
+    energy: -1200,
+    animation: "burn",
+    requiresHeat: true,
+    dangerLevel: 1,
+    isBlocked: false
+  },
 ];
 
 
