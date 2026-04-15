@@ -17,6 +17,27 @@ KHẢ NĂNG ĐẶC BIỆT: Bạn có quyền truy cập dữ liệu thực tế 
 NÔI DUNG: `;
 
 /**
+ * Utility to normalize chemical formulas for better searching
+ * Example: 'h2o' -> 'H₂O', 'o2' -> 'O₂'
+ */
+const normalizeChemFormula = (text) => {
+  if (!text) return text;
+  const subscripts = {
+    '0': '₀', '1': '₁', '2': '₂', '3': '₃', '4': '₄',
+    '5': '₅', '6': '₆', '7': '₇', '8': '₈', '9': '₉'
+  };
+  
+  // 1. Basic capitalization for common short formulas
+  let normalized = text.toUpperCase();
+  
+  // 2. Replace numbers with subscripts if they follow a letter
+  return normalized.replace(/([A-Z])(\d+)/g, (match, p1, p2) => {
+    const sub = p2.split('').map(char => subscripts[char] || char).join('');
+    return p1 + sub;
+  });
+};
+
+/**
  * Dynamic Database Context Fetcher
  * This tool allows Aurum AI to "read" from relevant platform tables
  */
@@ -32,13 +53,16 @@ const fetchDatabaseContext = async (userId, query) => {
     
     if (isChemQuery) {
       // Extract formula or use the last word
-      const formulas = q.match(/[a-z]{1,2}\d+/g) || []; // Simple regex for formulas like h2o, co2
-      const searchTerm = formulas.length > 0 ? formulas[0] : q.split(' ').pop();
+      const formulas = q.match(/[a-z]{1,2}\d+/g) || []; 
+      const rawSearchTerm = formulas.length > 0 ? formulas[0] : q.split(' ').pop();
+      const normalizedSearchTerm = normalizeChemFormula(rawSearchTerm);
       
+      console.log(`🔍 AI Searching for: Raw[${rawSearchTerm}] Normalized[${normalizedSearchTerm}]`);
+
       // Search chemicals
       const { data: chems } = await supabase.from('lab_chemicals')
         .select('name, formula, type')
-        .or(`name.ilike.%${searchTerm}%,formula.ilike.%${searchTerm}%`)
+        .or(`name.ilike.%${rawSearchTerm}%,formula.ilike.%${normalizedSearchTerm}%`)
         .limit(2);
       if (chems?.length > 0) {
         context += `- Hóa chất liên quan: ${chems.map(c => `${c.name} (${c.formula})`).join('; ')}.\n`;
@@ -47,7 +71,7 @@ const fetchDatabaseContext = async (userId, query) => {
       // Search reactions
       const { data: rx } = await supabase.from('lab_reactions')
         .select('name, equation, observation')
-        .or(`equation.ilike.%${searchTerm}%,name.ilike.%${searchTerm}%`)
+        .or(`equation.ilike.%${rawSearchTerm}%,equation.ilike.%${normalizedSearchTerm}%,name.ilike.%${rawSearchTerm}%`)
         .limit(3);
       if (rx?.length > 0) {
         context += `- Phản ứng liên quan: ${rx.map(r => `${r.name}: ${r.equation} (${r.observation})`).join('; ')}.\n`;
@@ -250,10 +274,21 @@ router.post('/ask', async (req, res) => {
         } catch (personalErr) {
           console.error('💥 Personal API Key Error:', personalErr.message);
           
+          const isQuotaError = personalErr.message.includes('429') || personalErr.message.includes('quota');
           const isAuthError = personalErr.message.includes('API_KEY_INVALID') || 
                             personalErr.message.includes('401') || 
                             personalErr.message.includes('unauthorized');
-                            
+
+          // --- SMART FALLBACK FOR QUOTA ERRORS ---
+          if (isQuotaError && dbContext) {
+            console.log('🛡️ Quota Exceeded: Activating Local Brain Fallback...');
+            return res.json({
+              message: `[Chế độ dự phòng] Hiện tại hệ thống AI đang quá tải (hết lượt sử dụng trong giây lát), nhưng tôi đã tìm thấy một số thông tin liên quan từ phòng thí nghiệm cho bạn:\n\n${dbContext.replace('--- DỮ LIỆU THỰC TẾ TỪ HỆ THỐNG ---', '').replace('------------------------------------', '').trim()}\n\nHãy thử lại sau ít phút hoặc hỏi cụ thể hơn về các hóa chất trên nhé!`,
+              source: 'local_fallback',
+              suggestions: ['Xem thêm phản ứng', 'Hỏi về hóa chất này', 'Thử lại sau']
+            });
+          }
+                             
           if (isAuthError) {
             return res.status(401).json({ error: 'Invalid or Expired Personal API Key', message: 'API Key không hợp lệ hoặc đã hết hạn.', details: personalErr.message });
           } else if (personalErr.message.includes('SAFETY_BLOCK')) {
@@ -267,7 +302,16 @@ router.post('/ask', async (req, res) => {
           }
         }
       } else {
-        // System Hybrid Mode (Currently out of quota)
+        // System Hybrid Mode (Out of quota fallback)
+        if (dbContext) {
+          console.log('🛡️ System Quota Exceeded: Activating Local Brain Fallback...');
+          return res.json({
+            message: `[Chế độ dự phòng] Tất cả dịch vụ AI đang bận, nhưng tôi đã tìm thấy dữ liệu từ phòng thí nghiệm cho bạn:\n\n${dbContext.replace('--- DỮ LIỆU THỰC TẾ TỪ HỆ THỐNG ---', '').replace('------------------------------------', '').trim()}\n\nHãy thử lại sau ít phút hoặc cung cấp API Key cá nhân để được hỗ trợ tốt hơn.`,
+            source: 'local_fallback',
+            suggestions: ['Sử dụng API Key cá nhân', 'Thử lại sau']
+          });
+        }
+        
         return res.status(503).json({
           error: 'AI Service Temporarily Unavailable',
           message: 'Tất cả các dịch vụ AI hiện đang bận. Vui lòng thử lại sau giây lát hoặc cung cấp API Key cá nhân.',
