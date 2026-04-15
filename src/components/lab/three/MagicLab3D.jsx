@@ -3,7 +3,7 @@ import { Canvas } from '@react-three/fiber';
 import { Loader } from '@react-three/drei';
 import LabScene from './magic-lab/LabScene';
 import useLabStore from './magic-lab/store';
-import AiAssistant from './magic-lab/AiAssistant';
+
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
@@ -517,12 +517,7 @@ const MagicLab3D = () => {
         )}
       </AnimatePresence>
 
-      {/* AI Assistant UI */}
-      <AiAssistant 
-        currentItems={activeBeaker.contents} 
-        reactions={dbReactions} 
-        chemicals={dbChemicals}
-      />
+
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
