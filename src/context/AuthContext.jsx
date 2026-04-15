@@ -250,6 +250,34 @@ export const AuthProvider = ({ children }) => {
     };
   }, [fetchProfile]);
 
+  // 6. Heartbeat (Activity Tracking)
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const sendHeartbeat = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        await fetch('/api/user/heartbeat', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } catch (err) {
+        // Silent error for heartbeat
+      }
+    };
+
+    // Initial heartbeat
+    sendHeartbeat();
+
+    const interval = setInterval(sendHeartbeat, 60000); // Every 1 minute
+    return () => clearInterval(interval);
+  }, [isLoggedIn]);
+
   // 5. Memoize Value
   const value = useMemo(() => ({
     user,

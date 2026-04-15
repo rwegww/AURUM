@@ -46,6 +46,7 @@ const auth = async (req, res, next) => {
     }
 
     if (!user) throw new Error('Không tìm thấy thông tin người dùng');
+    if (user.isLocked) throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
 
     req.user = user;
     req.token = token;
@@ -91,7 +92,10 @@ router.get('/leaderboard', async (req, res) => {
       xp: s.xp || 0,
       level: s.level || 1,
       role: s.role,
-      avatarSeed: s.avatarSeed
+      avatarSeed: s.avatarSeed,
+      lastActiveAt: s.lastActiveAt,
+      activeMinutes: s.activeMinutes,
+      isOnline: s.isOnline
     }));
     res.json(topStudents);
   } catch (err) {
@@ -152,6 +156,36 @@ router.post('/progress', auth, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật tiến độ', error: err.message });
+  }
+});
+
+// Heartbeat (Activity Tracking)
+router.post('/heartbeat', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const now = new Date().toISOString();
+    
+    // 1. Try to use the optimized RPC function
+    const { error: rpcError } = await supabase.rpc('increment_active_minutes', { user_id: userId });
+    
+    // 2. If RPC fails (e.g. not defined yet), fallback to manual update
+    if (rpcError) {
+      const { error: updateError } = await supabase.from('users').update({ 
+        last_active_at: now,
+        active_minutes: (req.user.activeMinutes || 0) + 1 
+      }).eq('id', userId);
+
+      if (updateError) {
+        // If update fails, it's likely the columns don't exist yet
+        console.warn(`[HEARTBEAT] Could not update activity for ${userId}. Missing columns?`, updateError.message);
+        return res.json({ success: false, message: 'Database schema update required' });
+      }
+    }
+
+    res.json({ success: true, timestamp: now });
+  } catch (err) {
+    console.error('[HEARTBEAT ERROR]', err.message);
+    res.status(500).json({ error: err.message });
   }
 });
 

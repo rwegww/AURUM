@@ -108,10 +108,19 @@ const FloatingIsland = ({ rank, user, delay }) => {
 
       <div className="text-center z-10">
         <h4 className="text-[18px] font-black text-viet-text">{user?.username || '---'}</h4>
-        <div className="flex items-center justify-center gap-1.5 mt-1 bg-viet-green/10 px-3 py-1 rounded-full">
-           <span className="text-[10px] font-black text-viet-green uppercase">Hóa sư</span>
-           <span className="text-[12px] font-black text-viet-green">{user?.level || 1}</span>
+        <div className="flex items-center justify-center gap-2 mt-1">
+           <div className="flex items-center justify-center gap-1.5 bg-viet-green/10 px-3 py-1 rounded-full">
+              <span className="text-[10px] font-black text-viet-green uppercase">Hóa sư</span>
+              <span className="text-[12px] font-black text-viet-green">{user?.level || 1}</span>
+           </div>
+           {/* Online Status Dot */}
+           <div className={`w-2 h-2 rounded-full ${user?.isOnline || (user?.lastActiveAt && new Date(user.lastActiveAt) > new Date(Date.now() - 5*60*1000)) ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={user?.isOnline ? 'Đang online' : 'Ngoại tuyến'}></div>
         </div>
+        {user?.activeMinutes > 0 && (
+          <p className="text-[9px] font-bold text-viet-text-light/40 uppercase tracking-widest mt-2">
+            ⏱️ {Math.floor(user.activeMinutes / 60)}h {user.activeMinutes % 60}m active
+          </p>
+        )}
       </div>
     </motion.div>
   );
@@ -137,12 +146,12 @@ const LeaderboardSection = () => {
   }, []);
 
   const topThree = [
-    leaders[1], // 2nd
-    leaders[0], // 1st
-    leaders[2]  // 3rd
+    leaders.length > 1 ? leaders[1] : null, // 2nd
+    leaders.length > 0 ? leaders[0] : null, // 1st
+    leaders.length > 2 ? leaders[2] : null  // 3rd
   ];
 
-  const others = leaders.slice(3);
+  const others = leaders.slice(3, 5); // Only show Rank 4 & 5 to keep Top 5 total
 
   return (
     <section className="relative pt-48 pb-32 bg-viet-bg overflow-hidden">
@@ -201,7 +210,8 @@ const LeaderboardSection = () => {
           <AnimatePresence>
             {others.map((u, idx) => {
               const rank = idx + 4;
-              const xpProgress = Math.min((u.xp % 1000) / 10, 100); // Progress to next 1000 XP
+              const isOnline = u.isOnline || (u.lastActiveAt && new Date(u.lastActiveAt) > new Date(Date.now() - 5*60*1000));
+              const xpProgress = Math.min((u.xp % 1000) / 10, 100);
               
               return (
                 <motion.div
@@ -210,38 +220,38 @@ const LeaderboardSection = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
                   whileHover={{ scale: 1.02, x: 10 }}
-                  className="group relative"
+                  className="flex items-center gap-6 p-5 bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] shadow-sm hover:shadow-xl hover:bg-white/70 transition-all duration-300"
                 >
-                  <div className="flex items-center gap-6 p-5 bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] shadow-sm hover:shadow-xl hover:bg-white/70 transition-all duration-300">
-                    <div className="w-12 h-12 flex items-center justify-center text-[24px] font-black text-viet-text/20 group-hover:text-viet-green transition-colors">
-                      {rank}
+                  <div className="w-12 h-12 flex items-center justify-center text-[24px] font-black text-viet-text/20 hover:text-viet-green transition-colors">
+                    {rank}
+                  </div>
+                  
+                  <div className="w-14 h-14 rounded-2xl bg-white shadow-inner overflow-hidden flex-shrink-0 border-2 border-white flex items-center justify-center p-1">
+                    <Avatar seed={u.avatarSeed || u.username} size={50} className="w-full h-full object-cover scale-125 translate-y-1" />
+                  </div>
+
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h5 className="text-[17px] font-black text-viet-text">{u.username}</h5>
+                      <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={isOnline ? 'Đang online' : 'Ngoại tuyến'} />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-widest">
+                        Cấp độ {u.level} • {u.activeMinutes > 0 ? `Hoạt động: ${Math.floor(u.activeMinutes / 60)}h ${u.activeMinutes % 60}m` : 'Môn đồ Hóa học'}
+                      </span>
+                      <div className="text-right">
+                        <span className="text-[18px] font-black text-viet-text">{u.xp}</span>
+                        <span className="text-[10px] font-black text-viet-green ml-1">XP</span>
+                      </div>
                     </div>
                     
-                    <div className="w-14 h-14 rounded-2xl bg-white shadow-inner overflow-hidden flex-shrink-0 border-2 border-white flex items-center justify-center p-1">
-                      <Avatar seed={u.avatarSeed || u.username} size={50} className="w-full h-full object-cover scale-125 translate-y-1" />
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="flex items-end justify-between mb-2">
-                        <div>
-                          <h5 className="text-[17px] font-black text-viet-text">{u.username}</h5>
-                          <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-widest leading-none">Cấp độ {u.level} • Môn đồ Hóa học</span>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[18px] font-black text-viet-text">{u.xp}</span>
-                          <span className="text-[10px] font-black text-viet-green ml-1">XP</span>
-                        </div>
-                      </div>
-                      
-                      {/* XP Progress Bar */}
-                      <div className="w-full h-2 bg-viet-text/5 rounded-full overflow-hidden">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${xpProgress}%` }}
-                          transition={{ duration: 1.5, delay: 0.5 }}
-                          className="h-full bg-gradient-to-r from-viet-green to-emerald-400"
-                        />
-                      </div>
+                    <div className="w-full h-2 bg-viet-text/5 rounded-full overflow-hidden mt-3">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${xpProgress}%` }}
+                        transition={{ duration: 1.5, delay: 0.5 }}
+                        className="h-full bg-gradient-to-r from-viet-green to-emerald-400"
+                      />
                     </div>
                   </div>
                 </motion.div>

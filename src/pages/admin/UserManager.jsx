@@ -65,9 +65,9 @@ const UserManager = () => {
               <table className="w-full text-left">
                 <thead className="bg-viet-bg/30 border-b border-viet-border">
                   <tr>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Học viên</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Cấp độ</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Kinh nghiệm (XP)</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Người dùng</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Trạng thái</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Hoạt động</th>
                     <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Tiến trình</th>
                     <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Thao tác</th>
                   </tr>
@@ -79,29 +79,44 @@ const UserManager = () => {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="hover:bg-viet-bg/10 transition-colors"
+                      className={`hover:bg-viet-bg/10 transition-colors ${u.is_locked ? 'bg-red-50/30 opacity-80' : ''}`}
                     >
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-viet-green/10 flex items-center justify-center text-viet-green font-black">
-                            {u.username.charAt(0).toUpperCase()}
+                          <div className="relative">
+                            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-viet-text font-black border border-viet-border">
+                              {u.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${u.isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
                           </div>
                           <div>
-                            <p className="text-sm font-bold text-viet-text">{u.username}</p>
-                            <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Học tập từ {new Date(u.createdAt).toLocaleDateString('vi-VN')}</p>
+                            <p className="text-sm font-bold text-viet-text flex items-center gap-2">
+                              {u.username}
+                              {u.role === 'teacher' && <span className="bg-blue-100 text-blue-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase">Giáo viên</span>}
+                              {u.is_locked && <span className="bg-red-100 text-red-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-widest">ĐÃ KHÓA</span>}
+                            </p>
+                            <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Tham gia: {new Date(u.createdAt).toLocaleDateString('vi-VN')}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-8 py-6 text-center">
-                         <span className="px-3 py-1 bg-yellow-50 text-yellow-600 rounded-lg text-xs font-black ring-1 ring-yellow-200">Lv {u.level}</span>
+                         <div className="flex flex-col items-center">
+                           <span className={`px-3 py-1 rounded-lg text-xs font-black ring-1 ${u.is_locked ? 'bg-red-50 text-red-500 ring-red-200' : 'bg-yellow-50 text-yellow-600 ring-yellow-200'}`}>Lv {u.level}</span>
+                           <span className="text-[10px] font-bold text-viet-text-light/50 mt-1 uppercase tracking-tighter">{u.xp.toLocaleString()} XP</span>
+                         </div>
                       </td>
                       <td className="px-8 py-6 text-center">
-                        <span className="text-sm font-black text-viet-text">{u.xp.toLocaleString()}</span>
+                        <div className="flex flex-col items-center">
+                          <span className="text-sm font-black text-viet-text">
+                            {u.active_minutes ? `${Math.floor(u.active_minutes / 60)}h ${u.active_minutes % 60}m` : '0m'}
+                          </span>
+                          <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-tighter">Tổng thời gian</span>
+                        </div>
                       </td>
                       <td className="px-8 py-6">
                          <div className="max-w-[120px] mx-auto">
-                            <div className="flex justify-between text-[10px] font-bold text-viet-text-light mb-1.5">
-                               <span>{u.unlockedLessons?.length || 0} bài</span>
+                            <div className="flex justify-between text-[10px] font-bold text-viet-text-light mb-1.5 uppercase tracking-tighter">
+                               <span>Tiến trình</span>
                                <span>{(u.xp % 1000) / 10}%</span>
                             </div>
                             <div className="w-full h-1.5 bg-viet-bg rounded-full overflow-hidden">
@@ -110,12 +125,39 @@ const UserManager = () => {
                          </div>
                       </td>
                       <td className="px-8 py-6 text-right">
-                         <Link 
-                           to={`/admin/users/${u.id}`}
-                           className="text-[10px] font-black text-viet-green hover:underline uppercase tracking-tight"
-                         >
-                           Xem chi tiết ➔
-                         </Link>
+                         <div className="flex items-center justify-end gap-3">
+                           <button 
+                             onClick={async () => {
+                               if (!window.confirm(`Bạn có chắc muốn ${u.is_locked ? 'mở khóa' : 'khóa'} tài khoản ${u.username}?`)) return;
+                               try {
+                                 const token = localStorage.getItem('token');
+                                 const res = await fetch(`/api/admin/users/${u.id}/lock`, {
+                                   method: 'PATCH',
+                                   headers: { 
+                                     'Content-Type': 'application/json',
+                                     'Authorization': `Bearer ${token}`
+                                   },
+                                   body: JSON.stringify({ isLocked: !u.is_locked })
+                                 });
+                                 if (res.ok) fetchUsers();
+                               } catch (err) { console.error(err); }
+                             }}
+                             className={`px-3 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest border transition-all ${
+                               u.is_locked 
+                               ? 'border-emerald-200 text-emerald-600 hover:bg-emerald-50' 
+                               : 'border-red-200 text-red-500 hover:bg-red-50'
+                             }`}
+                           >
+                             {u.is_locked ? '🔓 Mở khóa' : '🔒 Khóa'}
+                           </button>
+                           <Link 
+                             to={`/admin/users/${u.id}`}
+                             className="p-2 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white transition-all shadow-sm"
+                             title="Chi tiết"
+                           >
+                             👁️
+                           </Link>
+                         </div>
                       </td>
                     </motion.tr>
                   ))}
@@ -125,7 +167,7 @@ const UserManager = () => {
             {filteredUsers.length === 0 && (
                <div className="py-24 text-center">
                   <span className="text-4xl mb-4 block">🔍</span>
-                  <p className="text-viet-text-light font-bold">Không tìm thấy học sinh nào khớp với từ khóa</p>
+                  <p className="text-viet-text-light font-bold">Không tìm thấy người dùng nào khớp với từ khóa</p>
                </div>
             )}
           </div>

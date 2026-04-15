@@ -20,7 +20,11 @@ const mapUser = (user) => {
     avatar_seed: undefined,
     arena_stats: undefined,
     arena_avatar: undefined,
-    created_at: undefined
+    created_at: undefined,
+    lastActiveAt: user.updated_at || user.last_active_at,
+    activeMinutes: user.active_minutes || 0,
+    isOnline: user.is_online || (user.last_active_at && new Date(user.last_active_at) > new Date(Date.now() - 5*60*1000)),
+    isLocked: user.is_locked || false
   };
 };
 
@@ -170,7 +174,7 @@ export const User = {
     const { data, error } = await supabase
       .from('users')
       .select(`
-        id, username, role, xp, level, avatar_seed
+        id, username, role, xp, level, avatar_seed, updated_at, last_active_at, active_minutes, is_locked
       `)
       .eq('role', 'student')
       .order('xp', { ascending: false });
@@ -205,6 +209,18 @@ export const User = {
 
   async comparePassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
+  },
+
+  async toggleLock(id, lockStatus) {
+    const { data, error } = await supabase
+      .from('users')
+      .update({ is_locked: lockStatus })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return mapUser(data);
   }
 };
 

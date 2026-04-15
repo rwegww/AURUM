@@ -67,6 +67,18 @@ function AppContent() {
 
   const isManagementPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/teacher');
 
+  const functionalPaths = [
+    '/lab', 
+    '/arena', 
+    '/library', 
+    '/lessons', 
+    '/periodic-table', 
+    '/missions', 
+    '/knowledge-map', 
+    '/classroom'
+  ];
+  const isFunctionalPage = functionalPaths.some(path => location.pathname.startsWith(path));
+
   return (
     <>
       {!isAuthPage && !isImmersivePage && !isManagementPage && <Navbar />}
@@ -127,7 +139,7 @@ function AppContent() {
       </Suspense>
       
       {/* Floating Global UI */}
-      <AurumAiAgent />
+      {isFunctionalPage && <AurumAiAgent />}
       {!isManagementPage && <FeedbackButton />}
     </>
   );

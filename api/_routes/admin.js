@@ -67,13 +67,34 @@ router.get('/stats', adminOnly, async (req, res) => {
   }
 });
 
-// GET /api/admin/users - List all users
+// GET /api/admin/users - List all users with activity monitoring
 router.get('/users', adminOnly, async (req, res) => {
   try {
-    const users = await User.findStudents();
-    res.json(users);
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, username, role, xp, level, last_active_at, active_minutes, is_locked')
+      .order('last_active_at', { ascending: false });
+    
+    if (error) throw error;
+    res.json(data.map(u => ({
+      ...u,
+      isOnline: u.last_active_at && new Date(u.last_active_at) > new Date(Date.now() - 5*60*1000)
+    })));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi lấy danh sách học sinh', error: err.message });
+    res.status(500).json({ message: 'Lỗi lấy danh sách người dùng', error: err.message });
+  }
+});
+
+// PATCH /api/admin/users/:id/lock - Toggle user lock status
+router.patch('/users/:id/lock', adminOnly, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isLocked } = req.body;
+    
+    const updatedUser = await User.toggleLock(id, isLocked);
+    res.json({ message: isLocked ? 'Đã khóa tài khoản' : 'Đã mở khóa tài khoản', user: updatedUser });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi thay đổi trạng thái tài khoản', error: err.message });
   }
 });
 

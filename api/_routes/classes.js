@@ -207,11 +207,17 @@ router.get('/:id/members', auth, async (req, res) => {
     const { id } = req.params;
     const { data, error } = await supabase
       .from('class_members')
-      .select('student:student_id(id, username)')
+      .select('student:student_id(id, username, last_active_at, active_minutes)')
       .eq('class_id', id);
 
     if (error) throw error;
-    res.json(data);
+    
+    const formatted = data.map(m => ({
+      ...m.student,
+      isOnline: m.student?.last_active_at && new Date(m.student.last_active_at) > new Date(Date.now() - 5*60*1000)
+    }));
+    
+    res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

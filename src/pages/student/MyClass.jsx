@@ -15,6 +15,7 @@ const MyClass = () => {
   const [selectedClass, setSelectedClass] = useState(null);
   const [posts, setPosts] = useState([]);
   const [schedules, setSchedules] = useState([]);
+  const [members, setMembers] = useState([]);
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [privateMessage, setPrivateMessage] = useState('');
   const [sending, setSending] = useState(false);
@@ -67,6 +68,14 @@ const MyClass = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (sRes.ok) setSchedules(await sRes.json());
+    } catch (err) {}
+
+    // Fetch members
+    try {
+      const mRes = await fetch(`/api/classes/${cls.id}/members`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (mRes.ok) setMembers(await mRes.json());
     } catch (err) {}
   };
 
@@ -473,6 +482,35 @@ const MyClass = () => {
                             {t('my_class.schedules.join_meet')}
                           </a>
                        )}
+                     </div>
+                   ))
+                 )}
+               </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
+               <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
+                 <span>👥</span> {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
+               </h3>
+               
+               <div className="space-y-3">
+                 {members.length === 0 ? (
+                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
+                 ) : (
+                   members.map(m => (
+                     <div key={m.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
+                        <div className="relative">
+                           <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-black border border-viet-border">
+                              {m.username.substring(0,2).toUpperCase()}
+                           </div>
+                           <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${m.isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+                        </div>
+                        <div className="flex flex-col">
+                           <span className="text-xs font-bold text-viet-text leading-tight">{m.username}</span>
+                           <span className="text-[9px] font-bold text-viet-text-light/50 uppercase">
+                             {m.active_minutes ? `${Math.floor(m.active_minutes / 60)}h ${m.active_minutes % 60}m` : '0m active'}
+                           </span>
+                        </div>
                      </div>
                    ))
                  )}

@@ -224,12 +224,14 @@ router.post('/ask', async (req, res) => {
       let responseText = '';
       let usedEngine = '';
 
-      if (context.user_api_key) {
-        // BYOK: Use Personal Gemini API Key with Multi-turn Chat
-        console.log('📡 BYOK Active: Using Personal API Key with Chat History...');
+      const apiKeyToUse = context.user_api_key || process.env.GEMINI_API_KEY;
+      
+      if (apiKeyToUse) {
+        // Use Gemini API (either personal or server-side) with Multi-turn Chat
+        console.log(context.user_api_key ? '📡 BYOK Active: Using Personal API Key...' : '🌐 Using Server-side API Key...');
         try {
-          const personalGenAI = new GoogleGenerativeAI(context.user_api_key);
-          const personalModel = personalGenAI.getGenerativeModel({ 
+          const targetGenAI = new GoogleGenerativeAI(apiKeyToUse);
+          const model = targetGenAI.getGenerativeModel({ 
             model: 'gemini-2.0-flash',
             systemInstruction: SYSTEM_INSTRUCTION,
             safetySettings: [
@@ -241,18 +243,15 @@ router.post('/ask', async (req, res) => {
           });
 
           // Build Gemini-compatible chat history from frontend messages
-          // Gemini requires: first message must be 'user', roles must alternate
           let rawHistory = (context.chat_history || []).map(m => ({
             role: m.role === 'user' ? 'user' : 'model',
             parts: [{ text: m.text }]
           }));
           
-          // Drop leading 'model' messages (e.g. welcome greeting)
           while (rawHistory.length > 0 && rawHistory[0].role === 'model') {
             rawHistory.shift();
           }
           
-          // Merge consecutive same-role messages
           const chatHistory = [];
           for (const msg of rawHistory) {
             if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === msg.role) {
@@ -262,7 +261,7 @@ router.post('/ask', async (req, res) => {
             }
           }
 
-          const chat = personalModel.startChat({ history: chatHistory });
+          const chat = model.startChat({ history: chatHistory });
           const result = await chat.sendMessage(enrichedQuery);
           
           if (result.response.promptFeedback?.blockReason) {
@@ -270,52 +269,31 @@ router.post('/ask', async (req, res) => {
           }
           
           responseText = result.response.text();
-          usedEngine = 'personal-gemini-key';
-        } catch (personalErr) {
-          console.error('💥 Personal API Key Error:', personalErr.message);
+          usedEngine = context.user_api_key ? 'personal-gemini-key' : 'server-gemini-key';
+        } catch (apiErr) {
+          console.error('💥 AI API Error:', apiErr.message);
           
-          const isQuotaError = personalErr.message.includes('429') || personalErr.message.includes('quota');
-          const isAuthError = personalErr.message.includes('API_KEY_INVALID') || 
-                            personalErr.message.includes('401') || 
-                            personalErr.message.includes('unauthorized');
-
-          // --- SMART FALLBACK FOR QUOTA ERRORS ---
+          const isQuotaError = apiErr.message.includes('429') || apiErr.message.includes('quota');
           if (isQuotaError && dbContext) {
-            console.log('🛡️ Quota Exceeded: Activating Local Brain Fallback...');
             return res.json({
-              message: `[Chế độ dự phòng] Hiện tại hệ thống AI đang quá tải (hết lượt sử dụng trong giây lát), nhưng tôi đã tìm thấy một số thông tin liên quan từ phòng thí nghiệm cho bạn:\n\n${dbContext.replace('--- DỮ LIỆU THỰC TẾ TỪ HỆ THỐNG ---', '').replace('------------------------------------', '').trim()}\n\nHãy thử lại sau ít phút hoặc hỏi cụ thể hơn về các hóa chất trên nhé!`,
+              message: `[Chế độ dự phòng] Hệ thống AI đang quá tải lượt sử dụng, nhưng đây là thông tin tôi tìm thấy từ phòng thí nghiệm cho bạn:\n\n${dbContext.replace('--- DỮ LIỆU THỰC TẾ TỪ HỆ THỐNG ---', '').replace('------------------------------------', '').trim()}`,
               source: 'local_fallback',
               suggestions: ['Xem thêm phản ứng', 'Hỏi về hóa chất này', 'Thử lại sau']
             });
           }
                              
-          if (isAuthError) {
-            return res.status(401).json({ error: 'Invalid or Expired Personal API Key', message: 'API Key không hợp lệ hoặc đã hết hạn.', details: personalErr.message });
-          } else if (personalErr.message.includes('SAFETY_BLOCK')) {
-            return res.status(400).json({ 
-              error: 'Content Filtered', 
-              message: 'Nội dung bị bộ lọc an toàn chặn. Vui lòng thử câu hỏi khác.',
-              details: personalErr.message 
-            });
+          if (apiErr.message.includes('API_KEY_INVALID') || apiErr.message.includes('401')) {
+            return res.status(401).json({ error: 'Invalid API Key', message: 'API Key không hợp lệ.' });
+          } else if (apiErr.message.includes('SAFETY_BLOCK')) {
+            return res.status(400).json({ message: 'Nội dung bị chặn bởi bộ lọc an toàn.' });
           } else {
-            return res.status(503).json({ error: 'AI Model Error', message: `Lỗi AI: ${personalErr.message}`, details: personalErr.message });
+            return res.status(503).json({ error: 'AI Model Error', message: `Lỗi AI: ${apiErr.message}` });
           }
         }
       } else {
-        // System Hybrid Mode (Out of quota fallback)
-        if (dbContext) {
-          console.log('🛡️ System Quota Exceeded: Activating Local Brain Fallback...');
-          return res.json({
-            message: `[Chế độ dự phòng] Tất cả dịch vụ AI đang bận, nhưng tôi đã tìm thấy dữ liệu từ phòng thí nghiệm cho bạn:\n\n${dbContext.replace('--- DỮ LIỆU THỰC TẾ TỪ HỆ THỐNG ---', '').replace('------------------------------------', '').trim()}\n\nHãy thử lại sau ít phút hoặc cung cấp API Key cá nhân để được hỗ trợ tốt hơn.`,
-            source: 'local_fallback',
-            suggestions: ['Sử dụng API Key cá nhân', 'Thử lại sau']
-          });
-        }
-        
         return res.status(503).json({
-          error: 'AI Service Temporarily Unavailable',
-          message: 'Tất cả các dịch vụ AI hiện đang bận. Vui lòng thử lại sau giây lát hoặc cung cấp API Key cá nhân.',
-          details: 'System quota exceeded.'
+          error: 'AI Config Missing',
+          message: 'Hệ thống chưa được cấu hình API Key. Vui lòng liên hệ Admin.',
         });
       }
 

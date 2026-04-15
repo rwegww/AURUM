@@ -277,23 +277,34 @@ const ClassDetail = () => {
                 {members.length === 0 ? (
                   <p className="text-xs text-viet-text-light font-medium italic">Chưa có học sinh tham gia</p>
                 ) : (
-                  members.map(m => (
-                    <div key={m.student.id} className="flex items-center justify-between p-3 bg-slate-50 border border-viet-border rounded-2xl group/member transition-all hover:bg-white hover:shadow-sm">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-viet-green text-white rounded-full flex items-center justify-center font-bold text-xs uppercase shadow-sm">
-                           {m.student.username.substring(0,2)}
-                        </div>
-                        <span className="text-xs font-bold text-viet-text">{m.student.username}</span>
-                      </div>
-                      <button 
-                        onClick={() => startPrivateMessage(m.student.id)}
-                        className="w-8 h-8 rounded-lg bg-white border border-viet-border flex items-center justify-center text-xs opacity-0 group-hover/member:opacity-100 transition-all hover:bg-viet-green hover:text-white hover:border-viet-green shadow-sm"
-                        title="Nhắn tin riêng"
-                      >
-                        💬
-                      </button>
-                    </div>
-                  ))
+                   members.map(m => {
+                     const isOnline = m.isOnline;
+                     return (
+                       <div key={m.id} className="flex items-center justify-between p-3 bg-slate-50 border border-viet-border rounded-2xl group/member transition-all hover:bg-white hover:shadow-sm">
+                         <div className="flex items-center gap-3">
+                           <div className="relative">
+                             <div className="w-8 h-8 bg-slate-100 text-viet-text border border-viet-border rounded-full flex items-center justify-center font-bold text-xs uppercase shadow-sm">
+                                {m.username.substring(0,2)}
+                             </div>
+                             <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+                           </div>
+                           <div className="flex flex-col">
+                             <span className="text-xs font-bold text-viet-text">{m.username}</span>
+                             <span className="text-[9px] font-bold text-viet-text-light/50 uppercase">
+                               {m.active_minutes ? `${Math.floor(m.active_minutes / 60)}h ${m.active_minutes % 60}m active` : 'Chưa có hoạt động'}
+                             </span>
+                           </div>
+                         </div>
+                         <button 
+                           onClick={() => startPrivateMessage(m.id)}
+                           className="w-8 h-8 rounded-lg bg-white border border-viet-border flex items-center justify-center text-xs opacity-0 group-hover/member:opacity-100 transition-all hover:bg-viet-green hover:text-white hover:border-viet-green shadow-sm"
+                           title="Nhắn tin riêng"
+                         >
+                           💬
+                         </button>
+                       </div>
+                     );
+                   })
                 )}
              </div>
            </div>
