@@ -173,7 +173,14 @@ router.post('/ask', async (req, res) => {
           const personalGenAI = new GoogleGenerativeAI(context.user_api_key);
           const personalModel = personalGenAI.getGenerativeModel({ 
             model: 'gemini-1.5-flash-latest',
-            systemInstruction: SYSTEM_INSTRUCTION
+            systemInstruction: SYSTEM_INSTRUCTION,
+            // Relax safety settings for educational chemistry content
+            safetySettings: [
+              { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+              { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+              { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+              { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+            ]
           });
 
           // Build Gemini-compatible chat history from frontend messages
@@ -184,6 +191,11 @@ router.post('/ask', async (req, res) => {
 
           const chat = personalModel.startChat({ history: chatHistory });
           const result = await chat.sendMessage(enrichedQuery);
+          
+          if (result.response.promptFeedback?.blockReason) {
+            throw new Error(`SAFETY_BLOCK: ${result.response.promptFeedback.blockReason}`);
+          }
+          
           responseText = result.response.text();
           usedEngine = 'personal-gemini-key';
         } catch (personalErr) {
@@ -196,6 +208,12 @@ router.post('/ask', async (req, res) => {
                             
           if (isAuthError) {
             return res.status(401).json({ error: 'Invalid or Expired Personal API Key', details: personalErr.message });
+          } else if (personalErr.message.includes('SAFETY_BLOCK')) {
+            return res.status(400).json({ 
+              error: 'Content Filtered', 
+              message: 'Câu hỏi hoặc nội dung dữ liệu có thể chứa từ ngữ nhạy cảm bị bộ lọc an toàn chặn. Vui lòng thử đặt câu hỏi khác trung lập hơn.',
+              details: personalErr.message 
+            });
           } else {
             return res.status(503).json({ error: 'AI Model Error', message: 'Hệ thống AI gặp sự cố kỹ thuật với Key của bạn.', details: personalErr.message });
           }
