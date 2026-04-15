@@ -90,14 +90,14 @@ router.post('/ask', async (req, res) => {
       } catch (openAiErr) {
         console.warn('⚠️ OpenAI Failed (likely quota), falling back to Gemini:', openAiErr.message);
         
-        // Stage 2: Emergency Fallback to Gemini 1.5 Flash (Free/Stable)
-        console.log('📡 Emergency Fallback to Gemini (1.5-flash)...');
-        const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' });
+        // Stage 2: Emergency Fallback to Gemini 2.5 Flash (Only working model for this key)
+        console.log('📡 Emergency Fallback to Gemini (2.5-flash)...');
+        const geminiModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }, { apiVersion: 'v1' });
         const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
         const result = await geminiModel.generateContent(fullPrompt);
         const response = await result.response;
         responseText = response.text();
-        usedEngine = 'gemini-1.5-flash-fallback';
+        usedEngine = 'gemini-2.5-flash-fallback';
       }
 
       const duration = Date.now() - startTime;
