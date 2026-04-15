@@ -1,6 +1,6 @@
 import express from 'express';
 import OpenAI from 'openai';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { supabase } from '../lib/supabase.js';
 import crypto from 'crypto';
 
@@ -172,14 +172,13 @@ router.post('/ask', async (req, res) => {
         try {
           const personalGenAI = new GoogleGenerativeAI(context.user_api_key);
           const personalModel = personalGenAI.getGenerativeModel({ 
-            model: 'gemini-1.5-flash-latest',
+            model: 'gemini-2.0-flash',
             systemInstruction: SYSTEM_INSTRUCTION,
-            // Relax safety settings for educational chemistry content
             safetySettings: [
-              { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-              { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-              { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-              { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+              { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+              { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+              { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+              { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
             ]
           });
 
@@ -201,21 +200,20 @@ router.post('/ask', async (req, res) => {
         } catch (personalErr) {
           console.error('💥 Personal API Key Error:', personalErr.message);
           
-          // Distinguish between Auth errors (401/403) and Model/Quota errors
           const isAuthError = personalErr.message.includes('API_KEY_INVALID') || 
                             personalErr.message.includes('401') || 
                             personalErr.message.includes('unauthorized');
                             
           if (isAuthError) {
-            return res.status(401).json({ error: 'Invalid or Expired Personal API Key', details: personalErr.message });
+            return res.status(401).json({ error: 'Invalid or Expired Personal API Key', message: 'API Key không hợp lệ hoặc đã hết hạn.', details: personalErr.message });
           } else if (personalErr.message.includes('SAFETY_BLOCK')) {
             return res.status(400).json({ 
               error: 'Content Filtered', 
-              message: 'Câu hỏi hoặc nội dung dữ liệu có thể chứa từ ngữ nhạy cảm bị bộ lọc an toàn chặn. Vui lòng thử đặt câu hỏi khác trung lập hơn.',
+              message: 'Nội dung bị bộ lọc an toàn chặn. Vui lòng thử câu hỏi khác.',
               details: personalErr.message 
             });
           } else {
-            return res.status(503).json({ error: 'AI Model Error', message: 'Hệ thống AI gặp sự cố kỹ thuật với Key của bạn.', details: personalErr.message });
+            return res.status(503).json({ error: 'AI Model Error', message: `Lỗi AI: ${personalErr.message}`, details: personalErr.message });
           }
         }
       } else {
