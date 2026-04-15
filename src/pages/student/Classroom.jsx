@@ -3,6 +3,24 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
+// --- Animations ---
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { type: "spring", bounce: 0, duration: 0.8 } 
+  }
+};
+
 const Classroom = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -51,74 +69,76 @@ const Classroom = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-16 text-center max-w-3xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700">
-          <h1 className="text-4xl md:text-5xl font-black text-viet-text mb-6 tracking-tight uppercase">
+    <div className="min-h-screen bg-[oklch(0.98_0.02_135)] pt-28 pb-20 px-4 sm:px-6 lg:px-8 selection:bg-viet-green selection:text-white">
+      <div className="max-w-[1200px] mx-auto">
+        <header className="mb-16 text-center max-w-3xl mx-auto animate-fade-in">
+          <h1 className="font-rubik text-4xl md:text-5xl font-black text-[#1a1a1a] mb-6 tracking-tight uppercase leading-tight">
             <Trans i18nKey="classroom.title">
                Bắt đầu hành trình <span className="text-viet-green">Hóa học</span> của bạn
             </Trans>
           </h1>
-          <p className="text-viet-text-light text-lg font-bold">
+          <p className="text-[#1a1a1a]/70 text-lg font-bold">
             {t('classroom.subtitle')}
           </p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
           {classroomData.map((item, index) => (
             <motion.div
               key={item.grade}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="group"
+              variants={itemVariants}
+              className="group flex flex-col h-full"
             >
-              <div className="bg-white rounded-[40px] overflow-hidden border border-viet-border shadow-sm hover:shadow-2xl hover:shadow-viet-green/10 transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
+              <div className="bg-white rounded-[1.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:translate-y-1 transition-all duration-200 flex flex-col h-full">
                 {/* Image Section */}
-                <div className="aspect-[16/10] overflow-hidden relative">
+                <div className="aspect-[16/10] overflow-hidden relative border-b-4 border-[#1a1a1a]">
                    <img 
                      src={item.image} 
                      alt={item.title} 
-                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                    />
-                   <div className="absolute top-6 left-6 flex items-center gap-2">
-                      <span className="px-4 py-1.5 bg-white border border-viet-border rounded-full text-[11px] font-black text-viet-text-light uppercase tracking-widest shadow-sm">
+                   <div className="absolute top-4 left-4 flex items-center gap-2">
+                      <span className="px-4 py-1.5 bg-white border-2 border-[#1a1a1a] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full text-[11px] font-black text-[#1a1a1a] uppercase tracking-widest">
                          {item.age}
                       </span>
                    </div>
-                   <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </div>
 
                 {/* Content Section */}
                 <div className="p-8 flex flex-col flex-1">
                    <div className="flex items-center gap-2 mb-4">
-                      <span className={`w-8 h-1 rounded-full ${item.color}`} />
-                      <span className="text-[10px] font-black text-viet-green uppercase tracking-widest">Aurum</span>
+                      <span className={`w-8 h-2 rounded-full border-2 border-[#1a1a1a] ${item.color}`} />
+                      <span className="text-[10px] font-black text-[#1a1a1a] uppercase tracking-widest">Aurum</span>
                    </div>
                    
-                   <h3 className="text-2xl font-black text-viet-text mb-4 group-hover:text-viet-green transition-colors leading-tight">
+                   <h3 className="font-rubik text-2xl font-black text-[#1a1a1a] mb-4 group-hover:text-viet-green transition-colors leading-tight">
                       {item.title}
                    </h3>
                    
-                   <p className="text-viet-text-light font-medium text-sm leading-relaxed mb-8 flex-1">
+                   <p className="text-[#1a1a1a]/70 font-medium text-sm leading-relaxed mb-8 flex-1">
                       {item.desc}
                    </p>
 
                    <button 
                      onClick={() => navigate(`/classroom/${item.grade}/journey`)}
-                     className={`w-full py-4 rounded-[20px] font-black text-[12px] uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-2 ${
+                     className={`w-full py-4 rounded-[1rem] font-black text-[13px] uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:translate-y-1 ${
                        item.grade === 8 
-                       ? 'bg-viet-green text-white shadow-xl shadow-viet-green/20 hover:scale-[1.02]' 
-                       : 'bg-gray-50 border border-viet-border text-viet-text-light hover:bg-viet-green hover:text-white hover:border-viet-green'
+                       ? 'bg-viet-green text-white' 
+                       : 'bg-white text-[#1a1a1a] hover:bg-gray-50'
                      }`}
                    >
-                     {t('classroom.enter_class')} <span className="text-lg">➔</span>
+                     {t('classroom.enter_class')} <span className="text-lg">→</span>
                    </button>
                 </div>
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

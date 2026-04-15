@@ -84,7 +84,7 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
 
   return (
     <motion.div initial={{ x: -40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="flex flex-col gap-5">
-      <div className="bg-white rounded-[32px] p-6 border border-viet-border relative overflow-hidden shadow-sm">
+      <div className="bg-white rounded-[1.5rem] p-6 border-4 border-[#1a1a1a] shadow-tactile relative overflow-hidden">
         <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[80px] opacity-[0.08] pointer-events-none" style={{ background: selectedAura }} />
         <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4 flex items-center gap-1">
           <span>✦</span> {t('arena.character.badge')}
@@ -127,7 +127,7 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
           </div>
         </div>
       </div>
-      <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => { const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; setAvatarSeed(randomPreset.seed); setSelectedAvatar(0); setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); }} className="w-full py-4 rounded-[24px] font-black text-[12px] uppercase tracking-[2px] text-white flex items-center justify-center gap-3 bg-viet-text shadow-lg shadow-black/10 transition-all hover:bg-black">
+      <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => { const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; setAvatarSeed(randomPreset.seed); setSelectedAvatar(0); setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); }} className="w-full py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] bg-white border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:translate-y-1 transition-all flex items-center justify-center gap-3">
         <span>🎲</span> {t('arena.character.random_btn')}
       </motion.button>
     </motion.div>
@@ -202,7 +202,7 @@ const StatsPanel = ({ user }) => {
 
   return (
     <motion.div initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col gap-5">
-      <div className="bg-white rounded-[32px] p-6 border border-viet-border relative overflow-hidden shadow-sm">
+      <div className="bg-white rounded-[1.5rem] p-6 border-4 border-[#1a1a1a] shadow-tactile relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full blur-[80px] opacity-[0.05] pointer-events-none" style={{ background: rank.color }} />
         <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4 flex items-center gap-1">
           <span>📊</span> {t('arena.stats.badge')}
@@ -223,7 +223,7 @@ const StatsPanel = ({ user }) => {
           </div>
         </div>
       </div>
-      <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }} onClick={() => setShowLeaderboard(v => !v)} className="w-full py-4 rounded-[24px] font-black text-[12px] uppercase tracking-[2px] text-viet-text-light flex items-center justify-between px-6 bg-white border border-viet-border hover:border-viet-green/30 transition-all shadow-sm">
+      <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }} onClick={() => setShowLeaderboard(v => !v)} className="w-full py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] flex items-center justify-between px-6 bg-white border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all">
         <span>🏆 {t('arena.stats.leaderboard_btn')}</span>
         <span className="text-[14px]">{showLeaderboard ? '↑' : '↓'}</span>
       </motion.button>
@@ -257,7 +257,7 @@ const StatsPanel = ({ user }) => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="bg-white rounded-[32px] p-6 border border-viet-border shadow-sm">
+      <div className="bg-white rounded-[1.5rem] p-6 border-4 border-[#1a1a1a] shadow-tactile">
         <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4">⚡ {t('arena.stats.history')}</p>
         {loading ? (
           <div className="flex justify-center py-4">
@@ -325,7 +325,7 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
         <div className="absolute inset-0 rounded-full blur-3xl opacity-20 pointer-events-none" style={{ background: selectedAura, margin: '-20px' }} />
       </div>
       <div className="text-center">
-        <h2 className="text-3xl font-black text-viet-text uppercase tracking-[5px] mb-2 font-sora">
+        <h2 className="text-4xl font-black text-[#1a1a1a] uppercase tracking-[5px] mb-2 font-rubik leading-tight">
           <Trans i18nKey="arena.title">
             ĐẤU TRƯỜNG <span className="text-viet-green">HÓA HỌC</span>
           </Trans>
@@ -334,11 +334,11 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
       </div>
       <div className="w-full max-w-[420px] space-y-4">
         <div className="flex items-center gap-3">
-          <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => onFindMatch(findMode)} className="flex-1 py-5 rounded-[24px] font-black text-white text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 relative overflow-hidden group shadow-lg shadow-emerald-500/20 transition-all" style={{ background: isSearching ? 'linear-gradient(135deg, #ef4444, #dc2626)' : 'linear-gradient(135deg, #76c034, #64a32b)' }}>
+          <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => onFindMatch(findMode)} className={`flex-1 py-5 rounded-[1.5rem] font-black text-white text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all ${isSearching ? 'bg-red-500' : 'bg-viet-green'}`}>
             {isSearching ? <><motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="text-lg">⟳</motion.span> {t('arena.actions.cancel_find')}</> : <><span className="text-lg">⚔️</span> {t('arena.actions.find_match')}</>}
           </motion.button>
           <div className="relative">
-            <select value={findMode} onChange={(e) => setFindMode(e.target.value)} disabled={isSearching} className="w-32 py-5 px-3 rounded-[24px] font-black text-viet-text text-[11px] uppercase tracking-widest text-center outline-none border border-viet-border bg-white hover:border-viet-green transition-all appearance-none cursor-pointer disabled:opacity-50 shadow-sm">
+            <select value={findMode} onChange={(e) => setFindMode(e.target.value)} disabled={isSearching} className="w-32 py-5 px-3 rounded-[1.5rem] font-black text-[#1a1a1a] text-[11px] uppercase tracking-widest text-center outline-none border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all bg-white appearance-none cursor-pointer disabled:opacity-50">
               <option value="solo">{t('arena_modes.solo_short')}</option>
               <option value="3vs3">{t('arena_modes.3vs3_short')}</option>
               <option value="5vs5">{t('arena_modes.5vs5_short')}</option>
@@ -346,16 +346,16 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
             </select>
           </div>
         </div>
-        <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onCreateRoom} className="w-full py-5 rounded-[24px] font-black text-white text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 relative overflow-hidden shadow-lg shadow-purple-500/20 transition-all mt-2" style={{ background: 'linear-gradient(135deg, #a855f7, #8b5cf6)' }}>
+        <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onCreateRoom} className="w-full py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all mt-2 bg-white">
           <span>🏟️</span> {t('arena.actions.create_room')}
         </motion.button>
         <AnimatePresence mode="wait">
           {!showJoinInput ? (
             <div className="flex gap-4">
-              <motion.button key="join-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => setShowJoinInput(true)} className="flex-1 py-5 rounded-[24px] font-black text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 relative overflow-hidden shadow-lg shadow-orange-500/20 transition-all" style={{ background: 'linear-gradient(135deg, #f97316, #ea580c)' }}>
+              <motion.button key="join-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => setShowJoinInput(true)} className="flex-1 py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all bg-orange-400">
                 <span>🚪</span> {t('arena.actions.join_pin')}
               </motion.button>
-              <motion.button key="browser-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onOpenBrowser} className="flex-1 py-5 rounded-[24px] font-black text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 relative overflow-hidden shadow-lg shadow-blue-500/20 transition-all" style={{ background: 'linear-gradient(135deg, #3b82f6, #2563eb)' }}>
+              <motion.button key="browser-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onOpenBrowser} className="flex-1 py-5 rounded-[1.5rem] font-black text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all bg-blue-500">
                 <span>🌐</span> {t('arena.actions.lobby')}
               </motion.button>
             </div>
@@ -938,7 +938,7 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
   }, [avatarSeed, selectedAura, user?.id]);
 
   return (
-    <div className="min-h-screen pt-[100px] bg-viet-bg relative overflow-hidden font-inter">
+    <div className="min-h-screen pt-[100px] bg-[oklch(0.98_0.02_135)] relative overflow-hidden font-inter selection:bg-viet-green selection:text-white">
       <Particles />
 
       {/* Decorative BG blobs - softer for light theme */}

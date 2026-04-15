@@ -44,7 +44,7 @@ const Library = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[oklch(0.98_0.02_135)] pt-28 pb-20 px-4 sm:px-6 lg:px-8 selection:bg-viet-green selection:text-white">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12">
           <motion.div 
@@ -53,19 +53,19 @@ const Library = () => {
             className="flex flex-col md:flex-row md:items-end justify-between gap-6"
           >
             <div>
-              <h1 className="text-[40px] font-black text-viet-text uppercase tracking-tighter italic leading-none mb-4">
+              <h1 className="font-rubik text-5xl md:text-6xl font-black text-[#1a1a1a] uppercase tracking-tight leading-none mb-4">
                 <Trans i18nKey="library.title">
-                  Thư viện <span className="text-viet-green underline decoration-4 underline-offset-8">Học liệu</span>
+                  Thư viện <span className="text-viet-green">Học liệu</span>
                 </Trans>
               </h1>
-              <p className="text-viet-text-light font-bold text-lg">{t('library.subtitle')}</p>
+              <p className="text-[#1a1a1a]/70 font-bold text-lg">{t('library.subtitle')}</p>
             </div>
 
             <div className="relative w-full md:w-96 group">
               <input 
                 type="text" 
                 placeholder={t('library.search_placeholder')}
-                className="w-full bg-white border-2 border-viet-border rounded-full py-4 px-12 focus:ring-4 focus:ring-viet-green/10 focus:border-viet-green outline-none transition-all font-bold text-viet-text"
+                className="w-full bg-white border-4 border-[#1a1a1a] shadow-tactile-sm rounded-full py-4 px-12 focus:ring-0 focus:outline-none focus:shadow-tactile transition-all font-bold text-[#1a1a1a]"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -80,10 +80,10 @@ const Library = () => {
             <button
               key={cat.id}
               onClick={() => setCategory(cat.id)}
-              className={`whitespace-nowrap px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest transition-all ${
+              className={`whitespace-nowrap px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all border-4 border-[#1a1a1a] ${
                 category === cat.id
-                  ? 'bg-viet-green text-white shadow-xl shadow-viet-green/20'
-                  : 'bg-white border-2 border-viet-border text-viet-text-light hover:border-viet-green/30 hover:bg-viet-green/5'
+                  ? 'bg-viet-green text-white shadow-tactile translate-y-[2px]'
+                  : 'bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-tactile-sm'
               }`}
             >
               {cat.name}
@@ -107,7 +107,7 @@ const Library = () => {
               >
                 <Link
                   to={`/library/${item.id}`}
-                  className="bg-white rounded-[32px] border-2 border-viet-border p-5 h-full hover:shadow-2xl hover:shadow-viet-green/10 transition-all hover:-translate-y-2 group flex flex-col relative overflow-hidden"
+                  className="bg-white rounded-[1.5rem] border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:-translate-y-1 p-5 h-full transition-all group flex flex-col relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                      <span className="bg-viet-green text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
@@ -145,7 +145,7 @@ const Library = () => {
             ))}
 
             {materials.length === 0 && (
-              <div className="col-span-full py-24 text-center bg-white/50 rounded-[40px] border-4 border-dashed border-viet-border">
+              <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-4 border-dashed border-[#1a1a1a]">
                 <span className="text-6xl mb-4 block">📦</span>
                 <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>
                 <button onClick={() => {setCategory(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
