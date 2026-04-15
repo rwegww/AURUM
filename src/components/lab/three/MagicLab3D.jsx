@@ -287,7 +287,7 @@ const MagicLab3D = () => {
       </AnimatePresence>
 
       {/* Main UI Layout */}
-      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none p-4 z-[10]">
+      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none px-4 pt-4 pb-8 z-[10]">
         {/* Top Header */}
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
@@ -336,7 +336,7 @@ const MagicLab3D = () => {
           <motion.div 
             initial={false}
             animate={{ x: isSidebarOpen ? 0 : -340, opacity: isSidebarOpen ? 1 : 0.4 }}
-            className="relative w-[280px] my-1 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 pb-2 pointer-events-auto flex flex-col shadow-2xl min-h-0"
+            className="relative w-[280px] mt-1 mb-0 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 pb-2 pointer-events-auto flex flex-col shadow-2xl min-h-0"
           >
             {/* Toggle Button */}
             <button 
