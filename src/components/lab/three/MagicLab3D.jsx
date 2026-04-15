@@ -315,7 +315,7 @@ const MagicLab3D = () => {
         </div>
 
         {/* Middle & Bottom Layout */}
-        <div className="flex-1 flex justify-between items-start pointer-events-none mt-0 relative">
+        <div className="flex-1 flex justify-between items-center pointer-events-none mt-0 relative">
           {/* Floating Reaction Message */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 pointer-events-none z-[50]">
             <AnimatePresence>
@@ -336,7 +336,7 @@ const MagicLab3D = () => {
           <motion.div 
             initial={false}
             animate={{ x: isSidebarOpen ? 0 : -340, opacity: isSidebarOpen ? 1 : 0.4 }}
-            className="relative w-[340px] h-[75%] bg-black/50 backdrop-blur-2xl border border-white/10 rounded-[40px] p-6 pointer-events-auto flex flex-col shadow-2xl"
+            className="relative w-[340px] h-[85%] bg-black/50 backdrop-blur-2xl border border-white/10 rounded-[40px] p-6 pointer-events-auto flex flex-col shadow-2xl"
           >
             {/* Toggle Button */}
             <button 
@@ -387,7 +387,7 @@ const MagicLab3D = () => {
 
             {/* Chemicals Grid */}
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2 pb-12">
                 {availableChemicals.map((chem) => (
                   <motion.button
                     key={chem.formula + chem.name}
@@ -418,7 +418,7 @@ const MagicLab3D = () => {
           </motion.div>
 
           {/* Right Column - Beakers Selector */}
-          <div className="w-24 bg-black/30 backdrop-blur-md rounded-3xl border border-white/10 p-2 flex flex-col gap-2 overflow-y-auto max-h-[75%] custom-scrollbar pointer-events-auto">
+          <div className="w-24 bg-black/30 backdrop-blur-md rounded-3xl border border-white/10 p-2 flex flex-col gap-2 overflow-y-auto max-h-[85%] custom-scrollbar pointer-events-auto">
             {beakers.map((b, idx) => (
               <div key={b.id} className="relative group">
                 <button
