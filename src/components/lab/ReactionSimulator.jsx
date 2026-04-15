@@ -522,7 +522,7 @@ const ReactionSimulator = () => {
   );
 
   return (
-    <div ref={containerRef} className={`relative flex-1 flex flex-col md:flex-row gap-6 p-4 md:p-8 lab-ambient-bg min-h-[600px] overflow-hidden transition-all duration-700 ${isFullscreen ? 'fixed inset-0 z-[100]' : ''} rounded-[48px]`}>
+    <div ref={containerRef} className={`relative flex-1 flex flex-col md:flex-row gap-6 p-4 md:p-8 lab-ambient-bg min-h-[600px] overflow-visible transition-all duration-700 ${isFullscreen ? 'fixed inset-0 z-[100] overflow-auto' : ''} rounded-[48px]`}>
       <div className="absolute inset-0 lab-grid-overlay pointer-events-none opacity-20" />
 
       {/* Modals and Overlays */}
@@ -575,13 +575,13 @@ const ReactionSimulator = () => {
       </AnimatePresence>
 
       {/* LEFT SIDEBAR: Chemical Cabinet & Tools */}
-      <motion.aside initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="lg:w-80 flex flex-col gap-6 glass-panel rounded-[40px] p-6 h-fit max-h-[calc(100vh-10rem)] lg:sticky lg:top-8 z-20">
+      <motion.aside initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="lg:w-80 flex flex-col gap-4 glass-panel rounded-[40px] p-5 lg:sticky lg:top-4 z-20 overflow-y-auto max-h-[calc(100vh-2rem)]">
         <div className="flex justify-between items-center px-2">
           <h3 className="text-xl font-black italic uppercase tracking-tighter text-white/90">Phòng <span className="text-viet-green">vật tư</span></h3>
           <button onClick={() => setShowDiscoveryJournal(true)} className="w-10 h-10 glass-pill text-viet-green flex items-center justify-center hover:bg-viet-green hover:text-white transition-all shadow-lg" title="Sổ tay Hành trình">📖</button>
         </div>
 
-        <div className="space-y-6 flex-1 overflow-hidden flex flex-col">
+        <div className="space-y-4 flex-1 min-h-0 flex flex-col">
           <div className="space-y-3">
              <span className="text-[10px] font-black uppercase tracking-[4px] text-white/30 px-2">Kho hóa chất</span>
              <div className="space-y-4">
@@ -592,7 +592,7 @@ const ReactionSimulator = () => {
              </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar grid grid-cols-2 gap-3 min-h-0">
+          <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar grid grid-cols-2 gap-3 min-h-0 pb-16">
             {filteredChemicals.map((chem) => (
               <motion.div 
                 key={chem.formula} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
