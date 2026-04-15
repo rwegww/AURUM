@@ -94,16 +94,16 @@ const Classroom = () => {
               variants={itemVariants}
               className="group flex flex-col h-full"
             >
-              <div className="bg-white rounded-[1.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:translate-y-1 transition-all duration-200 flex flex-col h-full">
+              <div className="card-tactile overflow-hidden hover:translate-y-1 transition-all duration-200 flex flex-col h-full">
                 {/* Image Section */}
-                <div className="aspect-[16/10] overflow-hidden relative border-b-4 border-[#1a1a1a]">
+                <div className="aspect-[16/10] overflow-hidden relative border-b-2 border-duo-border">
                    <img 
                      src={item.image} 
                      alt={item.title} 
                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                    />
-                   <div className="absolute top-4 left-4 flex items-center gap-2">
-                      <span className="px-4 py-1.5 bg-white border-2 border-[#1a1a1a] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full text-[11px] font-black text-[#1a1a1a] uppercase tracking-widest">
+                    <div className="absolute top-4 left-4 flex items-center gap-2">
+                      <span className="px-4 py-1.5 bg-white border-2 border-duo-border border-b-4 rounded-full text-[11px] font-black text-[#1a1a1a] uppercase tracking-widest">
                          {item.age}
                       </span>
                    </div>
@@ -111,8 +111,8 @@ const Classroom = () => {
 
                 {/* Content Section */}
                 <div className="p-8 flex flex-col flex-1">
-                   <div className="flex items-center gap-2 mb-4">
-                      <span className={`w-8 h-2 rounded-full border-2 border-[#1a1a1a] ${item.color}`} />
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className={`w-8 h-2 rounded-full border border-duo-border ${item.color}`} />
                       <span className="text-[10px] font-black text-[#1a1a1a] uppercase tracking-widest">Aurum</span>
                    </div>
                    
@@ -126,10 +126,10 @@ const Classroom = () => {
 
                    <button 
                      onClick={() => navigate(`/classroom/${item.grade}/journey`)}
-                     className={`w-full py-4 rounded-[1rem] font-black text-[13px] uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:translate-y-1 ${
+                     className={`w-full py-4 rounded-[1rem] font-black text-[13px] uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
                        item.grade === 8 
-                       ? 'bg-viet-green text-white' 
-                       : 'bg-white text-[#1a1a1a] hover:bg-gray-50'
+                       ? 'btn-tactile-green' 
+                       : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
                      }`}
                    >
                      {t('classroom.enter_class')} <span className="text-lg">→</span>

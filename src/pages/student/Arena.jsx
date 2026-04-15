@@ -84,7 +84,7 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
 
   return (
     <motion.div initial={{ x: -40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="flex flex-col gap-5">
-      <div className="bg-white rounded-[1.5rem] p-6 border-4 border-[#1a1a1a] shadow-tactile relative overflow-hidden">
+      <div className="card-tactile relative overflow-hidden">
         <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[80px] opacity-[0.08] pointer-events-none" style={{ background: selectedAura }} />
         <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4 flex items-center gap-1">
           <span>✦</span> {t('arena.character.badge')}
@@ -127,7 +127,7 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
           </div>
         </div>
       </div>
-      <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => { const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; setAvatarSeed(randomPreset.seed); setSelectedAvatar(0); setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); }} className="w-full py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] bg-white border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:translate-y-1 transition-all flex items-center justify-center gap-3">
+      <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => { const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; setAvatarSeed(randomPreset.seed); setSelectedAvatar(0); setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); }} className="bg-white border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all px-6 py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] flex items-center justify-center gap-3">
         <span>🎲</span> {t('arena.character.random_btn')}
       </motion.button>
     </motion.div>
@@ -202,7 +202,7 @@ const StatsPanel = ({ user }) => {
 
   return (
     <motion.div initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col gap-5">
-      <div className="bg-white rounded-[1.5rem] p-6 border-4 border-[#1a1a1a] shadow-tactile relative overflow-hidden">
+      <div className="card-tactile relative overflow-hidden">
         <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full blur-[80px] opacity-[0.05] pointer-events-none" style={{ background: rank.color }} />
         <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4 flex items-center gap-1">
           <span>📊</span> {t('arena.stats.badge')}
@@ -223,7 +223,7 @@ const StatsPanel = ({ user }) => {
           </div>
         </div>
       </div>
-      <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }} onClick={() => setShowLeaderboard(v => !v)} className="w-full py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] flex items-center justify-between px-6 bg-white border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all">
+      <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }} onClick={() => setShowLeaderboard(v => !v)} className="w-full py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] flex items-center justify-between px-6 bg-white border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all">
         <span>🏆 {t('arena.stats.leaderboard_btn')}</span>
         <span className="text-[14px]">{showLeaderboard ? '↑' : '↓'}</span>
       </motion.button>
@@ -257,7 +257,7 @@ const StatsPanel = ({ user }) => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="bg-white rounded-[1.5rem] p-6 border-4 border-[#1a1a1a] shadow-tactile">
+      <div className="card-tactile">
         <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4">⚡ {t('arena.stats.history')}</p>
         {loading ? (
           <div className="flex justify-center py-4">
@@ -334,11 +334,11 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
       </div>
       <div className="w-full max-w-[420px] space-y-4">
         <div className="flex items-center gap-3">
-          <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => onFindMatch(findMode)} className={`flex-1 py-5 rounded-[1.5rem] font-black text-white text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all ${isSearching ? 'bg-red-500' : 'bg-viet-green'}`}>
+          <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => onFindMatch(findMode)} className={`flex-1 py-5 rounded-[1.5rem] font-black text-white text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 ${isSearching ? 'bg-red-500 border-b-4 border-red-700' : 'btn-tactile-green'}`}>
             {isSearching ? <><motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="text-lg">⟳</motion.span> {t('arena.actions.cancel_find')}</> : <><span className="text-lg">⚔️</span> {t('arena.actions.find_match')}</>}
           </motion.button>
           <div className="relative">
-            <select value={findMode} onChange={(e) => setFindMode(e.target.value)} disabled={isSearching} className="w-32 py-5 px-3 rounded-[1.5rem] font-black text-[#1a1a1a] text-[11px] uppercase tracking-widest text-center outline-none border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all bg-white appearance-none cursor-pointer disabled:opacity-50">
+            <select value={findMode} onChange={(e) => setFindMode(e.target.value)} disabled={isSearching} className="w-32 py-5 px-3 rounded-[1.5rem] font-black text-[#1a1a1a] text-[11px] uppercase tracking-widest text-center outline-none border-2 border-duo-border border-b-4 hover:bg-gray-50 transition-all bg-white appearance-none cursor-pointer disabled:opacity-50">
               <option value="solo">{t('arena_modes.solo_short')}</option>
               <option value="3vs3">{t('arena_modes.3vs3_short')}</option>
               <option value="5vs5">{t('arena_modes.5vs5_short')}</option>
@@ -346,16 +346,16 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
             </select>
           </div>
         </div>
-        <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onCreateRoom} className="w-full py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all mt-2 bg-white">
+        <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onCreateRoom} className="w-full py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all mt-2 bg-white">
           <span>🏟️</span> {t('arena.actions.create_room')}
         </motion.button>
         <AnimatePresence mode="wait">
           {!showJoinInput ? (
             <div className="flex gap-4">
-              <motion.button key="join-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => setShowJoinInput(true)} className="flex-1 py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all bg-orange-400">
+              <motion.button key="join-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => setShowJoinInput(true)} className="flex-1 py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-2 border-orange-600 border-b-4 bg-orange-400 hover:brightness-110 active:border-b-0 active:translate-y-[4px] transition-all">
                 <span>🚪</span> {t('arena.actions.join_pin')}
               </motion.button>
-              <motion.button key="browser-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onOpenBrowser} className="flex-1 py-5 rounded-[1.5rem] font-black text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover transition-all bg-blue-500">
+              <motion.button key="browser-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onOpenBrowser} className="flex-1 py-5 rounded-[1.5rem] font-black text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-2 border-blue-700 border-b-4 bg-blue-500 hover:brightness-110 active:border-b-0 active:translate-y-[4px] transition-all">
                 <span>🌐</span> {t('arena.actions.lobby')}
               </motion.button>
             </div>

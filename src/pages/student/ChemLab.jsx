@@ -61,7 +61,7 @@ const ChemLab = () => {
           variants={itemVariants}
           className="text-center mb-20"
         >
-          <div className="inline-block px-4 py-1.5 bg-white border-2 border-[#1a1a1a] shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-full mb-6">
+          <div className="inline-block px-4 py-1.5 bg-white border-2 border-duo-border border-b-4 rounded-full mb-6">
             <span className="text-[#1a1a1a] font-black text-xs uppercase tracking-widest italic">
               {t('chem_lab.header.badge')}
             </span>
@@ -86,10 +86,10 @@ const ChemLab = () => {
             <motion.div key={module.id} variants={itemVariants} className="flex flex-col h-full">
               <Link 
                 to={module.path}
-                className="group relative flex flex-col h-full bg-white rounded-[1.5rem] border-4 border-[#1a1a1a] hover:translate-y-1 transition-all duration-200 shadow-tactile hover:shadow-tactile-hover overflow-hidden"
+                className="card-tactile group relative flex flex-col h-full hover:translate-y-1 transition-all duration-200 overflow-hidden"
               >
                 <div className="p-8 flex flex-col h-full">
-                  <div className="w-16 h-16 rounded-[1rem] bg-white border-4 border-[#1a1a1a] shadow-tactile-sm flex items-center justify-center text-3xl mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
+                  <div className="w-16 h-16 rounded-[1rem] bg-white border-2 border-duo-border border-b-4 flex items-center justify-center text-3xl mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
                     {module.icon}
                   </div>
                   
@@ -101,7 +101,7 @@ const ChemLab = () => {
                     {module.desc}
                   </p>
                   
-                  <div className={`mt-auto py-3 px-6 rounded-full font-black text-[13px] uppercase tracking-widest transition-colors flex items-center justify-center gap-2 border-2 border-[#1a1a1a] ${module.colorClass}`}>
+                  <div className={`mt-auto py-3 px-6 rounded-full font-black text-[13px] uppercase tracking-widest transition-colors flex items-center justify-center gap-2 border-2 border-duo-border border-b-4 ${module.colorClass.replace('bg-[#1a1a1a]', 'bg-viet-green')}`}>
                     {t('chem_lab.modules.start_btn')} <span className="text-lg">→</span>
                   </div>
                 </div>
@@ -115,7 +115,7 @@ const ChemLab = () => {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="mt-24 p-10 rounded-[1.5rem] bg-[#1a1a1a] border-4 border-[#1a1a1a] shadow-tactile-green text-center relative overflow-hidden"
+          className="mt-24 p-10 rounded-[1.5rem] bg-[#1a1a1a] border-4 border-[#1a1a1a] text-center relative overflow-hidden"
         >
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-around gap-8">
             <div className="text-center">

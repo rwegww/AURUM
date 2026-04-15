@@ -65,7 +65,7 @@ const Library = () => {
               <input 
                 type="text" 
                 placeholder={t('library.search_placeholder')}
-                className="w-full bg-white border-4 border-[#1a1a1a] shadow-tactile-sm rounded-full py-4 px-12 focus:ring-0 focus:outline-none focus:shadow-tactile transition-all font-bold text-[#1a1a1a]"
+                className="w-full bg-white border-2 border-duo-border border-b-4 rounded-full py-4 px-12 focus:ring-0 focus:outline-none focus:border-gray-300 transition-all font-bold text-[#1a1a1a]"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -80,10 +80,10 @@ const Library = () => {
             <button
               key={cat.id}
               onClick={() => setCategory(cat.id)}
-              className={`whitespace-nowrap px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all border-4 border-[#1a1a1a] ${
+              className={`whitespace-nowrap px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all ${
                 category === cat.id
-                  ? 'bg-viet-green text-white shadow-tactile translate-y-[2px]'
-                  : 'bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-tactile-sm'
+                  ? 'btn-tactile-green'
+                  : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
               }`}
             >
               {cat.name}
@@ -107,7 +107,7 @@ const Library = () => {
               >
                 <Link
                   to={`/library/${item.id}`}
-                  className="bg-white rounded-[1.5rem] border-4 border-[#1a1a1a] shadow-tactile hover:shadow-tactile-hover hover:-translate-y-1 p-5 h-full transition-all group flex flex-col relative overflow-hidden"
+                  className="card-tactile p-5 h-full transition-all group flex flex-col relative overflow-hidden hover:-translate-y-1"
                 >
                   <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                      <span className="bg-viet-green text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
@@ -145,7 +145,7 @@ const Library = () => {
             ))}
 
             {materials.length === 0 && (
-              <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-4 border-dashed border-[#1a1a1a]">
+              <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-2 border-dashed border-duo-border">
                 <span className="text-6xl mb-4 block">📦</span>
                 <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>
                 <button onClick={() => {setCategory(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
