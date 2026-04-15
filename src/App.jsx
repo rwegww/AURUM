@@ -69,7 +69,7 @@ function AppContent() {
 
   return (
     <>
-      {!isAuthPage && !isImmersivePage && !isManagementPage && location.pathname !== '/' && <Navbar />}
+      {!isAuthPage && !isImmersivePage && !isManagementPage && <Navbar />}
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* ... standard routes ... */}

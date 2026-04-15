@@ -27,7 +27,7 @@ const FloatingIsland = ({ rank, user, delay }) => {
   const isSecond = rank === 2;
   const isThird = rank === 3;
 
-  const yOffset = isFirst ? -60 : isSecond ? -20 : 0;
+  const yOffset = isFirst ? -80 : isSecond ? -30 : 0;
   
   return (
     <motion.div
@@ -50,10 +50,10 @@ const FloatingIsland = ({ rank, user, delay }) => {
         <motion.div 
           animate={{ y: [0, -15, 0] }}
           transition={{ duration: 3 + Math.random(), repeat: Infinity, ease: "easeInOut" }}
-          className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl bg-white shadow-2xl border-4 ${isFirst ? 'border-amber-400' : 'border-white'} overflow-hidden relative p-1`}
+          className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl bg-white shadow-2xl border-4 ${isFirst ? 'border-amber-400 shadow-amber-200/50' : 'border-white shadow-slate-200/50'} overflow-hidden relative p-1`}
         >
           <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center p-2">
-            <Avatar seed={user?.avatarSeed || user?.username} size={110} className="w-full h-full object-cover scale-150 translate-y-2" />
+            <Avatar seed={user?.avatarSeed || user?.username} size={110} className="w-full h-full object-cover scale-110 translate-y-1" />
           </div>
         </motion.div>
         
@@ -75,13 +75,13 @@ const FloatingIsland = ({ rank, user, delay }) => {
         </div>
         
         {/* XP Tooltip-style Badge */}
-        <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-20 bg-viet-text text-white px-4 py-1.5 rounded-2xl text-[13px] font-black shadow-xl whitespace-nowrap border-2 border-white/20">
+        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 bg-[#1a1a1a] text-white px-4 py-1.5 rounded-full text-[13px] font-black shadow-xl whitespace-nowrap border-2 border-white">
           {user?.xp || 0} XP
         </div>
       </div>
 
       {/* Detailed SVG Island */}
-      <div className="relative w-40 h-24 mb-6">
+      <div className="relative w-44 h-28 mb-6 mt-4">
         <svg viewBox="0 0 200 120" className="w-full h-full drop-shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
           {/* Main Island Body */}
           <path 
@@ -184,7 +184,7 @@ const LeaderboardSection = () => {
         </div>
 
         {/* Top 3 Podium (The Islands) */}
-        <div className="flex items-end justify-center gap-3 sm:gap-6 md:gap-14 pt-20 mb-32 w-full overflow-x-auto pb-8 px-4 no-scrollbar">
+        <div className="flex items-end justify-center gap-3 sm:gap-6 md:gap-14 pt-40 mb-32 w-full overflow-visible pb-8 px-4">
           <div className="shrink-0 scale-75 sm:scale-90 md:scale-100 origin-bottom">
             <FloatingIsland rank={2} user={topThree[0]} delay={0.2} />
           </div>
