@@ -4848,6 +4848,237 @@ export const reactions = [
     safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
     isBlocked: false
   },
+  {
+    id: "rx_206",
+    name: "Đốt cháy Cacbon",
+    type: "combination",
+    reactants: [
+      { formula: "C", coeff: 1, name: "Cacbon" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+    ],
+    products: [
+      { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" }
+    ],
+    equation: "C + O₂ →(t°) CO₂",
+    gradeLevel: 8,
+    category: "Phi kim",
+    conditions: "Nhiệt độ cao",
+    observation: "Than cháy sáng, tỏa nhiều nhiệt, không có ngọn lửa.",
+    energy: -393.5,
+    animation: "burn",
+    requiresHeat: true,
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_207",
+    name: "Canxi tác dụng với nước",
+    type: "single-replacement",
+    reactants: [
+      { formula: "Ca", coeff: 1, name: "Canxi" },
+      { formula: "H₂O", coeff: 2, name: "Nước" }
+    ],
+    products: [
+      { formula: "Ca(OH)₂", coeff: 1, name: "Canxi Hidroxit" },
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+    ],
+    equation: "Ca + 2H₂O → Ca(OH)₂ + H₂↑",
+    gradeLevel: 9,
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Canxi tan dần, sủi bọt khí mạnh, dung dịch trở nên đục.",
+    energy: -413,
+    animation: "fizz",
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_208",
+    name: "Đốt cháy Canxi",
+    type: "combination",
+    reactants: [
+      { formula: "Ca", coeff: 2, name: "Canxi" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+    ],
+    products: [
+      { formula: "CaO", coeff: 2, name: "Vôi sống" }
+    ],
+    equation: "2Ca + O₂ →(t°) 2CaO",
+    gradeLevel: 8,
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao",
+    observation: "Canxi cháy với ngọn lửa đỏ cam đặc trưng, tạo chất rắn màu trắng.",
+    energy: -1270,
+    animation: "burn",
+    requiresHeat: true,
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_209",
+    name: "Liti tác dụng với nước",
+    type: "single-replacement",
+    reactants: [
+      { formula: "Li", coeff: 2, name: "Liti" },
+      { formula: "H₂O", coeff: 2, name: "Nước" }
+    ],
+    products: [
+      { formula: "LiOH", coeff: 2, name: "Liti Hidroxit" },
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+    ],
+    equation: "2Li + 2H₂O → 2LiOH + H₂↑",
+    gradeLevel: 10,
+    category: "Kim loại kiềm",
+    conditions: "Nhiệt độ thường",
+    observation: "Liti tan chậm hơn Natri, sủi bọt khí không màu.",
+    energy: -444,
+    animation: "fizz",
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_210",
+    name: "Kali tác dụng với nước",
+    type: "single-replacement",
+    reactants: [
+      { formula: "K", coeff: 2, name: "Kali" },
+      { formula: "H₂O", coeff: 2, name: "Nước" }
+    ],
+    products: [
+      { formula: "KOH", coeff: 2, name: "Kali Hidroxit" },
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+    ],
+    equation: "2K + 2H₂O → 2KOH + H₂↑",
+    gradeLevel: 8,
+    category: "Kim loại kiềm",
+    conditions: "Nhiệt độ thường",
+    observation: "Kali phản ứng cực mạnh, tự bùng cháy với ngọn lửa màu tím đặc trưng.",
+    energy: -392,
+    animation: "explosion",
+    dangerLevel: 2,
+    safetyWarning: "Phản ứng mãnh liệt, cần cẩn trọng",
+    isBlocked: false
+  },
+  {
+    id: "rx_211",
+    name: "Kali tác dụng với Clo",
+    type: "combination",
+    reactants: [
+      { formula: "K", coeff: 2, name: "Kali" },
+      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
+    ],
+    products: [
+      { formula: "KCl", coeff: 2, name: "Kali Clorua" }
+    ],
+    equation: "2K + Cl₂ →(t°) 2KCl",
+    gradeLevel: 10,
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao",
+    observation: "Kali cháy sáng trong khí Clo, tạo tinh thể trắng.",
+    energy: -874,
+    animation: "smoke",
+    requiresHeat: true,
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_212",
+    name: "Bari tác dụng với nước",
+    type: "single-replacement",
+    reactants: [
+      { formula: "Ba", coeff: 1, name: "Bari" },
+      { formula: "H₂O", coeff: 2, name: "Nước" }
+    ],
+    products: [
+      { formula: "Ba(OH)₂", coeff: 1, name: "Bari Hidroxit" },
+      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+    ],
+    equation: "Ba + 2H₂O → Ba(OH)₂ + H₂↑",
+    gradeLevel: 11,
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Bari tan nhanh, sủi bọt khí mạnh mẽ.",
+    energy: -430,
+    animation: "fizz",
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_213",
+    name: "Crom tác dụng với Clo",
+    type: "combination",
+    reactants: [
+      { formula: "Cr", coeff: 2, name: "Crom" },
+      { formula: "Cl₂", coeff: 3, name: "Khí Clo" }
+    ],
+    products: [
+      { formula: "CrCl₃", coeff: 2, name: "Crom(III) Clorua" }
+    ],
+    equation: "2Cr + 3Cl₂ →(t°) 2CrCl₃",
+    gradeLevel: 12,
+    category: "Kim loại",
+    conditions: "Nhiệt độ cao",
+    observation: "Crom cháy trong Clo tạo tinh thể màu tím đỏ.",
+    energy: -556,
+    animation: "smoke",
+    requiresHeat: true,
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_214",
+    name: "Bạc tác dụng với Axit Nitric đặc",
+    type: "redox",
+    reactants: [
+      { formula: "Ag", coeff: 1, name: "Bạc" },
+      { formula: "HNO₃", coeff: 2, name: "Axit Nitric đặc" }
+    ],
+    products: [
+      { formula: "AgNO₃", coeff: 1, name: "Bạc Nitrat" },
+      { formula: "NO₂", coeff: 1, name: "Khí Nitơ Đioxit" },
+      { formula: "H₂O", coeff: 1, name: "Nước" }
+    ],
+    equation: "Ag + 2HNO₃(đ) → AgNO₃ + NO₂↑ + H₂O",
+    gradeLevel: 11,
+    category: "Kim loại",
+    conditions: "Nhiệt độ thường",
+    observation: "Bạc tan, giải phóng khí màu nâu đỏ NO₂.",
+    energy: -100,
+    animation: "smoke",
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
+  {
+    id: "rx_215",
+    name: "Oxy hóa Bạc",
+    type: "combination",
+    reactants: [
+      { formula: "Ag", coeff: 4, name: "Bạc" },
+      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+    ],
+    products: [
+      { formula: "Ag₂O", coeff: 2, name: "Bạc Oxit" }
+    ],
+    equation: "4Ag + O₂ →(200°C) 2Ag₂O",
+    gradeLevel: 11,
+    category: "Kim loại",
+    conditions: "Nhiệt độ ~200°C",
+    observation: "Bề mặt bạc bị xỉn màu, tạo lớp oxit màu đen.",
+    energy: -62.2,
+    animation: "color-change",
+    requiresHeat: true,
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn",
+    isBlocked: false
+  },
 ];
 
 
@@ -4875,6 +5106,7 @@ export const chemicals = [
   { id: "Ar", formula: "Ar", name: "Khí Agon", state: "gas", category: "Khí hiếm", molarMass: 39.948, color: "#f8fafc", isStarter: true },
   { id: "Cr", formula: "Cr", name: "Crom", state: "solid", category: "Kim loại", molarMass: 51.996, color: "#94a3b8", isStarter: true },
   { id: "Ba", formula: "Ba", name: "Bari", state: "solid", category: "Kim loại kiềm thổ", molarMass: 137.33, color: "#e2e8f0", isStarter: true },
+  { id: "Ag", formula: "Ag", name: "Bạc", state: "solid", category: "Kim loại", molarMass: 107.87, color: "#f8fafc", isStarter: true },
   { id: "Cu", formula: "Cu", name: "Đồng", state: "solid", category: "Kim loại", molarMass: 63.546, color: "#f97316", isStarter: true },
   { id: "H2O", formula: "H₂O", name: "Nước", state: "liquid", category: "Dung môi", molarMass: 18.015, color: "#38bdf8" },
   { id: "HCl", formula: "HCl", name: "Axit Clohidric", state: "liquid", category: "Axit", molarMass: 36.46, color: "rgba(255,255,255,0.2)" },
