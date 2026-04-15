@@ -5171,8 +5171,8 @@ export const chemicals = [
   { id: "Na2CO3", formula: "Na₂CO₃", name: "Natri Cacbonat", state: "solid", category: "Muối", molarMass: 105.99, color: "#ffffff" },
   { id: "NaHCO3", formula: "NaHCO₃", name: "Natri Bicacbonat", state: "solid", category: "Muối", molarMass: 84.01, color: "#ffffff" },
   { id: "Ca(OH)2", formula: "Ca(OH)₂", name: "Canxi Hidroxit", state: "liquid", category: "Bazơ", molarMass: 74.09, color: "#f8fafc" },
-  { id: "Br2", formula: "Br₂", name: "Brom", state: "liquid", category: "Halogen", molarMass: 159.8, color: "#7c2d12" },
-  { id: "I2", formula: "I₂", name: "Iốt", state: "solid", category: "Halogen", molarMass: 253.8, color: "#4c1d95" },
+  { id: "Br2", formula: "Br₂", name: "Brom", state: "liquid", category: "Halogen", molarMass: 159.8, color: "#7c2d12", isStarter: true },
+  { id: "I2", formula: "I₂", name: "Iốt", state: "solid", category: "Halogen", molarMass: 253.8, color: "#4c1d95", isStarter: true },
   { id: "KClO3", formula: "KClO₃", name: "Kali Clorat", state: "solid", category: "Muối", molarMass: 122.5, color: "#ffffff" },
 
   // Hữu cơ (Organic)

@@ -287,7 +287,7 @@ const MagicLab3D = () => {
       </AnimatePresence>
 
       {/* Main UI Layout */}
-      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none px-4 pt-4 pb-8 z-[10]">
+      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none px-4 pt-4 pb-4 z-[10]">
         {/* Top Header */}
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
@@ -387,7 +387,7 @@ const MagicLab3D = () => {
 
             {/* Chemicals Grid */}
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 min-h-0" style={{ minHeight: 0 }}>
-              <div className="grid grid-cols-3 gap-1.5 pb-8">
+              <div className="grid grid-cols-3 gap-1.5 pb-20">
                 {availableChemicals.map((chem) => (
                   <motion.button
                     key={chem.formula + chem.name}
