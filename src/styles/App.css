@@ -18,6 +18,15 @@
   --color-lab-border: rgba(255, 255, 255, 0.08);
   --color-glow-green: rgba(118, 192, 52, 0.2);
   --glass-blur: 24px;
+  /* Duolingo-style Tactile Tokens */
+  --color-duo-green: #58cc02;
+  --color-duo-green-dark: #46a302;
+  --color-duo-blue: #1cb0f6;
+  --color-duo-blue-dark: #1899d6;
+  --color-duo-yellow: #ffc800;
+  --color-duo-yellow-dark: #e5a400;
+  --color-duo-border: #e5e5e5;
+  --color-duo-card-shadow: #e5e5e5;
 }
 
 body {
@@ -143,4 +152,25 @@ h1, h2, h3, h4, h5, h6 {
 .lab-grid-overlay {
   background-image: radial-gradient(rgba(118, 192, 52, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+/* Duolingo-style Tactile Components */
+.btn-tactile-green {
+  @apply bg-duo-green text-white border-b-4 border-duo-green-dark active:border-b-0 active:translate-y-[4px] transition-all duration-75;
+}
+
+.btn-tactile-blue {
+  @apply bg-duo-blue text-white border-b-4 border-duo-blue-dark active:border-b-0 active:translate-y-[4px] transition-all duration-75;
+}
+
+.btn-tactile-yellow {
+  @apply bg-duo-yellow text-white border-b-4 border-duo-yellow-dark active:border-b-0 active:translate-y-[4px] transition-all duration-75;
+}
+
+.card-tactile {
+  @apply bg-white border-2 border-duo-border border-b-4 rounded-[1.5rem] transition-all;
+}
+
+.card-tactile:hover {
+  @apply border-gray-300 border-b-4;
 }
