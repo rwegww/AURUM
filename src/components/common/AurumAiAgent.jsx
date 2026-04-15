@@ -22,9 +22,49 @@ const AurumAiAgent = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  
+  // BYOK State
+  const [apiKeyValue, setApiKeyValue] = useState('');
+  const [isKeySaved, setIsKeySaved] = useState(false);
+  
   const scrollRef = useRef(null);
 
   const role = user?.role || 'guest';
+
+  // Load Key from LocalStorage on mount or user change
+  useEffect(() => {
+    if (user?.id) {
+      const savedKey = localStorage.getItem(`gemini_key_${user.id}`);
+      if (savedKey) {
+        setIsKeySaved(true);
+      } else {
+        setIsKeySaved(false);
+      }
+    } else {
+      setIsKeySaved(false);
+    }
+  }, [user]);
+
+  const handleSaveKey = () => {
+    if (apiKeyValue.trim() && user?.id) {
+      localStorage.setItem(`gemini_key_${user.id}`, apiKeyValue.trim());
+      setIsKeySaved(true);
+      setMessages(prev => [...prev, {
+        id: Date.now(),
+        text: "🟢 **Hệ thống đã nhận API Key của bạn.**\nBạn sẽ không còn bị giới hạn bởi hạn mức của Server chung nữa. Giới hạn của bạn bây giờ là 1500 câu hỏi/ngày. Bạn muốn hỏi gì nào?",
+        sender: 'ai',
+        timestamp: new Date()
+      }]);
+    }
+  };
+
+  const handleRemoveKey = () => {
+    if (user?.id) {
+      localStorage.removeItem(`gemini_key_${user.id}`);
+      setIsKeySaved(false);
+      setApiKeyValue('');
+    }
+  };
 
   // Initialize with welcome message
   useEffect(() => {
@@ -72,7 +112,15 @@ const AurumAiAgent = () => {
 
     // AI Logic
     setTimeout(async () => {
-      const response = await AurumExpert.ask(text, { role, page: location.pathname, user });
+      // Get the locally saved api key to pass to the backend
+      const user_api_key = user?.id ? localStorage.getItem(`gemini_key_${user.id}`) : null;
+      
+      const response = await AurumExpert.ask(text, { 
+        role, 
+        page: location.pathname, 
+        user,
+        user_api_key 
+      });
       
       const aiMsg = { 
         id: Date.now() + 1, 
@@ -262,25 +310,77 @@ const AurumAiAgent = () => {
               )}
             </div>
 
-            {/* Input Area */}
-            <form onSubmit={handleSendMessage} className="p-6 bg-white/5 border-t border-white/10 shadow-2xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="Hỏi Aurum về hóa học..."
-                  className="w-full bg-black/40 border border-white/10 rounded-2xl py-4 pl-5 pr-14 text-sm text-white focus:ring-2 focus:ring-blue-600 outline-none transition-all placeholder:text-white/20"
-                />
+            {/* Input Area / Auth States */}
+            {!isLoggedIn ? (
+              <div className="p-6 bg-white/5 border-t border-white/10 text-center">
+                <p className="text-sm font-bold text-white mb-2">Vui lòng đăng nhập</p>
+                <p className="text-[10px] text-white/50 mb-4">Bạn cần đăng nhập để thiết lập và sử dụng tính năng Chat AI thông minh.</p>
                 <button 
-                  type="submit" 
-                  disabled={!inputValue.trim() || isTyping}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white disabled:opacity-30 hover:scale-105 active:scale-95 transition-all"
+                  onClick={() => navigate('/auth')}
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-500 transition-colors text-white text-xs font-bold rounded-xl"
                 >
-                  <Send size={18} />
+                  Đăng nhập ngay
                 </button>
               </div>
-            </form>
+            ) : !isKeySaved ? (
+              <div className="p-5 bg-white/5 border-t border-blue-500/30 shadow-[0_-10px_40px_rgba(37,99,235,0.1)]">
+                <div className="flex items-center gap-2 mb-3">
+                  <ShieldAlert size={16} className="text-yellow-400" />
+                  <p className="text-xs font-bold text-white uppercase tracking-wider">Cài đặt API Key Cá nhân</p>
+                </div>
+                <p className="text-[10px] text-white/60 mb-3 leading-relaxed">
+                  Để sử dụng hệ thống AI phân tích hóa học <b>không giới hạn (1500 câu hỏi/ngày)</b>, bạn cần có API Key Gemini riêng. Tạo hoàn toàn miễn phí tại <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" className="text-blue-400 font-bold hover:underline">Google AI Studio</a>.
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="password"
+                    value={apiKeyValue}
+                    onChange={(e) => setApiKeyValue(e.target.value)}
+                    placeholder="Dán API Key của bạn (AIzaSy...)"
+                    className="flex-1 bg-black/40 border border-white/10 rounded-xl py-2 px-3 text-xs text-white focus:ring-1 focus:ring-blue-600 outline-none"
+                  />
+                  <button 
+                    onClick={handleSaveKey}
+                    disabled={!apiKeyValue.trim()}
+                    className="px-4 py-2 bg-blue-600 rounded-xl text-white text-xs font-bold hover:bg-blue-500 disabled:opacity-50 transition-colors"
+                  >
+                    Lưu
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSendMessage} className="p-4 bg-white/5 border-t border-white/10 shadow-2xl relative">
+                <div className="absolute -top-7 left-0 right-0 flex justify-center">
+                  <div className="bg-green-500/20 border border-green-500/30 text-green-400 text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-widest flex items-center gap-1.5 shadow-lg backdrop-blur-md">
+                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                    Personal API (1500 limits/day)
+                    <button 
+                      type="button" 
+                      onClick={handleRemoveKey}
+                      className="ml-2 pl-2 border-l border-green-500/30 text-white/60 hover:text-white"
+                    >
+                      Xóa
+                    </button>
+                  </div>
+                </div>
+                <div className="relative mt-2">
+                  <input
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    placeholder="Hỏi Aurum về hóa học..."
+                    className="w-full bg-black/40 border border-white/10 rounded-2xl py-3.5 pl-5 pr-14 text-sm text-white focus:ring-2 focus:ring-blue-600 outline-none transition-all placeholder:text-white/20"
+                  />
+                  <button 
+                    type="submit" 
+                    disabled={!inputValue.trim() || isTyping}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white disabled:opacity-30 hover:scale-105 active:scale-95 transition-all"
+                  >
+                    <Send size={18} />
+                  </button>
+                </div>
+              </form>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

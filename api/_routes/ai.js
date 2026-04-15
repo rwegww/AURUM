@@ -73,31 +73,28 @@ router.post('/ask', async (req, res) => {
       let responseText = '';
       let usedEngine = '';
 
-      // Stage 1: Try OpenAI (Premium)
-      try {
-        console.log('📡 Attempting OpenAI (gpt-4o-mini)...');
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4o-mini",
-          messages: [
-            { role: "system", content: SYSTEM_INSTRUCTION },
-            { role: "user", content: normalizedQuery }
-          ],
-          max_tokens: 800,
-          temperature: 0.7
+      if (context.user_api_key) {
+        // BYOK: Use Personal Gemini API Key
+        console.log('📡 BYOK Active: Using Personal API Key...');
+        try {
+          const personalGenAI = new GoogleGenerativeAI(context.user_api_key);
+          // Try 1.5-flash as default for new keys
+          const personalModel = personalGenAI.getGenerativeModel({ model: 'gemini-1.5-flash' }, { apiVersion: 'v1' });
+          const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
+          const result = await personalModel.generateContent(fullPrompt);
+          responseText = (await result.response).text();
+          usedEngine = 'personal-gemini-key';
+        } catch (personalErr) {
+          console.error('💥 Personal API Key Error:', personalErr.message);
+          return res.status(401).json({ error: 'Invalid or Expired Personal API Key', details: personalErr.message });
+        }
+      } else {
+        // System Hybrid Mode (Currently out of quota)
+        return res.status(503).json({
+          error: 'AI Service Temporarily Unavailable',
+          message: 'Tất cả các dịch vụ AI hiện đang bận. Vui lòng thử lại sau giây lát hoặc cung cấp API Key cá nhân.',
+          details: 'System quota exceeded.'
         });
-        responseText = completion.choices[0].message.content;
-        usedEngine = 'openai-gpt-4o-mini';
-      } catch (openAiErr) {
-        console.warn('⚠️ OpenAI Failed (likely quota), falling back to Gemini:', openAiErr.message);
-        
-        // Stage 2: Emergency Fallback to Gemini 2.5 Flash (Only working model for this key)
-        console.log('📡 Emergency Fallback to Gemini (2.5-flash)...');
-        const geminiModel = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' }, { apiVersion: 'v1' });
-        const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
-        const result = await geminiModel.generateContent(fullPrompt);
-        const response = await result.response;
-        responseText = response.text();
-        usedEngine = 'gemini-2.5-flash-fallback';
       }
 
       const duration = Date.now() - startTime;

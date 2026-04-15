@@ -115,6 +115,7 @@ class AurumExpertEngine {
     const role = context.user?.role || context.role || 'student';
     const userId = context.user?.id || context.userId;
     const username = context.user?.username || context.username;
+    const user_api_key = context.user_api_key || null;
     const q = (query || '').toLowerCase().trim();
 
     if (!q) return this.handleFallback();
@@ -185,12 +186,18 @@ class AurumExpertEngine {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           query, 
-          context: { userId, username, role } 
+          context: { userId, username, role, user_api_key } 
         })
       });
 
       if (response.ok) {
         return await response.json();
+      } else if (response.status === 401) {
+        // Handle invalid API key explicitly
+        return {
+          message: '❌ **API Key không hợp lệ hoặc đã hết hạn.**\n\nVui lòng kiểm tra lại Google Gemini API Key của bạn trong phần thiết lập để tiếp tục sử dụng hệ thống AI phân tích chuyên sâu.',
+          suggestions: []
+        };
       }
     } catch (apiErr) {
       console.warn('⚠️ Hybrid AI Offline, following curriculum lookup:', apiErr.message);
