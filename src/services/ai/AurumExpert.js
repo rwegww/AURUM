@@ -153,7 +153,7 @@ class AurumExpertEngine {
     }
 
     const foundTokens = this.extractChemicals(query);
-    const isReactionQuery = q.includes('+') || q.includes('tác dụng') || q.includes('phản ứng') || q.includes('cho vào') || q.includes('dự đoán');
+    const isReactionQuery = q.includes('+') || q.includes('tác dụng') || q.includes('phản ứng') || q.includes('cho vào') || q.includes('dự đoán') || q.includes('tạo ra') || q.includes('điều chế');
     
     if (isReactionQuery) {
       if (foundTokens.length >= 2) {
@@ -191,13 +191,15 @@ class AurumExpertEngine {
         })
       });
 
+      const result = await response.json();
+
       if (response.ok) {
-        return await response.json();
-      } else if (response.status === 401) {
-        // Handle invalid API key explicitly
+        return result;
+      } else {
+        // Show the actual error message from backend (e.g. quota exceeded)
         return {
-          message: '❌ **API Key không hợp lệ hoặc đã hết hạn.**\n\nVui lòng kiểm tra lại Google Gemini API Key của bạn trong phần thiết lập để tiếp tục sử dụng hệ thống AI phân tích chuyên sâu.',
-          suggestions: []
+          message: `⚠️ **[Hệ thống AI]**\n\n${result.message || 'Hệ thống đang bận, vui lòng thử lại sau.'}`,
+          suggestions: result.error === 'AI Service Temporarily Unavailable' ? ['Thiết lập API Key cá nhân'] : []
         };
       }
     } catch (apiErr) {
