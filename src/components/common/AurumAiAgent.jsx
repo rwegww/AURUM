@@ -115,11 +115,21 @@ const AurumAiAgent = () => {
       // Get the locally saved api key to pass to the backend
       const user_api_key = user?.id ? localStorage.getItem(`gemini_key_${user.id}`) : null;
       
+      // Build chat history from recent messages (last 10 turns max)
+      const recentMessages = [...messages].slice(-10);
+      const chat_history = recentMessages
+        .filter(m => m.text)
+        .map(m => ({
+          role: m.sender === 'user' ? 'user' : 'model',
+          text: m.text
+        }));
+
       const response = await AurumExpert.ask(text, { 
         role, 
         page: location.pathname, 
         user,
-        user_api_key 
+        user_api_key,
+        chat_history
       });
       
       const aiMsg = { 

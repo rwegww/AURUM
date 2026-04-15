@@ -74,15 +74,24 @@ router.post('/ask', async (req, res) => {
       let usedEngine = '';
 
       if (context.user_api_key) {
-        // BYOK: Use Personal Gemini API Key
-        console.log('📡 BYOK Active: Using Personal API Key...');
+        // BYOK: Use Personal Gemini API Key with Multi-turn Chat
+        console.log('📡 BYOK Active: Using Personal API Key with Chat History...');
         try {
           const personalGenAI = new GoogleGenerativeAI(context.user_api_key);
-          // Use gemini-2.5-flash (the only model with quota on new Google accounts)
-          const personalModel = personalGenAI.getGenerativeModel({ model: 'gemini-2.5-flash' }, { apiVersion: 'v1' });
-          const fullPrompt = `${SYSTEM_INSTRUCTION}\n${normalizedQuery}`;
-          const result = await personalModel.generateContent(fullPrompt);
-          responseText = (await result.response).text();
+          const personalModel = personalGenAI.getGenerativeModel({ 
+            model: 'gemini-2.5-flash',
+            systemInstruction: SYSTEM_INSTRUCTION
+          }, { apiVersion: 'v1' });
+
+          // Build Gemini-compatible chat history from frontend messages
+          const chatHistory = (context.chat_history || []).map(m => ({
+            role: m.role === 'user' ? 'user' : 'model',
+            parts: [{ text: m.text }]
+          }));
+
+          const chat = personalModel.startChat({ history: chatHistory });
+          const result = await chat.sendMessage(normalizedQuery);
+          responseText = result.response.text();
           usedEngine = 'personal-gemini-key';
         } catch (personalErr) {
           console.error('💥 Personal API Key Error:', personalErr.message);

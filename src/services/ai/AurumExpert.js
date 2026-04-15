@@ -116,6 +116,7 @@ class AurumExpertEngine {
     const userId = context.user?.id || context.userId;
     const username = context.user?.username || context.username;
     const user_api_key = context.user_api_key || null;
+    const chat_history = context.chat_history || [];
     const q = (query || '').toLowerCase().trim();
 
     if (!q) return this.handleFallback();
@@ -186,7 +187,7 @@ class AurumExpertEngine {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           query, 
-          context: { userId, username, role, user_api_key } 
+          context: { userId, username, role, user_api_key, chat_history } 
         })
       });
 
