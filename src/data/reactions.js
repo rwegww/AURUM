@@ -4873,6 +4873,8 @@ export const chemicals = [
   { id: "Si", formula: "Si", name: "Silic", state: "solid", category: "Á kim", molarMass: 28.085, color: "#475569", isStarter: true },
   { id: "K", formula: "K", name: "Kali", state: "solid", category: "Kim loại kiềm", molarMass: 39.098, color: "#e2e8f0", isStarter: true },
   { id: "Ar", formula: "Ar", name: "Khí Agon", state: "gas", category: "Khí hiếm", molarMass: 39.948, color: "#f8fafc", isStarter: true },
+  { id: "Cr", formula: "Cr", name: "Crom", state: "solid", category: "Kim loại", molarMass: 51.996, color: "#94a3b8", isStarter: true },
+  { id: "Ba", formula: "Ba", name: "Bari", state: "solid", category: "Kim loại kiềm thổ", molarMass: 137.33, color: "#e2e8f0", isStarter: true },
   { id: "Cu", formula: "Cu", name: "Đồng", state: "solid", category: "Kim loại", molarMass: 63.546, color: "#f97316", isStarter: true },
   { id: "H2O", formula: "H₂O", name: "Nước", state: "liquid", category: "Dung môi", molarMass: 18.015, color: "#38bdf8" },
   { id: "HCl", formula: "HCl", name: "Axit Clohidric", state: "liquid", category: "Axit", molarMass: 36.46, color: "rgba(255,255,255,0.2)" },
