@@ -326,7 +326,7 @@ const AurumAiAgent = () => {
                 <p className="text-sm font-bold text-white mb-2">Vui lòng đăng nhập</p>
                 <p className="text-[10px] text-white/50 mb-4">Bạn cần đăng nhập để thiết lập và sử dụng tính năng Chat AI thông minh.</p>
                 <button 
-                  onClick={() => navigate('/auth')}
+                  onClick={() => navigate('/login')}
                   className="px-6 py-2 bg-blue-600 hover:bg-blue-500 transition-colors text-white text-xs font-bold rounded-xl"
                 >
                   Đăng nhập ngay
