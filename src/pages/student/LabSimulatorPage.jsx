@@ -33,7 +33,7 @@ const LabSimulatorPage = () => {
           </motion.div>
         </header>
 
-        <div className="h-[80vh] min-h-[600px] max-h-[900px] w-full">
+        <div className="min-h-[500px] w-full" style={{ height: 'calc(100vh - 280px)' }}>
           <MagicLab3D />
         </div>
       </div>

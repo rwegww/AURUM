@@ -287,7 +287,7 @@ const MagicLab3D = () => {
       </AnimatePresence>
 
       {/* Main UI Layout */}
-      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none p-6 z-[10]">
+      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none p-4 z-[10]">
         {/* Top Header */}
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
@@ -336,7 +336,7 @@ const MagicLab3D = () => {
           <motion.div 
             initial={false}
             animate={{ x: isSidebarOpen ? 0 : -340, opacity: isSidebarOpen ? 1 : 0.4 }}
-            className="relative w-[340px] my-2 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-[40px] p-6 pointer-events-auto flex flex-col shadow-2xl min-h-0"
+            className="relative w-[280px] my-1 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 pb-6 pointer-events-auto flex flex-col shadow-2xl min-h-0 overflow-hidden"
           >
             {/* Toggle Button */}
             <button 
@@ -347,7 +347,7 @@ const MagicLab3D = () => {
             </button>
 
             {/* Tools Area */}
-            <div className="flex justify-between items-center mb-6 bg-white/5 p-2 rounded-2xl border border-white/5">
+            <div className="flex justify-between items-center mb-4 bg-white/5 p-1.5 rounded-2xl border border-white/5">
               <button 
                 onClick={handleToggleHeat}
                 className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${activeBeaker.isHeating ? 'bg-orange-500 text-white shadow-lg' : 'hover:bg-white/5 text-white/50'}`}
@@ -372,7 +372,7 @@ const MagicLab3D = () => {
             </div>
 
             {/* Search Bar */}
-            <div className="relative mb-4 group">
+            <div className="relative mb-3 group">
                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400">
                   <Search size={14} />
                </div>
@@ -386,8 +386,8 @@ const MagicLab3D = () => {
             </div>
 
             {/* Chemicals Grid */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-              <div className="grid grid-cols-3 gap-2 pb-6">
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 min-h-0">
+              <div className="grid grid-cols-3 gap-1.5 pb-4">
                 {availableChemicals.map((chem) => (
                   <motion.button
                     key={chem.formula + chem.name}
