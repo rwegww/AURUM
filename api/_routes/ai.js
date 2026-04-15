@@ -12,7 +12,7 @@ PHONG CÁCH PHẢN HỒI BẮT BUỘC:
 - Ưu tiên sử dụng gạch đầu dòng và bảng biểu.
 - Không câu dẫn rườm rà.
 QUY TẮC BẢO MẬT: Không tiết lộ dữ liệu người dùng khác.
-KHẢ NĂNG ĐẶC BIỆT: Bạn có quyền truy cập dữ liệu thực tế từ hệ thống (lớp học, bài tập, tiến độ, điểm số) thông qua ngữ cảnh được cung cấp. Hãy trả lời dựa trên dữ liệu đó nếu người dùng hỏi về thông tin cá nhân của họ.
+KHẢ NĂNG ĐẶC BIỆT: Bạn có quyền truy cập dữ liệu thực tế từ hệ thống (lớp học, bài tập, tiến độ, điểm số, phòng thí nghiệm, phản ứng hóa học) thông qua ngữ cảnh được cung cấp. Hãy trả lời dựa trên dữ liệu đó nếu người dùng hỏi về thông tin hệ thống hoặc hóa học.
 
 NÔI DUNG: `;
 
@@ -21,25 +21,56 @@ NÔI DUNG: `;
  * This tool allows Aurum AI to "read" from relevant platform tables
  */
 const fetchDatabaseContext = async (userId, query) => {
-  if (!userId || userId === 'anonymous') return "";
-
   let context = "\n--- DỮ LIỆU THỰC TẾ TỪ HỆ THỐNG ---\n";
   const q = query.toLowerCase();
 
   try {
-    // 1. Core User Data (Always relevant)
+    // 1. Lab & Knowledge (Public - Available to all)
+    // Detect if it's a chemistry question and extract a search term
+    const chemKeywords = ['phản ứng', 'tạo ra', 'điều chế', 'chất', 'hóa học', 'phương trình', 'h2o', 'o2', 'co2', 'na', 'fe'];
+    const isChemQuery = chemKeywords.some(k => q.includes(k)) || q.match(/[A-Z][a-z]?\d*/);
+    
+    if (isChemQuery) {
+      // Extract formula or use the last word
+      const formulas = q.match(/[a-z]{1,2}\d+/g) || []; // Simple regex for formulas like h2o, co2
+      const searchTerm = formulas.length > 0 ? formulas[0] : q.split(' ').pop();
+      
+      // Search chemicals
+      const { data: chems } = await supabase.from('lab_chemicals')
+        .select('name, formula, type')
+        .or(`name.ilike.%${searchTerm}%,formula.ilike.%${searchTerm}%`)
+        .limit(2);
+      if (chems?.length > 0) {
+        context += `- Hóa chất liên quan: ${chems.map(c => `${c.name} (${c.formula})`).join('; ')}.\n`;
+      }
+
+      // Search reactions
+      const { data: rx } = await supabase.from('lab_reactions')
+        .select('name, equation, observation')
+        .or(`equation.ilike.%${searchTerm}%,name.ilike.%${searchTerm}%`)
+        .limit(3);
+      if (rx?.length > 0) {
+        context += `- Phản ứng liên quan: ${rx.map(r => `${r.name}: ${r.equation} (${r.observation})`).join('; ')}.\n`;
+      }
+    }
+
+    // If anonymous, return early with only public data
+    if (!userId || userId === 'anonymous') {
+      return context.length > 40 ? context + "------------------------------------\n" : "";
+    }
+
+    // 2. Core User Data (Private)
     const { data: user } = await supabase.from('users').select('xp, level, arena_stats').eq('id', userId).single();
     if (user) {
       context += `- Người dùng: Cấp ${user.level}, XP: ${user.xp}. Stats Arena: Thắng ${user.arena_stats?.wins}, Bại ${user.arena_stats?.losses}, Điểm ${user.arena_stats?.points}.\n`;
     }
 
-    // 2. Class Context
+    // 3. Class Context
     if (q.includes('lớp') || q.includes('bạn') || q.includes('thành viên') || q.includes('bài tập')) {
       const { data: members } = await supabase.from('class_members').select('class_id, class:class_id(name, code, teacher:teacher_id(username))').eq('student_id', userId);
       if (members?.length > 0) {
         context += `- Danh sách lớp đang tham gia: ${members.map(m => `${m.class.name} (GV: ${m.class.teacher?.username})`).join(', ')}.\n`;
         
-        // Fetch recent assignments if asked
         if (q.includes('bài tập') || q.includes('deadline')) {
            const classIds = members.map(m => m.class_id);
            const { data: posts } = await supabase.from('class_posts').select('content, deadline, type').in('class_id', classIds).eq('type', 'assignment').limit(3);
@@ -50,7 +81,7 @@ const fetchDatabaseContext = async (userId, query) => {
       }
     }
 
-    // 3. Lesson Progress
+    // 4. Lesson Progress
     if (q.includes('bài học') || q.includes('tiến độ') || q.includes('mở khóa')) {
       const { data: unlocked } = await supabase.from('user_unlocked_lessons').select('lesson:lesson_id(title)').eq('user_id', userId);
       if (unlocked?.length > 0) {
@@ -58,7 +89,7 @@ const fetchDatabaseContext = async (userId, query) => {
       }
     }
 
-    // 4. Missions
+    // 5. Missions
     if (q.includes('nhiệm vụ') || q.includes('achievement')) {
       const { data: missions } = await supabase.from('user_missions').select('mission:mission_id(title), current_count, is_completed').eq('user_id', userId).eq('is_completed', false).limit(3);
       if (missions?.length > 0) {
