@@ -1,19 +1,9 @@
-import dotenv from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../api/lib/supabase.js';
 import { elements } from '../elements_v2.js';
 import { arenaQuestions } from '../src/data/arenaQuestions.js';
+import dotenv from 'dotenv';
 
 dotenv.config();
-
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY; // Service Role Key
-
-if (!supabaseUrl || !supabaseKey) {
-  console.error("❌ Missing Supabase URL or Key in .env");
-  process.exit(1);
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function seed() {
   try {

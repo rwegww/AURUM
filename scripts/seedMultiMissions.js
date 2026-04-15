@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import { supabase } from '../api/lib/supabase.js';
 import Lesson from '../api/models/Lesson.js';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -130,24 +130,32 @@ const lesson1Challenges = [
 ];
 
 async function seedMultiMissions() {
+  console.log("🚀 Seeding Image-Selection Missions to Supabase...");
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to MongoDB!");
-
-    const lesson = await Lesson.findOne({ classId: 8, order: 1 });
+    const { data: lessons, error: fetchError } = await supabase
+      .from('lessons')
+      .select('id, title, order')
+      .eq('class_id', 8);
+    
+    if (fetchError) throw fetchError;
+    
+    const lesson = lessons?.find(l => l.order === 1);
+    
     if (lesson) {
-      lesson.challenges = lesson1Challenges;
-      await lesson.save();
-      console.log(`✅ Updated 10 challenges (8 image-selection + 2 MCQ) for: ${lesson.title}`);
+      const { error } = await supabase
+        .from('lessons')
+        .update({ challenges: lesson1Challenges })
+        .eq('id', lesson.id);
+
+      if (error) throw error;
+      console.log(`✅ Updated challenges for: ${lesson.title}`);
     } else {
-      console.log("❌ Lesson 1 not found.");
+      console.log("❌ Lesson (Class 8, Order 1) not found in Supabase.");
     }
 
     console.log("🎉 Successfully seeded image-selection missions!");
-    process.exit(0);
   } catch (err) {
-    console.error("Error seeding missions:", err);
-    process.exit(1);
+    console.error("Error seeding missions:", err.message);
   }
 }
 
