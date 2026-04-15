@@ -183,10 +183,26 @@ router.post('/ask', async (req, res) => {
           });
 
           // Build Gemini-compatible chat history from frontend messages
-          const chatHistory = (context.chat_history || []).map(m => ({
+          // Gemini requires: first message must be 'user', roles must alternate
+          let rawHistory = (context.chat_history || []).map(m => ({
             role: m.role === 'user' ? 'user' : 'model',
             parts: [{ text: m.text }]
           }));
+          
+          // Drop leading 'model' messages (e.g. welcome greeting)
+          while (rawHistory.length > 0 && rawHistory[0].role === 'model') {
+            rawHistory.shift();
+          }
+          
+          // Merge consecutive same-role messages
+          const chatHistory = [];
+          for (const msg of rawHistory) {
+            if (chatHistory.length > 0 && chatHistory[chatHistory.length - 1].role === msg.role) {
+              chatHistory[chatHistory.length - 1].parts[0].text += '\n' + msg.parts[0].text;
+            } else {
+              chatHistory.push(msg);
+            }
+          }
 
           const chat = personalModel.startChat({ history: chatHistory });
           const result = await chat.sendMessage(enrichedQuery);
