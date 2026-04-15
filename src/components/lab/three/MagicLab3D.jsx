@@ -315,7 +315,7 @@ const MagicLab3D = () => {
         </div>
 
         {/* Middle & Bottom Layout */}
-        <div className="flex-1 flex justify-between items-stretch pointer-events-none mt-0 relative">
+        <div className="flex-1 flex justify-between items-stretch pointer-events-none mt-0 relative min-h-0">
           {/* Floating Reaction Message */}
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 pointer-events-none z-[50]">
             <AnimatePresence>
@@ -336,7 +336,7 @@ const MagicLab3D = () => {
           <motion.div 
             initial={false}
             animate={{ x: isSidebarOpen ? 0 : -340, opacity: isSidebarOpen ? 1 : 0.4 }}
-            className="relative w-[280px] my-1 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 pb-6 pointer-events-auto flex flex-col shadow-2xl min-h-0 overflow-hidden"
+            className="relative w-[280px] my-1 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 pb-2 pointer-events-auto flex flex-col shadow-2xl min-h-0"
           >
             {/* Toggle Button */}
             <button 
@@ -386,8 +386,8 @@ const MagicLab3D = () => {
             </div>
 
             {/* Chemicals Grid */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 min-h-0">
-              <div className="grid grid-cols-3 gap-1.5 pb-4">
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 min-h-0" style={{ minHeight: 0 }}>
+              <div className="grid grid-cols-3 gap-1.5 pb-8">
                 {availableChemicals.map((chem) => (
                   <motion.button
                     key={chem.formula + chem.name}
