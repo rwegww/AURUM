@@ -157,6 +157,40 @@ router.post('/ask', async (req, res) => {
 
     console.log(`🤖 Hybrid AI Search Starting: "${normalizedQuery}"`);
     
+    // 1.5. Knowledge Base Lookup (10,000 curated entries)
+    try {
+      const qNorm = normalizedQuery.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove diacritics
+        .replace(/đ/g, 'd').replace(/[^a-z0-9 ]/g, '').trim();
+      
+      const { data: kbResults } = await supabase
+        .from('ai_knowledge_base')
+        .select('output, kind, category, title, difficulty')
+        .or(`input_normalized.eq.${qNorm},input.ilike.%${normalizedQuery}%`)
+        .limit(1);
+      
+      if (kbResults?.length > 0) {
+        const kb = kbResults[0];
+        console.log(`📚 Knowledge Base Hit: ${kb.title}`);
+        const kbResponse = {
+          message: kb.output,
+          source: 'knowledge_base',
+          category: kb.category,
+          suggestions: ['Tìm hiểu thêm', 'Ví dụ thực tế', 'Phản ứng liên quan'],
+          timestamp: new Date().toISOString()
+        };
+        // Cache it for next time
+        supabase.from('ai_cache').upsert({
+          query_hash: queryHash,
+          original_query: normalizedQuery,
+          response: kbResponse
+        }).then(() => {});
+        return res.json(kbResponse);
+      }
+    } catch (kbErr) {
+      console.warn('⚠️ KB lookup failed:', kbErr.message);
+    }
+
     // 2. Fetch Database Context
     const dbContext = await fetchDatabaseContext(userId, normalizedQuery);
     const enrichedQuery = dbContext ? `${dbContext}\nCâu hỏi: ${normalizedQuery}` : normalizedQuery;
