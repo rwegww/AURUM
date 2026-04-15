@@ -575,7 +575,7 @@ const ReactionSimulator = () => {
       </AnimatePresence>
 
       {/* LEFT SIDEBAR: Chemical Cabinet & Tools */}
-      <motion.aside initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="lg:w-80 flex flex-col gap-6 glass-panel rounded-[40px] p-6 max-h-[calc(100vh-4rem)] lg:sticky lg:top-8 overflow-hidden z-20">
+      <motion.aside initial={{ x: -100, opacity: 0 }} animate={{ x: 0, opacity: 1 }} className="lg:w-80 flex flex-col gap-6 glass-panel rounded-[40px] p-6 h-fit max-h-[calc(100vh-10rem)] lg:sticky lg:top-8 z-20">
         <div className="flex justify-between items-center px-2">
           <h3 className="text-xl font-black italic uppercase tracking-tighter text-white/90">Phòng <span className="text-viet-green">vật tư</span></h3>
           <button onClick={() => setShowDiscoveryJournal(true)} className="w-10 h-10 glass-pill text-viet-green flex items-center justify-center hover:bg-viet-green hover:text-white transition-all shadow-lg" title="Sổ tay Hành trình">📖</button>
