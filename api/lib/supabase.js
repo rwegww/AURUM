@@ -5,10 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-// Prioritize the working VITE_SUPABASE_ANON_KEY for public queries 
-// since the current SERVICE_ROLE_KEY in .env is invalid (401).
-// Once a valid Service Role Secret (sb_secret_...) is provided, it should be prioritized.
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+// Prioritize SUPABASE_SERVICE_ROLE_KEY to bypass RLS on the backend.
+// Fall back to ANON_KEY if service role is missing.
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
 // Strict validation to prevent crashes
 const isValid = (url, key) => {
