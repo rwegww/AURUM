@@ -20,9 +20,9 @@ const BubbleParticles = ({ active = false }) => {
     }));
   }, []);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!meshRef.current || !active) return;
-    const t = state.clock.elapsedTime;
+    const t = performance.now() * 0.001;
 
     bubbles.forEach((b, i) => {
       // Bay lên theo chu kỳ

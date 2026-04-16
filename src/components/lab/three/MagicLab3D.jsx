@@ -1,4 +1,5 @@
 import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { Loader } from '@react-three/drei';
 import LabScene from './magic-lab/LabScene';
@@ -260,7 +261,7 @@ const MagicLab3D = () => {
       className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10 bg-[#0a0a0f]"
     >
       <Canvas
-        shadows
+        shadows={{ type: THREE.PCFShadowMap }}
         camera={{ position: [0, 6, 12], fov: 35 }}
         className="w-full h-full"
         style={{ pointerEvents: 'auto', position: 'absolute', top: 0, left: 0 }}

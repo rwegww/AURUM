@@ -32,7 +32,8 @@ const LabScene = () => {
   useFrame((state) => {
     const activeBeaker = beakers[activeBeakerIndex];
     if (activeBeaker?.shake) {
-       const t = state.clock.elapsedTime * 50;
+       // Use performance.now() instead of deprecated state.clock.elapsedTime
+       const t = (performance.now() * 0.001) * 50;
        const intensity = activeBeaker.intensity === 'extreme' ? 0.15 : 0.05;
        state.camera.position.x += Math.sin(t) * intensity;
        state.camera.position.y += Math.cos(t * 1.2) * intensity;

@@ -32,9 +32,9 @@ const FireEffect = ({ active = false, intensity = 'medium' }) => {
   const colorYellow = useMemo(() => new THREE.Color('#ffaa00'), []);
   const colorPurple = useMemo(() => new THREE.Color('#a855f7'), []); // For KMnO4 reactions
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!meshRef.current || !active) return;
-    const t = state.clock.elapsedTime;
+    const t = performance.now() * 0.001;
 
     particles.forEach((p, i) => {
       const cycle = ((t * p.speed + p.phase) % 1.5); 

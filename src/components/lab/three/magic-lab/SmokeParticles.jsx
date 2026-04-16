@@ -22,9 +22,9 @@ const SmokeParticles = ({ active = false, color = '#ffffff', intensity = 'medium
     }));
   }, [intensity]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!meshRef.current || !active) return;
-    const t = state.clock.elapsedTime;
+    const t = performance.now() * 0.001;
 
     smokeParticles.forEach((p, i) => {
       // Bay lên và tan biến

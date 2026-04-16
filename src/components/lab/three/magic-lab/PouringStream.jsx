@@ -26,9 +26,9 @@ const PouringStream = ({ formula = null }) => {
     }));
   }, [isSolid]);
 
-  useFrame((state) => {
+  useFrame(() => {
     if (!meshRef.current || !formula) return;
-    const t = state.clock.elapsedTime;
+    const t = performance.now() * 0.001;
 
     particles.forEach((p, i) => {
       const cycle = ((t * p.speed + p.phase) % 1.0); // 0 -> 1 loop
