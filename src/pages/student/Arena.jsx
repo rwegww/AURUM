@@ -512,22 +512,6 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
           </AnimatePresence>
         </div>
       </div>
-
-      <div className="flex flex-col items-center gap-6 mt-8">
-        <div className="flex items-center gap-8 text-viet-text/20 text-[9px] font-black uppercase tracking-[4px]">
-          <span>⊙ {t('arena.actions.footer_info.summary')}</span>
-          <span>⊙ {t('arena.actions.footer_info.questions')}</span>
-          <span>⊙ {t('arena.actions.footer_info.time')}</span>
-        </div>
-        <div className="flex items-center gap-5 px-8 py-4 rounded-full bg-white border border-black/[0.03] shadow-[0_8px_40px_rgba(0,0,0,0.03)] text-viet-text/40 text-[12px] font-bold">
-          <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.4)]" />
-            <span>{t('arena.online_count', { count: onlineCount.toLocaleString() })}</span>
-          </div>
-          <div className="w-px h-4 bg-black/[0.05]" />
-          <span className="tracking-widest">1 VS 1 MODE</span>
-        </div>
-      </div>
     </motion.div>
   );
 };
