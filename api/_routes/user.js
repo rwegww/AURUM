@@ -60,25 +60,11 @@ const auth = async (req, res, next) => {
 // Get Online Count (Public)
 router.get('/online-count', async (req, res) => {
   try {
-    const totalStudents = await User.countStudents();
-    
-    // Professional Jitter Logic: 
-    // If we have few students (dev), we stay near the mockup value (1,248) but fluctuate.
-    // If we have many students (prod), we take ~15% of total as "active".
-    const isInitialPhase = totalStudents < 500;
-    const baseCount = isInitialPhase ? 1240 : Math.floor(totalStudents * 0.15);
-    
-    // Fluctuate based on current time (minutes/seconds) to make it look "real-time"
-    const now = new Date();
-    const timeSeed = now.getMinutes() + now.getSeconds();
-    const fluctuation = Math.floor(Math.sin(timeSeed) * 12);
-    
-    const count = Math.max(5, baseCount + fluctuation);
-    
-    res.json({ count });
+    const activeCount = await User.countActiveStudents();
+    // Fallback minimum to 1 if we are sure at least the current user is active (though this is public)
+    res.json({ count: Math.max(1, activeCount) });
   } catch (err) {
-    // Fallback to the mockup value if DB fails
-    res.status(200).json({ count: 1248 });
+    res.status(200).json({ count: 1 });
   }
 });
 

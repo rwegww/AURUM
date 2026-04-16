@@ -193,6 +193,18 @@ export const User = {
     return count;
   },
 
+  async countActiveStudents() {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+    const { count, error } = await supabase
+      .from('users')
+      .select('id', { count: 'exact', head: true })
+      .eq('role', 'student')
+      .gt('last_active_at', fiveMinutesAgo);
+    
+    if (error) throw error;
+    return count;
+  },
+
   async aggregateStats() {
     const { data, error } = await supabase
       .from('users')
