@@ -245,10 +245,6 @@ const KnowledgeMap = () => {
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
                         Hỏi Aurum về nội dung này
                       </button>
-                      <Link to="/classroom" className="w-full py-4 bg-white border-2 border-viet-border text-viet-text rounded-2xl font-black text-[13px] uppercase tracking-widest hover:border-viet-green hover:text-viet-green transition-all flex items-center justify-center gap-2">
-                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="m21 3-9 9"/><path d="M15 3h6v6"/></svg>
-                        Xem trong Hành trình
-                      </Link>
                     </div>
                   </div>
                 </motion.div>

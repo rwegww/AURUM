@@ -29,9 +29,25 @@ const getSvgDataUrl = (seed) => {
 };
 
 const AURA_COLORS = [
-  '#a855f7', '#06b6d4', '#22c55e', '#f97316',
+  '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b',
   '#ec4899', '#3b82f6', '#eab308', '#ef4444',
 ];
+
+const MODERN_STYLES = {
+  glass: "bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.04)]",
+  card: "bg-white border border-black/[0.03] shadow-[0_4px_20px_rgba(0,0,0,0.02)]",
+  button: "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
+  radius: "rounded-3xl",
+};
+
+const MODERN_COLORS = {
+  bg: 'oklch(0.99 0.005 100)',
+  card: 'rgba(255, 255, 255, 0.8)',
+  border: 'rgba(255, 255, 255, 0.4)',
+  accent: '#76c034',
+  text: '#1a1a1a',
+  textLight: '#666666',
+};
 
 const getRank = (t, pts = 0) => {
   const RANKS = [
@@ -47,19 +63,29 @@ const getRank = (t, pts = 0) => {
 // ─── FLOATING PARTICLES ───────────────────────────────────────────────────────
 const Particles = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {Array.from({ length: 20 }).map((_, i) => (
+    {Array.from({ length: 25 }).map((_, i) => (
       <motion.div
         key={i}
-        className="absolute rounded-full opacity-20"
+        className="absolute rounded-full"
         style={{
-          width: Math.random() * 4 + 2,
-          height: Math.random() * 4 + 2,
+          width: Math.random() * 3 + 1,
+          height: Math.random() * 3 + 1,
           background: AURA_COLORS[i % AURA_COLORS.length],
           left: `${Math.random() * 100}%`,
           top: `${Math.random() * 100}%`,
+          opacity: 0.1,
         }}
-        animate={{ y: [-20, 20, -20], opacity: [0.1, 0.4, 0.1] }}
-        transition={{ duration: 3 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 2 }}
+        animate={{ 
+          y: [0, -30, 0], 
+          x: [0, Math.random() * 20 - 10, 0],
+          opacity: [0.05, 0.15, 0.05] 
+        }}
+        transition={{ 
+          duration: 5 + Math.random() * 5, 
+          repeat: Infinity, 
+          ease: "linear",
+          delay: Math.random() * 5 
+        }}
       />
     ))}
   </div>
@@ -83,51 +109,100 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
   };
 
   return (
-    <motion.div initial={{ x: -40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="flex flex-col gap-5">
-      <div className="card-tactile relative overflow-hidden">
-        <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full blur-[80px] opacity-[0.08] pointer-events-none" style={{ background: selectedAura }} />
-        <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4 flex items-center gap-1">
-          <span>✦</span> {t('arena.character.badge')}
-        </p>
-        <div className="flex flex-col items-center mb-6">
-          <motion.div whileHover={{ scale: 1.05, rotate: 2 }} className="w-28 h-28 rounded-3xl mb-4 shadow-xl cursor-pointer select-none overflow-hidden relative" style={{ background: `linear-gradient(135deg, ${selectedAura}20, ${selectedAura}05)`, border: `2px solid ${selectedAura}30` }}>
-            <img src={currentAvatarUrl} alt={currentSeed} className="w-full h-full object-contain p-1" />
+    <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="flex flex-col gap-6">
+      <div className={`${MODERN_STYLES.glass} ${MODERN_STYLES.radius} p-8 group transition-all duration-500`}>
+        <div className="flex items-center justify-between mb-8">
+           <span className="text-[10px] font-bold uppercase tracking-[2px] text-viet-text/40">{t('arena.character.badge')}</span>
+           <div className="flex items-center gap-2">
+             <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: selectedAura }} />
+             <span className="text-[10px] font-bold text-viet-text/20 uppercase tracking-widest">LIVE</span>
+           </div>
+        </div>
+
+        <div className="flex flex-col items-center mb-10">
+          <motion.div 
+            whileHover={{ scale: 1.05 }} 
+            className="w-36 h-36 rounded-3xl mb-6 shadow-[0_20px_50px_rgba(0,0,0,0.06)] relative overflow-hidden flex items-center justify-center bg-white p-3 border border-black/[0.03]"
+          >
+            <div className="absolute inset-0 opacity-10" style={{ background: `radial-gradient(circle at center, ${selectedAura}, transparent)` }} />
+            <img src={currentAvatarUrl} alt={currentSeed} className="w-full h-full object-contain relative z-10" />
           </motion.div>
-          <div className="px-6 py-2 rounded-2xl font-black text-viet-text text-[13px] bg-viet-green/5 border border-viet-green/10">
-            {displayName}
+          <h3 className="text-xl font-black text-viet-text tracking-tight">{displayName}</h3>
+          <p className="text-[11px] font-medium text-viet-text/40 uppercase tracking-widest mt-1">CHEMISTRY EXPLORER</p>
+        </div>
+
+        <div className="space-y-8">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30 mb-3 px-1">{t('arena.character.name_label')}</p>
+            <div className="relative group/input">
+              <input 
+                type="text" 
+                value={customInput} 
+                onChange={(e) => setCustomInput(e.target.value)} 
+                onKeyDown={(e) => e.key === 'Enter' && applyCustomSeed()} 
+                placeholder={currentSeed} 
+                className="w-full px-5 py-4 rounded-2xl text-[13px] font-medium text-viet-text placeholder-viet-text/20 outline-none border border-black/[0.05] focus:border-viet-green focus:bg-white transition-all bg-black/[0.02]" 
+              />
+              <button 
+                onClick={applyCustomSeed} 
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-viet-green text-white font-bold flex items-center justify-center shadow-lg shadow-emerald-500/20 opacity-0 group-focus-within/input:opacity-100 transition-opacity"
+              >
+                ✓
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="mb-4">
-          <p className="text-[9px] font-black uppercase tracking-widest text-viet-text-light/40 mb-2 px-1">{t('arena.character.name_label')}</p>
-          <div className="flex gap-2">
-            <input type="text" value={customInput} onChange={(e) => setCustomInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && applyCustomSeed()} placeholder={currentSeed} className="flex-1 px-4 py-2.5 rounded-2xl text-[12px] font-bold text-viet-text placeholder-viet-text/20 outline-none border border-viet-border focus:border-viet-green transition-all bg-viet-bg" />
-            <motion.button whileTap={{ scale: 0.9 }} onClick={applyCustomSeed} className="px-4 py-2.5 rounded-2xl font-black text-xs text-white bg-viet-green shadow-sm hover:brightness-105">✓</motion.button>
+
+          <div>
+            <div className="flex items-center justify-between mb-3 px-1">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30">{t('arena.character.presets_label') || 'KIỂU DÁNG'}</p>
+              <button onClick={() => setShowMore(!showMore)} className="text-[10px] font-bold text-viet-green/60 hover:text-viet-green transition-all">
+                {showMore ? t('common.less', { defaultValue: 'THU GỌN' }) : t('common.more', { defaultValue: 'XEM THÊM' })}
+              </button>
+            </div>
+            <div className="grid grid-cols-4 gap-3">
+              {visiblePresets.map((av) => (
+                <motion.button 
+                  key={av.id} 
+                  whileHover={{ scale: 1.1, y: -2 }} 
+                  whileTap={{ scale: 0.9 }} 
+                  onClick={() => setAvatarSeed(av.seed)} 
+                  className={`aspect-square rounded-2xl overflow-hidden p-1.5 transition-all border-2 ${avatarSeed === av.seed ? 'border-viet-green bg-viet-green/5' : 'border-transparent bg-black/[0.02] hover:bg-black/[0.04]'}`}
+                >
+                  <img src={getSvgDataUrl(av.seed)} alt={av.label} className="w-full h-full object-contain" />
+                </motion.button>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="grid grid-cols-4 gap-2.5 mb-3">
-          {visiblePresets.map((av) => {
-            const presetUrl = getSvgDataUrl(av.seed);
-            const isSelected = avatarSeed === av.seed;
-            return (
-              <motion.button key={av.id} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.92 }} onClick={() => setAvatarSeed(av.seed)} className="w-full aspect-square rounded-2xl overflow-hidden p-1.5 transition-all bg-viet-bg border-2" style={{ borderColor: isSelected ? selectedAura : 'transparent', background: isSelected ? `${selectedAura}10` : 'var(--color-viet-bg)', boxShadow: isSelected ? `0 4px 12px ${selectedAura}25` : 'none' }}>
-                <img src={presetUrl} alt={av.label} className="w-full h-full object-contain" />
-              </motion.button>
-            );
-          })}
-        </div>
-        <button onClick={() => setShowMore(!showMore)} className="text-[10px] font-black uppercase tracking-widest text-viet-green/60 hover:text-viet-green transition-all mb-4 w-full text-center">
-          {showMore ? t('arena.character.collapse') : t('arena.character.expand', { count: AVATAR_PRESETS.length - 8 })}
-        </button>
-        <div>
-          <p className="text-[9px] font-black uppercase tracking-widest text-viet-text-light/40 mb-3 px-1">{t('arena.character.aura_label')}</p>
-          <div className="flex gap-2.5 flex-wrap">
-            {AURA_COLORS.map((c) => (
-              <motion.button key={c} whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.8 }} onClick={() => setSelectedAura(c)} className="w-6 h-6 rounded-full transition-all border border-black/5" style={{ background: c, boxShadow: selectedAura === c ? `0 0 10px ${c}80` : 'none', outline: selectedAura === c ? `2px solid ${c}` : 'none', outlineOffset: '2px' }} />
-            ))}
+
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30 mb-3 px-1">{t('arena.character.aura_label')}</p>
+            <div className="flex gap-2.5 flex-wrap px-1">
+              {AURA_COLORS.map((c) => (
+                <motion.button 
+                  key={c} 
+                  whileHover={{ scale: 1.2 }} 
+                  whileTap={{ scale: 0.8 }} 
+                  onClick={() => setSelectedAura(c)} 
+                  className={`w-6 h-6 rounded-full transition-all ring-offset-4 ${selectedAura === c ? 'ring-2 ring-black/10' : ''}`} 
+                  style={{ background: c }} 
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      <motion.button whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => { const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; setAvatarSeed(randomPreset.seed); setSelectedAvatar(0); setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); }} className="bg-white border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all px-6 py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] flex items-center justify-center gap-3">
+      
+      <motion.button 
+        whileHover={{ scale: 1.02, backgroundColor: '#1a1a1a', color: '#fff' }} 
+        whileTap={{ scale: 0.98 }} 
+        onClick={() => { 
+          const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; 
+          setAvatarSeed(randomPreset.seed); 
+          setSelectedAvatar(0); 
+          setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); 
+        }} 
+        className={`w-full py-5 ${MODERN_STYLES.radius} bg-white border border-black/[0.05] text-[11px] font-black uppercase tracking-widest text-viet-text shadow-sm transition-all flex items-center justify-center gap-3`}
+      >
         <span>🎲</span> {t('arena.character.random_btn')}
       </motion.button>
     </motion.div>
@@ -201,52 +276,68 @@ const StatsPanel = ({ user }) => {
   const RANK_COLORS = ['text-amber-500', 'text-slate-400', 'text-orange-600'];
 
   return (
-    <motion.div initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col gap-5">
-      <div className="card-tactile relative overflow-hidden">
-        <div className="absolute -top-16 -right-16 w-48 h-48 rounded-full blur-[80px] opacity-[0.05] pointer-events-none" style={{ background: rank.color }} />
-        <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4 flex items-center gap-1">
-          <span>📊</span> {t('arena.stats.badge')}
-        </p>
-        <div className="space-y-1 mb-6">
+    <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex flex-col gap-6">
+      <div className={`${MODERN_STYLES.glass} ${MODERN_STYLES.radius} p-8`}>
+        <div className="flex items-center justify-between mb-8">
+           <span className="text-[10px] font-bold uppercase tracking-[2px] text-viet-text/40">{t('arena.stats.badge')}</span>
+           <span className="text-lg opacity-40">📊</span>
+        </div>
+
+        <div className="space-y-5 mb-10 px-1">
           {rows.map(({ label, value, color }) => (
-            <div key={label} className="flex justify-between items-center py-2.5 border-b border-viet-border last:border-0">
-              <span className="text-viet-text-light text-[13px] font-bold">{label}</span>
-              <span className={`font-black text-[13px] ${color}`}>{value}</span>
+            <div key={label} className="flex justify-between items-center group/stat">
+              <span className="text-viet-text/40 text-[12px] font-bold group-hover/stat:text-viet-text/60 transition-colors">{label}</span>
+              <span className={`font-black text-[13px] tracking-tight ${color}`}>{value}</span>
             </div>
           ))}
         </div>
-        <div className="rounded-2xl p-4 flex items-center gap-4 transition-all" style={{ background: `linear-gradient(135deg, ${rank.color}10, ${rank.color}03)`, border: `1px solid ${rank.color}20` }}>
-          <span className="text-4xl drop-shadow-sm">{rank.icon}</span>
+
+        <div className="rounded-2xl p-5 flex items-center gap-5 transition-all bg-black/[0.02] border border-black/[0.03] group hover:bg-white hover:shadow-xl hover:border-transparent transition-all duration-500">
+          <span className="text-4xl drop-shadow-xl group-hover:scale-110 transition-transform duration-500">{rank.icon}</span>
           <div>
-            <p className="font-black text-lg" style={{ color: rank.color }}>{rank.name}</p>
-            <p className="text-viet-text-light/40 text-[9px] font-black uppercase tracking-widest">{t('arena.stats.rank_label')}</p>
+            <p className="font-black text-lg text-viet-text leading-tight mb-1">{rank.name}</p>
+            <p className="text-viet-text/30 text-[9px] font-black uppercase tracking-widest">{t('arena.stats.rank_label')}</p>
           </div>
         </div>
       </div>
-      <motion.button whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }} onClick={() => setShowLeaderboard(v => !v)} className="w-full py-4 rounded-[1.5rem] font-black text-[12px] uppercase tracking-[2px] text-[#1a1a1a] flex items-center justify-between px-6 bg-white border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all">
+
+      <motion.button 
+        whileHover={{ x: 4, backgroundColor: '#1a1a1a', color: '#fff' }} 
+        whileTap={{ scale: 0.98 }} 
+        onClick={() => setShowLeaderboard(v => !v)} 
+        className={`w-full py-5 ${MODERN_STYLES.radius} bg-white border border-black/[0.05] text-[11px] font-black uppercase tracking-widest text-viet-text shadow-sm transition-all flex items-center justify-between px-8`}
+      >
         <span>🏆 {t('arena.stats.leaderboard_btn')}</span>
-        <span className="text-[14px]">{showLeaderboard ? '↑' : '↓'}</span>
+        <span className="text-[14px] opacity-40">{showLeaderboard ? '−' : '+'}</span>
       </motion.button>
+
       <AnimatePresence>
         {showLeaderboard && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="bg-white rounded-[32px] border border-viet-border overflow-hidden shadow-sm">
-            <div className="p-6">
-              <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4">🥇 {t('arena.stats.leaderboard_title')}</p>
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }} 
+            animate={{ opacity: 1, height: 'auto' }} 
+            exit={{ opacity: 0, height: 0 }} 
+            className={`${MODERN_STYLES.glass} rounded-3xl overflow-hidden shadow-2xl`}
+          >
+            <div className="p-7">
+              <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-6">🥇 {t('arena.stats.leaderboard_title')}</p>
               {loading ? (
-                <div className="flex justify-center py-6">
+                <div className="flex justify-center py-8">
                   <div className="w-6 h-6 border-2 border-viet-green border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : leaderboard.length === 0 ? (
-                <p className="text-viet-text-light/40 text-[11px] text-center py-6 italic">{t('arena.stats.empty_leaderboard')}</p>
+                <p className="text-viet-text/30 text-[11px] text-center py-8 italic">{t('arena.stats.empty_leaderboard')}</p>
               ) : (
                 <div className="space-y-3">
                   {leaderboard.map((p, i) => (
-                    <div key={i} className="flex items-center gap-3 py-1.5 px-2 rounded-xl hover:bg-viet-bg transition-colors">
-                      <span className={`w-6 text-center font-black text-[13px] ${RANK_COLORS[i] || 'text-viet-text-light/30'}`}>{i + 1}</span>
-                      <img src={getSvgDataUrl(p.avatarSeed)} alt={p.name} className="w-8 h-8 rounded-lg object-contain shadow-sm" style={{ background: `${p.aura}10`, border: `1px solid ${p.aura}15` }} />
+                    <div key={i} className="flex items-center gap-4 py-3 px-3 rounded-2xl hover:bg-white transition-all shadow-sm shadow-transparent hover:shadow-black/5">
+                      <span className={`w-5 text-center font-black text-[12px] ${RANK_COLORS[i] || 'text-viet-text/20'}`}>{i + 1}</span>
+                      <div className="w-10 h-10 rounded-xl flex-shrink-0 bg-white shadow-sm border border-black/[0.03] p-1.5">
+                        <img src={getSvgDataUrl(p.avatarSeed)} alt={p.name} className="w-full h-full object-contain" />
+                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-viet-text font-black text-[13px] truncate">{p.name}</p>
-                        <p className="text-viet-text-light/40 text-[10px] font-bold">{p.wins} {t('arena.stats.wins')} - {p.total - p.wins} {t('arena.stats.losses')}</p>
+                        <p className="text-viet-text/30 text-[10px] font-bold uppercase tracking-tighter">{p.wins} {t('arena.stats.wins')}</p>
                       </div>
                       <span className="font-black text-[13px] text-amber-500">{p.points}</span>
                     </div>
@@ -257,26 +348,27 @@ const StatsPanel = ({ user }) => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="card-tactile">
-        <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-4">⚡ {t('arena.stats.history')}</p>
+
+      <div className={`${MODERN_STYLES.glass} ${MODERN_STYLES.radius} p-8`}>
+        <p className="text-[10px] font-black uppercase tracking-[2px] text-viet-green mb-6">⚡ {t('arena.stats.history')}</p>
         {loading ? (
-          <div className="flex justify-center py-4">
+          <div className="flex justify-center py-6">
             <div className="w-5 h-5 border-2 border-viet-green border-t-transparent rounded-full animate-spin" />
           </div>
         ) : battles.length === 0 ? (
-          <p className="text-viet-text-light/40 text-[11px] text-center py-6 italic">{t('arena.stats.empty_history')}</p>
+          <p className="text-viet-text/30 text-[11px] text-center py-8 italic">{t('arena.stats.empty_history')}</p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {battles.map((b, i) => (
-              <div key={i} className="flex items-center gap-3 py-2 px-1 hover:bg-viet-bg rounded-xl transition-all">
-                <span className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-[11px] border ${b.result === 'win' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : b.result === 'lose' ? 'bg-red-50 border-red-100 text-red-500' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
+              <div key={i} className="flex items-center gap-4 group/history cursor-pointer">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-[12px] border transition-all ${b.result === 'win' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : b.result === 'lose' ? 'bg-red-50 border-red-100 text-red-500' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
                   {b.result === 'win' ? 'W' : b.result === 'lose' ? 'L' : 'D'}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-viet-text font-black text-[12px] truncate">{b.opponent_name}</p>
-                  <p className="text-viet-text-light/30 text-[10px] font-bold uppercase">{timeAgo(t, b.played_at)}</p>
                 </div>
-                <span className={`font-black text-[12px] ${b.pts_change > 0 ? 'text-emerald-600' : b.pts_change < 0 ? 'text-red-500' : 'text-viet-text-light/30'}`}>
+                <div className="flex-1 min-w-0">
+                  <p className="text-viet-text font-bold text-[13px] truncate group-hover/history:text-viet-green transition-colors">{b.opponent_name}</p>
+                  <p className="text-viet-text/20 text-[10px] font-black uppercase tracking-tighter">{timeAgo(t, b.played_at)}</p>
+                </div>
+                <span className={`font-black text-[13px] ${b.pts_change > 0 ? 'text-emerald-600' : b.pts_change < 0 ? 'text-red-500' : 'text-viet-text/20'}`}>
                   {b.pts_change > 0 ? '+' : ''}{b.pts_change}
                 </span>
               </div>
@@ -309,36 +401,63 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
     };
     
     fetchOnlineCount();
-    const interval = setInterval(fetchOnlineCount, 30000); // 30s polling
+    const interval = setInterval(fetchOnlineCount, 30000); 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="flex flex-col items-center gap-8 py-4">
-      <div className="relative mb-2">
-        <motion.div animate={{ rotate: [0, 3, -3, 0] }} transition={{ duration: 5, repeat: Infinity }} className="w-36 h-36 rounded-full flex items-center justify-center text-7xl relative z-10 bg-white shadow-2xl border border-viet-border" style={{ boxShadow: `0 20px 40px ${selectedAura}15, 0 0 0 8px white` }}>
-          <div className="absolute inset-2 rounded-full opacity-[0.08]" style={{ background: selectedAura }} />
-          ⚔️
+    <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col items-center gap-10 py-4">
+      <div className="relative group">
+        <motion.div 
+          animate={{ y: [0, -8, 0] }} 
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className={`w-52 h-52 ${MODERN_STYLES.radius} flex items-center justify-center text-[84px] relative z-10 bg-white border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.06)] transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_50px_120px_rgba(0,0,0,0.08)]`}
+        >
+          <div className="absolute inset-6 rounded-[32px] opacity-10 animate-pulse" style={{ background: selectedAura }} />
+          <span className="relative z-10 drop-shadow-2xl grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500">⚔️</span>
+          
+          {/* Decorative glass elements */}
+          <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 flex items-center justify-center text-lg shadow-sm">✨</div>
+          <div className="absolute -bottom-2 -left-6 w-10 h-10 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 flex items-center justify-center text-sm shadow-sm">⚗️</div>
         </motion.div>
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} className="absolute inset-0 rounded-full border border-dashed border-viet-green/20" style={{ margin: '-12px' }} />
-        <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: 'linear' }} className="absolute inset-0 rounded-full border border-solid border-viet-green/10" style={{ margin: '-28px' }} />
-        <div className="absolute inset-0 rounded-full blur-3xl opacity-20 pointer-events-none" style={{ background: selectedAura, margin: '-20px' }} />
+        
+        {/* Modern decorative rings */}
+        <div className="absolute -inset-8 border border-black/[0.015] rounded-full pointer-events-none animate-[spin_40s_linear_infinite]" />
+        <div className="absolute -inset-16 border border-dashed border-black/[0.01] rounded-full pointer-events-none animate-[spin_60s_linear_infinite_reverse]" />
+        <div className="absolute inset-0 blur-[120px] opacity-[0.05] pointer-events-none" style={{ background: selectedAura }} />
       </div>
-      <div className="text-center">
-        <h2 className="text-4xl font-black text-[#1a1a1a] uppercase tracking-[5px] mb-2 font-rubik leading-tight">
+
+      <div className="text-center space-y-4">
+        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-viet-green/10 border border-viet-green/20 mb-2">
+           <span className="w-1.5 h-1.5 rounded-full bg-viet-green animate-pulse" />
+           <span className="text-[10px] font-black text-viet-green uppercase tracking-[2px]">{t('arena.mode_active', { defaultValue: 'CHẾ ĐỘ THI ĐẤU TRỰC TUYẾN' })}</span>
+        </div>
+        <h2 className="text-6xl font-black text-viet-text tracking-tighter leading-tight">
           <Trans i18nKey="arena.title">
-            ĐẤU TRƯỜNG <span className="text-viet-green">HÓA HỌC</span>
+            ARENA <span className="text-viet-green font-outline-2">ODYSSEY</span>
           </Trans>
         </h2>
-        <p className="text-viet-text-light/40 text-[11px] font-black tracking-[4px] uppercase">{t('arena.subtitle')}</p>
+        <p className="text-viet-text/40 text-[11px] font-bold tracking-[8px] uppercase px-4 max-w-[400px] mx-auto">{t('arena.subtitle')}</p>
       </div>
-      <div className="w-full max-w-[420px] space-y-4">
-        <div className="flex items-center gap-3">
-          <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => onFindMatch(findMode)} className={`flex-1 py-5 rounded-[1.5rem] font-black text-white text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 ${isSearching ? 'bg-red-500 border-b-4 border-red-700' : 'btn-tactile-green'}`}>
-            {isSearching ? <><motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="text-lg">⟳</motion.span> {t('arena.actions.cancel_find')}</> : <><span className="text-lg">⚔️</span> {t('arena.actions.find_match')}</>}
+
+      <div className="w-full max-w-[520px] space-y-5 mt-4">
+        <div className="flex flex-col md:flex-row items-stretch gap-4">
+          <motion.button 
+            whileHover={{ scale: 1.02, y: -2 }} 
+            whileTap={{ scale: 0.98 }} 
+            onClick={() => onFindMatch(findMode)} 
+            className={`flex-[2.5] py-5.5 rounded-2xl font-black text-white text-[15px] uppercase tracking-[3px] flex items-center justify-center gap-4 transition-all shadow-2xl ${isSearching ? 'bg-red-500 shadow-red-500/20' : 'bg-viet-green shadow-emerald-500/20 hover:brightness-105'}`}
+          >
+            {isSearching ? <><motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="text-xl">⟳</motion.span> {t('arena.actions.cancel_find')}</> : <><span className="text-xl">⚡</span> {t('arena.actions.find_match')}</>}
           </motion.button>
-          <div className="relative">
-            <select value={findMode} onChange={(e) => setFindMode(e.target.value)} disabled={isSearching} className="w-32 py-5 px-3 rounded-[1.5rem] font-black text-[#1a1a1a] text-[11px] uppercase tracking-widest text-center outline-none border-2 border-duo-border border-b-4 hover:bg-gray-50 transition-all bg-white appearance-none cursor-pointer disabled:opacity-50">
+          
+          <div className="flex-1 relative group">
+            <select 
+              value={findMode} 
+              onChange={(e) => setFindMode(e.target.value)} 
+              disabled={isSearching} 
+              className="w-full h-full py-5.5 px-6 rounded-2xl font-black text-viet-text text-[11px] uppercase tracking-widest outline-none border border-black/[0.05] bg-white hover:bg-black hover:text-white transition-all appearance-none cursor-pointer disabled:opacity-50 text-center shadow-sm"
+            >
               <option value="solo">{t('arena_modes.solo_short')}</option>
               <option value="3vs3">{t('arena_modes.3vs3_short')}</option>
               <option value="5vs5">{t('arena_modes.5vs5_short')}</option>
@@ -346,39 +465,86 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
             </select>
           </div>
         </div>
-        <motion.button whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onCreateRoom} className="w-full py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[15px] uppercase tracking-widest flex items-center justify-center gap-3 border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all mt-2 bg-white">
-          <span>🏟️</span> {t('arena.actions.create_room')}
-        </motion.button>
-        <AnimatePresence mode="wait">
-          {!showJoinInput ? (
-            <div className="flex gap-4">
-              <motion.button key="join-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={() => setShowJoinInput(true)} className="flex-1 py-5 rounded-[1.5rem] font-black text-[#1a1a1a] text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-2 border-orange-600 border-b-4 bg-orange-400 hover:brightness-110 active:border-b-0 active:translate-y-[4px] transition-all">
-                <span>🚪</span> {t('arena.actions.join_pin')}
-              </motion.button>
-              <motion.button key="browser-btn" whileHover={{ scale: 1.02, y: -2 }} whileTap={{ scale: 0.98 }} onClick={onOpenBrowser} className="flex-1 py-5 rounded-[1.5rem] font-black text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 border-2 border-blue-700 border-b-4 bg-blue-500 hover:brightness-110 active:border-b-0 active:translate-y-[4px] transition-all">
-                <span>🌐</span> {t('arena.actions.lobby')}
-              </motion.button>
-            </div>
-          ) : (
-            <motion.div key="join-input" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="space-y-3 p-4 bg-white border border-viet-border rounded-[28px] shadow-sm">
-              <input type="text" value={joinCode} onChange={(e) => setJoinCode(e.target.value.toUpperCase())} placeholder={t('arena.actions.pin_placeholder')} autoFocus className="w-full py-4 px-6 rounded-2xl font-black text-viet-text text-center text-xl placeholder-viet-text/10 outline-none border border-viet-border focus:border-orange-400 transition-all bg-viet-bg" style={{ letterSpacing: '0.4em' }} onKeyDown={(e) => { if (e.key === 'Enter' && joinCode.trim()) onJoinRoom(joinCode.trim()); }} />
-              <div className="flex gap-3">
-                <button onClick={() => setShowJoinInput(false)} className="flex-1 py-3 rounded-2xl font-black text-viet-text-light/50 text-[11px] uppercase tracking-widest border border-viet-border hover:bg-gray-50 transition-all">{t('arena.actions.close')}</button>
-                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => joinCode.trim() && onJoinRoom(joinCode.trim())} disabled={!joinCode.trim()} className="flex-[2] py-3 rounded-2xl font-black text-white text-[11px] uppercase tracking-widest disabled:opacity-40 transition-all bg-orange-500 shadow-sm">{t('arena.actions.enter')}</motion.button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <motion.button 
+            whileHover={{ y: -3, backgroundColor: '#f9f9f9' }} 
+            whileTap={{ scale: 0.98 }} 
+            onClick={onCreateRoom} 
+            className="py-5 rounded-2xl font-bold text-viet-text text-[13px] uppercase tracking-widest flex items-center justify-center gap-3 bg-white border border-black/[0.05] shadow-sm transition-all"
+          >
+            <span className="text-xl">🏟️</span> {t('arena.actions.create_room')}
+          </motion.button>
+
+          <AnimatePresence mode="wait">
+            {!showJoinInput ? (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-4">
+                <motion.button 
+                  whileHover={{ y: -3, backgroundColor: '#f9f9f9' }} 
+                  whileTap={{ scale: 0.98 }} 
+                  onClick={() => setShowJoinInput(true)} 
+                  className="flex-1 py-5 rounded-2xl font-bold text-viet-text text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 bg-white border border-black/[0.05] shadow-sm transition-all"
+                >
+                  <span>🚪</span> {t('arena.actions.join_pin')}
+                </motion.button>
+                <motion.button 
+                  whileHover={{ y: -3, scale: 1.02 }} 
+                  whileTap={{ scale: 0.98 }} 
+                  onClick={onOpenBrowser} 
+                  className="flex-1 py-5 rounded-2xl font-bold text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 bg-blue-600 shadow-blue-500/20 hover:brightness-110 transition-all"
+                >
+                  <span>🌐</span> {t('arena.actions.lobby')}
+                </motion.button>
+              </motion.div>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }} 
+                animate={{ opacity: 1, scale: 1 }} 
+                exit={{ opacity: 0, scale: 0.95 }} 
+                className={`col-span-full space-y-4 p-8 bg-white border border-black/[0.05] ${MODERN_STYLES.radius} shadow-[0_32px_64px_rgba(0,0,0,0.1)]`}
+              >
+                <input 
+                  type="text" 
+                  value={joinCode} 
+                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())} 
+                  placeholder={t('arena.actions.pin_placeholder')} 
+                  autoFocus 
+                  className="w-full py-5 px-6 rounded-2xl font-black text-viet-text text-center text-3xl placeholder-viet-text/10 outline-none border-b-2 border-transparent focus:border-viet-green transition-all bg-black/[0.02]" 
+                  style={{ letterSpacing: '0.4em' }} 
+                  onKeyDown={(e) => { if (e.key === 'Enter' && joinCode.trim()) onJoinRoom(joinCode.trim()); }} 
+                />
+                <div className="flex gap-4">
+                  <button onClick={() => setShowJoinInput(false)} className="flex-1 py-4.5 rounded-xl font-black text-viet-text/30 text-[11px] uppercase tracking-widest hover:bg-red-50 hover:text-red-500 transition-all">{t('arena.actions.close')}</button>
+                  <motion.button 
+                    whileHover={{ scale: 1.02 }} 
+                    whileTap={{ scale: 0.97 }} 
+                    onClick={() => joinCode.trim() && onJoinRoom(joinCode.trim())} 
+                    disabled={!joinCode.trim()} 
+                    className="flex-[2] py-4.5 rounded-xl font-black text-white text-[12px] uppercase tracking-widest disabled:opacity-40 transition-all bg-viet-text shadow-xl shadow-black/10"
+                  >
+                    {t('arena.actions.enter')}
+                  </motion.button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
-      <div className="flex items-center gap-6 text-viet-text-light/30 text-[9px] font-black uppercase tracking-[3px] mt-2">
-        <span>⊙ {t('arena.actions.footer_info.summary')}</span>
-        <span>⊙ {t('arena.actions.footer_info.questions')}</span>
-        <span>⊙ {t('arena.actions.footer_info.time')}</span>
-        <span>⊙ 1 vs 1</span>
-      </div>
-      <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-viet-border shadow-sm text-viet-text-light/50 text-[11px] font-bold">
-        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span>{t('arena.online_count', { count: onlineCount.toLocaleString() })}</span>
+
+      <div className="flex flex-col items-center gap-6 mt-8">
+        <div className="flex items-center gap-8 text-viet-text/20 text-[9px] font-black uppercase tracking-[4px]">
+          <span>⊙ {t('arena.actions.footer_info.summary')}</span>
+          <span>⊙ {t('arena.actions.footer_info.questions')}</span>
+          <span>⊙ {t('arena.actions.footer_info.time')}</span>
+        </div>
+        <div className="flex items-center gap-5 px-8 py-4 rounded-full bg-white border border-black/[0.03] shadow-[0_8px_40px_rgba(0,0,0,0.03)] text-viet-text/40 text-[12px] font-bold">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.4)]" />
+            <span>{t('arena.online_count', { count: onlineCount.toLocaleString() })}</span>
+          </div>
+          <div className="w-px h-4 bg-black/[0.05]" />
+          <span className="tracking-widest">1 VS 1 MODE</span>
+        </div>
       </div>
     </motion.div>
   );
@@ -390,10 +556,10 @@ const CreateRoomModal = ({ isOpen, onClose, user, onConfirm }) => {
   const { t } = useTranslation();
   const isTeacherOrAdmin = user?.role === 'teacher' || user?.role === 'admin';
   const difficulties = [
-    { id: 'easy',   label: t('arena.difficulties.easy'),   color: '#22c55e' },
-    { id: 'medium', label: t('arena.difficulties.medium'), color: '#eab308' },
-    { id: 'hard',   label: t('arena.difficulties.hard'),   color: '#f97316' },
-    { id: 'super',  label: t('arena.difficulties.super'),  color: '#ef4444' },
+    { id: 'easy',   label: t('arena.difficulties.easy'),   color: '#10b981' },
+    { id: 'medium', label: t('arena.difficulties.medium'), color: '#f59e0b' },
+    { id: 'hard',   label: t('arena.difficulties.hard'),   color: '#ef4444' },
+    { id: 'super',  label: t('arena.difficulties.super'),  color: '#8b5cf6' },
   ];
   const [formData, setFormData] = useState({
     name: '',
@@ -405,52 +571,80 @@ const CreateRoomModal = ({ isOpen, onClose, user, onConfirm }) => {
 
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md" onClick={onClose}>
-        <motion.div initial={{ opacity: 0, y: 40, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-white rounded-[40px] p-8 relative border border-viet-border shadow-2xl">
-          <button onClick={onClose} className="absolute top-6 right-6 w-10 h-10 rounded-2xl flex items-center justify-center text-viet-text-light/30 hover:text-red-500 hover:bg-red-50 transition-all font-black text-xl">✕</button>
-          <div className="w-16 h-16 rounded-3xl flex items-center justify-center text-4xl mb-6 bg-viet-green/10 text-viet-green">🏟️</div>
-          <h2 className="text-2xl font-black text-viet-text mb-6 uppercase tracking-wider font-sora">
-            <Trans i18nKey="arena.create_room.title">
-              MỞ SẢNH <span className="text-viet-green">THI ĐẤU</span>
-            </Trans>
-          </h2>
-          <div className="space-y-6">
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 mb-3 px-1">{t('arena.create_room.name_label')}</label>
-              <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder={t('arena.create_room.name_placeholder')} className="w-full py-4 px-5 rounded-2xl font-bold text-viet-text placeholder-viet-text/20 outline-none border border-viet-border focus:border-viet-green transition-all bg-viet-bg" />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/5 backdrop-blur-2xl" onClick={onClose}>
+        <motion.div initial={{ opacity: 0, y: 40, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-white/90 backdrop-blur-3xl rounded-[60px] p-10 relative border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.1)]">
+          <button onClick={onClose} className="absolute top-8 right-8 w-12 h-12 rounded-2xl flex items-center justify-center text-viet-text-light/20 hover:text-red-500 hover:bg-red-50 transition-all font-black text-xl">✕</button>
+          
+          <div className="flex flex-col items-center text-center mb-10">
+            <div className="w-20 h-20 rounded-[32px] flex items-center justify-center text-4xl mb-6 bg-viet-green/10 text-viet-green shadow-xl shadow-emerald-500/10">🏟️</div>
+            <h2 className="text-3xl font-black text-viet-text uppercase tracking-tight">
+              <Trans i18nKey="arena.create_room.title">
+                MỞ SẢNH <span className="text-viet-green">THI ĐẤU</span>
+              </Trans>
+            </h2>
+          </div>
+
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 px-1">{t('arena.create_room.name_label')}</label>
+              <input 
+                type="text" 
+                value={formData.name} 
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+                placeholder={t('arena.create_room.name_placeholder')} 
+                className="w-full py-4 px-6 rounded-2xl font-bold text-viet-text placeholder-viet-text/20 outline-none border border-black/[0.05] focus:border-viet-green transition-all bg-black/[0.02] focus:bg-white" 
+              />
             </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 mb-3 px-1">{t('arena.create_room.mode_label')}</label>
-              <select value={formData.mode} onChange={(e) => setFormData({ ...formData, mode: e.target.value })} className="w-full py-4 px-5 rounded-2xl font-bold text-viet-text outline-none border border-viet-border focus:border-viet-green transition-all bg-viet-bg appearance-none cursor-pointer">
+
+            <div className="space-y-3">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 px-1">{t('arena.create_room.mode_label')}</label>
+              <select 
+                value={formData.mode} 
+                onChange={(e) => setFormData({ ...formData, mode: e.target.value })} 
+                className="w-full py-4 px-6 rounded-2xl font-bold text-viet-text outline-none border border-black/[0.05] focus:border-viet-green transition-all bg-black/[0.02] appearance-none cursor-pointer"
+              >
                 <option value="solo">{t('arena_modes.solo')}</option>
                 <option value="3vs3">{t('arena_modes.3vs3')}</option>
                 <option value="5vs5">{t('arena_modes.5vs5')}</option>
                 <option value="1vs100">{t('arena_modes.1vs100')}</option>
               </select>
             </div>
-            <div>
-              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 mb-3 px-1">
+
+            <div className="space-y-4">
+              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 px-1">
                 {t('arena.create_room.difficulty_label')}
                 {isTeacherOrAdmin && <span className="ml-3 bg-viet-green/10 text-viet-green px-2 py-0.5 rounded-lg text-[9px] font-black border border-viet-green/20">{t('arena.create_room.admin_badge')}</span>}
               </label>
               {isTeacherOrAdmin ? (
                 <div className="grid grid-cols-2 gap-3">
                   {difficulties.map((d) => (
-                    <button key={d.id} onClick={() => setFormData({ ...formData, difficulty: d.id })} className="py-4 rounded-2xl font-black text-[12px] transition-all border-2" style={{ background: formData.difficulty === d.id ? `${d.color}10` : 'var(--color-viet-bg)', borderColor: formData.difficulty === d.id ? d.color : 'transparent', color: formData.difficulty === d.id ? d.color : 'var(--color-viet-text-light)', opacity: formData.difficulty === d.id ? 1 : 0.6 }}>
+                    <button 
+                      key={d.id} 
+                      onClick={() => setFormData({ ...formData, difficulty: d.id })} 
+                      className={`py-4 rounded-2xl font-black text-[12px] transition-all border-2 ${formData.difficulty === d.id ? 'bg-white shadow-xl scale-[1.02]' : 'bg-black/[0.02] border-transparent opacity-50 hover:opacity-80'}`}
+                      style={{ borderColor: formData.difficulty === d.id ? d.color : 'transparent', color: formData.difficulty === d.id ? d.color : 'inherit' }}
+                    >
                       {d.label}
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="w-full py-4 px-5 rounded-2xl flex items-center justify-between bg-viet-bg border border-viet-border">
-                  <span className="font-bold text-viet-text-light/50 flex items-center gap-2 text-[13px]">
+                <div className="w-full py-4 px-6 rounded-2xl flex items-center justify-between bg-black/[0.02] border border-black/[0.03]">
+                  <span className="font-bold text-viet-text-light/40 flex items-center gap-3 text-[13px]">
                     <span>🎓</span> {t('arena.create_room.auto_grade', { grade: user?.grade || '8' })}
                   </span>
-                  <span className="text-viet-text-light/30">🔒</span>
+                  <span className="text-viet-text-light/20">🔒</span>
                 </div>
               )}
             </div>
-            <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => onConfirm(formData)} disabled={!formData.name} className="w-full py-5 rounded-[24px] font-black text-white text-base uppercase tracking-widest disabled:opacity-40 transition-all bg-viet-green shadow-xl shadow-emerald-500/20 mt-2">
+
+            <motion.button 
+              whileHover={{ scale: 1.02 }} 
+              whileTap={{ scale: 0.98 }} 
+              onClick={() => onConfirm(formData)} 
+              disabled={!formData.name} 
+              className="w-full py-5 rounded-[28px] font-black text-white text-base uppercase tracking-widest disabled:opacity-40 transition-all bg-viet-green shadow-xl shadow-emerald-500/20 mt-4 hover:brightness-110"
+            >
               {t('arena.create_room.submit_btn')}
             </motion.button>
           </div>
@@ -486,52 +680,59 @@ const RoomBrowserModal = ({ isOpen, onClose, onJoin }) => {
 
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-md" onClick={onClose}>
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl bg-white rounded-[40px] p-8 relative border border-viet-border shadow-2xl max-h-[85vh] flex flex-col">
-          <button onClick={onClose} className="absolute top-6 right-6 w-10 h-10 rounded-2xl flex items-center justify-center text-viet-text-light/30 hover:text-red-500 hover:bg-red-50 transition-all font-black text-xl">✕</button>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-viet-text uppercase tracking-wider font-sora">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/5 backdrop-blur-2xl" onClick={onClose}>
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl bg-white/90 backdrop-blur-3xl rounded-[60px] p-10 relative border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.1)] max-h-[85vh] flex flex-col">
+          <button onClick={onClose} className="absolute top-8 right-8 w-12 h-12 rounded-2xl flex items-center justify-center text-viet-text-light/20 hover:text-red-500 hover:bg-red-50 transition-all font-black text-xl">✕</button>
+          
+          <div className="flex items-center justify-between mb-10 pr-12">
+            <h2 className="text-3xl font-black text-viet-text uppercase tracking-tight pr-4">
               <Trans i18nKey="arena.browser.title">
                 SẢNH CHỜ <span className="text-viet-green">TRỰC TUYẾN</span>
               </Trans>
             </h2>
-            <button onClick={fetchRooms} className="px-4 py-2 rounded-xl bg-viet-green/10 text-viet-green text-[11px] font-black uppercase tracking-widest hover:bg-viet-green/20 transition-all">⟳ {t('arena.browser.refresh')}</button>
+            <button onClick={fetchRooms} className="flex-shrink-0 px-5 py-2.5 rounded-2xl bg-black text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">⟳ {t('arena.browser.refresh')}</button>
           </div>
-          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-4">
+
+          <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-4">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <div className="w-10 h-10 border-4 border-viet-green border-t-transparent rounded-full animate-spin" />
-                <p className="text-viet-text-light/40 font-bold uppercase tracking-widest text-[11px]">{t('arena.browser.scanning')}</p>
+              <div className="flex flex-col items-center justify-center py-24 gap-6">
+                <div className="w-12 h-12 border-4 border-viet-green border-t-transparent rounded-full animate-spin" />
+                <p className="text-viet-text-light/30 font-black uppercase tracking-[4px] text-[10px]">{t('arena.browser.scanning')}</p>
               </div>
             ) : rooms.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <span className="text-6xl mb-4 opacity-20">🏜️</span>
-                <p className="text-viet-text font-black text-lg">{t('arena.browser.empty_title')}</p>
-                <p className="text-viet-text-light/50 text-[11px] font-bold">{t('arena.browser.empty_desc')}</p>
+              <div className="flex flex-col items-center justify-center py-24 text-center">
+                <span className="text-7xl mb-6 opacity-10">🏜️</span>
+                <p className="text-viet-text font-black text-xl mb-2">{t('arena.browser.empty_title')}</p>
+                <p className="text-viet-text-light/40 text-[12px] font-medium max-w-[280px] mx-auto leading-relaxed">{t('arena.browser.empty_desc')}</p>
               </div>
             ) : (
               rooms.map((room) => (
-                <div key={room.id} className="bg-viet-bg border border-viet-border rounded-3xl p-5 flex items-center gap-6 hover:border-viet-green/40 transition-all group">
-                  <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-viet-border overflow-hidden flex-shrink-0 relative group-hover:scale-105 transition-all">
-                    <img src={getSvgDataUrl(room.host_avatar?.seed || 'host')} className="w-full h-full object-contain p-1" alt="host" />
-                    <div className="absolute inset-0 bg-viet-green/5 opacity-0 group-hover:opacity-100 transition-all" />
+                <div key={room.id} className="bg-white border border-black/[0.03] rounded-[32px] p-6 flex items-center gap-6 hover:shadow-xl hover:border-viet-green/20 transition-all group">
+                  <div className="w-20 h-20 rounded-3xl bg-black/[0.02] overflow-hidden flex-shrink-0 relative group-hover:scale-105 transition-all">
+                    <img src={getSvgDataUrl(room.host_avatar?.seed || 'host')} className="w-full h-full object-contain p-2" alt="host" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-1">
-                      <h3 className="text-viet-text font-black text-[15px] truncate">{room.name}</h3>
-                      <span className="px-2 py-0.5 rounded-lg bg-white border border-viet-border text-[9px] font-black text-viet-text-light/50 uppercase tracking-widest">#{room.id}</span>
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-viet-text font-black text-lg truncate leading-tight">{room.name}</h3>
+                      <span className="px-2.5 py-1 rounded-xl bg-black/[0.03] text-[9px] font-black text-viet-text-light/40 uppercase tracking-widest">#{room.id}</span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-4 text-[10px] font-bold text-viet-text-light/40 uppercase tracking-widest">
-                      <span className="flex items-center gap-1.5"><span className="text-xs">👤</span> {room.host_name}</span>
-                      <span className="flex items-center gap-1.5"><span className="text-xs">🎮</span> {room.mode}</span>
-                      <span className="flex items-center gap-1.5"><span className="text-xs">🎯</span> {room.difficulty}</span>
+                    <div className="flex flex-wrap items-center gap-5 text-[10px] font-bold text-viet-text-light/30 uppercase tracking-widest">
+                      <span className="flex items-center gap-2">👤 {room.host_name}</span>
+                      <span className="flex items-center gap-2">🎮 {room.mode}</span>
+                      <span className="flex items-center gap-2">🎯 {room.difficulty}</span>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-3">
-                    <div className="text-[11px] font-black text-viet-text-light/40">
-                      <span className="text-viet-green">{room.current_players}</span>/{room.max_players}
+                    <div className="text-[14px] font-black text-viet-text">
+                      <span className="text-viet-green">{room.current_players}</span><span className="text-black/10 mx-0.5">/</span>{room.max_players}
                     </div>
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => onJoin(room.id)} disabled={room.current_players >= room.max_players} className="px-6 py-2.5 rounded-2xl font-black text-white text-[11px] uppercase tracking-widest bg-viet-text hover:bg-black transition-all disabled:opacity-30">
+                    <motion.button 
+                      whileHover={{ scale: 1.05 }} 
+                      whileTap={{ scale: 0.95 }} 
+                      onClick={() => onJoin(room.id)} 
+                      disabled={room.current_players >= room.max_players} 
+                      className="px-8 py-3 rounded-2xl font-black text-white text-[11px] uppercase tracking-widest bg-viet-text hover:bg-viet-green transition-all disabled:opacity-20 shadow-lg shadow-black/10"
+                    >
                       {t('arena.browser.enter_btn')}
                     </motion.button>
                   </div>
@@ -914,7 +1115,7 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
     user?.arenaAvatar?.seed || AVATAR_PRESETS[0].seed
   );
   const [selectedAura, setSelectedAura] = useState(
-    user?.arenaAvatar?.aura || '#a855f7'
+    user?.arenaAvatar?.aura || '#8b5cf6'
   );
   const saveTimerRef = useRef(null);
 
@@ -938,17 +1139,15 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
   }, [avatarSeed, selectedAura, user?.id]);
 
   return (
-    <div className="min-h-screen pt-[100px] bg-[oklch(0.98_0.02_135)] relative overflow-hidden font-inter selection:bg-viet-green selection:text-white">
+    <div className="min-h-screen pt-[120px] bg-[#fdfdfd] relative overflow-hidden font-inter selection:bg-viet-green selection:text-white">
+      {/* Refined modern background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.98_0.01_135)_0%,transparent_100%)]" />
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.04] pointer-events-none" style={{ background: selectedAura }} />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.04] pointer-events-none" style={{ background: '#76c034' }} />
+      
       <Particles />
 
-      {/* Decorative BG blobs - softer for light theme */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] rounded-full blur-[140px] opacity-[0.03] pointer-events-none"
-        style={{ background: selectedAura }} />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[140px] opacity-[0.03] pointer-events-none"
-        style={{ background: '#76c034' }} />
-
-      {/* Main 3-column layout */}
-      <div className="relative z-10 max-w-7xl mx-auto px-8 py-10 grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-10 items-start">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-8 lg:px-12 py-12 grid grid-cols-1 lg:grid-cols-[340px_1fr_340px] gap-8 xl:gap-14 items-start">
         {/* Left: Character */}
         <CharacterPanel
           user={user}
@@ -974,6 +1173,16 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
         {/* Right: Stats */}
         <StatsPanel user={user} />
       </div>
+      
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 4s ease-in-out infinite;
+        }
+      `}} />
     </div>
   );
 };
@@ -984,23 +1193,54 @@ const MatchResultScreen = ({ result, score, ptsChange, onClose }) => {
   const { t } = useTranslation();
   const isWin = result === 'win';
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-white/60 backdrop-blur-xl">
-      <div className="w-full max-sm text-center">
-        <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', damping: 12, delay: 0.1 }} className="text-[120px] mb-6 leading-none select-none">{isWin ? '🏆' : '🕯️'}</motion.div>
-        <motion.h2 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="text-4xl font-black uppercase mb-2 font-sora tracking-tighter" style={{ color: isWin ? '#76c034' : '#1a1a1a' }}>{isWin ? t('arena.result.win') : t('arena.result.lose')}</motion.h2>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-viet-text-light/50 text-[11px] font-black uppercase tracking-[4px] mb-8">{isWin ? t('arena.result.win_desc') : t('arena.result.lose_desc')}</motion.p>
-        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }} className="bg-viet-bg rounded-[32px] p-8 border border-viet-border flex items-center justify-center gap-10 mb-10 shadow-sm">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-white/40 backdrop-blur-3xl">
+      <div className="w-full max-w-sm text-center">
+        <motion.div 
+          initial={{ scale: 0, rotate: -20 }} 
+          animate={{ scale: 1, rotate: 0 }} 
+          transition={{ type: 'spring', damping: 12, delay: 0.1 }} 
+          className="text-[140px] mb-8 leading-none select-none drop-shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
+        >
+          {isWin ? '🏆' : '🕯️'}
+        </motion.div>
+
+        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="space-y-2 mb-10">
+          <h2 className="text-5xl font-black uppercase tracking-tighter" style={{ color: isWin ? '#10b981' : '#1a1a1a' }}>
+            {isWin ? t('arena.result.win') : t('arena.result.lose')}
+          </h2>
+          <p className="text-viet-text-light/40 text-[10px] font-black uppercase tracking-[6px]">{isWin ? t('arena.result.win_desc') : t('arena.result.lose_desc')}</p>
+        </motion.div>
+
+        <motion.div 
+          initial={{ y: 20, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ delay: 0.5 }} 
+          className="bg-white/50 backdrop-blur-xl rounded-[40px] p-10 border border-black/[0.03] flex items-center justify-center gap-12 mb-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)]"
+        >
           <div className="text-center">
-            <p className="text-viet-text-light/40 text-[9px] font-black uppercase tracking-widest mb-2">{t('arena.result.score')}</p>
-            <p className="text-3xl font-black text-viet-text">{score}</p>
+            <p className="text-viet-text-light/30 text-[9px] font-black uppercase tracking-widest mb-3">{t('arena.result.score')}</p>
+            <p className="text-4xl font-black text-viet-text tracking-tight">{score}</p>
           </div>
-          <div className="w-px h-12 bg-viet-border" />
+          <div className="w-px h-16 bg-black/[0.05]" />
           <div className="text-center">
-            <p className="text-viet-text-light/40 text-[9px] font-black uppercase tracking-widest mb-2">{t('arena.result.rank')}</p>
-            <p className={`text-3xl font-black ${ptsChange >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>{ptsChange > 0 ? '+' : ''}{ptsChange}</p>
+            <p className="text-viet-text-light/30 text-[9px] font-black uppercase tracking-widest mb-3">{t('arena.result.rank')}</p>
+            <p className={`text-4xl font-black tracking-tight ${ptsChange >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+              {ptsChange > 0 ? '+' : ''}{ptsChange}
+            </p>
           </div>
         </motion.div>
-        <motion.button initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={onClose} className="w-full py-5 rounded-[24px] font-black text-white text-base uppercase tracking-widest bg-viet-text shadow-xl shadow-black/10 transition-all hover:bg-black">{t('arena.result.continue_btn')}</motion.button>
+
+        <motion.button 
+          initial={{ y: 20, opacity: 0 }} 
+          animate={{ y: 0, opacity: 1 }} 
+          transition={{ delay: 0.6 }} 
+          whileHover={{ scale: 1.05 }} 
+          whileTap={{ scale: 0.95 }} 
+          onClick={onClose} 
+          className="w-full py-6 rounded-[32px] font-black text-white text-[15px] uppercase tracking-[4px] bg-black shadow-2xl shadow-black/20 transition-all hover:bg-viet-green hover:shadow-emerald-500/30"
+        >
+          {t('arena.result.continue_btn')}
+        </motion.button>
       </div>
     </motion.div>
   );
