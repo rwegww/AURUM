@@ -103,7 +103,7 @@ const Profile = () => {
                       : (i18n.language === 'vi' ? 'Sớm hơn' : 'Earlier')
                   }}
                 >
-                   Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {user?.createdAt 
+                   Thành viên ưu tú của Học viện Hóa học Aurum.<br/>Đã đồng hành từ {user?.createdAt 
                      ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
                      : (i18n.language === 'vi' ? 'Thời gian dài' : 'a long time')}
                 </Trans>

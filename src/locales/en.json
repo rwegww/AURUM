@@ -54,7 +54,7 @@
     }
   },
   "classroom": {
-    "title": "Start your <1>Chemistry</1> journey",
+    "title": "Start your <1/><2> Chemistry</2> journey",
     "subtitle": "Each level is a new journey with its own story and exciting challenges, helping you explore the world of chemistry in the most natural way.",
     "enter_class": "Enter Class",
     "grades": {
@@ -80,7 +80,7 @@
   },
   "about": {
     "mission_badge": "Our Mission",
-    "title": "Igniting the passion for <1/> <2>Chemistry</2> in youth",
+    "title": "Igniting the passion for <1/><2> Chemistry</2> in youth",
     "description": "Aurum is not just a learning platform, but a journey to explore the microscopic world of atoms and reactions. We believe knowledge truly comes alive when experienced and interacted with.",
     "pillars": {
       "safety": { "title": "Absolute Safety", "desc": "3D simulations help students practice dangerous reactions without real chemicals." },
@@ -128,13 +128,13 @@
       "privacy": { "title": "4. Privacy Policy", "p1": "We are committed to protecting the personal information of learners. Your data is encrypted and securely stored on the Supabase/Firebase system.", "p2": "We only use your email to send learning notifications and password recovery." },
       "liability": { "title": "5. Limitation of Liability", "p1": "Lab simulations are designed for visual educational purposes. Results may have minor deviations from reality depending on the simulation environment.", "p2": "We are not responsible for any loss arising from the misuse of information on this platform." }
     },
-    "footer_question": "Have questions about the terms? <br/> Please <contact>Contact Us</contact>."
+    "footer_question": "Have questions about the terms?<1/>Please <contact>Contact Us</contact>."
   },
   "profile": {
     "not_logged_in": "You are not logged in",
     "login_to_view": "Login to view profile",
     "member_role": "Student",
-    "member_since": "Elite member of Aurum Chemistry Academy. <br/>Part of the journey since {{date}}",
+    "member_since": "Elite member of Aurum Chemistry Academy.<1/>Part of the journey since {{date}}",
     "online_status": "Online Now",
     "change_avatar": "Randomize Avatar",
     "save_changes": "Save Changes",

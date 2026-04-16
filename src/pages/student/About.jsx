@@ -44,8 +44,7 @@ const About = () => {
             className="text-[40px] md:text-[60px] font-black text-viet-text leading-[1.1] tracking-tight mb-10"
           >
             <Trans i18nKey="about.title">
-              Khơi nguồn đam mê <br/>
-              <span className="text-viet-green">Hóa học</span> cho thế hệ trẻ
+              Khơi nguồn đam mê<br/><span className="text-viet-green">Hóa học</span>cho thế hệ trẻ
             </Trans>
           </motion.h1>
           <motion.p 

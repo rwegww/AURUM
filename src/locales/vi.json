@@ -54,7 +54,7 @@
     }
   },
   "classroom": {
-    "title": "Bắt đầu hành trình <1/><2>Hóa học</2> của bạn",
+    "title": "Bắt đầu hành trình <1/><2> Hóa học</2> của bạn",
     "subtitle": "Mỗi cấp độ là một hành trình mới với câu chuyện riêng và thử thách thú vị, giúp bạn khám phá thế giới hóa học một cách tự nhiên nhất.",
     "enter_class": "Vào lớp",
     "grades": {
@@ -80,7 +80,7 @@
   },
   "about": {
     "mission_badge": "Sứ mệnh của chúng tôi",
-    "title": "Khơ nguồn đam mê <1/> <2>Hóa học</2> cho thế hệ trẻ",
+    "title": "Khơi nguồn đam mê <1/><2> Hóa học</2> cho thế hệ trẻ",
     "description": "Aurum không chỉ là một nền tảng học tập, mà là một cuộc hành trình khám phá thế giới vi mô của các nguyên tử và phản ứng. Chúng tôi tin rằng kiến thức chỉ thực sự sống động khi nó được trải nghiệm và tương tác.",
     "pillars": {
       "safety": { "title": "An toàn tuyệt đối", "desc": "Mô phỏng 3D giúp học sinh thực hành các phản ứng nguy hiểm mà không cần hóa chất thực." },
@@ -128,13 +128,13 @@
       "privacy": { "title": "4. Chính sách bảo mật", "p1": "Commitment... (Chúng tôi cam kết...)", "p2": "We only... (Chúng tôi chỉ...)" },
       "liability": { "title": "5. Giới hạn trách nhiệm", "p1": "Simulations are... (Các mô phỏng...)", "p2": "No responsibility... (Chúng tôi không...)" }
     },
-    "footer_question": "Bạn có câu hỏi về điều khoản? <br/> Vui lòng <contact>Liên hệ với chúng tôi</contact>."
+    "footer_question": "Bạn có câu hỏi về điều khoản?<1/>Vui lòng <contact>Liên hệ với chúng tôi</contact>."
   },
   "profile": {
     "not_logged_in": "Bạn chưa đăng nhập",
     "login_to_view": "Đăng nhập để xem hồ sơ",
     "member_role": "Học sinh",
-    "member_since": "Thành viên ưu tú của Học viện Hóa học Aurum. <br/>Đã đồng hành từ {{date}}",
+    "member_since": "Thành viên ưu tú của Học viện Hóa học Aurum.<1/>Đã đồng hành từ {{date}}",
     "online_status": "Đang trực tuyến",
     "change_avatar": "Đổi nhân vật ngẫu nhiên",
     "save_changes": "Lưu thay đổi",

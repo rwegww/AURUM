@@ -43,7 +43,7 @@ const Contact = () => {
               </motion.span>
               <h1 className="text-4xl md:text-5xl font-black text-viet-text mb-6">
                 <Trans i18nKey="contact.title">
-                  Liên hệ với <br/> Đội ngũ sáng lập
+                  Liên hệ với<br/>Đội ngũ sáng lập
                 </Trans>
               </h1>
               <p className="text-[16px] text-viet-text-light font-medium leading-relaxed max-w-lg">

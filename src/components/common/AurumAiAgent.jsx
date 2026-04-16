@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, Sparkles, MessageSquare, ExternalLink, Beaker, BrainCircuit, ShieldAlert, Shield, FileText } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AurumExpert from '@/services/ai/AurumExpert';
@@ -134,7 +133,7 @@ const AurumAiAgent = () => {
             <div className="p-6 bg-white/5 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md">
-                  <Bot className="text-white" size={24} />
+                  <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
                 </div>
                 <div>
                   <h3 className="font-bold text-white text-lg leading-tight">Aurum AI</h3>
@@ -150,11 +149,11 @@ const AurumAiAgent = () => {
                   className="text-[10px] bg-white/10 hover:bg-white/20 text-white px-2 py-1.5 rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
                   title="Chính sách AI & An toàn"
                 >
-                  <Shield size={12} className="text-blue-400" />
+                  <svg className="w-3 h-3 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                   <span className="font-bold opacity-80">Chính sách AI</span>
                 </button>
                 <button onClick={() => setIsOpen(false)} className="p-2.5 rounded-xl hover:bg-white/10 text-white/40 transition-all">
-                  <X size={20} />
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
               </div>
             </div>
@@ -170,11 +169,11 @@ const AurumAiAgent = () => {
                 >
                   <div className="p-6 border-b border-white/10 flex items-center justify-between bg-blue-600/10">
                     <div className="flex items-center gap-3 text-white">
-                      <Shield size={20} className="text-blue-400" />
+                      <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                       <h4 className="font-bold text-sm uppercase tracking-wider">Hiến chương Aurum AI</h4>
                     </div>
                     <button onClick={() => setShowPolicy(false)} className="p-2 rounded-lg hover:bg-white/10 text-white/60">
-                      <X size={20} />
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                     </button>
                   </div>
                   <div className="flex-1 overflow-y-auto p-6 text-xs leading-relaxed text-white/80 scroll-smooth custom-scrollbar">
@@ -206,7 +205,7 @@ const AurumAiAgent = () => {
                         <div className="flex flex-wrap gap-2 mb-3">
                           {msg.confidence && (
                             <div className="flex items-center gap-1 bg-blue-500/20 text-blue-400 text-[8px] font-black px-1.5 py-0.5 rounded-md border border-blue-500/30 uppercase tracking-tighter">
-                              <BrainCircuit size={8} />
+                              <svg className="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M20 12h2"/><path d="M2 12h2"/></svg>
                               Confidence: {(msg.confidence * 100).toFixed(0)}%
                             </div>
                           )}
@@ -217,7 +216,7 @@ const AurumAiAgent = () => {
                                 msg.safety === 'Caution' ? 'bg-yellow-500/20 text-yellow-500 border-yellow-500/30' :
                                 'bg-green-500/20 text-green-500 border-green-500/30'}
                             `}>
-                              <ShieldAlert size={8} />
+                              <svg className="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                               {msg.safety === 'Danger' ? 'Cảnh báo Nguy hiểm' : msg.safety === 'Caution' ? 'Cần Thận trọng' : 'An toàn Giáo dục'}
                             </div>
                           )}
@@ -257,7 +256,7 @@ const AurumAiAgent = () => {
                             className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[11px] font-bold hover:bg-blue-600/30 transition-all"
                           >
                              {action.label}
-                             <ExternalLink size={12} />
+                             <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6m4-3h6v6m-11 5L21 3"/></svg>
                           </button>
                         ))}
                       </div>
@@ -305,7 +304,7 @@ const AurumAiAgent = () => {
                     disabled={!inputValue.trim() || isTyping}
                     className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white disabled:opacity-30 hover:scale-105 active:scale-95 transition-all"
                   >
-                    <Send size={18} />
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                   </button>
                 </div>
               </form>
@@ -324,10 +323,10 @@ const AurumAiAgent = () => {
           ${isOpen ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}
         `}
       >
-        {isOpen ? <X size={28} /> : (
+        {isOpen ? <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg> : (
           <div className="relative">
-            <Bot size={32} />
-            <Sparkles size={14} className="absolute -top-1 -right-1 text-yellow-300 animate-pulse" />
+            <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+            <svg className="absolute -top-1 -right-1 w-3.5 h-3.5 text-yellow-300 animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
           </div>
         )}
       </motion.button>

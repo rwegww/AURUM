@@ -28,7 +28,7 @@ const Terms = () => {
              className="text-4xl md:text-5xl font-black text-viet-text mb-4"
            >
              <Trans i18nKey="terms.title">
-               Điều khoản & <br/> Chính sách Bảo mật
+               Điều khoản &<br/>Chính sách Bảo mật
              </Trans>
            </motion.h1>
            <p className="text-viet-text-light font-bold text-[14px] uppercase tracking-widest opacity-50">{t('terms.last_updated', { date: 'April 16, 2026' })}</p>
@@ -65,11 +65,10 @@ const Terms = () => {
                <Trans 
                  i18nKey="terms.footer_question"
                  components={{ 
-                   br: <br />,
                    contact: <a href="/contact" className="text-viet-green font-bold hover:underline" /> 
                  }}
                >
-                 Bạn có câu hỏi về điều khoản? <br/> Vui lòng <a href="/contact">Liên hệ với chúng tôi</a>.
+                 Bạn có câu hỏi về điều khoản?<br/>Vui lòng <a href="/contact">Liên hệ với chúng tôi</a>.
                </Trans>
              </p>
           </div>
