@@ -87,7 +87,7 @@ export const CHEMISTRY_KNOWLEDGE_BASE = [
   {
     id: 'atom-structure',
     category: 'Đại cương',
-    patterns: ['cấu tạo nguyên tử', 'nguyên tử gồm gì', 'proton neutron electron', 'hạt cơ bản', 'nguyên tử là gì'],
+    patterns: ['cấu tạo nguyên tử', 'nguyên tử gồm gì', 'proton neutron electron', 'hạt cơ bản', 'nguyên tử là gì', 'Số khối và số hiệu nguyên tử', 'số hiệu nguyên tử', 'số khối'],
     title: 'Cấu tạo nguyên tử',
     explanation:
       'Nguyên tử gồm **hạt nhân** và **vỏ electron**. Hạt nhân chứa **proton** mang điện dương và **neutron** không mang điện. Electron mang điện âm và chuyển động quanh hạt nhân theo các mức năng lượng. Trong nguyên tử trung hòa: số proton = số electron. **Số hiệu nguyên tử Z = số proton**; **số khối A = proton + neutron**.',
@@ -96,7 +96,7 @@ export const CHEMISTRY_KNOWLEDGE_BASE = [
   {
     id: 'isotope',
     category: 'Đại cương',
-    patterns: ['đồng vị', 'isotope', 'nguyên tử cùng z khác n'],
+    patterns: ['đồng vị', 'isotope', 'nguyên tử cùng z khác n', 'Nguyên tử khối trung bình'],
     title: 'Đồng vị',
     explanation:
       'Đồng vị là các nguyên tử của cùng một nguyên tố có **cùng số proton** nhưng **khác số neutron**, nên khác số khối. Tính chất hóa học của các đồng vị gần như giống nhau vì phụ thuộc chủ yếu vào electron; tính chất vật lý có thể khác nhau.',

@@ -216,11 +216,12 @@ const KnowledgeMap = () => {
                         <button 
                           key={i} 
                           onClick={() => {
-                            const searchStr = s.toLowerCase();
+                            const searchStr = s.toLowerCase().replace(/\s+/g, '');
                             const relatedTopic = CHEMISTRY_KNOWLEDGE_BASE.find(t => 
-                              t.title.toLowerCase() === searchStr || 
-                              t.patterns.some(p => p.toLowerCase() === searchStr) ||
-                              t.title.toLowerCase().includes(searchStr)
+                              t.id.toLowerCase() === searchStr ||
+                              t.title.toLowerCase().replace(/\s+/g, '') === searchStr || 
+                              t.patterns.some(p => p.toLowerCase().replace(/\s+/g, '') === searchStr) ||
+                              t.title.toLowerCase().includes(s.toLowerCase())
                             );
                             if (relatedTopic) setSelectedTopic(relatedTopic);
                           }}
