@@ -156,9 +156,13 @@ class AurumExpertEngine {
     
     // 1. Prioritize Hybrid AI (Backend) for Natural Language Knowledge Queries
     // These queries are better handled by Gemini + DB Context rather than local heuristics
-    const isKnowledgeQuery = q.includes('cách') || q.includes('làm sao') || q.includes('tại sao') || q.includes('là gì') || q.includes('điều chế') || q.includes('tạo ra');
+    const isKnowledgeQuery = q.includes('giải thích') || q.includes('cách') || q.includes('làm sao') || q.includes('tại sao') || q.includes('là gì') || q.includes('điều chế') || q.includes('tạo ra') || q.includes('cho biết');
     
     if (isKnowledgeQuery) {
+      // Prioritize local theory database for curated educational content
+      const theoryMatch = this.findTheoryMatch(q);
+      if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
+
       const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history });
       if (hybridResult) return hybridResult;
     }
@@ -176,14 +180,14 @@ class AurumExpertEngine {
       }
     }
 
-    if (foundTokens.length === 1 && !q.includes('là gì')) {
-      const info = this.handleInfoRequest(foundTokens[0]);
-      if (info) return info;
-    }
-
     // 2. Local Theory & Curriculum Lookups (High Priority Curated Content)
     const theoryMatch = this.findTheoryMatch(q);
     if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
+
+    if (foundTokens.length === 1 && !isKnowledgeQuery) {
+      const info = this.handleInfoRequest(foundTokens[0]);
+      if (info) return info;
+    }
 
     if (q.includes('toàn bộ hóa học') || q.includes('sơ đồ hóa học') || q.includes('bản đồ hóa học') || q.includes('bản đồ kiến thức')) {
       return this.handleTheoryById('chemistry-map');
@@ -304,7 +308,8 @@ class AurumExpertEngine {
     for (const key of sortedKeys) {
       const normKey = key.toLowerCase();
       const isShort = normKey.length <= 2;
-      const pattern = isShort
+      const isWord = /[a-zà-ỹ]/i.test(normKey); // Detect if it's a name/word rather than just a formula
+      const pattern = (isShort || isWord)
         ? new RegExp(`(?:^|[^\\p{L}\\p{N}])${escapeRegExp(normKey)}(?=[^\\p{L}\\p{N}]|$)`, 'iu')
         : new RegExp(escapeRegExp(normKey), 'iu');
 
