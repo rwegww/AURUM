@@ -389,9 +389,30 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
       </div>
 
       <div className="text-center space-y-4">
-        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-viet-green/10 border border-viet-green/20 mb-2">
-           <span className="w-1.5 h-1.5 rounded-full bg-viet-green animate-pulse" />
-           <span className="text-[10px] font-black text-viet-green uppercase tracking-[2px]">{t('arena.mode_active', { defaultValue: 'CHẾ ĐỘ THI ĐẤU TRỰC TUYẾN' })}</span>
+        {/* Room Metadata Labels */}
+        <div className="flex items-center justify-center gap-10 mb-1 opacity-20 pointer-events-none">
+          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[4px]">
+            <span>⚙️</span> {t('arena_modes.all', { defaultValue: 'TỔNG HỢP' })}
+          </div>
+          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[4px]">
+            <span>📄</span> {t('arena_modes.questions', { defaultValue: '10 CÂU' })}
+          </div>
+          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[4px]">
+            <span>⏱️</span> {t('arena_modes.time', { defaultValue: '30 GIÂY' })}
+          </div>
+        </div>
+
+        <div className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-white border border-black/[0.05] shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4 transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
+           <div className="flex items-center gap-3">
+             <span className="w-2.5 h-2.5 rounded-full bg-viet-green animate-pulse shadow-[0_0_10px_rgba(118,192,52,0.4)]" />
+             <span className="text-[13px] font-bold text-viet-text/50">
+               {onlineCount.toLocaleString('vi-VN')} {t('arena.online_students', { defaultValue: 'học sinh đang trực tuyến' })}
+             </span>
+           </div>
+           <div className="w-[1px] h-4 bg-black/[0.08]" />
+           <span className="text-[11px] font-black text-viet-text/30 uppercase tracking-[2px]">
+             {findMode === 'solo' ? '1 VS 1' : findMode} MODE
+           </span>
         </div>
         <h2 className="text-6xl font-black text-viet-text tracking-tighter leading-tight">
           <Trans i18nKey="arena.title">
