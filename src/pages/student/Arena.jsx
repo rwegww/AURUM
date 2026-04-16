@@ -92,7 +92,7 @@ const Particles = () => (
 );
 
 // ─── CHARACTER PANEL ──────────────────────────────────────────────────────────
-const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, setAvatarSeed, selectedAura, setSelectedAura }) => {
+const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, setAvatarSeed }) => {
   const { t } = useTranslation();
   const AVATAR_PRESETS = getAvatarPresets(t);
   const displayName = user?.username || user?.full_name || t('common.guest', { defaultValue: 'Khách' });
@@ -114,80 +114,42 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
         <div className="flex items-center justify-between mb-8">
            <span className="text-[10px] font-bold uppercase tracking-[2px] text-viet-text/40">{t('arena.character.badge')}</span>
            <div className="flex items-center gap-2">
-             <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: selectedAura }} />
+             <div className="w-2 h-2 rounded-full animate-pulse bg-viet-green" />
              <span className="text-[10px] font-bold text-viet-text/20 uppercase tracking-widest">LIVE</span>
            </div>
         </div>
 
-        <div className="flex flex-col items-center mb-10">
+        <div className="flex flex-col items-center mb-6">
           <motion.div 
             whileHover={{ scale: 1.05 }} 
-            className="w-36 h-36 rounded-3xl mb-6 shadow-[0_20px_50px_rgba(0,0,0,0.06)] relative overflow-hidden flex items-center justify-center bg-white p-3 border border-black/[0.03]"
+            className="w-40 h-40 rounded-3xl mb-6 shadow-[0_20px_50px_rgba(0,0,0,0.06)] relative overflow-hidden flex items-center justify-center bg-white p-4 border border-black/[0.03]"
           >
-            <div className="absolute inset-0 opacity-10" style={{ background: `radial-gradient(circle at center, ${selectedAura}, transparent)` }} />
+            <div className="absolute inset-0 opacity-5 bg-viet-green" />
             <img src={currentAvatarUrl} alt={currentSeed} className="w-full h-full object-contain relative z-10" />
           </motion.div>
-          <h3 className="text-xl font-black text-viet-text tracking-tight">{displayName}</h3>
-          <p className="text-[11px] font-medium text-viet-text/40 uppercase tracking-widest mt-1">CHEMISTRY EXPLORER</p>
+          <h3 className="text-2xl font-black text-viet-text tracking-tight">{displayName}</h3>
+          <p className="text-[12px] font-medium text-viet-text/40 uppercase tracking-widest mt-1">CHEMISTRY EXPLORER</p>
         </div>
 
-        <div className="space-y-8">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30 mb-3 px-1">{t('arena.character.name_label')}</p>
-            <div className="relative group/input">
-              <input 
-                type="text" 
-                value={customInput} 
-                onChange={(e) => setCustomInput(e.target.value)} 
-                onKeyDown={(e) => e.key === 'Enter' && applyCustomSeed()} 
-                placeholder={currentSeed} 
-                className="w-full px-5 py-4 rounded-2xl text-[13px] font-medium text-viet-text placeholder-viet-text/20 outline-none border border-black/[0.05] focus:border-viet-green focus:bg-white transition-all bg-black/[0.02]" 
-              />
-              <button 
-                onClick={applyCustomSeed} 
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-viet-green text-white font-bold flex items-center justify-center shadow-lg shadow-emerald-500/20 opacity-0 group-focus-within/input:opacity-100 transition-opacity"
+        <div className="pt-6 border-t border-black/[0.03]">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30">{t('arena.character.presets_label') || 'PHONG CÁCH'}</p>
+            <button onClick={() => setShowMore(!showMore)} className="text-[10px] font-bold text-viet-green/60 hover:text-viet-green transition-all">
+              {showMore ? t('common.less', { defaultValue: 'THU GỌN' }) : t('common.more', { defaultValue: 'XEM THÊM' })}
+            </button>
+          </div>
+          <div className="grid grid-cols-4 gap-3">
+            {visiblePresets.map((av) => (
+              <motion.button 
+                key={av.id} 
+                whileHover={{ scale: 1.1, y: -2 }} 
+                whileTap={{ scale: 0.9 }} 
+                onClick={() => setAvatarSeed(av.seed)} 
+                className={`aspect-square rounded-2xl overflow-hidden p-1.5 transition-all border-2 ${avatarSeed === av.seed ? 'border-viet-green bg-viet-green/5' : 'border-transparent bg-black/[0.02] hover:bg-black/[0.04]'}`}
               >
-                ✓
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-3 px-1">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30">{t('arena.character.presets_label') || 'KIỂU DÁNG'}</p>
-              <button onClick={() => setShowMore(!showMore)} className="text-[10px] font-bold text-viet-green/60 hover:text-viet-green transition-all">
-                {showMore ? t('common.less', { defaultValue: 'THU GỌN' }) : t('common.more', { defaultValue: 'XEM THÊM' })}
-              </button>
-            </div>
-            <div className="grid grid-cols-4 gap-3">
-              {visiblePresets.map((av) => (
-                <motion.button 
-                  key={av.id} 
-                  whileHover={{ scale: 1.1, y: -2 }} 
-                  whileTap={{ scale: 0.9 }} 
-                  onClick={() => setAvatarSeed(av.seed)} 
-                  className={`aspect-square rounded-2xl overflow-hidden p-1.5 transition-all border-2 ${avatarSeed === av.seed ? 'border-viet-green bg-viet-green/5' : 'border-transparent bg-black/[0.02] hover:bg-black/[0.04]'}`}
-                >
-                  <img src={getSvgDataUrl(av.seed)} alt={av.label} className="w-full h-full object-contain" />
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30 mb-3 px-1">{t('arena.character.aura_label')}</p>
-            <div className="flex gap-2.5 flex-wrap px-1">
-              {AURA_COLORS.map((c) => (
-                <motion.button 
-                  key={c} 
-                  whileHover={{ scale: 1.2 }} 
-                  whileTap={{ scale: 0.8 }} 
-                  onClick={() => setSelectedAura(c)} 
-                  className={`w-6 h-6 rounded-full transition-all ring-offset-4 ${selectedAura === c ? 'ring-2 ring-black/10' : ''}`} 
-                  style={{ background: c }} 
-                />
-              ))}
-            </div>
+                <img src={getSvgDataUrl(av.seed)} alt={av.label} className="w-full h-full object-contain" />
+              </motion.button>
+            ))}
           </div>
         </div>
       </div>
@@ -199,7 +161,6 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
           const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; 
           setAvatarSeed(randomPreset.seed); 
           setSelectedAvatar(0); 
-          setSelectedAura(AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)]); 
         }} 
         className={`w-full py-5 ${MODERN_STYLES.radius} bg-white border border-black/[0.05] text-[11px] font-black uppercase tracking-widest text-viet-text shadow-sm transition-all flex items-center justify-center gap-3`}
       >
@@ -382,7 +343,7 @@ const StatsPanel = ({ user }) => {
 
 
 // ─── CENTER ACTION PANEL ───────────────────────────────────────────────────────
-const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser, selectedAvatar, selectedAura }) => {
+const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser, selectedAvatar }) => {
   const { t } = useTranslation();
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
@@ -413,7 +374,7 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           className={`w-52 h-52 ${MODERN_STYLES.radius} flex items-center justify-center text-[84px] relative z-10 bg-white border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.06)] transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_50px_120px_rgba(0,0,0,0.08)]`}
         >
-          <div className="absolute inset-6 rounded-[32px] opacity-10 animate-pulse" style={{ background: selectedAura }} />
+          <div className="absolute inset-6 rounded-[32px] opacity-10 animate-pulse bg-viet-green" />
           <span className="relative z-10 drop-shadow-2xl grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500">⚔️</span>
           
           {/* Decorative glass elements */}
@@ -424,7 +385,7 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
         {/* Modern decorative rings */}
         <div className="absolute -inset-8 border border-black/[0.015] rounded-full pointer-events-none animate-[spin_40s_linear_infinite]" />
         <div className="absolute -inset-16 border border-dashed border-black/[0.01] rounded-full pointer-events-none animate-[spin_60s_linear_infinite_reverse]" />
-        <div className="absolute inset-0 blur-[120px] opacity-[0.05] pointer-events-none" style={{ background: selectedAura }} />
+        <div className="absolute inset-0 blur-[120px] opacity-[0.05] pointer-events-none bg-viet-green" />
       </div>
 
       <div className="text-center space-y-4">
@@ -1114,36 +1075,32 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
   const [avatarSeed, setAvatarSeed] = useState(
     user?.arenaAvatar?.seed || AVATAR_PRESETS[0].seed
   );
-  const [selectedAura, setSelectedAura] = useState(
-    user?.arenaAvatar?.aura || '#8b5cf6'
-  );
   const saveTimerRef = useRef(null);
 
   // Sync from user when profile loads
   useEffect(() => {
     if (user?.arenaAvatar?.seed) setAvatarSeed(user.arenaAvatar.seed);
-    if (user?.arenaAvatar?.aura) setSelectedAura(user.arenaAvatar.aura);
   }, [user?.id]);
 
-  // Auto-save avatar + aura to DB with 1.5s debounce
+  // Auto-save avatar to DB with 1.5s debounce
   useEffect(() => {
     if (!user?.id) return;
     clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
       apiCall('/api/arena/save-avatar', {
         method: 'PATCH',
-        body: JSON.stringify({ seed: avatarSeed, aura: selectedAura }),
+        body: JSON.stringify({ seed: avatarSeed }),
       }).catch(() => {}); // silent fail
     }, 1500);
     return () => clearTimeout(saveTimerRef.current);
-  }, [avatarSeed, selectedAura, user?.id]);
+  }, [avatarSeed, user?.id]);
 
   return (
     <div className="min-h-screen pt-[120px] bg-[#fdfdfd] relative overflow-hidden font-inter selection:bg-viet-green selection:text-white">
       {/* Refined modern background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.98_0.01_135)_0%,transparent_100%)]" />
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.04] pointer-events-none" style={{ background: selectedAura }} />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.04] pointer-events-none" style={{ background: '#76c034' }} />
+      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.03] pointer-events-none bg-viet-green" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.03] pointer-events-none bg-viet-green" />
       
       <Particles />
 
@@ -1155,8 +1112,6 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
           setSelectedAvatar={setSelectedAvatar}
           avatarSeed={avatarSeed}
           setAvatarSeed={setAvatarSeed}
-          selectedAura={selectedAura}
-          setSelectedAura={setSelectedAura}
         />
 
         {/* Center: Actions */}
@@ -1167,7 +1122,6 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
           onJoinRoom={onJoinRoom}
           onOpenBrowser={onOpenBrowser}
           selectedAvatar={selectedAvatar}
-          selectedAura={selectedAura}
         />
 
         {/* Right: Stats */}
