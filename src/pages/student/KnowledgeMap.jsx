@@ -216,7 +216,12 @@ const KnowledgeMap = () => {
                         <button 
                           key={i} 
                           onClick={() => {
-                            const relatedTopic = CHEMISTRY_KNOWLEDGE_BASE.find(t => t.title === s);
+                            const searchStr = s.toLowerCase();
+                            const relatedTopic = CHEMISTRY_KNOWLEDGE_BASE.find(t => 
+                              t.title.toLowerCase() === searchStr || 
+                              t.patterns.some(p => p.toLowerCase() === searchStr) ||
+                              t.title.toLowerCase().includes(searchStr)
+                            );
                             if (relatedTopic) setSelectedTopic(relatedTopic);
                           }}
                           className="flex items-center gap-2 text-[13px] font-bold text-viet-text hover:text-viet-green transition-colors w-full text-left"

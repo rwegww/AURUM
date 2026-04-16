@@ -469,7 +469,7 @@ export const CHEMISTRY_KNOWLEDGE_BASE = [
   {
     id: 'redox',
     category: 'Oxi hóa – khử',
-    patterns: ['oxi hóa khử', 'redox', 'số oxi hóa', 'chất oxi hóa là gì', 'chất khử là gì'],
+    patterns: ['oxi hóa khử', 'phản ứng oxi hóa khử', 'redox', 'số oxi hóa', 'chất oxi hóa là gì', 'chất khử là gì'],
     title: 'Phản ứng oxi hóa – khử',
     explanation:
       'Phản ứng oxi hóa – khử là phản ứng có sự **thay đổi số oxi hóa** của các nguyên tố. **Chất oxi hóa** là chất nhận electron, còn **chất khử** là chất nhường electron. Quá trình oxi hóa là nhường electron; quá trình khử là nhận electron.',
@@ -550,7 +550,7 @@ export const CHEMISTRY_KNOWLEDGE_BASE = [
   {
     id: 'oxygen-sulfur',
     category: 'Phi kim',
-    patterns: ['oxi và lưu huỳnh', 'nhóm oxi lưu huỳnh', 'nhóm via'],
+    patterns: ['oxi và lưu huỳnh', 'nhóm oxi lưu huỳnh', 'nhóm via', 'SO2 và SO3', 'O2 và O3'],
     title: 'Nhóm oxi – lưu huỳnh',
     explanation:
       'Oxi là phi kim hoạt động mạnh, tham gia nhiều phản ứng cháy và oxi hóa. Lưu huỳnh có thể vừa thể hiện tính oxi hóa vừa thể hiện tính khử, có nhiều số oxi hóa khác nhau như -2, +4, +6.',
