@@ -3,38 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
 import { Link } from 'react-router-dom';
-import { 
-  Atom, 
-  Beaker, 
-  Flame, 
-  ShieldCheck, 
-  Zap, 
-  Dna, 
-  CircleDot, 
-  ArrowLeft,
-  ChevronRight,
-  Info,
-  ExternalLink,
-  MessageCircle
-} from 'lucide-react';
 
 const CATEGORY_META = {
-  'Đại cương': { icon: Atom, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-  'Liên kết': { icon: CircleDot, color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
-  'Mol và định lượng': { icon: Beaker, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-  'Chất khí': { icon: ShieldCheck, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-  'Dung dịch': { icon: Beaker, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
-  'Axit – bazơ – muối': { icon: ShieldCheck, color: 'text-rose-500', bg: 'bg-rose-500/10' },
-  'Phản ứng hóa học': { icon: Flame, color: 'text-orange-500', bg: 'bg-orange-500/10' },
-  'Động hóa học': { icon: Zap, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
-  'Cân bằng hóa học': { icon: Zap, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-  'Nhiệt hóa học': { icon: Flame, color: 'text-red-500', bg: 'bg-red-500/10' },
-  'Oxi hóa – khử': { icon: Zap, color: 'text-sky-500', bg: 'bg-sky-500/10' },
-  'Điện hóa': { icon: Zap, color: 'text-blue-600', bg: 'bg-blue-600/10' },
-  'Kim loại': { icon: Dna, color: 'text-slate-500', bg: 'bg-slate-500/10' },
-  'Phi kim': { icon: Globe, color: 'text-teal-500', bg: 'bg-teal-500/10' },
-  'Hữu cơ': { icon: Dna, color: 'text-green-600', bg: 'bg-green-600/10' },
-  'An toàn': { icon: ShieldCheck, color: 'text-red-600', bg: 'bg-red-600/10' },
+  'Đại cương': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2v20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m4.93 19.07 14.14-14.14"/></svg>, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+  'Liên kết': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg>, color: 'text-indigo-500', bg: 'bg-indigo-500/10' },
+  'Mol và định lượng': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+  'Chất khí': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+  'Dung dịch': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>, color: 'text-cyan-500', bg: 'bg-cyan-500/10' },
+  'Axit – bazơ – muối': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>, color: 'text-rose-500', bg: 'bg-rose-500/10' },
+  'Phản ứng hóa học': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+  'Động hóa học': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z"/></svg>, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
+  'Cân bằng hóa học': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z"/></svg>, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+  'Nhiệt hóa học': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>, color: 'text-red-500', bg: 'bg-red-500/10' },
+  'Oxi hóa – khử': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z"/></svg>, color: 'text-sky-500', bg: 'bg-sky-500/10' },
+  'Điện hóa': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 L13 2 Z"/></svg>, color: 'text-blue-600', bg: 'bg-blue-600/10' },
+  'Kim loại': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m10 11-8 8v3h3l8-8"/><path d="m18 12.5 3-3-2.5-2.5-3 3"/><path d="m9.5 22.5 7.5-7.5"/><path d="m12.5 15.5 2 2"/><path d="m20 7 2 2"/><path d="m7.5 14.5 2 2"/><path d="m16.5 10.5 2 2"/><path d="m17.5 2.5 4 4"/></svg>, color: 'text-slate-500', bg: 'bg-slate-500/10' },
+  'Phi kim': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>, color: 'text-teal-500', bg: 'bg-teal-500/10' },
+  'Hữu cơ': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m10 11-8 8v3h3l8-8"/><path d="m18 12.5 3-3-2.5-2.5-3 3"/><path d="m9.5 22.5 7.5-7.5"/><path d="m12.5 15.5 2 2"/><path d="m20 7 2 2"/><path d="m7.5 14.5 2 2"/><path d="m16.5 10.5 2 2"/><path d="m17.5 2.5 4 4"/></svg>, color: 'text-green-600', bg: 'bg-green-600/10' },
+  'An toàn': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>, color: 'text-red-600', bg: 'bg-red-600/10' },
 };
 
 const Globe = (props) => (
@@ -120,7 +106,7 @@ const KnowledgeMap = () => {
         {/* Header */}
         <header className="mb-16">
           <Link to="/" className="inline-flex items-center gap-2 text-viet-text/60 hover:text-viet-green font-bold text-sm mb-6 transition-colors group">
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
             QUAY LẠI TRANG CHỦ
           </Link>
           <motion.div
@@ -177,7 +163,7 @@ const KnowledgeMap = () => {
                       >
                         <span className="text-[14px] font-bold tracking-tight">{topic.title}</span>
                         {selectedTopic?.id === topic.id ? (
-                           <ChevronRight className="w-4 h-4" />
+                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
                         ) : (
                           <div className={`w-1.5 h-1.5 rounded-full ${Meta.color.replace('text-', 'bg-')}`} />
                         )}
@@ -201,7 +187,7 @@ const KnowledgeMap = () => {
                   className="bg-white rounded-[40px] border-2 border-viet-green/20 p-8 shadow-2xl relative overflow-hidden group"
                 >
                   <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 transition-transform">
-                    <Info className="w-32 h-32 text-viet-green" />
+                    <svg className="w-32 h-32 text-viet-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                   </div>
                   
                   <div className="relative z-10">
@@ -228,7 +214,7 @@ const KnowledgeMap = () => {
                       <h4 className="text-[10px] font-black text-viet-text/40 uppercase tracking-widest mb-2">Chủ đề liên quan</h4>
                       {(selectedTopic.suggestions || []).map((s, i) => (
                         <div key={i} className="flex items-center gap-2 text-[13px] font-bold text-viet-text hover:text-viet-green cursor-default transition-colors">
-                          <ChevronRight className="w-3 h-3 text-viet-green" />
+                          <svg className="w-3 h-3 text-viet-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
                           {s}
                         </div>
                       ))}
@@ -236,11 +222,11 @@ const KnowledgeMap = () => {
 
                     <div className="mt-10 flex flex-col gap-3">
                       <button className="w-full py-4 bg-viet-text text-white rounded-2xl font-black text-[13px] uppercase tracking-widest hover:bg-viet-green transition-all shadow-lg flex items-center justify-center gap-2">
-                        <MessageCircle className="w-4 h-4" />
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
                         Hỏi Aurum về nội dung này
                       </button>
                       <Link to="/classroom" className="w-full py-4 bg-white border-2 border-viet-border text-viet-text rounded-2xl font-black text-[13px] uppercase tracking-widest hover:border-viet-green hover:text-viet-green transition-all flex items-center justify-center gap-2">
-                        <ExternalLink className="w-4 h-4" />
+                        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="m21 3-9 9"/><path d="M15 3h6v6"/></svg>
                         Xem trong Lớp học
                       </Link>
                     </div>
@@ -249,7 +235,7 @@ const KnowledgeMap = () => {
               ) : (
                 <div className="bg-viet-green/5 rounded-[40px] border-2 border-dashed border-viet-green/20 p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
                   <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-xl mb-6 text-viet-green">
-                    <Atom className="w-10 h-10 animate-spin-slow" />
+                    <svg className="w-10 h-10 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2v20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m4.93 19.07 14.14-14.14"/></svg>
                   </div>
                   <h3 className="text-xl font-black text-viet-text uppercase italic tracking-tight mb-2">Chọn một chủ đề</h3>
                   <p className="text-viet-text-light text-sm font-medium leading-relaxed max-w-[240px]">

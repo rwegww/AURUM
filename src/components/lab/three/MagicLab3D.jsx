@@ -8,26 +8,6 @@ import useLabStore from './magic-lab/store';
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
-import {
-  ArrowLeft,
-  Flame,
-  RotateCcw,
-  Settings,
-  Plus,
-  Scissors,
-  Trash2,
-  X,
-  Volume2,
-  VolumeX,
-  BookOpen,
-  Search,
-  FlaskConical,
-  Info,
-  Maximize,
-  Minimize,
-  ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -296,7 +276,7 @@ const MagicLab3D = () => {
               onClick={() => setShowDiscoveryJournal(true)}
               className="flex items-center gap-2 px-4 h-12 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-all font-bold text-xs uppercase tracking-widest"
             >
-              <BookOpen size={18} className="text-purple-400" />
+              <svg className="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
               <span>Sổ tay khám phá ({discoveredFormulas.length})</span>
             </button>
             <button 
@@ -304,13 +284,13 @@ const MagicLab3D = () => {
               className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all text-blue-400"
               title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
             >
-              {isFullscreen ? <Minimize size={20} /> : <Maximize size={20} />}
+              {isFullscreen ? <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3v5H3M21 8h-5V3M3 16h5v5M16 21v-5h5"/></svg> : <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>}
             </button>
             <button 
               onClick={() => setShowLabSettings(true)}
               className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all"
             >
-              <Settings size={20} />
+               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
         </div>
@@ -344,7 +324,7 @@ const MagicLab3D = () => {
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-20 bg-blue-600 hover:bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-white/20 transition-all"
             >
-              {isSidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+              {isSidebarOpen ? <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg> : <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>}
             </button>
 
             {/* Tools Area */}
@@ -354,28 +334,28 @@ const MagicLab3D = () => {
                 className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${activeBeaker.isHeating ? 'bg-orange-500 text-white shadow-lg' : 'hover:bg-white/5 text-white/50'}`}
                 title="Đun nóng"
               >
-                <Flame size={20} />
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
               </button>
               <button 
                 onClick={handleClearBeaker}
                 className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-red-500/20 text-white/50 hover:text-red-400 transition-all"
                 title="Làm mới cốc"
               >
-                <RotateCcw size={20} />
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               </button>
               <button 
                 onClick={addBeaker}
                 className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:text-green-400 transition-all"
                 title="Thêm cốc mới"
               >
-                <Plus size={20} />
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
               </button>
             </div>
 
             {/* Search Bar */}
             <div className="relative mb-3 group">
                <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400">
-                  <Search size={14} />
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                </div>
                <input 
                   type="text"
@@ -444,7 +424,7 @@ const MagicLab3D = () => {
                     onClick={(e) => { e.stopPropagation(); removeBeaker(idx); }}
                     className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110 active:scale-95"
                   >
-                    <Trash2 size={12} />
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                   </button>
                 )}
               </div>
@@ -466,7 +446,7 @@ const MagicLab3D = () => {
              >
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-xl font-black uppercase italic italic">Tùy chỉnh Lab</h2>
-                  <button onClick={() => setShowLabSettings(false)} className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors"><X/></button>
+                  <button onClick={() => setShowLabSettings(false)} className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
                 </div>
 
                 <div className="space-y-6">
@@ -474,7 +454,7 @@ const MagicLab3D = () => {
 
                   <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div className="flex items-center gap-3">
-                      {soundEnabled ? <Volume2 size={20} className="text-blue-400" /> : <VolumeX size={20} className="text-white/30" />}
+                      {soundEnabled ? <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> : <svg className="w-5 h-5 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>}
                       <span className="text-sm font-bold">Hiệu ứng âm thanh</span>
                     </div>
                     <button 
@@ -507,7 +487,7 @@ const MagicLab3D = () => {
                     <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Bản đồ tiến trình khám phá hóa học</p>
                   </div>
                   <button onClick={() => setShowDiscoveryJournal(false)} className="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all">
-                    <X size={24} />
+                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
                   </button>
                 </div>
                 <div className="flex-1 overflow-hidden">

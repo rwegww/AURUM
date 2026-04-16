@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Bot, Sparkles, MessageSquare, Search, X, FlaskConical, Beaker as BeakerIcon, Lightbulb } from 'lucide-react';
 import useLabStore from './store'; // Correct import
 
 const normalize = (f) => {
@@ -97,7 +96,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
       {suggestions.length > 0 && !isOpen && (
         <div className="bg-blue-600/80 backdrop-blur-xl border border-blue-400/30 p-3 rounded-2xl rounded-tr-none shadow-2xl animate-bounce-soft max-w-[200px] pointer-events-auto">
           <div className="flex gap-2 items-start">
-            <Lightbulb size={16} className="text-yellow-400 shrink-0 mt-0.5" />
+            <svg className="w-4 h-4 text-yellow-400 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A4.5 4.5 0 0 0 13.5 3.5 4.5 4.5 0 0 0 9 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
             <p className="text-[10px] font-medium leading-tight text-white">
               {suggestions[0].text}
             </p>
@@ -116,10 +115,10 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
           }
         `}
       >
-        {isOpen ? <X size={24} className="text-white" /> : (
+        {isOpen ? <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg> : (
           <div className="relative text-white">
-            <Bot size={30} className="group-hover:animate-pulse" />
-            <Sparkles size={14} className="absolute -top-1 -right-1 text-yellow-300 animate-pulse" />
+            <svg className="w-7.5 h-7.5 group-hover:animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+            <svg className="absolute -top-1 -right-1 w-3.5 h-3.5 text-yellow-300 animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
           </div>
         )}
       </button>
@@ -131,7 +130,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
           <div className="p-5 border-b border-white/10 bg-white/5 flex items-center justify-between text-white">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-500/20 rounded-xl text-blue-400">
-                <Sparkles size={18} />
+                <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
               </div>
               <div>
                 <h3 className="text-sm font-bold">Trợ lí Lab AI</h3>
@@ -143,7 +142,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
               className={`p-2 rounded-xl transition-colors ${showSearch ? 'bg-blue-600 text-white' : 'hover:bg-white/10 text-white/40'}`}
               title="Tìm công thức"
             >
-              <Search size={18} />
+              <svg className="w-4.5 h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
             </button>
           </div>
 
@@ -158,7 +157,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
                     placeholder="Tìm chất muốn tạo..."
                     className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-10 pr-4 text-xs focus:ring-1 focus:ring-blue-500 outline-none transition-all text-white"
                   />
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40" />
+                  <svg className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                 </div>
 
                 <div className="space-y-3">
@@ -181,7 +180,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
                   ) : (
                     <div className="p-4 text-center space-y-2">
 			      <div className="flex justify-center">
-				<BeakerIcon size={24} className="text-white/10" />
+				<svg className="w-6 h-6 text-white/10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 3h15"/><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3"/><path d="M6 14h12"/></svg>
 			      </div>
                               <p className="text-[10px] text-white/40">Nhập tên chất để xem cách điều chế.</p>
                     </div>
@@ -191,7 +190,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
             ) : (
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-white/40 uppercase tracking-widest px-1">
-                  <MessageSquare size={12} />
+                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                   <span>Gợi ý cho cốc hiện tại</span>
                 </div>
 
@@ -209,7 +208,7 @@ const AiAssistant = ({ chemicals = [], reactions = [] }) => {
                     >
                       <div className="flex gap-3">
                         <div className={`shrink-0 p-2 rounded-xl ${s.type === 'reaction_path' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}`}>
-                          {s.type === 'reaction_path' ? <FlaskConical size={14} /> : <Lightbulb size={14} />}
+                          {s.type === 'reaction_path' ? <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16.3 2.1a.5.5 0 0 1 .7.1l2.9 4.3c.1.1.1.3 0 .4L17 10h-2l-2.9-3.2c-.1-.1-.1-.3 0-.4l2.9-4.3a.5.5 0 0 1 .7-.1z"/><path d="M10 10l-6 10a2 2 0 0 0 1.7 3h12.6a2 2 0 0 0 1.7-3l-6-10z"/><path d="M14 15h-4"/></svg> : <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A4.5 4.5 0 0 0 13.5 3.5 4.5 4.5 0 0 0 9 8c0 1.3.5 2.6 1.5 3.5.8.8 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>}
                         </div>
                         <p className="text-[11px] leading-relaxed text-white/90">
                           {s.text}
