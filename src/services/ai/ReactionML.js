@@ -1,5 +1,5 @@
 import { elements } from '../../data/elements';
-import { reactions } from '../../data/reactions';
+import { reactions } from '../../data/reactions/index.js';
 
 /**
  * REACTION ML ENGINE

@@ -1,4 +1,4 @@
-import { reactions } from '../../data/reactions';
+import { reactions } from '../../data/reactions/index.js';
 import { elements } from '../../data/elements';
 import ReactionML from './ReactionML';
 import {

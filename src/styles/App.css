@@ -174,3 +174,31 @@ h1, h2, h3, h4, h5, h6 {
 .card-tactile:hover {
   @apply border-gray-300 border-b-4;
 }
+
+/* Decorative Background Elements */
+.bg-blob {
+  @apply absolute rounded-full blur-[120px] opacity-20 pointer-events-none;
+}
+
+.bg-blob-green {
+  @apply bg-viet-green;
+}
+
+.bg-blob-blue {
+  @apply bg-blue-400;
+}
+
+.lab-container-shadow {
+  box-shadow: 
+    0 20px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 40px 0 rgba(118, 192, 52, 0.05);
+}
+
+.lab-backglow {
+  @apply absolute -inset-4 bg-viet-green/5 rounded-[3rem] blur-2xl opacity-0 transition-opacity duration-1000;
+}
+
+.group:hover .lab-backglow {
+  @apply opacity-100;
+}
+

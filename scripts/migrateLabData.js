@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
-import { reactions, chemicals } from '../src/data/reactions.js';
+import { reactions, chemicals } from '../src/data/reactions/index.js';
 
 dotenv.config();
 

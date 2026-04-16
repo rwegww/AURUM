@@ -74,7 +74,7 @@ const Classroom = () => {
         <header className="mb-16 text-center max-w-3xl mx-auto animate-fade-in">
           <h1 className="font-rubik text-4xl md:text-5xl font-black text-[#1a1a1a] mb-6 tracking-tight uppercase leading-tight">
             <Trans i18nKey="classroom.title">
-               Bắt đầu hành trình <span className="text-viet-green">Hóa học</span> của bạn
+               Bắt đầu hành trình <br /> <span className="text-viet-green">Hóa học</span> của bạn
             </Trans>
           </h1>
           <p className="text-[#1a1a1a]/70 text-lg font-bold">

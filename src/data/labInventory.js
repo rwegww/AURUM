@@ -14,6 +14,21 @@ export const ingredients = [
   { id: "ing_s", name: "Bột Lưu huỳnh", icon: "🟡", formula: "S", requiredQuiz: "hoa9_kntt_bai1", gradeLevel: 9 },
   { id: "ing_n", name: "Khí Nitơ nguyên chất", icon: "🔵", formula: "N", requiredQuiz: "hoa10_kntt_bai1", gradeLevel: 10 },
   { id: "ing_ca", name: "Bột Canxi", icon: "🤍", formula: "Ca", requiredQuiz: "hoa9_kntt_bai2", gradeLevel: 9 },
+  { id: "ing_ag", name: "Tinh chất Bạc", icon: "🥈", formula: "Ag", requiredQuiz: "hoa11_kntt_bai1", gradeLevel: 11 },
+  { id: "ing_au", name: "Tinh chất Vàng", icon: "🥇", formula: "Au", requiredQuiz: "hoa12_kntt_bai1", gradeLevel: 12 },
+  
+  // Halogen & Khí hiếm (Lớp 10)
+  { id: "ing_f", name: "Khí Flo", icon: "🟢", formula: "F", requiredQuiz: "hoa10_kntt_bai1", gradeLevel: 10 },
+  { id: "ing_br", name: "Dung dịch Brom", icon: "🟤", formula: "Br", requiredQuiz: "hoa10_kntt_bai2", gradeLevel: 10 },
+  { id: "ing_i", name: "Tinh thể Iốt", icon: "🟣", formula: "I", requiredQuiz: "hoa10_kntt_bai3", gradeLevel: 10 },
+  { id: "ing_he", name: "Khí Heli", icon: "🎈", formula: "He", requiredQuiz: "hoa10_kntt_bai4", gradeLevel: 10 },
+  { id: "ing_ne", name: "Khí Neon", icon: "🚥", formula: "Ne", requiredQuiz: "hoa10_kntt_bai5", gradeLevel: 10 },
+  { id: "ing_ar", name: "Khí Argon", icon: "🛡️", formula: "Ar", requiredQuiz: "hoa10_kntt_bai6", gradeLevel: 10 },
+  
+  // Á kim & Kim loại kiềm thổ (Lớp 11-12)
+  { id: "ing_si", name: "Bột Silic", icon: "🌑", formula: "Si", requiredQuiz: "hoa11_kntt_bai2", gradeLevel: 11 },
+  { id: "ing_be", name: "Bột Beri", icon: "⚪", formula: "Be", requiredQuiz: "hoa12_kntt_bai2", gradeLevel: 12 },
+  { id: "ing_ba", name: "Bột Bari", icon: "🏐", formula: "Ba", requiredQuiz: "hoa12_kntt_bai3", gradeLevel: 12 },
 ];
 
 export const craftableItems = [
