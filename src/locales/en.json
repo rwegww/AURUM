@@ -122,11 +122,31 @@
     "title": "Terms & <1/> Privacy Policy",
     "last_updated": "Last updated: {{date}}",
     "sections": {
-      "acceptance": { "title": "1. Acceptance of Terms", "p1": "By accessing and using the Aurum platform, you agree to comply with the terms and conditions set forth herein.", "p2": "We reserve the right to update, change, or replace any part of these Terms of Service by posting updates to our website." },
-      "accounts": { "title": "2. User Accounts", "p1": "Users are responsible for maintaining the confidentiality of their account information and password.", "p2": "It is strictly forbidden to share accounts with multiple users or use tools that interfere with learning results in the Arena." },
-      "intellectual": { "title": "3. Intellectual Property Rights", "p1": "All lecture content, 3D simulation images, and source code on the platform are the exclusive property of KTH Academy.", "p2": "Any act of copying, distributing, or using the content for commercial purposes without written consent is strictly prohibited." },
-      "privacy": { "title": "4. Privacy Policy", "p1": "We are committed to protecting the personal information of learners. Your data is encrypted and securely stored on the Supabase/Firebase system.", "p2": "We only use your email to send learning notifications and password recovery." },
-      "liability": { "title": "5. Limitation of Liability", "p1": "Lab simulations are designed for visual educational purposes. Results may have minor deviations from reality depending on the simulation environment.", "p2": "We are not responsible for any loss arising from the misuse of information on this platform." }
+      "acceptance": { 
+        "title": "1. Acceptance of Terms", 
+        "p1": "By accessing and using Aurum Chemistry Odyssey, you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, please refrain from using our services.", 
+        "p2": "We reserve the right to modify or update these terms at any time without prior notice. Your continued use of the platform after changes are posted constitutes your acceptance of the new terms." 
+      },
+      "accounts": { 
+        "title": "2. User Accounts", 
+        "p1": "To access certain features, you may need to register for an account. You are responsible for maintaining the confidentiality of your account information and password. All activities that occur under your account are your responsibility.", 
+        "p2": "Sharing accounts, using cheating tools in the arena, or intentionally disrupting the community is strictly prohibited. We reserve the right to suspend accounts that violate these rules without notice." 
+      },
+      "intellectual": { 
+        "title": "3. Intellectual Property", 
+        "p1": "All content on Aurum, including but not limited to lectures, 3D simulations, images, and source code, is owned by Aurum Chemistry Academy or its licensors.", 
+        "p2": "Any unauthorized copying, distribution, or commercialization of the content without our prior written consent is strictly prohibited and may result in legal action." 
+      },
+      "privacy": { 
+        "title": "4. Privacy Policy", 
+        "p1": "We are committed to protecting your personal information. Collected data (such as name, email, and learning progress) is used solely to personalize your learning experience and improve our service quality.", 
+        "p2": "We never sell or share your personal information with third parties for marketing purposes without your explicit consent." 
+      },
+      "liability": { 
+        "title": "5. Limitation of Liability", 
+        "p1": "Lab simulations and knowledge provided on this platform are for educational and reference purposes only. Users should not perform dangerous experiments in real life without expert supervision.", 
+        "p2": "We are not liable for any direct or indirect damages resulting from the use of information or incorrect practice of instructions found on the platform." 
+      }
     },
     "footer_question": "Have questions about the terms?<1/>Please <contact>Contact Us</contact>."
   },

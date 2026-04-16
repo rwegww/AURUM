@@ -122,11 +122,31 @@
     "title": "Điều khoản & <1/> Chính sách Bảo mật",
     "last_updated": "Cập nhật lần cuối: {{date}}",
     "sections": {
-      "acceptance": { "title": "1. Chấp nhận điều khoản", "p1": "By... (Bằng việc...)", "p2": "We reserve... (Chúng tôi có quyền...)" },
-      "accounts": { "title": "2. Tài khoản người dùng", "p1": "Users are... (Học viên có...)", "p2": "Prohibited... (Nghiêm cấm...)" },
-      "intellectual": { "title": "3. Quyền sở hữu trí tuệ", "p1": "All contents... (Tất cả nội dung...)", "p2": "Any acts... (Mọi hành vi...)" },
-      "privacy": { "title": "4. Chính sách bảo mật", "p1": "Commitment... (Chúng tôi cam kết...)", "p2": "We only... (Chúng tôi chỉ...)" },
-      "liability": { "title": "5. Giới hạn trách nhiệm", "p1": "Simulations are... (Các mô phỏng...)", "p2": "No responsibility... (Chúng tôi không...)" }
+      "acceptance": { 
+        "title": "1. Chấp nhận điều khoản", 
+        "p1": "Bằng việc truy cập và sử dụng Aurum Chemistry Odyssey, bạn đồng ý tuân thủ và bị ràng buộc bởi các điều khoản sử dụng này. Nếu bạn không đồng ý với bất kỳ phần nào của các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi.", 
+        "p2": "Chúng tôi có quyền sửa đổi hoặc cập nhật các điều khoản này bất kỳ lúc nào mà không cần thông báo trước. Việc bạn tiếp tục sử dụng nền tảng sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới." 
+      },
+      "accounts": { 
+        "title": "2. Tài khoản người dùng", 
+        "p1": "Để truy cập một số tính năng, bạn có thể cần đăng ký tài khoản. Bạn có trách nhiệm duy trì tính bảo mật của thông tin tài khoản và mật khẩu của mình. Mọi hoạt động xảy ra dưới tài khoản của bạn sẽ thuộc trách nhiệm của bạn.", 
+        "p2": "Nghiêm cấm các hành vi chia sẻ tài khoản, sử dụng công cụ gian lận trong đấu trường hoặc cố tình gây rối cộng đồng. Chúng tôi có quyền khóa tài khoản vi phạm mà không cần báo trước." 
+      },
+      "intellectual": { 
+        "title": "3. Quyền sở hữu trí tuệ", 
+        "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Học viện Hóa học Aurum hoặc các bên cấp phép.", 
+        "p2": "Mọi hành vi sao chép, phân phối hoặc thương mại hóa nội dung mà không có sự đồng ý bằng văn bản của chúng tôi đều bị nghiêm cấm và có thể bị truy cứu trách nhiệm pháp lý." 
+      },
+      "privacy": { 
+        "title": "4. Chính sách bảo mật", 
+        "p1": "Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn. Dữ liệu thu thập (như tên, email, tiến trình học tập) chỉ được sử dụng để cá nhân hóa trải nghiệm học tập và cải thiện chất lượng dịch vụ.", 
+        "p2": "Chúng tôi không bao giờ bán hoặc chia sẻ thông tin cá nhân của bạn cho bên thứ ba vì mục đích tiếp thị mà không có sự đồng ý rõ ràng của bạn." 
+      },
+      "liability": { 
+        "title": "5. Giới hạn trách nhiệm", 
+        "p1": "Các mô phỏng phòng thí nghiệm và kiến thức trên nền tảng này chỉ phục vụ mục đích giáo dục và tham khảo. Người dùng không được tự ý thực hiện các thí nghiệm nguy hiểm ngoài đời thực mà không có sự giám sát của chuyên gia.", 
+        "p2": "Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào phát sinh từ việc sử dụng thông tin hoặc thực hành sai lệch từ các hướng dẫn trên nền tảng." 
+      }
     },
     "footer_question": "Bạn có câu hỏi về điều khoản?<1/>Vui lòng <contact>Liên hệ với chúng tôi</contact>."
   },
