@@ -8,51 +8,71 @@ import FeedbackButton from '@/components/common/FeedbackButton'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
 
+// Helper to handle lazy loading errors in production (due to new deployments/hash changes)
+const lazyWithRetry = (componentImport) =>
+  lazy(async () => {
+    const pageHasAlreadyBeenForceRefreshed = JSON.parse(
+      window.localStorage.getItem('page-has-been-force-refreshed') || 'false'
+    );
+
+    try {
+      const component = await componentImport();
+      window.localStorage.setItem('page-has-been-force-refreshed', 'false');
+      return component;
+    } catch (error) {
+      if (!pageHasAlreadyBeenForceRefreshed) {
+        window.localStorage.setItem('page-has-been-force-refreshed', 'true');
+        return window.location.reload();
+      }
+      throw error;
+    }
+  });
+
 // Lazy Loaded Student Pages
-const Home = lazy(() => import('@/pages/student/Home'));
-const PeriodicTable = lazy(() => import('@/pages/student/PeriodicTable'));
-const Lessons = lazy(() => import('@/pages/student/Lessons'));
-const LessonPage = lazy(() => import('@/pages/student/LessonPage'));
-const Classroom = lazy(() => import('@/pages/student/Classroom'));
-const MyClass = lazy(() => import('@/pages/student/MyClass'));
-const GradeJourney = lazy(() => import('@/pages/student/GradeJourney'));
-const StageIntro = lazy(() => import('@/pages/student/StageIntro'));
-const StageChallenge = lazy(() => import('@/pages/student/StageChallenge'));
-const StageReward = lazy(() => import('@/pages/student/StageReward'));
-const Lectures = lazy(() => import('@/pages/student/Lectures'));
-const ChemLab = lazy(() => import('@/pages/student/ChemLab'));
-const LabSimulatorPage = lazy(() => import('@/pages/student/LabSimulatorPage'));
-const LabBalancerPage = lazy(() => import('@/pages/student/LabBalancerPage'));
-const LabMoleculePage = lazy(() => import('@/pages/student/LabMoleculePage'));
-const Arena = lazy(() => import('@/pages/student/Arena'));
-const Library = lazy(() => import('@/pages/student/Library'));
-const MaterialDetail = lazy(() => import('@/pages/student/MaterialDetail'));
-const Missions = lazy(() => import('@/pages/student/Missions'));
-const About = lazy(() => import('@/pages/student/About'));
-const Contact = lazy(() => import('@/pages/student/Contact'));
-const Terms = lazy(() => import('@/pages/student/Terms'));
-const Profile = lazy(() => import('@/pages/student/Profile'));
-const KnowledgeMap = lazy(() => import('@/pages/student/KnowledgeMap'));
+const Home = lazyWithRetry(() => import('@/pages/student/Home'));
+const PeriodicTable = lazyWithRetry(() => import('@/pages/student/PeriodicTable'));
+const Lessons = lazyWithRetry(() => import('@/pages/student/Lessons'));
+const LessonPage = lazyWithRetry(() => import('@/pages/student/LessonPage'));
+const Classroom = lazyWithRetry(() => import('@/pages/student/Classroom'));
+const MyClass = lazyWithRetry(() => import('@/pages/student/MyClass'));
+const GradeJourney = lazyWithRetry(() => import('@/pages/student/GradeJourney'));
+const StageIntro = lazyWithRetry(() => import('@/pages/student/StageIntro'));
+const StageChallenge = lazyWithRetry(() => import('@/pages/student/StageChallenge'));
+const StageReward = lazyWithRetry(() => import('@/pages/student/StageReward'));
+const Lectures = lazyWithRetry(() => import('@/pages/student/Lectures'));
+const ChemLab = lazyWithRetry(() => import('@/pages/student/ChemLab'));
+const LabSimulatorPage = lazyWithRetry(() => import('@/pages/student/LabSimulatorPage'));
+const LabBalancerPage = lazyWithRetry(() => import('@/pages/student/LabBalancerPage'));
+const LabMoleculePage = lazyWithRetry(() => import('@/pages/student/LabMoleculePage'));
+const Arena = lazyWithRetry(() => import('@/pages/student/Arena'));
+const Library = lazyWithRetry(() => import('@/pages/student/Library'));
+const MaterialDetail = lazyWithRetry(() => import('@/pages/student/MaterialDetail'));
+const Missions = lazyWithRetry(() => import('@/pages/student/Missions'));
+const About = lazyWithRetry(() => import('@/pages/student/About'));
+const Contact = lazyWithRetry(() => import('@/pages/student/Contact'));
+const Terms = lazyWithRetry(() => import('@/pages/student/Terms'));
+const Profile = lazyWithRetry(() => import('@/pages/student/Profile'));
+const KnowledgeMap = lazyWithRetry(() => import('@/pages/student/KnowledgeMap'));
 
 // Lazy Loaded Auth Pages
-const Login = lazy(() => import('@/pages/auth/Login'));
-const Register = lazy(() => import('@/pages/auth/Register'));
-const AuthCallback = lazy(() => import('@/pages/auth/AuthCallback'));
+const Login = lazyWithRetry(() => import('@/pages/auth/Login'));
+const Register = lazyWithRetry(() => import('@/pages/auth/Register'));
+const AuthCallback = lazyWithRetry(() => import('@/pages/auth/AuthCallback'));
 
 // Lazy Loaded Admin Modules
-const AdminLayout = lazy(() => import('@/components/layout/AdminLayout'));
-const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
-const LessonManager = lazy(() => import('@/pages/admin/LessonManager'));
-const UserManager = lazy(() => import('@/pages/admin/UserManager'));
-const UserDetail = lazy(() => import('@/pages/admin/UserDetail'));
-const FeedbackManager = lazy(() => import('@/pages/admin/FeedbackManager'));
+const AdminLayout = lazyWithRetry(() => import('@/components/layout/AdminLayout'));
+const AdminDashboard = lazyWithRetry(() => import('@/pages/admin/AdminDashboard'));
+const LessonManager = lazyWithRetry(() => import('@/pages/admin/LessonManager'));
+const UserManager = lazyWithRetry(() => import('@/pages/admin/UserManager'));
+const UserDetail = lazyWithRetry(() => import('@/pages/admin/UserDetail'));
+const FeedbackManager = lazyWithRetry(() => import('@/pages/admin/FeedbackManager'));
 
 // Lazy Loaded Teacher Modules
-const TeacherLayout = lazy(() => import('@/components/layout/TeacherLayout'));
-const TeacherDashboard = lazy(() => import('@/pages/teacher/TeacherDashboard'));
-const ClassManager = lazy(() => import('@/pages/teacher/ClassManager'));
-const ClassDetail = lazy(() => import('@/pages/teacher/ClassDetail'));
-const AssignmentManager = lazy(() => import('@/pages/teacher/AssignmentManager'));
+const TeacherLayout = lazyWithRetry(() => import('@/components/layout/TeacherLayout'));
+const TeacherDashboard = lazyWithRetry(() => import('@/pages/teacher/TeacherDashboard'));
+const ClassManager = lazyWithRetry(() => import('@/pages/teacher/ClassManager'));
+const ClassDetail = lazyWithRetry(() => import('@/pages/teacher/ClassDetail'));
+const AssignmentManager = lazyWithRetry(() => import('@/pages/teacher/AssignmentManager'));
 
 import AurumAiAgent from '@/components/common/AurumAiAgent'
 
