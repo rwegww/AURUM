@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
 
 const ChemistrySpark = ({ delay }) => (
@@ -23,6 +24,7 @@ const ChemistrySpark = ({ delay }) => (
 );
 
 const FloatingIsland = ({ rank, user, delay }) => {
+  const { t } = useTranslation();
   const isFirst = rank === 1;
   const isSecond = rank === 2;
   const isThird = rank === 3;
@@ -110,15 +112,15 @@ const FloatingIsland = ({ rank, user, delay }) => {
         <h4 className="text-[18px] font-black text-viet-text">{user?.username || '---'}</h4>
         <div className="flex items-center justify-center gap-2 mt-1">
            <div className="flex items-center justify-center gap-1.5 bg-viet-green/10 px-3 py-1 rounded-full">
-              <span className="text-[10px] font-black text-viet-green uppercase">Hóa sư</span>
+              <span className="text-[10px] font-black text-viet-green uppercase">{t('home.leaderboard.rank_master')}</span>
               <span className="text-[12px] font-black text-viet-green">{user?.level || 1}</span>
            </div>
            {/* Online Status Dot */}
-           <div className={`w-2 h-2 rounded-full ${user?.isOnline || (user?.lastActiveAt && new Date(user.lastActiveAt) > new Date(Date.now() - 5*60*1000)) ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={user?.isOnline ? 'Đang online' : 'Ngoại tuyến'}></div>
+           <div className={`w-2 h-2 rounded-full ${user?.isOnline || (user?.lastActiveAt && new Date(user.lastActiveAt) > new Date(Date.now() - 5*60*1000)) ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={user?.isOnline ? t('home.leaderboard.online') : t('home.leaderboard.offline')}></div>
         </div>
         {user?.activeMinutes > 0 && (
           <p className="text-[9px] font-bold text-viet-text-light/40 uppercase tracking-widest mt-2">
-            ⏱️ {Math.floor(user.activeMinutes / 60)}h {user.activeMinutes % 60}m active
+            ⏱️ {Math.floor(user.activeMinutes / 60)}h {user.activeMinutes % 60}m {t('home.leaderboard.active')}
           </p>
         )}
       </div>
@@ -127,6 +129,7 @@ const FloatingIsland = ({ rank, user, delay }) => {
 };
 
 const LeaderboardSection = () => {
+  const { t } = useTranslation();
   const [leaders, setLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -137,7 +140,7 @@ const LeaderboardSection = () => {
         const data = await res.json();
         if (Array.isArray(data)) setLeaders(data);
       } catch (err) {
-        console.error('Lỗi tải bảng xếp hạng:', err);
+        console.error('Leaderboard fetch error:', err);
       } finally {
         setLoading(false);
       }
@@ -180,15 +183,15 @@ const LeaderboardSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 border border-viet-green text-viet-green rounded-full text-[11px] font-black uppercase tracking-[3px] mb-6 shadow-sm"
           >
-            <span className="text-lg">⚔️</span> Bảng Phong Thần
+            <span className="text-lg">⚔️</span> {t('home.leaderboard.badge')}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-6xl font-black text-viet-text leading-tight"
           >
-            Vinh danh <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-viet-green to-blue-500">Chiến binh Hóa học</span>
+            {t('home.leaderboard.title_main')} <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-viet-green to-blue-500">{t('home.leaderboard.title_highlight')}</span>
           </motion.h2>
         </div>
 
@@ -233,11 +236,11 @@ const LeaderboardSection = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <h5 className="text-[17px] font-black text-viet-text">{u.username}</h5>
-                      <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={isOnline ? 'Đang online' : 'Ngoại tuyến'} />
+                      <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={isOnline ? t('home.leaderboard.online') : t('home.leaderboard.offline')} />
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-widest">
-                        Cấp độ {u.level} • {u.activeMinutes > 0 ? `Hoạt động: ${Math.floor(u.activeMinutes / 60)}h ${u.activeMinutes % 60}m` : 'Môn đồ Hóa học'}
+                        {t('home.leaderboard.level')} {u.level} • {u.activeMinutes > 0 ? `${t('home.leaderboard.activity')} ${Math.floor(u.activeMinutes / 60)}h ${u.activeMinutes % 60}m` : t('home.leaderboard.disciple')}
                       </span>
                       <div className="text-right">
                         <span className="text-[18px] font-black text-viet-text">{u.xp}</span>
@@ -262,20 +265,20 @@ const LeaderboardSection = () => {
           {loading && (
             <div className="flex flex-col items-center py-20 gap-4">
               <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
-              <p className="font-bold text-viet-text-light/60 uppercase tracking-widest text-[12px]">Đang truyền tin từ Đấu Trường...</p>
+              <p className="font-bold text-viet-text-light/60 uppercase tracking-widest text-[12px]">{t('home.leaderboard.transmitting')}</p>
             </div>
           )}
 
           {!loading && leaders.length === 0 && (
             <div className="text-center py-20 bg-white/30 backdrop-blur-sm rounded-[40px] border-2 border-dashed border-viet-border">
-               <p className="text-viet-text-light/50 italic">Đấu trường đang chờ đón những huyền thoại đầu tiên...</p>
+               <p className="text-viet-text-light/50 italic">{t('home.leaderboard.empty')}</p>
             </div>
           )}
         </div>
 
         <div className="mt-20 text-center">
           <Link to="/arena" className="group inline-flex items-center gap-4 px-10 py-5 bg-viet-text text-white rounded-full font-black text-[15px] hover:bg-viet-green transition-all shadow-xl hover:-translate-y-1">
-            Chinh phục thứ hạng ngay
+            {t('home.leaderboard.conquer_btn')}
             <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-viet-green transition-all">
               →
             </span>

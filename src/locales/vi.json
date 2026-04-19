@@ -45,6 +45,21 @@
         "desc": "Thư viện tài liệu số khổng lồ đi kèm Bảng tuần hoàn tương tác. Bấm vào bất kỳ nguyên tố nào để xem cấu hình electron, mức năng lượng và tính chất hóa học chi tiết.",
         "link": "Vào Thư viện"
       }
+    },
+    "leaderboard": {
+      "badge": "Bảng Phong Thần",
+      "title_main": "Vinh danh",
+      "title_highlight": "Chiến binh Hóa học",
+      "rank_master": "Hóa sư",
+      "online": "Đang online",
+      "offline": "Ngoại tuyến",
+      "active": "hoạt động",
+      "level": "Cấp độ",
+      "activity": "Hoạt động:",
+      "disciple": "Môn đồ Hóa học",
+      "transmitting": "Đang truyền tin từ Đấu Trường...",
+      "empty": "Đấu trường đang chờ đón những huyền thoại đầu tiên...",
+      "conquer_btn": "Chinh phục thứ hạng ngay"
     }
   },
   "footer": {

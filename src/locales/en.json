@@ -45,6 +45,21 @@
         "desc": "A massive digital library paired with an interactive Periodic Table. Click any element to view electron configuration, energy levels, and detailed chemical properties.",
         "link": "Go to Library"
       }
+    },
+    "leaderboard": {
+      "badge": "Leaderboard",
+      "title_main": "Hall of Fame",
+      "title_highlight": "Chemistry Warriors",
+      "rank_master": "Master",
+      "online": "Online",
+      "offline": "Offline",
+      "active": "active",
+      "level": "Level",
+      "activity": "Activity:",
+      "disciple": "Chemistry Disciple",
+      "transmitting": "Transmitting from the Arena...",
+      "empty": "The arena is waiting for its first legends...",
+      "conquer_btn": "Conquer Rank Now"
     }
   },
   "footer": {
