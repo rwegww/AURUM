@@ -56,10 +56,10 @@ export function parseFormula(formula) {
   return parse(clean(formula));
 }
 
-// Balance a simple equation using brute force (up to coeff 10)
+// Balance a simple equation using brute force
 // Input: reactants = ["H2", "O2"], products = ["H2O"]
 // Output: { balanced: true, coefficients: [2, 1, 2], equation: "2H₂ + O₂ → 2H₂O" }
-export function balanceEquation(reactantFormulas, productFormulas) {
+export function balanceEquation(reactantFormulas, productFormulas, customMax = 10) {
   const allFormulas = [...reactantFormulas, ...productFormulas];
   const n = allFormulas.length;
   
@@ -70,8 +70,8 @@ export function balanceEquation(reactantFormulas, productFormulas) {
   });
   const elementList = [...allElements];
   
-  // Brute force: try coefficients 1-10 for each compound
-  const maxCoeff = 10;
+  // Brute force: try coefficients 1-maxCoeff for each compound
+  const maxCoeff = customMax;
   
   function tryCoeffs(coeffs, idx) {
     if (idx === n) {

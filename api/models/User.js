@@ -31,7 +31,11 @@ const mapUser = (user) => {
           completedCount: user.balancing_progress.completedCount || 0,
           passedGrades: user.balancing_progress.passedGrades || []
         }
-      : { completedNodeIds: [], completedCount: 0, passedGrades: [] }
+      : { completedNodeIds: [], completedCount: 0, passedGrades: [] },
+    streakCount: user.streak_count || 0,
+    lastStreakAt: user.last_streak_at,
+    todayOnlineMinutes: user.today_online_minutes || 0,
+    todayLessonCompleted: user.today_lesson_completed || false
   };
 };
 
@@ -111,7 +115,10 @@ export const User = {
         role: userData.role || 'student',
         inventory: userData.inventory || { ingredients: [], craftedItems: [] },
         avatar_seed: userData.avatarSeed || userData.username,
-        balancing_progress: { completedNodeIds: [], completedCount: 0, passedGrades: [] }
+        balancing_progress: { completedNodeIds: [], completedCount: 0, passedGrades: [] },
+        streak_count: 0,
+        today_online_minutes: 0,
+        today_lesson_completed: false
       }])
       .select()
       .single();

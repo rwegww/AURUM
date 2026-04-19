@@ -16,7 +16,7 @@ const StageReward = () => {
   useEffect(() => {
     if (lessonId) {
       // Gain 100 XP and unlock current lesson (adding to unlockedLessons array)
-      updateProgress(100, lessonId);
+      updateProgress(100, lessonId, true);
     }
   }, [lessonId, updateProgress]);
 

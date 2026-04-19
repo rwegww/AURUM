@@ -102,8 +102,12 @@ router.get('/profile', auth, async (req, res) => {
     unlockedChemicals: req.user.unlockedChemicals || [],
     avatarSeed: req.user.avatarSeed,
     createdAt: req.user.createdAt,
-    arenaStats: req.user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 },
-    arenaAvatar: req.user.arena_avatar || { seed: 'Chem Master', aura: '#a855f7' },
+    arenaStats: req.user.arenaStats || { total: 0, wins: 0, losses: 0, points: 0 },
+    arenaAvatar: req.user.arenaAvatar || { seed: 'Chem Master', aura: '#a855f7' },
+    streakCount: req.user.streakCount || 0,
+    lastStreakAt: req.user.lastStreakAt,
+    todayOnlineMinutes: req.user.todayOnlineMinutes || 0,
+    todayLessonCompleted: req.user.todayLessonCompleted || false
   });
 });
 
@@ -120,58 +124,123 @@ router.patch('/profile', auth, async (req, res) => {
 // Update XP & Progress
 router.post('/progress', auth, async (req, res) => {
   try {
-    const { xpGain, unlockedLessonId } = req.body;
-    let { xp, level, unlockedLessons } = req.user;
+    const { xpGain, unlockedLessonId, isLessonCompletion } = req.body;
+    let { xp, level, unlockedLessons, todayLessonCompleted } = req.user;
     
     if (xpGain) {
-      xp += xpGain;
-      // Simple leveling logic: 1000 XP per level
+      // Apply streak bonus if applicable
+      const streakBonus = Math.floor((req.user.streakCount || 0) / 7) * 5; // e.g., +5 XP for every 7 days of streak
+      xp += (xpGain + streakBonus);
       level = Math.floor(xp / 1000) + 1;
     }
 
+    const updateFields = { xp, level };
+
     if (unlockedLessonId && !unlockedLessons.includes(unlockedLessonId)) {
       unlockedLessons.push(unlockedLessonId);
+      updateFields.unlockedLessons = unlockedLessons;
     }
 
-    const updatedUser = await User.update(req.user.id, { xp, level, unlockedLessons });
+    if (isLessonCompletion) {
+      updateFields.today_lesson_completed = true;
+      
+      // Update streak if not already updated today
+      const today = new Date().toISOString().split('T')[0];
+      const lastStreak = req.user.lastStreakAt ? new Date(req.user.lastStreakAt).toISOString().split('T')[0] : null;
+      
+      if (today !== lastStreak) {
+        updateFields.streak_count = (req.user.streakCount || 0) + 1;
+        updateFields.last_streak_at = new Date().toISOString();
+      }
+    }
+
+    const updatedUser = await User.update(req.user.id, updateFields);
     
     res.json({
       xp: updatedUser.xp,
       level: updatedUser.level,
-      unlockedLessons: updatedUser.unlockedLessons
+      unlockedLessons: updatedUser.unlockedLessons,
+      streakCount: updatedUser.streakCount,
+      todayLessonCompleted: updatedUser.todayLessonCompleted
     });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật tiến độ', error: err.message });
   }
 });
 
-// Heartbeat (Activity Tracking)
+// Heartbeat (Activity Tracking & Streak)
 router.post('/heartbeat', auth, async (req, res) => {
   try {
     const userId = req.user.id;
-    const now = new Date().toISOString();
+    const now = new Date();
+    const today = now.toISOString().split('T')[0];
+    const lastActiveDate = req.user.lastActiveAt ? new Date(req.user.lastActiveAt).toISOString().split('T')[0] : null;
     
-    // 1. Try to use the optimized RPC function
-    const { error: rpcError } = await supabase.rpc('increment_active_minutes', { user_id: userId });
+    let onlineMinutes = req.user.todayOnlineMinutes || 0;
     
-    // 2. If RPC fails (e.g. not defined yet), fallback to manual update
-    if (rpcError) {
-      const { error: updateError } = await supabase.from('users').update({ 
-        last_active_at: now,
-        active_minutes: (req.user.activeMinutes || 0) + 1 
-      }).eq('id', userId);
+    // Reset online minutes if it's a new day
+    if (today !== lastActiveDate) {
+      onlineMinutes = 0;
+    }
+    
+    onlineMinutes += 1;
+    
+    const updateFields = {
+      last_active_at: now.toISOString(),
+      today_online_minutes: onlineMinutes,
+      active_minutes: (req.user.activeMinutes || 0) + 1
+    };
 
-      if (updateError) {
-        // If update fails, it's likely the columns don't exist yet
-        console.warn(`[HEARTBEAT] Could not update activity for ${userId}. Missing columns?`, updateError.message);
-        return res.json({ success: false, message: 'Database schema update required' });
-      }
+    // Auto-reset today_lesson_completed on new day
+    if (today !== lastActiveDate) {
+      updateFields.today_lesson_completed = false;
     }
 
-    res.json({ success: true, timestamp: now });
+    // Check for streak maintenance (10 minutes online)
+    const lastStreakDate = req.user.lastStreakAt ? new Date(req.user.lastStreakAt).toISOString().split('T')[0] : null;
+    if (onlineMinutes >= 10 && today !== lastStreakDate) {
+      updateFields.streak_count = (req.user.streakCount || 0) + 1;
+      updateFields.last_streak_at = now.toISOString();
+    }
+
+    await User.update(userId, updateFields);
+
+    res.json({ 
+      success: true, 
+      onlineMinutes, 
+      streakCount: updateFields.streak_count || req.user.streakCount 
+    });
   } catch (err) {
-    console.error('[HEARTBEAT ERROR]', err.message);
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Recover Streak
+router.post('/streak/recover', auth, async (req, res) => {
+  try {
+    const { streakToRestore } = req.body; // The streak count they want to get back
+    const currentXP = req.user.xp || 0;
+    
+    // Cost formula: 100 XP base + (streak * 20)
+    const cost = 100 + (streakToRestore * 20);
+    
+    if (currentXP < cost) {
+      return res.status(400).json({ message: `Bạn cần ${cost} XP để khôi phục chuỗi ${streakToRestore} ngày. Hiện tại bạn chỉ có ${currentXP} XP.` });
+    }
+
+    const updatedUser = await User.update(req.user.id, {
+      xp: currentXP - cost,
+      streak_count: streakToRestore,
+      last_streak_at: new Date().toISOString()
+    });
+
+    res.json({
+      message: 'Khôi phục chuỗi thành công!',
+      streakCount: updatedUser.streakCount,
+      xp: updatedUser.xp
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi khôi phục chuỗi', error: err.message });
   }
 });
 

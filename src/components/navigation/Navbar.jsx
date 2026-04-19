@@ -5,6 +5,7 @@ import Avatar from '@/components/common/Avatar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import StreakBadge from '@/components/common/StreakBadge';
 
 const Navbar = () => {
   const { isLoggedIn, user, logout } = useAuth();
@@ -140,8 +141,8 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* User Info, Language & Mobile Toggle */}
         <div className="flex items-center gap-4 xl:gap-6 shrink-0">
+          <StreakBadge />
           <LanguageSwitcher />
 
           {isLoggedIn ? (

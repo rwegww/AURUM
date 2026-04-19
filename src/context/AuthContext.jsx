@@ -147,7 +147,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [fetchProfile]);
 
-  const updateProgress = useCallback(async (xpGain, unlockedLessonId) => {
+  const updateProgress = useCallback(async (xpGain, unlockedLessonId, isLessonCompletion = false) => {
     if (!isLoggedIn || !user) return;
     try {
       const token = localStorage.getItem('token');
@@ -157,11 +157,20 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ xpGain, unlockedLessonId })
+        body: JSON.stringify({ xpGain, unlockedLessonId, isLessonCompletion })
       });
       if (res.ok) {
         const data = await res.json();
-        if (mountedRef.current) setUser(prev => ({ ...prev, ...data }));
+        if (mountedRef.current) {
+          setUser(prev => ({ 
+            ...prev, 
+            xp: data.xp, 
+            level: data.level, 
+            unlockedLessons: data.unlockedLessons,
+            streakCount: data.streakCount ?? prev.streakCount,
+            todayLessonCompleted: data.todayLessonCompleted ?? prev.todayLessonCompleted
+          }));
+        }
       }
     } catch (err) {
       console.error('Lỗi cập nhật tiến độ:', err);
@@ -195,6 +204,30 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Lỗi cập nhật profile:', err);
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
+
+  const recoverStreak = useCallback(async (streakToRestore) => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/streak/recover', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ streakToRestore })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (mountedRef.current) setUser(prev => ({ ...prev, streakCount: data.streakCount, xp: data.xp }));
+        return { success: true, message: data.message };
+      } else {
+        throw new Error(data.message || 'Lỗi khôi phục chuỗi');
+      }
+    } catch (err) {
       return { success: false, message: err.message };
     }
   }, [isLoggedIn, user]);
@@ -259,13 +292,24 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
-        await fetch('/api/user/heartbeat', {
+        const res = await fetch('/api/user/heartbeat', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
         });
+        
+        if (res.ok) {
+          const data = await res.json();
+          if (mountedRef.current && data.success) {
+            setUser(prev => ({
+              ...prev,
+              todayOnlineMinutes: data.onlineMinutes,
+              streakCount: data.streakCount
+            }));
+          }
+        }
       } catch (err) {
         // Silent error for heartbeat
       }
@@ -289,8 +333,9 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProgress,
     refreshUser,
-    updateUser
-  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser]);
+    updateUser,
+    recoverStreak
+  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, recoverStreak]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
