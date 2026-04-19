@@ -38,7 +38,9 @@ const ManagementLayout = ({ role, menuItems, title }) => {
       
       {/* Main Content Area */}
       <main className="ml-64 flex-1 h-screen overflow-y-auto">
-         <Outlet />
+         <div className="pb-20">
+            <Outlet />
+         </div>
       </main>
     </div>
   );
