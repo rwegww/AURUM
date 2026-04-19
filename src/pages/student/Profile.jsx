@@ -60,9 +60,9 @@ const Profile = () => {
           <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-viet-green/20 to-transparent" />
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
             <div className="group relative">
-              <div className="w-40 h-40 rounded-[40px] bg-white border-4 border-viet-green p-1 shadow-2xl relative overflow-hidden">
-                <Avatar seed={editableSeed} size={160} className="w-full h-full rounded-[35px] object-cover scale-110" />
-                <div className="absolute -bottom-4 -right-4 bg-viet-green text-white w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-black shadow-lg z-20">
+              <div className="w-40 h-40 rounded-[40px] bg-white shadow-2xl relative flex items-center justify-center">
+                <Avatar seed={editableSeed} size={160} streakCount={user.streakCount} className="w-full h-full" />
+                <div className="absolute -bottom-4 -right-4 bg-viet-green text-white w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-black shadow-lg z-20 border-4 border-white">
                   {user.level}
                 </div>
               </div>
@@ -89,30 +89,53 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
-                 <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
-                 <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">{t('profile.member_role')}</span>
+            <div className="text-center md:text-left flex-1">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
+                    <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
+                    <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">{t('profile.member_role')}</span>
+                  </div>
+                  <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">
+                    <Trans 
+                      i18nKey="profile.member_since" 
+                      values={{ 
+                        date: user?.createdAt 
+                          ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
+                          : (i18n.language === 'vi' ? 'Sớm hơn' : 'Earlier')
+                      }}
+                    >
+                      Thành viên ưu tú của Học viện Hóa học Aurum.<br/>Đã đồng hành từ {user?.createdAt 
+                        ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
+                        : (i18n.language === 'vi' ? 'Thời gian dài' : 'a long time')}
+                    </Trans>
+                  </p>
+                </div>
+
+                {/* Streak Callout */}
+                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-6 flex items-center gap-6 self-center md:self-auto min-w-[280px]">
+                  <div className="text-5xl animate-bounce">🔥</div>
+                  <div className="flex-1">
+                    <div className="text-3xl font-black text-white mb-1">{user.streakCount} Ngày</div>
+                    <div className="text-[11px] font-black text-orange-400 uppercase tracking-widest">Chuỗi hiện tại</div>
+                    <div className="mt-3 w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                       <div 
+                         className="h-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]" 
+                         style={{ width: `${Math.min((user.streakCount / 30) * 100, 100)}%` }} 
+                       />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">
-                <Trans 
-                  i18nKey="profile.member_since" 
-                  values={{ 
-                    date: user?.createdAt 
-                      ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
-                      : (i18n.language === 'vi' ? 'Sớm hơn' : 'Earlier')
-                  }}
-                >
-                   Thành viên ưu tú của Học viện Hóa học Aurum.<br/>Đã đồng hành từ {user?.createdAt 
-                     ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
-                     : (i18n.language === 'vi' ? 'Thời gian dài' : 'a long time')}
-                </Trans>
-              </p>
               
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+              <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-6">
                   <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
                     <span className="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></span>
                     <span className="text-[13px] font-bold text-white/80">{t('profile.online_status')}</span>
+                  </div>
+                  <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
+                    <span className="text-orange-400 text-sm">⏱️</span>
+                    <span className="text-[13px] font-bold text-white/80">Hôm nay: {user.todayOnlineMinutes}/10 phút</span>
                   </div>
               </div>
             </div>

@@ -149,7 +149,7 @@ const Navbar = () => {
             <div className="hidden sm:flex items-center gap-2">
               <div className="flex items-center gap-2 bg-viet-green px-3 py-1.5 rounded-full shadow-md shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
                 <Link to="/profile" className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center overflow-hidden border border-white/30 group-hover:rotate-12 transition-transform shrink-0">
-                  <Avatar seed={user.avatarSeed || user.username} size={28} className="w-full h-full object-cover scale-125 translate-y-0.5" />
+                  <Avatar seed={user.avatarSeed || user.username} size={28} streakCount={user.streakCount} className="w-full h-full object-cover" />
                 </Link>
                 <Link to="/profile" className="flex items-center group/user max-w-[150px]">
                   <span className="text-[10px] font-black text-white uppercase tracking-widest leading-tight block truncate group-hover/user:underline">
@@ -255,7 +255,7 @@ const Navbar = () => {
                         className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl group"
                       >
                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-viet-green p-0.5 bg-white">
-                          <Avatar seed={user.avatarSeed || user.username} size={40} className="w-full h-full object-cover scale-150 translate-y-1" />
+                          <Avatar seed={user.avatarSeed || user.username} size={40} streakCount={user.streakCount} className="w-full h-full object-cover" />
                         </div>
                         <div className="flex flex-col">
                           <span className="text-[14px] font-black text-viet-text leading-tight">{user.username}</span>
