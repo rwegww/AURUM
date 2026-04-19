@@ -25,7 +25,13 @@ const mapUser = (user) => {
     activeMinutes: user.active_minutes || 0,
     isOnline: user.is_online || (user.last_active_at && new Date(user.last_active_at) > new Date(Date.now() - 5*60*1000)),
     isLocked: user.is_locked || false,
-    balancingProgress: user.balancing_progress || { completedNodeIds: [], completedCount: 0, passedGrades: [] }
+    balancingProgress: (user.balancing_progress && typeof user.balancing_progress === 'object') 
+      ? {
+          completedNodeIds: user.balancing_progress.completedNodeIds || [],
+          completedCount: user.balancing_progress.completedCount || 0,
+          passedGrades: user.balancing_progress.passedGrades || []
+        }
+      : { completedNodeIds: [], completedCount: 0, passedGrades: [] }
   };
 };
 
@@ -104,7 +110,8 @@ export const User = {
         password: hashedPassword,
         role: userData.role || 'student',
         inventory: userData.inventory || { ingredients: [], craftedItems: [] },
-        avatar_seed: userData.avatarSeed || userData.username
+        avatar_seed: userData.avatarSeed || userData.username,
+        balancing_progress: { completedNodeIds: [], completedCount: 0, passedGrades: [] }
       }])
       .select()
       .single();
