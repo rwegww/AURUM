@@ -45,12 +45,6 @@
         "desc": "Thư viện tài liệu số khổng lồ đi kèm Bảng tuần hoàn tương tác. Bấm vào bất kỳ nguyên tố nào để xem cấu hình electron, mức năng lượng và tính chất hóa học chi tiết.",
         "link": "Vào Thư viện"
       }
-    },
-    "footer": {
-      "desc": "© 2026 Chuyên đề Hóa Học KTH. Developed with 💚.",
-      "about": "Về chúng tôi",
-      "contact": "Liên hệ",
-      "terms": "Điều khoản"
     }
   },
   "footer": {
@@ -83,11 +77,26 @@
     "subtitle": "Mỗi cấp độ là một hành trình mới với câu chuyện riêng và thử thách thú vị, giúp bạn khám phá thế giới hóa học một cách tự nhiên nhất.",
     "enter_class": "Vào lớp",
     "grades": {
-      "8": { "title": "Khởi Đầu Của Nhà Giả Kim", "desc": "Bước vào thế giới phân tử nguyên sơ, làm chủ ngôn ngữ vô hình của Hóa học." },
-      "9": { "title": "Vương Quốc Chuyển Hóa", "desc": "Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác nguyên tố." },
-      "10": { "title": "Kiến Trúc Sư Nguyên Tử", "desc": "Tiến sâu vào động lực học và cấu tạo bảng tuần hoàn, làm quen với sự cân bằng vũ trụ." },
-      "11": { "title": "Mê Cung Hữu Cơ", "desc": "Lạc vào mê cung Carbon, tìm ra quy luật kiến tạo nên mọi sự sống phức tạp." },
-      "12": { "title": "Bậc Thầy Dung Hợp", "desc": "Ranh giới cuối cùng của các bậc thầy giả kim, hoàn thành định mệnh sáng tạo vũ trụ mới." }
+      "8": {
+        "title": "Khởi Đầu Của Nhà Giả Kim",
+        "desc": "Bước vào thế giới phân tử nguyên sơ, làm chủ ngôn ngữ vô hình của Hóa học."
+      },
+      "9": {
+        "title": "Vương Quốc Chuyển Hóa",
+        "desc": "Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác nguyên tố."
+      },
+      "10": {
+        "title": "Kiến Trúc Sư Nguyên Tử",
+        "desc": "Tiến sâu vào động lực học và cấu tạo bảng tuần hoàn, làm quen với sự cân bằng vũ trụ."
+      },
+      "11": {
+        "title": "Mê Cung Hữu Cơ",
+        "desc": "Lạc vào mê cung Carbon, tìm ra quy luật kiến tạo nên mọi sự sống phức tạp."
+      },
+      "12": {
+        "title": "Bậc Thầy Dung Hợp",
+        "desc": "Ranh giới cuối cùng của các bậc thầy giả kim, hoàn thành định mệnh sáng tạo vũ trụ mới."
+      }
     }
   },
   "lectures": {
@@ -108,9 +117,18 @@
     "title": "Khơi nguồn đam mê <1/><2> Hóa học</2> cho thế hệ trẻ",
     "description": "Aurum không chỉ là một nền tảng học tập, mà là một cuộc hành trình khám phá thế giới vi mô của các nguyên tử và phản ứng. Chúng tôi tin rằng kiến thức chỉ thực sự sống động khi nó được trải nghiệm và tương tác.",
     "pillars": {
-      "safety": { "title": "An toàn tuyệt đối", "desc": "Mô phỏng 3D giúp học sinh thực hành các phản ứng nguy hiểm mà không cần hóa chất thực." },
-      "gamification": { "title": "Học mà chơi", "desc": "Hệ thống gamification tích hợp điểm thưởng, cấp bậc giúp việc học trở nên lôi cuốn." },
-      "visualization": { "title": "Trực quan hóa", "desc": "Mọi khái niệm trừu tượng đều được số hóa thành hình ảnh sinh động và dễ hiểu." }
+      "safety": {
+        "title": "An toàn tuyệt đối",
+        "desc": "Mô phỏng 3D giúp học sinh thực hành các phản ứng nguy hiểm mà không cần hóa chất thực."
+      },
+      "gamification": {
+        "title": "Học mà chơi",
+        "desc": "Hệ thống gamification tích hợp điểm thưởng, cấp bậc giúp việc học trở nên lôi cuốn."
+      },
+      "visualization": {
+        "title": "Trực quan hóa",
+        "desc": "Mọi khái niệm trừu tượng đều được số hóa thành hình ảnh sinh động và dễ hiểu."
+      }
     },
     "team_section": {
       "title": "Đội ngũ chuyên gia từ Học viện KTH",
@@ -147,30 +165,30 @@
     "title": "Điều khoản & <1/> Chính sách Bảo mật",
     "last_updated": "Cập nhật lần cuối: {{date}}",
     "sections": {
-      "acceptance": { 
-        "title": "1. Chấp nhận điều khoản", 
-        "p1": "Bằng việc truy cập và sử dụng Aurum Chemistry Odyssey, bạn đồng ý tuân thủ và bị ràng buộc bởi các điều khoản sử dụng này. Nếu bạn không đồng ý với bất kỳ phần nào của các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi.", 
-        "p2": "Chúng tôi có quyền sửa đổi hoặc cập nhật các điều khoản này bất kỳ lúc nào mà không cần thông báo trước. Việc bạn tiếp tục sử dụng nền tảng sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới." 
+      "acceptance": {
+        "title": "1. Chấp nhận điều khoản",
+        "p1": "Bằng việc truy cập và sử dụng Aurum Chemistry Odyssey, bạn đồng ý tuân thủ và bị ràng buộc bởi các điều khoản sử dụng này. Nếu bạn không đồng ý với bất kỳ phần nào của các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi.",
+        "p2": "Chúng tôi có quyền sửa đổi hoặc cập nhật các điều khoản này bất kỳ lúc nào mà không cần thông báo trước. Việc bạn tiếp tục sử dụng nền tảng sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới."
       },
-      "accounts": { 
-        "title": "2. Tài khoản người dùng", 
-        "p1": "Để truy cập một số tính năng, bạn có thể cần đăng ký tài khoản. Bạn có trách nhiệm duy trì tính bảo mật của thông tin tài khoản và mật khẩu của mình. Mọi hoạt động xảy ra dưới tài khoản của bạn sẽ thuộc trách nhiệm của bạn.", 
-        "p2": "Nghiêm cấm các hành vi chia sẻ tài khoản, sử dụng công cụ gian lận trong đấu trường hoặc cố tình gây rối cộng đồng. Chúng tôi có quyền khóa tài khoản vi phạm mà không cần báo trước." 
+      "accounts": {
+        "title": "2. Tài khoản người dùng",
+        "p1": "Để truy cập một số tính năng, bạn có thể cần đăng ký tài khoản. Bạn có trách nhiệm duy trì tính bảo mật của thông tin tài khoản và mật khẩu của mình. Mọi hoạt động xảy ra dưới tài khoản của bạn sẽ thuộc trách nhiệm của bạn.",
+        "p2": "Nghiêm cấm các hành vi chia sẻ tài khoản, sử dụng công cụ gian lận trong đấu trường hoặc cố tình gây rối cộng đồng. Chúng tôi có quyền khóa tài khoản vi phạm mà không cần báo trước."
       },
-      "intellectual": { 
-        "title": "3. Quyền sở hữu trí tuệ", 
-        "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Học viện Hóa học Aurum hoặc các bên cấp phép.", 
-        "p2": "Mọi hành vi sao chép, phân phối hoặc thương mại hóa nội dung mà không có sự đồng ý bằng văn bản của chúng tôi đều bị nghiêm cấm và có thể bị truy cứu trách nhiệm pháp lý." 
+      "intellectual": {
+        "title": "3. Quyền sở hữu trí tuệ",
+        "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Học viện Hóa học Aurum hoặc các bên cấp phép.",
+        "p2": "Mọi hành vi sao chép, phân phối hoặc thương mại hóa nội dung mà không có sự đồng ý bằng văn bản của chúng tôi đều bị nghiêm cấm và có thể bị truy cứu trách nhiệm pháp lý."
       },
-      "privacy": { 
-        "title": "4. Chính sách bảo mật", 
-        "p1": "Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn. Dữ liệu thu thập (như tên, email, tiến trình học tập) chỉ được sử dụng để cá nhân hóa trải nghiệm học tập và cải thiện chất lượng dịch vụ.", 
-        "p2": "Chúng tôi không bao giờ bán hoặc chia sẻ thông tin cá nhân của bạn cho bên thứ ba vì mục đích tiếp thị mà không có sự đồng ý rõ ràng của bạn." 
+      "privacy": {
+        "title": "4. Chính sách bảo mật",
+        "p1": "Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn. Dữ liệu thu thập (như tên, email, tiến trình học tập) chỉ được sử dụng để cá nhân hóa trải nghiệm học tập và cải thiện chất lượng dịch vụ.",
+        "p2": "Chúng tôi không bao giờ bán hoặc chia sẻ thông tin cá nhân của bạn cho bên thứ ba vì mục đích tiếp thị mà không có sự đồng ý rõ ràng của bạn."
       },
-      "liability": { 
-        "title": "5. Giới hạn trách nhiệm", 
-        "p1": "Các mô phỏng phòng thí nghiệm và kiến thức trên nền tảng này chỉ phục vụ mục đích giáo dục và tham khảo. Người dùng không được tự ý thực hiện các thí nghiệm nguy hiểm ngoài đời thực mà không có sự giám sát của chuyên gia.", 
-        "p2": "Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào phát sinh từ việc sử dụng thông tin hoặc thực hành sai lệch từ các hướng dẫn trên nền tảng." 
+      "liability": {
+        "title": "5. Giới hạn trách nhiệm",
+        "p1": "Các mô phỏng phòng thí nghiệm và kiến thức trên nền tảng này chỉ phục vụ mục đích giáo dục và tham khảo. Người dùng không được tự ý thực hiện các thí nghiệm nguy hiểm ngoài đời thực mà không có sự giám sát của chuyên gia.",
+        "p2": "Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào phát sinh từ việc sử dụng thông tin hoặc thực hành sai lệch từ các hướng dẫn trên nền tảng."
       }
     },
     "footer_question": "Bạn có câu hỏi về điều khoản?<1/>Vui lòng <contact>Liên hệ với chúng tôi</contact>."
@@ -232,9 +250,18 @@
   "journey": {
     "badge": "Chương Trình Lớp {{grade}}",
     "themes": {
-      "8": { "title": "Hành Trình Khởi Đầu", "subtitle": "Làm chủ các nguyên tố cơ bản" },
-      "9": { "title": "Vương Quốc Chuyển Hóa", "subtitle": "Bí thuật phản ứng hóa học" },
-      "10": { "title": "Kiến Trúc Sư Nguyên Tử", "subtitle": "Xây dựng thế giới vi mô" }
+      "8": {
+        "title": "Hành Trình Khởi Đầu",
+        "subtitle": "Làm chủ các nguyên tố cơ bản"
+      },
+      "9": {
+        "title": "Vương Quốc Chuyển Hóa",
+        "subtitle": "Bí thuật phản ứng hóa học"
+      },
+      "10": {
+        "title": "Kiến Trúc Sư Nguyên Tử",
+        "subtitle": "Xây dựng thế giới vi mô"
+      }
     },
     "test_banner": {
       "bg_text": "KIỂM TRA",
@@ -652,11 +679,31 @@
       "explore_btn": "KHÁM PHÁ NGAY"
     },
     "story_parts": {
-      "8": { "title": "Phần 1", "name": "Sự Khởi Đầu Thức Tỉnh", "story": "Bước vào thế giới phân tử nguyên sơ, nơi vạn vật bắt đầu. Nhiệm vụ của bạn là hiểu được bản chất của nguyên tử và làm chủ ngôn ngữ vô hình của Hóa học." },
-      "9": { "title": "Phần 2", "name": "Hành Trình Chuyển Hóa", "story": "Những phản ứng bùng nổ và các chất biến đổi không ngừng. Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác giữa các nguyên tố." },
-      "10": { "title": "Phần 3", "name": "Bước Nhảy Vĩ Mô", "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ phải làm quen với sự cân bằng, nhiệt lượng và động lượng chi phối toàn bộ vũ trụ vật chất." },
-      "11": { "title": "Phần 4", "name": "Ma Trận Hữu Cơ", "story": "Lạc vào mê cung của các nguyên tử Carbon. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên mọi sự sống." },
-      "12": { "title": "Phần 5", "name": "Chạm Đỉnh Tiến Hóa", "story": "Ranh giới cuối cùng của các bậc thầy giả kim. Vượt qua những thử thách điện hóa, khám phá nguyên liệu polyme và sự dung hợp để hoàn thành định mệnh sáng tạo vũ trụ mới." }
+      "8": {
+        "title": "Phần 1",
+        "name": "Sự Khởi Đầu Thức Tỉnh",
+        "story": "Bước vào thế giới phân tử nguyên sơ, nơi vạn vật bắt đầu. Nhiệm vụ của bạn là hiểu được bản chất của nguyên tử và làm chủ ngôn ngữ vô hình của Hóa học."
+      },
+      "9": {
+        "title": "Phần 2",
+        "name": "Hành Trình Chuyển Hóa",
+        "story": "Những phản ứng bùng nổ và các chất biến đổi không ngừng. Mở khóa bí mật của phản ứng hóa học và nắm bắt sức mạnh từ sự tương tác giữa các nguyên tố."
+      },
+      "10": {
+        "title": "Phần 3",
+        "name": "Bước Nhảy Vĩ Mô",
+        "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ phải làm quen với sự cân bằng, nhiệt lượng và động lượng chi phối toàn bộ vũ trụ vật chất."
+      },
+      "11": {
+        "title": "Phần 4",
+        "name": "Ma Trận Hữu Cơ",
+        "story": "Lạc vào mê cung của các nguyên tử Carbon. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên mọi sự sống."
+      },
+      "12": {
+        "title": "Phần 5",
+        "name": "Chạm Đỉnh Tiến Hóa",
+        "story": "Ranh giới cuối cùng của các bậc thầy giả kim. Vượt qua những thử thách điện hóa, khám phá nguyên liệu polyme và sự dung hợp để hoàn thành định mệnh sáng tạo vũ trụ mới."
+      }
     }
   },
   "lesson_page": {
