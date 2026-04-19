@@ -12,7 +12,7 @@ const StreakBadge = () => {
 
   const streak = user.streakCount || 0;
   const isMaintainedToday = user.todayOnlineMinutes >= 10 || user.todayLessonCompleted;
-  
+
   // Logic for broken streak (simplified for UI)
   const isBroken = streak > 0 && !isMaintainedToday && user.lastStreakAt && (new Date() - new Date(user.lastStreakAt) > 48 * 60 * 60 * 1000);
 
@@ -37,11 +37,10 @@ const StreakBadge = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setShowModal(true)}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${
-          isMaintainedToday 
-            ? 'bg-orange-500/20 border border-orange-500/50 text-orange-500' 
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${isMaintainedToday
+            ? 'bg-orange-500/20 border border-orange-500/50 text-orange-500'
             : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
-        }`}
+          }`}
       >
         <motion.span
           animate={isMaintainedToday ? { scale: [1, 1.2, 1] } : {}}
@@ -68,21 +67,16 @@ const StreakBadge = () => {
                 <h2 className="text-2xl font-bold text-white mb-2">
                   Chuỗi {streak} ngày!
                 </h2>
-                <p className="text-zinc-400 mb-6">
-                  {isMaintainedToday 
-                    ? 'Bạn đã thắp chuỗi ngày hôm nay. Tiếp tục giữ vững phong độ nhé!' 
-                    : `Hôm nay bạn đã online ${user.todayOnlineMinutes}/10 phút. Hãy học thêm một chút để thắp chuỗi!`}
-                </p>
+
 
                 <div className="grid grid-cols-4 gap-2 mb-8">
                   {milestones.map((m) => (
-                    <div 
-                      key={m.days} 
-                      className={`p-3 rounded-2xl border text-center transition-all ${
-                        streak >= m.days 
-                          ? 'bg-orange-500/20 border-orange-500 text-orange-500' 
+                    <div
+                      key={m.days}
+                      className={`p-3 rounded-2xl border text-center transition-all ${streak >= m.days
+                          ? 'bg-orange-500/20 border-orange-500 text-orange-500'
                           : 'bg-zinc-800/50 border-zinc-700 text-zinc-500 opacity-50'
-                      }`}
+                        }`}
                     >
                       <div className="text-xl mb-1">{m.icon}</div>
                       <div className="text-[10px] font-bold uppercase">{m.days}N</div>

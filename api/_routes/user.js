@@ -79,6 +79,7 @@ router.get('/leaderboard', async (req, res) => {
       level: s.level || 1,
       role: s.role,
       avatarSeed: s.avatarSeed,
+      streakCount: s.streakCount || 0,
       lastActiveAt: s.lastActiveAt,
       activeMinutes: s.activeMinutes,
       isOnline: s.isOnline

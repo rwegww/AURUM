@@ -55,7 +55,13 @@ const FloatingIsland = ({ rank, user, delay }) => {
           className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl bg-white shadow-2xl border-4 ${isFirst ? 'border-amber-400 shadow-amber-200/50' : 'border-white shadow-slate-200/50'} overflow-hidden relative p-1`}
         >
           <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center p-2">
-            <Avatar seed={user?.avatarSeed || user?.username} size={110} className="w-full h-full object-cover scale-110 translate-y-1" />
+            <Avatar 
+              seed={user?.avatarSeed || user?.username} 
+              size={110} 
+              streakCount={user?.streakCount} 
+              level={user?.level}
+              className="w-full h-full object-cover" 
+            />
           </div>
         </motion.div>
         
@@ -230,7 +236,13 @@ const LeaderboardSection = () => {
                   </div>
                   
                   <div className="w-14 h-14 rounded-2xl bg-white shadow-inner overflow-hidden flex-shrink-0 border-2 border-white flex items-center justify-center p-1">
-                    <Avatar seed={u.avatarSeed || u.username} size={50} className="w-full h-full object-cover scale-125 translate-y-1" />
+                    <Avatar 
+                      seed={u.avatarSeed || u.username} 
+                      size={50} 
+                      streakCount={u.streakCount} 
+                      level={u.level}
+                      className="w-full h-full object-cover" 
+                    />
                   </div>
 
                   <div className="flex-1">
