@@ -63,23 +63,28 @@ const EquationSkillTree = ({ progress = {}, onSelectNode }) => {
     restDelta: 0.001
   });
 
-  // Mock data for 100 nodes (representing 600 questions) - scalable up to 500 nodes (3000 questions)
   const nodes = useMemo(() => {
-    const topics = [
-      { cat: 'Hóa hợp', title: 'Nhập môn: Đơn chất & Oxy' },
-      { cat: 'Thế', title: 'Kim loại hoạt động & Axit' },
-      { cat: 'Trung hòa', title: 'Axit mạnh - Bazơ mạnh' },
-      { cat: 'Hóa hợp', title: 'Cân bằng bậc 2: Oxit phức tạp' },
-      { cat: 'Hữu cơ', title: 'Phản ứng cháy Ankan' },
-      { cat: 'Trao đổi', title: 'Kết tủa & Muối' }
-    ];
+    const getTopic = (i) => {
+      if (i < 11) return { cat: 'Hóa hợp', title: 'Nhập môn: Đơn chất & Oxy' };
+      if (i < 18) return { cat: 'Thế', title: 'Kim loại hoạt động & Axit' };
+      if (i < 25) return { cat: 'Trung hòa', title: 'Axit mạnh - Bazơ mạnh' };
+      if (i < 32) return { cat: 'Oxit + Axit', title: 'Oxit Bazơ & Axit' };
+      if (i < 110) return { cat: 'Trao đổi', title: 'Muối & Kết tủa' };
+      if (i < 120) return { cat: 'Hữu cơ', title: 'Phản ứng cháy Hydrocarbon' };
+      if (i < 125) return { cat: 'Khử oxit', title: 'Phản ứng Oxy hóa - Khử' };
+      if (i < 200) return { cat: 'Muối + Bazơ', title: 'Trao đổi Muối & Bazơ' };
+      return { cat: 'Nâng cao', title: 'Cân bằng phương trình phức tạp' };
+    };
     
-    return Array.from({ length: 500 }, (_, i) => ({
-      id: i + 1,
-      category: topics[i % topics.length].cat,
-      title: topics[i % topics.length].title,
-      difficulty: i < 50 ? 'easy' : (i < 200 ? 'medium' : 'hard')
-    }));
+    return Array.from({ length: 500 }, (_, i) => {
+      const topic = getTopic(i);
+      return {
+        id: i + 1,
+        category: topic.cat,
+        title: topic.title,
+        difficulty: i < 50 ? 'easy' : (i < 200 ? 'medium' : 'hard')
+      };
+    });
   }, []);
 
   return (

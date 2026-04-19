@@ -91,7 +91,7 @@ const GradeJourney = () => {
           <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-3 bg-viet-green/5 rounded-full" />
 
           {/* Placement Test Banner */}
-          {grade !== '8' && lessons.length > 0 && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
+          {grade !== '8' && lessons.length > 0 && !user?.balancingProgress?.passedGrades?.includes(grade) && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-16 relative z-10">
               <div className="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-[32px] p-8 text-white shadow-xl overflow-hidden relative group">
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
@@ -118,9 +118,10 @@ const GradeJourney = () => {
             {lessons.map((lesson, index) => {
               const isEven = index % 2 === 0;
               const isFirstLessonDefaultUnlocked = grade === '8';
+              const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
               const previousLessonCompleted = index > 0 && user?.unlockedLessons?.includes(lessons[index - 1].lessonId);
               const isCompleted = user?.unlockedLessons?.includes(lesson.lessonId);
-              const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && isFirstLessonDefaultUnlocked) || previousLessonCompleted || isCompleted;
+              const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonCompleted || isCompleted;
               const isLocked = !isUnlocked;
 
               return (

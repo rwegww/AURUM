@@ -12,14 +12,42 @@ const EquationBalancer = () => {
     completedCount: 0
   });
 
-  // Mock progress for now
+  // Fetch real progress from backend
   useEffect(() => {
-    // In production, fetch from user_balancing_progress
-    setProgress({
-        completedNodeIds: [1], // Level 1 done
-        completedCount: 6
-    });
+    const fetchProgress = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/lab/balancing/progress', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setProgress(data);
+            }
+        } catch (err) {
+            console.error('Lỗi tải tiến trình cân bằng:', err);
+        }
+    };
+    fetchProgress();
   }, [user]);
+
+  const saveProgress = async (newProgress) => {
+    try {
+        const token = localStorage.getItem('token');
+        await fetch('/api/lab/balancing/progress', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ balancingProgress: newProgress })
+        });
+    } catch (err) {
+        console.error('Lỗi lưu tiến trình:', err);
+    }
+  };
 
   const handleSelectNode = (nodeId) => {
     setSelectedNodeId(nodeId);
@@ -52,10 +80,15 @@ const EquationBalancer = () => {
                 nodeId={selectedNodeId} 
                 onBack={() => setView('tree')}
                 onComplete={(qCount) => {
-                    setProgress(prev => ({
-                        completedCount: prev.completedCount + qCount,
-                        completedNodeIds: [...prev.completedNodeIds, selectedNodeId]
-                    }));
+                    const isNewNode = !progress.completedNodeIds.includes(selectedNodeId);
+                    const newProgress = {
+                        completedCount: progress.completedCount + (isNewNode ? qCount : 0),
+                        completedNodeIds: isNewNode 
+                            ? [...progress.completedNodeIds, selectedNodeId]
+                            : progress.completedNodeIds
+                    };
+                    setProgress(newProgress);
+                    saveProgress(newProgress);
                     setView('tree');
                 }}
             />

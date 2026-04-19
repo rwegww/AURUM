@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import LeaderboardSection from '@/components/home/LeaderboardSection';
+import Footer from '@/components/common/Footer';
 
 // --- Reused SVG Graphics (Simplified for Bento) ---
 
@@ -226,24 +227,7 @@ const Home = () => {
         <LeaderboardSection />
       </div>
 
-      {/* --- FOOTER --- */}
-      <footer className="w-full border-t-2 border-duo-border bg-white py-16 relative z-20">
-        <div className="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <div className="flex flex-col gap-2">
-            <span className="font-rubik text-2xl font-black text-[#1a1a1a] tracking-tighter uppercase">
-              AURUM <span className="text-viet-green">CURRENCY</span>
-            </span>
-            <p className="text-[15px] font-medium text-[#1a1a1a]/60">
-              {t('home.footer.desc')}
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 text-[16px] font-bold text-[#1a1a1a] hover:[&>a]:text-viet-green transition-colors">
-             <Link to="/about">{t('home.footer.about')}</Link>
-             <Link to="/contact">{t('home.footer.contact')}</Link>
-             <Link to="/terms">{t('home.footer.terms')}</Link>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

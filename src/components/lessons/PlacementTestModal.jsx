@@ -33,7 +33,7 @@ const PLACEMENT_TESTS = {
 };
 
 const PlacementTestModal = ({ grade, isOpen, onClose, onPass, firstLessonId }) => {
-  const { updateProgress } = useAuth();
+  const { user, updateProgress, updateUser } = useAuth();
   const [step, setStep] = useState('start'); // start, quiz, result
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
@@ -64,7 +64,21 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass, firstLessonId }) =
 
   const handleFinish = async () => {
     if (score >= passingScore) {
-      await updateProgress(500, firstLessonId);
+      // Gain XP but DON'T unlock lesson here to avoid auto-unlocking infographic
+      await updateProgress(500); 
+      
+      // Mark grade as passed in balancingProgress
+      const currentProgress = user?.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [] };
+      const updatedPassedGrades = currentProgress.passedGrades || [];
+      
+      if (!updatedPassedGrades.includes(grade)) {
+        await updateUser({ 
+          balancingProgress: { 
+            ...currentProgress, 
+            passedGrades: [...updatedPassedGrades, grade] 
+          } 
+        });
+      }
       onPass();
     } else {
       onClose();

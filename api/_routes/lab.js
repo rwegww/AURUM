@@ -101,6 +101,42 @@ router.get('/balancing/:nodeId', async (req, res) => {
   }
 });
 
+// GET /api/lab/balancing/progress - Get user's balancing progress
+router.get('/balancing/progress', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(200).json({ completedNodeIds: [], completedCount: 0 });
+    }
+    res.status(200).json(req.user.balancingProgress);
+  } catch (error) {
+    console.error('❌ Error fetching balancing progress:', error);
+    res.status(500).json({ message: 'Error fetching progress' });
+  }
+});
+
+// POST /api/lab/balancing/progress - Update user's balancing progress
+router.post('/balancing/progress', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(200).json({ message: 'Guest mode, progress not saved' });
+    }
+
+    const { balancingProgress } = req.body;
+    if (!balancingProgress) {
+      return res.status(400).json({ message: 'balancingProgress missing' });
+    }
+
+    const updatedUser = await User.update(req.user.id, { 
+      balancingProgress 
+    });
+
+    res.status(200).json(updatedUser.balancingProgress);
+  } catch (error) {
+    console.error('❌ Error updating balancing progress:', error);
+    res.status(500).json({ message: 'Error updating progress' });
+  }
+});
+
 // POST /api/lab/unlock - Unlock a chemical for a user
 router.post('/unlock', auth, async (req, res) => {
   try {

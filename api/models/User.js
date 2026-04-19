@@ -24,7 +24,8 @@ const mapUser = (user) => {
     lastActiveAt: user.updated_at || user.last_active_at,
     activeMinutes: user.active_minutes || 0,
     isOnline: user.is_online || (user.last_active_at && new Date(user.last_active_at) > new Date(Date.now() - 5*60*1000)),
-    isLocked: user.is_locked || false
+    isLocked: user.is_locked || false,
+    balancingProgress: user.balancing_progress || { completedNodeIds: [], completedCount: 0, passedGrades: [] }
   };
 };
 
@@ -132,6 +133,11 @@ export const User = {
     if (updateData.avatarSeed) {
       pgUpdateData.avatar_seed = updateData.avatarSeed;
       delete pgUpdateData.avatarSeed;
+    }
+
+    if (updateData.balancingProgress) {
+      pgUpdateData.balancing_progress = updateData.balancingProgress;
+      delete pgUpdateData.balancingProgress;
     }
     
     // 1. Update Core User Data (excluding junction lists)

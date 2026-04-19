@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation, Trans } from 'react-i18next';
+import Footer from '@/components/common/Footer';
 
 const Section = ({ title, icon, children, index }) => (
   <motion.section 
@@ -128,6 +129,7 @@ const Terms = () => {
         </div>
 
       </div>
+      <Footer />
     </div>
   );
 };

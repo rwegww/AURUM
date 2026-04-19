@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation, Trans } from 'react-i18next';
+import Footer from '@/components/common/Footer';
 
 const ContactInfo = ({ icon, label, value }) => (
   <div className="flex items-center gap-6 p-6 bg-white rounded-3xl border border-viet-border hover:border-viet-green/20 transition-all shadow-sm">
@@ -122,6 +123,7 @@ const Contact = () => {
         </div>
 
       </div>
+      <Footer />
     </div>
   );
 };

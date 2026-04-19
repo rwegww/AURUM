@@ -53,6 +53,31 @@
       "terms": "Terms"
     }
   },
+  "footer": {
+    "brand_desc": "Learn Chemistry through interactive games and realistic virtual experiments. A modern technology learning platform for the future generation.",
+    "explore": {
+      "title": "Explore",
+      "learning_center": "Learning Center",
+      "chem_tools": "Chemistry Tools",
+      "lectures": "Interactive Lectures",
+      "virtual_lab": "Virtual Lab",
+      "arena": "PK Race"
+    },
+    "support": {
+      "title": "Support",
+      "user_guide": "User Guide",
+      "faq": "FAQ",
+      "privacy_policy": "Privacy Policy",
+      "terms_of_service": "Terms of Service"
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "EMAIL",
+      "hotline": "HOTLINE",
+      "address_title": "HEADQUARTERS",
+      "address_value": "Nguyen Tat Thanh University, HCMC\n3F Nguyen Huu Tho, Tan Hung"
+    }
+  },
   "classroom": {
     "title": "Start your <1/><2> Chemistry</2> journey",
     "subtitle": "Each level is a new journey with its own story and exciting challenges, helping you explore the world of chemistry in the most natural way.",

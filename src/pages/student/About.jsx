@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation, Trans } from 'react-i18next';
+import Footer from '@/components/common/Footer';
 
 const About = () => {
   const { t } = useTranslation();
@@ -106,6 +107,7 @@ const About = () => {
            </div>
         </section>
       </div>
+      <Footer />
     </div>
   );
 };

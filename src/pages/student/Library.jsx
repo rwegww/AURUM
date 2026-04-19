@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
+import Footer from '@/components/common/Footer';
 
 const Library = () => {
   const { t } = useTranslation();
@@ -154,6 +155,7 @@ const Library = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

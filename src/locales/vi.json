@@ -53,6 +53,31 @@
       "terms": "Điều khoản"
     }
   },
+  "footer": {
+    "brand_desc": "Học Hóa học thông qua trò chơi tương tác và thí nghiệm ảo chân thực. Nền tảng không gian học tập công nghệ hiện đại dành cho thế hệ tương lai.",
+    "explore": {
+      "title": "Khám phá",
+      "learning_center": "Trung tâm học tập",
+      "chem_tools": "Công cụ Hóa học",
+      "lectures": "Bài giảng tương tác",
+      "virtual_lab": "Phòng Thí nghiệm ảo",
+      "arena": "Cuộc đua PK"
+    },
+    "support": {
+      "title": "Hỗ trợ",
+      "user_guide": "Hướng dẫn sử dụng",
+      "faq": "Câu hỏi thường gặp",
+      "privacy_policy": "Chính sách bảo mật",
+      "terms_of_service": "Điều khoản dịch vụ"
+    },
+    "contact": {
+      "title": "Liên hệ",
+      "email": "EMAIL",
+      "hotline": "HOTLINE",
+      "address_title": "TRỤ SỞ CHÍNH",
+      "address_value": "ĐH Nguyễn Tất Thành TP.HCM\n3F Nguyễn Hữu Thọ, Tân Hưng"
+    }
+  },
   "classroom": {
     "title": "Bắt đầu hành trình <1/><2> Hóa học</2> của bạn",
     "subtitle": "Mỗi cấp độ là một hành trình mới với câu chuyện riêng và thử thách thú vị, giúp bạn khám phá thế giới hóa học một cách tự nhiên nhất.",
