@@ -9,12 +9,12 @@ const Footer = () => {
   return (
     <footer className="w-full bg-white border-t border-viet-border py-20 relative overflow-hidden">
       {/* Grid Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(#1a1a1a 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-      
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{ backgroundImage: 'radial-gradient(#1a1a1a 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+
       <div className="max-w-[1200px] mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          
+
           {/* Brand Column */}
           <div className="flex flex-col gap-6">
             <Link to="/" className="flex items-center gap-2 group">
@@ -134,16 +134,8 @@ const Footer = () => {
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-20 pt-8 border-t border-viet-border flex flex-col sm:flex-row justify-between items-center gap-4">
-           <p className="text-[12px] font-bold text-viet-text-light">
-             {t('home.footer.desc')}
-           </p>
-           <div className="flex items-center gap-6">
-             <Link to="/terms" className="text-[12px] font-bold text-viet-text-light hover:text-viet-green transition-colors">{t('home.footer.terms')}</Link>
-             <Link to="/about" className="text-[12px] font-bold text-viet-text-light hover:text-viet-green transition-colors">{t('home.footer.about')}</Link>
-           </div>
-        </div>
+
+
       </div>
     </footer>
   );
