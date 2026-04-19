@@ -109,7 +109,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="block text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">{t('footer.contact.hotline')}</span>
-                  <a href="tel:+84981234567" className="text-[14px] font-black text-viet-text hover:text-viet-green transition-colors">(+84) 98 123 4567</a>
+                  <a href="tel:+84981234567" className="text-[14px] font-black text-viet-text hover:text-viet-green transition-colors">(+84) 33 468 1752</a>
                 </div>
               </div>
               {/* Address */}
