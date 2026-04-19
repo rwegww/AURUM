@@ -1016,10 +1016,14 @@
         "desc": "Train your equation balancing skills with thousands of exercises."
       },
       "molecule": {
-        "label": "Molecular Modeling",
-        "desc": "View 3D molecular structures and spatial arrangements of chemical substances."
+        "label": "Molecular Model",
+        "desc": "View 3D molecular structures and chemical space."
       },
-      "start_btn": "Get Started"
+      "solver": {
+        "label": "Equation Solver",
+        "desc": "Search and look up balanced equations instantly from the database."
+      },
+      "start_btn": "Start Now"
     },
     "stats": {
       "chemicals": "Simulated Chemicals",

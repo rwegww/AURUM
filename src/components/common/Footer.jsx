@@ -52,6 +52,7 @@ const Footer = () => {
                 { label: t('footer.explore.chem_tools'), path: '/periodic-table' },
                 { label: t('footer.explore.lectures'), path: '/lectures' },
                 { label: t('footer.explore.virtual_lab'), path: '/lab' },
+                { label: t('chem_lab.modules.solver.label'), path: '/lab/solver' },
                 { label: t('footer.explore.arena'), path: '/arena' },
               ].map((link, i) => (
                 <li key={i}>

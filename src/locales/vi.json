@@ -604,6 +604,10 @@
         "label": "Mô hình phân tử",
         "desc": "Xem cấu trúc phân tử 3D và không gian của các chất hóa học."
       },
+      "solver": {
+        "label": "Hỗ trợ cân bằng",
+        "desc": "Tra cứu và tìm kiếm phương trình đã cân bằng từ cơ sở dữ liệu."
+      },
       "start_btn": "Bắt đầu ngay"
     },
     "stats": {

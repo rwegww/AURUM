@@ -49,6 +49,14 @@ const ChemLab = () => {
       path: '/lab/molecules',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-emerald-500'
     },
+    { 
+      id: 'solver', 
+      label: t('chem_lab.modules.solver.label'), 
+      icon: '🧪', 
+      desc: t('chem_lab.modules.solver.desc'),
+      path: '/lab/solver',
+      colorClass: 'bg-[#1a1a1a] text-white hover:bg-purple-500'
+    },
   ];
 
   return (

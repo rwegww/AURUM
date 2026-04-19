@@ -81,6 +81,27 @@ router.get('/reactions', async (req, res) => {
   }
 });
 
+// GET /api/lab/balancing/search - Search for balanced equations
+router.get('/balancing/search', async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q) return res.status(200).json([]);
+
+    // Simple search in equation_string
+    const { data, error } = await supabase
+      .from('balancing_questions')
+      .select('reactants, products, answer, equation_string')
+      .ilike('equation_string', `%${q}%`)
+      .limit(10);
+
+    if (error) throw error;
+    res.status(200).json(data);
+  } catch (error) {
+    console.error('❌ Error searching balancing equations:', error);
+    res.status(500).json({ message: 'Error searching equations' });
+  }
+});
+
 // GET /api/lab/balancing/:nodeId - Get 6 questions for a specific balancing node
 router.get('/balancing/:nodeId', async (req, res) => {
   try {
