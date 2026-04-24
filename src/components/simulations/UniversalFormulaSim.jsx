@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { elements } from '@/data/elements';
+import { chemicals as labChemicals } from '@/data/reactions/chemicals';
 import { craftableItems } from '@/data/labInventory';
 import { molecules } from '@/data/molecules';
 
@@ -89,25 +90,47 @@ const UniversalFormulaSim = ({ formula }) => {
     return mass.toFixed(2);
   };
 
-  // Tạo kho dữ liệu tổng hợp (Đơn chất + Hợp chất)
+  // Tạo kho dữ liệu tổng hợp (Đơn chất + Hợp chất + Lab Chemicals)
   const unifiedDatabase = useMemo(() => {
     const db = [];
-    // 1. Thêm 118 nguyên tố
+    const addedSymbols = new Set();
+
+    // 1. Ưu tiên nạp từ Lab Chemicals (Chứa đầy đủ tên và khối lượng mol chuẩn)
+    labChemicals.forEach(c => {
+      db.push({ 
+        symbol: c.formula, 
+        name: c.name, 
+        weight: c.molarMass, 
+        category: c.category || 'hợp-chất', 
+        isCompound: c.formula.length > 2 || /[0-9]/.test(c.formula) 
+      });
+      addedSymbols.add(c.formula);
+    });
+
+    // 2. Thêm các nguyên tố từ Bảng tuần hoàn nếu chưa có
     elements.forEach(e => {
-      db.push({ symbol: e.symbol, name: e.name, weight: e.weight, category: e.category, isCompound: false });
+      if (!addedSymbols.has(e.symbol)) {
+        db.push({ symbol: e.symbol, name: e.name, weight: e.weight, category: e.category, isCompound: false });
+        addedSymbols.add(e.symbol);
+      }
     });
-    // 2. Thêm hợp chất từ labInventory
+
+    // 3. Thêm hợp chất từ labInventory
     craftableItems.forEach(c => {
-      if (!db.find(item => item.symbol === c.formula)) {
+      if (!addedSymbols.has(c.formula)) {
         db.push({ symbol: c.formula, name: c.name, weight: calculateMolarMass(c.formula), category: 'hợp-chất', isCompound: true });
+        addedSymbols.add(c.formula);
       }
     });
-    // 3. Thêm phân tử từ molecules
+
+    // 4. Thêm phân tử từ molecules
     molecules.forEach(m => {
-      if (!db.find(item => item.symbol === m.formula)) {
+      if (!addedSymbols.has(m.formula)) {
         db.push({ symbol: m.formula, name: m.name, weight: calculateMolarMass(m.formula), category: 'hợp-chất', isCompound: true });
+        addedSymbols.add(m.formula);
       }
     });
+
     return db;
   }, []);
 
