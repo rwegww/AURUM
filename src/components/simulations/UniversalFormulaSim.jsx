@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { elements } from '@/data/elements';
+import { craftableItems } from '@/data/labInventory';
+import { molecules } from '@/data/molecules';
 
 const UniversalFormulaSim = ({ formula }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -70,14 +72,54 @@ const UniversalFormulaSim = ({ formula }) => {
     setTargetVarKey(formula.variables[0].key);
   }, [formula]);
 
-  // Bảng tuần hoàn auto-fill
+  // Tiện ích tính khối lượng mol tự động từ công thức (H₂O, C₂H₅OH...)
+  const calculateMolarMass = (formulaStr) => {
+    if (!formulaStr) return 0;
+    // Chuyển subscript thành số thường
+    const standard = formulaStr.replace(/[₀-₉]/g, m => "0123456789"["₀₁₂₃₄₅₆₇₈₉".indexOf(m)]);
+    const regex = /([A-Z][a-z]?)([0-9]*)/g;
+    let mass = 0;
+    let match;
+    while ((match = regex.exec(standard)) !== null) {
+      const elSymbol = match[1];
+      const count = match[2] ? parseInt(match[2], 10) : 1;
+      const elementInfo = elements.find(e => e.symbol === elSymbol);
+      if (elementInfo) mass += parseFloat(elementInfo.weight) * count;
+    }
+    return mass.toFixed(2);
+  };
+
+  // Tạo kho dữ liệu tổng hợp (Đơn chất + Hợp chất)
+  const unifiedDatabase = useMemo(() => {
+    const db = [];
+    // 1. Thêm 118 nguyên tố
+    elements.forEach(e => {
+      db.push({ symbol: e.symbol, name: e.name, weight: e.weight, category: e.category, isCompound: false });
+    });
+    // 2. Thêm hợp chất từ labInventory
+    craftableItems.forEach(c => {
+      if (!db.find(item => item.symbol === c.formula)) {
+        db.push({ symbol: c.formula, name: c.name, weight: calculateMolarMass(c.formula), category: 'hợp-chất', isCompound: true });
+      }
+    });
+    // 3. Thêm phân tử từ molecules
+    molecules.forEach(m => {
+      if (!db.find(item => item.symbol === m.formula)) {
+        db.push({ symbol: m.formula, name: m.name, weight: calculateMolarMass(m.formula), category: 'hợp-chất', isCompound: true });
+      }
+    });
+    return db;
+  }, []);
+
+  // Bảng tuần hoàn & Hợp chất auto-fill
   const filteredElements = useMemo(() => {
     if (!searchTerm) return [];
-    return elements.filter(e => 
-      e.symbol.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      e.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const term = searchTerm.toLowerCase();
+    return unifiedDatabase.filter(e => 
+      e.symbol.toLowerCase().includes(term) || 
+      e.name.toLowerCase().includes(term)
     ).slice(0, 5);
-  }, [searchTerm]);
+  }, [searchTerm, unifiedDatabase]);
 
   const handleSelectElement = (el) => {
     setSelectedElement(el);
@@ -366,7 +408,7 @@ const UniversalFormulaSim = ({ formula }) => {
               type="text"
               value={searchTerm}
               onChange={(e) => { setSearchTerm(e.target.value); setShowDropdown(true); }}
-              placeholder="Gõ tên chất (VD: Cu, Fe, Oxi...)"
+              placeholder="Gõ tên chất (VD: Nước, H₂O, Fe, NaCl...)"
               className="w-full h-[48px] rounded-xl px-4 border-2 border-amber-300 focus:border-amber-500 outline-none text-[14px] font-bold bg-white"
             />
             {showDropdown && filteredElements.length > 0 && (
@@ -388,7 +430,7 @@ const UniversalFormulaSim = ({ formula }) => {
           {selectedElement && (
             <div className="mt-3 p-3 bg-white rounded-xl border border-amber-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-[16px] font-black text-white shadow-sm" style={{ backgroundColor: simColorHex }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-[13px] font-black text-white shadow-sm" style={{ backgroundColor: simColorHex }}>
                   {selectedElement.symbol}
                 </div>
                 <div>
@@ -397,7 +439,7 @@ const UniversalFormulaSim = ({ formula }) => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-[9px] font-bold text-gray-500 uppercase">Khối lượng mol</div>
+                <div className="text-[9px] font-bold text-gray-500 uppercase">{selectedElement.isCompound ? 'Phân tử khối' : 'Khối lượng mol'}</div>
                 <div className="text-[14px] font-black text-amber-600">{selectedElement.weight}</div>
               </div>
             </div>
