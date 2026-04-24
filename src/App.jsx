@@ -54,6 +54,7 @@ const Contact = lazyWithRetry(() => import('@/pages/student/Contact'));
 const Terms = lazyWithRetry(() => import('@/pages/student/Terms'));
 const Profile = lazyWithRetry(() => import('@/pages/student/Profile'));
 const KnowledgeMap = lazyWithRetry(() => import('@/pages/student/KnowledgeMap'));
+const ChemCalculator = lazyWithRetry(() => import('@/pages/student/ChemCalculator'));
 
 // Lazy Loaded Auth Pages
 const Login = lazyWithRetry(() => import('@/pages/auth/Login'));
@@ -96,7 +97,8 @@ function AppContent() {
     '/periodic-table', 
     '/missions', 
     '/knowledge-map', 
-    '/classroom'
+    '/classroom',
+    '/calculator'
   ];
   const isFunctionalPage = functionalPaths.some(path => location.pathname.startsWith(path));
 
@@ -140,6 +142,7 @@ function AppContent() {
           <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
+          <Route path="/calculator" element={<ProtectedRoute><ChemCalculator /></ProtectedRoute>} />
 
           {/* Protected Admin Routes */}
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
