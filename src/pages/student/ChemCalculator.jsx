@@ -59,19 +59,7 @@ const ChemCalculator = () => {
     setResult(null);
   };
 
-  const handleQuickSelect = (quick) => {
-    const formula = findFormulaById(quick.id);
-    if (formula) {
-      // Find which group this formula belongs to
-      for (const [key, group] of Object.entries(CHEM_FORMULAS)) {
-        if (group.categories.some(cat => cat.formulas.some(f => f.id === quick.id))) {
-          setSelectedGroup(key);
-          break;
-        }
-      }
-      handleSelectFormula(formula);
-    }
-  };
+
 
   const handleInputChange = (key, value) => {
     setInputValues(prev => ({ ...prev, [key]: value === '' ? '' : value }));
@@ -166,18 +154,7 @@ const ChemCalculator = () => {
               </div>
             </div>
 
-            <div className="viet-card p-4">
-              <h3 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-3">Công thức truy cập nhanh</h3>
-              <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1">
-                {QUICK_FORMULAS.map(q => (
-                  <button key={q.id} onClick={() => handleQuickSelect(q)}
-                    className={`w-full text-left p-3 rounded-xl transition-all ${selectedFormula?.id === q.id ? 'bg-viet-green/10 border-2 border-viet-green' : 'bg-viet-bg hover:bg-viet-green/5 border-2 border-transparent'}`}>
-                    <div className="text-[13px] font-black text-viet-text">{q.label}</div>
-                    <div className="text-[10px] text-viet-text-light mt-0.5">{q.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
+
 
             <div className="viet-card p-4">
               <h3 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-3">{groupData?.label} — Danh mục</h3>
