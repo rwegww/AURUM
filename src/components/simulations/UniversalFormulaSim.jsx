@@ -11,19 +11,40 @@ const UniversalFormulaSim = ({ formula }) => {
   const [targetVarKey, setTargetVarKey] = useState(formula.variables[0].key);
   
   // Giá trị đầu vào mặc định
+  // Giá trị đầu vào mặc định hợp lý cho từng loại biến
   const [inputs, setInputs] = useState(() => {
     const defaultVals = {};
     formula.variables.forEach(v => {
-      // Giá trị khởi tạo ngẫu nhiên hợp lý cho slider
       if (v.key === 'V') defaultVals[v.key] = 1.0;
       else if (v.key === 'n') defaultVals[v.key] = 0.5;
-      else if (v.key === 'm') defaultVals[v.key] = 50;
-      else if (v.key === 'M') defaultVals[v.key] = 58.5; // NaCl
-      else if (v.key === 'C' || v.key === 'Cm' || v.key === 'C%') defaultVals[v.key] = 1;
-      else defaultVals[v.key] = 1;
+      else if (v.key === 'm') defaultVals[v.key] = 20;
+      else if (v.key === 'M' || v.key === 'MA' || v.key === 'MB') defaultVals[v.key] = 56;
+      else if (v.key === 'C' || v.key === 'Cm') defaultVals[v.key] = 1;
+      else if (v.key === 'C%') defaultVals[v.key] = 15;
+      else if (v.key === 'N') defaultVals[v.key] = 3.01e23;
+      else if (v.key === 'P') defaultVals[v.key] = 1;
+      else if (v.key === 'T') defaultVals[v.key] = 298; // 25C
+      else if (v.key === 'd' || v.key === 'dA/B' || v.key === 'dA/kk' || v.key === 'dA/H₂') defaultVals[v.key] = 1.2;
+      else if (v.key === 'H%') defaultVals[v.key] = 80;
+      else defaultVals[v.key] = 10;
     });
     return defaultVals;
   });
+
+  // Xác định khoảng (range) cho các thanh trượt
+  const getVarRange = (key) => {
+    if (key === 'm' || key === 'mct' || key === 'mdd') return { min: 0.1, max: 200, step: 0.1 };
+    if (key === 'M' || key === 'MA' || key === 'MB') return { min: 1, max: 250, step: 1 };
+    if (key === 'V') return { min: 0.1, max: 25, step: 0.1 };
+    if (key === 'n') return { min: 0.01, max: 10, step: 0.01 };
+    if (key === 'C' || key === 'Cm') return { min: 0.1, max: 5, step: 0.1 };
+    if (key === 'C%' || key === 'H%') return { min: 1, max: 100, step: 1 };
+    if (key === 'P') return { min: 0.1, max: 10, step: 0.1 };
+    if (key === 'T') return { min: 273, max: 1000, step: 1 };
+    if (key === 'N') return { min: 1e22, max: 1e24, step: 1e22 };
+    if (key.startsWith('d')) return { min: 0.1, max: 5, step: 0.1 };
+    return { min: 0.1, max: 100, step: 0.1 };
+  };
 
   // Kết quả tính toán
   const [result, setResult] = useState({});
@@ -69,11 +90,11 @@ const UniversalFormulaSim = ({ formula }) => {
     }
   };
 
-  // Xác định các nhóm mô phỏng
   const varKeys = formula.variables.map(v => v.key);
-  const isScaleSim = varKeys.includes('m') && varKeys.includes('M'); 
-  const isBeakerSim = varKeys.includes('C') || varKeys.includes('Cm') || varKeys.includes('C%') || (varKeys.includes('V') && !varKeys.includes('P')); 
-  const isGasSim = varKeys.includes('P') || varKeys.includes('T') || varKeys.includes('d'); 
+  const isParticleSim = varKeys.includes('N');
+  const isGasSim = varKeys.includes('P') || varKeys.includes('T') || varKeys.includes('d') || varKeys.includes('dA/kk'); 
+  const isBeakerSim = !isParticleSim && !isGasSim && (varKeys.includes('C') || varKeys.includes('Cm') || varKeys.includes('C%') || varKeys.includes('V')); 
+  const isScaleSim = !isParticleSim && !isGasSim && !isBeakerSim; // Còn lại mặc định là cái cân
 
   // Màu mô phỏng
   const simColorHex = selectedElement 
@@ -108,11 +129,10 @@ const UniversalFormulaSim = ({ formula }) => {
         <div className="flex gap-8 items-end h-[250px]">
           {formula.variables.filter(v => v.key !== targetVarKey).map(v => {
             const val = inputs[v.key];
-            // Xác định max range
-            let max = 10;
-            if (v.key === 'm') max = 100;
-            if (v.key === 'M') max = 200;
-            if (v.key === 'V') max = 2;
+            const range = getVarRange(v.key);
+            
+            // Xử lý hiển thị slider an toàn
+            const percent = Math.min(Math.max((val - range.min) / (range.max - range.min) * 100, 0), 100);
             
             return (
               <div key={v.key} className="flex flex-col items-center h-full">
@@ -125,23 +145,23 @@ const UniversalFormulaSim = ({ formula }) => {
                 <div className="relative h-[180px] w-8 flex justify-center group">
                   <div className="absolute top-0 bottom-0 w-2 bg-gray-300 rounded-full" />
                   <input 
-                    type="range" min="0.01" max={max} step="0.01" 
+                    type="range" min={range.min} max={range.max} step={range.step} 
                     value={val} 
                     onChange={(e) => handleInputChange(v.key, e.target.value)}
                     className="absolute w-[180px] h-8 -rotate-90 appearance-none bg-transparent cursor-ns-resize z-10"
                     style={{ top: '75px', transformOrigin: 'center' }}
                   />
-                  {/* Custom Thumb (Thumb mặc định bị ẩn bởi CSS, giả lập ở đây) */}
+                  {/* Custom Thumb */}
                   <motion.div 
                     className="absolute w-12 h-6 bg-[#5c9ce6] border-2 border-[#4a80bc] rounded-md shadow-md flex items-center justify-center text-white text-[10px] font-bold pointer-events-none"
-                    style={{ bottom: `${(val / max) * 100}%`, marginBottom: '-12px' }}
+                    style={{ bottom: `${percent}%`, marginBottom: '-12px' }}
                   >
                     |||
                   </motion.div>
                 </div>
                 
                 <div className="mt-4 font-mono text-[14px] font-black text-[#34495e]">
-                  {val.toFixed(2)}
+                  {v.key === 'N' ? val.toExponential(2) : val.toFixed(2)}
                 </div>
               </div>
             );
@@ -232,8 +252,35 @@ const UniversalFormulaSim = ({ formula }) => {
             </div>
           )}
 
-          {/* VISUAL: Cân điện tử (Mặc định cho các công thức còn lại) */}
-          {!isBeakerSim && !isGasSim && (
+          {/* VISUAL: Hạt vi mô (Kính hiển vi) */}
+          {isParticleSim && (
+            <div className="relative w-[240px] h-[240px] rounded-full border-[8px] border-gray-800 bg-gray-900 overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              {/* Ánh sáng đèn kính hiển vi */}
+              <div className="absolute inset-0 bg-radial-gradient from-white/10 to-transparent pointer-events-none" />
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 text-center z-20 bg-black/40 px-3 py-1 rounded-full border border-white/10">
+                <div className="text-[14px] font-black text-amber-400">{(inputs.N || result.N || 0).toExponential(3)} hạt</div>
+              </div>
+              {/* Particles */}
+              {[...Array(Math.min(Math.floor((inputs.n || result.n || 1) * 30), 100))].map((_, i) => (
+                <motion.div key={i} className="absolute rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+                  style={{ 
+                    width: Math.random() * 6 + 4, height: Math.random() * 6 + 4,
+                    backgroundColor: simColorHex,
+                    left: `${20 + Math.random() * 60}%`, top: `${20 + Math.random() * 60}%`
+                  }}
+                  animate={{ 
+                    x: [(Math.random()-0.5)*40, (Math.random()-0.5)*40],
+                    y: [(Math.random()-0.5)*40, (Math.random()-0.5)*40],
+                    opacity: [0.5, 1, 0.5]
+                  }}
+                  transition={{ repeat: Infinity, duration: Math.random() * 3 + 2, ease: "easeInOut", repeatType: 'mirror' }}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* VISUAL: Cân điện tử (Mặc định cho khối lượng) */}
+          {isScaleSim && (
             <div className="flex flex-col items-center">
               <motion.div 
                 animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -244,7 +291,7 @@ const UniversalFormulaSim = ({ formula }) => {
               <div className="w-48 h-8 bg-gray-300 rounded-t-xl border-b-4 border-gray-400 mt-[-8px] z-0" />
               <div className="w-56 h-16 bg-[#2c3e50] rounded-xl flex items-center justify-center shadow-2xl relative">
                 <div className="w-40 h-10 bg-[#9ea79a] rounded flex items-center justify-end px-3 font-mono text-[24px] font-black text-gray-900 border-inset border-2 border-[#7a8276] shadow-inner">
-                  {(inputs.m || result.m || inputs.n || result.n || 0).toFixed(2)}
+                  {(inputs.m || inputs.mct || inputs.mdd || result.m || result.mct || result.mdd || 0).toFixed(2)} g
                 </div>
               </div>
             </div>
@@ -263,18 +310,18 @@ const UniversalFormulaSim = ({ formula }) => {
             <motion.div 
               className="absolute bottom-0 w-full"
               style={{ backgroundColor: `rgb(${simColorRgb})` }}
-              animate={{ height: `${Math.min(((result[targetVarKey] || 0) / (isBeakerSim ? 5 : 100)) * 100, 100)}%` }}
+              animate={{ height: `${Math.min(Math.max((result[targetVarKey] || 0) / getVarRange(targetVarKey).max * 100, 0), 100)}%` }}
               transition={{ type: "spring", stiffness: 80 }}
             />
             {/* Mũi tên chỉ thị kết quả */}
             <motion.div 
               className="absolute -right-10 flex items-center pointer-events-none"
-              animate={{ bottom: `${Math.min(((result[targetVarKey] || 0) / (isBeakerSim ? 5 : 100)) * 100, 100)}%`, marginBottom: '-10px' }}
+              animate={{ bottom: `${Math.min(Math.max((result[targetVarKey] || 0) / getVarRange(targetVarKey).max * 100, 0), 100)}%`, marginBottom: '-10px' }}
               transition={{ type: "spring", stiffness: 80 }}
             >
               <div className="w-0 h-0 border-t-[10px] border-t-transparent border-r-[15px] border-r-purple-700 border-b-[10px] border-b-transparent mr-1" />
-              <div className="font-mono text-[14px] font-black text-purple-900 whitespace-nowrap bg-white/80 px-1 rounded">
-                {(result[targetVarKey] || 0).toFixed(3)}
+              <div className="font-mono text-[12px] font-black text-purple-900 whitespace-nowrap bg-white/80 px-1 rounded border border-purple-200">
+                {targetVarKey === 'N' ? (result[targetVarKey] || 0).toExponential(2) : (result[targetVarKey] || 0).toFixed(2)}
               </div>
             </motion.div>
           </div>
