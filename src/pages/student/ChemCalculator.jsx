@@ -4,6 +4,35 @@ import { Link } from 'react-router-dom';
 import { CHEM_FORMULAS, QUICK_FORMULAS, UNIT_CONVERSIONS } from '@/data/chemFormulas';
 import { UniversalFormulaSim } from '@/components/simulations';
 
+const CATEGORY_ICONS = {
+  basic: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+    </svg>
+  ),
+  concentration: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.054.585M8 6h8l1 3H7l1-3zM9 20h6a2 2 0 002-2V9H7v9a2 2 0 002 2z" />
+    </svg>
+  ),
+  gases: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+    </svg>
+  ),
+  reaction: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+    </svg>
+  ),
+  advanced: (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.054.585M8 6h8l1 3H7l1-3zM9 20h6a2 2 0 002-2V9H7v9a2 2 0 002 2z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 11v4m0 0l-2-2m2 2l2-2" />
+    </svg>
+  ),
+};
+
 const ChemCalculator = () => {
   const [selectedGroup, setSelectedGroup] = useState('basic');
   const [selectedFormula, setSelectedFormula] = useState(null);
@@ -127,8 +156,10 @@ const ChemCalculator = () => {
               <div className="grid grid-cols-5 gap-2">
                 {Object.entries(CHEM_FORMULAS).map(([key, data]) => (
                   <button key={key} onClick={() => { setSelectedGroup(key); setSelectedFormula(null); setResult(null); }}
-                    className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${selectedGroup === key ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-viet-bg text-viet-text-light hover:bg-viet-green/10'}`}>
-                    <span className="text-[18px]">{data.icon}</span>
+                    className={`flex flex-col items-center gap-2 p-3 rounded-2xl transition-all ${selectedGroup === key ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-viet-bg text-viet-text-light hover:bg-viet-green/10'}`}>
+                    <div className={`${selectedGroup === key ? 'text-white' : 'text-viet-green'}`}>
+                      {CATEGORY_ICONS[key] || data.icon}
+                    </div>
                     <span className="text-[9px] font-black text-center leading-tight h-[24px] flex items-center">{data.label.split(' ')[0]}</span>
                   </button>
                 ))}
