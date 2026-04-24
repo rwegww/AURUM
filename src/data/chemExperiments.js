@@ -1,0 +1,478 @@
+/**
+ * Bộ dữ liệu thí nghiệm cho Máy tính Hóa học
+ * Mỗi thí nghiệm gắn với 1 công thức (formulaId) và có nhiều bài tập (tasks)
+ */
+
+export const CHEM_EXPERIMENTS = {
+  // === LỚP 8 ===
+  mol_mass: {
+    title: 'Xác định số mol chất rắn',
+    icon: '⚖️',
+    difficulty: 'Dễ',
+    grade: 8,
+    description: 'Cân khối lượng chất rắn trên cân điện tử và tính số mol.',
+    scenario: 'Bạn có một mẫu sắt (Fe) trên bàn cân. Cân điện tử hiển thị khối lượng mẫu. Hãy tính số mol sắt trong mẫu.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Cân được 11,2g sắt (Fe, M = 56 g/mol). Tính số mol Fe.',
+        givenValues: { m: 11.2, M: 56 },
+        expectedResult: { n: 0.2 },
+        hint: 'Áp dụng n = m / M',
+      },
+      {
+        id: 2,
+        question: 'Cân được 4,6g natri (Na, M = 23 g/mol). Tính số mol Na.',
+        givenValues: { m: 4.6, M: 23 },
+        expectedResult: { n: 0.2 },
+        hint: 'n = 4,6 / 23',
+      },
+      {
+        id: 3,
+        question: 'Cần lấy 0,5 mol đồng (Cu, M = 64 g/mol). Tính khối lượng cần cân.',
+        givenValues: { n: 0.5, M: 64 },
+        expectedResult: { m: 32 },
+        hint: 'm = n × M',
+      },
+    ],
+  },
+  mol_volume: {
+    title: 'Đo thể tích khí và tính số mol',
+    icon: '🫧',
+    difficulty: 'Dễ',
+    grade: 8,
+    description: 'Thu khí sinh ra từ phản ứng vào ống đong và tính số mol khí ở đktc.',
+    scenario: 'Trong phản ứng giữa kẽm và axit HCl, khí H₂ thoát ra được thu vào bình. Đo thể tích khí ở điều kiện tiêu chuẩn.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Thu được 4,48 lít khí H₂ ở đktc. Tính số mol H₂.',
+        givenValues: { V: 4.48 },
+        expectedResult: { n: 0.2 },
+        hint: 'n = V / 22,4 = 4,48 / 22,4',
+      },
+      {
+        id: 2,
+        question: 'Cần điều chế 0,25 mol O₂ ở đktc. Tính thể tích khí thu được.',
+        givenValues: { n: 0.25 },
+        expectedResult: { V: 5.6 },
+        hint: 'V = n × 22,4',
+      },
+    ],
+  },
+  mol_particles: {
+    title: 'Đếm số hạt nguyên tử',
+    icon: '🔢',
+    difficulty: 'Trung bình',
+    grade: 8,
+    description: 'Tính số hạt nguyên tử/phân tử từ số mol chất.',
+    scenario: 'Phòng thí nghiệm cần biết số nguyên tử trong một mẫu chất để phân tích cấu trúc.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Tính số nguyên tử trong 2 mol nhôm (Al).',
+        givenValues: { n: 2 },
+        expectedResult: { N: 1.2044e24 },
+        hint: 'N = n × Nₐ = 2 × 6,022 × 10²³',
+      },
+      {
+        id: 2,
+        question: 'Một mẫu có 3,011 × 10²³ phân tử nước. Tính số mol H₂O.',
+        givenValues: { N: 3.011e23 },
+        expectedResult: { n: 0.5 },
+        hint: 'n = N / Nₐ',
+      },
+    ],
+  },
+  mass_from_mol: {
+    title: 'Cân chất cho phản ứng',
+    icon: '⚖️',
+    difficulty: 'Dễ',
+    grade: 8,
+    description: 'Tính khối lượng chất cần dùng cho phản ứng từ số mol.',
+    scenario: 'Bạn cần chuẩn bị hóa chất cho thí nghiệm. Biết số mol cần dùng, tính khối lượng cần cân.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Cần 0,3 mol CaCO₃ (M = 100 g/mol). Tính khối lượng cần cân.',
+        givenValues: { n: 0.3, M: 100 },
+        expectedResult: { m: 30 },
+        hint: 'm = n × M = 0,3 × 100',
+      },
+      {
+        id: 2,
+        question: 'Có 9,8g H₂SO₄ (M = 98 g/mol). Tính số mol.',
+        givenValues: { m: 9.8, M: 98 },
+        expectedResult: { n: 0.1 },
+        hint: 'n = m / M',
+      },
+    ],
+  },
+  volume_gas: {
+    title: 'Thu khí từ phản ứng nhiệt phân',
+    icon: '💨',
+    difficulty: 'Dễ',
+    grade: 8,
+    description: 'Nhiệt phân KMnO₄ để thu khí O₂ và đo thể tích ở đktc.',
+    scenario: 'Nhiệt phân KMnO₄ trong ống nghiệm, khí O₂ được thu bằng phương pháp đẩy nước.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Điều chế được 0,15 mol O₂. Tính thể tích ở đktc.',
+        givenValues: { n: 0.15 },
+        expectedResult: { V: 3.36 },
+        hint: 'V = 0,15 × 22,4',
+      },
+    ],
+  },
+  concentration_percent: {
+    title: 'Pha dung dịch muối ăn',
+    icon: '🧂',
+    difficulty: 'Trung bình',
+    grade: 8,
+    description: 'Hòa tan muối ăn NaCl vào nước và tính nồng độ phần trăm.',
+    scenario: 'Bạn hòa tan muối ăn vào nước cất để pha dung dịch NaCl dùng cho thí nghiệm.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Hòa tan 10g NaCl vào 90g nước. Tính nồng độ % dung dịch.',
+        givenValues: { mct: 10, mdd: 100 },
+        expectedResult: { C: 10 },
+        hint: 'C% = (10/100) × 100 = 10%',
+      },
+      {
+        id: 2,
+        question: 'Cần pha 200g dung dịch NaCl 5%. Tính khối lượng muối cần dùng.',
+        givenValues: { C: 5, mdd: 200 },
+        expectedResult: { mct: 10 },
+        hint: 'mct = C% × mdd / 100',
+      },
+    ],
+  },
+  mass_solution: {
+    title: 'Cân khối lượng dung dịch',
+    icon: '🥤',
+    difficulty: 'Dễ',
+    grade: 8,
+    description: 'Tính khối lượng dung dịch từ chất tan và dung môi.',
+    scenario: 'Hòa tan đường vào nước, cân tổng khối lượng dung dịch thu được.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Hòa tan 20g đường vào 180g nước. Tính khối lượng dung dịch.',
+        givenValues: { mct: 20, mdm: 180 },
+        expectedResult: { mdd: 200 },
+        hint: 'mdd = mct + mdm',
+      },
+    ],
+  },
+
+  // === LỚP 9 ===
+  concentration_mol: {
+    title: 'Pha dung dịch NaOH theo nồng độ mol',
+    icon: '🧫',
+    difficulty: 'Trung bình',
+    grade: 9,
+    description: 'Hòa tan NaOH rắn vào nước cất để pha dung dịch có nồng độ mol xác định.',
+    scenario: 'Phòng thí nghiệm cần dung dịch NaOH 0,5M để chuẩn độ axit.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Hòa tan 0,1 mol NaOH vào nước, thu được 500 mL = 0,5L dung dịch. Tính Cₘ.',
+        givenValues: { n: 0.1, V: 0.5 },
+        expectedResult: { Cm: 0.2 },
+        hint: 'Cₘ = n / V = 0,1 / 0,5',
+      },
+      {
+        id: 2,
+        question: 'Cần 0,25 mol HCl từ dung dịch HCl 2M. Tính thể tích dung dịch cần lấy.',
+        givenValues: { Cm: 2, n: 0.25 },
+        expectedResult: { V: 0.125 },
+        hint: 'V = n / Cₘ = 0,25 / 2 = 0,125 L = 125 mL',
+      },
+    ],
+  },
+  dilution: {
+    title: 'Pha loãng dung dịch HCl',
+    icon: '💧',
+    difficulty: 'Trung bình',
+    grade: 9,
+    description: 'Pha loãng dung dịch HCl đặc để được nồng độ mong muốn.',
+    scenario: 'Bạn có dung dịch HCl đặc và cần pha loãng để thực hiện phản ứng.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Pha loãng 100 mL HCl 2M thành dung dịch 0,5M. Tính thể tích sau pha loãng.',
+        givenValues: { C1: 2, V1: 100, C2: 0.5 },
+        expectedResult: { V2: 400 },
+        hint: 'V₂ = C₁V₁ / C₂ = 2×100 / 0,5 = 400 mL',
+      },
+      {
+        id: 2,
+        question: 'Lấy 50 mL HCl 6M pha thành 300 mL. Tính nồng độ sau pha loãng.',
+        givenValues: { C1: 6, V1: 50, V2: 300 },
+        expectedResult: { C2: 1 },
+        hint: 'C₂ = C₁V₁ / V₂',
+      },
+    ],
+  },
+  yield: {
+    title: 'Đánh giá hiệu suất tổng hợp CaO',
+    icon: '🏭',
+    difficulty: 'Khó',
+    grade: 9,
+    description: 'Nung CaCO₃ để sản xuất CaO, so sánh lượng thực tế và lý thuyết.',
+    scenario: 'Nhà máy nung vôi: CaCO₃ → CaO + CO₂. So sánh sản phẩm thu được với lý thuyết.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Lý thuyết thu được 56g CaO, thực tế chỉ thu 44,8g. Tính hiệu suất.',
+        givenValues: { actual: 44.8, theory: 56 },
+        expectedResult: { H: 80 },
+        hint: 'H% = (44,8 / 56) × 100 = 80%',
+      },
+      {
+        id: 2,
+        question: 'Hiệu suất phản ứng 75%, lý thuyết sản xuất 100g CaO. Tính lượng thực tế.',
+        givenValues: { H: 75, theory: 100 },
+        expectedResult: { actual: 75 },
+        hint: 'Lượng thực tế = H% × lý thuyết / 100',
+      },
+    ],
+  },
+
+  // === LỚP 10 ===
+  ideal_gas: {
+    title: 'Đo áp suất khí trong bình kín',
+    icon: '🎈',
+    difficulty: 'Khó',
+    grade: 10,
+    description: 'Bơm khí vào bình kín, đo nhiệt độ và tính áp suất bằng phương trình PV = nRT.',
+    scenario: 'Một bình kín chứa khí N₂. Dùng nhiệt kế và áp kế để xác định trạng thái khí.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Bình 10L chứa 0,5 mol N₂ ở 300K. Tính áp suất (R = 0,0821).',
+        givenValues: { n: 0.5, V: 10, T: 300 },
+        expectedResult: { P: 1.2315 },
+        hint: 'P = nRT / V = 0,5 × 0,0821 × 300 / 10',
+      },
+      {
+        id: 2,
+        question: '2 mol khí O₂ ở 1 atm, 273K. Tính thể tích.',
+        givenValues: { n: 2, P: 1, T: 273 },
+        expectedResult: { V: 44.8146 },
+        hint: 'V = nRT / P',
+      },
+    ],
+  },
+  density_ratio_b: {
+    title: 'So sánh tỉ khối hai khí',
+    icon: '⚖️',
+    difficulty: 'Trung bình',
+    grade: 10,
+    description: 'So sánh khối lượng mol của hai loại khí để xác định khí nào nặng hơn.',
+    scenario: 'So sánh tỉ khối của khí SO₂ với khí O₂ để xác định khí nào nặng hơn.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Tính tỉ khối của SO₂ (M=64) so với O₂ (M=32).',
+        givenValues: { MA: 64, MB: 32 },
+        expectedResult: { d: 2 },
+        hint: 'd = 64 / 32 = 2 → SO₂ nặng gấp 2 lần O₂',
+      },
+    ],
+  },
+  density_ratio_air: {
+    title: 'Xác định khí nặng hay nhẹ hơn không khí',
+    icon: '🌬️',
+    difficulty: 'Dễ',
+    grade: 10,
+    description: 'Tính tỉ khối so với không khí để biết khí bay lên hay chìm xuống.',
+    scenario: 'Xác định khí CO₂ nặng hay nhẹ hơn không khí để chọn cách thu khí.',
+    tasks: [
+      {
+        id: 1,
+        question: 'CO₂ có M = 44 g/mol. Tính tỉ khối so với không khí.',
+        givenValues: { MA: 44 },
+        expectedResult: { d: 1.5172 },
+        hint: 'd = 44 / 29 ≈ 1,52 → CO₂ nặng hơn không khí',
+      },
+      {
+        id: 2,
+        question: 'Một khí có tỉ khối so với không khí là 0,55. Tìm khối lượng mol.',
+        givenValues: { d: 0.55 },
+        expectedResult: { MA: 15.95 },
+        hint: 'M = d × 29 ≈ 16 → Khí CH₄ (metan)',
+      },
+    ],
+  },
+  density_ratio_h2: {
+    title: 'Tỉ khối so với khí H₂',
+    icon: '💨',
+    difficulty: 'Dễ',
+    grade: 10,
+    description: 'So sánh khối lượng mol khí với H₂ - khí nhẹ nhất.',
+    scenario: 'Xác định khí X nặng gấp bao nhiêu lần H₂.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Khí Cl₂ có M = 71 g/mol. Tính tỉ khối so với H₂.',
+        givenValues: { MA: 71 },
+        expectedResult: { d: 35.5 },
+        hint: 'd = 71 / 2 = 35,5',
+      },
+    ],
+  },
+  density: {
+    title: 'Đo khối lượng riêng dung dịch',
+    icon: '🧪',
+    difficulty: 'Trung bình',
+    grade: 10,
+    description: 'Cân và đo thể tích dung dịch để xác định khối lượng riêng.',
+    scenario: 'Dùng cân và ống đong để xác định khối lượng riêng dung dịch H₂SO₄.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Cân 50 mL dung dịch H₂SO₄ được 68g. Tính khối lượng riêng.',
+        givenValues: { m: 68, V: 50 },
+        expectedResult: { D: 1.36 },
+        hint: 'D = 68 / 50 = 1,36 g/mL',
+      },
+    ],
+  },
+
+  // === LỚP 11 ===
+  reaction_rate: {
+    title: 'Đo tốc độ phản ứng phân hủy H₂O₂',
+    icon: '⏱️',
+    difficulty: 'Khó',
+    grade: 11,
+    description: 'Theo dõi sự giảm nồng độ H₂O₂ theo thời gian khi có xúc tác MnO₂.',
+    scenario: 'Phân hủy H₂O₂ với xúc tác MnO₂: 2H₂O₂ → 2H₂O + O₂. Đo nồng độ theo thời gian.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Nồng độ H₂O₂ giảm 0,02 mol/L trong 10 giây. Tính tốc độ phản ứng.',
+        givenValues: { dC: 0.02, dt: 10 },
+        expectedResult: { v: 0.002 },
+        hint: 'v = |ΔC / Δt| = 0,02 / 10 = 0,002 mol/L·s',
+      },
+      {
+        id: 2,
+        question: 'Tốc độ phản ứng là 0,005 mol/L·s. Sau 20s nồng độ giảm bao nhiêu?',
+        givenValues: { v: 0.005, dt: 20 },
+        expectedResult: { dC: 0.1 },
+        hint: 'ΔC = v × Δt = 0,005 × 20',
+      },
+    ],
+  },
+  equilibrium_kc: {
+    title: 'Xác định hằng số cân bằng',
+    icon: '⚖️',
+    difficulty: 'Khó',
+    grade: 11,
+    description: 'Đo nồng độ các chất tại trạng thái cân bằng và tính Kc.',
+    scenario: 'Phản ứng thuận nghịch A ⇌ B đạt cân bằng. Đo nồng độ A và B.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Tại cân bằng: [A] = 0,2 mol/L, [B] = 0,8 mol/L. Tính Kc.',
+        givenValues: { A: 0.2, B: 0.8 },
+        expectedResult: { Kc: 4 },
+        hint: 'Kc = [B] / [A] = 0,8 / 0,2 = 4',
+      },
+    ],
+  },
+  ph: {
+    title: 'Đo pH dung dịch axit',
+    icon: '🧪',
+    difficulty: 'Trung bình',
+    grade: 11,
+    description: 'Sử dụng máy đo pH hoặc giấy quỳ để xác định độ axit-bazơ.',
+    scenario: 'Nhúng điện cực pH vào dung dịch HCl và đọc kết quả.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Dung dịch HCl có [H⁺] = 0,001 mol/L. Tính pH.',
+        givenValues: { H: 0.001 },
+        expectedResult: { pH: 3 },
+        hint: 'pH = -log(0,001) = -log(10⁻³) = 3',
+      },
+      {
+        id: 2,
+        question: 'Dung dịch có pH = 5. Tính nồng độ H⁺.',
+        givenValues: { pH: 5 },
+        expectedResult: { H: 0.00001 },
+        hint: '[H⁺] = 10⁻⁵ = 0,00001 mol/L',
+      },
+    ],
+  },
+  poh: {
+    title: 'Tính pOH từ pH',
+    icon: '🔵',
+    difficulty: 'Dễ',
+    grade: 11,
+    description: 'Biết pH dung dịch, xác định pOH để đánh giá tính bazơ.',
+    scenario: 'Đo pH dung dịch NaOH rồi tính pOH tương ứng.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Dung dịch NaOH có pH = 12. Tính pOH.',
+        givenValues: { pH: 12 },
+        expectedResult: { pOH: 2 },
+        hint: 'pOH = 14 - pH = 14 - 12 = 2',
+      },
+    ],
+  },
+
+  // === LỚP 12 ===
+  faraday: {
+    title: 'Điện phân dung dịch CuSO₄',
+    icon: '⚡',
+    difficulty: 'Khó',
+    grade: 12,
+    description: 'Điện phân dung dịch CuSO₄ bằng điện cực trơ, cân Cu bám trên catot.',
+    scenario: 'Cho dòng điện qua dung dịch CuSO₄, đồng bám lên catot: Cu²⁺ + 2e → Cu.',
+    tasks: [
+      {
+        id: 1,
+        question: 'Điện phân CuSO₄ với I = 5A trong 3860s. Cu (A=64, n=2). Tính khối lượng Cu.',
+        givenValues: { A: 64, I: 5, t: 3860, n: 2 },
+        expectedResult: { m: 6.4 },
+        hint: 'm = A×I×t / (n×F) = 64×5×3860 / (2×96500)',
+      },
+      {
+        id: 2,
+        question: 'Muốn thu 3,2g Cu (A=64, n=2) với I = 2A. Tính thời gian cần.',
+        givenValues: { m: 3.2, A: 64, I: 2, n: 2 },
+        expectedResult: { t: 4825 },
+        hint: 't = m×n×F / (A×I)',
+      },
+    ],
+  },
+  polymerization: {
+    title: 'Xác định hệ số trùng hợp polietilen',
+    icon: '🔗',
+    difficulty: 'Trung bình',
+    grade: 12,
+    description: 'Từ khối lượng mol của polime, tính hệ số trùng hợp.',
+    scenario: 'Polietilen (PE) được tạo từ monome etilen CH₂=CH₂ (M = 28 g/mol).',
+    tasks: [
+      {
+        id: 1,
+        question: 'Polietilen có M = 14000 g/mol. Monome etilen M = 28 g/mol. Tính hệ số trùng hợp.',
+        givenValues: { Mp: 14000, Mm: 28 },
+        expectedResult: { n: 500 },
+        hint: 'n = Mp / Mm = 14000 / 28 = 500',
+      },
+      {
+        id: 2,
+        question: 'PVC có hệ số trùng hợp n = 400. Monome vinyl clorua M = 62,5 g/mol. Tính M polime.',
+        givenValues: { n: 400, Mm: 62.5 },
+        expectedResult: { Mp: 25000 },
+        hint: 'Mp = n × Mm',
+      },
+    ],
+  },
+};
