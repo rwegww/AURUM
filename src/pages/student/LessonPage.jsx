@@ -35,10 +35,6 @@ const LessonPage = () => {
       setLesson(lessonData);
       setGradeLessons(listData);
 
-      // Show story if not in lecture mode and slides exist
-      if (mode !== 'lecture' && lessonData.storySlides?.length > 0) {
-        setShowStory(true);
-      }
     } catch (err) {
       console.error(t('lesson_page.error.fetch'), err);
     } finally {
@@ -69,13 +65,6 @@ const LessonPage = () => {
 
   return (
     <div className="min-h-screen bg-viet-bg pt-[70px]">
-      {showStory && lesson.storySlides?.length > 0 && (
-        <StoryIntro 
-          slides={lesson.storySlides} 
-          onComplete={() => setShowStory(false)}
-          onSkip={() => setShowStory(false)}
-        />
-      )}
       <div className="flex relative">
         {/* Sidebar - Only show for logged in users or if desired for all */}
         {isLoggedIn && (

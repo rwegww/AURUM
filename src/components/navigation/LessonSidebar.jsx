@@ -72,25 +72,6 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
           </div>
         </div>
 
-        {/* Progress Card */}
-        <div className="mt-6 p-4 bg-white rounded-2xl border border-viet-border shadow-sm">
-          <div className="flex justify-between items-end mb-2">
-            <div className="flex flex-col">
-              <span className="text-[9px] font-black text-[#b4bac2] uppercase tracking-wider">Tiến độ khóa học</span>
-              <span className="text-[16px] font-black text-viet-text">{calculateProgress()}%</span>
-            </div>
-            <span className="text-[10px] font-bold text-viet-green bg-viet-green/10 px-2 py-0.5 rounded-md">
-              {lessons.findIndex(l => l.lessonId === currentLessonId) + 1}/{lessons.length} Bài
-            </span>
-          </div>
-          <div className="w-full h-2 bg-[#f0f2f5] rounded-full overflow-hidden">
-            <motion.div 
-              initial={{ width: 0 }}
-              animate={{ width: `${calculateProgress()}%` }}
-              className="h-full bg-gradient-to-r from-viet-green to-[#88d642] shadow-[0_0_10px_rgba(118,192,52,0.3)]" 
-            />
-          </div>
-        </div>
       </div>
 
       <div className="flex-1 p-4 pt-6">
