@@ -62,13 +62,35 @@ export const Mission = {
 
     if (pError) throw pError;
 
+    // 2.5 Get user streak info for syncing
+    const { data: user, error: uError } = await supabase
+      .from('users')
+      .select('streak_count, today_online_minutes, today_lesson_completed')
+      .eq('id', userId)
+      .single();
+
     // 3. Merge data
     return missions.map(mission => {
-      const userProgress = progress.find(p => p.mission_id === mission.id);
+      let userProgress = progress.find(p => p.mission_id === mission.id);
+      let currentCount = userProgress ? userProgress.current_count : 0;
+      let isCompleted = userProgress ? userProgress.is_completed : false;
+
+      // Special handling for streak-based missions
+      if (mission.action_type === 'streak' && user) {
+        currentCount = user.streak_count;
+        isCompleted = currentCount >= mission.target_count;
+      }
+      
+      // Special handling for daily streak lighting mission
+      if (mission.action_type === 'streak_light' && user) {
+        currentCount = (user.today_online_minutes >= 10 || user.today_lesson_completed) ? 1 : 0;
+        isCompleted = currentCount >= mission.target_count;
+      }
+
       return {
         ...mission,
-        currentCount: userProgress ? userProgress.current_count : 0,
-        isCompleted: userProgress ? userProgress.is_completed : false,
+        currentCount,
+        isCompleted,
         isClaimed: userProgress ? userProgress.is_claimed : false,
         updatedAt: userProgress ? userProgress.updated_at : null
       };
@@ -114,6 +136,30 @@ export const Mission = {
         }, { onConflict: 'user_id,mission_id' });
 
       if (upsertError) console.error(`Error updating mission ${mission.id}:`, upsertError);
+    }
+  },
+
+  // Sync streak progress (called when streak changes)
+  async syncStreakProgress(userId, streakCount) {
+    const { data: missions, error: mError } = await supabase
+      .from('missions')
+      .select('*')
+      .eq('action_type', 'streak');
+
+    if (mError || !missions) return;
+
+    for (const mission of missions) {
+      if (streakCount >= mission.target_count) {
+        await supabase
+          .from('user_missions')
+          .upsert({
+            user_id: userId,
+            mission_id: mission.id,
+            current_count: streakCount,
+            is_completed: true,
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'user_id,mission_id' });
+      }
     }
   },
 

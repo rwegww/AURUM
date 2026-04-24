@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
-import { Link } from 'react-router-dom';
+import { CORE_KNOWLEDGE_LESSONS } from '@/data/coreKnowledge';
+import { Link, useNavigate } from 'react-router-dom';
 
 const CATEGORY_META = {
   'Đại cương': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2v20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m4.93 19.07 14.14-14.14"/></svg>, color: 'text-blue-500', bg: 'bg-blue-500/10' },
@@ -21,6 +22,12 @@ const CATEGORY_META = {
   'Phi kim': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>, color: 'text-teal-500', bg: 'bg-teal-500/10' },
   'Hữu cơ': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m10 11-8 8v3h3l8-8"/><path d="m18 12.5 3-3-2.5-2.5-3 3"/><path d="m9.5 22.5 7.5-7.5"/><path d="m12.5 15.5 2 2"/><path d="m20 7 2 2"/><path d="m7.5 14.5 2 2"/><path d="m16.5 10.5 2 2"/><path d="m17.5 2.5 4 4"/></svg>, color: 'text-green-600', bg: 'bg-green-600/10' },
   'An toàn': { icon: (props) => <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>, color: 'text-red-600', bg: 'bg-red-600/10' },
+};
+
+const GRADE_COLORS = {
+  10: { bg: 'bg-blue-500', text: 'text-blue-600', light: 'bg-blue-50', border: 'border-blue-200' },
+  11: { bg: 'bg-purple-500', text: 'text-purple-600', light: 'bg-purple-50', border: 'border-purple-200' },
+  12: { bg: 'bg-amber-500', text: 'text-amber-600', light: 'bg-amber-50', border: 'border-amber-200' },
 };
 
 const Globe = (props) => (
@@ -65,6 +72,7 @@ const FallingSymbol = ({ x, delay, duration, opacity, size, blur, text }) => (
 
 const KnowledgeMap = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -82,6 +90,9 @@ const KnowledgeMap = () => {
   const handleTopicClick = (topic) => {
     setSelectedTopic(topic);
   };
+
+  // Get lessons for the selected topic
+  const relatedLessons = selectedTopic ? (CORE_KNOWLEDGE_LESSONS[selectedTopic.id] || []) : [];
 
   return (
     <div className="min-h-screen bg-[#fffbf0] pt-32 pb-20 px-6 relative overflow-hidden">
@@ -118,19 +129,18 @@ const KnowledgeMap = () => {
               <span className="text-viet-green">KIẾN THỨC</span>
             </h1>
             <p className="mt-4 text-xl text-viet-text-light font-bold max-w-2xl">
-              Hệ thống hóa toàn bộ lộ trình hóa học phổ thông. Nhấn vào một chủ đề để khám phá chiều sâu lý thuyết và các ứng dụng.
+              Hệ thống hóa toàn bộ lộ trình hóa học phổ thông. Nhấn vào một chủ đề để khám phá chiều sâu lý thuyết và đi đến bài học liên quan.
             </p>
           </motion.div>
         </header>
 
         {/* Map Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-12 items-start">
           
           <div className="space-y-12">
             {categoryList.map((catName, catIdx) => {
-              const Meta = CATEGORY_META[catName] || { icon: Info, color: 'text-gray-400', bg: 'bg-gray-100' };
+              const Meta = CATEGORY_META[catName] || { icon: Globe, color: 'text-gray-400', bg: 'bg-gray-100' };
               const Icon = Meta.icon;
-              const isActive = activeCategory === catName;
 
               return (
                 <motion.section 
@@ -149,26 +159,40 @@ const KnowledgeMap = () => {
                   </div>
 
                   <div className="flex flex-wrap gap-4">
-                    {categories[catName].map((topic, topicIdx) => (
-                      <motion.button
-                        key={topic.id}
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleTopicClick(topic)}
-                        className={`px-6 py-4 rounded-3xl border-2 transition-all flex items-center gap-3 shadow-sm ${
-                          selectedTopic?.id === topic.id 
-                            ? 'bg-viet-green border-viet-green text-white shadow-viet-green/30' 
-                            : 'bg-white border-viet-border text-viet-text hover:border-viet-green/40'
-                        }`}
-                      >
-                        <span className="text-[14px] font-bold tracking-tight">{topic.title}</span>
-                        {selectedTopic?.id === topic.id ? (
-                           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
-                        ) : (
-                          <div className={`w-1.5 h-1.5 rounded-full ${Meta.color.replace('text-', 'bg-')}`} />
-                        )}
-                      </motion.button>
-                    ))}
+                    {categories[catName].map((topic) => {
+                      const lessons = CORE_KNOWLEDGE_LESSONS[topic.id] || [];
+                      const hasLessons = lessons.length > 0;
+                      
+                      return (
+                        <motion.button
+                          key={topic.id}
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleTopicClick(topic)}
+                          className={`px-6 py-4 rounded-3xl border-2 transition-all flex items-center gap-3 shadow-sm ${
+                            selectedTopic?.id === topic.id 
+                              ? 'bg-viet-green border-viet-green text-white shadow-viet-green/30' 
+                              : 'bg-white border-viet-border text-viet-text hover:border-viet-green/40'
+                          }`}
+                        >
+                          <span className="text-[14px] font-bold tracking-tight">{topic.title}</span>
+                          {hasLessons && (
+                            <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+                              selectedTopic?.id === topic.id
+                                ? 'bg-white/20 text-white'
+                                : 'bg-viet-green/10 text-viet-green'
+                            }`}>
+                              {lessons.length}
+                            </span>
+                          )}
+                          {selectedTopic?.id === topic.id ? (
+                             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>
+                          ) : (
+                            <div className={`w-1.5 h-1.5 rounded-full ${Meta.color.replace('text-', 'bg-')}`} />
+                          )}
+                        </motion.button>
+                      );
+                    })}
                   </div>
                 </motion.section>
               );
@@ -207,6 +231,47 @@ const KnowledgeMap = () => {
                     {selectedTopic.formula && (
                       <div className="bg-slate-50 p-6 rounded-3xl mb-8 border border-slate-100 italic text-center font-serif text-lg">
                         {selectedTopic.formula}
+                      </div>
+                    )}
+
+                    {/* === KIẾN THỨC CỐT LÕI - Bài học liên quan === */}
+                    {relatedLessons.length > 0 && (
+                      <div className="mb-8">
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="w-6 h-6 bg-viet-green/10 rounded-lg flex items-center justify-center">
+                            <svg className="w-3.5 h-3.5 text-viet-green" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                          </div>
+                          <h4 className="text-[11px] font-black text-viet-text uppercase tracking-widest">
+                            Kiến thức cốt lõi
+                          </h4>
+                        </div>
+                        <div className="space-y-2">
+                          {relatedLessons.map((lesson, idx) => {
+                            const gradeColor = GRADE_COLORS[lesson.classId] || GRADE_COLORS[10];
+                            return (
+                              <motion.button
+                                key={`${lesson.classId}-${lesson.lessonId}-${idx}`}
+                                whileHover={{ x: 4, scale: 1.01 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => navigate(`/lessons/${lesson.classId}/${lesson.lessonId}`)}
+                                className={`w-full flex items-center gap-3 p-3.5 rounded-2xl border-2 ${gradeColor.border} ${gradeColor.light} hover:shadow-md transition-all text-left group/lesson cursor-pointer`}
+                              >
+                                <div className={`w-8 h-8 ${gradeColor.bg} text-white rounded-xl flex items-center justify-center shrink-0 text-[10px] font-black shadow-sm`}>
+                                  {lesson.classId}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-[13px] font-bold text-viet-text truncate group-hover/lesson:text-viet-green transition-colors">
+                                    {lesson.title}
+                                  </p>
+                                  <p className={`text-[10px] font-black ${gradeColor.text} uppercase tracking-wider`}>
+                                    Lớp {lesson.classId}
+                                  </p>
+                                </div>
+                                <svg className={`w-4 h-4 ${gradeColor.text} opacity-0 group-hover/lesson:opacity-100 transition-all shrink-0`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>
+                              </motion.button>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
 
@@ -255,7 +320,7 @@ const KnowledgeMap = () => {
                   </div>
                   <h3 className="text-xl font-black text-viet-text uppercase italic tracking-tight mb-2">Chọn một chủ đề</h3>
                   <p className="text-viet-text-light text-sm font-medium leading-relaxed max-w-[240px]">
-                    Nhấn vào bất kỳ "vệ tinh" kiến thức nào để xem chi tiết lý thuyết và lộ trình học tập.
+                    Nhấn vào bất kỳ "vệ tinh" kiến thức nào để xem chi tiết lý thuyết và đi đến bài học liên quan.
                   </p>
                 </div>
               )}

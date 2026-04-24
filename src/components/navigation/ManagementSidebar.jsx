@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import Avatar from '../common/Avatar';
 
 const ManagementSidebar = ({ menuItems, title }) => {
   const { user, logout } = useAuth();
@@ -28,8 +29,8 @@ const ManagementSidebar = ({ menuItems, title }) => {
           {title}
         </span>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border border-viet-border">
-            <img src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${user?.avatarSeed || user?.username}`} alt="Avatar" className="w-full h-full object-cover" />
+          <div className="w-12 h-12 flex items-center justify-center shrink-0">
+            <Avatar seed={user?.avatarSeed || user?.username} size={42} streakCount={user?.streakCount} level={user?.level} className="w-full h-full" />
           </div>
           <div>
             <p className="text-sm font-bold text-viet-text leading-tight">{user?.username}</p>

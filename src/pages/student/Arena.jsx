@@ -3,6 +3,7 @@ import multiavatar from '@multiavatar/multiavatar/esm';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
+import Avatar from '@/components/common/Avatar';
 
 // ─── AVATAR DATA ──────────────────────────────────────────────────────────────
 // Preset avatar seeds for quick selection
@@ -293,8 +294,8 @@ const StatsPanel = ({ user }) => {
                   {leaderboard.map((p, i) => (
                     <div key={i} className="flex items-center gap-4 py-3 px-3 rounded-2xl hover:bg-white transition-all shadow-sm shadow-transparent hover:shadow-black/5">
                       <span className={`w-5 text-center font-black text-[12px] ${RANK_COLORS[i] || 'text-viet-text/20'}`}>{i + 1}</span>
-                      <div className="w-10 h-10 rounded-xl flex-shrink-0 bg-white shadow-sm border border-black/[0.03] p-1.5">
-                        <img src={getSvgDataUrl(p.avatarSeed)} alt={p.name} className="w-full h-full object-contain" />
+                      <div className="w-10 h-10 rounded-xl flex-shrink-0 bg-white shadow-sm border border-black/[0.03] p-0.5">
+                        <Avatar seed={p.avatarSeed} size={36} streakCount={p.streakCount} level={p.level} className="w-full h-full" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-viet-text font-black text-[13px] truncate">{p.name}</p>
@@ -674,8 +675,8 @@ const RoomBrowserModal = ({ isOpen, onClose, onJoin }) => {
             ) : (
               rooms.map((room) => (
                 <div key={room.id} className="bg-white border border-black/[0.03] rounded-[32px] p-6 flex items-center gap-6 hover:shadow-xl hover:border-viet-green/20 transition-all group">
-                  <div className="w-20 h-20 rounded-3xl bg-black/[0.02] overflow-hidden flex-shrink-0 relative group-hover:scale-105 transition-all">
-                    <img src={getSvgDataUrl(room.host_avatar?.seed || 'host')} className="w-full h-full object-contain p-2" alt="host" />
+                  <div className="w-20 h-20 rounded-3xl bg-black/[0.02] overflow-visible flex-shrink-0 relative group-hover:scale-105 transition-all flex items-center justify-center">
+                    <Avatar seed={room.host_avatar?.seed || 'host'} size={64} streakCount={room.host_avatar?.streakCount} level={room.host_avatar?.level} className="w-full h-full" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">

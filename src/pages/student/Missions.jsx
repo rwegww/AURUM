@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
+import Avatar from '@/components/common/Avatar';
 
 const Missions = () => {
   const { t } = useTranslation();
@@ -113,19 +114,54 @@ const Missions = () => {
         </motion.div>
 
         {/* User Stats Card */}
-        <div className="bg-white rounded-[32px] border-2 border-viet-border p-6 mb-8 flex items-center justify-between shadow-sm">
-           <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-viet-green rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-lg shadow-viet-green/20">
-                {user?.level || 1}
+        <div className="bg-white rounded-[40px] border-2 border-viet-border p-8 mb-8 shadow-xl relative overflow-hidden group">
+           <div className="absolute top-0 right-0 w-64 h-64 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:bg-viet-green/10 transition-colors" />
+           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="flex items-center gap-6">
+                 <div className="w-24 h-24 flex items-center justify-center shrink-0">
+                   <Avatar seed={user?.avatarSeed || user?.username} size={96} streakCount={user?.streakCount} level={user?.level} />
+                 </div>
+                 <div>
+                   <p className="text-[11px] font-black text-viet-text-light/40 uppercase tracking-widest mb-1">{user?.username}</p>
+                   <h2 className="text-3xl font-black text-viet-text italic tracking-tighter uppercase mb-2">
+                     <Trans i18nKey="missions.level_val" values={{ level: user?.level || 1 }}>
+                       Cấp <span className="text-viet-green">{{level: user?.level || 1}}</span>
+                     </Trans>
+                   </h2>
+                   <div className="flex items-center gap-3">
+                      <div className="px-3 py-1 bg-viet-green/10 rounded-full text-[10px] font-black text-viet-green uppercase tracking-widest border border-viet-green/20">
+                        {user?.xp || 0} XP
+                      </div>
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                   </div>
+                 </div>
               </div>
-              <div>
-                <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest">{t('missions.current_level')}</p>
-                <p className="text-xl font-black text-viet-text uppercase tracking-tighter italic">{t('missions.level_val', { level: user?.level || 1 })}</p>
+
+              {/* Streak Pulse Area */}
+              <div className="flex items-center gap-8 bg-viet-bg/50 px-8 py-6 rounded-[32px] border border-viet-border/50 backdrop-blur-sm">
+                 <div className="text-center">
+                    <p className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-widest mb-2">Chuỗi hiện tại</p>
+                    <div className="flex items-center gap-2 justify-center">
+                       <span className="text-3xl font-black text-viet-text">{user?.streakCount || 0}</span>
+                       <span className="text-2xl animate-bounce">🔥</span>
+                    </div>
+                 </div>
+                 <div className="w-[1px] h-12 bg-viet-border" />
+                 <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                       <div className={`w-3 h-3 rounded-full ${user?.todayOnlineMinutes >= 10 ? 'bg-viet-green shadow-[0_0_8px_#76c034]' : 'bg-slate-200'}`} />
+                       <span className={`text-[11px] font-bold ${user?.todayOnlineMinutes >= 10 ? 'text-viet-green' : 'text-viet-text-light/60'}`}>
+                         Online 10 phút ({user?.todayOnlineMinutes}/10)
+                       </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                       <div className={`w-3 h-3 rounded-full ${user?.todayLessonCompleted ? 'bg-viet-green shadow-[0_0_8px_#76c034]' : 'bg-slate-200'}`} />
+                       <span className={`text-[11px] font-bold ${user?.todayLessonCompleted ? 'text-viet-green' : 'text-viet-text-light/60'}`}>
+                         Hoàn thành bài học
+                       </span>
+                    </div>
+                 </div>
               </div>
-           </div>
-           <div className="text-right">
-              <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest text-viet-green">{t('missions.total_xp')}</p>
-              <p className="text-2xl font-black text-viet-text">{user?.xp || 0} XP</p>
            </div>
         </div>
 
