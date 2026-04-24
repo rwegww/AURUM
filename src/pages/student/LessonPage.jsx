@@ -76,7 +76,7 @@ const LessonPage = () => {
           onSkip={() => setShowStory(false)}
         />
       )}
-      <div className="flex">
+      <div className="flex relative">
         {/* Sidebar - Only show for logged in users or if desired for all */}
         {isLoggedIn && (
           <LessonSidebar 

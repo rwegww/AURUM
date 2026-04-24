@@ -47,7 +47,7 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
   };
 
   return (
-    <aside className="w-[320px] h-[calc(100vh-70px)] bg-white border-r border-viet-border fixed top-[70px] left-0 overflow-y-auto z-40 custom-scrollbar flex flex-col shadow-sm">
+    <aside className="w-[320px] min-h-[calc(100vh-70px)] bg-white border-r border-viet-border absolute top-0 left-0 z-40 flex flex-col shadow-sm">
       {/* Top Header / Context */}
       <div className="p-6 pb-4 border-b border-viet-border bg-viet-bg/20">
         <Link to="/lessons" className="flex items-center gap-2 text-viet-green text-[10px] font-black uppercase tracking-widest mb-4 hover:underline">
