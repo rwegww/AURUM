@@ -115,10 +115,34 @@ const UniversalFormulaSim = ({ formula }) => {
   const filteredElements = useMemo(() => {
     if (!searchTerm) return [];
     const term = searchTerm.toLowerCase();
-    return unifiedDatabase.filter(e => 
+    
+    // Tìm trong database có sẵn
+    const results = unifiedDatabase.filter(e => 
       e.symbol.toLowerCase().includes(term) || 
       e.name.toLowerCase().includes(term)
     ).slice(0, 5);
+
+    // Tính năng AI: Tự động phân tích và tính toán phân tử khối cho mọi công thức người dùng gõ
+    // (Bao gồm cả các chất KHÔNG CÓ trong hệ thống như HCl, NaOH, HNO3...)
+    const calculatedMass = parseFloat(calculateMolarMass(searchTerm));
+    
+    // Nếu gõ ra được công thức hợp lệ (Khối lượng > 0 và bắt đầu bằng chữ In hoa)
+    if (calculatedMass > 0 && /^[A-Z][A-Za-z0-9₀-₉]*$/.test(searchTerm)) {
+      // Tránh trùng lặp nếu đã có trong db
+      if (!results.find(r => r.symbol.toLowerCase() === term)) {
+        // Tự động chuyển số thường thành số nhỏ (subscript) cho đẹp mắt
+        const formattedSymbol = searchTerm.replace(/[0-9]/g, m => "₀₁₂₃₄₅₆₇₈₉"[m]);
+        results.unshift({
+          symbol: formattedSymbol,
+          name: 'Hợp chất AI tự phân tích',
+          weight: calculatedMass,
+          category: 'hợp-chất',
+          isCompound: true
+        });
+      }
+    }
+    
+    return results.slice(0, 5);
   }, [searchTerm, unifiedDatabase]);
 
   const handleSelectElement = (el) => {
