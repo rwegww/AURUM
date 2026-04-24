@@ -5,18 +5,18 @@ import { CHEM_FORMULAS, QUICK_FORMULAS, UNIT_CONVERSIONS } from '@/data/chemForm
 import { UniversalFormulaSim } from '@/components/simulations';
 
 const ChemCalculator = () => {
-  const [selectedGrade, setSelectedGrade] = useState(8);
+  const [selectedGroup, setSelectedGroup] = useState('basic');
   const [selectedFormula, setSelectedFormula] = useState(null);
   const [inputValues, setInputValues] = useState({});
   const [result, setResult] = useState(null);
   const [mode, setMode] = useState('experiment'); // Mặc định là chế độ mô phỏng mới
   const [showQuickRef, setShowQuickRef] = useState(false);
 
-  const gradeData = CHEM_FORMULAS[selectedGrade];
+  const groupData = CHEM_FORMULAS[selectedGroup];
 
   const findFormulaById = useCallback((id) => {
-    for (const grade of Object.values(CHEM_FORMULAS)) {
-      for (const cat of grade.categories) {
+    for (const group of Object.values(CHEM_FORMULAS)) {
+      for (const cat of group.categories) {
         const found = cat.formulas.find(f => f.id === id);
         if (found) return found;
       }
@@ -31,9 +31,17 @@ const ChemCalculator = () => {
   };
 
   const handleQuickSelect = (quick) => {
-    setSelectedGrade(quick.grade);
     const formula = findFormulaById(quick.id);
-    if (formula) handleSelectFormula(formula);
+    if (formula) {
+      // Find which group this formula belongs to
+      for (const [key, group] of Object.entries(CHEM_FORMULAS)) {
+        if (group.categories.some(cat => cat.formulas.some(f => f.id === quick.id))) {
+          setSelectedGroup(key);
+          break;
+        }
+      }
+      handleSelectFormula(formula);
+    }
   };
 
   const handleInputChange = (key, value) => {
@@ -115,13 +123,13 @@ const ChemCalculator = () => {
           {/* CỘT TRÁI - Danh sách Công thức */}
           <div className="lg:col-span-4 space-y-4">
             <div className="viet-card p-4">
-              <h3 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-3">Phân loại theo Lớp</h3>
+              <h3 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-3">Phân loại theo Nhóm</h3>
               <div className="grid grid-cols-5 gap-2">
-                {Object.entries(CHEM_FORMULAS).map(([grade, data]) => (
-                  <button key={grade} onClick={() => { setSelectedGrade(parseInt(grade)); setSelectedFormula(null); setResult(null); }}
-                    className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${selectedGrade === parseInt(grade) ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-viet-bg text-viet-text-light hover:bg-viet-green/10'}`}>
+                {Object.entries(CHEM_FORMULAS).map(([key, data]) => (
+                  <button key={key} onClick={() => { setSelectedGroup(key); setSelectedFormula(null); setResult(null); }}
+                    className={`flex flex-col items-center gap-1 p-3 rounded-2xl transition-all ${selectedGroup === key ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-viet-bg text-viet-text-light hover:bg-viet-green/10'}`}>
                     <span className="text-[18px]">{data.icon}</span>
-                    <span className="text-[10px] font-black">{parseInt(grade)}</span>
+                    <span className="text-[9px] font-black text-center leading-tight h-[24px] flex items-center">{data.label.split(' ')[0]}</span>
                   </button>
                 ))}
               </div>
@@ -141,9 +149,9 @@ const ChemCalculator = () => {
             </div>
 
             <div className="viet-card p-4">
-              <h3 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-3">{gradeData?.label} — Danh mục công thức</h3>
+              <h3 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-3">{groupData?.label} — Danh mục</h3>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-                {gradeData?.categories.map((cat, ci) => (
+                {groupData?.categories.map((cat, ci) => (
                   <div key={ci}>
                     <h4 className="text-[11px] font-black text-viet-text uppercase tracking-wide mb-2 px-1 opacity-50">{cat.name}</h4>
                     <div className="space-y-1.5">
