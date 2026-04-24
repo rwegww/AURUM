@@ -167,28 +167,16 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
                                   {lesson.title.replace(`Bài ${lesson.globalIndex}: `, '').replace(`Bài ${lesson.lessonId}: `, '').replace(`Bài ${lesson.order}: `, '')}
                                 </h5>
                                 
-                                <div className="flex items-center flex-wrap gap-2 mt-2">
-                                  <div className="flex items-center gap-1">
-                                    {lesson.theoryModules?.length > 0 && <span className="w-1.5 h-1.5 rounded-full bg-blue-400" title="Lý thuyết" />}
-                                    {lesson.videoModules?.length > 0 && <span className="w-1.5 h-1.5 rounded-full bg-red-400" title="Video" />}
-                                    {lesson.quizzes?.length > 0 && <span className="w-1.5 h-1.5 rounded-full bg-orange-400" title="Trắc nghiệm" />}
+                                {isActive && (
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <span className="text-[9px] font-black uppercase tracking-wider text-viet-green">Đang học</span>
+                                    <motion.div 
+                                      animate={{ scale: [1, 1.2, 1] }} 
+                                      transition={{ repeat: Infinity, duration: 2 }}
+                                      className="w-1.5 h-1.5 rounded-full bg-viet-green shadow-[0_0_8px_rgba(118,192,52,0.6)]" 
+                                    />
                                   </div>
-                                  <div className="w-px h-2 bg-viet-border" />
-                                  <span className={`text-[9px] font-black uppercase tracking-wider ${
-                                    isActive ? 'text-viet-green' : 'text-[#b4bac2]'
-                                  }`}>
-                                    Module {lesson.globalIndex}
-                                  </span>
-                                  {isActive && (
-                                    <div className="ml-auto">
-                                      <motion.div 
-                                        animate={{ scale: [1, 1.2, 1] }} 
-                                        transition={{ repeat: Infinity, duration: 2 }}
-                                        className="w-1.5 h-1.5 rounded-full bg-viet-green shadow-[0_0_8px_rgba(118,192,52,0.6)]" 
-                                      />
-                                    </div>
-                                  )}
-                                </div>
+                                )}
                               </div>
                             </div>
                             
