@@ -425,7 +425,7 @@ const UniversalFormulaSim = ({ formula }) => {
         {/* Khung Chọn Chất (Bảng Tuần Hoàn) */}
         <div className="viet-card p-5 border-2 border-amber-200 bg-amber-50/50">
           <h3 className="text-[12px] font-black text-amber-800 uppercase tracking-[2px] mb-3 flex items-center gap-2">
-            <span>⚛️</span> Nạp chất từ Bảng Tuần Hoàn
+            <span>⚛️</span> Nạp chất từ Lab Chemicals
           </h3>
           <div className="relative">
             <input
