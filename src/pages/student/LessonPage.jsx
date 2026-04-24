@@ -86,7 +86,7 @@ const LessonPage = () => {
           />
         )}
 
-        <main className={`flex-1 p-8 max-w-[1200px] ${isLoggedIn ? 'ml-[300px]' : 'mx-auto'}`}>
+        <main className={`flex-1 p-8 max-w-[1200px] ${isLoggedIn ? 'ml-[320px]' : 'mx-auto'}`}>
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <span className="px-3 py-1 bg-viet-green text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
