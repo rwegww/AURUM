@@ -3,6 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CHEM_FORMULAS, QUICK_FORMULAS, UNIT_CONVERSIONS } from '@/data/chemFormulas';
 import { CHEM_SIMULATIONS } from '@/data/chemExperiments';
+import { MolaritySim, pHScaleSim, GasLawSim, DensitySim } from '@/components/simulations';
+
+const SIM_COMPONENTS = {
+  MolaritySim: <MolaritySim />,
+  pHScaleSim: <pHScaleSim />,
+  GasLawSim: <GasLawSim />,
+  DensitySim: <DensitySim />
+};
 
 const ChemCalculator = () => {
   const [selectedGrade, setSelectedGrade] = useState(8);
@@ -300,26 +308,20 @@ const ChemCalculator = () => {
                     </div>
                   </div>
 
-                  {/* PhET iFrame */}
-                  <div className="relative w-full" style={{ paddingBottom: '62.5%' }}>
-                    <iframe
-                      src={activeSim.url}
-                      title={activeSim.title}
-                      className="absolute inset-0 w-full h-full border-0"
-                      allowFullScreen
-                      allow="autoplay"
-                    />
+                  {/* Simulation Component */}
+                  <div className="p-6">
+                    {SIM_COMPONENTS[activeSim.component] || (
+                      <div className="p-8 text-center text-viet-text-light">
+                        Đang phát triển mô phỏng này...
+                      </div>
+                    )}
                   </div>
 
                   {/* Footer */}
                   <div className="p-4 bg-viet-bg/30 border-t border-viet-border flex items-center justify-between">
                     <p className="text-[10px] text-viet-text-light">
-                      Mô phỏng bởi <a href="https://phet.colorado.edu" target="_blank" rel="noreferrer" className="font-bold text-viet-green hover:underline">PhET — University of Colorado</a>
+                      Mô phỏng phát triển độc quyền bởi <span className="font-bold text-viet-green">Chemistry Odyssey</span>
                     </p>
-                    <a href={activeSim.url} target="_blank" rel="noreferrer"
-                      className="text-[10px] font-black text-viet-green uppercase tracking-wider hover:underline">
-                      Mở rộng ↗
-                    </a>
                   </div>
                 </div>
               </motion.div>
