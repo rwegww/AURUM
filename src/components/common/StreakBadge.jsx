@@ -33,7 +33,17 @@ const StreakBadge = () => {
 
   return (
     <>
-
+      <motion.div
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setShowModal(true)}
+        className={`flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${isMaintainedToday
+          ? 'bg-orange-500/20 border border-orange-500/50 text-orange-500'
+          : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
+          }`}
+      >
+        <span className="font-bold text-sm">🔥 {streak}</span>
+      </motion.div>
 
       <AnimatePresence>
         {showModal && (

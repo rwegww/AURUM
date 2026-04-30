@@ -146,42 +146,29 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setAuthError(null);
       
-      // Use Popup instead of Redirect because Firebase Hosting is not deployed (causing 404 on init.json)
-      const result = await signInWithPopup(firebaseAuth, googleProvider);
-      const idToken = await result.user.getIdToken();
+      // Store intended auth type
+      localStorage.setItem('authType', 'supabase');
       
-      // Send Firebase ID token to our backend to create/get user and get JWT
-      const res = await fetch('/api/auth/google-firebase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken })
+      // Use Supabase OAuth which uses secure redirect out of the box
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/login` // Redirect back to login to handle session initialization
+        }
       });
       
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Đăng nhập Google thất bại');
-      
-      // Store session info
-      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-        ? crypto.randomUUID() 
-        : Math.random().toString(36).substring(2) + Date.now().toString(36);
-      localStorage.setItem('sessionId', newSessionId);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('authType', 'firebase');
-      
-      const userData = await fetchProfile(data.token, true);
-      return { success: true, user: userData };
+      if (error) throw error;
+      // Wait for redirect
+      return { success: true };
     } catch (err) {
       console.error('Google login error:', err.message);
       if (mountedRef.current) {
         setLoading(false);
-        const friendlyMessage = err.code === 'auth/popup-closed-by-user' 
-          ? 'Bạn đã đóng cửa sổ đăng nhập. Vui lòng thử lại.' 
-          : err.message;
-        setAuthError(friendlyMessage);
+        setAuthError(err.message);
       }
       return { success: false, message: err.message };
     }
-  }, [fetchProfile]);
+  }, []);
 
   const register = useCallback(async (username, password, email, role = 'student') => {
     try {
