@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(null);
   const fetchingTokenRef = useRef(null);
   const mountedRef = useRef(true);
 
@@ -91,7 +92,14 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (err) {
-      if (err.name !== 'AbortError') console.error('Lỗi tải profile:', err);
+      if (err.name !== 'AbortError') {
+        console.error('Lỗi tải profile:', err);
+        if (err.message.includes('DUAL_LOGIN')) {
+          setAuthError('Tài khoản đã đăng nhập ở nơi khác.');
+        } else {
+          setAuthError(err.message);
+        }
+      }
     } finally {
       fetchingTokenRef.current = null;
       if (mountedRef.current) setLoading(false);
@@ -265,7 +273,7 @@ export const AuthProvider = ({ children }) => {
           if (session) {
             localStorage.setItem('token', session.access_token);
             localStorage.setItem('authType', 'supabase');
-            await fetchProfile(session.access_token);
+            await fetchProfile(session.access_token, true);
           } else if (mountedRef.current) setLoading(false);
         }
       } catch (err) {
@@ -392,8 +400,10 @@ export const AuthProvider = ({ children }) => {
     updateProgress,
     refreshUser,
     updateUser,
-    recoverStreak
-  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, recoverStreak]);
+    recoverStreak,
+    authError,
+    setAuthError
+  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, recoverStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
