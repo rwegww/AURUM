@@ -10,7 +10,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, authError } = useAuth();
+  const { login, loginWithGoogle, authError, setAuthError } = useAuth();
   const navigate = useNavigate();
 
   const displayError = error || authError;
