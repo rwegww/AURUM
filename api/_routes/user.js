@@ -6,73 +6,7 @@ import { supabase } from '../lib/supabase.js';
 
 const router = express.Router();
 
-// Middleware to verify JWT (handles both Custom JWT and Supabase tokens)
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) throw new Error('Token missing');
-
-    let userId;
-    let user;
-
-    // 1. Try to verify as custom JWT first (used by both custom login and Firebase Google login)
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      userId = decoded.id;
-      req.decodedCustomJwt = decoded;
-      user = await User.findById(userId);
-    } catch (jwtErr) {
-      // 2. Fallback: Try as Supabase token (legacy)
-      const { data, error: sbError } = await supabase.auth.getUser(token);
-      const sbUser = data?.user;
-      
-      if (sbUser && !sbError) {
-        userId = sbUser.id;
-        user = await User.findById(userId);
-        
-        if (!user && sbUser.email) {
-          user = await User.findOne({ email: sbUser.email });
-        }
-        
-        if (!user) {
-          user = await User.create({
-            id: userId,
-            username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
-            email: sbUser.email,
-            password: 'supabase_oauth_no_password',
-            role: 'student'
-          });
-        }
-      } else {
-        console.error('Auth Debug:', { jwtError: jwtErr.message, sbError: sbError?.message });
-        throw new Error(`Xác thực thất bại: ${jwtErr.message}`);
-      }
-    }
-
-    if (!user) throw new Error('Không tìm thấy thông tin người dùng');
-    if (user.isLocked) throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
-
-    // 3. Single session enforcement (Universal check)
-    // Skip enforcement if this is a 'claim' request (initial login/session takeover)
-    const clientSessionId = req.header('X-Session-ID') || (req.decodedCustomJwt?.sessionId);
-    if (req.query.claim !== 'true' && clientSessionId && user.currentSessionId && clientSessionId !== user.currentSessionId) {
-      const error = new Error('DUAL_LOGIN');
-      error.message = 'Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất.';
-      throw error;
-    }
-
-    req.user = user;
-    req.token = token;
-    next();
-  } catch (e) {
-    console.error('Auth Middleware Error:', e.message);
-    const status = e.message === 'DUAL_LOGIN' || e.message.includes('đăng nhập ở một thiết bị khác') ? 401 : 401;
-    res.status(status).json({ 
-      message: e.message === 'DUAL_LOGIN' ? 'Tài khoản đã đăng nhập ở nơi khác' : e.message, 
-      error: e.message === 'DUAL_LOGIN' ? 'DUAL_LOGIN' : e.message 
-    });
-  }
-};
+import { auth } from '../_middleware/auth.js';
 
 // Get Online Count (Public)
 router.get('/online-count', async (req, res) => {
