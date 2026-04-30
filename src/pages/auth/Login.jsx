@@ -10,10 +10,19 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, authError, setAuthError } = useAuth();
+  const { login, loginWithGoogle, authError, setAuthError, isLoggedIn, user } = useAuth();
   const navigate = useNavigate();
 
   const displayError = error || authError;
+
+  // Auto-redirect if already logged in (useful for Firebase Redirect flow)
+  React.useEffect(() => {
+    if (isLoggedIn && user) {
+      if (user.role === 'admin') navigate('/admin');
+      else if (user.role === 'teacher') navigate('/teacher');
+      else navigate('/lessons');
+    }
+  }, [isLoggedIn, user, navigate]);
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);

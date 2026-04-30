@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { auth as firebaseAuth, googleProvider } from '@/lib/firebase';
-import { signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
+import { signInWithRedirect, getRedirectResult, signOut as firebaseSignOut } from 'firebase/auth';
 import i18n from '@/i18n';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
@@ -146,42 +146,19 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setAuthError(null);
       
-      // Firebase Google Sign-In with Popup
-      const result = await signInWithPopup(firebaseAuth, googleProvider);
-      const idToken = await result.user.getIdToken();
-      
-      // Send Firebase ID token to our backend to create/get user and get JWT
-      const res = await fetch('/api/auth/google-firebase', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken })
-      });
-      
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Đăng nhập Google thất bại');
-      
-      // Store session info
-      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-        ? crypto.randomUUID() 
-        : Math.random().toString(36).substring(2) + Date.now().toString(36);
-      localStorage.setItem('sessionId', newSessionId);
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('authType', 'firebase');
-      
-      const userData = await fetchProfile(data.token, true);
-      return { success: true, user: userData };
+      // Use Redirect instead of Popup to bypass COOP/CORS issues
+      await signInWithRedirect(firebaseAuth, googleProvider);
+      // The page will redirect away. The result will be handled in initAuth.
+      return { success: true };
     } catch (err) {
       console.error('Google login error:', err.message);
       if (mountedRef.current) {
         setLoading(false);
-        const friendlyMessage = err.code === 'auth/popup-closed-by-user' 
-          ? 'Bạn đã đóng cửa sổ đăng nhập. Vui lòng thử lại.' 
-          : err.message;
-        setAuthError(friendlyMessage);
+        setAuthError(err.message);
       }
       return { success: false, message: err.message };
     }
-  }, [fetchProfile]);
+  }, []);
 
   const register = useCallback(async (username, password, email, role = 'student') => {
     try {
@@ -296,14 +273,38 @@ export const AuthProvider = ({ children }) => {
     mountedRef.current = true;
     const initAuth = async () => {
       try {
+        // 1. Check for Firebase Redirect Result FIRST
+        const redirectResult = await getRedirectResult(firebaseAuth);
+        if (redirectResult) {
+          const idToken = await redirectResult.user.getIdToken();
+          
+          const res = await fetch('/api/auth/google-firebase', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken })
+          });
+          
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || 'Đăng nhập Google thất bại');
+          
+          const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+            ? crypto.randomUUID() 
+            : Math.random().toString(36).substring(2) + Date.now().toString(36);
+          localStorage.setItem('sessionId', newSessionId);
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('authType', 'firebase');
+          
+          await fetchProfile(data.token, true);
+          return; // Exit early if we handled redirect
+        }
+
+        // 2. Check existing tokens
         const authType = localStorage.getItem('authType');
         const token = localStorage.getItem('token');
         
         if ((authType === 'custom' || authType === 'firebase') && token) {
-          // Custom login or Firebase login - token is our own JWT
           await fetchProfile(token, true);
         } else if (authType === 'supabase') {
-          // Legacy Supabase login - try to get session
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             localStorage.setItem('token', session.access_token);
@@ -314,7 +315,10 @@ export const AuthProvider = ({ children }) => {
         }
       } catch (err) {
         console.error('Init auth error:', err);
-        if (mountedRef.current) setLoading(false);
+        if (mountedRef.current) {
+          setLoading(false);
+          setAuthError(err.message);
+        }
       }
     };
 
