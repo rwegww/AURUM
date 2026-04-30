@@ -1,11 +1,9 @@
 import admin from 'firebase-admin';
 
 let app;
-let initialized = false;
 
 const initializeFirebase = () => {
-  if (initialized) return app;
-  initialized = true;
+  if (admin.apps.length > 0) return admin.apps[0];
 
   try {
     const serviceAccountVar = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
@@ -38,7 +36,7 @@ export const firebaseAdmin = {
   verifyToken: async (token) => {
     const firebaseApp = initializeFirebase();
     if (!firebaseApp) throw new Error('Firebase Admin not configured');
-    return admin.auth().verifyIdToken(token);
+    return firebaseApp.auth().verifyIdToken(token);
   }
 };
 

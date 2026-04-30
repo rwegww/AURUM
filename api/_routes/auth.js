@@ -12,6 +12,7 @@ router.post('/google-firebase', async (req, res) => {
     const { idToken } = req.body;
     if (!idToken) return res.status(400).json({ message: 'Token missing' });
 
+    console.log('🔍 Received ID Token (start):', idToken.substring(0, 20) + '...');
     const decodedToken = await firebaseAdmin.verifyToken(idToken);
     const { uid, email, name, picture } = decodedToken;
 
@@ -58,7 +59,11 @@ router.post('/google-firebase', async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Lỗi xác thực Firebase:', err);
+    console.error('🔥 Lỗi xác thực Firebase chi tiết:', {
+      message: err.message,
+      code: err.code,
+      stack: err.stack
+    });
     res.status(401).json({ message: 'Xác thực Google thất bại', error: err.message });
   }
 });
