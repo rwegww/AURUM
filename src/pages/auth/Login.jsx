@@ -75,7 +75,7 @@ const Login = () => {
     setAuthError(null);
     setError('');
     const result = await loginWithGoogle();
-    if (result.success) {
+    if (result.success && !result.redirecting) {
       if (result.user?.role === 'admin') {
         navigate('/admin');
       } else if (result.user?.role === 'teacher') {
