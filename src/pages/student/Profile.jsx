@@ -4,6 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
+import UserActivityHistory from '@/components/profile/UserActivityHistory';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div
@@ -23,10 +24,24 @@ const Profile = () => {
   const { user, updateUser } = useAuth();
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSavingPlan, setIsSavingPlan] = useState(false);
+  const [planData, setPlanData] = useState(user?.studyPlan || { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true });
 
   const handleRandomizeAvatar = () => {
     const newSeed = Math.random().toString(36).substring(7);
     setEditableSeed(newSeed);
+  };
+
+  const handleSaveStudyPlan = async () => {
+    setIsSavingPlan(true);
+    try {
+      await updateUser({ studyPlan: planData });
+      alert(t('profile.study_plan.success'));
+    } catch (err) {
+      console.error('Lỗi khi lưu kế hoạch:', err);
+    } finally {
+      setIsSavingPlan(false);
+    }
   };
 
   const handleSaveAvatar = async () => {
@@ -177,49 +192,114 @@ const Profile = () => {
             color="bg-purple-500"
           />
         </div>
+      </div>
+
+      {/* Study Plan Section */}
+      <div className="max-w-[1200px] mx-auto px-6 mb-16">
+        <div className="bg-white rounded-[40px] p-10 border border-viet-border shadow-xl overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+          
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+              <div>
+                <h2 className="text-3xl font-black text-viet-text mb-2">{t('profile.study_plan.title')}</h2>
+                <p className="text-viet-text-light/60 font-medium">{t('profile.study_plan.subtitle')}</p>
+              </div>
+              <div className="flex items-center gap-3 px-6 py-3 bg-viet-green/10 rounded-2xl border border-viet-green/20">
+                <span className="text-2xl">📊</span>
+                <div>
+                  <div className="text-[11px] font-black text-viet-green uppercase tracking-widest leading-none mb-1">Tiến độ hôm nay</div>
+                  <div className="text-lg font-black text-viet-text leading-none">
+                    {user.todayLessonCompleted ? 'Hoàn thành' : 'Chưa hoàn thành'}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="space-y-3">
+                <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.time_label')}</label>
+                <div className="relative">
+                  <input 
+                    type="time" 
+                    defaultValue={user.studyPlan?.studyTime || '20:00'}
+                    onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
+                    className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
+                  />
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 text-xl opacity-40">⏰</div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.target_label')}</label>
+                <div className="relative">
+                  <select 
+                    defaultValue={user.studyPlan?.dailyLessonTarget || 1}
+                    onChange={(e) => setPlanData({ ...planData, dailyLessonTarget: parseInt(e.target.value) })}
+                    className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none appearance-none transition-all"
+                  >
+                    {[1, 2, 3, 5, 10].map(n => (
+                      <option key={n} value={n}>{n} {t('common.lesson', { count: n })}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 text-xl pointer-events-none opacity-40">📚</div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.reminders_label')}</label>
+                <button 
+                  onClick={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
+                  className={`w-full h-16 rounded-2xl border px-6 flex items-center justify-between transition-all ${
+                    planData.remindersEnabled 
+                      ? 'bg-viet-green/5 border-viet-green' 
+                      : 'bg-slate-50 border-viet-border opacity-60'
+                  }`}
+                >
+                  <span className={`font-black text-lg ${planData.remindersEnabled ? 'text-viet-green' : 'text-viet-text'}`}>
+                    {planData.remindersEnabled ? 'Đang bật' : 'Đang tắt'}
+                  </span>
+                  <div className={`w-10 h-6 rounded-full relative transition-colors ${planData.remindersEnabled ? 'bg-viet-green' : 'bg-slate-300'}`}>
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${planData.remindersEnabled ? 'right-1' : 'left-1'}`} />
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-10 flex justify-end">
+              <button
+                onClick={handleSaveStudyPlan}
+                disabled={isSavingPlan}
+                className="px-12 py-5 bg-viet-text text-white rounded-2xl font-black text-lg shadow-xl shadow-viet-text/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 flex items-center gap-3"
+              >
+                {isSavingPlan ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    {t('profile.study_plan.saving')}
+                  </>
+                ) : (
+                  <>
+                    <span>💾</span>
+                    {t('profile.study_plan.save_btn')}
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
         {/* Detailed Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-
-          {/* Unlocked Chemicals */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+          {/* Activity History */}
           <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-8">
-              <h3 className="text-2xl font-black text-viet-text">{t('profile.collection.title')}</h3>
-              <span className="px-4 py-1.5 bg-slate-100 rounded-full text-[12px] font-black text-viet-text-light uppercase tracking-widest">
-                {t('profile.collection.unlocked_count', { current: user.unlockedChemicals?.length || 0, total: 118 })}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {user.unlockedChemicals && user.unlockedChemicals.length > 0 ? (
-                user.unlockedChemicals.map((formula, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="bg-white p-6 rounded-3xl border border-viet-border flex flex-col items-center gap-3 hover:border-viet-green transition-all shadow-sm"
-                  >
-                    <div className="w-12 h-12 bg-viet-green/10 rounded-2xl flex items-center justify-center">
-                      <span className="text-xl font-black text-viet-green">{formula}</span>
-                    </div>
-                    <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">{t('profile.collection.status')}</span>
-                  </motion.div>
-                ))
-              ) : (
-                <div className="col-span-full py-16 text-center bg-white rounded-[40px] border-2 border-dashed border-viet-border flex flex-col items-center gap-6">
-                  <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl">🧪</div>
-                  <p className="text-viet-text-light font-medium">{t('profile.collection.empty')}</p>
-                  <Link to="/lab" className="text-viet-green font-black text-sm uppercase tracking-widest hover:underline">{t('profile.collection.go_to_lab')}</Link>
-                </div>
-              )}
-            </div>
+            <UserActivityHistory />
           </div>
 
           {/* Arena Performance */}
-          <div className="space-y-6">
+          <div className="space-y-6 h-full flex flex-col">
             <h2 className="text-2xl font-black text-viet-text px-2">{t('profile.arena_stats.title')}</h2>
-            <div className="bg-viet-text text-white rounded-[32px] p-8 shadow-xl relative overflow-hidden">
+            <div className="bg-viet-text text-white rounded-[32px] p-8 shadow-xl relative overflow-hidden flex-1">
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
               <div className="space-y-6 relative z-10">
                 <div className="flex justify-between items-center border-b border-white/10 pb-4">
@@ -253,7 +333,41 @@ const Profile = () => {
               {t('profile.arena_stats.challenge_now')}
             </Link>
           </div>
+        </div>
 
+        {/* Unlocked Chemicals */}
+        <div className="mt-16">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-2xl font-black text-viet-text">{t('profile.collection.title')}</h3>
+            <span className="px-4 py-1.5 bg-slate-100 rounded-full text-[12px] font-black text-viet-text-light uppercase tracking-widest">
+              {t('profile.collection.unlocked_count', { current: user.unlockedChemicals?.length || 0, total: 118 })}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+            {user.unlockedChemicals && user.unlockedChemicals.length > 0 ? (
+              user.unlockedChemicals.map((formula, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                  className="bg-white p-6 rounded-3xl border border-viet-border flex flex-col items-center gap-3 hover:border-viet-green transition-all shadow-sm"
+                >
+                  <div className="w-12 h-12 bg-viet-green/10 rounded-2xl flex items-center justify-center">
+                    <span className="text-xl font-black text-viet-green">{formula}</span>
+                  </div>
+                  <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">{t('profile.collection.status')}</span>
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full py-16 text-center bg-white rounded-[40px] border-2 border-dashed border-viet-border flex flex-col items-center gap-6">
+                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl">🧪</div>
+                <p className="text-viet-text-light font-medium">{t('profile.collection.empty')}</p>
+                <Link to="/lab" className="text-viet-green font-black text-sm uppercase tracking-widest hover:underline">{t('profile.collection.go_to_lab')}</Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

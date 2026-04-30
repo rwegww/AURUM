@@ -35,7 +35,9 @@ const mapUser = (user) => {
     streakCount: user.streak_count || 0,
     lastStreakAt: user.last_streak_at,
     todayOnlineMinutes: user.today_online_minutes || 0,
-    todayLessonCompleted: user.today_lesson_completed || false
+    todayLessonCompleted: user.today_lesson_completed || false,
+    currentSessionId: user.current_session_id,
+    studyPlan: user.study_plan || { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true }
   };
 };
 
@@ -159,6 +161,16 @@ export const User = {
     const junctionChemicals = updateData.unlockedChemicals;
     delete pgUpdateData.unlockedLessons;
     delete pgUpdateData.unlockedChemicals;
+
+    if (updateData.currentSessionId) {
+      pgUpdateData.current_session_id = updateData.currentSessionId;
+      delete pgUpdateData.currentSessionId;
+    }
+
+    if (updateData.studyPlan) {
+      pgUpdateData.study_plan = updateData.studyPlan;
+      delete pgUpdateData.studyPlan;
+    }
 
     if (Object.keys(pgUpdateData).length > 0) {
       const { error } = await supabase

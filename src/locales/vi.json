@@ -12,6 +12,7 @@
     "arena_link": "ĐẤU TRƯỜNG",
     "missions": "NHIỆM VỤ",
     "knowledge_map": "BẢN ĐỒ",
+    "calculator": "MÁY TÍNH",
     "logout": "Thoát",
     "login": "Đăng nhập",
     "login_now": "Đăng nhập ngay"
@@ -224,10 +225,21 @@
     },
     "collection": {
       "title": "Bộ sưu tập Hóa chất",
-      "unlocked_count": "{{current}} / {{total}}",
-      "status": "Khám phá",
-      "empty": "Bạn chưa thực hiện phản ứng nào trong phòng Lab.",
-      "go_to_lab": "Vào phòng Lab ngay →"
+      "unlocked_count": "Đã mở khóa: {{current}}/{{total}}",
+      "status": "Đã sở hữu",
+      "empty": "Bạn chưa mở khóa hóa chất nào. Hãy thực hiện thí nghiệm ngay!",
+      "go_to_lab": "Đến phòng thí nghiệm →"
+    },
+    "study_plan": {
+      "title": "Kế hoạch học tập",
+      "subtitle": "Thiết lập mục tiêu hàng ngày để duy trì thói quen học tập",
+      "time_label": "Giờ học dự kiến",
+      "target_label": "Mục tiêu bài học/ngày",
+      "reminders_label": "Nhắc nhở học tập",
+      "save_btn": "Lưu kế hoạch",
+      "saving": "Đang lưu...",
+      "success": "Đã cập nhật kế hoạch học tập!",
+      "reminder_msg": "🔔 Đã đến giờ học rồi! Hôm nay bạn vẫn chưa hoàn thành mục tiêu bài học nào. Hãy vào học ngay để duy trì chuỗi nhé!"
     },
     "arena_stats": {
       "title": "Thống kê Đấu Trường",
@@ -235,7 +247,11 @@
       "wins": "Số trận thắng",
       "losses": "Số trận thua",
       "win_rate": "Tỉ lệ thắng",
-      "challenge_now": "Thách đấu ngay →"
+      "challenge_now": "Thách đấu ngay →",
+      "history_title": "Nhật ký hoạt động",
+      "history_empty": "Bạn chưa thực hiện hành động nào đáng chú ý.",
+      "history_clear": "Xóa nhật ký",
+      "history_time_ago": "Lúc"
     }
   },
   "missions": {
@@ -607,6 +623,10 @@
       "solver": {
         "label": "Hỗ trợ cân bằng",
         "desc": "Tra cứu và tìm kiếm phương trình đã cân bằng từ cơ sở dữ liệu."
+      },
+      "calculator": {
+        "label": "Máy tính hóa học",
+        "desc": "Tính toán nhanh các chỉ số mol, nồng độ và các công thức hóa học vạn năng."
       },
       "start_btn": "Bắt đầu ngay"
     },

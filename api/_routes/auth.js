@@ -2,6 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { firebaseAdmin } from '../lib/firebaseAdmin.js';
+import crypto from 'crypto';
 
 const router = express.Router();
 
@@ -34,8 +35,11 @@ router.post('/google-firebase', async (req, res) => {
       });
     }
 
+    const sessionId = crypto.randomUUID();
+    await User.update(user.id, { currentSessionId: sessionId });
+
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: user.id, role: user.role, sessionId },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -111,8 +115,11 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
     }
 
+    const sessionId = crypto.randomUUID();
+    await User.update(user.id, { currentSessionId: sessionId });
+
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: user.id, role: user.role, sessionId },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );

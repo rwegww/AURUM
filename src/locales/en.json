@@ -220,14 +220,28 @@
       "xp": "Experience (XP)",
       "level_title": "Alchemist Rank",
       "chemicals": "Unlocked Elements",
-      "arena_points": "Arena Points"
+      "arena_points": "Arena Points",
+      "losses": "Losses",
+      "win_rate": "Win Rate",
+      "challenge_now": "Challenge Now →"
     },
     "collection": {
-      "title": "Atomic Collection",
-      "unlocked_count": "{{current}} / {{total}}",
-      "status": "Discovered",
-      "empty": "You haven't performed any reactions in the Lab yet.",
-      "go_to_lab": "Go to Lab Now →"
+      "title": "Chemical Collection",
+      "unlocked_count": "Unlocked: {{current}}/{{total}}",
+      "status": "Owned",
+      "empty": "You haven't unlocked any chemicals yet. Start experimenting now!",
+      "go_to_lab": "Go to Lab →"
+    },
+    "study_plan": {
+      "title": "Study Plan",
+      "subtitle": "Set daily goals to maintain your learning habit",
+      "time_label": "Planned Study Time",
+      "target_label": "Lessons Goal / Day",
+      "reminders_label": "Study Reminders",
+      "save_btn": "Save Plan",
+      "saving": "Saving...",
+      "success": "Study plan updated!",
+      "reminder_msg": "🔔 It's time to study! You haven't reached your lesson goal today. Let's learn now to keep your streak alive!"
     },
     "arena_stats": {
       "title": "Arena Statistics",
@@ -235,7 +249,11 @@
       "wins": "Wins",
       "losses": "Losses",
       "win_rate": "Win Rate",
-      "challenge_now": "Challenge Now →"
+      "challenge_now": "Challenge Now →",
+      "history_title": "Activity Log",
+      "history_empty": "You haven't performed any notable actions yet.",
+      "history_clear": "Clear Log",
+      "history_time_ago": "At"
     }
   },
   "missions": {

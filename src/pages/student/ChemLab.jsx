@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { activityService } from '@/services/ActivityService';
 
 // --- Animations ---
 const containerVariants = {
@@ -57,6 +58,14 @@ const ChemLab = () => {
       path: '/lab/solver',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-purple-500'
     },
+    { 
+      id: 'calculator', 
+      label: t('chem_lab.modules.calculator.label'), 
+      icon: '🧮', 
+      desc: t('chem_lab.modules.calculator.desc'),
+      path: '/calculator',
+      colorClass: 'bg-[#1a1a1a] text-white hover:bg-pink-500'
+    },
   ];
 
   return (
@@ -94,6 +103,13 @@ const ChemLab = () => {
             <motion.div key={module.id} variants={itemVariants} className="flex flex-col h-full">
               <Link 
                 to={module.path}
+                onClick={() => activityService.log({
+                  type: 'lab',
+                  label: `Phòng Lab: ${module.label}`,
+                  description: `Đã truy cập mô-đun ${module.label}`,
+                  icon: module.icon,
+                  link: module.path
+                })}
                 className="card-tactile group relative flex flex-col h-full hover:translate-y-1 transition-all duration-200 overflow-hidden"
               >
                 <div className="p-8 flex flex-col h-full">

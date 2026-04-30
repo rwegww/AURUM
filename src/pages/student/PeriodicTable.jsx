@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { elements } from '@/data/elements';
 import { enrichElement } from '@/data/elementEnrichment';
 import AtomicModel from '@/components/common/AtomicModel';
+import { activityService } from '@/services/ActivityService';
 
 const PeriodicTable = () => {
   const { t, i18n } = useTranslation();

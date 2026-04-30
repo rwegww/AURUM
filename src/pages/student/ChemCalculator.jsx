@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CHEM_FORMULAS, QUICK_FORMULAS, UNIT_CONVERSIONS } from '@/data/chemFormulas';
 import { UniversalFormulaSim } from '@/components/simulations';
+import { activityService } from '@/services/ActivityService';
 
 const CATEGORY_ICONS = {
   basic: (
@@ -79,6 +80,15 @@ const ChemCalculator = () => {
     const solved = selectedFormula.solve(vars);
     if (solved) {
       setResult({ success: true, values: solved });
+      
+      // LOG ACTIVITY
+      activityService.log({
+        type: 'calculation',
+        label: `Tính toán: ${selectedFormula.name}`,
+        description: `Đã tính toán thành công công thức ${selectedFormula.formula}`,
+        icon: '🧮',
+        link: '/calculator'
+      });
     } else {
       setResult({ error: 'Không đủ dữ liệu hoặc công thức không hỗ trợ tổ hợp này.' });
     }
