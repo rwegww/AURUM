@@ -38,16 +38,11 @@ const StreakBadge = () => {
         whileTap={{ scale: 0.95 }}
         onClick={() => setShowModal(true)}
         className={`flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${isMaintainedToday
-            ? 'bg-orange-500/20 border border-orange-500/50 text-orange-500'
-            : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
+          ? 'bg-orange-500/20 border border-orange-500/50 text-orange-500'
+          : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
           }`}
       >
-        <motion.span
-          animate={isMaintainedToday ? { scale: [1, 1.2, 1] } : {}}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          {isMaintainedToday ? '🔥' : '☁️'}
-        </motion.span>
+
         <span className="font-bold text-sm">{streak}</span>
       </motion.div>
 
@@ -74,8 +69,8 @@ const StreakBadge = () => {
                     <div
                       key={m.days}
                       className={`p-3 rounded-2xl border text-center transition-all ${streak >= m.days
-                          ? 'bg-orange-500/20 border-orange-500 text-orange-500'
-                          : 'bg-zinc-800/50 border-zinc-700 text-zinc-500 opacity-50'
+                        ? 'bg-orange-500/20 border-orange-500 text-orange-500'
+                        : 'bg-zinc-800/50 border-zinc-700 text-zinc-500 opacity-50'
                         }`}
                     >
                       <div className="text-xl mb-1">{m.icon}</div>
