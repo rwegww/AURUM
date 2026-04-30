@@ -174,7 +174,10 @@ export const AuthProvider = ({ children }) => {
       console.error('Google login error:', err.message);
       if (mountedRef.current) {
         setLoading(false);
-        setAuthError(err.message);
+        const friendlyMessage = err.code === 'auth/popup-closed-by-user' 
+          ? 'Bạn đã đóng cửa sổ đăng nhập. Vui lòng thử lại.' 
+          : err.message;
+        setAuthError(friendlyMessage);
       }
       return { success: false, message: err.message };
     }
