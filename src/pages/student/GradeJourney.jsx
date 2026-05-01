@@ -133,8 +133,6 @@ const GradeJourney = () => {
               const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonCompleted || isCompleted;
               const isLocked = !isUnlocked;
 
-              const lessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
-
               return (
                 <motion.div
                   key={lesson.id}
@@ -157,28 +155,10 @@ const GradeJourney = () => {
                         <h3 className={`text-[14px] font-bold leading-tight transition-colors mb-3 ${isLocked ? 'text-gray-400' : 'text-viet-text group-hover:text-viet-green'}`}>
                           {lesson.title.split(': ').pop()}
                         </h3>
-
-                        {/* Stars Display */}
-                        {!isLocked && (
-                          <div className="flex gap-2">
-                             {['level1', 'level2', 'level3'].map(lvl => (
-                               <div key={lvl} className="flex flex-col items-center gap-0.5">
-                                  <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${lessonStars[lvl] > 0 ? 'bg-amber-400 text-white' : 'bg-slate-100 text-slate-300'}`}>
-                                    ⭐
-                                  </div>
-                                  <div className="flex gap-0.5">
-                                     {[1, 2, 3].map(s => (
-                                       <div key={s} className={`w-1 h-1 rounded-full ${s <= lessonStars[lvl] ? 'bg-amber-400' : 'bg-slate-200'}`} />
-                                     ))}
-                                  </div>
-                               </div>
-                             ))}
-                          </div>
-                        )}
                       </div>
                       {!isLocked && (
                         <div className={`absolute top-1/2 -translate-y-1/2 bg-viet-green text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap ${isEven ? '-left-4 -translate-x-full' : '-right-4 translate-x-full'}`}>
-                          {lessonStars.level1 === 0 ? 'Bắt đầu học' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
+                          Tiếp tục học
                         </div>
                       )}
                     </button>
