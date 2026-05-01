@@ -134,6 +134,18 @@ const TheoryRenderer = ({ modules }) => {
               </div>
             );
 
+          case 'markdown':
+            return (
+              <div key={index} className="prose max-w-none prose-slate prose-headings:text-viet-green prose-headings:font-black prose-p:text-viet-text prose-p:text-[17px] prose-p:font-medium prose-p:leading-[1.8] prose-p:opacity-90 prose-li:text-viet-text prose-li:text-[17px] prose-li:font-medium prose-li:leading-relaxed">
+                <ReactMarkdown 
+                  remarkPlugins={markdownPlugins}
+                  rehypePlugins={rehypePlugins}
+                >
+                  {formatContent(content.text)}
+                </ReactMarkdown>
+              </div>
+            );
+
           default:
             return null;
         }
