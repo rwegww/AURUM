@@ -29,9 +29,10 @@ const mapUser = (user) => {
       ? {
           completedNodeIds: user.balancing_progress.completedNodeIds || [],
           completedCount: user.balancing_progress.completedCount || 0,
-          passedGrades: user.balancing_progress.passedGrades || []
+          passedGrades: user.balancing_progress.passedGrades || [],
+          lessonStars: user.balancing_progress.lessonStars || {}
         }
-      : { completedNodeIds: [], completedCount: 0, passedGrades: [] },
+      : { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} },
     streakCount: user.streak_count || 0,
     lastStreakAt: user.last_streak_at,
     todayOnlineMinutes: user.today_online_minutes || 0,
