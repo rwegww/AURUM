@@ -10,7 +10,7 @@ const StageQuiz = () => {
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, completeLessonSegment } = useAuth();
   
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,17 +44,17 @@ const StageQuiz = () => {
     setLastResult(result);
     setShowResult(true);
 
-    // Sử dụng phương thức đồng bộ mới từ AuthContext
+    // Lưu tiến độ đoạn bài học vào database
     if (user) {
       const xpMap = { level1: 30, level2: 50, level3: 100 };
       const xpGain = xpMap[currentLevel] || 30;
       const isLessonCompletion = currentLevel === 'level3';
 
       try {
-        const { completeLessonSegment } = useAuth();
         await completeLessonSegment(lessonId, currentLevel, stars, xpGain, isLessonCompletion);
+        console.log('✅ Đã lưu giai đoạn:', { lessonId, currentLevel, stars });
       } catch (err) {
-        console.error('Lỗi khi lưu giai đoạn:', err);
+        console.error('❌ Lỗi khi lưu giai đoạn:', err);
       }
     }
   };
