@@ -136,7 +136,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
-      const userData = await fetchProfile(data.token);
+      const userData = await fetchProfile(data.token, true);
       return { success: true, user: userData };
     } catch (err) {
       return { success: false, message: err.message };
@@ -191,7 +191,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
-      await fetchProfile(data.token);
+      await fetchProfile(data.token, true);
       return { success: true };
     } catch (err) {
       return { success: false, message: err.message };
