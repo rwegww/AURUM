@@ -44,36 +44,15 @@ const StageQuiz = () => {
     setLastResult(result);
     setShowResult(true);
 
-    // Lưu tiến độ vào User Profile
+    // Sử dụng phương thức đồng bộ mới từ AuthContext
     if (user) {
-      const currentProgress = user.balancingProgress || { lessonStars: {} };
-      const lessonStars = { ...(currentProgress.lessonStars || {}) };
-      const currentLessonStars = { ...(lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 }) };
-      
-      // Ghi nhận hoàn thành giai đoạn này
-      currentLessonStars[currentLevel] = Math.max(currentLessonStars[currentLevel], stars);
-      lessonStars[lessonId] = currentLessonStars;
+      const xpMap = { level1: 30, level2: 50, level3: 100 };
+      const xpGain = xpMap[currentLevel] || 30;
+      const isLessonCompletion = currentLevel === 'level3';
 
       try {
-        // 1. Cập nhật sao vào profile (thông qua balancingProgress)
-        await updateUser({
-          balancingProgress: {
-            ...currentProgress,
-            lessonStars: lessonStars
-          }
-        });
-
-        // 2. Thưởng XP dựa trên giai đoạn và đánh dấu hoàn thành chặng (nếu là Ôn tập)
-        const xpMap = { level1: 30, level2: 50, level3: 100 };
-        const xpGain = xpMap[currentLevel] || 30;
-        
-        // Nếu là level3, đánh dấu isLessonCompletion = true để mở bài tiếp theo
-        const isLessonCompletion = currentLevel === 'level3';
-        
-        // Cần lấy updateProgress từ useAuth (đã destructure ở trên đầu component)
-        // Nhưng để chắc chắn và tránh lỗi closure, ta có thể dùng trực tiếp từ context
-        const context = useAuth();
-        await context.updateProgress(xpGain, isLessonCompletion ? lessonId : null, isLessonCompletion);
+        const { completeLessonSegment } = useAuth();
+        await completeLessonSegment(lessonId, currentLevel, stars, xpGain, isLessonCompletion);
       } catch (err) {
         console.error('Lỗi khi lưu giai đoạn:', err);
       }
