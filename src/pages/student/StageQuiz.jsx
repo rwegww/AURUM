@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import MissionModal from '@/components/lessons/MissionModal';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const StageQuiz = () => {
   const { t } = useTranslation();
