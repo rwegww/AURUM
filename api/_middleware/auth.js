@@ -48,13 +48,7 @@ export const auth = async (req, res, next) => {
     if (!user) throw new Error('Không tìm thấy thông tin người dùng');
     if (user.isLocked) throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
 
-    // Single session enforcement
-    const clientSessionId = req.header('X-Session-ID') || (req.decodedCustomJwt?.sessionId);
-    if (req.query.claim !== 'true' && clientSessionId && user.currentSessionId && clientSessionId !== user.currentSessionId) {
-      const error = new Error('DUAL_LOGIN');
-      error.message = 'Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất.';
-      throw error;
-    }
+    // Dual login feature temporarily disabled due to false positive lockouts
 
     req.user = user;
     req.token = token;
