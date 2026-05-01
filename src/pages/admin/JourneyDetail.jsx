@@ -20,6 +20,43 @@ const JourneyDetail = () => {
     try {
       const res = await fetch(`/api/lessons/${lessonId}`);
       const data = await res.json();
+      
+      // Tự động tạo dữ liệu mẫu nếu chưa có gì
+      if (!data.storySlides || data.storySlides.length === 0) {
+        data.storySlides = [
+          { title: `Khởi đầu hành trình: ${data.title}`, content: `Chào mừng bạn đến với chặng đường khám phá ${data.title}. Hãy cùng bắt đầu những thí nghiệm thú vị nhé!`, image: 'https://images.unsplash.com/photo-1532187863486-abf9d3a44601?auto=format&fit=crop&q=80&w=1000' },
+          { title: 'Bí ẩn hóa học', content: 'Mỗi phản ứng đều ẩn chứa một câu chuyện riêng. Bạn đã sẵn sàng giải mã chúng chưa?', image: 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&q=80&w=1000' }
+        ];
+      }
+      
+      if (!data.challenges || data.challenges.length === 0) {
+        data.challenges = [
+          { text: `Chuẩn bị dụng cụ cho thí nghiệm ${data.title}`, type: 'lab' },
+          { text: 'Thực hiện phản ứng và quan sát hiện tượng', type: 'lab' },
+          { text: 'Ghi chép kết quả và giải thích hiện tượng', type: 'lab' }
+        ];
+      }
+      
+      if (!data.quizzes || data.quizzes.length === 0) {
+        data.quizzes = [
+          { 
+            question: `Câu hỏi ôn tập: Thành phần chính trong bài ${data.title} là gì?`, 
+            options: ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'],
+            answer: 0
+          }
+        ];
+      }
+
+      if (!data.game || Object.keys(data.game).length === 0) {
+        data.game = {
+          type: 'quiz-rush',
+          difficulty: 2,
+          rewardXp: 150,
+          rewardGem: 10,
+          rewardItemId: 'item_basic_flask'
+        };
+      }
+
       setLesson(data);
     } catch (err) {
       console.error('Lỗi tải chi tiết bài học:', err);
