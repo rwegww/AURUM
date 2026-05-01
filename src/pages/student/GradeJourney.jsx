@@ -128,12 +128,22 @@ const GradeJourney = () => {
               const isEven = index % 2 === 0;
               const isFirstLessonDefaultUnlocked = grade === '8';
               const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
-              const previousLessonCompleted = index > 0 && user?.unlockedLessons?.includes(lessons[index - 1].lessonId);
-              const isCompleted = user?.unlockedLessons?.includes(lesson.lessonId);
-              const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonCompleted || isCompleted;
+              
+              // Kiểm tra chặng trước đã hoàn thành cả 3 đoạn chưa
+              const prevLessonStars = index > 0 
+                ? (user?.balancingProgress?.lessonStars?.[lessons[index - 1].lessonId] || { level1: 0, level2: 0, level3: 0 })
+                : null;
+              const previousLessonFullyCompleted = prevLessonStars 
+                ? (prevLessonStars.level1 > 0 && prevLessonStars.level2 > 0 && prevLessonStars.level3 > 0)
+                : false;
+              
+              const currentLessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
+              const isCompleted = currentLessonStars.level1 > 0 && currentLessonStars.level2 > 0 && currentLessonStars.level3 > 0;
+              
+              const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonFullyCompleted || isCompleted;
               const isLocked = !isUnlocked;
 
-              const lessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
+              const lessonStars = currentLessonStars;
 
               return (
                 <motion.div
