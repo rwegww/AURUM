@@ -65,6 +65,8 @@ router.get('/profile', auth, async (req, res) => {
     createdAt: req.user.createdAt,
     arenaStats: req.user.arenaStats || { total: 0, wins: 0, losses: 0, points: 0 },
     arenaAvatar: req.user.arenaAvatar || { seed: 'Chem Master', aura: '#a855f7' },
+    balancingProgress: req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} },
+    studyPlan: req.user.studyPlan,
     streakCount: req.user.streakCount || 0,
     lastStreakAt: req.user.lastStreakAt,
     todayOnlineMinutes: req.user.todayOnlineMinutes || 0,
