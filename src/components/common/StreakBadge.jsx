@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
 const StreakBadge = () => {
-  const { user, recoverStreak } = useAuth();
+  const { user, recoverStreak, resetStreak } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [recovering, setRecovering] = useState(false);
   const [error, setError] = useState(null);
@@ -16,11 +16,42 @@ const StreakBadge = () => {
   // Logic for broken streak (simplified for UI)
   const isBroken = streak > 0 && !isMaintainedToday && user.lastStreakAt && (new Date() - new Date(user.lastStreakAt) > 48 * 60 * 60 * 1000);
 
+  React.useEffect(() => {
+    if (isBroken) {
+      const today = new Date().toISOString().split('T')[0];
+      const seenDate = localStorage.getItem(`streak_broken_seen_${user.id}`);
+      
+      if (!seenDate) {
+        // First time seeing it broken
+        localStorage.setItem(`streak_broken_seen_${user.id}`, today);
+        setShowModal(true); // Auto show modal
+      } else if (seenDate !== today) {
+        // Second login (next day) and still not recovered -> Permanent loss
+        resetStreak();
+        localStorage.removeItem(`streak_broken_seen_${user.id}`);
+      }
+    } else {
+      // Clean up if maintained or recovered
+      localStorage.removeItem(`streak_broken_seen_${user.id}`);
+    }
+  }, [isBroken, user.id, resetStreak]);
+
   const handleRecover = async () => {
     setRecovering(true);
     setError(null);
     const res = await recoverStreak(streak); // Recover the previous count
     if (!res.success) setError(res.message);
+    setRecovering(false);
+  };
+
+  const handleAcceptLoss = async () => {
+    setRecovering(true);
+    const res = await resetStreak();
+    if (res.success) {
+      setShowModal(false);
+    } else {
+      setError(res.message);
+    }
     setRecovering(false);
   };
 
@@ -80,15 +111,25 @@ const StreakBadge = () => {
 
                 {isBroken && (
                   <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 mb-6">
-                    <p className="text-red-500 text-sm mb-3">
-                      Chuỗi của bạn đã bị nguội! Bạn có muốn dùng XP để khôi phục không?
+                    <p className="text-red-500 text-sm font-bold mb-1">
+                      Chuỗi của bạn đã bị nguội!
+                    </p>
+                    <p className="text-red-400 text-xs mb-4">
+                      Bạn có thể dùng XP để khôi phục hoặc chấp nhận mất. Nếu không khôi phục, chuỗi sẽ mất vĩnh viễn vào ngày mai.
                     </p>
                     <button
                       onClick={handleRecover}
                       disabled={recovering}
                       className="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-all disabled:opacity-50"
                     >
-                      {recovering ? 'Đang khôi phục...' : `Khôi phục với ${100 + streak * 20} XP`}
+                      {recovering ? 'Đang xử lý...' : `Khôi phục với ${100 + streak * 20} XP`}
+                    </button>
+                    <button
+                      onClick={handleAcceptLoss}
+                      disabled={recovering}
+                      className="w-full mt-2 py-2 bg-transparent border border-red-500/50 hover:bg-red-500/10 text-red-400 rounded-xl font-bold transition-all disabled:opacity-50"
+                    >
+                      Chấp nhận mất chuỗi
                     </button>
                     {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
                   </div>

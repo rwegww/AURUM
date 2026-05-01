@@ -208,4 +208,21 @@ router.post('/streak/recover', auth, async (req, res) => {
   }
 });
 
+// Reset Streak (Accept Loss)
+router.post('/streak/reset', auth, async (req, res) => {
+  try {
+    const updatedUser = await User.update(req.user.id, {
+      streak_count: 0,
+      last_streak_at: new Date().toISOString()
+    });
+
+    res.json({
+      message: 'Đã thiết lập lại chuỗi!',
+      streakCount: updatedUser.streakCount
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi thiết lập lại chuỗi', error: err.message });
+  }
+});
+
 export default router;

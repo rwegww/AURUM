@@ -283,6 +283,29 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isLoggedIn, user]);
 
+  const resetStreak = useCallback(async () => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/streak/reset', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (mountedRef.current) setUser(prev => ({ ...prev, streakCount: data.streakCount }));
+        return { success: true, message: data.message };
+      } else {
+        throw new Error(data.message || 'Lỗi thiết lập lại chuỗi');
+      }
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
+
   // 4. Initialization Effect
   useEffect(() => {
     mountedRef.current = true;
@@ -406,9 +429,10 @@ export const AuthProvider = ({ children }) => {
     refreshUser,
     updateUser,
     recoverStreak,
+    resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, recoverStreak, authError]);
+  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
