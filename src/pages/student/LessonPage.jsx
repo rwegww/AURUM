@@ -9,6 +9,31 @@ import { activityService } from '@/services/ActivityService';
 import DiscussionBoard from '@/components/lessons/DiscussionBoard';
 import StoryIntro from '@/components/lessons/StoryIntro';
 
+const getEmbedUrl = (url) => {
+  if (!url) return '';
+  
+  // YouTube
+  if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    let videoId = '';
+    if (url.includes('v=')) {
+      videoId = url.split('v=')[1]?.split('&')[0];
+    } else if (url.includes('youtu.be/')) {
+      videoId = url.split('youtu.be/')[1]?.split('?')[0];
+    } else if (url.includes('embed/')) {
+       return url;
+    }
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  }
+  
+  // Vimeo
+  if (url.includes('vimeo.com')) {
+    const videoId = url.split('/').pop();
+    return `https://player.vimeo.com/video/${videoId}`;
+  }
+
+  return url;
+};
+
 const LessonPage = () => {
   const { t } = useTranslation();
   const { grade, lessonId } = useParams();
@@ -115,12 +140,21 @@ const LessonPage = () => {
                 </div>
              </div>
              {video.url ? (
-               <iframe 
-                  className="w-full h-full pt-[60px]"
-                  src={video.url.replace('watch?v=', 'embed/')} 
-                  title={video.title}
-                  allowFullScreen
-                />
+               video.url.match(/\.(mp4|webm|ogg)$/) ? (
+                 <video 
+                    controls 
+                    className="w-full h-full pt-[60px] rounded-b-[24px] bg-black"
+                    src={video.url}
+                 />
+               ) : (
+                 <iframe 
+                    className="w-full h-full pt-[60px]"
+                    src={getEmbedUrl(video.url)} 
+                    title={video.title}
+                    allowFullScreen
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+               )
              ) : (
                <div className="w-full h-full pt-[60px] flex items-center justify-center bg-gray-100 text-gray-400 font-medium">
                  {t('lesson_page.video.placeholder')}
