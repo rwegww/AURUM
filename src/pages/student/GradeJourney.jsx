@@ -170,7 +170,7 @@ const GradeJourney = () => {
                                 ))}
                              </div>
                              <div className="flex justify-between text-[8px] font-black uppercase tracking-tighter text-slate-300">
-                                <span className={lessonStars.level1 > 0 ? 'text-viet-green' : ''}>Học</span>
+                                <span className={lessonStars.level1 > 0 ? 'text-viet-green' : ''}>Bài giảng</span>
                                 <span className={lessonStars.level2 > 0 ? 'text-viet-green' : ''}>Hiểu</span>
                                 <span className={lessonStars.level3 > 0 ? 'text-viet-green' : ''}>Ôn tập</span>
                              </div>
@@ -179,7 +179,7 @@ const GradeJourney = () => {
                       </div>
                       {!isLocked && (
                         <div className={`absolute top-1/2 -translate-y-1/2 bg-viet-green text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap ${isEven ? '-left-4 -translate-x-full' : '-right-4 translate-x-full'}`}>
-                          {lessonStars.level1 === 0 ? 'Bắt đầu học' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
+                          {lessonStars.level1 === 0 ? 'Xem bài giảng' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
                         </div>
                       )}
                     </button>
