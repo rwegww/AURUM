@@ -72,7 +72,10 @@ const StageChallenge = () => {
     <div className="min-h-screen bg-[#fffbf0]">
       <MissionModal
         lessonTitle={lesson?.title || t('mission_modal.labels.mission')}
-        challenges={lesson?.challenges && lesson.challenges.length > 0 ? lesson.challenges : [
+        challenges={lesson?.challenges && lesson.challenges.length > 0 ? lesson.challenges.map(c => ({
+          ...c,
+          type: 'lab-task'
+        })) : [
           {
             type: "image-selection",
             images: [

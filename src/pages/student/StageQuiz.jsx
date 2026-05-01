@@ -51,7 +51,11 @@ const StageQuiz = () => {
     <div className="min-h-screen bg-[#fffbf0]">
       <MissionModal
         lessonTitle={lesson?.title || 'Bài kiểm tra'}
-        challenges={lesson.quizzes}
+        challenges={lesson.quizzes.map(q => ({
+          ...q,
+          type: 'multiple-choice',
+          correctAnswer: q.answer // Map admin field 'answer' to MissionModal field 'correctAnswer'
+        }))}
         onUnlock={handleComplete}
         onCancel={handleCancel}
       />

@@ -44,10 +44,10 @@ const StoryIntro = ({ slides, onComplete, onSkip }) => {
                <div className="absolute inset-0 bg-viet-green/5 rounded-full scale-110 animate-pulse" />
                
                {/* Illustration Image (if exists) */}
-               {activeSlide.imageUrl && (
-                 <div className="absolute -top-12 -left-12 w-40 h-40 bg-white p-2 rounded-3xl border border-viet-border shadow-2xl rotate-[-6deg] z-30 overflow-hidden hidden md:block">
+               {activeSlide.image && (
+                 <div className="absolute -top-12 -left-12 w-48 h-48 bg-white p-2 rounded-3xl border border-viet-border shadow-2xl rotate-[-6deg] z-30 overflow-hidden hidden md:block">
                     <img 
-                      src={activeSlide.imageUrl} 
+                      src={activeSlide.image} 
                       className="w-full h-full object-cover rounded-2xl" 
                       alt="Illustration" 
                     />
@@ -79,8 +79,9 @@ const StoryIntro = ({ slides, onComplete, onSkip }) => {
                     ))}
                   </div>
 
-                  <h2 className="text-2xl md:text-3xl font-black text-viet-text leading-tight mb-4">
-                    {activeSlide.text}
+                  <h3 className="text-viet-green text-[12px] font-black uppercase tracking-[3px] mb-2">{activeSlide.title}</h3>
+                  <h2 className="text-xl md:text-2xl font-bold text-viet-text leading-relaxed mb-4">
+                    {activeSlide.content}
                   </h2>
                </div>
 

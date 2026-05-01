@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle }) => {
+const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.classList.add('no-scroll');
@@ -15,7 +15,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle }) => {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[150] bg-[#fffbf0]/95 backdrop-blur-2xl flex flex-col items-center justify-center p-4 md:p-8 overflow-y-auto"
     >
-      <div className="max-w-4xl w-full flex flex-col items-center">
+      <div className="max-w-4xl w-full flex flex-col items-center py-12">
         {/* Unlocked Badge */}
         <motion.div
           initial={{ scale: 0, rotate: -20 }}
@@ -23,7 +23,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle }) => {
           transition={{ type: "spring", damping: 12 }}
           className="mb-8 px-8 py-3 bg-viet-green text-white rounded-full font-black text-[14px] uppercase tracking-[4px] shadow-2xl shadow-viet-green/30"
         >
-          ✨ Đã mở khóa bí thuật ✨
+          ✨ Đã hoàn thành chặng đường ✨
         </motion.div>
 
         <motion.h2 
@@ -32,15 +32,39 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle }) => {
           transition={{ delay: 0.3 }}
           className="text-4xl md:text-5xl font-black text-viet-text mb-2 text-center italic"
         >
-          Trang Sách Tri Thức
+          Thành Quả Tuyệt Vời
         </motion.h2>
-        <p className="text-viet-text-light font-bold text-lg mb-12 opacity-60">Ghi chép từ cuộc hành trình - {lessonTitle}</p>
+        <p className="text-viet-text-light font-bold text-lg mb-8 opacity-60">Ghi chép từ cuộc hành trình - {lessonTitle}</p>
+
+        {/* Rewards Section */}
+        <div className="flex gap-6 mb-12">
+           <motion.div 
+             initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4 }}
+             className="bg-white px-6 py-4 rounded-3xl border border-rose-100 flex items-center gap-3 shadow-lg"
+           >
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-xl">⚡</div>
+              <div>
+                 <div className="text-[10px] font-black text-slate-400 uppercase">Kinh nghiệm</div>
+                 <div className="text-lg font-black text-rose-600">+{gameData?.rewardXp || 100} XP</div>
+              </div>
+           </motion.div>
+           <motion.div 
+             initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }}
+             className="bg-white px-6 py-4 rounded-3xl border border-sky-100 flex items-center gap-3 shadow-lg"
+           >
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center text-xl">💎</div>
+              <div>
+                 <div className="text-[10px] font-black text-slate-400 uppercase">Đá Aurum</div>
+                 <div className="text-lg font-black text-sky-500">+{gameData?.rewardGem || 5}</div>
+              </div>
+           </motion.div>
+        </div>
 
         {/* Book Page Image */}
         <motion.div
           initial={{ opacity: 0, y: 40, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.5, type: "spring" }}
+          transition={{ delay: 0.6, type: "spring" }}
           className="relative w-full max-w-2xl bg-white rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.1)] border border-viet-border overflow-hidden group mb-12"
         >
            <img 
@@ -60,7 +84,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle }) => {
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.9 }}
           onClick={onProceed}
           className="group relative px-12 py-5 bg-viet-text text-white rounded-[24px] font-black text-[14px] uppercase tracking-[3px] hover:scale-105 active:scale-95 transition-all shadow-2xl hover:bg-viet-green"
         >

@@ -54,6 +54,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
 
     if (type === 'multiple-choice' || type === 'image-selection') {
       correct = answer === currentChallenge.correctAnswer;
+    } else if (type === 'lab-task') {
+      correct = answer === true;
     } else if (type === 'fill-in-the-blank') {
       const normalizedInput = answer.toLowerCase().trim();
       const normalizedTarget = (currentChallenge.correctAnswer || "").toLowerCase().trim();
@@ -89,7 +91,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
     'image-selection': t('mission_modal.labels.image-selection'),
     'fill-in-the-blank': t('mission_modal.labels.fill-in-the-blank'),
     'drag-drop': t('mission_modal.labels.drag-drop'),
-    'matching': t('mission_modal.labels.matching')
+    'matching': t('mission_modal.labels.matching'),
+    'lab-task': t('mission_modal.labels.lab-task', { defaultValue: 'Chuẩn bị thí nghiệm' })
   };
 
   return (
@@ -114,7 +117,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
           <div className="flex items-center justify-between gap-4 mb-8">
              <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-viet-green/5 rounded-2xl flex items-center justify-center text-4xl border border-viet-green/10">
-                   {type === 'image-selection' ? '🔍' : '🧭'}
+                   {type === 'image-selection' ? '🔍' : type === 'lab-task' ? '🧪' : '🧭'}
                 </div>
                 <div>
                    <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">{typeLabels[type] || t('mission_modal.labels.mission')}</h3>
@@ -360,6 +363,36 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                          className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50 shadow-xl"
                        >
                          {t('mission_modal.matching.confirm')}
+                       </button>
+                    </div>
+                  )}
+
+                  {/* ---- LAB TASK CHECKLIST ---- */}
+                  {type === 'lab-task' && (
+                    <div className="flex flex-col gap-4">
+                       <div className="bg-white rounded-2xl border border-viet-border p-6 shadow-inner">
+                          <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-100">
+                             <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                             </div>
+                             <div>
+                                <h4 className="font-bold text-viet-text">Nhiệm vụ Lab</h4>
+                                <p className="text-[10px] text-viet-text-light font-bold uppercase">Xác nhận bạn đã chuẩn bị sẵn sàng</p>
+                             </div>
+                          </div>
+                          <div className="flex items-center gap-4 py-3 px-4 bg-indigo-50/50 rounded-xl border border-indigo-100/50">
+                             <div className="w-6 h-6 rounded-md bg-indigo-500 flex items-center justify-center text-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                             </div>
+                             <span className="text-[14px] font-bold text-indigo-900">{currentChallenge.text}</span>
+                          </div>
+                       </div>
+                       <button
+                         onClick={() => validateAnswer(true)}
+                         disabled={isCorrect !== null}
+                         className="w-full py-4 bg-indigo-500 text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 shadow-lg"
+                       >
+                         Hoàn thành bước này
                        </button>
                     </div>
                   )}
