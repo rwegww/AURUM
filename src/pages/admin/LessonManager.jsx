@@ -15,6 +15,7 @@ const LessonManager = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    content: '',
     classId: 8,
     chapter: 'Chương 1',
     programId: 'ketnoi'
@@ -46,6 +47,7 @@ const LessonManager = () => {
       setFormData({
         title: data.title,
         description: data.description,
+        content: data.content || '',
         classId: data.classId,
         chapter: data.chapter,
         programId: data.programId || 'ketnoi'
@@ -62,6 +64,7 @@ const LessonManager = () => {
     setFormData({
       title: '',
       description: '',
+      content: '',
       classId: selectedGrade || 8,
       chapter: 'Chương 1',
       programId: 'ketnoi'
@@ -273,11 +276,21 @@ const LessonManager = () => {
                      </div>
 
                      <div className="space-y-4">
-                        <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Mô tả bài tập</label>
+                        <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Mô tả bài học</label>
                         <textarea 
                           value={formData.description}
                           onChange={(e) => setFormData({...formData, description: e.target.value})}
                           className="w-full p-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-medium h-32 resize-none"
+                        />
+                     </div>
+
+                     <div className="space-y-4">
+                        <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Nội dung bài học (Hỗ trợ Markdown / LaTex)</label>
+                        <textarea 
+                          value={formData.content}
+                          onChange={(e) => setFormData({...formData, content: e.target.value})}
+                          className="w-full p-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-mono text-sm h-96 resize-y"
+                          placeholder="Nhập nội dung bài học..."
                         />
                      </div>
 
