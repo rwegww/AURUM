@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '../common/Avatar';
 
+import { LogOut } from 'lucide-react';
+
 const ManagementSidebar = ({ menuItems, title }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -13,8 +15,8 @@ const ManagementSidebar = ({ menuItems, title }) => {
       {/* Brand Header */}
       <div className="h-20 flex items-center px-6 border-b border-viet-border">
         <div className="flex items-center gap-2 group cursor-default">
-          {/* Styled $ Logo Small */}
-          <div className="w-10 h-10 mb-4 relative flex items-center justify-center shrink-0">
+          {/* Styled Logo Small */}
+          <div className="w-8 h-8 relative flex items-center justify-center shrink-0">
              <img src="/logo.png" alt="Admin" className="w-full h-full object-contain" />
           </div>
           <span className="text-xl font-black text-viet-text group-hover:text-viet-green transition-colors italic uppercase tracking-tighter">
@@ -24,17 +26,17 @@ const ManagementSidebar = ({ menuItems, title }) => {
       </div>
 
       {/* Role / Context Title */}
-      <div className="px-6 py-4 border-b border-viet-border/50 bg-viet-bg/30">
-        <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/60 block mb-1">
+      <div className="px-6 py-5 border-b border-viet-border/50 bg-slate-50/50">
+        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-viet-text-light/60 block mb-3">
           {title}
         </span>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 flex items-center justify-center shrink-0">
-            <Avatar seed={user?.avatarSeed || user?.username} size={42} streakCount={user?.streakCount} level={user?.level} className="w-full h-full" />
+          <div className="w-10 h-10 flex items-center justify-center shrink-0">
+            <Avatar seed={user?.avatarSeed || user?.username} size={38} streakCount={user?.streakCount} level={user?.level} className="w-full h-full" />
           </div>
-          <div>
-            <p className="text-sm font-bold text-viet-text leading-tight">{user?.username}</p>
-            <p className="text-xs text-viet-green font-bold capitalize">
+          <div className="overflow-hidden">
+            <p className="text-sm font-bold text-viet-text leading-none mb-1 truncate">{user?.username}</p>
+            <p className="text-[11px] text-viet-green font-bold capitalize">
               {user?.role === 'admin' ? 'Quản trị viên' : user?.role === 'teacher' ? 'Giáo viên' : user?.role}
             </p>
           </div>
@@ -42,7 +44,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2 custom-scrollbar">
+      <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
         {menuItems.map((item, index) => {
           const isActive = location.pathname === item.path || (item.path !== '/admin' && item.path !== '/teacher' && location.pathname.startsWith(item.path));
 
@@ -50,13 +52,15 @@ const ManagementSidebar = ({ menuItems, title }) => {
             <NavLink
               key={index}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all relative ${isActive
-                  ? 'text-viet-green bg-viet-green/10 font-bold'
+              className={`flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all relative group ${isActive
+                  ? 'text-viet-green bg-viet-green/5 font-bold shadow-sm shadow-viet-green/5'
                   : 'text-viet-text-light font-medium hover:bg-slate-50 hover:text-viet-text'
                 }`}
             >
-              <span className="text-xl">{item.icon}</span>
-              <span className="text-sm">{item.label}</span>
+              <div className={`shrink-0 transition-colors ${isActive ? 'text-viet-green' : 'text-slate-400 group-hover:text-viet-text'}`}>
+                {item.icon}
+              </div>
+              <span className="text-[13.5px] tracking-tight">{item.label}</span>
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
@@ -69,12 +73,12 @@ const ManagementSidebar = ({ menuItems, title }) => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-viet-border">
+      <div className="p-4 border-t border-viet-border bg-slate-50/30">
         <button
           onClick={logout}
-          className="flex items-center justify-center w-full gap-2 px-4 py-3 rounded-xl text-red-500 font-bold text-sm hover:bg-red-50 transition-colors"
+          className="flex items-center justify-center w-full gap-2 px-4 py-3 rounded-xl text-red-500 font-bold text-[13px] hover:bg-red-50 transition-all active:scale-95"
         >
-          <span></span> Đăng xuất
+          <LogOut size={18} /> Đăng xuất
         </button>
       </div>
     </div>
