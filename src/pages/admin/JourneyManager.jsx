@@ -195,11 +195,10 @@ const JourneyManager = () => {
                     <div className="w-px h-6 bg-slate-100 mx-2" />
                     
                     <Link 
-                      to={`/classroom/${selectedGrade}/journey/${lesson.lessonId}/intro?order=${index + 1}`} 
-                      target="_blank"
+                      to={`/admin/journey/${lesson.lessonId}`} 
                       className="px-4 py-2 rounded-xl text-[11px] font-black uppercase text-viet-green bg-viet-green/5 hover:bg-viet-green hover:text-white transition-all"
                     >
-                      Xem thử
+                      Chi tiết
                     </Link>
                   </div>
                 </div>

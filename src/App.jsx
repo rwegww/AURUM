@@ -68,6 +68,7 @@ const LessonManager = lazyWithRetry(() => import('@/pages/admin/LessonManager'))
 const UserManager = lazyWithRetry(() => import('@/pages/admin/UserManager'));
 const UserDetail = lazyWithRetry(() => import('@/pages/admin/UserDetail'));
 const JourneyManager = lazyWithRetry(() => import('@/pages/admin/JourneyManager'));
+const JourneyDetail = lazyWithRetry(() => import('@/pages/admin/JourneyDetail'));
 const FeedbackManager = lazyWithRetry(() => import('@/pages/admin/FeedbackManager'));
 
 // Lazy Loaded Teacher Modules
@@ -149,6 +150,7 @@ function AppContent() {
           <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
              <Route index element={<AdminDashboard />} />
              <Route path="journey" element={<JourneyManager />} />
+             <Route path="journey/:lessonId" element={<JourneyDetail />} />
              <Route path="lessons" element={<LessonManager />} />
              <Route path="users" element={<UserManager />} />
              <Route path="users/:id" element={<UserDetail />} />
