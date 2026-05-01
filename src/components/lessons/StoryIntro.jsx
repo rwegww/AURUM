@@ -42,6 +42,18 @@ const StoryIntro = ({ slides, onComplete, onSkip }) => {
             {/* Character Image */}
             <div className="w-48 h-48 md:w-64 md:h-64 shrink-0 relative">
                <div className="absolute inset-0 bg-viet-green/5 rounded-full scale-110 animate-pulse" />
+               
+               {/* Illustration Image (if exists) */}
+               {activeSlide.imageUrl && (
+                 <div className="absolute -top-12 -left-12 w-40 h-40 bg-white p-2 rounded-3xl border border-viet-border shadow-2xl rotate-[-6deg] z-30 overflow-hidden hidden md:block">
+                    <img 
+                      src={activeSlide.imageUrl} 
+                      className="w-full h-full object-cover rounded-2xl" 
+                      alt="Illustration" 
+                    />
+                 </div>
+               )}
+
                <img 
                  src={char.image} 
                  alt={char.name} 

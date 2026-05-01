@@ -12,6 +12,7 @@ const mapLesson = (lesson) => {
     quizzes: lesson.quizzes || [],
     storySlides: lesson.story_slides || [],
     challenges: lesson.challenges || [],
+    introVideoUrl: lesson.intro_video_url,
     isPremium: lesson.is_premium,
     // Remove snake_case versions to avoid confusion
     class_id: undefined,
@@ -37,6 +38,7 @@ const mapToPostgres = (l) => ({
   story_slides: l.storySlides || [],
   challenges: l.challenges || [],
   game: l.game || {},
+  intro_video_url: l.introVideoUrl,
   is_premium: l.isPremium || false
 });
 

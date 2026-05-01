@@ -37,7 +37,9 @@ const Classroom = lazyWithRetry(() => import('@/pages/student/Classroom'));
 const MyClass = lazyWithRetry(() => import('@/pages/student/MyClass'));
 const GradeJourney = lazyWithRetry(() => import('@/pages/student/GradeJourney'));
 const StageIntro = lazyWithRetry(() => import('@/pages/student/StageIntro'));
+const StageStory = lazyWithRetry(() => import('@/pages/student/StageStory'));
 const StageChallenge = lazyWithRetry(() => import('@/pages/student/StageChallenge'));
+const StageQuiz = lazyWithRetry(() => import('@/pages/student/StageQuiz'));
 const StageReward = lazyWithRetry(() => import('@/pages/student/StageReward'));
 const Lectures = lazyWithRetry(() => import('@/pages/student/Lectures'));
 const ChemLab = lazyWithRetry(() => import('@/pages/student/ChemLab'));
@@ -131,7 +133,9 @@ function AppContent() {
           <Route path="/my-class" element={<ProtectedRoute><MyClass /></ProtectedRoute>} />
           <Route path="/classroom/:grade/journey" element={<ProtectedRoute><GradeJourney /></ProtectedRoute>} />
           <Route path="/classroom/:grade/journey/:lessonId/intro" element={<ProtectedRoute><StageIntro /></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/story" element={<ProtectedRoute><StageStory /></ProtectedRoute>} />
           <Route path="/classroom/:grade/journey/:lessonId/challenge" element={<ProtectedRoute><StageChallenge /></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/quiz" element={<ProtectedRoute><StageQuiz /></ProtectedRoute>} />
           <Route path="/classroom/:grade/journey/:lessonId/reward" element={<ProtectedRoute><StageReward /></ProtectedRoute>} />
           <Route path="/lab" element={<ProtectedRoute><ChemLab /></ProtectedRoute>} />
           <Route path="/lab/simulator" element={<ProtectedRoute><LabSimulatorPage /></ProtectedRoute>} />
