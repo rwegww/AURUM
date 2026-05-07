@@ -159,7 +159,7 @@ export const AuthProvider = ({ children }) => {
       
       if (error) throw error;
       // Wait for redirect
-      return { success: true };
+      return { success: true, redirecting: true };
     } catch (err) {
       console.error('Google login error:', err.message);
       if (mountedRef.current) {
