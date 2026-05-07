@@ -20,7 +20,7 @@ const Login = () => {
     if (isLoggedIn && user) {
       if (user.role === 'admin') navigate('/admin');
       else if (user.role === 'teacher') navigate('/teacher');
-      else navigate('/lessons');
+      else navigate('/');
     }
   }, [isLoggedIn, user, navigate]);
 
@@ -63,7 +63,7 @@ const Login = () => {
       } else if (result.user?.role === 'teacher') {
         navigate('/teacher');
       } else {
-        navigate('/lessons');
+        navigate('/');
       }
     } else {
       setError(result.message || 'Sai email hoặc mật khẩu');
@@ -81,7 +81,7 @@ const Login = () => {
       } else if (result.user?.role === 'teacher') {
         navigate('/teacher');
       } else {
-        navigate('/lessons');
+        navigate('/');
       }
     } else if (result.message) {
       setError(result.message);
