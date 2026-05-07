@@ -3,43 +3,11 @@ import { supabase } from '../lib/supabase.js';
 import Mission from '../models/Mission.js';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
+import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
 // Auth Middleware (Simplified from lab.js)
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ message: 'Unauthorized' });
-
-    let userId;
-    let user;
-
-    // 1. Try Supabase
-    try {
-      const { data, error } = await supabase.auth.getUser(token);
-      if (data?.user && !error) {
-        userId = data.user.id;
-        user = await User.findById(userId);
-      }
-    } catch(e) {}
-
-    // 2. Try JWT
-    if (!user) {
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        userId = decoded.id;
-        user = await User.findById(userId);
-      } catch(e) {}
-    }
-
-    if (!user) return res.status(401).json({ message: 'Unauthorized' });
-    req.user = user;
-    next();
-  } catch (e) {
-    res.status(401).json({ message: 'Authentication failed' });
-  }
-};
 
 // GET /api/missions - Get all missions with current progress
 router.get('/', auth, async (req, res) => {

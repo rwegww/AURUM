@@ -2,43 +2,11 @@ import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { auth } from '../_middleware/auth.js';
 // removed redundant import
 
 const router = express.Router();
 
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) throw new Error('Token missing');
-
-    let userId;
-    let user;
-
-    const { data, error: sbError } = await supabase.auth.getUser(token);
-    const sbUser = data?.user;
-    
-    if (sbUser && !sbError) {
-      userId = sbUser.id;
-      user = await User.findById(userId);
-    } else {
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        userId = decoded.id;
-        user = await User.findById(userId);
-      } catch (jwtErr) {
-        throw new Error('Xác thực thất bại');
-      }
-    }
-
-    if (!user) throw new Error('Không tìm thấy thông tin người dùng');
-
-    req.user = user;
-    req.token = token;
-    next();
-  } catch (e) {
-    res.status(401).json({ message: 'Vui lòng đăng nhập lại', error: e.message });
-  }
-};
 
 // Get all classes for a teacher or student
 router.get('/', auth, async (req, res) => {

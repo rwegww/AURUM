@@ -2,34 +2,11 @@ import express from 'express';
 import { Discussion, Note } from '../models/Discussion.js';
 import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
+import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
 // Middleware to verify JWT
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ error: 'Hãy đăng nhập để thực hiện' });
-
-    const { data: { user: sbUser }, error: sbError } = await supabase.auth.getUser(token);
-    
-    if (sbUser && !sbError) {
-      req.user = await User.findById(sbUser.id);
-      if (!req.user) {
-         // Create profile if missing
-         req.user = await User.create({
-            id: sbUser.id,
-            username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
-            email: sbUser.email
-         });
-      }
-      return next();
-    }
-    throw new Error('Unauthorized');
-  } catch (err) {
-    res.status(401).json({ error: 'Phiên làm việc hết hạn' });
-  }
-};
 
 // --- DISCUSSION ROUTES ---
 

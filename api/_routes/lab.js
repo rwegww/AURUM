@@ -2,52 +2,12 @@ import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
 import Mission from '../models/Mission.js';
+import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
 import jwt from 'jsonwebtoken';
 
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    // If no token, treat as guest
-    if (!token) {
-      req.user = null;
-      return next();
-    }
-
-    let userId;
-    let user;
-
-    // 1. Try to verify as Supabase token
-    try {
-      const { data, error: sbError } = await supabase.auth.getUser(token);
-      if (data?.user && !sbError) {
-        userId = data.user.id;
-        user = await User.findById(userId);
-      }
-    } catch (sbErr) {
-      // Fall through to JWT check
-    }
-
-    // 2. Fallback: Try to verify as custom JWT
-    if (!user) {
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        userId = decoded.id;
-        user = await User.findById(userId);
-      } catch (jwtErr) {
-        // Not a valid JWT either, just treat as guest or ignore
-      }
-    }
-
-    req.user = user;
-    next();
-  } catch (e) {
-    console.error('❌ Lab Auth Error:', e.message);
-    next(); // Fallback to guest
-  }
-};
 
 // GET /api/lab/chemicals - Get all chemicals
 router.get('/chemicals', async (req, res) => {

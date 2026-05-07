@@ -2,27 +2,11 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
+import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
 // ─── AUTH MIDDLEWARE ──────────────────────────────────────────────────────────
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) throw new Error('Token missing');
-
-    const { data: { user: sbUser }, error: sbError } = await supabase.auth.getUser(token);
-    if (sbUser && !sbError) {
-      req.userId = sbUser.id;
-    } else {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.userId = decoded.id;
-    }
-    next();
-  } catch (e) {
-    res.status(401).json({ message: 'Vui lòng đăng nhập lại' });
-  }
-};
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
 const POINTS = { win: 100, lose: -50, draw: 20 };
