@@ -239,7 +239,9 @@
       "save_btn": "Lưu kế hoạch",
       "saving": "Đang lưu...",
       "success": "Đã cập nhật kế hoạch học tập!",
-      "reminder_msg": "🔔 Đã đến giờ học rồi! Hôm nay bạn vẫn chưa hoàn thành mục tiêu bài học nào. Hãy vào học ngay để duy trì chuỗi nhé!"
+      "reminder_msg": "🔔 Đã đến giờ học rồi! Hôm nay bạn vẫn chưa hoàn thành mục tiêu bài học nào. Hãy vào học ngay để duy trì chuỗi nhé!",
+      "email_reminders": "Nhắc nhở qua Email",
+      "calendar_reminders": "Đồng bộ Google Calendar"
     },
     "arena_stats": {
       "title": "Thống kê Đấu Trường",
@@ -247,12 +249,12 @@
       "wins": "Số trận thắng",
       "losses": "Số trận thua",
       "win_rate": "Tỉ lệ thắng",
-      "challenge_now": "Thách đấu ngay →",
-      "history_title": "Nhật ký hoạt động",
-      "history_empty": "Bạn chưa thực hiện hành động nào đáng chú ý.",
-      "history_clear": "Xóa nhật ký",
-      "history_time_ago": "Lúc"
-    }
+      "challenge_now": "Thách đấu ngay →"
+    },
+    "history_title": "Nhật ký hoạt động",
+    "history_empty": "Bạn chưa thực hiện hành động nào đáng chú ý.",
+    "history_clear": "Xóa nhật ký",
+    "history_time_ago": "Lúc"
   },
   "missions": {
     "badge": "Trung tâm huấn luyện",
@@ -450,6 +452,7 @@
   "common": {
     "grade": "Lớp {{grade}}",
     "lesson": "Bài {{order}}",
+    "lesson_count": "Bài",
     "loading": "Đang tải...",
     "back": "Quay lại",
     "continue": "Tiếp tục",
