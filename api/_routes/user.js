@@ -30,6 +30,10 @@ const auth = async (req, res, next) => {
         userId = sbUser.id;
         user = await User.findById(userId);
         
+        if (!user && sbUser.email) {
+          user = await User.findOne({ email: sbUser.email });
+        }
+        
         if (!user) {
           user = await User.create({
             id: userId,
