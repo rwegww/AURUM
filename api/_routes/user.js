@@ -15,35 +15,33 @@ const auth = async (req, res, next) => {
     let userId;
     let user;
 
-    // 1. Try to verify as Supabase token
-    const { data, error: sbError } = await supabase.auth.getUser(token);
-    const sbUser = data?.user;
-    
-    if (sbUser && !sbError) {
-      userId = sbUser.id;
-      // Check if user exists in our local 'users' table
+    // 1. Try to verify as custom JWT first (used by both custom login and Firebase Google login)
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      userId = decoded.id;
+      req.decodedCustomJwt = decoded;
       user = await User.findById(userId);
+    } catch (jwtErr) {
+      // 2. Fallback: Try as Supabase token (legacy)
+      const { data, error: sbError } = await supabase.auth.getUser(token);
+      const sbUser = data?.user;
       
-      // If Supabase user exists but not in our 'users' table, create a basic profile
-      if (!user) {
-        user = await User.create({
-          id: userId,
-          username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
-          email: sbUser.email,
-          password: 'supabase_oauth_no_password',
-          role: 'student'
-        });
-      }
-    } else {
-      // 2. Fallback: Try to verify as custom JWT (legacy/internal)
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        userId = decoded.id;
-        req.decodedCustomJwt = decoded;
+      if (sbUser && !sbError) {
+        userId = sbUser.id;
         user = await User.findById(userId);
-      } catch (jwtErr) {
-        console.error('Auth Debug:', { sbError: sbError?.message, jwtError: jwtErr.message });
-        throw new Error(`Xác thực thất bại: ${sbError?.message || jwtErr.message}`);
+        
+        if (!user) {
+          user = await User.create({
+            id: userId,
+            username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
+            email: sbUser.email,
+            password: 'supabase_oauth_no_password',
+            role: 'student'
+          });
+        }
+      } else {
+        console.error('Auth Debug:', { jwtError: jwtErr.message, sbError: sbError?.message });
+        throw new Error(`Xác thực thất bại: ${jwtErr.message}`);
       }
     }
 

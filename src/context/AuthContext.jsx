@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import { auth as firebaseAuth, googleProvider } from '@/lib/firebase';
+import { signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import i18n from '@/i18n';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
@@ -27,6 +29,9 @@ export const AuthProvider = ({ children }) => {
       const authType = localStorage.getItem('authType');
       if (authType === 'supabase') {
         await supabase.auth.signOut();
+      }
+      if (authType === 'firebase') {
+        await firebaseSignOut(firebaseAuth);
       }
     } catch (err) {
       console.error('Error during logout:', err);
@@ -139,20 +144,41 @@ export const AuthProvider = ({ children }) => {
   const loginWithGoogle = useCallback(async () => {
     try {
       setLoading(true);
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + '/auth/callback'
-        }
+      setAuthError(null);
+      
+      // Firebase Google Sign-In with Popup
+      const result = await signInWithPopup(firebaseAuth, googleProvider);
+      const idToken = await result.user.getIdToken();
+      
+      // Send Firebase ID token to our backend to create/get user and get JWT
+      const res = await fetch('/api/auth/google-firebase', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken })
       });
-      if (error) throw error;
-      return { success: true };
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Đăng nhập Google thất bại');
+      
+      // Store session info
+      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+        ? crypto.randomUUID() 
+        : Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('sessionId', newSessionId);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('authType', 'firebase');
+      
+      const userData = await fetchProfile(data.token, true);
+      return { success: true, user: userData };
     } catch (err) {
       console.error('Google login error:', err.message);
-      if (mountedRef.current) setLoading(false);
+      if (mountedRef.current) {
+        setLoading(false);
+        setAuthError(err.message);
+      }
       return { success: false, message: err.message };
     }
-  }, []);
+  }, [fetchProfile]);
 
   const register = useCallback(async (username, password, email, role = 'student') => {
     try {
@@ -268,57 +294,31 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       try {
         const authType = localStorage.getItem('authType');
-        if (authType === 'custom') {
-          const token = localStorage.getItem('token');
-          if (token) await fetchProfile(token);
-          else if (mountedRef.current) setLoading(false);
-        } else {
+        const token = localStorage.getItem('token');
+        
+        if ((authType === 'custom' || authType === 'firebase') && token) {
+          // Custom login or Firebase login - token is our own JWT
+          await fetchProfile(token, true);
+        } else if (authType === 'supabase') {
+          // Legacy Supabase login - try to get session
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             localStorage.setItem('token', session.access_token);
-            localStorage.setItem('authType', 'supabase');
             await fetchProfile(session.access_token, true);
           } else if (mountedRef.current) setLoading(false);
+        } else {
+          if (mountedRef.current) setLoading(false);
         }
       } catch (err) {
+        console.error('Init auth error:', err);
         if (mountedRef.current) setLoading(false);
       }
     };
 
     initAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      try {
-        if (event === 'SIGNED_IN' && session) {
-          localStorage.setItem('token', session.access_token);
-          localStorage.setItem('authType', 'supabase');
-          
-          // Generate session ID for Supabase user if not exists
-          if (!localStorage.getItem('sessionId')) {
-            const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-              ? crypto.randomUUID() 
-              : Math.random().toString(36).substring(2) + Date.now().toString(36);
-            localStorage.setItem('sessionId', newSessionId);
-          }
-          
-          await fetchProfile(session.access_token, true);
-        } else if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('authType');
-          if (mountedRef.current) {
-            setUser(null);
-            setIsLoggedIn(false);
-          }
-          if (window.location.pathname !== '/') window.location.href = '/';
-        }
-      } catch (authErr) {
-        console.error('Auth status change error:', authErr);
-      }
-    });
-
     return () => {
       mountedRef.current = false;
-      subscription.unsubscribe();
     };
   }, [fetchProfile]);
 

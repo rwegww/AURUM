@@ -1,13 +1,11 @@
 import admin from 'firebase-admin';
 
 let app;
-
-// In a real environment, you should use a service account key file
-// For this tutorial, we will expect FIREBASE_SERVICE_ACCOUNT_JSON env var 
-// OR a file at service-account.json
+let initialized = false;
 
 const initializeFirebase = () => {
-  if (app) return app;
+  if (initialized) return app;
+  initialized = true;
 
   try {
     const serviceAccountVar = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
@@ -15,17 +13,21 @@ const initializeFirebase = () => {
 
     if (serviceAccountVar) {
       serviceAccount = JSON.parse(serviceAccountVar);
+      app = admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+      });
+      console.log('✅ Firebase Admin initialized with service account.');
+      return app;
     } else {
-      // Fallback to local file if it exists
-      // admin.initializeApp({ credential: admin.credential.cert('path/to/key.json') });
-      console.warn('FIREBASE_SERVICE_ACCOUNT_JSON not found. Firebase Admin will not work until configured.');
-      return null;
+      // Initialize without service account - use project ID only
+      // This allows verifyIdToken to work by fetching Google's public keys
+      const projectId = process.env.FIREBASE_PROJECT_ID || 'khoaluan-2026';
+      app = admin.initializeApp({
+        projectId
+      });
+      console.log('✅ Firebase Admin initialized with project ID:', projectId);
+      return app;
     }
-
-    app = admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-    return app;
   } catch (err) {
     console.error('Lỗi khởi tạo Firebase Admin:', err.message);
     return null;

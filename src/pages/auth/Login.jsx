@@ -62,9 +62,21 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setAuthError(null);
-    loginWithGoogle();
+    setError('');
+    const result = await loginWithGoogle();
+    if (result.success) {
+      if (result.user?.role === 'admin') {
+        navigate('/admin');
+      } else if (result.user?.role === 'teacher') {
+        navigate('/teacher');
+      } else {
+        navigate('/lessons');
+      }
+    } else if (result.message) {
+      setError(result.message);
+    }
   };
 
   return (
