@@ -10,10 +10,18 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, authError } = useAuth();
   const navigate = useNavigate();
 
+  const displayError = error || authError;
+
   React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlError = params.get('error');
+    if (urlError) {
+      setError(decodeURIComponent(urlError));
+    }
+
     const savedEmail = localStorage.getItem('rememberEmail');
     const savedPassword = localStorage.getItem('rememberPassword');
     
@@ -30,6 +38,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setAuthError(null);
     const result = await login(email, password, rememberMe);
     if (result.success) {
       if (rememberMe) {
@@ -54,6 +63,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
+    setAuthError(null);
     loginWithGoogle();
   };
 
@@ -81,13 +91,13 @@ const Login = () => {
 
 
 
-        {error && (
+        {displayError && (
           <motion.div 
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase ring-1 ring-red-100 flex items-center gap-2 shadow-sm"
           >
-             <span className="text-base">🚨</span> {error}
+             <span className="text-base">🚨</span> {displayError}
           </motion.div>
         )}
 

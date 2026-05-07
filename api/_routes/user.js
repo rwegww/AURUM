@@ -42,7 +42,8 @@ const auth = async (req, res, next) => {
         req.decodedCustomJwt = decoded;
         user = await User.findById(userId);
       } catch (jwtErr) {
-        throw new Error('Xác thực thất bại');
+        console.error('Auth Debug:', { sbError: sbError?.message, jwtError: jwtErr.message });
+        throw new Error(`Xác thực thất bại: ${sbError?.message || jwtErr.message}`);
       }
     }
 
