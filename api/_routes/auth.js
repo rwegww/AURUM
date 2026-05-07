@@ -64,7 +64,10 @@ router.post('/google-firebase', async (req, res) => {
       code: err.code,
       stack: err.stack
     });
-    res.status(401).json({ message: 'Xác thực Google thất bại', error: err.message });
+    res.status(401).json({ 
+      message: `Lỗi Firebase: ${err.message}`, 
+      error: err.code || 'unknown'
+    });
   }
 });
 
