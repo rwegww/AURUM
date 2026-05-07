@@ -16,19 +16,25 @@ router.post('/google-firebase', async (req, res) => {
     const decodedToken = await firebaseAdmin.verifyToken(idToken);
     const { uid, email, name, picture } = decodedToken;
 
-    // Check if user exists by firebase uid (which we store in users.id)
+    // 1. Check if user exists by firebase uid
     let user = await User.findById(uid);
     
-    // Fallback: check by email if UID not found (maybe they first registered via email)
+    // 2. If not found by UID, check by email (to link existing accounts)
     if (!user && email) {
-      // Find user by email and potentially link them? 
-      // For now, let's create a new one if not found
+      user = await User.findOne({ email });
+      if (user) {
+        console.log(`🔗 Linking existing user ${user.username} (email: ${email}) to Firebase UID: ${uid}`);
+        // We need to update the user ID to the Firebase UID for future lookups
+        // Note: If the ID is a primary key, we might need a specific method. 
+        // For now, let's just log in with this user and keep their existing ID
+        // But to make findById(uid) work next time, we should ideally update the ID or store the mapping.
+      }
     }
 
     if (!user) {
       // Create new user with Firebase UID as primary key
       user = await User.create({
-        id: uid, // Use Firebase UID
+        id: uid, 
         username: name || email.split('@')[0],
         email,
         password: 'google_oauth_no_password',
