@@ -123,7 +123,9 @@ export const AuthProvider = ({ children }) => {
 
       if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
       
-      const newSessionId = crypto.randomUUID();
+      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+        ? crypto.randomUUID() 
+        : Math.random().toString(36).substring(2) + Date.now().toString(36);
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
@@ -162,7 +164,9 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Lỗi đăng ký');
 
-      const newSessionId = crypto.randomUUID();
+      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+        ? crypto.randomUUID() 
+        : Math.random().toString(36).substring(2) + Date.now().toString(36);
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
@@ -291,7 +295,10 @@ export const AuthProvider = ({ children }) => {
           
           // Generate session ID for Supabase user if not exists
           if (!localStorage.getItem('sessionId')) {
-            localStorage.setItem('sessionId', crypto.randomUUID());
+            const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+              ? crypto.randomUUID() 
+              : Math.random().toString(36).substring(2) + Date.now().toString(36);
+            localStorage.setItem('sessionId', newSessionId);
           }
           
           await fetchProfile(session.access_token, true);
