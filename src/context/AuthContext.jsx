@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import i18n from '@/i18n';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
 const AuthContext = createContext();
@@ -31,6 +32,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('authType');
+      localStorage.removeItem('sessionId');
       if (mountedRef.current) {
         setUser(null);
         setIsLoggedIn(false);
@@ -62,8 +64,14 @@ export const AuthProvider = ({ children }) => {
     fetchingTokenRef.current = token;
 
     try {
-      const res = await fetch('/api/user/profile', {
-        headers: { Authorization: `Bearer ${token}` }
+      const sessionId = localStorage.getItem('sessionId');
+      // Always claim session if force=true (which happens on login/init)
+      const url = force ? `/api/user/profile?claim=true` : `/api/user/profile`;
+      const res = await fetch(url, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'X-Session-ID': sessionId 
+        }
       });
       
       if (res.ok) {
@@ -74,7 +82,13 @@ export const AuthProvider = ({ children }) => {
         }
         return userData;
       } else if (res.status === 401) {
-        await logout();
+        const errorData = await res.json().catch(() => ({}));
+        if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
+          alert('Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất để bảo mật.');
+          await logout();
+        } else {
+          await logout();
+        }
       }
     } catch (err) {
       if (err.name !== 'AbortError') console.error('Lỗi tải profile:', err);
@@ -100,7 +114,9 @@ export const AuthProvider = ({ children }) => {
       }
 
       if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
-
+      
+      const newSessionId = crypto.randomUUID();
+      localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
       const userData = await fetchProfile(data.token);
@@ -138,6 +154,8 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Lỗi đăng ký');
 
+      const newSessionId = crypto.randomUUID();
+      localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
       await fetchProfile(data.token);
@@ -262,6 +280,12 @@ export const AuthProvider = ({ children }) => {
         if (event === 'SIGNED_IN' && session) {
           localStorage.setItem('token', session.access_token);
           localStorage.setItem('authType', 'supabase');
+          
+          // Generate session ID for Supabase user if not exists
+          if (!localStorage.getItem('sessionId')) {
+            localStorage.setItem('sessionId', crypto.randomUUID());
+          }
+          
           await fetchProfile(session.access_token);
         } else if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
           localStorage.removeItem('token');
@@ -292,11 +316,13 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('token');
         if (!token) return;
 
+        const sessionId = localStorage.getItem('sessionId');
         const res = await fetch('/api/user/heartbeat', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'X-Session-ID': sessionId
           }
         });
         
@@ -308,6 +334,38 @@ export const AuthProvider = ({ children }) => {
               todayOnlineMinutes: data.onlineMinutes,
               streakCount: data.streakCount
             }));
+
+            // --- Study Plan Reminder Logic ---
+            const studyPlan = data.user?.studyPlan || user?.studyPlan;
+            if (studyPlan?.remindersEnabled && !data.todayLessonCompleted) {
+              const now = new Date();
+              const [hours, minutes] = (studyPlan.studyTime || '20:00').split(':').map(Number);
+              const studyDateTime = new Date();
+              studyDateTime.setHours(hours, minutes, 0, 0);
+
+              if (now >= studyDateTime) {
+                const today = now.toISOString().split('T')[0];
+                const lastReminder = localStorage.getItem('last_study_reminder');
+                
+                if (lastReminder !== today) {
+                  // Using alert as a simple notification for now
+                  // In a real app, use a Toast or Browser Notification API
+                  const msg = i18n.language === 'vi' 
+                    ? "🔔 Đã đến giờ học rồi! Hãy vào học ngay để hoàn thành mục tiêu hôm nay nhé!"
+                    : "🔔 It's study time! Let's complete your daily goal now!";
+                  
+                  alert(msg);
+                  localStorage.setItem('last_study_reminder', today);
+                }
+              }
+            }
+            // ---------------------------------
+          }
+        } else if (res.status === 401) {
+          const errorData = await res.json().catch(() => ({}));
+          if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
+            alert('Phiên đăng nhập hết hạn vì bạn đã đăng nhập ở thiết bị khác.');
+            await logout();
           }
         }
       } catch (err) {

@@ -200,6 +200,13 @@ class AurumExpertEngine {
     // 4. Curriculum / Meta triggers (Fallback)
     if (q.includes('vai trò')) return this.handleRoleCheck(role);
     if (q.includes('bài học') || q.includes('lộ trình')) return this.handleLessonHelp(role);
+    if (q.includes('máy tính') || q.includes('calculator') || q.includes('tính toán')) {
+      return {
+        message: 'Bạn có thể sử dụng **Máy tính Hóa học Vạn năng** của Aurum để tính toán mol, nồng độ, thể tích khí và hàng loạt công thức khác một cách tự động.',
+        actions: [{ label: 'Mở Máy Tính Hóa Học', link: '/calculator' }],
+        suggestions: ['Cách tính nồng độ mol', 'Tính khối lượng chất', 'Đổi đơn vị hóa học']
+      };
+    }
 
     return this.handleFallback();
   }
@@ -447,6 +454,7 @@ class AurumExpertEngine {
         randomElements[0] ? `${randomElements[0].symbol} là gì?` : 'Cấu tạo nguyên tử',
         randomElements[1] ? `Hóa trị của ${randomElements[1].symbol}` : 'Mol là gì?',
         'Phản ứng Na + Cl2',
+        'Máy tính hóa học',
         'Bản đồ kiến thức hóa học'
       ]
     };

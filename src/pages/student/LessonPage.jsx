@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
 import TheoryRenderer from '@/components/lessons/TheoryRenderer';
 import LessonSidebar from '@/components/navigation/LessonSidebar';
+import { activityService } from '@/services/ActivityService';
 import DiscussionBoard from '@/components/lessons/DiscussionBoard';
 import StoryIntro from '@/components/lessons/StoryIntro';
 
@@ -34,6 +35,15 @@ const LessonPage = () => {
       
       setLesson(lessonData);
       setGradeLessons(listData);
+
+      // LOG ACTIVITY
+      activityService.log({
+        type: 'lesson',
+        label: `Học bài: ${lessonData.title}`,
+        description: `Đã truy cập bài học ${lessonData.title} (Lớp ${grade})`,
+        icon: '📚',
+        link: `/lessons/${grade}/${lessonId}`
+      });
 
     } catch (err) {
       console.error(t('lesson_page.error.fetch'), err);

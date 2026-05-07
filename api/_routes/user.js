@@ -39,6 +39,7 @@ const auth = async (req, res, next) => {
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         userId = decoded.id;
+        req.decodedCustomJwt = decoded;
         user = await User.findById(userId);
       } catch (jwtErr) {
         throw new Error('Xác thực thất bại');
@@ -48,12 +49,24 @@ const auth = async (req, res, next) => {
     if (!user) throw new Error('Không tìm thấy thông tin người dùng');
     if (user.isLocked) throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
 
+    // 3. Single session enforcement (Universal check)
+    const clientSessionId = req.header('X-Session-ID') || (req.decodedCustomJwt?.sessionId);
+    if (clientSessionId && user.currentSessionId && clientSessionId !== user.currentSessionId) {
+      const error = new Error('DUAL_LOGIN');
+      error.message = 'Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất.';
+      throw error;
+    }
+
     req.user = user;
     req.token = token;
     next();
   } catch (e) {
     console.error('Auth Middleware Error:', e.message);
-    res.status(401).json({ message: 'Vui lòng đăng nhập lại', error: e.message });
+    const status = e.message === 'DUAL_LOGIN' || e.message.includes('đăng nhập ở một thiết bị khác') ? 401 : 401;
+    res.status(status).json({ 
+      message: e.message === 'DUAL_LOGIN' ? 'Tài khoản đã đăng nhập ở nơi khác' : e.message, 
+      error: e.message === 'DUAL_LOGIN' ? 'DUAL_LOGIN' : e.message 
+    });
   }
 };
 
@@ -92,6 +105,15 @@ router.get('/leaderboard', async (req, res) => {
 
 // Get Profile
 router.get('/profile', auth, async (req, res) => {
+  // If 'claim' param is true, update the currentSessionId in DB
+  if (req.query.claim === 'true') {
+    const sessionId = req.header('X-Session-ID');
+    if (sessionId) {
+      await User.update(req.user.id, { currentSessionId: sessionId });
+      req.user.currentSessionId = sessionId; // Update in-memory user for immediate consistency
+    }
+  }
+
   res.json({
     id: req.user.id,
     username: req.user.username,
@@ -204,12 +226,15 @@ router.post('/heartbeat', auth, async (req, res) => {
       updateFields.last_streak_at = now.toISOString();
     }
 
-    await User.update(userId, updateFields);
+    const updatedUser = await User.update(userId, updateFields);
+    const userProfile = await User.findById(userId);
 
     res.json({ 
       success: true, 
       onlineMinutes, 
-      streakCount: updateFields.streak_count || req.user.streakCount 
+      streakCount: updatedUser.streakCount,
+      todayLessonCompleted: updatedUser.todayLessonCompleted,
+      user: userProfile
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
