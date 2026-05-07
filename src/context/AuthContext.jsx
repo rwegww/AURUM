@@ -286,7 +286,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('sessionId', crypto.randomUUID());
           }
           
-          await fetchProfile(session.access_token);
+          await fetchProfile(session.access_token, true);
         } else if (event === 'SIGNED_OUT' || (event === 'TOKEN_REFRESHED' && !session)) {
           localStorage.removeItem('token');
           localStorage.removeItem('authType');

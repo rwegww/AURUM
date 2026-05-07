@@ -50,8 +50,9 @@ const auth = async (req, res, next) => {
     if (user.isLocked) throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
 
     // 3. Single session enforcement (Universal check)
+    // Skip enforcement if this is a 'claim' request (initial login/session takeover)
     const clientSessionId = req.header('X-Session-ID') || (req.decodedCustomJwt?.sessionId);
-    if (clientSessionId && user.currentSessionId && clientSessionId !== user.currentSessionId) {
+    if (req.query.claim !== 'true' && clientSessionId && user.currentSessionId && clientSessionId !== user.currentSessionId) {
       const error = new Error('DUAL_LOGIN');
       error.message = 'Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất.';
       throw error;
