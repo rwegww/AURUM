@@ -10,7 +10,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, authError, setAuthError, isLoggedIn, user } = useAuth();
+  const { login, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const displayError = error || authError;
@@ -87,6 +87,17 @@ const Login = () => {
       setError(result.message);
     }
   };
+
+  if (authLoading || (isLoggedIn && user) || window.location.hash.includes('access_token')) {
+    return (
+      <AuthLayout>
+        <div className="flex flex-col items-center justify-center min-h-[400px]">
+          <div className="w-12 h-12 border-4 border-viet-green/30 border-t-viet-green rounded-full animate-spin mb-4"></div>
+          <p className="text-slate-500 font-medium animate-pulse">Đang xác thực thông tin...</p>
+        </div>
+      </AuthLayout>
+    );
+  }
 
   return (
     <AuthLayout>
