@@ -36,7 +36,7 @@ const StageQuiz = () => {
     fetchLesson();
   }, [lessonId]);
 
-  // Xử lý hoàn thành quiz (level2, level3)
+  // Xử lý hoàn thành quiz (level1, level2, level3)
   const handleLevelComplete = async ({ mistakes, total }) => {
     let stars = 1;
     if (mistakes <= 1) stars = 3;
@@ -47,8 +47,8 @@ const StageQuiz = () => {
     setShowResult(true);
 
     if (user) {
-      const xpMap = { level2: 50, level3: 100 };
-      const xpGain = xpMap[currentLevel] || 50;
+      const xpMap = { level1: 30, level2: 50, level3: 100 };
+      const xpGain = xpMap[currentLevel] || 30;
       const isLessonCompletion = currentLevel === 'level3';
 
       try {
@@ -64,10 +64,12 @@ const StageQuiz = () => {
   const handleVideoComplete = async () => {
     setVideoCompleted(true);
 
-    if (user) {
+    // Chỉ tự động lưu nếu level1 không có bài tập trắc nghiệm nào
+    const currentQuestions = getLevelData('level1');
+    if (user && currentQuestions.length === 0) {
       try {
         await completeLessonSegment(lessonId, 'level1', 3, 30, false);
-        console.log('✅ Đã lưu giai đoạn xem video:', { lessonId });
+        console.log('✅ Đã lưu giai đoạn 1 (Chỉ video):', { lessonId });
       } catch (err) {
         console.error('❌ Lỗi khi lưu giai đoạn video:', err);
       }
