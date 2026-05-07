@@ -192,11 +192,9 @@ const Profile = () => {
             color="bg-purple-500"
           />
         </div>
-      </div>
 
-      {/* Study Plan Section */}
-      <div className="max-w-[1200px] mx-auto px-6 mb-16">
-        <div className="bg-white rounded-[40px] p-10 border border-viet-border shadow-xl overflow-hidden relative">
+        {/* Study Plan Section */}
+        <div className="bg-white rounded-[40px] p-10 border border-viet-border shadow-xl overflow-hidden relative mb-16">
           <div className="absolute top-0 right-0 w-64 h-64 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           
           <div className="relative z-10">
@@ -287,7 +285,6 @@ const Profile = () => {
             </div>
           </div>
         </div>
-      </div>
 
         {/* Detailed Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
