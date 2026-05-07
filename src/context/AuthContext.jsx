@@ -89,10 +89,12 @@ export const AuthProvider = ({ children }) => {
         return userData;
       } else if (res.status === 401) {
         const errorData = await res.json().catch(() => ({}));
+        console.error('Lỗi 401 từ Server:', errorData);
         if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
           alert('Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất để bảo mật.');
           await logout();
         } else {
+          alert(`Lỗi xác thực: ${errorData.message || 'Không rõ'}. Vui lòng kiểm tra Server Vercel.`);
           await logout();
         }
       }
