@@ -9,6 +9,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
   const [inputValue, setInputValue] = useState("");
   const [dragItems, setDragItems] = useState([]);
   const [isCorrect, setIsCorrect] = useState(null);
+  const [mistakes, setMistakes] = useState(0);
   
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -68,13 +69,14 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
       setIsCorrect(true);
       setTimeout(() => {
         if (isFinalStep) {
-          onUnlock();
+          onUnlock({ mistakes, total: challenges.length });
         } else {
           setCurrentStep(prev => prev + 1);
         }
       }, 1200);
     } else {
       setIsCorrect(false);
+      setMistakes(prev => prev + 1);
       setTimeout(() => {
         setIsCorrect(null);
         setSelected(null);
