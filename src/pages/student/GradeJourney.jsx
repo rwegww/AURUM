@@ -160,20 +160,13 @@ const GradeJourney = () => {
 
                         {/* Segmented Progress Display */}
                         {!isLocked && (
-                          <div className="flex flex-col gap-2">
-                             <div className="flex gap-1 h-1.5 w-full">
-                                {['level1', 'level2', 'level3'].map((lvl, i) => (
-                                  <div 
-                                    key={lvl} 
-                                    className={`flex-1 rounded-full transition-all duration-500 ${lessonStars[lvl] > 0 ? 'bg-viet-green shadow-[0_0_8px_rgba(46,204,113,0.4)]' : 'bg-slate-100'}`}
-                                  />
-                                ))}
-                             </div>
-                             <div className="flex justify-between text-[8px] font-black uppercase tracking-tighter text-slate-300">
-                                <span className={lessonStars.level1 > 0 ? 'text-viet-green' : ''}>Bài giảng</span>
-                                <span className={lessonStars.level2 > 0 ? 'text-viet-green' : ''}>Hiểu</span>
-                                <span className={lessonStars.level3 > 0 ? 'text-viet-green' : ''}>Ôn tập</span>
-                             </div>
+                          <div className="flex gap-1 h-1.5 w-full">
+                             {['level1', 'level2', 'level3'].map((lvl, i) => (
+                               <div 
+                                 key={lvl} 
+                                 className={`flex-1 rounded-full transition-all duration-500 ${lessonStars[lvl] > 0 ? 'bg-viet-green shadow-[0_0_8px_rgba(46,204,113,0.4)]' : 'bg-slate-100'}`}
+                               />
+                             ))}
                           </div>
                         )}
                       </div>
