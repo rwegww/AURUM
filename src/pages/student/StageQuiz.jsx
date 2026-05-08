@@ -8,14 +8,14 @@ const StageQuiz = () => {
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
+  
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentLevel, setCurrentLevel] = useState('level1'); // level1, level2, level3
-  const [results, setResults] = useState({
-    level1: null, // { mistakes, total, stars }
-    level2: null,
-    level3: null
-  });
+  const [currentLevel, setCurrentLevel] = useState(searchParams.get('level') || 'level1');
+  const [showResult, setShowResult] = useState(false);
+  const [lastResult, setLastResult] = useState(null);
+  
   const order = searchParams.get('order') || '1';
 
   useEffect(() => {
@@ -33,36 +33,40 @@ const StageQuiz = () => {
     fetchLesson();
   }, [lessonId]);
 
-  const handleLevelComplete = ({ mistakes, total }) => {
-    // Tính toán sao dựa trên số lỗi
-    // < 2 lỗi: 3 sao (Hoàn hảo)
-    // 2-4 lỗi: 2 sao (Tốt)
-    // > 4 lỗi: 1 sao (Hoàn thành)
+  const handleLevelComplete = async ({ mistakes, total }) => {
     let stars = 1;
-    if (mistakes <= 2) stars = 3;
-    else if (mistakes <= 4) stars = 2;
+    if (mistakes <= 1) stars = 3;
+    else if (mistakes <= 3) stars = 2;
 
-    const newResults = {
-      ...results,
-      [currentLevel]: { mistakes, total, stars }
-    };
-    setResults(newResults);
+    const result = { mistakes, total, stars };
+    setLastResult(result);
+    setShowResult(true);
 
-    // Chuyển sang đoạn tiếp theo sau một khoảng trễ ngắn
-    setTimeout(() => {
-      if (currentLevel === 'level1') {
-        setCurrentLevel('level2');
-      } else if (currentLevel === 'level2') {
-        setCurrentLevel('level3');
-      } else {
-        handleFinalComplete(newResults);
+    // Lưu tiến độ vào User Profile (JSON balancingProgress)
+    if (user) {
+      const currentProgress = user.balancingProgress || {};
+      const lessonStars = currentProgress.lessonStars || {};
+      const currentLessonStars = lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 };
+      
+      // Chỉ cập nhật nếu đạt số sao cao hơn
+      if (stars > currentLessonStars[currentLevel]) {
+        currentLessonStars[currentLevel] = stars;
       }
-    }, 500);
+
+      await updateUser({
+        balancingProgress: {
+          ...currentProgress,
+          lessonStars: {
+            ...lessonStars,
+            [lessonId]: currentLessonStars
+          }
+        }
+      });
+    }
   };
 
-  const handleFinalComplete = (finalResults) => {
-    // Tính tổng sao hoặc lưu kết quả vào DB ở đây nếu cần
-    navigate(`/classroom/${grade}/journey/${lessonId}/reward?order=${order}`);
+  const handleContinue = () => {
+    navigate(`/classroom/${grade}/journey`);
   };
 
   const handleCancel = () => {
@@ -84,7 +88,7 @@ const StageQuiz = () => {
   const currentQuestions = getLevelData(currentLevel);
 
   if (!lesson?.quizzes || (Array.isArray(lesson.quizzes) && lesson.quizzes.length === 0)) {
-    handleFinalComplete({});
+    navigate(`/classroom/${grade}/journey`);
     return null;
   }
 
@@ -92,40 +96,16 @@ const StageQuiz = () => {
     <div className="min-h-screen bg-[#fffbf0]">
       {/* Level Indicator Overlay */}
       <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4 bg-white/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl border border-viet-border">
-         <div className="flex items-center gap-2">
-            {['level1', 'level2', 'level3'].map((lvl, idx) => {
-              const res = results[lvl];
-              const isCurrent = currentLevel === lvl;
-              const isDone = !!res;
-              
-              return (
-                <div key={lvl} className="flex flex-col items-center">
-                  <div 
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-sm transition-all duration-500 ${
-                      isCurrent 
-                        ? 'bg-amber-400 text-white scale-110 ring-4 ring-amber-100' 
-                        : (isDone ? 'bg-emerald-500 text-white' : 'bg-slate-100 text-slate-300')
-                    }`}
-                  >
-                    {isDone ? '✓' : '⭐'}
-                  </div>
-                  {isDone && (
-                    <div className="flex gap-0.5 mt-1">
-                      {[1, 2, 3].map(s => (
-                        <div key={s} className={`w-1.5 h-1.5 rounded-full ${s <= res.stars ? 'bg-amber-400' : 'bg-slate-200'}`} />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-         </div>
-         <div className="h-10 w-px bg-slate-200" />
-         <div className="pr-2">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đoạn hiện tại</div>
+         <div className="pr-4 border-r border-slate-200">
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đang làm</div>
             <div className="text-sm font-bold text-slate-700">
-               {currentLevel === 'level1' ? '1. Học tập' : currentLevel === 'level2' ? '2. Thông hiểu' : '3. Ôn tập'}
+               {currentLevel === 'level1' ? 'Đoạn 1: Học tập' : currentLevel === 'level2' ? 'Đoạn 2: Thông hiểu' : 'Đoạn 3: Ôn tập'}
             </div>
+         </div>
+         <div className="flex items-center gap-1.5">
+            {[1, 2, 3].map(s => (
+              <div key={s} className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-500 text-xs">⭐</div>
+            ))}
          </div>
       </div>
 
@@ -140,6 +120,59 @@ const StageQuiz = () => {
         onUnlock={handleLevelComplete}
         onCancel={handleCancel}
       />
+
+      <AnimatePresence>
+        {showResult && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }} 
+              animate={{ scale: 1, opacity: 1 }}
+              className="bg-white rounded-[40px] p-10 max-w-sm w-full text-center shadow-2xl border-4 border-viet-green"
+            >
+              <div className="text-6xl mb-6">🎉</div>
+              <h2 className="text-2xl font-black text-viet-text mb-2">Hoàn thành đoạn!</h2>
+              <p className="text-viet-text-light font-medium mb-8 uppercase tracking-widest text-xs">
+                {currentLevel === 'level1' ? 'Bạn đã học xong kiến thức cơ bản' : currentLevel === 'level2' ? 'Bạn đã thông hiểu vấn đề' : 'Bạn đã ôn tập xuất sắc'}
+              </p>
+
+              <div className="flex justify-center gap-3 mb-10">
+                {[1, 2, 3].map(s => (
+                  <motion.div 
+                    key={s}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.1 * s, type: 'spring' }}
+                    className={`text-4xl ${s <= (lastResult?.stars || 0) ? 'grayscale-0 drop-shadow-lg' : 'grayscale opacity-20'}`}
+                  >
+                    ⭐
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="bg-slate-50 rounded-2xl p-4 mb-8 flex justify-around">
+                <div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase">Chính xác</div>
+                   <div className="text-xl font-black text-viet-green">{lastResult?.total - lastResult?.mistakes}/{lastResult?.total}</div>
+                </div>
+                <div className="w-px bg-slate-200" />
+                <div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase">Đánh giá</div>
+                   <div className="text-xl font-black text-amber-500">
+                     {lastResult?.stars === 3 ? 'A+' : lastResult?.stars === 2 ? 'B' : 'C'}
+                   </div>
+                </div>
+              </div>
+
+              <button 
+                onClick={handleContinue}
+                className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-viet-green/20 hover:scale-105 transition-all"
+              >
+                Tiếp tục hành trình
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
