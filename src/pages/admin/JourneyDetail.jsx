@@ -14,6 +14,7 @@ const JourneyDetail = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('video'); // video, quiz, game
+  const [activeQuizLevel, setActiveQuizLevel] = useState('level1'); // level1, level2, level3
 
   const fetchLesson = async () => {
     setLoading(true);
@@ -21,14 +22,19 @@ const JourneyDetail = () => {
       const res = await fetch(`/api/lessons/${lessonId}`);
       const data = await res.json();
       
-      if (!data.quizzes || data.quizzes.length === 0) {
-        data.quizzes = [
-          { 
-            question: `Câu hỏi ôn tập: Thành phần chính trong bài ${data.title} là gì?`, 
-            options: ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'],
-            answer: 0
-          }
-        ];
+      // Khởi tạo cấu trúc 3 mức độ nếu chưa có hoặc là mảng phẳng
+      if (!data.quizzes || Array.isArray(data.quizzes)) {
+        const oldQuizzes = Array.isArray(data.quizzes) ? data.quizzes : [];
+        data.quizzes = {
+          level1: oldQuizzes.filter(q => q.level === 'easy' || !q.level).slice(0, 10),
+          level2: oldQuizzes.filter(q => q.level === 'medium').slice(0, 10),
+          level3: oldQuizzes.filter(q => q.level === 'hard').slice(0, 10)
+        };
+        
+        // Đảm bảo các mảng tồn tại
+        ['level1', 'level2', 'level3'].forEach(lvl => {
+          if (!data.quizzes[lvl]) data.quizzes[lvl] = [];
+        });
       }
 
       if (!data.game || Object.keys(data.game).length === 0) {
@@ -198,14 +204,49 @@ const JourneyDetail = () => {
                 <div className="flex items-center justify-between mb-8">
                    <div>
                       <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                        <ClipboardList className="text-emerald-500" /> Hệ thống Câu hỏi
+                        <ClipboardList className="text-emerald-500" /> Hệ thống Câu hỏi 3 Cấp độ
                       </h3>
-                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cài đặt các câu hỏi đánh giá kiến thức sau video</p>
+                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Mỗi chặng gồm 3 đoạn (Học - Hiểu - Ôn tập), mỗi đoạn 10 câu</p>
                    </div>
+                </div>
+
+                {/* Quiz Level Selector */}
+                <div className="flex p-1.5 bg-slate-100 rounded-2xl mb-8 gap-1">
+                  {[
+                    { id: 'level1', label: 'Đoạn 1: Học (Dễ)', icon: '⭐' },
+                    { id: 'level2', label: 'Đoạn 2: Hiểu (Vừa)', icon: '⭐⭐' },
+                    { id: 'level3', label: 'Đoạn 3: Ôn tập (Khó)', icon: '⭐⭐⭐' },
+                  ].map(lvl => (
+                    <button
+                      key={lvl.id}
+                      onClick={() => setActiveQuizLevel(lvl.id)}
+                      className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-bold transition-all ${
+                        activeQuizLevel === lvl.id 
+                          ? 'bg-white text-emerald-600 shadow-sm' 
+                          : 'text-slate-400 hover:text-slate-600'
+                      }`}
+                    >
+                      <span className="text-lg">{lvl.icon}</span>
+                      {lvl.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center justify-between mb-6">
+                   <h4 className="text-sm font-bold text-slate-700">
+                     Danh sách câu hỏi ({lesson.quizzes[activeQuizLevel]?.length || 0}/10)
+                   </h4>
                    <button 
                      onClick={() => {
-                       const newQuizzes = [...(lesson.quizzes || [])];
-                       newQuizzes.push({ 
+                       const newQuizzes = { ...lesson.quizzes };
+                       if (!newQuizzes[activeQuizLevel]) newQuizzes[activeQuizLevel] = [];
+                       
+                       if (newQuizzes[activeQuizLevel].length >= 10) {
+                         alert('Mỗi đoạn tối đa 10 câu hỏi!');
+                         return;
+                       }
+
+                       newQuizzes[activeQuizLevel].push({ 
                          question: 'Câu hỏi mới...', 
                          options: ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'],
                          answer: 0
@@ -219,13 +260,14 @@ const JourneyDetail = () => {
                 </div>
 
                 <div className="space-y-6">
-                  {(lesson.quizzes || []).map((q, idx) => (
+                  {(lesson.quizzes[activeQuizLevel] || []).map((q, idx) => (
                     <div key={idx} className="p-6 rounded-[24px] border border-slate-100 bg-slate-50/50 space-y-4">
                        <div className="flex items-center justify-between">
                          <span className="text-[11px] font-black text-emerald-600 uppercase">Câu hỏi {idx + 1}</span>
                          <button 
                            onClick={() => {
-                             const newQuizzes = lesson.quizzes.filter((_, i) => i !== idx);
+                             const newQuizzes = { ...lesson.quizzes };
+                             newQuizzes[activeQuizLevel] = newQuizzes[activeQuizLevel].filter((_, i) => i !== idx);
                              setLesson({...lesson, quizzes: newQuizzes});
                            }}
                            className="text-slate-300 hover:text-red-500 transition-colors"
@@ -237,8 +279,8 @@ const JourneyDetail = () => {
                          type="text" 
                          value={q.question}
                          onChange={(e) => {
-                           const newQuizzes = [...lesson.quizzes];
-                           newQuizzes[idx].question = e.target.value;
+                           const newQuizzes = { ...lesson.quizzes };
+                           newQuizzes[activeQuizLevel][idx].question = e.target.value;
                            setLesson({...lesson, quizzes: newQuizzes});
                          }}
                          className="w-full bg-white px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold outline-none focus:border-emerald-400"
@@ -250,8 +292,8 @@ const JourneyDetail = () => {
                                 type="text" 
                                 value={opt}
                                 onChange={(e) => {
-                                  const newQuizzes = [...lesson.quizzes];
-                                  newQuizzes[idx].options[optIdx] = e.target.value;
+                                  const newQuizzes = { ...lesson.quizzes };
+                                  newQuizzes[activeQuizLevel][idx].options[optIdx] = e.target.value;
                                   setLesson({...lesson, quizzes: newQuizzes});
                                 }}
                                 className={`w-full bg-white pl-10 pr-4 py-2 rounded-xl border text-xs font-medium outline-none transition-all ${
@@ -260,8 +302,8 @@ const JourneyDetail = () => {
                               />
                               <button 
                                 onClick={() => {
-                                  const newQuizzes = [...lesson.quizzes];
-                                  newQuizzes[idx].answer = optIdx;
+                                  const newQuizzes = { ...lesson.quizzes };
+                                  newQuizzes[activeQuizLevel][idx].answer = optIdx;
                                   setLesson({...lesson, quizzes: newQuizzes});
                                 }}
                                 className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 transition-all ${
@@ -273,6 +315,12 @@ const JourneyDetail = () => {
                        </div>
                     </div>
                   ))}
+                  
+                  {(!lesson.quizzes[activeQuizLevel] || lesson.quizzes[activeQuizLevel].length === 0) && (
+                    <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-[24px] text-slate-400 font-medium italic">
+                      Chưa có câu hỏi nào cho mức độ này.
+                    </div>
+                  )}
                 </div>
               </motion.section>
             )}
