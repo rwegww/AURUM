@@ -33,6 +33,33 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
     }
   };
 
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Update time as video plays
+  const handleTimeUpdate = () => {
+    if (!isDragging && videoRef.current) {
+      setCurrentTime(videoRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+    }
+  };
+
+  const handleSeek = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const clickedValue = (x / rect.width) * duration;
+    if (videoRef.current) {
+      videoRef.current.currentTime = clickedValue;
+      setCurrentTime(clickedValue);
+    }
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -95,6 +122,8 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
               className="w-full h-full object-cover"
               onEnded={() => setIsVideoEnded(true)}
               onClick={handlePlayPause}
+              onTimeUpdate={handleTimeUpdate}
+              onLoadedMetadata={handleLoadedMetadata}
             />
 
             {/* Play/Pause Indicator Overlay */}
@@ -112,8 +141,18 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
               )}
             </AnimatePresence>
 
+            {/* Custom Seek Bar / Progress Bar */}
+            <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-30" onClick={handleSeek}>
+                <div 
+                  className="h-full bg-viet-green relative transition-all duration-100"
+                  style={{ width: `${(currentTime / duration) * 100}%` }}
+                >
+                   <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-viet-green rounded-full shadow-md scale-0 group-hover:scale-100 transition-transform" />
+                </div>
+            </div>
+
             {/* Video Controls Decor */}
-            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity z-30">
                <button 
                  onClick={toggleMute}
                  className="w-10 h-10 rounded-full bg-white/80 backdrop-blur shadow-sm border border-gray-100 flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
@@ -126,6 +165,10 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
          {/* Technical Label Below Video */}
          <div className="absolute -bottom-8 left-10 flex items-center gap-6 opacity-30 select-none">
             <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">{t('stage_video.metadata.source')}</span>
+            <div className="w-20 h-[1px] bg-viet-text" />
+            <span className="text-[10px] font-bold text-viet-green min-w-[80px]">
+               {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')} / {Math.floor(duration / 60)}:{Math.floor(duration % 60).toString().padStart(2, '0')}
+            </span>
             <div className="w-20 h-[1px] bg-viet-text" />
             <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">{t('stage_video.metadata.format')}</span>
          </div>
