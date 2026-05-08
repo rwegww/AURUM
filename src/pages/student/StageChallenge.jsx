@@ -68,28 +68,20 @@ const StageChallenge = () => {
     </div>
   );
 
+  // If no challenges, skip to quiz
+  if (!lesson?.challenges || lesson.challenges.length === 0) {
+    handleComplete();
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-[#fffbf0]">
       <MissionModal
         lessonTitle={lesson?.title || t('mission_modal.labels.mission')}
-        challenges={lesson?.challenges && lesson.challenges.length > 0 ? lesson.challenges.map(c => ({
+        challenges={lesson.challenges.map(c => ({
           ...c,
           type: 'lab-task'
-        })) : [
-          {
-            type: "image-selection",
-            images: [
-              "/assets/images/lab-equipment/beaker.png",
-              "/assets/images/lab-equipment/test-tube.png",
-              "/assets/images/lab-equipment/graduated-cylinder.png",
-              "/assets/images/lab-equipment/erlenmeyer-flask.png"
-            ],
-            question: t('mission_modal.image_selection.fallback_question'),
-            correctAnswer: 0,
-            targetType: t('mission_modal.labels.target_type_fallback'),
-            source: t('mission_modal.source_fallback')
-          }
-        ]}
+        }))}
         onUnlock={handleComplete}
         onCancel={handleCancel}
       />

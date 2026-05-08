@@ -13,29 +13,13 @@ const JourneyDetail = () => {
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState('story'); // story, challenge, quiz, game
+  const [activeTab, setActiveTab] = useState('video'); // video, quiz, game
 
   const fetchLesson = async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/lessons/${lessonId}`);
       const data = await res.json();
-      
-      // Tự động tạo dữ liệu mẫu nếu chưa có gì
-      if (!data.storySlides || data.storySlides.length === 0) {
-        data.storySlides = [
-          { title: `Khởi đầu hành trình: ${data.title}`, content: `Chào mừng bạn đến với chặng đường khám phá ${data.title}. Hãy cùng bắt đầu những thí nghiệm thú vị nhé!`, image: 'https://images.unsplash.com/photo-1532187863486-abf9d3a44601?auto=format&fit=crop&q=80&w=1000' },
-          { title: 'Bí ẩn hóa học', content: 'Mỗi phản ứng đều ẩn chứa một câu chuyện riêng. Bạn đã sẵn sàng giải mã chúng chưa?', image: 'https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&q=80&w=1000' }
-        ];
-      }
-      
-      if (!data.challenges || data.challenges.length === 0) {
-        data.challenges = [
-          { text: `Chuẩn bị dụng cụ cho thí nghiệm ${data.title}`, type: 'lab' },
-          { text: 'Thực hiện phản ứng và quan sát hiện tượng', type: 'lab' },
-          { text: 'Ghi chép kết quả và giải thích hiện tượng', type: 'lab' }
-        ];
-      }
       
       if (!data.quizzes || data.quizzes.length === 0) {
         data.quizzes = [
@@ -116,7 +100,7 @@ const JourneyDetail = () => {
           <h1 className="text-3xl font-bold text-viet-text tracking-tight flex items-center gap-3">
             Thiết kế <span className="text-viet-green">Chặng đường</span> <Zap className="text-viet-green" size={28} />
           </h1>
-          <p className="text-viet-text-light mt-1 font-medium italic">Tùy chỉnh cốt truyện, thử thách và phần thưởng cho bài học: <span className="text-viet-green font-bold">{lesson.title}</span></p>
+          <p className="text-viet-text-light mt-1 font-medium italic">Tùy chỉnh video, câu hỏi và phần thưởng cho bài học: <span className="text-viet-green font-bold">{lesson.title}</span></p>
         </div>
 
         <button 
@@ -135,10 +119,9 @@ const JourneyDetail = () => {
         {/* Sidebar Tabs */}
         <aside className="space-y-2">
           {[
-            { id: 'story', label: 'Cốt truyện (Story)', icon: BookOpen, color: 'text-amber-500', bg: 'bg-amber-50' },
-            { id: 'challenge', label: 'Thử thách (Lab)', icon: Zap, color: 'text-indigo-500', bg: 'bg-indigo-50' },
+            { id: 'video', label: 'Video bài giảng', icon: BookOpen, color: 'text-amber-500', bg: 'bg-amber-50' },
             { id: 'quiz', label: 'Câu hỏi trắc nghiệm', icon: ClipboardList, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-            { id: 'game', label: 'Cài đặt Mini-game', icon: Gamepad2, color: 'text-rose-500', bg: 'bg-rose-50' },
+            { id: 'game', label: 'Thưởng & Tính điểm', icon: Gamepad2, color: 'text-rose-500', bg: 'bg-rose-50' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -159,160 +142,47 @@ const JourneyDetail = () => {
         <main className="lg:col-span-3 space-y-6">
           
           <AnimatePresence mode="wait">
-            {activeTab === 'story' && (
+            {activeTab === 'video' && (
               <motion.section 
-                key="story" 
+                key="video" 
                 initial={{ opacity: 0, x: 10 }} 
                 animate={{ opacity: 1, x: 0 }} 
                 exit={{ opacity: 0, x: -10 }}
                 className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm"
               >
-                <div className="flex items-center justify-between mb-8">
-                   <div>
-                      <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                        <BookOpen className="text-amber-500" /> Quản lý Cốt truyện
-                      </h3>
-                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Tạo các slide giới thiệu dẫn dắt học sinh vào bài học</p>
-                   </div>
-                   <button 
-                     onClick={() => {
-                       const newSlides = [...(lesson.storySlides || [])];
-                       newSlides.push({ title: 'Slide mới', content: 'Nội dung cốt truyện...', image: '' });
-                       setLesson({...lesson, storySlides: newSlides});
-                     }}
-                     className="flex items-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-xl text-xs font-bold hover:scale-105 transition-all"
-                   >
-                     <Plus size={16} /> Thêm Slide
-                   </button>
+                <div className="mb-8">
+                   <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
+                     <BookOpen className="text-amber-500" /> Video bài giảng
+                   </h3>
+                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cung cấp URL video từ Cloudinary để học sinh xem phần giới thiệu</p>
                 </div>
 
-                <div className="space-y-4">
-                  {(lesson.storySlides || []).map((slide, idx) => (
-                    <div key={idx} className="p-6 rounded-2xl border border-slate-100 bg-slate-50/30 space-y-4">
-                      <div className="flex items-center justify-between">
-                         <span className="text-[10px] font-black text-amber-600 bg-amber-100 px-2 py-0.5 rounded-md uppercase">Slide {idx + 1}</span>
-                         <button 
-                           onClick={() => {
-                             const newSlides = lesson.storySlides.filter((_, i) => i !== idx);
-                             setLesson({...lesson, storySlides: newSlides});
-                           }}
-                           className="text-slate-300 hover:text-red-500 transition-colors"
-                         >
-                           <Trash2 size={16} />
-                         </button>
-                      </div>
+                <div className="space-y-6">
+                   <div className="p-6 rounded-2xl border border-slate-100 bg-slate-50/30 space-y-4">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Link video bài giảng (Cloudinary URL)</label>
                       <input 
                         type="text" 
-                        value={slide.title}
-                        onChange={(e) => {
-                          const newSlides = [...lesson.storySlides];
-                          newSlides[idx].title = e.target.value;
-                          setLesson({...lesson, storySlides: newSlides});
-                        }}
-                        placeholder="Tiêu đề slide..."
-                        className="w-full bg-white px-4 py-2 rounded-xl border border-slate-200 text-sm font-bold focus:border-amber-400 outline-none"
+                        value={lesson.introVideoUrl || ''}
+                        onChange={(e) => setLesson({...lesson, introVideoUrl: e.target.value})}
+                        placeholder="Dán link video .mp4 từ Cloudinary..."
+                        className="w-full bg-white px-4 py-3 rounded-xl border border-slate-200 text-sm font-mono focus:border-amber-400 outline-none"
                       />
-                      <textarea 
-                        value={slide.content}
-                        onChange={(e) => {
-                          const newSlides = [...lesson.storySlides];
-                          newSlides[idx].content = e.target.value;
-                          setLesson({...lesson, storySlides: newSlides});
-                        }}
-                        placeholder="Nội dung thuyết minh..."
-                        className="w-full bg-white px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium h-24 focus:border-amber-400 outline-none resize-none"
-                      />
-                      <div className="flex items-center gap-4">
-                         <div className="flex-1">
-                           <label className="text-[10px] font-bold text-slate-400 uppercase mb-1 block">URL Hình ảnh minh họa</label>
-                           <input 
-                             type="text" 
-                             value={slide.image}
-                             onChange={(e) => {
-                               const newSlides = [...lesson.storySlides];
-                               newSlides[idx].image = e.target.value;
-                               setLesson({...lesson, storySlides: newSlides});
-                             }}
-                             placeholder="Dán link ảnh từ Cloudinary hoặc Unsplash..."
-                             className="w-full bg-white px-4 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:border-amber-400 outline-none"
+                      {lesson.introVideoUrl && (
+                        <div className="aspect-video rounded-xl border border-slate-100 overflow-hidden bg-black shadow-lg">
+                           <video 
+                             src={lesson.introVideoUrl} 
+                             className="w-full h-full object-contain" 
+                             controls
                            />
-                         </div>
-                         {slide.image && (
-                           <div className="w-16 h-16 rounded-xl border border-slate-100 overflow-hidden bg-white shrink-0">
-                             <img src={slide.image} alt="Preview" className="w-full h-full object-cover" />
-                           </div>
-                         )}
-                      </div>
-                    </div>
-                  ))}
-                  
-                  {(!lesson.storySlides || lesson.storySlides.length === 0) && (
-                    <div className="text-center py-12 text-slate-400 font-medium">Chưa có slide nào. Hãy bắt đầu kể câu chuyện của bạn!</div>
-                  )}
-                </div>
-              </motion.section>
-            )}
-
-            {activeTab === 'challenge' && (
-              <motion.section 
-                key="challenge" 
-                initial={{ opacity: 0, x: 10 }} 
-                animate={{ opacity: 1, x: 0 }} 
-                exit={{ opacity: 0, x: -10 }}
-                className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm"
-              >
-                <div className="flex items-center justify-between mb-8">
-                   <div>
-                      <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                        <Zap className="text-indigo-500" /> Thử thách Virtual Lab
-                      </h3>
-                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Thiết lập các nhiệm vụ thực hành thí nghiệm ảo</p>
-                   </div>
-                   <button 
-                     onClick={() => {
-                       const newChallenges = [...(lesson.challenges || [])];
-                       newChallenges.push({ text: 'Nhiệm vụ mới...', type: 'lab' });
-                       setLesson({...lesson, challenges: newChallenges});
-                     }}
-                     className="flex items-center gap-2 px-4 py-2 bg-indigo-500 text-white rounded-xl text-xs font-bold hover:scale-105 transition-all"
-                   >
-                     <Plus size={16} /> Thêm Nhiệm vụ
-                   </button>
-                </div>
-
-                <div className="space-y-3">
-                  {(lesson.challenges || []).map((ch, idx) => (
-                    <div key={idx} className="flex gap-3 items-center group">
-                      <div className="flex-1 bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 flex items-center justify-between group-hover:border-indigo-200 transition-all">
-                        <div className="flex items-center gap-4 flex-1">
-                          <CheckCircle2 size={18} className="text-indigo-400 shrink-0" />
-                          <input 
-                            type="text" 
-                            value={ch.text}
-                            onChange={(e) => {
-                              const newChallenges = [...lesson.challenges];
-                              newChallenges[idx].text = e.target.value;
-                              setLesson({...lesson, challenges: newChallenges});
-                            }}
-                            className="w-full bg-transparent text-sm font-bold text-viet-text outline-none"
-                          />
                         </div>
-                      </div>
-                      <button 
-                        onClick={() => {
-                          const newChallenges = lesson.challenges.filter((_, i) => i !== idx);
-                          setLesson({...lesson, challenges: newChallenges});
-                        }}
-                        className="w-12 h-12 rounded-2xl border border-slate-100 flex items-center justify-center text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  ))}
-
-                  {(!lesson.challenges || lesson.challenges.length === 0) && (
-                    <div className="text-center py-12 text-slate-400 font-medium">Không có thử thách nào. Bài học này sẽ được coi là chặng an toàn.</div>
-                  )}
+                      )}
+                      {!lesson.introVideoUrl && (
+                        <div className="aspect-video rounded-xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-3">
+                           <Layers size={48} className="opacity-20" />
+                           <p className="text-xs font-medium">Chưa có video được thiết lập</p>
+                        </div>
+                      )}
+                   </div>
                 </div>
               </motion.section>
             )}
@@ -328,9 +198,9 @@ const JourneyDetail = () => {
                 <div className="flex items-center justify-between mb-8">
                    <div>
                       <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                        <ClipboardList className="text-emerald-500" /> Hệ thống Trắc nghiệm
+                        <ClipboardList className="text-emerald-500" /> Hệ thống Câu hỏi
                       </h3>
-                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cài đặt các câu hỏi đánh giá sau bài học</p>
+                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cài đặt các câu hỏi đánh giá kiến thức sau video</p>
                    </div>
                    <button 
                      onClick={() => {
@@ -417,71 +287,45 @@ const JourneyDetail = () => {
               >
                 <div className="mb-8">
                    <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                     <Gamepad2 className="text-rose-500" /> Cài đặt Mini-game
+                     <Gamepad2 className="text-rose-500" /> Thưởng & Tính điểm
                    </h3>
-                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cấu hình phần thưởng và trò chơi cho chặng này</p>
+                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cấu hình XP và Đá Aurum mà học sinh nhận được khi hoàn thành chặng</p>
                 </div>
 
                 <div className="space-y-8">
-                   <div className="grid grid-cols-2 gap-8">
-                      <div className="space-y-4">
-                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Loại trò chơi</label>
-                        <select 
-                          value={lesson.game?.type || 'none'}
-                          onChange={(e) => setLesson({...lesson, game: {...(lesson.game || {}), type: e.target.value}})}
-                          className="w-full h-12 px-5 rounded-2xl border border-slate-100 bg-slate-50 font-bold text-sm outline-none focus:border-rose-300"
-                        >
-                           <option value="none">Không có trò chơi</option>
-                           <option value="quiz-rush">Trắc nghiệm nhanh</option>
-                           <option value="matching">Ghép cặp hóa chất</option>
-                           <option value="sorting">Phân loại chất</option>
-                        </select>
-                      </div>
-                      <div className="space-y-4">
-                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest">Độ khó (1-5)</label>
-                        <input 
-                          type="number" 
-                          min="1" max="5"
-                          value={lesson.game?.difficulty || 1}
-                          onChange={(e) => setLesson({...lesson, game: {...(lesson.game || {}), difficulty: parseInt(e.target.value)}})}
-                          className="w-full h-12 px-5 rounded-2xl border border-slate-100 bg-slate-50 font-bold text-sm outline-none focus:border-rose-300"
-                        />
-                      </div>
-                   </div>
-
-                   <div className="p-6 rounded-3xl bg-rose-50 border border-rose-100 space-y-6">
+                   <div className="p-8 rounded-[40px] bg-rose-50 border border-rose-100 space-y-8">
                       <h4 className="font-bold text-rose-700 flex items-center gap-2">
-                        <Zap size={18} /> Thiết lập Phần thưởng (Rewards)
+                        <Zap size={20} /> Thiết lập Phần thưởng (Rewards)
                       </h4>
-                      <div className="grid grid-cols-3 gap-6">
-                        <div className="bg-white p-4 rounded-2xl border border-rose-100">
-                          <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block text-center">XP Thưởng</label>
+                      <div className="grid grid-cols-2 gap-8">
+                        <div className="bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
+                          <label className="text-xs font-black text-slate-400 uppercase mb-3 block text-center tracking-widest">XP Thưởng (Kinh nghiệm)</label>
                           <input 
                             type="number" 
                             value={lesson.game?.rewardXp || 100}
                             onChange={(e) => setLesson({...lesson, game: {...(lesson.game || {}), rewardXp: parseInt(e.target.value)}})}
-                            className="w-full text-center text-xl font-black text-rose-600 outline-none"
+                            className="w-full text-center text-4xl font-black text-rose-600 outline-none"
                           />
                         </div>
-                        <div className="bg-white p-4 rounded-2xl border border-rose-100">
-                          <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block text-center">Đá Aurum</label>
+                        <div className="bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
+                          <label className="text-xs font-black text-slate-400 uppercase mb-3 block text-center tracking-widest">Đá Aurum (Tiền tệ)</label>
                           <input 
                             type="number" 
                             value={lesson.game?.rewardGem || 5}
                             onChange={(e) => setLesson({...lesson, game: {...(lesson.game || {}), rewardGem: parseInt(e.target.value)}})}
-                            className="w-full text-center text-xl font-black text-sky-500 outline-none"
+                            className="w-full text-center text-4xl font-black text-sky-500 outline-none"
                           />
                         </div>
-                        <div className="bg-white p-4 rounded-2xl border border-rose-100">
-                          <label className="text-[10px] font-black text-slate-400 uppercase mb-2 block text-center">Vật phẩm (ID)</label>
-                          <input 
-                            type="text" 
-                            value={lesson.game?.rewardItemId || ''}
-                            onChange={(e) => setLesson({...lesson, game: {...(lesson.game || {}), rewardItemId: e.target.value}})}
-                            placeholder="Mã ID..."
-                            className="w-full text-center text-sm font-black text-amber-500 outline-none"
-                          />
-                        </div>
+                      </div>
+
+                      <div className="bg-white/50 backdrop-blur-sm p-6 rounded-3xl border border-rose-200 flex items-center gap-6">
+                         <div className="w-16 h-16 bg-rose-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-rose-200">
+                            ⭐
+                         </div>
+                         <div className="flex-1">
+                            <h5 className="font-bold text-rose-900 text-sm">Cách tính điểm hoàn thành</h5>
+                            <p className="text-xs text-rose-700/60 font-medium">Học sinh sẽ nhận đủ số điểm trên khi hoàn thành video và trả lời đúng các câu hỏi trắc nghiệm.</p>
+                         </div>
                       </div>
                    </div>
                 </div>
@@ -494,14 +338,12 @@ const JourneyDetail = () => {
       {/* Floating Info */}
       <div className="fixed bottom-8 right-8 flex items-center gap-4 bg-white/80 backdrop-blur-xl border border-viet-border px-6 py-4 rounded-[32px] shadow-2xl z-50 animate-in fade-in slide-in-from-bottom-8">
          <div className="flex -space-x-3">
-            <div className="w-8 h-8 rounded-full bg-amber-100 border-2 border-white flex items-center justify-center text-amber-600 font-bold text-[10px]">{lesson.storySlides?.length || 0}</div>
-            <div className="w-8 h-8 rounded-full bg-indigo-100 border-2 border-white flex items-center justify-center text-indigo-600 font-bold text-[10px]">{lesson.challenges?.length || 0}</div>
             <div className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white flex items-center justify-center text-emerald-600 font-bold text-[10px]">{lesson.quizzes?.length || 0}</div>
          </div>
          <div className="w-px h-8 bg-slate-200" />
          <div className="flex items-center gap-2 text-viet-green">
             <CheckCircle2 size={16} />
-            <span className="text-xs font-bold">Mọi thứ đã sẵn sàng</span>
+            <span className="text-xs font-bold">Dữ liệu tối giản</span>
          </div>
       </div>
     </div>
