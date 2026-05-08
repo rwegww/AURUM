@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import MissionModal from '@/components/lessons/MissionModal';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/context/AuthContext';
 
 const StageQuiz = () => {
   const { t } = useTranslation();
