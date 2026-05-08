@@ -54,6 +54,7 @@ const StageReward = () => {
       <StageRewardModal
         rewardSrc={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
         lessonTitle={lesson?.title || "Phần thưởng chặng"}
+        gameData={lesson?.game}
         onProceed={handleReturnToJourney}
       />
     </div>
