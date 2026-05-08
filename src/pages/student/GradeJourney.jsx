@@ -152,13 +152,32 @@ const GradeJourney = () => {
                           <h4 className="text-[10px] font-black text-viet-green uppercase tracking-widest">{t('journey.stage.label', { order: index + 1 })}</h4>
                           {isLocked && <span className="text-gray-400">🔒</span>}
                         </div>
-                        <h3 className={`text-[14px] font-bold leading-tight transition-colors mb-3 ${isLocked ? 'text-gray-400' : 'text-viet-text group-hover:text-viet-green'}`}>
+                        <h3 className={`text-[14px] font-bold leading-tight transition-colors mb-4 ${isLocked ? 'text-gray-400' : 'text-viet-text group-hover:text-viet-green'}`}>
                           {lesson.title.split(': ').pop()}
                         </h3>
+
+                        {/* Segmented Progress Display */}
+                        {!isLocked && (
+                          <div className="flex flex-col gap-2">
+                             <div className="flex gap-1 h-1.5 w-full">
+                                {['level1', 'level2', 'level3'].map((lvl, i) => (
+                                  <div 
+                                    key={lvl} 
+                                    className={`flex-1 rounded-full transition-all duration-500 ${lessonStars[lvl] > 0 ? 'bg-viet-green shadow-[0_0_8px_rgba(46,204,113,0.4)]' : 'bg-slate-100'}`}
+                                  />
+                                ))}
+                             </div>
+                             <div className="flex justify-between text-[8px] font-black uppercase tracking-tighter text-slate-300">
+                                <span className={lessonStars.level1 > 0 ? 'text-viet-green' : ''}>Học</span>
+                                <span className={lessonStars.level2 > 0 ? 'text-viet-green' : ''}>Hiểu</span>
+                                <span className={lessonStars.level3 > 0 ? 'text-viet-green' : ''}>Ôn tập</span>
+                             </div>
+                          </div>
+                        )}
                       </div>
                       {!isLocked && (
                         <div className={`absolute top-1/2 -translate-y-1/2 bg-viet-green text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap ${isEven ? '-left-4 -translate-x-full' : '-right-4 translate-x-full'}`}>
-                          Tiếp tục học
+                          {lessonStars.level1 === 0 ? 'Bắt đầu học' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
                         </div>
                       )}
                     </button>
