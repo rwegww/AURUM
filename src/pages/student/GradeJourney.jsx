@@ -205,20 +205,30 @@ const GradeJourney = () => {
           </div>
 
           {/* End Milestone */}
-          <div className="mt-40 mb-20 flex flex-col items-center">
-            <motion.button whileHover={{ scale: 1.1, rotate: [-2, 2, -2] }} whileTap={{ scale: 0.9 }} onClick={() => setIsBookOpen(true)} className="relative group w-32 h-32 flex items-center justify-center cursor-pointer">
-              <div className="absolute inset-0 bg-viet-green/20 blur-3xl group-hover:bg-viet-green/40 transition-all rounded-full" />
-              <div className="relative w-24 h-24 bg-white rounded-2xl border-4 border-viet-green shadow-2xl flex flex-col items-center justify-center overflow-hidden transition-transform group-hover:rotate-6">
-                <div className="text-5xl">📖</div>
-                <div className="absolute bottom-1 w-full text-center text-[10px] font-black text-viet-green/40 uppercase tracking-widest">{t('journey.milestone.book_label')}</div>
+          {(() => {
+            const lesson1Stars = lessons.length > 0 
+              ? (user?.balancingProgress?.lessonStars?.[lessons[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
+              : { level1: 0, level2: 0, level3: 0 };
+            const isLesson1Complete = lesson1Stars.level1 > 0 && lesson1Stars.level2 > 0 && lesson1Stars.level3 > 0;
+            const canOpenBook = isLesson1Complete || user?.role === 'admin' || user?.role === 'teacher';
+            
+            return (
+              <div className={`mt-40 mb-20 flex flex-col items-center ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}>
+                <motion.button whileHover={canOpenBook ? { scale: 1.1, rotate: [-2, 2, -2] } : {}} whileTap={canOpenBook ? { scale: 0.9 } : {}} onClick={() => canOpenBook && setIsBookOpen(true)} className="relative group w-32 h-32 flex items-center justify-center cursor-pointer">
+                  <div className="absolute inset-0 bg-viet-green/20 blur-3xl group-hover:bg-viet-green/40 transition-all rounded-full" />
+                  <div className="relative w-24 h-24 bg-white rounded-2xl border-4 border-viet-green shadow-2xl flex flex-col items-center justify-center overflow-hidden transition-transform group-hover:rotate-6">
+                    <div className="text-5xl">{canOpenBook ? '📖' : '🔒'}</div>
+                    <div className="absolute bottom-1 w-full text-center text-[10px] font-black text-viet-green/40 uppercase tracking-widest">{t('journey.milestone.book_label')}</div>
+                  </div>
+                  {canOpenBook && <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg animate-bounce">{t('journey.milestone.book_badge')}</div>}
+                </motion.button>
+                <div className="mt-8 text-center">
+                  <h3 className="text-xl font-black text-viet-text font-sora">{canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}</h3>
+                  <p className="text-viet-text-light/60 text-[13px] font-bold mt-1 uppercase tracking-widest">{t('journey.milestone.subtitle', { grade })}</p>
+                </div>
               </div>
-              <div className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg animate-bounce">{t('journey.milestone.book_badge')}</div>
-            </motion.button>
-            <div className="mt-8 text-center">
-              <h3 className="text-xl font-black text-viet-text font-sora">{t('journey.milestone.title')}</h3>
-              <p className="text-viet-text-light/60 text-[13px] font-bold mt-1 uppercase tracking-widest">{t('journey.milestone.subtitle', { grade })}</p>
-            </div>
-          </div>
+            );
+          })()}
         </div>
       </div>
       {/* Modals... */}
