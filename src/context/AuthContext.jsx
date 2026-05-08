@@ -248,7 +248,7 @@ export const AuthProvider = ({ children }) => {
       if (res.ok) {
         const data = await res.json();
         if (mountedRef.current) setUser(prev => ({ ...prev, ...data }));
-        return { success: true };
+        return { success: true, user: data };
       } else {
         const errData = await res.json();
         throw new Error(errData.message || 'Lỗi cập nhật profile');
@@ -258,6 +258,38 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: err.message };
     }
   }, [isLoggedIn, user]);
+
+  const completeLessonSegment = useCallback(async (lessonId, level, stars, xpGain, isLessonCompletion) => {
+     if (!isLoggedIn || !user) return;
+     
+     try {
+        const currentProgress = user.balancingProgress || { lessonStars: {} };
+        const lessonStars = { ...(currentProgress.lessonStars || {}) };
+        const currentLessonStars = { ...(lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 }) };
+        
+        // Update stars
+        currentLessonStars[level] = Math.max(currentLessonStars[level], stars);
+        lessonStars[lessonId] = currentLessonStars;
+
+        const updateData = {
+          balancingProgress: {
+            ...currentProgress,
+            lessonStars: lessonStars
+          }
+        };
+
+        // 1. Save profile
+        const updateRes = await updateUser(updateData);
+        
+        // 2. Save XP/Unlock
+        await updateProgress(xpGain, isLessonCompletion ? lessonId : null, isLessonCompletion);
+        
+        return { success: true };
+     } catch (err) {
+        console.error('Lỗi lưu đoạn bài học:', err);
+        return { success: false, message: err.message };
+     }
+  }, [isLoggedIn, user, updateUser, updateProgress]);
 
   const recoverStreak = useCallback(async (streakToRestore) => {
     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
@@ -428,6 +460,7 @@ export const AuthProvider = ({ children }) => {
     updateProgress,
     refreshUser,
     updateUser,
+    completeLessonSegment,
     recoverStreak,
     resetStreak,
     authError,

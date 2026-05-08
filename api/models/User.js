@@ -174,11 +174,15 @@ export const User = {
     }
 
     if (Object.keys(pgUpdateData).length > 0) {
+      console.log(`[User.update] Updating ID ${id} with:`, JSON.stringify(pgUpdateData, null, 2));
       const { error } = await supabase
         .from('users')
         .update(pgUpdateData)
         .eq('id', id);
-      if (error) throw error;
+      if (error) {
+        console.error('[User.update] Supabase error:', error);
+        throw error;
+      }
     }
 
     // 2. Update Junction Tables for Unlocked Content
