@@ -4,6 +4,25 @@ import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import MediaUploader from '@/components/admin/MediaUploader';
 
+const modulesToMarkdown = (modules) => {
+  if (!modules || !modules.length) return '';
+  if (modules.length === 1 && modules[0].type === 'markdown') {
+    return modules[0].content.text;
+  }
+  
+  return modules.map(m => {
+    if (m.type === 'heading') {
+      const level = m.content.level ? parseInt(m.content.level.replace('h', '')) : 2;
+      return `${'#'.repeat(level)} ${m.content.text}`;
+    }
+    if (m.type === 'paragraph') return m.content.text;
+    if (m.type === 'list') return m.content.items.map(i => `- ${i}`).join('\n');
+    if (m.type === 'infoBox') return `> ℹ️ **${m.content.title}**\n> ${m.content.content}`;
+    if (m.type === 'warningBox') return `> ⚠️ **${m.content.title}**\n> ${m.content.content}`;
+    return '';
+  }).join('\n\n');
+};
+
 const LessonManager = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -47,7 +66,7 @@ const LessonManager = () => {
       setFormData({
         title: data.title,
         description: data.description,
-        content: data.content || '',
+        content: modulesToMarkdown(data.theoryModules),
         classId: data.classId,
         chapter: data.chapter,
         programId: data.programId || 'ketnoi'
@@ -99,13 +118,24 @@ const LessonManager = () => {
       const method = isCreating ? 'POST' : 'PUT';
       const url = isCreating ? '/api/admin/lessons' : `/api/admin/lessons/${editingLesson.lessonId}`;
       
+      const payload = {
+        ...formData,
+        theoryModules: [
+          {
+            type: "markdown",
+            content: { text: formData.content }
+          }
+        ]
+      };
+      delete payload.content;
+
       const res = await fetch(url, {
         method,
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
       
       if (res.ok) {
