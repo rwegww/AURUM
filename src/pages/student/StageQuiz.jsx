@@ -44,26 +44,39 @@ const StageQuiz = () => {
     setLastResult(result);
     setShowResult(true);
 
-    // Lưu tiến độ vào User Profile (JSON balancingProgress)
+    // Lưu tiến độ vào User Profile
     if (user) {
-      const currentProgress = user.balancingProgress || {};
-      const lessonStars = currentProgress.lessonStars || {};
-      const currentLessonStars = lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 };
+      const currentProgress = user.balancingProgress || { lessonStars: {} };
+      const lessonStars = { ...(currentProgress.lessonStars || {}) };
+      const currentLessonStars = { ...(lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 }) };
       
-      // Chỉ cập nhật nếu đạt số sao cao hơn
-      if (stars > currentLessonStars[currentLevel]) {
-        currentLessonStars[currentLevel] = stars;
-      }
+      // Ghi nhận hoàn thành giai đoạn này
+      currentLessonStars[currentLevel] = Math.max(currentLessonStars[currentLevel], stars);
+      lessonStars[lessonId] = currentLessonStars;
 
-      await updateUser({
-        balancingProgress: {
-          ...currentProgress,
-          lessonStars: {
-            ...lessonStars,
-            [lessonId]: currentLessonStars
+      try {
+        // 1. Cập nhật sao vào profile (thông qua balancingProgress)
+        await updateUser({
+          balancingProgress: {
+            ...currentProgress,
+            lessonStars: lessonStars
           }
-        }
-      });
+        });
+
+        // 2. Thưởng XP dựa trên giai đoạn và đánh dấu hoàn thành chặng (nếu là Ôn tập)
+        const xpMap = { level1: 30, level2: 50, level3: 100 };
+        const xpGain = xpMap[currentLevel] || 30;
+        
+        // Nếu là level3, đánh dấu isLessonCompletion = true để mở bài tiếp theo
+        const isLessonCompletion = currentLevel === 'level3';
+        
+        // Cần lấy updateProgress từ useAuth (đã destructure ở trên đầu component)
+        // Nhưng để chắc chắn và tránh lỗi closure, ta có thể dùng trực tiếp từ context
+        const context = useAuth();
+        await context.updateProgress(xpGain, isLessonCompletion ? lessonId : null, isLessonCompletion);
+      } catch (err) {
+        console.error('Lỗi khi lưu giai đoạn:', err);
+      }
     }
   };
 
@@ -104,11 +117,6 @@ const StageQuiz = () => {
                {currentLevel === 'level1' ? 'Đoạn 1: Học tập' : currentLevel === 'level2' ? 'Đoạn 2: Thông hiểu' : 'Đoạn 3: Ôn tập'}
             </div>
          </div>
-         <div className="flex items-center gap-1.5">
-            {[1, 2, 3].map(s => (
-              <div key={s} className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-500 text-xs">⭐</div>
-            ))}
-         </div>
       </div>
 
       <MissionModal
@@ -138,17 +146,7 @@ const StageQuiz = () => {
               </p>
 
               <div className="flex justify-center gap-3 mb-10">
-                {[1, 2, 3].map(s => (
-                  <motion.div 
-                    key={s}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.1 * s, type: 'spring' }}
-                    className={`text-4xl ${s <= (lastResult?.stars || 0) ? 'grayscale-0 drop-shadow-lg' : 'grayscale opacity-20'}`}
-                  >
-                    ⭐
-                  </motion.div>
-                ))}
+                <div className="text-4xl">🎉</div>
               </div>
 
               <div className="bg-slate-50 rounded-2xl p-4 mb-8 flex justify-around">
