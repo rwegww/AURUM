@@ -8,15 +8,12 @@ const StreakBadge = () => {
   const [recovering, setRecovering] = useState(false);
   const [error, setError] = useState(null);
 
-  if (!user) return null;
-
-  const streak = user.streakCount || 0;
-  const isMaintainedToday = user.todayOnlineMinutes >= 10 || user.todayLessonCompleted;
-
-  // Logic for broken streak (simplified for UI)
-  const isBroken = streak > 0 && !isMaintainedToday && user.lastStreakAt && (new Date() - new Date(user.lastStreakAt) > 48 * 60 * 60 * 1000);
-
   React.useEffect(() => {
+    if (!user) return;
+    const streak = user.streakCount || 0;
+    const isMaintainedToday = user.todayOnlineMinutes >= 10 || user.todayLessonCompleted;
+    const isBroken = streak > 0 && !isMaintainedToday && user.lastStreakAt && (new Date() - new Date(user.lastStreakAt) > 48 * 60 * 60 * 1000);
+
     if (isBroken) {
       const today = new Date().toISOString().split('T')[0];
       const seenDate = localStorage.getItem(`streak_broken_seen_${user.id}`);
@@ -34,7 +31,13 @@ const StreakBadge = () => {
       // Clean up if maintained or recovered
       localStorage.removeItem(`streak_broken_seen_${user.id}`);
     }
-  }, [isBroken, user.id, resetStreak]);
+  }, [user, resetStreak]);
+
+  if (!user) return null;
+
+  const streak = user.streakCount || 0;
+  const isMaintainedToday = user.todayOnlineMinutes >= 10 || user.todayLessonCompleted;
+  const isBroken = streak > 0 && !isMaintainedToday && user.lastStreakAt && (new Date() - new Date(user.lastStreakAt) > 48 * 60 * 60 * 1000);
 
   const handleRecover = async () => {
     setRecovering(true);
