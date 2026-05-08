@@ -133,6 +133,8 @@ const GradeJourney = () => {
               const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonCompleted || isCompleted;
               const isLocked = !isUnlocked;
 
+              const lessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
+
               return (
                 <motion.div
                   key={lesson.id}
