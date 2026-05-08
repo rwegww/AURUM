@@ -35,6 +35,7 @@ const LessonManager = () => {
     title: '',
     description: '',
     content: '',
+    videoUrl: '',
     classId: 8,
     chapter: 'Chương 1',
     programId: 'ketnoi'
@@ -67,6 +68,7 @@ const LessonManager = () => {
         title: data.title,
         description: data.description,
         content: modulesToMarkdown(data.theoryModules),
+        videoUrl: data.videoModules?.[0]?.url || '',
         classId: data.classId,
         chapter: data.chapter,
         programId: data.programId || 'ketnoi'
@@ -84,6 +86,7 @@ const LessonManager = () => {
       title: '',
       description: '',
       content: '',
+      videoUrl: '',
       classId: selectedGrade || 8,
       chapter: 'Chương 1',
       programId: 'ketnoi'
@@ -125,9 +128,17 @@ const LessonManager = () => {
             type: "markdown",
             content: { text: formData.content }
           }
-        ]
+        ],
+        videoModules: formData.videoUrl ? [
+          {
+            type: "youtube",
+            url: formData.videoUrl,
+            title: formData.title
+          }
+        ] : []
       };
       delete payload.content;
+      delete payload.videoUrl;
 
       const res = await fetch(url, {
         method,
@@ -302,6 +313,16 @@ const LessonManager = () => {
                               <option value="canhdieu">Cánh diều</option>
                               <option value="chantroi">Chân trời sáng tạo</option>
                            </select>
+                        </div>
+                        <div className="space-y-4 md:col-span-2">
+                           <label className="block text-xs font-bold text-viet-text-light uppercase tracking-wider">Link Video YouTube</label>
+                           <input 
+                             type="text" 
+                             value={formData.videoUrl}
+                             onChange={(e) => setFormData({...formData, videoUrl: e.target.value})}
+                             placeholder="https://www.youtube.com/watch?v=..."
+                             className="w-full h-12 px-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-bold text-blue-600"
+                           />
                         </div>
                      </div>
 
