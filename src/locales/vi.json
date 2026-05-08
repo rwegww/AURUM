@@ -824,6 +824,45 @@
     "solo_short": "1 VS 1",
     "3vs3_short": "3 VS 3",
     "5vs5_short": "5 VS 5",
-    "br_short": "Battle Royale"
+    "br_short": "Battle Royale",
+    "mission_modal": {
+      "labels": {
+        "mission": "Nhiệm vụ",
+        "goal": "Mục tiêu",
+        "multiple-choice": "Trắc nghiệm",
+        "image-selection": "Nhận biết hình ảnh",
+        "fill-in-the-blank": "Điền vào chỗ trống",
+        "drag-drop": "Sắp xếp thứ tự",
+        "matching": "Nối cặp",
+        "target_type_fallback": "dụng cụ"
+      },
+      "image_selection": {
+        "fallback_question": "Đâu là hình ảnh mô tả đúng nhất về đối tượng này?",
+        "confirm": "Tôi chọn hình số {{label}}",
+        "label_prefix": "Hình "
+      },
+      "fill_blank": {
+        "placeholder": "Nhập câu trả lời của bạn...",
+        "confirm": "Xác nhận câu trả lời"
+      },
+      "drag_drop": {
+        "instruction": "Kéo thả để sắp xếp lại đúng thứ tự",
+        "confirm": "Kiểm tra thứ tự"
+      },
+      "matching": {
+        "col_a": "Cột A",
+        "instruction": "Kéo các thẻ ở đây",
+        "confirm": "Kiểm tra kết quả"
+      },
+      "footer": {
+        "cancel": "Tạm dừng hành trình",
+        "correct": "Chính xác! {{status}}",
+        "wrong": "Chưa đúng rồi, hãy thử lại nhé!",
+        "status_next": "Tiếp tục thôi...",
+        "status_final": "Bạn đã hoàn thành!"
+      },
+      "narrative_fallback": "Hãy sử dụng kiến thức của bạn để hoàn thành thử thách này!",
+      "source_fallback": "Tư liệu thực tế"
+    }
   }
 }

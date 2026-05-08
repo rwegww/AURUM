@@ -56,7 +56,7 @@ const StageIntro = () => {
 
 
   const handleComplete = () => {
-    navigate(`/classroom/${grade}/journey/${lessonId}/challenge?order=${order}`);
+    navigate(`/classroom/${grade}/journey/${lessonId}/story?order=${order}`);
   };
 
   const handleBack = () => {
@@ -72,7 +72,7 @@ const StageIntro = () => {
   return (
     <div className="min-h-screen bg-[#fffbf0]">
       <StageVideoModal
-        videoSrc={`/assets/curriculum/class${grade}/${grade}-${order}.mp4`}
+        videoSrc={lesson?.introVideoUrl || `/assets/curriculum/class${grade}/${grade}-${order}.mp4`}
         lessonTitle={lesson?.title || t('common.loading')}
         onComplete={handleComplete}
         onSkip={handleComplete}

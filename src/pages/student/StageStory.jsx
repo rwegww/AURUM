@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import StageRewardModal from '@/components/lessons/StageRewardModal';
-import { useAuth } from '@/context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
+import StoryIntro from '@/components/lessons/StoryIntro';
+import { useTranslation } from 'react-i18next';
 
-const StageReward = () => {
-  const { updateProgress } = useAuth();
+const StageStory = () => {
+  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -12,26 +13,14 @@ const StageReward = () => {
   const [loading, setLoading] = useState(true);
   const order = searchParams.get('order') || '1';
 
-  // Mark lesson as completed on mount
-  useEffect(() => {
-    if (lessonId && lesson) {
-      // Gain XP and Gems from game settings
-      const xp = lesson.game?.rewardXp || 100;
-      const gems = lesson.game?.rewardGems || 10;
-      updateProgress(xp, lessonId, true);
-      // Optional: Update gems if updateProgress supports it or create another service
-    }
-  }, [lessonId, lesson, updateProgress]);
-
   useEffect(() => {
     const fetchLesson = async () => {
-
       try {
         const res = await fetch(`/api/lessons/${lessonId}`);
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lỗi tải phần thưởng:', err);
+        console.error('Lỗi tải cốt truyện:', err);
       } finally {
         setLoading(false);
       }
@@ -39,8 +28,8 @@ const StageReward = () => {
     fetchLesson();
   }, [lessonId]);
 
-  const handleReturnToJourney = () => {
-    navigate(`/classroom/${grade}/journey`);
+  const handleComplete = () => {
+    navigate(`/classroom/${grade}/journey/${lessonId}/challenge?order=${order}`);
   };
 
   if (loading) return (
@@ -49,15 +38,21 @@ const StageReward = () => {
     </div>
   );
 
+  // If no story slides, skip to challenge
+  if (!lesson?.storySlides || lesson.storySlides.length === 0) {
+    handleComplete();
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-[#fffbf0]">
-      <StageRewardModal
-        rewardSrc={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
-        lessonTitle={lesson?.title || "Phần thưởng chặng"}
-        onProceed={handleReturnToJourney}
+      <StoryIntro 
+        slides={lesson.storySlides}
+        onComplete={handleComplete}
+        onSkip={handleComplete}
       />
     </div>
   );
 };
 
-export default StageReward;
+export default StageStory;

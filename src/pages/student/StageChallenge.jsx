@@ -55,7 +55,7 @@ const StageChallenge = () => {
 
 
   const handleComplete = () => {
-    navigate(`/classroom/${grade}/journey/${lessonId}/reward?order=${order}`);
+    navigate(`/classroom/${grade}/journey/${lessonId}/quiz?order=${order}`);
   };
 
   const handleCancel = () => {

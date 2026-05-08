@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import StageRewardModal from '@/components/lessons/StageRewardModal';
-import { useAuth } from '@/context/AuthContext';
+import MissionModal from '@/components/lessons/MissionModal';
+import { useTranslation } from 'react-i18next';
 
-const StageReward = () => {
-  const { updateProgress } = useAuth();
+const StageQuiz = () => {
+  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -12,26 +12,14 @@ const StageReward = () => {
   const [loading, setLoading] = useState(true);
   const order = searchParams.get('order') || '1';
 
-  // Mark lesson as completed on mount
-  useEffect(() => {
-    if (lessonId && lesson) {
-      // Gain XP and Gems from game settings
-      const xp = lesson.game?.rewardXp || 100;
-      const gems = lesson.game?.rewardGems || 10;
-      updateProgress(xp, lessonId, true);
-      // Optional: Update gems if updateProgress supports it or create another service
-    }
-  }, [lessonId, lesson, updateProgress]);
-
   useEffect(() => {
     const fetchLesson = async () => {
-
       try {
         const res = await fetch(`/api/lessons/${lessonId}`);
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lỗi tải phần thưởng:', err);
+        console.error('Lỗi tải bài kiểm tra:', err);
       } finally {
         setLoading(false);
       }
@@ -39,7 +27,11 @@ const StageReward = () => {
     fetchLesson();
   }, [lessonId]);
 
-  const handleReturnToJourney = () => {
+  const handleComplete = () => {
+    navigate(`/classroom/${grade}/journey/${lessonId}/reward?order=${order}`);
+  };
+
+  const handleCancel = () => {
     navigate(`/classroom/${grade}/journey`);
   };
 
@@ -49,15 +41,22 @@ const StageReward = () => {
     </div>
   );
 
+  // If no quizzes, skip to reward
+  if (!lesson?.quizzes || lesson.quizzes.length === 0) {
+    handleComplete();
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-[#fffbf0]">
-      <StageRewardModal
-        rewardSrc={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
-        lessonTitle={lesson?.title || "Phần thưởng chặng"}
-        onProceed={handleReturnToJourney}
+      <MissionModal
+        lessonTitle={lesson?.title || 'Bài kiểm tra'}
+        challenges={lesson.quizzes}
+        onUnlock={handleComplete}
+        onCancel={handleCancel}
       />
     </div>
   );
 };
 
-export default StageReward;
+export default StageQuiz;
