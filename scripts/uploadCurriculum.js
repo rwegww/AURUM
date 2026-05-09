@@ -58,7 +58,7 @@ async function startMigration() {
 
     // 1. Tải danh sách bài học của khối này để tránh lỗi truy vấn cột 'order' (từ khóa dự phòng)
     const { data: allGradeLessons, error: fetchError } = await supabase
-      .from('lessons')
+      .from('lesson')
       .select('id, title, order')
       .eq('class_id', grade);
 
@@ -87,7 +87,7 @@ async function startMigration() {
 
           // 3. Update lesson in Supabase
           const { error: updateError } = await supabase
-            .from('lessons')
+            .from('lesson')
             .update({ intro_video_url: videoUrl })
             .eq('id', lesson.id);
 
