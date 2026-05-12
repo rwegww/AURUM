@@ -58,7 +58,7 @@ router.get('/profile', auth, async (req, res) => {
     role: req.user.role,
     xp: req.user.xp,
     level: req.user.level,
-    inventory: req.user.inventory,
+    inventory: req.user.inventory || { ingredients: [], craftedItems: [] },
     unlockedLessons: req.user.unlockedLessons,
     unlockedChemicals: req.user.unlockedChemicals || [],
     avatarSeed: req.user.avatarSeed,

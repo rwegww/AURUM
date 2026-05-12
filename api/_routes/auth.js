@@ -59,7 +59,7 @@ router.post('/google-firebase', async (req, res) => {
         role: user.role,
         xp: user.xp,
         level: user.level,
-        inventory: user.inventory,
+        inventory: user.inventory || { ingredients: [], craftedItems: [] },
         unlockedLessons: user.unlockedLessons,
         createdAt: user.createdAt
       }
@@ -146,7 +146,7 @@ router.post('/login', async (req, res) => {
         role: user.role,
         xp: user.xp,
         level: user.level,
-        inventory: user.inventory,
+        inventory: user.inventory || { ingredients: [], craftedItems: [] },
         unlockedLessons: user.unlockedLessons,
         createdAt: user.createdAt
       }

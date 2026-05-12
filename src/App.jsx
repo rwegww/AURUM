@@ -84,6 +84,13 @@ import AurumAiAgent from '@/components/common/AurumAiAgent'
 
 function AppContent() {
   const location = useLocation();
+
+  React.useEffect(() => {
+    if (window.location.pathname === '/auth/login') {
+      window.location.replace('/login' + window.location.hash);
+    }
+  }, []);
+
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
   const isImmersivePage = location.pathname.includes('/journey/') && (
     location.pathname.endsWith('/intro') || 
