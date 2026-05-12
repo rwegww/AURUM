@@ -25,13 +25,22 @@ const Profile = () => {
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
-  const [planData, setPlanData] = useState(user?.studyPlan || { 
+  const [planData, setPlanData] = useState({ 
     studyTime: '20:00', 
     dailyLessonTarget: 1, 
     remindersEnabled: true,
     emailEnabled: false,
     calendarEnabled: false
   });
+
+  React.useEffect(() => {
+    if (user) {
+      setEditableSeed(user.avatarSeed || user.username);
+      if (user.studyPlan) {
+        setPlanData(user.studyPlan);
+      }
+    }
+  }, [user]);
 
   const handleRandomizeAvatar = () => {
     const newSeed = Math.random().toString(36).substring(7);
@@ -42,6 +51,31 @@ const Profile = () => {
     setIsSavingPlan(true);
     try {
       await updateUser({ studyPlan: planData });
+      
+      // Sync to Google Calendar by opening pre-filled event link if calendar reminders are enabled
+      if (planData.calendarEnabled) {
+        const studyTime = planData.studyTime || '20:00';
+        const dailyLessonTarget = planData.dailyLessonTarget || 1;
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const [hours, minutes] = studyTime.split(':');
+        
+        // Local start time formatting: YYYYMMDDTHHMMSS
+        const startTime = `${year}${month}${day}T${hours}${minutes}00`;
+        const endHours = String((parseInt(hours) + 1) % 24).padStart(2, '0');
+        const endTime = `${year}${month}${day}T${endHours}${minutes}00`;
+        
+        const title = encodeURIComponent("Lịch học tập Học viện Hóa học Aurum");
+        const details = encodeURIComponent(`Nhắc nhở học tập hàng ngày.\nMục tiêu học tập: ${dailyLessonTarget} bài học/ngày.\nĐường dẫn học tập: https://chem-aurum.vercel.app/`);
+        const dates = `${startTime}/${endTime}`;
+        
+        const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&recur=RRULE:FREQ=DAILY`;
+        
+        window.open(calendarUrl, '_blank');
+      }
+      
       alert(t('profile.study_plan.success'));
     } catch (err) {
       console.error('Lỗi khi lưu kế hoạch:', err);
@@ -226,7 +260,7 @@ const Profile = () => {
                 <div className="relative">
                   <input 
                     type="time" 
-                    defaultValue={user.studyPlan?.studyTime || '20:00'}
+                    value={planData.studyTime || '20:00'}
                     onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
                     className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
                   />
@@ -238,7 +272,7 @@ const Profile = () => {
                 <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.target_label')}</label>
                 <div className="relative">
                   <select 
-                    defaultValue={user.studyPlan?.dailyLessonTarget || 1}
+                    value={planData.dailyLessonTarget || 1}
                     onChange={(e) => setPlanData({ ...planData, dailyLessonTarget: parseInt(e.target.value) })}
                     className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none appearance-none transition-all"
                   >
