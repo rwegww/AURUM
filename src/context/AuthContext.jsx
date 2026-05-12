@@ -155,7 +155,7 @@ export const AuthProvider = ({ children }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/login`, // Redirect back to login to handle session initialization
+          redirectTo: `${window.location.origin}/auth/callback`, // Redirect back to callback to handle session initialization
           queryParams: {
             prompt: 'select_account' // Force Google to show account selection screen
           }
