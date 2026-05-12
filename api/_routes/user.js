@@ -83,13 +83,27 @@ router.patch('/profile', auth, async (req, res) => {
     
     // Send email notification if study plan was updated and email reminders are enabled
     if (req.body.studyPlan && req.body.studyPlan.emailEnabled) {
-      sendStudyPlanEmail(req.user.email || updatedUser.email, req.user.username || updatedUser.username, req.body.studyPlan)
-        .then(result => {
-          if (result.previewUrl) {
-            console.log(`[Email Reminder] Ethereal Preview URL: ${result.previewUrl}`);
-          }
-        })
-        .catch(err => console.error('[Email Reminder] Failed to send email in background:', err));
+      const recipientEmail = req.user.email || updatedUser.email;
+      const recipientName = req.user.username || updatedUser.username;
+      console.log(`[Email Reminder] Attempting to send email to: ${recipientEmail} for user: ${recipientName}`);
+      console.log(`[Email Reminder] SMTP configured: ${!!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)}`);
+      
+      if (!recipientEmail) {
+        console.warn('[Email Reminder] No email address found for user, skipping email.');
+      } else {
+        sendStudyPlanEmail(recipientEmail, recipientName, req.body.studyPlan)
+          .then(result => {
+            if (result.success) {
+              console.log(`[Email Reminder] ✅ Email sent successfully to ${recipientEmail}`);
+            } else {
+              console.error(`[Email Reminder] ❌ Email failed: ${result.error}`);
+            }
+            if (result.previewUrl) {
+              console.log(`[Email Reminder] Ethereal Preview URL: ${result.previewUrl}`);
+            }
+          })
+          .catch(err => console.error('[Email Reminder] ❌ Failed to send email:', err.message));
+      }
     }
 
     res.json(updatedUser);

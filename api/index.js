@@ -61,6 +61,9 @@ app.get('/api/debug-env', (req, res) => {
     node_env: process.env.NODE_ENV,
     SUPABASE_URL: mask(process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL),
     OPENAI_API_READY: !!process.env.OPENAI_API_KEY,
+    SMTP_CONFIGURED: !!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS),
+    SMTP_HOST: process.env.SMTP_HOST || 'MISSING',
+    SMTP_USER: process.env.SMTP_USER ? mask(process.env.SMTP_USER) : 'MISSING',
     active_model: 'gpt-4o-mini',
     timestamp: new Date().toISOString()
   });
