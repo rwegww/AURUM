@@ -91,6 +91,36 @@ const GradeJourney = () => {
 
   const activeTheme = CLASS_THEMES[grade] || CLASS_THEMES['8'];
 
+  // ---- Knowledge Tree: memoized data (must be at top level) ----
+  const gradeTopics = useMemo(() => {
+    const topicIds = new Set();
+    Object.entries(CORE_KNOWLEDGE_LESSONS).forEach(([topicId, topicLessons]) => {
+      if (topicLessons.some(l => String(l.classId) === String(grade))) {
+        topicIds.add(topicId);
+      }
+    });
+    return CHEMISTRY_KNOWLEDGE_BASE.filter(t => topicIds.has(t.id));
+  }, [grade]);
+
+  const groupedTopics = useMemo(() => {
+    const cats = {};
+    gradeTopics.forEach(topic => {
+      if (!cats[topic.category]) cats[topic.category] = [];
+      cats[topic.category].push(topic);
+    });
+    return cats;
+  }, [gradeTopics]);
+
+  const categoryList = Object.keys(groupedTopics);
+
+  const CATEGORY_ICONS = {
+    'Đại cương': '⚛️', 'Liên kết': '🔗', 'Mol và định lượng': '⚖️',
+    'Chất khí': '💨', 'Dung dịch': '🧪', 'Axit – bazơ – muối': '🧫',
+    'Phản ứng hóa học': '🔥', 'Động hóa học': '⚡', 'Cân bằng hóa học': '⏳',
+    'Nhiệt hóa học': '🌡️', 'Oxi hóa – khử': '🔋', 'Điện hóa': '⚡',
+    'Kim loại': '🪙', 'Phi kim': '🌍', 'Hữu cơ': '🧬', 'An toàn': '🛡️',
+  };
+
   useEffect(() => {
     const fetchLessons = async () => {
       try {
@@ -624,40 +654,7 @@ const GradeJourney = () => {
       </div>
 
       {/* ====== KNOWLEDGE TREE SECTION ====== */}
-      {(() => {
-        // Filter knowledge topics relevant to this grade
-        const gradeTopics = useMemo(() => {
-          const topicIds = new Set();
-          Object.entries(CORE_KNOWLEDGE_LESSONS).forEach(([topicId, topicLessons]) => {
-            if (topicLessons.some(l => String(l.classId) === String(grade))) {
-              topicIds.add(topicId);
-            }
-          });
-          return CHEMISTRY_KNOWLEDGE_BASE.filter(t => topicIds.has(t.id));
-        }, [grade]);
-
-        // Group by category
-        const grouped = useMemo(() => {
-          const cats = {};
-          gradeTopics.forEach(topic => {
-            if (!cats[topic.category]) cats[topic.category] = [];
-            cats[topic.category].push(topic);
-          });
-          return cats;
-        }, [gradeTopics]);
-
-        const categoryList = Object.keys(grouped);
-        if (categoryList.length === 0) return null;
-
-        const CATEGORY_ICONS = {
-          'Đại cương': '⚛️', 'Liên kết': '🔗', 'Mol và định lượng': '⚖️',
-          'Chất khí': '💨', 'Dung dịch': '🧪', 'Axit – bazơ – muối': '🧫',
-          'Phản ứng hóa học': '🔥', 'Động hóa học': '⚡', 'Cân bằng hóa học': '⏳',
-          'Nhiệt hóa học': '🌡️', 'Oxi hóa – khử': '🔋', 'Điện hóa': '⚡',
-          'Kim loại': '🪙', 'Phi kim': '🌍', 'Hữu cơ': '🧬', 'An toàn': '🛡️',
-        };
-
-        return (
+      {categoryList.length > 0 && (
           <div className="max-w-3xl mx-auto px-4 md:px-6 pb-20">
             {/* Section Header */}
             <motion.div
@@ -692,7 +689,7 @@ const GradeJourney = () => {
 
               <div className="space-y-6">
                 {categoryList.map((catName, catIdx) => {
-                  const topics = grouped[catName];
+                  const topics = groupedTopics[catName];
                   const catIcon = CATEGORY_ICONS[catName] || '📚';
 
                   return (
@@ -793,8 +790,7 @@ const GradeJourney = () => {
               </div>
             </div>
           </div>
-        );
-      })()}
+      )}
 
       {/* Modals */}
       <AnimatePresence>
