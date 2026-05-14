@@ -60,6 +60,54 @@
       "transmitting": "Transmitting from the Arena...",
       "empty": "The arena is waiting for its first legends...",
       "conquer_btn": "Conquer Rank Now"
+    },
+    "social_proof": {
+      "text": "Trusted by 10,000+ students and 500+ teachers nationwide",
+      "schools": "Adopted by over 50 high schools"
+    },
+    "how_it_works": {
+      "badge": "How It Works",
+      "title": "3 Steps to Master Chemistry",
+      "steps": {
+        "step1": {
+          "title": "1. Interactive Theory",
+          "desc": "Vivid lessons help you deeply understand the core concepts."
+        },
+        "step2": {
+          "title": "2. Virtual Experiments",
+          "desc": "Mix chemicals with absolute safety right on your screen."
+        },
+        "step3": {
+          "title": "3. Competitive Arena",
+          "desc": "Compete with thousands of other students in the arena."
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "Community Reviews",
+      "title": "What users say about Aurum?",
+      "reviews": [
+        {
+          "name": "Nguyen Van A",
+          "role": "12th Grade Student",
+          "content": "Since using Aurum, Chemistry is no longer a nightmare. The virtual labs are so intuitive!"
+        },
+        {
+          "name": "Tran Thi B",
+          "role": "Chemistry Teacher",
+          "content": "This platform makes my students much more excited in every lesson."
+        },
+        {
+          "name": "Le Hoang C",
+          "role": "10th Grade Student",
+          "content": "The arena feature is addictive, I learn a lot from competing."
+        }
+      ]
+    },
+    "final_cta": {
+      "title": "Ready to Become an Alchemist?",
+      "subtitle": "Sign up today to explore the colorful world of Chemistry.",
+      "button": "Start Your Journey"
     }
   },
   "footer": {
