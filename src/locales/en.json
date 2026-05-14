@@ -139,6 +139,14 @@
     "title": "Start your <1/><2> Chemistry</2> journey",
     "subtitle": "Each level is a new journey with its own story and exciting challenges, helping you explore the world of chemistry in the most natural way.",
     "enter_class": "Enter Class",
+    "knowledge_tree": {
+      "academic_map": "Academic Map",
+      "title": "Comprehensive Chemistry Knowledge Tree",
+      "subtitle": "Systematize all Chemistry knowledge from basic to advanced (Grades 8 - 12).",
+      "instruction": "Click on each lesson to start your journey of conquest!",
+      "updating": "Updating lessons...",
+      "go_journey": "Open Grade {{grade}} journey"
+    },
     "grades": {
       "8": {
         "title": "The Alchemist's Beginning",
