@@ -150,6 +150,40 @@ const GradeJourney = () => {
     </div>
   );
 
+  const isFirstLessonDefaultUnlocked = grade === '8';
+  const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
+
+  const lessonsStatus = lessons.map((lesson, index) => {
+    const prevLessonStars = index > 0 
+      ? (user?.balancingProgress?.lessonStars?.[lessons[index - 1].lessonId] || { level1: 0, level2: 0, level3: 0 })
+      : null;
+    const previousLessonFullyCompleted = prevLessonStars 
+      ? (prevLessonStars.level1 > 0 && prevLessonStars.level2 > 0 && prevLessonStars.level3 > 0)
+      : false;
+    
+    const currentLessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
+    const isCompleted = currentLessonStars.level1 > 0 && currentLessonStars.level2 > 0 && currentLessonStars.level3 > 0;
+    
+    const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonFullyCompleted || isCompleted;
+    return {
+      ...lesson,
+      isUnlocked,
+      isCompleted,
+      stars: currentLessonStars
+    };
+  });
+
+  let highestUnlockedIndex = 0;
+  lessonsStatus.forEach((lesson, index) => {
+    if (lesson.isUnlocked) {
+      highestUnlockedIndex = index;
+    }
+  });
+
+  const progressPercentage = lessonsStatus.length > 1 
+    ? (highestUnlockedIndex / (lessonsStatus.length - 1)) * 100 
+    : 0;
+
   return (
     <div className="min-h-screen bg-[#fffbf0] pt-28 pb-20 overflow-x-hidden relative">
       {/* Premium background overlays */}
@@ -216,48 +250,10 @@ const GradeJourney = () => {
 
         {/* Journey Map Path */}
         <div className="relative min-h-[500px]">
-          
-          {/* DNA Double Helix SVG Path Winding down the middle */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-32 pointer-events-none z-0">
-            <svg className="w-full h-full opacity-[0.15]" preserveAspectRatio="none" viewBox="0 0 128 1000">
-              {/* Helix strand A */}
-              <path 
-                d="M 64,0 Q 128,100 64,200 Q 0,300 64,400 Q 128,500 64,600 Q 0,700 64,800 Q 128,900 64,1000" 
-                fill="none" 
-                stroke={activeTheme.primary} 
-                strokeWidth="4" 
-                strokeDasharray="6,6"
-              />
-              {/* Helix strand B */}
-              <path 
-                d="M 64,0 Q 0,100 64,200 Q 128,300 64,400 Q 0,500 64,600 Q 128,700 64,800 Q 0,900 64,1000" 
-                fill="none" 
-                stroke={activeTheme.primary} 
-                strokeWidth="4"
-              />
-              {/* Helix connectors (rungs) */}
-              {[...Array(20)].map((_, i) => {
-                const y = i * 50;
-                const xOffset = Math.sin((y / 200) * Math.PI) * 48;
-                return (
-                  <line 
-                    key={i}
-                    x1={64 - xOffset} 
-                    y1={y} 
-                    x2={64 + xOffset} 
-                    y2={y} 
-                    stroke={activeTheme.primary} 
-                    strokeWidth="1.5"
-                    opacity="0.6"
-                  />
-                );
-              })}
-            </svg>
-          </div>
 
           {/* Placement Test Banner */}
           {grade !== '8' && lessons.length > 0 && !user?.balancingProgress?.passedGrades?.includes(grade) && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-20 relative z-10">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-12 relative z-10">
               <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[36px] p-8 md:p-10 text-white shadow-2xl overflow-hidden relative border border-slate-800 group">
                 {/* Hologram details */}
                 <div className="absolute inset-0 opacity-[0.03] bg-grid-white" />
@@ -291,154 +287,54 @@ const GradeJourney = () => {
           )}
 
           {/* Lessons Timeline List */}
-          <div className="flex flex-col gap-20 relative z-10">
-            {lessons.map((lesson, index) => {
-              const isEven = index % 2 === 0;
-              const isFirstLessonDefaultUnlocked = grade === '8';
-              const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
-              
-              const prevLessonStars = index > 0 
-                ? (user?.balancingProgress?.lessonStars?.[lessons[index - 1].lessonId] || { level1: 0, level2: 0, level3: 0 })
-                : null;
-              const previousLessonFullyCompleted = prevLessonStars 
-                ? (prevLessonStars.level1 > 0 && prevLessonStars.level2 > 0 && prevLessonStars.level3 > 0)
-                : false;
-              
-              const currentLessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
-              const isCompleted = currentLessonStars.level1 > 0 && currentLessonStars.level2 > 0 && currentLessonStars.level3 > 0;
-              
-              const isUnlocked = user?.role === 'admin' || user?.role === 'teacher' || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed)) || previousLessonFullyCompleted || isCompleted;
-              const isLocked = !isUnlocked;
+          <div className="flex flex-col gap-12 relative z-10">
+            {/* Timeline vertical track */}
+            <div className="absolute left-[20px] top-[32px] bottom-[32px] w-[4px] bg-slate-200/80 rounded-full z-0 overflow-hidden">
+              <div 
+                className="w-full rounded-full transition-all duration-1000"
+                style={{ 
+                  height: `${progressPercentage}%`,
+                  backgroundColor: activeTheme.primary,
+                  boxShadow: `0 0 12px ${activeTheme.primaryGlow}`
+                }}
+              />
+            </div>
 
-              const lessonStars = currentLessonStars;
+            {lessonsStatus.map((lesson, index) => {
+              const isLocked = !lesson.isUnlocked;
+              const isCompleted = lesson.isCompleted;
+              const lessonStars = lesson.stars;
 
               return (
                 <motion.div
                   key={lesson.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.5 }}
-                  className={`flex items-center w-full ${isEven ? 'flex-row' : 'flex-row-reverse'} ${isLocked ? 'opacity-40 grayscale pointer-events-none' : ''}`}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className="relative flex gap-6 md:gap-8 items-start w-full"
                 >
-                  {/* Stage Card */}
-                  <div className={`w-[42%] flex ${isEven ? 'justify-end' : 'justify-start'}`}>
-                    <button
-                      onClick={() => handleStageClick(lesson, index, isLocked)}
-                      className={`group relative ${isLocked ? 'cursor-not-allowed' : ''} text-left`}
-                      disabled={isLocked}
-                    >
-                      <div 
-                        className={`bg-white rounded-[28px] p-6 w-full max-w-[300px] transition-all border-2 shadow-sm relative overflow-hidden flex flex-col justify-between ${
-                          isLocked 
-                            ? 'border-slate-200 bg-slate-50' 
-                            : 'hover:scale-[1.03] cursor-pointer hover:shadow-xl hover:-translate-y-1'
-                        }`}
-                        style={{ 
-                          borderColor: isLocked ? 'rgb(226, 232, 240)' : 'transparent',
-                          boxShadow: !isLocked ? '0 10px 30px -10px rgba(0,0,0,0.05)' : 'none'
-                        }}
-                      >
-                        {/* Tactile border on active */}
-                        {!isLocked && (
-                          <div 
-                            className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2" 
-                            style={{ backgroundColor: activeTheme.primary }} 
-                          />
-                        )}
-
-                        <div className="flex justify-between items-center mb-3">
-                          <span 
-                            className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border bg-slate-50"
-                            style={{ 
-                              color: isLocked ? '#94a3b8' : activeTheme.primary,
-                              borderColor: isLocked ? '#e2e8f0' : activeTheme.primaryLight
-                            }}
-                          >
-                            {t('journey.stage.label', { order: index + 1 })}
-                          </span>
-                          {isLocked ? (
-                            <Lock size={12} className="text-slate-300" />
-                          ) : (
-                            isCompleted ? (
-                              <Trophy size={14} className="text-amber-500 animate-pulse" />
-                            ) : (
-                              <div className="w-2 h-2 rounded-full animate-ping" style={{ backgroundColor: activeTheme.primary }} />
-                            )
-                          )}
-                        </div>
-
-                        <h3 className={`text-[15px] font-black leading-snug transition-colors mb-4 ${
-                          isLocked ? 'text-slate-400' : 'text-slate-800 group-hover:text-slate-900 font-sora'
-                        }`}>
-                          {lesson.title.split(': ').pop()}
-                        </h3>
-
-                        {/* segment status trackers */}
-                        {!isLocked && (
-                          <div className="flex gap-1.5 h-2 w-full mt-auto bg-slate-50 p-0.5 rounded-full border border-slate-100">
-                             {['level1', 'level2', 'level3'].map((lvl, i) => {
-                               const starsCount = lessonStars[lvl] || 0;
-                               return (
-                                 <div 
-                                   key={lvl} 
-                                   className="flex-1 rounded-full transition-all duration-700 relative overflow-hidden"
-                                   style={{ 
-                                     backgroundColor: starsCount > 0 ? activeTheme.primary : 'rgb(241, 245, 249)',
-                                     boxShadow: starsCount > 0 ? `0 0 6px ${activeTheme.primaryGlow}` : 'none'
-                                   }}
-                                 >
-                                   {/* Sparkle shine on complete */}
-                                   {starsCount > 0 && (
-                                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]" />
-                                   )}
-                                 </div>
-                               );
-                             })}
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Floating tooltip on hover */}
-                      {!isLocked && (
-                        <div 
-                          className={`absolute top-1/2 -translate-y-1/2 px-4 py-2 rounded-2xl text-[10px] font-black uppercase shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap z-30 pointer-events-none border text-white ${
-                            isEven 
-                              ? '-left-6 -translate-x-full group-hover:-translate-x-[90%]' 
-                              : '-right-6 translate-x-full group-hover:translate-x-[90%]'
-                          }`}
-                          style={{ 
-                            backgroundColor: activeTheme.primary,
-                            borderColor: activeTheme.primaryGlow
-                          }}
-                        >
-                          {lessonStars.level1 === 0 ? 'Bắt đầu: Video + Học' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
-                        </div>
-                      )}
-                    </button>
-                  </div>
-
                   {/* Molecular Orbit Central Node */}
-                  <div className="w-[16%] flex justify-center relative">
-                    <div className="relative w-14 h-14 flex items-center justify-center">
+                  <div className="w-10 flex-shrink-0 flex justify-center pt-3 relative">
+                    <div className="relative w-10 h-10 flex items-center justify-center">
                       
                       {/* Electron Orbits */}
                       {!isLocked && (
-                        <div className="absolute inset-0 pointer-events-none z-0">
+                        <div className="absolute inset-0 pointer-events-none">
                           <div 
-                            className="absolute inset-[-6px] rounded-full border-2 border-dashed animate-[spin_10s_linear_infinite]" 
+                            className="absolute inset-[-6px] rounded-full border border-dashed animate-[spin_10s_linear_infinite]" 
                             style={{ borderColor: activeTheme.primary, opacity: 0.35 }}
                           />
                           <div 
-                            className="absolute inset-[-14px] rounded-full border border-dotted animate-[spin_16s_linear_infinite_reverse]" 
+                            className="absolute inset-[-12px] rounded-full border border-dotted animate-[spin_16s_linear_infinite_reverse]" 
                             style={{ borderColor: activeTheme.primary, opacity: 0.2 }}
                           />
                           {/* Subatomic orbital electron */}
                           <div 
-                            className="absolute top-[-9px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full shadow-lg"
+                            className="absolute top-[-7px] left-1/2 -translate-x-1/2 w-2 h-2 rounded-full shadow-lg animate-pulse"
                             style={{ 
                               backgroundColor: activeTheme.primary,
-                              boxShadow: `0 0 10px ${activeTheme.primary}` 
+                              boxShadow: `0 0 8px ${activeTheme.primary}` 
                             }} 
                           />
                         </div>
@@ -446,18 +342,18 @@ const GradeJourney = () => {
 
                       {/* Main node bubble */}
                       <div 
-                        className={`w-12 h-12 rounded-[18px] border-4 flex items-center justify-center shadow-md z-20 transition-all ${
+                        className={`w-10 h-10 rounded-[14px] border-2 flex items-center justify-center shadow-sm z-10 transition-all ${
                           isLocked 
                             ? 'border-slate-200 bg-slate-100' 
-                            : 'bg-white cursor-pointer hover:scale-115 active:scale-95'
+                            : 'bg-white group-hover:scale-105'
                         }`}
                         style={{ 
                           borderColor: isLocked ? '#e2e8f0' : activeTheme.primary,
-                          boxShadow: !isLocked ? `0 10px 20px -5px ${activeTheme.primaryGlow}` : 'none'
+                          boxShadow: !isLocked ? `0 4px 12px -2px ${activeTheme.primaryGlow}` : 'none'
                         }}
                       >
                         <span 
-                          className="text-[14px] font-black font-mono leading-none"
+                          className="text-xs font-black font-mono leading-none"
                           style={{ color: isLocked ? '#cbd5e1' : activeTheme.primary }}
                         >
                           {index + 1}
@@ -466,13 +362,106 @@ const GradeJourney = () => {
                     </div>
                   </div>
 
-                  {/* Description side */}
-                  <div className="w-[42%] px-6">
-                    <p className={`text-[13px] font-medium leading-relaxed italic line-clamp-3 ${
-                      isLocked ? 'text-slate-300' : 'text-slate-600 font-medium'
-                    }`}>
-                      {isLocked ? t('journey.stage.locked_desc') : (lesson.description || t('journey.stage.default_desc'))}
-                    </p>
+                  {/* Stage Card */}
+                  <div 
+                    onClick={() => !isLocked && handleStageClick(lesson, index, isLocked)}
+                    className={`group relative flex-1 bg-white rounded-[24px] p-6 transition-all border-2 shadow-sm flex flex-col md:flex-row gap-6 justify-between overflow-hidden ${
+                      isLocked 
+                        ? 'border-slate-200 bg-slate-50/50 cursor-not-allowed opacity-50' 
+                        : 'hover:scale-[1.01] cursor-pointer hover:shadow-xl hover:border-slate-200/85 active:scale-[0.99]'
+                    }`}
+                    style={{ 
+                      borderColor: isLocked ? 'rgb(226, 232, 240)' : 'transparent',
+                      boxShadow: !isLocked ? '0 10px 30px -10px rgba(0,0,0,0.05)' : 'none'
+                    }}
+                  >
+                    {/* Tactile left border on active */}
+                    {!isLocked && (
+                      <div 
+                        className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2" 
+                        style={{ backgroundColor: activeTheme.primary }} 
+                      />
+                    )}
+
+                    <div className="flex-1 flex flex-col">
+                      <div className="flex items-center gap-3 mb-3">
+                        <span 
+                          className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border bg-slate-50"
+                          style={{ 
+                            color: isLocked ? '#94a3b8' : activeTheme.primary,
+                            borderColor: isLocked ? '#e2e8f0' : activeTheme.primaryLight
+                          }}
+                        >
+                          {t('journey.stage.label', { order: index + 1 })}
+                        </span>
+                        {isLocked ? (
+                          <Lock size={12} className="text-slate-300" />
+                        ) : (
+                          isCompleted ? (
+                            <Trophy size={14} className="text-amber-500 animate-pulse" />
+                          ) : (
+                            <span className="flex h-2 w-2 relative">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ backgroundColor: activeTheme.primary }} />
+                              <span className="relative inline-flex rounded-full h-2 w-2" style={{ backgroundColor: activeTheme.primary }} />
+                            </span>
+                          )
+                        )}
+                      </div>
+
+                      <h3 className={`text-[17px] font-black leading-snug tracking-tight mb-2 font-sora ${
+                        isLocked ? 'text-slate-400' : 'text-slate-800 group-hover:text-slate-900'
+                      }`}>
+                        {lesson.title.split(': ').pop()}
+                      </h3>
+
+                      <p className={`text-[13.5px] leading-relaxed mb-4 font-medium ${
+                        isLocked ? 'text-slate-300' : 'text-slate-500'
+                      }`}>
+                        {isLocked ? t('journey.stage.locked_desc') : (lesson.description || t('journey.stage.default_desc'))}
+                      </p>
+
+                      {/* segment status trackers */}
+                      {!isLocked && (
+                        <div className="flex items-center gap-3 mt-auto">
+                          <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Tiến độ:</span>
+                          <div className="flex gap-1.5 h-2.5 w-32 bg-slate-100 p-0.5 rounded-full border border-slate-200/50">
+                            {['level1', 'level2', 'level3'].map((lvl, i) => {
+                              const starsCount = lessonStars[lvl] || 0;
+                              return (
+                                <div 
+                                  key={lvl} 
+                                  className="flex-1 rounded-full transition-all duration-700 relative overflow-hidden"
+                                  style={{ 
+                                    backgroundColor: starsCount > 0 ? activeTheme.primary : 'rgb(241, 245, 249)',
+                                    boxShadow: starsCount > 0 ? `0 0 6px ${activeTheme.primaryGlow}` : 'none'
+                                  }}
+                                >
+                                  {/* Sparkle shine on complete */}
+                                  {starsCount > 0 && (
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent translate-x-[-100%] animate-[shimmer_2s_infinite]" />
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Interactive CTA Arrow */}
+                    {!isLocked && (
+                      <div className="flex items-center justify-end md:self-center shrink-0 mt-4 md:mt-0">
+                        <div 
+                          className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg"
+                          style={{ 
+                            background: `linear-gradient(135deg, ${activeTheme.primary}, ${activeTheme.primary})`,
+                            boxShadow: `0 4px 14px ${activeTheme.primaryGlow}`
+                          }}
+                        >
+                          <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               );
