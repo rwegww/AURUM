@@ -256,7 +256,7 @@ const MagicLab3D = () => {
       <AnimatePresence>
         {newDiscovery && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-xl rounded-3xl">
-             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-[#1a1c23] border border-white/10 rounded-[40px] p-10 text-center max-w-sm shadow-[0_0_50px_rgba(59,130,246,0.3)]">
+             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 text-center max-w-sm shadow-[0_0_50px_rgba(59,130,246,0.3)]">
                 <div className="text-5xl mb-6">✨</div>
                 <h2 className="text-2xl font-black text-white mb-2 uppercase italic">Phát hiện mới!</h2>
                 <div className="text-4xl font-black text-blue-400 mb-2 drop-shadow-md">{newDiscovery.formula}</div>
@@ -274,23 +274,29 @@ const MagicLab3D = () => {
           <div className="flex gap-2">
             <button 
               onClick={() => setShowDiscoveryJournal(true)}
-              className="flex items-center gap-2 px-4 h-12 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/10 transition-all font-bold text-xs uppercase tracking-widest"
+              className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
             >
-              <svg className="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-              <span>Sổ tay khám phá ({discoveredFormulas.length})</span>
+              <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+              <span className="text-white/80 group-hover:text-white transition-colors">Sổ tay khám phá</span>
+              <span className="ml-1 px-1.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-md text-[10px] font-black">{discoveredFormulas.length}</span>
             </button>
             <button 
               onClick={toggleFullscreen}
-              className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all text-blue-400"
+              className="w-12 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all text-blue-400 shadow-lg group"
               title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
             >
-              {isFullscreen ? <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3v5H3M21 8h-5V3M3 16h5v5M16 21v-5h5"/></svg> : <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>}
+              {isFullscreen ? (
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3v5H3M21 8h-5V3M3 16h5v5M16 21v-5h5"/></svg>
+              ) : (
+                <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+              )}
             </button>
             <button 
               onClick={() => setShowLabSettings(true)}
-              className="w-12 h-12 bg-black/30 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10 hover:bg-white/10 transition-all"
+              className="w-12 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all text-white/60 hover:text-white shadow-lg group"
+              title="Tùy chỉnh Lab"
             >
-               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+               <svg className="w-5 h-5 group-hover:rotate-45 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
           </div>
         </div>
@@ -316,36 +322,43 @@ const MagicLab3D = () => {
           {/* Left Sidebar - Chemicals & Tools */}
           <motion.div 
             initial={false}
-            animate={{ x: isSidebarOpen ? 0 : -340, opacity: isSidebarOpen ? 1 : 0.4 }}
-            className="relative w-[280px] mt-1 mb-0 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl p-4 pb-2 pointer-events-auto flex flex-col shadow-2xl min-h-0"
+            animate={{ x: isSidebarOpen ? 0 : -320, opacity: isSidebarOpen ? 1 : 0.4 }}
+            transition={{ type: "spring", damping: 20, stiffness: 120 }}
+            className="relative w-[280px] mt-2 mb-2 bg-slate-950/40 backdrop-blur-xl border border-white/10 rounded-[28px] p-4 pb-3 pointer-events-auto flex flex-col shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] min-h-0"
           >
             {/* Toggle Button */}
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="absolute -right-5 top-1/2 -translate-y-1/2 w-10 h-20 bg-blue-600 hover:bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg border border-white/20 transition-all"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 w-8 h-20 bg-slate-900/60 backdrop-blur-xl border border-white/10 hover:border-white/20 rounded-r-2xl flex items-center justify-center shadow-[4px_0_10px_-2px_rgba(0,0,0,0.5)] transition-all pointer-events-auto hover:bg-slate-800/80 group"
             >
-              {isSidebarOpen ? <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m15 18-6-6 6-6"/></svg> : <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m9 18 6-6-6-6"/></svg>}
+              <div className="text-white/60 group-hover:text-blue-400 transition-colors">
+                {isSidebarOpen ? <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg> : <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>}
+              </div>
             </button>
 
             {/* Tools Area */}
-            <div className="flex justify-between items-center mb-4 bg-white/5 p-1.5 rounded-2xl border border-white/5">
+            <div className="flex justify-between items-center mb-4 bg-white/5 p-1.5 rounded-2xl border border-white/5 gap-1.5">
               <button 
                 onClick={handleToggleHeat}
-                className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${activeBeaker.isHeating ? 'bg-orange-500 text-white shadow-lg' : 'hover:bg-white/5 text-white/50'}`}
+                className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${
+                  activeBeaker.isHeating 
+                    ? 'bg-gradient-to-tr from-amber-600 to-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] border border-orange-400/30' 
+                    : 'hover:bg-white/5 text-white/50 hover:text-white border border-transparent'
+                }`}
                 title="Đun nóng"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                <svg className={`w-5 h-5 ${activeBeaker.isHeating ? 'animate-bounce' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
               </button>
               <button 
                 onClick={handleClearBeaker}
-                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-red-500/20 text-white/50 hover:text-red-400 transition-all"
+                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-cyan-500/10 text-white/50 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Làm mới cốc"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               </button>
               <button 
                 onClick={addBeaker}
-                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-green-500/20 text-white/50 hover:text-green-400 transition-all"
+                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-emerald-500/10 text-white/50 hover:text-emerald-400 border border-transparent hover:border-emerald-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Thêm cốc mới"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
@@ -354,7 +367,7 @@ const MagicLab3D = () => {
 
             {/* Search Bar */}
             <div className="relative mb-3 group">
-               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400">
+               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-white/30 group-focus-within:text-blue-400 transition-colors">
                   <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
                </div>
                <input 
@@ -362,12 +375,12 @@ const MagicLab3D = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm hóa chất..."
-                  className="w-full bg-black/40 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs outline-none focus:border-blue-500/50 transition-all"
+                  className="w-full bg-slate-950/40 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all placeholder:text-white/30"
                />
             </div>
 
             {/* Chemicals Grid */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 min-h-0" style={{ minHeight: 0 }}>
+            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1 min-h-0">
               <div className="grid grid-cols-3 gap-1.5 pb-20">
                 {availableChemicals.map((chem) => (
                   <motion.button
@@ -376,21 +389,71 @@ const MagicLab3D = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleDropToBeaker(chem.formula)}
                     disabled={isPouringFormula !== null}
-                    className={`group relative p-2 rounded-xl border transition-all ${isPouringFormula === chem.formula ? 'bg-blue-600 border-blue-400' : 'bg-white/5 border-white/10 hover:border-white/30'}`}
+                    className={`group relative p-2 rounded-xl border transition-all duration-300 ${
+                      isPouringFormula === chem.formula 
+                        ? 'bg-blue-600/30 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)] text-white' 
+                        : 'bg-slate-950/40 border-white/5 hover:bg-slate-900/40'
+                    }`}
+                    style={{
+                      borderColor: isPouringFormula === chem.formula ? undefined : 'rgba(255,255,255,0.05)',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isPouringFormula !== chem.formula) {
+                        e.currentTarget.style.borderColor = chem.color + '60';
+                        e.currentTarget.style.boxShadow = `0 0 15px ${chem.color}30`;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (isPouringFormula !== chem.formula) {
+                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
+                        e.currentTarget.style.boxShadow = 'none';
+                      }
+                    }}
                   >
-                    <div className="aspect-square flex items-center justify-center rounded-lg bg-black/40 mb-1 overflow-hidden relative">
-                      <div className="absolute inset-0 opacity-20 blur-lg" style={{ backgroundColor: chem.color }} />
+                    <div className="aspect-square flex items-center justify-center rounded-lg bg-slate-950/60 mb-1.5 overflow-hidden relative border border-white/5">
+                      <div className="absolute inset-0 opacity-20 blur-lg transition-opacity duration-300 group-hover:opacity-30" style={{ backgroundColor: chem.color }} />
                       {chem.state === 'solid' ? (
-                         <div className="w-4 h-4 opacity-40 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)' }} />
+                        <div className="relative w-8 h-8 flex items-center justify-center scale-90 group-hover:scale-105 transition-transform duration-300">
+                          {/* Main Body */}
+                          <div className="absolute inset-0 rounded-md opacity-25 blur-sm" style={{ backgroundColor: chem.color }} />
+                          {/* Facets */}
+                          <div className="w-5 h-7 relative">
+                            {/* Top Pyramid facet */}
+                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/40 to-transparent opacity-90" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }} />
+                            {/* Bottom Inverted Pyramid facet */}
+                            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/40 to-transparent opacity-95" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 100%, 100% 0%, 0% 0%)' }} />
+                            {/* Left Reflection */}
+                            <div className="absolute top-[10%] left-0 w-[45%] h-[80%] bg-white/20" style={{ clipPath: 'polygon(0% 50%, 100% 0%, 100% 100%)' }} />
+                            {/* Right Shadow */}
+                            <div className="absolute top-[10%] right-0 w-[45%] h-[80%] bg-black/30" style={{ clipPath: 'polygon(100% 50%, 0% 0%, 0% 100%)' }} />
+                            {/* Gloss shine sweep */}
+                            <div className="absolute inset-0 w-[200%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-crystal-shine pointer-events-none" />
+                          </div>
+                        </div>
                       ) : (
-                         <div className="w-4 h-6 border-2 border-white/20 rounded-b-md relative overflow-hidden">
-                           <div className="absolute bottom-0 w-full h-1/2 opacity-60" style={{ backgroundColor: chem.color }} />
-                         </div>
+                        <div className="relative w-8 h-8 flex items-center justify-center scale-95 group-hover:scale-105 transition-transform duration-300">
+                          {/* Glass tube container */}
+                          <div className="w-4.5 h-7 border border-white/30 rounded-b-full relative overflow-hidden bg-white/5 flex items-end shadow-inner">
+                            {/* Liquid content */}
+                            <div 
+                              className="absolute bottom-0 left-0 w-full overflow-hidden transition-all duration-300"
+                              style={{ height: '65%', backgroundColor: chem.color }}
+                            >
+                              {/* Animated wave effect inside liquid */}
+                              <div className="absolute -top-[24px] -left-1/2 w-[200%] aspect-square bg-white/20 rounded-[38%] animate-wave opacity-50" />
+                              <div className="absolute -top-[28px] -left-1/2 w-[200%] aspect-square bg-white/10 rounded-[35%] animate-wave-slow opacity-75" />
+                            </div>
+                            {/* Gloss sheen overlay */}
+                            <div className="absolute top-0 right-0.5 w-[30%] h-full bg-gradient-to-l from-white/25 to-transparent rounded-r-full pointer-events-none" />
+                            {/* Tube lip */}
+                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5.5 h-0.5 bg-white/40 rounded-full" />
+                          </div>
+                        </div>
                       )}
                     </div>
                     <div className="flex flex-col items-center leading-none">
-                      <span className="text-[10px] font-black tracking-tight">{chem.formula}</span>
-                      <span className="text-[7px] text-white/40 font-bold uppercase truncate w-full text-center mt-0.5">{chem.name}</span>
+                      <span className="text-[10px] font-black tracking-tight text-white/90 group-hover:text-white transition-colors">{chem.formula}</span>
+                      <span className="text-[7px] text-white/40 font-bold uppercase truncate w-full text-center mt-0.5 transition-colors group-hover:text-white/60">{chem.name}</span>
                     </div>
                   </motion.button>
                 ))}
@@ -399,32 +462,64 @@ const MagicLab3D = () => {
           </motion.div>
 
           {/* Right Column - Beakers Selector */}
-          <div className="w-24 bg-black/30 backdrop-blur-md rounded-3xl border border-white/10 p-2 flex flex-col gap-2 overflow-y-auto my-2 custom-scrollbar pointer-events-auto self-center max-h-full">
+          <div className="w-24 bg-slate-900/30 backdrop-blur-xl border border-white/10 p-3 rounded-[28px] flex flex-col gap-3 my-auto pointer-events-auto self-center max-h-[90%] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
             {beakers.map((b, idx) => (
               <div key={b.id} className="relative group">
                 <button
                   onClick={() => setActiveBeaker(idx)}
-                  className={`w-full aspect-square rounded-2xl flex flex-col items-center justify-center transition-all border ${activeBeakerIndex === idx ? 'bg-blue-600/20 border-blue-500 ring-2 ring-blue-500/20' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}
+                  className={`w-full aspect-square rounded-2xl flex flex-col items-center justify-center transition-all border duration-300 relative overflow-hidden ${
+                    activeBeakerIndex === idx 
+                      ? 'bg-gradient-to-b from-blue-500/20 to-blue-500/5 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.25)] ring-1 ring-blue-400/30' 
+                      : 'bg-slate-950/40 border-white/5 hover:border-white/20 hover:bg-slate-900/40'
+                  }`}
                 >
-                  <div className="w-8 h-10 border-2 border-white/30 rounded-b-lg relative overflow-hidden mb-1">
+                  {/* Active Indicator Pulse dot */}
+                  {activeBeakerIndex === idx && (
+                    <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
+                    </span>
+                  )}
+                  
+                  {/* Heating Indicator badge */}
+                  {b.isHeating && (
+                    <div className="absolute top-1 left-1 w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse shadow-[0_0_8px_#f97316] z-10" title="Đang đun nóng" />
+                  )}
+
+                  <div className="w-8 h-10 relative overflow-hidden mb-1 flex items-end justify-center">
+                    {/* Outer beaker glass line */}
+                    <div className="absolute inset-0 border border-white/30 rounded-b-lg rounded-t-sm" />
+                    {/* Lip of beaker */}
+                    <div className="absolute top-0 left-0 w-full h-0.5 border-b border-white/30" />
+                    {/* Graduations/Measurement lines */}
+                    <div className="absolute top-2 left-0.5 w-1.5 h-0.5 bg-white/20" />
+                    <div className="absolute top-4 left-0.5 w-2 h-0.5 bg-white/20" />
+                    <div className="absolute top-6 left-0.5 w-1.5 h-0.5 bg-white/20" />
+                    
+                    {/* Liquid content */}
                     {b.contents.length > 0 && (
                       <div 
-                        className="absolute bottom-0 w-full transition-all duration-500" 
+                        className="absolute bottom-0 w-full transition-all duration-500 rounded-b-[7px] overflow-hidden" 
                         style={{ 
-                          height: `${Math.min(b.contents.length * 20, 100)}%`,
+                          height: `${Math.min(b.contents.length * 25, 90)}%`,
                           backgroundColor: b.contents[b.contents.length - 1].color 
                         }} 
-                      />
+                      >
+                        {/* Wave effect in beaker */}
+                        <div className="absolute -top-[48px] -left-1/2 w-[200%] aspect-square bg-white/25 rounded-[38%] animate-wave opacity-50" />
+                        <div className="absolute -top-[52px] -left-1/2 w-[200%] aspect-square bg-white/15 rounded-[35%] animate-wave-slow opacity-75" />
+                      </div>
                     )}
                   </div>
-                  <span className="text-[10px] font-black opacity-50">#{idx + 1}</span>
+                  <span className={`text-[10px] font-black tracking-wider transition-colors ${activeBeakerIndex === idx ? 'text-blue-400' : 'text-white/40'}`}>#{idx + 1}</span>
                 </button>
                 {beakers.length > 1 && (
                   <button 
                     onClick={(e) => { e.stopPropagation(); removeBeaker(idx); }}
-                    className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity transform hover:scale-110 active:scale-95"
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform hover:scale-110 shadow-md"
+                    title="Xóa cốc"
                   >
-                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                    <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
                   </button>
                 )}
               </div>
@@ -442,10 +537,10 @@ const MagicLab3D = () => {
                initial={{ scale: 0.9, opacity: 0 }} 
                animate={{ scale: 1, opacity: 1 }}
                exit={{ scale: 0.9, opacity: 0 }}
-               className="relative bg-[#0d0e12] border border-white/10 rounded-[32px] p-8 w-full max-w-md shadow-2xl"
+               className="relative bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 w-full max-w-md shadow-2xl"
              >
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-xl font-black uppercase italic italic">Tùy chỉnh Lab</h2>
+                  <h2 className="text-xl font-black uppercase italic">Tùy chỉnh Lab</h2>
                   <button onClick={() => setShowLabSettings(false)} className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
                 </div>
 
@@ -498,12 +593,30 @@ const MagicLab3D = () => {
         )}
       </AnimatePresence>
 
-
-
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
         .shadow-3xl { box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.7); }
+        
+        @keyframes wave-rotate {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        .animate-wave {
+          animation: wave-rotate 6s linear infinite;
+        }
+        .animate-wave-slow {
+          animation: wave-rotate 9s linear infinite;
+        }
+        
+        @keyframes crystal-shine {
+          0% { transform: translateX(-150%) skewX(-30deg); }
+          50% { transform: translateX(-150%) skewX(-30deg); }
+          100% { transform: translateX(150%) skewX(-30deg); }
+        }
+        .animate-crystal-shine {
+          animation: crystal-shine 4s ease-in-out infinite;
+        }
       `}</style>
     </div>
   );
