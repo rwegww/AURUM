@@ -5,7 +5,8 @@ import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
 import { CORE_KNOWLEDGE_LESSONS } from '@/data/coreKnowledge';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { CheckCircle2, Lock, ChevronRight, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, Lock, ChevronRight, ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import InfographicBook from '@/components/lessons/InfographicBook';
 
 // Grade theme colors
 const GRADE_THEME = {
@@ -23,6 +24,7 @@ const KnowledgeMap = () => {
 
   const [expandedGrade, setExpandedGrade] = useState(null);
   const [expandedLesson, setExpandedLesson] = useState(null);
+  const [selectedInfographicLesson, setSelectedInfographicLesson] = useState(null);
 
   const unlockedLessons = user?.unlockedLessons || [];
 
@@ -370,19 +372,39 @@ const KnowledgeMap = () => {
                                             );
                                           })}
                                           
-                                          {/* Action Button for the Lesson */}
+                                          {/* Action Buttons for the Lesson */}
                                           {lessonDone && (
                                             <div className="flex flex-row items-center relative mt-2">
                                               <div className="absolute left-0 top-0 bottom-1/2 w-[3px] bg-slate-200 z-0" />
                                               <div className="w-10 h-[3px] bg-slate-200 shrink-0 z-0" />
-                                              <motion.button
-                                                initial={{ opacity: 0 }}
-                                                animate={{ opacity: 1 }}
-                                                onClick={() => navigate(`/lessons/${lesson.classId}/${lesson.lessonId}`)}
-                                                className="shrink-0 z-10 text-[11px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-500 hover:text-viet-green transition-all shadow-sm"
-                                              >
-                                                Xem lại bài học →
-                                              </motion.button>
+                                              <div className="flex flex-row gap-2 shrink-0 z-10">
+                                                <motion.button
+                                                  initial={{ opacity: 0 }}
+                                                  animate={{ opacity: 1 }}
+                                                  onClick={() => navigate(`/lessons/${lesson.classId}/${lesson.lessonId}`)}
+                                                  className="text-[11px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-500 hover:text-viet-green transition-all shadow-sm"
+                                                >
+                                                  Xem lại bài học →
+                                                </motion.button>
+
+                                                <motion.button
+                                                  initial={{ opacity: 0 }}
+                                                  animate={{ opacity: 1 }}
+                                                  onClick={() => {
+                                                    const orderMatch = lesson.lessonId.match(/bai(\d+)/i);
+                                                    const order = orderMatch ? parseInt(orderMatch[1], 10) : 1;
+                                                    
+                                                    setSelectedInfographicLesson({
+                                                      ...lesson,
+                                                      order,
+                                                      title: lesson.title
+                                                    });
+                                                  }}
+                                                  className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl border-2 border-emerald-200 bg-emerald-50 hover:bg-emerald-100 hover:border-emerald-300 text-emerald-700 transition-all shadow-sm"
+                                                >
+                                                  <ImageIcon size={14} /> Infographic
+                                                </motion.button>
+                                              </div>
                                             </div>
                                           )}
                                         </div>
@@ -406,6 +428,17 @@ const KnowledgeMap = () => {
           </div>
         </div>
       </div>
+      
+      {/* Infographic Modal */}
+      {selectedInfographicLesson && (
+        <InfographicBook
+          isOpen={true}
+          onClose={() => setSelectedInfographicLesson(null)}
+          lessons={[selectedInfographicLesson]}
+          grade={selectedInfographicLesson.classId.toString()}
+          unlockedLessons={unlockedLessons}
+        />
+      )}
       
       <style dangerouslySetInnerHTML={{ __html: `
         .custom-scrollbar::-webkit-scrollbar {
