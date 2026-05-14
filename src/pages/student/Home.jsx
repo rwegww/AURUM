@@ -128,6 +128,7 @@ const Home = () => {
   React.useEffect(() => {
     const fetchTestimonials = async () => {
       try {
+        console.log('Home: Attempting to fetch testimonials from Supabase...');
         const { data, error } = await supabase
           .from('testimonials')
           .select('*')
@@ -136,7 +137,8 @@ const Home = () => {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          const currentLang = i18n.language === 'vi' ? 'vi' : 'en';
+          console.log('Home: Testimonials successfully fetched from database:', data);
+          const currentLang = i18n.language?.startsWith('vi') ? 'vi' : 'en';
           const formatted = data.map(item => ({
             name: item.name,
             role: currentLang === 'vi' ? item.role_vi : item.role_en,
@@ -145,11 +147,12 @@ const Home = () => {
           }));
           setTestimonials(formatted);
         } else {
+          console.warn('Home: No testimonials found in database, falling back to local translations.');
           const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
           setTestimonials(fallback);
         }
       } catch (err) {
-        console.error('Error fetching testimonials:', err);
+        console.error('Home: Error fetching testimonials from Supabase:', err);
         const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
         setTestimonials(fallback);
       }
