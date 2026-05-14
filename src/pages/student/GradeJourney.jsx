@@ -168,7 +168,7 @@ const GradeJourney = () => {
                           {lesson.title.split(': ').pop()}
                         </h3>
 
-                        {/* Segmented Progress Display */}
+                        {/* Segmented Progress Display: 3 segments as requested */}
                         {!isLocked && (
                           <div className="flex gap-1 h-1.5 w-full">
                              {['level1', 'level2', 'level3'].map((lvl, i) => (
@@ -182,7 +182,7 @@ const GradeJourney = () => {
                       </div>
                       {!isLocked && (
                         <div className={`absolute top-1/2 -translate-y-1/2 bg-viet-green text-white px-3 py-1 rounded-full text-[10px] font-black uppercase shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap ${isEven ? '-left-4 -translate-x-full' : '-right-4 translate-x-full'}`}>
-                          {lessonStars.level1 === 0 ? 'Xem bài giảng' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
+                          {lessonStars.level1 === 0 ? 'Bắt đầu: Video + Học' : (lessonStars.level2 === 0 ? 'Tiếp tục: Hiểu' : (lessonStars.level3 === 0 ? 'Tiếp tục: Ôn tập' : 'Làm lại ôn tập'))}
                         </div>
                       )}
                     </button>

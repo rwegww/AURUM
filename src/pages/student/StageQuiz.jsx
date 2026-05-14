@@ -97,8 +97,9 @@ const StageQuiz = () => {
   const currentQuestions = getLevelData(currentLevel);
 
   // ========== LEVEL 1: XEM VIDEO BÀI GIẢNG ==========
-  if (currentLevel === 'level1') {
+  if (currentLevel === 'level1' && !videoCompleted) {
     const videoUrl = lesson?.introVideoUrl;
+    // ... existing video render logic ...
 
     return (
       <div className="fixed inset-0 z-[110] flex items-start justify-center p-4 py-12 bg-[#fffbf0]/90 backdrop-blur-xl overflow-y-auto">
@@ -181,7 +182,7 @@ const StageQuiz = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="text-viet-green font-black text-[12px] uppercase flex items-center justify-center gap-2"
                     >
-                      <span>✅ Đã xem xong — Sẵn sàng làm bài tập!</span>
+                      <span>✅ Đã học xong — Bắt đầu làm bài tập ngay!</span>
                     </motion.div>
                   ) : (
                     <motion.p 
@@ -208,10 +209,10 @@ const StageQuiz = () => {
                 <motion.button
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  onClick={handleContinue}
+                  onClick={() => setVideoCompleted(true)}
                   className="px-8 py-3 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest shadow-lg hover:brightness-110 hover:scale-105 transition-all"
                 >
-                  Tiếp tục hành trình →
+                  Bắt đầu học ngay →
                 </motion.button>
               ) : (
                 <button
@@ -236,12 +237,11 @@ const StageQuiz = () => {
 
   return (
     <div className="min-h-screen bg-[#fffbf0]">
-      {/* Level Indicator Overlay */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4 bg-white/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl border border-viet-border">
+       <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4 bg-white/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl border border-viet-border">
          <div className="pr-4 border-r border-slate-200">
             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đang làm</div>
             <div className="text-sm font-bold text-slate-700">
-               {currentLevel === 'level2' ? 'Đoạn 2: Thông hiểu' : 'Đoạn 3: Ôn tập'}
+               {currentLevel === 'level1' ? 'Đoạn 1: Video + Học' : (currentLevel === 'level2' ? 'Đoạn 2: Hiểu' : 'Đoạn 3: Ôn tập')}
             </div>
          </div>
       </div>
@@ -269,7 +269,7 @@ const StageQuiz = () => {
               <div className="text-6xl mb-6">🎉</div>
               <h2 className="text-2xl font-black text-viet-text mb-2">Hoàn thành đoạn!</h2>
               <p className="text-viet-text-light font-medium mb-8 uppercase tracking-widest text-xs">
-                {currentLevel === 'level2' ? 'Bạn đã thông hiểu vấn đề' : 'Bạn đã ôn tập xuất sắc'}
+                {currentLevel === 'level1' ? 'Bạn đã bắt đầu hành trình xuất sắc' : (currentLevel === 'level2' ? 'Bạn đã nắm vững kiến thức' : 'Bạn đã ôn tập xuất sắc')}
               </p>
 
               <div className="bg-slate-50 rounded-2xl p-4 mb-8 flex justify-around">

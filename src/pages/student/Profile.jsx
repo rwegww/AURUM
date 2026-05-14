@@ -25,7 +25,13 @@ const Profile = () => {
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
-  const [planData, setPlanData] = useState(user?.studyPlan || { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true });
+  const [planData, setPlanData] = useState(user?.studyPlan || { 
+    studyTime: '20:00', 
+    dailyLessonTarget: 1, 
+    remindersEnabled: true,
+    emailEnabled: false,
+    calendarEnabled: false
+  });
 
   const handleRandomizeAvatar = () => {
     const newSeed = Math.random().toString(36).substring(7);
@@ -237,7 +243,7 @@ const Profile = () => {
                     className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none appearance-none transition-all"
                   >
                     {[1, 2, 3, 5, 10].map(n => (
-                      <option key={n} value={n}>{n} {t('common.lesson', { count: n })}</option>
+                      <option key={n} value={n}>{n} {t('common.lesson_count', { count: n })}</option>
                     ))}
                   </select>
                   <div className="absolute right-6 top-1/2 -translate-y-1/2 text-xl pointer-events-none opacity-40">📚</div>
@@ -246,21 +252,64 @@ const Profile = () => {
 
               <div className="space-y-3">
                 <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.reminders_label')}</label>
-                <button 
-                  onClick={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
-                  className={`w-full h-16 rounded-2xl border px-6 flex items-center justify-between transition-all ${
-                    planData.remindersEnabled 
-                      ? 'bg-viet-green/5 border-viet-green' 
-                      : 'bg-slate-50 border-viet-border opacity-60'
-                  }`}
-                >
-                  <span className={`font-black text-lg ${planData.remindersEnabled ? 'text-viet-green' : 'text-viet-text'}`}>
-                    {planData.remindersEnabled ? 'Đang bật' : 'Đang tắt'}
-                  </span>
-                  <div className={`w-10 h-6 rounded-full relative transition-colors ${planData.remindersEnabled ? 'bg-viet-green' : 'bg-slate-300'}`}>
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${planData.remindersEnabled ? 'right-1' : 'left-1'}`} />
-                  </div>
-                </button>
+                <div className="flex flex-col gap-3">
+                  <button 
+                    onClick={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
+                    className={`w-full h-14 rounded-2xl border px-5 flex items-center justify-between transition-all ${
+                      planData.remindersEnabled 
+                        ? 'bg-viet-green/5 border-viet-green' 
+                        : 'bg-slate-50 border-viet-border opacity-60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">🔔</span>
+                      <span className={`font-bold text-[15px] ${planData.remindersEnabled ? 'text-viet-green' : 'text-viet-text'}`}>
+                        {t('profile.study_plan.reminders_label')}
+                      </span>
+                    </div>
+                    <div className={`w-8 h-5 rounded-full relative transition-colors ${planData.remindersEnabled ? 'bg-viet-green' : 'bg-slate-300'}`}>
+                      <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${planData.remindersEnabled ? 'right-0.5' : 'left-0.5'}`} />
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setPlanData({ ...planData, emailEnabled: !planData.emailEnabled })}
+                    className={`w-full h-14 rounded-2xl border px-5 flex items-center justify-between transition-all ${
+                      planData.emailEnabled 
+                        ? 'bg-blue-500/5 border-blue-500' 
+                        : 'bg-slate-50 border-viet-border opacity-60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">📧</span>
+                      <span className={`font-bold text-[15px] ${planData.emailEnabled ? 'text-blue-600' : 'text-viet-text'}`}>
+                        {t('profile.study_plan.email_reminders')}
+                      </span>
+                    </div>
+                    <div className={`w-8 h-5 rounded-full relative transition-colors ${planData.emailEnabled ? 'bg-blue-500' : 'bg-slate-300'}`}>
+                      <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${planData.emailEnabled ? 'right-0.5' : 'left-0.5'}`} />
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setPlanData({ ...planData, calendarEnabled: !planData.calendarEnabled })}
+                    className={`w-full h-14 rounded-2xl border px-5 flex items-center justify-between transition-all ${
+                      planData.calendarEnabled 
+                        ? 'bg-red-500/5 border-red-500' 
+                        : 'bg-slate-50 border-viet-border opacity-60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl">📅</span>
+                      <span className={`font-bold text-[15px] ${planData.calendarEnabled ? 'text-red-600' : 'text-viet-text'}`}>
+                        {t('profile.study_plan.calendar_reminders')}
+                      </span>
+                    </div>
+                    <div className={`w-8 h-5 rounded-full relative transition-colors ${planData.calendarEnabled ? 'bg-red-500' : 'bg-slate-300'}`}>
+                      <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${planData.calendarEnabled ? 'right-0.5' : 'left-0.5'}`} />
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
 

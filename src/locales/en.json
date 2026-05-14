@@ -241,7 +241,9 @@
       "save_btn": "Save Plan",
       "saving": "Saving...",
       "success": "Study plan updated!",
-      "reminder_msg": "🔔 It's time to study! You haven't reached your lesson goal today. Let's learn now to keep your streak alive!"
+      "reminder_msg": "🔔 It's time to study! You haven't reached your lesson goal today. Let's learn now to keep your streak alive!",
+      "email_reminders": "Email Reminders",
+      "calendar_reminders": "Sync Google Calendar"
     },
     "arena_stats": {
       "title": "Arena Statistics",
@@ -249,12 +251,12 @@
       "wins": "Wins",
       "losses": "Losses",
       "win_rate": "Win Rate",
-      "challenge_now": "Challenge Now →",
-      "history_title": "Activity Log",
-      "history_empty": "You haven't performed any notable actions yet.",
-      "history_clear": "Clear Log",
-      "history_time_ago": "At"
-    }
+      "challenge_now": "Challenge Now →"
+    },
+    "history_title": "Activity Log",
+    "history_empty": "You haven't performed any notable actions yet.",
+    "history_clear": "Clear Log",
+    "history_time_ago": "At"
   },
   "missions": {
     "badge": "Training Center",
@@ -452,6 +454,8 @@
   "common": {
     "grade": "Grade {{grade}}",
     "lesson": "Lesson {{order}}",
+    "lesson_count_one": "Lesson",
+    "lesson_count_other": "Lessons",
     "loading": "Loading...",
     "back": "Back",
     "continue": "Continue",
