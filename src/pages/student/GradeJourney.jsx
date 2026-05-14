@@ -460,99 +460,164 @@ const GradeJourney = () => {
                 </motion.div>
               );
             })}
-          </div>
 
-          {/* End Milestone Book section */}
-          {(() => {
-            const lesson1Stars = lessons.length > 0 
-              ? (user?.balancingProgress?.lessonStars?.[lessons[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
-              : { level1: 0, level2: 0, level3: 0 };
-            const isLesson1Complete = lesson1Stars.level1 > 0 && lesson1Stars.level2 > 0 && lesson1Stars.level3 > 0;
-            const canOpenBook = isLesson1Complete || user?.role === 'admin' || user?.role === 'teacher';
-            
-            return (
-              <div className={`mt-28 mb-14 flex flex-col items-center relative ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}>
-                
-                {/* Book Milestone */}
-                <motion.button 
-                  whileHover={canOpenBook ? { scale: 1.05 } : {}} 
-                  whileTap={canOpenBook ? { scale: 0.95 } : {}} 
-                  onClick={() => canOpenBook && setIsBookOpen(true)} 
-                  className="relative group w-28 h-36 flex items-center justify-center cursor-pointer perspective-1000"
+            {/* Book Milestone — Final Timeline Node */}
+            {(() => {
+              const lesson1Stars = lessons.length > 0 
+                ? (user?.balancingProgress?.lessonStars?.[lessons[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
+                : { level1: 0, level2: 0, level3: 0 };
+              const isLesson1Complete = lesson1Stars.level1 > 0 && lesson1Stars.level2 > 0 && lesson1Stars.level3 > 0;
+              const canOpenBook = isLesson1Complete || user?.role === 'admin' || user?.role === 'teacher';
+
+              return (
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className={`relative flex gap-6 md:gap-8 items-start w-full ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}
                 >
-                  {/* Radiant background glowing portal aura */}
-                  <div 
-                    className="absolute inset-0 blur-2xl opacity-40 transition-all duration-500 group-hover:opacity-75 rounded-full animate-pulse scale-90"
-                    style={{ backgroundColor: activeTheme.primary }} 
-                  />
-                  
-                  {/* Miniature 3D Book */}
-                  <div 
-                    className={`relative w-[80px] h-[108px] rounded-[14px] shadow-2xl flex flex-col justify-between p-2.5 overflow-hidden transition-all duration-500 preserve-3d border border-white/10 ${
-                      canOpenBook ? 'group-hover:rotate-y-12 group-hover:-translate-y-2 group-hover:shadow-[8px_16px_24px_rgba(0,0,0,0.35)]' : ''
-                    }`}
-                    style={{
-                      background: canOpenBook 
-                        ? `linear-gradient(135deg, ${activeTheme.primary} 0%, #0f172a 100%)`
-                        : 'linear-gradient(135deg, #94a3b8 0%, #475569 100%)',
-                    }}
-                  >
-                    {/* Spine shading */}
-                    <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-black/35 border-r border-white/5 z-20 rounded-l-[14px]" />
-                    
-                    {/* Cover details (Gold ornaments for active, silver/white for locked) */}
-                    <div 
-                      className={`absolute inset-1 border rounded-[10px] pointer-events-none z-10 ${
-                        canOpenBook ? 'border-amber-500/25' : 'border-slate-400/20'
-                      }`} 
-                    />
-                    <div 
-                      className={`absolute inset-1.5 border rounded-[8px] pointer-events-none z-10 ${
-                        canOpenBook ? 'border-amber-500/15' : 'border-slate-400/10'
-                      }`} 
-                    />
-
-                    {/* Ribbon bookmark hanging out of the book */}
-                    {canOpenBook && (
-                      <div className="absolute bottom-[-4px] left-5 w-2 h-3.5 bg-rose-500 rounded-b-sm shadow-md z-0 origin-top group-hover:scale-y-125 transition-transform duration-300" />
-                    )}
-
-                    {/* Center Symbol/Lock */}
-                    <div className="my-auto mx-auto text-center relative z-10 flex flex-col items-center justify-center">
-                      <span className="text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
-                        {canOpenBook ? activeTheme.doodleSymbol : '🔒'}
-                      </span>
-                    </div>
-
-                    {/* Cover title text */}
-                    <div 
-                      className={`w-full text-center text-[7px] font-black uppercase tracking-widest relative z-10 mt-auto select-none ${
-                        canOpenBook ? 'text-amber-300/90' : 'text-slate-400'
-                      }`}
-                    >
-                      {t('journey.milestone.book_label')}
+                  {/* Molecular Orbit Central Node — Special Book Node */}
+                  <div className="w-10 flex-shrink-0 flex justify-center pt-3 relative">
+                    <div className="relative w-10 h-10 flex items-center justify-center">
+                      {canOpenBook && (
+                        <div className="absolute inset-0 pointer-events-none">
+                          <div 
+                            className="absolute inset-[-6px] rounded-full border-2 border-dashed animate-[spin_8s_linear_infinite]" 
+                            style={{ borderColor: activeTheme.primary, opacity: 0.5 }}
+                          />
+                          <div 
+                            className="absolute inset-[-12px] rounded-full border border-dotted animate-[spin_14s_linear_infinite_reverse]" 
+                            style={{ borderColor: activeTheme.primary, opacity: 0.25 }}
+                          />
+                          <div 
+                            className="absolute top-[-7px] left-1/2 -translate-x-1/2 w-2 h-2 rounded-full shadow-lg animate-pulse"
+                            style={{ backgroundColor: activeTheme.primary, boxShadow: `0 0 8px ${activeTheme.primary}` }} 
+                          />
+                        </div>
+                      )}
+                      <div 
+                        className={`w-10 h-10 rounded-[14px] border-2 flex items-center justify-center shadow-sm z-10 transition-all ${
+                          !canOpenBook ? 'border-slate-200 bg-slate-100' : 'bg-white'
+                        }`}
+                        style={{ 
+                          borderColor: !canOpenBook ? '#e2e8f0' : activeTheme.primary,
+                          boxShadow: canOpenBook ? `0 4px 12px -2px ${activeTheme.primaryGlow}` : 'none'
+                        }}
+                      >
+                        <BookOpen 
+                          size={16} 
+                          style={{ color: !canOpenBook ? '#cbd5e1' : activeTheme.primary }}
+                        />
+                      </div>
                     </div>
                   </div>
-                  
-                  {/* Animated Badge indicator */}
-                  {canOpenBook && (
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-black px-2.5 py-1 rounded-full shadow-lg animate-bounce border border-white uppercase tracking-wider z-30">
-                      {t('journey.milestone.book_badge')}
-                    </div>
-                  )}
-                </motion.button>
 
-                <div className="mt-6 text-center max-w-sm">
-                  <h3 className="text-lg font-black text-slate-800 font-sora uppercase italic">
-                    {canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}
-                  </h3>
-                  <p className="text-slate-500 text-[11px] font-bold mt-1.5 uppercase tracking-widest">
-                    {t('journey.milestone.subtitle', { grade })}
-                  </p>
-                </div>
-              </div>
-            );
-          })()}
+                  {/* Book Milestone Card — same pattern as lesson cards */}
+                  <div 
+                    onClick={() => canOpenBook && setIsBookOpen(true)}
+                    className={`group relative flex-1 rounded-[24px] p-6 transition-all border-2 shadow-sm overflow-hidden flex flex-col md:flex-row gap-6 items-center ${
+                      !canOpenBook 
+                        ? 'border-slate-200 bg-slate-50/50 cursor-not-allowed opacity-50' 
+                        : 'bg-white hover:scale-[1.01] cursor-pointer hover:shadow-xl hover:border-slate-200/85 active:scale-[0.99]'
+                    }`}
+                    style={{ 
+                      borderColor: !canOpenBook ? 'rgb(226, 232, 240)' : 'transparent',
+                      boxShadow: canOpenBook ? '0 10px 30px -10px rgba(0,0,0,0.05)' : 'none'
+                    }}
+                  >
+                    {/* Tactile left border */}
+                    {canOpenBook && (
+                      <div 
+                        className="absolute left-0 top-0 bottom-0 w-1.5 transition-all group-hover:w-2" 
+                        style={{ backgroundColor: activeTheme.primary }} 
+                      />
+                    )}
+
+                    {/* Mini 3D Book Visual */}
+                    <div className="relative w-[68px] h-[92px] shrink-0 perspective-1000 preserve-3d">
+                      <div 
+                        className="absolute inset-0 blur-xl opacity-30 rounded-full animate-pulse"
+                        style={{ backgroundColor: activeTheme.primary }} 
+                      />
+                      <div 
+                        className={`relative w-full h-full rounded-[12px] shadow-xl flex flex-col justify-between p-2 overflow-hidden border border-white/10 transition-all duration-500 ${
+                          canOpenBook ? 'group-hover:-translate-y-1 group-hover:shadow-[4px_8px_16px_rgba(0,0,0,0.3)]' : ''
+                        }`}
+                        style={{
+                          background: canOpenBook 
+                            ? `linear-gradient(135deg, ${activeTheme.primary} 0%, #0f172a 100%)`
+                            : 'linear-gradient(135deg, #94a3b8 0%, #475569 100%)',
+                        }}
+                      >
+                        <div className="absolute left-0 top-0 bottom-0 w-2 bg-black/35 border-r border-white/5 z-20 rounded-l-[12px]" />
+                        <div className={`absolute inset-1 border rounded-[8px] pointer-events-none z-10 ${canOpenBook ? 'border-amber-500/25' : 'border-slate-400/20'}`} />
+                        {canOpenBook && (
+                          <div className="absolute bottom-[-3px] left-4 w-1.5 h-3 bg-rose-500 rounded-b-sm shadow-md z-0" />
+                        )}
+                        <div className="my-auto mx-auto text-center relative z-10">
+                          <span className="text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
+                            {canOpenBook ? activeTheme.doodleSymbol : '🔒'}
+                          </span>
+                        </div>
+                        <div className={`w-full text-center text-[6px] font-black uppercase tracking-widest relative z-10 select-none ${canOpenBook ? 'text-amber-300/90' : 'text-slate-400'}`}>
+                          {t('journey.milestone.book_label')}
+                        </div>
+                      </div>
+                      {canOpenBook && (
+                        <div className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[7px] font-black px-2 py-0.5 rounded-full shadow-lg animate-bounce border border-white uppercase tracking-wider z-30">
+                          {t('journey.milestone.book_badge')}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Text Content */}
+                    <div className="flex-1 flex flex-col">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span 
+                          className="text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full border bg-slate-50"
+                          style={{ 
+                            color: !canOpenBook ? '#94a3b8' : activeTheme.primary,
+                            borderColor: !canOpenBook ? '#e2e8f0' : activeTheme.primaryLight
+                          }}
+                        >
+                          CỘT MỐC
+                        </span>
+                        {canOpenBook && (
+                          <Sparkles size={14} className="text-amber-500 animate-pulse" />
+                        )}
+                      </div>
+                      <h3 className={`text-[17px] font-black leading-snug tracking-tight mb-1.5 font-sora ${
+                        !canOpenBook ? 'text-slate-400' : 'text-slate-800 group-hover:text-slate-900'
+                      }`}>
+                        {canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}
+                      </h3>
+                      <p className={`text-[13px] leading-relaxed font-medium ${
+                        !canOpenBook ? 'text-slate-300' : 'text-slate-500'
+                      }`}>
+                        {t('journey.milestone.subtitle', { grade })}
+                      </p>
+                    </div>
+
+                    {/* CTA Arrow — same as lesson cards */}
+                    {canOpenBook && (
+                      <div className="flex items-center justify-end md:self-center shrink-0 mt-4 md:mt-0">
+                        <div 
+                          className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg"
+                          style={{ 
+                            background: `linear-gradient(135deg, ${activeTheme.primary}, ${activeTheme.primary})`,
+                            boxShadow: `0 4px 14px ${activeTheme.primaryGlow}`
+                          }}
+                        >
+                          <ArrowRight size={20} className="transition-transform duration-300 group-hover:translate-x-1" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })()}
+          </div>
         </div>
       </div>
 
