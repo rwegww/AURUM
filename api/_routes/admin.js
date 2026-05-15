@@ -129,24 +129,25 @@ router.post('/feedback/submit', async (req, res) => {
     let username = 'Anonymous';
 
     if (token) {
-      // Try Supabase first
-      const { data: { user: sbUser } } = await supabase.auth.getUser(token);
-      if (sbUser) {
-        const user = await User.findById(sbUser.id);
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
         if (user) {
           userId = user.id;
           username = user.username;
         }
-      } else {
-        // Try Custom JWT
+      } catch (jwtErr) {
         try {
-          const decoded = jwt.verify(token, process.env.JWT_SECRET);
-          const user = await User.findById(decoded.id);
-          if (user) {
-            userId = user.id;
-            username = user.username;
+          const { data } = await supabase.auth.getUser(token);
+          const sbUser = data?.user;
+          if (sbUser) {
+            const user = await User.findById(sbUser.id) || await User.findOne({ email: sbUser.email });
+            if (user) {
+              userId = user.id;
+              username = user.username;
+            }
           }
-        } catch (err) {}
+        } catch (sbErr) {}
       }
     }
 
