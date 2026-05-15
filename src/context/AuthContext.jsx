@@ -113,6 +113,21 @@ export const AuthProvider = ({ children }) => {
     }
   }, [logout]);
 
+  const registerTeacher = useCallback(async (username, password, email, proofImageUrl) => {
+    try {
+      const res = await fetch('/api/auth/register-teacher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, email, proofImageUrl })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Lỗi gửi yêu cầu đăng ký');
+      return { success: true, message: data.message };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  }, []);
+
   const login = useCallback(async (username, password) => {
     try {
       const res = await fetch('/api/auth/login', {
@@ -456,6 +471,7 @@ export const AuthProvider = ({ children }) => {
     login,
     loginWithGoogle,
     register,
+    registerTeacher,
     logout,
     updateProgress,
     refreshUser,
@@ -465,7 +481,7 @@ export const AuthProvider = ({ children }) => {
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, logout, updateProgress, refreshUser, updateUser, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
