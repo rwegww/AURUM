@@ -4,7 +4,6 @@ import dotenv from 'dotenv';
 import { supabase } from './lib/supabase.js';
 
 // Route Imports
-import aiRouter from './_routes/ai.js';
 import authRouter from './_routes/auth.js';
 import userRouter from './_routes/user.js';
 import arenaRouter from './_routes/arena.js';
@@ -28,7 +27,6 @@ app.use(cors());
 app.use(express.json());
 
 // API Routes Mounting
-app.use('/api/ai', aiRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/arena', arenaRouter);

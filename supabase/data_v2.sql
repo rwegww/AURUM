@@ -252,24 +252,7 @@ CREATE TABLE public.content_balancing_questions (
   created_at timestamp with time zone DEFAULT now()
 );
 
--- 9. MODULE: AI & SYSTEM
-CREATE TABLE public.sys_ai_cache (
-  query_hash text PRIMARY KEY,
-  original_query text,
-  response jsonb,
-  created_at timestamp with time zone DEFAULT now()
-);
 
-CREATE TABLE public.sys_ai_knowledge (
-  id text PRIMARY KEY,
-  kind text NOT NULL,
-  input text NOT NULL,
-  output text NOT NULL,
-  category text,
-  title text,
-  symbol text,
-  created_at timestamp with time zone DEFAULT now()
-);
 
 CREATE TABLE public.sys_feedback (
   id uuid DEFAULT gen_random_uuid() PRIMARY KEY,

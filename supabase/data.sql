@@ -1,28 +1,7 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
 
-CREATE TABLE public.ai_cache (
-  query_hash text NOT NULL,
-  original_query text,
-  response jsonb,
-  created_at timestamp with time zone DEFAULT now(),
-  CONSTRAINT ai_cache_pkey PRIMARY KEY (query_hash)
-);
-CREATE TABLE public.ai_knowledge_base (
-  id text NOT NULL,
-  kind text NOT NULL,
-  input text NOT NULL,
-  output text NOT NULL,
-  input_normalized text,
-  category text,
-  title text,
-  difficulty text,
-  source_id text,
-  symbol text,
-  compare_to text,
-  created_at timestamp with time zone DEFAULT now(),
-  CONSTRAINT ai_knowledge_base_pkey PRIMARY KEY (id)
-);
+
 CREATE TABLE public.arena_match_history (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_id text,
