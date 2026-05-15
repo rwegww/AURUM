@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -94,6 +95,52 @@ const AdminDashboard = () => {
                 <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">🏆</div>
                   <span className="text-sm font-bold text-viet-text">Sự kiện mới</span>
+                </div>
+              </div>
+            </section>
+
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
+                <h2 className="text-lg font-bold text-viet-text mb-6">Phân bố cấp độ học sinh</h2>
+                <div className="h-64">
+                  {stats.levelDistribution ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={stats.levelDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 'bold' }} dy={10} />
+                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 'bold' }} />
+                        <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                        <Bar dataKey="students" name="Số học sinh" fill="#22c55e" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  ) : <div className="h-full flex items-center justify-center text-viet-text-light font-medium">Chưa có dữ liệu</div>}
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
+                <h2 className="text-lg font-bold text-viet-text mb-6">Tỷ lệ phản hồi</h2>
+                <div className="h-64">
+                  {stats.feedbackDistribution && stats.feedbackDistribution.some(d => d.value > 0) ? (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={stats.feedbackDistribution}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {stats.feedbackDistribution.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                        <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 'bold', paddingTop: '20px' }} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  ) : <div className="h-full flex items-center justify-center text-viet-text-light font-medium">Chưa có phản hồi</div>}
                 </div>
               </div>
             </section>

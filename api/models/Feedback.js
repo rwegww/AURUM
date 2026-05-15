@@ -82,6 +82,28 @@ export const Feedback = {
     return data;
   },
 
+  async getTypeDistribution() {
+    const { data, error } = await supabase
+      .from('feedback')
+      .select('type');
+    if (error) throw error;
+    
+    const distribution = { bug: 0, suggestion: 0, praise: 0 };
+    data.forEach(f => {
+      if (distribution[f.type] !== undefined) {
+        distribution[f.type]++;
+      } else {
+        distribution[f.type] = 1;
+      }
+    });
+    
+    return [
+      { name: 'Báo lỗi', value: distribution.bug || 0, color: '#ef4444' },
+      { name: 'Góp ý', value: distribution.suggestion || 0, color: '#3b82f6' },
+      { name: 'Khen ngợi', value: distribution.praise || 0, color: '#22c55e' }
+    ];
+  },
+
   async getApprovedPraises() {
     const { data, error } = await supabase
       .from('feedback')

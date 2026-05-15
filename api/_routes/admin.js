@@ -48,11 +48,12 @@ const adminOnly = async (req, res, next) => {
 // GET /api/admin/stats - System-wide statistics
 router.get('/stats', adminOnly, async (req, res) => {
   try {
-    const [totalUsers, totalLessons, totalFeedback, userStats] = await Promise.all([
+    const [totalUsers, totalLessons, totalFeedback, userStats, feedbackDistribution] = await Promise.all([
       User.countStudents(),
       Lesson.countAll(),
       Feedback.countUnread(),
-      User.aggregateStats()
+      User.aggregateStats(),
+      Feedback.getTypeDistribution()
     ]);
     
     res.json({
@@ -60,7 +61,9 @@ router.get('/stats', adminOnly, async (req, res) => {
       totalLessons,
       unreadFeedback: totalFeedback,
       totalXP: userStats.totalXP,
-      avgLevel: Math.round(userStats.avgLevel)
+      avgLevel: userStats.avgLevel,
+      levelDistribution: userStats.levelDistribution,
+      feedbackDistribution
     });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi lấy thống kê', error: err.message });
