@@ -18,6 +18,7 @@ const AurumAiAgent = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [showPolicy, setShowPolicy] = useState(false);
+  const [isTutorMode, setIsTutorMode] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -41,6 +42,20 @@ const AurumAiAgent = () => {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isTyping]);
+
+  // Handle tutor mode toggle notification
+  useEffect(() => {
+    if (messages.length > 0 && isLoggedIn) {
+      setMessages(prev => [...prev, {
+        id: Date.now(),
+        text: isTutorMode 
+          ? "🎓 **Chế độ Gia sư đã bật.** Tôi sẽ không đưa ra đáp án ngay mà sẽ hướng dẫn bạn giải từng bước. Bắt đầu nào!" 
+          : "⚡ **Chế độ Gia sư đã tắt.** Tôi sẽ đưa ra câu trả lời trực tiếp và nhanh chóng nhất.",
+        sender: 'ai',
+        timestamp: new Date()
+      }]);
+    }
+  }, [isTutorMode]);
 
   // Listen for external triggers (e.g. from ElementCard)
   useEffect(() => {
@@ -86,7 +101,8 @@ const AurumAiAgent = () => {
         role, 
         page: location.pathname, 
         user,
-        chat_history
+        chat_history,
+        mode: isTutorMode ? 'tutor' : 'normal'
       });
       
       const aiMsg = { 
@@ -144,6 +160,14 @@ const AurumAiAgent = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsTutorMode(!isTutorMode)}
+                  className={`text-[10px] px-2 py-1.5 rounded-xl transition-all flex items-center gap-1.5 active:scale-95 border ${isTutorMode ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-white/10 hover:bg-white/20 text-white/70 border-transparent'}`}
+                  title={isTutorMode ? 'Tắt chế độ Gia sư' : 'Bật chế độ Gia sư (Giải từng bước)'}
+                >
+                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                  <span className="font-bold">{isTutorMode ? 'Gia sư: Bật' : 'Gia sư'}</span>
+                </button>
                 <button 
                   onClick={() => setShowPolicy(true)}
                   className="text-[10px] bg-white/10 hover:bg-white/20 text-white px-2 py-1.5 rounded-xl transition-all flex items-center gap-1.5 active:scale-95"

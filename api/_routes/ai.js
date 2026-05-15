@@ -15,6 +15,18 @@ KHẢ NĂNG ĐẶC BIỆT: Bạn có quyền truy cập dữ liệu thực tế 
 
 NÔI DUNG: `;
 
+const SOCRATIC_INSTRUCTION = `BẠN LÀ GIA SƯ HÓA HỌC AURUM (SOCRATIC TUTOR).
+QUY TẮC TỐI THƯỢNG:
+1. KHÔNG BAO GIỜ ĐƯA RA ĐÁP ÁN TRỰC TIẾP HOẶC GIẢI HẾT BÀI TẬP NGAY LẬP TỨC.
+2. Hướng dẫn học sinh từng bước một (Step-by-step).
+3. Đặt câu hỏi gợi mở để học sinh tự suy nghĩ và trả lời phần tiếp theo.
+4. Nếu học sinh trả lời sai, hãy nhẹ nhàng chỉ ra lỗi sai và gợi ý lại.
+5. Khen ngợi khi học sinh làm đúng một bước.
+6. Luôn giữ thái độ khích lệ, thân thiện của một người thầy.
+KHẢ NĂNG ĐẶC BIỆT: Bạn có quyền truy cập dữ liệu thực tế từ hệ thống (lớp học, bài tập, tiến độ, điểm số, phòng thí nghiệm, phản ứng hóa học) thông qua ngữ cảnh được cung cấp. Hãy tận dụng nó để hiểu ngữ cảnh bài toán của học sinh.
+
+NÔI DUNG: `;
+
 /**
  * Utility to normalize chemical formulas for better searching
  * Example: 'h2o' -> 'H₂O', 'o2' -> 'O₂'
@@ -231,7 +243,7 @@ router.post('/ask', async (req, res) => {
           const targetGenAI = new GoogleGenerativeAI(apiKeyToUse);
           const model = targetGenAI.getGenerativeModel({ 
             model: 'gemini-2.0-flash',
-            systemInstruction: SYSTEM_INSTRUCTION,
+            systemInstruction: context.mode === 'tutor' ? SOCRATIC_INSTRUCTION : SYSTEM_INSTRUCTION,
             safetySettings: [
               { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
               { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
