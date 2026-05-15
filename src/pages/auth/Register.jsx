@@ -213,25 +213,6 @@ const Register = () => {
               </div>
            </div>
 
-           {role === 'teacher' && (
-             <motion.div 
-               initial={{ opacity: 0, height: 0 }}
-               animate={{ opacity: 1, height: 'auto' }}
-               className="space-y-1 mt-2"
-             >
-               <label className="text-[9px] font-black text-viet-text-light uppercase tracking-[1.5px] pl-1 opacity-60">Mã xác thực giáo viên</label>
-               <div className="relative group">
-                 <input 
-                   type="text" required
-                   className="w-full h-11 pl-4 pr-4 rounded-xl bg-viet-green/5 border-2 border-transparent focus:bg-white focus:border-viet-green transition-all outline-none text-[13px] font-bold text-viet-green placeholder:text-viet-green/30 shadow-sm"
-                   placeholder="Nhập mã bí mật..."
-                   value={teacherCode}
-                   onChange={(e) => setTeacherCode(e.target.value)}
-                 />
-               </div>
-             </motion.div>
-           )}
-
            {role === 'student' && (
              <motion.div 
                initial={{ opacity: 0, height: 0 }}
