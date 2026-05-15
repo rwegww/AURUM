@@ -41,6 +41,11 @@ const AdminDashboard = () => {
 
   ];
 
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
     <div className="p-8 pb-12">
       <div className="max-w-7xl mx-auto">
