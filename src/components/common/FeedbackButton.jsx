@@ -23,10 +23,10 @@ const FeedbackButton = () => {
         const formData = new FormData();
         formData.append('file', imageFile);
 
-        const uploadRes = await fetch('/api/media/upload', {
+        const uploadRes = await fetch('/api/media/upload-public', {
           method: 'POST',
           headers: {
-            'Authorization': token ? `Bearer ${token}` : ''
+            // No auth required for public uploads
           },
           body: formData
         });
