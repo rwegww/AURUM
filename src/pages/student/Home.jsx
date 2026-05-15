@@ -128,31 +128,22 @@ const Home = () => {
   React.useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        console.log('Home: Attempting to fetch testimonials from Supabase...');
-        const { data, error } = await supabase
-          .from('testimonials')
-          .select('*')
-          .order('created_at', { ascending: true });
+        console.log('Home: Attempting to fetch praises from API...');
+        const res = await fetch('/api/user/public-praises');
         
-        if (error) throw error;
+        if (!res.ok) throw new Error('Failed to fetch public praises');
+        const data = await res.json();
         
         if (data && data.length > 0) {
-          console.log('Home: Testimonials successfully fetched from database:', data);
-          const currentLang = i18n.language?.startsWith('vi') ? 'vi' : 'en';
-          const formatted = data.map(item => ({
-            name: item.name,
-            role: currentLang === 'vi' ? item.role_vi : item.role_en,
-            content: currentLang === 'vi' ? item.content_vi : item.content_en,
-            rating: item.rating || 5
-          }));
-          setTestimonials(formatted);
+          console.log('Home: Praises successfully fetched from database:', data);
+          setTestimonials(data); // data is already mapped from backend
         } else {
-          console.warn('Home: No testimonials found in database, falling back to local translations.');
+          console.warn('Home: No praises found in database, falling back to local translations.');
           const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
           setTestimonials(fallback);
         }
       } catch (err) {
-        console.error('Home: Error fetching testimonials from Supabase:', err);
+        console.error('Home: Error fetching praises:', err);
         const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
         setTestimonials(fallback);
       }

@@ -122,7 +122,7 @@ router.get('/feedback', adminOnly, async (req, res) => {
 // POST /api/admin/feedback/submit - Student submission
 router.post('/feedback/submit', async (req, res) => {
   try {
-    const { message, type } = req.body;
+    const { message, type, imageUrl } = req.body;
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
     let userId = null;
@@ -156,7 +156,8 @@ router.post('/feedback/submit', async (req, res) => {
       userId,
       username,
       message,
-      type
+      type,
+      imageUrl
     });
     res.status(201).json({ message: 'Gửi phản hồi thành công!' });
   } catch (err) {
@@ -174,6 +175,20 @@ router.patch('/feedback/:id', adminOnly, async (req, res) => {
     res.json({ message: 'Đã giải quyết phản hồi' });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật phản hồi', error: err.message });
+  }
+});
+
+// PATCH /api/admin/feedback/:id/approve - Approve praise
+router.patch('/feedback/:id/approve', adminOnly, async (req, res) => {
+  try {
+    const feedback = await Feedback.findById(req.params.id);
+    if (!feedback) return res.status(404).json({ message: 'Không tìm thấy phản hồi' });
+    if (feedback.type !== 'praise') return res.status(400).json({ message: 'Chỉ có thể duyệt lời khen ngợi' });
+
+    await Feedback.approve(req.params.id);
+    res.json({ message: 'Đã duyệt lời khen ngợi' });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi duyệt lời khen', error: err.message });
   }
 });
 

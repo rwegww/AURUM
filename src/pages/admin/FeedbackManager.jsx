@@ -43,6 +43,21 @@ const FeedbackManager = () => {
     }
   };
 
+  const handleApprove = async (id) => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/admin/feedback/${id}/approve`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, isApproved: true } : f));
+      }
+    } catch (err) {
+      console.error('Lỗi duyệt phản hồi:', err);
+    }
+  };
+
   const getTypeStyle = (type) => {
     switch (type) {
       case 'bug': return 'bg-red-50 text-red-600 ring-red-200';
@@ -111,6 +126,27 @@ const FeedbackManager = () => {
                      <p className="text-viet-text font-medium leading-relaxed bg-viet-bg/30 p-6 rounded-2xl border border-viet-green/5">
                         {f.message}
                      </p>
+                     {f.imageUrl && (
+                       <div className="mt-4">
+                         <img src={f.imageUrl} alt="Đính kèm báo lỗi" className="max-w-md w-full rounded-2xl border border-viet-border object-contain max-h-[300px]" />
+                       </div>
+                     )}
+                     {f.type === 'praise' && (
+                       <div className="mt-4 flex justify-end">
+                         {f.isApproved ? (
+                           <span className="px-3 py-1.5 bg-green-100 text-green-700 text-xs font-bold rounded-xl flex items-center gap-2">
+                             ✓ Đang hiển thị trang chủ
+                           </span>
+                         ) : (
+                           <button 
+                             onClick={() => handleApprove(f.id)}
+                             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition shadow-md"
+                           >
+                             ⭐ Duyệt hiển thị trang chủ
+                           </button>
+                         )}
+                       </div>
+                     )}
                   </div>
                 </motion.div>
               ))

@@ -260,6 +260,8 @@ CREATE TABLE public.sys_feedback (
   message text NOT NULL,
   type text DEFAULT 'suggestion'::text,
   status text DEFAULT 'unread'::text,
+  image_url text,
+  is_approved boolean DEFAULT false,
   created_at timestamp with time zone DEFAULT now()
 );
 

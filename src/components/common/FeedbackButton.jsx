@@ -6,6 +6,7 @@ const FeedbackButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [type, setType] = useState('suggestion');
   const [message, setMessage] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
   const { isLoggedIn } = useAuth();
@@ -16,18 +17,39 @@ const FeedbackButton = () => {
     
     try {
       const token = localStorage.getItem('token');
+      let imageUrl = null;
+
+      if (type === 'bug' && imageFile) {
+        const formData = new FormData();
+        formData.append('file', imageFile);
+
+        const uploadRes = await fetch('/api/media/upload', {
+          method: 'POST',
+          headers: {
+            'Authorization': token ? `Bearer ${token}` : ''
+          },
+          body: formData
+        });
+
+        if (uploadRes.ok) {
+          const uploadData = await uploadRes.json();
+          imageUrl = uploadData.url;
+        }
+      }
+
       const res = await fetch('/api/admin/feedback/submit', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': token ? `Bearer ${token}` : ''
         },
-        body: JSON.stringify({ type, message })
+        body: JSON.stringify({ type, message, imageUrl })
       });
 
       if (res.ok) {
         setDone(true);
         setMessage('');
+        setImageFile(null);
         setTimeout(() => {
           setDone(false);
           setIsOpen(false);
@@ -107,6 +129,21 @@ const FeedbackButton = () => {
                     onChange={(e) => setMessage(e.target.value)}
                     className="w-full h-40 p-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none text-sm font-medium resize-none"
                   />
+
+                  {type === 'bug' && (
+                    <div className="flex items-center gap-2">
+                      <label className="flex items-center gap-2 cursor-pointer bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-200 transition">
+                        <span>📷 Đính kèm ảnh (nếu có)</span>
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          className="hidden" 
+                          onChange={(e) => setImageFile(e.target.files[0])}
+                        />
+                      </label>
+                      {imageFile && <span className="text-xs text-green-600 font-bold truncate max-w-[150px]">{imageFile.name}</span>}
+                    </div>
+                  )}
 
                   <div className="flex gap-3">
                     <button 
