@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const FeedbackButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,21 +21,8 @@ const FeedbackButton = () => {
       let imageUrl = null;
 
       if (type === 'bug' && imageFile) {
-        const formData = new FormData();
-        formData.append('file', imageFile);
-
-        const uploadRes = await fetch('/api/media/upload-public', {
-          method: 'POST',
-          headers: {
-            // No auth required for public uploads
-          },
-          body: formData
-        });
-
-        if (uploadRes.ok) {
-          const uploadData = await uploadRes.json();
+          const uploadData = await uploadToCloudinary(imageFile, 'chemistry-odyssey/bug-reports');
           imageUrl = uploadData.url;
-        }
       }
 
       const res = await fetch('/api/admin/feedback/submit', {

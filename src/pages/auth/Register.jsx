@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 import AuthLayout from '@/components/auth/AuthLayout';
 
 const RoleCard = ({ active, onClick, title, icon }) => (
@@ -59,19 +60,7 @@ const Register = () => {
           return;
         }
 
-        const formData = new FormData();
-        formData.append('file', proofFile);
-        
-        const uploadRes = await fetch('/api/media/upload-public', {
-          method: 'POST',
-          body: formData
-        });
-        
-        if (!uploadRes.ok) {
-          throw new Error('Không thể tải lên ảnh chứng minh');
-        }
-        
-        const uploadData = await uploadRes.json();
+        const uploadData = await uploadToCloudinary(proofFile, 'chemistry-odyssey/teacher-proofs');
         const proofImageUrl = uploadData.url;
 
         const result = await registerTeacher(username, password, email, proofImageUrl);
