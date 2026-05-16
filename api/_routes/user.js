@@ -81,7 +81,8 @@ router.get('/profile', auth, async (req, res) => {
     streakCount: req.user.streakCount || 0,
     lastStreakAt: req.user.lastStreakAt,
     todayOnlineMinutes: req.user.todayOnlineMinutes || 0,
-    todayLessonCompleted: req.user.todayLessonCompleted || false
+    todayLessonCompleted: req.user.todayLessonCompleted || false,
+    linkedAccounts: req.user.linkedAccounts || {}
   });
 });
 
@@ -120,6 +121,35 @@ router.patch('/profile', auth, async (req, res) => {
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
+  }
+});
+
+// Update XP & Progress
+router.post('/link-account', auth, async (req, res) => {
+  try {
+    const { provider, accountId } = req.body;
+    if (!provider || !accountId) {
+      return res.status(400).json({ message: 'Thiếu thông tin liên kết' });
+    }
+    
+    // Check if another user already linked this account
+    const filter = {};
+    if (provider === 'google') filter.googleId = accountId;
+    if (provider === 'telegram') filter.telegramId = accountId;
+    
+    const existingUser = await User.findOne(filter);
+    if (existingUser && existingUser.id !== req.user.id) {
+      return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác' });
+    }
+
+    const linkedAccounts = req.user.linkedAccounts || {};
+    linkedAccounts[provider] = accountId;
+
+    await User.update(req.user.id, { linkedAccounts });
+
+    res.json({ message: `Đã liên kết tài khoản ${provider} thành công!`, linkedAccounts });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi liên kết tài khoản', error: err.message });
   }
 });
 

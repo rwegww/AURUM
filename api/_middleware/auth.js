@@ -25,9 +25,12 @@ export const auth = async (req, res, next) => {
         userId = sbUser.id;
         user = await User.findById(userId);
         
-        // Link account by email if not found by ID
-        if (!user && sbUser.email) {
-          user = await User.findOne({ email: sbUser.email });
+        // Link account by google_id or email
+        if (!user && sbUser) {
+          user = await User.findOne({ googleId: sbUser.id });
+          if (!user && sbUser.email) {
+            user = await User.findOne({ email: sbUser.email });
+          }
         }
         
         // If still no user, create them (auto-registration)
