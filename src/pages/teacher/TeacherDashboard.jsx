@@ -95,6 +95,15 @@ const TeacherDashboard = () => {
     }
   };
 
+  const handleLinkTelegram = async (telegramData) => {
+    try {
+      await linkAccount('telegram', telegramData);
+      alert('Liên kết Telegram thành công!');
+    } catch (err) {
+      alert('Lỗi liên kết Telegram: ' + err.message);
+    }
+  };
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
