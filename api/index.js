@@ -91,14 +91,24 @@ app.use('/api', (req, res) => {
   res.status(404).json({ error: 'Endpoint not found', path: req.originalUrl });
 });
 
-// Global Error Handler
+// Body parser error handler (catches express.json() failures)
+app.use((err, req, res, next) => {
+  if (err.type === 'entity.parse.failed' || err.status === 400) {
+    return res.status(400).json({ message: 'Invalid JSON body', error: err.message });
+  }
+  next(err);
+});
+
+// Global Error Handler — always show error details for debugging
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err);
   res.status(500).json({ 
     message: 'Internal Server Error', 
-    error: process.env.NODE_ENV === 'development' ? err.message : undefined 
+    error: err.message,
+    type: err.type || err.constructor?.name
   });
 });
+
 
 // Consolidated Server Listener
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
