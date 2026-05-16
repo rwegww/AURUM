@@ -1,27 +1,35 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 
 const AuthCallback = () => {
     const navigate = useNavigate();
+    const { user, isLoggedIn, loading } = useAuth();
 
     useEffect(() => {
         const handleCallback = async () => {
-            const { data, error } = await supabase.auth.getSession();
+            const { error } = await supabase.auth.getSession();
             if (error) {
                 console.error('Auth callback error:', error.message);
                 navigate('/login?error=' + encodeURIComponent(error.message));
-            } else if (data?.session) {
-                navigate('/');
-            } else {
-                // If no session yet, AuthProvider listener will catch it
-                // but we can redirect to root as a fallback
-                navigate('/');
             }
         };
 
         handleCallback();
     }, [navigate]);
+
+    useEffect(() => {
+        if (!loading && isLoggedIn && user) {
+            if (user.role === 'admin') {
+                navigate('/admin');
+            } else if (user.role === 'teacher') {
+                navigate('/teacher');
+            } else {
+                navigate('/');
+            }
+        }
+    }, [loading, isLoggedIn, user, navigate]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-viet-bg">

@@ -14,7 +14,6 @@ const Navbar = () => {
   const [unreadCount, setUnreadCount] = React.useState(0);
 
   const lessonPath = isLoggedIn ? "/lessons/8/hoa8_kntt_bai1" : "/lessons";
-  const isAdmin = user?.role === 'admin' || user?.role === 'teacher';
 
   React.useEffect(() => {
     if (isLoggedIn) {
@@ -136,9 +135,14 @@ const Navbar = () => {
               </div>
             </div>
 
-            {isAdmin && (
+            {user?.role === 'admin' && (
               <NavLink to="/admin" className={({ isActive }) => `nav-link !text-red-500 hover:!text-red-600 ${isActive ? 'bg-red-50' : ''}`}>
                 ADMIN
+              </NavLink>
+            )}
+            {user?.role === 'teacher' && (
+              <NavLink to="/teacher" className={({ isActive }) => `nav-link !text-blue-500 hover:!text-blue-600 ${isActive ? 'bg-blue-50' : ''}`}>
+                GIÁO VIÊN
               </NavLink>
             )}
           </div>
