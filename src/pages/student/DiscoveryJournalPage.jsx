@@ -85,8 +85,8 @@ const DiscoveryJournalPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#0d0e12] flex flex-col font-sans text-white">
-      <div className="p-8 border-b border-white/10 flex justify-between items-center bg-black/40">
+    <div className="h-screen bg-[#0d0e12] flex flex-col font-sans text-white pt-20">
+      <div className="p-6 md:p-8 border-b border-white/10 flex justify-between items-center bg-black/40 shrink-0">
         <div>
           <h2 className="text-2xl font-black uppercase italic tracking-tighter">Synthesis Nexus</h2>
           <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Bản đồ tiến trình khám phá hóa học của bạn</p>
