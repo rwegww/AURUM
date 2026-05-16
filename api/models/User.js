@@ -58,7 +58,7 @@ export const User = {
       query = query.eq('id', filter.id);
     } else if (filter.googleId) {
       query = query.eq('linked_accounts->>google', filter.googleId);
-
+    }
 
     const { data: user, error: userError } = await query.maybeSingle();
     if (userError) {
