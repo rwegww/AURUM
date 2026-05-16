@@ -135,8 +135,6 @@ router.post('/link-account', auth, async (req, res) => {
     // Check if another user already linked this account
     const filter = {};
     if (provider === 'google') filter.googleId = accountId;
-    if (provider === 'telegram') filter.telegramId = accountId;
-    
     const existingUser = await User.findOne(filter);
     if (existingUser && existingUser.id !== req.user.id) {
       return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác' });

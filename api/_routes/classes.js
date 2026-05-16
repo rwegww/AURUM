@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase.js';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 import { auth } from '../_middleware/auth.js';
-import { sendTelegramMessage } from '../lib/telegramBot.js';
+
 
 const router = express.Router();
 
@@ -163,17 +163,7 @@ router.post('/join', auth, async (req, res) => {
         throw joinErr;
     }
     
-    // Send Telegram Notification to Teacher
-    try {
-      const teacher = await User.findById(classData.teacher_id);
-      const studentName = req.user.username || req.user.email || 'Một học sinh';
-      if (teacher && teacher.linkedAccounts?.telegram?.id) {
-        const msg = `🎓 <b>Học sinh mới tham gia lớp</b>\n\nHọc sinh <b>${studentName}</b> vừa mới tham gia vào lớp <b>${classData.name}</b> của bạn!`;
-        await sendTelegramMessage(teacher.linkedAccounts.telegram.id, msg);
-      }
-    } catch (notifyErr) {
-      console.error('Lỗi gửi thông báo Telegram khi tham gia lớp:', notifyErr);
-    }
+
 
     res.json({ message: 'Tham gia lớp thành công', class_id: classData.id });
   } catch (err) {
@@ -412,26 +402,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
 
     if (error) throw error;
 
-    // Send Telegram Notification to Teacher
-    try {
-      if (score === undefined) { // Only notify when student submits, not when teacher grades
-        const { data: post } = await supabase.from('class_posts').select('class_id, content').eq('id', postId).single();
-        if (post) {
-          const { data: classData } = await supabase.from('classes').select('name, teacher_id').eq('id', post.class_id).single();
-          if (classData) {
-            const teacher = await User.findById(classData.teacher_id);
-            const studentName = req.user.username || req.user.email || 'Một học sinh';
-            if (teacher && teacher.linkedAccounts?.telegram?.id) {
-              const assignmentName = post.content || 'Bài tập';
-              const msg = `📝 <b>Có bài tập mới được nộp!</b>\n\nHọc sinh <b>${studentName}</b> vừa nộp: <b>${assignmentName}</b>\nLớp: <b>${classData.name}</b>`;
-              await sendTelegramMessage(teacher.linkedAccounts.telegram.id, msg);
-            }
-          }
-        }
-      }
-    } catch (notifyErr) {
-      console.error('Lỗi gửi thông báo Telegram khi nộp bài:', notifyErr);
-    }
+
 
     res.json(data);
   } catch (err) {
