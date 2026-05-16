@@ -243,7 +243,7 @@ const Login = () => {
 
           <div className="w-full h-12 md:h-11 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden">
              <TelegramLoginButton 
-               botName="Aurumchemistrybot"
+               botName="Aurumchembot"
                onAuth={loginWithTelegram}
                buttonSize="large"
                cornerRadius={16}
