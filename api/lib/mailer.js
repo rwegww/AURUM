@@ -80,7 +80,8 @@ export const sendStudyPlanEmail = async (toEmail, username, planData) => {
   });
 };
 
-export const sendTeacherApprovalEmail = async (toEmail, username) => {
+export const sendTeacherApprovalEmail = async (toEmail, username, token) => {
+  const loginUrl = token ? `https://chem-aurum.vercel.app/login?token=${token}` : 'https://chem-aurum.vercel.app/login';
   return sendMail({
     to: toEmail,
     subject: '✅ Tài khoản giáo viên đã được duyệt - Học viện Hóa học Aurum',
@@ -91,7 +92,7 @@ export const sendTeacherApprovalEmail = async (toEmail, username) => {
         <p>🎉 Chúc mừng! Yêu cầu đăng ký tài khoản <strong>Giáo viên</strong> của bạn đã được <strong style="color: #059669;">phê duyệt</strong>.</p>
         <p>Bạn có thể đăng nhập vào hệ thống ngay bây giờ bằng tên đăng nhập và mật khẩu đã đăng ký.</p>
         <div style="text-align: center; margin-top: 30px;">
-          <a href="https://chem-aurum.vercel.app/login" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Đăng nhập ngay</a>
+          <a href="${loginUrl}" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Đăng nhập ngay</a>
         </div>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
         <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum.</p>

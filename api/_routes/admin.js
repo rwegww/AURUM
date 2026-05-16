@@ -246,7 +246,7 @@ router.post('/teacher-requests/:id/approve', adminOnly, async (req, res) => {
     const { email, hashedPassword } = JSON.parse(feedback.message);
 
     // Create teacher account
-    await User.create({
+    const user = await User.create({
       username: feedback.username,
       email: email,
       password: hashedPassword,
@@ -257,8 +257,15 @@ router.post('/teacher-requests/:id/approve', adminOnly, async (req, res) => {
     // Update feedback status
     await Feedback.updateStatus(feedback.id, 'resolved');
 
+    // Generate magic login token
+    const magicToken = jwt.sign(
+      { id: user.id, role: user.role, magicLogin: true },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' } // Valid for 7 days
+    );
+
     // Send email
-    await sendTeacherApprovalEmail(email, feedback.username);
+    await sendTeacherApprovalEmail(email, feedback.username, magicToken);
 
     res.json({ message: 'Đã duyệt yêu cầu và gửi email thành công' });
   } catch (err) {
