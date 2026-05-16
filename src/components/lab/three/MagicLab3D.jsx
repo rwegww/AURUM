@@ -53,7 +53,6 @@ const MagicLab3D = () => {
   const [isMessageVisible, setIsMessageVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [showDiscoveryMap, setShowDiscoveryMap] = useState(false);
 
   // --- Fullscreen Logic ---
   const toggleFullscreen = useCallback(() => {
@@ -273,7 +272,7 @@ const MagicLab3D = () => {
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
             <button 
-              onClick={() => setShowDiscoveryMap(true)}
+              onClick={() => window.open('/lab/discovery', '_blank')}
               className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
@@ -564,35 +563,6 @@ const MagicLab3D = () => {
           </div>
         )}
       </AnimatePresence>
-
-      {/* Discovery Map Modal */}
-      <AnimatePresence>
-        {showDiscoveryMap && (
-          <div className="fixed inset-0 z-[400] flex items-center justify-center p-4 md:p-10 pointer-events-auto">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowDiscoveryMap(false)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
-            <motion.div 
-              initial={{ scale: 0.95, opacity: 0, y: 20 }} 
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative w-full h-full bg-[#0d0e12] rounded-[40px] overflow-hidden shadow-2xl border border-white/10 flex flex-col"
-            >
-              <div className="p-6 md:p-8 border-b border-white/10 flex justify-between items-center bg-black/40 shrink-0 z-10">
-                <div>
-                  <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white">Synthesis Nexus</h2>
-                  <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Bản đồ tiến trình khám phá hóa học của bạn</p>
-                </div>
-                <button onClick={() => setShowDiscoveryMap(false)} className="px-6 py-2 bg-white/5 hover:bg-white/10 text-white rounded-2xl flex items-center justify-center transition-all text-xs font-bold uppercase tracking-widest border border-white/10">
-                  Đóng trang
-                </button>
-              </div>
-              <div className="flex-1 overflow-hidden relative">
-                <DiscoveryMap chemicals={dbChemicals} reactions={dbReactions} discoveredFormulas={discoveredFormulas} />
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
