@@ -132,9 +132,13 @@ router.post('/link-account', auth, async (req, res) => {
       return res.status(400).json({ message: 'Thiếu thông tin liên kết' });
     }
     
+    // Check if provider is supported
+    if (provider !== 'google') {
+      return res.status(400).json({ message: 'Nhà cung cấp không được hỗ trợ' });
+    }
+
     // Check if another user already linked this account
-    const filter = {};
-    if (provider === 'google') filter.googleId = accountId;
+    const filter = { googleId: accountId };
     const existingUser = await User.findOne(filter);
     if (existingUser && existingUser.id !== req.user.id) {
       return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác' });
