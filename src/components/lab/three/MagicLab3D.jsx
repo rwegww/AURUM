@@ -272,7 +272,7 @@ const MagicLab3D = () => {
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
             <button 
-              onClick={() => navigate('/lab/discovery')}
+              onClick={() => window.open('/lab/discovery', '_blank')}
               className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
