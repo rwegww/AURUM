@@ -2,8 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { auth as firebaseAuth, googleProvider } from '@/lib/firebase';
-import { signInWithPopup } from 'firebase/auth';
+import { supabase } from '@/lib/supabase';
 import TelegramLoginButton from '@/components/auth/TelegramLoginButton';
 
 const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
@@ -78,19 +77,17 @@ const TeacherDashboard = () => {
 
   const handleLinkGoogle = async () => {
     try {
-      const result = await signInWithPopup(firebaseAuth, googleProvider);
-      const uid = result.user.uid;
-      const res = await linkAccount('google', uid);
-      if (res.success) {
-        alert('Liên kết Google thành công!');
-      } else {
-        alert(res.message);
-      }
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/teacher?linking_google=true`,
+          queryParams: {
+            prompt: 'select_account'
+          }
+        }
+      });
+      if (error) throw error;
     } catch (err) {
-      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
-        // User cancelled the login, just ignore it silently
-        return;
-      }
       alert('Lỗi liên kết Google: ' + err.message);
     }
   };
@@ -105,6 +102,25 @@ const TeacherDashboard = () => {
   };
 
   React.useEffect(() => {
+    const checkGoogleLink = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('linking_google') === 'true') {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session?.user) {
+          const uid = data.session.user.id;
+          const res = await linkAccount('google', uid);
+          if (res.success) {
+            alert('Liên kết Google thành công!');
+          } else {
+            alert(res.message);
+          }
+          // Clean up URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+    };
+    checkGoogleLink();
+
     const fetchData = async () => {
       try {
         const token = localStorage.getItem('token');
