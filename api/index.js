@@ -16,7 +16,7 @@ import missionsRouter from './_routes/missions.js';
 import classesRouter from './_routes/classes.js';
 import discussionsRouter from './_routes/discussions.js';
 
-dotenv.config();
+dotenv.config({ path: ['.env.local', '.env'] });
 
 const app = express();
 

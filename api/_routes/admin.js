@@ -4,7 +4,7 @@ import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
 
-import sendMail from '../lib/mailer.js';
+import sendMail, { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../lib/mailer.js';
 
 import { supabase } from '../lib/supabase.js';
 
@@ -258,18 +258,7 @@ router.post('/teacher-requests/:id/approve', adminOnly, async (req, res) => {
     await Feedback.updateStatus(feedback.id, 'resolved');
 
     // Send email
-    await sendMail({
-      to: email,
-      subject: 'Yêu cầu đăng ký Giáo viên của bạn đã được duyệt!',
-      html: `
-        <div style="font-family: sans-serif; padding: 20px;">
-          <h2>Chào mừng đến với AURUM!</h2>
-          <p>Yêu cầu đăng ký tài khoản Giáo viên của bạn (Tên đăng nhập: <b>${feedback.username}</b>) đã được Quản trị viên duyệt thành công.</p>
-          <p>Bạn có thể đăng nhập vào hệ thống ngay bây giờ.</p>
-          <a href="http://localhost:5173/login" style="display: inline-block; padding: 10px 20px; background: #22c55e; color: white; text-decoration: none; border-radius: 8px;">Đăng nhập ngay</a>
-        </div>
-      `
-    });
+    await sendTeacherApprovalEmail(email, feedback.username);
 
     res.json({ message: 'Đã duyệt yêu cầu và gửi email thành công' });
   } catch (err) {
@@ -292,17 +281,7 @@ router.post('/teacher-requests/:id/reject', adminOnly, async (req, res) => {
     await Feedback.updateStatus(feedback.id, 'rejected');
 
     // Send email
-    await sendMail({
-      to: email,
-      subject: 'Yêu cầu đăng ký Giáo viên bị từ chối',
-      html: `
-        <div style="font-family: sans-serif; padding: 20px;">
-          <h2>Xin lỗi!</h2>
-          <p>Yêu cầu đăng ký tài khoản Giáo viên của bạn (Tên đăng nhập: <b>${feedback.username}</b>) đã bị Quản trị viên từ chối.</p>
-          <p>Tài liệu minh chứng của bạn có thể không hợp lệ hoặc không rõ ràng. Vui lòng liên hệ quản trị viên để biết thêm chi tiết.</p>
-        </div>
-      `
-    });
+    await sendTeacherRejectionEmail(email, feedback.username, 'Tài liệu minh chứng của bạn có thể không hợp lệ hoặc không rõ ràng.');
 
     res.json({ message: 'Đã từ chối yêu cầu và gửi email thành công' });
   } catch (err) {
