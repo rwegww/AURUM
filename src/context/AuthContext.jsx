@@ -377,7 +377,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ streakToRestore })
       });
       const data = await res.json();
-      if (res.ok) {
+      if (res.ok && data.success !== false) {
         if (mountedRef.current) setUser(prev => ({ ...prev, streakCount: data.streakCount, xp: data.xp }));
         return { success: true, message: data.message };
       } else {
