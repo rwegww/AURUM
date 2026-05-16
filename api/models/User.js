@@ -63,7 +63,14 @@ export const User = {
     }
 
     const { data: user, error: userError } = await query.maybeSingle();
-    if (userError) throw userError;
+    if (userError) {
+      // Gracefully handle missing linked_accounts column
+      if (userError.message?.includes('Could not find the column') || userError.code === '42703') {
+        console.warn('Column not found in users table, returning null for findOne:', userError.message);
+        return null;
+      }
+      throw userError;
+    }
     if (!user) return null;
 
     // 2. Try to fetch junction data (optional, don't crash if tables missing)

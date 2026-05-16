@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { auth as firebaseAuth, googleProvider } from '@/lib/firebase';
 import { signInWithPopup } from 'firebase/auth';
+import TelegramLoginButton from '@/components/auth/TelegramLoginButton';
 
 const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
   <motion.div
@@ -253,9 +254,14 @@ const TeacherDashboard = () => {
                       Đã liên kết
                     </div>
                   ) : (
-                    <button className="px-4 py-2 rounded-xl text-sm font-bold bg-[#24A1DE] text-white shadow-sm hover:bg-[#1d87ba] transition-all" onClick={() => alert('Vui lòng cấu hình Bot Token để sử dụng Telegram Widget')}>
-                      Liên kết
-                    </button>
+                    <div className="overflow-hidden rounded-xl h-10 flex items-center">
+                      <TelegramLoginButton 
+                         botName="Aurumchemistrybot"
+                         onAuth={handleLinkTelegram}
+                         buttonSize="medium"
+                         cornerRadius={12}
+                      />
+                    </div>
                   )}
                </div>
             </div>

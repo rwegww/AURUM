@@ -541,8 +541,11 @@ export const AuthProvider = ({ children }) => {
           const errorData = await res.json().catch(() => ({}));
           if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
             alert('Phiên đăng nhập hết hạn vì bạn đã đăng nhập ở thiết bị khác.');
-            await logout();
+          } else {
+            // Silent logout for expired token
+            console.warn('Phiên đăng nhập không hợp lệ hoặc đã hết hạn.');
           }
+          await logout();
         }
       } catch (err) {
         // Silent error for heartbeat
