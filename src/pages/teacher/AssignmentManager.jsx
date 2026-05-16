@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const AssignmentManager = () => {
     const { user } = useAuth();
@@ -79,34 +80,22 @@ const AssignmentManager = () => {
         if (!file) return;
 
         setIsUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
 
         try {
-            const token = localStorage.getItem('token');
-            const res = await fetch('/api/media/upload', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` },
-                body: formData
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                setUploadedFile({ name: file.name, url: data.url });
-                setNewAssignment({ ...newAssignment, lesson_id: data.url });
-                
-                // Automatically trigger analysis for PDF/Docx/Doc
-                if (file.type === 'application/pdf' || 
-                    file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-                    file.type === 'application/msword' ||
-                    file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
-                    handleAnalyzeFile(file);
-                }
-            } else {
-                alert('Tải tập tin thất bại. Vui lòng thử lại.');
+            const uploadData = await uploadToCloudinary(file, 'chemistry-odyssey/assignments');
+            setUploadedFile({ name: file.name, url: uploadData.url });
+            setNewAssignment({ ...newAssignment, lesson_id: uploadData.url });
+            
+            // Automatically trigger analysis for PDF/Docx/Doc
+            if (file.type === 'application/pdf' || 
+                file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+                file.type === 'application/msword' ||
+                file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
+                handleAnalyzeFile(file);
             }
         } catch (err) {
             console.error(err);
+            alert('Tải tập tin thất bại. Vui lòng thử lại.');
         } finally {
             setIsUploading(false);
         }
