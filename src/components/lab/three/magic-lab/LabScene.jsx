@@ -20,9 +20,9 @@ const LabScene = () => {
   // Xử lý bay hơi theo thời gian cho tất cả các cốc đang đun nóng
   React.useEffect(() => {
     const interval = setInterval(() => {
-      beakers.forEach((beaker, i) => {
+      beakers.forEach((beaker, beakerIdx) => {
         if (beaker.isHeating) {
-            evaporateStep(i);
+            evaporateStep(beakerIdx);
         }
       });
     }, 2000); // 2 giây mỗi bước bay hơi
