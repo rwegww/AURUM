@@ -10,9 +10,8 @@ class ActivityService {
    */
   async log(activity) {
     try {
-      // 1. Get current session
-      const { data: { session } } = await supabase.auth.getSession();
-      const userId = session?.user?.id;
+      // 1. Get user ID from localStorage (aligned with database profile)
+      const userId = localStorage.getItem('userId');
 
       const newActivity = {
         ...activity,
@@ -55,8 +54,8 @@ class ActivityService {
    */
   async getHistory() {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const userId = session?.user?.id;
+      // Get user ID from localStorage
+      const userId = localStorage.getItem('userId');
 
       if (userId) {
         const { data, error } = await supabase
@@ -101,8 +100,8 @@ class ActivityService {
    */
   async clear() {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const userId = session?.user?.id;
+      // Get user ID from localStorage
+      const userId = localStorage.getItem('userId');
 
       localStorage.removeItem(HISTORY_KEY);
 

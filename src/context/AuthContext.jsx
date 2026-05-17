@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('token');
       localStorage.removeItem('authType');
       localStorage.removeItem('sessionId');
+      localStorage.removeItem('userId');
       if (mountedRef.current) {
         setUser(null);
         setIsLoggedIn(false);
@@ -55,6 +56,7 @@ export const AuthProvider = ({ children }) => {
   // 3. Define functions that depend on others
   const fetchProfile = useCallback(async (token, force = false) => {
     if (!token) {
+      localStorage.removeItem('userId');
       if (mountedRef.current) {
         setUser(prev => (prev !== null ? null : prev));
         setIsLoggedIn(prev => (prev !== false ? false : prev));
@@ -82,6 +84,7 @@ export const AuthProvider = ({ children }) => {
       
       if (res.ok) {
         const userData = await res.json();
+        localStorage.setItem('userId', userData.id);
         if (mountedRef.current) {
           setUser(userData);
           setIsLoggedIn(true);

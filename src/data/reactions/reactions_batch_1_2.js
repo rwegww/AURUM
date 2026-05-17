@@ -505,6 +505,29 @@ export const reactionsBatch1_2 = [
     safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
     isBlocked: false
   },
+  {
+    id: "rx_210",
+    name: "Phản ứng tạo AgCl (dùng KCl)",
+    type: "double-replacement",
+    reactants: [
+      { formula: "AgNO₃", coeff: 1, name: "Bạc Nitrat" },
+      { formula: "KCl", coeff: 1, name: "Kali Clorua" }
+    ],
+    products: [
+      { formula: "AgCl", coeff: 1, name: "Bạc Clorua" },
+      { formula: "KNO₃", coeff: 1, name: "Kali Nitrat" }
+    ],
+    equation: "AgNO₃ + KCl → AgCl↓ + KNO₃",
+    gradeLevel: 9,
+    category: "Muối",
+    conditions: "Nhiệt độ thường",
+    observation: "Xuất hiện kết tủa trắng vón cục (AgCl).",
+    energy: -65.7,
+    animation: "precipitation",
+    dangerLevel: 1,
+    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    isBlocked: false
+  },
 
   {
     id: "rx_036",
