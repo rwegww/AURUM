@@ -19,14 +19,33 @@ const AnimatedSolid = ({ targetPosition, color, type }) => {
   });
 
   return (
-    <mesh ref={meshRef} position={[targetPosition[0], currentY, targetPosition[2]]}>
-      <dodecahedronGeometry args={[0.08, 0]} />
-      <meshStandardMaterial
-        color={color || '#888888'}
-        roughness={0.5}
-        metalness={type === 'metal' ? 0.8 : 0.2}
-      />
-    </mesh>
+    <group ref={meshRef} position={[targetPosition[0], currentY, targetPosition[2]]}>
+      {/* Cluster of 3 smaller pieces to look like a crumbly precipitate/sediment */}
+      <mesh position={[0, 0, 0]}>
+        <dodecahedronGeometry args={[0.045, 0]} />
+        <meshStandardMaterial
+          color={color || '#888888'}
+          roughness={0.8}
+          metalness={type === 'metal' ? 0.8 : 0.1}
+        />
+      </mesh>
+      <mesh position={[0.03, -0.015, 0.015]}>
+        <dodecahedronGeometry args={[0.035, 0]} />
+        <meshStandardMaterial
+          color={color || '#888888'}
+          roughness={0.8}
+          metalness={type === 'metal' ? 0.8 : 0.1}
+        />
+      </mesh>
+      <mesh position={[-0.025, -0.01, -0.025]}>
+        <dodecahedronGeometry args={[0.03, 0]} />
+        <meshStandardMaterial
+          color={color || '#888888'}
+          roughness={0.8}
+          metalness={type === 'metal' ? 0.8 : 0.1}
+        />
+      </mesh>
+    </group>
   );
 };
 
@@ -46,23 +65,35 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
     return '#a0d8ef';
   }, [contents]);
 
+  // Kiểm tra xem có chất rắn/kết tủa nào trong cốc không
+  const hasPrecipitate = useMemo(() => {
+    return contents.some(item => item.state === 'solid' || item.type === 'metal');
+  }, [contents]);
+
   // Material nước bên trong
   const waterMaterial = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
       color: beakerColor,
-      transmission: 0.5,
-      opacity: 0.85,
+      transmission: hasPrecipitate ? 0.15 : 0.5, // Làm đục (giảm truyền sáng) nếu có kết tủa
+      opacity: hasPrecipitate ? 0.95 : 0.85,
       transparent: true,
-      roughness: 0.15,
+      roughness: hasPrecipitate ? 0.7 : 0.15,     // Tăng độ nhám để ánh sáng phân tán tạo hiệu ứng huyền phù/đục
       ior: 1.33,
       side: THREE.DoubleSide,
       emissive: isHeating ? beakerColor : '#000000',
       emissiveIntensity: isHeating ? 0.3 : 0
     });
-  }, [beakerColor, isHeating]);
+  }, [beakerColor, isHeating, hasPrecipitate]);
 
   // Material vỏ cốc
   const beakerMaterial = useMemo(() => {
+    const heatTime = beakerData.heatTime || 0;
+    const isOverheating = heatTime >= 10;
+    
+    // Nếu quá nhiệt (sau 20s đun), thủy tinh chuyển dần sang ánh đỏ cam nóng chảy
+    const glowIntensity = isOverheating ? Math.min(1.5, (heatTime - 9) * 0.25) : 0;
+    const emissiveColor = isOverheating ? '#ff3300' : '#000000';
+
     return new THREE.MeshPhysicalMaterial({
       color: isActive ? "#ffffff" : "#cccccc",
       transmission: 0.92,
@@ -72,12 +103,15 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
       ior: 1.52,
       thickness: 0.02,
       side: THREE.DoubleSide,
+      emissive: emissiveColor,
+      emissiveIntensity: glowIntensity,
     });
-  }, [isActive, settings.beakerOpacity]);
+  }, [isActive, settings.beakerOpacity, beakerData.heatTime]);
 
-  // Mức nước dựa trên số lượng chất lỏng
+  // Mức nước dựa trên số lượng chất lỏng và lượng nước bay hơi
   const liquidCount = contents.filter(item => item.state !== 'solid').length;
-  const waterLevel = Math.min(0.9, Math.max(0.15, liquidCount * 0.18));
+  const liquidVolume = beakerData.liquidVolume !== undefined ? beakerData.liquidVolume : 1.0;
+  const waterLevel = Math.min(0.9, Math.max(0.15, liquidCount * 0.18 * liquidVolume));
 
   return (
     <group ref={groupRef} {...props}>

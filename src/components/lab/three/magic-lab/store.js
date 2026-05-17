@@ -17,6 +17,8 @@ const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   intensity: 'medium', 
   reactionProducts: [],
   shake: false,
+  heatTime: 0,
+  liquidVolume: 1.0,
 });
 
 const useLabStore = create((set, get) => ({
@@ -44,6 +46,79 @@ const useLabStore = create((set, get) => ({
     set(state => ({
       settings: { ...state.settings, ...newSettings }
     }));
+  },
+
+  evaporateStep: (beakerIdx) => {
+    set(state => {
+      const beaker = state.beakers[beakerIdx];
+      if (!beaker) return {};
+
+      const newBeakers = [...state.beakers];
+      let updatedBeaker = { ...beaker };
+
+      if (beaker.isHeating) {
+        const newHeatTime = beaker.heatTime + 1;
+        updatedBeaker.heatTime = newHeatTime;
+
+        // Overheat logic: vỡ cốc sau 15 bước (30 giây)
+        if (newHeatTime >= 15) {
+          updatedBeaker = {
+            ...createDefaultBeaker(beaker.id, "💥 CỐC BỊ QUÁ NHIỆT VÀ ĐÃ VỠ!"),
+            isHeating: false,
+            activeFlame: true,
+            activeSmoke: true,
+            intensity: 'extreme',
+            shake: true,
+          };
+          
+          setTimeout(() => {
+            set(s => {
+              const bks = [...s.beakers];
+              const b = bks[beakerIdx];
+              if (b && b.reactionMessage.includes("CỐC BỊ QUÁ NHIỆT")) {
+                bks[beakerIdx] = {
+                  ...b,
+                  activeFlame: false,
+                  activeSmoke: false,
+                  shake: false,
+                  reactionMessage: "Cốc thí nghiệm mới (đã thay cốc khác)"
+                };
+              }
+              return { beakers: bks };
+            });
+          }, 3500);
+        } else {
+          if (newHeatTime >= 10) {
+            updatedBeaker.reactionMessage = "⚠️ Cảnh báo: Cốc đang quá nhiệt!";
+          }
+
+          // Evaporation logic if beaker has liquids
+          const hasLiquids = beaker.contents.some(c => c.state !== 'solid');
+          if (hasLiquids) {
+            const newVol = Math.max(0, beaker.liquidVolume - 0.05);
+            updatedBeaker.liquidVolume = newVol;
+            updatedBeaker.activeSmoke = true;
+            updatedBeaker.smokeColor = '#ffffff';
+            updatedBeaker.intensity = newVol < 0.3 ? 'high' : 'low';
+
+            if (newVol <= 0) {
+              // Liquid is fully evaporated, filter out all non-solids
+              updatedBeaker.contents = beaker.contents.filter(c => c.state === 'solid');
+              updatedBeaker.reactionMessage = "Dung dịch đã bay hơi hoàn toàn.";
+              updatedBeaker.activeSmoke = false;
+            }
+          }
+        }
+      } else {
+        // Cooling down when not heating
+        if (beaker.heatTime > 0) {
+          updatedBeaker.heatTime = Math.max(0, beaker.heatTime - 1);
+        }
+      }
+
+      newBeakers[beakerIdx] = updatedBeaker;
+      return { beakers: newBeakers };
+    });
   },
 
   // --- Initialization ---
@@ -155,10 +230,32 @@ const useLabStore = create((set, get) => ({
           ...beaker,
           contents: newContents,
           droppedSolids: newSolids,
+          liquidVolume: 1.0,
+          heatTime: 0,
         };
 
         if (reaction) {
           updatedBeaker = get()._processBeakerReaction(reaction, newContents, newSolids, beaker.isHeating, idx);
+        }
+
+        // Gas escape logic for directly dropped gases
+        if (chemical.state === 'gas') {
+          updatedBeaker.activeBubbles = true;
+          updatedBeaker.activeSmoke = true;
+          updatedBeaker.reactionMessage = `Sục khí ${chemical.formula} vào cốc.`;
+          
+          setTimeout(() => {
+            set(s => {
+              const bks = [...s.beakers];
+              if (bks[idx]) {
+                bks[idx].activeBubbles = false;
+                bks[idx].activeSmoke = false;
+                bks[idx].contents = bks[idx].contents.filter(c => c.id !== newId);
+                bks[idx].reactionMessage = `Khí ${chemical.formula} đã bay thoát hết.`;
+              }
+              return { beakers: bks };
+            });
+          }, 5000);
         }
 
         newBeakers[idx] = updatedBeaker;
@@ -224,6 +321,8 @@ const useLabStore = create((set, get) => ({
               if (bks[beakerIdx]) {
                 bks[beakerIdx].activeBubbles = false;
                 bks[beakerIdx].activeSmoke = false;
+                // Remove gases from contents
+                bks[beakerIdx].contents = bks[beakerIdx].contents.filter(c => c.state !== 'gas');
               }
               return { beakers: bks };
             });
@@ -256,7 +355,9 @@ const useLabStore = create((set, get) => ({
       intensity: intensity,
       reactionProducts: products,
       isHeating: isHeating,
-      shake: isExplosion
+      shake: isExplosion,
+      liquidVolume: 1.0,
+      heatTime: 0
     };
   },
 

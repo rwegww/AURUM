@@ -54,12 +54,16 @@ const MagicLab3D = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+  const containerRef = useRef(null);
+
   // --- Fullscreen Logic ---
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => {
-        console.error(`Error attempting to enable full-screen mode: ${err.message}`);
-      });
+      if (containerRef.current) {
+        containerRef.current.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+      }
     } else {
       document.exitFullscreen();
     }
@@ -237,6 +241,7 @@ const MagicLab3D = () => {
 
   return (
     <div 
+      ref={containerRef}
       className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10 bg-[#0a0a0f]"
     >
       <Canvas
@@ -409,44 +414,39 @@ const MagicLab3D = () => {
                       }
                     }}
                   >
-                    <div className="aspect-square flex items-center justify-center rounded-lg bg-slate-950/60 mb-1.5 overflow-hidden relative border border-white/5">
-                      <div className="absolute inset-0 opacity-20 blur-lg transition-opacity duration-300 group-hover:opacity-30" style={{ backgroundColor: chem.color }} />
+                    <div 
+                      className="aspect-square flex items-center justify-center rounded-lg mb-1.5 overflow-hidden relative border border-white/5"
+                      style={{
+                        background: `radial-gradient(circle, ${chem.color}18 0%, rgba(2, 6, 23, 0.6) 85%)`
+                      }}
+                    >
                       {chem.state === 'solid' ? (
                         <div className="relative w-8 h-8 flex items-center justify-center scale-90 group-hover:scale-105 transition-transform duration-300">
-                          {/* Main Body */}
-                          <div className="absolute inset-0 rounded-md opacity-25 blur-sm" style={{ backgroundColor: chem.color }} />
-                          {/* Facets */}
-                          <div className="w-5 h-7 relative">
-                            {/* Top Pyramid facet */}
-                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/40 to-transparent opacity-90" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }} />
-                            {/* Bottom Inverted Pyramid facet */}
-                            <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/40 to-transparent opacity-95" style={{ backgroundColor: chem.color, clipPath: 'polygon(50% 100%, 100% 0%, 0% 0%)' }} />
-                            {/* Left Reflection */}
-                            <div className="absolute top-[10%] left-0 w-[45%] h-[80%] bg-white/20" style={{ clipPath: 'polygon(0% 50%, 100% 0%, 100% 100%)' }} />
-                            {/* Right Shadow */}
-                            <div className="absolute top-[10%] right-0 w-[45%] h-[80%] bg-black/30" style={{ clipPath: 'polygon(100% 50%, 0% 0%, 0% 100%)' }} />
-                            {/* Gloss shine sweep */}
-                            <div className="absolute inset-0 w-[200%] h-full -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-crystal-shine pointer-events-none" />
-                          </div>
+                          {/* 2D Solid Crystal SVG */}
+                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L4 9l8 13 8-13-8-7z" fill={chem.color} fillOpacity={0.7} stroke="rgba(255,255,255,0.4)" strokeWidth={1.5} />
+                            <path d="M12 2v20" stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                            <path d="M4 9h16" stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
+                          </svg>
+                        </div>
+                      ) : chem.state === 'gas' ? (
+                        <div className="relative w-8 h-8 flex items-center justify-center scale-95 group-hover:scale-105 transition-transform duration-300">
+                          {/* 2D Gas Flask SVG */}
+                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 3h6M12 3v5M7 16.5c0-3 3-6.5 3-7.5h4c0 1 3 4.5 3 7.5A5 5 0 0 1 7 16.5z" stroke="rgba(255,255,255,0.5)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M8.5 16.5c0-1.5 1.8-3.5 1.8-4H13.7c0 .5 1.8 2.5 1.8 4a3.5 3.5 0 0 1-7 0z" fill={chem.color} fillOpacity={0.7} />
+                            <circle cx="12" cy="13" r="1" fill="white" fillOpacity={0.8} />
+                            <circle cx="10" cy="15" r="0.8" fill="white" fillOpacity={0.8} />
+                            <circle cx="14" cy="14" r="0.8" fill="white" fillOpacity={0.8} />
+                          </svg>
                         </div>
                       ) : (
                         <div className="relative w-8 h-8 flex items-center justify-center scale-95 group-hover:scale-105 transition-transform duration-300">
-                          {/* Glass tube container */}
-                          <div className="w-4.5 h-7 border border-white/30 rounded-b-full relative overflow-hidden bg-white/5 flex items-end shadow-inner">
-                            {/* Liquid content */}
-                            <div 
-                              className="absolute bottom-0 left-0 w-full overflow-hidden transition-all duration-300"
-                              style={{ height: '65%', backgroundColor: chem.color }}
-                            >
-                              {/* Animated wave effect inside liquid */}
-                              <div className="absolute -top-[24px] -left-1/2 w-[200%] aspect-square bg-white/20 rounded-[38%] animate-wave opacity-50" />
-                              <div className="absolute -top-[28px] -left-1/2 w-[200%] aspect-square bg-white/10 rounded-[35%] animate-wave-slow opacity-75" />
-                            </div>
-                            {/* Gloss sheen overlay */}
-                            <div className="absolute top-0 right-0.5 w-[30%] h-full bg-gradient-to-l from-white/25 to-transparent rounded-r-full pointer-events-none" />
-                            {/* Tube lip */}
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5.5 h-0.5 bg-white/40 rounded-full" />
-                          </div>
+                          {/* 2D Liquid Test Tube SVG */}
+                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 3h6M10 3v13a2 2 0 0 0 4 0V3" stroke="rgba(255,255,255,0.5)" strokeWidth={1.5} strokeLinecap="round" />
+                            <path d="M10 8v8a2 2 0 0 0 4 0V8h-4z" fill={chem.color} fillOpacity={0.7} />
+                          </svg>
                         </div>
                       )}
                     </div>
