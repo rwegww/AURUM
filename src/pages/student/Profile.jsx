@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
-import StudyCalendar from '@/components/profile/StudyCalendar';
 import { supabase } from '@/lib/supabase';
 import { Bell, Mail, CalendarRange, Activity, Target, Clock, BookOpen, Lightbulb, Save } from 'lucide-react';
 
@@ -415,8 +414,6 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-
-            <StudyCalendar planData={planData} onPlanDataChange={setPlanData} />
           </div>
         </div>
 
