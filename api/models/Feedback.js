@@ -107,7 +107,7 @@ export const Feedback = {
   async getApprovedPraises() {
     const { data, error } = await supabase
       .from('feedback')
-      .select('username, message, created_at, users(role)')
+      .select('username, message, metadata, created_at, users(role)')
       .eq('type', 'praise')
       .eq('is_approved', true)
       .order('created_at', { ascending: false });
@@ -117,8 +117,8 @@ export const Feedback = {
     return data.map(f => ({
       name: f.username || 'Anonymous',
       role: f.users?.role || 'Học sinh',
-      content: f.message,
-      rating: 5 // Default for praises
+      content: f.metadata?.content_vi || f.metadata?.content_en || f.message,
+      rating: f.metadata?.rating || 5
     }));
   }
 };

@@ -1,5 +1,7 @@
 import { supabase } from '../lib/supabase.js';
 
+const LESSON_TABLE = process.env.LESSONS_TABLE || 'lessons';
+
 const mapLesson = (lesson) => {
   if (!lesson) return null;
   let theoryModules = lesson.theory_modules || [];
@@ -55,7 +57,7 @@ const mapToPostgres = (l) => ({
 export const Lesson = {
   async find(query = {}) {
     let supabaseQuery = supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .select('*');
     
     if (query.classId) {
@@ -73,7 +75,7 @@ export const Lesson = {
 
   async findAll() {
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .select('*')
       .order('order', { ascending: true });
     
@@ -83,7 +85,7 @@ export const Lesson = {
 
   async findByClass(classId) {
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .select('*')
       .eq('class_id', classId)
       .order('order', { ascending: true });
@@ -94,7 +96,7 @@ export const Lesson = {
 
   async findById(lessonId) {
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .select('*')
       .eq('id', lessonId)
       .single();
@@ -108,7 +110,7 @@ export const Lesson = {
   async create(lessonData) {
     const pgData = mapToPostgres(lessonData);
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .insert(pgData)
       .select()
       .single();
@@ -123,7 +125,7 @@ export const Lesson = {
     delete pgData.id;
 
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .update(pgData)
       .eq('id', lessonId)
       .select()
@@ -135,7 +137,7 @@ export const Lesson = {
 
   async delete(lessonId) {
     const { error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .delete()
       .eq('id', lessonId);
     
@@ -150,7 +152,7 @@ export const Lesson = {
     if (updateData.programId) pgUpdateData.program_id = updateData.programId;
     
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .update(pgUpdateData)
       .eq('id', lessonId)
       .select()
@@ -162,7 +164,7 @@ export const Lesson = {
 
   async countAll() {
     const { count, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .select('id', { count: 'exact', head: true });
     
     if (error) throw error;
@@ -171,7 +173,7 @@ export const Lesson = {
 
   async deleteMany() {
     const { error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .delete()
       .neq('id', '');
     
@@ -180,7 +182,7 @@ export const Lesson = {
 
   async insertMany(lessons) {
     const { data, error } = await supabase
-      .from('lesson')
+      .from(LESSON_TABLE)
       .insert(lessons.map(mapToPostgres));
     
     if (error) throw error;

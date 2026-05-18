@@ -2,6 +2,125 @@ import { supabase } from '../lib/supabase.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
+const defaultBalancingProgress = {
+  completedNodeIds: [],
+  completedCount: 0,
+  passedGrades: [],
+  lessonStars: {}
+};
+
+const isMissingDbObject = (error) =>
+  error?.code === '42P01' ||
+  error?.code === '42703' ||
+  error?.code === 'PGRST205' ||
+  error?.message?.includes('Could not find the table') ||
+  error?.message?.includes('Could not find the column');
+
+const normalizeIdList = (items, objectKey) => {
+  if (!Array.isArray(items)) return [];
+  return items
+    .map((item) => (typeof item === 'string' ? item : item?.[objectKey] || item?.item_id))
+    .filter(Boolean);
+};
+
+const normalizeBalancingProgress = (progress) => {
+  if (!progress || typeof progress !== 'object' || Array.isArray(progress)) {
+    return { ...defaultBalancingProgress };
+  }
+
+  return {
+    completedNodeIds: progress.completedNodeIds || [],
+    completedCount: progress.completedCount || 0,
+    passedGrades: progress.passedGrades || [],
+    lessonStars: progress.lessonStars || {}
+  };
+};
+
+const attachUserProgress = async (user) => {
+  try {
+    const { data, error } = await supabase
+      .from('user_progress')
+      .select('item_type, item_id, progress_data, unlocked_at')
+      .eq('user_id', user.id);
+
+    if (error) throw error;
+
+    user.unlocked_lessons = (data || [])
+      .filter((item) => item.item_type === 'lesson')
+      .map((item) => item.item_id);
+    user.unlocked_chemicals = (data || [])
+      .filter((item) => item.item_type === 'chemical')
+      .map((item) => item.item_id);
+
+    const balancing = (data || []).find(
+      (item) => item.item_type === 'balancing' && item.item_id === 'current'
+    );
+    user.balancing_progress = balancing?.progress_data || user.balancing_progress;
+    return user;
+  } catch (error) {
+    if (!isMissingDbObject(error)) throw error;
+  }
+
+  try {
+    const { data: lessons } = await supabase
+      .from('user_unlocked_lessons')
+      .select('lesson_id')
+      .eq('user_id', user.id);
+    const { data: chemicals } = await supabase
+      .from('user_unlocked_chemicals')
+      .select('chemical_formula')
+      .eq('user_id', user.id);
+
+    user.unlocked_lessons = lessons || [];
+    user.unlocked_chemicals = chemicals || [];
+  } catch (_e) {
+    console.warn('User progress tables missing or inaccessible, returning base user.');
+    user.unlocked_lessons = [];
+    user.unlocked_chemicals = [];
+  }
+
+  return user;
+};
+
+const upsertUserProgress = async (rows) => {
+  if (!rows.length) return false;
+
+  const { error } = await supabase
+    .from('user_progress')
+    .upsert(rows, { onConflict: 'user_id,item_type,item_id' });
+
+  if (error) {
+    if (isMissingDbObject(error)) return false;
+    throw error;
+  }
+
+  return true;
+};
+
+const upsertLegacyProgress = async (userId, { lessons = [], chemicals = [], balancingProgress } = {}) => {
+  if (balancingProgress) {
+    const { error } = await supabase
+      .from('users')
+      .update({ balancing_progress: balancingProgress })
+      .eq('id', userId);
+    if (error && !isMissingDbObject(error)) throw error;
+  }
+
+  for (const lessonId of lessons) {
+    const { error } = await supabase
+      .from('user_unlocked_lessons')
+      .upsert({ user_id: userId, lesson_id: lessonId }, { onConflict: 'user_id,lesson_id' });
+    if (error && !isMissingDbObject(error)) throw error;
+  }
+
+  for (const chemical of chemicals) {
+    const { error } = await supabase
+      .from('user_unlocked_chemicals')
+      .upsert({ user_id: userId, chemical_formula: chemical }, { onConflict: 'user_id,chemical_formula' });
+    if (error && !isMissingDbObject(error)) throw error;
+  }
+};
+
 const mapUser = (user) => {
   if (!user) return null;
   return {
@@ -9,8 +128,12 @@ const mapUser = (user) => {
     id: user.id,
     createdAt: user.created_at,
     // Flatten normalized arrays if they exist in the joined record
-    unlockedLessons: user.unlocked_lessons ? user.unlocked_lessons.map(l => l.lesson_id) : (user.unlockedLessons || []),
-    unlockedChemicals: user.unlocked_chemicals ? user.unlocked_chemicals.map(c => c.chemical_formula) : (user.unlockedChemicals || []),
+    unlockedLessons: normalizeIdList(user.unlocked_lessons, 'lesson_id').length > 0
+      ? normalizeIdList(user.unlocked_lessons, 'lesson_id')
+      : (user.unlockedLessons || []),
+    unlockedChemicals: normalizeIdList(user.unlocked_chemicals, 'chemical_formula').length > 0
+      ? normalizeIdList(user.unlocked_chemicals, 'chemical_formula')
+      : (user.unlockedChemicals || []),
     avatarSeed: user.avatar_seed || user.username,
     arenaStats: user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 },
     arenaAvatar: user.arena_avatar || { seed: 'Chem Master', aura: '#a855f7' },
@@ -25,14 +148,7 @@ const mapUser = (user) => {
     activeMinutes: user.active_minutes || 0,
     isOnline: user.is_online || (user.last_active_at && new Date(user.last_active_at) > new Date(Date.now() - 5*60*1000)),
     isLocked: user.is_locked || false,
-    balancingProgress: (user.balancing_progress && typeof user.balancing_progress === 'object') 
-      ? {
-          completedNodeIds: user.balancing_progress.completedNodeIds || [],
-          completedCount: user.balancing_progress.completedCount || 0,
-          passedGrades: user.balancing_progress.passedGrades || [],
-          lessonStars: user.balancing_progress.lessonStars || {}
-        }
-      : { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} },
+    balancingProgress: normalizeBalancingProgress(user.balancing_progress),
     streakCount: user.streak_count || 0,
     lastStreakAt: user.last_streak_at,
     todayOnlineMinutes: user.today_online_minutes || 0,
@@ -70,21 +186,7 @@ export const User = {
       throw userError;
     }
     if (!user) return null;
-
-    // 2. Try to fetch junction data (optional, don't crash if tables missing)
-    try {
-      const { data: lessons } = await supabase.from('user_unlocked_lessons').select('lesson_id').eq('user_id', user.id);
-      const { data: chemicals } = await supabase.from('user_unlocked_chemicals').select('chemical_formula').eq('user_id', user.id);
-      
-      user.unlocked_lessons = lessons || [];
-      user.unlocked_chemicals = chemicals || [];
-    } catch (_e) {
-      console.warn('Junction tables missing or inaccessible, returning base user.');
-      user.unlocked_lessons = [];
-      user.unlocked_chemicals = [];
-    }
-    
-    return mapUser(user);
+    return mapUser(await attachUserProgress(user));
   },
 
   async findById(id) {
@@ -97,20 +199,7 @@ export const User = {
     
     if (userError) throw userError;
     if (!user) return null;
-
-    // 2. Attempt junction data (fail-safe)
-    try {
-      const { data: lessons } = await supabase.from('user_unlocked_lessons').select('lesson_id').eq('user_id', id);
-      const { data: chemicals } = await supabase.from('user_unlocked_chemicals').select('chemical_formula').eq('user_id', id);
-      
-      user.unlocked_lessons = lessons || [];
-      user.unlocked_chemicals = chemicals || [];
-    } catch (_e) {
-      user.unlocked_lessons = [];
-      user.unlocked_chemicals = [];
-    }
-    
-    return mapUser(user);
+    return mapUser(await attachUserProgress(user));
   },
 
   async create(userData) {
@@ -127,7 +216,6 @@ export const User = {
         password: hashedPassword,
         role: userData.role || 'student',
         avatar_seed: userData.avatarSeed || userData.username,
-        balancing_progress: { completedNodeIds: [], completedCount: 0, passedGrades: [] },
         study_plan: { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true, grade: userData.grade || null },
         streak_count: 0,
         today_online_minutes: 0,
@@ -139,15 +227,37 @@ export const User = {
     if (error) throw error;
 
     // 2. Initial Unlocked Content (if any)
-    if (userData.unlockedLessons?.length > 0) {
-      await supabase.from('user_unlocked_lessons').insert(
-        userData.unlockedLessons.map(lessonId => ({ user_id: userId, lesson_id: lessonId }))
-      );
-    }
-    if (userData.unlockedChemicals?.length > 0) {
-      await supabase.from('user_unlocked_chemicals').insert(
-        userData.unlockedChemicals.map(chem => ({ user_id: userId, chemical_formula: chem }))
-      );
+    const initialLessons = userData.unlockedLessons || [];
+    const initialChemicals = userData.unlockedChemicals || [];
+    const initialBalancingProgress = { ...defaultBalancingProgress };
+    const progressRows = [
+      ...initialLessons.map((lessonId) => ({
+        user_id: userId,
+        item_type: 'lesson',
+        item_id: lessonId,
+        progress_data: {}
+      })),
+      ...initialChemicals.map((chemical) => ({
+        user_id: userId,
+        item_type: 'chemical',
+        item_id: chemical,
+        progress_data: {}
+      })),
+      {
+        user_id: userId,
+        item_type: 'balancing',
+        item_id: 'current',
+        progress_data: initialBalancingProgress
+      }
+    ];
+
+    const savedToProgress = await upsertUserProgress(progressRows);
+    if (!savedToProgress) {
+      await upsertLegacyProgress(userId, {
+        lessons: initialLessons,
+        chemicals: initialChemicals,
+        balancingProgress: initialBalancingProgress
+      });
     }
 
     return this.findById(userId);
@@ -162,10 +272,8 @@ export const User = {
       delete pgUpdateData.avatarSeed;
     }
 
-    if (updateData.balancingProgress) {
-      pgUpdateData.balancing_progress = updateData.balancingProgress;
-      delete pgUpdateData.balancingProgress;
-    }
+    const balancingProgress = updateData.balancingProgress;
+    delete pgUpdateData.balancingProgress;
 
     if (updateData.linkedAccounts) {
       pgUpdateData.linked_accounts = updateData.linkedAccounts;
@@ -208,17 +316,42 @@ export const User = {
     // 2. Update Junction Tables for Unlocked Content
     // NOTE: This implementation is simple "add if missing". 
     // For a full replacement, we'd need to delete first if that's the intent.
+    const progressRows = [];
     if (junctionLessons) {
-      for (const lessonId of junctionLessons) {
-        await supabase.from('user_unlocked_lessons')
-          .upsert({ user_id: id, lesson_id: lessonId }, { onConflict: 'user_id,lesson_id' });
-      }
+      progressRows.push(...junctionLessons.map((lessonId) => ({
+        user_id: id,
+        item_type: 'lesson',
+        item_id: lessonId,
+        progress_data: {}
+      })));
     }
 
     if (junctionChemicals) {
-      for (const chem of junctionChemicals) {
-        await supabase.from('user_unlocked_chemicals')
-          .upsert({ user_id: id, chemical_formula: chem }, { onConflict: 'user_id,chemical_formula' });
+      progressRows.push(...junctionChemicals.map((chemical) => ({
+        user_id: id,
+        item_type: 'chemical',
+        item_id: chemical,
+        progress_data: {}
+      })));
+    }
+
+    if (balancingProgress) {
+      progressRows.push({
+        user_id: id,
+        item_type: 'balancing',
+        item_id: 'current',
+        progress_data: balancingProgress
+      });
+    }
+
+    if (progressRows.length > 0) {
+      const savedToProgress = await upsertUserProgress(progressRows);
+      if (!savedToProgress) {
+        await upsertLegacyProgress(id, {
+          lessons: junctionLessons || [],
+          chemicals: junctionChemicals || [],
+          balancingProgress
+        });
       }
     }
 
