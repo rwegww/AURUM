@@ -1,10 +1,83 @@
 import express from 'express';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
+import { supabase } from '../lib/supabase.js';
+import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
 
 const router = express.Router();
 
 import { auth } from '../_middleware/auth.js';
+
+const VIETNAM_TIME_ZONE = 'Asia/Ho_Chi_Minh';
+const DEFAULT_STUDY_PLAN = {
+  studyTime: '20:00',
+  dailyLessonTarget: 1,
+  remindersEnabled: true,
+  emailEnabled: false,
+  calendarEnabled: false,
+};
+
+const datePartFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: VIETNAM_TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+const timePartFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: VIETNAM_TIME_ZONE,
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+});
+
+const getFormatterParts = (formatter, date) => Object.fromEntries(
+  formatter.formatToParts(date)
+    .filter(part => part.type !== 'literal')
+    .map(part => [part.type, part.value])
+);
+
+const getVietnamDateKey = (date) => {
+  const parts = getFormatterParts(datePartFormatter, date);
+  return `${parts.year}-${parts.month}-${parts.day}`;
+};
+
+const getVietnamMinuteOfDay = (date) => {
+  const parts = getFormatterParts(timePartFormatter, date);
+  return Number(parts.hour) * 60 + Number(parts.minute);
+};
+
+const getVietnamHHMM = (date) => {
+  const parts = getFormatterParts(timePartFormatter, date);
+  return `${parts.hour}:${parts.minute}`;
+};
+
+const parseStudyTimeMinutes = (value) => {
+  if (typeof value !== 'string') return null;
+  const match = value.trim().match(/^([01]\d|2[0-3]):([0-5]\d)$/);
+  if (!match) return null;
+  return Number(match[1]) * 60 + Number(match[2]);
+};
+
+const normalizeStudyPlan = (incoming, existing = {}) => {
+  const base = existing && typeof existing === 'object' && !Array.isArray(existing) ? existing : {};
+  const patch = incoming && typeof incoming === 'object' && !Array.isArray(incoming) ? incoming : {};
+  const merged = { ...DEFAULT_STUDY_PLAN, ...base, ...patch };
+  const target = Number.parseInt(merged.dailyLessonTarget, 10);
+
+  return {
+    ...merged,
+    studyTime: parseStudyTimeMinutes(merged.studyTime) !== null ? merged.studyTime.trim() : DEFAULT_STUDY_PLAN.studyTime,
+    dailyLessonTarget: Number.isFinite(target) ? Math.min(Math.max(target, 1), 10) : DEFAULT_STUDY_PLAN.dailyLessonTarget,
+    remindersEnabled: Boolean(merged.remindersEnabled),
+    emailEnabled: Boolean(merged.emailEnabled),
+    calendarEnabled: Boolean(merged.calendarEnabled),
+    customSessions: merged.customSessions && typeof merged.customSessions === 'object' && !Array.isArray(merged.customSessions)
+      ? merged.customSessions
+      : {},
+    completedDates: Array.isArray(merged.completedDates) ? merged.completedDates : [],
+  };
+};
 
 // Get Online Count (Public)
 router.get('/online-count', async (req, res) => {
@@ -63,6 +136,7 @@ router.get('/profile', auth, async (req, res) => {
   res.json({
     id: req.user.id,
     username: req.user.username,
+    email: req.user.email || null,
     role: req.user.role,
     xp: req.user.xp,
     level: req.user.level,
@@ -84,11 +158,14 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // Update Profile
-import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
-
 router.patch('/profile', auth, async (req, res) => {
   try {
-    const updatedUser = await User.update(req.user.id, req.body);
+    const updateData = { ...req.body };
+    if (Object.prototype.hasOwnProperty.call(updateData, 'studyPlan')) {
+      updateData.studyPlan = normalizeStudyPlan(updateData.studyPlan, req.user.studyPlan);
+    }
+
+    const updatedUser = await User.update(req.user.id, updateData);
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
@@ -274,22 +351,18 @@ router.post('/streak/reset', auth, async (req, res) => {
   }
 });
 
-import { supabase } from '../lib/supabase.js';
-
 // Cron Job: Send Study Plan Reminders & Streak Reminders
 router.get('/cron-send-reminders', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
     const cronSecret = process.env.CRON_SECRET;
-    
-    // Secure the cron endpoint in production environment
+
     if (process.env.NODE_ENV === 'production' && cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      return res.status(401).json({ message: 'Không có quyền truy cập endpoint này.' });
+      return res.status(401).json({ message: 'Khong co quyen truy cap endpoint nay.' });
     }
 
     console.log('[Cron Reminders] Starting reminder check...');
 
-    // Fetch all students (students have roles, emails, study plans, streak counts)
     const { data: students, error } = await supabase
       .from('users')
       .select('id, username, email, study_plan, today_lesson_completed, streak_count')
@@ -297,165 +370,138 @@ router.get('/cron-send-reminders', async (req, res) => {
 
     if (error) {
       console.error('[Cron Reminders] Supabase fetch error:', error);
-      return res.status(500).json({ message: 'Lỗi truy vấn cơ sở dữ liệu', error: error.message });
+      return res.status(500).json({ message: 'Loi truy van co so du lieu', error: error.message });
     }
 
-    // Get current Vietnam Time (GMT+7)
-    const nowVN = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
-    const currentHHMM = new Date().toLocaleTimeString('en-US', {
-      timeZone: 'Asia/Ho_Chi_Minh',
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const now = new Date();
+    const todayKey = getVietnamDateKey(now);
+    const currentMinute = getVietnamMinuteOfDay(now);
+    const currentHHMM = getVietnamHHMM(now);
+    const results = [];
+    const skipped = {
+      noEmail: 0,
+      completed: 0,
+      disabled: 0,
+      invalidTime: 0,
+      notDue: 0,
+    };
 
-    console.log(`[Cron Reminders] Current Vietnam Time: ${currentHHMM}`);
-
-    const matchingStudyReminders = [];
-    const dbUpdates = [];
+    console.log(`[Cron Reminders] Current Vietnam Time: ${todayKey} ${currentHHMM}`);
 
     for (const student of (students || [])) {
-      const plan = student.study_plan;
-      if (!plan || !plan.emailEnabled) continue;
-      if (student.today_lesson_completed) continue;
+      const plan = normalizeStudyPlan(student.study_plan);
+      let updatedPlan = { ...plan };
+      let hasPlanUpdate = false;
 
-      const studyTime = plan.studyTime ? plan.studyTime.trim() : null;
-      if (!studyTime) continue;
+      if (!plan.remindersEnabled || !plan.emailEnabled) {
+        skipped.disabled += 1;
+        continue;
+      }
 
-      // Parse scheduled study time today
-      const [sh, sm] = studyTime.split(':').map(Number);
-      const scheduledTime = new Date(nowVN);
-      scheduledTime.setHours(sh, sm, 0, 0);
+      if (!student.email) {
+        skipped.noEmail += 1;
+        results.push({
+          username: student.username,
+          type: 'email_reminder',
+          success: false,
+          error: 'missing_student_email',
+        });
+        continue;
+      }
 
-      if (nowVN >= scheduledTime) {
-        let shouldSend = false;
-        let isFirstToday = false;
-        let hourOffset = 0;
+      if (student.today_lesson_completed) {
+        skipped.completed += 1;
+        continue;
+      }
 
-        if (!plan.lastReminderSentAt) {
-          shouldSend = true;
-          isFirstToday = true;
-        } else {
-          const lastSentDate = new Date(plan.lastReminderSentAt).toLocaleDateString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' });
-          const currentDateStr = nowVN.toLocaleDateString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' });
+      const scheduledMinute = parseStudyTimeMinutes(plan.studyTime);
+      if (scheduledMinute === null) {
+        skipped.invalidTime += 1;
+        continue;
+      }
 
-          if (lastSentDate !== currentDateStr) {
-            shouldSend = true;
-            isFirstToday = true;
-          } else {
-            // Already sent today, check if at least 55 minutes have passed since last reminder
-            const lastSentTime = new Date(plan.lastReminderSentAt);
-            const msDiff = nowVN - lastSentTime;
-            const minutesDiff = Math.floor(msDiff / 1000 / 60);
+      if (currentMinute >= scheduledMinute) {
+        const lastSentAt = plan.lastReminderSentAt ? new Date(plan.lastReminderSentAt) : null;
+        const lastSentValid = lastSentAt instanceof Date && !Number.isNaN(lastSentAt.getTime());
+        const minutesSinceLast = lastSentValid ? Math.floor((now - lastSentAt) / 60000) : Infinity;
+        const lastStudyReminderDate = plan.lastStudyReminderDate
+          || (lastSentValid ? getVietnamDateKey(lastSentAt) : null);
+        const isFirstToday = lastStudyReminderDate !== todayKey;
+        const shouldSendStudyReminder = isFirstToday || minutesSinceLast >= 55;
 
-            if (minutesDiff >= 55) {
-              shouldSend = true;
-              
-              // Calculate hourOffset from the first reminder sent today
-              const firstSent = new Date(plan.firstReminderSentAt || plan.lastReminderSentAt);
-              const totalMsDiff = nowVN - firstSent;
-              hourOffset = Math.max(1, Math.round(totalMsDiff / 1000 / 60 / 60));
-            }
-          }
-        }
+        if (shouldSendStudyReminder) {
+          const hourOffset = Math.max(0, Math.floor((currentMinute - scheduledMinute) / 60));
+          console.log(`[Cron Reminders] Sending study reminder to ${student.username} (offset: ${hourOffset}h)`);
+          const sendResult = await sendStudyPlanHourlyReminderEmail(student.email, student.username, plan, hourOffset);
 
-        if (shouldSend) {
-          matchingStudyReminders.push({
-            student,
-            hourOffset
+          results.push({
+            username: student.username,
+            email: student.email,
+            type: 'study_reminder',
+            hourOffset,
+            success: sendResult.success,
+            error: sendResult.error || null,
           });
 
-          // Prepare database update
-          const updatedPlan = {
-            ...plan,
-            lastReminderSentAt: nowVN.toISOString(),
-            firstReminderSentAt: isFirstToday ? nowVN.toISOString() : (plan.firstReminderSentAt || plan.lastReminderSentAt || nowVN.toISOString())
-          };
-          dbUpdates.push(User.update(student.id, { studyPlan: updatedPlan }));
+          if (sendResult.success) {
+            const sentAt = now.toISOString();
+            updatedPlan = {
+              ...updatedPlan,
+              lastStudyReminderDate: todayKey,
+              lastReminderSentAt: sentAt,
+              firstReminderSentAt: isFirstToday ? sentAt : (plan.firstReminderSentAt || sentAt),
+            };
+            hasPlanUpdate = true;
+          }
+        } else {
+          skipped.notDue += 1;
         }
+      } else {
+        skipped.notDue += 1;
+      }
+
+      const streakCount = student.streak_count || 0;
+      if (currentMinute >= 21 * 60 && streakCount > 0 && updatedPlan.lastStreakReminderDate !== todayKey) {
+        console.log(`[Cron Reminders] Sending streak reminder to ${student.username} (streak: ${streakCount})`);
+        const sendResult = await sendStreakReminderEmail(student.email, student.username, streakCount);
+
+        results.push({
+          username: student.username,
+          email: student.email,
+          type: 'streak_reminder',
+          success: sendResult.success,
+          error: sendResult.error || null,
+        });
+
+        if (sendResult.success) {
+          updatedPlan = {
+            ...updatedPlan,
+            lastStreakReminderDate: todayKey,
+          };
+          hasPlanUpdate = true;
+        }
+      }
+
+      if (hasPlanUpdate) {
+        await User.update(student.id, { studyPlan: updatedPlan });
       }
     }
 
-    // 2. Filter students for daily streak reminders at 21:00 (9 PM):
-    const matchingStreakReminders = [];
-    if (currentHHMM === '21:00') {
-      (students || []).forEach(student => {
-        const plan = student.study_plan;
-        const hasActiveEmail = plan ? plan.emailEnabled : false;
-        const streakCount = student.streak_count || 0;
+    const successfulCount = results.filter(r => r.success).length;
 
-        if (hasActiveEmail && !student.today_lesson_completed && streakCount > 0) {
-          matchingStreakReminders.push(student);
-        }
-      });
-    }
-
-    console.log(`[Cron Reminders] Found ${matchingStudyReminders.length} matching study reminders and ${matchingStreakReminders.length} streak reminders.`);
-
-    if (matchingStudyReminders.length === 0 && matchingStreakReminders.length === 0) {
-      return res.json({ message: 'Không có học sinh nào cần gửi nhắc nhở tại thời điểm này.', sentCount: 0 });
-    }
-
-    // Update database for study reminders sent
-    if (dbUpdates.length > 0) {
-      await Promise.all(dbUpdates);
-    }
-
-    // Send Hourly Study Plan Reminders
-    const studyPromises = matchingStudyReminders.map(({ student, hourOffset }) => {
-      console.log(`[Cron Reminders] Sending hourly reminder to ${student.username} (offset: ${hourOffset}h)`);
-      return sendStudyPlanHourlyReminderEmail(student.email, student.username, student.study_plan, hourOffset)
-        .then(result => ({
-          username: student.username,
-          email: student.email,
-          type: 'study_reminder',
-          hourOffset,
-          success: result.success,
-          error: result.error || null
-        }))
-        .catch(err => ({
-          username: student.username,
-          email: student.email,
-          type: 'study_reminder',
-          hourOffset,
-          success: false,
-          error: err.message
-        }));
-    });
-
-    // Send Streak reminders
-    const streakPromises = matchingStreakReminders.map(student => {
-      console.log(`[Cron Reminders] Sending streak reminder to ${student.username} (streak: ${student.streak_count})`);
-      return sendStreakReminderEmail(student.email, student.username, student.streak_count)
-        .then(result => ({
-          username: student.username,
-          email: student.email,
-          type: 'streak_reminder',
-          success: result.success,
-          error: result.error || null
-        }))
-        .catch(err => ({
-          username: student.username,
-          email: student.email,
-          type: 'streak_reminder',
-          success: false,
-          error: err.message
-        }));
-    });
-
-    const allResults = await Promise.all([...studyPromises, ...streakPromises]);
-    const successfulCount = allResults.filter(r => r.success).length;
-
-    console.log(`[Cron Reminders] Completed. Successfully sent ${successfulCount}/${allResults.length} emails.`);
+    console.log(`[Cron Reminders] Completed. Successfully sent ${successfulCount}/${results.length} emails.`);
 
     res.json({
-      message: `Đã hoàn thành gửi nhắc nhở: ${successfulCount}/${allResults.length} thành công.`,
-      details: allResults
+      message: `Da hoan thanh gui nhac nho: ${successfulCount}/${results.length} thanh cong.`,
+      sentCount: successfulCount,
+      checkedCount: students?.length || 0,
+      skipped,
+      details: results,
     });
   } catch (err) {
     console.error('[Cron Reminders] Unexpected error:', err);
-    res.status(500).json({ message: 'Lỗi hệ thống bất ngờ', error: err.message });
+    res.status(500).json({ message: 'Loi he thong bat ngo', error: err.message });
   }
 });
-
 export default router;
+

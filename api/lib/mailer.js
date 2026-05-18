@@ -12,40 +12,48 @@ const createTransporter = async () => {
         pass: process.env.SMTP_PASS,
       },
     });
-  } else {
-    console.log('📝 SMTP credentials not found in env, creating Ethereal test account...');
-    const testAccount = await nodemailer.createTestAccount();
-    return nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
   }
+
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('SMTP credentials are missing. Set SMTP_HOST, SMTP_USER and SMTP_PASS to send real emails.');
+  }
+
+  console.log('SMTP credentials not found in env, creating Ethereal test account...');
+  const testAccount = await nodemailer.createTestAccount();
+  return nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    secure: false,
+    auth: {
+      user: testAccount.user,
+      pass: testAccount.pass,
+    },
+  });
 };
 
 // Generic sendMail function (used as default export for admin.js compatibility)
 const sendMail = async ({ to, subject, html }) => {
   try {
+    if (!to || typeof to !== 'string') {
+      return { success: false, error: 'Missing recipient email address.' };
+    }
+
     const transporter = await createTransporter();
     const info = await transporter.sendMail({
-      from: '"Học viện Hóa học Aurum" <no-reply@aurum-academy.org>',
+      from: process.env.SMTP_FROM || '"Hoc vien Hoa hoc Aurum" <no-reply@aurum-academy.org>',
       to,
       subject,
       html,
     });
-    console.log('✉️ Email sent:', info.messageId);
+    console.log('Email sent:', info.messageId);
     if (!process.env.SMTP_HOST) {
       const previewUrl = nodemailer.getTestMessageUrl(info);
-      console.log(`🔗 Preview URL: ${previewUrl}`);
+      console.log(`Preview URL: ${previewUrl}`);
       return { success: true, previewUrl };
     }
     return { success: true };
   } catch (error) {
-    console.error('❌ Failed to send email:', error);
+    console.error('Failed to send email:', error);
     return { success: false, error: error.message };
   }
 };
@@ -207,3 +215,4 @@ export const sendTeacherRejectionEmail = async (toEmail, username, reason) => {
     `,
   });
 };
+
