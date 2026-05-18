@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link, useSearchParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
@@ -37,16 +37,13 @@ const getEmbedUrl = (url) => {
 const LessonPage = () => {
   const { t } = useTranslation();
   const { grade, lessonId } = useParams();
-  const [searchParams] = useSearchParams();
-  const mode = searchParams.get('mode');
   
   const [lesson, setLesson] = useState(null);
   const [gradeLessons, setGradeLessons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showStory, setShowStory] = useState(false);
   const { isLoggedIn } = useAuth();
 
-  const fetchLessonData = async () => {
+  const fetchLessonData = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch both specific lesson and the list for sidebar
@@ -75,13 +72,13 @@ const LessonPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [grade, lessonId, t]);
 
   useEffect(() => {
     if (grade && lessonId) {
       fetchLessonData();
     }
-  }, [grade, lessonId]);
+  }, [fetchLessonData, grade, lessonId]);
 
   if (loading || !lesson) {
     return (

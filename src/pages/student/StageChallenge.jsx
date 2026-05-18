@@ -14,7 +14,6 @@ const StageChallenge = () => {
   const order = searchParams.get('order') || '1';
 
   const { user } = useAuth();
-  const [lessons, setLessons] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +22,6 @@ const StageChallenge = () => {
         const listRes = await fetch(`/api/lessons?classId=${grade}`);
         const listData = await listRes.json();
         const sortedLessons = Array.isArray(listData) ? listData : [];
-        setLessons(sortedLessons);
 
         const res = await fetch(`/api/lessons/${lessonId}`);
         const data = await res.json();

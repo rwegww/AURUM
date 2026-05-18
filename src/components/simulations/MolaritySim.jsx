@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { stableRange } from '@/utils/stableRandom';
 
 // Dữ liệu hóa học chuẩn - Chất tan và màu sắc
 const SOLUTES = [
@@ -28,6 +29,13 @@ const MolaritySim = () => {
 
   // Tính chiều cao dung dịch theo thể tích (max 200px cho 1000mL)
   const liquidHeight = Math.min((volume / 1000) * 200, 200);
+  const precipitates = useMemo(() => {
+    return Array.from({ length: 8 }, (_, i) => ({
+      cx: stableRange(`${solute.name}-molarity-cx`, i, 80, 200),
+      cy: stableRange(`${solute.name}-molarity-cy`, i, 275, 285),
+      r: stableRange(`${solute.name}-molarity-r`, i, 2, 5),
+    }));
+  }, [solute.name]);
 
   return (
     <div className="space-y-6">
@@ -45,11 +53,11 @@ const MolaritySim = () => {
           {/* Precipitate if saturated */}
           {isSaturated && (
             <g>
-              {[...Array(8)].map((_, i) => (
+              {precipitates.map((particle, i) => (
                 <circle key={i}
-                  cx={80 + Math.random() * 120}
-                  cy={275 + Math.random() * 10}
-                  r={2 + Math.random() * 3}
+                  cx={particle.cx}
+                  cy={particle.cy}
+                  r={particle.r}
                   fill={`rgba(${solute.color[0]}, ${solute.color[1]}, ${solute.color[2]}, 0.9)`}
                 />
               ))}
@@ -57,7 +65,7 @@ const MolaritySim = () => {
           )}
 
           {/* Volume scale marks */}
-          {[200, 400, 600, 800, 1000].map((ml, i) => {
+          {[200, 400, 600, 800, 1000].map((ml) => {
             const y = 290 - (ml / 1000) * 200;
             return (
               <g key={ml}>

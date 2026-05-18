@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StoryIntro from '@/components/lessons/StoryIntro';
-import { useTranslation } from 'react-i18next';
 
 const StageStory = () => {
-  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();

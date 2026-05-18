@@ -1,11 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { supabase } from '@/lib/supabase';
-import { auth as firebaseAuth, googleProvider } from '@/lib/firebase';
-import { signInWithPopup, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import i18n from '@/i18n';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
 const AuthContext = createContext();
+
+const getSupabase = async () => {
+  const { supabase } = await import('@/lib/supabase');
+  return supabase;
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -28,9 +31,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const authType = localStorage.getItem('authType');
       if (authType === 'supabase') {
+        const supabase = await getSupabase();
         await supabase.auth.signOut();
       }
       if (authType === 'firebase') {
+        const [{ auth: firebaseAuth }, { signOut: firebaseSignOut }] = await Promise.all([
+          import('@/lib/firebase'),
+          import('firebase/auth'),
+        ]);
         await firebaseSignOut(firebaseAuth);
       }
     } catch (err) {
@@ -200,6 +208,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('authType', 'supabase');
       
       // Use Supabase OAuth which uses secure redirect out of the box
+      const supabase = await getSupabase();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -355,7 +364,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         // 1. Save profile
-        const updateRes = await updateUser(updateData);
+        await updateUser(updateData);
         
         // 2. Save XP/Unlock
         await updateProgress(xpGain, isLessonCompletion ? lessonId : null, isLessonCompletion);
@@ -427,6 +436,7 @@ export const AuthProvider = ({ children }) => {
           await fetchProfile(token, true);
         } else if (authType === 'supabase') {
           // Legacy Supabase login - try to get session
+          const supabase = await getSupabase();
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             localStorage.setItem('token', session.access_token);
@@ -525,7 +535,7 @@ export const AuthProvider = ({ children }) => {
 
     const interval = setInterval(sendHeartbeat, 60000); // Every 1 minute
     return () => clearInterval(interval);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, logout, user?.studyPlan]);
 
   // 5. Memoize Value
   const value = useMemo(() => ({
@@ -547,7 +557,7 @@ export const AuthProvider = ({ children }) => {
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, completeLessonSegment, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

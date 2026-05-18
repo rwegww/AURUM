@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import InfographicPage from './InfographicPage';
 import { useAuth } from '@/context/AuthContext';
@@ -55,6 +55,12 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
   const [flipDirection, setFlipDirection] = useState(null); // 'next' or 'prev'
   
   const coverTheme = GRADE_COVERS[grade] || GRADE_COVERS['8'];
+  const bookPages = useMemo(() => [
+    { type: 'cover' },
+    ...lessons.map(lesson => ({ type: 'lesson', data: lesson })),
+    { type: 'back-cover' }
+  ], [lessons]);
+  const totalSpreads = Math.ceil(bookPages.length / 2);
 
   // Check mobile viewport
   useEffect(() => {
@@ -76,36 +82,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
     };
   }, []);
 
-  // Handle arrow keys
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') handleNext();
-      else if (e.key === 'ArrowLeft') handlePrev();
-      else if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSpread, isFlipping, isMobile]);
-
-  if (!isOpen) return null;
-
-  // Build Pages Array: [Cover, Lesson 1, Lesson 2, ..., Lesson 12, BackCover]
-  const bookPages = [
-    { type: 'cover' },
-    ...lessons.map(lesson => ({ type: 'lesson', data: lesson })),
-    { type: 'back-cover' }
-  ];
-
-  // For desktop: Spreads array grouping pages in pairs
-  // Spread 0: [null, Cover] (Book closed)
-  // Spread 1: [Lesson 1, Lesson 2]
-  // Spread 2: [Lesson 3, Lesson 4]
-  // ...
-  // Spread 6: [Lesson 11, Lesson 12]
-  // Spread 7: [BackCover, null] (Book closed back)
-  const totalSpreads = Math.ceil((bookPages.length) / 2);
-
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (isFlipping) return;
     if (isMobile) {
       if (currentSpread < bookPages.length - 1) {
@@ -126,9 +103,9 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
         }, 600);
       }
     }
-  };
+  }, [bookPages.length, currentSpread, isFlipping, isMobile, totalSpreads]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     if (isFlipping) return;
     if (isMobile) {
       if (currentSpread > 0) {
@@ -149,7 +126,20 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
         }, 600);
       }
     }
-  };
+  }, [currentSpread, isFlipping, isMobile]);
+
+  // Handle arrow keys
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') handleNext();
+      else if (e.key === 'ArrowLeft') handlePrev();
+      else if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleNext, handlePrev, onClose]);
+
+  if (!isOpen) return null;
 
   // Render a specific page item
   const renderPageContent = (pageIdx, side = 'left') => {

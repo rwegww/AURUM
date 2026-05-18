@@ -293,7 +293,6 @@ const useLabStore = create((set, get) => ({
       products.push({ formula: prodData.formula, color: prodData.color });
     });
 
-    const remainingFormulas = processedContents.map(c => c.formula);
     const newSolids = processedContents.filter(c => c.state === 'solid');
 
     // Heuristics for visual effects based on reaction animation string or product types

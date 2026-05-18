@@ -1,9 +1,6 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
-
-import { supabase } from '../lib/supabase.js';
 
 const router = express.Router();
 
@@ -15,7 +12,7 @@ router.get('/online-count', async (req, res) => {
     const activeCount = await User.countActiveStudents();
     // Fallback minimum to 1 if we are sure at least the current user is active (though this is public)
     res.json({ count: Math.max(1, activeCount) });
-  } catch (err) {
+  } catch (_err) {
     res.status(200).json({ count: 1 });
   }
 });
@@ -164,7 +161,7 @@ router.post('/link-account', auth, async (req, res) => {
 router.post('/progress', auth, async (req, res) => {
   try {
     const { xpGain, unlockedLessonId, isLessonCompletion } = req.body;
-    let { xp, level, unlockedLessons, todayLessonCompleted } = req.user;
+    let { xp, level, unlockedLessons } = req.user;
     
     if (xpGain) {
       // Apply streak bonus if applicable

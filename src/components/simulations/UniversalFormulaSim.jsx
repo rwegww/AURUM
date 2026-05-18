@@ -4,6 +4,7 @@ import { elements } from '@/data/elements';
 import { chemicals as labChemicals } from '@/data/reactions/chemicals';
 import { craftableItems } from '@/data/labInventory';
 import { molecules } from '@/data/molecules';
+import { stableRange } from '@/utils/stableRandom';
 
 const UniversalFormulaSim = ({ formula }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -197,6 +198,7 @@ const UniversalFormulaSim = ({ formula }) => {
     return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '155, 89, 182';
   };
   const simColorRgb = hexToRgb(simColorHex);
+  const formulaSeed = formula?.key || formula?.name || formula?.title || 'formula';
 
   // === Tính toán các biến trực quan cho Beaker ===
   const currentVol = inputs.V ?? inputs.mdd ?? result.V ?? result.mdd ?? 1; 
@@ -207,6 +209,49 @@ const UniversalFormulaSim = ({ formula }) => {
   const maxConc = 5; // Nồng độ tối đa hiển thị
   const concentrationOpacity = Math.min(currentConc / maxConc, 1);
   const isSaturated = currentConc > 3.5; // Giả lập bão hòa nếu nồng độ quá cao
+
+  const saturatedParticles = useMemo(() => {
+    return Array.from({ length: 30 }, (_, i) => ({
+      left: stableRange(`${formulaSeed}-saturated-left`, i, 10, 90),
+      bottom: stableRange(`${formulaSeed}-saturated-bottom`, i, 0, 10),
+    }));
+  }, [formulaSeed]);
+
+  const gasParticleCount = Math.min(Math.floor((inputs.n || inputs.P || 1) * 20), 100);
+  const gasParticles = useMemo(() => {
+    return Array.from({ length: gasParticleCount }, (_, i) => ({
+      initialX: stableRange(`${formulaSeed}-gas-initial-x`, i, 0, 180),
+      initialY: stableRange(`${formulaSeed}-gas-initial-y`, i, 0, 200),
+      x: [
+        stableRange(`${formulaSeed}-gas-x-a`, i, 0, 180),
+        stableRange(`${formulaSeed}-gas-x-b`, i, 0, 180),
+        stableRange(`${formulaSeed}-gas-x-c`, i, 0, 180),
+      ],
+      y: [
+        stableRange(`${formulaSeed}-gas-y-a`, i, 0, 200),
+        stableRange(`${formulaSeed}-gas-y-b`, i, 0, 200),
+        stableRange(`${formulaSeed}-gas-y-c`, i, 0, 200),
+      ],
+    }));
+  }, [formulaSeed, gasParticleCount]);
+
+  const microParticleCount = Math.min(Math.floor((inputs.n || result.n || 1) * 30), 100);
+  const microParticles = useMemo(() => {
+    return Array.from({ length: microParticleCount }, (_, i) => ({
+      size: stableRange(`${formulaSeed}-micro-size`, i, 4, 10),
+      left: stableRange(`${formulaSeed}-micro-left`, i, 20, 80),
+      top: stableRange(`${formulaSeed}-micro-top`, i, 20, 80),
+      x: [
+        stableRange(`${formulaSeed}-micro-x-a`, i, -20, 20),
+        stableRange(`${formulaSeed}-micro-x-b`, i, -20, 20),
+      ],
+      y: [
+        stableRange(`${formulaSeed}-micro-y-a`, i, -20, 20),
+        stableRange(`${formulaSeed}-micro-y-b`, i, -20, 20),
+      ],
+      duration: stableRange(`${formulaSeed}-micro-duration`, i, 2, 5),
+    }));
+  }, [formulaSeed, microParticleCount]);
 
   return (
     <div className="space-y-6">
@@ -301,9 +346,9 @@ const UniversalFormulaSim = ({ formula }) => {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-1 rounded-md text-[14px] font-black text-red-600 shadow-md border border-red-200">
                       Bão hoà!
                     </div>
-                    {[...Array(30)].map((_, i) => (
+                    {saturatedParticles.map((particle, i) => (
                       <div key={i} className="absolute bottom-2 w-2 h-2 bg-black rounded-sm rotate-45"
-                        style={{ left: `${10 + Math.random() * 80}%`, bottom: `${Math.random() * 10}px` }} />
+                        style={{ left: `${particle.left}%`, bottom: `${particle.bottom}px` }} />
                     ))}
                   </>
                 )}
@@ -328,12 +373,12 @@ const UniversalFormulaSim = ({ formula }) => {
                 style={{ height: `${Math.min((inputs.T || 273) / 500 * 100, 100)}%`, opacity: 0.8 }}
               />
               {/* Particles */}
-              {[...Array(Math.min(Math.floor((inputs.n || inputs.P || 1)*20), 100))].map((_, i) => (
+              {gasParticles.map((particle, i) => (
                 <motion.div key={i} className="absolute w-3 h-3 rounded-full bg-blue-500 shadow-sm"
-                  initial={{ x: Math.random()*180, y: Math.random()*200 }}
+                  initial={{ x: particle.initialX, y: particle.initialY }}
                   animate={{ 
-                    x: [Math.random()*180, Math.random()*180, Math.random()*180],
-                    y: [Math.random()*200, Math.random()*200, Math.random()*200]
+                    x: particle.x,
+                    y: particle.y
                   }}
                   transition={{ repeat: Infinity, duration: Math.max(0.5, 2 - (inputs.T || 273)/300), ease: "linear" }}
                 />
@@ -350,19 +395,19 @@ const UniversalFormulaSim = ({ formula }) => {
                 <div className="text-[14px] font-black text-amber-400">{(inputs.N || result.N || 0).toExponential(3)} hạt</div>
               </div>
               {/* Particles */}
-              {[...Array(Math.min(Math.floor((inputs.n || result.n || 1) * 30), 100))].map((_, i) => (
+              {microParticles.map((particle, i) => (
                 <motion.div key={i} className="absolute rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]"
                   style={{ 
-                    width: Math.random() * 6 + 4, height: Math.random() * 6 + 4,
+                    width: particle.size, height: particle.size,
                     backgroundColor: simColorHex,
-                    left: `${20 + Math.random() * 60}%`, top: `${20 + Math.random() * 60}%`
+                    left: `${particle.left}%`, top: `${particle.top}%`
                   }}
                   animate={{ 
-                    x: [(Math.random()-0.5)*40, (Math.random()-0.5)*40],
-                    y: [(Math.random()-0.5)*40, (Math.random()-0.5)*40],
+                    x: particle.x,
+                    y: particle.y,
                     opacity: [0.5, 1, 0.5]
                   }}
-                  transition={{ repeat: Infinity, duration: Math.random() * 3 + 2, ease: "easeInOut", repeatType: 'mirror' }}
+                  transition={{ repeat: Infinity, duration: particle.duration, ease: "easeInOut", repeatType: 'mirror' }}
                 />
               ))}
             </div>

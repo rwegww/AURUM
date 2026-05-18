@@ -1,5 +1,6 @@
 import express from 'express';
 import { supabase } from '../lib/supabase.js';
+import { auth, requireRole } from '../_middleware/auth.js';
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ router.get('/', async (req, res) => {
  * @route POST /api/elements/seed
  * @desc (Admin Only) Đẩy dữ liệu tĩnh lên Database lần đầu tiên
  */
-router.post('/seed', async (req, res) => {
+router.post('/seed', auth, requireRole('admin'), async (req, res) => {
   try {
     const { elementsData } = req.body;
     

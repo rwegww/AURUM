@@ -5,8 +5,8 @@ import { motion } from 'framer-motion';
 import LeaderboardSection from '@/components/home/LeaderboardSection';
 import Footer from '@/components/common/Footer';
 import { Play, FlaskConical, Trophy, BookOpen, Users, Star, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { stableRange } from '@/utils/stableRandom';
 
 // --- Reused SVG Graphics (Simplified for Bento) ---
 
@@ -58,9 +58,9 @@ const FallingChemistry = () => {
     <div className="absolute inset-0 pointer-events-none overflow-hidden h-full z-0 opacity-30">
       {[...Array(15)].map((_, i) => {
         const symbol = symbols[i % symbols.length];
-        const randomX = Math.random() * 100;
-        const duration = 20 + Math.random() * 25;
-        const delay = Math.random() * -40;
+        const randomX = stableRange('home-falling-x', i, 0, 100);
+        const duration = stableRange('home-falling-duration', i, 20, 45);
+        const delay = stableRange('home-falling-delay', i, -40, 0);
         return (
           <motion.div
             key={i}

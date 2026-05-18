@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ const LabSolverPage = () => {
   const [searched, setSearched] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
-  const searchEquations = async (q) => {
+  const searchEquations = useCallback(async (q) => {
     if (!q.trim()) {
       setResults([]);
       return;
@@ -31,12 +31,9 @@ const LabSolverPage = () => {
       setLoading(false);
       setSearched(true);
     }
-  };
+  }, []);
 
-  const debouncedSearch = useCallback(
-    debounce((q) => searchEquations(q), 500),
-    []
-  );
+  const debouncedSearch = useMemo(() => debounce(searchEquations, 500), [searchEquations]);
 
   useEffect(() => {
     if (query) {
@@ -45,6 +42,7 @@ const LabSolverPage = () => {
       setResults([]);
       setSearched(false);
     }
+    return () => debouncedSearch.cancel();
   }, [query, debouncedSearch]);
 
   const handleCopy = (text, index) => {

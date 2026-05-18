@@ -1,13 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { stableRandom } from '@/utils/stableRandom';
+
+const getDragItemsForStep = (challenge, step) => {
+  const type = challenge?.type || 'multiple-choice';
+  if ((type !== 'drag-drop' && type !== 'matching') || !challenge?.items) return [];
+
+  return [...challenge.items].sort((a, b) => {
+    const aKey = a.id ?? a.label ?? JSON.stringify(a);
+    const bKey = b.id ?? b.label ?? JSON.stringify(b);
+    return stableRandom(`${step}-${aKey}`) - stableRandom(`${step}-${bKey}`);
+  });
+};
 
 const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
   const { t } = useTranslation();
   const [currentStep, setCurrentStep] = useState(0);
   const [selected, setSelected] = useState(null);
   const [inputValue, setInputValue] = useState("");
-  const [dragItems, setDragItems] = useState([]);
+  const [dragItems, setDragItems] = useState(() => getDragItemsForStep(challenges[0], 0));
   const [isCorrect, setIsCorrect] = useState(null);
   const [mistakes, setMistakes] = useState(0);
   
@@ -17,7 +29,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
     return () => document.body.classList.remove('no-scroll');
   }, []);
 
-  const currentChallenge = challenges[currentStep] || {
+  const fallbackChallenge = useMemo(() => ({
     type: "image-selection",
     images: [
       "/assets/images/lab-equipment/beaker.png",
@@ -29,21 +41,25 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
     correctAnswer: 0,
     targetType: t('mission_modal.labels.target_type_fallback', { defaultValue: "dụng cụ" }),
     source: t('mission_modal.source_fallback')
-  };
+  }), [t]);
+  const currentChallenge = challenges[currentStep] || fallbackChallenge;
 
   const type = currentChallenge.type || 'multiple-choice';
   const progress = ((currentStep) / challenges.length) * 100;
   const isFinalStep = currentStep === challenges.length - 1;
+  const defaultDragItems = useMemo(
+    () => getDragItemsForStep(currentChallenge, currentStep),
+    [currentChallenge, currentStep]
+  );
+  const activeDragItems = dragItems.length > 0 ? dragItems : defaultDragItems;
 
-  // Initialize Drag Items if needed
-  useEffect(() => {
-    if ((type === 'drag-drop' || type === 'matching') && currentChallenge.items) {
-      setDragItems([...currentChallenge.items].sort(() => Math.random() - 0.5));
-    }
+  const goToStep = (nextStep) => {
+    setCurrentStep(nextStep);
+    setDragItems(getDragItemsForStep(challenges[nextStep], nextStep));
     setInputValue("");
     setSelected(null);
     setIsCorrect(null);
-  }, [currentStep]);
+  };
 
   const handleSelect = (index) => {
     if (isCorrect !== null) return;
@@ -71,7 +87,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
         if (isFinalStep) {
           onUnlock({ mistakes, total: challenges.length });
         } else {
-          setCurrentStep(prev => prev + 1);
+          goToStep(currentStep + 1);
         }
       }, 1200);
     } else {
@@ -298,8 +314,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                   {type === 'drag-drop' && (
                     <div className="flex flex-col gap-6">
                        <p className="text-[10px] text-center font-black text-viet-text-light/50 uppercase tracking-widest">{t('mission_modal.drag_drop.instruction')}</p>
-                       <Reorder.Group axis="y" values={dragItems} onReorder={setDragItems} className="flex flex-col gap-2">
-                          {dragItems.map((item) => (
+                       <Reorder.Group axis="y" values={activeDragItems} onReorder={setDragItems} className="flex flex-col gap-2">
+                          {activeDragItems.map((item) => (
                             <Reorder.Item 
                               key={item.id} 
                               value={item}
@@ -312,7 +328,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                           ))}
                        </Reorder.Group>
                        <button
-                         onClick={() => validateAnswer(dragItems)}
+                         onClick={() => validateAnswer(activeDragItems)}
                          disabled={isCorrect !== null}
                          className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50 shadow-lg"
                        >
@@ -338,8 +354,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                           {/* Column B (Draggable) */}
                           <div className="flex flex-col gap-2">
                              <div className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mb-2 px-2 text-right">{t('mission_modal.matching.instruction')}</div>
-                             <Reorder.Group axis="y" values={dragItems} onReorder={setDragItems} className="flex flex-col gap-2">
-                                {dragItems.map((item) => (
+                             <Reorder.Group axis="y" values={activeDragItems} onReorder={setDragItems} className="flex flex-col gap-2">
+                                {activeDragItems.map((item) => (
                                   <Reorder.Item 
                                     key={item.id} 
                                     value={item}
@@ -360,7 +376,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                        </div>
 
                        <button
-                         onClick={() => validateAnswer(dragItems)}
+                         onClick={() => validateAnswer(activeDragItems)}
                          disabled={isCorrect !== null}
                          className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 disabled:opacity-50 shadow-xl"
                        >

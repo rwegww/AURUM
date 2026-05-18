@@ -1,6 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { stableRange } from '@/utils/stableRandom';
 
 const SMOKE_COUNT = 60;
 
@@ -10,15 +11,16 @@ const SmokeParticles = ({ active = false, color = '#ffffff', intensity = 'medium
 
   const smokeParticles = useMemo(() => {
     const counts = intensity === 'high' ? SMOKE_COUNT : (intensity === 'extreme' ? SMOKE_COUNT * 1.5 : SMOKE_COUNT / 2);
-    return Array.from({ length: Math.floor(counts) }, () => ({
-      x: (Math.random() - 0.5) * 0.4,
-      z: (Math.random() - 0.5) * 0.4,
-      speed: 0.2 + Math.random() * 0.4,
-      size: 0.1 + Math.random() * 0.2,
-      wobble: Math.random() * Math.PI * 2,
-      wobbleSpeed: 0.5 + Math.random() * 1,
-      phase: Math.random() * 5,
-      rotationSpeed: (Math.random() - 0.5) * 0.1
+
+    return Array.from({ length: Math.floor(counts) }, (_, i) => ({
+      x: stableRange(`${intensity}-smoke-x`, i, -0.2, 0.2),
+      z: stableRange(`${intensity}-smoke-z`, i, -0.2, 0.2),
+      speed: stableRange(`${intensity}-smoke-speed`, i, 0.2, 0.6),
+      size: stableRange(`${intensity}-smoke-size`, i, 0.1, 0.3),
+      wobble: stableRange(`${intensity}-smoke-wobble`, i, 0, Math.PI * 2),
+      wobbleSpeed: stableRange(`${intensity}-smoke-wobble-speed`, i, 0.5, 1.5),
+      phase: stableRange(`${intensity}-smoke-phase`, i, 0, 5),
+      rotationSpeed: stableRange(`${intensity}-smoke-rotation`, i, -0.05, 0.05),
     }));
   }, [intensity]);
 
@@ -27,32 +29,21 @@ const SmokeParticles = ({ active = false, color = '#ffffff', intensity = 'medium
     const t = performance.now() * 0.001;
 
     smokeParticles.forEach((p, i) => {
-      // Bay lên và tan biến
-      const cycle = ((t * p.speed + p.phase) % 2.0); // 0 -> 2.0 loop
-      const y = cycle * 1.5 + 0.5; // Bay lên từ cốc
-
+      const cycle = (t * p.speed + p.phase) % 2;
+      const y = cycle * 1.5 + 0.5;
       const xOffset = Math.sin(t * p.wobbleSpeed + p.wobble) * 0.2 * cycle;
       const zOffset = Math.cos(t * p.wobbleSpeed + p.wobble) * 0.2 * cycle;
 
       dummy.position.set(p.x + xOffset, y, p.z + zOffset);
       dummy.rotation.set(t * p.rotationSpeed, t * p.rotationSpeed, t * p.rotationSpeed);
 
-      // Scale: to dần khi bay lên
-      const lifeRatio = cycle / 2.0;
-      const scale = p.size * (1 + lifeRatio * 2) * 8;
+      const lifeRatio = cycle / 2;
+      const baseScale = p.size * (1 + lifeRatio * 2) * 8;
+      const scale = lifeRatio > 0.8 ? baseScale * (1 - (lifeRatio - 0.8) * 5) : baseScale;
 
       dummy.scale.setScalar(scale);
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
-      
-      // Mờ dần theo độ cao
-      // Note: instancedMesh doesn't support per-instance opacity easily without special shader
-      // but we can use scale to "disappear"
-      if (lifeRatio > 0.8) {
-          dummy.scale.setScalar(scale * (1 - (lifeRatio - 0.8) * 5));
-          dummy.updateMatrix();
-          meshRef.current.setMatrixAt(i, dummy.matrix);
-      }
     });
 
     meshRef.current.instanceMatrix.needsUpdate = true;

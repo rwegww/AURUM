@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import multiavatar from '@multiavatar/multiavatar/esm';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
+import { stableRange } from '@/utils/stableRandom';
 
 // ─── AVATAR DATA ──────────────────────────────────────────────────────────────
 // Preset avatar seeds for quick selection
@@ -33,6 +34,16 @@ const AURA_COLORS = [
   '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b',
   '#ec4899', '#3b82f6', '#eab308', '#ef4444',
 ];
+
+const FLOATING_PARTICLES = Array.from({ length: 25 }, (_, i) => ({
+  width: stableRange('arena-particle-width', i, 1, 4),
+  height: stableRange('arena-particle-height', i, 1, 4),
+  left: stableRange('arena-particle-left', i, 0, 100),
+  top: stableRange('arena-particle-top', i, 0, 100),
+  x: stableRange('arena-particle-x', i, -10, 10),
+  duration: stableRange('arena-particle-duration', i, 5, 10),
+  delay: stableRange('arena-particle-delay', i, 0, 5),
+}));
 
 const MODERN_STYLES = {
   glass: "bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.04)]",
@@ -64,28 +75,28 @@ const getRank = (t, pts = 0) => {
 // ─── FLOATING PARTICLES ───────────────────────────────────────────────────────
 const Particles = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {Array.from({ length: 25 }).map((_, i) => (
+    {FLOATING_PARTICLES.map((particle, i) => (
       <motion.div
         key={i}
         className="absolute rounded-full"
         style={{
-          width: Math.random() * 3 + 1,
-          height: Math.random() * 3 + 1,
+          width: particle.width,
+          height: particle.height,
           background: AURA_COLORS[i % AURA_COLORS.length],
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
+          left: `${particle.left}%`,
+          top: `${particle.top}%`,
           opacity: 0.1,
         }}
         animate={{ 
           y: [0, -30, 0], 
-          x: [0, Math.random() * 20 - 10, 0],
+          x: [0, particle.x, 0],
           opacity: [0.05, 0.15, 0.05] 
         }}
         transition={{ 
-          duration: 5 + Math.random() * 5, 
+          duration: particle.duration,
           repeat: Infinity, 
           ease: "linear",
-          delay: Math.random() * 5 
+          delay: particle.delay
         }}
       />
     ))}
@@ -93,21 +104,15 @@ const Particles = () => (
 );
 
 // ─── CHARACTER PANEL ──────────────────────────────────────────────────────────
-const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, setAvatarSeed }) => {
+const CharacterPanel = ({ user, avatarSeed, setAvatarSeed }) => {
   const { t } = useTranslation();
   const AVATAR_PRESETS = getAvatarPresets(t);
   const displayName = user?.username || user?.full_name || t('common.guest', { defaultValue: 'Khách' });
-  const [customInput, setCustomInput] = useState('');
   const [showMore, setShowMore] = useState(false);
 
   const currentSeed = avatarSeed || displayName;
   const currentAvatarUrl = useMemo(() => getSvgDataUrl(currentSeed), [currentSeed]);
   const visiblePresets = showMore ? AVATAR_PRESETS : AVATAR_PRESETS.slice(0, 8);
-
-  const applyCustomSeed = () => {
-    const trimmed = customInput.trim();
-    if (trimmed) setAvatarSeed(trimmed);
-  };
 
   return (
     <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="flex flex-col gap-6">
@@ -161,7 +166,6 @@ const CharacterPanel = ({ user, selectedAvatar, setSelectedAvatar, avatarSeed, s
         onClick={() => { 
           const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; 
           setAvatarSeed(randomPreset.seed); 
-          setSelectedAvatar(0); 
         }} 
         className={`w-full py-5 ${MODERN_STYLES.radius} bg-white border border-black/[0.05] text-[11px] font-black uppercase tracking-widest text-viet-text shadow-sm transition-all flex items-center justify-center gap-3`}
       >
@@ -344,7 +348,7 @@ const StatsPanel = ({ user }) => {
 
 
 // ─── CENTER ACTION PANEL ───────────────────────────────────────────────────────
-const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser, selectedAvatar }) => {
+const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => {
   const { t } = useTranslation();
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
@@ -727,6 +731,11 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const [isWaiting, setIsWaiting] = useState(true);
   const [currentPlayers, setCurrentPlayers] = useState(room.current_players || 1);
   const correctCountRef = useRef(0);
+  const timeLeftRef = useRef(30);
+
+  useEffect(() => {
+    timeLeftRef.current = timeLeft;
+  }, [timeLeft]);
 
   useEffect(() => {
     if (!isWaiting) return;
@@ -739,7 +748,9 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
           setCurrentPlayers(data.room.current_players);
           if (data.room.current_players >= expectedMax) setIsWaiting(false);
         }
-      } catch (err) {}
+      } catch (err) {
+        // Keep polling; transient room lookups can fail while waiting for players.
+      }
     }, 3000);
     return () => clearInterval(interval);
   }, [isWaiting, room.id, room.mode, room.max_players]);
@@ -750,31 +761,23 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
       try {
         const data = await apiCall(`/api/arena/questions/${room.difficulty || 'easy'}`);
         if (data.success && data.questions.length > 0) setQuestions(data.questions);
-      } catch (e) {} finally { setLoadingQ(false); }
+      } catch (e) {
+        // Leave loading state clean; the room can be retried by leaving and rejoining.
+      } finally { setLoadingQ(false); }
     };
     fetchQ();
   }, [room.difficulty]);
 
-  useEffect(() => {
-    if (isWaiting || answered !== null || gameOver || questions.length === 0 || loadingQ) return;
-    const timer = setInterval(() => {
-      setTimeLeft(p => {
-        if (p <= 1) { clearInterval(timer); handleAnswer(-1); return 0; }
-        return p - 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [isWaiting, currentQIndex, answered, gameOver, questions.length, loadingQ]);
-
   const currentQ = questions[currentQIndex];
 
-  const handleAnswer = (i) => {
+  const handleAnswer = useCallback((i) => {
     if (answered !== null || !currentQ) return;
     setAnswered(i);
+    const remainingTime = timeLeftRef.current;
     const isCorrect = i === currentQ.correct;
     if (isCorrect) {
       correctCountRef.current += 1;
-      setScore(s => s + Math.max(100, timeLeft * 10));
+      setScore(s => s + Math.max(100, remainingTime * 10));
     }
     setTimeout(() => {
       const nextIdx = currentQIndex + 1;
@@ -785,10 +788,21 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
       } else {
         const result = correctCountRef.current >= Math.ceil(questions.length / 2) ? 'win' : 'lose';
         setGameOver(true);
-        onMatchEnd?.({ result, score: score + (isCorrect ? Math.max(100, timeLeft * 10) : 0), room_id: room.id });
+        onMatchEnd?.({ result, score: score + (isCorrect ? Math.max(100, remainingTime * 10) : 0), room_id: room.id });
       }
     }, 1500);
-  };
+  }, [answered, currentQ, currentQIndex, onMatchEnd, questions.length, room.id, score]);
+
+  useEffect(() => {
+    if (isWaiting || answered !== null || gameOver || questions.length === 0 || loadingQ) return;
+    const timer = setInterval(() => {
+      setTimeLeft(p => {
+        if (p <= 1) { clearInterval(timer); handleAnswer(-1); return 0; }
+        return p - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [answered, currentQIndex, gameOver, handleAnswer, isWaiting, loadingQ, questions.length]);
 
   const timerPct = (timeLeft / 30) * 100;
 
@@ -1077,16 +1091,10 @@ const ModeratorDashboard = ({ room, onLeave }) => {
 const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => {
   const { t } = useTranslation();
   const AVATAR_PRESETS = getAvatarPresets(t);
-  const [selectedAvatar, setSelectedAvatar] = useState(0);
   const [avatarSeed, setAvatarSeed] = useState(
     user?.arenaAvatar?.seed || AVATAR_PRESETS[0].seed
   );
   const saveTimerRef = useRef(null);
-
-  // Sync from user when profile loads
-  useEffect(() => {
-    if (user?.arenaAvatar?.seed) setAvatarSeed(user.arenaAvatar.seed);
-  }, [user?.id]);
 
   // Auto-save avatar to DB with 1.5s debounce
   useEffect(() => {
@@ -1114,8 +1122,6 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
         {/* Left: Character */}
         <CharacterPanel
           user={user}
-          selectedAvatar={selectedAvatar}
-          setSelectedAvatar={setSelectedAvatar}
           avatarSeed={avatarSeed}
           setAvatarSeed={setAvatarSeed}
         />
@@ -1127,7 +1133,6 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
           onCreateRoom={onCreateRoom}
           onJoinRoom={onJoinRoom}
           onOpenBrowser={onOpenBrowser}
-          selectedAvatar={selectedAvatar}
         />
 
         {/* Right: Stats */}
@@ -1210,6 +1215,7 @@ const MatchResultScreen = ({ result, score, ptsChange, onClose }) => {
 // ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 const Arena = () => {
   const { user, refreshUser } = useAuth();
+  const { t } = useTranslation();
   const [activeRoom, setActiveRoom] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isBrowserOpen, setIsBrowserOpen] = useState(false);
@@ -1254,20 +1260,16 @@ const Arena = () => {
   };
 
   // ── Smart Find Match (Polling until someone creates a room)
-  const [searchModeParams, setSearchModeParams] = useState(null);
-
   const handleFindMatch = (modeParam) => {
     if (isSearchingMatch) {
       // Hủy tìm
       clearInterval(searchInterval.current);
       searchInterval.current = null;
       setIsSearchingMatch(false);
-      setSearchModeParams(null);
       return;
     }
 
     setIsSearchingMatch(true);
-    setSearchModeParams(modeParam);
 
     const checkMatch = async () => {
       try {
@@ -1278,7 +1280,6 @@ const Arena = () => {
         });
         if (data.found) {
           setIsSearchingMatch(false);
-          setSearchModeParams(null);
           if (searchInterval.current) {
             clearInterval(searchInterval.current);
             searchInterval.current = null;
@@ -1411,6 +1412,7 @@ const Arena = () => {
       </AnimatePresence>
 
       <ArenaLobby
+        key={user?.id || 'guest'}
         user={user}
         onFindMatch={handleFindMatch}
         isSearching={isSearchingMatch}

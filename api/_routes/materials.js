@@ -1,6 +1,6 @@
 import express from 'express';
 import { supabase } from '../lib/supabase.js';
-import User from '../models/User.js';
+import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
@@ -50,12 +50,13 @@ router.get('/:id', async (req, res) => {
 });
 
 // 3. Post Feedback for a Material
-router.post('/:id/feedback', async (req, res) => {
+router.post('/:id/feedback', auth, async (req, res) => {
   try {
     const { id: material_id } = req.params;
-    const { content, rating, userId } = req.body;
+    const { content, rating } = req.body;
 
-    if (!content || !rating) {
+    const normalizedRating = Number(rating);
+    if (!content || !Number.isFinite(normalizedRating) || normalizedRating < 1 || normalizedRating > 5) {
       return res.status(400).json({ message: 'Thiếu nội dung hoặc đánh giá' });
     }
 
@@ -63,9 +64,9 @@ router.post('/:id/feedback', async (req, res) => {
       .from('material_feedback')
       .insert([{
         material_id,
-        user_id: userId,
+        user_id: req.user.id,
         content,
-        rating
+        rating: normalizedRating
       }])
       .select();
 

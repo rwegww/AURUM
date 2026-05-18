@@ -1,6 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
+import { stableRange } from '@/utils/stableRandom';
 
 const BUBBLE_COUNT = 25;
 
@@ -9,14 +10,14 @@ const BubbleParticles = ({ active = false }) => {
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const bubbles = useMemo(() => {
-    return Array.from({ length: BUBBLE_COUNT }, () => ({
-      x: (Math.random() - 0.5) * 0.7,
-      z: (Math.random() - 0.5) * 0.7,
-      speed: 0.3 + Math.random() * 0.6,
-      size: 0.015 + Math.random() * 0.03,
-      wobble: Math.random() * Math.PI * 2,
-      wobbleSpeed: 1 + Math.random() * 2,
-      phase: Math.random() * 3 // Offset thời gian để bọt không xuất hiện cùng lúc
+    return Array.from({ length: BUBBLE_COUNT }, (_, i) => ({
+      x: stableRange('bubble-x', i, -0.35, 0.35),
+      z: stableRange('bubble-z', i, -0.35, 0.35),
+      speed: stableRange('bubble-speed', i, 0.3, 0.9),
+      size: stableRange('bubble-size', i, 0.015, 0.045),
+      wobble: stableRange('bubble-wobble', i, 0, Math.PI * 2),
+      wobbleSpeed: stableRange('bubble-wobble-speed', i, 1, 3),
+      phase: stableRange('bubble-phase', i, 0, 3),
     }));
   }, []);
 
@@ -25,16 +26,12 @@ const BubbleParticles = ({ active = false }) => {
     const t = performance.now() * 0.001;
 
     bubbles.forEach((b, i) => {
-      // Bay lên theo chu kỳ
-      const cycle = ((t * b.speed + b.phase) % 1.2); // 0 -> 1.2 loop
-      const y = cycle * 0.8 + 0.05; // Từ đáy cốc bay lên
-
-      // Wobble ngang
+      const cycle = (t * b.speed + b.phase) % 1.2;
+      const y = cycle * 0.8 + 0.05;
       const xOffset = Math.sin(t * b.wobbleSpeed + b.wobble) * 0.05;
 
       dummy.position.set(b.x + xOffset, y, b.z);
 
-      // Scale: to dần rồi nhỏ lại khi vỡ
       const lifeRatio = cycle / 1.2;
       const scale = lifeRatio < 0.8
         ? b.size * (0.5 + lifeRatio * 0.8) * 12

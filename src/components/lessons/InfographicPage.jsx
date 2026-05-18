@@ -2,10 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'single' }) => {
+  const [imageError, setImageError] = React.useState(false);
+
   if (!lesson) return null;
 
   const imagePath = `/assets/curriculum/class${lesson.classId}/${lesson.classId}-${lesson.order}.png`;
-  const [imageError, setImageError] = React.useState(false);
 
   // Dynamic styles based on which side of the book spread this page is on
   let sideClasses = 'rounded-[32px] md:rounded-[40px] border border-viet-border/20 px-4 md:px-8';

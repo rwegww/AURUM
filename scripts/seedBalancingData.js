@@ -78,7 +78,9 @@ function addQuestion(reactants, products, category, grade, max = 10) {
       });
       seenEquations.add(eq);
     }
-  } catch (e) {}
+  } catch (_e) {
+    // Skip malformed equations and keep generating the seed dataset.
+  }
 }
 
 console.log('🏗️ Building massive 10,000 rows database...');

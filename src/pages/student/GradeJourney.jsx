@@ -419,7 +419,7 @@ const GradeJourney = () => {
                         <div className="flex items-center gap-3 mt-auto">
                           <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Tiến độ:</span>
                           <div className="flex gap-1.5 h-2.5 w-32 bg-slate-100 p-0.5 rounded-full border border-slate-200/50">
-                            {['level1', 'level2', 'level3'].map((lvl, i) => {
+                            {['level1', 'level2', 'level3'].map((lvl) => {
                               const starsCount = lessonStars[lvl] || 0;
                               return (
                                 <div 

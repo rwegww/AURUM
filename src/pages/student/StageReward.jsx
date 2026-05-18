@@ -17,7 +17,6 @@ const StageReward = () => {
     if (lessonId && lesson) {
       // Gain XP and Gems from game settings
       const xp = lesson.game?.rewardXp || 100;
-      const gems = lesson.game?.rewardGems || 10;
       updateProgress(xp, lessonId, true);
       // Optional: Update gems if updateProgress supports it or create another service
     }

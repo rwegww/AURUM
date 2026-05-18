@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
 import { CORE_KNOWLEDGE_LESSONS } from '@/data/coreKnowledge';
 import { Link, useNavigate } from 'react-router-dom';
@@ -18,7 +17,6 @@ const GRADE_THEME = {
 };
 
 const KnowledgeMap = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
 

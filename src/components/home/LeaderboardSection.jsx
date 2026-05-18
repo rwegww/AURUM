@@ -3,15 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
+import { stableRange } from '@/utils/stableRandom';
 
-const ChemistrySpark = ({ delay }) => (
+const ChemistrySpark = ({ delay, index }) => (
   <motion.div
     initial={{ opacity: 0, scale: 0 }}
     animate={{ 
       opacity: [0, 0.6, 0], 
       scale: [0.5, 1, 0.5],
       y: [-20, -100],
-      x: [0, Math.random() * 40 - 20]
+      x: [0, stableRange('leaderboard-spark-x', index, -20, 20)]
     }}
     transition={{ duration: 4, repeat: Infinity, delay, ease: "linear" }}
     className="absolute text-viet-green/30 pointer-events-none"
@@ -27,7 +28,7 @@ const FloatingIsland = ({ rank, user, delay }) => {
   const { t } = useTranslation();
   const isFirst = rank === 1;
   const isSecond = rank === 2;
-  const isThird = rank === 3;
+  const isOnline = Boolean(user?.isOnline || user?.computedIsOnline);
 
   const yOffset = isFirst ? -80 : isSecond ? -30 : 0;
   
@@ -51,7 +52,7 @@ const FloatingIsland = ({ rank, user, delay }) => {
       <div className="relative mb-6 z-10">
         <motion.div 
           animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 3 + Math.random(), repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: stableRange('leaderboard-island-duration', rank, 3, 4), repeat: Infinity, ease: "easeInOut" }}
           className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl bg-white shadow-2xl border-4 ${isFirst ? 'border-amber-400 shadow-amber-200/50' : 'border-white shadow-slate-200/50'} overflow-hidden relative p-1`}
         >
           <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center p-2">
@@ -122,7 +123,7 @@ const FloatingIsland = ({ rank, user, delay }) => {
               <span className="text-[12px] font-black text-viet-green">{user?.level || 1}</span>
            </div>
            {/* Online Status Dot */}
-           <div className={`w-2 h-2 rounded-full ${user?.isOnline || (user?.lastActiveAt && new Date(user.lastActiveAt) > new Date(Date.now() - 5*60*1000)) ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={user?.isOnline ? t('home.leaderboard.online') : t('home.leaderboard.offline')}></div>
+           <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={isOnline ? t('home.leaderboard.online') : t('home.leaderboard.offline')}></div>
         </div>
         {user?.activeMinutes > 0 && (
           <p className="text-[9px] font-bold text-viet-text-light/40 uppercase tracking-widest mt-2">
@@ -144,7 +145,16 @@ const LeaderboardSection = () => {
       try {
         const res = await fetch('/api/user/leaderboard');
         const data = await res.json();
-        if (Array.isArray(data)) setLeaders(data);
+        if (Array.isArray(data)) {
+          const now = Date.now();
+          setLeaders(data.map(user => ({
+            ...user,
+            computedIsOnline: Boolean(
+              user?.isOnline ||
+              (user?.lastActiveAt && new Date(user.lastActiveAt).getTime() > now - 5 * 60 * 1000)
+            ),
+          })));
+        }
       } catch (err) {
         console.error('Leaderboard fetch error:', err);
       } finally {
@@ -169,7 +179,7 @@ const LeaderboardSection = () => {
         {/* Floating Sparks */}
         {[...Array(6)].map((_, i) => (
           <div key={i} className="absolute" style={{ left: `${15 + i * 15}%`, top: `${70 + (i % 3) * 10}%` }}>
-            <ChemistrySpark delay={i * 0.7} />
+            <ChemistrySpark delay={i * 0.7} index={i} />
           </div>
         ))}
         
@@ -219,7 +229,7 @@ const LeaderboardSection = () => {
           <AnimatePresence>
             {others.map((u, idx) => {
               const rank = idx + 4;
-              const isOnline = u.isOnline || (u.lastActiveAt && new Date(u.lastActiveAt) > new Date(Date.now() - 5*60*1000));
+              const isOnline = Boolean(u.isOnline || u.computedIsOnline);
               const xpProgress = Math.min((u.xp % 1000) / 10, 100);
               
               return (

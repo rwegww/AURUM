@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
 const DiscussionBoard = ({ lessonId }) => {
-  const { user, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const [activeTab, setActiveTab] = useState('notes'); // 'notes' or 'qna'
   const [comments, setComments] = useState([]);
   const [noteContent, setNoteContent] = useState('');
@@ -21,14 +21,7 @@ const DiscussionBoard = ({ lessonId }) => {
     }
   };
 
-  useEffect(() => {
-    if (lessonId) {
-      if (activeTab === 'qna') fetchComments();
-      if (activeTab === 'notes' && isLoggedIn) fetchNote();
-    }
-  }, [lessonId, activeTab, isLoggedIn]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/discussions/${lessonId}`);
@@ -45,9 +38,9 @@ const DiscussionBoard = ({ lessonId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lessonId]);
 
-  const fetchNote = async () => {
+  const fetchNote = useCallback(async () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
@@ -61,7 +54,14 @@ const DiscussionBoard = ({ lessonId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lessonId]);
+
+  useEffect(() => {
+    if (lessonId) {
+      if (activeTab === 'qna') fetchComments();
+      if (activeTab === 'notes' && isLoggedIn) fetchNote();
+    }
+  }, [activeTab, fetchComments, fetchNote, isLoggedIn, lessonId]);
 
   const saveNote = async () => {
     if (!isLoggedIn) return;

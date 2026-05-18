@@ -55,7 +55,7 @@ export const COMMON_ION_MAP = {
 
 export const VALENCY_MAP = {
   H: 'I', He: '0', Li: 'I', Be: 'II', B: 'III', C: 'II, IV', N: 'II, III, IV, V', O: 'II', F: 'I',
-  Na: 'I', Mg: 'II', Al: 'III', Si: 'IV', P: 'III, V', S: 'II, IV, VI', Cl: 'I, III, V, VII', Ar: '0',
+  Na: 'I', Mg: 'II', Al: 'III', Si: 'IV', P: 'III, V', S: 'II, IV, VI', Cl: 'I, III, V, VII',
   K: 'I', Ca: 'II', Sc: 'III', Ti: 'II, III, IV', V: 'II, III, IV, V', Cr: 'II, III, VI', Mn: 'II, IV, VII',
   Fe: 'II, III', Co: 'II, III', Ni: 'II, III', Cu: 'I, II', Zn: 'II', Br: 'I, III, V, VII', Ag: 'I',
   Sr: 'II', Sn: 'II, IV', I: 'I, III, V, VII', Ba: 'II', Pb: 'II, IV',
@@ -78,9 +78,7 @@ export const OXIDATION_STATE_MAP = {
   Cu: ['+1', '+2'],
   Mn: ['+2', '+4', '+6', '+7'],
   Cr: ['+2', '+3', '+6'],
-  Na: ['+1'], Mg: ['+2'], Al: ['+3'],
-  Cl: ['-1', '+1', '+3', '+5', '+7'],
-  Br: ['-1', '+1', '+3', '+5', '+7']
+  Na: ['+1'], Mg: ['+2'], Al: ['+3']
 };
 
 export const CHEMISTRY_KNOWLEDGE_BASE = [

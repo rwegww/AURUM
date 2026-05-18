@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { molecules, bondTypeLabels, elementColors, elementRadii } from '../../data/molecules';
+import { molecules, elementColors, elementRadii } from '../../data/molecules';
 import { useAuth } from '@/context/AuthContext';
 
 const normalize = (f) => {
@@ -17,7 +17,6 @@ const MoleculeViewer = () => {
   const [selectedMolecule, setSelectedMolecule] = useState(null);
   const [viewMode, setViewMode] = useState('ball-stick'); // 'ball-stick' or 'space-fill'
   const [showLabels, setShowLabels] = useState(true);
-  const [showBondInfo, setShowBondInfo] = useState(true);
   const [hoveredAtom, setHoveredAtom] = useState(null);
   const [filterCategory, setFilterCategory] = useState('all');
   const [zoom, setZoom] = useState(1.5);
@@ -130,7 +129,7 @@ const MoleculeViewer = () => {
     if (synchronizedMolecules.length > 0 && !selectedMolecule) {
         setSelectedMolecule(synchronizedMolecules[0]);
     }
-  }, [synchronizedMolecules]);
+  }, [selectedMolecule, synchronizedMolecules]);
 
   const categories = useMemo(() => {
     const cats = new Set(synchronizedMolecules.map(m => m.category));
@@ -488,25 +487,6 @@ const MoleculeViewer = () => {
       </div>
     </div>
   );
-};
-
-// Utilities
-const lightenColor = (hex, percent) => {
-  const num = parseInt(hex.replace('#', ''), 16);
-  const amt = Math.round(2.55 * percent);
-  const R = Math.min(255, (num >> 16) + amt);
-  const G = Math.min(255, ((num >> 8) & 0x00FF) + amt);
-  const B = Math.min(255, (num & 0x0000FF) + amt);
-  return `rgb(${R},${G},${B})`;
-};
-
-const darkenColor = (hex, percent) => {
-  const num = parseInt(hex.replace('#', ''), 16);
-  const amt = Math.round(2.55 * percent);
-  const R = Math.max(0, (num >> 16) - amt);
-  const G = Math.max(0, ((num >> 8) & 0x00FF) - amt);
-  const B = Math.max(0, (num & 0x0000FF) - amt);
-  return `rgb(${R},${G},${B})`;
 };
 
 export default MoleculeViewer;

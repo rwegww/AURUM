@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { stableRange } from '@/utils/stableRandom';
 
-const Particle = ({ delay, x, y, size, color }) => (
+const Particle = ({ delay, duration, x, y, size, color }) => (
   <motion.div
     initial={{ x: `${x}%`, y: `${y}%`, opacity: 0.1, scale: 0.5 }}
     animate={{ 
@@ -11,7 +12,7 @@ const Particle = ({ delay, x, y, size, color }) => (
       scale: [0.5, 0.8, 0.5]
     }}
     transition={{ 
-      duration: 10 + Math.random() * 10, 
+      duration,
       repeat: Infinity, 
       delay,
       ease: "easeInOut" 
@@ -39,7 +40,7 @@ const MoleculeBackground = () => {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-viet-bg/50">
       {particles.map((p, i) => (
-        <Particle key={i} {...p} />
+        <Particle key={i} duration={stableRange('molecule-bg-duration', i, 10, 20)} {...p} />
       ))}
       
       {/* Subtle Grid Pattern */}

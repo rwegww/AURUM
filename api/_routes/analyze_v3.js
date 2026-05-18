@@ -17,7 +17,7 @@ const teacherOrAdmin = async (req, res, next) => {
     if (!authHeader) return res.status(401).json({ message: 'Không tìm thấy mã xác thực' });
 
     const token = authHeader.replace('Bearer ', '');
-    const { data, error: sbError } = await supabase.auth.getUser(token);
+    const { data } = await supabase.auth.getUser(token);
     const sbUser = data?.user;
     
     let userId = sbUser?.id;
@@ -25,7 +25,7 @@ const teacherOrAdmin = async (req, res, next) => {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             userId = decoded.id;
-        } catch (err) {
+        } catch (_err) {
             return res.status(401).json({ message: 'Mã xác thực không hợp lệ' });
         }
     }
@@ -110,13 +110,13 @@ function parseQuestions(text) {
 
     // Extract options
     const options = [];
-    const optionMatches = block.matchAll(/([A-D])[\.:)]\s*([\s\S]*?)(?=\s*[A-D][\.:)]|(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?)|$)/gi);
+    const optionMatches = block.matchAll(/([A-D])[.:)]\s*([\s\S]*?)(?=\s*[A-D][.:)]|(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?)|$)/gi);
     for (const m of optionMatches) {
         options.push(m[2].trim());
     }
 
     // Extract text
-    const questionMatch = block.match(/^(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-])\s*([\s\S]*?)(?=\s*[A-D][\.:)]|$)/i);
+    const questionMatch = block.match(/^(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-])\s*([\s\S]*?)(?=\s*[A-D][.:)]|$)/i);
     let questionText = '';
     if (questionMatch) {
         questionText = questionMatch[1].trim();
@@ -161,7 +161,7 @@ function parseQuestions(text) {
   }
 
   if (keyText) {
-    const keyMatches = keyText.matchAll(/(\d+)[\s.:\-\/]*([A-D])/gi);
+    const keyMatches = keyText.matchAll(/(\d+)[\s.:\-/]*([A-D])/gi);
     for (const match of keyMatches) {
         const qNum = parseInt(match[1]) - 1;
         const letter = match[2].toUpperCase();

@@ -1,7 +1,6 @@
+import './env.js';
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-import { supabase } from './lib/supabase.js';
 
 // Route Imports
 import authRouter from './_routes/auth.js';
@@ -16,12 +15,24 @@ import missionsRouter from './_routes/missions.js';
 import classesRouter from './_routes/classes.js';
 import discussionsRouter from './_routes/discussions.js';
 
-dotenv.config({ path: ['.env.local', '.env'] });
-
 const app = express();
 
 // Middleware
-app.use(cors());
+const configuredOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+  'https://chem-aurum.vercel.app',
+  ...(process.env.CORS_ORIGINS || '').split(','),
+].filter(Boolean).map((origin) => origin.trim());
+
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || process.env.NODE_ENV !== 'production' || configuredOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+}));
 app.use(express.json());
 
 // API Routes Mounting
@@ -71,6 +82,9 @@ app.get('/api/health', (req, res) => {
 
 // Diagnostic route for environment variables (Masked for security)
 app.get('/api/debug-env', (req, res) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Endpoint not found' });
+  }
   const mask = (str) => str ? `${str.substring(0, 4)}...${str.substring(str.length - 4)}` : 'MISSING';
   res.json({
     status: 'Operational',
@@ -99,13 +113,16 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-// Global Error Handler — always show error details for debugging
-app.use((err, req, res, next) => {
+// Global Error Handler
+app.use((err, req, res, _next) => {
   console.error('❌ Server Error:', err);
+  const showDetails = process.env.NODE_ENV !== 'production';
   res.status(500).json({ 
     message: 'Internal Server Error', 
-    error: err.message,
-    type: err.type || err.constructor?.name
+    ...(showDetails ? {
+      error: err.message,
+      type: err.type || err.constructor?.name
+    } : {})
   });
 });
 

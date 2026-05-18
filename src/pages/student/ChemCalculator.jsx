@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CHEM_FORMULAS, QUICK_FORMULAS, UNIT_CONVERSIONS } from '@/data/chemFormulas';
@@ -43,16 +43,6 @@ const ChemCalculator = () => {
   const [showQuickRef, setShowQuickRef] = useState(false);
 
   const groupData = CHEM_FORMULAS[selectedGroup];
-
-  const findFormulaById = useCallback((id) => {
-    for (const group of Object.values(CHEM_FORMULAS)) {
-      for (const cat of group.categories) {
-        const found = cat.formulas.find(f => f.id === id);
-        if (found) return found;
-      }
-    }
-    return null;
-  }, []);
 
   const handleSelectFormula = (formula) => {
     setSelectedFormula(formula);

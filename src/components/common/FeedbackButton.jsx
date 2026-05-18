@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const FeedbackButton = () => {
@@ -10,7 +9,6 @@ const FeedbackButton = () => {
   const [imageFile, setImageFile] = useState(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
-  const { isLoggedIn } = useAuth();
 
   const handlePaste = (e) => {
     const items = e.clipboardData?.items;

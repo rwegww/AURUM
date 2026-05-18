@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const AssignmentManager = () => {
-    const { user } = useAuth();
     const [assignments, setAssignments] = useState([]);
     const [classes, setClasses] = useState([]);
-    const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [viewingSubmissions, setViewingSubmissions] = useState(null);
@@ -45,15 +42,13 @@ const AssignmentManager = () => {
     const fetchInitialData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const [aRes, cRes, lRes] = await Promise.all([
+            const [aRes, cRes] = await Promise.all([
                 fetch('/api/classes/assignments/all', { headers: { 'Authorization': `Bearer ${token}` }}),
-                fetch('/api/classes', { headers: { 'Authorization': `Bearer ${token}` }}),
-                fetch('/api/lessons', { headers: { 'Authorization': `Bearer ${token}` }})
+                fetch('/api/classes', { headers: { 'Authorization': `Bearer ${token}` }})
             ]);
 
             if (aRes.ok) setAssignments(await aRes.json());
             if (cRes.ok) setClasses(await cRes.json());
-            if (lRes.ok) setLessons(await lRes.json());
         } catch (err) {
             console.error(err);
         } finally {
