@@ -133,6 +133,20 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   app.listen(PORT, '127.0.0.1', () => {
     console.log(`🚀 Aurum API running on http://127.0.0.1:${PORT}`);
     console.log(`🔗 Health Check: http://127.0.0.1:${PORT}/api/health`);
+    
+    // Local Cron Simulation (runs every 60 seconds to dispatch reminders automatically)
+    console.log('⏰ Local Cron Simulation started (checks every 60 seconds).');
+    setInterval(async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:${PORT}/api/user/cron-send-reminders`);
+        const result = await response.json();
+        if (result.details && result.details.length > 0) {
+          console.log('[Local Cron] Simulation run completed:', result.message);
+        }
+      } catch (err) {
+        console.error('[Local Cron] Simulation failed to ping route:', err.message);
+      }
+    }, 60000);
   });
 }
 
