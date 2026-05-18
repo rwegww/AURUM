@@ -524,4 +524,154 @@ router.delete('/assignments/:postId', auth, async (req, res) => {
   }
 });
 
+// GET /teacher/notifications - Fetch notifications for classes managed by this teacher
+router.get('/teacher/notifications', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Chỉ dành cho giáo viên và quản trị viên' });
+    }
+
+    // 1. Get all class IDs for this teacher
+    const { data: classes, error: classErr } = await supabase
+      .from('classes')
+      .select('id, name')
+      .eq('teacher_id', userId);
+
+    if (classErr) throw classErr;
+    if (!classes || classes.length === 0) {
+      return res.json([]);
+    }
+
+    const classIds = classes.map(c => c.id);
+    const classMap = {};
+    classes.forEach(c => {
+      classMap[c.id] = c.name;
+    });
+
+    // 2. Fetch new student joins
+    const { data: newMembers, error: memErr } = await supabase
+      .from('class_members')
+      .select('class_id, student_id, joined_at, student:student_id(username)')
+      .in('class_id', classIds)
+      .order('joined_at', { ascending: false })
+      .limit(15);
+
+    if (memErr) throw memErr;
+
+    // 3. Fetch student messages (posts that are not from this teacher)
+    const { data: posts, error: msgErr } = await supabase
+      .from('class_posts')
+      .select('id, class_id, content, type, created_at, author:author_id(username)')
+      .in('class_id', classIds)
+      .neq('author_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(15);
+
+    if (msgErr) throw msgErr;
+
+    // 4. Fetch homework submissions
+    const { data: assignments, error: assignErr } = await supabase
+      .from('class_posts')
+      .select('id, content, class_id')
+      .in('class_id', classIds)
+      .eq('type', 'assignment');
+
+    if (assignErr) throw assignErr;
+
+    let submissions = [];
+    if (assignments && assignments.length > 0) {
+      const assignmentIds = assignments.map(a => a.id);
+      const assignmentMap = {};
+      assignments.forEach(a => {
+        assignmentMap[a.id] = a;
+      });
+
+      const { data: subs, error: subErr } = await supabase
+        .from('class_assignment_submissions')
+        .select('post_id, student_id, submitted_at, student:student_id(username)')
+        .in('post_id', assignmentIds)
+        .order('submitted_at', { ascending: false })
+        .limit(15);
+
+      if (subErr) throw subErr;
+
+      submissions = (subs || []).map(s => {
+        const assign = assignmentMap[s.post_id];
+        return {
+          id: `sub-${s.post_id}-${s.student_id}-${new Date(s.submitted_at).getTime()}`,
+          type: 'submission',
+          title: 'Học sinh nộp bài tập',
+          message: `Học sinh ${s.student?.username || 'Học sinh'} đã nộp bài tập: "${assign?.content?.substring(0, 30) || 'Bài tập'}${assign?.content?.length > 30 ? '...' : ''}"`,
+          timestamp: s.submitted_at,
+          link: '/teacher/assignments'
+        };
+      });
+    }
+
+    // 5. Fetch near-deadline assignments (within 48 hours)
+    const now = new Date();
+    const fortyEightHoursLater = new Date(now.getTime() + 48 * 60 * 60 * 1000);
+    const { data: nearDue, error: dueErr } = await supabase
+      .from('class_posts')
+      .select('id, class_id, content, deadline')
+      .in('class_id', classIds)
+      .eq('type', 'assignment')
+      .gt('deadline', now.toISOString())
+      .lt('deadline', fortyEightHoursLater.toISOString())
+      .limit(5);
+
+    if (dueErr) throw dueErr;
+
+    // Combine notifications
+    const notifications = [];
+
+    // Add student joins
+    (newMembers || []).forEach(m => {
+      notifications.push({
+        id: `join-${m.class_id}-${m.student_id}-${new Date(m.joined_at).getTime()}`,
+        type: 'student_join',
+        title: 'Học sinh mới tham gia lớp',
+        message: `Học sinh ${m.student?.username || 'Học sinh'} đã tham gia lớp "${classMap[m.class_id]}"`,
+        timestamp: m.joined_at,
+        link: `/teacher/classes/${m.class_id}`
+      });
+    });
+
+    // Add student messages
+    (posts || []).forEach(p => {
+      notifications.push({
+        id: `msg-${p.id}`,
+        type: 'message',
+        title: 'Tin nhắn mới từ học sinh',
+        message: `${p.author?.username || 'Học sinh'} ("${classMap[p.class_id]}"): "${p.content?.substring(0, 50)}${p.content?.length > 50 ? '...' : ''}"`,
+        timestamp: p.created_at,
+        link: `/teacher/classes/${p.class_id}`
+      });
+    });
+
+    // Add submissions
+    notifications.push(...submissions);
+
+    // Add near due assignments
+    (nearDue || []).forEach(d => {
+      notifications.push({
+        id: `due-${d.id}`,
+        type: 'due_soon',
+        title: 'Bài tập sắp hết hạn',
+        message: `Bài tập "${d.content?.substring(0, 30)}${d.content?.length > 30 ? '...' : ''}" lớp "${classMap[d.class_id]}" sắp đến hạn nộp`,
+        timestamp: d.deadline,
+        link: '/teacher/assignments'
+      });
+    });
+
+    // Sort by timestamp descending
+    notifications.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+    res.json(notifications.slice(0, 25));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;
