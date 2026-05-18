@@ -65,7 +65,7 @@ const formatLateDuration = (lateMinutes) => {
     ? Math.max(0, Math.floor(Number(lateMinutes)))
     : 0;
 
-  if (safeLateMinutes <= 1) return '\u0110\u00fang gi\u1edd';
+  if (safeLateMinutes === 0) return '\u0110\u00fang gi\u1edd';
   if (safeLateMinutes < 60) return `Tr\u1ec5 ${safeLateMinutes} ph\u00fat`;
 
   const hours = Math.floor(safeLateMinutes / 60);
@@ -118,7 +118,7 @@ export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planDa
   let ctaText = 'Vào học ngay';
   let accentColor = '#059669'; // default green
 
-  if (safeLateMinutes > 1 && safeLateMinutes < 60) {
+  if (safeLateMinutes > 0 && safeLateMinutes < 60) {
     subject = 'Nhac nho hoc tap theo ke hoach - Hoc vien Aurum';
     greetingMsg = `Ban dang tre ${safeLateMinutes} phut so voi gio hoc da dat.`;
     mainContent = `Hom nay ban van chua hoan thanh muc tieu hoc tap hang ngay (<strong>${dailyLessonTarget} bai hoc</strong>). Hay vao hoc ngay de giu nhip do hoc tap nhe!`;

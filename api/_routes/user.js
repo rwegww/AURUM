@@ -17,10 +17,6 @@ const DEFAULT_STUDY_PLAN = {
   calendarEnabled: false,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 60;
-const STUDY_REMINDER_ON_TIME_WINDOW_MINUTES = Number.parseInt(
-  process.env.STUDY_REMINDER_ON_TIME_WINDOW_MINUTES || '10',
-  10
-);
 
 const datePartFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: VIETNAM_TIME_ZONE,
@@ -82,6 +78,26 @@ const normalizeStudyPlan = (incoming, existing = {}) => {
       : {},
     completedDates: Array.isArray(merged.completedDates) ? merged.completedDates : [],
   };
+};
+
+const resetStudyReminderState = (plan) => {
+  const {
+    lastStudyReminderDate: _lastStudyReminderDate,
+    lastReminderSentAt: _lastReminderSentAt,
+    firstReminderSentAt: _firstReminderSentAt,
+    ...rest
+  } = plan;
+
+  return rest;
+};
+
+const shouldResetStudyReminderState = (nextPlan, previousPlan = {}) => {
+  const previous = normalizeStudyPlan(previousPlan);
+
+  return nextPlan.studyTime !== previous.studyTime
+    || nextPlan.dailyLessonTarget !== previous.dailyLessonTarget
+    || (nextPlan.remindersEnabled && !previous.remindersEnabled)
+    || (nextPlan.emailEnabled && !previous.emailEnabled);
 };
 
 // Get Online Count (Public)
@@ -167,7 +183,10 @@ router.patch('/profile', auth, async (req, res) => {
   try {
     const updateData = { ...req.body };
     if (Object.prototype.hasOwnProperty.call(updateData, 'studyPlan')) {
-      updateData.studyPlan = normalizeStudyPlan(updateData.studyPlan, req.user.studyPlan);
+      const nextStudyPlan = normalizeStudyPlan(updateData.studyPlan, req.user.studyPlan);
+      updateData.studyPlan = shouldResetStudyReminderState(nextStudyPlan, req.user.studyPlan)
+        ? resetStudyReminderState(nextStudyPlan)
+        : nextStudyPlan;
     }
 
     const updatedUser = await User.update(req.user.id, updateData);
@@ -389,7 +408,6 @@ router.get('/cron-send-reminders', async (req, res) => {
       disabled: 0,
       invalidTime: 0,
       notDue: 0,
-      staleInitial: 0,
     };
 
     console.log(`[Cron Reminders] Current Vietnam Time: ${todayKey} ${currentHHMM}`);
@@ -426,45 +444,51 @@ router.get('/cron-send-reminders', async (req, res) => {
         continue;
       }
 
-      if (currentMinute >= scheduledMinute) {
-        const lateMinutes = Math.max(0, currentMinute - scheduledMinute);
+      const checkAt = new Date();
+      const checkTodayKey = getVietnamDateKey(checkAt);
+      const checkMinute = getVietnamMinuteOfDay(checkAt);
+
+      if (checkMinute >= scheduledMinute) {
+        const lateMinutes = Math.max(0, checkMinute - scheduledMinute);
         const lastSentAt = plan.lastReminderSentAt ? new Date(plan.lastReminderSentAt) : null;
         const lastSentValid = lastSentAt instanceof Date && !Number.isNaN(lastSentAt.getTime());
-        const minutesSinceLast = lastSentValid ? Math.floor((now - lastSentAt) / 60000) : Infinity;
+        const minutesSinceLast = lastSentValid ? Math.floor((checkAt - lastSentAt) / 60000) : Infinity;
         const lastStudyReminderDate = plan.lastStudyReminderDate
           || (lastSentValid ? getVietnamDateKey(lastSentAt) : null);
-        const isFirstToday = lastStudyReminderDate !== todayKey;
-        const shouldSendStudyReminder = isFirstToday
-          ? lateMinutes <= STUDY_REMINDER_ON_TIME_WINDOW_MINUTES || lateMinutes >= STUDY_REMINDER_INTERVAL_MINUTES
-          : minutesSinceLast >= STUDY_REMINDER_INTERVAL_MINUTES;
+        const isFirstToday = lastStudyReminderDate !== checkTodayKey;
+        const shouldSendStudyReminder = isFirstToday || minutesSinceLast >= STUDY_REMINDER_INTERVAL_MINUTES;
 
         if (shouldSendStudyReminder) {
-          const hourOffset = Math.max(0, Math.floor(lateMinutes / 60));
-          console.log(`[Cron Reminders] Sending study reminder to ${student.username} (late: ${lateMinutes}m, offset: ${hourOffset}h)`);
-          const sendResult = await sendStudyPlanHourlyReminderEmail(student.email, student.username, plan, hourOffset, lateMinutes);
+          const sendAttemptAt = new Date();
+          const sendAttemptDateKey = getVietnamDateKey(sendAttemptAt);
+          const sendAttemptMinute = getVietnamMinuteOfDay(sendAttemptAt);
+          const lateMinutesAtSend = sendAttemptDateKey === checkTodayKey
+            ? Math.max(0, sendAttemptMinute - scheduledMinute)
+            : lateMinutes;
+          const hourOffset = Math.max(0, Math.floor(lateMinutesAtSend / 60));
+          console.log(`[Cron Reminders] Sending study reminder to ${student.username} (late: ${lateMinutesAtSend}m, offset: ${hourOffset}h)`);
+          const sendResult = await sendStudyPlanHourlyReminderEmail(student.email, student.username, plan, hourOffset, lateMinutesAtSend);
 
           results.push({
             username: student.username,
             email: student.email,
             type: 'study_reminder',
             hourOffset,
-            lateMinutes,
+            lateMinutes: lateMinutesAtSend,
             success: sendResult.success,
             error: sendResult.error || null,
           });
 
           if (sendResult.success) {
-            const sentAt = now.toISOString();
+            const sentAt = sendAttemptAt.toISOString();
             updatedPlan = {
               ...updatedPlan,
-              lastStudyReminderDate: todayKey,
+              lastStudyReminderDate: checkTodayKey,
               lastReminderSentAt: sentAt,
               firstReminderSentAt: isFirstToday ? sentAt : (plan.firstReminderSentAt || sentAt),
             };
             hasPlanUpdate = true;
           }
-        } else if (isFirstToday) {
-          skipped.staleInitial += 1;
         } else {
           skipped.notDue += 1;
         }
