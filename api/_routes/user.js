@@ -84,7 +84,7 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // Update Profile
-import { sendStudyPlanEmail } from '../lib/mailer.js';
+import { sendStudyPlanConfirmationEmail, sendStudyPlanReminderEmail } from '../lib/mailer.js';
 
 router.patch('/profile', auth, async (req, res) => {
   try {
@@ -94,24 +94,24 @@ router.patch('/profile', auth, async (req, res) => {
     if (req.body.studyPlan && req.body.studyPlan.emailEnabled) {
       const recipientEmail = req.user.email || updatedUser.email;
       const recipientName = req.user.username || updatedUser.username;
-      console.log(`[Email Reminder] Attempting to send email to: ${recipientEmail} for user: ${recipientName}`);
+      console.log(`[Email Reminder] Attempting to send confirmation email to: ${recipientEmail} for user: ${recipientName}`);
       console.log(`[Email Reminder] SMTP configured: ${!!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)}`);
       
       if (!recipientEmail) {
         console.warn('[Email Reminder] No email address found for user, skipping email.');
       } else {
-        sendStudyPlanEmail(recipientEmail, recipientName, req.body.studyPlan)
+        sendStudyPlanConfirmationEmail(recipientEmail, recipientName, req.body.studyPlan)
           .then(result => {
             if (result.success) {
-              console.log(`[Email Reminder] ✅ Email sent successfully to ${recipientEmail}`);
+              console.log(`[Email Reminder] ✅ Confirmation email sent successfully to ${recipientEmail}`);
             } else {
-              console.error(`[Email Reminder] ❌ Email failed: ${result.error}`);
+              console.error(`[Email Reminder] ❌ Confirmation email failed: ${result.error}`);
             }
             if (result.previewUrl) {
               console.log(`[Email Reminder] Ethereal Preview URL: ${result.previewUrl}`);
             }
           })
-          .catch(err => console.error('[Email Reminder] ❌ Failed to send email:', err.message));
+          .catch(err => console.error('[Email Reminder] ❌ Failed to send confirmation email:', err.message));
       }
     }
 
@@ -297,6 +297,96 @@ router.post('/streak/reset', auth, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi thiết lập lại chuỗi', error: err.message });
+  }
+});
+
+import { supabase } from '../lib/supabase.js';
+
+// Cron Job: Send Study Plan Reminders
+router.get('/cron-send-reminders', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    const cronSecret = process.env.CRON_SECRET;
+    
+    // Secure the cron endpoint in production environment
+    if (process.env.NODE_ENV === 'production' && cronSecret && authHeader !== `Bearer ${cronSecret}`) {
+      return res.status(401).json({ message: 'Không có quyền truy cập endpoint này.' });
+    }
+
+    console.log('[Cron Reminders] Starting reminder check...');
+
+    // Fetch all students (students have roles, emails, study plans)
+    const { data: students, error } = await supabase
+      .from('users')
+      .select('id, username, email, study_plan, today_lesson_completed')
+      .eq('role', 'student');
+
+    if (error) {
+      console.error('[Cron Reminders] Supabase fetch error:', error);
+      return res.status(500).json({ message: 'Lỗi truy vấn cơ sở dữ liệu', error: error.message });
+    }
+
+    // Get current Vietnam Time (GMT+7) in HH:MM format
+    const currentHHMM = new Date().toLocaleTimeString('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    console.log(`[Cron Reminders] Current Vietnam Time: ${currentHHMM}`);
+
+    // Filter students:
+    // 1. Must have study_plan and emailEnabled = true
+    // 2. today_lesson_completed must be false
+    // 3. studyTime (format HH:MM) must match currentHHMM
+    const matchingStudents = (students || []).filter(student => {
+      const plan = student.study_plan;
+      if (!plan || !plan.emailEnabled) return false;
+      
+      // If student already completed their lesson target for today, skip reminding
+      if (student.today_lesson_completed) return false;
+
+      const studyTime = plan.studyTime ? plan.studyTime.trim() : null;
+      return studyTime === currentHHMM;
+    });
+
+    console.log(`[Cron Reminders] Found ${matchingStudents.length} matching students for time ${currentHHMM}`);
+
+    if (matchingStudents.length === 0) {
+      return res.json({ message: 'Không có học sinh nào cần gửi nhắc nhở tại thời điểm này.', sentCount: 0 });
+    }
+
+    // Send reminders to all matching students
+    const emailPromises = matchingStudents.map(student => {
+      console.log(`[Cron Reminders] Sending reminder to ${student.username} (${student.email}) for scheduled time ${student.study_plan.studyTime}`);
+      return sendStudyPlanReminderEmail(student.email, student.username, student.study_plan)
+        .then(result => ({
+          username: student.username,
+          email: student.email,
+          success: result.success,
+          error: result.error || null
+        }))
+        .catch(err => ({
+          username: student.username,
+          email: student.email,
+          success: false,
+          error: err.message
+        }));
+    });
+
+    const results = await Promise.all(emailPromises);
+    const successfulCount = results.filter(r => r.success).length;
+
+    console.log(`[Cron Reminders] Completed. Successfully sent ${successfulCount}/${matchingStudents.length} reminders.`);
+
+    res.json({
+      message: `Đã hoàn thành gửi nhắc nhở: ${successfulCount}/${matchingStudents.length} thành công.`,
+      details: results
+    });
+  } catch (err) {
+    console.error('[Cron Reminders] Unexpected error:', err);
+    res.status(500).json({ message: 'Lỗi hệ thống bất ngờ', error: err.message });
   }
 });
 
