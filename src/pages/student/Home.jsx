@@ -130,22 +130,18 @@ const Home = () => {
   React.useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        console.log('Home: Attempting to fetch praises from API...');
         const res = await fetch('/api/user/public-praises');
         
         if (!res.ok) throw new Error('Failed to fetch public praises');
         const data = await res.json();
         
         if (data && data.length > 0) {
-          console.log('Home: Praises successfully fetched from database:', data);
           setTestimonials(data); // data is already mapped from backend
         } else {
-          console.warn('Home: No praises found in database, falling back to local translations.');
           const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
           setTestimonials(fallback);
         }
       } catch (err) {
-        console.error('Home: Error fetching praises:', err);
         const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
         setTestimonials(fallback);
       }
