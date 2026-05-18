@@ -5,6 +5,37 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Trophy, Zap, Users, Layers } from 'lucide-react';
 
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 p-4 rounded-2xl shadow-2xl text-white">
+        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{label}</p>
+        <p className="text-base font-black text-white flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: payload[0].fill || payload[0].payload.color || '#10b981' }} />
+          {payload[0].value} <span className="text-xs font-bold text-slate-400">học sinh</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
+const PieTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 p-4 rounded-2xl shadow-2xl text-white">
+        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{data.name}</p>
+        <p className="text-base font-black text-white flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: data.color || '#3b82f6' }} />
+          {data.value} <span className="text-xs font-bold text-slate-400">phản hồi</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState({ lessons: 0, users: 0, uploads: 0 });
@@ -97,39 +128,6 @@ const AdminDashboard = () => {
                 <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">✉️</div>
                   <span className="text-sm font-bold text-viet-text">Gửi thông báo</span>
-                </div>
-                <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">🏆</div>
-                  <span className="text-sm font-bold text-viet-text">Sự kiện mới</span>
-                </div>
-              </div>
-            </section>
-
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
-                <h2 className="text-lg font-bold text-viet-text mb-6">Phân bố cấp độ học sinh</h2>
-                {stats.levelDistribution.length > 0 ? (
-                  <div className="h-48 mt-4">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={stats.levelDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} dy={10} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                        <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                        <Bar dataKey="students" fill="#22c55e" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
-                    <Layers className="w-8 h-8 mb-2 opacity-20" />
-                    <p className="text-sm font-medium">Chưa có dữ liệu cấp độ</p>
-                  </div>
-                )}
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
-                <h3 className="text-lg font-bold text-viet-text mb-6">Phân bổ khối lớp</h3>
                 {stats.gradeDistribution.length > 0 ? (
                   <div className="h-48 mt-4">
                     <ResponsiveContainer width="100%" height="100%">
@@ -185,7 +183,7 @@ const AdminDashboard = () => {
                   )}
                 </div>
               </motion.div>
-            </section>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
