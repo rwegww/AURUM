@@ -13,6 +13,7 @@ const getLocalDateString = (date) => {
 
 const StudyCalendar = ({ planData, onPlanDataChange }) => {
   const { t, i18n } = useTranslation();
+  const todayKey = getLocalDateString(new Date());
   const [currentDate, setCurrentDate] = useState(new Date());
   const [activityDates, setActivityDates] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -102,8 +103,12 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
   }
 
   const handleCellClick = (dayObj) => {
-    setSelectedDay(dayObj);
     const key = dayObj.dateKey;
+    if (key < todayKey) {
+      alert(t('profile.study_plan.calendar.err_past_date', 'Bạn chỉ có thể lên lịch học cho hôm nay hoặc các ngày trong tương lai!'));
+      return;
+    }
+    setSelectedDay(dayObj);
     const existing = customSessions[key];
 
     // Determine completion status
@@ -170,13 +175,11 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
     setModalOpen(false);
   };
 
-  const todayKey = getLocalDateString(new Date());
-
-  // Filter custom sessions for the current view month and sort them
+  // Filter custom sessions for the current view month and sort them (upcoming or today only)
   const currentMonthSchedules = Object.entries(customSessions)
     .filter(([key]) => {
       const [y, m] = key.split('-');
-      return parseInt(y) === year && parseInt(m) === (month + 1);
+      return parseInt(y) === year && parseInt(m) === (month + 1) && key >= todayKey;
     })
     .sort((a, b) => a[0].localeCompare(b[0]));
 
@@ -239,6 +242,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
           {calendarDays.map((dayObj, index) => {
             const { day, isCurrentMonth, dateKey } = dayObj;
             const isToday = dateKey === todayKey;
+            const isPast = dateKey < todayKey;
             
             // Check scheduled status
             const session = customSessions[dateKey];
@@ -250,18 +254,20 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
             return (
               <motion.div
                 key={index}
-                whileHover={{ y: -2 }}
+                whileHover={isPast ? {} : { y: -2 }}
                 onClick={() => handleCellClick(dayObj)}
-                className={`aspect-square rounded-2xl border transition-all p-2 flex flex-col justify-between cursor-pointer relative shadow-sm ${
-                  !isCurrentMonth 
-                    ? 'bg-transparent border-transparent opacity-20' 
+                className={`aspect-square rounded-2xl border transition-all p-2 flex flex-col justify-between relative shadow-sm ${
+                  isPast && !isCompleted
+                    ? 'bg-slate-50/30 border-slate-100 opacity-40 cursor-not-allowed'
+                    : !isCurrentMonth 
+                    ? 'bg-transparent border-transparent opacity-20 cursor-default' 
                     : isToday 
-                    ? 'bg-white border-viet-green border-2 ring-4 ring-viet-green/10' 
+                    ? 'bg-white border-viet-green border-2 ring-4 ring-viet-green/10 cursor-pointer' 
                     : isCompleted
-                    ? 'bg-emerald-50 border-emerald-200'
+                    ? 'bg-emerald-50 border-emerald-200 cursor-pointer'
                     : isScheduled
-                    ? 'bg-blue-50/50 border-blue-200'
-                    : 'bg-white border-viet-border hover:border-viet-green/50'
+                    ? 'bg-blue-50/50 border-blue-200 cursor-pointer'
+                    : 'bg-white border-viet-border hover:border-viet-green/50 cursor-pointer'
                 }`}
               >
                 {/* Date number */}
