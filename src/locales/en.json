@@ -1,155 +1,155 @@
 {
   "nav": {
-    "journey": "JOURNEY",
-    "vault": "VAULT",
-    "arena": "CHALLENGES",
-    "lectures": "LECTURES",
-    "classroom": "JOURNEY",
-    "my_class": "MY CLASSES",
-    "periodic_table": "PERIODIC TABLE",
-    "library": "LIBRARY",
-    "lab": "CHEM LAB",
+    "journey": "WIZARD JOURNEY",
+    "vault": "ANCIENT VAULT",
+    "arena": "DUELING CLUB",
+    "lectures": "SPELL GRIMOIRE",
+    "classroom": "GREAT HALL",
+    "my_class": "MY HOUSE",
+    "periodic_table": "ANCIENT ELEMENTS",
+    "library": "HOGWARTS LIBRARY",
+    "lab": "ALCHEMY LAB ⚗️",
     "arena_link": "ARENA",
-    "missions": "MISSIONS",
-    "knowledge_map": "KNOWLEDGE MAP",
-    "calculator": "CALCULATOR",
-    "support": "SUPPORT",
-    "profile": "Profile",
-    "logout": "Logout",
-    "login": "Login",
-    "login_now": "Login Now",
-    "feedback": "Send Feedback"
+    "missions": "WIZARD MISSIONS",
+    "knowledge_map": "MARAUDER'S MAP",
+    "calculator": "CALCULATING CAULDRON",
+    "support": "OWL POST SUPPORT",
+    "profile": "Wizard Profile",
+    "logout": "Leave Academy",
+    "login": "Enroll",
+    "login_now": "Enroll Now",
+    "feedback": "Owl Feedback"
   },
   "home": {
-    "hero_title": "LEARN CHEMISTRY",
-    "hero_title_highlight": "ACTIVELY",
-    "hero_statement": "The #1 Chemistry academic platform combining interactive simulations and online competition.",
-    "hero_image_alt": "Learn chemistry with Aurum",
-    "hero_badge_gamification": "Gamification",
-    "hero_badge_safe_lab": "Safe Lab",
-    "enter_classroom": "Enter Classroom",
-    "enter_lab": "Enter Lab",
+    "hero_title": "MASTER POTIONS &",
+    "hero_title_highlight": "ALCHEMY",
+    "hero_statement": "Brew magical potions, master arcane reactions, and duel at the Aurum Academy of Wizardry.",
+    "hero_image_alt": "Learn alchemy with Aurum",
+    "hero_badge_gamification": "Wizarding System",
+    "hero_badge_safe_lab": "Safe Potion Lab",
+    "enter_classroom": "Enter Great Hall",
+    "enter_lab": "To Alchemy Lab ⚗️",
     "stats": {
       "students_count": "10,000+",
-      "students_label": "Active Students",
+      "students_label": "Apprentice Wizards",
       "schools_count": "50+",
-      "schools_label": "Schools Joined",
+      "schools_label": "Affiliated Academies",
       "lessons_count": "1,000+",
-      "lessons_label": "Visual Lessons"
+      "lessons_label": "Magical Lessons"
     },
     "features": {
       "journey": {
-        "badge": "Learning Path",
-        "title": "Learning Journey",
-        "highlight": "Structured Online Curriculum",
-        "desc": "From the most basic concepts of Grade 8 Chemistry to advanced topics in Grade 12. Content is digitized into interactive lessons that sharpen both theory and practice.",
-        "desc_long": "From the most basic concepts of Grade 8 Chemistry to advanced topics in Grade 12. Content is digitized into interactive lessons that sharpen both theory and practice.",
-        "link": "Explore path",
-        "image_alt": "Chemistry learning journey"
+        "badge": "Magical Journey",
+        "title": "Magical Path",
+        "highlight": "Unleash Arcane Mana",
+        "desc": "Potions and Alchemy lessons from basic wizardry to advanced sorcery.",
+        "desc_long": "From basic potions theory to advanced archmage spells. The path is balanced between theory and magic casting.",
+        "link": "Explore magical map",
+        "image_alt": "Magical journey"
       },
       "lab": {
-        "badge": "Virtual Lab",
-        "title": "Virtual Lab",
-        "highlight": "3D Interactive",
-        "desc": "No real chemicals needed, no risk of explosions. Mix, observe color changes, precipitates, and gas evolution right on your screen. Supports hundreds of high school to advanced reactions.",
-        "desc_long": "Mix chemicals, observe color changes, precipitates, and gas evolution safely in 3D right on your screen.",
-        "link": "Enter Lab",
-        "image_alt": "3D virtual lab"
+        "badge": "Virtual Cauldron",
+        "title": "Brewing Room",
+        "highlight": "3D Magic Cauldron",
+        "desc": "Brew potions and observe magical 3D reactions safely without blowing up your cauldron.",
+        "desc_long": "Mix and brew the most legendary wizarding elixirs in our interactive 3D laboratory, perfectly safe from explosions.",
+        "link": "Enter Brewing Room",
+        "image_alt": "3D virtual cauldron"
       },
       "arena": {
-        "badge": "Competition",
-        "title": "Battle Arena",
-        "highlight": "Online Battle",
-        "desc": "Real-time ranking system. Create battle rooms with friends or find random matches. Quick-fire Chemistry questions to earn points and unlock exclusive avatars.",
-        "desc_long": "Real-time ranking system. Battle other students with quick-fire Chemistry questions, earn points, and climb the leaderboard.",
-        "link": "Join Arena",
-        "image_alt": "Online battle arena"
+        "badge": "Wizard Duels",
+        "title": "Dueling Club",
+        "highlight": "Wand Duelling",
+        "desc": "Real-time potion duels to earn house points and win the wizarding cup.",
+        "desc_long": "The competitive stage for talented wizards. Duel in real-time matches, climb the ranks, and leave your mark.",
+        "link": "Duel now",
+        "image_alt": "Wand duelling"
       },
       "library": {
-        "title": "Comprehensive Lookup",
-        "highlight": "Quick and Accurate",
-        "desc": "A massive digital library paired with an interactive Periodic Table. Click any element to view electron configuration, energy levels, and detailed chemical properties.",
+        "title": "Spell Repository",
+        "highlight": "Accurate, Mystical",
+        "desc": "A massive collection of ancient spellbooks paired with an interactive Periodic Table.",
         "link": "Go to Library"
       },
       "map": {
-        "badge": "Explore",
-        "title": "Journey",
-        "highlight": "Conquer Knowledge",
-        "desc": "Embark on an RPG-style learning adventure. Gather achievements, unlock new stages, and showcase your chemistry prowess.",
+        "badge": "Marauder's Map",
+        "title": "Marauder's Map",
+        "highlight": "Ancient Chambers",
+        "desc": "Adventure through academic chambers, collect magical relics, upgrade your mana, and write your name in the Hall of Fame.",
         "link": "Start Journey",
-        "image_alt": "Journey to conquer knowledge"
+        "image_alt": "Explore wizarding map"
       },
       "lessons": {
-        "badge": "Lectures",
-        "title": "Interactive Lessons",
-        "highlight": "Visual & Engaging",
-        "desc": "Theory presented through interactive slides, video illustrations, and quick quizzes to prepare you for exams.",
-        "link": "View Lectures",
-        "image_alt": "Vivid interactive lessons"
+        "badge": "Grimoire",
+        "title": "Potions Grimoire",
+        "highlight": "Visual & Magical",
+        "desc": "Potions theory presented through interactive magical grimoires and quick wizard tests.",
+        "link": "Read Grimoire",
+        "image_alt": "Magical grimoire study"
       }
     },
     "leaderboard": {
       "badge": "Leaderboard",
       "title_main": "Hall of Fame",
-      "title_highlight": "Chemistry Warriors",
-      "rank_master": "Master",
+      "title_highlight": "Archmages of Chemistry",
+      "rank_master": "Grand Sorcerer",
       "online": "Online",
       "offline": "Offline",
       "active": "active",
       "level": "Level",
       "activity": "Activity:",
-      "disciple": "Chemistry Disciple",
-      "transmitting": "Transmitting from the Arena...",
+      "disciple": "Apprentice Wizard",
+      "transmitting": "Transmitting from the Dueling Arena via Owl Mail...",
       "empty": "The arena is waiting for its first legends...",
       "conquer_btn": "Conquer Rank Now"
     },
     "social_proof": {
-      "text": "Trusted by 10,000+ students and 500+ teachers nationwide",
-      "schools": "Adopted by over 50 high schools"
+      "text": "10,000+ Apprentice Wizards",
+      "schools": "50+ Affiliated Academies"
     },
     "how_it_works": {
       "badge": "How It Works",
-      "title": "3 Steps to Master Chemistry",
+      "title": "3 Steps to Become a Chemistry Wizard",
       "steps": {
         "step1": {
-          "title": "1. Interactive Theory",
-          "desc": "Vivid lessons help you deeply understand the core concepts."
+          "title": "1. Study Ancient Spells",
+          "desc": "Study interactive magical grimoires to master the arcane foundations."
         },
         "step2": {
-          "title": "2. Virtual Experiments",
-          "desc": "Mix chemicals with absolute safety right on your screen."
+          "title": "2. Brew Legendary Potions",
+          "desc": "Brew and mix complex elixirs in virtual 3D cauldrons with zero risks."
         },
         "step3": {
-          "title": "3. Competitive Arena",
-          "desc": "Compete with thousands of other students in the arena."
+          "title": "3. Duel in the Arena",
+          "desc": "Challenge fellow sorcerers in real-time wand duels."
         }
       }
     },
     "testimonials": {
-      "badge": "Community Reviews",
-      "title": "What users say about Aurum?",
+      "badge": "Owl Post Letters",
+      "title": "What do wizards say about Aurum Academy?",
       "reviews": [
         {
-          "name": "Nguyen Van A",
-          "role": "12th Grade Student",
-          "content": "[Static Fallback] Since using Aurum, Chemistry is no longer a nightmare. The virtual labs are so intuitive!"
+          "name": "Harry Potter",
+          "role": "Gryffindor House",
+          "content": "Brewing potions is no longer a nightmare thanks to the 3D virtual cauldron!"
         },
         {
-          "name": "Tran Thi B",
-          "role": "Chemistry Teacher",
-          "content": "[Static Fallback] This platform makes my students much more excited in every lesson."
+          "name": "Professor Snape",
+          "role": "Potions Master",
+          "content": "The virtual brewing room prevents these foolish apprentices from blowing up my classroom."
         },
         {
-          "name": "Le Hoang C",
-          "role": "10th Grade Student",
-          "content": "[Static Fallback] The arena feature is addictive, I learn a lot from competing."
+          "name": "Draco Malfoy",
+          "role": "Slytherin House",
+          "content": "The wand duelling in the arena is absolutely brilliant. Slytherin will win the House Cup!"
         }
       ]
     },
     "final_cta": {
-      "title": "Ready to Become an Alchemist?",
-      "subtitle": "Sign up today to explore the colorful world of Chemistry.",
-      "button": "Start Your Journey"
+      "title": "Ready to Become a Master Alchemist?",
+      "subtitle": "Claim your Hogwarts acceptance letter and step into the world of magic today.",
+      "button": "Enroll Now ✉️"
     }
   },
   "footer": {
@@ -178,100 +178,100 @@
     }
   },
   "classroom": {
-    "title": "Start your <1/><2> Chemistry</2> journey",
-    "subtitle": "Each level is a new journey with its own story and exciting challenges, helping you explore the world of chemistry in the most natural way.",
-    "enter_class": "Enter Class",
+    "title": "Start your <1/><2> Alchemy</2> journey",
+    "subtitle": "Each level is a new mystical chamber with its own story and exciting duels, helping you explore the world of magic in the most natural way.",
+    "enter_class": "Enter Great Hall",
     "knowledge_tree": {
-      "academic_map": "Academic Map",
-      "title": "Comprehensive Chemistry Knowledge Tree",
-      "subtitle": "Systematize all Chemistry knowledge from basic to advanced (Grades 8 - 12).",
-      "instruction": "Click on each lesson to start your journey of conquest!",
-      "updating": "Updating lessons...",
-      "go_journey": "Open Grade {{grade}} journey"
+      "academic_map": "Marauder's Map",
+      "title": "Comprehensive Alchemy & Magic Tree",
+      "subtitle": "Systematize all magical potions and spell knowledge from basic to advanced.",
+      "instruction": "Tap your wand on each lesson scroll to start your training!",
+      "updating": "Transporting lesson scrolls...",
+      "go_journey": "Open House Grade {{grade}} path"
     },
     "grades": {
       "8": {
-        "title": "The Alchemist's Beginning",
-        "desc": "Step into the primitive world of molecules, mastering the invisible language of Chemistry."
+        "title": "Apprentice Wizard (Grade 8)",
+        "desc": "Step into the primitive world of molecules, mastering the invisible language of alchemy and herbology."
       },
       "9": {
-        "title": "The Kingdom of Transition",
-        "desc": "Unlock the secrets of chemical reactions and harness the power of elemental interaction."
+        "title": "Potion Brewer (Grade 9)",
+        "desc": "Mix potion ingredients in virtual cauldrons and capture the power of elemental interactions."
       },
       "10": {
-        "title": "The Atomic Architect",
-        "desc": "Dive deep into dynamics and periodic table structure, familiarizing yourself with cosmic balance."
+        "title": "Arcane Architect (Grade 10)",
+        "desc": "Dive deep into quantum shells and periodic table structures, familiarizing yourself with cosmic balance."
       },
       "11": {
-        "title": "The Organic Labyrinth",
-        "desc": "Get lost in the Carbon maze, finding the rules that build all complex life."
+        "title": "Organic Labyrinth (Grade 11)",
+        "desc": "Get lost in the Carbon maze, finding the rules that build all complex life and magical creatures."
       },
       "12": {
-        "title": "The Fusion Master",
+        "title": "Grand Alchemist (Grade 12)",
         "output": "The final frontier for alchemy masters, fulfilling the destiny of creating a new universe."
       }
     }
   },
   "lectures": {
-    "title": "Lecture <1>Library</1>",
-    "subtitle": "Look up theory and video lectures by grade level",
-    "search_placeholder": "Search lectures...",
+    "title": "Spellbook <1>Grimoire</1>",
+    "subtitle": "Look up magic theory and video spells by grade level",
+    "search_placeholder": "Search grimoires...",
     "grade_filter": "Grade {{grade}}",
-    "loading": "Loading data...",
-    "no_results": "No lectures found matching the keyword",
-    "clear_filters": "Clear filters",
+    "loading": "Decoding spell scrolls...",
+    "no_results": "No magical scrolls found matching the spell",
+    "clear_filters": "Dispel filters",
     "metadata": {
-      "video": "1 Video",
-      "theory": "Theory"
+      "video": "1 Pensieve Clip",
+      "theory": "Grimoire Notes"
     }
   },
   "about": {
-    "mission_badge": "Our Mission",
-    "title": "Igniting the passion for <1/><2> Chemistry</2> in youth",
-    "description": "Aurum is not just a learning platform, but a journey to explore the microscopic world of atoms and reactions. We believe knowledge truly comes alive when experienced and interacted with.",
+    "mission_badge": "Our Covenant",
+    "title": "Igniting the magical spark of <1/><2> Alchemy</2> in youth",
+    "description": "Aurum is not just an academy, but a journey to explore the microscopic world of atomic particles and magical reactions. We believe spells truly come alive when cast with a wand.",
     "pillars": {
       "safety": {
-        "title": "Absolute Safety",
-        "desc": "3D simulations help students practice dangerous reactions without real chemicals."
+        "title": "Safe Potion Making",
+        "desc": "3D virtual cauldrons help students practice brewing dangerous potions with zero risk of blowing up the classroom."
       },
       "gamification": {
-        "title": "Learn Through Play",
-        "desc": "Integrated gamification system with points and ranks makes learning engaging."
+        "title": "Spell Ranks & House Cups",
+        "desc": "Integrated gamification system with house points and wizard ranks makes learning highly engaging."
       },
       "visualization": {
-        "title": "Visualization",
-        "desc": "All abstract concepts are digitized into vivid and easy-to-understand images."
+        "title": "Arcane Vision",
+        "desc": "All abstract chemical bonds and atomic structures are visualized in stunning interactive 3D."
       }
     },
     "team_section": {
-      "title": "Expert Team from KTH Academy",
-      "description": "We bring together passionate Chemistry lecturers and professional software engineers. With the mantra \"Digitalizing education is the key to the future\", we constantly strive to perfect every lesson and simulation.",
+      "title": "Grand Council of Aurum Academy",
+      "description": "We bring together passionate Potions Masters and professional software architects. With the mantra 'Digitalizing education is the key to the future', we constantly refine every formula and cauldron simulation.",
       "achievements": [
-        "Over 1000 high-quality digitized lectures",
-        "Top-tier 3D reaction simulation technology",
-        "Academic community of over 50,000 students"
+        "Over 1,000 magic grimoires",
+        "Top-tier 3D potion brewing technology",
+        "Wizarding community of over 50,000 members"
       ]
     }
   },
   "contact": {
-    "badge": "Connect with Us",
-    "title": "Contact our <1/> Founding Team",
-    "description": "We are always happy to hear your feedback, comments, or collaboration requests. Don't hesitate to reach out through our official channels below.",
+    "badge": "Send an Owl to Us",
+    "title": "Contact the <1/> Founder Council",
+    "description": "We are always happy to receive feedback owls, error reports, or collaboration requests. Reach out to us through our official channels below.",
     "info": {
-      "hotline": "Hotline",
-      "address": "Address",
-      "google_maps": "View on Google Maps →"
+      "hotline": "Owl Hotline",
+      "address": "Diagon Alley Office",
+      "google_maps": "View on Marauder's Map →"
     },
     "form": {
-      "title": "Send us a Message",
-      "name_label": "Your Name",
-      "name_placeholder": "Enter full name...",
-      "email_label": "Contact Email",
-      "email_placeholder": "email@example.com",
-      "message_label": "Message Content",
-      "message_placeholder": "What would you like to discuss...",
-      "submit": "Send Now",
-      "success": "Sent successfully! ✓"
+      "title": "Draft an Owl Mail",
+      "name_label": "Your Wizard Name",
+      "name_placeholder": "Enter your name...",
+      "email_label": "Owl Mail address",
+      "email_placeholder": "potion_wizard@example.com",
+      "message_label": "Owl Mail Content",
+      "message_placeholder": "What would you like to discuss with the council...",
+      "submit": "Release Owl",
+      "success": "Owl released successfully! ✓"
     }
   },
   "terms": {
@@ -307,45 +307,45 @@
     "footer_question": "Have questions about the terms?<1/>Please <contact>Contact Us</contact>."
   },
   "profile": {
-    "not_logged_in": "You are not logged in",
-    "login_to_view": "Login to view profile",
-    "member_role": "Student",
-    "member_since": "Elite member of Aurum Chemistry Academy.<1/>Part of the journey since {{date}}",
-    "online_status": "Online Now",
-    "change_avatar": "Randomize Avatar",
-    "save_changes": "Save Changes",
+    "not_logged_in": "Not enrolled in Academy",
+    "login_to_view": "Login to view wizard profile",
+    "member_role": "Apprentice Wizard",
+    "member_since": "Elite member of Aurum Academy of Wizardry.<1/>Part of the journey since {{date}}",
+    "online_status": "Present in Great Hall",
+    "change_avatar": "Transfigure Avatar",
+    "save_changes": "Seal Changes",
     "stats": {
-      "xp": "Experience (XP)",
-      "level_title": "Alchemist Rank",
-      "chemicals": "Unlocked Elements",
-      "arena_points": "Arena Points",
+      "xp": "Mana (XP)",
+      "level_title": "Wizard Rank",
+      "chemicals": "Unlocked Potions",
+      "arena_points": "House Points",
       "losses": "Losses",
       "win_rate": "Win Rate",
-      "challenge_now": "Challenge Now →"
+      "challenge_now": "Duel Now →"
     },
     "collection": {
-      "title": "Chemical Collection",
+      "title": "Potion & Relic Vault",
       "unlocked_count": "Unlocked: {{current}}/{{total}}",
-      "status": "Owned",
-      "empty": "You haven't unlocked any chemicals yet. Start experimenting now!",
-      "go_to_lab": "Go to Lab →"
+      "status": "Collected",
+      "empty": "Your vault is empty! Start brewing potions or collecting relics now!",
+      "go_to_lab": "Go to Alchemy Lab →"
     },
     "study_plan": {
-      "title": "Study Plan",
-      "subtitle": "Set daily goals to maintain your learning habit",
-      "time_label": "Planned Study Time",
-      "target_label": "Lessons Goal / Day",
-      "reminders_label": "Study Reminders",
-      "save_btn": "Save Plan",
-      "saving": "Saving...",
-      "success": "Study plan updated!",
-      "reminder_msg": "🔔 It's time to study! You haven't reached your lesson goal today. Let's learn now to keep your streak alive!",
-      "email_reminders": "Email Reminders",
-      "calendar_reminders": "Schedule Custom Lessons",
+      "title": "Training Plan",
+      "subtitle": "Set daily goals to maintain your mana building habit",
+      "time_label": "Planned Training Time",
+      "target_label": "Grimoire Goal / Day",
+      "reminders_label": "Training Reminders",
+      "save_btn": "Seal Plan",
+      "saving": "Sealing...",
+      "success": "Training plan updated!",
+      "reminder_msg": "🔔 It's time to train your magic! You haven't reached your grimoire goal today. Draw your wand and learn now!",
+      "email_reminders": "Owl Reminders",
+      "calendar_reminders": "Schedule Custom Training",
       "calendar": {
-        "title": "Personal Study Calendar",
-        "prev_month": "Previous Month",
-        "next_month": "Next Month",
+        "title": "Personal Training Calendar",
+        "prev_month": "Previous Moon",
+        "next_month": "Next Moon",
         "weekday_sun": "Sun",
         "weekday_mon": "Mon",
         "weekday_tue": "Tue",
@@ -353,42 +353,42 @@
         "weekday_thu": "Thu",
         "weekday_fri": "Fri",
         "weekday_sat": "Sat",
-        "schedule_modal_title": "Study Day Details",
-        "schedule_modal_desc": "Adjust study time and lesson targets for this day.",
-        "input_title_label": "Content/Notes",
-        "input_title_placeholder": "e.g., Review chapter 1, practice reactions...",
-        "input_time_label": "Custom Study Time",
-        "input_target_label": "Lesson Target Count",
+        "schedule_modal_title": "Training Day Details",
+        "schedule_modal_desc": "Adjust magic training time and grimoire targets for this day.",
+        "input_title_label": "Magical Notes",
+        "input_title_placeholder": "e.g., Brew potions, practice spells...",
+        "input_time_label": "Custom Training Time",
+        "input_target_label": "Grimoire Target Count",
         "status_completed": "Completed Goal",
         "btn_save": "Save Schedule",
         "btn_delete": "Delete Schedule",
         "btn_cancel": "Cancel",
-        "upcoming_title": "Upcoming Custom Schedules",
-        "upcoming_empty": "No custom study schedules planned for this month. Click any calendar date to schedule your own session!",
-        "item_target": "{{count}} lessons",
+        "upcoming_title": "Upcoming Custom Training",
+        "upcoming_empty": "No custom training schedules planned for this moon. Click any calendar date to schedule your own session!",
+        "item_target": "{{count}} grimoires",
         "item_time": "At {{time}}"
       }
     },
     "arena_stats": {
-      "title": "Arena Statistics",
-      "total_matches": "Total Matches",
+      "title": "Dueling Statistics",
+      "total_matches": "Total Duels",
       "wins": "Wins",
       "losses": "Losses",
       "win_rate": "Win Rate",
-      "challenge_now": "Challenge Now →"
+      "challenge_now": "Duel Now →"
     },
-    "history_title": "Activity Log",
-    "history_empty": "You haven't performed any notable actions yet.",
+    "history_title": "Training Log",
+    "history_empty": "You haven't performed any magical actions yet.",
     "history_clear": "Clear Log",
     "history_time_ago": "At"
   },
   "missions": {
-    "badge": "Training Center",
-    "title": "Mission <1>System</1>",
-    "subtitle": "Complete challenges to rank up and earn valuable rewards.",
-    "current_level": "Current Level",
+    "badge": "Aurum Auror Office",
+    "title": "Wizard <1>Missions</1>",
+    "subtitle": "Complete magic challenges to rank up and earn valuable relics.",
+    "current_level": "Current Wizard Level",
     "level_val": "Level {{level}}",
-    "total_xp": "Total XP",
+    "total_xp": "Total Mana",
     "reset_in": "Reset in: <1>{{time}}</1>",
     "tabs": {
       "daily": "Daily",
@@ -400,14 +400,14 @@
       "completed": "Completed",
       "in_progress": "In Progress",
       "reward": "Reward",
-      "claim_btn": "Claim XP ⚡",
+      "claim_btn": "Claim Mana ⚡",
       "claiming": "Claiming...",
       "not_reached": "Incomplete"
     },
-    "empty": "No new missions for today."
+    "empty": "The Grand Council has no new missions for today."
   },
   "journey": {
-    "badge": "Grade {{grade}} Curriculum",
+    "badge": "Grade {{grade}} Path",
     "themes": {
       "8": {
         "title": "The Initial Journey",
@@ -443,44 +443,44 @@
     }
   },
   "arena": {
-    "badge": "Training Center",
-    "title": "CHEMISTRY <1>ARENA</1>",
-    "subtitle": "Challenge & Conquer knowledge",
-    "online_count": "{{count}} students online",
+    "badge": "Wizarding Academy",
+    "title": "WIZARDING <1>ARENA</1>",
+    "subtitle": "Duel & Conquer knowledge",
+    "online_count": "{{count}} apprentice wizards online",
     "character": {
-      "badge": "Your Character",
-      "name_label": "Character Name:",
-      "aura_label": "Aura Color:",
-      "random_btn": "Change Style",
+      "badge": "Your Wizard Character",
+      "name_label": "Wizard Name:",
+      "aura_label": "Mana Aura Color:",
+      "random_btn": "Transfigure Style",
       "expand": "↓ More Styles ({{count}} styles)",
       "collapse": "↑ Collapse",
       "presets": {
-        "chem_master": "Chemistry",
-        "lab_wizard": "Wizard",
-        "science_hero": "Science",
-        "atom_breaker": "Atom",
-        "dna_explorer": "DNA",
-        "ion_storm": "Ion",
-        "thermo_king": "Thermo",
-        "crystal_lord": "Crystal",
-        "proton_rush": "Proton",
-        "quark_force": "Quark",
-        "neutron_star": "Neutron",
-        "plasma_wave": "Plasma"
+        "chem_master": "Potion Master",
+        "lab_wizard": "Grand Alchemist",
+        "science_hero": "Auror",
+        "atom_breaker": "Elemental Mage",
+        "dna_explorer": "Blood Mage",
+        "ion_storm": "Storm Sorcerer",
+        "thermo_king": "Pyromancer",
+        "crystal_lord": "Geomancer",
+        "proton_rush": "Lightbringer",
+        "quark_force": "Ancient Sorcerer",
+        "neutron_star": "Cosmic Wizard",
+        "plasma_wave": "Aether Mage"
       }
     },
     "stats": {
       "badge": "Your Stats",
-      "rank_label": "Current Rank",
-      "total_matches": "Total Matches",
+      "rank_label": "Wizard Rank",
+      "total_matches": "Total Duels",
       "wins": "Wins",
       "losses": "Losses",
       "win_rate": "Win Rate",
-      "total_points": "Total Points",
-      "history": "Battle History",
-      "empty_history": "No recent battles",
-      "leaderboard_btn": "Leaderboard",
-      "leaderboard_title": "Top Players",
+      "total_points": "House Points",
+      "history": "Duel History",
+      "empty_history": "No recent duels",
+      "leaderboard_btn": "Hall of Fame",
+      "leaderboard_title": "Top Wizards",
       "empty_leaderboard": "No leaderboard data",
       "history_item": {
         "just_now": "Just now",
@@ -490,63 +490,63 @@
       }
     },
     "ranks": {
-      "bronze": "Bronze",
-      "silver": "Silver",
-      "gold": "Gold",
-      "diamond": "Diamond",
-      "master": "Master"
+      "bronze": "Apprentice",
+      "silver": "Sorcerer",
+      "gold": "Mage",
+      "diamond": "Auror",
+      "master": "Grand Archmage"
     },
     "actions": {
-      "find_match": "Find Match",
-      "cancel_find": "Cancel Match",
-      "create_room": "Create Room",
+      "find_match": "Find Opponent",
+      "cancel_find": "Cancel Duel",
+      "create_room": "Create Duel Lobby",
       "join_pin": "Enter PIN",
-      "lobby": "Waiting Hall (Rooms)",
+      "lobby": "Waiting Great Hall",
       "pin_placeholder": "ROOM PIN",
       "close": "Close",
-      "enter": "Join Room →",
+      "enter": "Join Duel →",
       "footer_info": {
-        "summary": "General",
+        "summary": "General Spells",
         "questions": "10 Qs",
         "time": "30s"
       }
     },
     "create_room": {
-      "title": "OPEN <1>BATTLE LOBBY</1>",
-      "name_label": "Room Name",
-      "name_placeholder": "Ex: Grade 8 Challenge...",
-      "mode_label": "Battle Mode",
-      "difficulty_label": "Question Set",
-      "admin_badge": "ADMINISTRATOR",
-      "auto_grade": "Auto Grade {{grade}}",
-      "submit_btn": "Create Battle Now →"
+      "title": "OPEN <1>DUELING LOBBY</1>",
+      "name_label": "Dueling Room Name",
+      "name_placeholder": "Ex: Grade 8 Potion Duel...",
+      "mode_label": "Dueling Mode",
+      "difficulty_label": "Scroll Set",
+      "admin_badge": "GRAND ARCHMAGE",
+      "auto_grade": "Auto House Grade {{grade}}",
+      "submit_btn": "Create Duel Now →"
     },
     "browser": {
-      "title": "ONLINE <1>HALL</1>",
-      "refresh": "Refresh",
-      "scanning": "Scanning rooms...",
+      "title": "ONLINE <1>GREAT HALL</1>",
+      "refresh": "Cast Scan Spell",
+      "scanning": "Scanning lobbies...",
       "empty_title": "Empty Hall!",
-      "empty_desc": "Create the first room to challenge",
+      "empty_desc": "Create the first dueling room to challenge",
       "enter_btn": "Enter →"
     },
     "room": {
-      "loading": "Loading...",
+      "loading": "Transporting...",
       "back_btn": "Back",
       "waiting": {
         "title": "WAITING LOBBY",
         "mode": "Mode",
-        "difficulty": "Difficulty",
-        "players": "Players",
+        "difficulty": "Rank",
+        "players": "Wizards",
         "exit_btn": "Exit",
         "start_btn": "Start Now"
       },
       "battle": {
-        "question": "Question {{current}}/{{total}}",
-        "score": "Score",
+        "question": "Spell {{current}}/{{total}}",
+        "score": "Mana Points",
         "time": "TIME",
         "status": {
           "label": "Status",
-          "claimed": "Claimed",
+          "claimed": "Collected",
           "completed": "Completed",
           "in_progress": "In Progress"
         }
@@ -554,136 +554,136 @@
     },
     "moderator": {
       "instruction": "JOIN AT <1>AURUM-APPS.COM</1> WITH PIN:",
-      "leaderboard_title": "REAL-TIME LEADERBOARD",
+      "leaderboard_title": "REAL-TIME HALL OF FAME",
       "live_badge": "Live",
-      "server_status": "Server Running",
+      "server_status": "Magic Circuit Running",
       "close_btn": "Close Arena ✕"
     },
     "result": {
       "win": "EXCELLENT!",
       "lose": "SEE YOU AGAIN",
-      "win_desc": "You conquered the arena",
-      "lose_desc": "Practice more for revenge",
+      "win_desc": "You conquered the magic arena",
+      "lose_desc": "Practice spells more for revenge",
       "score": "Score",
       "rank": "Rank",
       "continue_btn": "Continue →"
     },
     "difficulties": {
-      "easy": "Basic",
-      "medium": "Medium",
-      "hard": "Hard",
-      "super": "Insane"
+      "easy": "Easy (Apprentice)",
+      "medium": "Medium (Sorcerer)",
+      "hard": "Hard (Auror)",
+      "super": "Ultimate"
     }
   },
   "common": {
-    "grade": "Grade {{grade}}",
-    "lesson": "Lesson {{order}}",
-    "lesson_count_one": "Lesson",
-    "lesson_count_other": "Lessons",
-    "loading": "Loading...",
+    "grade": "House Grade {{grade}}",
+    "lesson": "Grimoire {{order}}",
+    "lesson_count_one": "Grimoire",
+    "lesson_count_other": "Grimoires",
+    "loading": "Decoding...",
     "back": "Back",
     "continue": "Continue",
     "save": "Save"
   },
   "my_class": {
     "sidebar": {
-      "title": "Your Classes",
-      "join_other": "Join Another Class",
-      "code_placeholder": "Class Code",
+      "title": "Your Houses",
+      "join_other": "Join Another House",
+      "code_placeholder": "House Code",
       "join_btn": "JOIN",
       "grade_label": "Grade {{grade}}",
-      "teacher_prefix": "Teacher:"
+      "teacher_prefix": "Professor:"
     },
     "empty": {
-      "title": "No Classes Yet",
-      "desc": "You haven't joined any classes yet. Please enter the class code provided by your teacher to start.",
-      "placeholder": "Enter class code (Ex: XYZ1A2)",
-      "submit": "Join Now"
+      "title": "No Houses Yet",
+      "desc": "You haven't joined any Houses yet. Please enter the House code provided by your Professor to start.",
+      "placeholder": "Enter House code (Ex: XYZ1A2)",
+      "submit": "Join House Now"
     },
     "header": {
       "badge": "GENERAL ACTIVITY"
     },
     "feed": {
-      "title": "Class Feed",
-      "empty": "No announcements or lessons from the teacher yet.",
+      "title": "House Feed",
+      "empty": "No announcements or magic scrolls from the Professor yet.",
       "author_you": "You",
-      "private_badge": "🔒 PRIVATE MESSAGE",
-      "sent_to_teacher": "Sent to Teacher",
-      "type_video": "VIDEO",
-      "type_assignment": "ASSIGNMENT",
-      "type_announcement": "ANNOUNCEMENT",
+      "private_badge": "🔒 OWL PRIVY MAIL",
+      "sent_to_teacher": "Sent to Professor",
+      "type_video": "PENSEVE CLIP",
+      "type_assignment": "MAGIC CHALLENGE",
+      "type_announcement": "ACADEMY BULLETIN",
       "deadline": "Deadline",
       "assignment": {
-        "completed": "✓ Assignment Completed",
+        "completed": "✓ Challenge Completed",
         "online_label": "Online",
-        "result_label": "Your Result:",
-        "start_online": "🚀 Start Online Quiz ({{count}} questions)",
-        "confirm_btn": "Confirm Assignment Completion",
-        "file_PDF": "Open PDF File",
-        "file_Word": "Open Word File",
-        "file_Excel": "Open Excel File",
-        "file_Link": "Open Link",
-        "file_Default": "View Document",
-        "file_Placeholder": "Paste link"
+        "result_label": "Your Magic Score:",
+        "start_online": "🚀 Start Online Spell Quiz ({{count}} questions)",
+        "confirm_btn": "Confirm Challenge Completion",
+        "file_PDF": "Open PDF Scroll",
+        "file_Word": "Open Word Scroll",
+        "file_Excel": "Open Excel Scroll",
+        "file_Link": "Open Magic Portal",
+        "file_Default": "View Magic Scroll",
+        "file_Placeholder": "Paste portal link"
       }
     },
     "schedules": {
       "title": "Upcoming Schedules",
       "empty": "No upcoming schedules",
-      "join_meet": "Join Meet"
+      "join_meet": "Join Great Hall Class"
     },
     "support": {
-      "title": "Need Support?",
-      "desc": "Contact your teacher privately through the system for assignment help.",
-      "btn": "Send Private Message"
+      "title": "Need Spell Support?",
+      "desc": "Contact your Professor privately through owl mail for assignment help.",
+      "btn": "Send Owl Mail"
     },
     "message_modal": {
-      "title": "Message Teacher",
-      "class_prefix": "Class:",
+      "title": "Owl Message to Professor",
+      "class_prefix": "House:",
       "placeholder": "Enter your questions or concerns here...",
-      "sending": "Sending...",
-      "send_btn": "Send Message ➔"
+      "sending": "Owl flying...",
+      "send_btn": "Send Owl Mail ➔"
     },
     "viewer": {
-      "from": "By",
+      "from": "By Professor",
       "deadline": "Deadline:",
-      "no_deadline": "None",
-      "download": "Download File",
-      "loading": "Preparing content...",
+      "no_deadline": "No limit",
+      "download": "Retrieve Scroll",
+      "loading": "Decoding scroll...",
       "tab_fallback": "Open in new tab if error occurs"
     },
     "quiz": {
-      "badge": "ONLINE ASSIGNMENT",
+      "badge": "ONLINE SPELL CHALLENGE",
       "progress": "Progress:",
-      "count_done": "{{done}} / {{total}} QUESTIONS DONE",
-      "submitting": "Submitting...",
+      "count_done": "{{done}} / {{total}} SPELLS SOLVED",
+      "submitting": "Submitting owl...",
       "submit_btn": "Submit Now ➔",
       "essay_placeholder": "Enter your essay answer here...",
-      "essay_badge": "Essay Section",
-      "score_msg": "Quiz section: {{score}}/10 points.\nEssay section will be graded separately by the teacher.",
-      "success_msg": "Assignment submitted successfully! The teacher will grade your essay section."
+      "essay_badge": "Essay Spell Section",
+      "score_msg": "Quiz section: {{score}}/10 points.\nEssay section will be graded separately by the Professor.",
+      "success_msg": "Challenge submitted successfully! The Professor will grade your essay section."
     }
   },
   "periodic_table": {
-    "title_main": "Periodic",
+    "title_main": "Ancient",
     "title_sub": " table",
-    "title_highlight": " of elements",
-    "database_label": "Database Alpha",
-    "system_desc": "Multi-dimensional atomic lookup system",
-    "categories_title": "Categories",
-    "tech_manual": "Technical Manual v1.0",
+    "title_highlight": " of magical elements",
+    "database_label": "Ancient Database",
+    "system_desc": "Multi-dimensional magic lookup system",
+    "categories_title": "Element Flows",
+    "tech_manual": "Library Catalog v1.0",
     "quick_guide": {
       "title": "Quick Lookup",
-      "desc": "Click elements to view 3D atomic simulations"
+      "desc": "Click elements to view 3D atomic magic simulations"
     },
     "legend": {
-      "high_boiling": "High Boiling Point",
-      "gas_state": "Gas State"
+      "high_boiling": "Extreme Boiling Point",
+      "gas_state": "Ghostly State"
     },
     "categories": {
       "all": "All",
       "diatomic-nonmetal": "Diatomic Nonmetal",
-      "noble-gas": "Noble Gas",
+      "noble-gas": "Pure Gas",
       "alkali-metal": "Alkali Metal",
       "alkaline-earth-metal": "Alkaline Earth Metal",
       "metalloid": "Metalloid",
@@ -1146,123 +1146,127 @@
   },
   "chem_lab": {
     "header": {
-      "badge": "Virtual Lab Center",
+      "badge": "Virtual Cauldron Lab",
       "title_1": "Explore the",
-      "title_2": "Chemistry",
+      "title_2": "Alchemy",
       "title_3": "Wonderland",
-      "desc": "Select a learning module and start your journey of knowledge conquest today."
+      "desc": "Select a learning module and start your wizardry journey today."
     },
     "modules": {
       "reaction": {
-        "label": "Reaction Simulator",
-        "desc": "Select chemicals and perform visual chemical reactions."
+        "label": "Cauldron Potion Mixer",
+        "desc": "Select magical elements and perform visual alchemy reactions."
       },
       "balance": {
-        "label": "Equation Balancer",
+        "label": "Spell Balancer",
         "desc": "Train your equation balancing skills with thousands of exercises."
       },
       "molecule": {
-        "label": "Molecular Model",
+        "label": "Linh Thach Model",
         "desc": "View 3D molecular structures and chemical space."
       },
       "solver": {
-        "label": "Equation Solver",
-        "desc": "Search and look up balanced equations instantly from the database."
+        "label": "Spell Finder",
+        "desc": "Search and look up balanced spell equations instantly from the database."
       },
-      "start_btn": "Start Now"
+      "calculator": {
+        "label": "Calculating Cauldron",
+        "desc": "Calculate atomic mass, potion concentration, and universal formulas."
+      },
+      "start_btn": "Ignite Cauldron"
     },
     "stats": {
-      "chemicals": "Simulated Chemicals",
+      "chemicals": "Brewed Potions",
       "reactions": "Discovered Reactions",
-      "creativity": "Creative Possibilities"
+      "creativity": "Creative Mana"
     }
   },
   "material_detail": {
     "back_btn": "Back to library",
-    "not_found": "Document does not exist",
-    "views": "views",
-    "downloads": "downloads",
+    "not_found": "Scroll does not exist",
+    "views": "wizards read",
+    "downloads": "copied",
     "unsupported_format": "Format #{{type}} does not support direct preview",
-    "download_to_view": "Download to view",
-    "no_desc": "No description available for this document.",
-    "download_btn": "Download material (FREE)",
+    "download_to_view": "Copy scroll to view",
+    "no_desc": "No description available for this scroll.",
+    "download_btn": "Copy scroll (FREE)",
     "feedback": {
-      "title_main": "Community",
-      "title_highlight": "Feedback",
-      "placeholder": "Leave your thoughts about this material...",
-      "submit_btn": "Send feedback",
-      "submitting_btn": "Sending...",
-      "login_required": "Please login to join the discussion",
-      "login_link": "Go to login page",
-      "no_feedback": "No comments yet. Be the first one!",
-      "alert_login": "Please login to send feedback!",
-      "err_fetch": "Error loading data",
-      "err_submit": "Error sending feedback",
-      "default_user": "User"
+      "title_main": "Great Hall",
+      "title_highlight": "Discussion",
+      "placeholder": "Leave your thoughts on this scroll...",
+      "submit_btn": "Send post",
+      "submitting_btn": "Owl flying...",
+      "login_required": "Please enroll to join the discussion",
+      "login_link": "Go to enrollment page",
+      "no_feedback": "No comments yet. Be the first wizard!",
+      "alert_login": "Please enroll to send feedback!",
+      "err_fetch": "Error loading scroll data",
+      "err_submit": "Error sending owl post",
+      "default_user": "Apprentice Wizard"
     },
     "sidebar": {
-      "file_info": "File Info",
-      "format": "Format",
-      "posted_date": "Posted Date",
-      "size": "Size",
-      "disclaimer": "All learning materials at Aurum are provided free of charge to support learning. All commercialization without author's consent is strictly prohibited."
+      "file_info": "Scroll Info",
+      "format": "Edition",
+      "posted_date": "Seal Date",
+      "size": "Scroll Size",
+      "disclaimer": "All magic scrolls at Aurum are provided free of charge to support alchemy training. All commercialization without author's consent is strictly prohibited."
     }
   },
   "library": {
-    "title": "Learning <1>Library</1>",
-    "subtitle": "A diverse repository of chemical knowledge with Infographics, Mindmaps, and more.",
-    "search_placeholder": "Search materials...",
-    "loading": "Loading materials...",
+    "title": "Magical <1>Library</1>",
+    "subtitle": "A diverse repository of magical knowledge with Infographics, Mindmaps, and more.",
+    "search_placeholder": "Search magic scrolls...",
+    "loading": "Loading scrolls...",
     "categories": {
-      "all": "All Materials",
-      "infographic_11": "GRADE 11 INFOGRAPHIC",
-      "infographic_12": "GRADE 12 INFOGRAPHIC",
-      "mindmap_10": "GRADE 10 MINDMAP",
-      "mindmap_11": "GRADE 11 MINDMAP",
-      "mindmap_12": "GRADE 12 MINDMAP",
-      "worksheet_12": "GRADE 12 WORKSHEET",
-      "comic_10": "GRADE 10 COMIC",
-      "comic_11": "GRADE 11 COMIC",
-      "comic_12": "GRADE 12 COMIC",
-      "worksheet_9": "GRADE 9 WORKSHEET",
-      "mindmap_6": "SCIENCE 6 MINDMAP"
+      "all": "All Scrolls",
+      "infographic_11": "GRADE 11 MAGIC SCROLL",
+      "infographic_12": "GRADE 12 MAGIC SCROLL",
+      "mindmap_10": "GRADE 10 SPELL MAP",
+      "mindmap_11": "GRADE 11 SPELL MAP",
+      "mindmap_12": "GRADE 12 SPELL MAP",
+      "worksheet_12": "GRADE 12 WORKSHEET SCROLL",
+      "comic_10": "GRADE 10 COMIC SCROLL",
+      "comic_11": "GRADE 11 COMIC SCROLL",
+      "comic_12": "GRADE 12 COMIC SCROLL",
+      "worksheet_9": "GRADE 9 WORKSHEET SCROLL",
+      "mindmap_6": "SCIENCE 6 SPELL MAP"
     },
     "card": {
-      "view_details": "View Details",
-      "default_category": "Material"
+      "view_details": "View Scroll",
+      "default_category": "Scroll"
     },
     "empty": {
-      "title": "No matching materials found",
+      "title": "No matching scrolls found",
       "clear_btn": "Clear filters and try again"
     }
   },
   "lessons": {
     "header": {
-      "title_journey": "Discovery",
-      "title_library": "Learning",
-      "subtitle_explore": "Journey",
-      "subtitle_materials": "Library",
+      "title_journey": "Marauder's Map",
+      "title_library": "Spell Grimoire",
+      "subtitle_explore": "Tu Luyen",
+      "subtitle_materials": "Scrolls",
       "desc_logged_in": "Complete the storylines to become a true master alchemist.",
-      "desc_guest": "A journey to conquer Chemistry from basic to advanced for students from grade 8 to 12."
+      "desc_guest": "A journey to conquer magic from basic to advanced for apprentice wizards from grade 8 to 12."
     },
     "grade_labels": {
       "label": "Grade {{grade}}"
     },
     "status": {
-      "loading": "Loading lessons...",
-      "empty_title_logged_in": "Please select a part to start your journey",
-      "empty_title_guest": "Please select a grade to show lessons",
-      "empty_desc": "Explore the magical world of chemistry right now",
-      "err_fetch": "Error loading lessons"
+      "loading": "Opening grimoire scrolls...",
+      "empty_title_logged_in": "Please select a chamber to start your journey",
+      "empty_title_guest": "Please select a grade to show magic lessons",
+      "empty_desc": "Explore the magical world of alchemy right now",
+      "err_fetch": "Error summoning lessons"
     },
     "card": {
-      "explore_btn": "EXPLORE NOW"
+      "explore_btn": "EXPLORE CHAMBER"
     },
     "story_parts": {
       "8": {
         "title": "Part 1",
         "name": "The Awakening Beginning",
-        "story": "Enter the primal molecular world, where everything begins. Your mission is to understand the nature of atoms and master the invisible language of Chemistry."
+        "story": "Enter the primal molecular world, where everything begins. Your mission is to understand the nature of atoms and master the invisible language of Alchemy."
       },
       "9": {
         "title": "Part 2",
@@ -1287,120 +1291,120 @@
     }
   },
   "lesson_page": {
-    "loading": "Loading lesson...",
+    "loading": "Summoning lesson...",
     "back_btn": "Back to list",
-    "grade_label": "CHEMISTRY GRADE {{grade}}",
+    "grade_label": "MAGIC GRADE {{grade}}",
     "content_title": "Lesson Content",
     "video": {
-      "placeholder": "Video not available",
-      "powered_by": "Developed by"
+      "placeholder": "Pensieve clip not available",
+      "powered_by": "Magic link by"
     },
     "error": {
-      "fetch": "Error loading lesson data"
+      "fetch": "Error summoning lesson data"
     }
   },
   "mission_modal": {
     "labels": {
-      "multiple-choice": "Multiple Choice",
-      "image-selection": "Image Recognition",
-      "fill-in-the-blank": "Fill in Blank",
-      "drag-drop": "Sorting",
-      "matching": "Matching",
-      "mission": "Mission",
-      "goal": "Goal"
+      "multiple-choice": "Multiple Choice Spell",
+      "image-selection": "Magical Beast Recognition",
+      "fill-in-the-blank": "Fill in Ancient Rune",
+      "drag-drop": "Sorting Flow",
+      "matching": "Matching Spells",
+      "mission": "Wizard Mission",
+      "goal": "Training Goal"
     },
-    "narrative_fallback": "Use your knowledge to complete this challenge!",
-    "source_fallback": "Reference",
+    "narrative_fallback": "Use your wand and knowledge to complete this challenge!",
+    "source_fallback": "Reference Scroll",
     "image_selection": {
-      "confirm": "Confirm selection {{label}} ➔",
-      "label_prefix": "Selection "
+      "confirm": "Confirm spell {{label}} ➔",
+      "label_prefix": "Spell "
     },
     "fill_blank": {
-      "placeholder": "Type answer...",
-      "confirm": "Confirm"
+      "placeholder": "Type ancient rune...",
+      "confirm": "Cast Spell"
     },
     "drag_drop": {
-      "instruction": "Drag to reorder correctly",
-      "confirm": "Confirm Order ➔"
+      "instruction": "Drag to reorder spell sequence correctly",
+      "confirm": "Confirm Sequence ➔"
     },
     "matching": {
-      "instruction": "Column B (Drag & Drop)",
-      "col_a": "Column A",
-      "col_b": "Column B",
-      "confirm": "Confirm Connection ➔"
+      "instruction": "Spell Meanings (Drag & Drop)",
+      "col_a": "Spell",
+      "col_b": "Meaning",
+      "confirm": "Confirm Spells ➔"
     },
     "footer": {
-      "cancel": "Cancel Journey",
-      "correct": "✨ Correct! {{status}}",
-      "wrong": "❌ Incorrect, try again!",
-      "status_final": "Mission accomplished!",
-      "status_next": "Next up..."
+      "cancel": "Suspend Training",
+      "correct": "✨ Correct! Spell holds! {{status}}",
+      "wrong": "❌ Spell backfired, try again!",
+      "status_final": "Wizard mission accomplished!",
+      "status_next": "Next chamber..."
     }
   },
   "stage_video": {
     "back_btn": "Back",
     "status": {
-      "label": "Status:",
-      "ready": "Ready",
-      "analyzing": "Analyzing"
+      "label": "Cauldron Status:",
+      "ready": "Mana Ready",
+      "analyzing": "Refining potion..."
     },
     "metadata": {
-      "source": "Source: Laboratory Camera 01",
-      "format": "Format: 1080p Digital Feed"
+      "source": "Source: Hogwarts Pensieve 01",
+      "format": "Format: Extracted Magic Memory"
     },
     "action_btn": {
-      "ready": "Accept Mission",
-      "processing": "Processing Data..."
+      "ready": "Accept Challenge",
+      "processing": "Refining Data..."
     },
     "hints": {
-      "ready": "Data retrieved! Success to you, Chemist.",
-      "processing": "Hint: Watch the clip closely to prepare for the challenge!"
+      "ready": "Magic memory ready! Draw your wand.",
+      "processing": "Hint: Watch the memory closely to prepare your spell!"
     }
   },
   "arena_modes": {
-    "solo": "1 VS 1",
-    "3vs3": "Squad 3 (3 VS 3)",
-    "5vs5": "Squad 5 (5 VS 5)",
-    "1vs100": "Battle Royale (1 vs 100)",
+    "solo": "SOLO DUEL",
+    "3vs3": "SQUAD OF 3 WIZARDS",
+    "5vs5": "SQUAD OF 5 WIZARDS",
+    "1vs100": "WIZARD BATTLE ROYALE",
     "solo_short": "1 VS 1",
     "3vs3_short": "3 VS 3",
     "5vs5_short": "5 VS 5",
-    "br_short": "Battle Royale"
+    "br_short": "Wizard War"
   },
   "widget": {
-    "title": "Aurum Assistant",
-    "status_active": "Active now",
-    "minimize": "Minimize",
-    "close": "Close",
-    "tooltip": "Aurum Assistant",
-    "login_required": "Login Required",
-    "login_required_desc": "Please log in to track and claim rewards from the daily mission system.",
-    "login_now": "Login Now",
-    "level_prefix": "Level",
-    "streak": "Streak",
-    "reset_in": "Reset in:",
-    "reward": "Reward",
+    "title": "Patronus Assistant",
+    "status_active": "Patronus active",
+    "minimize": "Dismiss",
+    "close": "Banish",
+    "tooltip": "Patronus Charm",
+    "login_required": "Enrollment Required",
+    "login_required_desc": "Please enroll in the Academy to track and claim rewards from daily wizard missions.",
+    "login_now": "Enroll Now",
+    "level_prefix": "Mana Level",
+    "streak": "Training Streak",
+    "reset_in": "Magic reset in:",
+    "reward": "Relic Reward",
     "claim": "Claim",
     "claimed": "Claimed ✓",
-    "locked": "Locked",
-    "no_missions": "No missions available",
-    "feedback_type": "Feedback type:",
-    "feedback_details": "Feedback details:",
-    "type_suggestion": "💡 Suggestion",
-    "type_bug": "🐛 Bug Report",
-    "type_praise": "❤️ Praise",
-    "placeholder_suggestion": "Describe your idea or feature request to help Aurum improve...",
-    "placeholder_bug": "Describe the bug in detail (and press Ctrl+V to paste screenshot if any)...",
-    "placeholder_praise": "Share what you love about Aurum...",
-    "attach_image": "📷 Attach Image (Or Ctrl+V)",
+    "locked": "Sealed",
+    "no_missions": "No wizard missions available",
+    "feedback_type": "Magical Feedback:",
+    "feedback_details": "Scroll details:",
+    "type_suggestion": "💡 Magical Idea",
+    "type_bug": "🐛 Pest Infestation (Bug)",
+    "type_praise": "❤️ Praise Academy",
+    "placeholder_suggestion": "Describe your magic idea to help improve the cauldron...",
+    "placeholder_bug": "Describe the magical pest (bug) in detail (and press Ctrl+V to paste screenshot)...",
+    "placeholder_praise": "Share what you love about the Hogwarts of Chemistry...",
+    "attach_image": "📷 Attach Vision (Or Ctrl+V)",
     "remove": "Remove",
-    "attach_hint": "Support file upload or press Ctrl+V to paste screenshot directly.",
-    "sending": "Sending feedback...",
-    "send_suggestion": "Send Suggestion ➔",
-    "send_bug": "Report Bug ➔",
-    "send_praise": "Send Praise ➔",
-    "success_title": "Thank you!",
-    "success_desc": "Your feedback has been successfully submitted to Aurum team.",
-    "send_another": "Submit Another Feedback"
+    "attach_hint": "Support image file or press Ctrl+V to paste vision directly.",
+    "sending": "Owl flying to Grand Council...",
+    "send_suggestion": "Send Idea Owl ➔",
+    "send_bug": "Report Pest Owl ➔",
+    "send_praise": "Send Praise Owl ➔",
+    "success_title": "Owl Received!",
+    "success_desc": "Your message has been successfully delivered to the Aurum Grand Council.",
+    "send_another": "Send Another Owl"
   }
 }
