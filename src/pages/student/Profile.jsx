@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
+import StudyCalendar from '@/components/profile/StudyCalendar';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div
@@ -51,31 +52,6 @@ const Profile = () => {
     setIsSavingPlan(true);
     try {
       await updateUser({ studyPlan: planData });
-      
-      // Sync to Google Calendar by opening pre-filled event link if calendar reminders are enabled
-      if (planData.calendarEnabled) {
-        const studyTime = planData.studyTime || '20:00';
-        const dailyLessonTarget = planData.dailyLessonTarget || 1;
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        const [hours, minutes] = studyTime.split(':');
-        
-        // Local start time formatting: YYYYMMDDTHHMMSS
-        const startTime = `${year}${month}${day}T${hours}${minutes}00`;
-        const endHours = String((parseInt(hours) + 1) % 24).padStart(2, '0');
-        const endTime = `${year}${month}${day}T${endHours}${minutes}00`;
-        
-        const title = encodeURIComponent("Lịch học tập Học viện Hóa học Aurum");
-        const details = encodeURIComponent(`Nhắc nhở học tập hàng ngày.\nMục tiêu học tập: ${dailyLessonTarget} bài học/ngày.\nĐường dẫn học tập: https://chem-aurum.vercel.app/`);
-        const dates = `${startTime}/${endTime}`;
-        
-        const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&details=${details}&recur=RRULE:FREQ=DAILY`;
-        
-        window.open(calendarUrl, '_blank');
-      }
-      
       alert(t('profile.study_plan.success'));
     } catch (err) {
       console.error('Lỗi khi lưu kế hoạch:', err);
@@ -366,6 +342,8 @@ const Profile = () => {
                 )}
               </button>
             </div>
+
+            <StudyCalendar planData={planData} onPlanDataChange={setPlanData} />
           </div>
         </div>
 
