@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
@@ -9,6 +9,12 @@ const FeedbackButton = () => {
   const [imageFile, setImageFile] = useState(null);
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('aurum_open_feedback', handleOpen);
+    return () => window.removeEventListener('aurum_open_feedback', handleOpen);
+  }, []);
 
   const handlePaste = (e) => {
     const items = e.clipboardData?.items;
