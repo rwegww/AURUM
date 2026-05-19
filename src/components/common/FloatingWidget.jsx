@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
@@ -7,7 +7,7 @@ import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const FloatingWidget = () => {
   const { t } = useTranslation();
-  const { user, isLoggedIn, loading: authLoading } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   
   // Widget open & expanded states
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,13 +21,12 @@ const FloatingWidget = () => {
   const [timeLeft, setTimeLeft] = useState('');
   const [claimableCount, setClaimableCount] = useState(0);
 
-  // Chatbot/Feedback states
+  // Direct Feedback Form states
   const [feedbackType, setFeedbackType] = useState('suggestion'); // 'suggestion' | 'bug' | 'praise'
-  const [messages, setMessages] = useState([]);
-  const [inputText, setInputText] = useState('');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [sendingFeedback, setSendingFeedback] = useState(false);
-  const chatEndRef = useRef(null);
+  const [feedbackSuccess, setFeedbackSuccess] = useState(false);
 
   // Interval for countdown and polling
   useEffect(() => {
@@ -128,78 +127,9 @@ const FloatingWidget = () => {
     }
   };
 
-  // Initialize Chatbot Messages
-  const initChat = () => {
-    setMessages([
-      {
-        id: 'welcome',
-        sender: 'bot',
-        text: 'Chào bạn! Mình có thể giúp gì cho bạn hôm nay? Hãy chọn một chủ đề phản hồi dưới đây:',
-        timestamp: new Date(),
-        quickReplies: [
-          { id: 'suggestion', label: '💡 Góp ý tính năng' },
-          { id: 'bug', label: '🐛 Báo lỗi hệ thống' },
-          { id: 'praise', label: '❤️ Khen ngợi' }
-        ]
-      }
-    ]);
-    setInputText('');
-    setImageFile(null);
-  };
-
-  useEffect(() => {
-    if (messages.length === 0) {
-      initChat();
-    }
-  }, [messages]);
-
-  // Scroll to bottom of chat
-  useEffect(() => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages]);
-
-  // Handle Quick Reply Choice
-  const handleQuickReply = (replyId, replyLabel) => {
-    // Remove quick replies from current bot message
-    setMessages(prev => prev.map(msg => msg.quickReplies ? { ...msg, quickReplies: null } : msg));
-    
-    // Add user response message
-    const userMsgId = `user-${Date.now()}`;
-    setMessages(prev => [...prev, {
-      id: userMsgId,
-      sender: 'user',
-      text: replyLabel,
-      timestamp: new Date()
-    }]);
-
-    setFeedbackType(replyId);
-
-    // Bot instruction response
-    setTimeout(() => {
-      let botText = '';
-      if (replyId === 'suggestion') {
-        botText = 'Tuyệt vời! Hãy gửi ý kiến đóng góp hoặc đề xuất tính năng mới của bạn ở đây nhé.';
-      } else if (replyId === 'bug') {
-        botText = 'Rất tiếc vì sự cố này! Hãy mô tả chi tiết lỗi. Bạn có thể đính kèm file ảnh bằng nút bên dưới hoặc dán trực tiếp hình ảnh chụp màn hình (Ctrl+V) vào ô nhập nhé.';
-      } else {
-        botText = 'Cảm ơn bạn rất nhiều! Rất vui được nghe phản hồi tích cực từ bạn. Hãy viết lời nhắn của bạn ở đây nhé.';
-      }
-
-      setMessages(prev => [...prev, {
-        id: `bot-instr-${Date.now()}`,
-        sender: 'bot',
-        text: botText,
-        timestamp: new Date(),
-        waitingInput: true
-      }]);
-    }, 600);
-  };
-
   // Paste Screenshot Handler
   const handlePaste = (e) => {
-    if (activeTab !== 'feedback') return;
+    if (activeTab !== 'feedback' || feedbackType !== 'bug') return;
     const items = e.clipboardData?.items;
     if (!items) return;
     
@@ -209,13 +139,6 @@ const FloatingWidget = () => {
         if (file) {
           const newFile = new File([file], `pasted-image-${Date.now()}.png`, { type: file.type });
           setImageFile(newFile);
-          // Auto convert to bug type or append notice
-          setMessages(prev => [...prev, {
-            id: `sys-pasted-${Date.now()}`,
-            sender: 'bot',
-            text: '📸 Đã nhận ảnh chụp màn hình từ clipboard!',
-            timestamp: new Date()
-          }]);
         }
         break;
       }
@@ -225,38 +148,16 @@ const FloatingWidget = () => {
   // Submit Feedback Chat Message
   const handleSendFeedback = async (e) => {
     if (e) e.preventDefault();
-    if (!inputText.trim() && !imageFile) return;
+    if (!feedbackMessage.trim()) return;
 
-    const userText = inputText;
-    const currentImg = imageFile;
-    
-    // Add user message
-    setMessages(prev => [...prev, {
-      id: `user-msg-${Date.now()}`,
-      sender: 'user',
-      text: userText || '🖼️ Gửi một hình ảnh đính kèm',
-      timestamp: new Date(),
-      attachmentName: currentImg ? currentImg.name : null
-    }]);
-
-    setInputText('');
-    setImageFile(null);
     setSendingFeedback(true);
-
-    const tempBotMsgId = `bot-sending-${Date.now()}`;
-    setMessages(prev => [...prev, {
-      id: tempBotMsgId,
-      sender: 'bot',
-      text: '⏳ Trợ lý đang gửi phản hồi lên hệ thống...',
-      timestamp: new Date()
-    }]);
 
     try {
       const token = localStorage.getItem('token');
       let imageUrl = null;
 
-      if (currentImg) {
-        const uploadData = await uploadToCloudinary(currentImg, 'chemistry-odyssey/bug-reports');
+      if (feedbackType === 'bug' && imageFile) {
+        const uploadData = await uploadToCloudinary(imageFile, 'chemistry-odyssey/bug-reports');
         imageUrl = uploadData.url;
       }
 
@@ -266,27 +167,17 @@ const FloatingWidget = () => {
           'Content-Type': 'application/json',
           'Authorization': token ? `Bearer ${token}` : ''
         },
-        body: JSON.stringify({ type: feedbackType, message: userText, imageUrl })
+        body: JSON.stringify({ type: feedbackType, message: feedbackMessage, imageUrl })
       });
 
       if (res.ok) {
-        // Replace temp bot message with success
-        setMessages(prev => prev.map(msg => msg.id === tempBotMsgId ? {
-          ...msg,
-          text: '✅ Cảm ơn bạn rất nhiều! Ý kiến đóng góp của bạn đã được lưu lại và gửi tới Ban quản trị Aurum. Chúc bạn một ngày học tập thật hiệu quả! 🌟',
-          quickReplies: [
-            { id: 'restart', label: '🔄 Gửi phản hồi mới' }
-          ]
-        } : msg));
+        setFeedbackSuccess(true);
       } else {
         throw new Error('Gửi thất bại');
       }
     } catch (err) {
       console.error('Lỗi gửi phản hồi:', err);
-      setMessages(prev => prev.map(msg => msg.id === tempBotMsgId ? {
-        ...msg,
-        text: '❌ Rất tiếc, đã có lỗi xảy ra khi kết nối mạng. Vui lòng thử lại sau.'
-      } : msg));
+      alert('Rất tiếc, đã có lỗi xảy ra khi kết nối mạng. Vui lòng thử lại sau.');
     } finally {
       setSendingFeedback(false);
     }
@@ -307,7 +198,6 @@ const FloatingWidget = () => {
         <button 
           onClick={() => {
             setIsExpanded(true);
-            // Default to missions, but if not logged in, show feedback
             if (!isLoggedIn) {
               setActiveTab('feedback');
             }
@@ -347,11 +237,8 @@ const FloatingWidget = () => {
                 </div>
               </div>
               
-              {/* Functional Controls + Messenger Decorative Icons */}
-              <div className="flex items-center gap-4">
-                <span className="text-white/40 cursor-default select-none text-sm max-sm:hidden" title="Voice call (Decorative)">📞</span>
-                <span className="text-white/40 cursor-default select-none text-sm max-sm:hidden" title="Video call (Decorative)">📹</span>
-                
+              {/* Functional Controls */}
+              <div className="flex items-center gap-2">
                 {/* Collapse / Minimize button */}
                 <button 
                   onClick={() => setIsExpanded(false)}
@@ -406,7 +293,6 @@ const FloatingWidget = () => {
               {/* TAB 1: MISSIONS */}
               {activeTab === 'missions' && (
                 <div className="space-y-4">
-                  {/* User auth state checking */}
                   {!isLoggedIn ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center px-4 space-y-4">
                       <span className="text-5xl">🔒</span>
@@ -569,117 +455,145 @@ const FloatingWidget = () => {
                 </div>
               )}
 
-              {/* TAB 2: CHATBOT FEEDBACK */}
+              {/* TAB 2: DIRECT FEEDBACK */}
               {activeTab === 'feedback' && (
                 <div className="flex flex-col h-full min-h-[420px] justify-between">
-                  
-                  {/* Messages log */}
-                  <div className="space-y-4 flex-1">
-                    {messages.map((msg) => {
-                      const isBot = msg.sender === 'bot';
-                      return (
-                        <div key={msg.id} className={`flex flex-col ${isBot ? 'items-start' : 'items-end'} space-y-1`}>
-                          
-                          {/* Sender identity */}
-                          {isBot && (
-                            <span className="text-[8px] font-black text-viet-text-light/40 uppercase tracking-widest pl-1">
-                              Trợ lý Aurum
-                            </span>
-                          )}
-                          
-                          {/* Chat Bubble */}
-                          <div 
-                            className={`max-w-[85%] px-4 py-3 rounded-2xl text-xs font-medium leading-relaxed ${
-                              isBot 
-                              ? 'bg-white border border-[#e6e2d6] text-viet-text rounded-tl-none shadow-sm'
-                              : 'bg-viet-green text-white rounded-tr-none shadow-sm shadow-viet-green/10'
-                            }`}
-                          >
-                            <p className="whitespace-pre-wrap">{msg.text}</p>
-                            {msg.attachmentName && (
-                              <div className="mt-1 text-[9px] font-semibold bg-black/10 px-2 py-0.5 rounded italic">
-                                📎 {msg.attachmentName}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Quick replies buttons */}
-                          {msg.quickReplies && (
-                            <div className="flex flex-wrap gap-2 pt-2 pl-1 max-w-xs">
-                              {msg.quickReplies.map((qr) => (
-                                <button
-                                  key={qr.id}
-                                  onClick={() => {
-                                    if (qr.id === 'restart') {
-                                      initChat();
-                                    } else {
-                                      handleQuickReply(qr.id, qr.label);
-                                    }
-                                  }}
-                                  className="px-3.5 py-2 bg-white border border-viet-green text-viet-green hover:bg-viet-green hover:text-white rounded-full font-bold text-[10px] uppercase tracking-tight shadow-sm transition-all cursor-pointer"
-                                >
-                                  {qr.label}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                    <div ref={chatEndRef} />
-                  </div>
-
-                  {/* Attachment indicator if image file selected */}
-                  {imageFile && (
-                    <div className="bg-green-50 border border-green-200 rounded-xl p-2.5 flex items-center justify-between mb-3 text-[10px] font-bold text-green-700 animate-fade-in shrink-0">
-                      <span className="truncate max-w-[200px]">📷 Đã chọn: {imageFile.name}</span>
-                      <button 
-                        onClick={() => setImageFile(null)} 
-                        className="text-red-500 hover:text-red-700 font-extrabold cursor-pointer"
+                  {feedbackSuccess ? (
+                    <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
+                      <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl animate-bounce">
+                        ✓
+                      </div>
+                      <h4 className="font-black text-viet-text text-lg uppercase tracking-tight">Cảm ơn bạn!</h4>
+                      <p className="text-xs font-semibold text-viet-text-light px-6">
+                        Ý kiến đóng góp của bạn đã được gửi thành công đến ban quản trị Aurum.
+                      </p>
+                      <button
+                        onClick={() => {
+                          setFeedbackSuccess(false);
+                          setFeedbackMessage('');
+                          setImageFile(null);
+                        }}
+                        className="px-6 py-2.5 bg-viet-green text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow-md hover:bg-[#007042] transition-colors cursor-pointer"
                       >
-                        Xóa
+                        Gửi phản hồi khác
                       </button>
                     </div>
+                  ) : (
+                    <form onSubmit={handleSendFeedback} onPaste={handlePaste} className="space-y-4 flex flex-col h-full justify-between">
+                      <div className="space-y-4">
+                        {/* Task Selector: 3 separate buttons */}
+                        <div>
+                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">Chọn loại phản hồi:</label>
+                          <div className="grid grid-cols-3 gap-2">
+                            {[
+                              { id: 'suggestion', label: '💡 Góp ý' },
+                              { id: 'bug', label: '🐛 Báo lỗi' },
+                              { id: 'praise', label: '❤️ Khen ngợi' }
+                            ].map(type => {
+                              const isSelected = feedbackType === type.id;
+                              let selectStyles = '';
+                              if (isSelected) {
+                                if (type.id === 'suggestion') selectStyles = 'border-amber-500 text-amber-600 shadow-sm bg-amber-50/10';
+                                else if (type.id === 'bug') selectStyles = 'border-red-500 text-red-600 shadow-sm bg-red-50/10';
+                                else selectStyles = 'border-pink-500 text-pink-600 shadow-sm bg-pink-50/10';
+                              } else {
+                                selectStyles = 'border-[#e6e2d6] text-viet-text-light hover:border-viet-green/30 bg-white';
+                              }
+
+                              return (
+                                <button
+                                  key={type.id}
+                                  type="button"
+                                  onClick={() => {
+                                    setFeedbackType(type.id);
+                                    setImageFile(null);
+                                  }}
+                                  className={`flex flex-col items-center justify-center py-2.5 rounded-xl border-2 text-[10px] font-black uppercase tracking-tighter transition-all cursor-pointer ${selectStyles}`}
+                                >
+                                  {type.label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Input Message Area */}
+                        <div>
+                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">Nội dung chi tiết:</label>
+                          <textarea
+                            required
+                            rows="5"
+                            placeholder={
+                              feedbackType === 'suggestion' 
+                              ? "Hãy mô tả ý tưởng hoặc đề xuất tính năng giúp Aurum hoàn thiện hơn..." 
+                              : feedbackType === 'bug' 
+                              ? "Hãy mô tả chi tiết lỗi bạn gặp phải (và nhấn Ctrl+V để dán trực tiếp ảnh chụp màn hình nếu có)..." 
+                              : "Hãy chia sẻ những điều bạn yêu thích về Aurum..."
+                            }
+                            value={feedbackMessage}
+                            onChange={(e) => setFeedbackMessage(e.target.value)}
+                            className="w-full p-4 rounded-xl border border-[#e6e2d6] bg-white text-xs font-semibold focus:outline-none focus:border-viet-green transition-all resize-none placeholder:text-viet-text-light/30"
+                          />
+                        </div>
+
+                        {/* Attachment Area (Only for Bug report) */}
+                        {feedbackType === 'bug' && (
+                          <div className="space-y-2 border border-dashed border-[#e6e2d6] rounded-xl p-3 bg-white">
+                            <div className="flex items-center justify-between">
+                              <label className="flex items-center gap-2 cursor-pointer bg-slate-50 border border-[#e6e2d6] hover:bg-slate-100 px-3 py-2 rounded-lg text-[9px] font-black uppercase text-slate-700 transition">
+                                📷 Đính kèm ảnh (Hoặc Ctrl+V)
+                                <input 
+                                  type="file" 
+                                  accept="image/*" 
+                                  className="hidden" 
+                                  onChange={handleFileChange}
+                                />
+                              </label>
+                              {imageFile && (
+                                <button 
+                                  type="button"
+                                  onClick={() => setImageFile(null)}
+                                  className="text-red-500 hover:text-red-700 font-extrabold text-[9px] uppercase cursor-pointer"
+                                >
+                                  Xóa
+                                </button>
+                              )}
+                            </div>
+                            {imageFile ? (
+                              <div className="text-[10px] text-green-700 font-bold truncate max-w-full">
+                                📎 {imageFile.name}
+                              </div>
+                            ) : (
+                              <p className="text-[8px] text-viet-text-light/40 font-bold leading-tight">
+                                Hỗ trợ tải tệp ảnh hoặc chụp ảnh màn hình rồi nhấn Ctrl+V để dán trực tiếp.
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Submit Button */}
+                      <button
+                        type="submit"
+                        disabled={sendingFeedback || !feedbackMessage.trim()}
+                        className={`w-full py-3.5 text-xs font-black uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer disabled:opacity-50 ${
+                          feedbackType === 'suggestion' 
+                          ? 'bg-amber-500 shadow-amber-500/20 hover:bg-amber-600 text-white' 
+                          : feedbackType === 'bug' 
+                          ? 'bg-red-500 shadow-red-500/20 hover:bg-red-600 text-white' 
+                          : 'bg-pink-500 shadow-pink-500/20 hover:bg-pink-600 text-white'
+                        }`}
+                      >
+                        {sendingFeedback 
+                          ? 'Đang gửi phản hồi...' 
+                          : feedbackType === 'suggestion' 
+                          ? 'Gửi ý kiến đóng góp ➔' 
+                          : feedbackType === 'bug' 
+                          ? 'Báo cáo lỗi hệ thống ➔' 
+                          : 'Gửi lời khen ngợi ➔'}
+                      </button>
+                    </form>
                   )}
-
-                  {/* Chat Input Bar at bottom */}
-                  <form 
-                    onSubmit={handleSendFeedback} 
-                    onPaste={handlePaste}
-                    className="flex items-center gap-2 border-t border-[#e6e2d6] pt-3 mt-3 bg-[#fffbf2] shrink-0"
-                  >
-                    {/* Attachment trigger button */}
-                    <label className="w-10 h-10 shrink-0 bg-white border border-[#e6e2d6] hover:bg-slate-50 rounded-xl flex items-center justify-center text-lg cursor-pointer transition-colors" title="Đính kèm ảnh">
-                      📷
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        className="hidden" 
-                        onChange={handleFileChange}
-                      />
-                    </label>
-
-                    {/* Text Input */}
-                    <input 
-                      type="text"
-                      placeholder="Nhập tin nhắn phản hồi..."
-                      value={inputText}
-                      onChange={(e) => setInputText(e.target.value)}
-                      disabled={sendingFeedback}
-                      className="flex-1 h-10 px-4 rounded-xl border border-[#e6e2d6] bg-white text-xs font-semibold focus:outline-none focus:border-viet-green transition-all"
-                    />
-
-                    {/* Send Button */}
-                    <button 
-                      type="submit"
-                      disabled={sendingFeedback || (!inputText.trim() && !imageFile)}
-                      className="w-10 h-10 shrink-0 bg-viet-green disabled:bg-viet-green/30 text-white rounded-xl flex items-center justify-center text-sm shadow-sm shadow-viet-green/20 hover:scale-105 transition-all cursor-pointer"
-                      title="Gửi"
-                    >
-                      ➔
-                    </button>
-                  </form>
-
                 </div>
               )}
 
