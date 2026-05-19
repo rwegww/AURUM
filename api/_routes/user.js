@@ -75,9 +75,23 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // Update Profile
+import { sendStudyPlanEmail } from '../lib/mailer.js';
+
 router.patch('/profile', auth, async (req, res) => {
   try {
     const updatedUser = await User.update(req.user.id, req.body);
+    
+    // Send email notification if study plan was updated and email reminders are enabled
+    if (req.body.studyPlan && req.body.studyPlan.emailEnabled) {
+      sendStudyPlanEmail(req.user.email || updatedUser.email, req.user.username || updatedUser.username, req.body.studyPlan)
+        .then(result => {
+          if (result.previewUrl) {
+            console.log(`[Email Reminder] Ethereal Preview URL: ${result.previewUrl}`);
+          }
+        })
+        .catch(err => console.error('[Email Reminder] Failed to send email in background:', err));
+    }
+
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
