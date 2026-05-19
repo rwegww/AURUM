@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 // Common Components (Static - small & frequently used)
 import { AuthProvider } from '@/context/AuthContext'
 import Navbar from '@/components/navigation/Navbar'
-import FeedbackButton from '@/components/common/FeedbackButton'
+import FloatingWidget from '@/components/common/FloatingWidget'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
 
@@ -51,7 +51,6 @@ const DiscoveryJournalPage = lazyWithRetry(() => import('@/pages/student/Discove
 const Arena = lazyWithRetry(() => import('@/pages/student/Arena'));
 const Library = lazyWithRetry(() => import('@/pages/student/Library'));
 const MaterialDetail = lazyWithRetry(() => import('@/pages/student/MaterialDetail'));
-const Missions = lazyWithRetry(() => import('@/pages/student/Missions'));
 const About = lazyWithRetry(() => import('@/pages/student/About'));
 const Contact = lazyWithRetry(() => import('@/pages/student/Contact'));
 const Terms = lazyWithRetry(() => import('@/pages/student/Terms'));
@@ -91,6 +90,16 @@ function AppContent() {
       window.location.replace('/login' + window.location.hash);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (location.state?.openMissions) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('aurum_open_missions'));
+      }, 300);
+      // Clear location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
   const isImmersivePage = location.pathname.includes('/journey/') && (
@@ -142,7 +151,7 @@ function AppContent() {
           <Route path="/arena" element={<ProtectedRoute><Arena /></ProtectedRoute>} />
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
           <Route path="/library/:id" element={<ProtectedRoute><MaterialDetail /></ProtectedRoute>} />
-          <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
+          <Route path="/missions" element={<Navigate to="/" replace state={{ openMissions: true }} />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
@@ -170,7 +179,7 @@ function AppContent() {
       </Suspense>
       
       {/* Floating Global UI */}
-      {!isManagementPage && !isStandalonePage && <FeedbackButton />}
+      {!isManagementPage && !isStandalonePage && <FloatingWidget />}
     </>
   );
 }
