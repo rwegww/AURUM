@@ -76,7 +76,8 @@ const formatLateDuration = (lateMinutes) => {
 };
 
 export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData) => {
-  const { studyTime, dailyLessonTarget } = planData;
+  const { dailyLessonTarget } = planData;
+  const studyTime = '00:00';
   return sendMail({
     to: toEmail,
     subject: '✔️ Xác nhận kích hoạt Kế hoạch học tập - Học viện Hóa học Aurum',
@@ -104,7 +105,8 @@ export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData
 };
 
 export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planData, hourOffset = 0, lateMinutes = null) => {
-  const { studyTime, dailyLessonTarget } = planData;
+  const { dailyLessonTarget } = planData;
+  const studyTime = '00:00';
   const safeLateMinutes = lateMinutes === null
     ? Math.max(0, Number(hourOffset) || 0) * 60
     : Math.max(0, Math.floor(Number(lateMinutes) || 0));

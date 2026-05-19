@@ -11,11 +11,10 @@ import { auth } from '../_middleware/auth.js';
 
 const VIETNAM_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 const DEFAULT_STUDY_PLAN = {
-  studyTime: '00:00',
   dailyLessonTarget: 1,
-  remindersEnabled: true,
   emailEnabled: false,
-  calendarEnabled: false,
+  completed: false,
+  grade: null,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 240;
 const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'password']);
@@ -75,16 +74,13 @@ const normalizeStudyPlan = (incoming, existing = {}) => {
   const target = Number.parseInt(merged.dailyLessonTarget, 10);
 
   return {
-    ...merged,
-    studyTime: parseStudyTimeMinutes(merged.studyTime) !== null ? merged.studyTime.trim() : DEFAULT_STUDY_PLAN.studyTime,
     dailyLessonTarget: Number.isFinite(target) ? Math.min(Math.max(target, 1), 10) : DEFAULT_STUDY_PLAN.dailyLessonTarget,
-    remindersEnabled: Boolean(merged.remindersEnabled),
     emailEnabled: Boolean(merged.emailEnabled),
-    calendarEnabled: Boolean(merged.calendarEnabled),
-    customSessions: merged.customSessions && typeof merged.customSessions === 'object' && !Array.isArray(merged.customSessions)
-      ? merged.customSessions
-      : {},
-    completedDates: Array.isArray(merged.completedDates) ? merged.completedDates : [],
+    completed: Boolean(merged.completed),
+    grade: merged.grade || null,
+    lastStudyReminderDate: merged.lastStudyReminderDate || null,
+    lastReminderSentAt: merged.lastReminderSentAt || null,
+    firstReminderSentAt: merged.firstReminderSentAt || null,
   };
 };
 
@@ -102,9 +98,7 @@ const resetStudyReminderState = (plan) => {
 const shouldResetStudyReminderState = (nextPlan, previousPlan = {}) => {
   const previous = normalizeStudyPlan(previousPlan);
 
-  return nextPlan.studyTime !== previous.studyTime
-    || nextPlan.dailyLessonTarget !== previous.dailyLessonTarget
-    || (nextPlan.remindersEnabled && !previous.remindersEnabled)
+  return nextPlan.dailyLessonTarget !== previous.dailyLessonTarget
     || (nextPlan.emailEnabled && !previous.emailEnabled);
 };
 
@@ -133,6 +127,10 @@ const toProfileResponse = (user) => ({
 
 const applyLessonStreak = (updateFields, user) => {
   updateFields.today_lesson_completed = true;
+  const plan = normalizeStudyPlan(user.studyPlan);
+  plan.completed = true;
+  updateFields.studyPlan = plan;
+  
   const today = new Date().toISOString().split('T')[0];
   const lastStreak = user.lastStreakAt ? new Date(user.lastStreakAt).toISOString().split('T')[0] : null;
 
@@ -381,6 +379,9 @@ router.post('/progress', auth, async (req, res) => {
 
     if (isLessonCompletion) {
       updateFields.today_lesson_completed = true;
+      const plan = normalizeStudyPlan(req.user.studyPlan);
+      plan.completed = true;
+      updateFields.studyPlan = plan;
       
       // Update streak if not already updated today
       const today = new Date().toISOString().split('T')[0];
@@ -432,6 +433,9 @@ router.post('/heartbeat', auth, async (req, res) => {
     // Auto-reset today_lesson_completed on new day
     if (today !== lastActiveDate) {
       updateFields.today_lesson_completed = false;
+      const plan = normalizeStudyPlan(req.user.studyPlan);
+      plan.completed = false;
+      updateFields.studyPlan = plan;
     }
 
     // Check for streak maintenance (10 minutes online)
@@ -544,7 +548,7 @@ router.get('/cron-send-reminders', async (req, res) => {
       let updatedPlan = { ...plan };
       let hasPlanUpdate = false;
 
-      if (!plan.remindersEnabled || !plan.emailEnabled) {
+      if (!plan.emailEnabled) {
         skipped.disabled += 1;
         continue;
       }
@@ -565,11 +569,8 @@ router.get('/cron-send-reminders', async (req, res) => {
         continue;
       }
 
-      const scheduledMinute = parseStudyTimeMinutes(plan.studyTime);
-      if (scheduledMinute === null) {
-        skipped.invalidTime += 1;
-        continue;
-      }
+      // Mặc định thời gian nhắc nhở là 12am (00:00) -> 0 phút của ngày
+      const scheduledMinute = 0;
 
       const checkAt = new Date();
       const checkTodayKey = getVietnamDateKey(checkAt);

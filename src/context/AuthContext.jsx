@@ -489,31 +489,7 @@ export const AuthProvider = ({ children }) => {
               streakCount: data.streakCount
             }));
 
-            // --- Study Plan Reminder Logic ---
-            const studyPlan = data.user?.studyPlan || user?.studyPlan;
-            if (studyPlan?.remindersEnabled && !data.todayLessonCompleted) {
-              const now = new Date();
-              const [hours, minutes] = (studyPlan.studyTime || '20:00').split(':').map(Number);
-              const studyDateTime = new Date();
-              studyDateTime.setHours(hours, minutes, 0, 0);
 
-              if (now >= studyDateTime) {
-                const today = now.toISOString().split('T')[0];
-                const lastReminder = localStorage.getItem('last_study_reminder');
-                
-                if (lastReminder !== today) {
-                  // Using alert as a simple notification for now
-                  // In a real app, use a Toast or Browser Notification API
-                  const msg = i18n.language === 'vi' 
-                    ? "🔔 Đã đến giờ học rồi! Hãy vào học ngay để hoàn thành mục tiêu hôm nay nhé!"
-                    : "🔔 It's study time! Let's complete your daily goal now!";
-                  
-                  alert(msg);
-                  localStorage.setItem('last_study_reminder', today);
-                }
-              }
-            }
-            // ---------------------------------
           }
         } else if (res.status === 401) {
           const errorData = await res.json().catch(() => ({}));
