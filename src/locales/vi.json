@@ -18,33 +18,71 @@
     "login_now": "Đăng nhập ngay"
   },
   "home": {
+    "hero_title": "HỌC HÓA HỌC",
+    "hero_title_highlight": "CHỦ ĐỘNG",
     "hero_statement": "Học hóa học dễ hiểu hơn qua lý thuyết, mô phỏng và thử thách.",
+    "hero_image_alt": "Học hóa học cùng Aurum",
+    "hero_badge_gamification": "Game hóa",
+    "hero_badge_safe_lab": "Lab An Toàn",
     "enter_classroom": "Vào Lớp Học",
     "enter_lab": "Vào Phòng Lab",
+    "stats": {
+      "students_count": "10.000+",
+      "students_label": "Học sinh tin dùng",
+      "schools_count": "50+",
+      "schools_label": "Trường học áp dụng",
+      "lessons_count": "1.000+",
+      "lessons_label": "Bài học trực quan"
+    },
     "features": {
       "journey": {
+        "badge": "Lộ Trình Học Tập",
         "title": "Lộ trình học tập",
         "highlight": "Trực tuyến bài bản",
         "desc": "Bài giảng tương tác từ cơ bản đến nâng cao.",
-        "link": "Khám phá Lớp học"
+        "desc_long": "Từ kiến thức cơ bản của Hóa học 8 đến các chuyên đề nâng cao của Hóa học 12. Nội dung được xây dựng cân bằng tốt giữa lý thuyết và thực hành.",
+        "link": "Khám phá lộ trình",
+        "image_alt": "Lộ trình học tập hóa học"
       },
       "lab": {
+        "badge": "Thí Nghiệm Ảo",
         "title": "Phòng thí nghiệm",
-        "highlight": "Tuyệt đối an toàn",
+        "highlight": "Ảo 3D tương tác",
         "desc": "Thực hành phản ứng an toàn, trực quan ngay trên màn hình.",
-        "link": "Thực hành Lab"
+        "desc_long": "Với phòng thí nghiệm 3D chân thực, bạn thực hành các phản ứng hóa học kinh điển ngay trên trình duyệt với giao diện trực quan và kết quả chính xác.",
+        "link": "Vào phòng Lab",
+        "image_alt": "Phòng thí nghiệm ảo 3D"
       },
       "arena": {
-        "title": "Đấu trường thi đấu",
-        "highlight": "Kịch tính căng thẳng",
+        "badge": "Cạnh Tranh",
+        "title": "Đấu trường",
+        "highlight": "PK trực tuyến",
         "desc": "Thi đấu thời gian thực, tích lũy điểm thưởng.",
-        "link": "Tham gia Đấu trường"
+        "desc_long": "Sân chơi trí tuệ kịch tính giữa các học sinh. Thử thách bản thân với các trận đấu thời gian thực, leo hạng và khẳng định tài năng.",
+        "link": "Tham gia ngay",
+        "image_alt": "Đấu trường PK trực tuyến"
       },
       "library": {
         "title": "Tra cứu toàn diện",
         "highlight": "Nhanh chóng, chính xác",
         "desc": "Thư viện tài liệu và Bảng tuần hoàn chi tiết.",
         "link": "Vào Thư viện"
+      },
+      "map": {
+        "badge": "Khám Phá",
+        "title": "Hành trình",
+        "highlight": "Chinh phục kiến thức",
+        "desc": "Phiêu lưu qua các chương học dưới hình thức game nhập vai. Thu thập thành tựu, mở khóa cấp độ mới và ghi tên mình lên bảng vàng.",
+        "link": "Bắt đầu hành trình",
+        "image_alt": "Hành trình chinh phục kiến thức"
+      },
+      "lessons": {
+        "badge": "Bài Giảng",
+        "title": "Bài giảng tương tác",
+        "highlight": "Trực quan & sinh động",
+        "desc": "Lý thuyết được trình bày sinh động qua các slide tương tác, video minh họa và bài kiểm tra nhanh giúp bạn ôn thi hiệu quả.",
+        "link": "Xem bài giảng",
+        "image_alt": "Bài giảng tương tác sinh động"
       }
     },
     "leaderboard": {
