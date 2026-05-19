@@ -83,13 +83,14 @@ router.post('/google-firebase', async (req, res) => {
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { username, password, email, role, teacherCode, grade } = req.body;
-    
-    if (role === 'teacher') {
-      const validCode = process.env.TEACHER_INVITE_CODE || 'AURUM_TEACHER_2026';
-      if (teacherCode !== validCode) {
-        return res.status(403).json({ message: 'Mã xác thực giáo viên không hợp lệ!' });
-      }
+    const { username, password, email, role = 'student', grade } = req.body;
+
+    if (role !== 'student') {
+      return res.status(403).json({ message: 'Public registration only supports student accounts' });
+    }
+
+    if (!username || !password || !email) {
+      return res.status(400).json({ message: 'Missing required registration fields' });
     }
     
     // Check if user exists
@@ -98,10 +99,17 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
     }
 
-    const user = await User.create({ username, password, email, role: role || 'student', grade });
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ message: 'Email da duoc su dung' });
+    }
+
+    const user = await User.create({ username, password, email, role: 'student', grade });
+    const sessionId = crypto.randomUUID();
+    await User.update(user.id, { currentSessionId: sessionId });
 
     const token = jwt.sign(
-      { id: user.id, role: user.role },
+      { id: user.id, role: user.role, sessionId },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );

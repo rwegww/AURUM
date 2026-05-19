@@ -3,52 +3,17 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
+import { auth, requireRole } from '../_middleware/auth.js';
 
 import { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../lib/mailer.js';
 
 import { supabase } from '../lib/supabase.js';
 
 const router = express.Router();
-
-// Role Middleware
-const adminOnly = async (req, res, next) => {
-  try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) throw new Error('Token missing');
-
-    let userId;
-    let user;
-
-    // 1. Try Supabase
-    const { data: { user: sbUser }, error: sbError } = await supabase.auth.getUser(token);
-    if (sbUser && !sbError) {
-      userId = sbUser.id;
-      user = await User.findById(userId);
-    } else {
-      // 2. Try Custom JWT
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        userId = decoded.id;
-        user = await User.findById(userId);
-      } catch (_jwtErr) {
-         throw new Error('Xác thực thất bại');
-      }
-    }
-
-    if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
-      throw new Error('Forbidden: Quyền truy cập bị từ chối');
-    }
-
-    req.user = user;
-    next();
-  } catch (e) {
-    console.error('Admin Auth Error:', e.message);
-    res.status(403).json({ message: 'Quyền truy cập bị từ chối', error: e.message });
-  }
-};
+const adminGuard = [auth, requireRole('admin')];
 
 // GET /api/admin/stats - System-wide statistics
-router.get('/stats', adminOnly, async (req, res) => {
+router.get('/stats', adminGuard, async (req, res) => {
   try {
     const [totalUsers, totalLessons, totalFeedback, userStats, feedbackDistribution] = await Promise.all([
       User.countStudents(),
@@ -76,7 +41,7 @@ router.get('/stats', adminOnly, async (req, res) => {
 });
 
 // GET /api/admin/users - List all users with activity monitoring
-router.get('/users', adminOnly, async (req, res) => {
+router.get('/users', adminGuard, async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('users')
@@ -94,7 +59,7 @@ router.get('/users', adminOnly, async (req, res) => {
 });
 
 // PATCH /api/admin/users/:id/lock - Toggle user lock status
-router.patch('/users/:id/lock', adminOnly, async (req, res) => {
+router.patch('/users/:id/lock', adminGuard, async (req, res) => {
   try {
     const { id } = req.params;
     const { isLocked } = req.body;
@@ -107,7 +72,7 @@ router.patch('/users/:id/lock', adminOnly, async (req, res) => {
 });
 
 // GET /api/admin/users/:id - Get single user detail
-router.get('/users/:id', adminOnly, async (req, res) => {
+router.get('/users/:id', adminGuard, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: 'Không tìm thấy học sinh' });
@@ -118,7 +83,7 @@ router.get('/users/:id', adminOnly, async (req, res) => {
 });
 
 // GET /api/admin/feedback - List all feedbacks
-router.get('/feedback', adminOnly, async (req, res) => {
+router.get('/feedback', adminGuard, async (req, res) => {
   try {
     const feedbacks = await Feedback.findAll();
     res.json(feedbacks);
@@ -177,7 +142,7 @@ router.post('/feedback/submit', async (req, res) => {
 });
 
 // PATCH /api/admin/feedback/:id - Resolve feedback
-router.patch('/feedback/:id', adminOnly, async (req, res) => {
+router.patch('/feedback/:id', adminGuard, async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback) return res.status(404).json({ message: 'Không tìm thấy phản hồi' });
@@ -190,7 +155,7 @@ router.patch('/feedback/:id', adminOnly, async (req, res) => {
 });
 
 // PATCH /api/admin/feedback/:id/approve - Approve praise
-router.patch('/feedback/:id/approve', adminOnly, async (req, res) => {
+router.patch('/feedback/:id/approve', adminGuard, async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback) return res.status(404).json({ message: 'Không tìm thấy phản hồi' });
@@ -208,7 +173,7 @@ router.patch('/feedback/:id/approve', adminOnly, async (req, res) => {
 // ==========================================
 
 // POST /api/admin/lessons - Create new lesson
-router.post('/lessons', adminOnly, async (req, res) => {
+router.post('/lessons', adminGuard, async (req, res) => {
   try {
     const lesson = await Lesson.create(req.body);
     res.status(201).json(lesson);
@@ -218,7 +183,7 @@ router.post('/lessons', adminOnly, async (req, res) => {
 });
 
 // PUT /api/admin/lessons/:id - Update lesson
-router.put('/lessons/:id', adminOnly, async (req, res) => {
+router.put('/lessons/:id', adminGuard, async (req, res) => {
   try {
     const lesson = await Lesson.update(req.params.id, req.body);
     res.json(lesson);
@@ -228,7 +193,7 @@ router.put('/lessons/:id', adminOnly, async (req, res) => {
 });
 
 // DELETE /api/admin/lessons/:id - Delete lesson
-router.delete('/lessons/:id', adminOnly, async (req, res) => {
+router.delete('/lessons/:id', adminGuard, async (req, res) => {
   try {
     await Lesson.delete(req.params.id);
     res.json({ message: 'Đã xóa bài học thành công' });
@@ -238,7 +203,7 @@ router.delete('/lessons/:id', adminOnly, async (req, res) => {
 });
 
 // Duyệt yêu cầu giáo viên
-router.post('/teacher-requests/:id/approve', adminOnly, async (req, res) => {
+router.post('/teacher-requests/:id/approve', adminGuard, async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback || feedback.type !== 'teacher_registration') {
@@ -277,7 +242,7 @@ router.post('/teacher-requests/:id/approve', adminOnly, async (req, res) => {
 });
 
 // Từ chối yêu cầu giáo viên
-router.post('/teacher-requests/:id/reject', adminOnly, async (req, res) => {
+router.post('/teacher-requests/:id/reject', adminGuard, async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id);
     if (!feedback || feedback.type !== 'teacher_registration') {

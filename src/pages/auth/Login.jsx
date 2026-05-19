@@ -53,14 +53,11 @@ const Login = () => {
     }
 
     const savedEmail = localStorage.getItem('rememberEmail');
-    const savedPassword = localStorage.getItem('rememberPassword');
+    localStorage.removeItem('rememberPassword');
     
     if (savedEmail) {
       setEmail(savedEmail);
       setRememberMe(true);
-    }
-    if (savedPassword) {
-      setPassword(savedPassword);
     }
   }, [magicLogin, navigate]);
 
@@ -73,11 +70,10 @@ const Login = () => {
     if (result.success) {
       if (rememberMe) {
         localStorage.setItem('rememberEmail', email);
-        localStorage.setItem('rememberPassword', password); // Basic implementation for cookie-like behavior without actual cookies in LocalStorage
       } else {
         localStorage.removeItem('rememberEmail');
-        localStorage.removeItem('rememberPassword');
       }
+      localStorage.removeItem('rememberPassword');
 
       if (result.user?.role === 'admin') {
         navigate('/admin');

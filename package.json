@@ -12,6 +12,7 @@
     "seed": "node scripts/seedData.js",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "vitest run",
     "preview": "vite preview",
     "db:backup": "node scripts/db/backupSupabaseRest.js",
     "db:migrate:restructure": "node scripts/db/runRestructureMigration.js",
@@ -26,7 +27,7 @@
     "@react-three/fiber": "^9.6.0",
     "@supabase/supabase-js": "^2.101.1",
     "bcryptjs": "^3.0.3",
-    "cloudinary": "^1.41.3",
+    "cloudinary": "^2.10.0",
     "cors": "^2.8.6",
     "docx": "^9.6.1",
     "dotenv": "^17.4.1",
@@ -41,7 +42,6 @@
     "lucide-react": "^0.473.0",
     "mammoth": "^1.12.0",
     "multer": "^2.1.1",
-    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^8.0.7",
     "openai": "^6.34.0",
     "pdf-parse": "^2.4.5",
@@ -70,10 +70,14 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "pg": "^8.13.1",
     "postcss": "^8.5.8",
+    "supertest": "^7.2.2",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.1",
-    "pg": "^8.13.1",
-    "xlsx": "^0.18.5"
+    "vitest": "^4.1.7"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
   }
 }

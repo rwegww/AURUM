@@ -14,6 +14,8 @@ const calcPoints = (result, score) => {
   return base + bonus;
 };
 
+const normalizeRpcRoom = (room) => Array.isArray(room) ? room[0] : room;
+
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. POST /api/arena/create  — Tạo phòng mới
 // ─────────────────────────────────────────────────────────────────────────────
@@ -57,12 +59,14 @@ router.post('/join', auth, async (req, res) => {
     if (room.current_players >= room.max_players)
       return res.status(400).json({ success: false, message: 'Phòng đã đầy.' });
 
-    const { data: updatedRoom, error: updateError } = await supabase
-      .from('arena_rooms')
-      .update({ current_players: room.current_players + 1 })
-      .eq('id', room_id).select().single();
+    const { data: updatedRoomData, error: updateError } = await supabase
+      .rpc('join_arena_room', { p_room_id: room_id });
 
     if (updateError) throw updateError;
+    const updatedRoom = normalizeRpcRoom(updatedRoomData);
+    if (!updatedRoom) {
+      return res.status(400).json({ success: false, message: 'Phong da day hoac khong con cho' });
+    }
 
     res.status(200).json({ success: true, room: updatedRoom });
   } catch (error) {
@@ -100,14 +104,14 @@ router.post('/find-match', auth, async (req, res) => {
       const roomToJoin = availableRooms[0];
       
       // Có phòng => tăng current_players
-      const { data: updatedRoom, error: updateError } = await supabase
-        .from('arena_rooms')
-        .update({ current_players: roomToJoin.current_players + 1 })
-        .eq('id', roomToJoin.id)
-        .select()
-        .single();
+      const { data: updatedRoomData, error: updateError } = await supabase
+        .rpc('join_arena_room', { p_room_id: roomToJoin.id });
         
       if (updateError) throw updateError;
+      const updatedRoom = normalizeRpcRoom(updatedRoomData);
+      if (!updatedRoom) {
+        return res.status(200).json({ success: true, found: false, message: 'Dang xep tran...' });
+      }
       
       return res.status(200).json({ success: true, room: updatedRoom, found: true });
     }
@@ -362,7 +366,6 @@ router.get('/rooms', async (req, res) => {
   try {
     // 1. Dọn dẹp các phòng ma (không có người hoặc quá cũ)
     // Tạm thời chỉ dọn phòng 0 người
-    await supabase.from('arena_rooms').delete().lte('current_players', 0);
     
     // 2. Lấy danh sách phòng
     const { data: rooms, error } = await supabase

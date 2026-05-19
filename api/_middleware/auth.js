@@ -10,12 +10,26 @@ export const auth = async (req, res, next) => {
     let userId;
     let user;
 
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = (() => {
+      try {
+        return jwt.verify(token, process.env.JWT_SECRET);
+      } catch {
+        return null;
+      }
+    })();
+
+    if (decoded) {
       userId = decoded.id;
       req.decodedCustomJwt = decoded;
       user = await User.findById(userId);
-    } catch {
+
+      if (!decoded.sessionId) {
+        throw new Error('INVALID_SESSION');
+      }
+      if (user?.currentSessionId && user.currentSessionId !== decoded.sessionId) {
+        throw new Error('DUAL_LOGIN');
+      }
+    } else {
       const { data, error: sbError } = await supabase.auth.getUser(token);
       const sbUser = data?.user;
 
@@ -54,8 +68,14 @@ export const auth = async (req, res, next) => {
     req.token = token;
     next();
   } catch (error) {
+    const message = error.message === 'DUAL_LOGIN'
+      ? 'Tai khoan da dang nhap o noi khac'
+      : error.message === 'INVALID_SESSION'
+        ? 'Phien dang nhap khong hop le'
+        : error.message;
+
     res.status(401).json({
-      message: error.message === 'DUAL_LOGIN' ? 'Tài khoản đã đăng nhập ở nơi khác' : error.message,
+      message,
       error: error.message === 'DUAL_LOGIN' ? 'DUAL_LOGIN' : error.message,
     });
   }

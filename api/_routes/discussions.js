@@ -6,6 +6,16 @@ const router = express.Router();
 
 // --- DISCUSSION ROUTES ---
 
+// Get student's private note for a lesson. Keep this before /:lessonId.
+router.get('/notes/:lessonId', auth, async (req, res) => {
+  try {
+    const note = await Note.get(req.user.id, req.params.lessonId);
+    res.json(note || { content: '' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get discussions for a lesson
 router.get('/:lessonId', async (req, res) => {
   try {
@@ -40,16 +50,6 @@ router.post('/:id/like', auth, async (req, res) => {
 });
 
 // --- NOTE ROUTES ---
-
-// Get student's private note for a lesson
-router.get('/notes/:lessonId', auth, async (req, res) => {
-  try {
-    const note = await Note.get(req.user.id, req.params.lessonId);
-    res.json(note || { content: '' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 // Save student's private note
 router.post('/notes', auth, async (req, res) => {
