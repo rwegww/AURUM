@@ -15,11 +15,13 @@ export default {
         'lab-border': '#30363D',
       },
       fontFamily: {
-        'be-vietnam': ['"Be Vietnam Pro"', 'sans-serif'],
-        'rubik': ['"Rubik"', 'sans-serif'], // New display font
-        sora: ['"Be Vietnam Pro"', 'sans-serif'],
-        inter: ['"Be Vietnam Pro"', 'sans-serif'],
-        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+        'nunito': ['"Nunito"', 'sans-serif'],
+        'quicksand': ['"Quicksand"', 'sans-serif'], // soft display font
+        'rubik': ['"Quicksand"', 'sans-serif'], // mapped → Quicksand
+        'be-vietnam': ['"Nunito"', 'sans-serif'], // mapped → Nunito
+        sora: ['"Nunito"', 'sans-serif'],
+        inter: ['"Nunito"', 'sans-serif'],
+        sans: ['"Nunito"', 'sans-serif'],
       },
       gridTemplateColumns: {
         '18': 'repeat(18, minmax(0, 1fr))',
