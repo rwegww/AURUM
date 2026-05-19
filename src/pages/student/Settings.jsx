@@ -55,7 +55,7 @@ const ReminderToggle = ({ enabled, onChange, title, icon, activeColor }) => {
 };
 
 const STUDY_PLAN_DEFAULTS = {
-  studyTime: '20:00',
+  studyTime: '00:00',
   dailyLessonTarget: 1,
   remindersEnabled: true,
   emailEnabled: false
@@ -369,21 +369,7 @@ const Settings = () => {
                   <Target className="w-5 h-5 text-viet-green" /> Kế hoạch học tập & Nhắc nhở
                 </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-2">Giờ học dự kiến</label>
-                    <div className="relative">
-                      <input 
-                        type="time" 
-                        value={planData.studyTime || '20:00'}
-                        onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
-                        className="w-full h-12 bg-slate-50 border border-viet-border rounded-xl px-4 font-black text-sm focus:border-viet-green focus:ring-2 focus:ring-viet-green/10 outline-none transition-all"
-                      />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-40">
-                        <Clock size={16} />
-                      </div>
-                    </div>
-                  </div>
+                <div className="grid grid-cols-1 gap-6 mb-6">
 
                   <div className="space-y-2">
                     <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-2">Mục tiêu bài học/ngày</label>
