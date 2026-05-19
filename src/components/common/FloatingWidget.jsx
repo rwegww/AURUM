@@ -239,14 +239,6 @@ const FloatingWidget = () => {
               
               {/* Functional Controls */}
               <div className="flex items-center gap-2">
-                {/* Collapse / Minimize button */}
-                <button 
-                  onClick={() => setIsExpanded(false)}
-                  className="hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg leading-none transition-colors cursor-pointer"
-                  title={t('widget.minimize')}
-                >
-                  −
-                </button>
                 {/* Close button */}
                 <button 
                   onClick={() => setIsExpanded(false)}
