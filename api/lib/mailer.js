@@ -60,45 +60,34 @@ const sendMail = async ({ to, subject, html }) => {
 
 export default sendMail;
 
-const formatLateDuration = (lateMinutes) => {
-  const safeLateMinutes = Number.isFinite(Number(lateMinutes))
-    ? Math.max(0, Math.floor(Number(lateMinutes)))
-    : 0;
-
-  if (safeLateMinutes === 0) return 'Đúng giờ';
-  if (safeLateMinutes < 60) return `Trễ ${safeLateMinutes} phút`;
-
-  const hours = Math.floor(safeLateMinutes / 60);
-  const minutes = safeLateMinutes % 60;
-  return minutes > 0
-    ? `Trễ ${hours} giờ ${minutes} phút`
-    : `Trễ ${hours} giờ`;
-};
-
 export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData) => {
   const { dailyLessonTarget } = planData;
-  const studyTime = '00:00';
   return sendMail({
     to: toEmail,
-    subject: '✔️ Xác nhận kích hoạt Kế hoạch học tập - Học viện Hóa học Aurum',
+    subject: '🌱 Kế hoạch học tập của bạn đã sẵn sàng! - Học viện Aurum',
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
-        <h2 style="color: #059669; text-align: center;">Học viện Hóa học Aurum</h2>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 540px; margin: 0 auto; padding: 35px; border: 1px solid #e2e8f0; border-radius: 24px; background-color: #ffffff; color: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+        <div style="text-align: center; margin-bottom: 15px;">
+          <span style="font-size: 44px;">🎒</span>
+        </div>
+        <h2 style="color: #059669; text-align: center; margin-top: 10px; font-weight: 800; font-size: 22px;">Chào mừng bạn tham gia kế hoạch học tập!</h2>
         <p>Xin chào <strong>${username}</strong>,</p>
-        <p>Kế hoạch học tập của bạn đã được thiết lập thành công và kích hoạt nhắc nhở!</p>
-        <div style="background-color: #f8fafc; padding: 15px; border-radius: 12px; margin: 20px 0;">
-          <h3 style="margin-top: 0; color: #1e293b;">Chi tiết kế hoạch:</h3>
-          <ul style="list-style-type: none; padding-left: 0;">
-            <li>⏰ <strong>Giờ học dự kiến:</strong> ${studyTime}</li>
-            <li>📚 <strong>Mục tiêu hàng ngày:</strong> ${dailyLessonTarget} bài học</li>
-          </ul>
+        <p>Kế hoạch học tập của bạn đã được kích hoạt thành công. Chúng mình sẽ đồng hành cùng bạn trên con đường làm chủ kiến thức Hóa học nhé! ✨</p>
+        
+        <div style="background-color: #f0fdf4; padding: 18px; border-radius: 16px; margin: 25px 0; border: 1px solid #bbf7d0; text-align: center;">
+          <span style="font-size: 15px; font-weight: bold; color: #166534;">📚 Mục tiêu của bạn: ${dailyLessonTarget} bài học mỗi ngày</span>
         </div>
-        <p>Hệ thống sẽ gửi email nhắc nhở bạn học tập vào lúc <strong>${studyTime}</strong> mỗi ngày (nếu bạn chưa hoàn thành mục tiêu học tập trong ngày) để duy trì chuỗi học tập (streak) và tích lũy điểm kinh nghiệm (XP) nhé!</p>
+        
+        <p style="font-size: 14px; line-height: 1.6; color: #475569;">
+          Hằng ngày, nếu bạn chưa hoàn thành mục tiêu học tập của ngày đó, hệ thống sẽ gửi một email nhắc nhở nhẹ nhàng để giúp bạn duy trì thói quen học tập, tích lũy điểm kinh nghiệm (XP) và nối dài chuỗi ngày học tập (streak) nha.
+        </p>
+        
         <div style="text-align: center; margin-top: 30px;">
-          <a href="https://chem-aurum.vercel.app/" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Bắt đầu học ngay</a>
+          <a href="https://chem-aurum.vercel.app/" style="background-color: #059669; color: white; padding: 14px 28px; text-decoration: none; border-radius: 14px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(5, 150, 105, 0.2);">Vào phòng Lab học ngay</a>
         </div>
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
-        <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum. Không cần trả lời email này.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;" />
+        <p style="font-size: 11px; color: #94a3b8; text-align: center; margin-bottom: 0;">Email gửi tự động thân thiện từ Học viện Hóa học Aurum 🧪</p>
       </div>
     `,
   });
@@ -106,70 +95,75 @@ export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData
 
 export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planData, hourOffset = 0, lateMinutes = null) => {
   const { dailyLessonTarget } = planData;
-  const studyTime = '00:00';
   const safeLateMinutes = lateMinutes === null
     ? Math.max(0, Number(hourOffset) || 0) * 60
     : Math.max(0, Math.floor(Number(lateMinutes) || 0));
   const templateHourOffset = Math.floor(safeLateMinutes / 240); // Every 4 hours
-  const lateDurationText = formatLateDuration(safeLateMinutes);
   
   let subject = '';
   let greetingMsg = '';
   let mainContent = '';
-  let ctaText = 'Vào học ngay';
+  let ctaText = 'Học một chút nào';
   let accentColor = '#059669'; // default green
+  let emoji = '✨';
 
   if (templateHourOffset === 0) {
-    subject = '📚 Hành trình hôm nay vừa bắt đầu! - Học viện Aurum';
-    greetingMsg = 'Ngày mới năng lượng!';
-    mainContent = `Hãy dành một chút thời gian hôm nay để hoàn thành mục tiêu học tập hàng ngày (<strong>${dailyLessonTarget} bài học</strong>). Chúc bạn một ngày học tập hiệu quả!`;
+    subject = '🌟 Khởi động ngày mới cùng Aurum nào! 🌟';
+    greetingMsg = 'Chào ngày mới năng lượng!';
+    mainContent = `Hôm nay bạn đã sẵn sàng khám phá thêm những kiến thức thú vị chưa? Hãy dành một chút thời gian hôm nay để hoàn thành mục tiêu <strong>${dailyLessonTarget} bài học</strong> nhé!`;
+    emoji = '🌱';
   } else if (templateHourOffset === 1) {
-    subject = '⚡ Đừng quên mục tiêu học tập nhé! - Học viện Aurum';
-    greetingMsg = 'Bạn đã bỏ lỡ 4 tiếng trôi qua!';
-    mainContent = `Chỉ cần hoàn thành <strong>${dailyLessonTarget} bài học</strong> để tiếp tục tích lũy kinh nghiệm (XP) và nâng cao trình độ. Hãy bứt phá ngay nhé!`;
+    subject = '🎒 Bạn ơi, hôm nay học một chút chứ? 🎒';
+    greetingMsg = 'Chỉ cần một chút tiến bộ mỗi ngày!';
+    mainContent = `Hôm nay bạn vẫn chưa ghé thăm phòng Lab của Aurum đó nha. Dành ra ít phút hoàn thành mục tiêu <strong>${dailyLessonTarget} bài học</strong> để duy trì đà học tập nào!`;
     accentColor = '#0d9488'; // teal
     ctaText = 'Bắt đầu học ngay';
+    emoji = '⚡';
   } else if (templateHourOffset === 2) {
-    subject = '🔥 Giữ ngọn lửa học tập của bạn! - Học viện Aurum';
-    greetingMsg = 'Đã 8 tiếng trôi qua, hãy giữ vững sự kiên trì!';
-    mainContent = `Sự kiên trì hàng ngày là chìa khóa để làm chủ kiến thức Hóa học. Hãy dành ra ít phút hoàn thành <strong>${dailyLessonTarget} bài học</strong> của ngày hôm nay nhé!`;
+    subject = '🔥 Đốt lửa phòng Lab Aurum cùng nhau nào! 🔥';
+    greetingMsg = 'Giữ vững nhịp điệu cùng Aurum!';
+    mainContent = `Kiên trì là chìa khóa để làm chủ thế giới Hóa học. Ghé thăm Aurum để hoàn thành <strong>${dailyLessonTarget} bài học</strong> hôm nay nhé. Các nguyên tử đang chờ bạn ghép đôi đó!`;
     accentColor = '#f59e0b'; // orange
     ctaText = 'Tiếp tục rèn luyện';
+    emoji = '🔬';
   } else if (templateHourOffset === 3) {
-    subject = '⏱️ Nửa ngày đã trôi qua! - Học viện Aurum';
-    greetingMsg = '12 tiếng đã trôi qua, đừng để mục tiêu hôm nay bị bỏ lỡ!';
-    mainContent = `Phòng thí nghiệm Aurum với các thử thách hóa học thú vị đang chờ đón bạn. Hoàn thành ngay <strong>${dailyLessonTarget} bài học</strong> để nhận thêm XP thưởng nào!`;
-    accentColor = '#ef4444'; // red
+    subject = '⏰ Tik tok! Đừng quên nhiệm vụ hôm nay nhé! ⏰';
+    greetingMsg = 'Một chút nỗ lực cuối ngày!';
+    mainContent = `Dù bận rộn đến đâu, cũng đừng quên tích lũy thêm một chút kiến thức cho bản thân nhé. Hoàn thành nhanh <strong>${dailyLessonTarget} bài học</strong> hôm nay nào bạn ơi!`;
+    accentColor = '#10b981'; // mint green
     ctaText = 'Khám phá phòng Lab';
+    emoji = '⭐';
   } else {
-    subject = '🧪 Cuối ngày rồi, nỗ lực thêm chút nữa nào! - Học viện Aurum';
-    greetingMsg = 'Gần hết ngày rồi, cố lên bạn nhé!';
-    mainContent = `Đừng kết thúc ngày hôm nay mà chưa đạt được mục tiêu học tập. Hãy đăng nhập và hoàn thành <strong>${dailyLessonTarget} bài học</strong> ngay!`;
-    accentColor = '#8b5cf6'; // purple
+    subject = '🌙 Học một chút trước khi ngủ nào bạn ơi! 🌙';
+    greetingMsg = 'Trước khi chìm vào giấc ngủ ngon...';
+    mainContent = `Chỉ cần hoàn thành <strong>${dailyLessonTarget} bài học</strong> thôi là bạn đã có thể yên tâm nghỉ ngơi với mục tiêu ngày đã đạt được rồi. Cố lên một chút nữa nhé!`;
+    accentColor = '#6366f1'; // indigo
     ctaText = 'Hoàn thành ngay';
+    emoji = '🦉';
   }
 
   return sendMail({
     to: toEmail,
     subject,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
-        <h2 style="color: #059669; text-align: center;">Học viện Hóa học Aurum</h2>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 540px; margin: 0 auto; padding: 35px; border: 1px solid #e2e8f0; border-radius: 24px; background-color: #ffffff; color: #1e293b; box-shadow: 0 4px 12px rgba(0,0,0,0.02);">
+        <div style="text-align: center; margin-bottom: 15px;">
+          <span style="font-size: 44px;">${emoji}</span>
+        </div>
+        <h2 style="color: ${accentColor}; text-align: center; margin-top: 10px; font-weight: 800; font-size: 20px;">${greetingMsg}</h2>
         <p>Xin chào <strong>${username}</strong>,</p>
-        <p style="font-size: 16px; font-weight: bold; color: ${accentColor};">🔔 ${greetingMsg}</p>
         <p>${mainContent}</p>
-        <div style="background-color: #f8fafc; padding: 15px; border-radius: 12px; margin: 20px 0; border-left: 4px solid ${accentColor};">
-          <ul style="list-style-type: none; padding-left: 0; margin: 0;">
-            <li>⏰ <strong>Giờ hẹn học:</strong> ${studyTime}</li>
-            <li>📚 <strong>Mục tiêu:</strong> ${dailyLessonTarget} bài học</li>
-            <li>&#128338; <strong>Thời gian trôi qua:</strong> ${lateDurationText}</li>
-          </ul>
+        
+        <div style="background-color: #f8fafc; padding: 18px; border-radius: 16px; margin: 25px 0; text-align: center; border: 1px solid #e2e8f0;">
+          <span style="font-size: 15px; font-weight: bold; color: ${accentColor};">📚 Mục tiêu hôm nay của bạn: ${dailyLessonTarget} bài học</span>
         </div>
+        
         <div style="text-align: center; margin-top: 30px;">
-          <a href="https://chem-aurum.vercel.app/" style="background-color: ${accentColor}; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">${ctaText}</a>
+          <a href="https://chem-aurum.vercel.app/" style="background-color: ${accentColor}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 14px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">${ctaText}</a>
         </div>
-        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
-        <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum. Không cần trả lời email này.</p>
+        
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;" />
+        <p style="font-size: 11px; color: #94a3b8; text-align: center; margin-bottom: 0;">Email gửi tự động thân thiện từ Học viện Hóa học Aurum 🧪</p>
       </div>
     `,
   });
@@ -184,59 +178,65 @@ export const sendStreakReminderEmail = async (toEmail, username, streakCount, ho
   let subject = '';
   let greetingMsg = '';
   let mainContent = '';
-  let ctaText = 'Vào học ngay';
+  let ctaText = 'Giữ ngọn lửa rực cháy';
   let accentColor = '#ea580c'; // default orange
+  let emoji = '🔥';
 
   if (templateHourOffset === 0) {
-    subject = `🔥 Bảo vệ chuỗi ${streakCount} ngày của bạn! - Học viện Aurum`;
-    greetingMsg = `Ngày mới bắt đầu, hãy tiếp tục nối dài chuỗi ${streakCount} ngày nhé!`;
-    mainContent = 'Đừng quên hoàn thành bài học hôm nay để không đánh mất chuỗi học tập tuyệt vời của bạn.';
+    subject = `🔥 Nối dài chuỗi streak ${streakCount} ngày cùng Aurum! 🔥`;
+    greetingMsg = 'Duy trì phong độ đỉnh cao của bạn!';
+    mainContent = `Chào ngày mới! Chuỗi học tập liên tục của bạn đã đạt **${streakCount} ngày** rồi đó. Hãy dành ít phút học hôm nay để tiếp tục nối dài thành tích đáng nể này nhé!`;
+    emoji = '✨';
   } else if (templateHourOffset === 1) {
-    subject = `⚡ Chuỗi ${streakCount} ngày đang chờ bạn! - Học viện Aurum`;
-    greetingMsg = 'Đã 4 tiếng trôi qua, ngọn lửa của bạn vẫn đang cháy!';
-    mainContent = 'Chỉ cần một bài học nữa thôi để giữ lửa, đừng chần chừ nhé!';
+    subject = `⚡ Giữ lửa chuỗi ${streakCount} ngày học tập của bạn! ⚡`;
+    greetingMsg = 'Ngọn lửa của bạn vẫn đang cháy rực!';
+    mainContent = `Bạn đang có chuỗi học tập **${streakCount} ngày** cực kỳ tuyệt vời. Đừng để ngọn lửa bị nguội đi nha, chỉ cần 1 bài học ngắn thôi để tiếp tục thói quen tốt nào!`;
+    accentColor = '#f97316';
+    emoji = '🏃‍♂️';
   } else if (templateHourOffset === 2) {
-    subject = `⏳ Giữ vững chuỗi ${streakCount} ngày! - Học viện Aurum`;
-    greetingMsg = 'Đã 8 tiếng trôi qua, đừng để chuỗi bị gián đoạn!';
-    mainContent = 'Chuỗi học tập thể hiện sự kiên trì của bạn. Hãy vào học ngay để chứng minh bản lĩnh!';
-    accentColor = '#ef4444'; // red
+    subject = `🏃‍♂️ Đừng để chuỗi ${streakCount} ngày vụt mất nhé! 🏃‍♂️`;
+    greetingMsg = 'Dành 3 phút bảo vệ thành quả nào!';
+    mainContent = `Chuỗi **${streakCount} ngày** học tập là minh chứng cho sự kiên trì tuyệt vời của bạn. Cùng ghé Aurum học một bài học ngắn để giữ vững chuỗi hôm nay nha!`;
+    accentColor = '#eab308';
+    emoji = '💪';
   } else if (templateHourOffset === 3) {
-    subject = `🚨 Báo động: Chuỗi ${streakCount} ngày sắp mất! - Học viện Aurum`;
-    greetingMsg = '12 tiếng đã trôi qua, nguy cơ mất chuỗi đang đến gần!';
-    mainContent = 'Bạn đã nỗ lực rất nhiều để đạt được thành tích này. Đừng bỏ cuộc bây giờ!';
-    accentColor = '#dc2626'; // darker red
-    ctaText = 'Cứu chuỗi ngay';
+    subject = `🚨 Cứu nguy cho chuỗi streak ${streakCount} ngày của bạn! 🚨`;
+    greetingMsg = 'Bảo vệ ngọn lửa của bạn ngay!';
+    mainContent = `Hôm nay sắp trôi qua rồi và chuỗi **${streakCount} ngày** học tập của bạn đang gặp thử thách lớn. Đăng nhập Aurum và hoàn thành nhanh 1 bài học để bảo toàn ngọn lửa nhé!`;
+    accentColor = '#ef4444';
+    ctaText = 'Bảo vệ chuỗi streak';
+    emoji = '🚨';
   } else {
-    subject = `🆘 Cảnh báo khẩn cấp: Chuỗi ${streakCount} ngày đang kêu cứu! - Học viện Aurum`;
-    greetingMsg = 'Ngày sắp hết, ngọn lửa của bạn sắp tắt!';
-    mainContent = 'Còn vài tiếng nữa thôi! Hãy hoàn thành bài học ngay lập tức để giữ vững thành quả của bạn!';
-    accentColor = '#b91c1c'; // darkest red
-    ctaText = 'Giữ ngọn lửa rực cháy';
+    subject = `🆘 Cơ hội cuối cùng giữ chuỗi ${streakCount} ngày! 🆘`;
+    greetingMsg = 'Giữ ngọn lửa rực cháy đến cùng!';
+    mainContent = `Chỉ còn ít thời gian nữa thôi là ngày hôm nay sẽ khép lại rồi. Hãy dành ra 2 phút hoàn thành nhanh 1 bài học để giữ lại chuỗi **${streakCount} ngày** cực kỳ đáng tự hào của bạn nhé. Aurum tin bạn làm được!`;
+    accentColor = '#be123c';
+    ctaText = 'Giữ lửa ngay';
+    emoji = '🦉';
   }
 
   return sendMail({
     to: toEmail,
     subject,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #fee2e2; border-radius: 16px; background-color: #fffaf0;">
-        <h2 style="color: #dc2626; text-align: center; margin-bottom: 5px;">🔥 Học viện Hóa học Aurum</h2>
-        <div style="text-align: center; font-size: 48px; margin: 15px 0;">⚡🏃💨</div>
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 540px; margin: 0 auto; padding: 35px; border: 1px solid #fee2e2; border-radius: 24px; background-color: #fffaf0; color: #1e293b; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.05);">
+        <div style="text-align: center; margin-bottom: 15px;">
+          <span style="font-size: 44px;">${emoji}</span>
+        </div>
+        <h2 style="color: ${accentColor}; text-align: center; margin-top: 10px; font-weight: 800; font-size: 20px;">${greetingMsg}</h2>
         <p>Xin chào <strong>${username}</strong>,</p>
-        <p style="font-size: 16px; font-weight: bold; color: ${accentColor}; text-align: center;">🔔 ${greetingMsg}</p>
-        <p style="font-size: 16px; line-height: 1.6;">
-          Cảnh báo! Chuỗi học tập liên tục cực kỳ ấn tượng của bạn đã đạt tới <strong style="color: #ea580c; font-size: 20px;">${streakCount} ngày</strong>.
-        </p>
-        <p style="font-size: 15px; color: #475569;">
-          ${mainContent}
-        </p>
-        <div style="background-color: #ffedd5; padding: 15px; border-radius: 12px; margin: 20px 0; border: 1px dashed #f97316; text-align: center;">
-          <span style="font-size: 18px; font-weight: bold; color: #ea580c;">🔥 Giữ ngọn lửa rực cháy - Thêm 1 ngày học tập! 🔥</span>
+        <p>${mainContent}</p>
+        
+        <div style="background-color: #ffedd5; padding: 18px; border-radius: 16px; margin: 25px 0; text-align: center; border: 1px dashed #f97316;">
+          <span style="font-size: 16px; font-weight: bold; color: #ea580c;">🔥 Chuỗi hiện tại: ${streakCount} ngày liên tiếp! 🔥</span>
         </div>
+        
         <div style="text-align: center; margin-top: 30px;">
-          <a href="https://chem-aurum.vercel.app/" style="background-color: ${accentColor}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px -1px rgba(234, 88, 12, 0.4);">${ctaText}</a>
+          <a href="https://chem-aurum.vercel.app/" style="background-color: ${accentColor}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 14px; font-weight: bold; display: inline-block; box-shadow: 0 4px 6px rgba(234, 88, 12, 0.2);">${ctaText}</a>
         </div>
-        <hr style="border: 0; border-top: 1px solid #fee2e2; margin-top: 40px;" />
-        <p style="font-size: 11px; color: #94a3b8; text-align: center;">Email tự động nhắc nhở bảo vệ chuỗi học tập từ Học viện Aurum. Hãy cùng duy trì thói quen học tập tốt mỗi ngày!</p>
+        
+        <hr style="border: 0; border-top: 1px solid #fee2e2; margin: 30px 0;" />
+        <p style="font-size: 11px; color: #a1a1aa; text-align: center; margin-bottom: 0;">Email nhắc nhở giữ chuỗi tự động từ Học viện Hóa học Aurum 🧪</p>
       </div>
     `,
   });
