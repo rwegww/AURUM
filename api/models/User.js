@@ -116,7 +116,6 @@ export const User = {
         email: userData.email,
         password: hashedPassword,
         role: userData.role || 'student',
-        inventory: userData.inventory || { ingredients: [], craftedItems: [] },
         avatar_seed: userData.avatarSeed || userData.username,
         balancing_progress: { completedNodeIds: [], completedCount: 0, passedGrades: [] },
         streak_count: 0,
