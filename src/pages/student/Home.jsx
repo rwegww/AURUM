@@ -101,20 +101,20 @@ const itemVariants = {
 };
 
 const BentoCard = ({ title, highlight, description, linkText, linkUrl, graphic, className = '' }) => (
-  <motion.div variants={itemVariants} className={`group relative bg-white border-2 border-duo-border border-b-[6px] rounded-3xl p-8 flex flex-col gap-6 hover:-translate-y-2 hover:border-b-[8px] hover:shadow-xl transition-all duration-300 overflow-hidden h-full ${className}`}>
-    <div className="absolute -right-8 -bottom-8 w-64 h-64 opacity-20 pointer-events-none transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12">
+  <motion.div variants={itemVariants} className={`group relative bg-white border-2 border-duo-border border-b-[6px] rounded-3xl p-8 flex flex-col gap-4 hover:-translate-y-2 hover:border-b-[8px] hover:shadow-xl transition-all duration-300 overflow-hidden h-full ${className}`}>
+    <div className="absolute -right-12 -bottom-12 w-80 h-80 opacity-[0.15] pointer-events-none transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12">
       {graphic}
     </div>
     <div className="relative z-10 flex-1">
-      <h3 className="font-rubik text-3xl font-black text-[#1a1a1a] leading-tight mb-3">
+      <h3 className="font-rubik text-3xl font-black text-[#1a1a1a] leading-tight mb-2">
         {title} <span className="block text-viet-green">{highlight}</span>
       </h3>
-      <p className="text-[17px] font-medium text-[#1a1a1a]/70 max-w-[280px] line-clamp-3">
+      <p className="text-[16px] font-medium text-[#64748b] max-w-[280px]">
         {description}
       </p>
     </div>
-    <div className="relative z-10 mt-auto">
-      <Link to={linkUrl} className="inline-flex items-center gap-3 px-6 py-3 bg-gray-100 hover:bg-viet-green hover:text-white rounded-full w-max text-sm uppercase tracking-widest font-black transition-colors">
+    <div className="relative z-10 mt-auto pt-4">
+      <Link to={linkUrl} className="inline-flex items-center gap-2 px-6 py-3 bg-gray-50 hover:bg-viet-green hover:text-white rounded-full w-max text-sm uppercase tracking-widest font-bold transition-colors">
         {linkText}
         <ArrowRight size={18} />
       </Link>
@@ -153,7 +153,7 @@ const Home = () => {
     <div className="min-h-screen font-sans bg-[#fbfbfb] selection:bg-viet-green selection:text-white">
       
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-[140px] lg:pt-[180px] pb-24 overflow-hidden bg-gradient-to-b from-[#f4faef] to-[#fbfbfb]">
+      <section className="relative pt-[120px] lg:pt-[160px] pb-20 overflow-hidden bg-gradient-to-b from-[#f4faef] to-[#fbfbfb]">
         <FallingChemistry />
         
         <div className="max-w-[1200px] mx-auto px-6 relative z-10">
@@ -165,31 +165,31 @@ const Home = () => {
           >
             {/* Left Content */}
             <div className="flex-1 text-center lg:text-left">
-              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-duo-border shadow-sm mb-8">
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-duo-border shadow-sm mb-6">
                 <span className="flex h-3 w-3 relative">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-viet-green opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-viet-green"></span>
                 </span>
-                <span className="text-sm font-bold text-[#1a1a1a] uppercase tracking-wider">{t('home.hero_statement', 'Nền tảng Hóa học #1')}</span>
+                <span className="text-sm font-bold text-[#1a1a1a] uppercase tracking-wider">AURUM CHEMISTRY</span>
               </motion.div>
               
-              <motion.h1 variants={itemVariants} className="font-rubik text-[clamp(2.5rem,5vw+1rem,4.5rem)] font-black text-[#1a1a1a] leading-[1.1] tracking-tight mb-6">
-                AURUM <br/>
-                <span className="text-viet-green">CHEMISTRY</span> CURRENCY
+              <motion.h1 variants={itemVariants} className="font-rubik text-[clamp(2.5rem,5vw+1rem,4.5rem)] font-black text-[#1a1a1a] leading-[1.1] tracking-tight mb-4">
+                HỌC HÓA HỌC <br/>
+                <span className="text-viet-green">CHỦ ĐỘNG</span>
               </motion.h1>
               
-              <motion.p variants={itemVariants} className="text-xl text-gray-600 mb-10 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
+              <motion.p variants={itemVariants} className="text-xl text-gray-500 mb-8 max-w-xl mx-auto lg:mx-0 font-medium">
                 {t('home.hero_statement')}
               </motion.p>
               
               <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Link to="/classroom" className="btn-tactile-green text-xl font-black px-10 py-5 rounded-[1.5rem] whitespace-nowrap flex items-center justify-center gap-3">
+                <Link to="/classroom" className="bg-viet-green hover:bg-[#65a32e] hover:scale-105 transition-transform text-white text-lg font-black px-8 py-4 rounded-[1.5rem] whitespace-nowrap flex items-center justify-center gap-3 shadow-[0_4px_14px_0_rgba(118,192,52,0.39)]">
                   {t('home.enter_classroom')}
-                  <Play size={24} className="fill-current" />
+                  <Play size={20} className="fill-current" />
                 </Link>
-                <Link to="/lab" className="bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all text-xl font-black px-10 py-5 rounded-[1.5rem] whitespace-nowrap flex items-center justify-center gap-3">
+                <Link to="/lab" className="bg-white text-[#1a1a1a] hover:bg-gray-50 hover:scale-105 transition-transform text-lg font-black px-8 py-4 rounded-[1.5rem] whitespace-nowrap flex items-center justify-center gap-3 shadow-md border border-gray-100">
                   {t('home.enter_lab')}
-                  <FlaskConical size={24} />
+                  <FlaskConical size={20} />
                 </Link>
               </motion.div>
             </div>
@@ -201,87 +201,71 @@ const Home = () => {
               
               {/* Floating Element 1 */}
               <motion.div 
-                animate={{ y: [0, -15, 0] }}
+                animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-10 right-10 bg-white p-4 rounded-2xl border-2 border-duo-border shadow-lg flex items-center gap-3 z-20 hidden md:flex"
+                className="absolute top-10 right-4 bg-white/90 backdrop-blur-sm p-3 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 z-20 hidden md:flex"
               >
-                <div className="bg-purple-100 p-2 rounded-xl"><Trophy className="text-purple-600" size={24} /></div>
-                <div className="text-left">
-                  <p className="text-xs font-bold text-gray-500 uppercase">Top 1</p>
-                  <p className="font-black text-[#1a1a1a]">Gamification</p>
-                </div>
+                <div className="bg-purple-50 p-2 rounded-xl"><Trophy className="text-purple-500" size={20} /></div>
+                <p className="font-bold text-sm text-[#1a1a1a] pr-2">Gamification</p>
               </motion.div>
 
               {/* Floating Element 2 */}
               <motion.div 
-                animate={{ y: [0, 15, 0] }}
+                animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute bottom-20 left-0 bg-white p-4 rounded-2xl border-2 border-duo-border shadow-lg flex items-center gap-3 z-20 hidden md:flex"
+                className="absolute bottom-16 left-0 bg-white/90 backdrop-blur-sm p-3 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-2 z-20 hidden md:flex"
               >
-                <div className="bg-blue-100 p-2 rounded-xl"><ShieldCheck className="text-blue-600" size={24} /></div>
-                <div className="text-left">
-                  <p className="text-xs font-bold text-gray-500 uppercase">100%</p>
-                  <p className="font-black text-[#1a1a1a]">Safe Labs</p>
-                </div>
+                <div className="bg-blue-50 p-2 rounded-xl"><FlaskConical className="text-blue-500" size={20} /></div>
+                <p className="font-bold text-sm text-[#1a1a1a] pr-2">Lab An Toàn</p>
               </motion.div>
             </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* --- SOCIAL PROOF BANNER --- */}
-      <section className="border-y-2 border-duo-border bg-white py-6 overflow-hidden">
-        <div className="max-w-[1200px] mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="flex -space-x-3">
-              {[1,2,3,4].map(i => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-200 overflow-hidden flex items-center justify-center font-bold text-gray-500 text-xs">
-                  {i===1?'👩‍🔬':i===2?'👨‍🎓':i===3?'👩‍🏫':'👨‍🔬'}
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col">
-              <div className="flex text-amber-400">
-                {[1,2,3,4,5].map(i => <Star key={i} size={16} className="fill-current" />)}
-              </div>
-              <span className="font-bold text-sm text-[#1a1a1a]">{t('home.social_proof.text')}</span>
-            </div>
+      {/* --- QUICK STATS --- */}
+      <section className="bg-white py-12 border-b border-gray-100">
+        <div className="max-w-[1000px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-gray-100">
+          <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+            <h3 className="text-4xl font-black text-[#1a1a1a] mb-1">10.000+</h3>
+            <p className="text-gray-500 font-medium">Học sinh tin dùng</p>
           </div>
-          <div className="font-bold text-gray-500 flex items-center gap-2">
-            <Users size={20} />
-            {t('home.social_proof.schools')}
+          <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+            <h3 className="text-4xl font-black text-[#1a1a1a] mb-1">50+</h3>
+            <p className="text-gray-500 font-medium">Trường học áp dụng</p>
+          </div>
+          <div className="flex flex-col items-center justify-center pt-4 md:pt-0">
+            <h3 className="text-4xl font-black text-[#1a1a1a] mb-1">1.000+</h3>
+            <p className="text-gray-500 font-medium">Bài học trực quan</p>
           </div>
         </div>
       </section>
 
       {/* --- HOW IT WORKS --- */}
-      <section className="py-24 bg-white relative">
-        <div className="max-w-[1200px] mx-auto px-6 text-center">
+      <section className="py-24 bg-[#fbfbfb] relative">
+        <div className="max-w-[1000px] mx-auto px-6 text-center">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={containerVariants}>
-            <motion.span variants={itemVariants} className="font-bold text-viet-green uppercase tracking-widest text-sm mb-3 block">
-              {t('home.how_it_works.badge')}
-            </motion.span>
-            <motion.h2 variants={itemVariants} className="font-rubik text-4xl md:text-5xl font-black text-[#1a1a1a] mb-16">
+            <motion.h2 variants={itemVariants} className="font-rubik text-3xl md:text-4xl font-black text-[#1a1a1a] mb-16">
               {t('home.how_it_works.title')}
             </motion.h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
               {/* Connecting line for desktop */}
-              <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-1 bg-gray-200 -z-10 border-t-2 border-dashed border-gray-300"></div>
+              <div className="hidden md:block absolute top-10 left-[20%] right-[20%] h-0.5 bg-transparent z-0 border-t-2 border-dashed border-gray-200"></div>
 
               {[
-                { id: 'step1', icon: <BookOpen size={32}/>, color: 'bg-blue-100 text-blue-600' },
-                { id: 'step2', icon: <FlaskConical size={32}/>, color: 'bg-viet-green/20 text-viet-green' },
-                { id: 'step3', icon: <Trophy size={32}/>, color: 'bg-purple-100 text-purple-600' }
+                { id: 'step1', icon: <BookOpen size={28}/>, color: 'bg-white text-blue-500 border-blue-100' },
+                { id: 'step2', icon: <FlaskConical size={28}/>, color: 'bg-white text-viet-green border-green-100' },
+                { id: 'step3', icon: <Trophy size={28}/>, color: 'bg-white text-purple-500 border-purple-100' }
               ].map((step) => (
-                <motion.div key={step.id} variants={itemVariants} className="flex flex-col items-center">
-                  <div className={`w-24 h-24 rounded-full ${step.color} border-4 border-white shadow-xl flex items-center justify-center mb-6 relative z-10`}>
+                <motion.div key={step.id} variants={itemVariants} className="flex flex-col items-center relative z-10">
+                  <div className={`w-20 h-20 rounded-full ${step.color} border shadow-sm flex items-center justify-center mb-6`}>
                     {step.icon}
                   </div>
-                  <h3 className="font-rubik text-2xl font-black text-[#1a1a1a] mb-3">
+                  <h3 className="font-bold text-xl text-[#1a1a1a] mb-2">
                     {t(`home.how_it_works.steps.${step.id}.title`)}
                   </h3>
-                  <p className="text-gray-600 font-medium max-w-xs">
+                  <p className="text-gray-500 text-sm max-w-[200px]">
                     {t(`home.how_it_works.steps.${step.id}.desc`)}
                   </p>
                 </motion.div>
@@ -304,7 +288,7 @@ const Home = () => {
             whileInView="visible" 
             viewport={{ once: true, margin: "-100px" }}
             variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[340px]"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[300px]"
           >
             <BentoCard
               title={t('home.features.journey.title')}
@@ -364,21 +348,21 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15 }}
-                className="bg-[#fbfbfb] p-8 rounded-3xl border-2 border-duo-border border-b-4 hover:-translate-y-2 transition-transform"
+                className="bg-[#fbfbfb] p-8 rounded-3xl border-2 border-duo-border border-b-4 hover:-translate-y-2 transition-transform flex flex-col h-full"
               >
                 <div className="flex text-amber-400 mb-4">
                   {[...Array(review.rating || 5)].map((_, starIndex) => (
-                    <Star key={starIndex} size={20} className="fill-current" />
+                    <Star key={starIndex} size={16} className="fill-current" />
                   ))}
                 </div>
-                <p className="text-lg font-medium text-[#1a1a1a] mb-6 italic">"{review.content}"</p>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full border-2 border-duo-border flex items-center justify-center font-bold">
+                <p className="text-[15px] font-medium text-[#1a1a1a] mb-6 italic flex-1">"{review.content}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gray-100 rounded-full border border-gray-200 flex items-center justify-center font-bold text-sm">
                     {review.name.charAt(0)}
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#1a1a1a]">{review.name}</h4>
-                    <span className="text-sm text-gray-500 font-medium">{review.role}</span>
+                    <h4 className="font-bold text-sm text-[#1a1a1a]">{review.name}</h4>
+                    <span className="text-xs text-gray-500 font-medium">{review.role}</span>
                   </div>
                 </div>
               </motion.div>
@@ -397,15 +381,15 @@ const Home = () => {
         <section className="py-24 bg-viet-green relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[url('/icons.svg')] bg-repeat bg-[length:100px_100px]"></div>
           <div className="max-w-[800px] mx-auto px-6 relative z-10 text-center">
-            <h2 className="font-rubik text-4xl md:text-6xl font-black text-white mb-6">
+            <h2 className="font-rubik text-4xl md:text-5xl font-black text-white mb-4">
               {t('home.final_cta.title')}
             </h2>
-            <p className="text-xl text-white/90 font-medium mb-10 max-w-2xl mx-auto">
+            <p className="text-lg text-white/90 font-medium mb-10 max-w-xl mx-auto">
               {t('home.final_cta.subtitle')}
             </p>
-            <Link to="/login" className="bg-white text-viet-green border-2 border-[#1a1a1a] border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all text-xl font-black px-12 py-6 rounded-[1.5rem] inline-flex items-center justify-center gap-3">
+            <Link to="/login" className="bg-white text-viet-green hover:bg-gray-50 hover:scale-105 transition-transform text-lg font-black px-10 py-5 rounded-full inline-flex items-center justify-center gap-3 shadow-lg">
               {t('home.final_cta.button')}
-              <Zap className="fill-current" size={24} />
+              <Zap className="fill-current" size={20} />
             </Link>
           </div>
         </section>

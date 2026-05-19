@@ -18,32 +18,32 @@
     "login_now": "Đăng nhập ngay"
   },
   "home": {
-    "hero_statement": "Nền tảng học thuật Hóa học số 1 kết hợp mô phỏng tương tác và thi đấu trực tuyến.",
+    "hero_statement": "Học hóa học dễ hiểu hơn qua lý thuyết, mô phỏng và thử thách.",
     "enter_classroom": "Vào Lớp Học",
     "enter_lab": "Vào Phòng Lab",
     "features": {
       "journey": {
         "title": "Lộ trình học tập",
         "highlight": "Trực tuyến bài bản",
-        "desc": "Từ những khái niệm cơ bản nhất của Hóa học 8 đến các chuyên đề nâng cao của Hóa học 12. Nội dung được số hóa thành các bài học tương tác tịnh tiến, rèn giũa cả lý thuyết và bài tập.",
+        "desc": "Bài giảng tương tác từ cơ bản đến nâng cao.",
         "link": "Khám phá Lớp học"
       },
       "lab": {
         "title": "Phòng thí nghiệm",
         "highlight": "Tuyệt đối an toàn",
-        "desc": "Không cần hóa chất thực, không lo rủi ro cháy nổ. Thoải mái pha trộn, quan sát sự đổi màu, kết tủa và khí thoát ra ngay trên màn hình. Hỗ trợ hàng trăm phản ứng từ phổ thông đến nâng cao.",
+        "desc": "Thực hành phản ứng an toàn, trực quan ngay trên màn hình.",
         "link": "Thực hành Lab"
       },
       "arena": {
         "title": "Đấu trường thi đấu",
         "highlight": "Kịch tính căng thẳng",
-        "desc": "Hệ thống xếp hạng thời gian thực. Tạo phòng thi đấu cùng bạn bè hoặc tìm trận ngẫu nhiên. Trả lời chớp nhoáng các câu hỏi Hóa học để tích lũy điểm và mở khóa các bộ Avatar độc quyền.",
+        "desc": "Thi đấu thời gian thực, tích lũy điểm thưởng.",
         "link": "Tham gia Đấu trường"
       },
       "library": {
         "title": "Tra cứu toàn diện",
         "highlight": "Nhanh chóng, chính xác",
-        "desc": "Thư viện tài liệu số khổng lồ đi kèm Bảng tuần hoàn tương tác. Bấm vào bất kỳ nguyên tố nào để xem cấu hình electron, mức năng lượng và tính chất hóa học chi tiết.",
+        "desc": "Thư viện tài liệu và Bảng tuần hoàn chi tiết.",
         "link": "Vào Thư viện"
       }
     },
@@ -63,24 +63,24 @@
       "conquer_btn": "Chinh phục thứ hạng ngay"
     },
     "social_proof": {
-      "text": "Tin dùng bởi 10,000+ học sinh và 500+ giáo viên toàn quốc",
-      "schools": "Hơn 50 trường THPT đang áp dụng"
+      "text": "10.000+ Học sinh",
+      "schools": "50+ Trường học"
     },
     "how_it_works": {
       "badge": "Cách hoạt động",
       "title": "3 Bước Chinh Phục Hóa Học",
       "steps": {
         "step1": {
-          "title": "1. Học Lý Thuyết",
-          "desc": "Bài giảng sinh động giúp bạn hiểu sâu bản chất vấn đề."
+          "title": "Nắm chắc nền tảng",
+          "desc": "Bài giảng sinh động dễ hiểu."
         },
         "step2": {
-          "title": "2. Thực Hành Lab",
-          "desc": "Pha chế hóa chất an toàn tuyệt đối ngay trên màn hình."
+          "title": "Quan sát trực quan",
+          "desc": "Pha chế và mô phỏng phản ứng."
         },
         "step3": {
-          "title": "3. Thi Đấu Đỉnh Cao",
-          "desc": "So tài cùng hàng ngàn học sinh khác trên đấu trường."
+          "title": "Củng cố qua thử thách",
+          "desc": "So tài kiến thức trên đấu trường."
         }
       }
     },
@@ -91,23 +91,23 @@
         {
           "name": "Nguyễn Văn A",
           "role": "Học sinh lớp 12",
-          "content": "[Static Fallback] Từ khi dùng Aurum, môn Hóa không còn là nỗi ám ảnh. Thí nghiệm ảo rất trực quan!"
+          "content": "Môn Hóa không còn là nỗi ám ảnh. Thí nghiệm ảo rất trực quan!"
         },
         {
           "name": "Trần Thị B",
           "role": "Giáo viên Hóa",
-          "content": "[Static Fallback] Nền tảng này giúp học sinh của tôi hào hứng hơn hẳn trong mỗi tiết học."
+          "content": "Nền tảng giúp học sinh hào hứng hơn hẳn trong mỗi tiết học."
         },
         {
           "name": "Lê Hoàng C",
           "role": "Học sinh lớp 10",
-          "content": "[Static Fallback] Tính năng đấu trường rất cuốn, mình học được nhiều từ việc thi đấu."
+          "content": "Tính năng đấu trường rất cuốn, học mà như chơi game."
         }
       ]
     },
     "final_cta": {
-      "title": "Sẵn Sàng Trở Thành Bậc Thầy Giả Kim?",
-      "subtitle": "Đăng ký ngay hôm nay để khám phá thế giới Hóa học đầy màu sắc.",
+      "title": "Sẵn Sàng Trở Thành Bậc Thầy?",
+      "subtitle": "Khám phá thế giới Hóa học ngay hôm nay.",
       "button": "Bắt Đầu Hành Trình"
     }
   },
