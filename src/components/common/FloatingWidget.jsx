@@ -177,7 +177,7 @@ const FloatingWidget = () => {
       }
     } catch (err) {
       console.error('Lỗi gửi phản hồi:', err);
-      alert('Rất tiếc, đã có lỗi xảy ra khi kết nối mạng. Vui lòng thử lại sau.');
+      alert(t('widget.err_network') || 'An error occurred. Please try again later.');
     } finally {
       setSendingFeedback(false);
     }
@@ -203,7 +203,7 @@ const FloatingWidget = () => {
             }
           }}
           className="fixed bottom-6 right-6 w-16 h-16 bg-viet-green text-white rounded-full shadow-[0_8px_24px_rgba(118,192,52,0.4)] flex items-center justify-center text-3xl hover:scale-110 hover:bg-[#007042] transition-all duration-300 z-50 cursor-pointer group"
-          aria-label="Mở Trợ lý Aurum"
+          aria-label={t('widget.tooltip')}
         >
           <span className="relative">
             💬
@@ -214,7 +214,7 @@ const FloatingWidget = () => {
             )}
           </span>
           <span className="absolute right-full mr-4 px-4 py-2 bg-viet-text text-white text-xs font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">
-            Trợ lý Aurum
+            {t('widget.tooltip')}
           </span>
         </button>
       )}
@@ -232,8 +232,8 @@ const FloatingWidget = () => {
                   <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-viet-green animate-pulse" />
                 </div>
                 <div className="text-left">
-                  <h3 className="font-black text-sm tracking-tight leading-none uppercase italic">Trợ lý Aurum</h3>
-                  <span className="text-[10px] text-white/80 font-bold">Đang hoạt động</span>
+                  <h3 className="font-black text-sm tracking-tight leading-none uppercase italic">{t('widget.title')}</h3>
+                  <span className="text-[10px] text-white/80 font-bold">{t('widget.status_active')}</span>
                 </div>
               </div>
               
@@ -243,7 +243,7 @@ const FloatingWidget = () => {
                 <button 
                   onClick={() => setIsExpanded(false)}
                   className="hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg leading-none transition-colors cursor-pointer"
-                  title="Thu nhỏ"
+                  title={t('widget.minimize')}
                 >
                   −
                 </button>
@@ -251,7 +251,7 @@ const FloatingWidget = () => {
                 <button 
                   onClick={() => setIsExpanded(false)}
                   className="hover:bg-white/10 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm leading-none transition-colors cursor-pointer"
-                  title="Đóng"
+                  title={t('widget.close')}
                 >
                   ✕
                 </button>
@@ -296,16 +296,16 @@ const FloatingWidget = () => {
                   {!isLoggedIn ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center px-4 space-y-4">
                       <span className="text-5xl">🔒</span>
-                      <h4 className="font-black text-viet-text uppercase tracking-tight text-lg">Yêu cầu đăng nhập</h4>
+                      <h4 className="font-black text-viet-text uppercase tracking-tight text-lg">{t('widget.login_required')}</h4>
                       <p className="text-xs font-semibold text-viet-text-light">
-                        Vui lòng đăng nhập tài khoản để theo dõi và nhận phần thưởng từ hệ thống nhiệm vụ mỗi ngày.
+                        {t('widget.login_required_desc')}
                       </p>
                       <a 
                         href="/login" 
                         onClick={() => setIsExpanded(false)}
                         className="px-6 py-3 bg-viet-green text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow-md hover:bg-[#007042] transition-colors"
                       >
-                        Đăng nhập ngay
+                        {t('widget.login_now')}
                       </a>
                     </div>
                   ) : (
@@ -319,7 +319,7 @@ const FloatingWidget = () => {
                           <div>
                             <p className="text-[9px] font-bold text-viet-text-light/50 uppercase tracking-wider">{user?.username}</p>
                             <h4 className="font-black text-viet-text leading-none italic uppercase">
-                              Cấp <span className="text-viet-green">{user?.level || 1}</span>
+                              {t('widget.level_prefix')} <span className="text-viet-green">{user?.level || 1}</span>
                             </h4>
                             <div className="flex items-center gap-2 mt-1.5">
                               <span className="text-[9px] font-extrabold bg-viet-green/10 text-viet-green px-2 py-0.5 rounded-full border border-viet-green/15">
@@ -331,7 +331,7 @@ const FloatingWidget = () => {
 
                         {/* Streak Badge */}
                         <div className="bg-viet-bg border border-[#e6e2d6] rounded-xl px-3 py-2 text-center shrink-0">
-                          <p className="text-[8px] font-black text-viet-text-light/40 uppercase tracking-widest leading-none mb-1">Streak</p>
+                          <p className="text-[8px] font-black text-viet-text-light/40 uppercase tracking-widest leading-none mb-1">{t('widget.streak')}</p>
                           <div className="flex items-center gap-1 justify-center leading-none">
                             <span className="text-base font-black text-viet-text">{user?.streakCount || 0}</span>
                             <span className="text-sm">🔥</span>
@@ -342,7 +342,7 @@ const FloatingWidget = () => {
                       {/* Daily countdown */}
                       {missionsActiveTab === 'daily' && (
                         <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold uppercase tracking-[2px] text-viet-text-light">
-                          <span>⏳ Làm mới sau:</span>
+                          <span>⏳ {t('widget.reset_in')}</span>
                           <span className="text-viet-text font-black">{timeLeft}</span>
                         </div>
                       )}
@@ -399,7 +399,7 @@ const FloatingWidget = () => {
                                       {/* Micro Progress Bar */}
                                       <div className="relative">
                                         <div className="flex justify-between items-center text-[8px] font-black text-viet-text-light/50 tracking-wider mb-1">
-                                          <span>{mission.isClaimed ? 'Đã nhận' : mission.isCompleted ? 'Hoàn thành' : 'Đang thực hiện'}</span>
+                                          <span>{mission.isClaimed ? t('missions.card.claimed') : mission.isCompleted ? t('missions.card.completed') : t('missions.card.in_progress')}</span>
                                           <span>{mission.currentCount}/{mission.target_count}</span>
                                         </div>
                                         <div className="h-2 bg-viet-bg rounded-full border border-[#e6e2d6] overflow-hidden p-0.5">
@@ -417,7 +417,7 @@ const FloatingWidget = () => {
                                   {/* Reward and Action Button */}
                                   <div className="flex flex-col items-end shrink-0 gap-2">
                                     <div className="px-2.5 py-1 bg-viet-green rounded-lg text-center">
-                                      <p className="text-[7px] font-black text-white/50 uppercase leading-none">Thưởng</p>
+                                      <p className="text-[7px] font-black text-white/50 uppercase leading-none">{t('widget.reward')}</p>
                                       <p className="text-[10px] font-black text-white leading-none">+{mission.xp_reward}XP</p>
                                     </div>
 
@@ -427,15 +427,15 @@ const FloatingWidget = () => {
                                         disabled={claimingId === mission.id}
                                         className="px-3.5 py-1.5 bg-viet-text text-white rounded-xl font-black text-[9px] uppercase tracking-wider shadow-sm hover:bg-black transition-colors cursor-pointer disabled:opacity-50"
                                       >
-                                        {claimingId === mission.id ? '...' : 'Nhận'}
+                                        {claimingId === mission.id ? '...' : t('widget.claim')}
                                       </button>
                                     ) : mission.isClaimed ? (
                                       <div className="px-3.5 py-1.5 bg-viet-bg text-viet-text-light/30 rounded-xl font-black text-[9px] uppercase border border-[#e6e2d6]">
-                                        Nhận ✓
+                                        {t('widget.claimed')}
                                       </div>
                                     ) : (
                                       <div className="px-3 py-1.5 bg-white text-viet-text-light/35 rounded-xl font-black text-[9px] uppercase border border-dashed border-[#e6e2d6] cursor-default">
-                                        Chưa đạt
+                                        {t('widget.locked')}
                                       </div>
                                     )}
                                   </div>
@@ -447,7 +447,7 @@ const FloatingWidget = () => {
                       ) : (
                         <div className="bg-white border border-dashed border-[#e6e2d6] rounded-2xl py-12 text-center">
                           <span className="text-3xl mb-2 block">💤</span>
-                          <p className="text-xs font-bold text-viet-text-light">Không có nhiệm vụ khả dụng</p>
+                          <p className="text-xs font-bold text-viet-text-light">{t('widget.no_missions')}</p>
                         </div>
                       )}
                     </>
@@ -463,9 +463,9 @@ const FloatingWidget = () => {
                       <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl animate-bounce">
                         ✓
                       </div>
-                      <h4 className="font-black text-viet-text text-lg uppercase tracking-tight">Cảm ơn bạn!</h4>
+                      <h4 className="font-black text-viet-text text-lg uppercase tracking-tight">{t('widget.success_title')}</h4>
                       <p className="text-xs font-semibold text-viet-text-light px-6">
-                        Ý kiến đóng góp của bạn đã được gửi thành công đến ban quản trị Aurum.
+                        {t('widget.success_desc')}
                       </p>
                       <button
                         onClick={() => {
@@ -475,7 +475,7 @@ const FloatingWidget = () => {
                         }}
                         className="px-6 py-2.5 bg-viet-green text-white text-[11px] font-black uppercase tracking-wider rounded-xl shadow-md hover:bg-[#007042] transition-colors cursor-pointer"
                       >
-                        Gửi phản hồi khác
+                        {t('widget.send_another')}
                       </button>
                     </div>
                   ) : (
@@ -483,12 +483,12 @@ const FloatingWidget = () => {
                       <div className="space-y-4">
                         {/* Task Selector: 3 separate buttons */}
                         <div>
-                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">Chọn loại phản hồi:</label>
+                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">{t('widget.feedback_type')}</label>
                           <div className="grid grid-cols-3 gap-2">
                             {[
-                              { id: 'suggestion', label: '💡 Góp ý' },
-                              { id: 'bug', label: '🐛 Báo lỗi' },
-                              { id: 'praise', label: '❤️ Khen ngợi' }
+                              { id: 'suggestion', label: t('widget.type_suggestion') },
+                              { id: 'bug', label: t('widget.type_bug') },
+                              { id: 'praise', label: t('widget.type_praise') }
                             ].map(type => {
                               const isSelected = feedbackType === type.id;
                               let selectStyles = '';
@@ -519,16 +519,16 @@ const FloatingWidget = () => {
 
                         {/* Input Message Area */}
                         <div>
-                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">Nội dung chi tiết:</label>
+                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">{t('widget.feedback_details')}</label>
                           <textarea
                             required
                             rows="5"
                             placeholder={
                               feedbackType === 'suggestion' 
-                              ? "Hãy mô tả ý tưởng hoặc đề xuất tính năng giúp Aurum hoàn thiện hơn..." 
+                              ? t('widget.placeholder_suggestion') 
                               : feedbackType === 'bug' 
-                              ? "Hãy mô tả chi tiết lỗi bạn gặp phải (và nhấn Ctrl+V để dán trực tiếp ảnh chụp màn hình nếu có)..." 
-                              : "Hãy chia sẻ những điều bạn yêu thích về Aurum..."
+                              ? t('widget.placeholder_bug') 
+                              : t('widget.placeholder_praise')
                             }
                             value={feedbackMessage}
                             onChange={(e) => setFeedbackMessage(e.target.value)}
@@ -541,7 +541,7 @@ const FloatingWidget = () => {
                           <div className="space-y-2 border border-dashed border-[#e6e2d6] rounded-xl p-3 bg-white">
                             <div className="flex items-center justify-between">
                               <label className="flex items-center gap-2 cursor-pointer bg-slate-50 border border-[#e6e2d6] hover:bg-slate-100 px-3 py-2 rounded-lg text-[9px] font-black uppercase text-slate-700 transition">
-                                📷 Đính kèm ảnh (Hoặc Ctrl+V)
+                                {t('widget.attach_image')}
                                 <input 
                                   type="file" 
                                   accept="image/*" 
@@ -555,7 +555,7 @@ const FloatingWidget = () => {
                                   onClick={() => setImageFile(null)}
                                   className="text-red-500 hover:text-red-700 font-extrabold text-[9px] uppercase cursor-pointer"
                                 >
-                                  Xóa
+                                  {t('widget.remove')}
                                 </button>
                               )}
                             </div>
@@ -565,7 +565,7 @@ const FloatingWidget = () => {
                               </div>
                             ) : (
                               <p className="text-[8px] text-viet-text-light/40 font-bold leading-tight">
-                                Hỗ trợ tải tệp ảnh hoặc chụp ảnh màn hình rồi nhấn Ctrl+V để dán trực tiếp.
+                                {t('widget.attach_hint')}
                               </p>
                             )}
                           </div>
@@ -585,12 +585,12 @@ const FloatingWidget = () => {
                         }`}
                       >
                         {sendingFeedback 
-                          ? 'Đang gửi phản hồi...' 
+                          ? t('widget.sending') 
                           : feedbackType === 'suggestion' 
-                          ? 'Gửi ý kiến đóng góp ➔' 
+                          ? t('widget.send_suggestion') 
                           : feedbackType === 'bug' 
-                          ? 'Báo cáo lỗi hệ thống ➔' 
-                          : 'Gửi lời khen ngợi ➔'}
+                          ? t('widget.send_bug') 
+                          : t('widget.send_praise')}
                       </button>
                     </form>
                   )}
