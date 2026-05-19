@@ -56,6 +56,7 @@ const About = lazyWithRetry(() => import('@/pages/student/About'));
 const Contact = lazyWithRetry(() => import('@/pages/student/Contact'));
 const Terms = lazyWithRetry(() => import('@/pages/student/Terms'));
 const Profile = lazyWithRetry(() => import('@/pages/student/Profile'));
+const Settings = lazyWithRetry(() => import('@/pages/student/Settings'));
 const KnowledgeMap = lazyWithRetry(() => import('@/pages/student/KnowledgeMap'));
 const ChemCalculator = lazyWithRetry(() => import('@/pages/student/ChemCalculator'));
 
@@ -143,6 +144,7 @@ function AppContent() {
           <Route path="/library/:id" element={<ProtectedRoute><MaterialDetail /></ProtectedRoute>} />
           <Route path="/missions" element={<ProtectedRoute><Missions /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
           <Route path="/calculator" element={<ProtectedRoute><ChemCalculator /></ProtectedRoute>} />
 

@@ -270,6 +270,10 @@ export const User = {
   async update(id, updateData) {
     const pgUpdateData = { ...updateData };
     
+    if (updateData.password) {
+      pgUpdateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+    
     // Handle special mappings
     if (updateData.avatarSeed) {
       pgUpdateData.avatar_seed = updateData.avatarSeed;

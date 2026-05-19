@@ -113,7 +113,7 @@ const Navbar = () => {
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
                 {t('nav.arena')} <span className="text-[10px] opacity-30">▼</span>
               </button>
-              <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+              <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lab" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10 2v7.5" /><path d="M14 2v7.5" /><path d="M8.5 2h7" /><path d="M14 9.32a4 4 0 1 1-4 0" /><path d="M8.5 15h7" /></svg> {t('nav.lab')}
@@ -121,14 +121,24 @@ const Navbar = () => {
                 <NavLink to="/arena" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19" /></svg> {t('nav.arena_link')}
                 </NavLink>
+                <NavLink to="/missions" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
+                  <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg> {t('nav.missions')}
+                </NavLink>
+              </div>
+            </div>
+
+            {/* SUPPORT GROUP */}
+            <div className="relative group/nav">
+              <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6">
+                {t('nav.support')} <span className="text-[10px] opacity-30">▼</span>
+              </button>
+              <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+                <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lab/solver" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> {t('chem_lab.modules.solver.label')}
                 </NavLink>
                 <NavLink to="/calculator" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/><line x1="12" y1="6" x2="12" y2="18"/></svg> {t('nav.calculator')}
-                </NavLink>
-                <NavLink to="/missions" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
-                  <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg> {t('nav.missions')}
                 </NavLink>
               </div>
             </div>
@@ -160,6 +170,10 @@ const Navbar = () => {
                   <span className="text-[10px] font-black text-white uppercase tracking-widest leading-tight block truncate group-hover/user:underline">
                     {user?.username}
                   </span>
+                </Link>
+                <div className="w-px h-3 bg-white/30 mx-1"></div>
+                <Link to="/settings" className="text-[10px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-1 mr-1" title="Cài đặt">
+                  ⚙️
                 </Link>
                 <div className="w-px h-3 bg-white/30 mx-1"></div>
                 <button
@@ -229,10 +243,10 @@ const Navbar = () => {
                     { path: "/knowledge-map", label: t('nav.knowledge_map'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg> },
                     { path: "/library", label: t('nav.library'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /></svg> },
                     { path: "/lab", label: t('nav.lab'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10 2v7.5" /><path d="M14 2v7.5" /><path d="M8.5 2h7" /><path d="M14 9.32a4 4 0 1 1-4 0" /><path d="M8.5 15h7" /></svg> },
-                    { path: "/lab/solver", label: t('chem_lab.modules.solver.label'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> },
-                    { path: "/calculator", label: t('nav.calculator'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/><line x1="12" y1="6" x2="12" y2="18"/></svg> },
                     { path: "/arena", label: t('nav.arena_link'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19" /></svg>, requiresAuth: true },
                     { path: "/missions", label: t('nav.missions'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></svg>, requiresAuth: true },
+                    { path: "/lab/solver", label: t('chem_lab.modules.solver.label'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> },
+                    { path: "/calculator", label: t('nav.calculator'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/><line x1="12" y1="6" x2="12" y2="18"/></svg> },
                   ].filter(item => !item.requiresAuth || isLoggedIn).map((item) => (
                     <NavLink
                       key={item.path}
@@ -255,19 +269,32 @@ const Navbar = () => {
                 <div className="mt-8 pt-8 border-t border-viet-border space-y-4">
                   {isLoggedIn ? (
                     <div className="space-y-4">
-                      <Link
-                        to="/profile"
-                        onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl group"
-                      >
-                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-viet-green p-0.5 bg-white">
-                          <Avatar seed={user.avatarSeed || user.username} size={40} streakCount={user.streakCount} level={user.level} className="w-full h-full object-cover" />
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-[14px] font-black text-viet-text leading-tight">{user.username}</span>
-                          <span className="text-[10px] font-bold text-viet-green uppercase tracking-widest">Hồ sơ cá nhân</span>
-                        </div>
-                      </Link>
+                      <div className="flex gap-2">
+                        <Link
+                          to="/profile"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="flex-1 flex items-center gap-4 p-4 bg-slate-50 rounded-2xl group"
+                        >
+                          <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-viet-green p-0.5 bg-white">
+                            <Avatar seed={user.avatarSeed || user.username} size={40} streakCount={user.streakCount} level={user.level} className="w-full h-full object-cover" />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[14px] font-black text-viet-text leading-tight">{user.username}</span>
+                            <span className="text-[10px] font-bold text-viet-green uppercase tracking-widest">Hồ sơ cá nhân</span>
+                          </div>
+                        </Link>
+                        <Link
+                          to="/settings"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="w-14 bg-slate-50 hover:bg-slate-100 rounded-2xl flex items-center justify-center text-viet-text border border-viet-border transition-all animate-fade-in"
+                          title="Cài đặt"
+                        >
+                          <svg className="w-6 h-6 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.297 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.991l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          </svg>
+                        </Link>
+                      </div>
                       <button
                         onClick={() => { logout(); setIsMenuOpen(false); }}
                         className="w-full py-4 text-center text-red-500 font-extrabold text-[12px] uppercase tracking-widest hover:bg-red-50 rounded-xl transition-all"

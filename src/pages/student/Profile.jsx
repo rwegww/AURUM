@@ -1,65 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
-import { supabase } from '@/lib/supabase';
-import { Bell, Mail, Activity, Target, Clock, BookOpen, Save } from 'lucide-react';
-
-const ReminderToggle = ({ enabled, onChange, title, icon, activeColor }) => {
-  const colorClasses = {
-    green: {
-      border: 'border-viet-green bg-white shadow-sm',
-      iconBg: 'bg-viet-green/10 text-viet-green',
-      switchBg: 'bg-viet-green',
-    },
-    blue: {
-      border: 'border-blue-500 bg-white shadow-sm',
-      iconBg: 'bg-blue-500/10 text-blue-600',
-      switchBg: 'bg-blue-500',
-    },
-    purple: {
-      border: 'border-purple-500 bg-white shadow-sm',
-      iconBg: 'bg-purple-500/10 text-purple-600',
-      switchBg: 'bg-purple-500',
-    }
-  };
-
-  const colors = enabled ? colorClasses[activeColor] : {
-    border: 'border-viet-border bg-white/50 opacity-80 hover:opacity-100',
-    iconBg: 'bg-slate-100 text-slate-400',
-    switchBg: 'bg-slate-200'
-  };
-
-  return (
-    <motion.div
-      whileHover={{ y: -1 }}
-      onClick={onChange}
-      className={`relative p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 ${colors.border}`}
-    >
-      <div className="flex items-center gap-3">
-        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 ${colors.iconBg}`}>
-          {icon}
-        </div>
-        <span className={`font-black text-[13px] ${enabled ? 'text-viet-text' : 'text-slate-500'}`}>
-          {title}
-        </span>
-      </div>
-      <div className="select-none">
-        <div className={`w-9 h-5 rounded-full relative transition-colors duration-200 ${colors.switchBg}`}>
-          <motion.div 
-            animate={{ x: enabled ? 18 : 2 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            className="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"
-          />
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
+import { Settings as SettingsIcon } from 'lucide-react';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div
@@ -74,103 +20,9 @@ const ProfileCard = ({ title, value, icon, color }) => (
   </motion.div>
 );
 
-const STUDY_PLAN_DEFAULTS = {
-  studyTime: '20:00',
-  dailyLessonTarget: 1,
-  remindersEnabled: true,
-  emailEnabled: false
-};
-
 const Profile = () => {
   const { t, i18n } = useTranslation();
-  const { user, updateUser, linkAccount } = useAuth();
-  const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isSavingPlan, setIsSavingPlan] = useState(false);
-  const [planData, setPlanData] = useState(STUDY_PLAN_DEFAULTS);
-
-  React.useEffect(() => {
-    if (user) {
-      setEditableSeed(user.avatarSeed || user.username);
-      if (user.studyPlan) {
-        setPlanData({ ...STUDY_PLAN_DEFAULTS, ...user.studyPlan });
-      }
-    }
-  }, [user]);
-
-  const handleRandomizeAvatar = () => {
-    const newSeed = Math.random().toString(36).substring(7);
-    setEditableSeed(newSeed);
-  };
-
-  const handleSaveStudyPlan = async () => {
-    setIsSavingPlan(true);
-    try {
-      await updateUser({ studyPlan: planData });
-      alert(t('profile.study_plan.success'));
-    } catch (err) {
-      console.error('Lỗi khi lưu kế hoạch:', err);
-    } finally {
-      setIsSavingPlan(false);
-    }
-  };
-
-  const handleToggleEmailReminder = () => {
-    if (!planData.emailEnabled && !user.email) {
-      alert('Tai khoan nay chua co email, khong the bat nhac nho qua email.');
-      return;
-    }
-    setPlanData({ ...planData, emailEnabled: !planData.emailEnabled });
-  };
-
-  const handleLinkGoogle = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/profile?linking_google=true`,
-          queryParams: {
-            prompt: 'select_account'
-          }
-        }
-      });
-      if (error) throw error;
-    } catch (err) {
-      alert('Lỗi liên kết Google: ' + err.message);
-    }
-  };
-
-  React.useEffect(() => {
-    const checkGoogleLink = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('linking_google') === 'true') {
-        const { data } = await supabase.auth.getSession();
-        if (data?.session?.user) {
-          const uid = data.session.user.id;
-          const email = data.session.user.email;
-          const res = await linkAccount('google', uid, email);
-          if (res.success) {
-            alert('Liên kết Google thành công!');
-          } else {
-            alert(res.message);
-          }
-          window.history.replaceState({}, document.title, window.location.pathname);
-        }
-      }
-    };
-    checkGoogleLink();
-  }, [linkAccount]);
-
-  const handleSaveAvatar = async () => {
-    setIsSaving(true);
-    try {
-      await updateUser({ avatarSeed: editableSeed });
-    } catch (err) {
-      console.error('Lỗi khi lưu ảnh đại diện:', err);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  const { user } = useAuth();
 
   if (!user) {
     return (
@@ -191,45 +43,29 @@ const Profile = () => {
         <div className="relative mb-16 px-10 py-16 bg-viet-text rounded-[40px] overflow-hidden">
           <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-viet-green/20 to-transparent" />
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-            <div className="group relative">
-              <div className="w-40 h-40 rounded-[40px] bg-white shadow-2xl relative flex items-center justify-center">
-                <Avatar 
-                  seed={editableSeed} 
-                  size={160} 
-                  streakCount={user.streakCount} 
-                  level={user.level}
-                  className="w-full h-full" 
-                />
-              </div>
-
-              {/* Avatar Controls */}
-              <div className="absolute -right-16 top-0 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  onClick={handleRandomizeAvatar}
-                  className="w-12 h-12 bg-white rounded-2xl shadow-xl flex items-center justify-center text-xl hover:scale-110 transition-transform"
-                  title={t('profile.change_avatar')}
-                >
-                  🎲
-                </button>
-                {editableSeed !== (user.avatarSeed || user.username) && (
-                  <button
-                    onClick={handleSaveAvatar}
-                    disabled={isSaving}
-                    className="w-12 h-12 bg-viet-green text-white rounded-2xl shadow-xl flex items-center justify-center text-xl hover:scale-110 transition-transform disabled:opacity-50"
-                    title={t('profile.save_changes')}
-                  >
-                    {isSaving ? '...' : '✓'}
-                  </button>
-                )}
-              </div>
+            <div className="w-40 h-40 rounded-[40px] bg-white shadow-2xl relative flex items-center justify-center overflow-hidden shrink-0">
+              <Avatar 
+                seed={user.avatarSeed || user.username} 
+                size={160} 
+                streakCount={user.streakCount} 
+                level={user.level}
+                className="w-full h-full" 
+              />
             </div>
 
-            <div className="text-center md:text-left flex-1">
+            <div className="text-center md:text-left flex-1 w-full">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                  <div className="flex items-center justify-center md:justify-start gap-4 mb-2">
+                  <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-2">
                     <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
                     <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">{t('profile.member_role')}</span>
+                    <Link 
+                      to="/settings" 
+                      className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-2xl transition-all flex items-center justify-center" 
+                      title="Cài đặt"
+                    >
+                      <SettingsIcon className="w-4 h-4" />
+                    </Link>
                   </div>
                   <p className="text-white/60 font-medium text-lg leading-relaxed mb-6">
                     <Trans
@@ -265,10 +101,9 @@ const Profile = () => {
 
               <div className="flex flex-wrap gap-4 justify-center md:justify-start mt-6">
                 <div className="px-6 py-3 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3">
-                  <span className="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></span>
+                  <span className="w-3 h-3 rounded-full bg-viet-green animate-pulse"></span>
                   <span className="text-[13px] font-bold text-white/80">{t('profile.online_status')}</span>
                 </div>
-
               </div>
             </div>
           </div>
@@ -308,153 +143,6 @@ const Profile = () => {
             }
             color="bg-purple-500"
           />
-        </div>
-
-        {/* Study Plan Section */}
-        <div className="bg-white rounded-[40px] p-8 border border-viet-border shadow-xl overflow-hidden relative mb-12">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-          
-          <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-              <div>
-                <h2 className="text-2xl font-black text-viet-text flex items-center gap-2">
-                  <Target className="w-6 h-6 text-viet-green" /> {t('profile.study_plan.title')}
-                </h2>
-                <p className="text-xs text-viet-text-light/60 font-medium">{t('profile.study_plan.subtitle')}</p>
-              </div>
-              <div className="flex items-center gap-3 px-4 py-2 bg-viet-green/10 rounded-2xl border border-viet-green/20">
-                <Activity className="w-5 h-5 text-viet-green shrink-0 animate-pulse" />
-                <div>
-                  <div className="text-[10px] font-black text-viet-green uppercase tracking-widest leading-none mb-1">Tiến độ hôm nay</div>
-                  <div className="text-sm font-black text-viet-text leading-none">
-                    {user.todayLessonCompleted ? 'Hoàn thành' : 'Chưa hoàn thành'}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-              {/* Left Column: Time & Target */}
-              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.time_label')}</label>
-                  <div className="relative">
-                    <input 
-                      type="time" 
-                      value={planData.studyTime || '20:00'}
-                      onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
-                      className="w-full h-14 bg-slate-50 border border-viet-border rounded-2xl px-5 font-black text-md focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
-                    />
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 opacity-40">
-                      <Clock size={18} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.target_label')}</label>
-                  <div className="relative">
-                    <select 
-                      value={planData.dailyLessonTarget || 1}
-                      onChange={(e) => setPlanData({ ...planData, dailyLessonTarget: parseInt(e.target.value) })}
-                      className="w-full h-14 bg-slate-50 border border-viet-border rounded-2xl px-5 font-black text-md focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none appearance-none transition-all"
-                    >
-                      {[1, 2, 3, 5, 10].map(n => (
-                        <option key={n} value={n}>{n} {t('common.lesson_count', { count: n })}</option>
-                      ))}
-                    </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                      <BookOpen size={18} />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Save Button inside the Left Grid */}
-                <div className="sm:col-span-2 pt-2 flex justify-end">
-                  <button
-                    onClick={handleSaveStudyPlan}
-                    disabled={isSavingPlan}
-                    className="w-full sm:w-auto px-8 py-3.5 bg-viet-green hover:bg-viet-green/90 text-white rounded-2xl font-black text-sm shadow-md shadow-viet-green/20 hover:shadow-lg hover:shadow-viet-green/30 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    {isSavingPlan ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                        {t('profile.study_plan.saving')}
-                      </>
-                    ) : (
-                      <>
-                        <Save size={16} />
-                        {t('profile.study_plan.save_btn')}
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column: Compact Reminders */}
-              <div className="bg-slate-50/50 border border-viet-border rounded-[32px] p-6 space-y-4">
-                <h4 className="text-[11px] font-black text-viet-text-light uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                  <Bell className="w-4 h-4 text-viet-green shrink-0" /> {t('profile.study_plan.reminders_label')}
-                </h4>
-                <div className="flex flex-col gap-3">
-                  <ReminderToggle
-                    enabled={planData.remindersEnabled}
-                    onChange={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
-                    title="Nhắc nhở học tập"
-                    icon={<Bell size={18} />}
-                    activeColor="green"
-                  />
-
-                  <ReminderToggle 
-                    enabled={planData.emailEnabled}
-                    onChange={handleToggleEmailReminder}
-                    title="Nhắc nhở qua Email"
-                    icon={<Mail size={18} />}
-                    activeColor="blue"
-                  />
-
-                  {planData.__showRemovedCalendar && (
-                  <ReminderToggle 
-                    title="Lịch học tùy chỉnh"
-                  />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Linked Accounts Section */}
-        <div className="bg-white rounded-[40px] p-10 border border-viet-border shadow-xl overflow-hidden relative mb-16">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
-          <div className="relative z-10">
-            <h2 className="text-3xl font-black text-viet-text mb-2">Liên kết tài khoản</h2>
-            <p className="text-viet-text-light/60 font-medium mb-10">Liên kết tài khoản Google để đăng nhập nhanh chóng và an toàn hơn</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div className="flex items-center justify-between p-6 rounded-3xl border-2 border-slate-100 bg-slate-50 hover:border-blue-200 transition-all">
-                  <div className="flex items-center gap-4">
-                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-10 h-10" alt="Google" />
-                     <div>
-                       <div className="font-bold text-slate-800 text-lg">Google</div>
-                       <div className="text-sm text-slate-500 font-medium">Đăng nhập nhanh bằng Google</div>
-                     </div>
-                  </div>
-                  {user?.linkedAccounts?.google ? (
-                    <div className="px-5 py-2.5 rounded-xl text-[13px] font-black bg-green-50 text-green-600 border border-green-200 uppercase tracking-widest">
-                      Đã liên kết
-                    </div>
-                  ) : (
-                    <button 
-                      onClick={handleLinkGoogle}
-                      className="px-6 py-3 rounded-2xl text-[14px] font-black bg-white border-2 border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 hover:border-blue-300 transition-all uppercase tracking-widest"
-                    >
-                      Liên kết
-                    </button>
-                  )}
-               </div>
-            </div>
-          </div>
         </div>
 
         {/* Detailed Sections */}

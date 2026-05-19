@@ -18,7 +18,7 @@ const DEFAULT_STUDY_PLAN = {
   calendarEnabled: false,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 60;
-const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan']);
+const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'password']);
 const LESSON_LEVEL_XP = {
   level1: 30,
   level2: 50,
@@ -211,6 +211,14 @@ router.patch('/profile', auth, async (req, res) => {
     }
 
     const updateData = { ...req.body };
+
+    if (updateData.username) {
+      const existingUser = await User.findOne({ username: updateData.username });
+      if (existingUser && existingUser.id !== req.user.id) {
+        return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
+      }
+    }
+
     if (Object.prototype.hasOwnProperty.call(updateData, 'studyPlan')) {
       const nextStudyPlan = normalizeStudyPlan(updateData.studyPlan, req.user.studyPlan);
       updateData.studyPlan = shouldResetStudyReminderState(nextStudyPlan, req.user.studyPlan)
