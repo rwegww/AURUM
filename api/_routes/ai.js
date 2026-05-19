@@ -1,5 +1,4 @@
 import express from 'express';
-import OpenAI from 'openai';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { supabase } from '../lib/supabase.js';
 import crypto from 'crypto';
@@ -129,7 +128,6 @@ const fetchDatabaseContext = async (userId, query) => {
 };
 
 // Initialize Providers
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 /**
