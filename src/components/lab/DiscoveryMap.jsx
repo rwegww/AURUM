@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules } from '../../data/molecules';
 import { elements } from '../../data/elements';
@@ -82,69 +82,108 @@ const getApplications = (formula, name, category) => {
   if (category?.includes('Bazơ')) return 'Xử lý nước, sản xuất chất tẩy rửa, xà phòng.';
   if (category?.includes('Muối')) return 'Công nghiệp thực phẩm, sản xuất phân bón, hóa chất.';
   if (category?.includes('Kim loại')) return 'Cơ khí chế tạo, điện tử, xây dựng.';
-  return 'Nghiên cứu khoa học, giáo dụng và mô phỏng thí nghiệm.';
+  return 'Nghiên cứu khoa học, giáo dục và mô phỏng thí nghiệm.';
 };
 
-const CATEGORY_THEME = {
-  'Kim loại': { color: '#3b82f6', icon: '⛏️', label: 'Kim loại' },
-  'Phi kim / Khí': { color: '#8b5cf6', icon: '☁️', label: 'Phi kim / Khí' },
-  'Axit': { color: '#ef4444', icon: '🧪', label: 'Axit' },
-  'Bazơ': { color: '#10b981', icon: '🧼', label: 'Bazơ' },
-  'Muối': { color: '#f59e0b', icon: '🧂', label: 'Muối' },
-  'Khác': { color: '#64748b', icon: '📦', label: 'Khác' }
+const TIER_THEME = {
+  0: { color: '#3b82f6', icon: '💎', label: 'Bậc 0: Nguyên bản' },
+  1: { color: '#10b981', icon: '🌿', label: 'Bậc 1: Sơ cấp' },
+  2: { color: '#f59e0b', icon: '⚡', label: 'Bậc 2: Trung cấp' },
+  3: { color: '#ef4444', icon: '🔥', label: 'Bậc 3: Cao cấp' },
+  4: { color: '#8b5cf6', icon: '🔮', label: 'Khác / Huyền bí' }
 };
 
 const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFormulas = [] }) => {
-  const [expandedCategory, setExpandedCategory] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
+  const [hoveredId, setHoveredId] = useState(null);
+  const containerRef = useRef(null);
 
   const normalizedDiscovered = useMemo(() => 
     new Set(discoveredFormulas.map(f => normalize(f)))
   , [discoveredFormulas]);
 
+  // Compute Tiers using BFS on Reactions
   const treeData = useMemo(() => {
-    const groups = {
-      'Kim loại': [],
-      'Phi kim / Khí': [],
-      'Axit': [],
-      'Bazơ': [],
-      'Muối': [],
-      'Khác': []
-    };
+    const tierMap = new Map(); // normalized_formula -> tier level
+    const elementsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [] };
 
+    // Initialize Tier 0 (Starters)
     chemicals.forEach(chem => {
-      const type = (chem.category || chem.type || '').toLowerCase();
       const normF = normalize(chem.formula);
+      if (chem.is_starter || chem.isStarter) {
+        tierMap.set(normF, 0);
+      }
+    });
+
+    // Run BFS to assign tiers
+    let changed = true;
+    let iterations = 0;
+    while(changed && iterations < 10) {
+      changed = false;
+      iterations++;
+      _reactions.forEach(rx => {
+        if (!rx.reactants || !rx.products) return;
+        
+        let maxReactantTier = -1;
+        let allReactantsHaveTier = true;
+        
+        rx.reactants.forEach(r => {
+          const rf = normalize(r.formula);
+          if (tierMap.has(rf)) {
+            maxReactantTier = Math.max(maxReactantTier, tierMap.get(rf));
+          } else {
+            allReactantsHaveTier = false;
+          }
+        });
+
+        if (allReactantsHaveTier && maxReactantTier !== -1) {
+          const productTier = Math.min(maxReactantTier + 1, 3); // Max logic tier is 3
+          rx.products.forEach(p => {
+            const pf = normalize(p.formula);
+            const currentTier = tierMap.get(pf);
+            if (currentTier === undefined || productTier < currentTier) {
+               tierMap.set(pf, productTier);
+               changed = true;
+            }
+          });
+        }
+      });
+    }
+
+    // Populate elementsByTier
+    chemicals.forEach(chem => {
+      const normF = normalize(chem.formula);
+      let tier = tierMap.get(normF);
+      if (tier === undefined) tier = 4; // Unlinked / Special
+      
       const isDiscovered = normalizedDiscovered.has(normF) || chem.is_starter || chem.isStarter;
       
       const node = {
          ...chem,
          normalizedFormula: normF,
-         isDiscovered
+         isDiscovered,
+         tier
       };
-
-      if (type.includes('kim loại')) groups['Kim loại'].push(node);
-      else if (type.includes('phi kim') || type.includes('khí') || chem.state === 'gas') groups['Phi kim / Khí'].push(node);
-      else if (type.includes('axit')) groups['Axit'].push(node);
-      else if (type.includes('bazơ') || type.includes('bazo')) groups['Bazơ'].push(node);
-      else if (type.includes('muối')) groups['Muối'].push(node);
-      else groups['Khác'].push(node);
+      
+      if (!elementsByTier[tier]) elementsByTier[tier] = [];
+      elementsByTier[tier].push(node);
     });
 
+    // Clean up empty tiers and sort
     const result = {};
-    Object.keys(groups).forEach(k => {
-      if (groups[k].length > 0) {
-         groups[k].sort((a, b) => {
-            if (a.isDiscovered === b.isDiscovered) return a.normalizedFormula.localeCompare(b.normalizedFormula);
-            return a.isDiscovered ? -1 : 1; // Discovered first
-         });
-         result[k] = groups[k];
-      }
+    [0,1,2,3,4].forEach(t => {
+       if (elementsByTier[t] && elementsByTier[t].length > 0) {
+           elementsByTier[t].sort((a,b) => {
+               if (a.isDiscovered === b.isDiscovered) return a.normalizedFormula.localeCompare(b.normalizedFormula);
+               return a.isDiscovered ? -1 : 1;
+           });
+           result[t] = elementsByTier[t];
+       }
     });
     return result;
-  }, [chemicals, normalizedDiscovered]);
+  }, [chemicals, _reactions, normalizedDiscovered]);
 
-  const categoryKeys = Object.keys(treeData);
+  const tierKeys = Object.keys(treeData).map(Number).sort();
 
   const selectedData = useMemo(() => {
     if (!selectedId) return null;
@@ -172,6 +211,28 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
     );
   }, [selectedId, _reactions]);
 
+  // Determine highlighted nodes for connection effect
+  const highlightedNodes = useMemo(() => {
+    const highlights = new Set();
+    const activeId = hoveredId || selectedId;
+    if (activeId) {
+      highlights.add(activeId);
+      // Find what makes activeId
+      _reactions.forEach(rx => {
+        if (rx.products && rx.products.some(p => normalize(p.formula) === activeId)) {
+          rx.reactants?.forEach(r => highlights.add(normalize(r.formula)));
+        }
+      });
+      // Find what activeId makes
+      _reactions.forEach(rx => {
+        if (rx.reactants && rx.reactants.some(r => normalize(r.formula) === activeId)) {
+          rx.products?.forEach(p => highlights.add(normalize(p.formula)));
+        }
+      });
+    }
+    return highlights;
+  }, [hoveredId, selectedId, _reactions]);
+
   const renderPathwayNode = (formula, coeff, name, isProduct = false) => {
      const isDiscovered = normalizedDiscovered.has(normalize(formula));
      return (
@@ -193,163 +254,106 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
       {/* Main Map Area */}
-      <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar relative">
-        <div className="flex flex-row items-center min-w-max min-h-full py-16 px-12 relative z-10">
+      <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar relative" ref={containerRef}>
+        <div className="flex flex-row items-start min-w-max min-h-full py-16 px-12 relative z-10 gap-16">
           
-          {/* 1. ROOT NODE */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="shrink-0 relative z-10"
-          >
-            <div className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none">
-              🧪 VẬT CHẤT
-            </div>
-          </motion.div>
-
-          {/* Root Connector */}
-          <div className="w-12 h-[3px] bg-white/10 shrink-0" />
-
-          {/* 2. CATEGORIES COLUMN */}
-          <div className="flex flex-col gap-6 shrink-0 relative">
-            {categoryKeys.map((category, cIdx) => {
-              const isFirst = cIdx === 0;
-              const isLast = cIdx === categoryKeys.length - 1;
-              const isOnly = categoryKeys.length === 1;
-
-              const theme = CATEGORY_THEME[category] || CATEGORY_THEME['Khác'];
-              const isExpanded = expandedCategory === category;
-              const items = treeData[category] || [];
-              const doneCount = items.filter(i => i.isDiscovered).length;
-              const totalCount = items.length;
-              const isComplete = doneCount === totalCount && totalCount > 0;
-
-              return (
-                <div key={category} className="flex flex-row items-center relative">
-                  {/* Vertical Branch Line */}
-                  {!isOnly && (
-                    <div
-                      className="absolute left-0 w-[3px] bg-white/10 z-0"
-                      style={{
-                        top: isFirst ? '50%' : '0',
-                        bottom: isLast ? '50%' : '0',
-                      }}
-                    />
-                  )}
-
-                  {/* Horizontal Connector to Category */}
-                  <div className="w-12 h-[3px] bg-white/10 shrink-0 z-0" />
-
-                  {/* Category Node */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: cIdx * 0.05 }}
-                    className="shrink-0 relative z-10"
-                  >
-                    <button
-                      onClick={() => setExpandedCategory(isExpanded ? null : category)}
-                      className={`flex items-center gap-4 px-5 py-4 rounded-[20px] border-2 transition-all duration-300 w-[260px] text-left group ${
-                        isExpanded
-                          ? 'bg-[#1a1c23] shadow-2xl scale-[1.02]'
-                          : 'bg-[#1a1c23]/60 hover:bg-[#1a1c23] hover:shadow-lg hover:scale-[1.01]'
-                      }`}
-                      style={{
-                        borderColor: isExpanded ? theme.color : 'rgba(255,255,255,0.1)',
-                        boxShadow: isExpanded ? `0 12px 30px ${theme.color}30` : undefined
-                      }}
-                    >
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 shadow-inner bg-black/40"
-                        style={{ borderBottom: `2px solid ${theme.color}` }}
-                      >
-                        {theme.icon}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h2 className="text-[15px] font-black text-white leading-tight mb-1 uppercase tracking-wider">
-                          {theme.label}
-                        </h2>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] font-bold text-white/40">
-                            {doneCount}/{totalCount} chất
-                          </span>
-                          {isComplete && <CheckCircle2 size={12} className="text-viet-green" />}
-                        </div>
-                      </div>
-                      <ChevronRight
-                        size={18}
-                        className={`text-white/20 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}
-                        style={{ color: isExpanded ? theme.color : undefined }}
-                      />
-                    </button>
-                  </motion.div>
-
-                  {/* 3. CHEMICALS GRID */}
-                  <AnimatePresence>
-                    {isExpanded && items.length > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: 'auto' }}
-                        exit={{ opacity: 0, width: 0 }}
-                        transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
-                        className="flex flex-row items-center shrink-0 overflow-hidden"
-                      >
-                        {/* Connector from Category to Items Grid */}
-                        <div className="w-12 h-[3px] bg-white/10 shrink-0" />
-
-                        <div className="bg-[#1a1c23]/40 backdrop-blur-md border border-white/10 p-6 rounded-[32px] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 w-max shrink-0 my-4">
-                          {items.map((item, iIdx) => (
-                            <motion.button
-                                key={item.formula}
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: iIdx * 0.02 }}
-                                onClick={() => setSelectedId(item.normalizedFormula)}
-                                className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all w-[220px] text-left relative overflow-hidden group ${
-                                    item.isDiscovered 
-                                        ? 'bg-[#1a1c23] border-white/10 hover:border-white/30 shadow-lg' 
-                                        : 'bg-[#1a1c23]/30 border-white/5 opacity-60 hover:opacity-100'
-                                }`}
-                                style={{
-                                    borderColor: selectedId === item.normalizedFormula ? theme.color : undefined
-                                }}
-                            >
-                                {/* Highlight bar for selected */}
-                                {selectedId === item.normalizedFormula && (
-                                    <div className="absolute left-0 top-0 bottom-0 w-1" style={{ backgroundColor: theme.color }} />
-                                )}
-
-                                <div 
-                                    className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border border-white/10 relative overflow-hidden"
-                                    style={{ backgroundColor: item.isDiscovered ? theme.color + '20' : '#00000040' }}
-                                >
-                                    {item.isDiscovered && (
-                                        <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
-                                    )}
-                                    {item.isDiscovered ? (
-                                        <span className="text-[13px] font-black italic text-white relative z-10">{item.formula}</span>
-                                    ) : (
-                                        <Lock size={16} className="text-white/20 relative z-10" />
-                                    )}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className={`text-[12px] font-bold leading-tight truncate ${item.isDiscovered ? 'text-white' : 'text-white/40'}`}>
-                                        {item.isDiscovered ? item.name : 'Chất bí ẩn'}
-                                    </p>
-                                    <p className="text-[9px] font-black text-white/30 mt-1 uppercase tracking-widest">
-                                        {item.is_starter || item.isStarter ? 'GỐC' : 'TỔNG HỢP'}
-                                    </p>
-                                </div>
-                            </motion.button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
+          {/* ROOT NODE / START */}
+          <div className="flex flex-col justify-center h-full shrink-0">
+             <motion.div
+               initial={{ opacity: 0, scale: 0.8 }}
+               animate={{ opacity: 1, scale: 1 }}
+               className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none"
+             >
+               🧪 NGUYÊN BẢN
+             </motion.div>
           </div>
+
+          {/* TIERS COLUMNS */}
+          {tierKeys.map((tier, tIdx) => {
+            const theme = TIER_THEME[tier];
+            const items = treeData[tier] || [];
+            
+            return (
+              <div key={tier} className="flex flex-col gap-6 shrink-0 relative">
+                {/* Tier Header */}
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: tIdx * 0.1 }}
+                  className="sticky top-0 z-20 bg-[#0a0c10]/80 backdrop-blur-md py-4 mb-4 border-b border-white/10 flex items-center justify-between"
+                >
+                   <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-white/5 border border-white/10" style={{ color: theme.color }}>
+                         {theme.icon}
+                      </div>
+                      <h2 className="text-sm font-black uppercase tracking-widest text-white">{theme.label}</h2>
+                   </div>
+                   <span className="text-[10px] font-bold text-white/30 ml-4">{items.length} chất</span>
+                </motion.div>
+
+                {/* Items Grid for this Tier */}
+                <motion.div 
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 1 }}
+                   transition={{ delay: tIdx * 0.1 + 0.2 }}
+                   className="grid grid-cols-2 gap-4"
+                >
+                   {items.map((item, iIdx) => {
+                      const isHighlighted = highlightedNodes.has(item.normalizedFormula);
+                      const isFaded = highlightedNodes.size > 0 && !isHighlighted;
+
+                      return (
+                        <motion.button
+                            key={item.formula}
+                            onMouseEnter={() => setHoveredId(item.normalizedFormula)}
+                            onMouseLeave={() => setHoveredId(null)}
+                            onClick={() => setSelectedId(item.normalizedFormula)}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all duration-300 w-[200px] text-left relative overflow-hidden group ${
+                                item.isDiscovered 
+                                    ? 'bg-[#1a1c23] border-white/10 hover:border-white/30 shadow-lg' 
+                                    : 'bg-[#1a1c23]/30 border-white/5 opacity-60 hover:opacity-100'
+                            }`}
+                            style={{
+                                borderColor: isHighlighted ? theme.color : (selectedId === item.normalizedFormula ? theme.color : undefined),
+                                opacity: isFaded ? 0.3 : 1,
+                                transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
+                                boxShadow: isHighlighted ? `0 0 20px ${theme.color}40` : undefined,
+                                zIndex: isHighlighted ? 10 : 1
+                            }}
+                        >
+                            {/* Highlight glow */}
+                            {isHighlighted && (
+                                <div className="absolute inset-0 opacity-10" style={{ backgroundColor: theme.color }} />
+                            )}
+
+                            <div 
+                                className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border border-white/10 relative overflow-hidden transition-colors"
+                                style={{ backgroundColor: item.isDiscovered ? theme.color + '20' : '#00000040' }}
+                            >
+                                {item.isDiscovered && (
+                                    <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
+                                )}
+                                {item.isDiscovered ? (
+                                    <span className="text-[13px] font-black italic text-white relative z-10">{item.formula}</span>
+                                ) : (
+                                    <Lock size={16} className="text-white/20 relative z-10" />
+                                )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className={`text-[12px] font-bold leading-tight truncate ${item.isDiscovered ? 'text-white' : 'text-white/40'}`}>
+                                    {item.isDiscovered ? item.name : 'Chất bí ẩn'}
+                                </p>
+                                <p className="text-[9px] font-black text-white/30 mt-1 uppercase tracking-widest">
+                                    {item.category || 'Vật chất'}
+                                </p>
+                            </div>
+                        </motion.button>
+                      );
+                   })}
+                </motion.div>
+              </div>
+            );
+          })}
 
           <div className="w-16 shrink-0" />
         </div>
