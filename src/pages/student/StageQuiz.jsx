@@ -262,19 +262,19 @@ const StageQuiz = () => {
 
       <AnimatePresence>
         {showResult && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
             <motion.div 
               initial={{ scale: 0.9, opacity: 0 }} 
               animate={{ scale: 1, opacity: 1 }}
-              className="bg-white rounded-[40px] p-10 max-w-sm w-full text-center shadow-2xl border-4 border-viet-green"
+              className="bg-white rounded-[40px] p-8 md:p-10 max-w-lg w-full text-center shadow-2xl border-4 border-viet-green my-8"
             >
-              <div className="text-6xl mb-6">🎉</div>
+              <div className="text-6xl mb-4">🎉</div>
               <h2 className="text-2xl font-black text-viet-text mb-2">Hoàn thành đoạn!</h2>
-              <p className="text-viet-text-light font-medium mb-8 uppercase tracking-widest text-xs">
+              <p className="text-viet-text-light font-medium mb-6 uppercase tracking-widest text-xs">
                 {currentLevel === 'level1' ? 'Bạn đã bắt đầu hành trình xuất sắc' : (currentLevel === 'level2' ? 'Bạn đã nắm vững kiến thức' : 'Bạn đã ôn tập xuất sắc')}
               </p>
 
-              <div className="bg-slate-50 rounded-2xl p-4 mb-8 flex justify-around">
+              <div className="bg-slate-50 rounded-2xl p-4 mb-6 flex justify-around">
                 <div>
                    <div className="text-[10px] font-black text-slate-400 uppercase">Chính xác</div>
                    <div className="text-xl font-black text-viet-green">{lastResult?.total - lastResult?.mistakes}/{lastResult?.total}</div>
@@ -287,6 +287,39 @@ const StageQuiz = () => {
                    </div>
                 </div>
               </div>
+
+              {/* Infographic Reward Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.4, type: "spring", damping: 14 }}
+                className="relative w-full bg-[#fcf8f0] rounded-[24px] border-2 border-viet-border overflow-hidden shadow-lg mb-6 group"
+              >
+                {/* Reward label ribbon */}
+                <div className="absolute top-3 left-3 z-20 px-3 py-1 bg-viet-green text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5">
+                  📖 Trang sổ tay mới
+                </div>
+
+                {/* Infographic image */}
+                <img 
+                  src={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
+                  alt={`Infographic - ${lesson?.title || 'Phần thưởng'}`}
+                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+
+                {/* Shimmer overlay on reveal */}
+                <motion.div 
+                  initial={{ x: '-100%' }}
+                  animate={{ x: '200%' }}
+                  transition={{ delay: 0.6, duration: 1, ease: "easeInOut" }}
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"
+                />
+              </motion.div>
+
+              <p className="text-viet-text-light/40 text-[10px] font-black uppercase tracking-widest mb-6">
+                Trang infographic đã được lưu vào sổ tay hành trình
+              </p>
 
               <button 
                 onClick={handleContinue}
