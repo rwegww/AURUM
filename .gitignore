@@ -25,7 +25,20 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 *.sw?
 
 .vercel
 .env*
+!.env.example
+!mobile/.env.example
+backups/

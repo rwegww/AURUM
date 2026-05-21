@@ -21,6 +21,8 @@ const app = express();
 const configuredOrigins = [
   process.env.FRONTEND_URL,
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+  process.env.URL, // Netlify primary URL
+  process.env.DEPLOY_URL, // Netlify deploy preview URL
   'https://chem-aurum.vercel.app',
   ...(process.env.CORS_ORIGINS || '').split(','),
 ].filter(Boolean).map((origin) => origin.trim());
@@ -130,9 +132,10 @@ app.use((err, req, res, _next) => {
 // Consolidated Server Listener
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, '127.0.0.1', () => {
-    console.log(`🚀 Aurum API running on http://127.0.0.1:${PORT}`);
-    console.log(`🔗 Health Check: http://127.0.0.1:${PORT}/api/health`);
+  const HOST = process.env.API_HOST || '127.0.0.1';
+  app.listen(PORT, HOST, () => {
+    console.log(`🚀 Aurum API running on http://${HOST}:${PORT}`);
+    console.log(`🔗 Health Check: http://${HOST}:${PORT}/api/health`);
     
     // Local Cron Simulation (runs every 60 seconds to dispatch reminders automatically)
     console.log('⏰ Local Cron Simulation started (checks every 60 seconds).');
