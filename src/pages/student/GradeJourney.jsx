@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Atom, FlaskConical, Lock, Compass, Trophy, 
   Sparkles, BookOpen, ArrowRight, HelpCircle, 
-  CheckCircle2, Beaker, GraduationCap, ChevronDown, Network 
+  CheckCircle2, Beaker, GraduationCap, ChevronDown 
 } from 'lucide-react';
 import InfographicBook from '@/components/lessons/InfographicBook';
 import PlacementTestModal from '@/components/lessons/PlacementTestModal';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
-import { CORE_KNOWLEDGE_LESSONS } from '@/data/coreKnowledge';
 
 // Expanded Class Themes for a spectacular look
 const CLASS_THEMES = {
@@ -90,36 +88,6 @@ const GradeJourney = () => {
   const [isTestOpen, setIsTestOpen] = useState(false);
 
   const activeTheme = CLASS_THEMES[grade] || CLASS_THEMES['8'];
-
-  // ---- Knowledge Tree: memoized data (must be at top level) ----
-  const gradeTopics = useMemo(() => {
-    const topicIds = new Set();
-    Object.entries(CORE_KNOWLEDGE_LESSONS).forEach(([topicId, topicLessons]) => {
-      if (topicLessons.some(l => String(l.classId) === String(grade))) {
-        topicIds.add(topicId);
-      }
-    });
-    return CHEMISTRY_KNOWLEDGE_BASE.filter(t => topicIds.has(t.id));
-  }, [grade]);
-
-  const groupedTopics = useMemo(() => {
-    const cats = {};
-    gradeTopics.forEach(topic => {
-      if (!cats[topic.category]) cats[topic.category] = [];
-      cats[topic.category].push(topic);
-    });
-    return cats;
-  }, [gradeTopics]);
-
-  const categoryList = Object.keys(groupedTopics);
-
-  const CATEGORY_ICONS = {
-    'Đại cương': '⚛️', 'Liên kết': '🔗', 'Mol và định lượng': '⚖️',
-    'Chất khí': '💨', 'Dung dịch': '🧪', 'Axit – bazơ – muối': '🧫',
-    'Phản ứng hóa học': '🔥', 'Động hóa học': '⚡', 'Cân bằng hóa học': '⏳',
-    'Nhiệt hóa học': '🌡️', 'Oxi hóa – khử': '🔋', 'Điện hóa': '⚡',
-    'Kim loại': '🪙', 'Phi kim': '🌍', 'Hữu cơ': '🧬', 'An toàn': '🛡️',
-  };
 
   useEffect(() => {
     const fetchLessons = async () => {
@@ -652,145 +620,6 @@ const GradeJourney = () => {
           </div>
         </div>
       </div>
-
-      {/* ====== KNOWLEDGE TREE SECTION ====== */}
-      {categoryList.length > 0 && (
-          <div className="max-w-3xl mx-auto px-4 md:px-6 pb-20">
-            {/* Section Header */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="text-center mb-10 pt-8"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border bg-white shadow-sm mb-4"
-                style={{ borderColor: activeTheme.primaryLight }}
-              >
-                <Network size={14} style={{ color: activeTheme.primary }} />
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: activeTheme.primary }}>
-                  Hệ thống kiến thức
-                </span>
-              </div>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-800 font-sora tracking-tight">
-                Cây Kiến Thức Lớp {grade}
-              </h2>
-              <p className="text-sm text-slate-500 font-medium mt-2 max-w-md mx-auto">
-                Tổng hợp tất cả chủ đề kiến thức bạn đã và sẽ học trong hành trình này
-              </p>
-            </motion.div>
-
-            {/* Tree Structure */}
-            <div className="relative">
-              {/* Vertical trunk line */}
-              <div 
-                className="absolute left-[19px] top-0 bottom-0 w-0.5 rounded-full"
-                style={{ backgroundColor: activeTheme.primaryLight }}
-              />
-
-              <div className="space-y-6">
-                {categoryList.map((catName, catIdx) => {
-                  const topics = groupedTopics[catName];
-                  const catIcon = CATEGORY_ICONS[catName] || '📚';
-
-                  return (
-                    <motion.div
-                      key={catName}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, margin: "-50px" }}
-                      transition={{ delay: catIdx * 0.05 }}
-                    >
-                      {/* Category branch node */}
-                      <div className="flex items-center gap-4 mb-3">
-                        <div 
-                          className="w-10 h-10 rounded-xl flex items-center justify-center text-lg shadow-sm border-2 bg-white relative z-10 shrink-0"
-                          style={{ borderColor: activeTheme.primary }}
-                        >
-                          {catIcon}
-                        </div>
-                        <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <h3 className="text-[15px] font-black text-slate-700 uppercase tracking-tight truncate">
-                            {catName}
-                          </h3>
-                          <span 
-                            className="text-[10px] font-black px-2 py-0.5 rounded-full shrink-0"
-                            style={{ backgroundColor: activeTheme.primaryLight, color: activeTheme.primary }}
-                          >
-                            {topics.length}
-                          </span>
-                          <div className="h-px flex-1 bg-slate-100" />
-                        </div>
-                      </div>
-
-                      {/* Topic leaves */}
-                      <div className="ml-[19px] pl-8 border-l-2 space-y-2" style={{ borderColor: activeTheme.primaryLight }}>
-                        {topics.map((topic) => {
-                          const topicLessons = (CORE_KNOWLEDGE_LESSONS[topic.id] || []).filter(
-                            l => String(l.classId) === String(grade)
-                          );
-
-                          return (
-                            <motion.div
-                              key={topic.id}
-                              whileHover={{ x: 4 }}
-                              className="group relative bg-white rounded-2xl border border-slate-100 p-4 shadow-sm hover:shadow-md hover:border-slate-200 transition-all cursor-default"
-                            >
-                              {/* Branch connector dot */}
-                              <div 
-                                className="absolute left-[-13px] top-5 w-2 h-2 rounded-full border-2 bg-white"
-                                style={{ borderColor: activeTheme.primary }}
-                              />
-
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="text-[14px] font-bold text-slate-700 leading-snug mb-1 group-hover:text-slate-900 transition-colors">
-                                    {topic.title}
-                                  </h4>
-                                  {topic.formula && (
-                                    <div className="text-[12px] font-mono text-slate-400 mb-1.5">
-                                      {topic.formula.replace(/\\/g, '').replace(/text\{|\}/g, '')}
-                                    </div>
-                                  )}
-                                  <p className="text-[12px] text-slate-400 font-medium leading-relaxed line-clamp-2">
-                                    {topic.explanation.replace(/\*\*/g, '')}
-                                  </p>
-                                </div>
-                              </div>
-
-                              {/* Related lessons from this grade */}
-                              {topicLessons.length > 0 && (
-                                <div className="mt-3 flex flex-wrap gap-1.5">
-                                  {topicLessons.map((lesson, idx) => (
-                                    <span
-                                      key={idx}
-                                      className="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-50 text-slate-500 border border-slate-100"
-                                    >
-                                      {lesson.title.replace(/^Bài \d+: /, '')}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-
-              {/* Tree root cap */}
-              <div className="flex justify-center mt-8">
-                <div 
-                  className="px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border-2 bg-white shadow-sm"
-                  style={{ borderColor: activeTheme.primary, color: activeTheme.primary }}
-                >
-                  ✦ Nền tảng lớp {grade} ✦
-                </div>
-              </div>
-            </div>
-          </div>
-      )}
 
       {/* Modals */}
       <AnimatePresence>
