@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { Leaf, FlaskConical, Beaker, Flame } from 'lucide-react';
 
 const StreakBadge = () => {
   const { user, recoverStreak, resetStreak } = useAuth();
@@ -59,10 +60,10 @@ const StreakBadge = () => {
   };
 
   const milestones = [
-    { days: 3, label: 'Tập sự', icon: '🌱' },
-    { days: 7, label: 'Nhà hóa học', icon: '🧪' },
-    { days: 14, label: 'Bậc thầy', icon: '⚗️' },
-    { days: 30, label: 'Huyền thoại', icon: '🔥' },
+    { days: 3, label: 'Tập sự', icon: <Leaf className="w-8 h-8 text-green-500" /> },
+    { days: 7, label: 'Nhà hóa học', icon: <FlaskConical className="w-8 h-8 text-emerald-500" /> },
+    { days: 14, label: 'Bậc thầy', icon: <Beaker className="w-8 h-8 text-amber-500" /> },
+    { days: 30, label: 'Huyền thoại', icon: <Flame className="w-8 h-8 text-orange-500" /> },
   ];
 
   return (

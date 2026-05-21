@@ -8,7 +8,7 @@
     "my_class": "MY HOUSE",
     "periodic_table": "ANCIENT ELEMENTS",
     "library": "HOGWARTS LIBRARY",
-    "lab": "ALCHEMY LAB ⚗️",
+    "lab": "ALCHEMY LAB",
     "arena_link": "ARENA",
     "missions": "WIZARD MISSIONS",
     "knowledge_map": "MARAUDER'S MAP",
@@ -29,7 +29,7 @@
     "hero_badge_safe_lab": "Safe Potion Lab",
     "enter_classroom": "Enter Great Hall",
     "open_expo_app": "Open Expo App",
-    "enter_lab": "To Alchemy Lab ⚗️",
+    "enter_lab": "To Alchemy Lab",
     "stats": {
       "students_count": "10,000+",
       "students_label": "Apprentice Wizards",

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MagicLab3D from '@/components/lab/three/MagicLab3D';
+import { Beaker } from 'lucide-react';
 
 const LabSimulatorPage = () => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const LabSimulatorPage = () => {
           
           <div className="bg-white p-6 rounded-[2rem] border-2 border-viet-border flex items-center gap-5 shadow-xl hover:shadow-2xl transition-shadow relative group overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-viet-green/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <div className="w-14 h-14 bg-viet-green text-white rounded-2xl flex items-center justify-center text-3xl shadow-tactile-green active:shadow-none active:translate-y-1 transition-all">⚗️</div>
+            <div className="w-14 h-14 bg-viet-green text-white rounded-2xl flex items-center justify-center shadow-tactile-green active:shadow-none active:translate-y-1 transition-all"><Beaker className="w-7 h-7" /></div>
             <div className="relative z-10">
               <p className="text-[10px] font-black text-viet-text-light uppercase tracking-[0.2em] mb-1">Trạng thái thiết bị</p>
               <p className="text-lg font-black text-viet-text">Phòng Lab Ma Thuật</p>
