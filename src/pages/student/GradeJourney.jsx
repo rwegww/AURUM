@@ -139,9 +139,6 @@ const GradeJourney = () => {
 
   if (loading) return (
     <div className="min-h-screen bg-[#fffbf0] flex flex-col items-center justify-center relative overflow-hidden">
-      {/* Decorative Lab Grid */}
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none" 
-           style={{ backgroundImage: 'linear-gradient(#000 1.5px, transparent 1.5px), linear-gradient(90deg, #000 1.5px, transparent 1.5px)', backgroundSize: '30px 30px' }} />
       <div className="relative w-20 h-20 flex items-center justify-center">
         <div className="absolute inset-0 border-4 border-dashed rounded-full animate-[spin_8s_linear_infinite]" style={{ borderColor: activeTheme.primary }} />
         <div className="text-3xl animate-bounce">{activeTheme.doodleSymbol}</div>
@@ -186,9 +183,6 @@ const GradeJourney = () => {
 
   return (
     <div className="min-h-screen bg-[#fffbf0] pt-28 pb-20 overflow-x-hidden relative">
-      {/* Premium background overlays */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" 
-           style={{ backgroundImage: 'linear-gradient(#000 1.5px, transparent 1.5px), linear-gradient(90deg, #000 1.5px, transparent 1.5px)', backgroundSize: '30px 30px' }} />
       
       {/* Colored radial background blobs */}
       <div className={`absolute top-20 left-[-10%] w-[45vw] h-[45vw] rounded-full blur-[150px] opacity-[0.08] pointer-events-none z-0 ${activeTheme.blobColor}`} />
@@ -477,38 +471,64 @@ const GradeJourney = () => {
             const canOpenBook = isLesson1Complete || user?.role === 'admin' || user?.role === 'teacher';
             
             return (
-              <div className={`mt-40 mb-20 flex flex-col items-center relative ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}>
+              <div className={`mt-28 mb-14 flex flex-col items-center relative ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}>
                 
                 {/* Book Milestone */}
                 <motion.button 
                   whileHover={canOpenBook ? { scale: 1.05 } : {}} 
                   whileTap={canOpenBook ? { scale: 0.95 } : {}} 
                   onClick={() => canOpenBook && setIsBookOpen(true)} 
-                  className="relative group w-36 h-36 flex items-center justify-center cursor-pointer"
+                  className="relative group w-28 h-36 flex items-center justify-center cursor-pointer perspective-1000"
                 >
                   {/* Radiant background glowing portal aura */}
                   <div 
-                    className="absolute inset-0 blur-3xl opacity-50 transition-all duration-500 group-hover:opacity-80 rounded-full animate-pulse"
+                    className="absolute inset-0 blur-2xl opacity-40 transition-all duration-500 group-hover:opacity-75 rounded-full animate-pulse scale-90"
                     style={{ backgroundColor: activeTheme.primary }} 
                   />
                   
-                  {/* Floating book frame */}
+                  {/* Miniature 3D Book */}
                   <div 
-                    className={`relative w-28 h-28 bg-white rounded-3xl border-4 shadow-2xl flex flex-col items-center justify-center overflow-hidden transition-all duration-300 ${
-                      canOpenBook ? 'group-hover:rotate-3 group-hover:-translate-y-2' : ''
+                    className={`relative w-[80px] h-[108px] rounded-[14px] shadow-2xl flex flex-col justify-between p-2.5 overflow-hidden transition-all duration-500 preserve-3d border border-white/10 ${
+                      canOpenBook ? 'group-hover:rotate-y-12 group-hover:-translate-y-2 group-hover:shadow-[8px_16px_24px_rgba(0,0,0,0.35)]' : ''
                     }`}
-                    style={{ borderColor: canOpenBook ? activeTheme.primary : '#cbd5e1' }}
+                    style={{
+                      background: canOpenBook 
+                        ? `linear-gradient(135deg, ${activeTheme.primary} 0%, #0f172a 100%)`
+                        : 'linear-gradient(135deg, #94a3b8 0%, #475569 100%)',
+                    }}
                   >
-                    {/* Glowing background inside cover */}
-                    <div 
-                      className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-                      style={{ backgroundColor: activeTheme.primary }}
-                    />
+                    {/* Spine shading */}
+                    <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-black/35 border-r border-white/5 z-20 rounded-l-[14px]" />
                     
-                    <div className="text-5xl drop-shadow-md select-none">{canOpenBook ? '📔' : '🔒'}</div>
+                    {/* Cover details (Gold ornaments for active, silver/white for locked) */}
                     <div 
-                      className="absolute bottom-1.5 w-full text-center text-[8px] font-black uppercase tracking-widest"
-                      style={{ color: canOpenBook ? activeTheme.primary : '#94a3b8' }}
+                      className={`absolute inset-1 border rounded-[10px] pointer-events-none z-10 ${
+                        canOpenBook ? 'border-amber-500/25' : 'border-slate-400/20'
+                      }`} 
+                    />
+                    <div 
+                      className={`absolute inset-1.5 border rounded-[8px] pointer-events-none z-10 ${
+                        canOpenBook ? 'border-amber-500/15' : 'border-slate-400/10'
+                      }`} 
+                    />
+
+                    {/* Ribbon bookmark hanging out of the book */}
+                    {canOpenBook && (
+                      <div className="absolute bottom-[-4px] left-5 w-2 h-3.5 bg-rose-500 rounded-b-sm shadow-md z-0 origin-top group-hover:scale-y-125 transition-transform duration-300" />
+                    )}
+
+                    {/* Center Symbol/Lock */}
+                    <div className="my-auto mx-auto text-center relative z-10 flex flex-col items-center justify-center">
+                      <span className="text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
+                        {canOpenBook ? activeTheme.doodleSymbol : '🔒'}
+                      </span>
+                    </div>
+
+                    {/* Cover title text */}
+                    <div 
+                      className={`w-full text-center text-[7px] font-black uppercase tracking-widest relative z-10 mt-auto select-none ${
+                        canOpenBook ? 'text-amber-300/90' : 'text-slate-400'
+                      }`}
                     >
                       {t('journey.milestone.book_label')}
                     </div>
@@ -516,17 +536,17 @@ const GradeJourney = () => {
                   
                   {/* Animated Badge indicator */}
                   {canOpenBook && (
-                    <div className="absolute -top-3 -right-3 bg-red-500 text-white text-[9px] font-black px-3 py-1.5 rounded-full shadow-lg animate-bounce border-2 border-white uppercase tracking-wider">
+                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-black px-2.5 py-1 rounded-full shadow-lg animate-bounce border border-white uppercase tracking-wider z-30">
                       {t('journey.milestone.book_badge')}
                     </div>
                   )}
                 </motion.button>
 
-                <div className="mt-8 text-center max-w-sm">
-                  <h3 className="text-2xl font-black text-slate-800 font-sora uppercase italic">
+                <div className="mt-6 text-center max-w-sm">
+                  <h3 className="text-lg font-black text-slate-800 font-sora uppercase italic">
                     {canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}
                   </h3>
-                  <p className="text-slate-500 text-[13px] font-bold mt-2 uppercase tracking-widest">
+                  <p className="text-slate-500 text-[11px] font-bold mt-1.5 uppercase tracking-widest">
                     {t('journey.milestone.subtitle', { grade })}
                   </p>
                 </div>
@@ -562,6 +582,12 @@ const GradeJourney = () => {
 
       {/* Embedded CSS custom keyframes for float up and shimmers */}
       <style>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+        .preserve-3d {
+          transform-style: preserve-3d;
+        }
         @keyframes floatUp {
           0% {
             transform: translateY(0) scale(0.8) rotate(0deg);
