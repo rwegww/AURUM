@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Avatar from '@/components/common/Avatar';
+import { FlaskConical } from 'lucide-react';
 
 const UserDetail = () => {
   const { id } = useParams();
@@ -138,7 +139,7 @@ const UserDetail = () => {
 
               <section className="bg-white p-8 rounded-[40px] border border-viet-border shadow-sm">
                  <h2 className="text-xl font-bold text-viet-text mb-6 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center text-sm">🧪</span>
+                    <span className="w-8 h-8 rounded-xl bg-orange-100 flex items-center justify-center text-sm"><FlaskConical className="w-4 h-4 text-orange-600" /></span>
                     Kho Vật chất Khám phá
                  </h2>
                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Trophy, Zap, Users, Layers } from 'lucide-react';
+import { Trophy, Zap, Users, Layers, Mail } from 'lucide-react';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -126,7 +126,7 @@ const AdminDashboard = () => {
                   <span className="text-sm font-bold text-viet-text">Thêm bài học</span>
                 </button>
                 <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">✉️</div>
+                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl"><Mail className="w-6 h-6 text-slate-500" /></div>
                   <span className="text-sm font-bold text-viet-text">Gửi thông báo</span>
                 </div>
               </div>
