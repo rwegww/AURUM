@@ -202,13 +202,15 @@ const FloatingWidget = () => {
               setActiveTab('feedback');
             }
           }}
-          className="fixed bottom-6 right-6 w-16 h-16 bg-viet-green text-white rounded-full shadow-[0_8px_24px_rgba(118,192,52,0.4)] flex items-center justify-center text-3xl hover:scale-110 hover:bg-[#007042] transition-all duration-300 z-50 cursor-pointer group"
+          className="fixed bottom-5 right-5 w-[52px] h-[52px] bg-viet-green text-white rounded-2xl shadow-[0_8px_24px_rgba(118,192,52,0.3)] flex items-center justify-center hover:scale-105 hover:bg-[#007042] transition-all duration-300 z-50 cursor-pointer group border border-white/20"
           aria-label={t('widget.tooltip')}
         >
-          <span className="relative">
-            💬
+          <span className="relative flex items-center justify-center">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
             {claimableCount > 0 && (
-              <span className="absolute -top-3 -right-3 w-6 h-6 bg-red-500 rounded-full text-white text-[10px] font-black flex items-center justify-center border-2 border-white animate-pulse">
+              <span className="absolute -top-2.5 -right-2.5 w-5 h-5 bg-red-500 rounded-full text-white text-[9px] font-black flex items-center justify-center border-2 border-white animate-pulse">
                 {claimableCount}
               </span>
             )}
