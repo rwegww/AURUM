@@ -1,14 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const InfographicPage = ({ lesson, pageNumber, isCompleted = true }) => {
+const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'single' }) => {
   if (!lesson) return null;
 
   const imagePath = `/assets/curriculum/class${lesson.classId}/${lesson.classId}-${lesson.order}.png`;
   const [imageError, setImageError] = React.useState(false);
 
+  // Dynamic styles based on which side of the book spread this page is on
+  let sideClasses = 'rounded-[32px] md:rounded-[40px] border border-viet-border/20 px-4 md:px-8';
+  if (side === 'left') {
+    sideClasses = 'rounded-l-[32px] md:rounded-l-[40px] rounded-r-none border-y border-l border-viet-border/20 pl-4 md:pl-8 pr-6 md:pr-12';
+  } else if (side === 'right') {
+    sideClasses = 'rounded-r-[32px] md:rounded-r-[40px] rounded-l-none border-y border-r border-viet-border/20 pr-4 md:pr-8 pl-6 md:pl-12';
+  }
+
   return (
-    <div className="w-full h-full bg-white p-4 md:p-8 flex flex-col relative rounded-[40px] overflow-hidden select-none border-x border-viet-border/20 shadow-inner">
+    <div className={`w-full h-full bg-white py-4 md:py-8 flex flex-col relative overflow-hidden select-none shadow-inner ${sideClasses}`}>
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-viet-green/5 rounded-full -mr-16 -mt-16 blur-3xl pointer-events-none" />
       
