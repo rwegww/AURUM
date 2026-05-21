@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import LeaderboardSection from '@/components/home/LeaderboardSection';
 import Footer from '@/components/common/Footer';
 import { Play, FlaskConical, Trophy, BookOpen, Users, Star, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 // --- Reused SVG Graphics (Simplified for Bento) ---
 
@@ -121,10 +122,40 @@ const BentoCard = ({ title, highlight, description, linkText, linkUrl, graphic, 
 );
 
 const Home = () => {
-  const { t } = useTranslation();
-  
-  // Testimonial data (using translation keys where available)
-  const testimonials = t('home.testimonials.reviews', { returnObjects: true }) || [];
+  const { t, i18n } = useTranslation();
+  const [testimonials, setTestimonials] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('testimonials')
+          .select('*')
+          .order('created_at', { ascending: true });
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          const currentLang = i18n.language === 'vi' ? 'vi' : 'en';
+          const formatted = data.map(item => ({
+            name: item.name,
+            role: currentLang === 'vi' ? item.role_vi : item.role_en,
+            content: currentLang === 'vi' ? item.content_vi : item.content_en,
+            rating: item.rating || 5
+          }));
+          setTestimonials(formatted);
+        } else {
+          const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
+          setTestimonials(fallback);
+        }
+      } catch (err) {
+        console.error('Error fetching testimonials:', err);
+        const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
+        setTestimonials(fallback);
+      }
+    };
+    fetchTestimonials();
+  }, [t, i18n.language]);
 
   return (
     <div className="min-h-screen font-sans bg-[#fbfbfb] selection:bg-viet-green selection:text-white">
@@ -344,7 +375,9 @@ const Home = () => {
                 className="bg-[#fbfbfb] p-8 rounded-3xl border-2 border-duo-border border-b-4 hover:-translate-y-2 transition-transform"
               >
                 <div className="flex text-amber-400 mb-4">
-                  {[1,2,3,4,5].map(star => <Star key={star} size={20} className="fill-current" />)}
+                  {[...Array(review.rating || 5)].map((_, starIndex) => (
+                    <Star key={starIndex} size={20} className="fill-current" />
+                  ))}
                 </div>
                 <p className="text-lg font-medium text-[#1a1a1a] mb-6 italic">"{review.content}"</p>
                 <div className="flex items-center gap-4">
