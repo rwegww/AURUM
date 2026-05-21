@@ -91,17 +91,17 @@
         {
           "name": "Nguyễn Văn A",
           "role": "Học sinh lớp 12",
-          "content": "Từ khi dùng Aurum, môn Hóa không còn là nỗi ám ảnh. Thí nghiệm ảo rất trực quan!"
+          "content": "[Static Fallback] Từ khi dùng Aurum, môn Hóa không còn là nỗi ám ảnh. Thí nghiệm ảo rất trực quan!"
         },
         {
           "name": "Trần Thị B",
           "role": "Giáo viên Hóa",
-          "content": "Nền tảng này giúp học sinh của tôi hào hứng hơn hẳn trong mỗi tiết học."
+          "content": "[Static Fallback] Nền tảng này giúp học sinh của tôi hào hứng hơn hẳn trong mỗi tiết học."
         },
         {
           "name": "Lê Hoàng C",
           "role": "Học sinh lớp 10",
-          "content": "Tính năng đấu trường rất cuốn, mình học được nhiều từ việc thi đấu."
+          "content": "[Static Fallback] Tính năng đấu trường rất cuốn, mình học được nhiều từ việc thi đấu."
         }
       ]
     },

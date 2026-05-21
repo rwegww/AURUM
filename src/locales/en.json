@@ -90,17 +90,17 @@
         {
           "name": "Nguyen Van A",
           "role": "12th Grade Student",
-          "content": "Since using Aurum, Chemistry is no longer a nightmare. The virtual labs are so intuitive!"
+          "content": "[Static Fallback] Since using Aurum, Chemistry is no longer a nightmare. The virtual labs are so intuitive!"
         },
         {
           "name": "Tran Thi B",
           "role": "Chemistry Teacher",
-          "content": "This platform makes my students much more excited in every lesson."
+          "content": "[Static Fallback] This platform makes my students much more excited in every lesson."
         },
         {
           "name": "Le Hoang C",
           "role": "10th Grade Student",
-          "content": "The arena feature is addictive, I learn a lot from competing."
+          "content": "[Static Fallback] The arena feature is addictive, I learn a lot from competing."
         }
       ]
     },
