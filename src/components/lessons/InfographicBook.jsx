@@ -281,7 +281,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
       {/* Background click to close */}
       <div className="absolute inset-0 z-0" onClick={onClose} />
 
-      <div className="relative w-full max-w-5xl h-full max-h-[85vh] flex flex-col items-center justify-center z-10">
+      <div className="relative w-full max-w-5xl h-full max-h-[85vh] flex flex-col items-center justify-center z-10 scale-[0.8]">
         
         {/* Header Branding */}
         <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-4 md:px-0 -translate-y-16 pointer-events-none z-50">
