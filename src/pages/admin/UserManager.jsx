@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { Lock, Unlock, Eye, Search } from 'lucide-react';
 
 const UserManager = () => {
   const { user } = useAuth();
@@ -51,7 +52,7 @@ const UserManager = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full h-12 px-12 rounded-2xl border border-viet-border bg-white text-sm font-bold focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none"
             />
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-viet-text-light">🔍</span>
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-viet-text-light" />
           </div>
         </header>
 
@@ -142,20 +143,20 @@ const UserManager = () => {
                                  if (res.ok) fetchUsers();
                                } catch (err) { console.error(err); }
                              }}
-                             className={`px-3 py-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest border transition-all ${
+                             className={`px-3 py-1.5 flex items-center gap-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest border transition-all ${
                                u.is_locked 
                                ? 'border-emerald-200 text-emerald-600 hover:bg-emerald-50' 
                                : 'border-red-200 text-red-500 hover:bg-red-50'
                              }`}
                            >
-                             {u.is_locked ? '🔓 Mở khóa' : '🔒 Khóa'}
+                             {u.is_locked ? <><Unlock className="w-3.5 h-3.5" /> Mở khóa</> : <><Lock className="w-3.5 h-3.5" /> Khóa</>}
                            </button>
                            <Link 
                              to={`/admin/users/${u.id}`}
-                             className="p-2 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white transition-all shadow-sm"
+                             className="p-2 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white text-slate-500 hover:text-blue-600 transition-all shadow-sm"
                              title="Chi tiết"
                            >
-                             👁️
+                             <Eye className="w-4 h-4" />
                            </Link>
                          </div>
                       </td>
@@ -165,8 +166,8 @@ const UserManager = () => {
               </table>
             </div>
             {filteredUsers.length === 0 && (
-               <div className="py-24 text-center">
-                  <span className="text-4xl mb-4 block">🔍</span>
+               <div className="py-24 text-center flex flex-col items-center">
+                  <Search className="w-12 h-12 text-viet-text-light mb-4" />
                   <p className="text-viet-text-light font-bold">Không tìm thấy người dùng nào khớp với từ khóa</p>
                </div>
             )}
