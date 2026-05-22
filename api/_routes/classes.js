@@ -1,7 +1,10 @@
 import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
+import multer from 'multer';
+import mammoth from 'mammoth';
 
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
@@ -77,6 +80,93 @@ const ensureClassAccess = async (classId, user, res) => {
   return classData;
 };
 
+
+
+// Parse exam files for 2025 format
+router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
+    try {
+        if (!requireTeacherOrAdmin(req, res)) return;
+        if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
+
+        let text = '';
+        if (req.file.mimetype === 'application/pdf') {
+            const pdf = (await import('pdf-parse')).default;
+            const data = await pdf(req.file.buffer);
+            text = data.text;
+        } else {
+            const data = await mammoth.extractRawText({ buffer: req.file.buffer });
+            text = data.value;
+        }
+
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        const questions = [];
+        let currentPart = 1;
+        let qIndex = 0;
+        let currentQuestion = null;
+
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i];
+            
+            // Determine Part
+            if (/^PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
+            if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
+            if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
+            
+            // Detect Question start
+            const qMatch = line.match(/^(?:Câu\s*\d+|Bài\s*\d+|C\d+)\s*[.:]?\s*(.*)/i);
+            if (qMatch) {
+                if (currentQuestion) questions.push(currentQuestion);
+                qIndex++;
+                let type = 'multiple_choice';
+                if (currentPart === 2) type = 'true_false';
+                if (currentPart === 3) type = 'short_answer';
+                
+                currentQuestion = {
+                    id: 'q_' + Date.now() + '_' + qIndex,
+                    part: currentPart,
+                    type: type,
+                    content: qMatch[1],
+                    options: type === 'multiple_choice' ? {A:'', B:'', C:'', D:''} : (type === 'true_false' ? {a:'', b:'', c:'', d:''} : null),
+                    correct_answer: type === 'true_false' ? {a:'', b:'', c:'', d:''} : ''
+                };
+                continue;
+            }
+
+            if (currentQuestion) {
+                // Detect options for Multiple Choice
+                if (currentQuestion.type === 'multiple_choice') {
+                    const optMatch = line.match(/^([A-D])\s*[.:]\s*(.*)/i);
+                    if (optMatch) {
+                        const key = optMatch[1].toUpperCase();
+                        currentQuestion.options[key] = optMatch[2];
+                        continue;
+                    }
+                }
+                
+                // Detect options for True/False
+                if (currentQuestion.type === 'true_false') {
+                    const optMatch = line.match(/^([a-d])\s*[.:)]\s*(.*)/i);
+                    if (optMatch) {
+                        const key = optMatch[1].toLowerCase();
+                        currentQuestion.options[key] = optMatch[2];
+                        continue;
+                    }
+                }
+
+                // If not an option, it's continuation of question content
+                if (currentQuestion.content.length > 0) currentQuestion.content += '\n';
+                currentQuestion.content += line;
+            }
+        }
+        
+        if (currentQuestion) questions.push(currentQuestion);
+
+        res.json(questions);
+    } catch (err) {
+        console.error('Parse exam file error:', err);
+        res.status(500).json({ error: 'Lỗi hệ thống khi phân tích đề thi' });
+    }
+});
 
 // Get all classes for a teacher or student
 router.get('/', auth, async (req, res) => {
@@ -212,6 +302,72 @@ router.post('/', auth, async (req, res) => {
     res.status(201).json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Parse exam file (Format 2025)
+router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
+  try {
+    if (!requireTeacherOrAdmin(req, res)) return;
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    
+    // Extract text from DOCX
+    const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+    const text = result.value;
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+
+    const questions = [];
+    let currentPart = 0;
+    let currentQuestion = null;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.startsWith('Phần I.')) { currentPart = 1; continue; }
+      if (line.startsWith('Phần II.')) { currentPart = 2; continue; }
+      if (line.startsWith('Phần III.')) { currentPart = 3; continue; }
+      if (line.includes('------ HẾT ------') || line.startsWith('ĐÁP ÁN')) { break; }
+
+      if (!currentPart) continue;
+
+      if (line.startsWith('Câu ')) {
+        if (currentQuestion) questions.push(currentQuestion);
+        currentQuestion = {
+          id: 'q' + (questions.length + 1),
+          part: currentPart,
+          type: currentPart === 1 ? 'multiple_choice' : currentPart === 2 ? 'true_false' : 'short_answer',
+          content: line,
+          options: currentPart !== 3 ? {} : undefined,
+          correct_answer: currentPart === 2 ? {a:'', b:'', c:'', d:''} : ''
+        };
+      } else if (currentQuestion) {
+        if (currentPart === 1) {
+          if (line.match(/^[A-D]\./)) {
+            const parts = line.split(/(?=[A-D]\.)/);
+            parts.forEach(p => {
+              const m = p.trim().match(/^([A-D])\.\s*(.*)/);
+              if (m) currentQuestion.options[m[1]] = m[2];
+            });
+          } else {
+            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
+          }
+        } else if (currentPart === 2) {
+          if (line.match(/^[a-d]\)/)) {
+            const m = line.match(/^([a-d])\)\s*(.*)/);
+            if (m) currentQuestion.options[m[1]] = m[2];
+          } else {
+            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
+          }
+        } else if (currentPart === 3) {
+          currentQuestion.content += '\n' + line;
+        }
+      }
+    }
+    if (currentQuestion) questions.push(currentQuestion);
+
+    res.json(questions);
+  } catch (err) {
+    console.error('Error parsing exam file:', err);
+    res.status(500).json({ error: 'Failed to parse file', details: err.message });
   }
 });
 
