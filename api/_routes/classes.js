@@ -94,7 +94,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
         const data = await pdf(req.file.buffer);
         text = data.text;
     } else {
-        const mammoth = require('mammoth');
         const data = await mammoth.extractRawText({ buffer: req.file.buffer });
         text = data.value;
     }
@@ -231,6 +230,209 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             q.correct_answer = answersObj.part3[q.partNum];
         }
     }
+
+    res.json(questions);
+  } catch (err) {
+    console.error('Error parsing exam file:', err);
+    res.status(500).json({ error: 'Failed to parse file', details: err.message });
+  }
+});
+
+// Get all classes for a teacher or student
+router.get('/', auth, async (req, res) => {
+  try {
+    const { role, id } = req.user;
+    
+    // Select class properties and count members
+    let query = supabase.from('classes')
+      .select('*, teacher:teacher_id(username), student_count:class_members(count)');
+
+    if (role === 'teacher') {
+      query = query.eq('teacher_id', id);
+    } else if (role === 'admin') {
+      // Admin can inspect all classes.
+    } else {
+      // For student, get classes they joined
+      const { data: memberData } = await supabase.from('class_members').select('class_id').eq('student_id', id);
+      const classIds = memberData?.map(m => m.class_id) || [];
+      if (classIds.length === 0) return res.json([]);
+      query = query.in('id', classIds);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    // Format response to flatten student_count
+    const formattedData = data.map(cls => ({
+        ...cls,
+        student_count: cls.student_count?.[0]?.count || 0
+    }));
+
+    res.json(formattedData);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get class stats for notifications
+router.get('/stats', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    // 1. Get joined classes
+    const { data: members, error: memErr } = await supabase
+      .from('class_members')
+      .select('class_id')
+      .eq('student_id', userId);
+    
+    if (memErr) throw memErr;
+    const classIds = members.map(m => m.class_id);
+    
+    if (classIds.length === 0) return res.json({});
+
+    // 2. For each class, count posts that the student can see
+    // This is a bit heavy for a single query if many classes, 
+    // but for now we fetch recent posts count.
+    const { data: posts, error: postErr } = await supabase
+      .from('class_posts')
+      .select('class_id, created_at')
+      .in('class_id', classIds)
+      .or(`target_student_id.is.null,target_student_id.eq.${userId},author_id.eq.${userId}`);
+
+    if (postErr) throw postErr;
+
+    // 3. Group by class_id
+    const stats = {};
+    posts.forEach(p => {
+      if (!stats[p.class_id]) stats[p.class_id] = { count: 0, latest: p.created_at };
+      stats[p.class_id].count++;
+      if (new Date(p.created_at) > new Date(stats[p.class_id].latest)) {
+        stats[p.class_id].latest = p.created_at;
+      }
+    });
+
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get total summary for teacher dashboard
+router.get('/teacher-summary', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+       return res.status(403).json({ error: 'Chỉ dành cho giáo viên' });
+    }
+
+    // 1. Get all class IDs for this teacher
+    const { data: classes } = await supabase.from('classes').select('id').eq('teacher_id', userId);
+    const classIds = classes?.map(c => c.id) || [];
+
+    if (classIds.length === 0) {
+      return res.json({ total_students: 0, active_assignments: 0 });
+    }
+
+    // 2. Count unique students
+    const { data: members } = await supabase.from('class_members').select('student_id').in('class_id', classIds);
+    const uniqueStudents = new Set(members?.map(m => m.student_id));
+
+    // 3. Count active assignments
+    const { count: assignmentCount } = await supabase
+      .from('class_posts')
+      .select('*', { count: 'exact', head: true })
+      .in('class_id', classIds)
+      .eq('type', 'assignment');
+
+    res.json({
+      total_students: uniqueStudents.size,
+      active_assignments: assignmentCount || 0
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Create a new class (Teacher only)
+router.post('/', auth, async (req, res) => {
+  try {
+    if (!requireTeacherOrAdmin(req, res)) return;
+
+    const { name, grade_level, description } = req.body;
+    const teacher_id = req.user.id;
+    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+
+    const { data, error } = await supabase
+      .from('classes')
+      .insert([{ name, grade_level, description, teacher_id, code }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Parse exam file (Format 2025)
+router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
+  try {
+    if (!requireTeacherOrAdmin(req, res)) return;
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    
+    // Extract text from DOCX
+    const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+    const text = result.value;
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+
+    const questions = [];
+    let currentPart = 0;
+    let currentQuestion = null;
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.startsWith('Phần I.')) { currentPart = 1; continue; }
+      if (line.startsWith('Phần II.')) { currentPart = 2; continue; }
+      if (line.startsWith('Phần III.')) { currentPart = 3; continue; }
+      if (line.includes('------ HẾT ------') || line.startsWith('ĐÁP ÁN')) { break; }
+
+      if (!currentPart) continue;
+
+      if (line.startsWith('Câu ')) {
+        if (currentQuestion) questions.push(currentQuestion);
+        currentQuestion = {
+          id: 'q' + (questions.length + 1),
+          part: currentPart,
+          type: currentPart === 1 ? 'multiple_choice' : currentPart === 2 ? 'true_false' : 'short_answer',
+          content: line,
+          options: currentPart !== 3 ? {} : undefined,
+          correct_answer: currentPart === 2 ? {a:'', b:'', c:'', d:''} : ''
+        };
+      } else if (currentQuestion) {
+        if (currentPart === 1) {
+          if (line.match(/^[A-D]\./)) {
+            const parts = line.split(/(?=[A-D]\.)/);
+            parts.forEach(p => {
+              const m = p.trim().match(/^([A-D])\.\s*(.*)/);
+              if (m) currentQuestion.options[m[1]] = m[2];
+            });
+          } else {
+            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
+          }
+        } else if (currentPart === 2) {
+          if (line.match(/^[a-d]\)/)) {
+            const m = line.match(/^([a-d])\)\s*(.*)/);
+            if (m) currentQuestion.options[m[1]] = m[2];
+          } else {
+            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
+          }
+        } else if (currentPart === 3) {
+          currentQuestion.content += '\n' + line;
+        }
+      }
+    }
+    if (currentQuestion) questions.push(currentQuestion);
 
     res.json(questions);
   } catch (err) {
