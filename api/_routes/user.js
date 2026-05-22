@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Feedback from '../models/Feedback.js';
 
 import { supabase } from '../lib/supabase.js';
 
@@ -38,6 +39,16 @@ router.get('/leaderboard', async (req, res) => {
     res.json(topStudents);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi tải bảng xếp hạng', error: err.message });
+  }
+});
+
+// Get Public Praises (Home Page)
+router.get('/public-praises', async (req, res) => {
+  try {
+    const praises = await Feedback.getApprovedPraises();
+    res.json(praises);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi tải lời khen ngợi', error: err.message });
   }
 });
 

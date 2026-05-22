@@ -9,7 +9,8 @@ export const Feedback = {
         username: feedbackData.username,
         message: feedbackData.message,
         type: feedbackData.type || 'suggestion',
-        status: feedbackData.status || 'unread'
+        status: feedbackData.status || 'unread',
+        image_url: feedbackData.imageUrl || null
       }])
       .select()
       .single();
@@ -30,6 +31,8 @@ export const Feedback = {
       ...f,
       id: f.id,
       createdAt: f.created_at,
+      imageUrl: f.image_url,
+      isApproved: f.is_approved,
       userId: { username: f.users?.username }
     }));
   },
@@ -65,6 +68,36 @@ export const Feedback = {
     
     if (error) throw error;
     return data;
+  },
+
+  async approve(id) {
+    const { data, error } = await supabase
+      .from('feedback')
+      .update({ is_approved: true })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async getApprovedPraises() {
+    const { data, error } = await supabase
+      .from('feedback')
+      .select('username, message, created_at, users(role)')
+      .eq('type', 'praise')
+      .eq('is_approved', true)
+      .order('created_at', { ascending: false });
+      
+    if (error) throw error;
+    
+    return data.map(f => ({
+      name: f.username || 'Anonymous',
+      role: f.users?.role || 'Học sinh',
+      content: f.message,
+      rating: 5 // Default for praises
+    }));
   }
 };
 

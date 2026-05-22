@@ -122,6 +122,8 @@ CREATE TABLE public.feedback (
   message text NOT NULL,
   type text DEFAULT 'suggestion'::text CHECK (type = ANY (ARRAY['bug'::text, 'suggestion'::text, 'praise'::text, 'other'::text])),
   status text DEFAULT 'unread'::text CHECK (status = ANY (ARRAY['unread'::text, 'resolved'::text])),
+  image_url text,
+  is_approved boolean DEFAULT false,
   created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT feedback_pkey PRIMARY KEY (id),
   CONSTRAINT feedback_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id)

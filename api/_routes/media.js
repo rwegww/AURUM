@@ -61,16 +61,13 @@ const teacherOrAdmin = async (req, res, next) => {
       }
     }
 
+    // If user is not found
     if (!user) {
       console.warn(`⚠️ User not found for ID: ${userId}`);
       return res.status(404).json({ message: 'Không tìm thấy người dùng' });
     }
 
-    if (user.role !== 'admin' && user.role !== 'teacher') {
-      console.warn(`⚠️ Forbidden access for role: ${user.role} (User: ${user.username})`);
-      return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
-    }
-
+    // We allow any authenticated user to upload (including students for bug reports)
     req.user = user;
     next();
   } catch (e) {
