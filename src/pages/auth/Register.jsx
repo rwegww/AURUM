@@ -60,8 +60,16 @@ const Register = () => {
           return;
         }
 
-        const uploadData = await uploadToCloudinary(proofFile, 'chemistry-odyssey/teacher-proofs');
-        const proofImageUrl = uploadData.url;
+        let proofImageUrl = null;
+        try {
+          const uploadData = await uploadToCloudinary(proofFile, 'chemistry-odyssey/teacher-proofs');
+          proofImageUrl = uploadData.url;
+        } catch (uploadErr) {
+          console.error('❌ Upload error:', uploadErr);
+          setError(`Lỗi tải ảnh: ${uploadErr.message}. Hãy kiểm tra lại cấu hình Cloudinary.`);
+          setLoading(false);
+          return;
+        }
 
         const result = await registerTeacher(username, password, email, proofImageUrl);
         if (result.success) {
@@ -79,7 +87,8 @@ const Register = () => {
         }
       }
     } catch (err) {
-      setError('Lỗi đăng ký tài khoản');
+      console.error('❌ Register error:', err);
+      setError(`Lỗi: ${err.message || 'Không thể kết nối đến máy chủ'}`);
     }
     setLoading(false);
   };
