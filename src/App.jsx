@@ -80,7 +80,6 @@ const ClassManager = lazyWithRetry(() => import('@/pages/teacher/ClassManager'))
 const ClassDetail = lazyWithRetry(() => import('@/pages/teacher/ClassDetail'));
 const AssignmentManager = lazyWithRetry(() => import('@/pages/teacher/AssignmentManager'));
 
-import AurumAiAgent from '@/components/common/AurumAiAgent'
 
 function AppContent() {
   const location = useLocation();
@@ -179,7 +178,6 @@ function AppContent() {
       </Suspense>
       
       {/* Floating Global UI */}
-      {isFunctionalPage && <AurumAiAgent />}
       {!isManagementPage && <FeedbackButton />}
     </>
   );
