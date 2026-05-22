@@ -76,6 +76,24 @@ const teacherOrAdmin = async (req, res, next) => {
   }
 };
 
+// Public Upload Endpoint (for anonymous bug reports)
+router.post('/upload-public', upload.single('file'), (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Không có tệp nào được nhận' });
+    }
+    
+    res.json({
+      url: req.file.path,
+      format: req.file.format,
+      size: req.file.size
+    });
+  } catch (e) {
+    console.error('❌ Public Upload Route Error:', e);
+    res.status(500).json({ message: 'Lỗi tải ảnh phản hồi', error: e.message });
+  }
+});
+
 // Upload Endpoint
 router.post('/upload', (req, res, next) => {
   // Manual check for teacherOrAdmin so we can catch errors better

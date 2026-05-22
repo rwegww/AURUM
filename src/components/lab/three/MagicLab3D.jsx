@@ -30,7 +30,6 @@ const MagicLab3D = () => {
   
   // --- Discovery State ---
   const [newDiscovery, setNewDiscovery] = useState(null);
-  const [showDiscoveryJournal, setShowDiscoveryJournal] = useState(false);
 
   // Store Hooks
   const setData = useLabStore(state => state.setData);
@@ -273,7 +272,7 @@ const MagicLab3D = () => {
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
             <button 
-              onClick={() => setShowDiscoveryJournal(true)}
+              onClick={() => window.open('/lab/discovery', '_blank')}
               className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
@@ -565,33 +564,7 @@ const MagicLab3D = () => {
         )}
       </AnimatePresence>
 
-      {/* Discovery Map Overlay */}
-      <AnimatePresence>
-        {showDiscoveryJournal && (
-          <div className="fixed inset-0 z-[400] flex items-center justify-center p-8">
-             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowDiscoveryJournal(false)} className="absolute inset-0 bg-black/60 backdrop-blur-xl" />
-             <motion.div 
-                initial={{ y: 50, opacity: 0 }} 
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 50, opacity: 0 }}
-                className="relative w-full max-w-6xl h-full bg-[#0d0e12]/80 border border-white/10 rounded-[40px] overflow-hidden flex flex-col shadow-3xl"
-             >
-                <div className="p-8 border-b border-white/10 flex justify-between items-center bg-black/20">
-                  <div>
-                    <h2 className="text-2xl font-black uppercase italic tracking-tighter">Synthesis Nexus</h2>
-                    <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Bản đồ tiến trình khám phá hóa học</p>
-                  </div>
-                  <button onClick={() => setShowDiscoveryJournal(false)} className="w-12 h-12 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                  </button>
-                </div>
-                <div className="flex-1 overflow-hidden">
-                  <DiscoveryMap chemicals={dbChemicals} reactions={dbReactions} discoveredFormulas={discoveredFormulas} />
-                </div>
-             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
