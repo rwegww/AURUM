@@ -94,13 +94,15 @@ router.get('/:id/feedback', async (req, res) => {
 
     // 2. Get unique user IDs
     const userIds = [...new Set(feedbacks.map(f => f.user_id))].filter(Boolean);
+    const replyUserIds = [...new Set(feedbacks.map(f => f.reply_user_id))].filter(Boolean);
+    const allUserIds = [...new Set([...userIds, ...replyUserIds])];
 
-    if (userIds.length > 0) {
+    if (allUserIds.length > 0) {
       // 3. Fetch usernames for these IDs
       const { data: users, error: userError } = await supabase
         .from('users')
         .select('id, username')
-        .in('id', userIds);
+        .in('id', allUserIds);
 
       if (!userError && users) {
         const userMap = users.reduce((acc, u) => {
@@ -111,7 +113,8 @@ router.get('/:id/feedback', async (req, res) => {
         // 4. Manually join the data
         feedbacks = feedbacks.map(f => ({
           ...f,
-          users: userMap[f.user_id] || null
+          users: userMap[f.user_id] || null,
+          reply_user: f.reply_user_id ? (userMap[f.reply_user_id] || null) : null
         }));
       }
     }
@@ -120,6 +123,37 @@ router.get('/:id/feedback', async (req, res) => {
   } catch (err) {
     console.error('Lỗi tải phản hồi:', err);
     res.status(500).json({ message: 'Lỗi tải phản hồi', error: err.message });
+  }
+});
+
+// 5. Reply to a Feedback
+router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
+  try {
+    const { feedbackId } = req.params;
+    const { reply_content } = req.body;
+
+    if (req.user.role !== 'admin' && req.user.role !== 'teacher') {
+      return res.status(403).json({ message: 'Chỉ admin hoặc giáo viên mới có quyền trả lời.' });
+    }
+
+    if (!reply_content) {
+      return res.status(400).json({ message: 'Thiếu nội dung trả lời.' });
+    }
+
+    const { data, error } = await supabase
+      .from('material_feedback')
+      .update({
+        reply_content,
+        reply_user_id: req.user.id,
+        reply_created_at: new Date().toISOString()
+      })
+      .eq('id', feedbackId)
+      .select();
+
+    if (error) throw error;
+    res.json(data[0]);
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi gửi phản hồi', error: err.message });
   }
 });
 
