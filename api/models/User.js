@@ -252,7 +252,18 @@ export const User = {
     const totalXP = data.reduce((sum, u) => sum + (u.xp || 0), 0);
     const avgLevel = data.length > 0 ? data.reduce((sum, u) => sum + (u.level || 1), 0) / data.length : 1;
     
-    return { totalXP, avgLevel };
+    const levels = {};
+    data.forEach(u => {
+      const lvl = u.level || 1;
+      levels[lvl] = (levels[lvl] || 0) + 1;
+    });
+    
+    const levelDistribution = Object.keys(levels).map(lvl => ({
+      name: `Cấp ${lvl}`,
+      students: levels[lvl]
+    })).sort((a, b) => parseInt(a.name.split(' ')[1]) - parseInt(b.name.split(' ')[1]));
+    
+    return { totalXP, avgLevel, levelDistribution };
   },
 
   async comparePassword(plainPassword, hashedPassword) {
