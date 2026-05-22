@@ -80,7 +80,14 @@ router.post('/google-firebase', async (req, res) => {
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { username, password, email, role } = req.body;
+    const { username, password, email, role, teacherCode } = req.body;
+    
+    if (role === 'teacher') {
+      const validCode = process.env.TEACHER_INVITE_CODE || 'AURUM_TEACHER_2026';
+      if (teacherCode !== validCode) {
+        return res.status(403).json({ message: 'Mã xác thực giáo viên không hợp lệ!' });
+      }
+    }
     
     // Check if user exists
     const existingUser = await User.findOne({ username });
