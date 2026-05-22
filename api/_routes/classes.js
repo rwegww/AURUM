@@ -111,6 +111,11 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             if (/^PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
             if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
             if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
+
+            // Check for end of exam / answer section
+            if (/^(--+)?\s*HẾT\s*(--+)?$/i.test(line) || /^ĐÁP ÁN/i.test(line) || /^HƯỚNG DẪN GIẢI/i.test(line)) {
+                break;
+            }
             
             // Detect Question start
             const qMatch = line.match(/^(?:Câu\s*\d+|Bài\s*\d+|C\d+)\s*[.:]?\s*(.*)/i);
