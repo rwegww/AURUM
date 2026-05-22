@@ -118,6 +118,7 @@ export const User = {
         role: userData.role || 'student',
         avatar_seed: userData.avatarSeed || userData.username,
         balancing_progress: { completedNodeIds: [], completedCount: 0, passedGrades: [] },
+        study_plan: { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true, grade: userData.grade || null },
         streak_count: 0,
         today_online_minutes: 0,
         today_lesson_completed: false
@@ -244,7 +245,7 @@ export const User = {
   async aggregateStats() {
     const { data, error } = await supabase
       .from('users')
-      .select('xp, level')
+      .select('id, username, xp, level, study_plan, streak_count, avatar_seed')
       .eq('role', 'student');
     
     if (error) throw error;
@@ -253,9 +254,14 @@ export const User = {
     const avgLevel = data.length > 0 ? data.reduce((sum, u) => sum + (u.level || 1), 0) / data.length : 1;
     
     const levels = {};
+    const grades = {};
+    
     data.forEach(u => {
       const lvl = u.level || 1;
       levels[lvl] = (levels[lvl] || 0) + 1;
+      
+      const grade = u.study_plan?.grade || 'Chưa rõ';
+      grades[grade] = (grades[grade] || 0) + 1;
     });
     
     const levelDistribution = Object.keys(levels).map(lvl => ({
@@ -263,7 +269,28 @@ export const User = {
       students: levels[lvl]
     })).sort((a, b) => parseInt(a.name.split(' ')[1]) - parseInt(b.name.split(' ')[1]));
     
-    return { totalXP, avgLevel, levelDistribution };
+    const gradeDistribution = Object.keys(grades).map(g => ({
+      name: g === 'Chưa rõ' ? g : `Lớp ${g}`,
+      students: grades[g],
+      color: g === 'Chưa rõ' ? '#94a3b8' : (g == 8 ? '#f43f5e' : (g == 9 ? '#eab308' : (g == 10 ? '#3b82f6' : (g == 11 ? '#a855f7' : '#14b8a6'))))
+    }));
+
+    const topXP = [...data].sort((a, b) => (b.xp || 0) - (a.xp || 0)).slice(0, 5).map(u => ({
+      id: u.id,
+      name: u.username,
+      xp: u.xp || 0,
+      level: u.level || 1,
+      avatar: u.avatar_seed || u.username
+    }));
+    
+    const topStreak = [...data].sort((a, b) => (b.streak_count || 0) - (a.streak_count || 0)).slice(0, 5).map(u => ({
+      id: u.id,
+      name: u.username,
+      streak: u.streak_count || 0,
+      avatar: u.avatar_seed || u.username
+    }));
+
+    return { totalXP, avgLevel, levelDistribution, gradeDistribution, topXP, topStreak };
   },
 
   async comparePassword(plainPassword, hashedPassword) {

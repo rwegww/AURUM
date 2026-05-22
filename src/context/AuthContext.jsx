@@ -175,12 +175,12 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const register = useCallback(async (username, password, email, role = 'student', teacherCode = '') => {
+  const register = useCallback(async (username, password, email, role = 'student', teacherCode = '', grade = null) => {
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, email, role, teacherCode })
+        body: JSON.stringify({ username, password, email, role, teacherCode, grade })
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Lỗi đăng ký');

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Trophy, Zap, Users, Layers } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -100,26 +101,57 @@ const AdminDashboard = () => {
             </section>
 
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
+              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
                 <h2 className="text-lg font-bold text-viet-text mb-6">Phân bố cấp độ học sinh</h2>
-                <div className="h-64">
-                  {stats.levelDistribution ? (
+                {stats.levelDistribution.length > 0 ? (
+                  <div className="h-48 mt-4">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={stats.levelDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 'bold' }} dy={10} />
-                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 'bold' }} />
-                        <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                        <Bar dataKey="students" name="Số học sinh" fill="#22c55e" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} dy={10} />
+                        <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                        <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                        <Bar dataKey="students" fill="#22c55e" radius={[4, 4, 0, 0]} maxBarSize={40} />
                       </BarChart>
                     </ResponsiveContainer>
-                  ) : <div className="h-full flex items-center justify-center text-viet-text-light font-medium">Chưa có dữ liệu</div>}
-                </div>
-              </div>
-              
-              <div className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
+                    <Layers className="w-8 h-8 mb-2 opacity-20" />
+                    <p className="text-sm font-medium">Chưa có dữ liệu cấp độ</p>
+                  </div>
+                )}
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
+                <h3 className="text-lg font-bold text-viet-text mb-6">Phân bổ khối lớp</h3>
+                {stats.gradeDistribution.length > 0 ? (
+                  <div className="h-48 mt-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={stats.gradeDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} layout="vertical">
+                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                        <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
+                        <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} dx={-10} />
+                        <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                        <Bar dataKey="students" radius={[0, 4, 4, 0]} maxBarSize={20}>
+                          {stats.gradeDistribution.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color || '#3b82f6'} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
+                    <Layers className="w-8 h-8 mb-2 opacity-20" />
+                    <p className="text-sm font-medium">Chưa có dữ liệu khối lớp</p>
+                  </div>
+                )}
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
                 <h2 className="text-lg font-bold text-viet-text mb-6">Tỷ lệ phản hồi</h2>
-                <div className="h-64">
+                <div className="h-48">
                   {stats.feedbackDistribution && stats.feedbackDistribution.some(d => d.value > 0) ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -127,8 +159,8 @@ const AdminDashboard = () => {
                           data={stats.feedbackDistribution}
                           cx="50%"
                           cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
+                          innerRadius={40}
+                          outerRadius={60}
                           paddingAngle={5}
                           dataKey="value"
                         >
@@ -137,13 +169,71 @@ const AdminDashboard = () => {
                           ))}
                         </Pie>
                         <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
-                        <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 'bold', paddingTop: '20px' }} />
+                        <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
                       </PieChart>
                     </ResponsiveContainer>
-                  ) : <div className="h-full flex items-center justify-center text-viet-text-light font-medium">Chưa có phản hồi</div>}
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
+                      <Users className="w-8 h-8 mb-2 opacity-20" />
+                      <p className="text-sm font-medium">Chưa có phản hồi nào</p>
+                    </div>
+                  )}
                 </div>
-              </div>
+              </motion.div>
             </section>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
+                <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-amber-500" />
+                  Học sinh Xuất sắc (Top XP)
+                </h3>
+                <div className="space-y-3">
+                  {stats.topXP && stats.topXP.length > 0 ? stats.topXP.map((student, idx) => (
+                    <div key={student.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100/50">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs ${idx === 0 ? 'bg-amber-400' : idx === 1 ? 'bg-slate-300' : idx === 2 ? 'bg-amber-600' : 'bg-slate-200 text-slate-500'}`}>
+                          {idx + 1}
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-slate-800">{student.name}</p>
+                          <p className="text-xs text-slate-500 font-medium">Cấp độ {student.level}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm font-black text-viet-green">{student.xp}</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">XP</p>
+                      </div>
+                    </div>
+                  )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
+                </div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
+                <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-orange-500" />
+                  Học sinh Tích cực (Top Streak)
+                </h3>
+                <div className="space-y-3">
+                  {stats.topStreak && stats.topStreak.length > 0 ? stats.topStreak.map((student, idx) => (
+                    <div key={student.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100/50">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs ${idx === 0 ? 'bg-orange-500' : idx === 1 ? 'bg-orange-400' : idx === 2 ? 'bg-orange-300' : 'bg-slate-200 text-slate-500'}`}>
+                          {idx + 1}
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-slate-800">{student.name}</p>
+                        </div>
+                      </div>
+                      <div className="text-right flex items-center gap-1 bg-orange-100 px-2 py-1 rounded-lg">
+                        <p className="text-sm font-black text-orange-600">{student.streak}</p>
+                        <Zap className="w-3 h-3 text-orange-500" />
+                      </div>
+                    </div>
+                  )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
+                </div>
+              </motion.div>
+            </div>
           </div>
 
           <aside className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">

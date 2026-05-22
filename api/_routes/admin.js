@@ -63,6 +63,9 @@ router.get('/stats', adminOnly, async (req, res) => {
       totalXP: userStats.totalXP,
       avgLevel: userStats.avgLevel,
       levelDistribution: userStats.levelDistribution,
+      gradeDistribution: userStats.gradeDistribution,
+      topXP: userStats.topXP,
+      topStreak: userStats.topStreak,
       feedbackDistribution
     });
   } catch (err) {

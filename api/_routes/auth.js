@@ -80,7 +80,7 @@ router.post('/google-firebase', async (req, res) => {
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { username, password, email, role, teacherCode } = req.body;
+    const { username, password, email, role, teacherCode, grade } = req.body;
     
     if (role === 'teacher') {
       const validCode = process.env.TEACHER_INVITE_CODE || 'AURUM_TEACHER_2026';
@@ -95,7 +95,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
     }
 
-    const user = await User.create({ username, password, email, role: role || 'student' });
+    const user = await User.create({ username, password, email, role: role || 'student', grade });
 
     const token = jwt.sign(
       { id: user.id, role: user.role },
