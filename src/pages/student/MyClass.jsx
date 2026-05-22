@@ -132,9 +132,14 @@ const MyClass = () => {
         const currentClass = selectedClass;
         if (currentClass) selectClass(currentClass);
         setActiveQuiz(null);
+      } else {
+        const data = await res.json();
+        throw new Error(data.error || 'Nộp bài thất bại!');
       }
     } catch (err) {
       console.error(err);
+      alert(err.message);
+      throw err;
     }
   };
 
@@ -154,13 +159,18 @@ const MyClass = () => {
   const handleSubmitQuiz = async () => {
     setIsSubmittingQuiz(true);
     const score = calculateScore(activeQuiz.questions, quizAnswers);
-    const hasEssay = activeQuiz.questions.some(q => q.type === 'essay');
-    await handleCompleteAssignment(activeQuiz.id, quizAnswers, score);
-    setIsSubmittingQuiz(false);
-    if (hasEssay && score !== null) {
-      alert(t('my_class.quiz.score_msg', { score }));
-    } else if (hasEssay) {
-      alert(t('my_class.quiz.success_msg'));
+    const hasEssay = activeQuiz.questions.some(q => q.type === 'essay' || q.type === 'short_answer');
+    try {
+      await handleCompleteAssignment(activeQuiz.id, quizAnswers, score);
+      if (hasEssay && score !== null) {
+        alert(t('my_class.quiz.score_msg', { score }));
+      } else if (hasEssay) {
+        alert(t('my_class.quiz.success_msg'));
+      }
+    } catch (err) {
+      // Error already alerted in handleCompleteAssignment
+    } finally {
+      setIsSubmittingQuiz(false);
     }
   };
 
