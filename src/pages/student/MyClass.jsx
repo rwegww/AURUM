@@ -678,7 +678,17 @@ const MyClass = () => {
 
               <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
                 {activeQuiz.questions.map((q, qIdx) => (
-                  <div key={qIdx} className="space-y-6">
+                  <React.Fragment key={qIdx}>
+                    {(qIdx === 0 || activeQuiz.questions[qIdx - 1].part !== q.part) && (
+                      <div className="flex items-center gap-4 pt-8 pb-4">
+                        <div className="h-px flex-1 bg-slate-200"></div>
+                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">
+                          {q.part === 1 ? 'Phần I - Trắc nghiệm' : q.part === 2 ? 'Phần II - Đúng/Sai' : q.part === 3 ? 'Phần III - Trả lời ngắn' : `Phần ${q.part}`}
+                        </h3>
+                        <div className="h-px flex-1 bg-slate-200"></div>
+                      </div>
+                    )}
+                    <div className="space-y-6">
                     <div className="flex gap-4">
                       <span className="shrink-0 w-10 h-10 bg-viet-green text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-lg shadow-viet-green/20">
                         {qIdx + 1}
@@ -710,6 +720,27 @@ const MyClass = () => {
                             </button>
                           ))}
                         </div>
+                      ) : (q.type === 'true_false') ? (
+                        <div className="grid grid-cols-1 gap-3">
+                          {Object.entries(q.options || {}).map(([key, opt]) => (
+                            <div key={key} className="p-4 rounded-2xl border-2 border-slate-100 bg-white flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-3 flex-1">
+                                <span className="w-8 h-8 shrink-0 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center font-black text-xs uppercase">{key}</span>
+                                <span className="text-sm font-bold text-viet-text">{opt}</span>
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button 
+                                  onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: { ...(quizAnswers[qIdx] || {}), [key]: true } })}
+                                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition-all ${quizAnswers[qIdx]?.[key] === true ? 'bg-viet-green text-white shadow-md shadow-viet-green/20' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
+                                >Đúng</button>
+                                <button 
+                                  onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: { ...(quizAnswers[qIdx] || {}), [key]: false } })}
+                                  className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition-all ${quizAnswers[qIdx]?.[key] === false ? 'bg-red-500 text-white shadow-md shadow-red-500/20' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
+                                >Sai</button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       ) : (
                         <div className="relative group">
                           <textarea 
@@ -725,6 +756,7 @@ const MyClass = () => {
                       )}
                     </div>
                   </div>
+                  </React.Fragment>
                 ))}
               </div>
 
