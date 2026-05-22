@@ -8,6 +8,7 @@ const FeedbackManager = () => {
   const navigate = useNavigate();
   const [feedbacks, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('feedbacks');
 
   const fetchFeedbacks = async () => {
     try {
@@ -58,6 +59,44 @@ const FeedbackManager = () => {
     }
   };
 
+  const handleTeacherApprove = async (id) => {
+    if (!window.confirm('Bạn có chắc chắn duyệt yêu cầu này?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/admin/teacher-requests/${id}/approve`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'resolved' } : f));
+      } else {
+        const data = await res.json();
+        alert(data.message || 'Lỗi duyệt');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleTeacherReject = async (id) => {
+    if (!window.confirm('Bạn có chắc chắn từ chối yêu cầu này?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/admin/teacher-requests/${id}/reject`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'rejected' } : f));
+      } else {
+        const data = await res.json();
+        alert(data.message || 'Lỗi từ chối');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const getTypeStyle = (type) => {
     switch (type) {
       case 'bug': return 'bg-red-50 text-red-600 ring-red-200';
@@ -76,19 +115,39 @@ const FeedbackManager = () => {
           <p className="text-viet-text-light mt-1 font-medium italic">Lắng nghe ý kiến của học sinh để cải thiện hệ thống.</p>
         </header>
 
+        <div className="flex gap-4 mb-8">
+          <button 
+            onClick={() => setActiveTab('feedbacks')}
+            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'feedbacks' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+          >
+            Phản hồi & Báo lỗi
+          </button>
+          <button 
+            onClick={() => setActiveTab('teachers')}
+            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'teachers' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'} flex items-center gap-2`}
+          >
+            Duyệt Giáo viên
+            {feedbacks.filter(f => f.type === 'teacher_registration' && f.status === 'unread').length > 0 && (
+              <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">
+                {feedbacks.filter(f => f.type === 'teacher_registration' && f.status === 'unread').length}
+              </span>
+            )}
+          </button>
+        </div>
+
         {loading ? (
            <div className="flex justify-center py-24">
               <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin" />
            </div>
         ) : (
           <div className="space-y-6">
-            {feedbacks.length === 0 ? (
+            {feedbacks.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').length === 0 ? (
                <div className="bg-white rounded-[32px] border border-viet-border p-24 text-center">
-                  <span className="text-4xl mb-4 block">📫</span>
-                  <p className="text-viet-text-light font-bold">Hòm thư hiện đang trống</p>
+                  <span className="text-4xl mb-4 block">{activeTab === 'teachers' ? '🎓' : '📫'}</span>
+                  <p className="text-viet-text-light font-bold">{activeTab === 'teachers' ? 'Không có yêu cầu duyệt nào' : 'Hòm thư hiện đang trống'}</p>
                </div>
             ) : (
-              feedbacks.map((f, i) => (
+              feedbacks.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').map((f, i) => (
                 <motion.div
                   key={f.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -108,24 +167,55 @@ const FeedbackManager = () => {
                           <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">{new Date(f.createdAt).toLocaleString('vi-VN')}</p>
                         </div>
                      </div>
-                     <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3">
                         <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ${getTypeStyle(f.type)}`}>
-                           {f.type === 'suggestion' ? 'Góp ý' : f.type === 'bug' ? 'Báo lỗi' : f.type === 'praise' ? 'Khen ngợi' : f.type}
+                           {f.type === 'suggestion' ? 'Góp ý' : f.type === 'bug' ? 'Báo lỗi' : f.type === 'praise' ? 'Khen ngợi' : f.type === 'teacher_registration' ? 'Yêu cầu GV' : f.type}
                         </span>
-                        {f.status === 'unread' ? (
-                           <button 
-                             onClick={() => handleResolve(f.id)}
-                             className="px-4 py-1.5 bg-viet-green text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
-                           >Hoàn thành</button>
-                        ) : (
-                           <span className="px-2.5 py-1 bg-gray-100 text-gray-400 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ XỬ LÝ</span>
+                        {f.type !== 'teacher_registration' && (
+                          f.status === 'unread' ? (
+                             <button 
+                               onClick={() => handleResolve(f.id)}
+                               className="px-4 py-1.5 bg-viet-green text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
+                             >Hoàn thành</button>
+                          ) : (
+                             <span className="px-2.5 py-1 bg-gray-100 text-gray-400 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ XỬ LÝ</span>
+                          )
+                        )}
+                        {f.type === 'teacher_registration' && (
+                          f.status === 'unread' ? (
+                            <div className="flex gap-2">
+                              <button 
+                                onClick={() => handleTeacherApprove(f.id)}
+                                className="px-4 py-1.5 bg-green-500 text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
+                              >Duyệt</button>
+                              <button 
+                                onClick={() => handleTeacherReject(f.id)}
+                                className="px-4 py-1.5 bg-red-500 text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
+                              >Từ chối</button>
+                            </div>
+                          ) : f.status === 'resolved' ? (
+                             <span className="px-2.5 py-1 bg-green-100 text-green-600 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ DUYỆT</span>
+                          ) : (
+                             <span className="px-2.5 py-1 bg-red-100 text-red-600 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ TỪ CHỐI</span>
+                          )
                         )}
                      </div>
                   </div>
                   <div className="pl-[52px]">
-                     <p className="text-viet-text font-medium leading-relaxed bg-viet-bg/30 p-6 rounded-2xl border border-viet-green/5">
-                        {f.message}
-                     </p>
+                     {f.type === 'teacher_registration' ? (
+                       <div className="bg-viet-bg/30 p-6 rounded-2xl border border-viet-green/5 mb-4">
+                         <h4 className="text-sm font-bold mb-2">Thông tin đăng ký:</h4>
+                         <ul className="text-sm space-y-1">
+                           <li><b>Tên đăng nhập:</b> {f.username}</li>
+                           <li><b>Email:</b> {JSON.parse(f.message).email || 'N/A'}</li>
+                         </ul>
+                       </div>
+                     ) : (
+                       <p className="text-viet-text font-medium leading-relaxed bg-viet-bg/30 p-6 rounded-2xl border border-viet-green/5">
+                          {f.message}
+                       </p>
+                     )}
+                     
                      {f.imageUrl && (
                        <div className="mt-4">
                          <img src={f.imageUrl} alt="Đính kèm báo lỗi" className="max-w-md w-full rounded-2xl border border-viet-border object-contain max-h-[300px]" />

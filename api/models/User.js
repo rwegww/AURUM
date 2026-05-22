@@ -104,7 +104,7 @@ export const User = {
   },
 
   async create(userData) {
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const hashedPassword = userData.skipHash ? userData.password : await bcrypt.hash(userData.password, 10);
     const userId = userData.id || crypto.randomUUID();
     
     // 1. Create User

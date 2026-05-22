@@ -25,13 +25,13 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('student');
-  const [grade, setGrade] = useState('');
-  const [teacherCode, setTeacherCode] = useState('');
+  const [proofFile, setProofFile] = useState(null);
+  const [grade, setGrade] = useState('8');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, registerTeacher } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -51,24 +51,48 @@ const Register = () => {
       return;
     }
 
-    if (role === 'teacher' && !teacherCode) {
-      setError('Vui lòng nhập mã xác thực giáo viên');
-      setLoading(false);
-      return;
-    }
-    
-    if (role === 'student' && !grade) {
-      setError('Vui lòng chọn khối lớp của bạn');
-      setLoading(false);
-      return;
-    }
+    try {
+      if (role === 'teacher') {
+        if (!proofFile) {
+          setError('Vui lòng tải lên tài liệu chứng minh (Thẻ giáo viên, CCCD...)');
+          setLoading(false);
+          return;
+        }
 
-    const result = await register(username, password, email, role, teacherCode, grade);
-    if (result.success) navigate('/lessons');
-    else {
-      setError(result.message || 'Lỗi đăng ký tài khoản');
-      setLoading(false);
+        const formData = new FormData();
+        formData.append('file', proofFile);
+        
+        const uploadRes = await fetch('/api/media/upload-public', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (!uploadRes.ok) {
+          throw new Error('Không thể tải lên ảnh chứng minh');
+        }
+        
+        const uploadData = await uploadRes.json();
+        const proofImageUrl = uploadData.url;
+
+        const result = await registerTeacher(username, password, email, proofImageUrl);
+        if (result.success) {
+          alert('Đăng ký thành công! Vui lòng chờ Quản trị viên xét duyệt.');
+          navigate('/login');
+        } else {
+          setError(result.message);
+        }
+      } else {
+        const result = await register(username, password, email, role, grade);
+        if (result.success) {
+          navigate('/login');
+        } else {
+          setError(result.message);
+        }
+      }
+    } catch (err) {
+      setError('Lỗi đăng ký tài khoản');
     }
+    setLoading(false);
   };
 
   return (
@@ -235,6 +259,25 @@ const Register = () => {
                </div>
              </motion.div>
            )}
+
+            {role === 'teacher' && (
+              <div className="space-y-2 mt-4">
+                <label className="text-[10px] font-bold text-viet-text-light tracking-widest uppercase">
+                  Tài Liệu Chứng Minh (Ảnh)
+                </label>
+                <div className="relative group">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setProofFile(e.target.files[0])}
+                    className="w-full bg-slate-50 border-2 border-transparent focus:bg-white focus:border-viet-green rounded-xl px-5 py-3 transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-viet-green/10 file:text-viet-green hover:file:bg-viet-green/20 text-sm font-bold text-viet-text"
+                  />
+                  <div className="text-xs text-viet-text-light mt-2 italic px-1">
+                    Vui lòng tải lên ảnh Thẻ giáo viên, CCCD... Quản trị viên sẽ gửi kết quả duyệt qua Email.
+                  </div>
+                </div>
+              </div>
+            )}
 
             <button 
               type="submit" disabled={loading}

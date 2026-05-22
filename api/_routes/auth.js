@@ -119,6 +119,52 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// Register Teacher (Pending Approval)
+router.post('/register-teacher', async (req, res) => {
+  try {
+    const { username, password, email, proofImageUrl } = req.body;
+    
+    if (!username || !password || !email || !proofImageUrl) {
+      return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ thông tin và ảnh minh chứng' });
+    }
+    
+    // Check if user exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
+    }
+
+    // Check if email exists
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return res.status(400).json({ message: 'Email đã được sử dụng' });
+    }
+    
+    // Hash the password so we don't store it in plain text even in feedback
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const messageContent = JSON.stringify({
+      email: email,
+      hashedPassword: hashedPassword
+    });
+
+    // Create a special feedback entry to hold the request
+    await Feedback.create({
+      userId: null,
+      username: username,
+      type: 'teacher_registration',
+      message: messageContent,
+      imageUrl: proofImageUrl,
+      status: 'unread'
+    });
+
+    res.status(201).json({ message: 'Yêu cầu đăng ký đã được gửi. Vui lòng chờ Quản trị viên duyệt qua Email.' });
+  } catch (err) {
+    console.error('Lỗi đăng ký giáo viên:', err);
+    res.status(500).json({ message: 'Lỗi server' });
+  }
+});
+
 // Login
 router.post('/login', async (req, res) => {
   try {
