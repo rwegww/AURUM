@@ -117,6 +117,7 @@ class AurumExpertEngine {
     const username = context.user?.username || context.username;
     const user_api_key = context.user_api_key || null;
     const chat_history = context.chat_history || [];
+    const mode = context.mode || 'normal';
     const q = (query || '').toLowerCase().trim();
 
     if (!q) return this.handleFallback();
@@ -163,7 +164,7 @@ class AurumExpertEngine {
       const theoryMatch = this.findTheoryMatch(q);
       if (theoryMatch) return this.handleTheoryRequest(theoryMatch);
 
-      const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history });
+      const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history, mode });
       if (hybridResult) return hybridResult;
     }
 
@@ -194,7 +195,7 @@ class AurumExpertEngine {
     }
 
     // 3. Hybrid DB + Gemini Call (The "Brain" upgrade)
-    const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history });
+    const hybridResult = await this.callHybridAI(query, { userId, username, role, user_api_key, chat_history, mode });
     if (hybridResult) return hybridResult;
 
     // 4. Curriculum / Meta triggers (Fallback)
