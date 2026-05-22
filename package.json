@@ -24,7 +24,6 @@
     "@dicebear/core": "^9.4.2",
     "@dicebear/lorelei": "^9.4.2",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@netlify/functions": "^5.2.2",
     "@react-three/fiber": "^9.6.0",
     "@supabase/supabase-js": "^2.101.1",
     "bcryptjs": "^3.0.3",
