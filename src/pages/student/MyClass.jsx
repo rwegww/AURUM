@@ -689,7 +689,7 @@ const MyClass = () => {
                     <div className="flex-1 pl-14 space-y-4">
                       {(q.type || 'multiple_choice') === 'multiple_choice' ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {q.options.map((opt, oIdx) => (
+                          {(Array.isArray(q.options) ? q.options : (q.options ? Object.values(q.options) : [])).map((opt, oIdx) => (
                             <button 
                               key={oIdx}
                               onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: oIdx })}
