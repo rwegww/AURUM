@@ -135,22 +135,28 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             if (currentQuestion) {
                 // Detect options for Multiple Choice
                 if (currentQuestion.type === 'multiple_choice') {
-                    const optMatch = line.match(/^([A-D])\s*[.:]\s*(.*)/i);
-                    if (optMatch) {
-                        const key = optMatch[1].toUpperCase();
-                        currentQuestion.options[key] = optMatch[2];
-                        continue;
+                    const mcRegex = /(?:^|\s+)([A-D])\s*[.:]\s*(.*?)(?=\s+[A-D]\s*[.:]|$)/gi;
+                    let match;
+                    let hasMatch = false;
+                    while ((match = mcRegex.exec(line)) !== null) {
+                        const key = match[1].toUpperCase();
+                        currentQuestion.options[key] = match[2].trim();
+                        hasMatch = true;
                     }
+                    if (hasMatch) continue;
                 }
                 
                 // Detect options for True/False
                 if (currentQuestion.type === 'true_false') {
-                    const optMatch = line.match(/^([a-d])\s*[.:)]\s*(.*)/i);
-                    if (optMatch) {
-                        const key = optMatch[1].toLowerCase();
-                        currentQuestion.options[key] = optMatch[2];
-                        continue;
+                    const tfRegex = /(?:^|\s+)([a-d])\s*[.:)]\s*(.*?)(?=\s+[a-d]\s*[.:)]|$)/gi;
+                    let match;
+                    let hasMatch = false;
+                    while ((match = tfRegex.exec(line)) !== null) {
+                        const key = match[1].toLowerCase();
+                        currentQuestion.options[key] = match[2].trim();
+                        hasMatch = true;
                     }
+                    if (hasMatch) continue;
                 }
 
                 // If not an option, it's continuation of question content
