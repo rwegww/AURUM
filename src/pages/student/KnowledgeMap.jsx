@@ -10,8 +10,8 @@ import InfographicBook from '@/components/lessons/InfographicBook';
 
 // Grade theme colors
 const GRADE_THEME = {
-  8:  { color: '#16a34a', light: '#f0fdf4', border: '#bbf7d0', label: 'Lớp 8' },
-  9:  { color: '#f97316', light: '#fff7ed', border: '#fed7aa', label: 'Lớp 9' },
+  8: { color: '#16a34a', light: '#f0fdf4', border: '#bbf7d0', label: 'Lớp 8' },
+  9: { color: '#f97316', light: '#fff7ed', border: '#fed7aa', label: 'Lớp 9' },
   10: { color: '#3b82f6', light: '#eff6ff', border: '#bfdbfe', label: 'Lớp 10' },
   11: { color: '#8b5cf6', light: '#f5f3ff', border: '#ddd6fe', label: 'Lớp 11' },
   12: { color: '#ec4899', light: '#fdf2f8', border: '#fbcfe8', label: 'Lớp 12' },
@@ -97,9 +97,7 @@ const KnowledgeMap = () => {
             <h1 className="font-rubik text-3xl md:text-4xl font-black text-[#1a1a1a] mb-2 tracking-tight uppercase leading-tight">
               Sơ Đồ Tư Duy <span className="text-viet-green">Hóa Học</span>
             </h1>
-            <p className="text-slate-500 font-bold text-sm max-w-xl leading-relaxed">
-              Cấu trúc cây: Lớp → Bài học → Kiến thức. Cuộn ngang để khám phá.
-            </p>
+
             {/* Overall progress */}
             <div className="mt-4 flex items-center gap-4 max-w-xs">
               <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
@@ -176,11 +174,10 @@ const KnowledgeMap = () => {
                           setExpandedGrade(isExpanded ? null : grade);
                           setExpandedLesson(null); // Reset lesson when changing grade
                         }}
-                        className={`flex items-center gap-4 px-5 py-3.5 rounded-2xl border-2 transition-all duration-200 w-[240px] text-left group ${
-                          isExpanded
+                        className={`flex items-center gap-4 px-5 py-3.5 rounded-2xl border-2 transition-all duration-200 w-[240px] text-left group ${isExpanded
                             ? 'bg-white shadow-xl scale-[1.02]'
                             : 'bg-white hover:shadow-md hover:scale-[1.01]'
-                        }`}
+                          }`}
                         style={{
                           borderColor: isExpanded ? theme.color : '#e2e8f0',
                           boxShadow: isExpanded ? `0 12px 30px ${theme.color}20` : undefined
@@ -259,30 +256,27 @@ const KnowledgeMap = () => {
                                   >
                                     <button
                                       onClick={() => setExpandedLesson(isLessonExpanded ? null : lesson.lessonId)}
-                                      className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 text-left w-[280px] group ${
-                                        isLessonExpanded
+                                      className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-200 text-left w-[280px] group ${isLessonExpanded
                                           ? 'bg-white shadow-lg scale-[1.02]'
                                           : lessonDone
                                             ? 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-sm'
                                             : 'bg-slate-50 border-slate-100 opacity-60 hover:opacity-100'
-                                      }`}
+                                        }`}
                                       style={{
                                         borderColor: isLessonExpanded ? theme.color : undefined,
                                         boxShadow: isLessonExpanded ? `0 8px 20px ${theme.color}15` : undefined
                                       }}
                                     >
                                       <div
-                                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-[11px] font-black text-white ${
-                                          lessonDone ? '' : 'bg-slate-300'
-                                        }`}
+                                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-[11px] font-black text-white ${lessonDone ? '' : 'bg-slate-300'
+                                          }`}
                                         style={{ backgroundColor: lessonDone ? theme.color : undefined }}
                                       >
                                         {lessonDone ? '✓' : <Lock size={12} />}
                                       </div>
                                       <div className="flex-1 min-w-0">
-                                        <p className={`text-[13px] font-bold leading-snug truncate ${
-                                          lessonDone ? 'text-slate-800' : 'text-slate-500'
-                                        }`}>
+                                        <p className={`text-[13px] font-bold leading-snug truncate ${lessonDone ? 'text-slate-800' : 'text-slate-500'
+                                          }`}>
                                           {shortTitle}
                                         </p>
                                         <p className="text-[10px] font-bold text-slate-400 mt-0.5">
@@ -343,11 +337,10 @@ const KnowledgeMap = () => {
                                                   className="shrink-0 relative z-10"
                                                 >
                                                   <div
-                                                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 transition-all w-[300px] ${
-                                                      topicDone
+                                                    className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 transition-all w-[300px] ${topicDone
                                                         ? 'bg-white border-slate-200 shadow-sm'
                                                         : 'bg-slate-50 border-slate-100 opacity-60'
-                                                    }`}
+                                                      }`}
                                                   >
                                                     <div
                                                       className="w-2.5 h-2.5 rounded-full shrink-0"
@@ -357,9 +350,8 @@ const KnowledgeMap = () => {
                                                       }}
                                                     />
                                                     <div className="flex-1 min-w-0">
-                                                      <p className={`text-[12.5px] font-bold leading-snug ${
-                                                        topicDone ? 'text-slate-800' : 'text-slate-500'
-                                                      }`}>
+                                                      <p className={`text-[12.5px] font-bold leading-snug ${topicDone ? 'text-slate-800' : 'text-slate-500'
+                                                        }`}>
                                                         {topic.title}
                                                       </p>
                                                     </div>
@@ -371,7 +363,7 @@ const KnowledgeMap = () => {
                                               </div>
                                             );
                                           })}
-                                          
+
                                           {/* Action Buttons for the Lesson */}
                                           {lessonDone && (
                                             <div className="flex flex-row items-center relative mt-2">
@@ -393,7 +385,7 @@ const KnowledgeMap = () => {
                                                   onClick={() => {
                                                     const orderMatch = lesson.lessonId.match(/bai(\d+)/i);
                                                     const order = orderMatch ? parseInt(orderMatch[1], 10) : 1;
-                                                    
+
                                                     setSelectedInfographicLesson({
                                                       ...lesson,
                                                       order,
@@ -428,7 +420,7 @@ const KnowledgeMap = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Infographic Modal */}
       {selectedInfographicLesson && (
         <InfographicBook
@@ -439,8 +431,9 @@ const KnowledgeMap = () => {
           unlockedLessons={unlockedLessons}
         />
       )}
-      
-      <style dangerouslySetInnerHTML={{ __html: `
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .custom-scrollbar::-webkit-scrollbar {
           width: 8px;
           height: 8px;
