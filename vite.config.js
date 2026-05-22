@@ -44,10 +44,6 @@ export default defineConfig({
             if (normalizedId.includes('node_modules/three')) {
               return 'vendor-3d-three';
             }
-            // Keep Firebase database/auth separate
-            if (normalizedId.includes('firebase') || normalizedId.includes('@firebase')) {
-              return 'vendor-firebase';
-            }
             // Keep animations separate
             if (normalizedId.includes('framer-motion')) {
               return 'vendor-framer';

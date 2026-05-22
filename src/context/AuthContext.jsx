@@ -1,6 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import i18n from '@/i18n';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
 const AuthContext = createContext();
@@ -50,13 +49,6 @@ export const AuthProvider = ({ children }) => {
       if (authType === 'supabase') {
         const supabase = await getSupabase();
         await supabase.auth.signOut();
-      }
-      if (authType === 'firebase') {
-        const [{ auth: firebaseAuth }, { signOut: firebaseSignOut }] = await Promise.all([
-          import('@/lib/firebase'),
-          import('firebase/auth'),
-        ]);
-        await firebaseSignOut(firebaseAuth);
       }
     } catch (err) {
       console.error('Error during logout:', err);
@@ -431,8 +423,8 @@ export const AuthProvider = ({ children }) => {
         const authType = localStorage.getItem('authType');
         const token = localStorage.getItem('token');
         
-        if ((authType === 'custom' || authType === 'firebase') && token) {
-          // Custom login or Firebase login - token is our own JWT
+        if (authType === 'custom' && token) {
+          // Custom login uses the API-issued JWT.
           await fetchProfile(token, true);
         } else if (authType === 'supabase') {
           // Legacy Supabase login - try to get session

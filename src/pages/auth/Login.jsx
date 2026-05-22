@@ -17,7 +17,7 @@ const Login = () => {
 
   const displayError = error || authError;
 
-  // Auto-redirect if already logged in (useful for Firebase Redirect flow)
+  // Auto-redirect if already logged in.
   React.useEffect(() => {
     if (isLoggedIn && user) {
       if (user.role === 'admin') navigate('/admin');
