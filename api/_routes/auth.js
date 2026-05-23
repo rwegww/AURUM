@@ -121,12 +121,48 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// DEBUG: Test register-teacher step by step (remove after debugging)
+router.post('/debug-register-teacher', async (req, res) => {
+  const steps = [];
+  try {
+    steps.push('step1: route entered');
+    const { username, password, email, proofImageUrl } = req.body;
+    steps.push(`step2: parsed body - username=${username}, email=${email}, hasProof=${!!proofImageUrl}`);
+
+    const existingUser = await User.findOne({ username });
+    steps.push(`step3: User.findOne done - exists=${!!existingUser}`);
+
+    const hashedPassword = await bcrypt.hash(password || 'test', 10);
+    steps.push('step4: bcrypt.hash done');
+
+    await Feedback.create({
+      userId: null,
+      username: username || 'debugtest',
+      type: 'teacher_registration',
+      message: JSON.stringify({ email, hashedPassword }),
+      imageUrl: proofImageUrl || 'https://example.com/test.jpg',
+      status: 'unread'
+    });
+    steps.push('step5: Feedback.create done');
+
+    return res.json({ success: true, steps });
+  } catch (err) {
+    steps.push(`ERROR: ${err.message}`);
+    return res.status(500).json({ success: false, steps, error: err.message, stack: err.stack });
+  }
+});
+
 // Register Teacher (Pending Approval)
 router.post('/register-teacher', async (req, res) => {
+  // Ensure we always respond with JSON
+  res.setHeader('Content-Type', 'application/json');
+  
   try {
+    console.log('📝 [register-teacher] Request body keys:', Object.keys(req.body || {}));
     const { username, password, email, proofImageUrl } = req.body;
     
     if (!username || !password || !email || !proofImageUrl) {
+      console.warn('⚠️ [register-teacher] Missing fields:', { username: !!username, password: !!password, email: !!email, proofImageUrl: !!proofImageUrl });
       return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ thông tin và ảnh minh chứng' });
     }
     
@@ -160,10 +196,11 @@ router.post('/register-teacher', async (req, res) => {
       status: 'unread'
     });
 
-    res.status(201).json({ message: 'Yêu cầu đăng ký đã được gửi. Vui lòng chờ Quản trị viên duyệt qua Email.' });
+    console.log('✅ [register-teacher] Teacher registration request created for:', username);
+    return res.status(201).json({ message: 'Yêu cầu đăng ký đã được gửi. Vui lòng chờ Quản trị viên duyệt qua Email.' });
   } catch (err) {
-    console.error('Lỗi đăng ký giáo viên:', err);
-    res.status(500).json({ message: 'Lỗi server' });
+    console.error('❌ [register-teacher] Error:', err.message, err.stack);
+    return res.status(500).json({ message: 'Lỗi server', error: err.message });
   }
 });
 
