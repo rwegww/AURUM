@@ -30,7 +30,7 @@ const Classroom = () => {
       age: t('common.grade', { grade: 8 }),
       title: t('classroom.grades.8.title'),
       desc: t('classroom.grades.8.desc'),
-      image: "/assets/images/classroom/grade8.png",
+      image: "/assets/images/classroom/grade8-viet.png",
       color: "bg-viet-green"
     },
     {
@@ -38,7 +38,7 @@ const Classroom = () => {
       age: t('common.grade', { grade: 9 }),
       title: t('classroom.grades.9.title'),
       desc: t('classroom.grades.9.desc'),
-      image: "/assets/images/classroom/grade9.png",
+      image: "/assets/images/classroom/grade9-viet.png",
       color: "bg-orange-500"
     },
     {
@@ -46,7 +46,7 @@ const Classroom = () => {
       age: t('common.grade', { grade: 10 }),
       title: t('classroom.grades.10.title'),
       desc: t('classroom.grades.10.desc'),
-      image: "/assets/images/classroom/grade10.png",
+      image: "/assets/images/classroom/grade10-viet.png",
       color: "bg-blue-500"
     },
     {
@@ -54,7 +54,7 @@ const Classroom = () => {
       age: t('common.grade', { grade: 11 }),
       title: t('classroom.grades.11.title'),
       desc: t('classroom.grades.11.desc'),
-      image: "/assets/images/classroom/grade11.png",
+      image: "/assets/images/classroom/grade11-viet.png",
       color: "bg-emerald-600"
     },
     {
@@ -62,7 +62,7 @@ const Classroom = () => {
       age: t('common.grade', { grade: 12 }),
       title: t('classroom.grades.12.title'),
       desc: t('classroom.grades.12.desc'),
-      image: "/assets/images/classroom/grade12.png",
+      image: "/assets/images/classroom/grade12-viet.png",
       color: "bg-purple-600"
     },
     {
@@ -70,7 +70,7 @@ const Classroom = () => {
       age: t('classroom.knowledge_tree.academic_map', 'BẢN ĐỒ KIẾN THỨC'),
       title: t('classroom.knowledge_tree.title', 'Cây Kiến Thức Tổng'),
       desc: t('classroom.knowledge_tree.subtitle', 'Hệ thống hóa toàn bộ kiến thức hóa học từ lớp 8 đến 12'),
-      image: "/assets/images/classroom/grade11.png", // Có thể thay bằng ảnh phù hợp hơn
+      image: "/assets/images/classroom/grade10-viet.png",
       color: "bg-slate-600"
     }
   ];
@@ -81,7 +81,7 @@ const Classroom = () => {
         <header className="mb-16 text-center max-w-3xl mx-auto animate-fade-in">
           <h1 className="font-rubik text-4xl md:text-5xl font-black text-[#1a1a1a] mb-6 tracking-tight uppercase leading-tight">
             <Trans i18nKey="classroom.title">
-               Bắt đầu hành trình<br/><span className="text-viet-green">Hóa học</span>của bạn
+               Bắt đầu hành trình<br/><span className="text-viet-green">Hóa học</span> của bạn
             </Trans>
           </h1>
           <p className="text-[#1a1a1a]/70 text-lg font-bold">

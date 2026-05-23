@@ -58,7 +58,7 @@ export const bai9 = {
         "items": [
           "Những Cạm bẫy Bẻ não Thi Tốt nghiệp Quốc Gia:",
           "1. Chống Mắt Tự Phán đoán Sản phẩm Khử: Dây HNO3 loãng tạo N2Oười nhạt. Axit ĐẶC HNO3 đứt ruột nhả NO2 ngáo nâu. Nhưng Kim loại Mạng Hổ Trâu Mg/Al cắm vào nát Nh2 HNO3 quá Loãng, ép chọc nhứ N xuống thẳng hầm mù ra vỏ Cặn Phân Bón mặn chát Ammonium Nitrate ($NH_4NO_3$).",
-          "2. Ma Pháp Bảo Toàn Electron siêu tốc: Không thèm viết phương trình dông dài cân bằng rác rưởi. Tổng Mol Electron Kim Loại Nhả Bỏ ĐỨT ĐUÔI = Bằng Tổng số Mol e bọn Khí/Ion nhận trọn. Xối rã mọi hệ ẩn.",
+          "2. Hóa Học Bảo Toàn Electron siêu tốc: Không thèm viết phương trình dông dài cân bằng rác rưởi. Tổng Mol Electron Kim Loại Nhả Bỏ ĐỨT ĐUÔI = Bằng Tổng số Mol e bọn Khí/Ion nhận trọn. Xối rã mọi hệ ẩn.",
           "3. Trò đùa Thụ động Lưỡng Tâm (Al, Fe, Cr đóng băng não lì trước cặp H2SO4 đặc + HNO3 đặc để dạng Lạnh lùng Nguội Xút)."
         ]
       }

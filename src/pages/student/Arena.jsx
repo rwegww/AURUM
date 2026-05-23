@@ -11,7 +11,7 @@ import { Beaker } from 'lucide-react';
 // Preset avatar seeds for quick selection
 const getAvatarPresets = (t) => [
   { id: 1, seed: 'Chem Master',   label: t('arena.character.presets.chem_master') },
-  { id: 2, seed: 'Lab Wizard',    label: t('arena.character.presets.lab_wizard') },
+  { id: 2, seed: 'Lab Explorer',  label: t('arena.character.presets.lab_wizard') },
   { id: 3, seed: 'Science Hero',  label: t('arena.character.presets.science_hero') },
   { id: 4, seed: 'Atom Breaker',  label: t('arena.character.presets.atom_breaker') },
   { id: 5, seed: 'DNA Explorer',  label: t('arena.character.presets.dna_explorer') },

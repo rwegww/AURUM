@@ -22,7 +22,7 @@ export const bai7 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Sulfur (Lưu Huỳnh S) nguyên thủy mang sắc Vàng chanh đặc trưng diệu kì, rải rắc nồng nặc quanh các họng mồm Miệng Núi Lửa (Diêm sinh). Phi kim này có vô số lột vỏ thù hình nhưng 2 dạng Vua chúa là Tà Phương ($S_\\alpha$) and Đơn Tà ($S_\\beta$). Chấm vào nước Lưu huỳnh trơ trượt nhám nổi lềnh bềnh (không tan), nhưng thả vào cồn Benzene, dầu hỏa lại vỡ tan tành dung môi. Nó từng là nguyên liệu ma thuật chế tác Thuốc Nổ Đen xa xưa."
+        "text": "Sulfur (Lưu Huỳnh S) nguyên thủy mang sắc Vàng chanh đặc trưng diệu kì, rải rắc nồng nặc quanh các họng mồm Miệng Núi Lửa (Diêm sinh). Phi kim này có vô số lột vỏ thù hình nhưng 2 dạng Vua chúa là Tà Phương ($S_\\alpha$) and Đơn Tà ($S_\\beta$). Chấm vào nước Lưu huỳnh trơ trượt nhám nổi lềnh bềnh (không tan), nhưng thả vào cồn Benzene, dầu hỏa lại vỡ tan tành dung môi. Nó từng là nguyên liệu hóa học chế tác Thuốc Nổ Đen xa xưa."
       }
     },
     {

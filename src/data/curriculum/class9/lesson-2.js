@@ -15,7 +15,7 @@ export const bai2 = {
       "title": "Bí thuật: Dãy Hoạt Động Hóa Học",
       "url": "https://www.youtube.com/watch?v=Trq879pu8Mw",
       "thumbnail": "https://img.youtube.com/vi/Trq879pu8Mw/0.jpg",
-      "description": "Khám phá câu thần chú vạn năng để làm chủ mọi phản ứng kim loại."
+      "description": "Khám phá câu công thức vạn năng để làm chủ mọi phản ứng kim loại."
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@ export const bai2 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Câu Thần Chú Bất Hủ",
+        "text": "1. Câu Công Thức Bất Hủ",
         "level": "h2"
       }
     },
@@ -39,7 +39,7 @@ export const bai2 = {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Thần Chú Lướt Não",
+        "title": "Công Thức Lướt Não",
         "content": "**K - Na - Ca - Mg - Al - Zn - Fe - Ni - Sn - Pb - (H) - Cu - Hg - Ag - Pt - Au**\n\n*Khi Nào Cần May Áo Giáp Sắt Nhớ Sang Phố Hỏi Cửa Hàng Á Phi Âu.*\n\n(Lưu ý: Kim loại đứng trước mạnh hơn, đứng sau yếu hơn).",
         "color": "blue"
       }
@@ -138,7 +138,7 @@ export const bai2 = {
       ],
       "correctOrder": ["d1", "d2", "d3", "d4", "d5"],
       "question": "Sắp xếp theo chiều hoạt động hóa học yếu dần.",
-      "source": "Thứ tự thần chú"
+      "source": "Thứ tự công thức"
     }
   ],
   "game": {
