@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/auth/AuthLayout';
+import TelegramLoginButton from '@/components/auth/TelegramLoginButton';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,7 +11,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, magicLogin, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
+  const { login, magicLogin, loginWithGoogle, loginWithTelegram, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const displayError = error || authError;
@@ -230,24 +231,24 @@ const Login = () => {
            <span className="relative z-10 bg-white px-4 text-[13px] md:text-[9px] font-medium md:font-black text-slate-400 md:text-viet-text-light/40 md:uppercase md:tracking-[3px]">Hoặc đăng nhập bằng</span>
         </div>
 
-        <div className="flex gap-3 mb-6 md:mb-3">
+        <div className="flex flex-col gap-3 mb-6 md:mb-3">
           <button 
             onClick={handleGoogleLogin}
             type="button"
-            className="flex-1 h-12 md:h-11 bg-[#fdf0e0] md:bg-white border border-[#f3e3d0] md:border-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-[14px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest text-slate-700 md:text-viet-text hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+            className="w-full h-12 md:h-11 bg-[#fdf0e0] md:bg-white border border-[#f3e3d0] md:border-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-[14px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest text-slate-700 md:text-viet-text hover:bg-slate-50 transition-all shadow-sm active:scale-95"
           >
              <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
              Google
           </button>
 
-          <button 
-            onClick={() => alert('Vui lòng cấu hình Bot Token để sử dụng Telegram Login')}
-            type="button"
-            className="flex-1 h-12 md:h-11 bg-[#24A1DE] text-white rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-[14px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest hover:bg-[#1d87ba] transition-all shadow-sm active:scale-95"
-          >
-             <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" className="w-5 h-5" alt="Telegram" />
-             Telegram
-          </button>
+          <div className="w-full h-12 md:h-11 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden">
+             <TelegramLoginButton 
+               botName="Aurumchemistrybot"
+               onAuth={loginWithTelegram}
+               buttonSize="large"
+               cornerRadius={16}
+             />
+          </div>
         </div>
 
 
