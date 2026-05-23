@@ -86,6 +86,10 @@ const TeacherDashboard = () => {
         alert(res.message);
       }
     } catch (err) {
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        // User cancelled the login, just ignore it silently
+        return;
+      }
       alert('Lỗi liên kết Google: ' + err.message);
     }
   };
