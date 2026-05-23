@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import Footer from '@/components/common/Footer';
+import { Download, Eye, FileText, Folder, PackageOpen, Search } from 'lucide-react';
 
 const Library = () => {
   const { t } = useTranslation();
@@ -70,7 +71,7 @@ const Library = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl grayscale group-focus-within:grayscale-0 transition-all">🔍</span>
+              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-viet-text-light transition-all group-focus-within:text-viet-green" aria-hidden="true" />
             </div>
           </motion.div>
         </header>
@@ -117,10 +118,10 @@ const Library = () => {
                   </div>
 
                   <div className="w-full aspect-[4/3] bg-viet-bg rounded-[24px] mb-6 flex items-center justify-center text-4xl overflow-hidden border border-viet-border/50">
-                    {item.file_type === 'pdf' ? '📄' : 
+                    {item.file_type === 'pdf' ? <FileText size={42} className="text-viet-green" aria-hidden="true" /> : 
                      item.file_type?.match(/png|jpg|jpeg|webp/) ? (
                        <img src={item.file_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={item.title} />
-                     ) : '📁'}
+                     ) : <Folder size={42} className="text-viet-text-light" aria-hidden="true" />}
                   </div>
                   
                   <div className="flex-1">
@@ -134,8 +135,8 @@ const Library = () => {
 
                   <div className="flex items-center justify-between mt-6 pt-4 border-t border-viet-border/50">
                     <div className="flex items-center gap-3 text-[10px] font-bold text-viet-text-light uppercase">
-                       <span>👁️ {item.view_count || 0}</span>
-                       <span>⬇️ {item.download_count || 0}</span>
+                       <span className="flex items-center gap-1"><Eye size={12} aria-hidden="true" /> {item.view_count || 0}</span>
+                       <span className="flex items-center gap-1"><Download size={12} aria-hidden="true" /> {item.download_count || 0}</span>
                     </div>
                     <span className="text-[10px] font-black text-viet-text-light/40 uppercase">
                       #{item.file_type}
@@ -147,7 +148,7 @@ const Library = () => {
 
             {materials.length === 0 && (
               <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-2 border-dashed border-duo-border">
-                <span className="text-6xl mb-4 block">📦</span>
+                <PackageOpen size={56} className="mx-auto mb-4 text-viet-text-light/30" aria-hidden="true" />
                 <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>
                 <button onClick={() => {setCategory(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
               </div>

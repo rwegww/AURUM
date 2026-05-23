@@ -306,7 +306,7 @@ const AssignmentManager = () => {
                             
                             <div className="space-y-3 mb-8">
                                 <div className="flex items-center gap-2 text-[11px] text-viet-text-light font-bold">
-                                    <span className="w-5">📅</span>
+                                    <span className="w-5" aria-hidden="true"></span>
                                     <span>Hạn nộp:</span>
                                     <span className={new Date(assignment.deadline) < new Date() ? 'text-red-500 font-black' : 'text-viet-text'}>
                                         {assignment.deadline ? new Date(assignment.deadline).toLocaleString('vi-VN') : 'Không có'}

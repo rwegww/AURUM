@@ -76,7 +76,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
            
            {/* Decorative Elements */}
            <div className="absolute top-8 left-8 w-12 h-12 bg-white/40 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-xl border border-white/30">
-             📖
+            Book
            </div>
         </motion.div>
 

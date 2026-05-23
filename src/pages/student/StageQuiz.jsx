@@ -293,7 +293,7 @@ const StageQuiz = () => {
               >
                 {/* Reward label ribbon */}
                 <div className="absolute top-3 left-3 z-20 px-3 py-1 bg-viet-green text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5">
-                  📖 Trang sổ tay mới
+                  Trang sổ tay mới
                 </div>
 
                 {/* Infographic image */}
