@@ -324,41 +324,70 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
               </div>
             ) : (
               // Desktop View: Double Page 3D Flip Book layout
-              <div className="w-full h-full flex relative rounded-[40px] preserve-3d bg-[#1a0e07] shadow-[0_30px_70px_rgba(0,0,0,0.6)] p-3">
+              <div 
+                className={`w-full h-full flex relative rounded-[40px] preserve-3d transition-all duration-[600ms] ease-[cubic-bezier(0.645,0.045,0.355,1.0)] p-3 ${
+                  (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === 0 || 
+                  (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === totalSpreads - 1 
+                    ? 'bg-transparent shadow-none' 
+                    : 'bg-[#1a0e07] shadow-[0_30px_70px_rgba(0,0,0,0.6)]'
+                }`}
+                style={{
+                  transform: (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === 0 
+                    ? 'translateX(-25%)' 
+                    : (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === totalSpreads - 1 
+                      ? 'translateX(25%)' 
+                      : 'translateX(0)'
+                }}
+              >
                 
                 {/* Book cover spine wrap */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-12 bg-gradient-to-r from-black/40 via-black/10 to-black/40 z-20 pointer-events-none border-x border-white/5" />
+                <div 
+                  className={`absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-12 bg-gradient-to-r from-black/40 via-black/10 to-black/40 z-20 pointer-events-none border-x border-white/5 transition-opacity duration-500 ${
+                    (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === 0 || 
+                    (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === totalSpreads - 1 
+                      ? 'opacity-0' 
+                      : 'opacity-100'
+                  }`} 
+                />
 
                 {/* Left Page (Underneath static) */}
-                <div className="w-1/2 h-full bg-[#fefcf7] rounded-l-[32px] md:rounded-l-[40px] relative overflow-hidden border-r border-slate-200 shadow-inner">
+                <div 
+                  className={`w-1/2 h-full rounded-l-[32px] md:rounded-l-[40px] relative overflow-hidden transition-opacity duration-300 ${
+                    currentSpread === 0 ? 'opacity-0' : 'bg-[#fefcf7] border-r border-slate-200 shadow-inner opacity-100'
+                  }`}
+                >
                   {/* Static Left page represents Spread S-1 Right (if going prev) or Spread S Left (if normal) */}
-                  {renderPageContent(
+                  {currentSpread > 0 && renderPageContent(
                     isFlipping && flipDirection === 'prev' 
                       ? (currentSpread - 1) * 2 - 1 
                       : currentSpread * 2 - 1, 
                     'left'
                   )}
                   {/* Center binding shadow */}
-                  <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-black/10 pointer-events-none" />
+                  {currentSpread > 0 && <div className="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-black/10 pointer-events-none" />}
                 </div>
 
                 {/* Right Page (Underneath static) */}
-                <div className="w-1/2 h-full bg-[#fefcf7] rounded-r-[32px] md:rounded-r-[40px] relative overflow-hidden shadow-inner">
+                <div 
+                  className={`w-1/2 h-full rounded-r-[32px] md:rounded-r-[40px] relative overflow-hidden transition-opacity duration-300 ${
+                    currentSpread === totalSpreads - 1 ? 'opacity-0' : 'bg-[#fefcf7] shadow-inner opacity-100'
+                  }`}
+                >
                   {/* Static Right page represents Spread S+1 Left (if going next) or Spread S Right (if normal) */}
-                  {renderPageContent(
+                  {currentSpread < totalSpreads - 1 && renderPageContent(
                     isFlipping && flipDirection === 'next'
                       ? (currentSpread + 1) * 2
                       : currentSpread * 2,
                     'right'
                   )}
                   {/* Center binding shadow */}
-                  <div className="absolute top-0 left-0 bottom-0 w-8 bg-gradient-to-l from-transparent to-black/10 pointer-events-none" />
+                  {currentSpread < totalSpreads - 1 && <div className="absolute top-0 left-0 bottom-0 w-8 bg-gradient-to-l from-transparent to-black/10 pointer-events-none" />}
                 </div>
 
                 {/* DYNAMIC FLIPPING LEAF */}
                 {isFlipping && (
                   <div 
-                    className={`absolute top-3 bottom-3 w-[calc(50%-12px)] h-[calc(100%-24px)] z-40 pointer-events-none preserve-3d transition-transform duration-600 ease-[cubic-bezier(0.645,0.045,0.355,1.0)]`}
+                    className={`absolute top-3 bottom-3 w-[calc(50%-12px)] h-[calc(100%-24px)] z-40 pointer-events-none preserve-3d transition-transform duration-[600ms] ease-[cubic-bezier(0.645,0.045,0.355,1.0)]`}
                     style={{
                       left: flipDirection === 'next' ? '50%' : '12px',
                       transformOrigin: flipDirection === 'next' ? 'left center' : 'right center',
@@ -372,7 +401,11 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
                   >
                     {/* Front Face of Flipping Page */}
                     <div 
-                      className="absolute inset-0 w-full h-full backface-hidden z-20 overflow-hidden shadow-md"
+                      className={`absolute inset-0 w-full h-full backface-hidden z-20 overflow-hidden shadow-xl ${
+                        flipDirection === 'next' && currentSpread === 0 ? 'rounded-[32px] md:rounded-[40px]' :
+                        flipDirection === 'prev' && currentSpread === totalSpreads - 1 ? 'rounded-[32px] md:rounded-[40px]' :
+                        flipDirection === 'next' ? 'rounded-r-[32px] md:rounded-r-[40px] bg-[#fefcf7]' : 'rounded-l-[32px] md:rounded-l-[40px] bg-[#fefcf7]'
+                      }`}
                       style={{
                         transform: 'rotateY(0deg)'
                       }}
@@ -381,7 +414,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
                         flipDirection === 'next' 
                           ? currentSpread * 2 
                           : currentSpread * 2 - 1,
-                        flipDirection === 'next' ? 'right' : 'left'
+                        flipDirection === 'next' ? (currentSpread === 0 ? 'single' : 'right') : (currentSpread === totalSpreads - 1 ? 'single' : 'left')
                       )}
                       {/* Interactive page curl shadow */}
                       <div className="absolute inset-0 bg-black/5 mix-blend-multiply pointer-events-none animate-[pageShadowForward_0.6s_ease-in-out_forwards]" />
@@ -389,7 +422,11 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
 
                     {/* Back Face of Flipping Page (rotated 180 degrees) */}
                     <div 
-                      className="absolute inset-0 w-full h-full backface-hidden z-10 overflow-hidden shadow-md"
+                      className={`absolute inset-0 w-full h-full backface-hidden z-10 overflow-hidden shadow-xl ${
+                        flipDirection === 'next' && currentSpread === totalSpreads - 2 ? 'rounded-[32px] md:rounded-[40px]' :
+                        flipDirection === 'prev' && currentSpread === 1 ? 'rounded-[32px] md:rounded-[40px]' :
+                        flipDirection === 'next' ? 'rounded-l-[32px] md:rounded-l-[40px] bg-[#fefcf7]' : 'rounded-r-[32px] md:rounded-r-[40px] bg-[#fefcf7]'
+                      }`}
                       style={{
                         transform: 'rotateY(180deg)'
                       }}
@@ -398,7 +435,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
                         flipDirection === 'next'
                           ? (currentSpread + 1) * 2 - 1
                           : (currentSpread - 1) * 2,
-                        flipDirection === 'next' ? 'left' : 'right'
+                        flipDirection === 'next' ? (currentSpread === totalSpreads - 2 ? 'single' : 'left') : (currentSpread === 1 ? 'single' : 'right')
                       )}
                       {/* Interactive page curl shadow */}
                       <div className="absolute inset-0 bg-black/5 mix-blend-multiply pointer-events-none animate-[pageShadowBackward_0.6s_ease-in-out_forwards]" />
@@ -407,7 +444,14 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
                 )}
 
                 {/* Realistic Binder rings overlay in center spine */}
-                <div className="absolute top-10 bottom-10 left-1/2 -translate-x-1/2 flex flex-col justify-between items-center w-2 h-[calc(100%-80px)] z-50 pointer-events-none">
+                <div 
+                  className={`absolute top-10 bottom-10 left-1/2 -translate-x-1/2 flex flex-col justify-between items-center w-2 h-[calc(100%-80px)] z-50 pointer-events-none transition-opacity duration-300 ${
+                    (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === 0 || 
+                    (isFlipping ? (flipDirection === 'next' ? currentSpread + 1 : currentSpread - 1) : currentSpread) === totalSpreads - 1 
+                      ? 'opacity-0' 
+                      : 'opacity-100'
+                  }`}
+                >
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="relative w-8 h-4 flex items-center justify-center">
                       {/* 3D Ring arc */}
