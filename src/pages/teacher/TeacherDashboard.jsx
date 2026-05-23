@@ -101,7 +101,8 @@ const TeacherDashboard = () => {
         const { data } = await supabase.auth.getSession();
         if (data?.session?.user) {
           const uid = data.session.user.id;
-          const res = await linkAccount('google', uid);
+          const email = data.session.user.email;
+          const res = await linkAccount('google', uid, email);
           if (res.success) {
             alert('Liên kết Google thành công!');
           } else {

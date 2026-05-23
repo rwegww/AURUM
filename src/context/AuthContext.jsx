@@ -306,7 +306,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isLoggedIn, user]);
 
-  const linkAccount = useCallback(async (provider, accountId) => {
+  const linkAccount = useCallback(async (provider, accountId, providerEmail) => {
     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
     try {
       const token = localStorage.getItem('token');
@@ -316,7 +316,7 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ provider, accountId })
+        body: JSON.stringify({ provider, accountId, providerEmail })
       });
       const data = await res.json();
       if (res.ok) {

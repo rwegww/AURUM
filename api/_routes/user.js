@@ -127,7 +127,7 @@ router.patch('/profile', auth, async (req, res) => {
 // Update XP & Progress
 router.post('/link-account', auth, async (req, res) => {
   try {
-    const { provider, accountId } = req.body;
+    const { provider, accountId, providerEmail } = req.body;
     if (!provider || !accountId) {
       return res.status(400).json({ message: 'Thiếu thông tin liên kết' });
     }
@@ -135,6 +135,11 @@ router.post('/link-account', auth, async (req, res) => {
     // Check if provider is supported
     if (provider !== 'google') {
       return res.status(400).json({ message: 'Nhà cung cấp không được hỗ trợ' });
+    }
+
+    // Verify email matches if the user registered with an email
+    if (req.user.email && req.user.email !== providerEmail) {
+      return res.status(400).json({ message: 'Email liên kết phải trùng khớp với email của tài khoản hiện tại' });
     }
 
     // Check if another user already linked this account

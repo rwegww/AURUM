@@ -6,6 +6,7 @@ import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
 import StudyCalendar from '@/components/profile/StudyCalendar';
+import { supabase } from '@/lib/supabase';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div
@@ -22,7 +23,7 @@ const ProfileCard = ({ title, value, icon, color }) => (
 
 const Profile = () => {
   const { t, i18n } = useTranslation();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, linkAccount } = useAuth();
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
@@ -59,6 +60,44 @@ const Profile = () => {
       setIsSavingPlan(false);
     }
   };
+
+  const handleLinkGoogle = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/profile?linking_google=true`,
+          queryParams: {
+            prompt: 'select_account'
+          }
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      alert('Lỗi liên kết Google: ' + err.message);
+    }
+  };
+
+  React.useEffect(() => {
+    const checkGoogleLink = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('linking_google') === 'true') {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session?.user) {
+          const uid = data.session.user.id;
+          const email = data.session.user.email;
+          const res = await linkAccount('google', uid, email);
+          if (res.success) {
+            alert('Liên kết Google thành công!');
+          } else {
+            alert(res.message);
+          }
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+    };
+    checkGoogleLink();
+  }, [linkAccount]);
 
   const handleSaveAvatar = async () => {
     setIsSaving(true);
@@ -344,6 +383,39 @@ const Profile = () => {
             </div>
 
             <StudyCalendar planData={planData} onPlanDataChange={setPlanData} />
+          </div>
+        </div>
+
+        {/* Linked Accounts Section */}
+        <div className="bg-white rounded-[40px] p-10 border border-viet-border shadow-xl overflow-hidden relative mb-16">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+          <div className="relative z-10">
+            <h2 className="text-3xl font-black text-viet-text mb-2">Liên kết tài khoản</h2>
+            <p className="text-viet-text-light/60 font-medium mb-10">Liên kết tài khoản Google để đăng nhập nhanh chóng và an toàn hơn</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="flex items-center justify-between p-6 rounded-3xl border-2 border-slate-100 bg-slate-50 hover:border-blue-200 transition-all">
+                  <div className="flex items-center gap-4">
+                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-10 h-10" alt="Google" />
+                     <div>
+                       <div className="font-bold text-slate-800 text-lg">Google</div>
+                       <div className="text-sm text-slate-500 font-medium">Đăng nhập nhanh bằng Google</div>
+                     </div>
+                  </div>
+                  {user?.linkedAccounts?.google ? (
+                    <div className="px-5 py-2.5 rounded-xl text-[13px] font-black bg-green-50 text-green-600 border border-green-200 uppercase tracking-widest">
+                      Đã liên kết
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={handleLinkGoogle}
+                      className="px-6 py-3 rounded-2xl text-[14px] font-black bg-white border-2 border-slate-200 shadow-sm text-slate-600 hover:text-blue-600 hover:border-blue-300 transition-all uppercase tracking-widest"
+                    >
+                      Liên kết
+                    </button>
+                  )}
+               </div>
+            </div>
           </div>
         </div>
 
