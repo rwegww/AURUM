@@ -87,11 +87,35 @@ const DiscoveryJournalPage = () => {
   return (
     <div className="h-screen bg-[#0d0e12] flex flex-col font-sans text-white pt-20">
       <div className="p-6 md:p-8 border-b border-white/10 flex justify-between items-center bg-black/40 shrink-0">
-        <div>
-          <h2 className="text-2xl font-black uppercase italic tracking-tighter">Synthesis Nexus</h2>
-          <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Bản đồ tiến trình khám phá hóa học của bạn</p>
+        <div className="flex items-center gap-12">
+          <div>
+            <h2 className="text-2xl font-black uppercase italic tracking-tighter">Synthesis Nexus</h2>
+            <p className="text-xs text-white/40 font-bold uppercase tracking-widest mt-1">Sổ tay vật chất & Phản ứng</p>
+          </div>
+          
+          {/* Progress Bar in Header */}
+          <div className="hidden md:flex items-center gap-4 bg-white/5 border border-white/10 px-6 py-3 rounded-2xl">
+              <div className="flex flex-col gap-1 w-48">
+                  <div className="flex justify-between items-center">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Tiến độ thu thập</span>
+                      <span className="text-[10px] text-viet-green font-black">{Math.round((discoveredFormulas.length / Math.max(1, dbChemicals.length)) * 100)}%</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden border border-white/5">
+                      <motion.div 
+                        className="h-full bg-gradient-to-r from-blue-500 to-viet-green"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(discoveredFormulas.length / Math.max(1, dbChemicals.length)) * 100}%` }}
+                        transition={{ duration: 1, ease: 'easeOut' }}
+                      />
+                  </div>
+              </div>
+              <div className="flex flex-col items-end pl-4 border-l border-white/10">
+                  <span className="text-xl font-black italic">{discoveredFormulas.length} <span className="text-xs text-white/40 not-italic">/ {dbChemicals.length}</span></span>
+              </div>
+          </div>
         </div>
-        <button onClick={() => window.close()} className="px-6 py-2 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all text-xs font-bold uppercase tracking-widest">
+
+        <button onClick={() => window.close()} className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all text-xs font-bold uppercase tracking-widest border border-white/10 shadow-lg">
           Đóng trang
         </button>
       </div>

@@ -114,7 +114,7 @@ const DiscoveryMap = ({ chemicals = [], reactions = [], discoveredFormulas = [] 
     };
 
     chemicals.forEach(chem => {
-      const type = chem.category || chem.type || '';
+      const type = (chem.category || chem.type || '').toLowerCase();
       const normF = normalize(chem.formula);
       const isDiscovered = normalizedDiscovered.has(normF) || chem.is_starter || chem.isStarter;
       
@@ -124,11 +124,11 @@ const DiscoveryMap = ({ chemicals = [], reactions = [], discoveredFormulas = [] 
          isDiscovered
       };
 
-      if (type.includes('Kim loại')) groups['Kim loại'].push(node);
-      else if (type.includes('Phi kim') || type.includes('Khí') || chem.state === 'gas') groups['Phi kim / Khí'].push(node);
-      else if (type.includes('Axit')) groups['Axit'].push(node);
-      else if (type.includes('Bazơ')) groups['Bazơ'].push(node);
-      else if (type.includes('Muối')) groups['Muối'].push(node);
+      if (type.includes('kim loại')) groups['Kim loại'].push(node);
+      else if (type.includes('phi kim') || type.includes('khí') || chem.state === 'gas') groups['Phi kim / Khí'].push(node);
+      else if (type.includes('axit')) groups['Axit'].push(node);
+      else if (type.includes('bazơ') || type.includes('bazo')) groups['Bazơ'].push(node);
+      else if (type.includes('muối')) groups['Muối'].push(node);
       else groups['Khác'].push(node);
     });
 
@@ -178,30 +178,6 @@ const DiscoveryMap = ({ chemicals = [], reactions = [], discoveredFormulas = [] 
       {/* Background Grid */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
-      {/* Header Progress */}
-      <div className="shrink-0 p-6 flex justify-center items-center z-10 border-b border-white/5 bg-black/20">
-         <div className="flex items-center gap-6 w-full max-w-4xl bg-white/5 border border-white/10 px-8 py-4 rounded-3xl backdrop-blur-xl">
-             <div className="flex-1">
-                 <div className="flex justify-between items-center mb-2">
-                     <h3 className="text-sm font-black uppercase tracking-widest text-white/80">Tiến độ thu thập</h3>
-                     <span className="text-viet-green font-black">{Math.round((discoveredCount / totalItems) * 100)}%</span>
-                 </div>
-                 <div className="h-2.5 bg-slate-900 rounded-full overflow-hidden border border-white/5">
-                     <motion.div 
-                        className="h-full bg-gradient-to-r from-blue-500 to-viet-green"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(discoveredCount / totalItems) * 100}%` }}
-                        transition={{ duration: 1, ease: 'easeOut' }}
-                     />
-                 </div>
-             </div>
-             <div className="flex flex-col items-end shrink-0 pl-6 border-l border-white/10">
-                 <span className="text-3xl font-black italic">{discoveredCount} <span className="text-sm text-white/40 not-italic">/ {totalItems}</span></span>
-                 <span className="text-[10px] font-bold uppercase tracking-[2px] text-white/40">Chất đã tìm thấy</span>
-             </div>
-         </div>
-      </div>
-
       {/* Main Map Area */}
       <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar relative">
         <div className="flex flex-row items-center min-w-max min-h-full py-16 px-12 relative z-10">
@@ -212,12 +188,8 @@ const DiscoveryMap = ({ chemicals = [], reactions = [], discoveredFormulas = [] 
             animate={{ opacity: 1, scale: 1 }}
             className="shrink-0 relative z-10"
           >
-            <div className="px-8 py-6 bg-slate-900 text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-2xl border-l-[6px] border-viet-green select-none border-t border-r border-b border-white/10 flex items-center gap-4">
-              <span className="text-3xl">🧪</span>
-              <div className="flex flex-col">
-                  <span>Sổ Tay</span>
-                  <span className="text-viet-green">Khám Phá</span>
-              </div>
+            <div className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none">
+              🧪 VẬT CHẤT
             </div>
           </motion.div>
 
