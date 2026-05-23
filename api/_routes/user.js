@@ -267,7 +267,7 @@ router.post('/streak/recover', auth, async (req, res) => {
     const cost = 100 + (streakToRestore * 20);
     
     if (currentXP < cost) {
-      return res.status(400).json({ message: `Bạn cần ${cost} XP để khôi phục chuỗi ${streakToRestore} ngày. Hiện tại bạn chỉ có ${currentXP} XP.` });
+      return res.status(200).json({ success: false, message: `Bạn cần ${cost} XP để khôi phục chuỗi ${streakToRestore} ngày. Hiện tại bạn chỉ có ${currentXP} XP.` });
     }
 
     const updatedUser = await User.update(req.user.id, {
