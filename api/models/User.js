@@ -38,7 +38,8 @@ const mapUser = (user) => {
     todayOnlineMinutes: user.today_online_minutes || 0,
     todayLessonCompleted: user.today_lesson_completed || false,
     currentSessionId: user.current_session_id,
-    studyPlan: user.study_plan || { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true }
+    studyPlan: user.study_plan || { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true },
+    linkedAccounts: user.linked_accounts || {}
   };
 };
 
@@ -55,6 +56,10 @@ export const User = {
       query = query.eq('email', filter.email);
     } else if (filter.id) {
       query = query.eq('id', filter.id);
+    } else if (filter.googleId) {
+      query = query.eq('linked_accounts->>google', filter.googleId);
+    } else if (filter.telegramId) {
+      query = query.eq('linked_accounts->>telegram', filter.telegramId);
     }
 
     const { data: user, error: userError } = await query.maybeSingle();
@@ -155,6 +160,11 @@ export const User = {
     if (updateData.balancingProgress) {
       pgUpdateData.balancing_progress = updateData.balancingProgress;
       delete pgUpdateData.balancingProgress;
+    }
+
+    if (updateData.linkedAccounts) {
+      pgUpdateData.linked_accounts = updateData.linkedAccounts;
+      delete pgUpdateData.linkedAccounts;
     }
     
     // 1. Update Core User Data (excluding junction lists)

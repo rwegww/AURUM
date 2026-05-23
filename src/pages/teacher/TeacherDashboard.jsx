@@ -1,6 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { auth as firebaseAuth, googleProvider } from '@/lib/firebase';
+import { signInWithPopup } from 'firebase/auth';
 
 const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
   <motion.div
@@ -70,6 +73,22 @@ const TeacherDashboard = () => {
   const [classes, setClasses] = React.useState([]);
   const [summary, setSummary] = React.useState({ total_students: 0, active_assignments: 0 });
   const [loading, setLoading] = React.useState(true);
+  const { user, linkAccount } = useAuth();
+
+  const handleLinkGoogle = async () => {
+    try {
+      const result = await signInWithPopup(firebaseAuth, googleProvider);
+      const uid = result.user.uid;
+      const res = await linkAccount('google', uid);
+      if (res.success) {
+        alert('Liên kết Google thành công!');
+      } else {
+        alert(res.message);
+      }
+    } catch (err) {
+      alert('Lỗi liên kết Google: ' + err.message);
+    }
+  };
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -179,7 +198,64 @@ const TeacherDashboard = () => {
                />
              ))
            )}
-        </div>
+         </div>
+
+         {/* Linked Accounts */}
+         <div className="mt-12 bg-white rounded-[32px] border border-viet-border p-8 hover:shadow-md hover:border-viet-green/30 transition-all">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-600">
+                 <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2">
+                   <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" strokeLinecap="round" strokeLinejoin="round"/>
+                 </svg>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-viet-text">Tài khoản liên kết</h2>
+                <p className="text-sm font-medium text-viet-text-light">Liên kết tài khoản Google và Telegram để đăng nhập nhanh</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               {/* Google Link */}
+               <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50">
+                  <div className="flex items-center gap-3">
+                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-8 h-8" alt="Google" />
+                     <div>
+                       <div className="font-bold text-slate-800">Google</div>
+                       <div className="text-xs text-slate-500 font-medium">Đăng nhập nhanh bằng Google</div>
+                     </div>
+                  </div>
+                  {user?.linkedAccounts?.google ? (
+                    <div className="px-4 py-2 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-200">
+                      Đã liên kết
+                    </div>
+                  ) : (
+                    <button className="px-4 py-2 rounded-xl text-sm font-bold bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-viet-green hover:border-viet-green transition-all" onClick={handleLinkGoogle}>
+                      Liên kết
+                    </button>
+                  )}
+               </div>
+
+               {/* Telegram Link */}
+               <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50">
+                  <div className="flex items-center gap-3">
+                     <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" className="w-8 h-8" alt="Telegram" />
+                     <div>
+                       <div className="font-bold text-slate-800">Telegram</div>
+                       <div className="text-xs text-slate-500 font-medium">Đăng nhập qua Telegram Widget</div>
+                     </div>
+                  </div>
+                  {user?.linkedAccounts?.telegram ? (
+                    <div className="px-4 py-2 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-200">
+                      Đã liên kết
+                    </div>
+                  ) : (
+                    <button className="px-4 py-2 rounded-xl text-sm font-bold bg-[#24A1DE] text-white shadow-sm hover:bg-[#1d87ba] transition-all" onClick={() => alert('Vui lòng cấu hình Bot Token để sử dụng Telegram Widget')}>
+                      Liên kết
+                    </button>
+                  )}
+               </div>
+            </div>
+         </div>
       </div>
     </div>
   );

@@ -220,6 +220,43 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const loginWithTelegram = useCallback(async (telegramData) => {
+    try {
+      setLoading(true);
+      setAuthError(null);
+      
+      const res = await fetch('/api/auth/telegram-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(telegramData)
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (err) {
+        throw new Error(`Server status: ${res.status}`);
+      }
+
+      if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập Telegram');
+      
+      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+        ? crypto.randomUUID() 
+        : Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('sessionId', newSessionId);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('authType', 'custom');
+      const userData = await fetchProfile(data.token, true);
+      return { success: true, user: userData };
+    } catch (err) {
+      if (mountedRef.current) {
+        setLoading(false);
+        setAuthError(err.message);
+      }
+      return { success: false, message: err.message };
+    }
+  }, [fetchProfile]);
+
   const register = useCallback(async (username, password, email, role = 'student', teacherCode = '', grade = null) => {
     try {
       const res = await fetch('/api/auth/register', {
@@ -300,6 +337,32 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       console.error('Lỗi cập nhật profile:', err);
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
+
+  const linkAccount = useCallback(async (provider, accountId) => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/link-account', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ provider, accountId })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        if (mountedRef.current) {
+          setUser(prev => ({ ...prev, linkedAccounts: data.linkedAccounts }));
+        }
+        return { success: true, message: data.message };
+      } else {
+        throw new Error(data.message || 'Lỗi liên kết tài khoản');
+      }
+    } catch (err) {
       return { success: false, message: err.message };
     }
   }, [isLoggedIn, user]);
@@ -501,18 +564,20 @@ export const AuthProvider = ({ children }) => {
     login,
     magicLogin,
     loginWithGoogle,
+    loginWithTelegram,
     register,
     registerTeacher,
     logout,
     updateProgress,
     refreshUser,
     updateUser,
+    linkAccount,
     completeLessonSegment,
     recoverStreak,
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, loginWithTelegram, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

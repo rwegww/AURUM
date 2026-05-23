@@ -63,7 +63,8 @@ router.post('/google-firebase', async (req, res) => {
         level: user.level,
         inventory: user.inventory || { ingredients: [], craftedItems: [] },
         unlockedLessons: user.unlockedLessons,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        linkedAccounts: user.linkedAccounts || {}
       }
     });
   } catch (err) {
@@ -113,7 +114,8 @@ router.post('/register', async (req, res) => {
         role: user.role,
         xp: user.xp,
         level: user.level,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        linkedAccounts: user.linkedAccounts || {}
       }
     });
   } catch (err) {
@@ -239,11 +241,79 @@ router.post('/magic-login', async (req, res) => {
         level: user.level,
         inventory: user.inventory || { ingredients: [], craftedItems: [] },
         unlockedLessons: user.unlockedLessons,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        linkedAccounts: user.linkedAccounts || {}
       }
     });
   } catch (err) {
     res.status(401).json({ message: 'Link đăng nhập đã hết hạn hoặc không hợp lệ', error: err.message });
+  }
+});
+
+// Telegram Login
+router.post('/telegram-login', async (req, res) => {
+  try {
+    const data = req.body;
+    if (!data || !data.hash) return res.status(400).json({ message: 'Dữ liệu không hợp lệ' });
+
+    // Validate Telegram Data
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    if (!botToken) {
+      return res.status(500).json({ message: 'Hệ thống chưa cấu hình Telegram Bot' });
+    }
+
+    const { hash, ...userData } = data;
+    const secretKey = crypto.createHash('sha256').update(botToken).digest();
+    const dataCheckString = Object.keys(userData)
+      .sort()
+      .map(key => `${key}=${userData[key]}`)
+      .join('\n');
+    const hmac = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
+
+    if (hmac !== hash) {
+      return res.status(401).json({ message: 'Xác thực Telegram thất bại' });
+    }
+
+    // Auth Time Check
+    const authDate = parseInt(data.auth_date, 10);
+    const now = Math.floor(Date.now() / 1000);
+    if (now - authDate > 86400) {
+      return res.status(401).json({ message: 'Dữ liệu đăng nhập đã hết hạn' });
+    }
+
+    // Search user by telegram_id
+    const user = await User.findOne({ telegramId: data.id.toString() });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Không tìm thấy tài khoản liên kết với Telegram này. Vui lòng đăng nhập và liên kết tài khoản trước.' });
+    }
+
+    const sessionId = crypto.randomUUID();
+    await User.update(user.id, { currentSessionId: sessionId });
+
+    const token = jwt.sign(
+      { id: user.id, role: user.role, sessionId },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        xp: user.xp,
+        level: user.level,
+        inventory: user.inventory || { ingredients: [], craftedItems: [] },
+        unlockedLessons: user.unlockedLessons,
+        createdAt: user.createdAt,
+        linkedAccounts: user.linkedAccounts || {}
+      }
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi đăng nhập Telegram', error: err.message });
   }
 });
 
@@ -283,7 +353,8 @@ router.post('/login', async (req, res) => {
         level: user.level,
         inventory: user.inventory || { ingredients: [], craftedItems: [] },
         unlockedLessons: user.unlockedLessons,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        linkedAccounts: user.linkedAccounts || {}
       }
     });
   } catch (err) {
