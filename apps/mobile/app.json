@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "AURUM",
+    "slug": "aurum-mobile",
+    "scheme": "aurum",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "../../public/logo.png",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "vn.aurum.mobile"
+    },
+    "android": {
+      "package": "vn.aurum.mobile",
+      "adaptiveIcon": {
+        "foregroundImage": "../../public/logo.png",
+        "backgroundColor": "#FFFBF0"
+      },
+      "predictiveBackGestureEnabled": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-document-picker",
+        {
+          "iCloudContainerEnvironment": "Production"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "AURUM cần quyền chọn ảnh để tải tài liệu minh chứng và học liệu."
+        }
+      ]
+    ],
+    "extra": {
+      "apiUrl": "https://chem-aurum.vercel.app/api",
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}

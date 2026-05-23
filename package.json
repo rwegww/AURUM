@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "apps/mobile",
+    "packages/shared"
+  ],
   "engines": {
     "node": "20.x"
   },
@@ -14,6 +18,10 @@
     "lint": "eslint .",
     "test": "vitest run",
     "preview": "vite preview",
+    "mobile:start": "npm --workspace @aurum/mobile run start",
+    "mobile:android": "npm --workspace @aurum/mobile run android",
+    "mobile:ios": "npm --workspace @aurum/mobile run ios",
+    "mobile:typecheck": "npm --workspace @aurum/mobile run typecheck",
     "db:backup": "node scripts/db/backupSupabaseRest.js",
     "db:migrate:restructure": "node scripts/db/runRestructureMigration.js",
     "db:validate:restructure": "node scripts/db/validateRestructure.js",
