@@ -147,7 +147,7 @@ const ClassDetail = () => {
                    >
                       <option value="">👥 Cả lớp</option>
                       {members.map(m => (
-                        <option key={m.student.id} value={m.student.id}>👤 {m.student.username}</option>
+                        <option key={m.id} value={m.id}>👤 {m.username}</option>
                       ))}
                    </select>
 
