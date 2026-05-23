@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const MediaUploader = ({ onUploadSuccess, type = 'image' }) => {
   const [uploading, setUploading] = useState(false);
@@ -18,23 +19,9 @@ const MediaUploader = ({ onUploadSuccess, type = 'image' }) => {
     reader.onloadend = () => setPreview(reader.result);
     reader.readAsDataURL(file);
 
-    const formData = new FormData();
-    formData.append('file', file);
-
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('/api/media/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Lỗi tải lên');
-
-      onUploadSuccess(data.url);
+      const uploadData = await uploadToCloudinary(file, 'chemistry-odyssey/admin');
+      onUploadSuccess(uploadData.url);
       setUploading(false);
     } catch (err) {
       setError(err.message);

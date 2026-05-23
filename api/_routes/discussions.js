@@ -6,8 +6,6 @@ import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
-// Middleware to verify JWT
-
 // --- DISCUSSION ROUTES ---
 
 // Get discussions for a lesson
