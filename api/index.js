@@ -12,7 +12,6 @@ import lessonsRouter from './_routes/lessons.js';
 import materialsRouter from './_routes/materials.js';
 import elementsRouter from './_routes/elements.js';
 import labRouter from './_routes/lab.js';
-import analyzeRouter from './_routes/analyze_v3.js';
 import missionsRouter from './_routes/missions.js';
 import classesRouter from './_routes/classes.js';
 import discussionsRouter from './_routes/discussions.js';
@@ -34,10 +33,31 @@ app.use('/api/lessons', lessonsRouter);
 app.use('/api/materials', materialsRouter);
 app.use('/api/elements', elementsRouter);
 app.use('/api/lab', labRouter);
-app.use('/api/analyze', analyzeRouter);
 app.use('/api/missions', missionsRouter);
 app.use('/api/classes', classesRouter);
 app.use('/api/discussions', discussionsRouter);
+
+// Analyze route — lazy-loaded per-request to prevent Vercel cold-start crash
+// (pdf-parse, word-extractor, multer are heavy native modules that may fail on serverless)
+let _analyzeRouter = null;
+let _analyzeLoadError = null;
+app.use('/api/analyze', async (req, res, next) => {
+  if (_analyzeLoadError) {
+    return res.status(503).json({ message: 'Dịch vụ phân tích tài liệu tạm thời không khả dụng.', error: _analyzeLoadError });
+  }
+  if (!_analyzeRouter) {
+    try {
+      const mod = await import('./_routes/analyze_v3.js');
+      _analyzeRouter = mod.default;
+      console.log('✅ Analyze router lazy-loaded on first request.');
+    } catch (err) {
+      _analyzeLoadError = err.message;
+      console.error('⚠️ Analyze router failed to load:', err.message);
+      return res.status(503).json({ message: 'Dịch vụ phân tích tài liệu tạm thời không khả dụng.', error: err.message });
+    }
+  }
+  return _analyzeRouter(req, res, next);
+});
 
 // Basic Health Check
 app.get('/api/health', (req, res) => {
