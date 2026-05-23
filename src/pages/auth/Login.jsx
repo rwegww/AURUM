@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/auth/AuthLayout';
-import TelegramLoginButton from '@/components/auth/TelegramLoginButton';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +11,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, magicLogin, loginWithGoogle, loginWithTelegram, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
+  const { login, magicLogin, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const displayError = error || authError;
@@ -241,14 +241,7 @@ const Login = () => {
              Google
           </button>
 
-          <div className="w-full h-12 md:h-11 rounded-xl md:rounded-2xl flex items-center justify-center overflow-hidden">
-             <TelegramLoginButton 
-               botName="Aurumchembot"
-               onAuth={loginWithTelegram}
-               buttonSize="large"
-               cornerRadius={16}
-             />
-          </div>
+
         </div>
 
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
-import TelegramLoginButton from '@/components/auth/TelegramLoginButton';
+
 
 const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
   <motion.div
@@ -92,14 +92,7 @@ const TeacherDashboard = () => {
     }
   };
 
-  const handleLinkTelegram = async (telegramData) => {
-    try {
-      await linkAccount('telegram', telegramData);
-      alert('Liên kết Telegram thành công!');
-    } catch (err) {
-      alert('Lỗi liên kết Telegram: ' + err.message);
-    }
-  };
+
 
   React.useEffect(() => {
     const checkGoogleLink = async () => {
@@ -244,7 +237,7 @@ const TeacherDashboard = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
                {/* Google Link */}
                <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50">
                   <div className="flex items-center gap-3">
@@ -265,30 +258,7 @@ const TeacherDashboard = () => {
                   )}
                </div>
 
-               {/* Telegram Link */}
-               <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-200 bg-slate-50">
-                  <div className="flex items-center gap-3">
-                     <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" className="w-8 h-8" alt="Telegram" />
-                     <div>
-                       <div className="font-bold text-slate-800">Telegram</div>
-                       <div className="text-xs text-slate-500 font-medium">Đăng nhập qua Telegram Widget</div>
-                     </div>
-                  </div>
-                  {user?.linkedAccounts?.telegram ? (
-                    <div className="px-4 py-2 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-200">
-                      Đã liên kết
-                    </div>
-                  ) : (
-                    <div className="overflow-hidden rounded-xl h-10 flex items-center">
-                      <TelegramLoginButton 
-                         botName="Aurumchembot"
-                         onAuth={handleLinkTelegram}
-                         buttonSize="medium"
-                         cornerRadius={12}
-                      />
-                    </div>
-                  )}
-               </div>
+
             </div>
          </div>
       </div>

@@ -58,9 +58,7 @@ export const User = {
       query = query.eq('id', filter.id);
     } else if (filter.googleId) {
       query = query.eq('linked_accounts->>google', filter.googleId);
-    } else if (filter.telegramId) {
-      query = query.eq('linked_accounts->>telegram', filter.telegramId);
-    }
+
 
     const { data: user, error: userError } = await query.maybeSingle();
     if (userError) {
