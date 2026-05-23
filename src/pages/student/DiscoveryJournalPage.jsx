@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import DiscoveryMap from '@/components/lab/DiscoveryMap';
 import { useAuth } from '@/context/AuthContext';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
 
 const normalize = (f) => {
   if (!f) return "";
@@ -12,7 +11,6 @@ const normalize = (f) => {
 
 const DiscoveryJournalPage = () => {
   const { user, isLoggedIn } = useAuth();
-  const navigate = useNavigate();
   const [dbChemicals, setDbChemicals] = useState([]);
   const [dbReactions, setDbReactions] = useState([]);
   const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
@@ -87,7 +85,7 @@ const DiscoveryJournalPage = () => {
   );
 
   return (
-    <div className="h-screen bg-[#0d0e12] flex flex-col font-sans text-white pt-20">
+    <div className="h-screen bg-[#0d0e12] flex flex-col font-sans text-white">
       <div className="p-6 md:p-8 border-b border-white/10 flex justify-between items-center bg-black/40 shrink-0">
         <div className="flex items-center gap-12">
           <div>
@@ -117,8 +115,8 @@ const DiscoveryJournalPage = () => {
           </div>
         </div>
 
-        <button onClick={() => navigate('/lab/simulator')} className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all text-xs font-bold uppercase tracking-widest border border-white/10 shadow-lg">
-          Quay lại phòng Lab
+        <button onClick={() => window.close()} className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded-2xl flex items-center justify-center transition-all text-xs font-bold uppercase tracking-widest border border-white/10 shadow-lg">
+          Đóng trang
         </button>
       </div>
       <div className="flex-1 overflow-hidden relative">

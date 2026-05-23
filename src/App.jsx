@@ -99,6 +99,7 @@ function AppContent() {
   );
 
   const isManagementPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/teacher');
+  const isStandalonePage = location.pathname === '/lab/discovery';
 
   const functionalPaths = [
     '/lab', 
@@ -115,7 +116,7 @@ function AppContent() {
 
   return (
     <>
-      {!isAuthPage && !isImmersivePage && !isManagementPage && <Navbar />}
+      {!isAuthPage && !isImmersivePage && !isManagementPage && !isStandalonePage && <Navbar />}
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* ... standard routes ... */}
@@ -180,7 +181,7 @@ function AppContent() {
       </Suspense>
       
       {/* Floating Global UI */}
-      {!isManagementPage && <FeedbackButton />}
+      {!isManagementPage && !isStandalonePage && <FeedbackButton />}
     </>
   );
 }
