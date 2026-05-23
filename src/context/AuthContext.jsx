@@ -128,6 +128,36 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const magicLogin = useCallback(async (tokenParam) => {
+    try {
+      const res = await fetch('/api/auth/magic-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: tokenParam })
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        throw new Error(`Server status: ${res.status}`);
+      }
+
+      if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
+      
+      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
+        ? crypto.randomUUID() 
+        : Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('sessionId', newSessionId);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('authType', 'custom');
+      const userData = await fetchProfile(data.token, true);
+      return { success: true, user: userData };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  }, [fetchProfile]);
+
   const login = useCallback(async (username, password) => {
     try {
       const res = await fetch('/api/auth/login', {
@@ -469,6 +499,7 @@ export const AuthProvider = ({ children }) => {
     isLoggedIn,
     loading,
     login,
+    magicLogin,
     loginWithGoogle,
     register,
     registerTeacher,
@@ -481,7 +512,7 @@ export const AuthProvider = ({ children }) => {
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

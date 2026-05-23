@@ -204,6 +204,49 @@ router.post('/register-teacher', async (req, res) => {
   }
 });
 
+// Magic Login via Email Link
+router.post('/magic-login', async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ message: 'Token missing' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded.magicLogin) {
+      return res.status(400).json({ message: 'Token không hợp lệ cho tính năng này' });
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+    }
+
+    const sessionId = crypto.randomUUID();
+    await User.update(user.id, { currentSessionId: sessionId });
+
+    const authToken = jwt.sign(
+      { id: user.id, role: user.role, sessionId },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token: authToken,
+      user: {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        xp: user.xp,
+        level: user.level,
+        inventory: user.inventory || { ingredients: [], craftedItems: [] },
+        unlockedLessons: user.unlockedLessons,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (err) {
+    res.status(401).json({ message: 'Link đăng nhập đã hết hạn hoặc không hợp lệ', error: err.message });
+  }
+});
+
 // Login
 router.post('/login', async (req, res) => {
   try {

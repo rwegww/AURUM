@@ -10,7 +10,7 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
+  const { login, magicLogin, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const displayError = error || authError;
@@ -27,8 +27,27 @@ const Login = () => {
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const urlError = params.get('error');
+    const magicToken = params.get('token');
+
     if (urlError) {
       setError(decodeURIComponent(urlError));
+    }
+
+    if (magicToken) {
+      setLoading(true);
+      magicLogin(magicToken).then(result => {
+        if (result.success) {
+          if (result.user?.role === 'admin') navigate('/admin');
+          else if (result.user?.role === 'teacher') navigate('/teacher');
+          else navigate('/');
+        } else {
+          setError(result.message || 'Link đăng nhập tự động không hợp lệ');
+          setLoading(false);
+          // Xóa token khỏi url
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      });
+      return;
     }
 
     const savedEmail = localStorage.getItem('rememberEmail');
