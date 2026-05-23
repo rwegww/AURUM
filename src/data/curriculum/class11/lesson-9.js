@@ -103,9 +103,9 @@ export const bai9 = {
     {
       "id": "v1",
       "title": "Ôn tập chương 2: Nitrogen - Sulfur",
-      "url": "https://www.youtube.com/watch?v=GCsDlcJla__",
-      "thumbnail": "https://img.youtube.com/vi/GCsDlcJla__/0.jpg",
-      "description": "Tổng kết kiến thức trọng tâm chương 2 and giải bài tập tự luyện (Tech12h)."
+      "url": "https://www.youtube.com/watch?v=2fZmqTFR5Ps",
+      "thumbnail": "https://img.youtube.com/vi/2fZmqTFR5Ps/0.jpg",
+      "description": "Tổng kết kiến thức trọng tâm chương 2 and giải bài tập tự luyện (Loigiaihay)."
     }
   ],
   "practiceModules": [],

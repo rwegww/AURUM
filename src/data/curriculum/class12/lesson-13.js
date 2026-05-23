@@ -92,8 +92,8 @@ export const bai13 = {
     {
       "id": "v1",
       "title": "Bài giảng: Vật liệu Polymer",
-      "url": "https://www.youtube.com/watch?v=1F9-o_e6A0o",
-      "thumbnail": "https://img.youtube.com/vi/1F9-o_e6A0o/0.jpg",
+      "url": "https://www.youtube.com/watch?v=iYpVgMWlkg0",
+      "thumbnail": "https://img.youtube.com/vi/iYpVgMWlkg0/0.jpg",
       "description": "Tìm hiểu về chất dẻo, tơ sợi, cao su and keo dán (VietJack)."
     }
   ],

@@ -26,10 +26,12 @@ const TheoryRenderer = ({ modules }) => {
   const markdownPlugins = [remarkGfm, remarkMath];
   const rehypePlugins = [rehypeKatex];
 
-  // Helper to fix literal \n strings in content
+  // Helper to fix literal \n strings in content and provide hard breaks
   const formatContent = (text) => {
     if (typeof text !== 'string') return text;
-    return text.replace(/\\n/g, '\n');
+    // Replace \n with two spaces and a newline for markdown hard break
+    // Also remove any stray trailing backslashes that might have been added
+    return text.replace(/\\n/g, '  \n').replace(/\\\s*$/gm, '');
   };
 
   return (
@@ -40,19 +42,23 @@ const TheoryRenderer = ({ modules }) => {
         switch (type) {
           case 'heading': {
             const HeadingTag = content.level || 'h2';
+            // Strip leading numbers like "1. ", "2. ", "II. "
+            let headingText = formatContent(content.text);
+            headingText = headingText.replace(/^(?:\d+|[IVXLCDM]+)[\.\)]\s*/i, '');
+            
             return (
               <HeadingTag 
                 key={index} 
                 className={`text-viet-green font-black tracking-tight mt-12 first:mt-0 ${
                   content.level === 'h1' ? 'text-4xl border-b-2 border-viet-green/10 pb-4 mb-8' : 
-                  content.level === 'h3' ? 'text-2xl mt-8' : 'text-3xl mb-6'
+                  content.level === 'h3' ? 'text-2xl mt-8' : 'text-[28px] mb-6'
                 }`}
               >
                 <ReactMarkdown 
                   remarkPlugins={markdownPlugins}
                   rehypePlugins={rehypePlugins}
                 >
-                  {formatContent(content.text)}
+                  {headingText}
                 </ReactMarkdown>
               </HeadingTag>
             );
@@ -91,12 +97,13 @@ const TheoryRenderer = ({ modules }) => {
             return (
               <div 
                 key={index} 
-                className="bg-blue-50/50 border-l-8 border-blue-500 p-8 rounded-2xl my-8 shadow-sm"
+                className="bg-slate-50 border-l-[6px] border-blue-500 p-6 rounded-2xl my-8 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-blue-500/10 rounded-full flex items-center justify-center shrink-0">
                     <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <circle cx="12" cy="12" r="9" strokeWidth="2" />
+                      <circle cx="12" cy="12" r="3" fill="currentColor" />
                     </svg>
                   </div>
                   <h4 className="font-black text-blue-700 text-lg uppercase tracking-wider">
@@ -123,10 +130,10 @@ const TheoryRenderer = ({ modules }) => {
             return (
               <div 
                 key={index} 
-                className="bg-orange-50 border-l-8 border-orange-500 p-8 rounded-2xl my-8 shadow-sm"
+                className="bg-orange-50 border-l-[6px] border-orange-500 p-6 rounded-2xl my-8 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center shrink-0">
                     <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>

@@ -101,8 +101,8 @@ export const bai9 = {
     {
       "id": "v1",
       "title": "Bài giảng: Amino acid and Peptide",
-      "url": "https://www.youtube.com/watch?v=R9E-H8wHq_0",
-      "thumbnail": "https://img.youtube.com/vi/R9E-H8wHq_0/0.jpg",
+      "url": "https://www.youtube.com/watch?v=c1MyZSe2H3Y",
+      "thumbnail": "https://img.youtube.com/vi/c1MyZSe2H3Y/0.jpg",
       "description": "Cấu tạo, tính chất của amino acid and khái niệm về peptide (VietJack)."
     }
   ],

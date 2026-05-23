@@ -92,8 +92,8 @@ export const bai10 = {
     {
       "id": "v1",
       "title": "Bài giảng: Protein and Enzyme",
-      "url": "https://www.youtube.com/watch?v=F0Oq2fXpU-M",
-      "thumbnail": "https://img.youtube.com/vi/F0Oq2fXpU-M/0.jpg",
+      "url": "https://www.youtube.com/watch?v=G3Yu1986BtA",
+      "thumbnail": "https://img.youtube.com/vi/G3Yu1986BtA/0.jpg",
       "description": "Cấu trúc, tính chất của protein and vai trò của enzyme trong cơ thể (VietJack)."
     }
   ],
