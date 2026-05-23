@@ -175,20 +175,20 @@ const Home = () => {
             className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16"
           >
             {/* Left */}
-            <div className="w-full lg:w-[55%] lg:flex-none text-center lg:text-left min-w-0">
+            <div className="w-full lg:w-[55%] lg:flex-none text-center min-w-0">
               <motion.h1
                 variants={fadeUp}
-                className="font-rubik text-[clamp(2.2rem,4.5vw+0.8rem,4rem)] font-black text-[#1a1a1a] leading-[1.08] tracking-tight mb-4 text-balance"
+                className="font-rubik text-[clamp(2.2rem,4.5vw+0.8rem,4rem)] font-black text-[#1a1a1a] leading-[1.08] tracking-tight mb-4 text-balance break-words"
               >
-                <span className="whitespace-normal md:whitespace-nowrap">{t('home.hero_title')}</span> <br />
+                <span>{t('home.hero_title')}</span> <br />
                 <span className="text-viet-green">{t('home.hero_title_highlight')}</span>
               </motion.h1>
 
-              <motion.p variants={fadeUp} className="text-xl text-gray-500 mb-8 max-w-xl mx-auto lg:mx-0 font-medium text-balance">
+              <motion.p variants={fadeUp} className="text-xl text-gray-500 mb-8 max-w-xl mx-auto font-medium text-balance">
                 {t('home.hero_statement')}
               </motion.p>
 
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/classroom"
                   className="bg-viet-green hover:bg-[#65a32e] hover:scale-105 transition-all text-white text-lg font-black px-8 py-4 rounded-[1.5rem] flex items-center justify-center gap-3 shadow-[0_4px_20px_0_rgba(118,192,52,0.4)]"
