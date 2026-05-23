@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { CHEM_FORMULAS, QUICK_FORMULAS, UNIT_CONVERSIONS } from '@/data/chemFormulas';
 import { UniversalFormulaSim } from '@/components/simulations';
 import { activityService } from '@/services/ActivityService';
+import { Calculator, Microscope, ClipboardList } from 'lucide-react';
 
 const CATEGORY_ICONS = {
   basic: (
@@ -76,7 +77,7 @@ const ChemCalculator = () => {
         type: 'calculation',
         label: `Tính toán: ${selectedFormula.name}`,
         description: `Đã tính toán thành công công thức ${selectedFormula.formula}`,
-        icon: '🧮',
+        icon: <Calculator className="w-4 h-4 inline" />,
         link: '/calculator'
       });
     } else {
@@ -104,16 +105,16 @@ const ChemCalculator = () => {
         {/* Cụm Nút chức năng */}
         <div className="flex gap-2 mb-8 flex-wrap">
           <button onClick={() => { setMode('experiment'); setSelectedFormula(null); setResult(null); }}
-            className={`px-6 py-3 rounded-2xl text-[13px] font-black uppercase tracking-wider transition-all ${mode === 'experiment' ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-white text-viet-text-light border-2 border-viet-border hover:border-viet-green/30'}`}>
-            🔬 Mô phỏng tương tác
+            className={`px-6 py-3 rounded-2xl text-[13px] font-black uppercase tracking-wider transition-all flex items-center gap-2 ${mode === 'experiment' ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-white text-viet-text-light border-2 border-viet-border hover:border-viet-green/30'}`}>
+            <Microscope className="w-4 h-4" /> Mô phỏng tương tác
           </button>
           <button onClick={() => { setMode('simple'); setSelectedFormula(null); setResult(null); }}
-            className={`px-6 py-3 rounded-2xl text-[13px] font-black uppercase tracking-wider transition-all ${mode === 'simple' ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-white text-viet-text-light border-2 border-viet-border hover:border-viet-green/30'}`}>
-            🧮 Tính nhanh (Cơ bản)
+            className={`px-6 py-3 rounded-2xl text-[13px] font-black uppercase tracking-wider transition-all flex items-center gap-2 ${mode === 'simple' ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20' : 'bg-white text-viet-text-light border-2 border-viet-border hover:border-viet-green/30'}`}>
+            <Calculator className="w-4 h-4" /> Tính nhanh (Cơ bản)
           </button>
           <button onClick={() => setShowQuickRef(!showQuickRef)}
-            className={`px-6 py-3 rounded-2xl text-[13px] font-black uppercase tracking-wider transition-all ml-auto ${showQuickRef ? 'bg-amber-500 text-white' : 'bg-white text-viet-text-light border-2 border-viet-border'}`}>
-            📋 Bảng tra cứu & Đổi đơn vị
+            className={`px-6 py-3 rounded-2xl text-[13px] font-black uppercase tracking-wider transition-all ml-auto flex items-center gap-2 ${showQuickRef ? 'bg-amber-500 text-white' : 'bg-white text-viet-text-light border-2 border-viet-border'}`}>
+            <ClipboardList className="w-4 h-4" /> Bảng tra cứu & Đổi đơn vị
           </button>
         </div>
 
@@ -181,8 +182,8 @@ const ChemCalculator = () => {
           <div className="lg:col-span-8">
             {!selectedFormula ? (
               <div className="viet-card p-12 text-center flex flex-col items-center justify-center min-h-[500px]">
-                <div className="text-[64px] mb-6">
-                  {mode === 'experiment' ? '🔬' : '🧮'}
+                <div className="flex justify-center mb-6">
+                  {mode === 'experiment' ? <Microscope className="w-16 h-16 text-viet-text" /> : <Calculator className="w-16 h-16 text-viet-text" />}
                 </div>
                 <h2 className="text-[22px] font-black text-viet-text mb-3">Chọn một công thức hóa học</h2>
                 <p className="text-[14px] text-viet-text-light max-w-md mx-auto leading-relaxed">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules, elementColors, elementRadii } from '../../data/molecules';
 import { useAuth } from '@/context/AuthContext';
+import { Microscope } from 'lucide-react';
 
 const normalize = (f) => {
   if (!f) return "";
@@ -338,7 +339,7 @@ const MoleculeViewer = () => {
 
   if (synchronizedMolecules.length === 0) return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[600px] text-center p-8">
-      <div className="text-6xl mb-6">🔬</div>
+      <div className="flex justify-center mb-6"><Microscope className="w-16 h-16 text-viet-text" /></div>
       <h2 className="text-2xl font-black text-viet-text italic uppercase mb-2">Thư viện đang trống</h2>
       <p className="text-viet-text-light font-bold max-w-md mx-auto">
         Vào "Mô phỏng phản ứng" để khám phá thêm các chất mới. Mỗi chất bạn phát hiện sẽ xuất hiện tại đây dưới dạng mô hình 3D.

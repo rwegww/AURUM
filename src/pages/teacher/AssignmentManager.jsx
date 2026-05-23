@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
+import { ClipboardList } from 'lucide-react';
 
 const AssignmentManager = () => {
     const [assignments, setAssignments] = useState([]);
@@ -465,7 +466,7 @@ const AssignmentManager = () => {
                                         <div className="mt-8 pt-8 border-t-4 border-viet-green/20 space-y-6">
                                             <div className="flex items-center justify-between bg-emerald-50 p-4 rounded-2xl border border-viet-green/20">
                                                 <div>
-                                                   <h3 className="text-sm font-black text-viet-text uppercase tracking-widest">📋 DANH SÁCH CÂU HỎI ({parsedQuestions.length})</h3>
+                                                   <h3 className="text-sm font-black text-viet-text uppercase tracking-widest flex items-center"><ClipboardList className="w-5 h-5 mr-2" /> DANH SÁCH CÂU HỎI ({parsedQuestions.length})</h3>
                                                    <p className="text-[10px] font-bold text-viet-green uppercase mt-1">Format 2025: Trắc nghiệm, Đúng/Sai, Trả lời ngắn</p>
                                                 </div>
                                                 <div className="flex gap-2">
@@ -682,7 +683,7 @@ const AssignmentManager = () => {
                                                 <div className="mt-4 p-5 bg-white rounded-3xl border-2 border-viet-green shadow-xl shadow-viet-green/5 space-y-6">
                                                     <div className="space-y-4">
                                                         <h4 className="text-[10px] font-black text-viet-text uppercase tracking-widest border-b border-slate-100 pb-2 flex items-center gap-2">
-                                                            <span>📋</span> Chi tiết bài làm
+                                                            <ClipboardList className="w-4 h-4" /> Chi tiết bài làm
                                                         </h4>
                                                         <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
                                                             {viewingSubmissions.questions.map((q, qIdx) => {

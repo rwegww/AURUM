@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { molecules } from '../../data/molecules';
 import { elements } from '../../data/elements';
 import { craftableItems } from '../../data/labInventory';
-import { CheckCircle2, Lock, ChevronRight, Activity, ArrowRight, Plus } from 'lucide-react';
+import { CheckCircle2, Lock, ChevronRight, Activity, ArrowRight, Plus, Microscope } from 'lucide-react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 // Helper to normalize formulas (H₂ -> H2)
@@ -481,7 +481,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                   </div>
                   <div className="space-y-4">
                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-white/50">🔬</div>
+                        <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-white/50"><Microscope size={16} /></div>
                         <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[4px]">Tính chất & Mô tả</h4>
                      </div>
                      <div className="bg-white/5 p-6 rounded-[24px] border border-white/5">
