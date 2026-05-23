@@ -6,6 +6,7 @@ import LeaderboardSection from '@/components/home/LeaderboardSection';
 import Footer from '@/components/common/Footer';
 import { Play, FlaskConical, Trophy, BookOpen, Users, Star, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 
 // --- Reused SVG Graphics (Simplified for Bento) ---
 
@@ -123,6 +124,7 @@ const BentoCard = ({ title, highlight, description, linkText, linkUrl, graphic, 
 
 const Home = () => {
   const { t, i18n } = useTranslation();
+  const { isLoggedIn } = useAuth();
   const [testimonials, setTestimonials] = React.useState([]);
 
   React.useEffect(() => {
@@ -395,21 +397,23 @@ const Home = () => {
       </div>
 
       {/* --- FINAL CTA --- */}
-      <section className="py-24 bg-viet-green relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/icons.svg')] bg-repeat bg-[length:100px_100px]"></div>
-        <div className="max-w-[800px] mx-auto px-6 relative z-10 text-center">
-          <h2 className="font-rubik text-4xl md:text-6xl font-black text-white mb-6">
-            {t('home.final_cta.title')}
-          </h2>
-          <p className="text-xl text-white/90 font-medium mb-10 max-w-2xl mx-auto">
-            {t('home.final_cta.subtitle')}
-          </p>
-          <Link to="/login" className="bg-white text-viet-green border-2 border-[#1a1a1a] border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all text-xl font-black px-12 py-6 rounded-[1.5rem] inline-flex items-center justify-center gap-3">
-            {t('home.final_cta.button')}
-            <Zap className="fill-current" size={24} />
-          </Link>
-        </div>
-      </section>
+      {!isLoggedIn && (
+        <section className="py-24 bg-viet-green relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[url('/icons.svg')] bg-repeat bg-[length:100px_100px]"></div>
+          <div className="max-w-[800px] mx-auto px-6 relative z-10 text-center">
+            <h2 className="font-rubik text-4xl md:text-6xl font-black text-white mb-6">
+              {t('home.final_cta.title')}
+            </h2>
+            <p className="text-xl text-white/90 font-medium mb-10 max-w-2xl mx-auto">
+              {t('home.final_cta.subtitle')}
+            </p>
+            <Link to="/login" className="bg-white text-viet-green border-2 border-[#1a1a1a] border-b-4 hover:bg-gray-50 active:border-b-0 active:translate-y-[4px] transition-all text-xl font-black px-12 py-6 rounded-[1.5rem] inline-flex items-center justify-center gap-3">
+              {t('home.final_cta.button')}
+              <Zap className="fill-current" size={24} />
+            </Link>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
