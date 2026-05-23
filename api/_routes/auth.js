@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Feedback from '../models/Feedback.js';
 import { firebaseAdmin } from '../lib/firebaseAdmin.js';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
