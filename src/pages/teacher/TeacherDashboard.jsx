@@ -281,7 +281,7 @@ const TeacherDashboard = () => {
                   ) : (
                     <div className="overflow-hidden rounded-xl h-10 flex items-center">
                       <TelegramLoginButton 
-                         botName="Aurumchemistrybot"
+                         botName="Aurumchembot"
                          onAuth={handleLinkTelegram}
                          buttonSize="medium"
                          cornerRadius={12}
