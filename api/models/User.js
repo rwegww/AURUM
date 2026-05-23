@@ -197,8 +197,13 @@ export const User = {
         .update(pgUpdateData)
         .eq('id', id);
       if (error) {
-        console.error('[User.update] Supabase error:', error);
-        throw error;
+        // Gracefully handle missing columns (e.g. current_session_id, linked_accounts, etc.)
+        if (error.message?.includes('Could not find the column') || error.code === '42703') {
+          console.warn('[User.update] Column missing in users table, skipping update:', error.message);
+        } else {
+          console.error('[User.update] Supabase error:', error);
+          throw error;
+        }
       }
     }
 
