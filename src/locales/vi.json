@@ -550,7 +550,8 @@
         "summary": "Tổng hợp công thức",
         "questions": "10 Câu",
         "time": "30 Giây"
-      }
+      },
+      "practice_room": "Vào Phòng Chơi Thử"
     },
     "create_room": {
       "title": "MỞ SẢNH <1>QUYẾT ĐẤU</1>",
@@ -616,6 +617,9 @@
       "medium": "Vừa (Học viên)",
       "hard": "Khó (Thần Sáng)",
       "super": "Tối Thượng"
+    },
+    "practice": {
+      "title": "Phòng Chơi Thử"
     }
   },
   "common": {
