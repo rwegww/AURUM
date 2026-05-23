@@ -21,135 +21,135 @@
     "feedback": "Hòm thư góp ý Pháp thuật"
   },
   "home": {
-    "hero_title": "BẬC THẦY GIẢ KIM",
-    "hero_title_highlight": "PHÙ THỦY",
-    "hero_statement": "Học chế tạo độc dược, làm chủ các phản ứng ma pháp và quyết đấu tại Học viện Aurum.",
-    "hero_image_alt": "Học giả kim thuật cùng Aurum",
-    "hero_badge_gamification": "Hệ Phù Thủy",
-    "hero_badge_safe_lab": "Vạc Ma Pháp An Toàn",
-    "enter_classroom": "Vào Đại Sảnh Đường",
-    "enter_lab": "Toàn bộ Lò Giả Kim",
+    "hero_title": "HÀNH TRÌNH HÓA HỌC",
+    "hero_title_highlight": "SẮC VIỆT",
+    "hero_statement": "Cùng Aurum khám phá phản ứng, nguyên tố và phòng thí nghiệm ảo qua một hành trình học tập lấy cảm hứng từ văn hoá Việt.",
+    "hero_image_alt": "Hành trình Hóa học lấy cảm hứng từ Việt Nam",
+    "hero_badge_gamification": "Học qua thử thách",
+    "hero_badge_safe_lab": "Phòng lab an toàn",
+    "enter_classroom": "Bắt đầu hành trình",
+    "enter_lab": "Vào phòng thí nghiệm",
     "stats": {
       "students_count": "10.000+",
-      "students_label": "Phù thủy tập sự",
+      "students_label": "Học viên Việt Nam",
       "schools_count": "50+",
-      "schools_label": "Học viện liên kết",
+      "schools_label": "Lớp học đồng hành",
       "lessons_count": "1.000+",
-      "lessons_label": "Bài học Độc dược"
+      "lessons_label": "Bài học Hóa học"
     },
     "features": {
       "journey": {
-        "badge": "Hành Trình Pháp Thuật",
-        "title": "Hành trình Pháp thuật",
-        "highlight": "Khai mở Linh lực",
-        "desc": "Bài học phép thuật từ Độc dược sơ cấp tới Giả kim cao cấp.",
-        "desc_long": "Từ lý thuyết độc dược cơ bản đến các ma pháp chuyên sâu của Đại pháp sư. Lộ trình được thiết kế cân bằng giữa thực hành và lý thuyết.",
-        "link": "Khám phá bản đồ học tập",
-        "image_alt": "Hành trình ma pháp"
+        "badge": "Lộ Trình",
+        "title": "Lộ trình học tập",
+        "highlight": "Đi qua bản đồ tri thức",
+        "desc": "Từ lớp 8 đến lớp 12, mỗi chặng học mở ra một mảng kiến thức Hóa học gần gũi và có hệ thống.",
+        "desc_long": "Từ lớp 8 đến lớp 12, Aurum dẫn bạn đi qua các chủ đề Hóa học theo từng chặng rõ ràng: nguyên tử, phản ứng, dung dịch, hữu cơ và ứng dụng đời sống. Mỗi bài học gắn với hình ảnh Việt Nam để việc học dễ nhớ hơn.",
+        "link": "Khám phá lộ trình",
+        "image_alt": "Bản đồ tri thức Hóa học phong cách Việt Nam"
       },
       "lab": {
-        "badge": "Vạc Pha Chế Ảo",
-        "title": "Lò pha chế độc dược",
-        "highlight": "Vạc ma pháp 3D",
-        "desc": "Pha chế độc dược và quan sát phản ứng ma thuật 3D an toàn, không lo nổ vạc.",
-        "desc_long": "Thực hành chế tạo các loại thuốc độc đáo nhất thế giới phù thủy trong lò phản ứng 3D chân thực, an toàn tuyệt đối khỏi các tai nạn cháy nổ.",
-        "link": "Vào lò Giả kim",
-        "image_alt": "Vạc pha chế ảo 3D"
+        "badge": "Thực Hành",
+        "title": "Phòng thí nghiệm ảo",
+        "highlight": "Thử phản ứng an toàn",
+        "desc": "Quan sát hiện tượng, pha dung dịch và kiểm tra giả thuyết trong môi trường mô phỏng trực quan.",
+        "desc_long": "Phòng thí nghiệm ảo giúp học sinh thực hành phản ứng, nhận biết chất và quan sát hiện tượng một cách an toàn. Các mô phỏng được thiết kế để hỗ trợ bài học trên lớp và khuyến khích tư duy thử nghiệm.",
+        "link": "Vào phòng thí nghiệm",
+        "image_alt": "Phòng thí nghiệm Hóa học an toàn trong trường học Việt Nam"
       },
       "arena": {
-        "badge": "Quyết Đấu",
-        "title": "Đấu trường phù thủy",
-        "highlight": "Quyết đấu Đũa phép",
-        "desc": "So tài độc dược thời gian thực, tích lũy điểm nhà và nhận cúp phù thủy.",
-        "desc_long": "Sân chơi kịch tính của các phù thủy tài năng. Thử thách bản thân với các trận đấu phép thuật thời gian thực, khẳng định vị thế trên bảng vàng.",
-        "link": "Quyết đấu ngay",
-        "image_alt": "Quyết đấu đũa phép"
+        "badge": "Thi Đấu",
+        "title": "Đấu trường kiến thức",
+        "highlight": "Thi đấu Hóa học",
+        "desc": "Trả lời nhanh, ghi điểm và rèn phản xạ với các câu hỏi Hóa học theo cấp độ.",
+        "desc_long": "Aurum biến luyện tập thành cuộc thi kiến thức thân thiện giữa các học viên. Bạn có thể kiểm tra tốc độ, độ chính xác và khả năng vận dụng công thức qua từng vòng thử thách.",
+        "link": "Thử sức ngay",
+        "image_alt": "Cuộc thi kiến thức Hóa học giữa học sinh Việt Nam"
       },
       "library": {
-        "title": "Bách khoa toàn thư",
-        "highlight": "Chính xác, huyền bí",
-        "desc": "Thư viện cổ thư ma pháp và Bảng tuần hoàn nguyên tố chi tiết.",
-        "link": "Vào Thư viện"
+        "title": "Bách khoa Hóa học",
+        "highlight": "Tra cứu chính xác",
+        "desc": "Kho học liệu, bảng tuần hoàn và tài liệu trực quan giúp bạn ôn tập nhanh khi cần.",
+        "link": "Vào thư viện"
       },
       "map": {
-        "badge": "Khám Phá",
-        "title": "Bản đồ Đạo tặc",
-        "highlight": "Chinh phục mật cảnh",
-        "desc": "Phiêu lưu qua các mật cảnh học thuật, thu thập cổ vật ma pháp, nâng cấp pháp lực và vinh danh tại Đại Sảnh Đường.",
+        "badge": "Khám Phá Việt Nam",
+        "title": "Bản đồ học tập",
+        "highlight": "Chinh phục từng chặng",
+        "desc": "Theo dõi tiến độ qua bản đồ Việt Nam cách điệu, mở khóa từng chủ đề và ghi lại dấu mốc học tập của bạn.",
         "link": "Bắt đầu hành trình",
-        "image_alt": "Khám phá mật cảnh ma pháp"
+        "image_alt": "Bản đồ Việt Nam cách điệu với các chặng học Hóa học"
       },
       "lessons": {
-        "badge": "Cẩm Nang",
-        "title": "Cẩm nang độc dược",
-        "highlight": "Trực quan & huyền bí",
-        "desc": "Lý thuyết độc dược được trình bày sống động qua các slide ma thuật tương tác và bài kiểm tra pháp thuật nhanh.",
-        "link": "Đọc cẩm nang",
-        "image_alt": "Cẩm nang độc dược sinh động"
+        "badge": "Học Liệu",
+        "title": "Bài giảng sinh động",
+        "highlight": "Dễ hiểu, dễ nhớ",
+        "desc": "Lý thuyết Hóa học được trình bày bằng hình ảnh, ví dụ đời sống và hoạt động tương tác ngắn.",
+        "link": "Xem bài giảng",
+        "image_alt": "Bài giảng Hóa học trực quan phong cách tranh Việt"
       }
     },
     "leaderboard": {
-      "badge": "Bảng Phong Thần",
+      "badge": "Bảng Vinh Danh",
       "title_main": "Vinh danh",
-      "title_highlight": "Phù Thủy Tối Thượng",
-      "rank_master": "Đại pháp sư",
+      "title_highlight": "Nhà khám phá nổi bật",
+      "rank_master": "Học viên tiêu biểu",
       "online": "Đang online",
       "offline": "Ngoại tuyến",
       "active": "hoạt động",
       "level": "Cấp độ",
       "activity": "Hoạt động:",
-      "disciple": "Học viên Ma pháp",
-      "transmitting": "Đang truyền tin bằng cú gửi từ Đấu Trường...",
-      "empty": "Đấu trường đang chờ đón những huyền thoại đầu tiên...",
-      "conquer_btn": "Ghi danh bảng vàng ngay"
+      "disciple": "Học viên Aurum",
+      "transmitting": "Đang tải bảng xếp hạng...",
+      "empty": "Bảng xếp hạng đang chờ những người học đầu tiên...",
+      "conquer_btn": "Tham gia thử thách ngay"
     },
     "social_proof": {
-      "text": "10.000+ Phù thủy tập sự",
-      "schools": "50+ Học viện liên kết"
+      "text": "10.000+ học viên Việt Nam",
+      "schools": "50+ lớp học đồng hành"
     },
     "how_it_works": {
       "badge": "Cách hoạt động",
-      "title": "3 Bước Chinh Phục Ma Pháp Hóa Học",
+      "title": "3 Bước Chinh Phục Hóa Học",
       "steps": {
         "step1": {
-          "title": "Luyện tập Thần chú cơ bản",
-          "desc": "Học cổ thư ma pháp tương tác trực quan, dễ hiểu."
+          "title": "Nắm chắc kiến thức nền",
+          "desc": "Học lý thuyết bằng hình ảnh trực quan và ví dụ gần gũi."
         },
         "step2": {
-          "title": "Chế tạo Độc dược",
-          "desc": "Tự tay pha chế trong vạc và quan sát phản ứng ma thuật."
+          "title": "Thực hành trong lab ảo",
+          "desc": "Quan sát phản ứng, thử nghiệm giả thuyết và rút ra kết luận."
         },
         "step3": {
-          "title": "Quyết đấu Đũa phép",
-          "desc": "So tài linh lực và kỹ năng độc dược tại Đấu trường."
+          "title": "Thi đấu kiến thức",
+          "desc": "Rèn tốc độ, độ chính xác và lưu lại tiến độ qua từng thử thách."
         }
       }
     },
     "testimonials": {
-      "badge": "Thư Cú Đưa Tin",
-      "title": "Các phù thủy nói gì về Học viện Aurum?",
+      "badge": "Góc chia sẻ",
+      "title": "Học viên và giáo viên nói gì về Aurum?",
       "reviews": [
         {
-          "name": "Harry Potter",
-          "role": "Nhà Gryffindor",
-          "content": "Môn Độc dược không còn là nỗi ác mộng nhờ vạc ma pháp 3D trực quan!"
+          "name": "Minh Anh",
+          "role": "Học sinh lớp 9",
+          "content": "Các bài học có hình minh họa rõ ràng nên mình hiểu phản ứng Hóa học nhanh hơn và bớt sợ bài tập."
         },
         {
-          "name": "Giáo sư Snape",
-          "role": "Bậc thầy Độc dược",
-          "content": "Lò pha chế ảo giúp đám học trò tập sự không còn làm nổ tung lớp học của ta nữa."
+          "name": "Gia Bảo",
+          "role": "Học sinh lớp 11",
+          "content": "Phòng thí nghiệm ảo giúp mình thử nhiều hiện tượng trước khi làm bài thực hành trên lớp."
         },
         {
-          "name": "Draco Malfoy",
-          "role": "Nhà Slytherin",
-          "content": "Đấu trường quyết đấu đũa phép rất kịch tính. Slytherin chắc chắn sẽ giành cúp nhà!"
+          "name": "Cô Lan",
+          "role": "Giáo viên Hóa học",
+          "content": "Aurum phù hợp để giao nhiệm vụ ôn tập ngắn, học sinh dễ theo dõi tiến độ và chủ động luyện tập hơn."
         }
       ]
     },
     "final_cta": {
-      "title": "Sẵn Sàng Trở Thành Bậc Thầy Giả Kim?",
-      "subtitle": "Nhận thư mời nhập học và gia nhập thế giới ma pháp ngay hôm nay.",
-      "button": "Nhập Học Ngay"
+      "title": "Sẵn sàng bắt đầu hành trình Hóa học?",
+      "subtitle": "Đăng nhập để học theo lộ trình cá nhân, lưu tiến độ và tiếp tục khám phá mỗi ngày.",
+      "button": "Bắt đầu ngay"
     }
   },
   "footer": {

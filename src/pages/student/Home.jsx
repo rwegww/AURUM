@@ -210,7 +210,7 @@ const Home = () => {
             <motion.div variants={fadeUp} className="w-full lg:w-[45%] lg:flex-none max-w-[520px] lg:max-w-none">
               <div className="relative rounded-[32px] overflow-hidden shadow-[0_30px_80px_0_rgba(0,0,0,0.18)] group">
                 <img
-                  src="/assets/images/home-journey.png"
+                  src="/assets/images/home-viet-journey.png"
                   alt={t('home.hero_image_alt')}
                   className="w-full h-[360px] lg:h-[420px] object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -243,7 +243,7 @@ const Home = () => {
         buttonText={t('home.features.journey.link')}
         buttonUrl="/classroom"
         buttonIcon={<BookOpen size={16} />}
-        imageSrc="/assets/images/home-journey.png"
+        imageSrc="/assets/images/home-viet-journey.png"
         imageAlt={t('home.features.journey.image_alt')}
         imageRight={true}
         bgClass="bg-white"
@@ -260,7 +260,7 @@ const Home = () => {
         buttonText={t('home.features.lab.link')}
         buttonUrl="/lab"
         buttonIcon={<FlaskConical size={16} />}
-        imageSrc="/assets/images/home-lab.png"
+        imageSrc="/assets/images/home-viet-lab.png"
         imageAlt={t('home.features.lab.image_alt')}
         imageRight={false}
         bgClass="bg-[#f8f9fa]"
@@ -277,7 +277,7 @@ const Home = () => {
         buttonText={t('home.features.arena.link')}
         buttonUrl="/arena"
         buttonIcon={<Trophy size={16} />}
-        imageSrc="/assets/images/home-arena.png"
+        imageSrc="/assets/images/home-viet-arena.png"
         imageAlt={t('home.features.arena.image_alt')}
         imageRight={true}
         bgClass="bg-white"
@@ -294,7 +294,7 @@ const Home = () => {
         buttonText={t('home.features.map.link')}
         buttonUrl="/classroom"
         buttonIcon={<Map size={16} />}
-        imageSrc="/assets/images/home-map.png"
+        imageSrc="/assets/images/home-viet-map.png"
         imageAlt={t('home.features.map.image_alt')}
         imageRight={false}
         bgClass="bg-[#f4faef]"
@@ -311,7 +311,7 @@ const Home = () => {
         buttonText={t('home.features.lessons.link')}
         buttonUrl="/classroom"
         buttonIcon={<BookOpen size={16} />}
-        imageSrc="/assets/images/home-lessons.png"
+        imageSrc="/assets/images/home-viet-lessons.png"
         imageAlt={t('home.features.lessons.image_alt')}
         imageRight={true}
         bgClass="bg-white"

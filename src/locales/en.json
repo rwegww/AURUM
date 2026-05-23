@@ -21,135 +21,135 @@
     "feedback": "Owl Feedback"
   },
   "home": {
-    "hero_title": "MASTER POTIONS &",
-    "hero_title_highlight": "ALCHEMY",
-    "hero_statement": "Brew magical potions, master arcane reactions, and duel at the Aurum Academy of Wizardry.",
-    "hero_image_alt": "Learn alchemy with Aurum",
-    "hero_badge_gamification": "Wizarding System",
-    "hero_badge_safe_lab": "Safe Potion Lab",
-    "enter_classroom": "Enter Great Hall",
-    "enter_lab": "To Alchemy Lab",
+    "hero_title": "CHEMISTRY JOURNEY",
+    "hero_title_highlight": "VIETNAM INSPIRED",
+    "hero_statement": "Explore reactions, elements, and virtual labs with Aurum through a learning journey inspired by Vietnamese culture.",
+    "hero_image_alt": "A Vietnam-inspired chemistry learning journey",
+    "hero_badge_gamification": "Challenge-based learning",
+    "hero_badge_safe_lab": "Safe virtual lab",
+    "enter_classroom": "Start the journey",
+    "enter_lab": "Enter the lab",
     "stats": {
       "students_count": "10,000+",
-      "students_label": "Apprentice Wizards",
+      "students_label": "Vietnamese learners",
       "schools_count": "50+",
-      "schools_label": "Affiliated Academies",
+      "schools_label": "Partner classrooms",
       "lessons_count": "1,000+",
-      "lessons_label": "Magical Lessons"
+      "lessons_label": "Chemistry lessons"
     },
     "features": {
       "journey": {
-        "badge": "Magical Journey",
-        "title": "Magical Path",
-        "highlight": "Unleash Arcane Mana",
-        "desc": "Potions and Alchemy lessons from basic wizardry to advanced sorcery.",
-        "desc_long": "From basic potions theory to advanced archmage spells. The path is balanced between theory and magic casting.",
-        "link": "Explore magical map",
-        "image_alt": "Magical journey"
+        "badge": "Learning Path",
+        "title": "Structured learning path",
+        "highlight": "Travel the knowledge map",
+        "desc": "From grade 8 to grade 12, each stop opens a clear and memorable chemistry topic.",
+        "desc_long": "From grade 8 to grade 12, Aurum guides learners through atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
+        "link": "Explore the path",
+        "image_alt": "A Vietnam-inspired chemistry knowledge map"
       },
       "lab": {
-        "badge": "Virtual Cauldron",
-        "title": "Brewing Room",
-        "highlight": "3D Magic Cauldron",
-        "desc": "Brew potions and observe magical 3D reactions safely without blowing up your cauldron.",
-        "desc_long": "Mix and brew the most legendary wizarding elixirs in our interactive 3D laboratory, perfectly safe from explosions.",
-        "link": "Enter Brewing Room",
-        "image_alt": "3D virtual cauldron"
+        "badge": "Practice",
+        "title": "Virtual chemistry lab",
+        "highlight": "Try reactions safely",
+        "desc": "Observe changes, mix solutions, and test ideas in a clear simulation environment.",
+        "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom lessons and encourage experimental thinking.",
+        "link": "Enter the lab",
+        "image_alt": "A safe chemistry lab in a Vietnamese classroom"
       },
       "arena": {
-        "badge": "Wizard Duels",
-        "title": "Dueling Club",
-        "highlight": "Wand Duelling",
-        "desc": "Real-time potion duels to earn house points and win the wizarding cup.",
-        "desc_long": "The competitive stage for talented wizards. Duel in real-time matches, climb the ranks, and leave your mark.",
-        "link": "Duel now",
-        "image_alt": "Wand duelling"
+        "badge": "Competition",
+        "title": "Knowledge arena",
+        "highlight": "Compete in chemistry",
+        "desc": "Answer quickly, score points, and sharpen your reflexes with leveled chemistry questions.",
+        "desc_long": "Aurum turns practice into a friendly knowledge competition. Learners can test speed, accuracy, and formula application through each challenge round.",
+        "link": "Try it now",
+        "image_alt": "A friendly chemistry knowledge contest between Vietnamese students"
       },
       "library": {
-        "title": "Spell Repository",
-        "highlight": "Accurate, Mystical",
-        "desc": "A massive collection of ancient spellbooks paired with an interactive Periodic Table.",
-        "link": "Go to Library"
+        "title": "Chemistry reference hub",
+        "highlight": "Accurate lookup",
+        "desc": "Study materials, the periodic table, and visual resources help learners review quickly.",
+        "link": "Open library"
       },
       "map": {
-        "badge": "Marauder's Map",
-        "title": "Marauder's Map",
-        "highlight": "Ancient Chambers",
-        "desc": "Adventure through academic chambers, collect magical relics, upgrade your mana, and write your name in the Hall of Fame.",
-        "link": "Start Journey",
-        "image_alt": "Explore wizarding map"
+        "badge": "Explore Vietnam",
+        "title": "Learning map",
+        "highlight": "Conquer each stage",
+        "desc": "Track progress on a stylized Vietnam map, unlock topics, and record your learning milestones.",
+        "link": "Start the journey",
+        "image_alt": "A stylized map of Vietnam with chemistry learning stages"
       },
       "lessons": {
-        "badge": "Grimoire",
-        "title": "Potions Grimoire",
-        "highlight": "Visual & Magical",
-        "desc": "Potions theory presented through interactive magical grimoires and quick wizard tests.",
-        "link": "Read Grimoire",
-        "image_alt": "Magical grimoire study"
+        "badge": "Study Materials",
+        "title": "Visual lessons",
+        "highlight": "Clear and memorable",
+        "desc": "Chemistry theory is presented with visuals, real-life examples, and short interactions.",
+        "link": "View lessons",
+        "image_alt": "A visual chemistry lesson in Vietnamese folk-art style"
       }
     },
     "leaderboard": {
       "badge": "Leaderboard",
-      "title_main": "Hall of Fame",
-      "title_highlight": "Archmages of Chemistry",
-      "rank_master": "Grand Sorcerer",
+      "title_main": "Honoring",
+      "title_highlight": "Top explorers",
+      "rank_master": "Featured learner",
       "online": "Online",
       "offline": "Offline",
       "active": "active",
       "level": "Level",
       "activity": "Activity:",
-      "disciple": "Apprentice Wizard",
-      "transmitting": "Transmitting from the Dueling Arena via Owl Mail...",
-      "empty": "The arena is waiting for its first legends...",
-      "conquer_btn": "Conquer Rank Now"
+      "disciple": "Aurum learner",
+      "transmitting": "Loading leaderboard...",
+      "empty": "The leaderboard is waiting for the first learners...",
+      "conquer_btn": "Join the challenge"
     },
     "social_proof": {
-      "text": "10,000+ Apprentice Wizards",
-      "schools": "50+ Affiliated Academies"
+      "text": "10,000+ Vietnamese learners",
+      "schools": "50+ partner classrooms"
     },
     "how_it_works": {
-      "badge": "How It Works",
-      "title": "3 Steps to Become a Chemistry Wizard",
+      "badge": "How it works",
+      "title": "3 Steps to Master Chemistry",
       "steps": {
         "step1": {
-          "title": "1. Study Ancient Spells",
-          "desc": "Study interactive magical grimoires to master the arcane foundations."
+          "title": "Build the foundation",
+          "desc": "Study theory through visual explanations and familiar examples."
         },
         "step2": {
-          "title": "2. Brew Legendary Potions",
-          "desc": "Brew and mix complex elixirs in virtual 3D cauldrons with zero risks."
+          "title": "Practice in the virtual lab",
+          "desc": "Observe reactions, test hypotheses, and draw conclusions."
         },
         "step3": {
-          "title": "3. Duel in the Arena",
-          "desc": "Challenge fellow sorcerers in real-time wand duels."
+          "title": "Compete with knowledge",
+          "desc": "Train speed, accuracy, and progress through each challenge."
         }
       }
     },
     "testimonials": {
-      "badge": "Owl Post Letters",
-      "title": "What do wizards say about Aurum Academy?",
+      "badge": "Stories",
+      "title": "What learners and teachers say about Aurum",
       "reviews": [
         {
-          "name": "Harry Potter",
-          "role": "Gryffindor House",
-          "content": "Brewing potions is no longer a nightmare thanks to the 3D virtual cauldron!"
+          "name": "Minh Anh",
+          "role": "Grade 9 student",
+          "content": "The illustrated lessons make reactions easier to understand, so chemistry exercises feel less intimidating."
         },
         {
-          "name": "Professor Snape",
-          "role": "Potions Master",
-          "content": "The virtual brewing room prevents these foolish apprentices from blowing up my classroom."
+          "name": "Gia Bao",
+          "role": "Grade 11 student",
+          "content": "The virtual lab lets me test different observations before doing practical work in class."
         },
         {
-          "name": "Draco Malfoy",
-          "role": "Slytherin House",
-          "content": "The wand duelling in the arena is absolutely brilliant. Slytherin will win the House Cup!"
+          "name": "Ms. Lan",
+          "role": "Chemistry teacher",
+          "content": "Aurum works well for short review tasks, and students can follow their progress more independently."
         }
       ]
     },
     "final_cta": {
-      "title": "Ready to Become a Master Alchemist?",
-      "subtitle": "Claim your Hogwarts acceptance letter and step into the world of magic today.",
-      "button": "Enroll Now"
+      "title": "Ready to begin your chemistry journey?",
+      "subtitle": "Sign in to follow a personal learning path, save your progress, and keep exploring every day.",
+      "button": "Start now"
     }
   },
   "footer": {
