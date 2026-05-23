@@ -12,6 +12,23 @@ const FeedbackButton = () => {
   const [done, setDone] = useState(false);
   const { isLoggedIn } = useAuth();
 
+  const handlePaste = (e) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        if (file) {
+          const newFile = new File([file], `pasted-image-${Date.now()}.png`, { type: file.type });
+          setImageFile(newFile);
+          setType('bug'); // Automatically switch to bug report
+        }
+        break;
+      }
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSending(true);
@@ -112,16 +129,17 @@ const FeedbackButton = () => {
                   <textarea 
                     autoFocus
                     required
-                    placeholder="Hãy mô tả chi tiết ý kiến của bạn..."
+                    placeholder="Hãy mô tả chi tiết ý kiến của bạn... (Hỗ trợ dán ảnh bằng Ctrl+V)"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
+                    onPaste={handlePaste}
                     className="w-full h-40 p-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none text-sm font-medium resize-none"
                   />
 
                   {type === 'bug' && (
                     <div className="flex items-center gap-2">
                       <label className="flex items-center gap-2 cursor-pointer bg-gray-100 px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-200 transition">
-                        <span>📷 Đính kèm ảnh (nếu có)</span>
+                        <span>📷 Đính kèm ảnh (Hoặc Ctrl+V)</span>
                         <input 
                           type="file" 
                           accept="image/*" 
