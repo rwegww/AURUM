@@ -21,6 +21,18 @@ const AuthLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen w-full flex flex-col md:items-center md:justify-center bg-[#fdf6e3] md:bg-[#fffbf0] overflow-hidden relative md:p-8 font-inter">
+      {/* Aggressively hide browser-default password reveal buttons at runtime to prevent Vite stripping them */}
+      <style>{`
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear,
+        ::-ms-reveal,
+        ::-ms-clear {
+          display: none !important;
+          width: 0 !important;
+          height: 0 !important;
+        }
+      `}</style>
+      
       {/* Mobile Top Bar */}
       <div className="flex md:hidden items-center justify-between px-6 py-5 w-full bg-transparent z-50">
         <Link to="/" className="flex items-center gap-2 group">
