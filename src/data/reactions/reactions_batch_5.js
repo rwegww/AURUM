@@ -1205,29 +1205,6 @@ export const reactionsBatch5 = [
     isBlocked: false
   },
   {
-    id: "rx_308",
-    name: "Crom tác dụng với Clo",
-    type: "combination",
-    reactants: [
-      { formula: "Cr", coeff: 2, name: "Crom" },
-      { formula: "Cl₂", coeff: 3, name: "Khí Clo" }
-    ],
-    products: [
-      { formula: "CrCl₃", coeff: 2, name: "Crom(III) Clorua" }
-    ],
-    equation: "2Cr + 3Cl₂ →(t°) 2CrCl₃",
-    gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Nhiệt độ cao",
-    observation: "Crom cháy trong Clo tạo tinh thể màu tím đỏ.",
-    energy: -556,
-    animation: "smoke",
-    requiresHeat: true,
-    dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn",
-    isBlocked: false
-  },
-  {
     id: "rx_309",
     name: "Bạc tác dụng với Axit Nitric đặc",
     type: "redox",
@@ -1363,51 +1340,6 @@ export const reactionsBatch5 = [
     isBlocked: false
   },
   {
-    id: "rx_315",
-    name: "Bo tác dụng với Oxy",
-    type: "combination",
-    reactants: [
-      { formula: "B", coeff: 4, name: "Bo" },
-      { formula: "O₂", coeff: 3, name: "Khí Oxy" }
-    ],
-    products: [
-      { formula: "B₂O₃", coeff: 2, name: "Bo Trioxit" }
-    ],
-    equation: "4B + 3O₂ →(t°) 2B₂O₃",
-    gradeLevel: 11,
-    category: "Á kim",
-    conditions: "Nhiệt độ cao",
-    observation: "Bo cháy sáng tạo chất rắn màu trắng.",
-    energy: -1273,
-    animation: "burn",
-    requiresHeat: true,
-    dangerLevel: 1,
-    isBlocked: false
-  },
-  {
-    id: "rx_316",
-    name: "Beri tác dụng với Axit Clohidric",
-    type: "single-replacement",
-    reactants: [
-      { formula: "Be", coeff: 1, name: "Beri" },
-      { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
-    ],
-    products: [
-      { formula: "BeCl₂", coeff: 1, name: "Beri Clorua" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
-    ],
-    equation: "Be + 2HCl → BeCl₂ + H₂↑",
-    gradeLevel: 10,
-    category: "Kim loại",
-    conditions: "Nhiệt độ thường",
-    observation: "Beri tan dần, sủi bọt khí không màu.",
-    energy: -450,
-    animation: "fizz",
-    dangerLevel: 2,
-    safetyWarning: "Hợp chất Beri rất độc",
-    isBlocked: false
-  },
-  {
     id: "rx_317",
     name: "Cacbon khử Đồng(II) Oxit",
     type: "redox",
@@ -1520,28 +1452,6 @@ export const reactionsBatch5 = [
     isBlocked: false
   },
   {
-    id: "rx_322",
-    name: "Bo tác dụng với Magie",
-    type: "combination",
-    reactants: [
-      { formula: "B", coeff: 2, name: "Bo" },
-      { formula: "Mg", coeff: 3, name: "Magiê" }
-    ],
-    products: [
-      { formula: "Mg₃B₂", coeff: 1, name: "Magiê Borua" }
-    ],
-    equation: "2B + 3Mg →(t°) Mg₃B₂",
-    gradeLevel: 11,
-    category: "Á kim",
-    conditions: "Nhiệt độ cao",
-    observation: "Tạo hợp chất borua kim loại.",
-    energy: -120,
-    animation: "smoke",
-    requiresHeat: true,
-    dangerLevel: 1,
-    isBlocked: false
-  },
-  {
     id: "rx_323",
     name: "Silic tác dụng với Oxy",
     type: "combination",
@@ -1583,53 +1493,6 @@ export const reactionsBatch5 = [
     energy: -85,
     animation: "mix",
     dangerLevel: 1,
-    isBlocked: false
-  },
-  {
-    id: "rx_325",
-    name: "Beri tác dụng với Oxy",
-    type: "combination",
-    reactants: [
-      { formula: "Be", coeff: 2, name: "Beri" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    products: [
-      { formula: "BeO", coeff: 2, name: "Beri Oxit" }
-    ],
-    equation: "2Be + O₂ →(t°) 2BeO",
-    gradeLevel: 10,
-    category: "Kim loại",
-    conditions: "Nhiệt độ cao",
-    observation: "Beri cháy sáng tạo lớp oxit trắng.",
-    energy: -1200,
-    animation: "burn",
-    requiresHeat: true,
-    dangerLevel: 1,
-    isBlocked: false
-  },
-  {
-    id: "rx_326",
-    name: "Hòa tan Vàng trong nước cường toan",
-    type: "redox",
-    reactants: [
-      { formula: "Au", coeff: 1, name: "Vàng" },
-      { formula: "HNO₃", coeff: 1, name: "Axit Nitric" },
-      { formula: "HCl", coeff: 3, name: "Axit Clohidric" }
-    ],
-    products: [
-      { formula: "AuCl₃", coeff: 1, name: "Vàng(III) Clorua" },
-      { formula: "NO", coeff: 1, name: "Khí Nitơ Oxit" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
-    ],
-    equation: "Au + HNO₃ + 3HCl → AuCl₃ + NO↑ + 2H₂O",
-    gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Hỗn hợp HNO₃ và HCl (tỉ lệ 1:3)",
-    observation: "Vàng tan dần, giải phóng khí không màu hóa nâu trong không khí (NO).",
-    energy: -150,
-    animation: "fizz",
-    dangerLevel: 2,
-    safetyWarning: "Cần thực hiện trong tủ hút, axit cực mạnh",
     isBlocked: false
   },
   {
@@ -1699,72 +1562,6 @@ export const reactionsBatch5 = [
     observation: "Bề mặt bạc bị đen lại do tạo thành lớp Ag₂S.",
     energy: -600,
     animation: "color-change",
-    dangerLevel: 1,
-    isBlocked: false
-  },
-  {
-    id: "rx_330",
-    name: "Crom tác dụng với Axit Clohidric",
-    type: "single-replacement",
-    reactants: [
-      { formula: "Cr", coeff: 1, name: "Crom" },
-      { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
-    ],
-    products: [
-      { formula: "CrCl₂", coeff: 1, name: "Crom(II) Clorua" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
-    ],
-    equation: "Cr + 2HCl → CrCl₂ + H₂↑",
-    gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Không có không khí",
-    observation: "Crom tan dần, thoát ra bọt khí, dung dịch có màu xanh lam.",
-    energy: -90,
-    animation: "fizz",
-    dangerLevel: 1,
-    isBlocked: false
-  },
-  {
-    id: "rx_331",
-    name: "Oxy hóa Crom",
-    type: "combination",
-    reactants: [
-      { formula: "Cr", coeff: 4, name: "Crom" },
-      { formula: "O₂", coeff: 3, name: "Khí Oxy" }
-    ],
-    products: [
-      { formula: "Cr₂O₃", coeff: 2, name: "Crom(III) Oxit" }
-    ],
-    equation: "4Cr + 3O₂ →(t°) 2Cr₂O₃",
-    gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Nhiệt độ cao",
-    observation: "Crom cháy sáng tạo lớp oxit màu xanh lục.",
-    energy: -1140,
-    animation: "burn",
-    requiresHeat: true,
-    dangerLevel: 1,
-    isBlocked: false
-  },
-  {
-    id: "rx_332",
-    name: "Crom tác dụng với Axit Sunfuric loãng",
-    type: "single-replacement",
-    reactants: [
-      { formula: "Cr", coeff: 1, name: "Crom" },
-      { formula: "H₂SO₄", coeff: 1, name: "Axit Sunfuric loãng" }
-    ],
-    products: [
-      { formula: "CrSO₄", coeff: 1, name: "Crom(II) Sunfat" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
-    ],
-    equation: "Cr + H₂SO₄ → CrSO₄ + H₂↑",
-    gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Không có không khí",
-    observation: "Crom tan tạo dung dịch màu xanh lam và bọt khí.",
-    energy: -85,
-    animation: "fizz",
     dangerLevel: 1,
     isBlocked: false
   },
@@ -2036,75 +1833,6 @@ export const reactionsBatch5 = [
     isBlocked: false
   },
   {
-    id: "rx_345",
-    name: "Đặc tính Khí Trơ (Heli)",
-    type: "combination",
-    reactants: [
-      { formula: "He", coeff: 1, name: "Heli" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    products: [
-      { formula: "He", coeff: 1, name: "Heli" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    equation: "He + O₂ → Không phản ứng",
-    gradeLevel: 10,
-    category: "Khí hiếm",
-    conditions: "Mọi điều kiện",
-    observation: "Khí Heli hoàn toàn trơ, không phản ứng với Oxy ở bất kỳ nhiệt độ nào.",
-    energy: 0,
-    animation: "mix",
-    dangerLevel: 0,
-    safetyWarning: "Không có phản ứng xảy ra.",
-    isBlocked: false
-  },
-  {
-    id: "rx_346",
-    name: "Đặc tính Khí Trơ (Neon)",
-    type: "combination",
-    reactants: [
-      { formula: "Ne", coeff: 1, name: "Neon" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    products: [
-      { formula: "Ne", coeff: 1, name: "Neon" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    equation: "Ne + O₂ → Không phản ứng",
-    gradeLevel: 10,
-    category: "Khí hiếm",
-    conditions: "Mọi điều kiện",
-    observation: "Khí Neon hoàn toàn trơ, không phản ứng với Oxy. Dùng làm đèn huỳnh quang.",
-    energy: 0,
-    animation: "mix",
-    dangerLevel: 0,
-    safetyWarning: "Không có phản ứng xảy ra.",
-    isBlocked: false
-  },
-  {
-    id: "rx_347",
-    name: "Đặc tính Khí Trơ (Argon)",
-    type: "combination",
-    reactants: [
-      { formula: "Ar", coeff: 1, name: "Khí Agon" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    products: [
-      { formula: "Ar", coeff: 1, name: "Khí Agon" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
-    ],
-    equation: "Ar + O₂ → Không phản ứng",
-    gradeLevel: 10,
-    category: "Khí hiếm",
-    conditions: "Mọi điều kiện",
-    observation: "Argon trơ về mặt hóa học, được dùng làm môi trường bảo vệ trong hàn kim loại.",
-    energy: 0,
-    animation: "mix",
-    dangerLevel: 0,
-    safetyWarning: "Không có phản ứng xảy ra.",
-    isBlocked: false
-  },
-  {
     id: "rx_348",
     name: "Thiếc tác dụng với Oxy",
     type: "combination",
@@ -2212,29 +1940,6 @@ export const reactionsBatch5 = [
     energy: -550,
     animation: "fizz",
     dangerLevel: 2,
-    isBlocked: false
-  },
-  {
-    id: "rx_353",
-    name: "Beri tác dụng với Clo",
-    type: "combination",
-    reactants: [
-      { formula: "Be", coeff: 1, name: "Beri" },
-      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
-    ],
-    products: [
-      { formula: "BeCl₂", coeff: 1, name: "Beri Clorua" }
-    ],
-    equation: "Be + Cl₂ →(t°) BeCl₂",
-    gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Đun nóng",
-    observation: "Beri cháy trong khí Clo tạo ra tinh thể Beri clorua.",
-    energy: -496,
-    animation: "smoke",
-    requiresHeat: true,
-    dangerLevel: 2,
-    safetyWarning: "Hợp chất của Beri rất độc.",
     isBlocked: false
   },
   {

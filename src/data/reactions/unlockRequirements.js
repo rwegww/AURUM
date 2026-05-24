@@ -9,7 +9,6 @@ export const unlockRequirements = {
     'CuSO4': { level: 4, required: [] },
     'Na': { level: 5, required: ['rx_001'] },
     'Ag': { level: 10, required: [] },
-    'Au': { level: 12, required: [] },
   },
   reactions: {
     'rx_001': { level: 2, requiredChemicals: ['H2', 'O2'] },
@@ -21,7 +20,6 @@ export const unlockRequirements = {
     'rx_145': { level: 10, requiredChemicals: ['NaCl', 'AgNO3'] },
     'rx_163': { level: 10, requiredChemicals: ['SO3', 'H2O'] },
     'rx_200': { level: 12, requiredChemicals: ['C6H12O6', 'Ag2O'] },
-    'rx_326': { level: 12, requiredChemicals: ['Au', 'HCl', 'HNO3'] },
     'rx_327': { level: 11, requiredChemicals: ['Ag', 'HNO3'] },
   }
 };
