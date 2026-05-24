@@ -31,11 +31,13 @@ class ActivityService {
           .from('user_activities')
           .insert([{
             user_id: userId,
-            type: activity.type,
-            label: activity.label,
+            action_type: activity.type,
             description: activity.description,
-            icon: activity.icon,
-            link: activity.link
+            metadata: {
+              label: activity.label,
+              icon: activity.icon,
+              link: activity.link
+            }
           }]);
         
         if (error) console.warn('DB Log Error:', error.message);
@@ -69,11 +71,11 @@ class ActivityService {
           return data.map(item => ({
             id: item.id,
             timestamp: item.created_at,
-            type: item.type,
-            label: item.label,
+            type: item.action_type || item.type,
+            label: item.metadata?.label || item.label || '',
             description: item.description,
-            icon: item.icon,
-            link: item.link
+            icon: item.metadata?.icon || item.icon || '',
+            link: item.metadata?.link || item.link || ''
           }));
         }
       }
