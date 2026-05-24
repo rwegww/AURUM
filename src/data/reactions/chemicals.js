@@ -79,6 +79,7 @@ export const chemicals = [
   { id: "FeSO4", formula: "FeSO₄", name: "Sắt(II) Sunfat", state: "solid", category: "Muối", molarMass: 151.91, color: "#d1fae5" },
   { id: "BaSO4", formula: "BaSO₄", name: "Bari Sunfat", state: "solid", category: "Muối", molarMass: 233.39, color: "#ffffff" },
   { id: "KCl", formula: "KCl", name: "Kali Clorua", state: "solid", category: "Muối", molarMass: 74.55, color: "#f8fafc" },
+  { id: "KNO3", formula: "KNO₃", name: "Kali Nitrat", state: "solid", category: "Muối", molarMass: 101.10, color: "#ffffff" },
   { id: "NaCl", formula: "NaCl", name: "Natri Clorua", state: "solid", category: "Muối", molarMass: 58.44, color: "#ffffff" },
   { id: "Na2SO3", formula: "Na₂SO₃", name: "Natri Sunfit", state: "solid", category: "Muối", molarMass: 126.04, color: "#ffffff" },
   { id: "MgCl2", formula: "MgCl₂", name: "Magiê Clorua", state: "solid", category: "Muối", molarMass: 95.21, color: "#f1f5f9" },
