@@ -66,33 +66,7 @@ const LabScene = () => {
 
               {isActive && <PouringStream formula={isPouringFormula} />}
 
-              {beaker.reactionProducts.length > 0 && (
-                <Html position={[0.7, 0.8, 0]} center distanceFactor={4}>
-                  <div style={{
-                    background: 'rgba(0,0,0,0.85)',
-                    backdropFilter: 'blur(12px)',
-                    borderRadius: '12px',
-                    padding: '10px 18px',
-                    border: '1px solid rgba(255,255,255,0.25)',
-                    pointerEvents: 'none',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
-                    animation: 'scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                  }}>
-                    {beaker.reactionProducts.map((p) => (
-                      <div key={p.formula} style={{
-                        color: p.color === '#ffffff' ? '#a0d8ef' : p.color,
-                        fontFamily: 'monospace',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        lineHeight: '1.4',
-                        textShadow: `0 0 10px ${p.color}55`
-                      }}>
-                        {p.formula}
-                      </div>
-                    ))}
-                  </div>
-                </Html>
-              )}
+
 
               <Html position={[0, -0.25, 0.8]} center>
                  <div 
