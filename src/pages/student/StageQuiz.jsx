@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import MissionModal from '@/components/lessons/MissionModal';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const StageQuiz = () => {
-  const { t } = useTranslation();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -14,7 +12,7 @@ const StageQuiz = () => {
   
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentLevel, setCurrentLevel] = useState(searchParams.get('level') || 'level1');
+  const currentLevel = searchParams.get('level') || 'level1';
   const [showResult, setShowResult] = useState(false);
   const [lastResult, setLastResult] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);

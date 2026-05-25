@@ -17,7 +17,6 @@ const ContactInfo = ({ icon, label, value }) => (
 
 const Contact = () => {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
@@ -32,7 +32,7 @@ const PLACEMENT_TESTS = {
   ]
 };
 
-const PlacementTestModal = ({ grade, isOpen, onClose, onPass, firstLessonId }) => {
+const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
   const { user, updateProgress, updateUser } = useAuth();
   const [step, setStep] = useState('start'); // start, quiz, result
   const [currentQuestion, setCurrentQuestion] = useState(0);

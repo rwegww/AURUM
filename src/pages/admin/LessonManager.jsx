@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MediaUploader from '@/components/admin/MediaUploader';
 
 const modulesToMarkdown = (modules) => {
@@ -24,8 +23,6 @@ const modulesToMarkdown = (modules) => {
 };
 
 const LessonManager = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGrade, setSelectedGrade] = useState(null);

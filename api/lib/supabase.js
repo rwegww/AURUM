@@ -1,51 +1,61 @@
 import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
-
-// Ensure env variables are loaded even if this is the first module imported
-dotenv.config();
+import '../env.js';
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-// Prioritize SUPABASE_SERVICE_ROLE_KEY to bypass RLS on the backend.
-// Fall back to ANON_KEY if service role is missing.
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.SUPABASE_KEY ||
+  process.env.VITE_SUPABASE_ANON_KEY;
 
-// Strict validation to prevent crashes
 const isValid = (url, key) => {
   if (!url || !key) return false;
   try {
     new URL(url);
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 };
 
-if (!isValid(supabaseUrl, supabaseKey)) {
-  console.warn('⚠️  Supabase credentials missing or invalid. Falling back to dummy client.');
+const hasValidCredentials = isValid(supabaseUrl, supabaseKey);
+
+if (!hasValidCredentials) {
+  const message =
+    'Supabase credentials missing or invalid. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY.';
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(message);
+  }
+  console.warn(`WARNING: ${message} Database calls will fail until env is configured.`);
 } else {
-  console.log('✅ Supabase client initialized successfully.');
+  console.log('Supabase client initialized successfully.');
 }
 
-// Fail-safe client creation with more robust dummy methods
-export const supabase = isValid(supabaseUrl, supabaseKey)
+const notConfigured = () => {
+  throw new Error('Database client not initialized');
+};
+
+// Non-production keeps imports alive, but DB calls fail explicitly instead of returning fake data.
+export const supabase = hasValidCredentials
   ? createClient(supabaseUrl, supabaseKey)
-  : { 
-      from: () => ({ 
-        select: () => ({ 
-          eq: () => ({ 
-            single: () => Promise.resolve({ data: null, error: new Error('Database client not initialized') }),
-            maybeSingle: () => Promise.resolve({ data: null, error: null }) // Be graceful for lookups
+  : {
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            single: notConfigured,
+            maybeSingle: notConfigured,
           }),
           filter: () => ({
-            order: () => Promise.resolve({ data: [], error: null })
+            order: notConfigured,
           }),
-          order: () => Promise.resolve({ data: [], error: null }) 
+          order: notConfigured,
         }),
-        insert: () => Promise.resolve({ data: null, error: new Error('Database client not initialized') }),
-        update: () => ({ eq: () => Promise.resolve({ error: new Error('Database client not initialized') }) }),
-        upsert: () => Promise.resolve({ error: new Error('Database client not initialized') })
+        insert: notConfigured,
+        update: () => ({ eq: notConfigured }),
+        upsert: notConfigured,
+        delete: () => ({ eq: notConfigured, lte: notConfigured }),
       }),
       auth: {
-        getUser: () => Promise.resolve({ data: { user: null }, error: new Error('Auth not initialized') })
-      }
+        getUser: notConfigured,
+      },
+      rpc: notConfigured,
     };

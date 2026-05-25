@@ -62,7 +62,7 @@ const Login = () => {
     if (savedPassword) {
       setPassword(savedPassword);
     }
-  }, []);
+  }, [magicLogin, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

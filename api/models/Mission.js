@@ -63,7 +63,7 @@ export const Mission = {
     if (pError) throw pError;
 
     // 2.5 Get user streak info for syncing
-    const { data: user, error: uError } = await supabase
+    const { data: user } = await supabase
       .from('users')
       .select('streak_count, today_online_minutes, today_lesson_completed')
       .eq('id', userId)

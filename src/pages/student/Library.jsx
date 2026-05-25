@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
@@ -11,7 +11,7 @@ const Library = () => {
   const [category, setCategory] = useState('');
   const [search, setSearch] = useState('');
 
-  const fetchMaterials = async () => {
+  const fetchMaterials = useCallback(async () => {
     setLoading(true);
     try {
       const url = `/api/materials?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
@@ -23,11 +23,11 @@ const Library = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [category, search, t]);
 
   useEffect(() => {
     fetchMaterials();
-  }, [category, search]);
+  }, [fetchMaterials]);
 
   const categories = [
     { id: '', name: t('library.categories.all') },

@@ -24,7 +24,6 @@ const calculateMolarMass = (formula, elements) => {
     let i = 0;
     while (i < f.length) {
       if (f[i] === '(') {
-        let count = 1;
         let start = i + 1;
         let pMatch = 1;
         while (pMatch > 0 && ++i < f.length) {
@@ -95,7 +94,7 @@ const CATEGORY_THEME = {
   'Khác': { color: '#64748b', icon: '📦', label: 'Khác' }
 };
 
-const DiscoveryMap = ({ chemicals = [], reactions = [], discoveredFormulas = [] }) => {
+const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFormulas = [] }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -146,8 +145,6 @@ const DiscoveryMap = ({ chemicals = [], reactions = [], discoveredFormulas = [] 
   }, [chemicals, normalizedDiscovered]);
 
   const categoryKeys = Object.keys(treeData);
-  const totalItems = chemicals.length;
-  const discoveredCount = chemicals.filter(c => normalizedDiscovered.has(normalize(c.formula)) || c.is_starter || c.isStarter).length;
 
   const selectedData = useMemo(() => {
     if (!selectedId) return null;

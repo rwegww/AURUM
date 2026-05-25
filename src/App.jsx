@@ -101,19 +101,6 @@ function AppContent() {
   const isManagementPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/teacher');
   const isStandalonePage = location.pathname === '/lab/discovery';
 
-  const functionalPaths = [
-    '/lab', 
-    '/arena', 
-    '/library', 
-    '/lessons', 
-    '/periodic-table', 
-    '/missions', 
-    '/knowledge-map', 
-    '/classroom',
-    '/calculator'
-  ];
-  const isFunctionalPage = functionalPaths.some(path => location.pathname.startsWith(path));
-
   return (
     <>
       {!isAuthPage && !isImmersivePage && !isManagementPage && !isStandalonePage && <Navbar />}

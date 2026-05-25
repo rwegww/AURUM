@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
 const Lessons = () => {
   const { t } = useTranslation();
   const { isLoggedIn } = useAuth();
-  const navigate = useNavigate();
   const { grade } = useParams();
   const [searchParams] = useSearchParams();
   const queryGrade = searchParams.get('grade');
@@ -23,7 +22,7 @@ const Lessons = () => {
     }
   }, [grade, queryGrade]);
 
-  const fetchLessons = async (grade) => {
+  const fetchLessons = useCallback(async (grade) => {
     setLoading(true);
     try {
       const res = await fetch(`/api/lessons?classId=${grade}`);
@@ -34,13 +33,13 @@ const Lessons = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
 
   useEffect(() => {
     if (selectedGrade) {
       fetchLessons(selectedGrade);
     }
-  }, [selectedGrade]);
+  }, [fetchLessons, selectedGrade]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

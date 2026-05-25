@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -16,7 +16,7 @@ const JourneyDetail = () => {
   const [activeTab, setActiveTab] = useState('video'); // video, quiz, game
   const [activeQuizLevel, setActiveQuizLevel] = useState('level1'); // level1, level2, level3
 
-  const fetchLesson = async () => {
+  const fetchLesson = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/lessons/${lessonId}`);
@@ -53,11 +53,11 @@ const JourneyDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [lessonId]);
 
   useEffect(() => {
     fetchLesson();
-  }, [lessonId]);
+  }, [fetchLesson]);
 
   const handleSave = async () => {
     setSaving(true);

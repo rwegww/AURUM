@@ -8,14 +8,20 @@ const UserActivityHistory = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchHistory = async () => {
+  const fetchHistory = async (isCancelled = () => false) => {
     const data = await activityService.getHistory();
+    if (isCancelled()) return;
     setHistory(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchHistory();
+    let cancelled = false;
+    activityService.getHistory().then((data) => {
+      if (cancelled) return;
+      setHistory(data);
+      setLoading(false);
+    });
 
     const handleUpdate = () => fetchHistory();
 
@@ -23,6 +29,7 @@ const UserActivityHistory = () => {
     window.addEventListener('aurum_activity_cleared', handleUpdate);
 
     return () => {
+      cancelled = true;
       window.removeEventListener('aurum_activity_logged', handleUpdate);
       window.removeEventListener('aurum_activity_cleared', handleUpdate);
     };

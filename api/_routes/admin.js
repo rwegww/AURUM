@@ -4,7 +4,7 @@ import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
 
-import sendMail, { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../lib/mailer.js';
+import { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../lib/mailer.js';
 
 import { supabase } from '../lib/supabase.js';
 
@@ -30,7 +30,7 @@ const adminOnly = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         userId = decoded.id;
         user = await User.findById(userId);
-      } catch (jwtErr) {
+      } catch (_jwtErr) {
          throw new Error('Xác thực thất bại');
       }
     }
@@ -144,7 +144,7 @@ router.post('/feedback/submit', async (req, res) => {
           userId = user.id;
           username = user.username;
         }
-      } catch (jwtErr) {
+        } catch (_jwtErr) {
         try {
           const { data } = await supabase.auth.getUser(token);
           const sbUser = data?.user;
@@ -155,7 +155,9 @@ router.post('/feedback/submit', async (req, res) => {
               username = user.username;
             }
           }
-        } catch (sbErr) {}
+        } catch (_sbErr) {
+          // Ignore Supabase token fallback failure; custom JWT auth may still identify the user.
+        }
       }
     }
 

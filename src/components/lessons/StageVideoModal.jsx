@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
-const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) => {
+const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
   const { t } = useTranslation();
   const videoRef = useRef(null);
   const [isMuted, setIsMuted] = useState(false);
@@ -35,11 +35,10 @@ const StageVideoModal = ({ videoSrc, onComplete, onSkip, onBack, lessonTitle }) 
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
 
   // Update time as video plays
   const handleTimeUpdate = () => {
-    if (!isDragging && videoRef.current) {
+    if (videoRef.current) {
       setCurrentTime(videoRef.current.currentTime);
     }
   };

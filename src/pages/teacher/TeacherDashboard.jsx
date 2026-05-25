@@ -143,7 +143,7 @@ const TeacherDashboard = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [linkAccount]);
 
   return (
     <div className="p-8 pb-24">

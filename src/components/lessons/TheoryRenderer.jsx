@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 
+const KATEX_CSS_ID = 'aurum-katex-css';
+const KATEX_CSS_URL = 'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css';
+
+const ensureKatexStylesheet = () => {
+  if (document.getElementById(KATEX_CSS_ID)) return;
+  const link = document.createElement('link');
+  link.id = KATEX_CSS_ID;
+  link.rel = 'stylesheet';
+  link.href = KATEX_CSS_URL;
+  document.head.appendChild(link);
+};
+
 const TheoryRenderer = ({ modules }) => {
+  useEffect(() => {
+    ensureKatexStylesheet();
+  }, []);
+
   if (!modules || !Array.isArray(modules)) return null;
 
   const markdownPlugins = [remarkGfm, remarkMath];
@@ -22,7 +38,7 @@ const TheoryRenderer = ({ modules }) => {
         const { type, content } = module;
 
         switch (type) {
-          case 'heading':
+          case 'heading': {
             const HeadingTag = content.level || 'h2';
             return (
               <HeadingTag 
@@ -40,6 +56,7 @@ const TheoryRenderer = ({ modules }) => {
                 </ReactMarkdown>
               </HeadingTag>
             );
+          }
 
           case 'paragraph':
             return (

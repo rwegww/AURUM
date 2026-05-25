@@ -9,7 +9,9 @@ async function createAccounts() {
     let admin = null;
     try {
         admin = await User.findOne({ username: 'admin' });
-    } catch(e) {}
+    } catch(_e) {
+        // Continue and create the account if lookup fails.
+    }
     
     if (admin) {
         console.log("Tài khoản admin đã tồn tại.");
@@ -27,7 +29,9 @@ async function createAccounts() {
     let teacher = null;
     try {
         teacher = await User.findOne({ username: 'teacher' });
-    } catch(e) {}
+    } catch(_e) {
+        // Continue and create the account if lookup fails.
+    }
     
     if (teacher) {
         console.log("Tài khoản teacher đã tồn tại.");

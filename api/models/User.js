@@ -78,7 +78,7 @@ export const User = {
       
       user.unlocked_lessons = lessons || [];
       user.unlocked_chemicals = chemicals || [];
-    } catch (e) {
+    } catch (_e) {
       console.warn('Junction tables missing or inaccessible, returning base user.');
       user.unlocked_lessons = [];
       user.unlocked_chemicals = [];
@@ -105,7 +105,7 @@ export const User = {
       
       user.unlocked_lessons = lessons || [];
       user.unlocked_chemicals = chemicals || [];
-    } catch (e) {
+    } catch (_e) {
       user.unlocked_lessons = [];
       user.unlocked_chemicals = [];
     }
@@ -118,7 +118,7 @@ export const User = {
     const userId = userData.id || crypto.randomUUID();
     
     // 1. Create User
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('users')
       .insert([{
         id: userId,

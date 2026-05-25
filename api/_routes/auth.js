@@ -16,7 +16,7 @@ router.post('/google-firebase', async (req, res) => {
 
     console.log('🔍 Received ID Token (start):', idToken.substring(0, 20) + '...');
     const decodedToken = await firebaseAdmin.verifyToken(idToken);
-    const { uid, email, name, picture } = decodedToken;
+    const { uid, email, name } = decodedToken;
 
     // 1. Check if user exists by firebase uid
     let user = await User.findById(uid);
@@ -120,37 +120,6 @@ router.post('/register', async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi đăng ký', error: err.message });
-  }
-});
-
-// DEBUG: Test register-teacher step by step (remove after debugging)
-router.post('/debug-register-teacher', async (req, res) => {
-  const steps = [];
-  try {
-    steps.push('step1: route entered');
-    const { username, password, email, proofImageUrl } = req.body;
-    steps.push(`step2: parsed body - username=${username}, email=${email}, hasProof=${!!proofImageUrl}`);
-
-    const existingUser = await User.findOne({ username });
-    steps.push(`step3: User.findOne done - exists=${!!existingUser}`);
-
-    const hashedPassword = await bcrypt.hash(password || 'test', 10);
-    steps.push('step4: bcrypt.hash done');
-
-    await Feedback.create({
-      userId: null,
-      username: username || 'debugtest',
-      type: 'teacher_registration',
-      message: JSON.stringify({ email, hashedPassword }),
-      imageUrl: proofImageUrl || 'https://example.com/test.jpg',
-      status: 'unread'
-    });
-    steps.push('step5: Feedback.create done');
-
-    return res.json({ success: true, steps });
-  } catch (err) {
-    steps.push(`ERROR: ${err.message}`);
-    return res.status(500).json({ success: false, steps, error: err.message, stack: err.stack });
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -25,11 +25,50 @@ const MyClass = () => {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
 
-  useEffect(() => {
-    fetchClasses();
+  const markAsRead = useCallback((classId) => {
+    const lastReadData = JSON.parse(localStorage.getItem('classroom_last_read') || '{}');
+    lastReadData[classId] = new Date().toISOString();
+    localStorage.setItem('classroom_last_read', JSON.stringify(lastReadData));
+    window.dispatchEvent(new Event('classroom_read'));
   }, []);
 
-  const fetchClasses = async () => {
+  const selectClass = useCallback(async (cls) => {
+    setSelectedClass(cls);
+    markAsRead(cls.id);
+    const token = localStorage.getItem('token');
+    
+    // Fetch posts
+    try {
+      const pRes = await fetch(`/api/classes/${cls.id}/posts`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (pRes.ok) setPosts(await pRes.json());
+    } catch (err) {
+      // Keep the class shell usable even if posts fail to load.
+    }
+
+    // Fetch schedules
+    try {
+      const sRes = await fetch(`/api/classes/${cls.id}/schedules`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (sRes.ok) setSchedules(await sRes.json());
+    } catch (err) {
+      // Schedules are optional for the student class view.
+    }
+
+    // Fetch members
+    try {
+      const mRes = await fetch(`/api/classes/${cls.id}/members`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (mRes.ok) setMembers(await mRes.json());
+    } catch (err) {
+      // Member list failure should not block posts and assignments.
+    }
+  }, [markAsRead]);
+
+  const fetchClasses = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/classes', {
@@ -47,45 +86,11 @@ const MyClass = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectClass]);
 
-  const selectClass = async (cls) => {
-    setSelectedClass(cls);
-    markAsRead(cls.id);
-    const token = localStorage.getItem('token');
-    
-    // Fetch posts
-    try {
-      const pRes = await fetch(`/api/classes/${cls.id}/posts`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (pRes.ok) setPosts(await pRes.json());
-    } catch (err) {}
-
-    // Fetch schedules
-    try {
-      const sRes = await fetch(`/api/classes/${cls.id}/schedules`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (sRes.ok) setSchedules(await sRes.json());
-    } catch (err) {}
-
-    // Fetch members
-    try {
-      const mRes = await fetch(`/api/classes/${cls.id}/members`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (mRes.ok) setMembers(await mRes.json());
-    } catch (err) {}
-  };
-
-  const markAsRead = (classId) => {
-    const lastReadData = JSON.parse(localStorage.getItem('classroom_last_read') || '{}');
-    lastReadData[classId] = new Date().toISOString();
-    localStorage.setItem('classroom_last_read', JSON.stringify(lastReadData));
-    // Dispatch custom event to notify Navbar
-    window.dispatchEvent(new Event('classroom_read'));
-  };
+  useEffect(() => {
+    fetchClasses();
+  }, [fetchClasses]);
 
   const handleJoinClass = async (e) => {
     e.preventDefault();

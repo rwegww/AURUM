@@ -18,7 +18,7 @@ const SUBSTANCES = [
   { name: 'NaOH 1M', pH: 14.0, color: '#9b34b8', category: 'Bazơ mạnh' },
 ];
 
-const pHScaleSim = () => {
+const PHScaleSim = () => {
   const [selectedIdx, setSelectedIdx] = useState(7); // Nước cất mặc định
   const substance = SUBSTANCES[selectedIdx];
   const hConc = Math.pow(10, -substance.pH);
@@ -115,4 +115,4 @@ const pHScaleSim = () => {
   );
 };
 
-export default pHScaleSim;
+export default PHScaleSim;

@@ -1,14 +1,11 @@
 import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
-import { Loader } from '@react-three/drei';
 import LabScene from './magic-lab/LabScene';
 import useLabStore from './magic-lab/store';
 
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -20,11 +17,9 @@ const normalize = (f) => {
 
 const MagicLab3D = () => {
   const { user, isLoggedIn, refreshUser } = useAuth();
-  const navigate = useNavigate();
   
   // --- Game Data Local State ---
   const [dbChemicals, setDbChemicals] = useState([]);
-  const [dbReactions, setDbReactions] = useState([]);
   const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -44,8 +39,6 @@ const MagicLab3D = () => {
   const addBeaker = useLabStore(state => state.addBeaker);
   const removeBeaker = useLabStore(state => state.removeBeaker);
   const setActiveBeaker = useLabStore(state => state.setActiveBeaker);
-  const settings = useLabStore(state => state.settings);
-  const updateLabSettings = useLabStore(state => state.updateSettings);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
@@ -116,8 +109,6 @@ const MagicLab3D = () => {
         });
 
         setDbChemicals(processedChems);
-        setDbReactions(rxsData);
-        
         // Initial progression
         const starters = processedChems.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
         const saved = localStorage.getItem('chem_odyssey_discovered');
@@ -139,7 +130,7 @@ const MagicLab3D = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [setData]);
 
   // Sync auth user progress
   useEffect(() => {
@@ -149,7 +140,7 @@ const MagicLab3D = () => {
       setDiscoveredFormulas(combined);
       setUnlocked(combined);
     }
-  }, [user, isLoggedIn, dbChemicals]);
+  }, [dbChemicals, isLoggedIn, setUnlocked, user]);
 
   // Handle new discoveries
   const handleOnDiscovery = useCallback((products) => {

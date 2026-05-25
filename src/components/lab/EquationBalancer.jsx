@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import EquationSkillTree from './EquationSkillTree';
@@ -134,7 +134,10 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
     }, [nodeId]);
 
     const currentQuestion = questions[currentStep];
-    const allFormulas = currentQuestion ? [...currentQuestion.reactants, ...currentQuestion.products] : [];
+    const allFormulas = useMemo(
+        () => currentQuestion ? [...currentQuestion.reactants, ...currentQuestion.products] : [],
+        [currentQuestion]
+    );
 
     useEffect(() => {
         if (allFormulas.length > 0) {
@@ -142,7 +145,7 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
             setShowResult(false);
             setIsCorrect(false);
         }
-    }, [currentStep, questions]);
+    }, [allFormulas.length, currentStep]);
 
     const checkAnswer = () => {
         const correct = currentQuestion.answer.every((a, i) => a === userCoeffs[i]);

@@ -6,9 +6,6 @@ import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
-import jwt from 'jsonwebtoken';
-
-
 // GET /api/lab/chemicals - Get all chemicals
 router.get('/chemicals', async (req, res) => {
   try {

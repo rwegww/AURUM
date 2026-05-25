@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { elements } from '@/data/elements';
 import { enrichElement } from '@/data/elementEnrichment';
 import AtomicModel from '@/components/common/AtomicModel';
-import { activityService } from '@/services/ActivityService';
 
 const PeriodicTable = () => {
   const { t, i18n } = useTranslation();
@@ -13,11 +12,6 @@ const PeriodicTable = () => {
   const [filter, setFilter] = useState('all');
   const [detailTab, setDetailTab] = useState('overview');
   const [imgError, setImgError] = useState(false);
-
-  // Reset image error state when a new element is selected
-  useEffect(() => {
-    setImgError(false);
-  }, [selectedElement]);
 
   const categories = [
     { id: 'all', label: t('periodic_table.categories.all'), color: 'bg-viet-green' },
@@ -50,6 +44,7 @@ const PeriodicTable = () => {
   };
 
   const handleSelect = (el) => {
+    setImgError(false);
     setSelectedElement(enrichElement(el));
     setDetailTab('overview');
   };

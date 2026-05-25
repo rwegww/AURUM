@@ -9,7 +9,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 
 async function checkColumn() {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('users')
     .select('avatar_seed')
     .limit(1);

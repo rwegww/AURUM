@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import { Map, ChevronRight, ChevronLeft, Save, RefreshCcw, GripVertical, AlertTriangle } from 'lucide-react';
 

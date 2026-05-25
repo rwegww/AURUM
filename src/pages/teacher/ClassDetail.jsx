@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -13,11 +13,7 @@ const ClassDetail = () => {
   const [newPost, setNewPost] = useState({ content: '', type: 'announcement', media_url: '', deadline: '', target_student_id: '' });
   const [newSchedule, setNewSchedule] = useState({ title: '', start_time: '', meet_url: '' });
 
-  useEffect(() => {
-    fetchClassData();
-  }, [id]);
-
-  const fetchClassData = async () => {
+  const fetchClassData = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       
@@ -47,7 +43,11 @@ const ClassDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchClassData();
+  }, [fetchClassData]);
 
   const handleCreatePost = async (e) => {
     e.preventDefault();

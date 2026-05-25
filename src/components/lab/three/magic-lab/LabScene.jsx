@@ -1,12 +1,36 @@
-import React, { useRef } from 'react';
-import { OrbitControls, Environment, ContactShadows, Html } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
+import React, { useEffect, useRef } from 'react';
+import { extend, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import Beaker from './Beaker';
 import FireEffect from './FireEffect';
 import BubbleParticles from './BubbleParticles';
 import SmokeParticles from './SmokeParticles';
 import PouringStream from './PouringStream';
 import useLabStore from './store';
+
+extend({ OrbitControls: ThreeOrbitControls });
+
+const CameraControls = () => {
+  const controlsRef = useRef();
+  const { camera, gl } = useThree();
+
+  useFrame(() => {
+    controlsRef.current?.update();
+  });
+
+  return (
+    <orbitControls
+      ref={controlsRef}
+      args={[camera, gl.domElement]}
+      minPolarAngle={Math.PI / 6}
+      maxPolarAngle={Math.PI / 2.15}
+      minDistance={3.5}
+      maxDistance={10}
+      enablePan
+      autoRotate={false}
+    />
+  );
+};
 
 const LabScene = () => {
   const beakers = useLabStore(state => state.beakers);
@@ -18,7 +42,7 @@ const LabScene = () => {
   const groupRef = useRef();
 
   // Xử lý bay hơi theo thời gian cho tất cả các cốc đang đun nóng
-  React.useEffect(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       beakers.forEach((beaker, beakerIdx) => {
         if (beaker.isHeating) {
@@ -44,8 +68,12 @@ const LabScene = () => {
     <>
       <ambientLight intensity={0.4} />
       <directionalLight position={[5, 10, 5]} intensity={1} castShadow />
-      <Environment preset="night" />
-      <ContactShadows position={[0, -0.01, 0]} scale={10} blur={3} opacity={0.5} />
+      <pointLight position={[-4, 4, -3]} intensity={0.5} color="#60a5fa" />
+
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.04, 0]} receiveShadow>
+        <circleGeometry args={[5.5, 64]} />
+        <shadowMaterial opacity={0.35} />
+      </mesh>
 
       <group ref={groupRef}>
         {beakers.map((beaker, i) => {
@@ -68,45 +96,18 @@ const LabScene = () => {
 
 
 
-              <Html position={[0, -0.25, 0.8]} center>
-                 <div 
-                   onClick={() => setActiveBeaker(i)}
-                   style={{
-                     cursor: 'pointer',
-                     color: isActive ? '#60a5fa' : '#4b5563',
-                     fontSize: '12px',
-                     fontWeight: 'bold',
-                     textTransform: 'uppercase',
-                     letterSpacing: '1px',
-                     background: isActive ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                     padding: '3px 10px',
-                     borderRadius: '6px',
-                     transition: 'all 0.3s',
-                     border: isActive ? '1px solid rgba(96, 165, 250, 0.3)' : '1px solid transparent'
-                   }}
-                 >
-                   {isActive ? (
-                     beaker.reactionMessage.includes('💥') || beaker.reactionMessage.includes('💣') 
-                       ? '🔴 DANGER' 
-                       : (beaker.contents.length > 0 
-                           ? [...new Set(beaker.contents.map(c => c.formula))].join(' + ') 
-                           : '🟢 TRỐNG')
-                   ) : `Cốc ${i+1}`}
-                 </div>
-              </Html>
+              {isActive && (
+                <mesh position={[0, -0.18, 0.8]} rotation={[-Math.PI / 2, 0, 0]}>
+                  <ringGeometry args={[0.42, 0.48, 48]} />
+                  <meshBasicMaterial color="#60a5fa" transparent opacity={0.75} />
+                </mesh>
+              )}
             </group>
           );
         })}
       </group>
 
-      <OrbitControls
-        minPolarAngle={Math.PI / 6}
-        maxPolarAngle={Math.PI / 2.15}
-        minDistance={3.5}
-        maxDistance={10}
-        enablePan={true}
-        autoRotate={false}
-      />
+      <CameraControls />
     </>
   );
 };

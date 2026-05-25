@@ -13,22 +13,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [unreadCount, setUnreadCount] = React.useState(0);
 
-  const lessonPath = isLoggedIn ? "/lessons/8/hoa8_kntt_bai1" : "/lessons";
-
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      fetchUnreadStats();
-      const interval = setInterval(fetchUnreadStats, 30000); // Check every 30s
-
-      window.addEventListener('classroom_read', fetchUnreadStats);
-      return () => {
-        clearInterval(interval);
-        window.removeEventListener('classroom_read', fetchUnreadStats);
-      };
-    }
-  }, [isLoggedIn]);
-
-  const fetchUnreadStats = async () => {
+  const fetchUnreadStats = React.useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/classes/stats', { headers: { 'Authorization': `Bearer ${token}` } });
@@ -49,7 +34,20 @@ const Navbar = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      fetchUnreadStats();
+      const interval = setInterval(fetchUnreadStats, 30000); // Check every 30s
+
+      window.addEventListener('classroom_read', fetchUnreadStats);
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('classroom_read', fetchUnreadStats);
+      };
+    }
+  }, [fetchUnreadStats, isLoggedIn]);
 
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent h-[90px] flex items-center px-6 lg:px-12">

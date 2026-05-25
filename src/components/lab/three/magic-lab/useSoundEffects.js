@@ -123,7 +123,7 @@ export const useSoundEffects = () => {
         gain.connect(masterGainRef.current);
         
         osc.start(now);
-        osc.stop(now + 0.1);
+        osc.stop(now + duration);
         break;
       }
 
@@ -282,12 +282,13 @@ export const useSoundEffects = () => {
       default:
         break;
     }
-  }, [enabled, initAudio, stopSound]);
+  }, [enabled, initAudio]);
 
   // Clean up
   useEffect(() => {
+    const activeNodes = activeNodesRef.current;
     return () => {
-      Object.keys(activeNodesRef.current).forEach(stopSound);
+      Object.keys(activeNodes).forEach(stopSound);
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }

@@ -2,27 +2,30 @@ import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import useLabStore from './store';
+import { stableRange } from '@/utils/stableRandom';
 
 const STREAM_COUNT = 30;
 
 const PouringStream = ({ formula = null }) => {
   const meshRef = useRef();
   const dummy = useMemo(() => new THREE.Object3D(), []);
-  
-  // Lấy danh sách hóa chất từ store thay vì import cứng từ reactionDB
+
   const chemicals = useLabStore(state => state.chemicals);
-  
   const chemical = formula ? (Object.values(chemicals).find(c => c.formula === formula) || chemicals[formula]) : null;
   const streamColor = chemical?.color || '#cccccc';
   const isSolid = chemical?.state === 'solid' || chemical?.type?.includes('metal');
 
   const particles = useMemo(() => {
-    return Array.from({ length: STREAM_COUNT }, () => ({
-      xSpread: (Math.random() - 0.5) * 0.15,
-      zSpread: (Math.random() - 0.5) * 0.15,
-      speed: 1.5 + Math.random() * 1.5,
-      phase: Math.random() * 2,
-      size: isSolid ? (0.02 + Math.random() * 0.04) : (0.01 + Math.random() * 0.025)
+    const seed = `pouring-${isSolid ? 'solid' : 'liquid'}`;
+
+    return Array.from({ length: STREAM_COUNT }, (_, i) => ({
+      xSpread: stableRange(`${seed}-x`, i, -0.075, 0.075),
+      zSpread: stableRange(`${seed}-z`, i, -0.075, 0.075),
+      speed: stableRange(`${seed}-speed`, i, 1.5, 3),
+      phase: stableRange(`${seed}-phase`, i, 0, 2),
+      size: isSolid
+        ? stableRange(`${seed}-size`, i, 0.02, 0.06)
+        : stableRange(`${seed}-size`, i, 0.01, 0.035),
     }));
   }, [isSolid]);
 
@@ -31,26 +34,25 @@ const PouringStream = ({ formula = null }) => {
     const t = performance.now() * 0.001;
 
     particles.forEach((p, i) => {
-      const cycle = ((t * p.speed + p.phase) % 1.0); // 0 -> 1 loop
-      
-      let x, y, z;
+      const cycle = (t * p.speed + p.phase) % 1;
+      let x;
+      let y;
+      let z;
+
       if (isSolid) {
-        // Rơi thẳng từ trên xuống trong tâm cốc
-        y = 2.0 - cycle * 1.6; 
+        y = 2 - cycle * 1.6;
         const spread = cycle * 0.15;
-        x = p.xSpread * spread; 
+        x = p.xSpread * spread;
         z = p.zSpread * spread;
       } else {
-        // Đổ từ bình vào (offset sang trái)
-        y = 1.8 - cycle * 1.4; 
+        y = 1.8 - cycle * 1.4;
         const spread = cycle * 0.3;
-        x = p.xSpread * spread - 0.3; // Offset -0.3
+        x = p.xSpread * spread - 0.3;
         z = p.zSpread * spread;
       }
 
       dummy.position.set(x, y, z);
-      const scale = p.size * (isSolid ? 22 : 12);
-      dummy.scale.setScalar(scale);
+      dummy.scale.setScalar(p.size * (isSolid ? 22 : 12));
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
     });

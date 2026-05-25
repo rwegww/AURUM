@@ -13,13 +13,13 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "migrate-lab": "node scripts/migrateLabData.js"
+    "migrate-lab": "node scripts/migrateLabData.js",
+    "upload-curriculum": "node scripts/uploadCurriculum.js"
   },
   "dependencies": {
     "@dicebear/core": "^9.4.2",
     "@dicebear/lorelei": "^9.4.2",
     "@multiavatar/multiavatar": "^1.0.7",
-    "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.0",
     "@supabase/supabase-js": "^2.101.1",
     "bcryptjs": "^3.0.3",

@@ -1,7 +1,5 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import { supabase } from '../lib/supabase.js';
-import User from '../models/User.js';
 import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();

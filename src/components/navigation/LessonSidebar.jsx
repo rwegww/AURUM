@@ -40,12 +40,6 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
     setExpandedSections(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
-  const calculateProgress = () => {
-    if (!lessons.length) return 0;
-    const currentIndex = lessons.findIndex(l => l.lessonId === currentLessonId);
-    return Math.round(((currentIndex + 1) / lessons.length) * 100) || 0;
-  };
-
   return (
     <aside className="w-[320px] min-h-[calc(100vh-70px)] bg-white border-r border-viet-border absolute top-0 left-0 z-40 flex flex-col shadow-sm">
       {/* Top Header / Context */}

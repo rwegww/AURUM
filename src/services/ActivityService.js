@@ -1,7 +1,10 @@
-import { supabase } from '@/lib/supabase';
-
 const HISTORY_KEY = 'aurum_user_activity_history';
 const MAX_HISTORY_ITEMS = 50;
+
+const getSupabase = async () => {
+  const { supabase } = await import('@/lib/supabase');
+  return supabase;
+};
 
 class ActivityService {
   /**
@@ -26,6 +29,7 @@ class ActivityService {
 
       // 3. Save to Database (if logged in)
       if (userId) {
+        const supabase = await getSupabase();
         const { error } = await supabase
           .from('user_activities')
           .insert([{
@@ -58,6 +62,7 @@ class ActivityService {
       const userId = localStorage.getItem('userId');
 
       if (userId) {
+        const supabase = await getSupabase();
         const { data, error } = await supabase
           .from('user_activities')
           .select('*')
@@ -106,6 +111,7 @@ class ActivityService {
       localStorage.removeItem(HISTORY_KEY);
 
       if (userId) {
+        const supabase = await getSupabase();
         await supabase
           .from('user_activities')
           .delete()

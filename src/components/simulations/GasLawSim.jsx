@@ -31,7 +31,7 @@ const GasLawSim = () => {
       });
     }
     particlesRef.current = particles;
-  }, [mol]);
+  }, [mol, speed]);
 
   // Update speed when temp changes
   useEffect(() => {
@@ -41,7 +41,7 @@ const GasLawSim = () => {
       p.vx = Math.cos(angle) * s;
       p.vy = Math.sin(angle) * s;
     });
-  }, [tempC]);
+  }, [speed]);
 
   // Animation loop
   useEffect(() => {

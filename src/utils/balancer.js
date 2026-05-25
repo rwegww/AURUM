@@ -5,8 +5,6 @@
 
 // Parse chemical formula like "Fe2O3" → { Fe: 2, O: 3 }
 export function parseFormula(formula) {
-  const elements = {};
-  
   // Helper to handle cleaning and normalization
   const clean = (f) => f
     .replace(/₀/g, '0').replace(/₁/g, '1').replace(/₂/g, '2')
