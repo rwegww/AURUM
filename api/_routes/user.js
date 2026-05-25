@@ -84,37 +84,11 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // Update Profile
-import { sendStudyPlanConfirmationEmail, sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
+import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
 
 router.patch('/profile', auth, async (req, res) => {
   try {
     const updatedUser = await User.update(req.user.id, req.body);
-    
-    // Send email notification if study plan was updated and email reminders are enabled
-    if (req.body.studyPlan && req.body.studyPlan.emailEnabled) {
-      const recipientEmail = req.user.email || updatedUser.email;
-      const recipientName = req.user.username || updatedUser.username;
-      console.log(`[Email Reminder] Attempting to send confirmation email to: ${recipientEmail} for user: ${recipientName}`);
-      console.log(`[Email Reminder] SMTP configured: ${!!(process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS)}`);
-      
-      if (!recipientEmail) {
-        console.warn('[Email Reminder] No email address found for user, skipping email.');
-      } else {
-        sendStudyPlanConfirmationEmail(recipientEmail, recipientName, req.body.studyPlan)
-          .then(result => {
-            if (result.success) {
-              console.log(`[Email Reminder] ✅ Confirmation email sent successfully to ${recipientEmail}`);
-            } else {
-              console.error(`[Email Reminder] ❌ Confirmation email failed: ${result.error}`);
-            }
-            if (result.previewUrl) {
-              console.log(`[Email Reminder] Ethereal Preview URL: ${result.previewUrl}`);
-            }
-          })
-          .catch(err => console.error('[Email Reminder] ❌ Failed to send confirmation email:', err.message));
-      }
-    }
-
     res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
