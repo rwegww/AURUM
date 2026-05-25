@@ -9,54 +9,51 @@ import StudyCalendar from '@/components/profile/StudyCalendar';
 import { supabase } from '@/lib/supabase';
 import { Bell, Mail, CalendarRange, Activity, Target, Clock, BookOpen, Lightbulb, Save } from 'lucide-react';
 
-const ReminderToggle = ({ enabled, onChange, title, description, icon, activeColor }) => {
+const ReminderToggle = ({ enabled, onChange, title, icon, activeColor }) => {
   const colorClasses = {
     green: {
-      border: 'border-viet-green bg-white shadow-[0_8px_30px_rgba(118,192,52,0.06)]',
+      border: 'border-viet-green bg-white shadow-sm',
       iconBg: 'bg-viet-green/10 text-viet-green',
       switchBg: 'bg-viet-green',
     },
     blue: {
-      border: 'border-blue-500 bg-white shadow-[0_8px_30px_rgba(59,130,246,0.06)]',
+      border: 'border-blue-500 bg-white shadow-sm',
       iconBg: 'bg-blue-500/10 text-blue-600',
       switchBg: 'bg-blue-500',
     },
     purple: {
-      border: 'border-purple-500 bg-white shadow-[0_8px_30px_rgba(168,85,247,0.06)]',
+      border: 'border-purple-500 bg-white shadow-sm',
       iconBg: 'bg-purple-500/10 text-purple-600',
       switchBg: 'bg-purple-500',
     }
   };
 
   const colors = enabled ? colorClasses[activeColor] : {
-    border: 'border-viet-border bg-slate-50/30 opacity-70 hover:opacity-100 hover:bg-white',
+    border: 'border-viet-border bg-white/50 opacity-80 hover:opacity-100',
     iconBg: 'bg-slate-100 text-slate-400',
-    switchBg: 'bg-slate-300'
+    switchBg: 'bg-slate-200'
   };
 
   return (
     <motion.div
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -1 }}
       onClick={onChange}
-      className={`relative p-5 rounded-3xl border-2 transition-all duration-300 cursor-pointer flex items-start gap-4 ${colors.border}`}
+      className={`relative p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 ${colors.border}`}
     >
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${colors.iconBg}`}>
-        {icon}
-      </div>
-      <div className="flex-1 text-left">
-        <h4 className={`font-black text-[15px] leading-tight ${enabled ? 'text-viet-text' : 'text-slate-500'}`}>
+      <div className="flex items-center gap-3">
+        <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 ${colors.iconBg}`}>
+          {icon}
+        </div>
+        <span className={`font-black text-[13px] ${enabled ? 'text-viet-text' : 'text-slate-500'}`}>
           {title}
-        </h4>
-        <p className="text-[12px] font-medium text-slate-400 mt-1.5 leading-snug">
-          {description}
-        </p>
+        </span>
       </div>
-      <div className="pt-1 select-none">
-        <div className={`w-11 h-6 rounded-full relative transition-colors duration-300 ${colors.switchBg}`}>
+      <div className="select-none">
+        <div className={`w-9 h-5 rounded-full relative transition-colors duration-200 ${colors.switchBg}`}>
           <motion.div 
-            animate={{ x: enabled ? 20 : 2 }}
+            animate={{ x: enabled ? 18 : 2 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            className="absolute top-1 w-4 h-4 bg-white rounded-full shadow-md"
+            className="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"
           />
         </div>
       </div>
@@ -306,88 +303,97 @@ const Profile = () => {
         </div>
 
         {/* Study Plan Section */}
-        <div className="bg-white rounded-[40px] p-10 border border-viet-border shadow-xl overflow-hidden relative mb-16">
+        <div className="bg-white rounded-[40px] p-8 border border-viet-border shadow-xl overflow-hidden relative mb-12">
           <div className="absolute top-0 right-0 w-64 h-64 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
           
           <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
               <div>
-                <h2 className="text-3xl font-black text-viet-text mb-2">{t('profile.study_plan.title')}</h2>
-                <p className="text-viet-text-light/60 font-medium">{t('profile.study_plan.subtitle')}</p>
+                <h2 className="text-2xl font-black text-viet-text flex items-center gap-2">
+                  <Target className="w-6 h-6 text-viet-green" /> {t('profile.study_plan.title')}
+                </h2>
+                <p className="text-xs text-viet-text-light/60 font-medium">{t('profile.study_plan.subtitle')}</p>
               </div>
-              <div className="flex items-center gap-3 px-6 py-3 bg-viet-green/10 rounded-2xl border border-viet-green/20">
-                <Activity className="w-6 h-6 text-viet-green shrink-0 animate-pulse" />
+              <div className="flex items-center gap-3 px-4 py-2 bg-viet-green/10 rounded-2xl border border-viet-green/20">
+                <Activity className="w-5 h-5 text-viet-green shrink-0 animate-pulse" />
                 <div>
-                  <div className="text-[11px] font-black text-viet-green uppercase tracking-widest leading-none mb-1">Tiến độ hôm nay</div>
-                  <div className="text-lg font-black text-viet-text leading-none">
+                  <div className="text-[10px] font-black text-viet-green uppercase tracking-widest leading-none mb-1">Tiến độ hôm nay</div>
+                  <div className="text-sm font-black text-viet-text leading-none">
                     {user.todayLessonCompleted ? 'Hoàn thành' : 'Chưa hoàn thành'}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-              {/* Left Side: Targets & Tip */}
-              <div className="lg:col-span-2 space-y-8 pr-0 lg:pr-6 border-r-0 lg:border-r border-slate-100">
-                <h3 className="text-xl font-black text-viet-text mb-2 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-viet-green shrink-0" /> Thiết lập mục tiêu học tập
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.time_label')}</label>
-                    <div className="relative">
-                      <input 
-                        type="time" 
-                        value={planData.studyTime || '20:00'}
-                        onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
-                        className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
-                      />
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-40">
-                        <Clock size={20} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <label className="text-[13px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.target_label')}</label>
-                    <div className="relative">
-                      <select 
-                        value={planData.dailyLessonTarget || 1}
-                        onChange={(e) => setPlanData({ ...planData, dailyLessonTarget: parseInt(e.target.value) })}
-                        className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none appearance-none transition-all"
-                      >
-                        {[1, 2, 3, 5, 10].map(n => (
-                          <option key={n} value={n}>{n} {t('common.lesson_count', { count: n })}</option>
-                        ))}
-                      </select>
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
-                        <BookOpen size={20} />
-                      </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              {/* Left Column: Time & Target */}
+              <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.time_label')}</label>
+                  <div className="relative">
+                    <input 
+                      type="time" 
+                      value={planData.studyTime || '20:00'}
+                      onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
+                      className="w-full h-14 bg-slate-50 border border-viet-border rounded-2xl px-5 font-black text-md focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
+                    />
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 opacity-40">
+                      <Clock size={18} />
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex items-start gap-4">
-                  <Lightbulb className="w-6 h-6 text-amber-500 shrink-0" />
-                  <div className="text-sm font-medium text-slate-500 leading-relaxed">
-                    <p className="font-bold text-[#1a1a1a] mb-1">Mẹo duy trì thói quen học:</p>
-                    Học cùng một thời điểm mỗi ngày giúp tạo phản xạ tự nhiên. Đặt mục tiêu nhỏ (1-2 bài) giúp bạn dễ dàng hoàn thành và không bị nản lòng.
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-2">{t('profile.study_plan.target_label')}</label>
+                  <div className="relative">
+                    <select 
+                      value={planData.dailyLessonTarget || 1}
+                      onChange={(e) => setPlanData({ ...planData, dailyLessonTarget: parseInt(e.target.value) })}
+                      className="w-full h-14 bg-slate-50 border border-viet-border rounded-2xl px-5 font-black text-md focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none appearance-none transition-all"
+                    >
+                      {[1, 2, 3, 5, 10].map(n => (
+                        <option key={n} value={n}>{n} {t('common.lesson_count', { count: n })}</option>
+                      ))}
+                    </select>
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+                      <BookOpen size={18} />
+                    </div>
                   </div>
+                </div>
+
+                {/* Save Button inside the Left Grid */}
+                <div className="sm:col-span-2 pt-2 flex justify-end">
+                  <button
+                    onClick={handleSaveStudyPlan}
+                    disabled={isSavingPlan}
+                    className="w-full sm:w-auto px-8 py-3.5 bg-viet-green hover:bg-viet-green/90 text-white rounded-2xl font-black text-sm shadow-md shadow-viet-green/20 hover:shadow-lg hover:shadow-viet-green/30 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
+                    {isSavingPlan ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        {t('profile.study_plan.saving')}
+                      </>
+                    ) : (
+                      <>
+                        <Save size={16} />
+                        {t('profile.study_plan.save_btn')}
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
 
-              {/* Right Side: Reminders (Sleek cards) */}
-              <div className="space-y-6">
-                <h3 className="text-xl font-black text-viet-text flex items-center gap-2">
-                  <Bell className="w-5 h-5 text-viet-green shrink-0" /> Nhắc nhở & Thông báo
-                </h3>
-                <div className="flex flex-col gap-4">
+              {/* Right Column: Compact Reminders */}
+              <div className="bg-slate-50/50 border border-viet-border rounded-[32px] p-6 space-y-4">
+                <h4 className="text-[11px] font-black text-viet-text-light uppercase tracking-widest pl-1 flex items-center gap-1.5">
+                  <Bell className="w-4 h-4 text-viet-green shrink-0" /> {t('profile.study_plan.reminders_label')}
+                </h4>
+                <div className="flex flex-col gap-3">
                   <ReminderToggle 
                     enabled={planData.remindersEnabled}
                     onChange={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
                     title="Nhắc nhở học tập"
-                    description="Nhận thông báo nhắc nhở trực tiếp ngay trên trang web khi bạn đang trực tuyến."
-                    icon={<Bell size={24} />}
+                    icon={<Bell size={18} />}
                     activeColor="green"
                   />
 
@@ -395,8 +401,7 @@ const Profile = () => {
                     enabled={planData.emailEnabled}
                     onChange={() => setPlanData({ ...planData, emailEnabled: !planData.emailEnabled })}
                     title="Nhắc nhở qua Email"
-                    description="Tự động nhận email nhắc học nếu hôm nay bạn chưa hoàn thành mục tiêu học tập."
-                    icon={<Mail size={24} />}
+                    icon={<Mail size={18} />}
                     activeColor="blue"
                   />
 
@@ -404,32 +409,11 @@ const Profile = () => {
                     enabled={planData.calendarEnabled}
                     onChange={() => setPlanData({ ...planData, calendarEnabled: !planData.calendarEnabled })}
                     title="Lịch học tùy chỉnh"
-                    description="Cho phép bạn đặt lịch học cụ thể cho từng ngày riêng lẻ trên lịch học cá nhân."
-                    icon={<CalendarRange size={24} />}
+                    icon={<CalendarRange size={18} />}
                     activeColor="purple"
                   />
                 </div>
               </div>
-            </div>
-
-            <div className="mt-10 pt-8 border-t border-slate-100 flex justify-end">
-              <button
-                onClick={handleSaveStudyPlan}
-                disabled={isSavingPlan}
-                className="px-12 py-4 bg-viet-green hover:bg-viet-green/90 text-white rounded-2xl font-black text-md shadow-lg shadow-viet-green/20 hover:shadow-xl hover:shadow-viet-green/30 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50 flex items-center gap-3"
-              >
-                {isSavingPlan ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    {t('profile.study_plan.saving')}
-                  </>
-                ) : (
-                  <>
-                    <Save size={18} />
-                    {t('profile.study_plan.save_btn')}
-                  </>
-                )}
-              </button>
             </div>
 
             <StudyCalendar planData={planData} onPlanDataChange={setPlanData} />
