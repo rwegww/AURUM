@@ -52,11 +52,11 @@ const sendMail = async ({ to, subject, html }) => {
 
 export default sendMail;
 
-export const sendStudyPlanEmail = async (toEmail, username, planData) => {
+export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData) => {
   const { studyTime, dailyLessonTarget } = planData;
   return sendMail({
     to: toEmail,
-    subject: '📚 Nhắc nhở Kế hoạch học tập - Học viện Hóa học Aurum',
+    subject: '✔️ Xác nhận kích hoạt Kế hoạch học tập - Học viện Hóa học Aurum',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
         <h2 style="color: #059669; text-align: center;">Học viện Hóa học Aurum</h2>
@@ -69,9 +69,30 @@ export const sendStudyPlanEmail = async (toEmail, username, planData) => {
             <li>📚 <strong>Mục tiêu hàng ngày:</strong> ${dailyLessonTarget} bài học</li>
           </ul>
         </div>
-        <p>Chúng tôi sẽ gửi email nhắc nhở bạn học tập vào lúc <strong>${studyTime}</strong> mỗi ngày để duy trì chuỗi học tập (streak) và tích lũy điểm kinh nghiệm (XP) nhé!</p>
+        <p>Hệ thống sẽ gửi email nhắc nhở bạn học tập vào lúc <strong>${studyTime}</strong> mỗi ngày (nếu bạn chưa hoàn thành mục tiêu học tập trong ngày) để duy trì chuỗi học tập (streak) và tích lũy điểm kinh nghiệm (XP) nhé!</p>
         <div style="text-align: center; margin-top: 30px;">
           <a href="https://chem-aurum.vercel.app/" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Bắt đầu học ngay</a>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
+        <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum. Không cần trả lời email này.</p>
+      </div>
+    `,
+  });
+};
+
+export const sendStudyPlanReminderEmail = async (toEmail, username, planData) => {
+  const { studyTime, dailyLessonTarget } = planData;
+  return sendMail({
+    to: toEmail,
+    subject: '📚 Đã đến giờ học Hóa học rồi! - Học viện Hóa học Aurum',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
+        <h2 style="color: #059669; text-align: center;">Học viện Hóa học Aurum</h2>
+        <p>Xin chào <strong>${username}</strong>,</p>
+        <p>🔔 Đã đến giờ học Hóa học theo kế hoạch học tập của bạn rồi! (<strong>${studyTime}</strong>)</p>
+        <p>Hôm nay bạn vẫn chưa hoàn thành mục tiêu học tập hàng ngày (<strong>${dailyLessonTarget} bài học</strong>). Hãy vào học ngay để duy trì chuỗi học tập (streak) và tích lũy điểm kinh nghiệm (XP) nhé!</p>
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="https://chem-aurum.vercel.app/" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Vào học ngay</a>
         </div>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
         <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum. Không cần trả lời email này.</p>
