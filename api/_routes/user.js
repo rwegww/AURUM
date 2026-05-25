@@ -185,16 +185,21 @@ router.get('/public-praises', async (req, res) => {
 
 // Get Profile
 router.get('/profile', auth, async (req, res) => {
-  // If 'claim' param is true, update the currentSessionId in DB
-  if (req.query.claim === 'true') {
-    const sessionId = req.header('X-Session-ID');
-    if (sessionId) {
-      await User.update(req.user.id, { currentSessionId: sessionId });
-      req.user.currentSessionId = sessionId; // Update in-memory user for immediate consistency
+  try {
+    // If 'claim' param is true, update the currentSessionId in DB
+    if (req.query.claim === 'true') {
+      const sessionId = req.header('X-Session-ID');
+      if (sessionId) {
+        await User.update(req.user.id, { currentSessionId: sessionId });
+        req.user.currentSessionId = sessionId; // Update in-memory user for immediate consistency
+      }
     }
-  }
 
-  res.json(toProfileResponse(req.user));
+    res.json(toProfileResponse(req.user));
+  } catch (err) {
+    console.error('Error in /profile:', err);
+    res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  }
 });
 
 // Update Profile
