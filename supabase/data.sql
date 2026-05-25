@@ -294,7 +294,6 @@ CREATE TABLE public.users (
   created_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
   updated_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
   arena_stats jsonb DEFAULT '{"wins": 0, "total": 0, "losses": 0, "points": 0}'::jsonb,
-  arena_avatar jsonb DEFAULT '{"aura": "#a855f7", "seed": "Chem Master"}'::jsonb,
   avatar_seed text,
   active_minutes integer DEFAULT 0,
   last_active_at timestamp with time zone DEFAULT now(),
