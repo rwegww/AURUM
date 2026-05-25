@@ -13,6 +13,9 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "db:backup": "node scripts/db/backupSupabaseRest.js",
+    "db:migrate:restructure": "node scripts/db/runRestructureMigration.js",
+    "db:validate:restructure": "node scripts/db/validateRestructure.js",
     "migrate-lab": "node scripts/migrateLabData.js",
     "upload-curriculum": "node scripts/uploadCurriculum.js"
   },
@@ -37,7 +40,6 @@
     "katex": "^0.16.45",
     "lucide-react": "^0.473.0",
     "mammoth": "^1.12.0",
-    "mongoose": "^9.4.1",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^8.0.7",
@@ -71,6 +73,7 @@
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.1",
+    "pg": "^8.13.1",
     "xlsx": "^0.18.5"
   }
 }

@@ -1,115 +1,113 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Lesson from '../api/models/Lesson.js';
 
-dotenv.config();
+dotenv.config({ path: ['.env.local', '.env'] });
 
 const challenges = [
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Beaker_selection_01.jpg/800px-Beaker_selection_01.jpg",
-    question: "Dụng cụ dùng để chứa và đun nóng dung dịch này tên là gì?",
-    options: ["Cốc thủy tinh", "Ống đong", "Bình tam giác", "Ống nghiệm"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Beaker_selection_01.jpg/800px-Beaker_selection_01.jpg',
+    question: 'Dung cu dung de chua va dun nong dung dich nay ten la gi?',
+    options: ['Coc thuy tinh', 'Ong dong', 'Binh tam giac', 'Ong nghiem'],
     correctAnswer: 0,
-    targetType: "dụng cụ"
+    targetType: 'dung cu'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Magnesium_ribbon_burning.jpg/800px-Magnesium_ribbon_burning.jpg",
-    question: "Hiện tượng dải Magiê cháy sáng rực rỡ này là dấu hiệu của:",
-    options: ["Biến đổi vật lý", "Sự bay hơi", "Phản ứng hóa học", "Sự hòa tan"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Magnesium_ribbon_burning.jpg/800px-Magnesium_ribbon_burning.jpg',
+    question: 'Hien tuong dai magie chay sang ruc ro nay la dau hieu cua gi?',
+    options: ['Bien doi vat ly', 'Su bay hoi', 'Phan ung hoa hoc', 'Su hoa tan'],
     correctAnswer: 2,
-    targetType: "biến đổi"
+    targetType: 'bien doi'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/4/4d/Amedeo_Avogadro2.jpg",
-    question: "Đây là chân dung nhà bác học đã đề xuất hằng số $6,022 \\times 10^{23}$. Ông là ai?",
-    options: ["Lavoisier", "Dalton", "Avogadro", "Mendeleev"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/4/4d/Amedeo_Avogadro2.jpg',
+    question: 'Nha bac hoc de xuat hang so 6.022 x 10^23 la ai?',
+    options: ['Lavoisier', 'Dalton', 'Avogadro', 'Mendeleev'],
     correctAnswer: 2,
-    targetType: "nhà bác học"
+    targetType: 'nha bac hoc'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Copper%28II%29_sulfate_solution.jpg/800px-Copper%28II%29_sulfate_solution.jpg",
-    question: "Chất lỏng màu xanh lam đồng nhất này là ví dụ của khái niệm:",
-    options: ["Nhũ tương", "Huyền phù", "Dung dịch", "Hỗn hợp không đồng nhất"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Copper%28II%29_sulfate_solution.jpg/800px-Copper%28II%29_sulfate_solution.jpg',
+    question: 'Chat long mau xanh lam dong nhat nay la vi du cua khai niem nao?',
+    options: ['Nhu tuong', 'Huyen phu', 'Dung dich', 'Hon hop khong dong nhat'],
     correctAnswer: 2,
-    targetType: "trạng thái chất"
+    targetType: 'trang thai chat'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Antoine_Lavoisier.jpg/800px-Antoine_Lavoisier.jpg",
-    question: "Dưới đây là một nhà bác học người Pháp, cha đẻ của định luật Bảo toàn khối lượng. Tên ông là gì?",
-    options: ["Isaac Newton", "Antoine Lavoisier", "Marie Curie", "Albert Einstein"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Antoine_Lavoisier.jpg/800px-Antoine_Lavoisier.jpg',
+    question: 'Cha de cua dinh luat bao toan khoi luong la ai?',
+    options: ['Isaac Newton', 'Antoine Lavoisier', 'Marie Curie', 'Albert Einstein'],
     correctAnswer: 1,
-    targetType: "nhà bác học"
+    targetType: 'nha bac hoc'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/H2_Combustion_Reaction.png/800px-H2_Combustion_Reaction.png",
-    question: "Sơ đồ này mô tả điều gì trong hóa học?",
-    options: ["Tỉ khối", "Độ tan", "Phương trình hóa học", "Công thức phân tử"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/H2_Combustion_Reaction.png/800px-H2_Combustion_Reaction.png',
+    question: 'So do nay mo ta dieu gi trong hoa hoc?',
+    options: ['Ti khoi', 'Do tan', 'Phuong trinh hoa hoc', 'Cong thuc phan tu'],
     correctAnswer: 2,
-    targetType: "mô hình"
+    targetType: 'mo hinh'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Litmus_paper.JPG/800px-Litmus_paper.JPG",
-    question: "Dụng cụ dùng để nhận biết nhanh tính Acid/Base này là:",
-    options: ["Giấy quỳ tím", "Giấy lọc", "Ống đong", "Phễu"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Litmus_paper.JPG/800px-Litmus_paper.JPG',
+    question: 'Dung cu dung de nhan biet nhanh tinh acid/base la gi?',
+    options: ['Giay quy tim', 'Giay loc', 'Ong dong', 'Pheu'],
     correctAnswer: 0,
-    targetType: "dụng cụ thử"
+    targetType: 'dung cu thu'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sodium_hydroxide_pellets.JPG/800px-Sodium_hydroxide_pellets.JPG",
-    question: "Những viên chất rắn màu trắng ẩm ướt này thường là ví dụ của:",
-    options: ["Acid", "Base (Kiềm)", "Oxit", "Muối"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sodium_hydroxide_pellets.JPG/800px-Sodium_hydroxide_pellets.JPG',
+    question: 'Nhung vien chat ran mau trang am uot nay thuong la vi du cua gi?',
+    options: ['Acid', 'Base (kiem)', 'Oxit', 'Muoi'],
     correctAnswer: 1,
-    targetType: "loại chất"
+    targetType: 'loai chat'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Rust_on_iron.jpg/800px-Rust_on_iron.jpg",
-    question: "Lớp gỉ màu nâu đỏ trên bề mặt sắt này chính là một loại:",
-    options: ["Oxit", "Axit", "Muối", "Ba-zơ"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Rust_on_iron.jpg/800px-Rust_on_iron.jpg',
+    question: 'Lop gi mau nau do tren be mat sat la loai chat nao?',
+    options: ['Oxit', 'Axit', 'Muoi', 'Bazo'],
     correctAnswer: 0,
-    targetType: "loại chất"
+    targetType: 'loai chat'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Halite_Crystal.jpg/800px-Halite_Crystal.jpg",
-    question: "Dưới đây là tinh thể Muối ăn trong tự nhiên, tên khoáng học là:",
-    options: ["Thạch anh", "Halite (Muối đá)", "Canxit", "Pirit"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Halite_Crystal.jpg/800px-Halite_Crystal.jpg',
+    question: 'Tinh the muoi an trong tu nhien co ten khoang hoc la gi?',
+    options: ['Thach anh', 'Halite (muoi da)', 'Canxit', 'Pirit'],
     correctAnswer: 1,
-    targetType: "loại chất"
+    targetType: 'loai chat'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Potassium_carbonate_potash.jpg/800px-Potassium_carbonate_potash.jpg",
-    question: "Chất này được dùng rộng rãi trong sản xuất phân bón. Đây là:",
-    options: ["Axit mạnh", "Nhiên liệu", "Muối Kali (Potash)", "Oxit kim loại"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Potassium_carbonate_potash.jpg/800px-Potassium_carbonate_potash.jpg',
+    question: 'Chat nay duoc dung rong rai trong san xuat phan bon. Day la gi?',
+    options: ['Axit manh', 'Nhien lieu', 'Muoi kali (potash)', 'Oxit kim loai'],
     correctAnswer: 2,
-    targetType: "ứng dụng"
+    targetType: 'ung dung'
   },
   {
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Methane-3D-balls.png/800px-Methane-3D-balls.png",
-    question: "Mô hình này mô tả khí Mêtan ($CH_4$), thành phần chính của loại:",
-    options: ["Acid", "Base", "Nhiên liệu khí", "Oxit khí"],
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Methane-3D-balls.png/800px-Methane-3D-balls.png',
+    question: 'Mo hinh nay mo ta khi methane CH4, thanh phan chinh cua loai nao?',
+    options: ['Acid', 'Base', 'Nhien lieu khi', 'Oxit khi'],
     correctAnswer: 2,
-    targetType: "ứng dụng"
+    targetType: 'ung dung'
   }
 ];
 
 async function updateChallenges() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to MongoDB!");
+    const lessons = await Lesson.find({ classId: 8 });
+    console.log(`Found ${lessons.length} grade 8 lessons.`);
 
-    const lessons = await Lesson.find({ classId: 8 }).sort({ order: 1 });
-    console.log(`Found ${lessons.length} lessons for Grade 8.`);
-
-    for (let i = 0; i < Math.min(lessons.length, challenges.length); i++) {
+    for (let i = 0; i < Math.min(lessons.length, challenges.length); i += 1) {
       const lesson = lessons[i];
-      lesson.challenge = challenges[i];
-      await lesson.save();
+      await Lesson.update(lesson.lessonId || lesson.id, {
+        ...lesson,
+        challenges: [challenges[i]]
+      });
       console.log(`Updated challenge for: ${lesson.title}`);
     }
 
-    console.log("Successfully updated all challenges! 🎉");
+    console.log('Successfully updated challenges.');
     process.exit(0);
-  } catch (err) {
-    console.error("Error updating challenges:", err);
+  } catch (error) {
+    console.error('Error updating challenges:', error);
     process.exit(1);
   }
 }

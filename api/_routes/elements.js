@@ -1,60 +1,44 @@
 import express from 'express';
-import { supabase } from '../lib/supabase.js';
 import { auth, requireRole } from '../_middleware/auth.js';
+import { elements as staticElements } from '../../src/data/elements.js';
 
 const router = express.Router();
 
-/**
- * @route GET /api/elements
- * @desc Lấy danh sách toàn bộ 118 nguyên tố hóa học
- */
-router.get('/', async (req, res) => {
+const toApiElement = (element) => ({
+  atomic_number: element.number,
+  number: element.number,
+  symbol: element.symbol,
+  name: element.name,
+  atomic_mass: Number.parseFloat(element.weight) || null,
+  weight: element.weight,
+  state: element.state || 'unknown',
+  category: element.category || 'unknown',
+  color_hex: element.colorHex || null,
+  electron_configuration: Array.isArray(element.shells) ? element.shells.join('-') : null,
+  shells: element.shells || [],
+  description: element.desc || element.description || null,
+  desc: element.desc || element.description || null,
+  x: element.x,
+  y: element.y,
+});
+
+router.get('/', async (_req, res) => {
   try {
-    const { data: elements, error } = await supabase
-      .from('periodic_elements')
-      .select('*')
-      .order('atomic_number', { ascending: true });
-
-    if (error) throw error;
-
     res.status(200).json({
       success: true,
-      elements
+      elements: staticElements.map(toApiElement)
     });
   } catch (error) {
-    console.error('Lỗi tải Bảng tuần hoàn:', error);
+    console.error('Error loading periodic elements:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-/**
- * @route POST /api/elements/seed
- * @desc (Admin Only) Đẩy dữ liệu tĩnh lên Database lần đầu tiên
- */
-router.post('/seed', auth, requireRole('admin'), async (req, res) => {
-  try {
-    const { elementsData } = req.body;
-    
-    // Yêu cầu token hoặc Middleware kiểm tra Role là Admin ở hệ thống thực tế
-    if (!elementsData || elementsData.length === 0) {
-      return res.status(400).json({ success: false, message: 'Thiếu dữ liệu elementsData' });
-    }
-
-    const { data, error } = await supabase
-      .from('periodic_elements')
-      .upsert(elementsData, { onConflict: 'atomic_number' })
-      .select();
-
-    if (error) throw error;
-
-    res.status(201).json({
-      success: true,
-      message: `Đã nạp thành công ${data.length} nguyên tố vào CSDL`,
-    });
-  } catch (error) {
-    console.error('Lỗi nạp dữ liệu Bảng tuần hoàn:', error);
-    res.status(500).json({ success: false, message: error.message });
-  }
+router.post('/seed', auth, requireRole('admin'), async (_req, res) => {
+  res.status(410).json({
+    success: false,
+    message: 'Periodic elements are served from static app data; database seeding is no longer supported.'
+  });
 });
 
 export default router;

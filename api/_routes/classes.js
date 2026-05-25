@@ -272,8 +272,8 @@ router.get('/:id/posts', auth, async (req, res) => {
     const enhancedPosts = await Promise.all(posts.map(async (p) => {
       if (p.type === 'assignment' && p.media_url) {
         const { data: lesson } = await supabase
-          .from('lesson')
-          .select('id, grade_level')
+          .from('lessons')
+          .select('id, class_id')
           .eq('id', p.media_url)
           .single();
         if (lesson) p.lesson = lesson;

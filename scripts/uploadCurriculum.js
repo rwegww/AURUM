@@ -18,7 +18,7 @@ const args = new Set(process.argv.slice(2));
 const APPLY = args.has('--apply');
 const DELETE_LOCAL = args.has('--delete-local');
 const FORCE = args.has('--force');
-const LESSON_TABLE = process.env.LESSONS_TABLE || 'lesson';
+const LESSON_TABLE = process.env.LESSONS_TABLE || 'lessons';
 
 const requiredWhenApply = [
   'CLOUDINARY_CLOUD_NAME',
