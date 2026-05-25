@@ -60,6 +60,21 @@ const sendMail = async ({ to, subject, html }) => {
 
 export default sendMail;
 
+const formatLateDuration = (lateMinutes) => {
+  const safeLateMinutes = Number.isFinite(Number(lateMinutes))
+    ? Math.max(0, Math.floor(Number(lateMinutes)))
+    : 0;
+
+  if (safeLateMinutes <= 1) return '\u0110\u00fang gi\u1edd';
+  if (safeLateMinutes < 60) return `Tr\u1ec5 ${safeLateMinutes} ph\u00fat`;
+
+  const hours = Math.floor(safeLateMinutes / 60);
+  const minutes = safeLateMinutes % 60;
+  return minutes > 0
+    ? `Tr\u1ec5 ${hours} gi\u1edd ${minutes} ph\u00fat`
+    : `Tr\u1ec5 ${hours} gi\u1edd`;
+};
+
 export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData) => {
   const { studyTime, dailyLessonTarget } = planData;
   return sendMail({
@@ -88,8 +103,13 @@ export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData
   });
 };
 
-export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planData, hourOffset) => {
+export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planData, hourOffset = 0, lateMinutes = null) => {
   const { studyTime, dailyLessonTarget } = planData;
+  const safeLateMinutes = lateMinutes === null
+    ? Math.max(0, Number(hourOffset) || 0) * 60
+    : Math.max(0, Math.floor(Number(lateMinutes) || 0));
+  const templateHourOffset = Math.floor(safeLateMinutes / 60);
+  const lateDurationText = formatLateDuration(safeLateMinutes);
   
   // Define templates based on how many hours they are late (hourOffset)
   let subject = '';
@@ -98,17 +118,23 @@ export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planDa
   let ctaText = 'Vào học ngay';
   let accentColor = '#059669'; // default green
 
-  if (hourOffset === 0) {
+  if (safeLateMinutes > 1 && safeLateMinutes < 60) {
+    subject = 'Nhac nho hoc tap theo ke hoach - Hoc vien Aurum';
+    greetingMsg = `Ban dang tre ${safeLateMinutes} phut so voi gio hoc da dat.`;
+    mainContent = `Hom nay ban van chua hoan thanh muc tieu hoc tap hang ngay (<strong>${dailyLessonTarget} bai hoc</strong>). Hay vao hoc ngay de giu nhip do hoc tap nhe!`;
+    accentColor = '#f59e0b';
+    ctaText = 'Vao hoc ngay';
+  } else if (templateHourOffset === 0) {
     subject = '📚 Đã đến giờ học Hóa học theo kế hoạch! - Học viện Aurum';
     greetingMsg = 'Đã đến giờ học Hóa học theo kế hoạch của bạn rồi!';
     mainContent = `Hôm nay bạn vẫn chưa hoàn thành mục tiêu học tập hàng ngày (<strong>${dailyLessonTarget} bài học</strong>). Hãy dành 5 phút vào học để duy trì nhịp độ học tập nhé!`;
-  } else if (hourOffset === 1) {
+  } else if (templateHourOffset === 1) {
     subject = '⚡ Đừng quên mục tiêu học tập hôm nay nhé! - Học viện Aurum';
     greetingMsg = 'Bạn đã trễ 1 tiếng so với kế hoạch học tập rồi!';
     mainContent = `Chỉ cần hoàn thành <strong>${dailyLessonTarget} bài học</strong> để tiếp tục tích lũy kinh nghiệm (XP) và nâng cao trình độ. Hãy bứt phá ngay nhé!`;
     accentColor = '#f59e0b'; // orange/amber
     ctaText = 'Bắt đầu học ngay';
-  } else if (hourOffset === 2) {
+  } else if (templateHourOffset === 2) {
     subject = '🔥 Giữ ngọn lửa học tập của bạn! - Học viện Aurum';
     greetingMsg = 'Đã trễ 2 tiếng rồi, hãy giữ vững sự kiên trì!';
     mainContent = `Sự kiên trì hàng ngày là chìa khóa để làm chủ kiến thức Hóa học. Hãy dành ra ít phút hoàn thành <strong>${dailyLessonTarget} bài học</strong> của ngày hôm nay nhé!`;
@@ -136,7 +162,7 @@ export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planDa
           <ul style="list-style-type: none; padding-left: 0; margin: 0;">
             <li>⏰ <strong>Giờ hẹn học:</strong> ${studyTime}</li>
             <li>📚 <strong>Mục tiêu:</strong> ${dailyLessonTarget} bài học</li>
-            <li>🕒 <strong>Thời gian trễ:</strong> ${hourOffset === 0 ? 'Đúng giờ' : `${hourOffset} giờ`}</li>
+            <li>&#128338; <strong>Th&#7901;i gian tr&#7877;:</strong> ${lateDurationText}</li>
           </ul>
         </div>
         <div style="text-align: center; margin-top: 30px;">
