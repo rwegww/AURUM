@@ -51,7 +51,6 @@ const StageQuiz = () => {
 
       try {
         await completeLessonSegment(lessonId, currentLevel, stars, xpGain, isLessonCompletion);
-        console.log('✅ Đã lưu giai đoạn:', { lessonId, currentLevel, stars });
       } catch (err) {
         console.error('❌ Lỗi khi lưu giai đoạn:', err);
       }
@@ -67,7 +66,6 @@ const StageQuiz = () => {
     if (user && currentQuestions.length === 0) {
       try {
         await completeLessonSegment(lessonId, 'level1', 3, 30, false);
-        console.log('✅ Đã lưu giai đoạn 1 (Chỉ video):', { lessonId });
       } catch (err) {
         console.error('❌ Lỗi khi lưu giai đoạn video:', err);
       }
