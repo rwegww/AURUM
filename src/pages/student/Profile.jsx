@@ -6,7 +6,7 @@ import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
 import { supabase } from '@/lib/supabase';
-import { Bell, Mail, CalendarRange, Activity, Target, Clock, BookOpen, Lightbulb, Save } from 'lucide-react';
+import { Bell, Mail, Activity, Target, Clock, BookOpen, Save } from 'lucide-react';
 
 const ReminderToggle = ({ enabled, onChange, title, icon, activeColor }) => {
   const colorClasses = {
@@ -74,25 +74,26 @@ const ProfileCard = ({ title, value, icon, color }) => (
   </motion.div>
 );
 
+const STUDY_PLAN_DEFAULTS = {
+  studyTime: '20:00',
+  dailyLessonTarget: 1,
+  remindersEnabled: true,
+  emailEnabled: false
+};
+
 const Profile = () => {
   const { t, i18n } = useTranslation();
   const { user, updateUser, linkAccount } = useAuth();
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
-  const [planData, setPlanData] = useState({ 
-    studyTime: '20:00', 
-    dailyLessonTarget: 1, 
-    remindersEnabled: true,
-    emailEnabled: false,
-    calendarEnabled: false
-  });
+  const [planData, setPlanData] = useState(STUDY_PLAN_DEFAULTS);
 
   React.useEffect(() => {
     if (user) {
       setEditableSeed(user.avatarSeed || user.username);
       if (user.studyPlan) {
-        setPlanData(user.studyPlan);
+        setPlanData({ ...STUDY_PLAN_DEFAULTS, ...user.studyPlan });
       }
     }
   }, [user]);
@@ -112,6 +113,14 @@ const Profile = () => {
     } finally {
       setIsSavingPlan(false);
     }
+  };
+
+  const handleToggleEmailReminder = () => {
+    if (!planData.emailEnabled && !user.email) {
+      alert('Tai khoan nay chua co email, khong the bat nhac nho qua email.');
+      return;
+    }
+    setPlanData({ ...planData, emailEnabled: !planData.emailEnabled });
   };
 
   const handleLinkGoogle = async () => {
@@ -388,7 +397,7 @@ const Profile = () => {
                   <Bell className="w-4 h-4 text-viet-green shrink-0" /> {t('profile.study_plan.reminders_label')}
                 </h4>
                 <div className="flex flex-col gap-3">
-                  <ReminderToggle 
+                  <ReminderToggle
                     enabled={planData.remindersEnabled}
                     onChange={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
                     title="Nhắc nhở học tập"
@@ -398,19 +407,17 @@ const Profile = () => {
 
                   <ReminderToggle 
                     enabled={planData.emailEnabled}
-                    onChange={() => setPlanData({ ...planData, emailEnabled: !planData.emailEnabled })}
+                    onChange={handleToggleEmailReminder}
                     title="Nhắc nhở qua Email"
                     icon={<Mail size={18} />}
                     activeColor="blue"
                   />
 
+                  {planData.__showRemovedCalendar && (
                   <ReminderToggle 
-                    enabled={planData.calendarEnabled}
-                    onChange={() => setPlanData({ ...planData, calendarEnabled: !planData.calendarEnabled })}
                     title="Lịch học tùy chỉnh"
-                    icon={<CalendarRange size={18} />}
-                    activeColor="purple"
                   />
+                  )}
                 </div>
               </div>
             </div>
