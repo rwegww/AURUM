@@ -35,7 +35,6 @@ const MODE_CONFIG = {
   solo: { maxPlayers: 2, icon: Swords, accent: 'text-viet-green', bg: 'bg-viet-green/10' },
   '3vs3': { maxPlayers: 6, icon: Shield, accent: 'text-blue-600', bg: 'bg-blue-50' },
   '5vs5': { maxPlayers: 10, icon: Users, accent: 'text-amber-600', bg: 'bg-amber-50' },
-  '1vs100': { maxPlayers: 100, icon: Trophy, accent: 'text-rose-600', bg: 'bg-rose-50' },
 };
 
 const MODE_KEYS = Object.keys(MODE_CONFIG);
@@ -76,7 +75,6 @@ const SHORT_MODE_KEYS = {
   solo: 'solo_short',
   '3vs3': '3vs3_short',
   '5vs5': '5vs5_short',
-  '1vs100': 'br_short',
 };
 
 const getModeLabel = (t, mode) => (MODE_CONFIG[mode] ? t(`arena_modes.${mode}`) : mode || t('arena_modes.solo'));
@@ -340,7 +338,7 @@ const ModeSelector = ({ value, onChange, disabled = false }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       {MODE_KEYS.map((mode) => {
         const config = MODE_CONFIG[mode];
         const Icon = config.icon;
@@ -443,25 +441,25 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
           <ModeSelector value={findMode} onChange={setFindMode} disabled={isSearching} />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="flex flex-col gap-3">
           <IconButton
             onClick={() => onFindMatch(findMode)}
-            className={`min-h-12 px-5 text-sm uppercase tracking-widest text-white ${isSearching ? 'bg-red-500 hover:bg-red-600' : 'bg-viet-green hover:brightness-105'}`}
+            className={`min-h-14 w-full px-5 text-base font-black uppercase tracking-widest text-white transition-all ${isSearching ? 'bg-red-500 hover:bg-red-600' : 'bg-viet-green hover:bg-viet-green/90 shadow-md hover:shadow-lg'}`}
           >
-            {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
+            {isSearching ? <Loader2 className="h-6 w-6 animate-spin" /> : <Search className="h-6 w-6" />}
             {isSearching ? t('arena.actions.cancel_find') : t('arena.actions.find_match')}
           </IconButton>
-          <div className="grid grid-cols-2 gap-3 sm:flex">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <IconButton
               onClick={onCreateRoom}
-              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-viet-green hover:text-viet-green"
+              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text transition-colors hover:border-viet-green hover:bg-viet-green/5 hover:text-viet-green"
             >
               <Plus className="h-5 w-5" />
               {t('arena.actions.create_room')}
             </IconButton>
             <IconButton
               onClick={onPractice}
-              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-purple-400 hover:text-purple-600"
+              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text transition-colors hover:border-purple-500 hover:bg-purple-50 hover:text-purple-600"
             >
               <FlaskConical className="h-5 w-5" />
               {t('arena.actions.practice_room')}
@@ -471,17 +469,17 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
       </Panel>
 
       <Panel className="p-5 sm:p-6">
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           <IconButton
             onClick={() => setShowJoinInput((value) => !value)}
-            className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-blue-400 hover:text-blue-600"
+            className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text transition-colors hover:border-blue-500 hover:bg-blue-50 hover:text-blue-600"
           >
             <DoorOpen className="h-5 w-5" />
             {t('arena.actions.join_pin')}
           </IconButton>
           <IconButton
             onClick={onOpenBrowser}
-            className="min-h-12 bg-blue-600 px-5 text-sm uppercase tracking-widest text-white hover:bg-blue-700"
+            className="min-h-12 bg-blue-600 px-5 text-sm uppercase tracking-widest text-white transition-colors hover:bg-blue-700 shadow-sm hover:shadow-md"
           >
             <Gamepad2 className="h-5 w-5" />
             {t('arena.ui.open_room_browser')}

@@ -10,7 +10,9 @@ import {
   FlaskConical,
   Loader2,
   LogOut,
+  Minus,
   Play,
+  Plus,
   RefreshCw,
   Send,
   Trophy,
@@ -204,37 +206,38 @@ const BalancingScaleModel = ({ reactantCounts = {}, productCounts = {}, elements
   const leftTotal = elements.reduce((sum, element) => sum + Number(reactantCounts[element] || 0), 0);
   const rightTotal = elements.reduce((sum, element) => sum + Number(productCounts[element] || 0), 0);
   const isBalanced = elements.length > 0 && elements.every((element) => reactantCounts[element] === productCounts[element]);
-  const tilt = isBalanced ? 0 : Math.max(-8, Math.min(8, (rightTotal - leftTotal) * 2));
+  const tilt = isBalanced ? 0 : Math.max(-10, Math.min(10, (rightTotal - leftTotal) * 2));
 
   return (
-    <div data-arena-model="balancing-scale" className="rounded-lg border border-white/10 bg-slate-900 p-5 text-white">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <div data-arena-model="balancing-scale" className="flex flex-col rounded-3xl border border-slate-200 bg-white p-5 text-viet-text shadow-sm">
+      <div className="mb-6 flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Cái cân cân bằng</p>
-          <p className="font-black">{isBalanced ? 'Hai vế đã bằng nhau' : 'Chỉnh hệ số để cân bằng'}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Cái cân cân bằng</p>
+          <p className="mt-1 text-lg font-black text-viet-text">{isBalanced ? 'Hai vế đã bằng nhau' : 'Chỉnh hệ số để cân bằng'}</p>
         </div>
-        <div className={`rounded-lg px-3 py-2 text-xs font-black ${isBalanced ? 'bg-viet-green/20 text-viet-green' : 'bg-amber-400/15 text-amber-200'}`}>
+        <div className={`rounded-xl px-4 py-2 font-mono text-sm font-black shadow-sm ${isBalanced ? 'bg-viet-green/10 text-viet-green ring-1 ring-viet-green/30' : 'bg-slate-100 text-slate-500 ring-1 ring-slate-200'}`}>
           {leftTotal} / {rightTotal}
         </div>
       </div>
 
-      <div className="relative min-h-[230px] overflow-hidden rounded-lg border border-white/10 bg-white/5 p-4">
-        <div className="absolute bottom-8 left-1/2 h-28 w-2 -translate-x-1/2 rounded-full bg-white/25" />
-        <div className="absolute bottom-5 left-1/2 h-4 w-28 -translate-x-1/2 rounded-t-lg bg-white/20" />
+      <div className="relative min-h-[300px] flex-1 overflow-hidden rounded-2xl border border-viet-border bg-slate-50 p-4 shadow-inner">
+        <div className="absolute bottom-6 left-1/2 h-40 w-3 -translate-x-1/2 rounded-full border border-slate-300 bg-gradient-to-b from-slate-200 to-slate-400 shadow-md" />
+        <div className="absolute bottom-4 left-1/2 h-4 w-32 -translate-x-1/2 rounded-full border border-slate-300 bg-slate-400 shadow-[0_10px_20px_rgba(0,0,0,0.1)]" />
+
         <div
-          className="absolute left-8 right-8 top-20 h-2 origin-center rounded-full bg-viet-green transition-transform duration-300"
+          className="absolute left-8 right-8 top-16 h-2.5 origin-center rounded-full bg-gradient-to-r from-viet-green to-lime-500 shadow-[0_0_15px_rgba(34,197,94,0.3)] transition-transform duration-500 ease-out"
           style={{ transform: `rotate(${tilt}deg)` }}
         >
-          <div className="absolute -left-4 top-5 w-28" style={{ transform: `rotate(${-tilt}deg)` }}>
-            <div className="rounded-b-full border-2 border-blue-200/70 bg-blue-300/10 px-3 py-5 text-center">
-              <p className="text-[10px] font-black uppercase tracking-widest text-blue-100">Vế trái</p>
-              <p className="mt-1 text-2xl font-black">{leftTotal}</p>
+          <div className="absolute -left-6 top-3 w-32" style={{ transform: `rotate(${-tilt}deg)`, transition: 'transform 500ms ease-out' }}>
+            <div className="relative overflow-hidden rounded-b-[40px] border-2 border-emerald-200 bg-emerald-50 px-3 py-6 text-center shadow-md">
+              <p className="relative text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Vế trái</p>
+              <p className="relative mt-2 font-mono text-4xl font-black text-emerald-500">{leftTotal}</p>
             </div>
           </div>
-          <div className="absolute -right-4 top-5 w-28" style={{ transform: `rotate(${-tilt}deg)` }}>
-            <div className="rounded-b-full border-2 border-amber-200/70 bg-amber-300/10 px-3 py-5 text-center">
-              <p className="text-[10px] font-black uppercase tracking-widest text-amber-100">Vế phải</p>
-              <p className="mt-1 text-2xl font-black">{rightTotal}</p>
+          <div className="absolute -right-6 top-3 w-32" style={{ transform: `rotate(${-tilt}deg)`, transition: 'transform 500ms ease-out' }}>
+            <div className="relative overflow-hidden rounded-b-[40px] border-2 border-amber-200 bg-amber-50 px-3 py-6 text-center shadow-md">
+              <p className="relative text-[10px] font-black uppercase tracking-[0.2em] text-amber-600">Vế phải</p>
+              <p className="relative mt-2 font-mono text-4xl font-black text-amber-500">{rightTotal}</p>
             </div>
           </div>
         </div>
@@ -243,7 +246,7 @@ const BalancingScaleModel = ({ reactantCounts = {}, productCounts = {}, elements
           {elements.map((element) => {
             const ok = reactantCounts[element] === productCounts[element];
             return (
-              <span key={element} className={`rounded-full border px-3 py-1 text-xs font-black ${ok ? 'border-viet-green/40 bg-viet-green/15 text-viet-green' : 'border-red-300/40 bg-red-400/10 text-red-200'}`}>
+              <span key={element} className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-black tracking-wider ${ok ? 'border-viet-green/30 bg-viet-green/10 text-viet-green' : 'border-red-400/30 bg-red-50 text-red-500'}`}>
                 {element}: {reactantCounts[element] || 0}/{productCounts[element] || 0}
               </span>
             );
@@ -344,70 +347,70 @@ const BalancingGame = ({ task, onSubmit, submitting, disabled }) => {
   };
 
   const renderFormula = (formula, index) => (
-    <div key={`${formula}-${index}`} className="flex items-center gap-2 rounded-lg border border-viet-border bg-white px-3 py-3">
-      <div className="flex flex-col">
-        <button
-          type="button"
-          disabled={disabled || submitting || coefficients[index] >= max}
-          onClick={() => changeCoeff(index, 1)}
-          className="rounded-md text-viet-green transition hover:bg-viet-green/10 disabled:opacity-30"
-        >
-          <ChevronUp className="h-4 w-4" />
-        </button>
+    <div key={`${formula}-${index}`} className="flex shrink-0 items-center gap-2 rounded-xl border border-viet-border bg-slate-50 px-3 py-2 shadow-sm transition-all focus-within:border-viet-green/50 focus-within:bg-white focus-within:ring-4 focus-within:ring-viet-green/10">
+      <div className="flex items-center gap-1 rounded-md border border-viet-border bg-white p-0.5">
         <button
           type="button"
           disabled={disabled || submitting || coefficients[index] <= min}
           onClick={() => changeCoeff(index, -1)}
-          className="rounded-md text-red-500 transition hover:bg-red-50 disabled:opacity-30"
+          className="flex h-6 w-6 items-center justify-center rounded text-viet-text-light transition hover:bg-red-50 hover:text-red-500 disabled:opacity-30"
         >
-          <ChevronDown className="h-4 w-4" />
+          <Minus className="h-3 w-3" />
+        </button>
+        <span className="w-6 text-center font-mono text-lg font-black text-viet-green">{coefficients[index]}</span>
+        <button
+          type="button"
+          disabled={disabled || submitting || coefficients[index] >= max}
+          onClick={() => changeCoeff(index, 1)}
+          className="flex h-6 w-6 items-center justify-center rounded text-viet-text-light transition hover:bg-viet-green/10 hover:text-viet-green disabled:opacity-30"
+        >
+          <Plus className="h-3 w-3" />
         </button>
       </div>
-      <span className="w-8 text-center text-2xl font-black text-viet-green">{coefficients[index]}</span>
       <span className="text-xl font-black text-viet-text">{formula}</span>
     </div>
   );
 
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-      <div className="rounded-lg border border-slate-200 bg-white p-5 text-viet-text">
-        <div className="flex flex-wrap items-center gap-3">
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 text-viet-text shadow-sm overflow-hidden">
+        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar pb-2">
           {(equation.reactants || []).map((formula, index) => (
             <React.Fragment key={`reactant-${formula}-${index}`}>
               {renderFormula(formula, index)}
-              {index < splitIndex - 1 && <span className="text-2xl font-black text-viet-text-light">+</span>}
+              {index < splitIndex - 1 && <span className="shrink-0 text-xl font-black text-viet-text-light drop-shadow-sm">+</span>}
             </React.Fragment>
           ))}
-          <span className="text-3xl font-black text-viet-green">{'->'}</span>
+          <span className="shrink-0 mx-1 text-2xl font-black text-viet-green drop-shadow-sm">{'->'}</span>
           {(equation.products || []).map((formula, index) => (
             <React.Fragment key={`product-${formula}-${index}`}>
               {renderFormula(formula, splitIndex + index)}
-              {index < equation.products.length - 1 && <span className="text-2xl font-black text-viet-text-light">+</span>}
+              {index < equation.products.length - 1 && <span className="shrink-0 text-xl font-black text-viet-text-light drop-shadow-sm">+</span>}
             </React.Fragment>
           ))}
         </div>
 
-        <div className="mt-6 rounded-lg border border-viet-border">
-          <div className="grid grid-cols-3 rounded-t-lg bg-slate-50 px-4 py-3 text-[10px] font-black uppercase tracking-widest text-viet-text-light">
+        <div className="mt-8 overflow-hidden rounded-2xl border border-viet-border shadow-sm">
+          <div className="grid grid-cols-3 bg-slate-50 px-5 py-4 text-[11px] font-black uppercase tracking-widest text-viet-text-light">
             <span>Nguyên tố</span>
-            <span>Vế trái</span>
-            <span>Vế phải</span>
+            <span className="text-center">Vế trái</span>
+            <span className="text-center">Vế phải</span>
           </div>
           {elements.map((element) => {
             const ok = reactantCounts[element] === productCounts[element];
             return (
-              <div key={element} className="grid grid-cols-3 border-t border-viet-border px-4 py-3 text-sm font-black">
+              <div key={element} className="grid grid-cols-3 border-t border-viet-border bg-white px-5 py-4 text-base font-black transition-colors hover:bg-slate-50">
                 <span className={ok ? 'text-viet-green' : 'text-red-500'}>{element}</span>
-                <span>{reactantCounts[element] || 0}</span>
-                <span>{productCounts[element] || 0}</span>
+                <span className="text-center text-viet-text">{reactantCounts[element] || 0}</span>
+                <span className="text-center text-viet-text">{productCounts[element] || 0}</span>
               </div>
             );
           })}
         </div>
 
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-black ${isBalanced ? 'bg-viet-green/10 text-viet-green' : 'bg-amber-50 text-amber-600'}`}>
-            {isBalanced ? <CheckCircle2 className="h-4 w-4" /> : <RefreshCw className="h-4 w-4" />}
+        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className={`inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-black shadow-sm ${isBalanced ? 'bg-viet-green/10 text-viet-green ring-1 ring-viet-green/30' : 'bg-amber-50 text-amber-600 ring-1 ring-amber-500/20'}`}>
+            {isBalanced ? <CheckCircle2 className="h-5 w-5" /> : <RefreshCw className="h-5 w-5" />}
             {isBalanced ? 'Các nguyên tố đã cân bằng' : 'Theo dõi bộ đếm nguyên tử'}
           </div>
           <SubmitButton
@@ -696,28 +699,28 @@ const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
 };
 
 const Scoreboard = ({ players, currentUserId }) => (
-  <aside className="rounded-lg border border-white/10 bg-white/5 p-4">
-    <div className="mb-4 flex items-center justify-between">
-      <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Bảng điểm</p>
-      <Users className="h-4 w-4 text-white/40" />
+  <div className="flex w-full items-center gap-4 overflow-x-auto rounded-lg border border-white/10 bg-white/5 p-3 hide-scrollbar">
+    <div className="flex shrink-0 items-center gap-2 border-r border-white/10 pr-4">
+      <Trophy className="h-4 w-4 text-amber-400" />
+      <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Bảng điểm</span>
     </div>
-    <div className="space-y-3">
+    <div className="flex gap-3">
       {[...players].sort((a, b) => (b.score || 0) - (a.score || 0)).map((player, index) => (
         <div
           key={player.user_id}
-          className={`flex items-center gap-3 rounded-lg border p-3 ${player.user_id === currentUserId ? 'border-viet-green/50 bg-viet-green/10' : 'border-white/10 bg-white/5'}`}
+          className={`flex shrink-0 items-center gap-2.5 rounded-full border px-3 py-1.5 ${player.user_id === currentUserId ? 'border-viet-green/50 bg-viet-green/10' : 'border-white/10 bg-white/5'}`}
         >
-          <span className="w-5 text-center text-sm font-black text-white/50">{index + 1}</span>
-          <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={36} />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-black text-white">{player.username}</p>
-            <p className="text-[11px] font-bold text-white/40">{player.correct_count || 0} đúng</p>
+          <span className="text-[10px] font-black text-white/50">#{index + 1}</span>
+          <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={24} />
+          <span className="max-w-[100px] truncate text-xs font-bold text-white">{player.username}</span>
+          <div className="flex items-center gap-1.5 border-l border-white/10 pl-2">
+            <span className="text-[10px] font-bold text-white/40">{player.correct_count || 0} ✓</span>
+            <span className="text-xs font-black text-viet-green">{player.score || 0}</span>
           </div>
-          <span className="text-sm font-black text-viet-green">{player.score || 0}</span>
         </div>
       ))}
     </div>
-  </aside>
+  </div>
 );
 
 const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
@@ -1085,8 +1088,10 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
           </div>
         </header>
 
-        <main className="grid flex-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="space-y-5">
+        <main className="flex flex-1 flex-col gap-5">
+          <Scoreboard players={players} currentUserId={user?.id} />
+
+          <div className="flex-1 space-y-5">
             <section className="rounded-lg border border-white/10 bg-white/5 p-5">
               <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <span className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-black uppercase tracking-widest ${meta.bg} ${meta.tone}`}>
@@ -1117,8 +1122,6 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
               disabled={hasAnswered || currentRoom?.status !== 'playing'}
             />
           </div>
-
-          <Scoreboard players={players} currentUserId={user?.id} />
         </main>
       </div>
     </div>
