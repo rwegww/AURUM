@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { activityService } from '@/services/ActivityService';
+import { CalendarRange, Flame, Clock, Check } from 'lucide-react';
 
 const getLocalDateString = (date) => {
   const y = date.getFullYear();
@@ -184,7 +185,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h3 className="text-2xl font-black text-viet-text flex items-center gap-2">
-            <span>📅</span>
+            <CalendarRange className="w-6 h-6 text-viet-green shrink-0" />
             {t('profile.study_plan.calendar.title', 'Lịch học tập cá nhân')}
           </h3>
           <p className="text-viet-text-light/60 font-medium text-sm mt-1">
@@ -273,23 +274,23 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                 {/* Status indicators */}
                 <div className="flex flex-wrap gap-1 items-center justify-end h-6">
                   {isCompleted && (
-                    <motion.span 
+                    <motion.div 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="text-emerald-500 text-sm" 
+                      className="w-5 h-5 flex items-center justify-center" 
                       title="Hoàn thành học tập"
                     >
-                      🔥
-                    </motion.span>
+                      <Flame size={14} className="text-emerald-500 fill-emerald-500" />
+                    </motion.div>
                   )}
                   {isScheduled && (
                     <motion.div 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="w-5 h-5 rounded-lg bg-blue-500 text-white flex items-center justify-center text-[10px] font-bold"
+                      className="w-5 h-5 rounded-lg bg-blue-500 text-white flex items-center justify-center"
                       title={session.title || "Lịch học tùy chỉnh"}
                     >
-                      ⏰
+                      <Clock size={10} />
                     </motion.div>
                   )}
                 </div>
@@ -345,8 +346,8 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                       </p>
                     </div>
                   </div>
-                  <div className="text-xl">
-                    {isCompleted ? '✅' : '⏰'}
+                  <div className="flex items-center justify-center">
+                    {isCompleted ? <Check className="w-5 h-5 text-emerald-500" /> : <Clock className="w-5 h-5 text-slate-400" />}
                   </div>
                 </div>
               );
@@ -437,8 +438,8 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                       : 'bg-slate-50 border-viet-border opacity-70'
                   }`}
                 >
-                  <span className="font-black text-sm">
-                    🔥 {t('profile.study_plan.calendar.status_completed', 'Đã hoàn thành mục tiêu')}
+                  <span className="font-black text-sm flex items-center gap-1.5">
+                    <Flame size={16} className="text-emerald-500 fill-emerald-500 shrink-0" /> {t('profile.study_plan.calendar.status_completed', 'Đã hoàn thành mục tiêu')}
                   </span>
                   <div className={`w-8 h-5 rounded-full relative transition-colors ${sessionForm.completed ? 'bg-emerald-500' : 'bg-slate-300'}`}>
                     <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${sessionForm.completed ? 'right-0.5' : 'left-0.5'}`} />

@@ -7,7 +7,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
 import StudyCalendar from '@/components/profile/StudyCalendar';
 import { supabase } from '@/lib/supabase';
-import { Bell, Mail, CalendarRange } from 'lucide-react';
+import { Bell, Mail, CalendarRange, Activity, Target, Clock, BookOpen, Lightbulb, Save } from 'lucide-react';
 
 const ReminderToggle = ({ enabled, onChange, title, description, icon, activeColor }) => {
   const colorClasses = {
@@ -316,7 +316,7 @@ const Profile = () => {
                 <p className="text-viet-text-light/60 font-medium">{t('profile.study_plan.subtitle')}</p>
               </div>
               <div className="flex items-center gap-3 px-6 py-3 bg-viet-green/10 rounded-2xl border border-viet-green/20">
-                <span className="text-2xl">📊</span>
+                <Activity className="w-6 h-6 text-viet-green shrink-0 animate-pulse" />
                 <div>
                   <div className="text-[11px] font-black text-viet-green uppercase tracking-widest leading-none mb-1">Tiến độ hôm nay</div>
                   <div className="text-lg font-black text-viet-text leading-none">
@@ -330,7 +330,7 @@ const Profile = () => {
               {/* Left Side: Targets & Tip */}
               <div className="lg:col-span-2 space-y-8 pr-0 lg:pr-6 border-r-0 lg:border-r border-slate-100">
                 <h3 className="text-xl font-black text-viet-text mb-2 flex items-center gap-2">
-                  <span>🎯</span> Thiết lập mục tiêu học tập
+                  <Target className="w-5 h-5 text-viet-green shrink-0" /> Thiết lập mục tiêu học tập
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-3">
@@ -342,7 +342,9 @@ const Profile = () => {
                         onChange={(e) => setPlanData({ ...planData, studyTime: e.target.value })}
                         className="w-full h-16 bg-slate-50 border border-viet-border rounded-2xl px-6 font-black text-lg focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
                       />
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 text-xl opacity-40">⏰</div>
+                      <div className="absolute right-6 top-1/2 -translate-y-1/2 opacity-40">
+                        <Clock size={20} />
+                      </div>
                     </div>
                   </div>
 
@@ -358,13 +360,15 @@ const Profile = () => {
                           <option key={n} value={n}>{n} {t('common.lesson_count', { count: n })}</option>
                         ))}
                       </select>
-                      <div className="absolute right-6 top-1/2 -translate-y-1/2 text-xl pointer-events-none opacity-40">📚</div>
+                      <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none opacity-40">
+                        <BookOpen size={20} />
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100 flex items-start gap-4">
-                  <span className="text-2xl">💡</span>
+                  <Lightbulb className="w-6 h-6 text-amber-500 shrink-0" />
                   <div className="text-sm font-medium text-slate-500 leading-relaxed">
                     <p className="font-bold text-[#1a1a1a] mb-1">Mẹo duy trì thói quen học:</p>
                     Học cùng một thời điểm mỗi ngày giúp tạo phản xạ tự nhiên. Đặt mục tiêu nhỏ (1-2 bài) giúp bạn dễ dàng hoàn thành và không bị nản lòng.
@@ -375,7 +379,7 @@ const Profile = () => {
               {/* Right Side: Reminders (Sleek cards) */}
               <div className="space-y-6">
                 <h3 className="text-xl font-black text-viet-text flex items-center gap-2">
-                  <span>🔔</span> Nhắc nhở & Thông báo
+                  <Bell className="w-5 h-5 text-viet-green shrink-0" /> Nhắc nhở & Thông báo
                 </h3>
                 <div className="flex flex-col gap-4">
                   <ReminderToggle 
@@ -421,7 +425,7 @@ const Profile = () => {
                   </>
                 ) : (
                   <>
-                    <span>💾</span>
+                    <Save size={18} />
                     {t('profile.study_plan.save_btn')}
                   </>
                 )}
