@@ -11,9 +11,18 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [lastChecked, setLastChecked] = useState(() => {
-    return localStorage.getItem('teacher_last_checked_notifications') || '';
+  const [readIds, setReadIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('teacher_read_notification_ids') || '[]');
+    } catch {
+      return [];
+    }
   });
+
+  const saveReadIds = (ids) => {
+    localStorage.setItem('teacher_read_notification_ids', JSON.stringify(ids));
+    setReadIds(ids);
+  };
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -40,27 +49,36 @@ const ManagementSidebar = ({ menuItems, title }) => {
   }, [user, fetchNotifications]);
 
   const unreadCount = useMemo(() => {
-    if (!lastChecked) return notifications.length;
-    return notifications.filter(n => new Date(n.timestamp) > new Date(lastChecked)).length;
-  }, [notifications, lastChecked]);
+    return notifications.filter(n => !readIds.includes(n.id)).length;
+  }, [notifications, readIds]);
 
-  const isNotificationNew = (notif) => {
-    if (!lastChecked) return true;
-    return new Date(notif.timestamp) > new Date(lastChecked);
+  const markAsRead = (id) => {
+    if (!readIds.includes(id)) {
+      const newReadIds = [...readIds, id];
+      saveReadIds(newReadIds);
+    }
+  };
+
+  const toggleReadStatus = (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (readIds.includes(id)) {
+      const newReadIds = readIds.filter(x => x !== id);
+      saveReadIds(newReadIds);
+    } else {
+      const newReadIds = [...readIds, id];
+      saveReadIds(newReadIds);
+    }
   };
 
   const markAllAsRead = () => {
-    const nowStr = new Date().toISOString();
-    localStorage.setItem('teacher_last_checked_notifications', nowStr);
-    setLastChecked(nowStr);
+    const allIds = notifications.map(n => n.id);
+    const newReadIds = Array.from(new Set([...readIds, ...allIds]));
+    saveReadIds(newReadIds);
   };
 
   const toggleNotifications = () => {
-    const nextState = !isOpen;
-    setIsOpen(nextState);
-    if (nextState) {
-      markAllAsRead();
-    }
+    setIsOpen(!isOpen);
   };
 
   const getNotificationIcon = (type) => {
@@ -183,30 +201,45 @@ const ManagementSidebar = ({ menuItems, title }) => {
                 </div>
               ) : (
                 notifications.map((notif) => {
-                  const isNew = isNotificationNew(notif);
+                  const isUnread = !readIds.includes(notif.id);
                   return (
                     <NavLink
                       key={notif.id}
                       to={notif.link}
-                      onClick={() => setIsOpen(false)}
+                      onClick={() => {
+                        markAsRead(notif.id);
+                        setIsOpen(false);
+                      }}
                       className={`p-4 block hover:bg-slate-50/80 transition-colors relative ${
-                        isNew ? 'bg-viet-green/5' : ''
+                        isUnread ? 'bg-viet-green/5' : ''
                       }`}
                     >
-                      {isNew && (
-                        <span className="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-viet-green rounded-full" />
-                      )}
-                      <div className="flex gap-2">
-                        <span className="text-base shrink-0">{getNotificationIcon(notif.type)}</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-bold text-viet-text leading-snug">{notif.title}</p>
-                          <p className="text-[11px] text-viet-text-light mt-1 font-medium leading-relaxed break-words">
-                            {notif.message}
-                          </p>
-                          <p className="text-[9px] text-slate-400 mt-1 font-bold uppercase tracking-wider">
-                            {getRelativeTime(notif.timestamp)}
-                          </p>
+                      <div className="flex gap-2 items-start justify-between">
+                        <div className="flex gap-2 flex-1 min-w-0">
+                          <span className="text-base shrink-0 mt-0.5">{getNotificationIcon(notif.type)}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-xs leading-snug ${isUnread ? 'font-black text-viet-text' : 'font-bold text-slate-700'}`}>{notif.title}</p>
+                            <p className="text-[11px] text-viet-text-light mt-1 font-medium leading-relaxed break-words">
+                              {notif.message}
+                            </p>
+                            <p className="text-[9px] text-slate-400 mt-1 font-bold uppercase tracking-wider">
+                              {getRelativeTime(notif.timestamp)}
+                            </p>
+                          </div>
                         </div>
+
+                        {/* Interactive Read/Unread Toggle Button */}
+                        <button
+                          onClick={(e) => toggleReadStatus(e, notif.id)}
+                          className="shrink-0 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-all self-center ml-1"
+                          title={isUnread ? "Đánh dấu là đã đọc" : "Đánh dấu là chưa đọc"}
+                        >
+                          <div className={`w-2.5 h-2.5 rounded-full transition-all ${
+                            isUnread 
+                              ? 'bg-viet-green scale-110 shadow-sm shadow-viet-green/20'
+                              : 'border-2 border-slate-300 bg-transparent hover:bg-slate-400' 
+                          }`} />
+                        </button>
                       </div>
                     </NavLink>
                   );
