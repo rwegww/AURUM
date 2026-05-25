@@ -300,9 +300,9 @@ router.get('/cron-send-reminders', async (req, res) => {
       return res.status(500).json({ message: 'Lỗi truy vấn cơ sở dữ liệu', error: error.message });
     }
 
-    // Get current Vietnam Time (GMT+7) in HH:MM format
-    const nowVN = new Date();
-    const currentHHMM = nowVN.toLocaleTimeString('en-US', {
+    // Get current Vietnam Time (GMT+7)
+    const nowVN = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+    const currentHHMM = new Date().toLocaleTimeString('en-US', {
       timeZone: 'Asia/Ho_Chi_Minh',
       hour12: false,
       hour: '2-digit',
@@ -311,39 +311,72 @@ router.get('/cron-send-reminders', async (req, res) => {
 
     console.log(`[Cron Reminders] Current Vietnam Time: ${currentHHMM}`);
 
-    const getMinutesSinceMidnight = (timeStr) => {
-      const [h, m] = timeStr.split(':').map(Number);
-      return h * 60 + m;
-    };
-    const currentMinutes = getMinutesSinceMidnight(currentHHMM);
-
-    // 1. Filter students for hourly study reminders:
-    // Must have study plan, emailEnabled === true, today_lesson_completed === false,
-    // and current time must be exactly at/after scheduled time and matching integer hour.
     const matchingStudyReminders = [];
+    const dbUpdates = [];
 
-    (students || []).forEach(student => {
+    for (const student of (students || [])) {
       const plan = student.study_plan;
-      if (!plan || !plan.emailEnabled) return;
-      if (student.today_lesson_completed) return;
+      if (!plan || !plan.emailEnabled) continue;
+      if (student.today_lesson_completed) continue;
 
       const studyTime = plan.studyTime ? plan.studyTime.trim() : null;
-      if (!studyTime) return;
+      if (!studyTime) continue;
 
-      const scheduledMinutes = getMinutesSinceMidnight(studyTime);
-      const diff = currentMinutes - scheduledMinutes;
+      // Parse scheduled study time today
+      const [sh, sm] = studyTime.split(':').map(Number);
+      const scheduledTime = new Date(nowVN);
+      scheduledTime.setHours(sh, sm, 0, 0);
 
-      if (diff >= 0 && diff % 60 === 0) {
-        const hourOffset = diff / 60;
-        matchingStudyReminders.push({
-          student,
-          hourOffset
-        });
+      if (nowVN >= scheduledTime) {
+        let shouldSend = false;
+        let isFirstToday = false;
+        let hourOffset = 0;
+
+        if (!plan.lastReminderSentAt) {
+          shouldSend = true;
+          isFirstToday = true;
+        } else {
+          const lastSentDate = new Date(plan.lastReminderSentAt).toLocaleDateString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' });
+          const currentDateStr = nowVN.toLocaleDateString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' });
+
+          if (lastSentDate !== currentDateStr) {
+            shouldSend = true;
+            isFirstToday = true;
+          } else {
+            // Already sent today, check if at least 55 minutes have passed since last reminder
+            const lastSentTime = new Date(plan.lastReminderSentAt);
+            const msDiff = nowVN - lastSentTime;
+            const minutesDiff = Math.floor(msDiff / 1000 / 60);
+
+            if (minutesDiff >= 55) {
+              shouldSend = true;
+              
+              // Calculate hourOffset from the first reminder sent today
+              const firstSent = new Date(plan.firstReminderSentAt || plan.lastReminderSentAt);
+              const totalMsDiff = nowVN - firstSent;
+              hourOffset = Math.max(1, Math.round(totalMsDiff / 1000 / 60 / 60));
+            }
+          }
+        }
+
+        if (shouldSend) {
+          matchingStudyReminders.push({
+            student,
+            hourOffset
+          });
+
+          // Prepare database update
+          const updatedPlan = {
+            ...plan,
+            lastReminderSentAt: nowVN.toISOString(),
+            firstReminderSentAt: isFirstToday ? nowVN.toISOString() : (plan.firstReminderSentAt || plan.lastReminderSentAt || nowVN.toISOString())
+          };
+          dbUpdates.push(User.update(student.id, { studyPlan: updatedPlan }));
+        }
       }
-    });
+    }
 
     // 2. Filter students for daily streak reminders at 21:00 (9 PM):
-    // Must have streak_count > 0, emailEnabled === true, and today_lesson_completed === false.
     const matchingStreakReminders = [];
     if (currentHHMM === '21:00') {
       (students || []).forEach(student => {
@@ -361,6 +394,11 @@ router.get('/cron-send-reminders', async (req, res) => {
 
     if (matchingStudyReminders.length === 0 && matchingStreakReminders.length === 0) {
       return res.json({ message: 'Không có học sinh nào cần gửi nhắc nhở tại thời điểm này.', sentCount: 0 });
+    }
+
+    // Update database for study reminders sent
+    if (dbUpdates.length > 0) {
+      await Promise.all(dbUpdates);
     }
 
     // Send Hourly Study Plan Reminders
