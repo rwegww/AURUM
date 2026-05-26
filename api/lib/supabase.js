@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import ws from 'ws';
 import '../env.js';
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
@@ -36,7 +37,11 @@ const notConfigured = () => {
 
 // Non-production keeps imports alive, but DB calls fail explicitly instead of returning fake data.
 export const supabase = hasValidCredentials
-  ? createClient(supabaseUrl, supabaseKey)
+  ? createClient(supabaseUrl, supabaseKey, {
+      realtime: {
+        transport: ws,
+      },
+    })
   : {
       from: () => ({
         select: () => ({
