@@ -1,5 +1,4 @@
-/* Global Styles for VietEdu Light Theme (Updated Fonts: Be Vietnam Pro) */
-@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap');
+/* Global Styles for VietEdu Light Theme (Updated Fonts: Nunito + Quicksand) */
 @import "tailwindcss";
 
 @theme {
@@ -8,9 +7,10 @@
   --color-viet-border: #e8e8e8;
   --color-viet-text: #1a1a1a;
   --color-viet-text-light: #666666;
-  --font-be-vietnam: "Be Vietnam Pro", sans-serif;
-  --font-sora: "Be Vietnam Pro", sans-serif; /* fallback mapping */
-  --font-inter: "Be Vietnam Pro", sans-serif; /* fallback mapping */
+  --font-nunito: "Nunito", sans-serif;
+  --font-quicksand: "Quicksand", sans-serif;
+  --font-sora: "Nunito", sans-serif; /* fallback mapping */
+  --font-inter: "Nunito", sans-serif; /* fallback mapping */
   
   /* Laboratory Theme Tokens */
   --color-lab-bg: #0a0c10;
@@ -30,10 +30,11 @@
 }
 
 body {
-  font-family: var(--font-be-vietnam);
+  font-family: var(--font-nunito);
   background-color: var(--color-viet-bg);
   color: var(--color-viet-text);
   overflow-x: hidden;
+  letter-spacing: -0.01em;
 }
 
 body.no-scroll {
@@ -41,15 +42,15 @@ body.no-scroll {
   padding-right: var(--scrollbar-width, 0px); /* Prevent layout shift if possible */
 }
 
-/* Global Heading Rule: All titles use Be Vietnam Pro */
+/* Global Heading Rule: All display titles use Quicksand */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-be-vietnam);
+  font-family: var(--font-nunito);
 }
 
 .viet-btn-green {
   @apply px-6 py-3 rounded-2xl bg-viet-green text-white font-black uppercase tracking-tight
          transition-all hover:brightness-110 active:scale-95;
-  font-family: var(--font-be-vietnam);
+  font-family: var(--font-nunito);
 }
 
 .viet-card {
@@ -64,7 +65,7 @@ h1, h2, h3, h4, h5, h6 {
 .nav-link {
   @apply px-3 xl:px-4 py-2 rounded-xl text-[12px] xl:text-[13px] font-black uppercase tracking-widest text-viet-text-light
          transition-all hover:text-viet-green hover:bg-viet-green/5 flex items-center gap-2 whitespace-nowrap;
-  font-family: var(--font-be-vietnam);
+  font-family: var(--font-nunito);
 }
 
 .nav-link-active {
