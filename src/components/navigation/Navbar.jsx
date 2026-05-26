@@ -161,28 +161,41 @@ const Navbar = () => {
           <LanguageSwitcher />
 
           {isLoggedIn ? (
-            <div className="hidden sm:flex items-center gap-2">
-              <div className="flex items-center gap-2 bg-viet-green px-3 py-2 rounded-full shadow-md shadow-viet-green/20 group animate-fade-in transition-all whitespace-nowrap">
-                <Link to="/profile" className="w-10 h-10 rounded-full flex items-center justify-center group-hover:rotate-6 transition-transform shrink-0">
-                  <Avatar seed={user.avatarSeed || user.username} size={36} streakCount={user.streakCount} level={user.level} className="w-full h-full" />
-                </Link>
-                <Link to="/profile" className="flex items-center group/user max-w-[150px]">
-                  <span className="text-[10px] font-black text-white uppercase tracking-widest leading-tight block truncate group-hover/user:underline">
-                    {user?.username}
-                  </span>
-                </Link>
-                <div className="w-px h-3 bg-white/30 mx-1"></div>
-                <Link to="/settings" className="text-[10px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-1 mr-1" title="Cài đặt">
-                  ⚙️
-                </Link>
-                <div className="w-px h-3 bg-white/30 mx-1"></div>
-                <button
-                  onClick={logout}
-                  className="text-[10px] font-black text-white/80 hover:text-white transition-all uppercase tracking-widest px-1"
-                  title={t('nav.logout')}
-                >
-                  {t('nav.logout')}
-                </button>
+            <div className="hidden sm:block relative group/profile-dropdown">
+              <Link to="/profile" className="flex items-center gap-2 bg-viet-green px-3 py-2 rounded-full shadow-md shadow-viet-green/20 hover:shadow-lg hover:shadow-viet-green/30 transition-all whitespace-nowrap">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0">
+                  <Avatar seed={user.avatarSeed || user.username} size={32} streakCount={user.streakCount} level={user.level} className="w-full h-full" />
+                </div>
+                <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none block truncate max-w-[100px] select-none">
+                  {user?.username}
+                </span>
+                <span className="text-[8px] text-white/70 select-none mr-1">▼</span>
+              </Link>
+
+              {/* Dropdown Menu */}
+              <div className="absolute top-[85%] right-0 w-48 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover/profile-dropdown:opacity-100 group-hover/profile-dropdown:translate-y-0 group-hover/profile-dropdown:pointer-events-auto transition-all duration-200 z-[120]">
+                {/* bridge area to prevent mouse leave */}
+                <div className="absolute -top-3 left-0 right-0 h-3 bg-transparent" />
+                <div className="bg-white shadow-2xl rounded-2xl border border-viet-border p-2">
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all"
+                  >
+                    <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    {t('nav.profile')}
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-50 text-[12px] font-bold text-red-500 hover:text-red-600 transition-all text-left cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                    </svg>
+                    {t('nav.logout')}
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
