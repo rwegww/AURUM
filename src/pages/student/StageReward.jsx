@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import StageRewardModal from '@/components/lessons/StageRewardModal';
-import { useAuth } from '@/context/AuthContext';
 
 const StageReward = () => {
-  const { updateProgress } = useAuth();
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
   const order = searchParams.get('order') || '1';
-
-  // Mark lesson as completed on mount
-  useEffect(() => {
-    if (lessonId && lesson) {
-      // Gain XP and Gems from game settings
-      const xp = lesson.game?.rewardXp || 100;
-      updateProgress(xp, lessonId, true);
-      // Optional: Update gems if updateProgress supports it or create another service
-    }
-  }, [lessonId, lesson, updateProgress]);
 
   useEffect(() => {
     const fetchLesson = async () => {

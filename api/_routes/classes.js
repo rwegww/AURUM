@@ -20,7 +20,7 @@ const ensureClassOwner = async (classId, user, res) => {
     .from('classes')
     .select('id, teacher_id')
     .eq('id', classId)
-    .single();
+    .maybeSingle();
 
   if (error || !classData) {
     res.status(404).json({ error: 'Không tìm thấy lớp học' });
@@ -29,6 +29,48 @@ const ensureClassOwner = async (classId, user, res) => {
 
   if (user.role !== 'admin' && classData.teacher_id !== user.id) {
     res.status(403).json({ error: 'Bạn không có quyền quản lý lớp học này' });
+    return null;
+  }
+
+  return classData;
+};
+
+const isClassMember = async (classId, userId) => {
+  const { data, error } = await supabase
+    .from('class_members')
+    .select('class_id')
+    .eq('class_id', classId)
+    .eq('student_id', userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return !!data;
+};
+
+const ensureClassAccess = async (classId, user, res) => {
+  const { data: classData, error } = await supabase
+    .from('classes')
+    .select('id, teacher_id')
+    .eq('id', classId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!classData) {
+    res.status(404).json({ error: 'Khong tim thay lop hoc' });
+    return null;
+  }
+
+  if (user.role === 'admin' || classData.teacher_id === user.id) {
+    return classData;
+  }
+
+  if (user.role === 'teacher') {
+    res.status(403).json({ error: 'Ban khong co quyen truy cap lop hoc nay' });
+    return null;
+  }
+
+  if (!(await isClassMember(classId, user.id))) {
+    res.status(403).json({ error: 'Ban chua tham gia lop hoc nay' });
     return null;
   }
 
@@ -45,12 +87,15 @@ router.get('/', auth, async (req, res) => {
     let query = supabase.from('classes')
       .select('*, teacher:teacher_id(username), student_count:class_members(count)');
 
-    if (role === 'teacher' || role === 'admin') {
+    if (role === 'teacher') {
       query = query.eq('teacher_id', id);
+    } else if (role === 'admin') {
+      // Admin can inspect all classes.
     } else {
       // For student, get classes they joined
       const { data: memberData } = await supabase.from('class_members').select('class_id').eq('student_id', id);
       const classIds = memberData?.map(m => m.class_id) || [];
+      if (classIds.length === 0) return res.json([]);
       query = query.in('id', classIds);
     }
 
@@ -173,6 +218,10 @@ router.post('/', auth, async (req, res) => {
 // Join a class (Student)
 router.post('/join', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ error: 'Chi hoc sinh moi co the tham gia lop hoc' });
+    }
+
     const { code } = req.body;
     const student_id = req.user.id;
 
@@ -205,6 +254,8 @@ router.post('/join', auth, async (req, res) => {
 router.get('/:id/members', auth, async (req, res) => {
   try {
     const { id } = req.params;
+    if (!(await ensureClassAccess(id, req.user, res))) return;
+
     const { data, error } = await supabase
       .from('class_members')
       .select('student:student_id(id, username, last_active_at, active_minutes)')
@@ -227,6 +278,8 @@ router.get('/:id/members', auth, async (req, res) => {
 router.get('/:id/posts', auth, async (req, res) => {
   try {
     const { id } = req.params;
+    if (!(await ensureClassAccess(id, req.user, res))) return;
+
     let query = supabase
       .from('class_posts')
       .select('*, author:author_id(username), target:target_student_id(username)')
@@ -326,6 +379,8 @@ router.post('/:id/posts', auth, async (req, res) => {
 router.get('/:id/schedules', auth, async (req, res) => {
   try {
     const { id } = req.params;
+    if (!(await ensureClassAccess(id, req.user, res))) return;
+
     const { data, error } = await supabase
       .from('class_schedules')
       .select('*')
@@ -411,8 +466,8 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
     const { data: submissions } = await supabase.from('class_assignment_submissions').select('*').eq('post_id', postId);
 
     // Map together
-    const progress = members.map(m => {
-      const sub = submissions.find(s => s.student_id === m.student.id);
+    const progress = (members || []).map(m => {
+      const sub = (submissions || []).find(s => s.student_id === m.student.id);
       return {
         student: m.student,
         submitted: !!sub,
@@ -431,16 +486,26 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 // Submit an assignment (Student)
 router.post('/assignments/:postId/submit', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ error: 'Chi hoc sinh moi co the nop bai' });
+    }
+
     const { postId } = req.params;
-    const { answers, score } = req.body;
+    const { answers } = req.body;
     const student_id = req.user.id;
 
     const { data: post, error: postError } = await supabase
       .from('class_posts')
-      .select('class_id')
+      .select('class_id, type, target_student_id')
       .eq('id', postId)
       .single();
     if (postError || !post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    if (post.type !== 'assignment') {
+      return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
+    }
+    if (post.target_student_id && post.target_student_id !== student_id) {
+      return res.status(403).json({ error: 'Bai tap nay khong duoc giao cho ban' });
+    }
 
     const { data: membership, error: membershipError } = await supabase
       .from('class_members')
@@ -457,10 +522,11 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
       .upsert([{ 
         post_id: postId, 
         student_id, 
-        status: score !== undefined ? 'graded' : 'submitted',
-        answers: answers || [],
-        score: score
-      }], { onConflict: 'post_id, student_id' })
+        status: 'submitted',
+        answers: Array.isArray(answers) ? answers : [],
+        score: null,
+        feedback: null
+      }], { onConflict: 'post_id,student_id' })
       .select()
       .single();
 
@@ -484,6 +550,17 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Chỉ giáo viên mới có quyền chấm điểm' });
     }
+
+    const { data: post, error: postError } = await supabase
+      .from('class_posts')
+      .select('class_id, type')
+      .eq('id', postId)
+      .single();
+    if (postError || !post) return res.status(404).json({ error: 'Khong tim thay bai tap' });
+    if (post.type !== 'assignment') {
+      return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
+    }
+    if (!(await ensureClassOwner(post.class_id, req.user, res))) return;
 
     const { data, error } = await supabase
       .from('class_assignment_submissions')

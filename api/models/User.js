@@ -162,11 +162,15 @@ const mapUser = (user) => {
 export const User = {
   async findOne(filter) {
     // 1. Fetch core user data first (safe)
-    let query = supabase.from('users').select('*');
-    
     if (filter.username && filter.email) {
-      query = query.or(`username.eq."${filter.username}",email.eq."${filter.email}"`);
-    } else if (filter.username) {
+      const byUsername = await this.findOne({ username: filter.username });
+      if (byUsername) return byUsername;
+      return this.findOne({ email: filter.email });
+    }
+
+    let query = supabase.from('users').select('*');
+
+    if (filter.username) {
       query = query.eq('username', filter.username);
     } else if (filter.email) {
       query = query.eq('email', filter.email);

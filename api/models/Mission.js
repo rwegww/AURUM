@@ -164,7 +164,7 @@ export const Mission = {
   },
 
   // Claim mission reward
-  async claimReward(userId, missionId) {
+  async claimRewardLegacy(userId, missionId) {
     // 1. Verify mission status
     const { data: mission, error: mError } = await supabase
       .from('missions')
@@ -215,6 +215,18 @@ export const Mission = {
     if (updateError) throw updateError;
 
     return { xpGained: mission.xp_reward, totalXP: newXP, newLevel };
+  },
+
+  async claimReward(userId, missionId) {
+    const { data, error } = await supabase.rpc('claim_mission_reward', {
+      p_user_id: userId,
+      p_mission_id: missionId
+    });
+
+    if (error) throw error;
+    if (!data) throw new Error('Reward already claimed or mission not completed');
+
+    return data;
   }
 };
 

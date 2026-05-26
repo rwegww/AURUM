@@ -10,6 +10,23 @@ const getSupabase = async () => {
   return supabase;
 };
 
+const createClientSessionId = (token) => {
+  try {
+    const payload = token?.split('.')[1];
+    if (payload) {
+      const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const decoded = JSON.parse(atob(normalizedPayload.padEnd(Math.ceil(normalizedPayload.length / 4) * 4, '=')));
+      if (decoded?.sessionId) return decoded.sessionId;
+    }
+  } catch (err) {
+    console.warn('Could not decode JWT session id:', err);
+  }
+
+  return (typeof crypto !== 'undefined' && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -156,9 +173,7 @@ export const AuthProvider = ({ children }) => {
 
       if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
       
-      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-        ? crypto.randomUUID() 
-        : Math.random().toString(36).substring(2) + Date.now().toString(36);
+      const newSessionId = createClientSessionId(data.token);
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
@@ -186,9 +201,7 @@ export const AuthProvider = ({ children }) => {
 
       if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
       
-      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-        ? crypto.randomUUID() 
-        : Math.random().toString(36).substring(2) + Date.now().toString(36);
+      const newSessionId = createClientSessionId(data.token);
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
@@ -244,9 +257,7 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Lỗi đăng ký');
 
-      const newSessionId = (typeof crypto !== 'undefined' && crypto.randomUUID) 
-        ? crypto.randomUUID() 
-        : Math.random().toString(36).substring(2) + Date.now().toString(36);
+      const newSessionId = createClientSessionId(data.token);
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
@@ -257,35 +268,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, [fetchProfile]);
 
-  const updateProgress = useCallback(async (xpGain, unlockedLessonId, isLessonCompletion = false) => {
-    if (!isLoggedIn || !user) return;
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('/api/user/progress', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ xpGain, unlockedLessonId, isLessonCompletion })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (mountedRef.current) {
-          setUser(prev => ({ 
-            ...prev, 
-            xp: data.xp, 
-            level: data.level, 
-            unlockedLessons: data.unlockedLessons,
-            streakCount: data.streakCount ?? prev.streakCount,
-            todayLessonCompleted: data.todayLessonCompleted ?? prev.todayLessonCompleted
-          }));
-        }
-      }
-    } catch (err) {
-      console.error('Lỗi cập nhật tiến độ:', err);
-    }
-  }, [isLoggedIn, user]);
+  const updateProgress = useCallback(async () => {
+    console.warn('updateProgress is deprecated. Use completeLessonSegment or completePlacementTest.');
+    return { success: false, message: 'Deprecated progress endpoint' };
+  }, []);
 
   const refreshUser = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -344,37 +330,51 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isLoggedIn, user]);
 
-  const completeLessonSegment = useCallback(async (lessonId, level, stars, xpGain, isLessonCompletion) => {
-     if (!isLoggedIn || !user) return;
+  const completeLessonSegment = useCallback(async (lessonId, level, stars) => {
+     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
      
      try {
-        const currentProgress = user.balancingProgress || { lessonStars: {} };
-        const lessonStars = { ...(currentProgress.lessonStars || {}) };
-        const currentLessonStars = { ...(lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 }) };
-        
-        // Update stars
-        currentLessonStars[level] = Math.max(currentLessonStars[level], stars);
-        lessonStars[lessonId] = currentLessonStars;
-
-        const updateData = {
-          balancingProgress: {
-            ...currentProgress,
-            lessonStars: lessonStars
-          }
-        };
-
-        // 1. Save profile
-        await updateUser(updateData);
-        
-        // 2. Save XP/Unlock
-        await updateProgress(xpGain, isLessonCompletion ? lessonId : null, isLessonCompletion);
-        
-        return { success: true };
+        const token = localStorage.getItem('token');
+        const res = await fetch('/api/user/lesson-segment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ lessonId, level, stars })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Không thể lưu tiến độ bài học');
+        if (mountedRef.current && data.user) setUser(data.user);
+        return { success: true, user: data.user };
      } catch (err) {
         console.error('Lỗi lưu đoạn bài học:', err);
         return { success: false, message: err.message };
      }
-  }, [isLoggedIn, user, updateUser, updateProgress]);
+  }, [isLoggedIn, user]);
+
+  const completePlacementTest = useCallback(async (grade) => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/placement-pass', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ grade })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Không thể lưu kết quả test');
+      if (mountedRef.current && data.user) setUser(data.user);
+      return { success: true, user: data.user, xpGained: data.xpGained };
+    } catch (err) {
+      console.error('Lỗi lưu kết quả test:', err);
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
 
   const recoverStreak = useCallback(async (streakToRestore) => {
     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
@@ -553,11 +553,12 @@ export const AuthProvider = ({ children }) => {
     updateUser,
     linkAccount,
     completeLessonSegment,
+    completePlacementTest,
     recoverStreak,
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, completeLessonSegment, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, completeLessonSegment, completePlacementTest, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

@@ -42,9 +42,12 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
   useEffect(() => {
     if (user?.role === 'teacher' || user?.role === 'admin') {
-      fetchNotifications();
+      const timeout = setTimeout(fetchNotifications, 0);
       const interval = setInterval(fetchNotifications, 30000); // Poll every 30s
-      return () => clearInterval(interval);
+      return () => {
+        clearTimeout(timeout);
+        clearInterval(interval);
+      };
     }
   }, [user, fetchNotifications]);
 
@@ -119,7 +122,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
   };
 
   return (
-    <div className="w-64 h-screen fixed top-0 left-0 bg-white border-r border-viet-border flex flex-col z-40">
+    <div className="hidden md:flex w-64 h-screen fixed top-0 left-0 bg-white border-r border-viet-border flex-col z-40">
       {/* Brand Header */}
       <div className="h-20 flex items-center px-6 border-b border-viet-border">
         <div className="flex items-center gap-2 group cursor-default">

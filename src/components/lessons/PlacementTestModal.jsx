@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -32,19 +33,23 @@ const PLACEMENT_TESTS = {
   ]
 };
 
+export const AVAILABLE_PLACEMENT_TEST_GRADES = Object.keys(PLACEMENT_TESTS);
+
 const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
-  const { user, updateProgress, updateUser } = useAuth();
+  const { completePlacementTest } = useAuth();
   const [step, setStep] = useState('start'); // start, quiz, result
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isCorrect, setIsCorrect] = useState(null);
 
-  const questions = PLACEMENT_TESTS[grade] || PLACEMENT_TESTS[9];
+  const normalizedGrade = String(grade);
+  const questions = PLACEMENT_TESTS[normalizedGrade] || [];
+  const hasPlacementTest = questions.length > 0;
   const passingScore = Math.ceil(questions.length * 0.7);
 
   const handleAnswer = (index) => {
-    if (selectedAnswer !== null) return;
+    if (selectedAnswer !== null || !questions[currentQuestion]) return;
     
     setSelectedAnswer(index);
     const correct = index === questions[currentQuestion].correctAnswer;
@@ -64,21 +69,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
 
   const handleFinish = async () => {
     if (score >= passingScore) {
-      // Gain XP but DON'T unlock lesson here to avoid auto-unlocking infographic
-      await updateProgress(500); 
-      
-      // Mark grade as passed in balancingProgress
-      const currentProgress = user?.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [] };
-      const updatedPassedGrades = currentProgress.passedGrades || [];
-      
-      if (!updatedPassedGrades.includes(grade)) {
-        await updateUser({ 
-          balancingProgress: { 
-            ...currentProgress, 
-            passedGrades: [...updatedPassedGrades, grade] 
-          } 
-        });
-      }
+      await completePlacementTest(normalizedGrade);
       onPass();
     } else {
       onClose();
@@ -86,6 +77,27 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
   };
 
   if (!isOpen) return null;
+
+  if (!hasPlacementTest) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
+      >
+        <div className="w-full max-w-md bg-white rounded-[32px] p-8 text-center shadow-2xl">
+          <h2 className="text-2xl font-black text-viet-text mb-3 uppercase">Chua co bai test</h2>
+          <p className="text-viet-text-light font-bold mb-6">
+            He thong chua co du lieu placement test cho lop {normalizedGrade}. Hay hoc theo lo trinh duoc mo khoa san.
+          </p>
+          <button onClick={onClose} className="viet-btn-green w-full py-4 text-lg">
+            Quay lai
+          </button>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div 

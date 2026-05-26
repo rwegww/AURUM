@@ -1,6 +1,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
+import Lesson from '../models/Lesson.js';
 import { supabase } from '../lib/supabase.js';
 import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
 
@@ -17,6 +18,13 @@ const DEFAULT_STUDY_PLAN = {
   calendarEnabled: false,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 60;
+const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan']);
+const LESSON_LEVEL_XP = {
+  level1: 30,
+  level2: 50,
+  level3: 100,
+};
+const PLACEMENT_GRADES = new Set(['9', '10', '11', '12']);
 
 const datePartFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: VIETNAM_TIME_ZONE,
@@ -100,6 +108,40 @@ const shouldResetStudyReminderState = (nextPlan, previousPlan = {}) => {
     || (nextPlan.emailEnabled && !previous.emailEnabled);
 };
 
+const toProfileResponse = (user) => ({
+  id: user.id,
+  username: user.username,
+  email: user.email || null,
+  role: user.role,
+  xp: user.xp,
+  level: user.level,
+  inventory: user.inventory || { ingredients: [], craftedItems: [] },
+  unlockedLessons: user.unlockedLessons || [],
+  unlockedChemicals: user.unlockedChemicals || [],
+  avatarSeed: user.avatarSeed,
+  createdAt: user.createdAt,
+  arenaStats: user.arenaStats || { total: 0, wins: 0, losses: 0, points: 0 },
+  arenaAvatar: user.arenaAvatar || { seed: 'Chem Master', aura: '#a855f7' },
+  balancingProgress: user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} },
+  studyPlan: user.studyPlan,
+  streakCount: user.streakCount || 0,
+  lastStreakAt: user.lastStreakAt,
+  todayOnlineMinutes: user.todayOnlineMinutes || 0,
+  todayLessonCompleted: user.todayLessonCompleted || false,
+  linkedAccounts: user.linkedAccounts || {}
+});
+
+const applyLessonStreak = (updateFields, user) => {
+  updateFields.today_lesson_completed = true;
+  const today = new Date().toISOString().split('T')[0];
+  const lastStreak = user.lastStreakAt ? new Date(user.lastStreakAt).toISOString().split('T')[0] : null;
+
+  if (today !== lastStreak) {
+    updateFields.streak_count = (user.streakCount || 0) + 1;
+    updateFields.last_streak_at = new Date().toISOString();
+  }
+};
+
 // Get Online Count (Public)
 router.get('/online-count', async (req, res) => {
   try {
@@ -154,33 +196,20 @@ router.get('/profile', auth, async (req, res) => {
     }
   }
 
-  res.json({
-    id: req.user.id,
-    username: req.user.username,
-    email: req.user.email || null,
-    role: req.user.role,
-    xp: req.user.xp,
-    level: req.user.level,
-    inventory: req.user.inventory || { ingredients: [], craftedItems: [] },
-    unlockedLessons: req.user.unlockedLessons,
-    unlockedChemicals: req.user.unlockedChemicals || [],
-    avatarSeed: req.user.avatarSeed,
-    createdAt: req.user.createdAt,
-    arenaStats: req.user.arenaStats || { total: 0, wins: 0, losses: 0, points: 0 },
-    arenaAvatar: req.user.arenaAvatar || { seed: 'Chem Master', aura: '#a855f7' },
-    balancingProgress: req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} },
-    studyPlan: req.user.studyPlan,
-    streakCount: req.user.streakCount || 0,
-    lastStreakAt: req.user.lastStreakAt,
-    todayOnlineMinutes: req.user.todayOnlineMinutes || 0,
-    todayLessonCompleted: req.user.todayLessonCompleted || false,
-    linkedAccounts: req.user.linkedAccounts || {}
-  });
+  res.json(toProfileResponse(req.user));
 });
 
 // Update Profile
 router.patch('/profile', auth, async (req, res) => {
   try {
+    const invalidFields = Object.keys(req.body || {}).filter((field) => !PROFILE_UPDATE_FIELDS.has(field));
+    if (invalidFields.length > 0) {
+      return res.status(400).json({
+        message: 'Unsupported profile fields',
+        fields: invalidFields,
+      });
+    }
+
     const updateData = { ...req.body };
     if (Object.prototype.hasOwnProperty.call(updateData, 'studyPlan')) {
       const nextStudyPlan = normalizeStudyPlan(updateData.studyPlan, req.user.studyPlan);
@@ -190,13 +219,103 @@ router.patch('/profile', auth, async (req, res) => {
     }
 
     const updatedUser = await User.update(req.user.id, updateData);
-    res.json(updatedUser);
+    res.json(toProfileResponse(updatedUser));
   } catch (err) {
     res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
   }
 });
 
-// Update XP & Progress
+router.post('/progress', auth, async (_req, res) => {
+  res.status(410).json({ message: 'Deprecated. Use /api/user/lesson-segment or /api/user/placement-pass.' });
+});
+
+router.post('/lesson-segment', auth, async (req, res) => {
+  try {
+    const { lessonId, level, stars } = req.body || {};
+    if (!lessonId || !Object.prototype.hasOwnProperty.call(LESSON_LEVEL_XP, level)) {
+      return res.status(400).json({ message: 'Invalid lesson segment payload' });
+    }
+
+    const normalizedStars = Number.parseInt(stars, 10);
+    if (!Number.isFinite(normalizedStars) || normalizedStars < 1 || normalizedStars > 3) {
+      return res.status(400).json({ message: 'Invalid star count' });
+    }
+
+    const lesson = await Lesson.findById(lessonId);
+    if (!lesson) {
+      return res.status(404).json({ message: 'Lesson not found' });
+    }
+
+    const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
+    const lessonStars = { ...(currentProgress.lessonStars || {}) };
+    const currentLessonStars = { ...(lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 }) };
+    const previousStars = currentLessonStars[level] || 0;
+    const firstCompletionForLevel = previousStars <= 0;
+
+    currentLessonStars[level] = Math.max(previousStars, normalizedStars);
+    lessonStars[lessonId] = currentLessonStars;
+
+    const updateFields = {
+      balancingProgress: {
+        ...currentProgress,
+        lessonStars,
+      },
+    };
+
+    if (firstCompletionForLevel) {
+      const streakBonus = Math.floor((req.user.streakCount || 0) / 7) * 5;
+      const nextXp = (req.user.xp || 0) + LESSON_LEVEL_XP[level] + streakBonus;
+      updateFields.xp = nextXp;
+      updateFields.level = Math.floor(nextXp / 1000) + 1;
+    }
+
+    if (level === 'level3') {
+      const unlockedLessons = Array.isArray(req.user.unlockedLessons) ? [...req.user.unlockedLessons] : [];
+      if (!unlockedLessons.includes(lessonId)) {
+        unlockedLessons.push(lessonId);
+        updateFields.unlockedLessons = unlockedLessons;
+      }
+      applyLessonStreak(updateFields, req.user);
+    }
+
+    const updatedUser = await User.update(req.user.id, updateFields);
+    res.json({ success: true, user: toProfileResponse(updatedUser) });
+  } catch (err) {
+    res.status(500).json({ message: 'Could not update lesson segment', error: err.message });
+  }
+});
+
+router.post('/placement-pass', auth, async (req, res) => {
+  try {
+    const grade = String(req.body?.grade || '');
+    if (!PLACEMENT_GRADES.has(grade)) {
+      return res.status(400).json({ message: 'Invalid placement grade' });
+    }
+
+    const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
+    const passedGrades = Array.isArray(currentProgress.passedGrades) ? currentProgress.passedGrades : [];
+    const alreadyPassed = passedGrades.includes(grade);
+    const updateFields = {
+      balancingProgress: {
+        ...currentProgress,
+        passedGrades: alreadyPassed ? passedGrades : [...passedGrades, grade],
+      },
+    };
+
+    if (!alreadyPassed) {
+      const nextXp = (req.user.xp || 0) + 500;
+      updateFields.xp = nextXp;
+      updateFields.level = Math.floor(nextXp / 1000) + 1;
+    }
+
+    const updatedUser = await User.update(req.user.id, updateFields);
+    res.json({ success: true, user: toProfileResponse(updatedUser), xpGained: alreadyPassed ? 0 : 500 });
+  } catch (err) {
+    res.status(500).json({ message: 'Could not save placement result', error: err.message });
+  }
+});
+
+// Update XP & Progress (legacy, shadowed by the deprecation handler above)
 router.post('/link-account', auth, async (req, res) => {
   try {
     const { provider, accountId, providerEmail } = req.body;

@@ -7,7 +7,7 @@ import {
   CheckCircle2, Beaker, GraduationCap, ChevronDown 
 } from 'lucide-react';
 import InfographicBook from '@/components/lessons/InfographicBook';
-import PlacementTestModal from '@/components/lessons/PlacementTestModal';
+import PlacementTestModal, { AVAILABLE_PLACEMENT_TEST_GRADES } from '@/components/lessons/PlacementTestModal';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 
@@ -98,7 +98,7 @@ const GradeJourney = () => {
           throw new Error(`Lỗi server (${res.status}): ${text.substring(0, 100)}`);
         }
         const data = await res.json();
-        setLessons(data.slice(0, 12));
+        setLessons(data);
       } catch (err) {
         console.error('Lỗi tải hành trình:', err);
       } finally {
@@ -246,7 +246,7 @@ const GradeJourney = () => {
         <div className="relative min-h-[500px]">
 
           {/* Placement Test Banner */}
-          {grade !== '8' && lessons.length > 0 && !user?.balancingProgress?.passedGrades?.includes(grade) && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
+          {grade !== '8' && AVAILABLE_PLACEMENT_TEST_GRADES.includes(String(grade)) && lessons.length > 0 && !user?.balancingProgress?.passedGrades?.includes(grade) && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-12 relative z-10">
               <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[36px] p-8 md:p-10 text-white shadow-2xl overflow-hidden relative border border-slate-800 group">
                 {/* Hologram details */}

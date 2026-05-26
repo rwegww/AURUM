@@ -79,7 +79,7 @@ const Register = () => {
           setError(result.message);
         }
       } else {
-        const result = await register(username, password, email, role, grade);
+        const result = await register(username, password, email, 'student', '', grade);
         if (result.success) {
           navigate('/login');
         } else {
