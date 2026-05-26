@@ -55,10 +55,9 @@ const ReminderToggle = ({ enabled, onChange, title, icon, activeColor }) => {
 };
 
 const STUDY_PLAN_DEFAULTS = {
-  studyTime: '00:00',
   dailyLessonTarget: 1,
-  remindersEnabled: true,
-  emailEnabled: false
+  emailEnabled: false,
+  completed: false
 };
 
 const Settings = () => {
@@ -392,17 +391,9 @@ const Settings = () => {
 
                 <div className="space-y-4 bg-slate-50/50 border border-viet-border rounded-[24px] p-6 mb-6">
                   <h3 className="text-[11px] font-black text-viet-text-light uppercase tracking-widest pl-1 flex items-center gap-1.5">
-                    <Bell className="w-4 h-4 text-viet-green shrink-0" /> Thiết lập thông báo nhắc học
+                    <Mail className="w-4 h-4 text-viet-green shrink-0" /> Thiết lập thông báo nhắc học
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <ReminderToggle
-                      enabled={planData.remindersEnabled}
-                      onChange={() => setPlanData({ ...planData, remindersEnabled: !planData.remindersEnabled })}
-                      title="Nhắc nhở học tập"
-                      icon={<Bell size={16} />}
-                      activeColor="green"
-                    />
-
+                  <div className="grid grid-cols-1 gap-3">
                     <ReminderToggle 
                       enabled={planData.emailEnabled}
                       onChange={handleToggleEmailReminder}
