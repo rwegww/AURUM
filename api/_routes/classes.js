@@ -775,7 +775,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
     }
 
     const { postId } = req.params;
-    const { answers } = req.body;
+    const { answers, score } = req.body;
     const student_id = req.user.id;
 
     const { data: post, error: postError } = await supabase
@@ -808,7 +808,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
         student_id, 
         status: 'submitted',
         answers: answers || {},
-        score: null,
+        score: score ?? null,
         feedback: null
       }], { onConflict: 'post_id,student_id' })
       .select()
