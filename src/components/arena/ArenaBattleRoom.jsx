@@ -108,19 +108,19 @@ const CalculationExperimentModel = ({ payload = {} }) => {
   const meta = visualMeta[visual] || visualMeta.flask;
 
   return (
-    <div data-arena-model="calculation-experiment" className="rounded-lg border border-white/10 bg-slate-900 p-5 text-white">
+    <div data-arena-model="calculation-experiment" className="rounded-2xl border border-slate-200 bg-white p-6 text-viet-text shadow-sm">
       <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/20 text-blue-200">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-500">
           <Calculator className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Mô hình thí nghiệm</p>
-          <p className="font-black">{meta.title}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Mô hình thí nghiệm</p>
+          <p className="font-black text-lg">{meta.title}</p>
         </div>
       </div>
 
-      <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-        <div className="relative min-h-[190px] overflow-hidden rounded-lg bg-slate-950/70 p-4">
+      <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <div className="relative min-h-[190px] overflow-hidden rounded-xl bg-slate-900/5 p-4 ring-1 ring-inset ring-slate-200/50">
           {visual === 'scale' && (
             <div className="grid h-full min-h-[160px] place-items-center">
               <div className="relative h-32 w-56">
@@ -181,18 +181,18 @@ const CalculationExperimentModel = ({ payload = {} }) => {
           )}
         </div>
 
-        <div className="mt-4 rounded-lg border border-viet-green/30 bg-viet-green/10 p-3">
+        <div className="mt-5 rounded-xl border border-viet-green/30 bg-viet-green/10 p-4">
           <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Công thức tương ứng</p>
-          <p className="mt-1 text-sm font-black text-white">{payload.formula || meta.hint}</p>
-          <p className="mt-2 text-xs font-bold text-white/60">{meta.hint}</p>
+          <p className="mt-1 text-sm font-black text-viet-text">{payload.formula || meta.hint}</p>
+          <p className="mt-2 text-xs font-bold text-viet-text-light">{meta.hint}</p>
         </div>
 
         {given.length > 0 && (
-          <div className="mt-3 grid gap-2">
+          <div className="mt-4 grid gap-2">
             {given.map((item) => (
-              <div key={`${item.label}-${item.value}-${item.unit}`} className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2 text-xs font-black">
-                <span className="text-white/60">{item.label}</span>
-                <span>{item.value} {item.unit}</span>
+              <div key={`${item.label}-${item.value}-${item.unit}`} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-black shadow-sm">
+                <span className="text-viet-text-light">{item.label}</span>
+                <span className="text-viet-text">{item.value} {item.unit}</span>
               </div>
             ))}
           </div>
@@ -562,18 +562,18 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
         </div>
       </div>
 
-      <div className="rounded-lg border border-white/10 bg-slate-900 p-5 text-white">
-        <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Trạng thái phân tử</p>
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-viet-text shadow-sm">
+        <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Trạng thái phân tử</p>
         <p className="mt-2 text-3xl font-black text-viet-green">{payload.formula || 'Molecule'}</p>
-        <div className="mt-5 grid min-h-[240px] place-items-center rounded-lg border border-white/10 bg-white/5 p-4">
+        <div className="mt-5 grid min-h-[240px] place-items-center rounded-2xl border border-viet-border bg-slate-50 p-4">
           <div className="flex max-w-[260px] flex-wrap justify-center gap-3">
             {slots.map((slot) => (
               <div
                 key={slot.id}
-                className={`flex h-16 w-16 items-center justify-center rounded-full border text-xl font-black ${
+                className={`flex h-16 w-16 items-center justify-center rounded-full border-2 text-xl font-black ${
                   placements[slot.id]
-                    ? 'border-viet-green bg-viet-green/20 text-viet-green'
-                    : 'border-white/20 bg-white/10 text-white/40'
+                    ? 'border-viet-green bg-viet-green text-white shadow-md'
+                    : 'border-slate-200 bg-white text-viet-text-light'
                 }`}
               >
                 {placements[slot.id] || '?'}
@@ -581,7 +581,7 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
             ))}
           </div>
         </div>
-        <div className="mt-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-bold text-white/70">
+        <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-bold text-blue-700">
           Đã ghép {filledCount}/{slots.length} vị trí. Đáp án chỉ được chấm ở backend.
         </div>
       </div>
@@ -661,7 +661,7 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
         </div>
       </div>
 
-      <div className="rounded-lg border border-white/10 bg-white p-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <AtomicModel shells={shells} symbol={payload.symbol || ''} />
       </div>
     </div>
@@ -671,9 +671,9 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
 const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
   if (!task) {
     return (
-      <div className="rounded-lg border border-white/10 bg-white/5 p-8 text-center text-white">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-viet-text shadow-sm">
         <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-viet-green" />
-        Đang tải nhiệm vụ...
+        <span className="font-black">Đang tải nhiệm vụ...</span>
       </div>
     );
   }
@@ -699,22 +699,22 @@ const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
 };
 
 const Scoreboard = ({ players, currentUserId }) => (
-  <div className="flex w-full items-center gap-4 overflow-x-auto rounded-lg border border-white/10 bg-white/5 p-3 hide-scrollbar">
-    <div className="flex shrink-0 items-center gap-2 border-r border-white/10 pr-4">
+  <div className="flex w-full items-center gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white p-3 hide-scrollbar shadow-sm">
+    <div className="flex shrink-0 items-center gap-2 border-r border-slate-200 pr-4">
       <Trophy className="h-4 w-4 text-amber-400" />
-      <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Bảng điểm</span>
+      <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Bảng điểm</span>
     </div>
     <div className="flex gap-3">
       {[...players].sort((a, b) => (b.score || 0) - (a.score || 0)).map((player, index) => (
         <div
           key={player.user_id}
-          className={`flex shrink-0 items-center gap-2.5 rounded-full border px-3 py-1.5 ${player.user_id === currentUserId ? 'border-viet-green/50 bg-viet-green/10' : 'border-white/10 bg-white/5'}`}
+          className={`flex shrink-0 items-center gap-2.5 rounded-full border px-3 py-1.5 ${player.user_id === currentUserId ? 'border-viet-green/50 bg-viet-green/10' : 'border-slate-200 bg-slate-50'}`}
         >
-          <span className="text-[10px] font-black text-white/50">#{index + 1}</span>
+          <span className="text-[10px] font-black text-viet-text-light">#{index + 1}</span>
           <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={24} />
-          <span className="max-w-[100px] truncate text-xs font-bold text-white">{player.username}</span>
-          <div className="flex items-center gap-1.5 border-l border-white/10 pl-2">
-            <span className="text-[10px] font-bold text-white/40">{player.correct_count || 0} ✓</span>
+          <span className="max-w-[100px] truncate text-xs font-bold text-viet-text">{player.username}</span>
+          <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
+            <span className="text-[10px] font-bold text-viet-text-light">{player.correct_count || 0} ✓</span>
             <span className="text-xs font-black text-viet-green">{player.score || 0}</span>
           </div>
         </div>
@@ -730,19 +730,18 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
   const canStart = isHost && (room.is_practice || players.length >= (room.max_players || 1));
 
   return (
-    <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-950 p-4 text-white sm:p-6">
-      <div className="mx-auto flex min-h-full max-w-5xl flex-col justify-center">
-        <div className="rounded-lg border border-white/10 bg-white/5 p-5 shadow-2xl sm:p-8">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center overflow-y-auto bg-slate-900/60 p-4 text-viet-text backdrop-blur-sm sm:p-6">
+      <div className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-8">
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <p className="text-[11px] font-black uppercase tracking-widest text-viet-green">Phòng Arena PK</p>
               <h1 className="mt-2 text-4xl font-black">{room.name || `Phòng ${room.id}`}</h1>
-              <p className="mt-2 text-sm font-bold text-white/50">Mã phòng: <span className="text-white">{room.id}</span></p>
+              <p className="mt-2 text-sm font-bold text-viet-text-light">Mã phòng: <span className="text-viet-text">{room.id}</span></p>
             </div>
             <button
               type="button"
               onClick={onLeave}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-white/10 px-4 text-sm font-black uppercase tracking-widest text-red-200 transition hover:bg-red-500/10"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 text-sm font-black uppercase tracking-widest text-red-500 transition hover:border-red-200 hover:bg-red-50"
             >
               <LogOut className="h-5 w-5" />
               Rời phòng
@@ -750,48 +749,47 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Chế độ</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Chế độ</p>
               <p className="mt-2 text-xl font-black">{room.mode || 'solo'}</p>
             </div>
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Độ khó</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Độ khó</p>
               <p className="mt-2 text-xl font-black">{room.difficulty || 'auto'}</p>
             </div>
-            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Người chơi</p>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Người chơi</p>
               <p className="mt-2 text-xl font-black">{players.length}/{room.max_players || 1}</p>
             </div>
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             {players.map((player) => (
-              <div key={player.user_id} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+              <div key={player.user_id} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
                 <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={44} />
                 <div className="min-w-0">
                   <p className="truncate font-black">{player.username}</p>
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-white/40">{player.status}</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-viet-text-light">{player.status}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-sm font-bold text-white/50">
+            <p className="text-sm font-bold text-viet-text-light">
               {isHost ? 'Chủ phòng có thể bắt đầu khi đủ người.' : 'Đợi chủ phòng bắt đầu trận.'}
             </p>
             <button
               type="button"
               disabled={!canStart || starting}
               onClick={onStart}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-viet-green px-5 text-sm font-black uppercase tracking-widest text-white transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-viet-green px-6 text-sm font-black uppercase tracking-widest text-white shadow-sm transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {starting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5" />}
+              {starting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5 fill-current" />}
               Bắt đầu
             </button>
           </div>
         </div>
-      </div>
     </div>
   );
 };
@@ -805,26 +803,26 @@ const FinishedRoom = ({ state, user, onContinue }) => {
     : 'draw';
 
   return (
-    <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-950 p-4 text-white sm:p-6">
-      <div className="mx-auto flex min-h-full max-w-4xl flex-col justify-center">
-        <div className="rounded-lg border border-white/10 bg-white/5 p-5 text-center shadow-2xl sm:p-8">
-          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-lg bg-viet-green/15 text-viet-green">
+    <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-900/60 p-4 text-viet-text backdrop-blur-sm sm:p-6">
+      <div className="mx-auto flex min-h-full max-w-2xl flex-col justify-center">
+        <div className="rounded-3xl border border-slate-200 bg-white p-6 text-center shadow-2xl sm:p-8">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-viet-green/15 text-viet-green">
             <Trophy className="h-8 w-8" />
           </div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-white/40">Trận đã kết thúc</p>
+          <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">Trận đã kết thúc</p>
           <h1 className="mt-2 text-4xl font-black">
             {result === 'win' ? 'Bạn thắng' : result === 'lose' ? 'Bạn thua' : 'Hòa điểm'}
           </h1>
-          <p className="mt-2 text-sm font-bold text-white/50">Điểm của bạn: {current?.score || 0}</p>
+          <p className="mt-2 text-sm font-bold text-viet-text-light">Điểm của bạn: {current?.score || 0}</p>
 
           <div className="mt-6 space-y-3 text-left">
             {players.map((player, index) => (
-              <div key={player.user_id} className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
-                <span className="w-6 text-center font-black text-white/50">{index + 1}</span>
+              <div key={player.user_id} className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <span className="w-6 text-center font-black text-viet-text-light">{index + 1}</span>
                 <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={44} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-black">{player.username}</p>
-                  <p className="text-xs font-bold text-white/40">{player.correct_count || 0} câu đúng</p>
+                  <p className="text-xs font-bold text-viet-text-light">{player.correct_count || 0} câu đúng</p>
                 </div>
                 <span className="font-black text-viet-green">{player.score || 0}</span>
               </div>
@@ -1040,44 +1038,44 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-950 p-4 text-white sm:p-6">
+    <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-50 p-4 text-viet-text sm:p-6">
       <div className="mx-auto flex min-h-full max-w-7xl flex-col gap-5">
         <header className="grid gap-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={onLeave}
-              className="flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/70 transition hover:text-red-300"
+              className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-viet-text-light transition hover:bg-red-50 hover:text-red-500 hover:border-red-200 shadow-sm"
             >
               <LogOut className="h-5 w-5" />
             </button>
-            <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Tiến độ</p>
+            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Tiến độ</p>
               <p className="font-black">Round {(currentRoom?.current_round_index || 0) + 1}/{totalRounds}</p>
             </div>
           </div>
 
-          <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-            <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+            <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-viet-text-light">
               <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> Thời gian</span>
-              <span className={timeLeft <= 5 ? 'text-red-300' : 'text-viet-green'}>{timeLeft}s</span>
+              <span className={timeLeft <= 5 ? 'text-red-500' : 'text-viet-green'}>{timeLeft}s</span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
               <motion.div
-                className={`h-full rounded-full ${timeLeft <= 5 ? 'bg-red-400' : 'bg-viet-green'}`}
+                className={`h-full rounded-full ${timeLeft <= 5 ? 'bg-red-500' : 'bg-viet-green'}`}
                 animate={{ width: `${timerPct}%` }}
                 transition={{ duration: 0.25 }}
               />
             </div>
-            <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/5">
-              <div className="h-full rounded-full bg-white/30" style={{ width: `${progress}%` }} />
+            <div className="mt-2 h-1 overflow-hidden rounded-full bg-slate-50">
+              <div className="h-full rounded-full bg-slate-300" style={{ width: `${progress}%` }} />
             </div>
           </div>
 
           <div className="flex items-center justify-between gap-3 lg:justify-end">
-            <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">Điểm</p>
-              <p className="text-xl font-black text-white">{currentPlayer?.score || 0}</p>
+            <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-right shadow-sm">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Điểm</p>
+              <p className="text-xl font-black text-viet-text">{currentPlayer?.score || 0}</p>
             </div>
             <Avatar
               seed={user?.avatarSeed || user?.username || 'Aurum'}
@@ -1092,13 +1090,13 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
           <Scoreboard players={players} currentUserId={user?.id} />
 
           <div className="flex-1 space-y-5">
-            <section className="rounded-lg border border-white/10 bg-white/5 p-5">
+            <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                 <span className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-black uppercase tracking-widest ${meta.bg} ${meta.tone}`}>
                   <MetaIcon className="h-4 w-4" />
                   {meta.label}
                 </span>
-                <span className="text-[11px] font-black uppercase tracking-widest text-white/40">{currentTask?.difficulty || currentRoom?.difficulty}</span>
+                <span className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">{currentTask?.difficulty || currentRoom?.difficulty}</span>
               </div>
               <h1 className="text-2xl font-black leading-snug sm:text-3xl">{currentTask?.question}</h1>
             </section>
@@ -1110,7 +1108,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
             )}
 
             {hasAnswered && (
-              <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm font-black text-white/60">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-black text-amber-700 shadow-sm">
                 Bạn đã nộp round này. Đang chờ người chơi khác hoặc hết giờ.
               </div>
             )}
