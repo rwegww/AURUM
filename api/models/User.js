@@ -154,7 +154,7 @@ const mapUser = (user) => {
     todayOnlineMinutes: user.today_online_minutes || 0,
     todayLessonCompleted: user.today_lesson_completed || false,
     currentSessionId: user.current_session_id,
-    studyPlan: user.study_plan || { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true },
+    studyPlan: user.study_plan || { studyTime: '00:00', dailyLessonTarget: 1, remindersEnabled: true },
     linkedAccounts: user.linked_accounts || {}
   };
 };
@@ -220,7 +220,7 @@ export const User = {
         password: hashedPassword,
         role: userData.role || 'student',
         avatar_seed: userData.avatarSeed || userData.username,
-        study_plan: { studyTime: '20:00', dailyLessonTarget: 1, remindersEnabled: true, grade: userData.grade || null },
+        study_plan: { studyTime: '00:00', dailyLessonTarget: 1, remindersEnabled: true, grade: userData.grade || null },
         streak_count: 0,
         today_online_minutes: 0,
         today_lesson_completed: false

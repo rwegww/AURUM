@@ -11,13 +11,13 @@ import { auth } from '../_middleware/auth.js';
 
 const VIETNAM_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 const DEFAULT_STUDY_PLAN = {
-  studyTime: '20:00',
+  studyTime: '00:00',
   dailyLessonTarget: 1,
   remindersEnabled: true,
   emailEnabled: false,
   calendarEnabled: false,
 };
-const STUDY_REMINDER_INTERVAL_MINUTES = 60;
+const STUDY_REMINDER_INTERVAL_MINUTES = 240;
 const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'password']);
 const LESSON_LEVEL_XP = {
   level1: 30,
@@ -593,13 +593,21 @@ router.get('/cron-send-reminders', async (req, res) => {
             ? Math.max(0, sendAttemptMinute - scheduledMinute)
             : lateMinutes;
           const hourOffset = Math.max(0, Math.floor(lateMinutesAtSend / 60));
-          console.log(`[Cron Reminders] Sending study reminder to ${student.username} (late: ${lateMinutesAtSend}m, offset: ${hourOffset}h)`);
-          const sendResult = await sendStudyPlanHourlyReminderEmail(student.email, student.username, plan, hourOffset, lateMinutesAtSend);
+          const streakCount = student.streak_count || 0;
+
+          let sendResult;
+          if (streakCount > 0) {
+            console.log(`[Cron Reminders] Sending streak reminder to ${student.username} (streak: ${streakCount}, late: ${lateMinutesAtSend}m, offset: ${hourOffset}h)`);
+            sendResult = await sendStreakReminderEmail(student.email, student.username, streakCount, hourOffset, lateMinutesAtSend);
+          } else {
+            console.log(`[Cron Reminders] Sending study reminder to ${student.username} (late: ${lateMinutesAtSend}m, offset: ${hourOffset}h)`);
+            sendResult = await sendStudyPlanHourlyReminderEmail(student.email, student.username, plan, hourOffset, lateMinutesAtSend);
+          }
 
           results.push({
             username: student.username,
             email: student.email,
-            type: 'study_reminder',
+            type: streakCount > 0 ? 'streak_reminder' : 'study_reminder',
             hourOffset,
             lateMinutes: lateMinutesAtSend,
             success: sendResult.success,
@@ -621,28 +629,6 @@ router.get('/cron-send-reminders', async (req, res) => {
         }
       } else {
         skipped.notDue += 1;
-      }
-
-      const streakCount = student.streak_count || 0;
-      if (currentMinute >= 21 * 60 && streakCount > 0 && updatedPlan.lastStreakReminderDate !== todayKey) {
-        console.log(`[Cron Reminders] Sending streak reminder to ${student.username} (streak: ${streakCount})`);
-        const sendResult = await sendStreakReminderEmail(student.email, student.username, streakCount);
-
-        results.push({
-          username: student.username,
-          email: student.email,
-          type: 'streak_reminder',
-          success: sendResult.success,
-          error: sendResult.error || null,
-        });
-
-        if (sendResult.success) {
-          updatedPlan = {
-            ...updatedPlan,
-            lastStreakReminderDate: todayKey,
-          };
-          hasPlanUpdate = true;
-        }
       }
 
       if (hasPlanUpdate) {
