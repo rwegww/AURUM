@@ -69,7 +69,7 @@ const FeedbackButton = () => {
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-viet-green text-white rounded-full shadow-2xl shadow-viet-green/30 flex items-center justify-center text-2xl hover:scale-110 transition-all z-[60] group"
+        className="fixed bottom-0 right-0 w-16 h-12 bg-viet-green text-white rounded-tl-2xl shadow-[-4px_-4px_15px_rgba(0,0,0,0.1)] shadow-viet-green/30 flex items-center justify-center text-2xl hover:bg-[#007042] transition-colors z-[60] group"
       >
         <span>💬</span>
         <span className="absolute right-full mr-4 px-4 py-2 bg-viet-text text-white text-xs font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
