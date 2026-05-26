@@ -176,17 +176,6 @@ const Home = () => {
           >
             {/* Left */}
             <div className="flex-1 text-center lg:text-left">
-              <motion.div
-                variants={fadeUp}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border-2 border-duo-border shadow-sm mb-6"
-              >
-                <span className="flex h-3 w-3 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-viet-green opacity-75" />
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-viet-green" />
-                </span>
-                <span className="text-sm font-black text-[#1a1a1a] uppercase tracking-wider">AURUM CHEMISTRY</span>
-              </motion.div>
-
               <motion.h1
                 variants={fadeUp}
                 className="font-rubik text-[clamp(2.8rem,5vw+1rem,4.8rem)] font-black text-[#1a1a1a] leading-[1.08] tracking-tight mb-4"
@@ -226,26 +215,6 @@ const Home = () => {
                   className="w-full h-[360px] lg:h-[420px] object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
-
-                {/* Floating badge: Gamification */}
-                <motion.div
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute top-5 right-5 bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-2xl shadow-lg border border-white/60 flex items-center gap-2"
-                >
-                  <div className="bg-purple-50 p-1.5 rounded-lg"><Trophy className="text-purple-500" size={18} /></div>
-                  <span className="font-black text-sm text-[#1a1a1a]">{t('home.hero_badge_gamification')}</span>
-                </motion.div>
-
-                {/* Floating badge: Lab An Toàn */}
-                <motion.div
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                  className="absolute bottom-5 left-5 bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-2xl shadow-lg border border-white/60 flex items-center gap-2"
-                >
-                  <div className="bg-blue-50 p-1.5 rounded-lg"><FlaskConical className="text-blue-500" size={18} /></div>
-                  <span className="font-black text-sm text-[#1a1a1a]">{t('home.hero_badge_safe_lab')}</span>
-                </motion.div>
               </div>
             </motion.div>
           </motion.div>
