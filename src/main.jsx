@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { injectSpeedInsights } from '@vercel/speed-insights'
 import '@/styles/App.css'
 import './i18n'
 
@@ -15,6 +16,8 @@ console.warn = (...args) => {
 import App from './App.jsx'
 
 import { SpeedInsights } from "@vercel/speed-insights/react";
+// Initialize Vercel Speed Insights
+injectSpeedInsights()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
