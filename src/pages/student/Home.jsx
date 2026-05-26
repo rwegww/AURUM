@@ -73,7 +73,7 @@ const FeatureRow = ({
         className={`flex flex-col ${imageRight ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 lg:gap-16`}
       >
         {/* Text Side */}
-        <div className="flex-1 min-w-0">
+        <div className="w-full lg:w-[55%] lg:flex-none min-w-0">
           <motion.span
             variants={fadeUp}
             className={`inline-block text-sm font-black uppercase tracking-widest mb-3 ${badgeColor}`}
@@ -82,7 +82,7 @@ const FeatureRow = ({
           </motion.span>
           <motion.h2
             variants={fadeUp}
-            className="font-rubik text-[clamp(2rem,3.5vw+0.5rem,3rem)] font-black text-[#1a1a1a] leading-[1.15] mb-4"
+            className="font-rubik text-[clamp(1.8rem,3vw+0.4rem,2.6rem)] font-black text-[#1a1a1a] leading-[1.15] mb-4 text-balance"
           >
             {title}
             {titleHighlight && (
@@ -110,7 +110,7 @@ const FeatureRow = ({
         {/* Image Side */}
         <motion.div
           variants={fadeUp}
-          className="flex-1 w-full min-w-0 max-w-[520px] lg:max-w-none"
+          className="w-full lg:w-[45%] lg:flex-none min-w-0 max-w-[520px] lg:max-w-none"
         >
           <div className="relative rounded-[28px] overflow-hidden shadow-2xl group">
             <img
@@ -172,19 +172,19 @@ const Home = () => {
             initial="hidden"
             animate="visible"
             variants={stagger}
-            className="flex flex-col lg:flex-row items-center gap-12"
+            className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16"
           >
             {/* Left */}
-            <div className="flex-1 text-center lg:text-left">
+            <div className="w-full lg:w-[55%] lg:flex-none text-center lg:text-left min-w-0">
               <motion.h1
                 variants={fadeUp}
-                className="font-rubik text-[clamp(2.8rem,5vw+1rem,4.8rem)] font-black text-[#1a1a1a] leading-[1.08] tracking-tight mb-4"
+                className="font-rubik text-[clamp(2.2rem,4.5vw+0.8rem,4rem)] font-black text-[#1a1a1a] leading-[1.08] tracking-tight mb-4 text-balance"
               >
-                {t('home.hero_title')} <br />
+                <span className="whitespace-normal md:whitespace-nowrap">{t('home.hero_title')}</span> <br />
                 <span className="text-viet-green">{t('home.hero_title_highlight')}</span>
               </motion.h1>
 
-              <motion.p variants={fadeUp} className="text-xl text-gray-500 mb-8 max-w-xl mx-auto lg:mx-0 font-medium">
+              <motion.p variants={fadeUp} className="text-xl text-gray-500 mb-8 max-w-xl mx-auto lg:mx-0 font-medium text-balance">
                 {t('home.hero_statement')}
               </motion.p>
 
@@ -207,7 +207,7 @@ const Home = () => {
             </div>
 
             {/* Right — Hero Image */}
-            <motion.div variants={fadeUp} className="flex-1 w-full max-w-[520px]">
+            <motion.div variants={fadeUp} className="w-full lg:w-[45%] lg:flex-none max-w-[520px] lg:max-w-none">
               <div className="relative rounded-[32px] overflow-hidden shadow-[0_30px_80px_0_rgba(0,0,0,0.18)] group">
                 <img
                   src="/assets/images/home-journey.png"
