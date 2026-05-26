@@ -17,33 +17,71 @@
     "login_now": "Login Now"
   },
   "home": {
+    "hero_title": "LEARN CHEMISTRY",
+    "hero_title_highlight": "ACTIVELY",
     "hero_statement": "The #1 Chemistry academic platform combining interactive simulations and online competition.",
+    "hero_image_alt": "Learn chemistry with Aurum",
+    "hero_badge_gamification": "Gamification",
+    "hero_badge_safe_lab": "Safe Lab",
     "enter_classroom": "Enter Classroom",
     "enter_lab": "Enter Lab",
+    "stats": {
+      "students_count": "10,000+",
+      "students_label": "Active Students",
+      "schools_count": "50+",
+      "schools_label": "Schools Joined",
+      "lessons_count": "1,000+",
+      "lessons_label": "Visual Lessons"
+    },
     "features": {
       "journey": {
+        "badge": "Learning Path",
         "title": "Learning Journey",
         "highlight": "Structured Online Curriculum",
         "desc": "From the most basic concepts of Grade 8 Chemistry to advanced topics in Grade 12. Content is digitized into interactive lessons that sharpen both theory and practice.",
-        "link": "Explore Classroom"
+        "desc_long": "From the most basic concepts of Grade 8 Chemistry to advanced topics in Grade 12. Content is digitized into interactive lessons that sharpen both theory and practice.",
+        "link": "Explore path",
+        "image_alt": "Chemistry learning journey"
       },
       "lab": {
+        "badge": "Virtual Lab",
         "title": "Virtual Lab",
-        "highlight": "Absolutely Safe",
+        "highlight": "3D Interactive",
         "desc": "No real chemicals needed, no risk of explosions. Mix, observe color changes, precipitates, and gas evolution right on your screen. Supports hundreds of high school to advanced reactions.",
-        "link": "Practice in Lab"
+        "desc_long": "Mix chemicals, observe color changes, precipitates, and gas evolution safely in 3D right on your screen.",
+        "link": "Enter Lab",
+        "image_alt": "3D virtual lab"
       },
       "arena": {
+        "badge": "Competition",
         "title": "Battle Arena",
-        "highlight": "Intense Competition",
+        "highlight": "Online Battle",
         "desc": "Real-time ranking system. Create battle rooms with friends or find random matches. Quick-fire Chemistry questions to earn points and unlock exclusive avatars.",
-        "link": "Join Arena"
+        "desc_long": "Real-time ranking system. Battle other students with quick-fire Chemistry questions, earn points, and climb the leaderboard.",
+        "link": "Join Arena",
+        "image_alt": "Online battle arena"
       },
       "library": {
         "title": "Comprehensive Lookup",
         "highlight": "Quick and Accurate",
         "desc": "A massive digital library paired with an interactive Periodic Table. Click any element to view electron configuration, energy levels, and detailed chemical properties.",
         "link": "Go to Library"
+      },
+      "map": {
+        "badge": "Explore",
+        "title": "Journey",
+        "highlight": "Conquer Knowledge",
+        "desc": "Embark on an RPG-style learning adventure. Gather achievements, unlock new stages, and showcase your chemistry prowess.",
+        "link": "Start Journey",
+        "image_alt": "Journey to conquer knowledge"
+      },
+      "lessons": {
+        "badge": "Lectures",
+        "title": "Interactive Lessons",
+        "highlight": "Visual & Engaging",
+        "desc": "Theory presented through interactive slides, video illustrations, and quick quizzes to prepare you for exams.",
+        "link": "View Lectures",
+        "image_alt": "Vivid interactive lessons"
       }
     },
     "leaderboard": {
