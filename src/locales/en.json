@@ -12,6 +12,8 @@
     "arena_link": "ARENA",
     "missions": "MISSIONS",
     "knowledge_map": "KNOWLEDGE MAP",
+    "calculator": "CALCULATOR",
+    "support": "SUPPORT",
     "logout": "Logout",
     "login": "Login",
     "login_now": "Login Now"
