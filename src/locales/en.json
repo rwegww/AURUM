@@ -17,7 +17,8 @@
     "profile": "Profile",
     "logout": "Logout",
     "login": "Login",
-    "login_now": "Login Now"
+    "login_now": "Login Now",
+    "feedback": "Send Feedback"
   },
   "home": {
     "hero_title": "LEARN CHEMISTRY",
