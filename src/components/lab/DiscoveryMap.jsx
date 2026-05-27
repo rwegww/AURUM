@@ -94,20 +94,6 @@ const TIER_THEME = {
   4: { color: '#8b5cf6', icon: '🔮', label: 'Khác / Huyền bí' }
 };
 
-const buildPyramidRows = (items) => {
-  const rows = [];
-  let currentIndex = 0;
-  let itemsInRow = 1;
-
-  while (currentIndex < items.length) {
-    const row = items.slice(currentIndex, currentIndex + itemsInRow);
-    rows.push(row);
-    currentIndex += itemsInRow;
-    itemsInRow++;
-  }
-  return rows;
-};
-
 const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFormulas = [] }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
@@ -324,71 +310,59 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
           panning={{ velocityDisabled: false }}
         >
           <TransformComponent wrapperStyle={{ width: '100%', height: '100%', cursor: 'grab' }} contentStyle={{ minWidth: '100%', minHeight: '100%' }}>
-            <div className="flex flex-row items-center min-w-max min-h-full py-24 px-12 relative z-10 gap-24">
+            
+            {/* Top-to-Bottom Tree Layout */}
+            <div className="flex flex-col items-center min-w-max min-h-max py-24 px-12 relative z-10 gap-32">
               
               {/* ROOT NODE / START */}
-              <div className="flex flex-col justify-center h-full shrink-0 ml-12">
+              <div className="flex justify-center w-full shrink-0">
                  <motion.div
                    initial={{ opacity: 0, scale: 0.8 }}
                    animate={{ opacity: 1, scale: 1 }}
-                   className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none flex items-center justify-center rotate-[-90deg] translate-x-[-50px]"
-                   style={{ transformOrigin: 'center center' }}
+                   className="px-8 py-4 bg-viet-green text-white rounded-full font-black text-xl uppercase tracking-widest shadow-[0_0_40px_rgba(16,185,129,0.3)] border-b-[4px] border-emerald-700 select-none flex items-center justify-center"
                  >
-                   NGUYÊN BẢN
+                   CÂY TIẾN HÓA VẬT CHẤT
                  </motion.div>
               </div>
 
-              {/* TIERS COLUMNS */}
+              {/* TIERS AS ROWS */}
               {tierKeys.map((tier, tIdx) => {
                 const theme = TIER_THEME[tier];
                 const items = treeData[tier] || [];
                 
                 return (
-                  <div key={tier} className="flex flex-col gap-8 shrink-0 relative items-center justify-center min-h-full">
-                    {/* Tier Header (Now a sticky floating badge above the column) */}
+                  <div key={tier} className="flex flex-col gap-8 shrink-0 relative items-center justify-center w-full">
+                    {/* Tier Header */}
                     <motion.div
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: tIdx * 0.1 }}
-                      className="absolute top-[-80px] z-20 bg-[#0a0c10]/80 backdrop-blur-md py-3 px-6 rounded-full border border-white/10 flex items-center justify-center gap-3 shadow-xl"
+                      className="z-20 bg-[#0a0c10]/90 backdrop-blur-md py-3 px-8 rounded-full border border-white/10 flex items-center justify-center gap-4 shadow-xl mb-4"
                     >
-                       <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm bg-white/5 border border-white/10" style={{ color: theme.color }}>
+                       <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-white/5 border border-white/10" style={{ color: theme.color }}>
                           {theme.icon}
                        </div>
                        <div className="flex flex-col">
-                           <h2 className="text-[11px] font-black uppercase tracking-widest text-white leading-none">{theme.label}</h2>
-                           <span className="text-[9px] font-bold text-white/40 mt-1">{items.length} chất</span>
+                           <h2 className="text-sm font-black uppercase tracking-widest text-white leading-none">{theme.label}</h2>
+                           <span className="text-[10px] font-bold text-white/40 mt-1">{items.length} chất</span>
                        </div>
                     </motion.div>
 
-                    {/* Items Grid for this Tier */}
+                    {/* Items Grid for this Tier Row */}
                     <motion.div 
                        initial={{ opacity: 0 }}
                        animate={{ opacity: 1 }}
                        transition={{ delay: tIdx * 0.1 + 0.2 }}
-                       className="flex justify-center items-center"
+                       className="flex flex-wrap justify-center items-center gap-4"
+                       style={{ maxWidth: '4000px' }}
                     >
-                       {items.length > 8 ? (
-                          // Pyramid Layout for large tiers
-                          <div className="flex flex-col items-center gap-3">
-                             {buildPyramidRows(items).map((rowItems, rIdx) => (
-                               <div key={rIdx} className="flex justify-center gap-3">
-                                 {rowItems.map(item => renderItemNode(item, theme))}
-                               </div>
-                             ))}
-                          </div>
-                       ) : (
-                          // Standard Grid for smaller tiers
-                          <div className="grid grid-cols-2 gap-4">
-                             {items.map(item => renderItemNode(item, theme))}
-                          </div>
-                       )}
+                       {items.map(item => renderItemNode(item, theme))}
                     </motion.div>
                   </div>
                 );
               })}
 
-              <div className="w-32 shrink-0" />
+              <div className="h-32 shrink-0" />
             </div>
           </TransformComponent>
         </TransformWrapper>
