@@ -4,6 +4,7 @@ import { molecules } from '../../data/molecules';
 import { elements } from '../../data/elements';
 import { craftableItems } from '../../data/labInventory';
 import { CheckCircle2, Lock, ChevronRight, Activity, ArrowRight, Plus } from 'lucide-react';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 // Helper to normalize formulas (H₂ -> H2)
 const normalize = (f) => {
@@ -93,6 +94,20 @@ const TIER_THEME = {
   4: { color: '#8b5cf6', icon: '🔮', label: 'Khác / Huyền bí' }
 };
 
+const buildPyramidRows = (items) => {
+  const rows = [];
+  let currentIndex = 0;
+  let itemsInRow = 1;
+
+  while (currentIndex < items.length) {
+    const row = items.slice(currentIndex, currentIndex + itemsInRow);
+    rows.push(row);
+    currentIndex += itemsInRow;
+    itemsInRow++;
+  }
+  return rows;
+};
+
 const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFormulas = [] }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
@@ -104,7 +119,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
 
   // Compute Tiers using BFS on Reactions
   const treeData = useMemo(() => {
-    const tierMap = new Map(); // normalized_formula -> tier level
+    const tierMap = new Map();
     const elementsByTier = { 0: [], 1: [], 2: [], 3: [], 4: [] };
 
     // Initialize Tier 0 (Starters)
@@ -137,7 +152,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
         });
 
         if (allReactantsHaveTier && maxReactantTier !== -1) {
-          const productTier = Math.min(maxReactantTier + 1, 3); // Max logic tier is 3
+          const productTier = Math.min(maxReactantTier + 1, 3);
           rx.products.forEach(p => {
             const pf = normalize(p.formula);
             const currentTier = tierMap.get(pf);
@@ -150,11 +165,10 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
       });
     }
 
-    // Populate elementsByTier
     chemicals.forEach(chem => {
       const normF = normalize(chem.formula);
       let tier = tierMap.get(normF);
-      if (tier === undefined) tier = 4; // Unlinked / Special
+      if (tier === undefined) tier = 4;
       
       const isDiscovered = normalizedDiscovered.has(normF) || chem.is_starter || chem.isStarter;
       
@@ -169,7 +183,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
       elementsByTier[tier].push(node);
     });
 
-    // Clean up empty tiers and sort
     const result = {};
     [0,1,2,3,4].forEach(t => {
        if (elementsByTier[t] && elementsByTier[t].length > 0) {
@@ -192,7 +205,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
     let isDiscovered = normalizedDiscovered.has(selectedId);
     if (node) isDiscovered = isDiscovered || node.is_starter || node.isStarter;
 
-    // Try to enrich
     const molecule = molecules.find(m => normalize(m.formula) === selectedId);
     if (molecule) return { ...node, ...molecule, isDiscovered, formula: selectedId };
     const element = elements.find(e => normalize(e.symbol) === selectedId);
@@ -203,7 +215,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
     return { ...node, isDiscovered, formula: selectedId };
   }, [selectedId, chemicals, normalizedDiscovered]);
 
-  // Find pathways (reactions where selectedId is a product)
   const synthesisPathways = useMemo(() => {
     if (!selectedId || !_reactions) return [];
     return _reactions.filter(rx => 
@@ -211,19 +222,16 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
     );
   }, [selectedId, _reactions]);
 
-  // Determine highlighted nodes for connection effect
   const highlightedNodes = useMemo(() => {
     const highlights = new Set();
     const activeId = hoveredId || selectedId;
     if (activeId) {
       highlights.add(activeId);
-      // Find what makes activeId
       _reactions.forEach(rx => {
         if (rx.products && rx.products.some(p => normalize(p.formula) === activeId)) {
           rx.reactants?.forEach(r => highlights.add(normalize(r.formula)));
         }
       });
-      // Find what activeId makes
       _reactions.forEach(rx => {
         if (rx.reactants && rx.reactants.some(r => normalize(r.formula) === activeId)) {
           rx.products?.forEach(p => highlights.add(normalize(p.formula)));
@@ -248,143 +256,164 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
      );
   };
 
+  const renderItemNode = (item, theme) => {
+    const isHighlighted = highlightedNodes.has(item.normalizedFormula);
+    const isFaded = highlightedNodes.size > 0 && !isHighlighted;
+
+    return (
+        <motion.button
+            key={item.formula}
+            onMouseEnter={() => setHoveredId(item.normalizedFormula)}
+            onMouseLeave={() => setHoveredId(null)}
+            onClick={() => setSelectedId(item.normalizedFormula)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all duration-300 w-[180px] text-left relative overflow-hidden group ${
+                item.isDiscovered 
+                    ? 'bg-[#1a1c23] border-white/10 hover:border-white/30 shadow-lg' 
+                    : 'bg-[#1a1c23]/30 border-white/5 opacity-60 hover:opacity-100'
+            }`}
+            style={{
+                borderColor: isHighlighted ? theme.color : (selectedId === item.normalizedFormula ? theme.color : undefined),
+                opacity: isFaded ? 0.3 : 1,
+                transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
+                boxShadow: isHighlighted ? `0 0 20px ${theme.color}40` : undefined,
+                zIndex: isHighlighted ? 10 : 1
+            }}
+        >
+            {isHighlighted && (
+                <div className="absolute inset-0 opacity-10" style={{ backgroundColor: theme.color }} />
+            )}
+
+            <div 
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-white/10 relative overflow-hidden transition-colors"
+                style={{ backgroundColor: item.isDiscovered ? theme.color + '20' : '#00000040' }}
+            >
+                {item.isDiscovered && (
+                    <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
+                )}
+                {item.isDiscovered ? (
+                    <span className="text-[11px] font-black italic text-white relative z-10">{item.formula}</span>
+                ) : (
+                    <Lock size={14} className="text-white/20 relative z-10" />
+                )}
+            </div>
+            <div className="flex-1 min-w-0">
+                <p className={`text-[11px] font-bold leading-tight truncate ${item.isDiscovered ? 'text-white' : 'text-white/40'}`}>
+                    {item.isDiscovered ? item.name : 'Chất bí ẩn'}
+                </p>
+                <p className="text-[8px] font-black text-white/30 mt-0.5 uppercase tracking-widest">
+                    {item.category || 'Vật chất'}
+                </p>
+            </div>
+        </motion.button>
+    );
+  };
+
   return (
     <div className="w-full h-full bg-[#0a0c10] overflow-hidden relative flex flex-col font-sans text-white">
       {/* Background Grid */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
-      {/* Main Map Area */}
-      <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar relative" ref={containerRef}>
-        <div className="flex flex-row items-start min-w-max min-h-full py-16 px-12 relative z-10 gap-16">
-          
-          {/* ROOT NODE / START */}
-          <div className="flex flex-col justify-center h-full shrink-0">
-             <motion.div
-               initial={{ opacity: 0, scale: 0.8 }}
-               animate={{ opacity: 1, scale: 1 }}
-               className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none"
-             >
-               🧪 NGUYÊN BẢN
-             </motion.div>
-          </div>
-
-          {/* TIERS COLUMNS */}
-          {tierKeys.map((tier, tIdx) => {
-            const theme = TIER_THEME[tier];
-            const items = treeData[tier] || [];
-            
-            return (
-              <div key={tier} className="flex flex-col gap-6 shrink-0 relative">
-                {/* Tier Header */}
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: tIdx * 0.1 }}
-                  className="sticky top-0 z-20 bg-[#0a0c10]/80 backdrop-blur-md py-4 mb-4 border-b border-white/10 flex items-center justify-between"
-                >
-                   <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-white/5 border border-white/10" style={{ color: theme.color }}>
-                         {theme.icon}
-                      </div>
-                      <h2 className="text-sm font-black uppercase tracking-widest text-white">{theme.label}</h2>
-                   </div>
-                   <span className="text-[10px] font-bold text-white/30 ml-4">{items.length} chất</span>
-                </motion.div>
-
-                {/* Items Grid for this Tier */}
-                <motion.div 
-                   initial={{ opacity: 0 }}
-                   animate={{ opacity: 1 }}
-                   transition={{ delay: tIdx * 0.1 + 0.2 }}
-                   className="grid grid-cols-2 gap-4"
-                >
-                   {items.map((item, iIdx) => {
-                      const isHighlighted = highlightedNodes.has(item.normalizedFormula);
-                      const isFaded = highlightedNodes.size > 0 && !isHighlighted;
-
-                      return (
-                        <motion.button
-                            key={item.formula}
-                            onMouseEnter={() => setHoveredId(item.normalizedFormula)}
-                            onMouseLeave={() => setHoveredId(null)}
-                            onClick={() => setSelectedId(item.normalizedFormula)}
-                            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all duration-300 w-[200px] text-left relative overflow-hidden group ${
-                                item.isDiscovered 
-                                    ? 'bg-[#1a1c23] border-white/10 hover:border-white/30 shadow-lg' 
-                                    : 'bg-[#1a1c23]/30 border-white/5 opacity-60 hover:opacity-100'
-                            }`}
-                            style={{
-                                borderColor: isHighlighted ? theme.color : (selectedId === item.normalizedFormula ? theme.color : undefined),
-                                opacity: isFaded ? 0.3 : 1,
-                                transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
-                                boxShadow: isHighlighted ? `0 0 20px ${theme.color}40` : undefined,
-                                zIndex: isHighlighted ? 10 : 1
-                            }}
-                        >
-                            {/* Highlight glow */}
-                            {isHighlighted && (
-                                <div className="absolute inset-0 opacity-10" style={{ backgroundColor: theme.color }} />
-                            )}
-
-                            <div 
-                                className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border border-white/10 relative overflow-hidden transition-colors"
-                                style={{ backgroundColor: item.isDiscovered ? theme.color + '20' : '#00000040' }}
-                            >
-                                {item.isDiscovered && (
-                                    <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
-                                )}
-                                {item.isDiscovered ? (
-                                    <span className="text-[13px] font-black italic text-white relative z-10">{item.formula}</span>
-                                ) : (
-                                    <Lock size={16} className="text-white/20 relative z-10" />
-                                )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className={`text-[12px] font-bold leading-tight truncate ${item.isDiscovered ? 'text-white' : 'text-white/40'}`}>
-                                    {item.isDiscovered ? item.name : 'Chất bí ẩn'}
-                                </p>
-                                <p className="text-[9px] font-black text-white/30 mt-1 uppercase tracking-widest">
-                                    {item.category || 'Vật chất'}
-                                </p>
-                            </div>
-                        </motion.button>
-                      );
-                   })}
-                </motion.div>
+      {/* Main Map Area with Zoom & Pan */}
+      <div className="flex-1 overflow-hidden relative" ref={containerRef}>
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.1}
+          maxScale={4}
+          centerOnInit={false}
+          wheel={{ step: 0.1 }}
+          panning={{ velocityDisabled: false }}
+        >
+          <TransformComponent wrapperStyle={{ width: '100%', height: '100%', cursor: 'grab' }} contentStyle={{ minWidth: '100%', minHeight: '100%' }}>
+            <div className="flex flex-row items-center min-w-max min-h-full py-24 px-12 relative z-10 gap-24">
+              
+              {/* ROOT NODE / START */}
+              <div className="flex flex-col justify-center h-full shrink-0 ml-12">
+                 <motion.div
+                   initial={{ opacity: 0, scale: 0.8 }}
+                   animate={{ opacity: 1, scale: 1 }}
+                   className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none flex items-center justify-center rotate-[-90deg] translate-x-[-50px]"
+                   style={{ transformOrigin: 'center center' }}
+                 >
+                   NGUYÊN BẢN
+                 </motion.div>
               </div>
-            );
-          })}
 
-          <div className="w-16 shrink-0" />
-        </div>
+              {/* TIERS COLUMNS */}
+              {tierKeys.map((tier, tIdx) => {
+                const theme = TIER_THEME[tier];
+                const items = treeData[tier] || [];
+                
+                return (
+                  <div key={tier} className="flex flex-col gap-8 shrink-0 relative items-center justify-center min-h-full">
+                    {/* Tier Header (Now a sticky floating badge above the column) */}
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: tIdx * 0.1 }}
+                      className="absolute top-[-80px] z-20 bg-[#0a0c10]/80 backdrop-blur-md py-3 px-6 rounded-full border border-white/10 flex items-center justify-center gap-3 shadow-xl"
+                    >
+                       <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm bg-white/5 border border-white/10" style={{ color: theme.color }}>
+                          {theme.icon}
+                       </div>
+                       <div className="flex flex-col">
+                           <h2 className="text-[11px] font-black uppercase tracking-widest text-white leading-none">{theme.label}</h2>
+                           <span className="text-[9px] font-bold text-white/40 mt-1">{items.length} chất</span>
+                       </div>
+                    </motion.div>
+
+                    {/* Items Grid for this Tier */}
+                    <motion.div 
+                       initial={{ opacity: 0 }}
+                       animate={{ opacity: 1 }}
+                       transition={{ delay: tIdx * 0.1 + 0.2 }}
+                       className="flex justify-center items-center"
+                    >
+                       {items.length > 8 ? (
+                          // Pyramid Layout for large tiers
+                          <div className="flex flex-col items-center gap-3">
+                             {buildPyramidRows(items).map((rowItems, rIdx) => (
+                               <div key={rIdx} className="flex justify-center gap-3">
+                                 {rowItems.map(item => renderItemNode(item, theme))}
+                               </div>
+                             ))}
+                          </div>
+                       ) : (
+                          // Standard Grid for smaller tiers
+                          <div className="grid grid-cols-2 gap-4">
+                             {items.map(item => renderItemNode(item, theme))}
+                          </div>
+                       )}
+                    </motion.div>
+                  </div>
+                );
+              })}
+
+              <div className="w-32 shrink-0" />
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
       </div>
 
       {/* Substance Detail Card (Right Modal) */}
       <AnimatePresence>
         {selectedId && selectedData && (
           <>
-            {/* Backdrop Mask */}
             <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                onClick={() => setSelectedId(null)}
                className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[100]"
             />
-            
-            {/* Side Card */}
             <motion.div 
                initial={{ x: 600, opacity: 0 }} 
                animate={{ x: 0, opacity: 1 }} 
                exit={{ x: 600, opacity: 0 }}
                className="absolute top-4 right-4 bottom-4 w-[550px] bg-[#1a1c23]/95 backdrop-blur-3xl border border-white/10 rounded-[40px] shadow-[0_40px_100px_rgba(0,0,0,0.8)] z-[101] overflow-hidden flex flex-col"
             >
-               {/* Card Header & Glow */}
                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-viet-green to-transparent opacity-50" />
-               
                <div className="p-8 pb-4 flex flex-col items-center text-center relative shrink-0">
                   <button onClick={() => setSelectedId(null)} className="absolute top-6 left-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all border border-white/5">
                      <span className="text-white/60 text-lg font-light">✕</span>
                   </button>
-
                   <div className="mt-4 mb-4 relative">
                      <motion.div 
                         animate={{ rotate: [0, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -394,16 +423,12 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         {selectedData.formula || selectedData.symbol}
                      </h2>
                   </div>
-
                   <h3 className="text-2xl font-black text-white mb-2">{selectedData.isDiscovered ? selectedData.name : 'Vật chất bí ẩn'}</h3>
                   <div className="px-5 py-1.5 bg-white/10 border border-white/10 text-white rounded-full text-[10px] font-black uppercase tracking-[3px]">
                      {selectedData.category || 'Vật chất'}
                   </div>
                </div>
-
                <div className="flex-1 overflow-y-auto custom-scrollbar p-8 pt-4 flex flex-col gap-6">
-                  
-                  {/* Synthesis Pathways (Knowledge Tree Section) */}
                   <div className="flex flex-col gap-4">
                      <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-xl bg-viet-green/20 flex items-center justify-center text-viet-green">
@@ -411,7 +436,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         </div>
                         <h4 className="text-[12px] font-black text-white/60 uppercase tracking-[3px]">Cây Tổng Hợp</h4>
                      </div>
-                     
                      <div className="bg-black/30 p-6 rounded-[24px] border border-white/5 flex flex-col gap-6">
                         {selectedData.is_starter || selectedData.isStarter ? (
                            <div className="text-center py-4">
@@ -425,7 +449,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                                     <span className="text-[10px] font-bold text-white/20 bg-white/5 px-2 py-0.5 rounded">{pathway.type || 'Phản ứng'}</span>
                                  </div>
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
-                                    {/* Reactants */}
                                     <div className="flex items-center gap-2">
                                        {pathway.reactants.map((reactant, rIdx) => (
                                           <React.Fragment key={`r-${rIdx}`}>
@@ -434,14 +457,10 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                                           </React.Fragment>
                                        ))}
                                     </div>
-                                    
-                                    {/* Arrow */}
                                     <div className="flex flex-col items-center justify-center mx-2">
                                        <span className="text-[8px] text-white/30 font-bold mb-1">{pathway.conditions ? 'ĐK' : ''}</span>
                                        <ArrowRight size={20} className="text-viet-green opacity-70" />
                                     </div>
-
-                                    {/* Products (highlighting the selected one) */}
                                     <div className="flex items-center gap-2">
                                        {pathway.products.map((product, prIdx) => {
                                           const isTarget = normalize(product.formula) === normalize(selectedData.formula);
@@ -466,8 +485,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         )}
                      </div>
                   </div>
-
-                  {/* Properties Section */}
                   <div className="space-y-4">
                      <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-white/50">🔬</div>
@@ -479,7 +496,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         </p>
                      </div>
                   </div>
-
                   <div className="flex flex-col gap-4">
                      <div className="bg-white/5 p-6 rounded-[24px] border border-white/5 flex flex-col gap-2">
                         <span className="text-[8px] font-black text-viet-green uppercase tracking-[3px]">Khối lượng nguyên tử / phân tử</span>
@@ -488,7 +504,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">u (amu)</span>
                         </div>
                      </div>
-
                      <div className="bg-white/5 p-6 rounded-[24px] border border-white/5 space-y-3">
                         <div className="flex items-center gap-2">
                            <div className="w-1.5 h-1.5 rounded-full bg-viet-green" />
@@ -504,14 +519,6 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
           </>
         )}
       </AnimatePresence>
-
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-      `}} />
     </div>
   );
 };
