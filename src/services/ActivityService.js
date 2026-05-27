@@ -13,8 +13,9 @@ class ActivityService {
    */
   async log(activity) {
     try {
-      // 1. Get user ID from localStorage (aligned with database profile)
-      const userId = localStorage.getItem('userId');
+      const supabase = await getSupabase();
+      const { data: { session } } = await supabase.auth.getSession();
+      const activeUserId = session?.user?.id;
 
       const newActivity = {
         ...activity,
@@ -28,12 +29,11 @@ class ActivityService {
       localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedLocal));
 
       // 3. Save to Database (if logged in)
-      if (userId) {
-        const supabase = await getSupabase();
+      if (activeUserId) {
         const { error } = await supabase
           .from('user_activities')
           .insert([{
-            user_id: userId,
+            user_id: activeUserId,
             action_type: activity.type,
             description: activity.description,
             metadata: {
@@ -43,7 +43,9 @@ class ActivityService {
             }
           }]);
         
-        if (error) console.warn('DB Log Error:', error.message);
+        if (error && error.code !== '42501') {
+           console.warn('DB Log Error:', error.message);
+        }
       }
       
       // Dispatch custom event for UI reactivity
@@ -58,15 +60,15 @@ class ActivityService {
    */
   async getHistory() {
     try {
-      // Get user ID from localStorage
-      const userId = localStorage.getItem('userId');
+      const supabase = await getSupabase();
+      const { data: { session } } = await supabase.auth.getSession();
+      const activeUserId = session?.user?.id;
 
-      if (userId) {
-        const supabase = await getSupabase();
+      if (activeUserId) {
         const { data, error } = await supabase
           .from('user_activities')
           .select('*')
-          .eq('user_id', userId)
+          .eq('user_id', activeUserId)
           .order('created_at', { ascending: false })
           .limit(MAX_HISTORY_ITEMS);
 
@@ -105,17 +107,17 @@ class ActivityService {
    */
   async clear() {
     try {
-      // Get user ID from localStorage
-      const userId = localStorage.getItem('userId');
-
       localStorage.removeItem(HISTORY_KEY);
 
-      if (userId) {
-        const supabase = await getSupabase();
+      const supabase = await getSupabase();
+      const { data: { session } } = await supabase.auth.getSession();
+      const activeUserId = session?.user?.id;
+
+      if (activeUserId) {
         await supabase
           .from('user_activities')
           .delete()
-          .eq('user_id', userId);
+          .eq('user_id', activeUserId);
       }
 
       window.dispatchEvent(new CustomEvent('aurum_activity_cleared'));
