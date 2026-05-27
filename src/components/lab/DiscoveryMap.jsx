@@ -94,6 +94,21 @@ const TIER_THEME = {
   4: { color: '#8b5cf6', icon: '🔮', label: 'Khác / Huyền bí' }
 };
 
+const buildPyramidRows = (items) => {
+  const rows = [];
+  let currentIndex = 0;
+  // Bắt đầu với số lượng chất vừa phải ở đỉnh để chóp không quá nhọn (ví dụ: 2 chất)
+  let itemsInRow = 2;
+
+  while (currentIndex < items.length) {
+    const row = items.slice(currentIndex, currentIndex + itemsInRow);
+    rows.push(row);
+    currentIndex += itemsInRow;
+    itemsInRow++;
+  }
+  return rows;
+};
+
 const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFormulas = [] }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [hoveredId, setHoveredId] = useState(null);
@@ -303,9 +318,10 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
       <div className="flex-1 overflow-hidden relative" ref={containerRef}>
         <TransformWrapper
           initialScale={1}
-          minScale={0.1}
-          maxScale={4}
-          centerOnInit={false}
+          minScale={0.4}
+          maxScale={1.5}
+          centerOnInit={true}
+          limitToBounds={true}
           wheel={{ step: 0.1 }}
           panning={{ velocityDisabled: false }}
         >
@@ -353,10 +369,14 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                        initial={{ opacity: 0 }}
                        animate={{ opacity: 1 }}
                        transition={{ delay: tIdx * 0.1 + 0.2 }}
-                       className="flex flex-wrap justify-center items-center gap-4"
+                       className="flex flex-col items-center gap-4"
                        style={{ maxWidth: '4000px' }}
                     >
-                       {items.map(item => renderItemNode(item, theme))}
+                       {buildPyramidRows(items).map((rowItems, rIdx) => (
+                          <div key={rIdx} className="flex justify-center gap-4">
+                             {rowItems.map(item => renderItemNode(item, theme))}
+                          </div>
+                       ))}
                     </motion.div>
                   </div>
                 );
