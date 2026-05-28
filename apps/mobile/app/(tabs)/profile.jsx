@@ -19,10 +19,10 @@ const targetOptions = [1, 2, 3, 5];
 const grades = ["8", "9", "10", "11", "12"];
 
 const roleLabel = (role) => {
-  if (role === "student") return "Há»c sinh";
-  if (role === "teacher") return "GiÃ¡o viÃªn";
-  if (role === "admin") return "Quáº£n trá»‹";
-  return "TÃ i khoáº£n";
+  if (role === "student") return "Học sinh";
+  if (role === "teacher") return "Giáo viên";
+  if (role === "admin") return "Quản trị";
+  return "Tài khoản";
 };
 
 export default function ProfileTab() {
@@ -44,7 +44,7 @@ export default function ProfileTab() {
     const result = await updateProfile({ studyPlan: nextPlan });
     setSavingPlan(false);
     if (!result.success) {
-      Alert.alert("KhÃ´ng lÆ°u Ä‘Æ°á»£c", result.message);
+      Alert.alert("Không lưu được", result.message);
     }
   };
 
@@ -54,10 +54,10 @@ export default function ProfileTab() {
     try {
       await classApi.join(token, joinCode.trim().toUpperCase());
       setJoinCode("");
-      Alert.alert("ÄÃ£ tham gia lá»›p", "Lá»›p há»c sáº½ xuáº¥t hiá»‡n trong báº£ng Ä‘iá»u khiá»ƒn.");
+      Alert.alert("Đã tham gia lớp", "Lớp học sẽ xuất hiện trong bảng điều khiển.");
       await refreshProfile();
     } catch (error) {
-      Alert.alert("KhÃ´ng tham gia Ä‘Æ°á»£c", error.message);
+      Alert.alert("Không tham gia được", error.message);
     } finally {
       setJoining(false);
     }
@@ -67,30 +67,30 @@ export default function ProfileTab() {
     <Screen>
       <ScreenHeader
         eyebrow={roleLabel(user?.role)}
-        title={user?.username || "Há»“ sÆ¡"}
-        subtitle={user?.email || "Quáº£n lÃ½ tiáº¿n Ä‘á»™ há»c táº­p vÃ  phiÃªn Ä‘Äƒng nháº­p."}
-        right={<Pill label={`Cáº¥p ${user?.level || 1}`} icon="sparkles-outline" color={colors.green} />}
+        title={user?.username || "Hồ sơ"}
+        subtitle={user?.email || "Quản lý tiến độ học tập và phiên đăng nhập."}
+        right={<Pill label={`Cấp ${user?.level || 1}`} icon="sparkles-outline" color={colors.green} />}
       />
 
       <View style={styles.metricRow}>
-        <Metric label="Kinh nghiá»‡m" value={user?.xp || 0} icon="flash-outline" color={colors.green} />
-        <Metric label="Chuá»—i há»c" value={user?.streakCount || 0} icon="flame-outline" color={colors.green} />
-        <Metric label="Trá»±c tuyáº¿n" value={`${user?.todayOnlineMinutes || 0}p`} icon="time-outline" color={colors.green} />
+        <Metric label="Kinh nghiệm" value={user?.xp || 0} icon="flash-outline" color={colors.green} />
+        <Metric label="Chuỗi học" value={user?.streakCount || 0} icon="flame-outline" color={colors.green} />
+        <Metric label="Trực tuyến" value={`${user?.todayOnlineMinutes || 0}p`} icon="time-outline" color={colors.green} />
       </View>
 
-      <SectionTitle title="Káº¿ hoáº¡ch há»c" />
+      <SectionTitle title="Kế hoạch học" />
       <Card accent={colors.green} style={styles.planCard}>
         <View style={styles.planTop}>
           <View>
-            <Text style={styles.cardTitle}>Má»¥c tiÃªu má»—i ngÃ y</Text>
+            <Text style={styles.cardTitle}>Mục tiêu mỗi ngày</Text>
             <Text style={styles.cardSubtitle}>
-              {studyPlan.completed ? "HÃ´m nay Ä‘Ã£ hoÃ n thÃ nh má»¥c tiÃªu." : "HoÃ n thÃ nh bÃ i Ä‘á»ƒ giá»¯ nhá»‹p há»c."}
+              {studyPlan.completed ? "Hôm nay đã hoàn thành mục tiêu." : "Hoàn thành bài để giữ nhịp học."}
             </Text>
           </View>
-          <Pill label={studyPlan.completed ? "ÄÃ£ xong" : "Äang má»Ÿ"} color={studyPlan.completed ? colors.green : colors.green} />
+          <Pill label={studyPlan.completed ? "Đã xong" : "Đang mở"} color={studyPlan.completed ? colors.green : colors.green} />
         </View>
 
-        <Text style={styles.fieldLabel}>Sá»‘ bÃ i/ngÃ y</Text>
+        <Text style={styles.fieldLabel}>Số bài/ngày</Text>
         <View style={styles.optionRow}>
           {targetOptions.map((target) => (
             <Pressable
@@ -106,7 +106,7 @@ export default function ProfileTab() {
           ))}
         </View>
 
-        <Text style={styles.fieldLabel}>Khá»‘i Æ°u tiÃªn</Text>
+        <Text style={styles.fieldLabel}>Khối ưu tiên</Text>
         <View style={styles.optionRow}>
           {grades.map((grade) => (
             <Pressable
@@ -124,8 +124,8 @@ export default function ProfileTab() {
 
         <View style={styles.switchRow}>
           <View style={styles.switchText}>
-            <Text style={styles.fieldLabel}>Nháº¯c há»c qua thÆ° Ä‘iá»‡n tá»­</Text>
-            <Text style={styles.cardSubtitle}>Há»‡ thá»‘ng sáº½ dÃ¹ng thÆ° Ä‘iá»‡n tá»­ trong há»“ sÆ¡ Ä‘á»ƒ gá»­i nháº¯c há»c.</Text>
+            <Text style={styles.fieldLabel}>Nhắc học qua thư điện tử</Text>
+            <Text style={styles.cardSubtitle}>Hệ thống sẽ dùng thư điện tử trong hồ sơ để gửi nhắc học.</Text>
           </View>
           <Switch
             value={studyPlan.emailEnabled}
@@ -136,18 +136,18 @@ export default function ProfileTab() {
         </View>
       </Card>
 
-      <SectionTitle title="Lá»›p há»c" />
+      <SectionTitle title="Lớp học" />
       <Card accent={colors.green} style={styles.joinCard}>
-        <Text style={styles.cardTitle}>Tham gia lá»›p báº±ng mÃ£</Text>
+        <Text style={styles.cardTitle}>Tham gia lớp bằng mã</Text>
         <TextField
           icon="key-outline"
-          placeholder="MÃ£ lá»›p"
+          placeholder="Mã lớp"
           value={joinCode}
           onChangeText={setJoinCode}
           autoCapitalize="characters"
         />
         <PrimaryButton
-          label={joining ? "Äang tham gia..." : "Tham gia lá»›p"}
+          label={joining ? "Đang tham gia..." : "Tham gia lớp"}
           icon="people-outline"
           color={colors.green}
           onPress={joinClass}
@@ -155,13 +155,13 @@ export default function ProfileTab() {
         />
       </Card>
 
-      <SectionTitle title="TÃ i khoáº£n" />
+      <SectionTitle title="Tài khoản" />
       <Card style={styles.accountCard}>
-        <Text style={styles.cardTitle}>PhiÃªn Ä‘Äƒng nháº­p</Text>
+        <Text style={styles.cardTitle}>Phiên đăng nhập</Text>
         <Text style={styles.cardSubtitle}>
-          ÄÄƒng xuáº¥t khá»i thiáº¿t bá»‹ hiá»‡n táº¡i vÃ  quay láº¡i mÃ n Ä‘Äƒng nháº­p.
+          Đăng xuất khỏi thiết bị hiện tại và quay lại màn đăng nhập.
         </Text>
-        <GhostButton label="ÄÄƒng xuáº¥t" icon="log-out-outline" onPress={logout} color={colors.red} />
+        <GhostButton label="Đăng xuất" icon="log-out-outline" onPress={logout} color={colors.red} />
       </Card>
     </Screen>
   );

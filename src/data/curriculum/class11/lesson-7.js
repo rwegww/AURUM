@@ -3,18 +3,18 @@
   "classId": 11,
   "lessonId": 7,
   "programId": "ketnoi",
-  "title": "BÃ i 7. Sulfur and sulfur dioxide",
-  "chapter": "ChÆ°Æ¡ng 2. Nitrogen â€“ Sulfur",
+  "title": "Bài 7. Sulfur and sulfur dioxide",
+  "chapter": "Chương 2. Nitrogen – Sulfur",
   "order": 7,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "TÃ­nh cháº¥t cá»§a sulfur Ä‘Æ¡n cháº¥t and sulfur dioxide. PhÃ¢n tÃ­ch vai trÃ² vá»«a oxi hÃ³a vá»«a khá»­ cá»§a sulfur and SO2.",
+  "description": "Tính chất của sulfur đơn chất and sulfur dioxide. Phân tích vai trò vừa oxi hóa vừa khử của sulfur and SO2.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Tinh thá»ƒ Sulfur",
+        "text": "1. Tinh thể Sulfur",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Sulfur (LÆ°u Huá»³nh S) nguyÃªn thá»§y mang sáº¯c VÃ ng chanh Ä‘áº·c trÆ°ng diá»‡u kÃ¬, ráº£i ráº¯c ná»“ng náº·c quanh cÃ¡c há»ng má»“m Miá»‡ng NÃºi Lá»­a (DiÃªm sinh). Phi kim nÃ y cÃ³ vÃ´ sá»‘ lá»™t vá» thÃ¹ hÃ¬nh nhÆ°ng 2 dáº¡ng Vua chÃºa lÃ  TÃ  PhÆ°Æ¡ng ($S_\\alpha$) and ÄÆ¡n TÃ  ($S_\\beta$). Cháº¥m vÃ o nÆ°á»›c LÆ°u huá»³nh trÆ¡ trÆ°á»£t nhÃ¡m ná»•i lá»nh bá»nh (khÃ´ng tan), nhÆ°ng tháº£ vÃ o cá»“n Benzene, dáº§u há»a láº¡i vá»¡ tan tÃ nh dung mÃ´i. NÃ³ tá»«ng lÃ  nguyÃªn liá»‡u hÃ³a há»c cháº¿ tÃ¡c Thuá»‘c Ná»• Äen xa xÆ°a."
+        "text": "Sulfur (Lưu Huỳnh S) nguyên thủy mang sắc Vàng chanh đặc trưng diệu kì, rải rắc nồng nặc quanh các họng mồm Miệng Núi Lửa (Diêm sinh). Phi kim này có vô số lột vỏ thù hình nhưng 2 dạng Vua chúa là Tà Phương ($S_\\alpha$) and Đơn Tà ($S_\\beta$). Chấm vào nước Lưu huỳnh trơ trượt nhám nổi lềnh bềnh (không tan), nhưng thả vào cồn Benzene, dầu hỏa lại vỡ tan tành dung môi. Nó từng là nguyên liệu hóa học chế tác Thuốc Nổ Đen xa xưa."
       }
     },
     {
@@ -31,8 +31,8 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**TÃ­nh LÆ°á»¡ng Cá»±c (Vá»«a Oxi hÃ³a - Vá»«a Khá»­):** Äá»©ng chÃ³t vÃ³t má»©c 0 náº±m giá»¯a thang ngá»±c (-2) and (+4, +6).\n1. **TÃ­nh Oxi hÃ³a (CÆ°á»›p e, cháº¡y lÃ¹i vá» Cáº¥p -2):** Nuá»‘t trá»n Kim Loáº¡i khi Nung LÃ². VÃ­ dá»¥ háº§m sáº¯t: $Fe + S \\xrightarrow{t^\\circ} FeS$ (Iron sulfide Ä‘en ngÃ²m xá»‰). PhÃ m lÃ  Thá»§y ngÃ¢n (Hg) Äá»™c Háº¡i rá»‰ vá»¡ nhiá»‡t káº¿, ráº¯c tháº³ng Bá»™t S vÃ o sáº½ láº­p tá»©c Vá»“ Láº¥y Xá»±c cháº¯t Hg dÃ­nh cháº·t Cá»¡ nhiá»‡t Ä‘á»™ thÆ°á»ng ($Hg + S \\rightarrow HgS$) quÃ©t Ä‘i an toÃ n.",
-          "2. **TÃ­nh Khá»­ (Biáº¿u e, cháº¡y Phá»‘c LÃªn Cáº¥p +4 hoáº·c +6):** Gáº·p lÅ© lÆ°u manh ngáº­m Oxi hay Halogen cá»±c háº¡n, S bá» cháº¡y nhÆ°á»ng quyÃªn sinh. Äá»‘t LÆ°u huá»³nh lá»­a xanh nháº¡t má»: $S + O_2 \\xrightarrow{t^\\circ} SO_2$ (KhÃ­ sunfurÆ¡ háº¯c sáº·c sá»¥a)."
+          "**Tính Lưỡng Cực (Vừa Oxi hóa - Vừa Khử):** Đứng chót vót mức 0 nằm giữa thang ngực (-2) and (+4, +6).\n1. **Tính Oxi hóa (Cướp e, chạy lùi về Cấp -2):** Nuốt trọn Kim Loại khi Nung Lò. Ví dụ hầm sắt: $Fe + S \\xrightarrow{t^\\circ} FeS$ (Iron sulfide đen ngòm xỉ). Phàm là Thủy ngân (Hg) Độc Hại rỉ vỡ nhiệt kế, rắc thẳng Bột S vào sẽ lập tức Vồ Lấy Xực chắt Hg dính chặt Cỡ nhiệt độ thường ($Hg + S \\rightarrow HgS$) quét đi an toàn.",
+          "2. **Tính Khử (Biếu e, chạy Phốc Lên Cấp +4 hoặc +6):** Gặp lũ lưu manh ngậm Oxi hay Halogen cực hạn, S bỏ chạy nhường quyên sinh. Đốt Lưu huỳnh lửa xanh nhạt mờ: $S + O_2 \\xrightarrow{t^\\circ} SO_2$ (Khí sunfurơ hắc sặc sụa)."
         ]
       }
     },
@@ -48,15 +48,15 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "KhÃ­ DiÃªm Sinh Sulfur dioxide ($SO_2$) mang trong mÃ¬nh Ã¡n Äá»™c tá»­ hÃ¬nh cÃ´ng nghiá»‡p. KhÃ­ vÃ´ sáº¯c KhÃ´ng MÃ u, bá»‘c hÆ¡i chua MÃ¹i Háº¯c ná»“ng náº·c (Ä‘áº·c trÆ°ng mÃ¹i diÃªm quáº¹t xáº¹t chÃ¡y sá»±c lÃªn mÅ©i vÃ¡ng Ä‘áº§u). LÃ  khÃ­ náº·ng chÃ¬m tÃ n dÆ° pháº£ ngáº­p kho tÃ ng xÆ°á»Ÿng má» dá»‡t."
+        "text": "Khí Diêm Sinh Sulfur dioxide ($SO_2$) mang trong mình án Độc tử hình công nghiệp. Khí vô sắc Không Màu, bốc hơi chua Mùi Hắc nồng nặc (đặc trưng mùi diêm quẹt xẹt cháy sực lên mũi váng đầu). Là khí nặng chìm tàn dư phả ngập kho tàng xưởng mỏ dệt."
       }
     },
     {
       "id": "mod6",
       "type": "infoBox",
       "content": {
-        "title": "Ãc Má»™ng Ã” Nhiá»…m and ChiÃªu HÃ³a Há»c",
-        "content": "Báº£n cháº¥t lÃ  má»™t Oxide Acid. \n1. HÃ²a quyá»‡n PhÃ¢n Li NÆ°á»›c rá»… máº§m sinh Axit: $SO_2 + H_2O \\rightleftharpoons H_2SO_3$ (Axit yáº¿u rÃ¡t há»ng tá»± phÃ¢n há»§y).\n2. TÃ­nh Khá»­ Tuyá»‡t ChiÃªu (Táº©y mÃ u diá»‡u kÃ¬): Do $S^{+4}$ Ä‘ang Ä‘á»©ng khe vá»±c chÆ¡i vÆ¡i, nÃ³ cá»±c khÃ¡t khao leo lÃªn Ä‘á»‰nh $S^{+6}$. Sá»¥c SO2 vÃ o cá»‘c NÆ°á»›c Bromine (NÃ¢u Ä‘á» ngáº§u) hay Thuá»‘c tÃ­m (KMnO4 Há»“ng má»™ng mÆ¡), khÃ­ nÃ y nhÃ o tá»›i nuá»‘t háº¿t oxi hÃ³a tÃ n báº¡o, táº©y cá»‘c bay lá»™t Máº¡ch MÃ u HÃ³a Tráº¯ng Trong Veo: $SO_2 + Br_2 + 2H_2O \\rightarrow H_2SO_4 + 2HBr$. VÃ¬ lÃ m máº¥t mÃ u cÃ¡nh hoa Ä‘an dá»‡t, SO2 Ä‘Æ°á»£c táº­n dá»¥ng Táº©y Tráº¯ng ÄÆ°á»ng ngáº­m phÃ¨n, diá»‡t má»‘c rÆ°á»£u nho.",
+        "title": "Ác Mộng Ô Nhiễm and Chiêu Hóa Học",
+        "content": "Bản chất là một Oxide Acid. \n1. Hòa quyện Phân Li Nước rễ mầm sinh Axit: $SO_2 + H_2O \\rightleftharpoons H_2SO_3$ (Axit yếu rát họng tự phân hủy).\n2. Tính Khử Tuyệt Chiêu (Tẩy màu diệu kì): Do $S^{+4}$ đang đứng khe vực chơi vơi, nó cực khát khao leo lên đỉnh $S^{+6}$. Sục SO2 vào cốc Nước Bromine (Nâu đỏ ngầu) hay Thuốc tím (KMnO4 Hồng mộng mơ), khí này nhào tới nuốt hết oxi hóa tàn bạo, tẩy cốc bay lột Mạch Màu Hóa Trắng Trong Veo: $SO_2 + Br_2 + 2H_2O \\rightarrow H_2SO_4 + 2HBr$. Vì làm mất màu cánh hoa đan dệt, SO2 được tận dụng Tẩy Trắng Đường ngậm phèn, diệt mốc rượu nho.",
         "color": "blue"
       }
     },
@@ -64,8 +64,8 @@
       "id": "mod7",
       "type": "warningBox",
       "content": {
-        "title": "SÃ¡t Thá»§ SÆ°Æ¡ng MÃ¹ MÆ°a Axit",
-        "content": "Nhá»¯ng cá»™t khÃ³i Ä‘en quÃ¡nh xáº£ má»‹t mÃ¹ tá»« nhÃ  mÃ¡y Nhiá»‡t Äiá»‡n Than, hÃ³a cháº¥t Dáº§u Má» láº¥p Ä‘áº§y táº§ng Ä‘iá»‡n ly báº±ng KhÃ­ $SO_2$. NÃ³ lÆ¡ lá»­ng ngáº­m bÃ¡m HÆ¡i NÆ°á»›c MÃ¢y Trá»i gáº·p váº§ng XÃºc TÃ¡c Ã”xit Ãnh sÃ¡ng Ä‘á»ƒ biáº¿n cáº¥u tá»¥ng thÃ nh Khá»‘i NÆ°á»›c Acid Sulfuric ($H_2SO_4$). TrÃºt mÆ°a nhÆ° Ä‘áº¡n há»§y diá»‡t nÃ¡t TÆ°á»£ng Pháº­t ÄÃ¡, bÃ o rá»‰ Äƒn vá» Ã” tÃ´ and lÃ m thá»‘i loÃ©t rá»… rá»«ng lÃ¡ kim ngáº­p máº·n.",
+        "title": "Sát Thủ Sương Mù Mưa Axit",
+        "content": "Những cột khói đen quánh xả mịt mù từ nhà máy Nhiệt Điện Than, hóa chất Dầu Mỏ lấp đầy tầng điện ly bằng Khí $SO_2$. Nó lơ lửng ngậm bám Hơi Nước Mây Trời gặp vầng Xúc Tác Ôxit Ánh sáng để biến cấu tụng thành Khối Nước Acid Sulfuric ($H_2SO_4$). Trút mưa như đạn hủy diệt nát Tượng Phật Đá, bào rỉ ăn vỏ Ô tô and làm thối loét rễ rừng lá kim ngập mặn.",
         "color": "orange"
       }
     }
@@ -73,36 +73,36 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "CÃ¢u nÃ o sai khi nÃ³i vá» SO2?",
+      "question": "Câu nào sai khi nói về SO2?",
       "options": [
-        "LÃ  khÃ­ khÃ´ng mÃ u and cÃ³ mÃ¹i háº¯c.",
-        "SO2 lÃ  má»™t acid vÃ´ cÆ¡ máº¡nh.",
-        "LÃ m máº¥t mÃ u dung dá»‹ch Br2.",
-        "LÃ  cháº¥t gÃ¢y mÆ°a acid."
+        "Là khí không màu and có mùi hắc.",
+        "SO2 là một acid vô cơ mạnh.",
+        "Làm mất màu dung dịch Br2.",
+        "Là chất gây mưa acid."
       ],
       "correctAnswer": 1,
-      "explanation": "SO2 khÃ´ng pháº£i lÃ  acid mÃ  lÃ  má»™t acidic oxide yáº¿u, tan vÃ o táº¡o H2SO3 chá»© khÃ´ng pháº£i acid máº¡nh."
+      "explanation": "SO2 không phải là acid mà là một acidic oxide yếu, tan vào tạo H2SO3 chứ không phải acid mạnh."
     },
     {
       "id": "q2",
-      "question": "Khi sá»¥c SO2 vÃ o nÆ°á»›c brom, hiá»‡n tÆ°á»£ng xáº£y ra lÃ ?",
+      "question": "Khi sục SO2 vào nước brom, hiện tượng xảy ra là?",
       "options": [
-        "NÆ°á»›c brom máº¥t dáº§n mÃ u nÃ¢u Ä‘áº­m.",
-        "Sá»§i bá»t khÃ­ khÃ´ng mÃ u.",
-        "CÃ³ káº¿t tá»§a mÃ u vÃ ng.",
-        "NÆ°á»›c brom chuyá»ƒn mÃ u Ä‘en."
+        "Nước brom mất dần màu nâu đậm.",
+        "Sủi bọt khí không màu.",
+        "Có kết tủa màu vàng.",
+        "Nước brom chuyển màu đen."
       ],
       "correctAnswer": 0,
-      "explanation": "SO2 lÃ m máº¥t mÃ u nÆ°á»›c bromine chuyá»ƒn tá»« nÃ¢u sang khÃ´ng mÃ u."
+      "explanation": "SO2 làm mất màu nước bromine chuyển từ nâu sang không màu."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Sulfur and sulfur dioxide",
+      "title": "Bài giảng: Sulfur and sulfur dioxide",
       "url": "https://www.youtube.com/watch?v=l1fgoIVcBL0",
       "thumbnail": "https://img.youtube.com/vi/l1fgoIVcBL0/0.jpg",
-      "description": "TÃ­nh cháº¥t lÆ°u huá»³nh Ä‘Æ¡n cháº¥t and sulfur dioxide (SO2) trong tá»± nhiÃªn (VietJack)."
+      "description": "Tính chất lưu huỳnh đơn chất and sulfur dioxide (SO2) trong tự nhiên (VietJack)."
     }
   ],
   "practiceModules": [],

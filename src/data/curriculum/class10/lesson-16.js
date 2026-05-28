@@ -4,17 +4,17 @@
   "lessonId": 16,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 16: Ã”n táº­p chÆ°Æ¡ng 4",
-  "chapter": "ChÆ°Æ¡ng 4: Pháº£n á»©ng oxi hÃ³a - khá»­",
+  "title": "Bài 16: Ôn tập chương 4",
+  "chapter": "Chương 4: Phản ứng oxi hóa - khử",
   "order": 16,
   "isPremium": false,
-  "description": "Luyá»‡n táº­p cÃ¢n báº±ng and xÃ¡c Ä‘á»‹nh vai trÃ² cÃ¡c cháº¥t trong pháº£n á»©ng khá»­.",
+  "description": "Luyện tập cân bằng and xác định vai trò các chất trong phản ứng khử.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Há»‡ thá»‘ng hÃ³a kiáº¿n thá»©c vá» pháº£n á»©ng oxi hÃ³a - khá»­",
+        "text": "1. Hệ thống hóa kiến thức về phản ứng oxi hóa - khử",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Pháº£n á»©ng oxi hÃ³a - khá»­ lÃ  lá»›p pháº£n á»©ng quan trá»ng nháº¥t trong hÃ³a há»c vÃ´ cÆ¡, Ä‘áº·c trÆ°ng bá»Ÿi sá»± thay Ä‘á»•i sá»‘ oxi hÃ³a cá»§a cÃ¡c nguyÃªn tá»‘. Cáº§n náº¯m vá»¯ng:\n- **Dáº¥u hiá»‡u nháº­n biáº¿t**: CÃ³ sá»± thay Ä‘á»•i sá»‘ oxi hÃ³a cá»§a Ã­t nháº¥t má»™t nguyÃªn tá»‘. Háº§u háº¿t cÃ¡c pháº£n á»©ng cÃ³ Ä‘Æ¡n cháº¥t tham gia hoáº·c táº¡o thÃ nh Ä‘á»u lÃ  pháº£n á»©ng redox.\n- **Quy táº¯c cá»‘t lÃµi**: Tá»•ng sá»‘ electron do cháº¥t khá»­ nhÆ°á»ng pháº£i báº±ng tá»•ng sá»‘ electron mÃ  cháº¥t oxi hÃ³a nháº­n."
+        "text": "Phản ứng oxi hóa - khử là lớp phản ứng quan trọng nhất trong hóa học vô cơ, đặc trưng bởi sự thay đổi số oxi hóa của các nguyên tố. Cần nắm vững:\n- **Dấu hiệu nhận biết**: Có sự thay đổi số oxi hóa của ít nhất một nguyên tố. Hầu hết các phản ứng có đơn chất tham gia hoặc tạo thành đều là phản ứng redox.\n- **Quy tắc cốt lõi**: Tổng số electron do chất khử nhường phải bằng tổng số electron mà chất oxi hóa nhận."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "KÄ© nÄƒng cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh phá»©c táº¡p",
-        "content": "Äá»‘i vá»›i cÃ¡c pháº£n á»©ng trong mÃ´i trÆ°á»ng acid ($H^+$) hoáº·c base ($OH^-$), cáº§n chÃº Ã½ báº£o toÃ n Ä‘iá»‡n tÃ­ch and báº£o toÃ n nguyÃªn tá»‘ hydrogen, oxygen á»Ÿ bÆ°á»›c cuá»‘i cÃ¹ng. Viá»‡c xÃ¡c Ä‘á»‹nh Ä‘Ãºng tá»‰ lá»‡ giá»¯a cháº¥t oxi hÃ³a and cháº¥t khá»­ lÃ  chÃ¬a khÃ³a Ä‘á»ƒ giáº£i quyáº¿t cÃ¡c bÃ i toÃ¡n Ä‘á»‹nh lÆ°á»£ng liÃªn quan Ä‘áº¿n báº£o toÃ n electron.",
+        "title": "Kĩ năng cân bằng phương trình phức tạp",
+        "content": "Đối với các phản ứng trong môi trường acid ($H^+$) hoặc base ($OH^-$), cần chú ý bảo toàn điện tích and bảo toàn nguyên tố hydrogen, oxygen ở bước cuối cùng. Việc xác định đúng tỉ lệ giữa chất oxi hóa and chất khử là chìa khóa để giải quyết các bài toán định lượng liên quan đến bảo toàn electron.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Vai trÃ² cá»§a pháº£n á»©ng oxi hÃ³a - khá»­ trong thá»±c tiá»…n",
+        "text": "2. Vai trò của phản ứng oxi hóa - khử trong thực tiễn",
         "level": "h2"
       }
     },
@@ -46,7 +46,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Pháº£n á»©ng oxi hÃ³a - khá»­ tá»“n táº¡i phá»• biáº¿n xung quanh chÃºng ta:\n- **Trong Ä‘á»i sá»‘ng**: Sá»± hÃ´ háº¥p cá»§a sinh váº­t, quÃ¡ trÃ¬nh quang há»£p cá»§a cÃ¢y xanh, sá»± chÃ¡y cá»§a nhiÃªn liá»‡u cung cáº¥p nÄƒng lÆ°á»£ng.\n- **Trong cÃ´ng nghiá»‡p**: Luyá»‡n kim (chiáº¿t xuáº¥t kim loáº¡i tá»« quáº·ng), sáº£n xuáº¥t hÃ³a cháº¥t (phÃ¢n bÃ³n, thuá»‘c ná»•), and hoáº¡t Ä‘á»™ng cá»§a cÃ¡c nguá»“n Ä‘iá»‡n hÃ³a há»c (pin, áº¯c quy).\n- **Máº·t tiÃªu cá»±c**: Sá»± Äƒn mÃ²n kim loáº¡i gÃ¢y hÆ° háº¡i cÃ¡c cÃ´ng trÃ¬nh xÃ¢y dá»±ng and mÃ¡y mÃ³c."
+        "text": "Phản ứng oxi hóa - khử tồn tại phổ biến xung quanh chúng ta:\n- **Trong đời sống**: Sự hô hấp của sinh vật, quá trình quang hợp của cây xanh, sự cháy của nhiên liệu cung cấp năng lượng.\n- **Trong công nghiệp**: Luyện kim (chiết xuất kim loại từ quặng), sản xuất hóa chất (phân bón, thuốc nổ), and hoạt động của các nguồn điện hóa học (pin, ắc quy).\n- **Mặt tiêu cực**: Sự ăn mòn kim loại gây hư hại các công trình xây dựng and máy móc."
       }
     }
   ],
@@ -54,10 +54,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Ã”n táº­p chÆ°Æ¡ng 4",
+      "title": "Bài giảng: Ôn tập chương 4",
       "url": "https://www.youtube.com/watch?v=Bzy5osIoU3w",
       "thumbnail": "https://img.youtube.com/vi/Bzy5osIoU3w/0.jpg",
-      "description": "Tá»•ng há»£p kiáº¿n thá»©c vá» pháº£n á»©ng oxi hÃ³a - khá»­ and cÃ¡c dáº¡ng bÃ i táº­p trá»ng tÃ¢m (VietJack)."
+      "description": "Tổng hợp kiến thức về phản ứng oxi hóa - khử and các dạng bài tập trọng tâm (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -67,43 +67,43 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Äá»‹nh nghÄ©a pháº£n á»©ng oxi hÃ³a - khá»­ lÃ  pháº£n á»©ng cÃ³ sá»± thay Ä‘á»•i:",
+        "question": "Định nghĩa phản ứng oxi hóa - khử là phản ứng có sự thay đổi:",
         "options": [
-          "Sá»‘ oxi hÃ³a cá»§a má»™t sá»‘ nguyÃªn tá»­",
-          "Khá»‘i lÆ°á»£ng cháº¥t",
-          "Thá»ƒ tÃ­ch khÃ­",
-          "MÃ u sáº¯c dung dá»‹ch"
+          "Số oxi hóa của một số nguyên tử",
+          "Khối lượng chất",
+          "Thể tích khí",
+          "Màu sắc dung dịch"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Ã nghÄ©a cá»§a pháº£n á»©ng oxi hÃ³a - khá»­ trong Ä‘á»i sá»‘ng lÃ :",
+        "question": "Ý nghĩa của phản ứng oxi hóa - khử trong đời sống là:",
         "options": [
-          "Sáº£n xuáº¥t Ä‘iá»‡n trong pin/áº¯c quy",
-          "Sá»± hÃ´ háº¥p sinh váº­t",
-          "Sá»± chÃ¡y cá»§a nhiÃªn liá»‡u",
-          "Táº¥t cáº£ cÃ¡c Ã½ trÃªn"
+          "Sản xuất điện trong pin/ắc quy",
+          "Sự hô hấp sinh vật",
+          "Sự cháy của nhiên liệu",
+          "Tất cả các ý trên"
         ],
         "correctAnswer": 3,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "PhÆ°Æ¡ng phÃ¡p thÄƒng báº±ng electron dÃ¹ng Ä‘á»ƒ:",
+        "question": "Phương pháp thăng bằng electron dùng để:",
         "options": [
-          "CÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh oxi hÃ³a - khá»­",
-          "TÃ­nh pH",
-          "Äo nhiá»‡t nÄƒng",
-          "TÃ¡ch há»—n há»£p"
+          "Cân bằng phương trình oxi hóa - khử",
+          "Tính pH",
+          "Đo nhiệt năng",
+          "Tách hỗn hợp"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Trong pháº£n á»©ng: $Mg + 2HCl \\rightarrow MgCl_2 + H_2$, cháº¥t bá»‹ oxi hÃ³a lÃ :",
+        "question": "Trong phản ứng: $Mg + 2HCl \\rightarrow MgCl_2 + H_2$, chất bị oxi hóa là:",
         "options": [
           "$Mg$",
           "$HCl$",
@@ -111,17 +111,17 @@
           "$H_2$"
         ],
         "correctAnswer": 0,
-        "explanation": "Mg tá»« 0 lÃªn +2 nÃªn bá»‹ oxi hÃ³a.",
+        "explanation": "Mg từ 0 lên +2 nên bị oxi hóa.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Sá»± Äƒn mÃ²n kim loáº¡i thÆ°á»ng lÃ  do pháº£n á»©ng nÃ o gÃ¢y ra?",
+        "question": "Sự ăn mòn kim loại thường là do phản ứng nào gây ra?",
         "options": [
-          "Pháº£n á»©ng oxi hÃ³a - khá»­",
-          "Pháº£n á»©ng thá»§y phÃ¢n",
-          "Pháº£n á»©ng nhiá»‡t phÃ¢n",
-          "Pháº£n á»©ng trÃ¹ng há»£p"
+          "Phản ứng oxi hóa - khử",
+          "Phản ứng thủy phân",
+          "Phản ứng nhiệt phân",
+          "Phản ứng trùng hợp"
         ],
         "correctAnswer": 0,
         "points": 10

@@ -4,32 +4,32 @@
   "lessonId": 5,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 5: Äá»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng vÃ  PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
-  "chapter": "ChÆ°Æ¡ng 1: Pháº£n á»©ng hÃ³a há»c",
+  "title": "Bài 5: Định luật bảo toàn khối lượng và Phương trình hóa học",
+  "chapter": "Chương 1: Phản ứng hóa học",
   "order": 5,
   "isPremium": false,
-  "description": "Ná»™i dung Ä‘á»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng, cÃ¡ch láº­p phÆ°Æ¡ng trÃ¬nh hÃ³a há»c vÃ  Ã½ nghÄ©a Ä‘á»‹nh lÆ°á»£ng cá»§a phÆ°Æ¡ng trÃ¬nh.",
+  "description": "Nội dung định luật bảo toàn khối lượng, cách lập phương trình hóa học và ý nghĩa định lượng của phương trình.",
   "challenges": [
     {
       "type": "matching",
-      "narrative": "HÃ£y ná»‘i cÃ¡c thÃ nh pháº§n cá»§a má»™t phÆ°Æ¡ng trÃ¬nh hÃ³a há»c Ä‘Ãºng.",
+      "narrative": "Hãy nối các thành phần của một phương trình hóa học đúng.",
       "leftItems": [
-        { "id": "e1", "label": "Há»‡ sá»‘ (Coefficient)" },
-        { "id": "e2", "label": "Chá»‰ sá»‘ (Index)" },
-        { "id": "e3", "label": "MÅ©i tÃªn (â†’)" }
+        { "id": "e1", "label": "Hệ số (Coefficient)" },
+        { "id": "e2", "label": "Chỉ số (Index)" },
+        { "id": "e3", "label": "Mũi tên (→)" }
       ],
       "items": [
-        { "id": "e3", "label": "Biá»ƒu diá»…n chiá»u pháº£n á»©ng" },
-        { "id": "e1", "label": "Sá»‘ Ä‘áº·t trÆ°á»›c cÃ´ng thá»©c" },
-        { "id": "e2", "label": "Sá»‘ nhá» dÆ°á»›i kÃ½ hiá»‡u" }
+        { "id": "e3", "label": "Biểu diễn chiều phản ứng" },
+        { "id": "e1", "label": "Số đặt trước công thức" },
+        { "id": "e2", "label": "Số nhỏ dưới ký hiệu" }
       ],
       "correctOrder": ["e1", "e2", "e3"],
-      "question": "Khá»›p cÃ¡c khÃ¡i niá»‡m trong phÆ°Æ¡ng trÃ¬nh hÃ³a há»c.",
-      "source": "SÃ¡ch giÃ¡o khoa"
+      "question": "Khớp các khái niệm trong phương trình hóa học.",
+      "source": "Sách giáo khoa"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Cho pháº£n á»©ng: A + B â†’ C. Biáº¿t m_A = 4g, m_C = 10g. HÃ£y tÃ­nh khá»‘i lÆ°á»£ng cháº¥t B Ä‘Ã£ tham gia pháº£n á»©ng.",
+      "narrative": "Cho phản ứng: A + B → C. Biết m_A = 4g, m_C = 10g. Hãy tính khối lượng chất B đã tham gia phản ứng.",
       "options": [
         "6 gam",
         "14 gam",
@@ -37,28 +37,28 @@
         "10 gam"
       ],
       "correctAnswer": 0,
-      "question": "Ãp dá»¥ng Ä‘á»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng: m_A + m_B = m_C.",
-      "source": "TÃ­nh toÃ¡n báº£o toÃ n"
+      "question": "Áp dụng định luật bảo toàn khối lượng: m_A + m_B = m_C.",
+      "source": "Tính toán bảo toàn"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Trong pháº£n á»©ng hÃ³a há»c, sá»± thay Ä‘á»•i chá»‰ xáº£y ra á»Ÿ liÃªn káº¿t giá»¯a cÃ¡c nguyÃªn tá»­, cÃ²n sá»‘ lÆ°á»£ng nguyÃªn tá»­ má»—i loáº¡i Ä‘Æ°á»£c báº£o toÃ n.",
-      "placeholder": "Ai Ä‘Ã£ tÃ¬m ra Ä‘á»‹nh luáº­t nÃ y?",
+      "narrative": "Trong phản ứng hóa học, sự thay đổi chỉ xảy ra ở liên kết giữa các nguyên tử, còn số lượng nguyên tử mỗi loại được bảo toàn.",
+      "placeholder": "Ai đã tìm ra định luật này?",
       "correctAnswer": "Lavoisier",
-      "question": "Äá»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng do nhÃ  bÃ¡c há»c Lomonosov vÃ  ai tÃ¬m ra?",
-      "source": "Lá»‹ch sá»­ hÃ³a há»c"
+      "question": "Định luật bảo toàn khối lượng do nhà bác học Lomonosov và ai tìm ra?",
+      "source": "Lịch sử hóa học"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thá»­ thÃ¡ch láº­p phÆ°Æ¡ng trÃ¬nh: HÃ£y sáº¯p xáº¿p cÃ¡c bÆ°á»›c Ä‘á»ƒ cÃ¢n báº±ng má»™t phÆ°Æ¡ng trÃ¬nh hÃ³a há»c.",
+      "narrative": "Thử thách lập phương trình: Hãy sắp xếp các bước để cân bằng một phương trình hóa học.",
       "items": [
-        { "id": "b1", "label": "Viáº¿t sÆ¡ Ä‘á»“ pháº£n á»©ng" },
-        { "id": "b2", "label": "CÃ¢n báº±ng sá»‘ nguyÃªn tá»­ má»—i nguyÃªn tá»‘" },
-        { "id": "b3", "label": "Viáº¿t phÆ°Æ¡ng trÃ¬nh hÃ³a há»c hoÃ n chá»‰nh" }
+        { "id": "b1", "label": "Viết sơ đồ phản ứng" },
+        { "id": "b2", "label": "Cân bằng số nguyên tử mỗi nguyên tố" },
+        { "id": "b3", "label": "Viết phương trình hóa học hoàn chỉnh" }
       ],
       "correctOrder": ["b1", "b2", "b3"],
-      "question": "TrÃ¬nh tá»± láº­p phÆ°Æ¡ng trÃ¬nh hÃ³a há»c.",
-      "source": "Ká»¹ nÄƒng láº­p phÆ°Æ¡ng trÃ¬nh"
+      "question": "Trình tự lập phương trình hóa học.",
+      "source": "Kỹ năng lập phương trình"
     }
   ],
   "theoryModules": [
@@ -66,7 +66,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Äá»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng",
+        "text": "1. Định luật bảo toàn khối lượng",
         "level": "h2"
       }
     },
@@ -74,15 +74,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "ÄÃ¢y lÃ  má»™t trong nhá»¯ng Ä‘á»‹nh luáº­t ná»n táº£ng nháº¥t cá»§a hÃ³a há»c, Ä‘Æ°á»£c phÃ¡t biá»ƒu bá»Ÿi hai nhÃ  bÃ¡c há»c Lomonosov (1748, Nga) vÃ  Lavoisier (1774, PhÃ¡p). Äá»‹nh luáº­t nÃ y giÃºp chÃºng ta hiá»ƒu ráº±ng váº­t cháº¥t khÃ´ng tá»± sinh ra hay máº¥t Ä‘i trong pháº£n á»©ng hÃ³a há»c."
+        "text": "Đây là một trong những định luật nền tảng nhất của hóa học, được phát biểu bởi hai nhà bác học Lomonosov (1748, Nga) và Lavoisier (1774, Pháp). Định luật này giúp chúng ta hiểu rằng vật chất không tự sinh ra hay mất đi trong phản ứng hóa học."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Ná»™i dung Ä‘á»‹nh luáº­t",
-        "content": "**PhÃ¡t biá»ƒu**: Trong má»™t pháº£n á»©ng hÃ³a há»c, tá»•ng khá»‘i lÆ°á»£ng cá»§a cÃ¡c **cháº¥t sáº£n pháº©m** báº±ng tá»•ng khá»‘i lÆ°á»£ng cá»§a cÃ¡c **cháº¥t pháº£n á»©ng** (cháº¥t tham gia).\\n\\n**Biá»ƒu thá»©c tá»•ng quÃ¡t**: Vá»›i pháº£n á»©ng $A + B \\rightarrow C + D$:\\n$$m_A + m_B = m_C + m_D$$",
+        "title": "Nội dung định luật",
+        "content": "**Phát biểu**: Trong một phản ứng hóa học, tổng khối lượng của các **chất sản phẩm** bằng tổng khối lượng của các **chất phản ứng** (chất tham gia).\\n\\n**Biểu thức tổng quát**: Với phản ứng $A + B \\rightarrow C + D$:\\n$$m_A + m_B = m_C + m_D$$",
         "color": "blue"
       }
     },
@@ -90,15 +90,15 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "**Giáº£i thÃ­ch báº£n cháº¥t**: Trong pháº£n á»©ng hÃ³a há»c, chá»‰ cÃ³ **liÃªn káº¿t giá»¯a cÃ¡c nguyÃªn tá»­** bá»‹ phÃ¡ vá»¡ vÃ  hÃ¬nh thÃ nh liÃªn káº¿t má»›i. Báº£n thÃ¢n cÃ¡c nguyÃªn tá»­ khÃ´ng bá»‹ máº¥t Ä‘i hay táº¡o thÃªm â€” sá»‘ lÆ°á»£ng nguyÃªn tá»­ cá»§a má»—i nguyÃªn tá»‘ trÆ°á»›c vÃ  sau pháº£n á»©ng luÃ´n **giá»¯ nguyÃªn**. Do khá»‘i lÆ°á»£ng má»—i nguyÃªn tá»­ khÃ´ng Ä‘á»•i vÃ  sá»‘ lÆ°á»£ng khÃ´ng Ä‘á»•i, nÃªn tá»•ng khá»‘i lÆ°á»£ng Ä‘Æ°á»£c báº£o toÃ n."
+        "text": "**Giải thích bản chất**: Trong phản ứng hóa học, chỉ có **liên kết giữa các nguyên tử** bị phá vỡ và hình thành liên kết mới. Bản thân các nguyên tử không bị mất đi hay tạo thêm — số lượng nguyên tử của mỗi nguyên tố trước và sau phản ứng luôn **giữ nguyên**. Do khối lượng mỗi nguyên tử không đổi và số lượng không đổi, nên tổng khối lượng được bảo toàn."
       }
     },
     {
       "id": "mod5",
       "type": "warningBox",
       "content": {
-        "title": "LÆ°u Ã½ thÆ°á»ng gáº·p",
-        "content": "- Khi nung sáº¯t trong khÃ´ng khÃ­, khá»‘i lÆ°á»£ng cháº¥t ráº¯n **tÄƒng** vÃ¬ sáº¯t Ä‘Ã£ káº¿t há»£p vá»›i oxygen trong khÃ´ng khÃ­ táº¡o thÃ nh oxit sáº¯t. Tá»•ng khá»‘i lÆ°á»£ng ($m_{Fe} + m_{O_2}$) **váº«n báº±ng** khá»‘i lÆ°á»£ng oxit sáº¯t táº¡o thÃ nh.\\n- Khi Ä‘á»‘t chÃ¡y náº¿n, khá»‘i lÆ°á»£ng náº¿n **giáº£m** vÃ¬ sáº£n pháº©m ($CO_2$ vÃ  $H_2O$) bay hÆ¡i vÃ o khÃ´ng khÃ­. NhÆ°ng náº¿u thu háº¿t sáº£n pháº©m, tá»•ng khá»‘i lÆ°á»£ng váº«n báº£o toÃ n.",
+        "title": "Lưu ý thường gặp",
+        "content": "- Khi nung sắt trong không khí, khối lượng chất rắn **tăng** vì sắt đã kết hợp với oxygen trong không khí tạo thành oxit sắt. Tổng khối lượng ($m_{Fe} + m_{O_2}$) **vẫn bằng** khối lượng oxit sắt tạo thành.\\n- Khi đốt cháy nến, khối lượng nến **giảm** vì sản phẩm ($CO_2$ và $H_2O$) bay hơi vào không khí. Nhưng nếu thu hết sản phẩm, tổng khối lượng vẫn bảo toàn.",
         "color": "orange"
       }
     },
@@ -106,7 +106,7 @@
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "2. PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
+        "text": "2. Phương trình hóa học",
         "level": "h2"
       }
     },
@@ -114,14 +114,14 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c khÃ´ng chá»‰ lÃ  nhá»¯ng kÃ½ hiá»‡u khÃ´ khan, mÃ  lÃ  **ngÃ´n ngá»¯ toÃ n cáº§u** cá»§a hÃ³a há»c. NÃ³ biá»ƒu diá»…n ngáº¯n gá»n diá»…n biáº¿n cá»§a má»™t pháº£n á»©ng, cho biáº¿t danh tÃ­nh cÃ¡c cháº¥t tham gia, sáº£n pháº©m táº¡o thÃ nh vÃ  Ä‘áº·c biá»‡t lÃ  **tá»‰ lá»‡ sá»‘ lÆ°á»£ng** giá»¯a chÃºng. Má»™t phÆ°Æ¡ng trÃ¬nh Ä‘Æ°á»£c cÃ¢n báº±ng Ä‘Ãºng chÃ­nh lÃ  chÃ¬a khÃ³a Ä‘á»ƒ giáº£i quyáº¿t má»i bÃ i toÃ¡n tÃ­nh toÃ¡n sau nÃ y."
+        "text": "Phương trình hóa học không chỉ là những ký hiệu khô khan, mà là **ngôn ngữ toàn cầu** của hóa học. Nó biểu diễn ngắn gọn diễn biến của một phản ứng, cho biết danh tính các chất tham gia, sản phẩm tạo thành và đặc biệt là **tỉ lệ số lượng** giữa chúng. Một phương trình được cân bằng đúng chính là chìa khóa để giải quyết mọi bài toán tính toán sau này."
       }
     },
     {
       "id": "mod8",
       "type": "heading",
       "content": {
-        "text": "3. Ba bÆ°á»›c láº­p phÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
+        "text": "3. Ba bước lập phương trình hóa học",
         "level": "h2"
       }
     },
@@ -131,9 +131,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**BÆ°á»›c 1 â€” Viáº¿t sÆ¡ Ä‘á»“ pháº£n á»©ng**: Ghi cÃ´ng thá»©c hÃ³a há»c cá»§a cÃ¡c cháº¥t tham gia (trÃ¡i) vÃ  sáº£n pháº©m (pháº£i), ngÄƒn cÃ¡ch bá»Ÿi mÅ©i tÃªn nÃ©t Ä‘á»©t. VÃ­ dá»¥: $Al + O_2 \\dashrightarrow Al_2O_3$.",
-          "**BÆ°á»›c 2 â€” CÃ¢n báº±ng sá»‘ nguyÃªn tá»­**: ÄÃ¢y lÃ  bÆ°á»›c quan trá»ng nháº¥t. Chá»n há»‡ sá»‘ Ä‘áº·t trÆ°á»›c cÃ¡c cÃ´ng thá»©c sao cho sá»‘ nguyÃªn tá»­ má»—i nguyÃªn tá»‘ á»Ÿ hai váº¿ báº±ng nhau. \\n  *Máº¹o nhá»*: Æ¯u tiÃªn cÃ¢n báº±ng nguyÃªn tá»‘ cÃ³ sá»‘ nguyÃªn tá»­ lá»›n nháº¥t hoáº·c xuáº¥t hiá»‡n Ã­t nháº¥t trÆ°á»›c. Náº¿u cÃ³ nhÃ³m nguyÃªn tá»­ (nhÆ° $SO_4, OH$) giá»¯ nguyÃªn sau pháº£n á»©ng, hÃ£y cÃ¢n báº±ng cáº£ nhÃ³m nhÆ° má»™t Ä‘Æ¡n vá»‹.",
-          "**BÆ°á»›c 3 â€” Viáº¿t phÆ°Æ¡ng trÃ¬nh hoÃ n chá»‰nh**: Thay mÅ©i tÃªn nÃ©t Ä‘á»©t báº±ng mÅ©i tÃªn nÃ©t liá»n. Kiá»ƒm tra láº¡i láº§n cuá»‘i táº¥t cáº£ cÃ¡c há»‡ sá»‘."
+          "**Bước 1 — Viết sơ đồ phản ứng**: Ghi công thức hóa học của các chất tham gia (trái) và sản phẩm (phải), ngăn cách bởi mũi tên nét đứt. Ví dụ: $Al + O_2 \\dashrightarrow Al_2O_3$.",
+          "**Bước 2 — Cân bằng số nguyên tử**: Đây là bước quan trọng nhất. Chọn hệ số đặt trước các công thức sao cho số nguyên tử mỗi nguyên tố ở hai vế bằng nhau. \\n  *Mẹo nhỏ*: Ưu tiên cân bằng nguyên tố có số nguyên tử lớn nhất hoặc xuất hiện ít nhất trước. Nếu có nhóm nguyên tử (như $SO_4, OH$) giữ nguyên sau phản ứng, hãy cân bằng cả nhóm như một đơn vị.",
+          "**Bước 3 — Viết phương trình hoàn chỉnh**: Thay mũi tên nét đứt bằng mũi tên nét liền. Kiểm tra lại lần cuối tất cả các hệ số."
         ]
       }
     },
@@ -141,7 +141,7 @@
       "id": "mod10",
       "type": "heading",
       "content": {
-        "text": "4. VÃ­ dá»¥ minh há»a cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh",
+        "text": "4. Ví dụ minh họa cân bằng phương trình",
         "level": "h2"
       }
     },
@@ -149,8 +149,8 @@
       "id": "mod11",
       "type": "infoBox",
       "content": {
-        "title": "VÃ­ dá»¥ 1: Pháº£n á»©ng Ä‘á»‘t chÃ¡y NhÃ´m",
-        "content": "**SÆ¡ Ä‘á»“**: $Al + O_2 \\rightarrow Al_2O_3$\\n\\n**BÆ°á»›c cÃ¢n báº±ng**:\\n- Äáº¿m: Váº¿ trÃ¡i cÃ³ 1 Al, 2 O. Váº¿ pháº£i cÃ³ 2 Al, 3 O. â†’ ChÆ°a báº±ng nhau.\\n- CÃ¢n báº±ng Al: Äáº·t há»‡ sá»‘ 2 trÆ°á»›c Al â†’ $2Al + O_2 \\rightarrow Al_2O_3$. Al Ä‘Ã£ báº±ng (2=2).\\n- CÃ¢n báº±ng O: Váº¿ trÃ¡i cÃ³ 2 O, váº¿ pháº£i cÃ³ 3 O. Bá»™i chung nhá» nháº¥t cá»§a 2 vÃ  3 lÃ  6. â†’ Äáº·t há»‡ sá»‘ 3 trÆ°á»›c $O_2$ vÃ  2 trÆ°á»›c $Al_2O_3$.\\n- Kiá»ƒm tra láº¡i Al: Váº¿ trÃ¡i cáº§n 4 Al â†’ há»‡ sá»‘ 4.\\n\\n**Káº¿t quáº£**: $4Al + 3O_2 \\rightarrow 2Al_2O_3$",
+        "title": "Ví dụ 1: Phản ứng đốt cháy Nhôm",
+        "content": "**Sơ đồ**: $Al + O_2 \\rightarrow Al_2O_3$\\n\\n**Bước cân bằng**:\\n- Đếm: Vế trái có 1 Al, 2 O. Vế phải có 2 Al, 3 O. → Chưa bằng nhau.\\n- Cân bằng Al: Đặt hệ số 2 trước Al → $2Al + O_2 \\rightarrow Al_2O_3$. Al đã bằng (2=2).\\n- Cân bằng O: Vế trái có 2 O, vế phải có 3 O. Bội chung nhỏ nhất của 2 và 3 là 6. → Đặt hệ số 3 trước $O_2$ và 2 trước $Al_2O_3$.\\n- Kiểm tra lại Al: Vế trái cần 4 Al → hệ số 4.\\n\\n**Kết quả**: $4Al + 3O_2 \\rightarrow 2Al_2O_3$",
         "color": "blue"
       }
     },
@@ -158,8 +158,8 @@
       "id": "mod12",
       "type": "infoBox",
       "content": {
-        "title": "VÃ­ dá»¥ 2: Pháº£n á»©ng Ä‘á»‘t chÃ¡y Metan",
-        "content": "**SÆ¡ Ä‘á»“**: $CH_4 + O_2 \\rightarrow CO_2 + H_2O$\\n\\n- C: 1 = 1 âœ“\\n- H: 4 bÃªn trÃ¡i, 2 bÃªn pháº£i â†’ Ä‘áº·t há»‡ sá»‘ **2** trÆ°á»›c $H_2O$: $CH_4 + O_2 \\rightarrow CO_2 + 2H_2O$\\n- O: BÃªn pháº£i cÃ³ $2 + 2 = 4$ O, bÃªn trÃ¡i cÃ³ 2 O â†’ Ä‘áº·t há»‡ sá»‘ **2** trÆ°á»›c $O_2$.\\n\\n**Káº¿t quáº£**: $CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O$\\n\\nKiá»ƒm tra: C(1=1) âœ“, H(4=4) âœ“, O(4=4) âœ“",
+        "title": "Ví dụ 2: Phản ứng đốt cháy Metan",
+        "content": "**Sơ đồ**: $CH_4 + O_2 \\rightarrow CO_2 + H_2O$\\n\\n- C: 1 = 1 ✓\\n- H: 4 bên trái, 2 bên phải → đặt hệ số **2** trước $H_2O$: $CH_4 + O_2 \\rightarrow CO_2 + 2H_2O$\\n- O: Bên phải có $2 + 2 = 4$ O, bên trái có 2 O → đặt hệ số **2** trước $O_2$.\\n\\n**Kết quả**: $CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O$\\n\\nKiểm tra: C(1=1) ✓, H(4=4) ✓, O(4=4) ✓",
         "color": "blue"
       }
     },
@@ -167,7 +167,7 @@
       "id": "mod13",
       "type": "heading",
       "content": {
-        "text": "5. Ã nghÄ©a cá»§a phÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
+        "text": "5. Ý nghĩa của phương trình hóa học",
         "level": "h2"
       }
     },
@@ -177,9 +177,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Ã nghÄ©a Ä‘á»‹nh tÃ­nh**: Cho biáº¿t cháº¥t nÃ o pháº£n á»©ng vá»›i cháº¥t nÃ o, sáº£n pháº©m táº¡o thÃ nh lÃ  gÃ¬.",
-          "**Ã nghÄ©a Ä‘á»‹nh lÆ°á»£ng**: Cho biáº¿t **tá»‰ lá»‡ sá»‘ mol** (vÃ  sá»‘ phÃ¢n tá»­) giá»¯a cÃ¡c cháº¥t. VÃ­ dá»¥: $2H_2 + O_2 \\rightarrow 2H_2O$ cho biáº¿t cá»© 2 mol $H_2$ pháº£n á»©ng vá»›i 1 mol $O_2$ táº¡o ra 2 mol $H_2O$.",
-          "**á»¨ng dá»¥ng**: Tá»« phÆ°Æ¡ng trÃ¬nh, ta cÃ³ thá»ƒ tÃ­nh Ä‘Æ°á»£c lÆ°á»£ng cháº¥t cáº§n dÃ¹ng hoáº·c lÆ°á»£ng sáº£n pháº©m thu Ä‘Æ°á»£c â€” Ä‘Ã¢y lÃ  ná»n táº£ng cho bÃ i toÃ¡n hÃ³a há»c."
+          "**Ý nghĩa định tính**: Cho biết chất nào phản ứng với chất nào, sản phẩm tạo thành là gì.",
+          "**Ý nghĩa định lượng**: Cho biết **tỉ lệ số mol** (và số phân tử) giữa các chất. Ví dụ: $2H_2 + O_2 \\rightarrow 2H_2O$ cho biết cứ 2 mol $H_2$ phản ứng với 1 mol $O_2$ tạo ra 2 mol $H_2O$.",
+          "**Ứng dụng**: Từ phương trình, ta có thể tính được lượng chất cần dùng hoặc lượng sản phẩm thu được — đây là nền tảng cho bài toán hóa học."
         ]
       }
     },
@@ -187,7 +187,7 @@
       "id": "mod15",
       "type": "heading",
       "content": {
-        "text": "6. BÃ i táº­p váº­n dá»¥ng Ä‘á»‹nh luáº­t BTKL",
+        "text": "6. Bài tập vận dụng định luật BTKL",
         "level": "h2"
       }
     },
@@ -197,7 +197,7 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**BÃ i máº«u**: Cho 5,6g sáº¯t tÃ¡c dá»¥ng hoÃ n toÃ n vá»›i dung dá»‹ch $HCl$, thu Ä‘Æ°á»£c $FeCl_2$ vÃ  0,2g khÃ­ $H_2$. Biáº¿t lÆ°á»£ng $HCl$ Ä‘Ã£ dÃ¹ng lÃ  7,3g. TÃ­nh khá»‘i lÆ°á»£ng $FeCl_2$ táº¡o thÃ nh.\\n  *Giáº£i*: Theo ÄLBTKL: $m_{Fe} + m_{HCl} = m_{FeCl_2} + m_{H_2}$.\\n  $5,6 + 7,3 = m_{FeCl_2} + 0,2$.\\n  $m_{FeCl_2} = 12,9 - 0,2 = 12,7$g."
+          "**Bài mẫu**: Cho 5,6g sắt tác dụng hoàn toàn với dung dịch $HCl$, thu được $FeCl_2$ và 0,2g khí $H_2$. Biết lượng $HCl$ đã dùng là 7,3g. Tính khối lượng $FeCl_2$ tạo thành.\\n  *Giải*: Theo ĐLBTKL: $m_{Fe} + m_{HCl} = m_{FeCl_2} + m_{H_2}$.\\n  $5,6 + 7,3 = m_{FeCl_2} + 0,2$.\\n  $m_{FeCl_2} = 12,9 - 0,2 = 12,7$g."
         ]
       }
     },
@@ -205,7 +205,7 @@
       "id": "mod17",
       "type": "heading",
       "content": {
-        "text": "7. Ã nghÄ©a thá»±c tiá»…n cá»§a Äá»‹nh luáº­t BTKL",
+        "text": "7. Ý nghĩa thực tiễn của Định luật BTKL",
         "level": "h2"
       }
     },
@@ -213,7 +213,7 @@
       "id": "mod18",
       "type": "paragraph",
       "content": {
-        "text": "Trong cÃ´ng nghiá»‡p hÃ³a cháº¥t, Ä‘á»‹nh luáº­t nÃ y giÃºp ká»¹ sÆ° tÃ­nh toÃ¡n chÃ­nh xÃ¡c lÆ°á»£ng nguyÃªn liá»‡u cáº§n nháº­p vÃ o Ä‘á»ƒ thu Ä‘Æ°á»£c sáº£n lÆ°á»£ng mong muá»‘n, trÃ¡nh lÃ£ng phÃ­ vÃ  kiá»ƒm soÃ¡t cháº¥t tháº£i. Náº¿u tá»•ng khá»‘i lÆ°á»£ng sáº£n pháº©m thu Ä‘Æ°á»£c Ã­t hÆ¡n Ä‘áº§u vÃ o má»™t cÃ¡ch báº¥t thÆ°á»ng, Ä‘Ã³ lÃ  dáº¥u hiá»‡u cá»§a sá»± rÃ² rá»‰ hoáº·c pháº£n á»©ng phá»¥ khÃ´ng mong muá»‘nâ€”má»™t máº¥u chá»‘t Ä‘á»ƒ báº£o vá»‡ mÃ´i trÆ°á»ng vÃ  tá»‘i Æ°u hÃ³a chi phÃ­."
+        "text": "Trong công nghiệp hóa chất, định luật này giúp kỹ sư tính toán chính xác lượng nguyên liệu cần nhập vào để thu được sản lượng mong muốn, tránh lãng phí và kiểm soát chất thải. Nếu tổng khối lượng sản phẩm thu được ít hơn đầu vào một cách bất thường, đó là dấu hiệu của sự rò rỉ hoặc phản ứng phụ không mong muốn—một mấu chốt để bảo vệ môi trường và tối ưu hóa chi phí."
       }
     }
   ],
@@ -221,10 +221,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Äá»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng vÃ  phÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
+      "title": "Bài giảng: Định luật bảo toàn khối lượng và phương trình hóa học",
       "url": "https://www.youtube.com/watch?v=5Wj-98YFpNw",
       "thumbnail": "https://img.youtube.com/vi/5Wj-98YFpNw/0.jpg",
-      "description": "Ná»™i dung Ä‘á»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng vÃ  cÃ¡c bÆ°á»›c cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh hÃ³a há»c (VietJack)."
+      "description": "Nội dung định luật bảo toàn khối lượng và các bước cân bằng phương trình hóa học (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -234,20 +234,20 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Trong má»™t pháº£n á»©ng hÃ³a há»c, tá»•ng khá»‘i lÆ°á»£ng cá»§a cÃ¡c cháº¥t sáº£n pháº©m so vá»›i cÃ¡c cháº¥t tham gia lÃ :",
+        "question": "Trong một phản ứng hóa học, tổng khối lượng của các chất sản phẩm so với các chất tham gia là:",
         "options": [
-          "Lá»›n hÆ¡n",
-          "Nhá» hÆ¡n",
-          "Báº±ng nhau",
-          "KhÃ¡c nhau"
+          "Lớn hơn",
+          "Nhỏ hơn",
+          "Bằng nhau",
+          "Khác nhau"
         ],
         "correctAnswer": 2,
-        "explanation": "Äá»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng kháº³ng Ä‘á»‹nh tá»•ng khá»‘i lÆ°á»£ng khÃ´ng Ä‘á»•i.",
+        "explanation": "Định luật bảo toàn khối lượng khẳng định tổng khối lượng không đổi.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Cho pháº£n á»©ng: $A + B \\rightarrow C + D$. Náº¿u biáº¿t $m_A = 5g, m_B = 10g, m_C = 7g$, thÃ¬ khá»‘i lÆ°á»£ng cháº¥t $D$ lÃ :",
+        "question": "Cho phản ứng: $A + B \\rightarrow C + D$. Nếu biết $m_A = 5g, m_B = 10g, m_C = 7g$, thì khối lượng chất $D$ là:",
         "options": [
           "15g",
           "8g",
@@ -260,20 +260,20 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Táº¡i sao khi nung má»™t thanh sáº¯t trong khÃ´ng khÃ­, khá»‘i lÆ°á»£ng thanh sáº¯t láº¡i tÄƒng lÃªn?",
+        "question": "Tại sao khi nung một thanh sắt trong không khí, khối lượng thanh sắt lại tăng lên?",
         "options": [
-          "VÃ¬ cháº¥t ráº¯n káº¿t há»£p thÃªm khÃ­ $O_2$ tá»« mÃ´i trÆ°á»ng",
-          "VÃ¬ sáº¯t ná»Ÿ ra khi nÃ³ng",
-          "VÃ¬ cÃ¢n bá»‹ lá»—i",
-          "VÃ¬ nguyÃªn tá»­ sáº¯t náº·ng hÆ¡n"
+          "Vì chất rắn kết hợp thêm khí $O_2$ từ môi trường",
+          "Vì sắt nở ra khi nóng",
+          "Vì cân bị lỗi",
+          "Vì nguyên tử sắt nặng hơn"
         ],
         "correctAnswer": 0,
-        "explanation": "Pháº£n á»©ng hÃ³a há»£p lÃ m tÄƒng khá»‘i lÆ°á»£ng cháº¥t ráº¯n.",
+        "explanation": "Phản ứng hóa hợp làm tăng khối lượng chất rắn.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Há»‡ sá»‘ cÃ¢n báº±ng cá»§a phÆ°Æ¡ng trÃ¬nh: $P + O_2 \\dashrightarrow P_2O_5$ láº§n lÆ°á»£t lÃ :",
+        "question": "Hệ số cân bằng của phương trình: $P + O_2 \\dashrightarrow P_2O_5$ lần lượt là:",
         "options": [
           "2, 5, 2",
           "4, 5, 2",
@@ -286,7 +286,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "CÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh: $Al + HCl \\rightarrow AlCl_3 + H_2$. Tá»•ng há»‡ sá»‘ (nguyÃªn, tá»‘i giáº£n) cÃ¡c cháº¥t lÃ :",
+        "question": "Cân bằng phương trình: $Al + HCl \\rightarrow AlCl_3 + H_2$. Tổng hệ số (nguyên, tối giản) các chất là:",
         "options": [
           "13",
           "11",

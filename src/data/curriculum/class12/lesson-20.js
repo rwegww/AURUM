@@ -3,18 +3,18 @@
   "classId": 12,
   "lessonId": 20,
   "programId": "ketnoi",
-  "title": "BÃ i 20. Kim loáº¡i trong tá»± nhiÃªn vÃ  phÆ°Æ¡ng phÃ¡p tÃ¡ch kim loáº¡i",
-  "chapter": "ChÆ°Æ¡ng 6. Äáº¡i cÆ°Æ¡ng vá» kim loáº¡i",
+  "title": "Bài 20. Kim loại trong tự nhiên và phương pháp tách kim loại",
+  "chapter": "Chương 6. Đại cương về kim loại",
   "order": 20,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tráº¡ng thÃ¡i tá»± nhiÃªn cá»§a kim loáº¡i vÃ  cÃ¡c phÆ°Æ¡ng phÃ¡p luyá»‡n kim cÆ¡ báº£n: Nhiá»‡t luyá»‡n, Thá»§y luyá»‡n vÃ  Äiá»‡n phÃ¢n.",
+  "description": "Trạng thái tự nhiên của kim loại và các phương pháp luyện kim cơ bản: Nhiệt luyện, Thủy luyện và Điện phân.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Tráº¡ng thÃ¡i tá»± nhiÃªn cá»§a Kim loáº¡i",
+        "text": "1. Trạng thái tự nhiên của Kim loại",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong tá»± nhiÃªn, háº§u háº¿t cÃ¡c kim loáº¡i tá»“n táº¡i dÆ°á»›i dáº¡ng há»£p cháº¥t (oxide, sulfide, carbonate, silicate...) gá»i lÃ  quáº·ng. Chá»‰ má»™t sá»‘ Ã­t kim loáº¡i kÃ©m hoáº¡t Ä‘á»™ng (nhÆ° Au, Pt) cÃ³ thá»ƒ tá»“n táº¡i á»Ÿ dáº¡ng Ä‘Æ¡n cháº¥t (tráº¡ng thÃ¡i tá»± do). TÃ¹y vÃ o hÃ m lÆ°á»£ng kim loáº¡i vÃ  trá»¯ lÆ°á»£ng mÃ  cÃ¡c má» quáº·ng Ä‘Æ°á»£c khai thÃ¡c Ä‘á»ƒ phá»¥c vá»¥ cÃ´ng nghiá»‡p luyá»‡n kim."
+        "text": "Trong tự nhiên, hầu hết các kim loại tồn tại dưới dạng hợp chất (oxide, sulfide, carbonate, silicate...) gọi là quặng. Chỉ một số ít kim loại kém hoạt động (như Au, Pt) có thể tồn tại ở dạng đơn chất (trạng thái tự do). Tùy vào hàm lượng kim loại và trữ lượng mà các mỏ quặng được khai thác để phục vụ công nghiệp luyện kim."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. NguyÃªn táº¯c vÃ  PhÆ°Æ¡ng phÃ¡p Äiá»u cháº¿ Kim loáº¡i",
+        "text": "2. Nguyên tắc và Phương pháp Điều chế Kim loại",
         "level": "h2"
       }
     },
@@ -37,8 +37,8 @@
       "id": "mod4",
       "type": "infoBox",
       "content": {
-        "title": "NguyÃªn táº¯c chung cá»§a Luyá»‡n kim",
-        "content": "Báº£n cháº¥t cá»§a viá»‡c Ä‘iá»u cháº¿ kim loáº¡i lÃ  khá»­ cÃ¡c ion kim loáº¡i trong há»£p cháº¥t thÃ nh nguyÃªn tá»­:\n**$M^{n+} + ne \\rightarrow M$**.\nÄá»ƒ thá»±c hiá»‡n quÃ¡ trÃ¬nh nÃ y, ngÆ°á»i ta sá»­ dá»¥ng cÃ¡c tÃ¡c nhÃ¢n khá»­ nhÆ° hÃ³a cháº¥t ($C, CO, H_2$, kim loáº¡i máº¡nh hÆ¡n) hoáº·c dÃ²ng Ä‘iá»‡n má»™t chiá»u.",
+        "title": "Nguyên tắc chung của Luyện kim",
+        "content": "Bản chất của việc điều chế kim loại là khử các ion kim loại trong hợp chất thành nguyên tử:\n**$M^{n+} + ne \\rightarrow M$**.\nĐể thực hiện quá trình này, người ta sử dụng các tác nhân khử như hóa chất ($C, CO, H_2$, kim loại mạnh hơn) hoặc dòng điện một chiều.",
         "color": "blue"
       }
     },
@@ -46,7 +46,7 @@
       "id": "mod5",
       "type": "heading",
       "content": {
-        "text": "3. CÃ¡c phÆ°Æ¡ng phÃ¡p luyá»‡n kim cÆ¡ báº£n",
+        "text": "3. Các phương pháp luyện kim cơ bản",
         "level": "h2"
       }
     },
@@ -56,9 +56,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**PhÆ°Æ¡ng phÃ¡p Nhiá»‡t luyá»‡n:** DÃ¹ng cÃ¡c cháº¥t khá»­ máº¡nh ($C, CO, H_2, Al$) Ä‘á»ƒ khá»­ ion kim loáº¡i trong oxide á»Ÿ nhiá»‡t Ä‘á»™ cao. PhÆ°Æ¡ng phÃ¡p nÃ y Ã¡p dá»¥ng cho cÃ¡c kim loáº¡i cÃ³ tÃ­nh khá»­ trung bÃ¬nh vÃ  yáº¿u (sau Al trong dÃ£y Ä‘iá»‡n hÃ³a) nhÆ° Zn, Fe, Sn, Pb, Cu...",
-          "**PhÆ°Æ¡ng phÃ¡p Thá»§y luyá»‡n:** DÃ¹ng dung dá»‹ch hÃ²a tan quáº·ng (thÆ°á»ng lÃ  acid hoáº·c kiá»m) sau Ä‘Ã³ dÃ¹ng kim loáº¡i máº¡nh hÆ¡n Ä‘á»ƒ Ä‘áº©y kim loáº¡i yáº¿u hÆ¡n ra khá»i dung dá»‹ch muá»‘i. VÃ­ dá»¥: DÃ¹ng Fe Ä‘áº©y Cu ra khá»i dung dá»‹ch $CuSO_4$.",
-          "**PhÆ°Æ¡ng phÃ¡p Äiá»‡n phÃ¢n:** \n- **Äiá»‡n phÃ¢n nÃ³ng cháº£y**: LÃ  phÆ°Æ¡ng phÃ¡p duy nháº¥t Ä‘á»ƒ Ä‘iá»u cháº¿ cÃ¡c kim loáº¡i hoáº¡t Ä‘á»™ng máº¡nh (kiá»m, kiá»m thá»•, nhÃ´m). VÃ­ dá»¥: Äiá»‡n phÃ¢n nÃ³ng cháº£y $Al_2O_3$ (cÃ³ thÃªm cryolite) Ä‘á»ƒ sáº£n xuáº¥t nhÃ´m.\n- **Äiá»‡n phÃ¢n dung dá»‹ch**: Ãp dá»¥ng cho cÃ¡c kim loáº¡i trung bÃ¬nh vÃ  yáº¿u Ä‘á»©ng sau Al."
+          "**Phương pháp Nhiệt luyện:** Dùng các chất khử mạnh ($C, CO, H_2, Al$) để khử ion kim loại trong oxide ở nhiệt độ cao. Phương pháp này áp dụng cho các kim loại có tính khử trung bình và yếu (sau Al trong dãy điện hóa) như Zn, Fe, Sn, Pb, Cu...",
+          "**Phương pháp Thủy luyện:** Dùng dung dịch hòa tan quặng (thường là acid hoặc kiềm) sau đó dùng kim loại mạnh hơn để đẩy kim loại yếu hơn ra khỏi dung dịch muối. Ví dụ: Dùng Fe đẩy Cu ra khỏi dung dịch $CuSO_4$.",
+          "**Phương pháp Điện phân:** \n- **Điện phân nóng chảy**: Là phương pháp duy nhất để điều chế các kim loại hoạt động mạnh (kiềm, kiềm thổ, nhôm). Ví dụ: Điện phân nóng chảy $Al_2O_3$ (có thêm cryolite) để sản xuất nhôm.\n- **Điện phân dung dịch**: Áp dụng cho các kim loại trung bình và yếu đứng sau Al."
         ]
       }
     },
@@ -66,8 +66,8 @@
       "id": "mod7",
       "type": "warningBox",
       "content": {
-        "title": "LÆ°u Ã½ vá» phÆ°Æ¡ng phÃ¡p Nhiá»‡t nhÃ´m",
-        "content": "Pháº£n á»©ng nhiá»‡t nhÃ´m lÃ  má»™t dáº¡ng cá»§a nhiá»‡t luyá»‡n, sá»­ dá»¥ng bá»™t nhÃ´m ($Al$) lÃ m cháº¥t khá»­ máº¡nh Ä‘á»ƒ Ä‘iá»u cháº¿ cÃ¡c kim loáº¡i nhÆ° Fe, Cr tá»« oxide tÆ°Æ¡ng á»©ng á»Ÿ nhiá»‡t Ä‘á»™ ráº¥t cao. Pháº£n á»©ng nÃ y tá»a nhiá»‡t lÆ°á»£ng cá»±c lá»›n vÃ  thÆ°á»ng Ä‘Æ°á»£c dÃ¹ng cho cÃ¡c má»¥c Ä‘Ã­ch Ä‘áº·c biá»‡t nhÆ° hÃ n Ä‘Æ°á»ng ray.",
+        "title": "Lưu ý về phương pháp Nhiệt nhôm",
+        "content": "Phản ứng nhiệt nhôm là một dạng của nhiệt luyện, sử dụng bột nhôm ($Al$) làm chất khử mạnh để điều chế các kim loại như Fe, Cr từ oxide tương ứng ở nhiệt độ rất cao. Phản ứng này tỏa nhiệt lượng cực lớn và thường được dùng cho các mục đích đặc biệt như hàn đường ray.",
         "color": "orange"
       }
     }
@@ -75,36 +75,36 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "PhÆ°Æ¡ng phÃ¡p nÃ o sau Ä‘Ã¢y Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ Ä‘iá»u cháº¿ kim loáº¡i nhÃ´m (Al) trong cÃ´ng nghiá»‡p?",
+      "question": "Phương pháp nào sau đây được dùng để điều chế kim loại nhôm (Al) trong công nghiệp?",
       "options": [
-        "Nhiá»‡t luyá»‡n báº±ng khÃ­ CO khá»­ $Al_2O_3$.",
-        "Äiá»‡n phÃ¢n nÃ³ng cháº£y $Al_2O_3$.",
-        "Thá»§y luyá»‡n dÃ¹ng Zn Ä‘áº©y Al ra khá»i muá»‘i.",
-        "Äiá»‡n phÃ¢n dung dá»‹ch $AlCl_3$."
+        "Nhiệt luyện bằng khí CO khử $Al_2O_3$.",
+        "Điện phân nóng chảy $Al_2O_3$.",
+        "Thủy luyện dùng Zn đẩy Al ra khỏi muối.",
+        "Điện phân dung dịch $AlCl_3$."
       ],
       "correctAnswer": 1,
-      "explanation": "NhÃ´m lÃ  kim loáº¡i hoáº¡t Ä‘á»™ng máº¡nh, cÃ³ liÃªn káº¿t oxide ráº¥t bá»n vá»¯ng, do Ä‘Ã³ chá»‰ cÃ³ thá»ƒ Ä‘iá»u cháº¿ báº±ng phÆ°Æ¡ng phÃ¡p Ä‘iá»‡n phÃ¢n nÃ³ng cháº£y aluminum oxide."
+      "explanation": "Nhôm là kim loại hoạt động mạnh, có liên kết oxide rất bền vững, do đó chỉ có thể điều chế bằng phương pháp điện phân nóng chảy aluminum oxide."
     },
     {
       "id": "q2",
-      "question": "Trong phÆ°Æ¡ng phÃ¡p nhiá»‡t luyá»‡n, cháº¥t khá»­ nÃ o sau Ä‘Ã¢y KHÃ”NG Ä‘Æ°á»£c sá»­ dá»¥ng Ä‘á»ƒ Ä‘iá»u cháº¿ Fe tá»« $Fe_2O_3$?",
+      "question": "Trong phương pháp nhiệt luyện, chất khử nào sau đây KHÔNG được sử dụng để điều chế Fe từ $Fe_2O_3$?",
       "options": [
         "Cacbon (C).",
         "Cacbon monoxide (CO).",
         "Hydrogen (H2).",
-        "Äiá»‡n nÄƒng má»™t chiá»u."
+        "Điện năng một chiều."
       ],
       "correctAnswer": 3,
-      "explanation": "Nhiá»‡t luyá»‡n sá»­ dá»¥ng cÃ¡c tÃ¡c nhÃ¢n khá»­ hÃ³a há»c á»Ÿ nhiá»‡t Ä‘á»™ cao. Äiá»‡n nÄƒng má»™t chiá»u (Ä‘iá»‡n phÃ¢n) khÃ´ng Ä‘Æ°á»£c coi lÃ  tÃ¡c nhÃ¢n khá»­ cá»§a phÆ°Æ¡ng phÃ¡p nhiá»‡t luyá»‡n thÃ´ng thÆ°á»ng."
+      "explanation": "Nhiệt luyện sử dụng các tác nhân khử hóa học ở nhiệt độ cao. Điện năng một chiều (điện phân) không được coi là tác nhân khử của phương pháp nhiệt luyện thông thường."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Kim loáº¡i trong tá»± nhiÃªn vÃ  tÃ¡ch kim loáº¡i",
+      "title": "Bài giảng: Kim loại trong tự nhiên và tách kim loại",
       "url": "https://www.youtube.com/watch?v=4nRR7xtfi7E",
       "thumbnail": "https://img.youtube.com/vi/4nRR7xtfi7E/0.jpg",
-      "description": "SÆ¡ lÆ°á»£c vá» quáº·ng kim loáº¡i vÃ  cÃ¡c phÆ°Æ¡ng phÃ¡p luyá»‡n kim: nhiá»‡t luyá»‡n, thá»§y luyá»‡n, Ä‘iá»‡n phÃ¢n (VietJack)."
+      "description": "Sơ lược về quặng kim loại và các phương pháp luyện kim: nhiệt luyện, thủy luyện, điện phân (VietJack)."
     }
   ],
   "practiceModules": [],

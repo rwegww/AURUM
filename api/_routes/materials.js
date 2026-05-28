@@ -89,24 +89,24 @@ const validateMaterialPayload = (body) => {
   const fileType = normalizeFileType(body.file_type || body.fileType);
   const errors = {};
 
-  if (!title) errors.title = 'TiÃªu Ä‘á» lÃ  báº¯t buá»™c';
-  else if (title.length > MAX_TEXT_LENGTH.title) errors.title = `TiÃªu Ä‘á» tá»‘i Ä‘a ${MAX_TEXT_LENGTH.title} kÃ½ tá»±`;
+  if (!title) errors.title = 'Tiêu đề là bắt buộc';
+  else if (title.length > MAX_TEXT_LENGTH.title) errors.title = `Tiêu đề tối đa ${MAX_TEXT_LENGTH.title} ký tự`;
 
-  if (!category) errors.category = 'Danh má»¥c lÃ  báº¯t buá»™c';
-  else if (category.length > MAX_TEXT_LENGTH.category) errors.category = `Danh má»¥c tá»‘i Ä‘a ${MAX_TEXT_LENGTH.category} kÃ½ tá»±`;
+  if (!category) errors.category = 'Danh mục là bắt buộc';
+  else if (category.length > MAX_TEXT_LENGTH.category) errors.category = `Danh mục tối đa ${MAX_TEXT_LENGTH.category} ký tự`;
 
   if (description.length > MAX_TEXT_LENGTH.description) {
-    errors.description = `MÃ´ táº£ tá»‘i Ä‘a ${MAX_TEXT_LENGTH.description} kÃ½ tá»±`;
+    errors.description = `Mô tả tối đa ${MAX_TEXT_LENGTH.description} ký tự`;
   }
 
-  if (!fileUrl) errors.file_url = 'Tá»‡p há»c liá»‡u lÃ  báº¯t buá»™c';
+  if (!fileUrl) errors.file_url = 'Tệp học liệu là bắt buộc';
   else if (fileUrl.length > MAX_TEXT_LENGTH.fileUrl || !isValidHttpUrl(fileUrl)) {
-    errors.file_url = 'ÄÆ°á»ng dáº«n tá»‡p khÃ´ng há»£p lá»‡';
+    errors.file_url = 'Đường dẫn tệp không hợp lệ';
   }
 
-  if (!fileType) errors.file_type = 'Äá»‹nh dáº¡ng tá»‡p lÃ  báº¯t buá»™c';
+  if (!fileType) errors.file_type = 'Định dạng tệp là bắt buộc';
   else if (fileType.length > MAX_TEXT_LENGTH.fileType || !ALLOWED_FILE_TYPES.has(fileType)) {
-    errors.file_type = 'Äá»‹nh dáº¡ng tá»‡p khÃ´ng Ä‘Æ°á»£c há»— trá»£';
+    errors.file_type = 'Định dạng tệp không được hỗ trợ';
   }
 
     return {
@@ -142,7 +142,7 @@ router.get('/', async (req, res) => {
 
     res.json((data || []).map(normalizeMaterial));
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i táº£i danh sÃ¡ch tÃ i liá»‡u', error: err.message });
+    res.status(500).json({ message: 'Lỗi tải danh sách tài liệu', error: err.message });
   }
 });
 
@@ -150,12 +150,12 @@ router.get('/', async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     if (req.user.role !== 'teacher') {
-      return res.status(403).json({ message: 'Chá»‰ giÃ¡o viÃªn má»›i Ä‘Æ°á»£c upload há»c liá»‡u vÃ o thÆ° viá»‡n' });
+      return res.status(403).json({ message: 'Chỉ giáo viên mới được upload học liệu vào thư viện' });
     }
 
     const { values, errors } = validateMaterialPayload(req.body || {});
     if (Object.keys(errors).length > 0) {
-      return res.status(400).json({ message: 'Dá»¯ liá»‡u há»c liá»‡u khÃ´ng há»£p lá»‡', errors });
+      return res.status(400).json({ message: 'Dữ liệu học liệu không hợp lệ', errors });
     }
 
     const { data, error } = await supabase
@@ -167,7 +167,7 @@ router.post('/', auth, async (req, res) => {
     if (error) throw error;
     return res.status(201).json(normalizeMaterial(data));
   } catch (err) {
-    return res.status(500).json({ message: 'Lá»—i lÆ°u há»c liá»‡u vÃ o thÆ° viá»‡n', error: err.message });
+    return res.status(500).json({ message: 'Lỗi lưu học liệu vào thư viện', error: err.message });
   }
 });
 
@@ -190,7 +190,7 @@ router.get('/:id', async (req, res) => {
 
     res.json(normalizeMaterial(data));
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i táº£i chi tiáº¿t tÃ i liá»‡u', error: err.message });
+    res.status(500).json({ message: 'Lỗi tải chi tiết tài liệu', error: err.message });
   }
 });
 
@@ -218,7 +218,7 @@ router.post('/:id/download', async (req, res) => {
     if (error) throw error;
     res.json({ download_count: data.luot_tai });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i cáº­p nháº­t lÆ°á»£t táº£i tÃ i liá»‡u', error: err.message });
+    res.status(500).json({ message: 'Lỗi cập nhật lượt tải tài liệu', error: err.message });
   }
 });
 
@@ -230,7 +230,7 @@ router.post('/:id/feedback', auth, async (req, res) => {
 
     const normalizedRating = Number(rating);
     if (!content || !Number.isFinite(normalizedRating) || normalizedRating < 1 || normalizedRating > 5) {
-      return res.status(400).json({ message: 'Thiáº¿u ná»™i dung hoáº·c Ä‘Ã¡nh giÃ¡' });
+      return res.status(400).json({ message: 'Thiếu nội dung hoặc đánh giá' });
     }
 
     const { data, error } = await supabase
@@ -246,7 +246,7 @@ router.post('/:id/feedback', auth, async (req, res) => {
     if (error) throw error;
     res.status(201).json(normalizeMaterialFeedback(data[0]));
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i gá»­i pháº£n há»“i', error: err.message });
+    res.status(500).json({ message: 'Lỗi gửi phản hồi', error: err.message });
   }
 });
 
@@ -294,8 +294,8 @@ router.get('/:id/feedback', async (req, res) => {
     
     return res.json(phan_hois.map(normalizeMaterialFeedback));
   } catch (err) {
-    console.error('Lá»—i táº£i pháº£n há»“i:', err);
-    res.status(500).json({ message: 'Lá»—i táº£i pháº£n há»“i', error: err.message });
+    console.error('Lỗi tải phản hồi:', err);
+    res.status(500).json({ message: 'Lỗi tải phản hồi', error: err.message });
   }
 });
 
@@ -306,11 +306,11 @@ router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
     const { reply_content } = req.body;
 
     if (req.user.role !== 'admin' && req.user.role !== 'teacher') {
-      return res.status(403).json({ message: 'Chá»‰ admin hoáº·c giÃ¡o viÃªn má»›i cÃ³ quyá»n tráº£ lá»i.' });
+      return res.status(403).json({ message: 'Chỉ admin hoặc giáo viên mới có quyền trả lời.' });
     }
 
     if (!reply_content) {
-      return res.status(400).json({ message: 'Thiáº¿u ná»™i dung tráº£ lá»i.' });
+      return res.status(400).json({ message: 'Thiếu nội dung trả lời.' });
     }
 
     const { data, error } = await supabase
@@ -326,7 +326,7 @@ router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
     if (error) throw error;
     res.json(normalizeMaterialFeedback(data[0]));
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i gá»­i pháº£n há»“i', error: err.message });
+    res.status(500).json({ message: 'Lỗi gửi phản hồi', error: err.message });
   }
 });
 

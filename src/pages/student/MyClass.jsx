@@ -107,7 +107,7 @@ const MyClass = () => {
       });
       
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || t('common.error_joining_class', { defaultValue: 'Lá»—i tham gia lá»›p' }));
+      if (!res.ok) throw new Error(data.error || t('common.error_joining_class', { defaultValue: 'Lỗi tham gia lớp' }));
       
       setJoinCode('');
       setError('');
@@ -134,7 +134,7 @@ const MyClass = () => {
         setActiveQuiz(null);
       } else {
         const data = await res.json();
-        throw new Error(data.error || 'Ná»™p bÃ i tháº¥t báº¡i!');
+        throw new Error(data.error || 'Nộp bài thất bại!');
       }
     } catch (err) {
       console.error(err);
@@ -145,7 +145,7 @@ const MyClass = () => {
 
   const calculateScore = (questions, answers) => {
     const mcQuestions = questions.filter(q => (q.type || 'multiple_choice') === 'multiple_choice');
-    if (mcQuestions.length === 0) return null; // All essay â€” needs manual grading
+    if (mcQuestions.length === 0) return null; // All essay — needs manual grading
     
     let correctCount = 0;
     questions.forEach((q, idx) => {
@@ -175,12 +175,12 @@ const MyClass = () => {
   };
 
   const getFileIcon = (url) => {
-    if (!url) return 'ðŸ”—';
+    if (!url) return '🔗';
     const lowerUrl = url.toLowerCase();
-    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return 'ðŸ“•';
-    if (lowerUrl.includes('doc') || lowerUrl.includes('word') || lowerUrl.includes('docx')) return 'ðŸ“˜';
-    if (lowerUrl.includes('xls') || lowerUrl.includes('excel') || lowerUrl.includes('xlsx')) return 'ðŸ“—';
-    return 'ðŸ”—';
+    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return '📕';
+    if (lowerUrl.includes('doc') || lowerUrl.includes('word') || lowerUrl.includes('docx')) return '📘';
+    if (lowerUrl.includes('xls') || lowerUrl.includes('excel') || lowerUrl.includes('xlsx')) return '📗';
+    return '🔗';
   };
 
   const getFileLabel = (url) => {
@@ -277,7 +277,7 @@ const MyClass = () => {
           className="bg-white p-10 rounded-[40px] max-w-md w-full text-center border border-viet-border shadow-xl shadow-black/5"
         >
           <div className="w-20 h-20 bg-viet-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-4xl text-viet-green">ðŸ«</span>
+            <span className="text-4xl text-viet-green">🏫</span>
           </div>
           <h2 className="text-2xl font-black text-viet-text mb-2 uppercase tracking-tight">{t('my_class.empty.title')}</h2>
           <p className="text-sm font-medium text-viet-text-light mb-8">
@@ -309,7 +309,7 @@ const MyClass = () => {
     <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Lá»›p Sidebar */}
+        {/* Lớp Sidebar */}
         <div className="lg:col-span-3 space-y-4">
           <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">{t('my_class.sidebar.title')}</h2>
           {lop.map(cls => (
@@ -324,7 +324,7 @@ const MyClass = () => {
             >
               <h3 className={`text-lg font-black leading-tight ${selectedClass?.id === cls.id ? 'text-white' : 'text-viet-text'}`}>{cls.name}</h3>
               <p className={`text-[11px] font-bold uppercase tracking-wider ${selectedClass?.id === cls.id ? 'text-white/80' : 'text-viet-text-light'}`}>
-                {t('my_class.sidebar.teacher_prefix')} {cls.teacher?.username} â€¢ {t('my_class.sidebar.grade_label', { grade: cls.khoi_id || cls.gradeLevelId })}
+                {t('my_class.sidebar.teacher_prefix')} {cls.teacher?.username} • {t('my_class.sidebar.grade_label', { grade: cls.khoi_id || cls.gradeLevelId })}
               </p>
             </button>
           ))}
@@ -347,7 +347,7 @@ const MyClass = () => {
           </div>
         </div>
 
-        {/* Ná»™i dung chÃ­nh */}
+        {/* Nội dung chính */}
         {selectedClass && (
           <div className="lg:col-span-6 space-y-6">
             <header className="bg-white p-8 rounded-[32px] border border-viet-border flex flex-col gap-2 relative overflow-hidden">
@@ -362,7 +362,7 @@ const MyClass = () => {
               
               {posts.length === 0 ? (
                 <div className="bg-white border text-center border-viet-border border-dashed p-12 rounded-[32px]">
-                   <span className="text-4xl block mb-2 opacity-30">ðŸ“­</span>
+                   <span className="text-4xl block mb-2 opacity-30">📭</span>
                    <p className="text-viet-text-light font-bold text-sm">{t('my_class.feed.empty')}</p>
                 </div>
               ) : (
@@ -455,7 +455,7 @@ const MyClass = () => {
                               }}
                               className="w-full py-4 bg-viet-green text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all border-b-4 border-emerald-700"
                             >
-                              ðŸš€ {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
+                              🚀 {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
                             </button>
                           ) : (
                             <button 
@@ -474,7 +474,7 @@ const MyClass = () => {
           </div>
         )}
 
-        {/* Lá»‹ch há»c & KhÃ¡c (Right Sidebar) */}
+        {/* Lịch học & Khác (Right Sidebar) */}
         {selectedClass && (
           <div className="lg:col-span-3 space-y-6">
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
@@ -505,12 +505,12 @@ const MyClass = () => {
 
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span>ðŸ‘¥</span> {t('my_class.members.title', { defaultValue: 'Báº¡n cÃ¹ng lá»›p' })}
+                 <span>👥</span> {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
                </h3>
                
                <div className="space-y-3">
                  {members.length === 0 ? (
-                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'ChÆ°a cÃ³ thÃ nh viÃªn nÃ o' })}</p>
+                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
                  ) : (
                    members.map(m => (
                      <div key={m.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
@@ -543,7 +543,7 @@ const MyClass = () => {
                     {t('my_class.support.btn')}
                   </button>
                </div>
-               <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">ðŸ’¬</div>
+               <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">💬</div>
             </div>
 
             {/* Messaging Modal */}
@@ -606,7 +606,7 @@ const MyClass = () => {
                            {getFileLabel(viewingAssignment.media_url)}
                         </h3>
                         <p className="text-[10px] font-bold text-viet-text-light uppercase tracking-widest">
-                           {t('my_class.viewer.from')} {viewingAssignment.author?.username} â€¢ {t('my_class.viewer.deadline')} {viewingAssignment.deadline ? new Date(viewingAssignment.deadline).toLocaleString() : t('my_class.viewer.no_deadline')}
+                           {t('my_class.viewer.from')} {viewingAssignment.author?.username} • {t('my_class.viewer.deadline')} {viewingAssignment.deadline ? new Date(viewingAssignment.deadline).toLocaleString() : t('my_class.viewer.no_deadline')}
                         </p>
                      </div>
                   </div>
@@ -618,7 +618,7 @@ const MyClass = () => {
                         rel="noreferrer"
                         className="hidden sm:flex px-6 py-3 bg-white border-2 border-slate-200 text-viet-text font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-slate-50 transition-all items-center gap-2"
                      >
-                        <span>ðŸ“¥</span> {t('my_class.viewer.download')}
+                        <span>📥</span> {t('my_class.viewer.download')}
                      </a>
                      <button 
                         onClick={() => setViewingAssignment(null)} 
@@ -650,7 +650,7 @@ const MyClass = () => {
                          rel="noreferrer"
                          className="px-6 py-3 bg-white/90 backdrop-blur shadow-xl border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all flex items-center gap-2"
                        >
-                         <span>ðŸ”—</span> {t('my_class.viewer.tab_fallback')}
+                         <span>🔗</span> {t('my_class.viewer.tab_fallback')}
                        </a>
                     </div>
                   )}
@@ -662,7 +662,7 @@ const MyClass = () => {
                     target="_blank" 
                     rel="noreferrer"
                     className="flex-1 py-4 bg-viet-text text-white font-black text-[10px] uppercase tracking-widest rounded-xl text-center"
-                  >{t('my_class.viewer.download')} ðŸ“¥</a>
+                  >{t('my_class.viewer.download')} 📥</a>
                </div>
             </motion.div>
           </div>
@@ -693,7 +693,7 @@ const MyClass = () => {
                       <div className="flex items-center gap-4 pt-8 pb-4">
                         <div className="h-px flex-1 bg-slate-200"></div>
                         <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">
-                          {q.part === 1 ? 'Pháº§n I - Tráº¯c nghiá»‡m' : q.part === 2 ? 'Pháº§n II - ÄÃºng/Sai' : q.part === 3 ? 'Pháº§n III - Tráº£ lá»i ngáº¯n' : `Pháº§n ${q.part}`}
+                          {q.part === 1 ? 'Phần I - Trắc nghiệm' : q.part === 2 ? 'Phần II - Đúng/Sai' : q.part === 3 ? 'Phần III - Trả lời ngắn' : `Phần ${q.part}`}
                         </h3>
                         <div className="h-px flex-1 bg-slate-200"></div>
                       </div>
@@ -742,7 +742,7 @@ const MyClass = () => {
                                 <button 
                                   onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: { ...(quizAnswers[qIdx] || {}), [key]: true } })}
                                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition-all ${quizAnswers[qIdx]?.[key] === true ? 'bg-viet-green text-white shadow-md shadow-viet-green/20' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
-                                >ÄÃºng</button>
+                                >Đúng</button>
                                 <button 
                                   onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: { ...(quizAnswers[qIdx] || {}), [key]: false } })}
                                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition-all ${quizAnswers[qIdx]?.[key] === false ? 'bg-red-500 text-white shadow-md shadow-red-500/20' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}

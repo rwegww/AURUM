@@ -41,15 +41,15 @@ export default function LibraryTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="ThÆ° viá»‡n"
-        title="ThÆ° viá»‡n há»c liá»‡u"
-        subtitle="TÃ i liá»‡u, Ä‘á»“ há»a thÃ´ng tin, sÆ¡ Ä‘á»“ tÆ° duy vÃ  há»c liá»‡u giÃ¡o viÃªn Ä‘Ã£ Ä‘Äƒng."
-        right={<Pill label={`${hoc_lieu.length} má»¥c`} icon="documents-outline" color={colors.green} />}
+        eyebrow="Thư viện"
+        title="Thư viện học liệu"
+        subtitle="Tài liệu, đồ họa thông tin, sơ đồ tư duy và học liệu giáo viên đã đăng."
+        right={<Pill label={`${hoc_lieu.length} mục`} icon="documents-outline" color={colors.green} />}
       />
 
       <TextField
         icon="search-outline"
-        placeholder="TÃ¬m tÃ i liá»‡u"
+        placeholder="Tìm tài liệu"
         value={search}
         onChangeText={setSearch}
       />
@@ -59,7 +59,7 @@ export default function LibraryTab() {
           onPress={() => setCategory("")}
           style={[styles.categoryChip, category === "" ? styles.categoryActive : null]}
         >
-          <Text style={[styles.categoryText, category === "" ? styles.categoryTextActive : null]}>Táº¥t cáº£</Text>
+          <Text style={[styles.categoryText, category === "" ? styles.categoryTextActive : null]}>Tất cả</Text>
         </Pressable>
         {knownCategories.map((item) => (
           <Pressable
@@ -74,14 +74,14 @@ export default function LibraryTab() {
         ))}
       </View>
 
-      <SectionTitle title="Há»c liá»‡u" actionLabel="Táº£i láº¡i" onAction={hoc_lieuResource.reload} />
+      <SectionTitle title="Học liệu" actionLabel="Tải lại" onAction={hoc_lieuResource.reload} />
 
       {hoc_lieuResource.loading && !hoc_lieuResource.data ? (
-        <LoadingState label="Äang táº£i thÆ° viá»‡n..." />
+        <LoadingState label="Đang tải thư viện..." />
       ) : hoc_lieuResource.error ? (
         <ErrorState message={hoc_lieuResource.error.message} onRetry={hoc_lieuResource.reload} />
       ) : hoc_lieu.length === 0 ? (
-        <EmptyState icon="folder-open-outline" title="KhÃ´ng tÃ¬m tháº¥y tÃ i liá»‡u" subtitle="Thá»­ Ä‘á»•i tá»« khÃ³a hoáº·c bá» lá»c danh má»¥c." />
+        <EmptyState icon="folder-open-outline" title="Không tìm thấy tài liệu" subtitle="Thử đổi từ khóa hoặc bỏ lọc danh mục." />
       ) : (
         <View style={styles.stack}>
           {hoc_lieu.map((item) => (
@@ -89,7 +89,7 @@ export default function LibraryTab() {
               key={item.id}
               icon={item.file_type === "pdf" ? "document-text-outline" : "image-outline"}
               title={item.title}
-              subtitle={`${item.category || "Há»c liá»‡u"} Â· ${item.view_count || 0} lÆ°á»£t xem`}
+              subtitle={`${item.category || "Học liệu"} · ${item.view_count || 0} lượt xem`}
               color={colors.green}
               onPress={() => router.push({ pathname: "/library/[id]", params: { id: item.id } })}
             />

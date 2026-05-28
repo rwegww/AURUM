@@ -79,7 +79,7 @@ router.get('/chemicals', async (req, res) => {
     if (error) throw error;
     res.status(200).json((data || []).map(normalizeChemical));
   } catch (error) {
-    console.error('âŒ Error fetching chemicals:', error);
+    console.error('❌ Error fetching chemicals:', error);
     res.status(500).json({ message: 'Error fetching chemicals', error: error.message });
   }
 });
@@ -95,7 +95,7 @@ router.get('/reactions', async (req, res) => {
     if (error) throw error;
     res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('âŒ Error fetching reactions:', error);
+    console.error('❌ Error fetching reactions:', error);
     res.status(500).json({ message: 'Error fetching reactions', error: error.message });
   }
 });
@@ -116,7 +116,7 @@ router.get('/balancing/search', async (req, res) => {
     if (error) throw error;
     res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('âŒ Error searching balancing equations:', error);
+    console.error('❌ Error searching balancing equations:', error);
     res.status(500).json({ message: 'Error searching equations' });
   }
 });
@@ -136,7 +136,7 @@ router.get('/balancing/:nodeId', async (req, res) => {
     // but we return whatever we have.
     res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('âŒ Error fetching balancing questions:', error);
+    console.error('❌ Error fetching balancing questions:', error);
     res.status(500).json({ message: 'Error fetching questions', error: error.message });
   }
 });
@@ -149,7 +149,7 @@ router.get('/balancing/progress', auth, async (req, res) => {
     }
     res.status(200).json(req.user.balancingProgress);
   } catch (error) {
-    console.error('âŒ Error fetching balancing progress:', error);
+    console.error('❌ Error fetching balancing progress:', error);
     res.status(500).json({ message: 'Error fetching progress' });
   }
 });
@@ -172,7 +172,7 @@ router.post('/balancing/progress', auth, async (req, res) => {
 
     res.status(200).json(updatedUser.balancingProgress);
   } catch (error) {
-    console.error('âŒ Error updating balancing progress:', error);
+    console.error('❌ Error updating balancing progress:', error);
     res.status(500).json({ message: 'Error updating progress' });
   }
 });
@@ -201,7 +201,7 @@ router.post('/unlock', auth, async (req, res) => {
       if (!unlockedChemicals.includes(f)) {
         unlockedChemicals.push(f);
         changed = true;
-        console.log(`ðŸ”“ Unlocking ${f} for user ${req.user.id}`);
+        console.log(`🔓 Unlocking ${f} for user ${req.user.id}`);
       }
     });
 
@@ -213,13 +213,13 @@ router.post('/unlock', auth, async (req, res) => {
       try {
         await Mission.updateProgress(req.user.id, 'reaction', 1);
       } catch (err) {
-        console.warn('âš ï¸ Failed to update mission progress:', err.message);
+        console.warn('⚠️ Failed to update mission progress:', err.message);
       }
     }
 
     res.status(200).json({ unlockedChemicals });
   } catch (error) {
-    console.error('âŒ Error unlocking chemical:', error);
+    console.error('❌ Error unlocking chemical:', error);
     res.status(500).json({ message: 'Error unlocking chemical', error: error.message });
   }
 });

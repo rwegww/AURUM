@@ -4,17 +4,17 @@
   "lessonId": 20,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 20: Ã”n táº­p chÆ°Æ¡ng 6",
-  "chapter": "ChÆ°Æ¡ng 6: Tá»‘c Ä‘á»™ pháº£n á»©ng",
+  "title": "Bài 20: Ôn tập chương 6",
+  "chapter": "Chương 6: Tốc độ phản ứng",
   "order": 20,
   "isPremium": false,
-  "description": "Luyá»‡n táº­p á»©ng dá»¥ng tÄƒng giáº£m tá»‘c Ä‘á»™ pháº£n á»©ng trong thá»±c tiá»…n.",
+  "description": "Luyện tập ứng dụng tăng giảm tốc độ phản ứng trong thực tiễn.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. á»¨ng dá»¥ng kiá»ƒm soÃ¡t tá»‘c Ä‘á»™ pháº£n á»©ng trong thá»±c tiá»…n",
+        "text": "1. Ứng dụng kiểm soát tốc độ phản ứng trong thực tiễn",
         "level": "h2"
       }
     },
@@ -24,9 +24,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**TÄƒng tá»‘c Ä‘á»™ pháº£n á»©ng**: Sá»­ dá»¥ng quáº¡t thá»•i khÃ´ng khÃ­ vÃ o lÃ² than (tÄƒng ná»“ng Ä‘á»™ $O_2$), cháº» nhá» cá»§i hoáº·c nghiá»n má»‹n quáº·ng (tÄƒng diá»‡n tÃ­ch tiáº¿p xÃºc), Ä‘un náº¥u thá»±c pháº©m á»Ÿ nhiá»‡t Ä‘á»™ cao hoáº·c dÃ¹ng ná»“i Ã¡p suáº¥t (tÄƒng nhiá»‡t Ä‘á»™ and Ã¡p suáº¥t).",
-          "**Giáº£m tá»‘c Ä‘á»™ pháº£n á»©ng**: Báº£o quáº£n thá»±c pháº©m trong tá»§ láº¡nh hoáº·c kho láº¡nh (giáº£m nhiá»‡t Ä‘á»™ lÃ m cháº­m quÃ¡ trÃ¬nh Ã´i thiu), sá»­ dá»¥ng cháº¥t á»©c cháº¿ Ä‘á»ƒ chá»‘ng Äƒn mÃ²n kim loáº¡i, sÆ¡n phá»§ bá» máº·t Ä‘á»ƒ ngÄƒn tiáº¿p xÃºc vá»›i mÃ´i trÆ°á»ng.",
-          "**Sá»­ dá»¥ng xÃºc tÃ¡c**: DÃ¹ng cÃ¡c loáº¡i men trong sáº£n xuáº¥t rÆ°á»£u, giáº¥m, sá»¯a chua; sá»­ dá»¥ng cÃ¡c bá»™ chuyá»ƒn Ä‘á»•i xÃºc tÃ¡c trong á»‘ng xáº£ Ã´ tÃ´ Ä‘á»ƒ giáº£m thiá»ƒu khÃ­ tháº£i Ä‘á»™c háº¡i."
+          "**Tăng tốc độ phản ứng**: Sử dụng quạt thổi không khí vào lò than (tăng nồng độ $O_2$), chẻ nhỏ củi hoặc nghiền mịn quặng (tăng diện tích tiếp xúc), đun nấu thực phẩm ở nhiệt độ cao hoặc dùng nồi áp suất (tăng nhiệt độ and áp suất).",
+          "**Giảm tốc độ phản ứng**: Bảo quản thực phẩm trong tủ lạnh hoặc kho lạnh (giảm nhiệt độ làm chậm quá trình ôi thiu), sử dụng chất ức chế để chống ăn mòn kim loại, sơn phủ bề mặt để ngăn tiếp xúc với môi trường.",
+          "**Sử dụng xúc tác**: Dùng các loại men trong sản xuất rượu, giấm, sữa chua; sử dụng các bộ chuyển đổi xúc tác trong ống xả ô tô để giảm thiểu khí thải độc hại."
         ]
       }
     },
@@ -34,7 +34,7 @@
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Tá»•ng káº¿t phÆ°Æ¡ng phÃ¡p tÃ­nh toÃ¡n",
+        "text": "2. Tổng kết phương pháp tính toán",
         "level": "h2"
       }
     },
@@ -42,8 +42,8 @@
       "id": "mod4",
       "type": "infoBox",
       "content": {
-        "title": "Má»‘i liÃªn há»‡ giá»¯a cÃ¡c cháº¥t trong pháº£n á»©ng",
-        "content": "Äá»‘i vá»›i pháº£n á»©ng tá»•ng quÃ¡t: $aA + bB \\rightarrow cC + dD$, tá»‘c Ä‘á»™ pháº£n á»©ng trung bÃ¬nh cÃ³ thá»ƒ tÃ­nh theo báº¥t ká»³ cháº¥t nÃ o theo biá»ƒu thá»©c:\\n$$\\bar{v} = -\\frac{1}{a} \\frac{\\Delta [A]}{\\Delta t} = -\\frac{1}{b} \\frac{\\Delta [B]}{\\Delta t} = \\frac{1}{c} \\frac{\\Delta [C]}{\\Delta t} = \\frac{1}{d} \\frac{\\Delta [D]}{\\Delta t}$$\\nLÆ°u Ã½ dáº¥u Ã¢m (-) dÃ nh cho cháº¥t tham gia (ná»“ng Ä‘á»™ giáº£m) and dáº¥u dÆ°Æ¡ng (+) dÃ nh cho sáº£n pháº©m (ná»“ng Ä‘á»™ tÄƒng).",
+        "title": "Mối liên hệ giữa các chất trong phản ứng",
+        "content": "Đối với phản ứng tổng quát: $aA + bB \\rightarrow cC + dD$, tốc độ phản ứng trung bình có thể tính theo bất kỳ chất nào theo biểu thức:\\n$$\\bar{v} = -\\frac{1}{a} \\frac{\\Delta [A]}{\\Delta t} = -\\frac{1}{b} \\frac{\\Delta [B]}{\\Delta t} = \\frac{1}{c} \\frac{\\Delta [C]}{\\Delta t} = \\frac{1}{d} \\frac{\\Delta [D]}{\\Delta t}$$\\nLưu ý dấu âm (-) dành cho chất tham gia (nồng độ giảm) and dấu dương (+) dành cho sản phẩm (nồng độ tăng).",
         "color": "blue"
       }
     }
@@ -52,10 +52,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Ã”n táº­p chÆ°Æ¡ng 6",
+      "title": "Bài giảng: Ôn tập chương 6",
       "url": "https://www.youtube.com/watch?v=LKnym_nPwrg",
       "thumbnail": "https://img.youtube.com/vi/LKnym_nPwrg/0.jpg",
-      "description": "Tá»•ng há»£p cÃ¡c quy táº¯c vá» tá»‘c Ä‘á»™ pháº£n á»©ng and bÃ i táº­p tÃ­nh toÃ¡n liÃªn quan (VietJack)."
+      "description": "Tổng hợp các quy tắc về tốc độ phản ứng and bài tập tính toán liên quan (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -65,60 +65,60 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Táº¡i sao thá»©c Äƒn trong tá»§ láº¡nh lÃ¢u há»ng hÆ¡n?",
+        "question": "Tại sao thức ăn trong tủ lạnh lâu hỏng hơn?",
         "options": [
-          "Nhiá»‡t Ä‘á»™ tháº¥p lÃ m giáº£m tá»‘c Ä‘á»™ pháº£n á»©ng phÃ¢n há»§y",
-          "Tá»§ láº¡nh cÃ³ cháº¥t diá»‡t khuáº©n",
-          "Tá»§ láº¡nh tá»‘i tÄƒm",
-          "Tá»§ láº¡nh khÃ´ rÃ¡o"
+          "Nhiệt độ thấp làm giảm tốc độ phản ứng phân hủy",
+          "Tủ lạnh có chất diệt khuẩn",
+          "Tủ lạnh tối tăm",
+          "Tủ lạnh khô ráo"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Táº¡i sao nÃ©n khÃ­ trong Ä‘á»™ng cÆ¡ láº¡i giÃºp pháº£n á»©ng chÃ¡y nhanh hÆ¡n?",
+        "question": "Tại sao nén khí trong động cơ lại giúp phản ứng cháy nhanh hơn?",
         "options": [
-          "TÄƒng Ã¡p suáº¥t lÃ m tÄƒng ná»“ng Ä‘á»™ cháº¥t khÃ­",
-          "LÃ m khÃ­ nÃ³ng lÃªn",
-          "LÃ m khÃ­ chuyá»ƒn tráº¡ng thÃ¡i",
-          "Giáº£m nhiá»‡t Ä‘á»™"
+          "Tăng áp suất làm tăng nồng độ chất khí",
+          "Làm khí nóng lên",
+          "Làm khí chuyển trạng thái",
+          "Giảm nhiệt độ"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Ã nghÄ©a cá»§a viá»‡c thá»•i khÃ´ng khÃ­ vÃ o lÃ² than lÃ :",
+        "question": "Ý nghĩa của việc thổi không khí vào lò than là:",
         "options": [
-          "TÄƒng ná»“ng Ä‘á»™ Oxi",
-          "LÃ m lÃ² nguá»™i bá»›t",
-          "LÃ m sáº¡ch tro",
-          "Tiáº¿t kiá»‡m than"
+          "Tăng nồng độ Oxi",
+          "Làm lò nguội bớt",
+          "Làm sạch tro",
+          "Tiết kiệm than"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Cháº¥t xÃºc tÃ¡c cÃ³ tÃ¡c dá»¥ng:",
+        "question": "Chất xúc tác có tác dụng:",
         "options": [
-          "LÃ m giáº£m nÄƒng lÆ°á»£ng hoáº¡t hÃ³a",
-          "Tham gia vÃ o sáº£n pháº©m",
-          "Bá»‹ tiÃªu hao sau pháº£n á»©ng",
-          "LÃ m thay Ä‘á»•i nhiá»‡t pháº£n á»©ng"
+          "Làm giảm năng lượng hoạt hóa",
+          "Tham gia vào sản phẩm",
+          "Bị tiêu hao sau phản ứng",
+          "Làm thay đổi nhiệt phản ứng"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Diá»‡n tÃ­ch bá» máº·t tiáº¿p xÃºc cÃ ng lá»›n thÃ¬ tá»‘c Ä‘á»™ pháº£n á»©ng:",
+        "question": "Diện tích bề mặt tiếp xúc càng lớn thì tốc độ phản ứng:",
         "options": [
-          "CÃ ng nhanh",
-          "CÃ ng cháº­m",
-          "KhÃ´ng Ä‘á»•i",
-          "Biáº¿n máº¥t"
+          "Càng nhanh",
+          "Càng chậm",
+          "Không đổi",
+          "Biến mất"
         ],
         "correctAnswer": 0,
         "points": 10

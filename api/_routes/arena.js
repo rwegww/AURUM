@@ -261,7 +261,7 @@ const getQuestion = async (questionId) => {
   if (error) throw error;
   const question = normalizeQuestionRow(data);
   if (!isPlayableMiniGameQuestion(question)) {
-    throw new Error('CÃ¢u há»i Arena khÃ´ng cÃ³ payload mini game há»£p lá»‡.');
+    throw new Error('Câu hỏi Arena không có payload mini game hợp lệ.');
   }
   return question;
 };
@@ -278,7 +278,7 @@ const upsertRoomPlayer = async (roomId, user, status = 'joined') => {
     .upsert({
       phong_dau_id: roomId,
       nguoi_dung_id: user.id,
-      username: user.username || 'áº¨n danh',
+      username: user.username || 'Ẩn danh',
       avatar_seed: user.avatarSeed || user.avatar_seed || user.username || 'Aurum',
       status,
       xem_cuoi_luc: new Date().toISOString(),
@@ -343,7 +343,7 @@ const ensureRoomQuestionSet = async (room) => {
   const questions = await fetchCandidateQuestions(room.difficulty);
   const selected = selectQuestionSet(questions);
   if (selected.length === 0) {
-    throw new Error('ChÆ°a cÃ³ cÃ¢u há»i mini game Arena Ä‘ang hoáº¡t Ä‘á»™ng.');
+    throw new Error('Chưa có câu hỏi mini game Arena đang hoạt động.');
   }
 
   const { data: updatedRoom, error } = await supabase
@@ -474,7 +474,7 @@ const recordArenaStats = async (room, players, winnerUserId) => {
     await supabase.from('lich_su_dau').insert([{
       nguoi_dung_id: player.nguoi_dung_id,
       phong_dau_id: room.id,
-      ten_doi_thu: isDraw ? 'Äáº¥u trÆ°á»ng Arena' : (winner?.username || 'Äáº¥u trÆ°á»ng Arena'),
+      ten_doi_thu: isDraw ? 'Đấu trường Arena' : (winner?.username || 'Đấu trường Arena'),
       ket_qua: result,
       diem: player.score || 0,
       diem_thay_doi: ptsChange,
@@ -598,7 +598,7 @@ router.post('/create', auth, async (req, res) => {
     await upsertRoomPlayer(newRoom.id, req.user, is_practice ? 'ready' : 'joined');
     res.status(201).json({ success: true, room: normalizeRoomRow(newRoom) });
   } catch (error) {
-    console.error('Lá»—i táº¡o phÃ²ng Arena:', error);
+    console.error('Lỗi tạo phòng Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -606,12 +606,12 @@ router.post('/create', auth, async (req, res) => {
 router.post('/join', auth, async (req, res) => {
   try {
     const { phong_dau_id } = req.body || {};
-    if (!phong_dau_id) return res.status(400).json({ success: false, message: 'Thiáº¿u mÃ£ phÃ²ng.' });
+    if (!phong_dau_id) return res.status(400).json({ success: false, message: 'Thiếu mã phòng.' });
 
     const room = await getRoom(phong_dau_id);
-    if (room.is_practice) return res.status(400).json({ success: false, message: 'PhÃ²ng luyá»‡n táº­p khÃ´ng cho tham gia.' });
+    if (room.is_practice) return res.status(400).json({ success: false, message: 'Phòng luyện tập không cho tham gia.' });
     if (room.status !== 'waiting') {
-      return res.status(400).json({ success: false, message: 'PhÃ²ng nÃ y Ä‘ang thi Ä‘áº¥u hoáº·c Ä‘Ã£ káº¿t thÃºc.' });
+      return res.status(400).json({ success: false, message: 'Phòng này đang thi đấu hoặc đã kết thúc.' });
     }
 
     const { data: existingPlayer } = await supabase
@@ -626,7 +626,7 @@ router.post('/join', auth, async (req, res) => {
     }
 
     if ((room.current_players || 0) >= (room.max_players || 2)) {
-      return res.status(400).json({ success: false, message: 'PhÃ²ng Ä‘Ã£ Ä‘áº§y.' });
+      return res.status(400).json({ success: false, message: 'Phòng đã đầy.' });
     }
 
     const { data: updatedRoomData, error: updateError } = await supabase
@@ -634,12 +634,12 @@ router.post('/join', auth, async (req, res) => {
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
-    if (!updatedRoom) return res.status(400).json({ success: false, message: 'PhÃ²ng Ä‘Ã£ Ä‘áº§y hoáº·c khÃ´ng cÃ²n chá»—.' });
+    if (!updatedRoom) return res.status(400).json({ success: false, message: 'Phòng đã đầy hoặc không còn chỗ.' });
 
     await upsertRoomPlayer(phong_dau_id, req.user, 'joined');
     res.status(200).json({ success: true, room: updatedRoom });
   } catch (error) {
-    console.error('Lá»—i tham gia phÃ²ng Arena:', error);
+    console.error('Lỗi tham gia phòng Arena:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -662,7 +662,7 @@ router.post('/find-match', auth, async (req, res) => {
     const normalizedRooms = (rooms || []).map(normalizeRoomRow);
     const roomToJoin = normalizedRooms.find((room) => (room.current_players || 0) < (room.max_players || 2));
     if (!roomToJoin) {
-      return res.status(200).json({ success: true, found: false, message: 'Äang xáº¿p tráº­n...' });
+      return res.status(200).json({ success: true, found: false, message: 'Đang xếp trận...' });
     }
 
     const { data: updatedRoomData, error: updateError } = await supabase
@@ -670,12 +670,12 @@ router.post('/find-match', auth, async (req, res) => {
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
-    if (!updatedRoom) return res.status(200).json({ success: true, found: false, message: 'Äang xáº¿p tráº­n...' });
+    if (!updatedRoom) return res.status(200).json({ success: true, found: false, message: 'Đang xếp trận...' });
 
     await upsertRoomPlayer(roomToJoin.id, req.user, 'joined');
     return res.status(200).json({ success: true, room: updatedRoom, found: true });
   } catch (error) {
-    console.error('Lá»—i tÃ¬m tráº­n:', error);
+    console.error('Lỗi tìm trận:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -686,7 +686,7 @@ router.get('/questions/:difficulty', async (req, res) => {
     const selected = selectQuestionSet(questions).map((question) => sanitizeQuestion(question));
     res.status(200).json({ success: true, questions: selected });
   } catch (error) {
-    console.error('Lá»—i táº£i cÃ¢u há»i Arena:', error);
+    console.error('Lỗi tải câu hỏi Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -695,7 +695,7 @@ router.get('/realtime-token', auth, async (req, res) => {
   try {
     const secret = process.env.SUPABASE_JWT_SECRET || (process.env.NODE_ENV !== 'production' ? process.env.JWT_SECRET : null);
     if (!secret) {
-      return res.status(500).json({ success: false, message: 'Thiáº¿u SUPABASE_JWT_SECRET Ä‘á»ƒ cáº¥p realtime token.' });
+      return res.status(500).json({ success: false, message: 'Thiếu SUPABASE_JWT_SECRET để cấp realtime token.' });
     }
 
     const token = jwt.sign(
@@ -710,7 +710,7 @@ router.get('/realtime-token', auth, async (req, res) => {
 
     res.json({ success: true, token, expiresIn: 900 });
   } catch (error) {
-    console.error('Lá»—i cáº¥p realtime token:', error);
+    console.error('Lỗi cấp realtime token:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -723,18 +723,18 @@ router.post('/realtime-token', auth, async (req, res) => {
 router.post('/room/:id/start', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
-    if (room.status === 'finished') return res.status(400).json({ success: false, message: 'Tráº­n Ä‘Ã£ káº¿t thÃºc.' });
+    if (room.status === 'finished') return res.status(400).json({ success: false, message: 'Trận đã kết thúc.' });
     if (room.status === 'playing') {
       return res.json({ success: true, state: await buildRoomState(room, req.userId) });
     }
     if (room.chu_phong_id !== req.userId) {
-      return res.status(403).json({ success: false, message: 'Chá»‰ chá»§ phÃ²ng Ä‘Æ°á»£c báº¯t Ä‘áº§u tráº­n.' });
+      return res.status(403).json({ success: false, message: 'Chỉ chủ phòng được bắt đầu trận.' });
     }
 
     const players = await getPlayers(room.id);
     const playerCount = Math.max(players.length, room.current_players || 1);
     if (!room.is_practice && playerCount < (room.max_players || 2)) {
-      return res.status(400).json({ success: false, message: 'ChÆ°a Ä‘á»§ ngÆ°á»i chÆ¡i Ä‘á»ƒ báº¯t Ä‘áº§u.' });
+      return res.status(400).json({ success: false, message: 'Chưa đủ người chơi để bắt đầu.' });
     }
 
     const ensured = await ensureRoomQuestionSet(room);
@@ -765,7 +765,7 @@ router.post('/room/:id/start', auth, async (req, res) => {
 
   res.json({ success: true, state: await buildRoomState(normalizeRoomRow(startedRoom), req.userId) });
   } catch (error) {
-    console.error('Lá»—i báº¯t Ä‘áº§u tráº­n Arena:', error);
+    console.error('Lỗi bắt đầu trận Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -775,7 +775,7 @@ router.get('/room/:id/state', auth, async (req, res) => {
     const room = await getRoom(req.params.id);
     res.json({ success: true, state: await buildRoomState(room, req.userId) });
   } catch (error) {
-    console.error('Lá»—i láº¥y tráº¡ng thÃ¡i phÃ²ng Arena:', error);
+    console.error('Lỗi lấy trạng thái phòng Arena:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -784,16 +784,16 @@ router.post('/room/:id/answer', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
     if (room.status !== 'playing') {
-      return res.status(400).json({ success: false, message: 'PhÃ²ng chÆ°a á»Ÿ tráº¡ng thÃ¡i thi Ä‘áº¥u.' });
+      return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
     }
 
     const endsAt = room.round_ends_at ? new Date(room.round_ends_at).getTime() : 0;
     if (endsAt && Date.now() > endsAt + 1000) {
-      return res.status(400).json({ success: false, message: 'VÃ²ng chÆ¡i Ä‘Ã£ háº¿t thá»i gian.' });
+      return res.status(400).json({ success: false, message: 'Vòng chơi đã hết thời gian.' });
     }
 
     const question = await currentQuestionForRoom(room);
-    if (!question) return res.status(400).json({ success: false, message: 'KhÃ´ng tÃ¬m tháº¥y cÃ¢u há»i hiá»‡n táº¡i.' });
+    if (!question) return res.status(400).json({ success: false, message: 'Không tìm thấy câu hỏi hiện tại.' });
 
     const roundIndex = room.current_round_index || 0;
     const { data: duplicate, error: duplicateError } = await supabase
@@ -806,7 +806,7 @@ router.post('/room/:id/answer', auth, async (req, res) => {
 
     if (duplicateError) throw duplicateError;
     if (duplicate) {
-      return res.status(409).json({ success: false, message: 'Báº¡n Ä‘Ã£ tráº£ lá»i vÃ²ng nÃ y.' });
+      return res.status(409).json({ success: false, message: 'Bạn đã trả lời vòng này.' });
     }
 
     const answerPayload = req.body || {};
@@ -836,7 +836,7 @@ router.post('/room/:id/answer', auth, async (req, res) => {
       state: await buildRoomState(advancedRoom, req.userId),
     });
   } catch (error) {
-    console.error('Lá»—i ná»™p Ä‘Ã¡p Ã¡n Arena:', error);
+    console.error('Lỗi nộp đáp án Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -845,17 +845,17 @@ router.post('/room/:id/advance', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
     if (room.status !== 'playing') {
-      return res.status(400).json({ success: false, message: 'PhÃ²ng chÆ°a á»Ÿ tráº¡ng thÃ¡i thi Ä‘áº¥u.' });
+      return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
     }
 
     if (!(await canAdvanceRound(room))) {
-      return res.status(400).json({ success: false, message: 'ChÆ°a thá»ƒ chuyá»ƒn vÃ²ng vÃ¬ cÃ²n thá»i gian hoáº·c cÃ²n ngÆ°á»i chÆ°a tráº£ lá»i.' });
+      return res.status(400).json({ success: false, message: 'Chưa thể chuyển vòng vì còn thời gian hoặc còn người chưa trả lời.' });
     }
 
     const advancedRoom = await advanceRoomRound(room);
     res.json({ success: true, state: await buildRoomState(advancedRoom, req.userId) });
   } catch (error) {
-    console.error('Lá»—i chuyá»ƒn vÃ²ng Arena:', error);
+    console.error('Lỗi chuyển vòng Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -891,7 +891,7 @@ router.post('/match-result', auth, async (req, res) => {
     await supabase.from('lich_su_dau').insert([{
       nguoi_dung_id: req.userId,
       phong_dau_id: phong_dau_id || null,
-      ten_doi_thu: opponent_name || 'Äá»‘i thá»§ áº©n danh',
+      ten_doi_thu: opponent_name || 'Đối thủ ẩn danh',
       ket_qua: result,
       diem: score || 0,
       diem_thay_doi: ptsChange,
@@ -912,7 +912,7 @@ router.post('/match-result', auth, async (req, res) => {
 
     res.json({ success: true, stats: newStats, ptsChange });
   } catch (error) {
-    console.error('Lá»—i ghi káº¿t quáº£ tráº­n Ä‘áº¥u:', error);
+    console.error('Lỗi ghi kết quả trận đấu:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -943,7 +943,7 @@ router.get('/leaderboard', async (req, res) => {
 
     res.json({ success: true, leaderboard });
   } catch (error) {
-    console.error('Lá»—i táº£i báº£ng xáº¿p háº¡ng:', error);
+    console.error('Lỗi tải bảng xếp hạng:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -967,7 +967,7 @@ router.get('/my-battles', auth, async (req, res) => {
     });
     res.json({ success: true, battles: formattedBattles });
   } catch (error) {
-    console.error('Lá»—i táº£i lá»‹ch sá»­ tráº­n Ä‘áº¥u:', error);
+    console.error('Lỗi tải lịch sử trận đấu:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -976,7 +976,7 @@ router.patch('/save-avatar', auth, async (req, res) => {
   try {
     const { seed } = req.body || {};
     if (!seed || typeof seed !== 'string') {
-      return res.status(400).json({ success: false, message: 'Thiáº¿u avatar seed' });
+      return res.status(400).json({ success: false, message: 'Thiếu avatar seed' });
     }
 
     const { error } = await supabase
@@ -987,7 +987,7 @@ router.patch('/save-avatar', auth, async (req, res) => {
     if (error) throw error;
     res.json({ success: true });
   } catch (error) {
-    console.error('Lá»—i lÆ°u avatar:', error);
+    console.error('Lỗi lưu avatar:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -997,7 +997,7 @@ router.get('/room/:id', async (req, res) => {
     const room = await getRoom(req.params.id);
     res.json({ success: true, room });
   } catch (error) {
-    console.error('Lá»—i láº¥y thÃ´ng tin phÃ²ng:', error);
+    console.error('Lỗi lấy thông tin phòng:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -1005,7 +1005,7 @@ router.get('/room/:id', async (req, res) => {
 router.post('/leave', auth, async (req, res) => {
   try {
     const { phong_dau_id } = req.body || {};
-    if (!phong_dau_id) return res.status(400).json({ success: false, message: 'Thiáº¿u mÃ£ phÃ²ng' });
+    if (!phong_dau_id) return res.status(400).json({ success: false, message: 'Thiếu mã phòng' });
 
     const room = await getRoom(phong_dau_id);
     await supabase
@@ -1031,7 +1031,7 @@ router.post('/leave', auth, async (req, res) => {
     if (updateError) throw updateError;
     res.json({ success: true, current_players: nextCount });
   } catch (error) {
-    console.error('Lá»—i rá»i phÃ²ng:', error);
+    console.error('Lỗi rời phòng:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -1052,7 +1052,7 @@ router.get('/rooms', async (req, res) => {
 
     const formatted = (rooms || []).map((room) => ({
       ...normalizeRoomRow(room),
-      host_name: room.nguoi_dung?.username || 'áº¨n danh',
+      host_name: room.nguoi_dung?.username || 'Ẩn danh',
       host_avatar: {
         seed: room.nguoi_dung?.avatar_seed || room.nguoi_dung?.username || 'Aurum',
         streakCount: room.nguoi_dung?.so_ngay_chuoi || 0,
@@ -1062,7 +1062,7 @@ router.get('/rooms', async (req, res) => {
 
     res.json({ success: true, rooms: formatted });
   } catch (error) {
-    console.error('Lá»—i láº¥y danh sÃ¡ch phÃ²ng:', error);
+    console.error('Lỗi lấy danh sách phòng:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });

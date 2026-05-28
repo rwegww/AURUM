@@ -1,13 +1,13 @@
-﻿// CÆ¡ sá»Ÿ dá»¯ liá»‡u phÃ¢n tá»­ vá»›i tá»a Ä‘á»™ 3D chuáº©n hÃ³a
-// Dá»¯ liá»‡u Ä‘Æ°á»£c Ä‘á»“ng bá»™ tá»« dá»± Ã¡n KL, há»— trá»£ hiá»ƒn thá»‹ 3D vÃ  xoay khÃ´ng gian
+﻿// Cơ sở dữ liệu phân tử với tọa độ 3D chuẩn hóa
+// Dữ liệu được đồng bộ từ dự án KL, hỗ trợ hiển thị 3D và xoay không gian
 
 export const molecules = [
   {
     id: "h2",
-    name: "Hydro (Hâ‚‚)",
-    formula: "Hâ‚‚",
-    category: "VÃ´ cÆ¡",
-    description: "KhÃ­ hydro, phÃ¢n tá»­ Ä‘Æ¡n giáº£n nháº¥t gá»“m 2 nguyÃªn tá»­ hydro liÃªn káº¿t Ä‘Æ¡n.",
+    name: "Hydro (H₂)",
+    formula: "H₂",
+    category: "Vô cơ",
+    description: "Khí hydro, phân tử đơn giản nhất gồm 2 nguyên tử hydro liên kết đơn.",
     gradeLevel: 8,
     atoms: [
       { id: 0, element: "H", position: [-0.37, 0, 0] },
@@ -19,10 +19,10 @@ export const molecules = [
   },
   {
     id: "o2",
-    name: "Oxy (Oâ‚‚)",
-    formula: "Oâ‚‚",
-    category: "VÃ´ cÆ¡",
-    description: "KhÃ­ oxy, cáº§n thiáº¿t cho sá»± sá»‘ng vÃ  sá»± chÃ¡y. PhÃ¢n tá»­ gá»“m 2 nguyÃªn tá»­ O liÃªn káº¿t Ä‘Ã´i.",
+    name: "Oxy (O₂)",
+    formula: "O₂",
+    category: "Vô cơ",
+    description: "Khí oxy, cần thiết cho sự sống và sự cháy. Phân tử gồm 2 nguyên tử O liên kết đôi.",
     gradeLevel: 8,
     atoms: [
       { id: 0, element: "O", position: [-0.6, 0, 0] },
@@ -34,10 +34,10 @@ export const molecules = [
   },
   {
     id: "n2",
-    name: "NitÆ¡ (Nâ‚‚)",
-    formula: "Nâ‚‚",
-    category: "VÃ´ cÆ¡",
-    description: "KhÃ­ nitÆ¡ chiáº¿m 78% báº§u khÃ­ quyá»ƒn. LiÃªn káº¿t ba cá»±c ká»³ bá»n vá»¯ng.",
+    name: "Nitơ (N₂)",
+    formula: "N₂",
+    category: "Vô cơ",
+    description: "Khí nitơ chiếm 78% bầu khí quyển. Liên kết ba cực kỳ bền vững.",
     gradeLevel: 8,
     atoms: [
       { id: 0, element: "N", position: [-0.55, 0, 0] },
@@ -49,10 +49,10 @@ export const molecules = [
   },
   {
     id: "h2o",
-    name: "NÆ°á»›c (Hâ‚‚O)",
-    formula: "Hâ‚‚O",
-    category: "VÃ´ cÆ¡",
-    description: "PhÃ¢n tá»­ nÆ°á»›c cÃ³ cáº¥u trÃºc gÃ³c 104.5Â°. LÃ  dung mÃ´i cá»§a sá»± sá»‘ng.",
+    name: "Nước (H₂O)",
+    formula: "H₂O",
+    category: "Vô cơ",
+    description: "Phân tử nước có cấu trúc góc 104.5°. Là dung môi của sự sống.",
     gradeLevel: 8,
     atoms: [
       { id: 0, element: "O", position: [0, 0, 0] },
@@ -66,10 +66,10 @@ export const molecules = [
   },
   {
     id: "co2",
-    name: "Cacbon Dioxit (COâ‚‚)",
-    formula: "COâ‚‚",
-    category: "VÃ´ cÆ¡",
-    description: "KhÃ­ COâ‚‚ cÃ³ cáº¥u trÃºc tháº³ng hÃ ng hoÃ n háº£o O=C=O.",
+    name: "Cacbon Dioxit (CO₂)",
+    formula: "CO₂",
+    category: "Vô cơ",
+    description: "Khí CO₂ có cấu trúc thẳng hàng hoàn hảo O=C=O.",
     gradeLevel: 8,
     atoms: [
       { id: 0, element: "C", position: [0, 0, 0] },
@@ -83,10 +83,10 @@ export const molecules = [
   },
   {
     id: "nh3",
-    name: "Amoniac (NHâ‚ƒ)",
-    formula: "NHâ‚ƒ",
-    category: "VÃ´ cÆ¡",
-    description: "PhÃ¢n tá»­ amoniac cÃ³ dáº¡ng hÃ¬nh chÃ³p tam giÃ¡c vá»›i N á»Ÿ Ä‘á»‰nh.",
+    name: "Amoniac (NH₃)",
+    formula: "NH₃",
+    category: "Vô cơ",
+    description: "Phân tử amoniac có dạng hình chóp tam giác với N ở đỉnh.",
     gradeLevel: 10,
     atoms: [
       { id: 0, element: "N", position: [0, 0, 0.38] },
@@ -102,10 +102,10 @@ export const molecules = [
   },
   {
     id: "ch4",
-    name: "Metan (CHâ‚„)",
-    formula: "CHâ‚„",
-    category: "Há»¯u cÆ¡",
-    description: "Hydrocarbon Ä‘Æ¡n giáº£n nháº¥t, cáº¥u trÃºc tá»© diá»‡n Ä‘á»u hoÃ n háº£o.",
+    name: "Metan (CH₄)",
+    formula: "CH₄",
+    category: "Hữu cơ",
+    description: "Hydrocarbon đơn giản nhất, cấu trúc tứ diện đều hoàn hảo.",
     gradeLevel: 11,
     atoms: [
       { id: 0, element: "C", position: [0, 0, 0] },
@@ -123,10 +123,10 @@ export const molecules = [
   },
   {
     id: "c2h5oh",
-    name: "Ethanol (Câ‚‚Hâ‚…OH)",
-    formula: "Câ‚‚Hâ‚…OH",
-    category: "Há»¯u cÆ¡",
-    description: "PhÃ¢n tá»­ rÆ°á»£u etylic, cáº¥u trÃºc gá»“m khung C-C vÃ  nhÃ³m chá»©c -OH.",
+    name: "Ethanol (C₂H₅OH)",
+    formula: "C₂H₅OH",
+    category: "Hữu cơ",
+    description: "Phân tử rượu etylic, cấu trúc gồm khung C-C và nhóm chức -OH.",
     gradeLevel: 11,
     atoms: [
       { id: 0, element: "C", position: [-0.76, 0, 0] },
@@ -152,10 +152,10 @@ export const molecules = [
   },
   {
     id: "h2so4",
-    name: "Axit Sunfuric (Hâ‚‚SOâ‚„)",
-    formula: "Hâ‚‚SOâ‚„",
-    category: "VÃ´ cÆ¡",
-    description: "Axit máº¡nh, cáº¥u trÃºc tá»© diá»‡n lá»‡ch vá»›i S á»Ÿ trung tÃ¢m.",
+    name: "Axit Sunfuric (H₂SO₄)",
+    formula: "H₂SO₄",
+    category: "Vô cơ",
+    description: "Axit mạnh, cấu trúc tứ diện lệch với S ở trung tâm.",
     gradeLevel: 10,
     atoms: [
       { id: 0, element: "S", position: [0, 0, 0] },
@@ -177,10 +177,10 @@ export const molecules = [
   },
   {
     id: "c6h6",
-    name: "Benzen (Câ‚†Hâ‚†)",
-    formula: "Câ‚†Hâ‚†",
-    category: "Há»¯u cÆ¡",
-    description: "VÃ²ng benzen thÆ¡m, cÃ¡c liÃªn káº¿t C-C cÃ³ Ä‘á»™ dÃ i tÆ°Æ¡ng Ä‘Æ°Æ¡ng nhau (liÃªn káº¿t phi cá»¥c bá»™).",
+    name: "Benzen (C₆H₆)",
+    formula: "C₆H₆",
+    category: "Hữu cơ",
+    description: "Vòng benzen thơm, các liên kết C-C có độ dài tương đương nhau (liên kết phi cục bộ).",
     gradeLevel: 11,
     atoms: [
       { id: 0, element: "C", position: [1.4, 0, 0] },
@@ -213,7 +213,7 @@ export const molecules = [
   }
 ];
 
-// Báº£ng mÃ u nguyÃªn tá»‘ chuáº©n CPK
+// Bảng màu nguyên tố chuẩn CPK
 export const elementColors = {
   H: "#e2e8f0", // Light silver/gray instead of pure white to be visible on white bg
   C: "#2c3e50",
@@ -234,7 +234,7 @@ export const elementColors = {
   F: "#2ecc71",
 };
 
-// KÃ­ch thÆ°á»›c nguyÃªn tá»­ tÆ°Æ¡ng á»©ng (Van der Waals radii tá»· lá»‡)
+// Kích thước nguyên tử tương ứng (Van der Waals radii tỷ lệ)
 export const elementRadii = {
   H: 12,
   C: 17,
@@ -253,11 +253,11 @@ export const elementRadii = {
   Cu: 14,
 };
 
-// NhÃ£n loáº¡i liÃªn káº¿t
+// Nhãn loại liên kết
 export const bondTypeLabels = {
-  single: "LiÃªn káº¿t Ä‘Æ¡n",
-  double: "LiÃªn káº¿t Ä‘Ã´i",
-  triple: "LiÃªn káº¿t ba",
-  ionic: "LiÃªn káº¿t ion",
+  single: "Liên kết đơn",
+  double: "Liên kết đôi",
+  triple: "Liên kết ba",
+  ionic: "Liên kết ion",
 };
 

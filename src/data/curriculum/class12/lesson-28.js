@@ -3,18 +3,18 @@
   "classId": 12,
   "lessonId": 28,
   "programId": "ketnoi",
-  "title": "BÃ i 28. SÆ¡ lÆ°á»£c vá» phá»©c cháº¥t",
-  "chapter": "ChÆ°Æ¡ng 8. SÆ¡ lÆ°á»£c vá» kim loáº¡i chuyá»ƒn tiáº¿p vÃ  phá»©c cháº¥t",
+  "title": "Bài 28. Sơ lược về phức chất",
+  "chapter": "Chương 8. Sơ lược về kim loại chuyển tiếp và phức chất",
   "order": 28,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "KhÃ¡i niá»‡m, cáº¥u táº¡o vÃ  cÃ¡c thÃ nh pháº§n chÃ­nh cá»§a phá»©c cháº¥t: Ion trung tÃ¢m, phá»‘i tá»­ vÃ  sá»‘ phá»‘i trÃ­.",
+  "description": "Khái niệm, cấu tạo và các thành phần chính của phức chất: Ion trung tâm, phối tử và số phối trí.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡i niá»‡m vá» Phá»©c cháº¥t",
+        "text": "1. Khái niệm về Phức chất",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Phá»©c cháº¥t lÃ  táº­p há»£p cÃ¡c nguyÃªn tá»­ hoáº·c nhÃ³m nguyÃªn tá»­ Ä‘Æ°á»£c hÃ¬nh thÃ nh tá»« má»™t ion kim loáº¡i (thÆ°á»ng lÃ  kim loáº¡i chuyá»ƒn tiáº¿p) káº¿t há»£p vá»›i cÃ¡c phÃ¢n tá»­ hoáº·c ion (gá»i lÃ  phá»‘i tá»­) thÃ´ng qua liÃªn káº¿t cá»™ng hÃ³a trá»‹ phá»‘i trÃ­ (liÃªn káº¿t cho - nháº­n)."
+        "text": "Phức chất là tập hợp các nguyên tử hoặc nhóm nguyên tử được hình thành từ một ion kim loại (thường là kim loại chuyển tiếp) kết hợp với các phân tử hoặc ion (gọi là phối tử) thông qua liên kết cộng hóa trị phối trí (liên kết cho - nhận)."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Cáº¥u táº¡o cá»§a má»™t Phá»©c cháº¥t Ä‘Æ¡n nhÃ¢n",
+        "text": "2. Cấu tạo của một Phức chất đơn nhân",
         "level": "h2"
       }
     },
@@ -39,9 +39,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Ion trung tÃ¢m:** ThÆ°á»ng lÃ  cation kim loáº¡i chuyá»ƒn tiáº¿p cÃ³ cÃ¡c orbital trá»‘ng mang nÄƒng lÆ°á»£ng tháº¥p Ä‘á»ƒ nháº­n cáº·p electron.",
-          "**Phá»‘i tá»­ (Ligand):** LÃ  cÃ¡c phÃ¢n tá»­ ($H_2O, NH_3, CO...$) hoáº·c ion ($Cl^-, CN^-, OH^-...$) cÃ³ Ã­t nháº¥t má»™t cáº·p electron chÆ°a liÃªn káº¿t Ä‘á»ƒ Ä‘Ã³ng gÃ³p vÃ o liÃªn káº¿t cho - nháº­n.",
-          "**Sá»‘ phá»‘i trÃ­:** LÃ  sá»‘ lÆ°á»£ng liÃªn káº¿t cho - nháº­n mÃ  cÃ¡c phá»‘i tá»­ táº¡o ra trá»±c tiáº¿p vá»›i ion trung tÃ¢m. CÃ¡c sá»‘ phá»‘i trÃ­ phá»• biáº¿n nháº¥t lÃ  2, 4 vÃ  6."
+          "**Ion trung tâm:** Thường là cation kim loại chuyển tiếp có các orbital trống mang năng lượng thấp để nhận cặp electron.",
+          "**Phối tử (Ligand):** Là các phân tử ($H_2O, NH_3, CO...$) hoặc ion ($Cl^-, CN^-, OH^-...$) có ít nhất một cặp electron chưa liên kết để đóng góp vào liên kết cho - nhận.",
+          "**Số phối trí:** Là số lượng liên kết cho - nhận mà các phối tử tạo ra trực tiếp với ion trung tâm. Các số phối trí phổ biến nhất là 2, 4 và 6."
         ]
       }
     },
@@ -49,8 +49,8 @@
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Biá»ƒu diá»…n vÃ  HÃ¬nh há»c cá»§a Phá»©c cháº¥t",
-        "content": "CÃ´ng thá»©c cá»§a phá»©c cháº¥t thÆ°á»ng Ä‘Æ°á»£c Ä‘áº·t trong ngoáº·c vuÃ´ng $[M(L)_n]$. HÃ¬nh há»c cá»§a phá»©c cháº¥t phá»¥ thuá»™c vÃ o sá»‘ phá»‘i trÃ­ vÃ  báº£n cháº¥t cá»§a ion trung tÃ¢m:\n- Sá»‘ phá»‘i trÃ­ 2: Dáº¡ng Ä‘Æ°á»ng tháº³ng (linear).\n- Sá»‘ phá»‘i trÃ­ 4: Dáº¡ng tá»© diá»‡n (tetrahedral) hoáº·c vuÃ´ng pháº³ng (square planar).\n- Sá»‘ phá»‘i trÃ­ 6: Dáº¡ng bÃ¡t diá»‡n (octahedral).",
+        "title": "Biểu diễn và Hình học của Phức chất",
+        "content": "Công thức của phức chất thường được đặt trong ngoặc vuông $[M(L)_n]$. Hình học của phức chất phụ thuộc vào số phối trí và bản chất của ion trung tâm:\n- Số phối trí 2: Dạng đường thẳng (linear).\n- Số phối trí 4: Dạng tứ diện (tetrahedral) hoặc vuông phẳng (square planar).\n- Số phối trí 6: Dạng bát diện (octahedral).",
         "color": "blue"
       }
     },
@@ -58,8 +58,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "PhÃ¢n biá»‡t Phá»©c cháº¥t vÃ  Muá»‘i kÃ©p",
-        "content": "Muá»‘i kÃ©p (nhÆ° phÃ¨n nhÃ´m kali) phÃ¢n li hoÃ n toÃ n thÃ nh cÃ¡c ion Ä‘Æ¡n giáº£n trong dung dá»‹ch. NgÆ°á»£c láº¡i, phá»©c cháº¥t tá»“n táº¡i bá»n vá»¯ng nhÆ° má»™t Ä‘Æ¡n vá»‹ Ä‘á»™c láº­p (cáº§u ná»™i) vÃ  giá»¯ nguyÃªn tÃ­nh cháº¥t Ä‘áº·c trÆ°ng cá»§a nÃ³ trong dung dá»‹ch.",
+        "title": "Phân biệt Phức chất và Muối kép",
+        "content": "Muối kép (như phèn nhôm kali) phân li hoàn toàn thành các ion đơn giản trong dung dịch. Ngược lại, phức chất tồn tại bền vững như một đơn vị độc lập (cầu nội) và giữ nguyên tính chất đặc trưng của nó trong dung dịch.",
         "color": "orange"
       }
     }
@@ -67,7 +67,7 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "XÃ¡c Ä‘á»‹nh sá»‘ oxi hÃ³a cá»§a sáº¯t trong phá»©c cháº¥t $K_4[Fe(CN)_6]$?",
+      "question": "Xác định số oxi hóa của sắt trong phức chất $K_4[Fe(CN)_6]$?",
       "options": [
         "0.",
         "+2.",
@@ -75,28 +75,28 @@
         "+6."
       ],
       "correctAnswer": 1,
-      "explanation": "Trong $[Fe(CN)_6]^{4-}$, phá»‘i tá»­ $CN$ mang Ä‘iá»‡n tÃ­ch -1. Gá»i $x$ lÃ  sá»‘ oxi hÃ³a cá»§a Fe: $x + 6(-1) = -4 \\Rightarrow x = +2$."
+      "explanation": "Trong $[Fe(CN)_6]^{4-}$, phối tử $CN$ mang điện tích -1. Gọi $x$ là số oxi hóa của Fe: $x + 6(-1) = -4 \\Rightarrow x = +2$."
     },
     {
       "id": "q2",
-      "question": "Báº£n cháº¥t cá»§a liÃªn káº¿t giá»¯a ion trung tÃ¢m vÃ  cÃ¡c phá»‘i tá»­ trong phá»©c cháº¥t lÃ  gÃ¬?",
+      "question": "Bản chất của liên kết giữa ion trung tâm và các phối tử trong phức chất là gì?",
       "options": [
-        "LiÃªn káº¿t ion máº¡nh.",
-        "LiÃªn káº¿t cá»™ng hÃ³a trá»‹ phá»‘i trÃ­ (cho - nháº­n).",
-        "Lá»±c hÃºt Van der Waals.",
-        "LiÃªn káº¿t hydrogen."
+        "Liên kết ion mạnh.",
+        "Liên kết cộng hóa trị phối trí (cho - nhận).",
+        "Lực hút Van der Waals.",
+        "Liên kết hydrogen."
       ],
       "correctAnswer": 1,
-      "explanation": "Phá»‘i tá»­ Ä‘Ã³ng vai trÃ² lÃ  cháº¥t cho cáº·p electron, ion kim loáº¡i trung tÃ¢m Ä‘Ã³ng vai trÃ² lÃ  cháº¥t nháº­n cáº·p electron vÃ o cÃ¡c orbital trá»‘ng, táº¡o thÃ nh liÃªn káº¿t cho - nháº­n bá»n vá»¯ng."
+      "explanation": "Phối tử đóng vai trò là chất cho cặp electron, ion kim loại trung tâm đóng vai trò là chất nhận cặp electron vào các orbital trống, tạo thành liên kết cho - nhận bền vững."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: SÆ¡ lÆ°á»£c vá» phá»©c cháº¥t",
+      "title": "Bài giảng: Sơ lược về phức chất",
       "url": "https://www.youtube.com/watch?v=UZkNY9PeYms",
       "thumbnail": "https://img.youtube.com/vi/UZkNY9PeYms/0.jpg",
-      "description": "Äá»‹nh nghÄ©a vá» phá»©c cháº¥t, phá»‘i tá»­ and cÃ¡ch xÃ¡c Ä‘á»‹nh sá»‘ phá»‘i trÃ­ trong cÃ¡c há»‡ phá»©c phá»• biáº¿n (VietJack)."
+      "description": "Định nghĩa về phức chất, phối tử and cách xác định số phối trí trong các hệ phức phổ biến (VietJack)."
     }
   ],
   "practiceModules": [],

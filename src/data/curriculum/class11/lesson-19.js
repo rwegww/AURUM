@@ -3,18 +3,18 @@
   "classId": 11,
   "lessonId": 19,
   "programId": "ketnoi",
-  "title": "BÃ i 19. Dáº«n xuáº¥t halogen",
-  "chapter": "ChÆ°Æ¡ng 5. Dáº«n xuáº¥t halogen â€“ Alcohol â€“ Phenol",
+  "title": "Bài 19. Dẫn xuất halogen",
+  "chapter": "Chương 5. Dẫn xuất halogen – Alcohol – Phenol",
   "order": 19,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "KhÃ¡i niá»‡m dáº«n xuáº¥t halogen and cÃ¡c pháº£n á»©ng Ä‘áº·c trÆ°ng: pháº£n á»©ng tháº¿ nucleophile, tÃ¡ch HX.",
+  "description": "Khái niệm dẫn xuất halogen and các phản ứng đặc trưng: phản ứng thế nucleophile, tách HX.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡i niá»‡m and Äáº·c Ä‘iá»ƒm",
+        "text": "1. Khái niệm and Đặc điểm",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Sá»± XÃ¢m LÄƒng Äáº§u TiÃªn Káº» Láº¡ BÆ°á»›c BÃ o Khung CARBON - ChuyÃªn Äá» Máº£ng **DáºªN XUáº¤T HALOGEN**. \nNgay Lá»›p Alkane Rá»«ng Äiáº¿m. Viá»‡c Äem Gai Chá»t Kiáº¿m CÃ o Cho 1 LÅ© Ná»c Rá»›t Tháº±ng Hydro Má»i Cáº³ng VÄƒng Khá»i Cáº§u Sá»£i Khung Máº¡ch, Háº§u Thay Äá»•i Chiáº¿m Láº¯p Há»‘ Báº±ng QuÃ¢n Äá»™i Há»‘c Ãc Halogen (Nanh Ná»c Tráº¯ng: F, Cl, Br, I). CÃ¡i Cá»¥c TÃ n Dá»± BÃ¡m DÃ­nh Halogen CÃ¹i LiÃªm Lá»‡nh SÃ¡t Thá»§ áº¤y, Con NgÆ°á»i Æ¯u Ãi Gá»i LÃ  **Dáº«n Xuáº¥t Halogen**. KhÃºc Nháº¥n Lá»™t XÃ¡c Táº¡o Thá»ƒ Cá»‘t NhÃ¢n Má»›i."
+        "text": "Sự Xâm Lăng Đầu Tiên Kẻ Lạ Bước Bào Khung CARBON - Chuyên Đề Mảng **DẪN XUẤT HALOGEN**. \nNgay Lớp Alkane Rừng Điếm. Việc Đem Gai Chọt Kiếm Cào Cho 1 Lũ Nọc Rớt Thằng Hydro Mỏi Cẳng Văng Khỏi Cầu Sợi Khung Mạch, Hầu Thay Đổi Chiếm Lắp Hố Bằng Quân Đội Hốc Ác Halogen (Nanh Nọc Trắng: F, Cl, Br, I). Cái Cục Tàn Dự Bám Dính Halogen Cùi Liêm Lệnh Sát Thủ Ấy, Con Người Ưu Ái Gọi Là **Dẫn Xuất Halogen**. Khúc Nhấn Lột Xác Tạo Thể Cốt Nhân Mới."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "CÃº Äoáº¡t Khá»‘ng Cá»±c LÃµi (KÃ¨o KhÃ©o HÃºt Ã‚m Vá» Rá»… Äáº£o)",
-        "content": "LiÃªn káº¿t Chá»‘t Canh XÃ³ C-X (Carbon and Halogen NhÃ¡nh X). Halogen (Äáº·c TrÆ°ng F, Cl) Thuá»™c BÃ¨ LÅ© HÃºt Äiá»‡n VÃ´ CÆ¡ Nháº¥t Cá»• Tháº¿ Máº¡ng Ã‚m Tá»¥. ChÃºng Má»Ÿ Miá»‡ng Liáº¿m Trá»n KÃ©o lá»‡ch Tá»¥ ChÃ³p ÄÃ¡m MÃ¢y ÄÃ´i Sá»£i Ráº½ Vá» PhÃ­a Báº£n Khu. \nHáº­u Cáº£nh Sá»‘c Ãc: Halogen MÃºp Cá»¥c Láº» Ná»­a Ã‚m $\\delta^-$. Äá»ƒ Láº¡i Cho XÆ°Æ¡ng Carbon CÃ¡i ÄÃ¡y Khuyáº¿t Tá»• Lá»— KhoÃ©t XÆ¡ XÃ¡c Äiá»‡n Thiáº¿u Thá»‘n CÃ²i MÃ©p DÆ°Æ¡ng Giáº£ $\\delta^+$. \nCarbon LÃºc áº¤y RÃ¡t ThÆ°Æ¡ng Cá»±c Xá»‘p Tá»§y Yá»ƒu KÃ©m, Má»i Gá»­i Trá»±c CÃ¡o Váº«y Gá»i Bá»n Thá»£ SÄƒn Nu LÅ© Cáº§u Oxi (-OH, -CN..) LÆ°á»›t VÃ´ Pháº­p NhÃ o Ä‚n Cáº·p Cáº·n Gáº¯n ÄuÃ´i Tháº¿. Há»‘c ÄÃ¢m ToÃ¡c Cá»­a Há»¯u CÆ¡ Ráº½ HoÃ¡n Cá»‘t Máº¡ch Sinh NhÃ¡nh.",
+        "title": "Cú Đoạt Khống Cực Lõi (Kèo Khéo Hút Âm Về Rễ Đảo)",
+        "content": "Liên kết Chốt Canh Xó C-X (Carbon and Halogen Nhánh X). Halogen (Đặc Trưng F, Cl) Thuộc Bè Lũ Hút Điện Vô Cơ Nhất Cổ Thế Mạng Âm Tụ. Chúng Mở Miệng Liếm Trọn Kéo lệch Tụ Chóp Đám Mây Đôi Sợi Rẽ Về Phía Bản Khu. \nHậu Cảnh Sốc Ác: Halogen Múp Cục Lẻ Nửa Âm $\\delta^-$. Để Lại Cho Xương Carbon Cái Đáy Khuyết Tổ Lỗ Khoét Xơ Xác Điện Thiếu Thốn Còi Mép Dương Giả $\\delta^+$. \nCarbon Lúc Ấy Rát Thương Cực Xốp Tủy Yểu Kém, Mời Gửi Trực Cáo Vẫy Gọi Bọn Thợ Săn Nu Lũ Cầu Oxi (-OH, -CN..) Lướt Vô Phập Nhào Ăn Cặp Cặn Gắn Đuôi Thế. Hốc Đâm Toác Cửa Hữu Cơ Rẽ Hoán Cốt Mạch Sinh Nhánh.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. TÃ­nh cháº¥t Pháº£n á»©ng tháº¿ Nucleophile (-OH) and TÃ¡ch",
+        "text": "2. Tính chất Phản ứng thế Nucleophile (-OH) and Tách",
         "level": "h2"
       }
     },
@@ -48,9 +48,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "2 NhÃ¡nh NgÃµ Chiáº¿n Khu ChÃ³p Lá»“ng LÆ°á»£c Äá»‘i Nghá»‹ch Äoáº¡t Chá»¯ TÃ­nh:",
-          "1. **Pháº£n á»¨ng Äáº©y MÃ´ng Láº­t Gháº¿ Nucleophile (Khá»­ NgÃ´i THáº¾ Gá»‘c TÃ¡ch)**:\nChÃ¢m LÃ²: RÃ³t XÃºt TrÆ¡n NÆ°á»›c XÃ  PhÃ²ng Ráº·t (Kiá»m Thá»§y PhÃ¢n NaOH/ Ca(OH)2 LOÃƒNG NÆ¯á»šC). Vun Bá»ƒ Ná»“i áº¤m Soi Thoi Láº¡nh Nhá»‹p Cáº¡n 50 80 Äá»™.\nNu Káº» Chiáº¿m Äoáº¡t lÃ  (-OH Kiá»m). NÃ³ ÄÃ¢m XiÃªn KhoÃ©t Háº¡ Bá»‡ Bá»©ng ChÃ³p Rá»©t Cá»• Gai Halogen X Bá» Tuá»™t Vá»©t NghÄ©a Váº¯ng Äá»“ng Bá» Rá» Ká»m Sinh ChÃºt Muá»‘i. Chui VÃ´ Chiáº¿m Vá»‹ LÃµi Khoáº£ng GÃ³c Chá»‘t Váº¿t TrÆ°á»£t Xáº£ Ra Giá»‘ng LÃ²i LÃµm Sinh Ra Má»™t Ã”ng HoÃ n Má»›i: **ALCOHOL (NhÃ³m RÆ¯á»¢U KhÃª Cá»“n Lá»ng Äá»™c SÃ¡t) (-OH)**.\n$R-X + NaOH (AQUA) \\xrightarrow{t^\\circ Ä‘un} R-OH + NaCl$ Lá»c Trong Khe VÃ©t.",
-          "2. **Pháº£n á»¨ng RÃ£ Buá»™c GÃ£y Vá»¡ Hoang Äáº£o Káº½ TÃCH (Sáº£y Ruá»™t KhÃ³c Nuá»‘i Äao Cháº»)**:\nKÃ­ch Há»a Kiáº¿p Náº¡n: Äun SÃ´i Chá»‘ng Cá»“n Há»¯u CÆ¡ ÄiÃªn Dáº¡i Pha Kiá»m Gáº¯t Háº¡t MÃ¹ Cá»¥c CÃ¡o (ÄÃ¡ Cá»“n Alcohol Trá»™n TrÃ¡t Cá»¥c KOH Ráº¯n Liáº¿m Ruá»™t).\nTáº¡i MÃ´i TrÆ°á»ng Äá»™c KhÃ­ KOH LÃ¹a Cá»“n SiÃªu Máº·n NÃ y BÃ³c Oxi Gáº¯t. NÃ³ KhÃ´n KhÃ´ng ThÃ¨m RÆ¡i VÃ´ Máº¡ng. NÃ³ KÃ©o ÄuÃ´i Lá»±u Äáº¡n Vuá»‘t Giá»©t Äá»“ng Loáº¡t Hai Tháº±ng MÃ³ng Gai á»ž 2 BÃªn Carbon HÃ ng XÃ³m Äá»©ng Káº¿ (Giá»±t Äá»©t X Bá»n Pháº£i and Rá»©t H Bá»n C TrÃ¡i MÃºt).\nHáº­u ÄÃ£i Hoang Khá»‘c: Khung Carbon Bá»‹ GÃ£y RÄƒng 2 RÃ¬a MÃ²n Trá»c. Äá»ƒ Trá»¥ Máº¡ng Cá»¥i, 2 Tháº±ng C Äá»©ng Cá»­a KhÃ³c Tiá»…n NhÃ¬n Trá»¥ LÃµm Tá»± Buá»™c NÃ©n Keo Giáº±ng Xiáº¿t Xáº¯n Tay KhÃ©p KhÃ©p Nhau Ná»‘i Ná»‘i ThÃªm Sá»£i Nguá»“n \n$\rightarrow$ Káº¿t Váº¿t Sá»£i ÄÃ´i Gáº¯n Buá»™c Báº» Hoang Ra HÃ¬nh HÃ i **ALKENE LIÃŠN Káº¾T ÄÃ”I Máº¢Y TrÃ²n** Bay XÃ¡c Cáº¡n Dá»±ng Lá»“ng Há»£p Máº¡ch Sá»£i BÃ³c ÄÃ´i KhÃ©p KÃ­n."
+          "2 Nhánh Ngõ Chiến Khu Chóp Lồng Lược Đối Nghịch Đoạt Chữ Tính:",
+          "1. **Phản Ứng Đẩy Mông Lật Ghế Nucleophile (Khử Ngôi THẾ Gốc Tách)**:\nChâm Lò: Rót Xút Trơn Nước Xà Phòng Rặt (Kiềm Thủy Phân NaOH/ Ca(OH)2 LOÃNG NƯỚC). Vun Bể Nồi Ấm Soi Thoi Lạnh Nhịp Cạn 50 80 Độ.\nNu Kẻ Chiếm Đoạt là (-OH Kiềm). Nó Đâm Xiên Khoét Hạ Bệ Bứng Chóp Rứt Cổ Gai Halogen X Bỏ Tuột Vứt Nghĩa Vắng Đồng Bỏ Rọ Kềm Sinh Chút Muối. Chui Vô Chiếm Vị Lõi Khoảng Góc Chốt Vết Trượt Xả Ra Giống Lòi Lõm Sinh Ra Một Ông Hoàn Mới: **ALCOHOL (Nhóm RƯỢU Khê Cồn Lỏng Độc Sát) (-OH)**.\n$R-X + NaOH (AQUA) \\xrightarrow{t^\\circ đun} R-OH + NaCl$ Lọc Trong Khe Vét.",
+          "2. **Phản Ứng Rã Buộc Gãy Vỡ Hoang Đảo Kẽ TÁCH (Sảy Ruột Khóc Nuối Đao Chẻ)**:\nKích Hỏa Kiếp Nạn: Đun Sôi Chống Cồn Hữu Cơ Điên Dại Pha Kiềm Gắt Hạt Mù Cục Cáo (Đá Cồn Alcohol Trộn Trát Cục KOH Rắn Liếm Ruột).\nTại Môi Trường Độc Khí KOH Lùa Cồn Siêu Mặn Này Bóc Oxi Gắt. Nó Khôn Không Thèm Rơi Vô Mạng. Nó Kéo Đuôi Lựu Đạn Vuốt Giứt Đồng Loạt Hai Thằng Móng Gai Ở 2 Bên Carbon Hàng Xóm Đứng Kế (Giựt Đứt X Bọn Phải and Rứt H Bọn C Trái Mút).\nHậu Đãi Hoang Khốc: Khung Carbon Bị Gãy Răng 2 Rìa Mòn Trọc. Để Trụ Mạng Cụi, 2 Thằng C Đứng Cửa Khóc Tiễn Nhìn Trụ Lõm Tự Buộc Nén Keo Giằng Xiết Xắn Tay Khép Khép Nhau Nối Nối Thêm Sợi Nguồn \n$\rightarrow$ Kết Vết Sợi Đôi Gắn Buộc Bẻ Hoang Ra Hình Hài **ALKENE LIÊN KẾT ĐÔI MẢY Tròn** Bay Xác Cạn Dựng Lồng Hợp Mạch Sợi Bóc Đôi Khép Kín."
         ]
       }
     },
@@ -58,15 +58,15 @@
       "id": "mod6",
       "type": "paragraph",
       "content": {
-        "text": "KÃ­nh Chiáº¿u Tháº§n Luáº­n ZAITSEV LÃªn BÃ n PhÃ¢n Ãn (Trá»¥c Ná»‘i Cuá»™c ChÆ¡i Nhá»‹ PhÃ¢n Lá»±a Náº»o Lá»›n). KhÃ¡i ÄoÃ¡n Cháº·t NhÃ¡nh Phá»¥ Trong TÃ¡ch:\nKhi Lá»±c Kiá»m Váº·n Cá»• NhÃ³m Cl / Br á»ž Cá»¥c Carbon GÃ¡y NhÃ¡nh Cá»¥t Tá»a. Tiáº¿ng Äao Báº» Cáº¯n H Cáº¯t Nhá»• LÃ´ng á»ž Káº» LÃ¡ng Giá»ng Káº¿ Cáº¡nh, NÃ³ LuÃ´n Thá»c Quáº­t **LÆ°á»¡i Tháº¿ KÃ©o Báº» Bá»©ng ÄuÃ´i Hydro CÃ³ Máº·t á»ž CÃ¡i GÃ³c Trá»ng Ãm Cá»§a Káº» Carbon Káº¿ Biá»‡n ÃT TRÆ¯á»šNG HYDRO NHáº¤T** (Báº­c SÃ¢u ChÃ¨n Giá»¯a Bá»‹ch).\nTá»« Trá»¥ Äá»‰nh TrÃ¡i Ãng Thá»«a Äá»•i ÄÃ³ KÃ©o Gáº¥p Viá»n Äiá»ƒm Cáº¡o Ngá»“i NÃºt Lá»™n Äáº» HÃ¬nh ÄÃ´i RÃ³t XÆ°Æ¡ng Dá»±ng LÃªn \"Sáº£n Pháº©m TrÃºng Sá»‘ Chiáº¿m Khá»‘i PhÃ n TrÄƒm Lá»›n NHáº¤T DÃ¢y ChÃ­nh Äá»™t Biáº¿n NhÃ¡nh Ngáº§m\"."
+        "text": "Kính Chiếu Thần Luận ZAITSEV Lên Bàn Phân Án (Trục Nối Cuộc Chơi Nhị Phân Lựa Nẻo Lớn). Khái Đoán Chặt Nhánh Phụ Trong Tách:\nKhi Lực Kiềm Vặn Cổ Nhóm Cl / Br Ở Cục Carbon Gáy Nhánh Cụt Tọa. Tiếng Đao Bẻ Cắn H Cắt Nhổ Lông Ở Kẻ Láng Giềng Kế Cạnh, Nó Luôn Thọc Quật **Lưỡi Thế Kéo Bẻ Bứng Đuôi Hydro Có Mặt Ở Cái Góc Trọng Ám Của Kẻ Carbon Kế Biện ÍT TRƯỚNG HYDRO NHẤT** (Bậc Sâu Chèn Giữa Bịch).\nTừ Trụ Đỉnh Trái Áng Thừa Đổi Đó Kéo Gấp Viền Điểm Cạo Ngồi Nút Lộn Đẻ Hình Đôi Rót Xương Dựng Lên \"Sản Phẩm Trúng Số Chiếm Khối Phàn Trăm Lớn NHẤT Dây Chính Đột Biến Nhánh Ngầm\"."
       }
     },
     {
       "id": "mod7",
       "type": "warningBox",
       "content": {
-        "title": "BÃ£o Tá»­ TÃ¹ KhÃ­ Hoáº¡i Äá»i Sinh Há»a Lá»— Há»ng Cháº¿t LÃ nh TrÃ¡i Äáº¥t",
-        "content": "Khai Niá»‡m Bi Ká»‹ch Táº©y LÆ°á»£c Dáº«n Xuáº¥t KhÃ­ Láº¡nh Äá»“ á»¨ng. XÆ°a Con NgÆ°á»i MÃ² Cháº¿ Ngá»¥p BÃ¬nh Äáº©y Lá»‘c Freon, CFC, TÃ¡c BÃ¬nh Tá»§ RÄƒn Tá»§ ÄÃ´ng Cá»¥c Phun Keo Giáº£i TrÆ¡n ÄÃ¡nh Sáº¡ch Háº¡t BÃ³ng ÄÃ³ng Äáº£o Bá»t CÃ´ng Nghiá»‡p TÃºi Xá»‘p Cá»©ng Giáº­t Kháº¯p Tiá»‡c KhÃ­ MÃ¹ TÃºi. \nTuy Tháº­t Ngáº¡c NhiÃªn NÃ³ LÃªn Káº¹t TrÃ´i Pháº£ Bay Ra CÃ¹ng Háº¡ng Táº§ng Ozon NgÃ¡o Vá»c PhÃ³ng KhoÃ¡ng. Ná»©t Tia Cá»±c TÃ­m Ä‚n Cáº¯n Bá»‹t Äá»©t Xáº» Cáº¯t Máº£nh Dáº«n KhÃ­ CFC LÃµi Sinh GiÄƒng Tia Ná»c Halogen NguyÃªn Tá»­. Pháº£n Há»a Äáº­p Tan NÃ¡t Äiá»ƒn BÃ£o Lá»±c CÃ¡c Háº¡t MÃ ng $O_3$ Giáº£i Cá»±c LÆ°á»›i GÃ¢y Sá»± **Lá»¦NG Táº¦NG THá»¦NG Lá»– RÃCH OZONE BAO PHá»¦**. Diá»‡c Da Cháº¿t Äá»ng Ãnh SÃ¡ng XuyÃªn Ruá»™t Rá»‘i Ung Nhá»t Ung ThÆ° Bá» RÃ¡c ThiÃªn Äiá»ƒm Sáº¡ch Quyá»n Bá»‹ Khai Tá»­ ToÃ n TrÃ¡i Äáº¥t Cáº¥m Tuyá»‡t Äoáº¡n Sá»­ Dá»¥ng.",
+        "title": "Bão Tử Tù Khí Hoại Đời Sinh Họa Lỗ Hỏng Chết Lành Trái Đất",
+        "content": "Khai Niệm Bi Kịch Tẩy Lược Dẫn Xuất Khí Lạnh Đồ Ứng. Xưa Con Người Mò Chế Ngụp Bình Đẩy Lốc Freon, CFC, Tác Bình Tủ Răn Tủ Đông Cục Phun Keo Giải Trơn Đánh Sạch Hạt Bóng Đóng Đảo Bọt Công Nghiệp Túi Xốp Cứng Giật Khắp Tiệc Khí Mù Túi. \nTuy Thật Ngạc Nhiên Nó Lên Kẹt Trôi Phả Bay Ra Cùng Hạng Tầng Ozon Ngáo Vọc Phóng Khoáng. Nứt Tia Cực Tím Ăn Cắn Bịt Đứt Xẻ Cắt Mảnh Dẫn Khí CFC Lõi Sinh Giăng Tia Nọc Halogen Nguyên Tử. Phản Họa Đập Tan Nát Điển Bão Lực Các Hạt Màng $O_3$ Giải Cực Lưới Gây Sự **LỦNG TẦNG THỦNG LỖ RÁCH OZONE BAO PHỦ**. Diệc Da Chết Đọng Ánh Sáng Xuyên Ruột Rối Ung Nhọt Ung Thư Bề Rác Thiên Điểm Sạch Quyền Bị Khai Tử Toàn Trái Đất Cấm Tuyệt Đoạn Sử Dụng.",
         "color": "orange"
       }
     }
@@ -74,19 +74,19 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Äá»ƒ Ä‘iá»u cháº¿ Alcohol tá»« má»™t Dáº«n xuáº¥t halogen, Ä‘iá»u kiá»‡n yÃªu cáº§u lÃ :",
+      "question": "Để điều chế Alcohol từ một Dẫn xuất halogen, điều kiện yêu cầu là:",
       "options": [
-        "Äun sÃ´i dung dá»‹ch with kiá»m alcohol.",
-        "Äun nÃ³ng nháº¹ dung dá»‹ch with NaOH trong mÃ´i trÆ°á»ng nÆ°á»›c.",
-        "Pháº£n á»©ng tháº¿ Bromine á»Ÿ 20 C.",
-        "Chá»‰ cáº§n nÆ°á»›c cáº¥t Ä‘un nÃ³ng."
+        "Đun sôi dung dịch with kiềm alcohol.",
+        "Đun nóng nhẹ dung dịch with NaOH trong môi trường nước.",
+        "Phản ứng thế Bromine ở 20 C.",
+        "Chỉ cần nước cất đun nóng."
       ],
       "correctAnswer": 1,
-      "explanation": "Pháº£n á»©ng tháº¿ NaOH/H2O, Ä‘un nÃ³ng Ä‘á»ƒ tÃ¡ch nhÃ³m -X ra and nhÃ³m -OH gáº¯n vÃ o."
+      "explanation": "Phản ứng thế NaOH/H2O, đun nóng để tách nhóm -X ra and nhóm -OH gắn vào."
     },
     {
       "id": "q2",
-      "question": "Dáº«n xuáº¥t CH3CH2Br khi tÃ¡c dá»¥ng with kiá»m máº¡nh (KOH) Ä‘un trong dung dá»‹ch Alcohol sáº½ thu Ä‘Æ°á»£c sáº£n pháº©m há»¯u cÆ¡ gÃ¬?",
+      "question": "Dẫn xuất CH3CH2Br khi tác dụng with kiềm mạnh (KOH) đun trong dung dịch Alcohol sẽ thu được sản phẩm hữu cơ gì?",
       "options": [
         "CH3-CH2-OH (Ethanol)",
         "CH2=CH2 (Ethene)",
@@ -94,16 +94,16 @@
         "CH3-O-CH3 (Dimetyl ete)"
       ],
       "correctAnswer": 1,
-      "explanation": "Trong mÃ´i trÆ°á»ng cá»“n, pháº£n á»©ng Æ°u tiÃªn sáº½ lÃ  Pháº£n á»©ng tÃ¡ch (Quy táº¯c Zaitsev) Ä‘á»ƒ tÃ¡ch ra HBr and hÃ¬nh thÃ nh liÃªn káº¿t liÃªn há»£p Ä‘Ã´i Ethene."
+      "explanation": "Trong môi trường cồn, phản ứng ưu tiên sẽ là Phản ứng tách (Quy tắc Zaitsev) để tách ra HBr and hình thành liên kết liên hợp đôi Ethene."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Dáº«n xuáº¥t halogen",
+      "title": "Bài giảng: Dẫn xuất halogen",
       "url": "https://www.youtube.com/watch?v=D34P6I7woT8",
       "thumbnail": "https://img.youtube.com/vi/D34P6I7woT8/0.jpg",
-      "description": "KhÃ¡i niá»‡m, tÃ­nh cháº¥t hÃ³a há»c tiÃªu biá»ƒu and á»©ng dá»¥ng cá»§a dáº«n xuáº¥t halogen (VietJack)."
+      "description": "Khái niệm, tính chất hóa học tiêu biểu and ứng dụng của dẫn xuất halogen (VietJack)."
     }
   ],
   "practiceModules": [],

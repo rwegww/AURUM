@@ -18,7 +18,7 @@ const StageStory = () => {
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lá»—i táº£i cá»‘t truyá»‡n:', err);
+        console.error('Lỗi tải cốt truyện:', err);
       } finally {
         setLoading(false);
       }

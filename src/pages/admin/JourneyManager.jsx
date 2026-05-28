@@ -20,7 +20,7 @@ const JourneyManager = () => {
       setLessons(sortedData);
       setHasChanges(false);
     } catch (err) {
-      console.error('Lá»—i táº£i hÃ nh trÃ¬nh:', err);
+      console.error('Lỗi tải hành trình:', err);
     } finally {
       setLoading(false);
     }
@@ -72,10 +72,10 @@ const JourneyManager = () => {
       
       await Promise.all(updatePromises);
       setHasChanges(false);
-      alert('ÄÃ£ cáº­p nháº­t thá»© tá»± hÃ nh trÃ¬nh thÃ nh cÃ´ng!');
+      alert('Đã cập nhật thứ tự hành trình thành công!');
     } catch (err) {
-      console.error('Lá»—i lÆ°u hÃ nh trÃ¬nh:', err);
-      alert('CÃ³ lá»—i xáº£y ra khi lÆ°u hÃ nh trÃ¬nh.');
+      console.error('Lỗi lưu hành trình:', err);
+      alert('Có lỗi xảy ra khi lưu hành trình.');
     } finally {
       setSaving(false);
     }
@@ -85,11 +85,11 @@ const JourneyManager = () => {
     <div className="p-8 max-w-6xl mx-auto">
       <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">â† Quay láº¡i Báº£ng Ä‘iá»u khiá»ƒn</Link>
+          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
           <h1 className="text-3xl font-bold text-viet-text tracking-tight flex items-center gap-3">
-            Quáº£n lÃ½ <span className="text-viet-green">HÃ nh trÃ¬nh</span> <Map className="text-viet-green" size={28} />
+            Quản lý <span className="text-viet-green">Hành trình</span> <Map className="text-viet-green" size={28} />
           </h1>
-          <p className="text-viet-text-light mt-1 font-medium italic">Sáº¯p xáº¿p lá»™ trÃ¬nh há»c táº­p cho há»c sinh theo tá»«ng khá»‘i lá»›p.</p>
+          <p className="text-viet-text-light mt-1 font-medium italic">Sắp xếp lộ trình học tập cho học sinh theo từng khối lớp.</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ const JourneyManager = () => {
                   selectedGrade === g ? 'bg-viet-green text-white shadow-md' : 'text-viet-text-light hover:bg-gray-50'
                 }`}
               >
-                Lá»›p {g}
+                Lớp {g}
               </button>
             ))}
           </div>
@@ -117,7 +117,7 @@ const JourneyManager = () => {
             }`}
           >
             {saving ? <RefreshCcw className="animate-spin" size={16} /> : <Save size={16} />}
-            LÆ°u thay Ä‘á»•i
+            Lưu thay đổi
           </button>
         </div>
       </header>
@@ -129,7 +129,7 @@ const JourneyManager = () => {
           className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-3 text-amber-700 text-sm font-medium"
         >
           <AlertTriangle size={18} />
-          Báº¡n cÃ³ thay Ä‘á»•i chÆ°a lÆ°u. HÃ£y nháº¥n "LÆ°u thay Ä‘á»•i" Ä‘á»ƒ cáº­p nháº­t thá»© tá»± má»›i cho há»c sinh.
+          Bạn có thay đổi chưa lưu. Hãy nhấn "Lưu thay đổi" để cập nhật thứ tự mới cho học sinh.
         </motion.div>
       )}
 
@@ -170,7 +170,7 @@ const JourneyManager = () => {
                     <div>
                       <h3 className="font-bold text-viet-text leading-tight">{lesson.title}</h3>
                       <p className="text-[11px] text-viet-text-light font-medium mt-1 uppercase tracking-wider">
-                        {lesson.chapter || 'Ná»™i dung cá»‘t lÃµi'} â€¢ ID: {lesson.lessonId}
+                        {lesson.chapter || 'Nội dung cốt lõi'} • ID: {lesson.lessonId}
                       </p>
                     </div>
                   </div>
@@ -197,7 +197,7 @@ const JourneyManager = () => {
                       to={`/admin/journey/${lesson.lessonId}`} 
                       className="px-4 py-2 rounded-xl text-[11px] font-black uppercase text-viet-green bg-viet-green/5 hover:bg-viet-green hover:text-white transition-all"
                     >
-                      Chi tiáº¿t
+                      Chi tiết
                     </Link>
                   </div>
                 </div>
@@ -210,8 +210,8 @@ const JourneyManager = () => {
               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
                 <Map size={32} />
               </div>
-              <p className="text-slate-400 font-bold">ChÆ°a cÃ³ bÃ i há»c nÃ o cho khá»‘i lá»›p nÃ y.</p>
-              <Link to="/admin/bai_hoc" className="text-viet-green font-bold text-sm mt-2 block hover:underline">Tá»›i trang Quáº£n lÃ½ Há»c liá»‡u â†’</Link>
+              <p className="text-slate-400 font-bold">Chưa có bài học nào cho khối lớp này.</p>
+              <Link to="/admin/bai_hoc" className="text-viet-green font-bold text-sm mt-2 block hover:underline">Tới trang Quản lý Học liệu →</Link>
             </div>
           )}
         </div>

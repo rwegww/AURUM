@@ -61,9 +61,9 @@ const LessonPage = () => {
       // LOG ACTIVITY
       activityService.log({
         type: 'lesson',
-        label: `Há»c bÃ i: ${lessonData.title}`,
-        description: `ÄÃ£ truy cáº­p bÃ i há»c ${lessonData.title} (Lá»›p ${grade})`,
-        icon: 'ðŸ“š',
+        label: `Học bài: ${lessonData.title}`,
+        description: `Đã truy cập bài học ${lessonData.title} (Lớp ${grade})`,
+        icon: '📚',
         link: `/bai_hoc/${grade}/${lessonId}`
       });
 

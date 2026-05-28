@@ -3,19 +3,19 @@
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 7,
-  "chapterName": "ChÆ°Æ¡ng 7: Hydrocarbon vÃ  nhiÃªn liá»‡u",
+  "chapterName": "Chương 7: Hydrocarbon và nhiên liệu",
   "lessonId": 5,
-  "title": "BÃ i 5: Giá»›i thiá»‡u Há»£p cháº¥t há»¯u cÆ¡",
-  "description": "KhÃ¡m phÃ¡ khÃ¡i niá»‡m, Ä‘áº·c Ä‘iá»ƒm thÃ nh pháº§n vÃ  cÃ¡ch phÃ¢n loáº¡i tháº¿ giá»›i há»£p cháº¥t há»¯u cÆ¡ bao la.",
+  "title": "Bài 5: Giới thiệu Hợp chất hữu cơ",
+  "description": "Khám phá khái niệm, đặc điểm thành phần và cách phân loại thế giới hợp chất hữu cơ bao la.",
   "level": "Beginner",
   "order": 5,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Tháº¿ giá»›i há»¯u cÆ¡ ká»³ diá»‡u",
+      "title": "Thế giới hữu cơ kỳ diệu",
       "url": "https://www.youtube.com/watch?v=hEm6Tew46mA",
       "thumbnail": "https://img.youtube.com/vi/hEm6Tew46mA/0.jpg",
-      "description": "Táº¡i sao Carbon láº¡i lÃ  nguyÃªn tá»‘ cá»§a sá»± sá»‘ng?"
+      "description": "Tại sao Carbon lại là nguyên tố của sự sống?"
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Há»£p cháº¥t há»¯u cÆ¡ lÃ  gÃ¬?",
+        "text": "1. Hợp chất hữu cơ là gì?",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Há»£p cháº¥t há»¯u cÆ¡ lÃ  há»£p cháº¥t cá»§a **Carbon** (trá»« má»™t sá»‘ trÆ°á»ng há»£p nhÆ° $CO, CO_2,$ muá»‘i carbonate, cyanide...)."
+        "text": "Hợp chất hữu cơ là hợp chất của **Carbon** (trừ một số trường hợp như $CO, CO_2,$ muối carbonate, cyanide...)."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "PhÃ¢n loáº¡i Há»£p cháº¥t há»¯u cÆ¡",
-        "content": "- **Hydrocarbon:** Chá»‰ chá»©a 2 nguyÃªn tá»‘ C vÃ  H. VÃ­ dá»¥: $CH_4, C_2H_4$.\n- **Dáº«n xuáº¥t Hydrocarbon:** NgoÃ i C vÃ  H cÃ²n cÃ³ cÃ¡c nguyÃªn tá»‘ khÃ¡c (O, N, Cl...). VÃ­ dá»¥: $C_2H_5OH, CH_3COOH$.",
+        "title": "Phân loại Hợp chất hữu cơ",
+        "content": "- **Hydrocarbon:** Chỉ chứa 2 nguyên tố C và H. Ví dụ: $CH_4, C_2H_4$.\n- **Dẫn xuất Hydrocarbon:** Ngoài C và H còn có các nguyên tố khác (O, N, Cl...). Ví dụ: $C_2H_5OH, CH_3COOH$.",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Äáº·c Ä‘iá»ƒm chung",
+        "text": "2. Đặc điểm chung",
         "level": "h2"
       }
     },
@@ -57,10 +57,10 @@
       "type": "list",
       "content": {
         "items": [
-          "**ThÃ nh pháº§n:** LuÃ´n cÃ³ Carbon, thÆ°á»ng cÃ³ Hydro, Oxy, NitÆ¡...",
-          "**LiÃªn káº¿t:** Chá»§ yáº¿u lÃ  liÃªn káº¿t cá»™ng hÃ³a trá»‹.",
-          "**TÃ­nh cháº¥t:** Dá»… chÃ¡y, kÃ©m bá»n nhiá»‡t, nhiá»‡t Ä‘á»™ nÃ³ng cháº£y tháº¥p.",
-          "**Pháº£n á»©ng:** ThÆ°á»ng xáº£y ra cháº­m vÃ  theo nhiá»u hÆ°á»›ng khÃ¡c nhau."
+          "**Thành phần:** Luôn có Carbon, thường có Hydro, Oxy, Nitơ...",
+          "**Liên kết:** Chủ yếu là liên kết cộng hóa trị.",
+          "**Tính chất:** Dễ cháy, kém bền nhiệt, nhiệt độ nóng chảy thấp.",
+          "**Phản ứng:** Thường xảy ra chậm và theo nhiều hướng khác nhau."
         ]
       }
     },
@@ -68,8 +68,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Dáº¥u hiá»‡u nháº­n biáº¿t",
-        "content": "HÃ£y thá»­ Ä‘á»‘t má»™t máº©u bÃ´ng hoáº·c máº©u gá»—, náº¿u tháº¥y khÃ³i Ä‘en (muá»™i than) vÃ  sinh ra khÃ­ lÃ m Ä‘á»¥c nÆ°á»›c vÃ´i trong ($CO_2$), Ä‘Ã³ cháº¯c cháº¯n lÃ  há»£p cháº¥t há»¯u cÆ¡!",
+        "title": "Dấu hiệu nhận biết",
+        "content": "Hãy thử đốt một mẩu bông hoặc mẩu gỗ, nếu thấy khói đen (muội than) và sinh ra khí làm đục nước vôi trong ($CO_2$), đó chắc chắn là hợp chất hữu cơ!",
         "color": "orange"
       }
     }
@@ -77,38 +77,38 @@
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Há»£p cháº¥t há»¯u cÆ¡ cÃ³ máº·t á»Ÿ kháº¯p má»i nÆ¡i, tá»« thá»±c pháº©m chÃºng ta Äƒn Ä‘áº¿n cÃ¡c loáº¡i Ä‘á»“ dÃ¹ng hÃ ng ngÃ y. Báº¡n cÃ³ nháº­n ra váº­t thá»ƒ nÃ o lÃ m tá»« PE (má»™t loáº¡i dáº«n xuáº¥t há»¯u cÆ¡) khÃ´ng?",
+      "narrative": "Hợp chất hữu cơ có mặt ở khắp mọi nơi, từ thực phẩm chúng ta ăn đến các loại đồ dùng hàng ngày. Bạn có nhận ra vật thể nào làm từ PE (một loại dẫn xuất hữu cơ) không?",
       "images": [
         "https://images.unsplash.com/photo-1605600611284-19561ad7ddf4?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ tÃºi nilon â€” má»™t sáº£n pháº©m há»¯u cÆ¡ polymer phá»• biáº¿n nháº¥t?",
+      "question": "Hình ảnh nào mô tả túi nilon — một sản phẩm hữu cơ polymer phổ biến nhất?",
       "correctAnswer": 0,
-      "targetType": "nháº­n biáº¿t",
-      "source": "Äá»i sá»‘ng quanh ta"
+      "targetType": "nhận biết",
+      "source": "Đời sống quanh ta"
     },
     {
       "type": "matching",
-      "narrative": "Tháº¿ giá»›i váº­t cháº¥t Ä‘Æ°á»£c chia thÃ nh hai 'vÆ°Æ¡ng quá»‘c'. HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i chÃºng tháº­t chÃ­nh xÃ¡c nhÃ©.",
+      "narrative": "Thế giới vật chất được chia thành hai 'vương quốc'. Hãy giúp tôi phân loại chúng thật chính xác nhé.",
       "leftItems": [
-        { "id": "o1", "label": "Há»£p cháº¥t Há»¯u cÆ¡" },
-        { "id": "o2", "label": "Há»£p cháº¥t VÃ´ cÆ¡" },
-        { "id": "o3", "label": "TrÆ°á»ng há»£p ngoáº¡i lá»‡ (VÃ´ cÆ¡)" }
+        { "id": "o1", "label": "Hợp chất Hữu cơ" },
+        { "id": "o2", "label": "Hợp chất Vô cơ" },
+        { "id": "o3", "label": "Trường hợp ngoại lệ (Vô cơ)" }
       ],
       "items": [
-        { "id": "o1", "label": "ÄÆ°á»ng, RÆ°á»£u, Protein, Vitamin" },
-        { "id": "o2", "label": "Muá»‘i Äƒn (NaCl), Axit sunfuric" },
-        { "id": "o3", "label": "$CO, CO_2,$ Muá»‘i Carbonate" }
+        { "id": "o1", "label": "Đường, Rượu, Protein, Vitamin" },
+        { "id": "o2", "label": "Muối ăn (NaCl), Axit sunfuric" },
+        { "id": "o3", "label": "$CO, CO_2,$ Muối Carbonate" }
       ],
       "correctOrder": ["o1", "o2", "o3"],
-      "question": "PhÃ¢n loáº¡i cÃ¡c cháº¥t thÃ nh Há»¯u cÆ¡ hoáº·c VÃ´ cÆ¡.",
-      "source": "KhÃ¡i niá»‡m ná»n táº£ng"
+      "question": "Phân loại các chất thành Hữu cơ hoặc Vô cơ.",
+      "source": "Khái niệm nền tảng"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Má»i há»£p cháº¥t há»¯u cÆ¡ Ä‘á»u cÃ³ má»™t nguyÃªn tá»‘ 'xÆ°Æ¡ng sá»‘ng' táº¡o nÃªn cáº¥u trÃºc máº¡ch dÃ i. ÄÃ³ lÃ  nguyÃªn tá»‘ nÃ o?",
+      "narrative": "Mọi hợp chất hữu cơ đều có một nguyên tố 'xương sống' tạo nên cấu trúc mạch dài. Đó là nguyên tố nào?",
       "options": [
         "Carbon (C)",
         "Oxygen (O)",
@@ -116,63 +116,63 @@
         "Nitrogen (N)"
       ],
       "correctAnswer": 0,
-      "question": "NguyÃªn tá»‘ nÃ o buá»™c pháº£i cÃ³ máº·t trong má»i há»£p cháº¥t há»¯u cÆ¡?",
-      "source": "NguyÃªn tá»‘ cá»‘t lÃµi"
+      "question": "Nguyên tố nào buộc phải có mặt trong mọi hợp chất hữu cơ?",
+      "source": "Nguyên tố cốt lõi"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Há»£p cháº¥t há»¯u cÆ¡ Ä‘Æ°á»£c chia thÃ nh hai nhÃ³m: Hydrocarbon (chá»‰ cÃ³ C and H) vÃ  ... cá»§a hydrocarbon (cÃ³ thÃªm O, N, Cl...).",
-      "placeholder": "Nháº­p thuáº­t ngá»¯...",
-      "correctAnswer": "Dáº«n xuáº¥t",
-      "question": "TÃªn gá»i cá»§a nhÃ³m há»£p cháº¥t chá»©a C, H vÃ  nguyÃªn tá»‘ khÃ¡c lÃ  gÃ¬?",
-      "source": "PhÃ¢n loáº¡i"
+      "narrative": "Hợp chất hữu cơ được chia thành hai nhóm: Hydrocarbon (chỉ có C and H) và ... của hydrocarbon (có thêm O, N, Cl...).",
+      "placeholder": "Nhập thuật ngữ...",
+      "correctAnswer": "Dẫn xuất",
+      "question": "Tên gọi của nhóm hợp chất chứa C, H và nguyên tố khác là gì?",
+      "source": "Phân loại"
     },
     {
       "type": "drag-drop",
-      "narrative": "Äáº·c tÃ­nh 'nháº¡y cáº£m' vá»›i nhiá»‡t lÃ  Ä‘áº·c trÆ°ng cá»§a há»¯u cÆ¡. HÃ£y hoÃ n thÃ nh cÃ¡c Ä‘áº·c Ä‘iá»ƒm chung sau.",
+      "narrative": "Đặc tính 'nhạy cảm' với nhiệt là đặc trưng của hữu cơ. Hãy hoàn thành các đặc điểm chung sau.",
       "items": [
-        { "id": "c1", "label": "Dá»… chÃ¡y" },
-        { "id": "c2", "label": "KÃ©m bá»n nhiá»‡t" },
-        { "id": "c3", "label": "NÃ³ng cháº£y tháº¥p" }
+        { "id": "c1", "label": "Dễ cháy" },
+        { "id": "c2", "label": "Kém bền nhiệt" },
+        { "id": "c3", "label": "Nóng chảy thấp" }
       ],
       "correctOrder": ["c1", "c2", "c3"],
-      "question": "Sáº¯p xáº¿p 3 Ä‘áº·c Ä‘iá»ƒm hÃ³a lÃ½ Ä‘áº·c trÆ°ng nháº¥t cá»§a há»£p cháº¥t há»¯u cÆ¡.",
-      "source": "TÃ­nh cháº¥t chung"
+      "question": "Sắp xếp 3 đặc điểm hóa lý đặc trưng nhất của hợp chất hữu cơ.",
+      "source": "Tính chất chung"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Há»£p cháº¥t nÃ o sau Ä‘Ã¢y lÃ  há»£p cháº¥t há»¯u cÆ¡?",
+        "question": "Hợp chất nào sau đây là hợp chất hữu cơ?",
         "options": ["$CH_4$", "$CO_2$", "$CaCO_3$", "$NaCl$"],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Dáº«n xuáº¥t hydrocarbon lÃ  há»£p cháº¥t cÃ³ thÃªm nguyÃªn tá»‘ nÃ o ngoÃ i C vÃ  H?",
-        "options": ["Chá»‰ O", "O, N, Cl...", "Chá»‰ N", "KhÃ´ng cÃ³ thÃªm gÃ¬"],
+        "question": "Dẫn xuất hydrocarbon là hợp chất có thêm nguyên tố nào ngoài C và H?",
+        "options": ["Chỉ O", "O, N, Cl...", "Chỉ N", "Không có thêm gì"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "LiÃªn káº¿t chá»§ yáº¿u trong há»£p cháº¥t há»¯u cÆ¡ lÃ :",
-        "options": ["LiÃªn káº¿t Ion", "LiÃªn káº¿t cá»™ng hÃ³a trá»‹", "LiÃªn káº¿t kim loáº¡i", "LiÃªn káº¿t Hidro"],
+        "question": "Liên kết chủ yếu trong hợp chất hữu cơ là:",
+        "options": ["Liên kết Ion", "Liên kết cộng hóa trị", "Liên kết kim loại", "Liên kết Hidro"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Khi Ä‘á»‘t chÃ¡y hoÃ n toÃ n há»£p cháº¥t há»¯u cÆ¡, sáº£n pháº©m luÃ´n cÃ³:",
-        "options": ["$O_2$", "$CO_2$ vÃ  $H_2O$", "$N_2$", "$Cl_2$"],
+        "question": "Khi đốt cháy hoàn toàn hợp chất hữu cơ, sản phẩm luôn có:",
+        "options": ["$O_2$", "$CO_2$ và $H_2O$", "$N_2$", "$Cl_2$"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Cháº¥t nÃ o lÃ  Hydrocarbon?",
+        "question": "Chất nào là Hydrocarbon?",
         "options": ["$C_2H_2$", "$C_2H_5OH$", "$CH_3Cl$", "$C_6H_{12}O_6$"],
         "correctAnswer": 0,
         "points": 10

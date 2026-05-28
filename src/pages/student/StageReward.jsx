@@ -18,7 +18,7 @@ const StageReward = () => {
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lá»—i táº£i pháº§n thÆ°á»Ÿng:', err);
+        console.error('Lỗi tải phần thưởng:', err);
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,7 @@ const StageReward = () => {
     <div className="min-h-screen bg-[#fffbf0]">
       <StageRewardModal
         rewardSrc={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
-        lessonTitle={lesson?.title || "Pháº§n thÆ°á»Ÿng cháº·ng"}
+        lessonTitle={lesson?.title || "Phần thưởng chặng"}
         gameData={lesson?.game}
         onProceed={handleReturnToJourney}
       />

@@ -15,7 +15,7 @@ const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
     <div className="flex justify-between items-start mb-6">
       <div>
         <h3 className="text-xl font-bold text-viet-text group-hover:text-viet-green transition-colors">{className}</h3>
-        <p className="text-xs font-bold text-viet-text-light uppercase tracking-wider">HÃ³a há»c Khá»‘i {grade}</p>
+        <p className="text-xs font-bold text-viet-text-light uppercase tracking-wider">Hóa học Khối {grade}</p>
       </div>
       <div className="w-10 h-10 rounded-2xl bg-viet-green/10 text-viet-green flex items-center justify-center font-black">
         {grade}
@@ -24,11 +24,11 @@ const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
     
     <div className="space-y-4">
       <div className="flex justify-between items-center text-sm">
-        <span className="text-viet-text-light font-medium">SÄ© sá»‘:</span>
-        <span className="font-bold text-viet-text">{students} Há»c sinh</span>
+        <span className="text-viet-text-light font-medium">Sĩ số:</span>
+        <span className="font-bold text-viet-text">{students} Học sinh</span>
       </div>
       <div className="flex justify-between items-center text-sm">
-        <span className="text-viet-text-light font-medium">Trung bÃ¬nh XP:</span>
+        <span className="text-viet-text-light font-medium">Trung bình XP:</span>
         <span className="font-bold text-blue-500">{avgScore} XP</span>
       </div>
     </div>
@@ -43,7 +43,7 @@ const ClassCard = ({ className, id, grade, students, avgScore, delay }) => (
          </div>
       </div>
       <Link to={`/teacher/lop/${id}`} className="text-xs font-bold text-viet-green hover:underline">
-        Quáº£n lÃ½ âž”
+        Quản lý ➔
       </Link>
     </div>
   </motion.div>
@@ -88,7 +88,7 @@ const TeacherDashboard = () => {
       });
       if (error) throw error;
     } catch (err) {
-      alert('Lá»—i liÃªn káº¿t Google: ' + err.message);
+      alert('Lỗi liên kết Google: ' + err.message);
     }
   };
 
@@ -104,7 +104,7 @@ const TeacherDashboard = () => {
           const email = data.session.user.email;
           const res = await linkAccount('google', uid, email);
           if (res.success) {
-            alert('LiÃªn káº¿t Google thÃ nh cÃ´ng!');
+            alert('Liên kết Google thành công!');
           } else {
             alert(res.message);
           }
@@ -154,9 +154,9 @@ const TeacherDashboard = () => {
           </div>
           <div>
             <h1 className="text-3xl font-bold text-viet-text tracking-tight">
-               Báº£ng TÃ³m Táº¯t GiÃ¡o ViÃªn
+               Bảng Tóm Tắt Giáo Viên
             </h1>
-            <p className="text-viet-text-light font-medium">Há»‡ thá»‘ng quáº£n lÃ½ há»c táº­p Aurum v2.0</p>
+            <p className="text-viet-text-light font-medium">Hệ thống quản lý học tập Aurum v2.0</p>
           </div>
         </header>
 
@@ -164,7 +164,7 @@ const TeacherDashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-gradient-to-br from-viet-green/20 to-viet-green/5 p-6 rounded-[32px] border border-viet-green/20 relative overflow-hidden group hover:shadow-xl hover:shadow-viet-green/5 transition-all duration-500">
              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-viet-green uppercase tracking-wider">Tá»•ng sá»‘ lá»›p</span>
+                <span className="text-xs font-bold text-viet-green uppercase tracking-wider">Tổng số lớp</span>
                 <div className="p-2 rounded-lg bg-viet-green/10 text-viet-green group-hover:scale-110 transition-transform">
                    <IconClass />
                 </div>
@@ -175,7 +175,7 @@ const TeacherDashboard = () => {
 
           <div className="bg-gradient-to-br from-blue-500/20 to-blue-500/5 p-6 rounded-[32px] border border-blue-500/20 relative overflow-hidden group hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-500">
              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Tá»•ng sá»‘ há»c sinh</span>
+                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Tổng số học sinh</span>
                 <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 group-hover:scale-110 transition-transform">
                    <IconStudents />
                 </div>
@@ -186,7 +186,7 @@ const TeacherDashboard = () => {
 
           <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 p-6 rounded-[32px] border border-purple-500/20 relative overflow-hidden group hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-500">
              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Nhiá»‡m vá»¥ Ä‘ang diá»…n ra</span>
+                <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Nhiệm vụ đang diễn ra</span>
                 <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 group-hover:scale-110 transition-transform">
                    <IconTasks />
                 </div>
@@ -197,9 +197,9 @@ const TeacherDashboard = () => {
         </div>
 
         <div className="flex items-center justify-between mb-6">
-           <h2 className="text-xl font-bold text-viet-text">Danh sÃ¡ch Lá»›p há»c</h2>
+           <h2 className="text-xl font-bold text-viet-text">Danh sách Lớp học</h2>
            <Link to="/teacher/lop" className="px-4 py-2 bg-viet-text text-white rounded-xl text-sm font-bold shadow-md hover:bg-black transition-colors">
-              Quáº£n lÃ½ Lá»›p há»c âž”
+              Quản lý Lớp học ➔
            </Link>
         </div>
 
@@ -208,7 +208,7 @@ const TeacherDashboard = () => {
            {loading ? (
              <div className="col-span-full py-10 text-center"><div className="w-8 h-8 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mx-auto"></div></div>
            ) : lop.length === 0 ? (
-             <div className="col-span-full py-10 text-center text-viet-text-light font-bold border-2 border-dashed border-viet-border rounded-xl">ChÆ°a cÃ³ lá»›p nÃ o Ä‘Æ°á»£c táº¡o.</div>
+             <div className="col-span-full py-10 text-center text-viet-text-light font-bold border-2 border-dashed border-viet-border rounded-xl">Chưa có lớp nào được tạo.</div>
            ) : (
              lop.map((cls, i) => (
                <ClassCard 
@@ -233,8 +233,8 @@ const TeacherDashboard = () => {
                  </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-viet-text">TÃ i khoáº£n liÃªn káº¿t</h2>
-                <p className="text-sm font-medium text-viet-text-light">LiÃªn káº¿t tÃ i khoáº£n Google vÃ  Telegram Ä‘á»ƒ Ä‘Äƒng nháº­p nhanh</p>
+                <h2 className="text-xl font-bold text-viet-text">Tài khoản liên kết</h2>
+                <p className="text-sm font-medium text-viet-text-light">Liên kết tài khoản Google và Telegram để đăng nhập nhanh</p>
               </div>
             </div>
 
@@ -245,16 +245,16 @@ const TeacherDashboard = () => {
                      <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-8 h-8" alt="Google" />
                      <div>
                        <div className="font-bold text-slate-800">Google</div>
-                       <div className="text-xs text-slate-500 font-medium">ÄÄƒng nháº­p nhanh báº±ng Google</div>
+                       <div className="text-xs text-slate-500 font-medium">Đăng nhập nhanh bằng Google</div>
                      </div>
                   </div>
                   {user?.linkedAccounts?.google ? (
                     <div className="px-4 py-2 rounded-xl text-sm font-bold bg-green-50 text-green-600 border border-green-200">
-                      ÄÃ£ liÃªn káº¿t
+                      Đã liên kết
                     </div>
                   ) : (
                     <button className="px-4 py-2 rounded-xl text-sm font-bold bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-viet-green hover:border-viet-green transition-all" onClick={handleLinkGoogle}>
-                      LiÃªn káº¿t
+                      Liên kết
                     </button>
                   )}
                </div>

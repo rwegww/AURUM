@@ -21,7 +21,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(118, 192, 52, 0.4)',
     gradient: 'from-[#76c034] to-[#589d24]',
     blobColor: 'bg-emerald-400',
-    doodleSymbol: 'Oâ‚‚'
+    doodleSymbol: 'O₂'
   },
   '9': {
     titleKey: 'journey.themes.9.title',
@@ -31,7 +31,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(99, 102, 241, 0.4)',
     gradient: 'from-indigo-500 to-purple-600',
     blobColor: 'bg-indigo-400',
-    doodleSymbol: 'âš¡'
+    doodleSymbol: '⚡'
   },
   '10': {
     titleKey: 'journey.themes.10.title',
@@ -41,7 +41,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(20, 184, 166, 0.4)',
     gradient: 'from-teal-500 to-emerald-600',
     blobColor: 'bg-teal-400',
-    doodleSymbol: 'âš›ï¸'
+    doodleSymbol: '⚛️'
   },
   '11': {
     titleKey: 'journey.themes.11.title',
@@ -51,7 +51,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(244, 63, 94, 0.4)',
     gradient: 'from-rose-500 to-pink-600',
     blobColor: 'bg-rose-400',
-    doodleSymbol: 'ðŸ§¬'
+    doodleSymbol: '🧬'
   },
   '12': {
     titleKey: 'journey.themes.12.title',
@@ -61,19 +61,19 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(245, 158, 11, 0.4)',
     gradient: 'from-amber-500 to-orange-600',
     blobColor: 'bg-amber-400',
-    doodleSymbol: 'â˜¢ï¸'
+    doodleSymbol: '☢️'
   }
 };
 
 const CHEMICAL_DOODLES = [
-  { symbol: 'Hâ‚‚O', name: 'NÆ°á»›c', x: '8%', y: '15%' },
-  { symbol: 'COâ‚‚', name: 'Cacbon Ä‘ioxit', x: '88%', y: '25%' },
-  { symbol: 'Oâ‚‚', name: 'Oxy', x: '5%', y: '45%' },
-  { symbol: 'NaCl', name: 'Muá»‘i Äƒn', x: '92%', y: '55%' },
-  { symbol: 'Hâ‚‚', name: 'HiÄ‘ro', x: '7%', y: '70%' },
-  { symbol: 'HCl', name: 'Axit clohiÄ‘ric', x: '89%', y: '80%' },
-  { symbol: 'NHâ‚ƒ', name: 'Amoniac', x: '4%', y: '90%' },
-  { symbol: 'CHâ‚„', name: 'Metan', x: '91%', y: '12%' },
+  { symbol: 'H₂O', name: 'Nước', x: '8%', y: '15%' },
+  { symbol: 'CO₂', name: 'Cacbon đioxit', x: '88%', y: '25%' },
+  { symbol: 'O₂', name: 'Oxy', x: '5%', y: '45%' },
+  { symbol: 'NaCl', name: 'Muối ăn', x: '92%', y: '55%' },
+  { symbol: 'H₂', name: 'Hiđro', x: '7%', y: '70%' },
+  { symbol: 'HCl', name: 'Axit clohiđric', x: '89%', y: '80%' },
+  { symbol: 'NH₃', name: 'Amoniac', x: '4%', y: '90%' },
+  { symbol: 'CH₄', name: 'Metan', x: '91%', y: '12%' },
 ];
 
 const GradeJourney = () => {
@@ -95,12 +95,12 @@ const GradeJourney = () => {
         const res = await fetch(`/api/lessons?classId=${grade}`);
         if (!res.ok) {
           const text = await res.text();
-          throw new Error(`Lá»—i server (${res.status}): ${text.substring(0, 100)}`);
+          throw new Error(`Lỗi server (${res.status}): ${text.substring(0, 100)}`);
         }
         const data = await res.json();
         setLessons(data);
       } catch (err) {
-        console.error('Lá»—i táº£i hÃ nh trÃ¬nh:', err);
+        console.error('Lỗi tải hành trình:', err);
       } finally {
         setLoading(false);
       }
@@ -143,7 +143,7 @@ const GradeJourney = () => {
         <div className="absolute inset-0 border-4 border-dashed rounded-full animate-[spin_8s_linear_infinite]" style={{ borderColor: activeTheme.primary }} />
         <div className="text-3xl animate-bounce">{activeTheme.doodleSymbol}</div>
       </div>
-      <p className="mt-4 font-black uppercase tracking-[4px] text-viet-text-light text-xs animate-pulse">Khai má»Ÿ báº£n Ä‘á»“...</p>
+      <p className="mt-4 font-black uppercase tracking-[4px] text-viet-text-light text-xs animate-pulse">Khai mở bản đồ...</p>
     </div>
   );
 
@@ -417,7 +417,7 @@ const GradeJourney = () => {
                       {/* segment status trackers */}
                       {!isLocked && (
                         <div className="flex items-center gap-3 mt-auto">
-                          <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Tiáº¿n Ä‘á»™:</span>
+                          <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Tiến độ:</span>
                           <div className="flex gap-1.5 h-2.5 w-32 bg-slate-100 p-0.5 rounded-full border border-slate-200/50">
                             {['level1', 'level2', 'level3'].map((lvl) => {
                               const starsCount = lessonStars[lvl] || 0;
@@ -461,7 +461,7 @@ const GradeJourney = () => {
               );
             })}
 
-            {/* Book Milestone â€” Final Timeline Node */}
+            {/* Book Milestone — Final Timeline Node */}
             {(() => {
               const lesson1Stars = bai_hoc.length > 0 
                 ? (user?.balancingProgress?.lessonStars?.[bai_hoc[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
@@ -477,7 +477,7 @@ const GradeJourney = () => {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className={`relative flex gap-6 md:gap-8 items-start w-full ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}
                 >
-                  {/* Molecular Orbit Central Node â€” Special Book Node */}
+                  {/* Molecular Orbit Central Node — Special Book Node */}
                   <div className="w-10 flex-shrink-0 flex justify-center pt-3 relative">
                     <div className="relative w-10 h-10 flex items-center justify-center">
                       {canOpenBook && (
@@ -513,7 +513,7 @@ const GradeJourney = () => {
                     </div>
                   </div>
 
-                  {/* Book Milestone Card â€” same pattern as lesson cards */}
+                  {/* Book Milestone Card — same pattern as lesson cards */}
                   <div 
                     onClick={() => canOpenBook && setIsBookOpen(true)}
                     className={`group relative flex-1 rounded-[24px] p-6 transition-all border-2 shadow-sm overflow-hidden flex flex-col md:flex-row gap-6 items-center ${
@@ -557,7 +557,7 @@ const GradeJourney = () => {
                         )}
                         <div className="my-auto mx-auto text-center relative z-10">
                           <span className="text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
-                            {canOpenBook ? activeTheme.doodleSymbol : 'ðŸ”’'}
+                            {canOpenBook ? activeTheme.doodleSymbol : '🔒'}
                           </span>
                         </div>
                         <div className={`w-full text-center text-[6px] font-black uppercase tracking-widest relative z-10 select-none ${canOpenBook ? 'text-amber-300/90' : 'text-slate-400'}`}>
@@ -581,7 +581,7 @@ const GradeJourney = () => {
                             borderColor: !canOpenBook ? '#e2e8f0' : activeTheme.primaryLight
                           }}
                         >
-                          Cá»˜T Má»C
+                          CỘT MỐC
                         </span>
                         {canOpenBook && (
                           <Sparkles size={14} className="text-amber-500 animate-pulse" />
@@ -590,7 +590,7 @@ const GradeJourney = () => {
                       <h3 className={`text-[17px] font-black leading-snug tracking-tight mb-1.5 font-sora ${
                         !canOpenBook ? 'text-slate-400' : 'text-slate-800 group-hover:text-slate-900'
                       }`}>
-                        {canOpenBook ? t('journey.milestone.title') : 'HoÃ n thÃ nh cháº·ng 1 Ä‘á»ƒ má»Ÿ'}
+                        {canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}
                       </h3>
                       <p className={`text-[13px] leading-relaxed font-medium ${
                         !canOpenBook ? 'text-slate-300' : 'text-slate-500'
@@ -599,7 +599,7 @@ const GradeJourney = () => {
                       </p>
                     </div>
 
-                    {/* CTA Arrow â€” same as lesson cards */}
+                    {/* CTA Arrow — same as lesson cards */}
                     {canOpenBook && (
                       <div className="flex items-center justify-end md:self-center shrink-0 mt-4 md:mt-0">
                         <div 

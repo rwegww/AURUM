@@ -5,7 +5,7 @@ dotenv.config();
 
 async function createAccounts() {
   try {
-    console.log("Äang táº¡o tÃ i khoáº£n Admin...");
+    console.log("Đang tạo tài khoản Admin...");
     let admin = null;
     try {
         admin = await User.findOne({ username: 'admin' });
@@ -14,7 +14,7 @@ async function createAccounts() {
     }
     
     if (admin) {
-        console.log("TÃ i khoáº£n admin Ä‘Ã£ tá»“n táº¡i.");
+        console.log("Tài khoản admin đã tồn tại.");
     } else {
         await User.create({
             username: 'admin',
@@ -22,10 +22,10 @@ async function createAccounts() {
             password: 'password123',
             role: 'admin'
         });
-        console.log("ÄÃ£ táº¡o tÃ i khoáº£n Admin thÃ nh cÃ´ng! (TÃ i khoáº£n: admin / Máº­t kháº©u: password123)");
+        console.log("Đã tạo tài khoản Admin thành công! (Tài khoản: admin / Mật khẩu: password123)");
     }
 
-    console.log("Äang táº¡o tÃ i khoáº£n GiÃ¡o viÃªn...");
+    console.log("Đang tạo tài khoản Giáo viên...");
     let teacher = null;
     try {
         teacher = await User.findOne({ username: 'teacher' });
@@ -34,7 +34,7 @@ async function createAccounts() {
     }
     
     if (teacher) {
-        console.log("TÃ i khoáº£n teacher Ä‘Ã£ tá»“n táº¡i.");
+        console.log("Tài khoản teacher đã tồn tại.");
     } else {
         await User.create({
             username: 'teacher',
@@ -42,11 +42,11 @@ async function createAccounts() {
             password: 'password123',
             role: 'teacher'
         });
-        console.log("ÄÃ£ táº¡o tÃ i khoáº£n GiÃ¡o viÃªn thÃ nh cÃ´ng! (TÃ i khoáº£n: teacher / Máº­t kháº©u: password123)");
+        console.log("Đã tạo tài khoản Giáo viên thành công! (Tài khoản: teacher / Mật khẩu: password123)");
     }
 
   } catch (err) {
-    console.error("Lá»—i khi táº¡o tÃ i khoáº£n:", err);
+    console.error("Lỗi khi tạo tài khoản:", err);
   }
 }
 

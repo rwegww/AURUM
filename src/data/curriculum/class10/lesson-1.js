@@ -4,17 +4,17 @@
   "lessonId": 1,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 1: ThÃ nh pháº§n cá»§a nguyÃªn tá»­",
-  "chapter": "ChÆ°Æ¡ng 1: Cáº¥u táº¡o nguyÃªn tá»­",
+  "title": "Bài 1: Thành phần của nguyên tử",
+  "chapter": "Chương 1: Cấu tạo nguyên tử",
   "order": 1,
   "isPremium": false,
-  "description": "TÃ¬m hiá»ƒu vá» háº¡t nhÃ¢n (proton, neutron) and lá»›p vá» electron cá»§a nguyÃªn tá»­.",
+  "description": "Tìm hiểu về hạt nhân (proton, neutron) and lớp vỏ electron của nguyên tử.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡m phÃ¡ Electron: ThÃ­ nghiá»‡m cá»§a J.J. Thomson",
+        "text": "1. Khám phá Electron: Thí nghiệm của J.J. Thomson",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "NÄƒm 1897, nhÃ  váº­t lÃ½ J.J. Thomson Ä‘Ã£ thá»±c hiá»‡n thÃ­ nghiá»‡m phÃ³ng Ä‘iá»‡n qua á»‘ng thá»§y tinh gáº§n nhÆ° chÃ¢n khÃ´ng (á»‘ng tia Ã¢m cá»±c). Ã”ng quan sÃ¡t tháº¥y má»™t chÃ¹m tia phÃ¡t ra tá»« cá»±c Ã¢m (cathode) lan truyá»n tháº³ng and bá»‹ lá»‡ch vá» phÃ­a cá»±c dÆ°Æ¡ng khi Ä‘áº·t trong Ä‘iá»‡n trÆ°á»ng.\n\nKáº¿t luáº­n: ChÃ¹m tia Ã¢m cá»±c gá»“m nhá»¯ng háº¡t cá»±c nhá» mang Ä‘iá»‡n tÃ­ch Ã¢m, gá»i lÃ  **electron** (kÃ­ hiá»‡u lÃ  $e$). ÄÃ¢y lÃ  thÃ nh pháº§n cáº¥u táº¡o nÃªn má»i nguyÃªn tá»­."
+        "text": "Năm 1897, nhà vật lý J.J. Thomson đã thực hiện thí nghiệm phóng điện qua ống thủy tinh gần như chân không (ống tia âm cực). Ông quan sát thấy một chùm tia phát ra từ cực âm (cathode) lan truyền thẳng and bị lệch về phía cực dương khi đặt trong điện trường.\n\nKết luận: Chùm tia âm cực gồm những hạt cực nhỏ mang điện tích âm, gọi là **electron** (kí hiệu là $e$). Đây là thành phần cấu tạo nên mọi nguyên tử."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Äáº·c Ä‘iá»ƒm cá»§a cÃ¡c háº¡t cÆ¡ báº£n",
-        "content": "| Háº¡t | KÃ­ hiá»‡u | Äiá»‡n tÃ­ch (C) | Äiá»‡n tÃ­ch quy Æ°á»›c | Khá»‘i lÆ°á»£ng (kg) | Khá»‘i lÆ°á»£ng (amu) |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| Electron | $e$ | $-1,602 \\times 10^{-19}$ | $-1$ | $9,11 \\times 10^{-31}$ | $0,00055$ |\n| Proton | $p$ | $+1,602 \\times 10^{-19}$ | $+1$ | $1,673 \\times 10^{-27}$ | $1$ |\n| Neutron | $n$ | $0$ | $0$ | $1,675 \\times 10^{-27}$ | $1$ |",
+        "title": "Đặc điểm của các hạt cơ bản",
+        "content": "| Hạt | Kí hiệu | Điện tích (C) | Điện tích quy ước | Khối lượng (kg) | Khối lượng (amu) |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| Electron | $e$ | $-1,602 \\times 10^{-19}$ | $-1$ | $9,11 \\times 10^{-31}$ | $0,00055$ |\n| Proton | $p$ | $+1,602 \\times 10^{-19}$ | $+1$ | $1,673 \\times 10^{-27}$ | $1$ |\n| Neutron | $n$ | $0$ | $0$ | $1,675 \\times 10^{-27}$ | $1$ |",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. KhÃ¡m phÃ¡ Háº¡t nhÃ¢n: ThÃ­ nghiá»‡m cá»§a E. Rutherford",
+        "text": "2. Khám phá Hạt nhân: Thí nghiệm của E. Rutherford",
         "level": "h2"
       }
     },
@@ -46,14 +46,14 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "NÄƒm 1911, Ernest Rutherford thá»±c hiá»‡n thÃ­ nghiá»‡m báº¯n phÃ¡ má»™t lÃ¡ vÃ ng má»ng báº±ng cÃ¡c háº¡t alpha ($\\alpha$) mang Ä‘iá»‡n dÆ°Æ¡ng.\n- **Káº¿t quáº£**: Háº§u háº¿t cÃ¡c háº¡t $\\alpha$ Ä‘i tháº³ng, má»™t sá»‘ Ã­t bá»‹ lá»‡ch hÆ°á»›ng and ráº¥t Ã­t háº¡t bá»‹ báº­t ngÆ°á»£c láº¡i.\n- **Káº¿t luáº­n**:\n  + NguyÃªn tá»­ cÃ³ **cáº¥u táº¡o rá»—ng**.\n  + á»ž tÃ¢m nguyÃªn tá»­ cÃ³ má»™t vÃ¹ng kÃ­ch thÆ°á»›c cá»±c nhá» nhÆ°ng táº­p trung toÃ n bá»™ Ä‘iá»‡n tÃ­ch dÆ°Æ¡ng and gáº§n nhÆ° toÃ n bá»™ khá»‘i lÆ°á»£ng nguyÃªn tá»­, gá»i lÃ  ** háº¡t nhÃ¢n **."
+        "text": "Năm 1911, Ernest Rutherford thực hiện thí nghiệm bắn phá một lá vàng mỏng bằng các hạt alpha ($\\alpha$) mang điện dương.\n- **Kết quả**: Hầu hết các hạt $\\alpha$ đi thẳng, một số ít bị lệch hướng and rất ít hạt bị bật ngược lại.\n- **Kết luận**:\n  + Nguyên tử có **cấu tạo rỗng**.\n  + Ở tâm nguyên tử có một vùng kích thước cực nhỏ nhưng tập trung toàn bộ điện tích dương and gần như toàn bộ khối lượng nguyên tử, gọi là ** hạt nhân **."
       }
     },
     {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Cáº¥u trÃºc nguyÃªn tá»­",
+        "text": "3. Cấu trúc nguyên tử",
         "level": "h2"
       }
     },
@@ -61,15 +61,15 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "NguyÃªn tá»­ gá»“m hai pháº§n chÃ­nh:\n\n1. **Háº¡t nhÃ¢n**: Náº±m á»Ÿ tÃ¢m, gá»“m cÃ¡c háº¡t **Proton** ($p$) and **Neutron** ($n$). VÃ¬ nguyÃªn tá»­ trung hÃ²a vá» Ä‘iá»‡n, nÃªn sá»‘ Ä‘Æ¡n vá»‹ Ä‘iá»‡n tÃ­ch dÆ°Æ¡ng cá»§a háº¡t nhÃ¢n luÃ´n báº±ng sá»‘ electron á»Ÿ lá»›p vá» ($Z = p = e$).\n2. **Lá»›p vá»**: Chá»©a cÃ¡c **electron** chuyá»ƒn Ä‘á»™ng ráº¥t nhanh trong khÃ´ng gian xung quanh háº¡t nhÃ¢n.\n\n**KÃ­ch thÆ°á»›c**: ÄÆ°á»ng kÃ­nh nguyÃªn tá»­ lá»›n gáº¥p khoáº£ng $10.000$ Ä‘áº¿n $100.000$ láº§n Ä‘Æ°á»ng kÃ­nh háº¡t nhÃ¢n. Náº¿u coi nguyÃªn tá»­ nhÆ° má»™t sÃ¢n váº­n Ä‘á»™ng thÃ¬ háº¡t nhÃ¢n chá»‰ nhÆ° má»™t quáº£ bÃ³ng tennis Ä‘áº·t á»Ÿ trung tÃ¢m."
+        "text": "Nguyên tử gồm hai phần chính:\n\n1. **Hạt nhân**: Nằm ở tâm, gồm các hạt **Proton** ($p$) and **Neutron** ($n$). Vì nguyên tử trung hòa về điện, nên số đơn vị điện tích dương của hạt nhân luôn bằng số electron ở lớp vỏ ($Z = p = e$).\n2. **Lớp vỏ**: Chứa các **electron** chuyển động rất nhanh trong không gian xung quanh hạt nhân.\n\n**Kích thước**: Đường kính nguyên tử lớn gấp khoảng $10.000$ đến $100.000$ lần đường kính hạt nhân. Nếu coi nguyên tử như một sân vận động thì hạt nhân chỉ như một quả bóng tennis đặt ở trung tâm."
       }
     },
     {
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "Ghi nhá»› quan trá»ng",
-        "content": "Khá»‘i lÆ°á»£ng cá»§a electron ráº¥t nhá» (khÃ´ng Ä‘Ã¡ng ká»ƒ so vá»›i p and n), do Ä‘Ã³ khá»‘i lÆ°á»£ng cá»§a nguyÃªn tá»­ Ä‘Æ°á»£c coi lÃ  táº­p trung hoÃ n toÃ n á»Ÿ háº¡t nhÃ¢n.",
+        "title": "Ghi nhớ quan trọng",
+        "content": "Khối lượng của electron rất nhỏ (không đáng kể so với p and n), do đó khối lượng của nguyên tử được coi là tập trung hoàn toàn ở hạt nhân.",
         "color": "orange"
       }
     }
@@ -78,10 +78,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: ThÃ nh pháº§n cá»§a nguyÃªn tá»­",
+      "title": "Bài giảng: Thành phần của nguyên tử",
       "url": "https://www.youtube.com/watch?v=UuoLVALlxz0",
       "thumbnail": "https://img.youtube.com/vi/UuoLVALlxz0/0.jpg",
-      "description": "TÃ¬m hiá»ƒu vá» cáº¥u táº¡o nguyÃªn tá»­, cÃ¡c loáº¡i háº¡t cÆ¡ báº£n p, n, e (VietJack)."
+      "description": "Tìm hiểu về cấu tạo nguyên tử, các loại hạt cơ bản p, n, e (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -91,43 +91,43 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Háº¡t mang Ä‘iá»‡n dÆ°Æ¡ng trong nguyÃªn tá»­ lÃ :",
+        "question": "Hạt mang điện dương trong nguyên tử là:",
         "options": [
           "Proton",
           "Neutron",
           "Electron",
-          "Háº¡t nhÃ¢n"
+          "Hạt nhân"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Lá»›p vá» nguyÃªn tá»­ cáº¥u táº¡o bá»Ÿi loáº¡i háº¡t nÃ o?",
+        "question": "Lớp vỏ nguyên tử cấu tạo bởi loại hạt nào?",
         "options": [
           "Proton",
           "Electron",
           "Neutron",
-          "Háº¡t quack"
+          "Hạt quack"
         ],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Khá»‘i lÆ°á»£ng cá»§a nguyÃªn tá»­ táº­p trung chá»§ yáº¿u á»Ÿ:",
+        "question": "Khối lượng của nguyên tử tập trung chủ yếu ở:",
         "options": [
-          "Háº¡t nhÃ¢n",
-          "Lá»›p vá»",
-          "CÃ¡c háº¡t proton",
-          "CÃ¡c háº¡t electron"
+          "Hạt nhân",
+          "Lớp vỏ",
+          "Các hạt proton",
+          "Các hạt electron"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Má»™t nguyÃªn tá»­ cÃ³ 6 proton, 6 neutron and 6 electron. Khá»‘i lÆ°á»£ng nguyÃªn tá»­ xáº¥p xá»‰ lÃ :",
+        "question": "Một nguyên tử có 6 proton, 6 neutron and 6 electron. Khối lượng nguyên tử xấp xỉ là:",
         "options": [
           "12 amu",
           "18 amu",
@@ -139,12 +139,12 @@
       },
       {
         "type": "multiple-choice",
-        "question": "KÃ­ch thÆ°á»›c cá»§a háº¡t nhÃ¢n so vá»›i kÃ­ch thÆ°á»›c nguyÃªn tá»­ lÃ :",
+        "question": "Kích thước của hạt nhân so với kích thước nguyên tử là:",
         "options": [
-          "Ráº¥t nhá»",
-          "Ráº¥t lá»›n",
-          "Báº±ng nhau",
-          "Lá»›n gáº¥p Ä‘Ã´i"
+          "Rất nhỏ",
+          "Rất lớn",
+          "Bằng nhau",
+          "Lớn gấp đôi"
         ],
         "correctAnswer": 0,
         "points": 10

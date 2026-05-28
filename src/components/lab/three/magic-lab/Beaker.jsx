@@ -5,11 +5,11 @@ import useLabStore from './store';
 
 const AnimatedSolid = ({ targetPosition, color, type }) => {
   const meshRef = useRef();
-  const [currentY, setCurrentY] = useState(2.0); // Báº¯t Ä‘áº§u rÆ¡i tá»« trÃªn cao
+  const [currentY, setCurrentY] = useState(2.0); // Bắt đầu rơi từ trên cao
 
   useFrame((state, delta) => {
     if (currentY > targetPosition[1]) {
-      // RÆ¡i xuá»‘ng dáº§n cho Ä‘áº¿n khi cháº¡m Ä‘Ã­ch
+      // Rơi xuống dần cho đến khi chạm đích
       const newY = Math.max(targetPosition[1], currentY - delta * 4);
       setCurrentY(newY);
       if (meshRef.current) {
@@ -54,7 +54,7 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
   const { contents, isHeating } = beakerData;
   const settings = useLabStore(state => state.settings);
 
-  // TÃ­nh toÃ¡n mÃ u sáº¯c tá»•ng há»£p dá»±a trÃªn cÃ¡c cháº¥t lá»ng cÃ³ trong cá»‘c
+  // Tính toán màu sắc tổng hợp dựa trên các chất lỏng có trong cốc
   const beakerColor = useMemo(() => {
     if (contents.length === 0) return '#a0d8ef';
     const liquids = contents.filter(item => item?.state !== 'solid');
@@ -65,19 +65,19 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
     return '#a0d8ef';
   }, [contents]);
 
-  // Kiá»ƒm tra xem cÃ³ cháº¥t ráº¯n/káº¿t tá»§a nÃ o trong cá»‘c khÃ´ng
+  // Kiểm tra xem có chất rắn/kết tủa nào trong cốc không
   const hasPrecipitate = useMemo(() => {
     return contents.some(item => item.state === 'solid' || item.type === 'metal');
   }, [contents]);
 
-  // Material nÆ°á»›c bÃªn trong
+  // Material nước bên trong
   const waterMaterial = useMemo(() => {
     return new THREE.MeshPhysicalMaterial({
       color: beakerColor,
-      transmission: hasPrecipitate ? 0.15 : 0.5, // LÃ m Ä‘á»¥c (giáº£m truyá»n sÃ¡ng) náº¿u cÃ³ káº¿t tá»§a
+      transmission: hasPrecipitate ? 0.15 : 0.5, // Làm đục (giảm truyền sáng) nếu có kết tủa
       opacity: hasPrecipitate ? 0.95 : 0.85,
       transparent: true,
-      roughness: hasPrecipitate ? 0.7 : 0.15,     // TÄƒng Ä‘á»™ nhÃ¡m Ä‘á»ƒ Ã¡nh sÃ¡ng phÃ¢n tÃ¡n táº¡o hiá»‡u á»©ng huyá»n phÃ¹/Ä‘á»¥c
+      roughness: hasPrecipitate ? 0.7 : 0.15,     // Tăng độ nhám để ánh sáng phân tán tạo hiệu ứng huyền phù/đục
       ior: 1.33,
       side: THREE.DoubleSide,
       emissive: isHeating ? beakerColor : '#000000',
@@ -85,12 +85,12 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
     });
   }, [beakerColor, isHeating, hasPrecipitate]);
 
-  // Material vá» cá»‘c
+  // Material vỏ cốc
   const beakerMaterial = useMemo(() => {
     const heatTime = beakerData.heatTime || 0;
     const isOverheating = heatTime >= 10;
     
-    // Náº¿u quÃ¡ nhiá»‡t (sau 20s Ä‘un), thá»§y tinh chuyá»ƒn dáº§n sang Ã¡nh Ä‘á» cam nÃ³ng cháº£y
+    // Nếu quá nhiệt (sau 20s đun), thủy tinh chuyển dần sang ánh đỏ cam nóng chảy
     const glowIntensity = isOverheating ? Math.min(1.5, (heatTime - 9) * 0.25) : 0;
     const emissiveColor = isOverheating ? '#ff3300' : '#000000';
 
@@ -108,20 +108,20 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
     });
   }, [isActive, settings.beakerOpacity, beakerData.heatTime]);
 
-  // Má»©c nÆ°á»›c dá»±a trÃªn sá»‘ lÆ°á»£ng cháº¥t lá»ng vÃ  lÆ°á»£ng nÆ°á»›c bay hÆ¡i
+  // Mức nước dựa trên số lượng chất lỏng và lượng nước bay hơi
   const liquidCount = contents.filter(item => item.state !== 'solid').length;
   const liquidVolume = beakerData.liquidVolume !== undefined ? beakerData.liquidVolume : 1.0;
   const waterLevel = Math.min(0.9, Math.max(0.15, liquidCount * 0.18 * liquidVolume));
 
   return (
     <group ref={groupRef} {...props}>
-      {/* Vá» cá»‘c thá»§y tinh - ThÃ¢n chÃ­nh */}
+      {/* Vỏ cốc thủy tinh - Thân chính */}
       <mesh position={[0, 0.55, 0]}>
         <cylinderGeometry args={[0.52, 0.48, 1.1, 32, 1, true]} />
         <primitive object={beakerMaterial} attach="material" />
       </mesh>
 
-      {/* Hiá»‡u á»©ng chá»n cá»‘c (cÅ©ng dÃ¹ng Ä‘á»ƒ trang trÃ­) */}
+      {/* Hiệu ứng chọn cốc (cũng dùng để trang trí) */}
       {isActive && (
         <mesh position={[0, -0.02, 0]} rotation={[Math.PI / 2, 0, 0]}>
            <ringGeometry args={[0.55, 0.65, 32]} />
@@ -129,7 +129,7 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
         </mesh>
       )}
 
-      {/* Viá»n miá»‡ng cá»‘c (lip) */}
+      {/* Viền miệng cốc (lip) */}
       <mesh position={[0, 1.1, 0]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.52, 0.02, 8, 32]} />
         <meshPhysicalMaterial
@@ -142,19 +142,19 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
         />
       </mesh>
 
-      {/* Má» rÃ³t (Spout) */}
+      {/* Mỏ rót (Spout) */}
       <mesh position={[0, 1.1, 0.53]} rotation={[0.3, 0, 0]}>
         <boxGeometry args={[0.15, 0.04, 0.08]} />
         <meshPhysicalMaterial color="#ffffff" transmission={0.9} opacity={settings.beakerOpacity} transparent />
       </mesh>
 
-      {/* ÄÃ¡y cá»‘c */}
+      {/* Đáy cốc */}
       <mesh position={[0, 0, 0]}>
         <cylinderGeometry args={[0.48, 0.48, 0.06, 32]} />
         <meshPhysicalMaterial color="#ffffff" transmission={0.85} opacity={settings.beakerOpacity} transparent />
       </mesh>
 
-      {/* Cháº¥t lá»ng */}
+      {/* Chất lỏng */}
       {liquidCount > 0 && (
         <mesh position={[0, waterLevel / 2 + 0.03, 0]}>
           <cylinderGeometry args={[0.46, 0.46, waterLevel, 32]} />
@@ -162,7 +162,7 @@ const Beaker = ({ beakerData, isActive, ...props }) => {
         </mesh>
       )}
 
-      {/* Cháº¥t ráº¯n dÆ°á»›i Ä‘Ã¡y cá»‘c (CÃ³ hiá»‡u á»©ng rÆ¡i) */}
+      {/* Chất rắn dưới đáy cốc (Có hiệu ứng rơi) */}
       {contents.map((item, idx) => {
         if (item.state === 'solid' || item.type === 'metal') {
           const angle = idx * Math.PI * 0.618;

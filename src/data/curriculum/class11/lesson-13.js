@@ -3,18 +3,18 @@
   "classId": 11,
   "lessonId": 13,
   "programId": "ketnoi",
-  "title": "BÃ i 13. Cáº¥u táº¡o hÃ³a há»c há»£p cháº¥t há»¯u cÆ¡",
-  "chapter": "ChÆ°Æ¡ng 3. Äáº¡i cÆ°Æ¡ng vá» hÃ³a há»c há»¯u cÆ¡",
+  "title": "Bài 13. Cấu tạo hóa học hợp chất hữu cơ",
+  "chapter": "Chương 3. Đại cương về hóa học hữu cơ",
   "order": 13,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tráº­t tá»± liÃªn káº¿t cÃ¡c nguyÃªn tá»­ táº¡o ra cáº¥u táº¡o hÃ³a há»c. TÃ¬m hiá»ƒu Ä‘á»“ng Ä‘áº³ng, Ä‘á»“ng phÃ¢n and nhÃ³m chá»©c Ä‘áº·c trÆ°ng trong há»£p cháº¥t há»¯u cÆ¡.",
+  "description": "Trật tự liên kết các nguyên tử tạo ra cấu tạo hóa học. Tìm hiểu đồng đẳng, đồng phân and nhóm chức đặc trưng trong hợp chất hữu cơ.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Thuyáº¿t cáº¥u táº¡o hÃ³a há»c",
+        "text": "1. Thuyết cấu tạo hóa học",
         "level": "h2"
       }
     },
@@ -24,8 +24,8 @@
       "content": {
         "type": "bullet",
         "items": [
-          "Há»¯u cÆ¡ tá»«ng lÃ  LÄ©nh Vá»±c Ma ÄiÃªn cho Ä‘áº¿n khi BÃ¡c há»c Butlerov háº¡ chiáº¿u Thuyáº¿t Cáº¥u Táº¡o HÃ³a Há»c - Linh Há»“n Tá»‘i ThÆ°á»£ng.\n1. **TuÃ¢n thá»§ BÃ n Luáº­n HÃ³a Trá»‹:** Carbon (C) mang 4 Tay gáº¯p, Hydrogen (H) mang duy nháº¥t 1 cháº¥u cáº¯m, Oxygen (O) báº¥u 2 chá»‘t khuy, Nitrogen (N) xoáº¯n 3 váº·n trÃ²n. CÃ¡c nguyÃªn tá»­ Há»¯u CÆ¡ vÄ©nh viá»…n khÃ´ng bao giá» ghÃ©p lá»™n xá»™n vÃ´ tráº­t tá»±, mÃ  Cháº·t Cháº½ Xiáº¿t RÃ ng Buá»™c nhÆ° TrÃ² ChÆ¡i Lego Láº¯p RÃ¡p Khung HÃ³a Trá»‹.\n2. **CÃ¡ch ghÃ©p lÃ m NÃªn TÃ­nh Cháº¥t Má»‡nh:** Cháº¥t Cá»“n Men Say ngáº¥t ngÃ¢y and Cháº¥t KhÃ­ Äá»™c Láº¡nh GÃ¡y TÃª Cá»©ng cÃ³ Thá»ƒ Giá»‘ng Tuyá»‡t Äá»‘i 100% Khá»‘i lÆ°á»£ng, Giá»‘ng 100% CTPT C2H6O. ChÃºng CHá»ˆ KHÃC NHAU á»Ÿ cÃ¡i HÃ¬nh DÃ¡ng Chá»— Láº¯p RÃ¡p Tay Äiá»ƒm.",
-          "3. **Sá»©c Máº¡nh Khung Gá»— Cacbon:** Äáº·c Ã¢n thÆ°á»£ng Ä‘áº¿, Bá»n Cacbon khÃ´ng chá»‰ bÃ¡m káº» khÃ¡c, ChÃºng CÃ³ Thá»ƒ Tá»± Náº¯m Tay Äá»“ng Bá»n vÆ°Æ¡n CÃ¢y C_C_C dÃ i báº¥t táº­n ngÃ n kilomet ná»‘i máº¡ng. GhÃ©p Máº¡ch Tháº³ng TÃ³c, GhÃ©p Máº¡ch PhÃ¢n NhÃ¡nh San HÃ´ Ráº½ CÃ¢y, hoáº·c LÆ°á»£n Ná»‘i VÃ²ng KÃ­n HÃ¬nh Lá»¥c GiÃ¡c."
+          "Hữu cơ từng là Lĩnh Vực Ma Điên cho đến khi Bác học Butlerov hạ chiếu Thuyết Cấu Tạo Hóa Học - Linh Hồn Tối Thượng.\n1. **Tuân thủ Bàn Luận Hóa Trị:** Carbon (C) mang 4 Tay gắp, Hydrogen (H) mang duy nhất 1 chấu cắm, Oxygen (O) bấu 2 chốt khuy, Nitrogen (N) xoắn 3 vặn tròn. Các nguyên tử Hữu Cơ vĩnh viễn không bao giờ ghép lộn xộn vô trật tự, mà Chặt Chẽ Xiết Ràng Buộc như Trò Chơi Lego Lắp Ráp Khung Hóa Trị.\n2. **Cách ghép làm Nên Tính Chất Mệnh:** Chất Cồn Men Say ngất ngây and Chất Khí Độc Lạnh Gáy Tê Cứng có Thể Giống Tuyệt Đối 100% Khối lượng, Giống 100% CTPT C2H6O. Chúng CHỈ KHÁC NHAU ở cái Hình Dáng Chỗ Lắp Ráp Tay Điểm.",
+          "3. **Sức Mạnh Khung Gỗ Cacbon:** Đặc ân thượng đế, Bọn Cacbon không chỉ bám kẻ khác, Chúng Có Thể Tự Nắm Tay Đồng Bọn vươn Cây C_C_C dài bất tận ngàn kilomet nối mạng. Ghép Mạch Thẳng Tóc, Ghép Mạch Phân Nhánh San Hô Rẽ Cây, hoặc Lượn Nối Vòng Kín Hình Lục Giác."
         ]
       }
     },
@@ -33,7 +33,7 @@
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Äá»“ng Ä‘áº³ng",
+        "text": "2. Đồng đẳng",
         "level": "h2"
       }
     },
@@ -41,8 +41,8 @@
       "id": "mod4",
       "type": "infoBox",
       "content": {
-        "title": "NhÃ  Äá»“ng Äáº³ng Há»c (Anh Em CÃ¹ng Gen HÃ³a)",
-        "content": "HÃ£y hiá»ƒu chá»¯ Äá»“ng Äáº³ng (Äá»“ng loáº¡i HÃ ng Äáº³ng). NÃ³ lÃ  nhá»¯ng há»£p cháº¥t CÃ“ Cáº¤U Táº O Y Há»†T NHAU (TÃ­nh cháº¥t HÃ³a há»c giá»t mÃ¡u y chang 99%). NhÆ°ng chá»‰ vÃ¬ tuá»•i tÃ¡c Äá»©a Lá»›n Äá»©a BÃ©, Sá»± To Nhá» XÃ¡c PhÃ m cá»§a chÃºng KhÃ¡c Nhau Dá»‹ Biáº¿n ThÃªm BÃ´i Tá»«ng Cá»¥c Gáº¡ch ($CH_2$ - náº·ng 14 dvc).\nVÃ­ dá»¥ Pháº£ Há»‡ DÃ£y Alkane (Äá»u lÃ  máº¡ch tháº³ng no no trÃ²n): Methane $CH_4$, Gáº¯n thÃªm 1 cá»¥c $CH_2$ Ä‘áº» vá»t Ethane $C_2H_6$, thÃªm tiáº¿p 1 cá»¥c Ä‘áº» em $C_3H_8$ and dÃ i luá»“n tuá»™t. ChÃºng lÃ  NhÃ³m \"Äá»“ng Äáº³ng\".",
+        "title": "Nhà Đồng Đẳng Học (Anh Em Cùng Gen Hóa)",
+        "content": "Hãy hiểu chữ Đồng Đẳng (Đồng loại Hàng Đẳng). Nó là những hợp chất CÓ CẤU TẠO Y HỆT NHAU (Tính chất Hóa học giọt máu y chang 99%). Nhưng chỉ vì tuổi tác Đứa Lớn Đứa Bé, Sự To Nhỏ Xác Phàm của chúng Khác Nhau Dị Biến Thêm Bôi Từng Cục Gạch ($CH_2$ - nặng 14 dvc).\nVí dụ Phả Hệ Dãy Alkane (Đều là mạch thẳng no no tròn): Methane $CH_4$, Gắn thêm 1 cục $CH_2$ đẻ vọt Ethane $C_2H_6$, thêm tiếp 1 cục đẻ em $C_3H_8$ and dài luồn tuột. Chúng là Nhóm \"Đồng Đẳng\".",
         "color": "blue"
       }
     },
@@ -50,7 +50,7 @@
       "id": "mod5",
       "type": "heading",
       "content": {
-        "text": "3. Äá»“ng phÃ¢n",
+        "text": "3. Đồng phân",
         "level": "h2"
       }
     },
@@ -58,8 +58,8 @@
       "id": "mod6",
       "type": "infoBox",
       "content": {
-        "title": "TÃ¢m Kháº£m Ãc Má»™ng Cáº¯t Rá»… Äá»“ng PhÃ¢n",
-        "content": "KhÃ¡i Niá»‡m Diá»‡t Kháº£o ThÃ­ Tá»‘i Cao - Äá»“ng PhÃ¢n. (Äá»“ng nghÄ©a CÃ™NG 1 CÃ´ng Thá»©c Sinh Cá»•). \n**Äá»“ng PhÃ¢n** lÃ  nhá»¯ng cháº¥t HOÃ€N TOÃ€N KHÃC NHAU vá» má»i máº·t (mÃ u, mÃ¹i, lÃ½ hÃ³a, Ä‘iá»ƒm sÃ´i tan), Bá»n chÃºng chá»‰ cÃ³ chung 1 cÃ¡i mÃ¡c CÃ”NG THá»¨C PHÃ‚N Tá»¬ Cá»™t Má»‘c Sá»‘ NguyÃªn Tá»­ Náº¥u Cao (1 ná»“i chÃ¡o). Do cÃ¡ch Láº¯p RÃ¡p Ráº½ CÃ¢y Ráº½ NhÃ¡nh Khung Carbon khÃ¡c nhau Ä‘áº» ra Háº±ng Sa Sá»‘ Biáº¿n Vá»‹ PhÃ©p Má»‡nh Láº¡.",
+        "title": "Tâm Khảm Ác Mộng Cắt Rễ Đồng Phân",
+        "content": "Khái Niệm Diệt Khảo Thí Tối Cao - Đồng Phân. (Đồng nghĩa CÙNG 1 Công Thức Sinh Cổ). \n**Đồng Phân** là những chất HOÀN TOÀN KHÁC NHAU về mọi mặt (màu, mùi, lý hóa, điểm sôi tan), Bọn chúng chỉ có chung 1 cái mác CÔNG THỨC PHÂN TỬ Cột Mốc Số Nguyên Tử Nấu Cao (1 nồi cháo). Do cách Lắp Ráp Rẽ Cây Rẽ Nhánh Khung Carbon khác nhau đẻ ra Hằng Sa Số Biến Vị Phép Mệnh Lạ.",
         "color": "green"
       }
     },
@@ -69,7 +69,7 @@
       "content": {
         "type": "bullet",
         "items": [
-          "Sá»± Ä‘a dáº¡ng cá»§a Há»¯u CÆ¡ Ä‘Ã¨ báº¹p VÃ´ CÆ¡ lÃ  nhá» Sá»± BÃ¹ng Ná»• Giá»›i Äá»“ng PhÃ¢n:\n1. **Äá»“ng PhÃ¢n Máº¡ch Khung Carbon (TrÃ² RÃºt Khá»›p XÆ°Æ¡ng):** Xáº» khÃºc Máº¡ch Káº» Tháº³ng vÃ³t 4 chá»‘t ($CH_3-CH_2-CH_2-CH_3$ Butane) thÃ nh Báº» Cháº¥u NhÃ´ Máº¡ch Gáº¯n Ráº½ NhÃ¡nh Lá»“i ($CH_3-CH(CH_3)-CH_3$ 2-MethylPropane).\n2. **Äá»“ng PhÃ¢n Dá»‹ch Vá»‹ TrÃ­ Chá»‘t:** Dá»i chá»— Cáº¯m cá»§a LiÃªn káº¿t ÄÃ´i (C=C Ä‘áº§u rÃ o nháº£y vá» vÃ´ lÃµi C=C lÃµi), hoáº·c Dá»i XÃ¡ch Gá»‘c (-OH, Cl) Cháº¡y tá»« Äáº§u nhÃ  cáº¯m thá»¥t lÃºt vÃ o Giá»¯a NhÃ .\n3. **Äá»“ng PhÃ¢n Loáº¡i Cá»±c (Loáº¡i MÃ©p NhÃ³m Chá»©c):** CÃ¹ng $C_2H_6O$ cÃ³ thá»ƒ Váº½ láº¯p Äáº§u ráº½ PhÃ©p RÆ°á»£u (-OH báº¥u Ä‘uÃ´i say láº£o Ä‘áº£o) VÃ€ Váº½ biáº¿n tháº¥u Cáº¥u TrÃºc KhÃ­ KÃ­nh Ná»•i (-O- Ngáº­m MÃµm Cáº¯t ChÃ­nh Giá»¯a LÃµi lá»«ng chá»«ng Ether TÃª liá»‡t NÃ£o)."
+          "Sự đa dạng của Hữu Cơ đè bẹp Vô Cơ là nhờ Sự Bùng Nổ Giới Đồng Phân:\n1. **Đồng Phân Mạch Khung Carbon (Trò Rút Khớp Xương):** Xẻ khúc Mạch Kẻ Thẳng vót 4 chốt ($CH_3-CH_2-CH_2-CH_3$ Butane) thành Bẻ Chấu Nhô Mạch Gắn Rẽ Nhánh Lồi ($CH_3-CH(CH_3)-CH_3$ 2-MethylPropane).\n2. **Đồng Phân Dịch Vị Trí Chốt:** Dời chỗ Cắm của Liên kết Đôi (C=C đầu rào nhảy về vô lõi C=C lõi), hoặc Dời Xách Gốc (-OH, Cl) Chạy từ Đầu nhà cắm thụt lút vào Giữa Nhà.\n3. **Đồng Phân Loại Cực (Loại Mép Nhóm Chức):** Cùng $C_2H_6O$ có thể Vẽ lắp Đầu rẽ Phép Rượu (-OH bấu đuôi say lảo đảo) VÀ Vẽ biến thấu Cấu Trúc Khí Kính Nổi (-O- Ngậm Mõm Cắt Chính Giữa Lõi lừng chừng Ether Tê liệt Não)."
         ]
       }
     },
@@ -77,8 +77,8 @@
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "CÃ¡i Báº«y Äáº¿m Nháº§m Tay Äá»“ng PhÃ¢n Cháº¿t Báº¥t Äáº¯c KÃ¬ Tá»­",
-        "content": "Sai láº§m KÃ¨o Ä‘iá»ƒm náº·ng nháº¥t Äá» Thi HÃ³a: Báº» nháº§m tay hoáº·c báº» nhÃ¡nh cáº¯m Láº¡i cÃ¡i MÃ©p Vá»‹ TrÃ­ CHÃ“T ÄUÃ”I Rá»„ Máº¡ch. HÃ£y nhá»› Máº¡ch Carbon CÃ³ Thá»ƒ Uá»‘n Náº¯n LÆ°á»£n Lá» dÃ­ch dáº¯c uá»‘n Ã©o Cong ÄuÃ´i Cáº¡p. Viá»‡c Gáº¥p Cá»™t Báº» Cá»• 1 Khung Tháº³ng hÃ¬nh chá»¯ U thÃ¬ Báº£n Cháº¥t RÃºt Ruá»™t NÃ³ Váº«n Chá»‰ LÃ  1 CÃ¡i Khung Tháº³ng (Báº» Gáº­p chá»© KhÃ´ng há» Sinh TrÆ°á»Ÿng NhÃ¡nh Thá»±c Sá»± giá»¯a thÃ¢n). Pháº£i Váº» gÃ£y dá»i TrÃ³i Chá»‘t VÃ€O Giá»¯a CÃC CARBON BÃŠN TRONG Cá»¤C thÃ¬ Má»›i Gá»i LÃ€ Váº½ PhÃ¢n Ráº» NhÃ¡nh.",
+        "title": "Cái Bẫy Đếm Nhầm Tay Đồng Phân Chết Bất Đắc Kì Tử",
+        "content": "Sai lầm Kèo điểm nặng nhất Đề Thi Hóa: Bẻ nhầm tay hoặc bẻ nhánh cắm Lại cái Mép Vị Trí CHÓT ĐUÔI RỄ Mạch. Hãy nhớ Mạch Carbon Có Thể Uốn Nắn Lượn Lờ dích dắc uốn éo Cong Đuôi Cạp. Việc Gấp Cột Bẻ Cổ 1 Khung Thẳng hình chữ U thì Bản Chất Rút Ruột Nó Vẫn Chỉ Là 1 Cái Khung Thẳng (Bẻ Gập chứ Không hề Sinh Trưởng Nhánh Thực Sự giữa thân). Phải Vẻ gãy dời Trói Chốt VÀO Giữa CÁC CARBON BÊN TRONG CỤC thì Mới Gọi LÀ Vẽ Phân Rẻ Nhánh.",
         "color": "orange"
       }
     }
@@ -86,19 +86,19 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "CÃ¡c cháº¥t CH4, C2H6, C3H8 thuá»™c cÃ¹ng má»™t dÃ£y:",
+      "question": "Các chất CH4, C2H6, C3H8 thuộc cùng một dãy:",
       "options": [
-        "Äá»“ng phÃ¢n máº¡ch cacbon",
-        "Äá»“ng Ä‘áº³ng alkane",
-        "Äá»“ng phÃ¢n cáº¥u táº¡o",
-        "Äá»“ng Ä‘áº³ng alkene"
+        "Đồng phân mạch cacbon",
+        "Đồng đẳng alkane",
+        "Đồng phân cấu tạo",
+        "Đồng đẳng alkene"
       ],
       "correctAnswer": 1,
-      "explanation": "ÄÃ¢y lÃ  cÃ¡c Hidrocarbon no máº¡ch há»Ÿ, hÆ¡n kÃ©m nhau -CH2- nÃªn gá»i lÃ  Ä‘á»“ng Ä‘áº³ng alkane."
+      "explanation": "Đây là các Hidrocarbon no mạch hở, hơn kém nhau -CH2- nên gọi là đồng đẳng alkane."
     },
     {
       "id": "q2",
-      "question": "C2H6O cÃ³ bao nhiÃªu Ä‘á»“ng phÃ¢n cáº¥u táº¡o máº¡ch há»Ÿ?",
+      "question": "C2H6O có bao nhiêu đồng phân cấu tạo mạch hở?",
       "options": [
         "1",
         "2",
@@ -106,16 +106,16 @@
         "4"
       ],
       "correctAnswer": 1,
-      "explanation": "CÃ³ hai Ä‘á»“ng phÃ¢n cáº¥u táº¡o lÃ  ethyl alcohol (CH3-CH2-OH) and dimethyl ether (CH3-O-CH3)."
+      "explanation": "Có hai đồng phân cấu tạo là ethyl alcohol (CH3-CH2-OH) and dimethyl ether (CH3-O-CH3)."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Cáº¥u táº¡o hÃ³a há»c há»£p cháº¥t há»¯u cÆ¡",
+      "title": "Bài giảng: Cấu tạo hóa học hợp chất hữu cơ",
       "url": "https://www.youtube.com/watch?v=yVug4yRVoRQ",
       "thumbnail": "https://img.youtube.com/vi/yVug4yRVoRQ/0.jpg",
-      "description": "Thuyáº¿t cáº¥u táº¡o hÃ³a há»c, khÃ¡i niá»‡m Ä‘á»“ng Ä‘áº³ng and Ä‘á»“ng phÃ¢n trong hÃ³a há»¯u cÆ¡ (Tech12h)."
+      "description": "Thuyết cấu tạo hóa học, khái niệm đồng đẳng and đồng phân trong hóa hữu cơ (Tech12h)."
     }
   ],
   "practiceModules": [],

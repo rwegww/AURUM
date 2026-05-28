@@ -2,7 +2,7 @@
   {
     "number": 1,
     "symbol": "H",
-    "name": "HiÄ‘ro",
+    "name": "Hiđro",
     "weight": "1.008",
     "category": "diatomic-nonmetal",
     "x": 1,
@@ -10,7 +10,7 @@
     "shells": [
       1
     ],
-    "desc": "NguyÃªn tá»‘ nháº¹ nháº¥t vÃ  phá»• biáº¿n nháº¥t trong vÅ© trá»¥. ThÃ nh pháº§n chÃ­nh cá»§a nÆ°á»›c."
+    "desc": "Nguyên tố nhẹ nhất và phổ biến nhất trong vũ trụ. Thành phần chính của nước."
   },
   {
     "number": 2,
@@ -23,7 +23,7 @@
     "shells": [
       2
     ],
-    "desc": "KhÃ­ trÆ¡, nháº¹ thá»© hai sau Hydro. PhÃ¡t hiá»‡n trÃªn máº·t trá»i trÆ°á»›c khi tÃ¬m tháº¥y trÃªn TrÃ¡i Äáº¥t."
+    "desc": "Khí trơ, nhẹ thứ hai sau Hydro. Phát hiện trên mặt trời trước khi tìm thấy trên Trái Đất."
   },
   {
     "number": 3,
@@ -37,7 +37,7 @@
       2,
       1
     ],
-    "desc": "Kim loáº¡i kiá»m nháº¹ nháº¥t, má»m vÃ  cÃ³ mÃ u báº¡c."
+    "desc": "Kim loại kiềm nhẹ nhất, mềm và có màu bạc."
   },
   {
     "number": 4,
@@ -51,7 +51,7 @@
       2,
       2
     ],
-    "desc": "Kim loáº¡i kiá»m thá»• nháº¹, cá»©ng, mÃ u xÃ¡m thÃ©p."
+    "desc": "Kim loại kiềm thổ nhẹ, cứng, màu xám thép."
   },
   {
     "number": 5,
@@ -65,7 +65,7 @@
       2,
       3
     ],
-    "desc": "Ã kim cá»©ng, mÃ u Ä‘en, cÃ³ tÃ­nh bÃ¡n dáº«n."
+    "desc": "Á kim cứng, màu đen, có tính bán dẫn."
   },
   {
     "number": 6,
@@ -79,12 +79,12 @@
       2,
       4
     ],
-    "desc": "NguyÃªn tá»‘ cÆ¡ báº£n cá»§a sá»± sá»‘ng trÃªn TrÃ¡i Äáº¥t."
+    "desc": "Nguyên tố cơ bản của sự sống trên Trái Đất."
   },
   {
     "number": 7,
     "symbol": "N",
-    "name": "NitÆ¡",
+    "name": "Nitơ",
     "weight": "14.01",
     "category": "diatomic-nonmetal",
     "x": 15,
@@ -93,7 +93,7 @@
       2,
       5
     ],
-    "desc": "KhÃ­ chiáº¿m 78% khÃ­ quyá»ƒn TrÃ¡i Äáº¥t."
+    "desc": "Khí chiếm 78% khí quyển Trái Đất."
   },
   {
     "number": 8,
@@ -107,7 +107,7 @@
       2,
       6
     ],
-    "desc": "Duy trÃ¬ sá»± sá»‘ng vÃ  sá»± chÃ¡y, chiáº¿m 21% khÃ´ng khÃ­."
+    "desc": "Duy trì sự sống và sự cháy, chiếm 21% không khí."
   },
   {
     "number": 9,
@@ -121,7 +121,7 @@
       2,
       7
     ],
-    "desc": "Phi kim hoáº¡t Ä‘á»™ng máº¡nh nháº¥t, cÃ³ Ä‘á»™ Ã¢m Ä‘iá»‡n lá»›n nháº¥t."
+    "desc": "Phi kim hoạt động mạnh nhất, có độ âm điện lớn nhất."
   },
   {
     "number": 10,
@@ -135,7 +135,7 @@
       2,
       8
     ],
-    "desc": "KhÃ­ hiáº¿m phÃ¡t ra Ã¡nh sÃ¡ng Ä‘á» cam trong Ä‘Ã¨n quáº£ng cÃ¡o."
+    "desc": "Khí hiếm phát ra ánh sáng đỏ cam trong đèn quảng cáo."
   },
   {
     "number": 11,
@@ -150,7 +150,7 @@
       8,
       1
     ],
-    "desc": "Kim loáº¡i má»m, pháº£n á»©ng máº¡nh vá»›i nÆ°á»›c táº¡o ngá»n lá»­a vÃ ng."
+    "desc": "Kim loại mềm, phản ứng mạnh với nước tạo ngọn lửa vàng."
   },
   {
     "number": 12,
@@ -165,12 +165,12 @@
       8,
       2
     ],
-    "desc": "Kim loáº¡i nháº¹, chÃ¡y sÃ¡ng vá»›i ngá»n lá»­a tráº¯ng chÃ³i."
+    "desc": "Kim loại nhẹ, cháy sáng với ngọn lửa trắng chói."
   },
   {
     "number": 13,
     "symbol": "Al",
-    "name": "NhÃ´m",
+    "name": "Nhôm",
     "weight": "26.98",
     "category": "post-transition-metal",
     "x": 13,
@@ -180,7 +180,7 @@
       8,
       3
     ],
-    "desc": "Kim loáº¡i phá»• biáº¿n nháº¥t trong vá» TrÃ¡i Äáº¥t, nháº¹ vÃ  bá»n."
+    "desc": "Kim loại phổ biến nhất trong vỏ Trái Đất, nhẹ và bền."
   },
   {
     "number": 14,
@@ -195,7 +195,7 @@
       8,
       4
     ],
-    "desc": "Ã kim bÃ¡n dáº«n, thÃ nh pháº§n chÃ­nh cá»§a cÃ¡t vÃ  tháº¡ch anh."
+    "desc": "Á kim bán dẫn, thành phần chính của cát và thạch anh."
   },
   {
     "number": 15,
@@ -210,12 +210,12 @@
       8,
       5
     ],
-    "desc": "Phi kim quan trá»ng cho DNA vÃ  xÆ°Æ¡ng, cÃ³ thÃ¹ hÃ¬nh tráº¯ng vÃ  Ä‘á»."
+    "desc": "Phi kim quan trọng cho DNA và xương, có thù hình trắng và đỏ."
   },
   {
     "number": 16,
     "symbol": "S",
-    "name": "LÆ°u huá»³nh",
+    "name": "Lưu huỳnh",
     "weight": "32.07",
     "category": "polyatomic-nonmetal",
     "x": 16,
@@ -225,7 +225,7 @@
       8,
       6
     ],
-    "desc": "Phi kim mÃ u vÃ ng, cÃ³ trong nÃºi lá»­a vÃ  táº¡o ra H2SO4."
+    "desc": "Phi kim màu vàng, có trong núi lửa và tạo ra H2SO4."
   },
   {
     "number": 17,
@@ -240,7 +240,7 @@
       8,
       7
     ],
-    "desc": "KhÃ­ vÃ ng lá»¥c, Ä‘á»™c, dÃ¹ng Ä‘á»ƒ khá»­ trÃ¹ng nÆ°á»›c."
+    "desc": "Khí vàng lục, độc, dùng để khử trùng nước."
   },
   {
     "number": 18,
@@ -255,7 +255,7 @@
       8,
       8
     ],
-    "desc": "KhÃ­ hiáº¿m phá»• biáº¿n nháº¥t trong khÃ´ng khÃ­, hoÃ n toÃ n trÆ¡."
+    "desc": "Khí hiếm phổ biến nhất trong không khí, hoàn toàn trơ."
   },
   {
     "number": 19,
@@ -271,7 +271,7 @@
       8,
       1
     ],
-    "desc": "Kim loáº¡i kiá»m má»m, pháº£n á»©ng mÃ£nh liá»‡t vá»›i nÆ°á»›c."
+    "desc": "Kim loại kiềm mềm, phản ứng mãnh liệt với nước."
   },
   {
     "number": 20,
@@ -287,7 +287,7 @@
       8,
       2
     ],
-    "desc": "Kim loáº¡i kiá»m thá»•, thÃ nh pháº§n chÃ­nh cá»§a xÆ°Æ¡ng vÃ  rÄƒng."
+    "desc": "Kim loại kiềm thổ, thành phần chính của xương và răng."
   },
   {
     "number": 21,
@@ -303,7 +303,7 @@
       9,
       2
     ],
-    "desc": "Kim loáº¡i chuyá»ƒn tiáº¿p nháº¹, bá»n, dÃ¹ng trong há»£p kim nhÃ´m."
+    "desc": "Kim loại chuyển tiếp nhẹ, bền, dùng trong hợp kim nhôm."
   },
   {
     "number": 22,
@@ -319,7 +319,7 @@
       10,
       2
     ],
-    "desc": "Kim loáº¡i máº¡nh, nháº¹, chá»‘ng Äƒn mÃ²n tuyá»‡t vá»i, dÃ¹ng trong y táº¿."
+    "desc": "Kim loại mạnh, nhẹ, chống ăn mòn tuyệt vời, dùng trong y tế."
   },
   {
     "number": 23,
@@ -335,7 +335,7 @@
       11,
       2
     ],
-    "desc": "Kim loáº¡i cá»©ng, chá»‘ng Äƒn mÃ²n, dÃ¹ng trong thÃ©p há»£p kim siÃªu bá»n."
+    "desc": "Kim loại cứng, chống ăn mòn, dùng trong thép hợp kim siêu bền."
   },
   {
     "number": 24,
@@ -351,7 +351,7 @@
       13,
       1
     ],
-    "desc": "Kim loáº¡i cá»©ng nháº¥t, bÃ³ng, dÃ¹ng Ä‘á»ƒ máº¡ báº£o vá»‡ vÃ  thÃ©p khÃ´ng gá»‰."
+    "desc": "Kim loại cứng nhất, bóng, dùng để mạ bảo vệ và thép không gỉ."
   },
   {
     "number": 25,
@@ -367,12 +367,12 @@
       13,
       2
     ],
-    "desc": "Kim loáº¡i quan trá»ng Ä‘á»ƒ sáº£n xuáº¥t thÃ©p vÃ  pin kiá»m."
+    "desc": "Kim loại quan trọng để sản xuất thép và pin kiềm."
   },
   {
     "number": 26,
     "symbol": "Fe",
-    "name": "Sáº¯t",
+    "name": "Sắt",
     "weight": "55.85",
     "category": "transition-metal",
     "x": 8,
@@ -383,7 +383,7 @@
       14,
       2
     ],
-    "desc": "Kim loáº¡i phá»• biáº¿n nháº¥t, lÃµi TrÃ¡i Äáº¥t vÃ  hemoglobin trong mÃ¡u."
+    "desc": "Kim loại phổ biến nhất, lõi Trái Đất và hemoglobin trong máu."
   },
   {
     "number": 27,
@@ -399,7 +399,7 @@
       15,
       2
     ],
-    "desc": "Kim loáº¡i cÃ³ tá»« tÃ­nh, dÃ¹ng trong há»£p kim chá»‹u nhiá»‡t vÃ  pin."
+    "desc": "Kim loại có từ tính, dùng trong hợp kim chịu nhiệt và pin."
   },
   {
     "number": 28,
@@ -415,12 +415,12 @@
       16,
       2
     ],
-    "desc": "Kim loáº¡i tráº¯ng báº¡c, chá»‘ng Äƒn mÃ²n, thÃ nh pháº§n cá»§a thÃ©p khÃ´ng gá»‰."
+    "desc": "Kim loại trắng bạc, chống ăn mòn, thành phần của thép không gỉ."
   },
   {
     "number": 29,
     "symbol": "Cu",
-    "name": "Äá»“ng",
+    "name": "Đồng",
     "weight": "63.55",
     "category": "transition-metal",
     "x": 11,
@@ -431,12 +431,12 @@
       18,
       1
     ],
-    "desc": "Kim loáº¡i mÃ u Ä‘á», dáº«n Ä‘iá»‡n vÃ  nhiá»‡t tá»‘t thá»© hai sau báº¡c."
+    "desc": "Kim loại màu đỏ, dẫn điện và nhiệt tốt thứ hai sau bạc."
   },
   {
     "number": 30,
     "symbol": "Zn",
-    "name": "Káº½m",
+    "name": "Kẽm",
     "weight": "65.38",
     "category": "transition-metal",
     "x": 12,
@@ -447,7 +447,7 @@
       18,
       2
     ],
-    "desc": "Kim loáº¡i xÃ¡m xanh, dÃ¹ng máº¡ káº½m chá»‘ng gá»‰ vÃ  trong há»‡ miá»…n dá»‹ch."
+    "desc": "Kim loại xám xanh, dùng mạ kẽm chống gỉ và trong hệ miễn dịch."
   },
   {
     "number": 31,
@@ -463,7 +463,7 @@
       18,
       3
     ],
-    "desc": "Kim loáº¡i nÃ³ng cháº£y á»Ÿ nhiá»‡t Ä‘á»™ gáº§n nhiá»‡t Ä‘á»™ phÃ²ng, dÃ¹ng trong LED."
+    "desc": "Kim loại nóng chảy ở nhiệt độ gần nhiệt độ phòng, dùng trong LED."
   },
   {
     "number": 32,
@@ -479,7 +479,7 @@
       18,
       4
     ],
-    "desc": "Ã kim mÃ u tráº¯ng xÃ¡m, bÃ¡n dáº«n, linh há»“n cá»§a cÃ¡c thiáº¿t bá»‹ quang há»c."
+    "desc": "Á kim màu trắng xám, bán dẫn, linh hồn của các thiết bị quang học."
   },
   {
     "number": 33,
@@ -495,7 +495,7 @@
       18,
       5
     ],
-    "desc": "Ã kim cÃ³ tiáº¿ng lÃ  Ä‘á»™c cháº¥t, nhÆ°ng cá»±c ká»³ quan trá»ng trong bÃ¡n dáº«n."
+    "desc": "Á kim có tiếng là độc chất, nhưng cực kỳ quan trọng trong bán dẫn."
   },
   {
     "number": 34,
@@ -511,7 +511,7 @@
       18,
       6
     ],
-    "desc": "Phi kim bÃ¡n dáº«n, dáº«n Ä‘iá»‡n tá»‘t khi Ä‘Æ°á»£c chiáº¿u sÃ¡ng."
+    "desc": "Phi kim bán dẫn, dẫn điện tốt khi được chiếu sáng."
   },
   {
     "number": 35,
@@ -527,7 +527,7 @@
       18,
       7
     ],
-    "desc": "Phi kim duy nháº¥t á»Ÿ thá»ƒ lá»ng á»Ÿ nhiá»‡t Ä‘á»™ phÃ²ng, mÃ u Ä‘á» nÃ¢u, Ä‘á»™c."
+    "desc": "Phi kim duy nhất ở thể lỏng ở nhiệt độ phòng, màu đỏ nâu, độc."
   },
   {
     "number": 36,
@@ -543,7 +543,7 @@
       18,
       8
     ],
-    "desc": "KhÃ­ hiáº¿m phÃ¡t ra Ã¡nh sÃ¡ng tráº¯ng rá»±c rá»¡ trong Ä‘Ã¨n flash."
+    "desc": "Khí hiếm phát ra ánh sáng trắng rực rỡ trong đèn flash."
   },
   {
     "number": 37,
@@ -560,7 +560,7 @@
       8,
       1
     ],
-    "desc": "Kim loáº¡i kiá»m cá»±c ká»³ hoáº¡t Ä‘á»™ng, tá»± chÃ¡y trong khÃ´ng khÃ­."
+    "desc": "Kim loại kiềm cực kỳ hoạt động, tự cháy trong không khí."
   },
   {
     "number": 38,
@@ -577,7 +577,7 @@
       8,
       2
     ],
-    "desc": "Kim loáº¡i kiá»m thá»• má»m, mÃ u báº¡c, dÃ¹ng táº¡o phÃ¡o hoa mÃ u Ä‘á» rá»±c."
+    "desc": "Kim loại kiềm thổ mềm, màu bạc, dùng tạo pháo hoa màu đỏ rực."
   },
   {
     "number": 39,
@@ -594,7 +594,7 @@
       9,
       2
     ],
-    "desc": "Kim loáº¡i mÃ u báº¡c, linh há»“n cá»§a cÃ¡c bá»™ khuáº¿ch Ä‘áº¡i laser."
+    "desc": "Kim loại màu bạc, linh hồn của các bộ khuếch đại laser."
   },
   {
     "number": 40,
@@ -611,7 +611,7 @@
       10,
       2
     ],
-    "desc": "Kim loáº¡i chá»‘ng Äƒn mÃ²n cá»±c tá»‘t, dÃ¹ng trong vá» thanh nhiÃªn liá»‡u háº¡t nhÃ¢n."
+    "desc": "Kim loại chống ăn mòn cực tốt, dùng trong vỏ thanh nhiên liệu hạt nhân."
   },
   {
     "number": 41,
@@ -628,7 +628,7 @@
       12,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 41 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 41 trong bảng tuần hoàn."
   },
   {
     "number": 42,
@@ -645,7 +645,7 @@
       13,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 42 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 42 trong bảng tuần hoàn."
   },
   {
     "number": 43,
@@ -662,7 +662,7 @@
       13,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 43 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 43 trong bảng tuần hoàn."
   },
   {
     "number": 44,
@@ -679,7 +679,7 @@
       15,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 44 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 44 trong bảng tuần hoàn."
   },
   {
     "number": 45,
@@ -696,7 +696,7 @@
       16,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 45 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 45 trong bảng tuần hoàn."
   },
   {
     "number": 46,
@@ -713,12 +713,12 @@
       18,
       0
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 46 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 46 trong bảng tuần hoàn."
   },
   {
     "number": 47,
     "symbol": "Ag",
-    "name": "Báº¡c",
+    "name": "Bạc",
     "weight": "107.87",
     "category": "transition-metal",
     "x": 11,
@@ -730,7 +730,7 @@
       18,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 47 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 47 trong bảng tuần hoàn."
   },
   {
     "number": 48,
@@ -747,7 +747,7 @@
       18,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 48 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 48 trong bảng tuần hoàn."
   },
   {
     "number": 49,
@@ -764,12 +764,12 @@
       18,
       3
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 49 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 49 trong bảng tuần hoàn."
   },
   {
     "number": 50,
     "symbol": "Sn",
-    "name": "Thiáº¿c",
+    "name": "Thiếc",
     "weight": "118.71",
     "category": "post-transition-metal",
     "x": 14,
@@ -781,7 +781,7 @@
       18,
       4
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 50 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 50 trong bảng tuần hoàn."
   },
   {
     "number": 51,
@@ -798,7 +798,7 @@
       18,
       5
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 51 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 51 trong bảng tuần hoàn."
   },
   {
     "number": 52,
@@ -815,7 +815,7 @@
       18,
       6
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 52 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 52 trong bảng tuần hoàn."
   },
   {
     "number": 53,
@@ -832,7 +832,7 @@
       18,
       7
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 53 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 53 trong bảng tuần hoàn."
   },
   {
     "number": 54,
@@ -849,7 +849,7 @@
       18,
       8
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 54 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 54 trong bảng tuần hoàn."
   },
   {
     "number": 55,
@@ -867,7 +867,7 @@
       8,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 55 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 55 trong bảng tuần hoàn."
   },
   {
     "number": 56,
@@ -885,7 +885,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 56 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 56 trong bảng tuần hoàn."
   },
   {
     "number": 57,
@@ -903,7 +903,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 57 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 57 trong bảng tuần hoàn."
   },
   {
     "number": 58,
@@ -921,7 +921,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 58 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 58 trong bảng tuần hoàn."
   },
   {
     "number": 59,
@@ -939,7 +939,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 59 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 59 trong bảng tuần hoàn."
   },
   {
     "number": 60,
@@ -957,7 +957,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 60 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 60 trong bảng tuần hoàn."
   },
   {
     "number": 61,
@@ -975,7 +975,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 61 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 61 trong bảng tuần hoàn."
   },
   {
     "number": 62,
@@ -993,7 +993,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 62 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 62 trong bảng tuần hoàn."
   },
   {
     "number": 63,
@@ -1011,7 +1011,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 63 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 63 trong bảng tuần hoàn."
   },
   {
     "number": 64,
@@ -1029,7 +1029,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 64 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 64 trong bảng tuần hoàn."
   },
   {
     "number": 65,
@@ -1047,7 +1047,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 65 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 65 trong bảng tuần hoàn."
   },
   {
     "number": 66,
@@ -1065,7 +1065,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 66 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 66 trong bảng tuần hoàn."
   },
   {
     "number": 67,
@@ -1083,7 +1083,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 67 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 67 trong bảng tuần hoàn."
   },
   {
     "number": 68,
@@ -1101,7 +1101,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 68 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 68 trong bảng tuần hoàn."
   },
   {
     "number": 69,
@@ -1119,7 +1119,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 69 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 69 trong bảng tuần hoàn."
   },
   {
     "number": 70,
@@ -1137,7 +1137,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 70 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 70 trong bảng tuần hoàn."
   },
   {
     "number": 71,
@@ -1155,7 +1155,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 71 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 71 trong bảng tuần hoàn."
   },
   {
     "number": 72,
@@ -1173,7 +1173,7 @@
       10,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 72 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 72 trong bảng tuần hoàn."
   },
   {
     "number": 73,
@@ -1191,7 +1191,7 @@
       11,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 73 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 73 trong bảng tuần hoàn."
   },
   {
     "number": 74,
@@ -1209,7 +1209,7 @@
       12,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 74 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 74 trong bảng tuần hoàn."
   },
   {
     "number": 75,
@@ -1227,7 +1227,7 @@
       13,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 75 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 75 trong bảng tuần hoàn."
   },
   {
     "number": 76,
@@ -1245,7 +1245,7 @@
       14,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 76 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 76 trong bảng tuần hoàn."
   },
   {
     "number": 77,
@@ -1263,7 +1263,7 @@
       15,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 77 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 77 trong bảng tuần hoàn."
   },
   {
     "number": 78,
@@ -1281,12 +1281,12 @@
       17,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 78 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 78 trong bảng tuần hoàn."
   },
   {
     "number": 79,
     "symbol": "Au",
-    "name": "VÃ ng",
+    "name": "Vàng",
     "weight": "196.97",
     "category": "transition-metal",
     "x": 11,
@@ -1299,12 +1299,12 @@
       18,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 79 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 79 trong bảng tuần hoàn."
   },
   {
     "number": 80,
     "symbol": "Hg",
-    "name": "Thá»§y ngÃ¢n",
+    "name": "Thủy ngân",
     "weight": "200.59",
     "category": "transition-metal",
     "x": 12,
@@ -1317,7 +1317,7 @@
       18,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 80 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 80 trong bảng tuần hoàn."
   },
   {
     "number": 81,
@@ -1335,12 +1335,12 @@
       18,
       3
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 81 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 81 trong bảng tuần hoàn."
   },
   {
     "number": 82,
     "symbol": "Pb",
-    "name": "ChÃ¬",
+    "name": "Chì",
     "weight": "207.2",
     "category": "post-transition-metal",
     "x": 14,
@@ -1353,7 +1353,7 @@
       18,
       4
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 82 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 82 trong bảng tuần hoàn."
   },
   {
     "number": 83,
@@ -1371,7 +1371,7 @@
       18,
       5
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 83 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 83 trong bảng tuần hoàn."
   },
   {
     "number": 84,
@@ -1389,7 +1389,7 @@
       18,
       6
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 84 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 84 trong bảng tuần hoàn."
   },
   {
     "number": 85,
@@ -1407,7 +1407,7 @@
       18,
       7
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 85 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 85 trong bảng tuần hoàn."
   },
   {
     "number": 86,
@@ -1425,7 +1425,7 @@
       18,
       8
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 86 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 86 trong bảng tuần hoàn."
   },
   {
     "number": 87,
@@ -1444,7 +1444,7 @@
       8,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 87 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 87 trong bảng tuần hoàn."
   },
   {
     "number": 88,
@@ -1463,7 +1463,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 88 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 88 trong bảng tuần hoàn."
   },
   {
     "number": 89,
@@ -1482,7 +1482,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 89 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 89 trong bảng tuần hoàn."
   },
   {
     "number": 90,
@@ -1501,7 +1501,7 @@
       10,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 90 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 90 trong bảng tuần hoàn."
   },
   {
     "number": 91,
@@ -1520,7 +1520,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 91 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 91 trong bảng tuần hoàn."
   },
   {
     "number": 92,
@@ -1539,7 +1539,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 92 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 92 trong bảng tuần hoàn."
   },
   {
     "number": 93,
@@ -1558,7 +1558,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 93 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 93 trong bảng tuần hoàn."
   },
   {
     "number": 94,
@@ -1577,7 +1577,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 94 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 94 trong bảng tuần hoàn."
   },
   {
     "number": 95,
@@ -1596,7 +1596,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 95 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 95 trong bảng tuần hoàn."
   },
   {
     "number": 96,
@@ -1615,7 +1615,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 96 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 96 trong bảng tuần hoàn."
   },
   {
     "number": 97,
@@ -1634,7 +1634,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 97 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 97 trong bảng tuần hoàn."
   },
   {
     "number": 98,
@@ -1653,7 +1653,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 98 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 98 trong bảng tuần hoàn."
   },
   {
     "number": 99,
@@ -1672,7 +1672,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 99 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 99 trong bảng tuần hoàn."
   },
   {
     "number": 100,
@@ -1691,7 +1691,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 100 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 100 trong bảng tuần hoàn."
   },
   {
     "number": 101,
@@ -1710,7 +1710,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 101 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 101 trong bảng tuần hoàn."
   },
   {
     "number": 102,
@@ -1729,7 +1729,7 @@
       8,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 102 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 102 trong bảng tuần hoàn."
   },
   {
     "number": 103,
@@ -1748,7 +1748,7 @@
       9,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 103 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 103 trong bảng tuần hoàn."
   },
   {
     "number": 104,
@@ -1767,7 +1767,7 @@
       10,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 104 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 104 trong bảng tuần hoàn."
   },
   {
     "number": 105,
@@ -1786,7 +1786,7 @@
       11,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 105 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 105 trong bảng tuần hoàn."
   },
   {
     "number": 106,
@@ -1805,7 +1805,7 @@
       12,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 106 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 106 trong bảng tuần hoàn."
   },
   {
     "number": 107,
@@ -1824,7 +1824,7 @@
       13,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 107 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 107 trong bảng tuần hoàn."
   },
   {
     "number": 108,
@@ -1843,7 +1843,7 @@
       14,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 108 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 108 trong bảng tuần hoàn."
   },
   {
     "number": 109,
@@ -1862,7 +1862,7 @@
       15,
       2
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 109 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 109 trong bảng tuần hoàn."
   },
   {
     "number": 110,
@@ -1881,7 +1881,7 @@
       17,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 110 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 110 trong bảng tuần hoàn."
   },
   {
     "number": 111,
@@ -1900,7 +1900,7 @@
       18,
       1
     ],
-    "desc": "NguyÃªn tá»‘ sá»‘ 111 trong báº£ng tuáº§n hoÃ n."
+    "desc": "Nguyên tố số 111 trong bảng tuần hoàn."
   },
   {
     "number": 112,
@@ -1919,7 +1919,7 @@
       18,
       2
     ],
-    "desc": "NguyÃªn tá»‘ nhÃ¢n táº¡o siÃªu náº·ng, Ä‘Æ°á»£c Ä‘áº·t tÃªn theo Nicolaus Copernicus."
+    "desc": "Nguyên tố nhân tạo siêu nặng, được đặt tên theo Nicolaus Copernicus."
   },
   {
     "number": 113,
@@ -1938,7 +1938,7 @@
       18,
       3
     ],
-    "desc": "NguyÃªn tá»‘ siÃªu náº·ng Ä‘áº§u tiÃªn Ä‘Æ°á»£c khÃ¡m phÃ¡ táº¡i chÃ¢u Ã (Nháº­t Báº£n)."
+    "desc": "Nguyên tố siêu nặng đầu tiên được khám phá tại châu Á (Nhật Bản)."
   },
   {
     "number": 114,
@@ -1957,7 +1957,7 @@
       18,
       4
     ],
-    "desc": "NguyÃªn tá»‘ siÃªu náº·ng nhÃ¢n táº¡o, Ä‘Æ°á»£c nghiÃªn cá»©u táº¡i PhÃ²ng thÃ­ nghiá»‡m Flerov."
+    "desc": "Nguyên tố siêu nặng nhân tạo, được nghiên cứu tại Phòng thí nghiệm Flerov."
   },
   {
     "number": 115,
@@ -1976,7 +1976,7 @@
       18,
       5
     ],
-    "desc": "NguyÃªn tá»‘ siÃªu náº·ng vinh danh vÃ¹ng Moscow cá»§a Nga."
+    "desc": "Nguyên tố siêu nặng vinh danh vùng Moscow của Nga."
   },
   {
     "number": 116,
@@ -1995,7 +1995,7 @@
       18,
       6
     ],
-    "desc": "NguyÃªn tá»‘ siÃªu náº·ng vinh danh PhÃ²ng thÃ­ nghiá»‡m Quá»‘c gia Livermore."
+    "desc": "Nguyên tố siêu nặng vinh danh Phòng thí nghiệm Quốc gia Livermore."
   },
   {
     "number": 117,
@@ -2014,7 +2014,7 @@
       18,
       7
     ],
-    "desc": "Halogen siÃªu náº·ng, Ä‘Æ°á»£c Ä‘áº·t tÃªn theo bang Tennessee cá»§a Hoa Ká»³."
+    "desc": "Halogen siêu nặng, được đặt tên theo bang Tennessee của Hoa Kỳ."
   },
   {
     "number": 118,
@@ -2033,21 +2033,21 @@
       18,
       8
     ],
-    "desc": "NguyÃªn tá»‘ cuá»‘i cÃ¹ng cá»§a báº£ng tuáº§n hoÃ n hiá»‡n táº¡i, siÃªu náº·ng vÃ  nhÃ¢n táº¡o."
+    "desc": "Nguyên tố cuối cùng của bảng tuần hoàn hiện tại, siêu nặng và nhân tạo."
   }
 ];
 
 export const categories = [
-  { id: 'all', name: 'Táº¥t cáº£' },
-  { id: 'alkali-metal', name: 'Kiá»m' },
-  { id: 'alkaline-earth-metal', name: 'Kiá»m thá»•' },
-  { id: 'transition-metal', name: 'Chuyá»ƒn tiáº¿p' },
+  { id: 'all', name: 'Tất cả' },
+  { id: 'alkali-metal', name: 'Kiềm' },
+  { id: 'alkaline-earth-metal', name: 'Kiềm thổ' },
+  { id: 'transition-metal', name: 'Chuyển tiếp' },
   { id: 'lanthanide', name: 'Lanthan' },
   { id: 'actinide', name: 'Actini' },
-  { id: 'post-transition-metal', name: 'Sau chuyá»ƒn tiáº¿p' },
-  { id: 'metalloid', name: 'Ã kim' },
+  { id: 'post-transition-metal', name: 'Sau chuyển tiếp' },
+  { id: 'metalloid', name: 'Á kim' },
   { id: 'diatomic-nonmetal', name: 'Phi kim (2nt)' },
   { id: 'polyatomic-nonmetal', name: 'Phi kim (nnt)' },
-  { id: 'noble-gas', name: 'KhÃ­ hiáº¿m' },
+  { id: 'noble-gas', name: 'Khí hiếm' },
 ];
 

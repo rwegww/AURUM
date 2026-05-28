@@ -3,18 +3,18 @@
   "classId": 11,
   "lessonId": 11,
   "programId": "ketnoi",
-  "title": "BÃ i 11. PhÆ°Æ¡ng phÃ¡p tÃ¡ch biá»‡t and tinh cháº¿ há»£p cháº¥t há»¯u cÆ¡",
-  "chapter": "ChÆ°Æ¡ng 3. Äáº¡i cÆ°Æ¡ng vá» hÃ³a há»c há»¯u cÆ¡",
+  "title": "Bài 11. Phương pháp tách biệt and tinh chế hợp chất hữu cơ",
+  "chapter": "Chương 3. Đại cương về hóa học hữu cơ",
   "order": 11,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "NguyÃªn táº¯c cÃ¡c phÆ°Æ¡ng phÃ¡p tÃ¡ch and tinh cháº¿ thÃ´ng dá»¥ng: chiáº¿t, chÆ°ng cáº¥t, káº¿t tinh and sáº¯c kÃ­.",
+  "description": "Nguyên tắc các phương pháp tách and tinh chế thông dụng: chiết, chưng cất, kết tinh and sắc kí.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. PhÆ°Æ¡ng phÃ¡p Chiáº¿t",
+        "text": "1. Phương pháp Chiết",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong thiÃªn nhiÃªn, cÃ¡c há»£p cháº¥t há»¯u cÆ¡ hiáº¿m khi Ä‘á»©ng Ä‘Æ¡n láº» mÃ  luÃ´n pha trá»™n thÃ nh nhá»¯ng má»› bÃ²ng bong há»—n há»£p (tinh dáº§u gá»™p trong lÃ¡, diá»‡p lá»¥c trá»™n bÃ¹n táº¿ bÃ o). Äá»ƒ láº¥y ra Ä‘Æ°á»£c cháº¥t Tinh Khiáº¿t, HÃ³a há»c há»¯u cÆ¡ sá»­ dá»¥ng 4 tuyá»‡t kÄ© cÆ¡ báº£n dá»±a vÃ o sá»± chÃªnh lá»‡ch **TÃNH CHáº¤T Váº¬T LÃ** (Äá»™ hÃ²a tan, Nhiá»‡t Ä‘á»™ sÃ´i, Äá»™ háº¥p phá»¥). PhÆ°Æ¡ng phÃ¡p sá»‘ 1: **Chiáº¿t (Extraction)**."
+        "text": "Trong thiên nhiên, các hợp chất hữu cơ hiếm khi đứng đơn lẻ mà luôn pha trộn thành những mớ bòng bong hỗn hợp (tinh dầu gộp trong lá, diệp lục trộn bùn tế bào). Để lấy ra được chất Tinh Khiết, Hóa học hữu cơ sử dụng 4 tuyệt kĩ cơ bản dựa vào sự chênh lệch **TÍNH CHẤT VẬT LÍ** (Độ hòa tan, Nhiệt độ sôi, Độ hấp phụ). Phương pháp số 1: **Chiết (Extraction)**."
       }
     },
     {
@@ -31,9 +31,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "Chiáº¿t lÃ  nghá»‡ thuáº­t Ä‘i mÆ°á»£n má»™t \"Dung MÃ´i Tháº§n TÃ i\" Ä‘á»ƒ kÃ©o rá»©t cháº¥t cáº§n tÃ¬m ra khá»i há»—n há»£p. Dá»±a vÃ o nguyÃªn lÃ­: Cháº¥t tan khÃ¡c nhau trong 2 dung mÃ´i KhÃ´ng Thá»ƒ Trá»™n Láº«n.",
-          "**1. Chiáº¿t lá»ng - lá»ng (DÃ¹ng Phá»…u Chiáº¿t):** TÃ¡ch cháº¥t há»¯u cÆ¡ tá»« dung dá»‹ch nÆ°á»›c. VÃ­ dá»¥ cho tinh dáº§u láº«n nÆ°á»›c vÃ o Phá»…u thá»§y tinh cÃ³ vÃ²i. Äá»• Ether (dung mÃ´i Há»¯u cÆ¡ hÃ´i háº¯c) vÃ o $\\rightarrow$ Láº¯c máº¡nh. Tinh dáº§u cá»±c thÃ¨m Ether nÃªn bá» NÆ°á»›c bÆ¡i háº¿t sáº¡ch lÃªn lá»›p Eter nháº¹ ná»•i bá» máº·t. NÆ°á»›c náº·ng chÃ¬m dÆ°á»›i rá»—ng tuáº¿ch. Má»Ÿ khÃ³a vÃ²i xáº£ bá» NÆ°á»›c, ta thu Ä‘Æ°á»£c lá»›p Ether chá»©a tinh dáº§u.",
-          "**2. Chiáº¿t lá»ng - ráº¯n (NgÃ¢m RÆ°á»£u/Háº§m):** Khai thÃ¡c dÆ°á»£c liá»‡u. NgÃ¢m rá»… sÃ¢m cá»©ng vÃ o cá»“n RÆ°á»£u (Dung mÃ´i lá»ng). Cá»‘t nhÃ¢n sÃ¢m nháº£ tan vÃ o rÆ°á»£u thÃ nh RÆ°á»£u Thuá»‘c."
+          "Chiết là nghệ thuật đi mượn một \"Dung Môi Thần Tài\" để kéo rứt chất cần tìm ra khỏi hỗn hợp. Dựa vào nguyên lí: Chất tan khác nhau trong 2 dung môi Không Thể Trộn Lẫn.",
+          "**1. Chiết lỏng - lỏng (Dùng Phễu Chiết):** Tách chất hữu cơ từ dung dịch nước. Ví dụ cho tinh dầu lẫn nước vào Phễu thủy tinh có vòi. Đổ Ether (dung môi Hữu cơ hôi hắc) vào $\\rightarrow$ Lắc mạnh. Tinh dầu cực thèm Ether nên bỏ Nước bơi hết sạch lên lớp Eter nhẹ nổi bề mặt. Nước nặng chìm dưới rỗng tuếch. Mở khóa vòi xả bỏ Nước, ta thu được lớp Ether chứa tinh dầu.",
+          "**2. Chiết lỏng - rắn (Ngâm Rượu/Hầm):** Khai thác dược liệu. Ngâm rễ sâm cứng vào cồn Rượu (Dung môi lỏng). Cốt nhân sâm nhả tan vào rượu thành Rượu Thuốc."
         ]
       }
     },
@@ -41,7 +41,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. PhÆ°Æ¡ng phÃ¡p ChÆ°ng cáº¥t",
+        "text": "2. Phương pháp Chưng cất",
         "level": "h2"
       }
     },
@@ -49,15 +49,15 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "PhÆ°Æ¡ng phÃ¡p 2: **ChÆ°ng cáº¥t (Distillation)**. LÃ  mÃ n tra táº¥n báº±ng Lá»­a Ä‘á»ƒ phÃ¢n tÃ¡ch cÃ¡c Cáº·p Cháº¥t Lá»ng Tan Láº«n ToÃ n Pháº§n. Dá»±a trÃªn ranh giá»›i: **Nhiá»‡t Äá»™ SÃ´i KhÃ¡c Biá»‡t**. Cháº¥t nÃ o cÃ³ Nhiá»‡t Ä‘á»™ sÃ´i áº¢o Tháº¥p hÆ¡n $\\rightarrow$ Nháº¹ dáº¡ bá»‘c hÆ¡i bay lÃªn trÆ°á»›c. BÄƒng qua á»‘ng sinh hÃ n (á»‘ng ruá»™t gÃ  ngÃ¢m láº¡nh) $\\rightarrow$ KhÃ­ ngÆ°ng tá»¥ rÃ³t thÃ nh giá»t lá»ng rÆ¡i xuá»‘ng bÃ¬nh há»©ng."
+        "text": "Phương pháp 2: **Chưng cất (Distillation)**. Là màn tra tấn bằng Lửa để phân tách các Cặp Chất Lỏng Tan Lẫn Toàn Phần. Dựa trên ranh giới: **Nhiệt Độ Sôi Khác Biệt**. Chất nào có Nhiệt độ sôi Ảo Thấp hơn $\\rightarrow$ Nhẹ dạ bốc hơi bay lên trước. Băng qua ống sinh hàn (ống ruột gà ngâm lạnh) $\\rightarrow$ Khí ngưng tụ rót thành giọt lỏng rơi xuống bình hứng."
       }
     },
     {
       "id": "mod6",
       "type": "infoBox",
       "content": {
-        "title": "ChÆ°ng cáº¥t Náº¥u RÆ°á»£u Truyá»n Thá»‘ng",
-        "content": "VÃ­ dá»¥ kinh Ä‘iá»ƒn Ä‘un hÃ¨m rÆ°á»£u (Há»—n há»£p Cá»“n Ethyl Alcohol sÃ´i 78Â°C trá»™n with NÆ°á»›c sÃ´i 100Â°C). Khi Ä‘un nÃ³ng Tá»›i 78 Ä‘á»™, ná»“i náº¥u chÆ°a Ä‘á»ƒ nÆ°á»›c ká»‹p sÃ´i thÃ¬ toÃ n bá»™ bá»™ Cá»“n Há»¯u CÆ¡ Ä‘Ã£ bá»‘c hÆ¡i bay Ã o áº¡t trÃ o lÃªn máº·t $\\rightarrow$ Dáº«n á»‘ng qua thau nÆ°á»›c láº¡nh ngÆ°ng tá»¥ láº¡i thÃ nh Tinh Cháº¥t RÆ°á»£u Trong váº¯t.",
+        "title": "Chưng cất Nấu Rượu Truyền Thống",
+        "content": "Ví dụ kinh điển đun hèm rượu (Hỗn hợp Cồn Ethyl Alcohol sôi 78°C trộn with Nước sôi 100°C). Khi đun nóng Tới 78 độ, nồi nấu chưa để nước kịp sôi thì toàn bộ bộ Cồn Hữu Cơ đã bốc hơi bay ào ạt trào lên mặt $\\rightarrow$ Dẫn ống qua thau nước lạnh ngưng tụ lại thành Tinh Chất Rượu Trong vắt.",
         "color": "blue"
       }
     },
@@ -65,7 +65,7 @@
       "id": "mod7",
       "type": "heading",
       "content": {
-        "text": "3. PhÆ°Æ¡ng phÃ¡p Káº¿t tinh",
+        "text": "3. Phương pháp Kết tinh",
         "level": "h2"
       }
     },
@@ -73,14 +73,14 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "PhÆ°Æ¡ng phÃ¡p 3: **Káº¿t tinh (Crystallization)**. Ãp dá»¥ng cho Cháº¥t Ráº¯n. Dá»±a trÃªn chÃ¢n lÃ­: Äá»™ tan cá»§a Cháº¥t Ráº¯n biáº¿n thiÃªn cá»±c Ä‘á»™ theo Nhiá»‡t Ä‘á»™ (NÃ³ng thÃ¬ tan tá»‘t, Láº¡nh thÃ¬ Ä‘áº©y vÄƒng ra). \nThá»±c hÃ nh: Äun nÃ³ng hÃ²a tan cháº¥t ráº¯n láº«n táº¡p báº©n vÃ o dung dá»‹ch sÃ´i tÆ¡i táº£ $\\rightarrow$ Lá»c cáº·n rÃ¡c nÃ³ng $\\rightarrow$ RÃ³t NÆ°á»›c ra Ä‘á»ƒ Nguá»™i Cháº­m (Hoáº·c á»§ ngÃ¢m Ä‘Ã¡). Do láº¡nh Ä‘á»™t ngá»™t, Cháº¥t Tinh Khiáº¿t sáº½ tuÃ´n trÃ o tá»§a má»c thÃ nh nhá»¯ng Tinh Thá»ƒ Kim CÆ°Æ¡ng MÃ³ng Cá»p báº¯t máº¯t lÃ³ng lÃ¡nh (Lá»c ra tinh cháº¿ mÃ­a xá»‘p thÃ nh ÄÆ°á»ng PhÃ¨n Tráº¯ng)."
+        "text": "Phương pháp 3: **Kết tinh (Crystallization)**. Áp dụng cho Chất Rắn. Dựa trên chân lí: Độ tan của Chất Rắn biến thiên cực độ theo Nhiệt độ (Nóng thì tan tốt, Lạnh thì đẩy văng ra). \nThực hành: Đun nóng hòa tan chất rắn lẫn tạp bẩn vào dung dịch sôi tơi tả $\\rightarrow$ Lọc cặn rác nóng $\\rightarrow$ Rót Nước ra để Nguội Chậm (Hoặc ủ ngâm đá). Do lạnh đột ngột, Chất Tinh Khiết sẽ tuôn trào tủa mọc thành những Tinh Thể Kim Cương Móng Cọp bắt mắt lóng lánh (Lọc ra tinh chế mía xốp thành Đường Phèn Trắng)."
       }
     },
     {
       "id": "mod9",
       "type": "heading",
       "content": {
-        "text": "4. PhÆ°Æ¡ng phÃ¡p Sáº¯c kÃ­ (Sáº¯c kÃ­ cá»™t, lá»›p má»ng)",
+        "text": "4. Phương pháp Sắc kí (Sắc kí cột, lớp mỏng)",
         "level": "h2"
       }
     },
@@ -88,15 +88,15 @@
       "id": "mod10",
       "type": "paragraph",
       "content": {
-        "text": "PhÆ°Æ¡ng phÃ¡p 4 Äá»‰nh Cao: **Sáº¯c kÃ­ (Chromatography)**. VÆ°á»£t má»i ranh giá»›i phÃ¢n tÃ¡ch cáº£ LÆ°á»£ng Máº«u Hiá»ƒn Vi giá»t xÃ­u xiu. TrÃ² chÆ¡i vÆ°á»£t chÆ°á»›ng ngáº¡i váº­t giá»¯a Pha Äá»™ng (Dung mÃ´i lá»ng/khÃ­ lÃ¹a cháº¡y) mang theo CÃ  Máº«u rÆ°á»£t Ä‘uá»•i trÆ°á»£t trÃªn Pha TÄ©nh (Cá»™t cÃ¡t Gel tÄ©nh láº·ng). Cháº¥t nÃ o bá»‹ Pha TÄ©nh Giá»¯ Láº¡i BÃ¡m Æ¯a HÆ¡n $\\rightarrow$ Bá»‹ káº¹t cháº¡y luáº©n quáº©n Ráº¥t Cháº­m Cá»¥t LÃ¹i sau and bá»‹ TÃ¡ch rá»›t háº³n Lá»›p with tháº±ng cháº¡y nhanh. DÃ¹ng Sáº¯c kÃ­ lá»›p Má»ng TÃ¡ch mÃ u Vi khuáº©n, Giá»t Lá»‡ MÃ¡u."
+        "text": "Phương pháp 4 Đỉnh Cao: **Sắc kí (Chromatography)**. Vượt mọi ranh giới phân tách cả Lượng Mẫu Hiển Vi giọt xíu xiu. Trò chơi vượt chướng ngại vật giữa Pha Động (Dung môi lỏng/khí lùa chạy) mang theo Cà Mẫu rượt đuổi trượt trên Pha Tĩnh (Cột cát Gel tĩnh lặng). Chất nào bị Pha Tĩnh Giữ Lại Bám Ưa Hơn $\\rightarrow$ Bị kẹt chạy luẩn quẩn Rất Chậm Cụt Lùi sau and bị Tách rớt hẳn Lớp with thằng chạy nhanh. Dùng Sắc kí lớp Mỏng Tách màu Vi khuẩn, Giọt Lệ Máu."
       }
     },
     {
       "id": "mod11",
       "type": "warningBox",
       "content": {
-        "title": "BÃ¡o Äá»™ng Sinh Tá»­ Lá»­a Tráº§n Há»¯u CÆ¡",
-        "content": "VÃ¬ hÃ³a cháº¥t há»¯u cÆ¡ (Ether, XÄƒng, Cá»“n, Chloroform) vÃ´ cÃ¹ng tÃ n nháº«n khÃ¡t lá»­a, Bá»‘c HÆ¡i Láº¹ and ChÃ¡y ÄiÃªn Cuá»“ng tháº£m sÃ¡t ná»•. ToÃ n bá»™ cÃ¡c quÃ¡ trÃ¬nh ChÆ°ng Cáº¥t Ä‘un náº¥u á»Ÿ phÃ²ng Lab NGHIÃŠM Cáº¤M 100% báº­t quáº¹t Má»“i Lá»­a ÄÃ¨n cá»“n rá»i trá»±c tiáº¿p dÆ°á»›i Ä‘Ã¡y bÃ¬nh cáº§u (Nguy cÆ¡ bá»ƒ bÃ¬nh Phá»¥t ChÃ¡y NhÃ ). Báº®T BUá»˜C dÃ¹ng \"Báº¿p Äiá»‡n CÃ¡ch Thá»§y\" hay \"Báº¿p TrÃ¡t Háº¡t CÃ¡t\" táº£n nhiá»‡t Ãªm Ã¡i.",
+        "title": "Báo Động Sinh Tử Lửa Trần Hữu Cơ",
+        "content": "Vì hóa chất hữu cơ (Ether, Xăng, Cồn, Chloroform) vô cùng tàn nhẫn khát lửa, Bốc Hơi Lẹ and Cháy Điên Cuồng thảm sát nổ. Toàn bộ các quá trình Chưng Cất đun nấu ở phòng Lab NGHIÊM CẤM 100% bật quẹt Mồi Lửa Đèn cồn rọi trực tiếp dưới đáy bình cầu (Nguy cơ bể bình Phụt Cháy Nhà). BẮT BUỘC dùng \"Bếp Điện Cách Thủy\" hay \"Bếp Trát Hạt Cát\" tản nhiệt êm ái.",
         "color": "orange"
       }
     }
@@ -104,36 +104,36 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Äá»ƒ tÃ¡ch há»—n há»£p gá»“m RÆ°á»£u ($C_2H_5OH$) and nÆ°á»›c (nhiá»‡t Ä‘á»™ sÃ´i gáº§n 78Â°C and 100Â°C), phÆ°Æ¡ng phÃ¡p tá»‘i Æ°u lÃ :",
+      "question": "Để tách hỗn hợp gồm Rượu ($C_2H_5OH$) and nước (nhiệt độ sôi gần 78°C and 100°C), phương pháp tối ưu là:",
       "options": [
-        "Káº¿t tinh.",
-        "Chiáº¿t lá»ng-lá»ng báº±ng ete.",
-        "ChÆ°ng cáº¥t phÃ¢n Ä‘oáº¡n.",
-        "Sáº¯c kÃ­ giáº¥y."
+        "Kết tinh.",
+        "Chiết lỏng-lỏng bằng ete.",
+        "Chưng cất phân đoạn.",
+        "Sắc kí giấy."
       ],
       "correctAnswer": 2,
-      "explanation": "Hai cháº¥t lá»ng hÃ²a tan vÃ o nhau nhÆ°ng cÃ³ nhiá»‡t Ä‘á»™ sÃ´i khÃ¡c biá»‡t (78Â°C and 100Â°C) sáº½ dÃ¹ng chÆ°ng cáº¥t."
+      "explanation": "Hai chất lỏng hòa tan vào nhau nhưng có nhiệt độ sôi khác biệt (78°C and 100°C) sẽ dùng chưng cất."
     },
     {
       "id": "q2",
-      "question": "Dá»¥ng cá»¥ Ä‘áº·c trÆ°ng nháº¥t cá»§a phÆ°Æ¡ng phÃ¡p Chiáº¿t lá»ng-lá»ng lÃ  gÃ¬?",
+      "question": "Dụng cụ đặc trưng nhất của phương pháp Chiết lỏng-lỏng là gì?",
       "options": [
-        "á»ng sinh hÃ n.",
-        "Phá»…u chiáº¿t.",
-        "Cá»™t sáº¯c kÃ­.",
-        "Giáº¥y lá»c."
+        "Ống sinh hàn.",
+        "Phễu chiết.",
+        "Cột sắc kí.",
+        "Giấy lọc."
       ],
       "correctAnswer": 1,
-      "explanation": "Phá»…u chiáº¿t (dá»¥ng cá»¥ báº±ng thá»§y tinh cÃ³ khÃ³a) dÃ¹ng Ä‘á»ƒ chiáº¿t há»‡ hai dung mÃ´i lá»ng phÃ¢n lá»›p."
+      "explanation": "Phễu chiết (dụng cụ bằng thủy tinh có khóa) dùng để chiết hệ hai dung môi lỏng phân lớp."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: PhÆ°Æ¡ng phÃ¡p tÃ¡ch biá»‡t and tinh cháº¿ há»£p cháº¥t há»¯u cÆ¡",
+      "title": "Bài giảng: Phương pháp tách biệt and tinh chế hợp chất hữu cơ",
       "url": "https://www.youtube.com/watch?v=fQcDkujbfrI",
       "thumbnail": "https://img.youtube.com/vi/fQcDkujbfrI/0.jpg",
-      "description": "CÃ¡c phÆ°Æ¡ng phÃ¡p chÆ°ng cáº¥t, chiáº¿t, káº¿t tinh and sáº¯c kÃ½ cá»™t trong thá»±c hÃ nh hÃ³a há»¯u cÆ¡ (VietJack)."
+      "description": "Các phương pháp chưng cất, chiết, kết tinh and sắc ký cột trong thực hành hóa hữu cơ (VietJack)."
     }
   ],
   "practiceModules": [],

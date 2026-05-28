@@ -4,17 +4,17 @@
   "lessonId": 22,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 22: Hydrogen halide and Muá»‘i halide",
-  "chapter": "ChÆ°Æ¡ng 7: NguyÃªn tá»‘ nhÃ³m VIIA (Helogen)",
+  "title": "Bài 22: Hydrogen halide and Muối halide",
+  "chapter": "Chương 7: Nguyên tố nhóm VIIA (Helogen)",
   "order": 22,
   "isPremium": false,
-  "description": "Há»£p cháº¥t cá»§a halogen, dung dá»‹ch acid and pháº£n á»©ng nháº­n biáº¿t.",
+  "description": "Hợp chất của halogen, dung dịch acid and phản ứng nhận biết.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. TÃ­nh cháº¥t cá»§a cÃ¡c Hydrogen halide and acid tÆ°Æ¡ng á»©ng",
+        "text": "1. Tính chất của các Hydrogen halide and acid tương ứng",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Hydrogen halide ($HX$) is cÃ¡c há»£p cháº¥t khÃ­ khÃ´ng mÃ u, cÃ³ mÃ¹i xá»™c and tan ráº¥t tá»‘t trong nÆ°á»›c táº¡o thÃ nh dung dá»‹ch acid hydrohalic.\\n- **Äá»™ bá»n liÃªn káº¿t**: Giáº£m dáº§n tá»« $HF$ Ä‘áº¿n $HI$ do bÃ¡n kÃ­nh nguyÃªn tá»­ halogen tÄƒng dáº§n, lÃ m liÃªn káº¿t $H-X$ dÃ i ra and yáº¿u Ä‘i.\\n- **TÃ­nh acid**: TÄƒng dáº§n theo dÃ£y: **$HF < HCl < HBr < HI$**. Trong Ä‘Ã³ $HF$ lÃ  acid yáº¿u, cÃ²n $HCl, HBr, HI$ lÃ  cÃ¡c acid máº¡nh."
+        "text": "Hydrogen halide ($HX$) is các hợp chất khí không màu, có mùi xộc and tan rất tốt trong nước tạo thành dung dịch acid hydrohalic.\\n- **Độ bền liên kết**: Giảm dần từ $HF$ đến $HI$ do bán kính nguyên tử halogen tăng dần, làm liên kết $H-X$ dài ra and yếu đi.\\n- **Tính acid**: Tăng dần theo dãy: **$HF < HCl < HBr < HI$**. Trong đó $HF$ là acid yếu, còn $HCl, HBr, HI$ là các acid mạnh."
       }
     },
     {
@@ -31,8 +31,8 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Äáº·c Ä‘iá»ƒm riÃªng cá»§a $HF$**: DÃ¹ lÃ  acid yáº¿u, nhÆ°ng $HF$ cÃ³ tÃ­nh cháº¥t Ä‘áº·c biá»‡t lÃ  Äƒn mÃ²n thá»§y tinh ($SiO_2$), do Ä‘Ã³ nÃ³ khÃ´ng Ä‘Æ°á»£c Ä‘á»±ng trong bÃ¬nh thá»§y tinh mÃ  pháº£i Ä‘á»±ng trong bÃ¬nh nhá»±a chuyÃªn dá»¥ng.\\n  $$SiO_2 + 4HF \\rightarrow SiF_4\\uparrow + 2H_2O$$",
-          "**TÃ­nh khá»­ cá»§a cÃ¡c ion halide ($X^-$)**: TÃ­nh khá»­ tÄƒng dáº§n tá»« $Cl^-$ Ä‘áº¿n $I^-$. VÃ­ dá»¥, $HBr$ and $HI$ cÃ³ thá»ƒ khá»­ Ä‘Æ°á»£c $H_2SO_4$ Ä‘áº·c, trong khi $HCl$ thÃ¬ khÃ´ng."
+          "**Đặc điểm riêng của $HF$**: Dù là acid yếu, nhưng $HF$ có tính chất đặc biệt là ăn mòn thủy tinh ($SiO_2$), do đó nó không được đựng trong bình thủy tinh mà phải đựng trong bình nhựa chuyên dụng.\\n  $$SiO_2 + 4HF \\rightarrow SiF_4\\uparrow + 2H_2O$$",
+          "**Tính khử của các ion halide ($X^-$)**: Tính khử tăng dần từ $Cl^-$ đến $I^-$. Ví dụ, $HBr$ and $HI$ có thể khử được $H_2SO_4$ đặc, trong khi $HCl$ thì không."
         ]
       }
     },
@@ -40,7 +40,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "2. Nháº­n biáº¿t ion halide trong dung dá»‹ch",
+        "text": "2. Nhận biết ion halide trong dung dịch",
         "level": "h2"
       }
     },
@@ -48,8 +48,8 @@
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Sá»­ dá»¥ng thuá»‘c thá»­ Báº¡c nitrate ($AgNO_3$)",
-        "content": "Äá»ƒ phÃ¢n biá»‡t cÃ¡c muá»‘i halide, ta cho tÃ¡c dá»¥ng vá»›i dung dá»‹ch $AgNO_3$:\\n- **Fluoride ($F^-$)**: KhÃ´ng cÃ³ hiá»‡n tÆ°á»£ng (AgF tan).\\n- **Chloride ($Cl^-$)**: Xuáº¥t hiá»‡n **káº¿t tá»§a tráº¯ng** ($AgCl$).\\n- **Bromide ($Br^-$)**: Xuáº¥t hiá»‡n **káº¿t tá»§a vÃ ng nháº¡t** ($AgBr$).\\n- **Iodide ($I^-$)**: Xuáº¥t hiá»‡n **káº¿t tá»§a vÃ ng Ä‘áº­m** ($AgI$).",
+        "title": "Sử dụng thuốc thử Bạc nitrate ($AgNO_3$)",
+        "content": "Để phân biệt các muối halide, ta cho tác dụng với dung dịch $AgNO_3$:\\n- **Fluoride ($F^-$)**: Không có hiện tượng (AgF tan).\\n- **Chloride ($Cl^-$)**: Xuất hiện **kết tủa trắng** ($AgCl$).\\n- **Bromide ($Br^-$)**: Xuất hiện **kết tủa vàng nhạt** ($AgBr$).\\n- **Iodide ($I^-$)**: Xuất hiện **kết tủa vàng đậm** ($AgI$).",
         "color": "blue"
       }
     }
@@ -58,10 +58,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Hydrogen halide and má»™t sá»‘ pháº£n á»©ng cá»§a ion halide",
+      "title": "Bài giảng: Hydrogen halide and một số phản ứng của ion halide",
       "url": "https://www.youtube.com/watch?v=RZDVl7THNmY",
       "thumbnail": "https://img.youtube.com/vi/RZDVl7THNmY/0.jpg",
-      "description": "TÃ­nh cháº¥t acid cá»§a hydrogen halide and cÃ¡c pháº£n á»©ng Ä‘áº·c trÆ°ng nháº­n biáº¿t ion halide (VietJack)."
+      "description": "Tính chất acid của hydrogen halide and các phản ứng đặc trưng nhận biết ion halide (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -71,7 +71,7 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Axit halogenhiÄ‘ric máº¡nh nháº¥t lÃ :",
+        "question": "Axit halogenhiđric mạnh nhất là:",
         "options": [
           "$HI$",
           "$HBr$",
@@ -83,11 +83,11 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Thuá»‘c thá»­ dÃ¹ng Ä‘á»ƒ nháº­n biáº¿t cÃ¡c ion halogenua lÃ :",
+        "question": "Thuốc thử dùng để nhận biết các ion halogenua là:",
         "options": [
-          "Dung dá»‹ch $AgNO_13$",
-          "Quá»³ tÃ­m",
-          "NÆ°á»›c vÃ´i trong",
+          "Dung dịch $AgNO_13$",
+          "Quỳ tím",
+          "Nước vôi trong",
           "$NaOH$"
         ],
         "correctAnswer": 0,
@@ -95,7 +95,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Káº¿t tá»§a tráº¯ng thu Ä‘Æ°á»£c khi cho ion $Cl^-$ tÃ¡c dá»¥ng vá»›i báº¡c nitrat lÃ :",
+        "question": "Kết tủa trắng thu được khi cho ion $Cl^-$ tác dụng với bạc nitrat là:",
         "options": [
           "$AgCl$",
           "$AgBr$",
@@ -107,7 +107,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Axit nÃ o sau Ä‘Ã¢y khÃ´ng Ä‘Æ°á»£c Ä‘á»±ng trong bÃ¬nh thá»§y tinh? (VÃ¬ Äƒn mÃ²n thá»§y tinh)",
+        "question": "Axit nào sau đây không được đựng trong bình thủy tinh? (Vì ăn mòn thủy tinh)",
         "options": [
           "$HF$",
           "$HCl$",
@@ -119,10 +119,10 @@
       },
       {
         "type": "multiple-choice",
-        "question": "NÆ°á»›c Gia-ven Ä‘Æ°á»£c Ä‘iá»u cháº¿ báº±ng cÃ¡ch cho khÃ­ Clo sá»¥c vÃ o dung dá»‹ch:",
+        "question": "Nước Gia-ven được điều chế bằng cách cho khí Clo sục vào dung dịch:",
         "options": [
-          "$NaOH$ loÃ£ng",
-          "$Ca(OH)_2$ ráº¯n",
+          "$NaOH$ loãng",
+          "$Ca(OH)_2$ rắn",
           "$H_2SO_4$",
           "$NaHCO_3$"
         ],

@@ -26,7 +26,7 @@ const StageQuiz = () => {
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lá»—i táº£i bÃ i há»c:', err);
+        console.error('Lỗi tải bài học:', err);
       } finally {
         setLoading(false);
       }
@@ -34,7 +34,7 @@ const StageQuiz = () => {
     fetchLesson();
   }, [lessonId]);
 
-  // Xá»­ lÃ½ hoÃ n thÃ nh quiz (level1, level2, level3)
+  // Xử lý hoàn thành quiz (level1, level2, level3)
   const handleLevelComplete = async ({ mistakes, total }) => {
     let stars = 1;
     if (mistakes <= 1) stars = 3;
@@ -52,22 +52,22 @@ const StageQuiz = () => {
       try {
         await completeLessonSegment(lessonId, currentLevel, stars, xpGain, isLessonCompletion);
       } catch (err) {
-        console.error('âŒ Lá»—i khi lÆ°u giai Ä‘oáº¡n:', err);
+        console.error('❌ Lỗi khi lưu giai đoạn:', err);
       }
     }
   };
 
-  // Xá»­ lÃ½ hoÃ n thÃ nh xem video (level1)
+  // Xử lý hoàn thành xem video (level1)
   const handleVideoComplete = async () => {
     setVideoCompleted(true);
 
-    // Chá»‰ tá»± Ä‘á»™ng lÆ°u náº¿u level1 khÃ´ng cÃ³ bÃ i táº­p tráº¯c nghiá»‡m nÃ o
+    // Chỉ tự động lưu nếu level1 không có bài tập trắc nghiệm nào
     const currentQuestions = getLevelData('level1');
     if (user && currentQuestions.length === 0) {
       try {
         await completeLessonSegment(lessonId, 'level1', 3, 30, false);
       } catch (err) {
-        console.error('âŒ Lá»—i khi lÆ°u giai Ä‘oáº¡n video:', err);
+        console.error('❌ Lỗi khi lưu giai đoạn video:', err);
       }
     }
   };
@@ -94,7 +94,7 @@ const StageQuiz = () => {
 
   const currentQuestions = getLevelData(currentLevel);
 
-  // ========== LEVEL 1: XEM VIDEO BÃ€I GIáº¢NG ==========
+  // ========== LEVEL 1: XEM VIDEO BÀI GIẢNG ==========
   if (currentLevel === 'level1' && !videoCompleted) {
     const videoUrl = lesson?.introVideoUrl;
     // ... existing video render logic ...
@@ -117,26 +117,26 @@ const StageQuiz = () => {
           </div>
 
           <div className="p-8 md:p-10">
-            {/* Header - Giá»‘ng MissionModal */}
+            {/* Header - Giống MissionModal */}
             <div className="flex items-center justify-between gap-4 mb-8">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 bg-viet-green/5 rounded-2xl flex items-center justify-center text-4xl border border-viet-green/10">
-                  ðŸŽ¬
+                  🎬
                 </div>
                 <div>
-                  <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">BÃ i giáº£ng</h3>
-                  <h2 className="text-xl font-bold text-viet-text line-clamp-1">{lesson?.title || 'BÃ i giáº£ng'}</h2>
+                  <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">Bài giảng</h3>
+                  <h2 className="text-xl font-bold text-viet-text line-clamp-1">{lesson?.title || 'Bài giảng'}</h2>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">Äoáº¡n</div>
+                <div className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">Đoạn</div>
                 <div className="text-lg font-black text-viet-green">
                   1<span className="text-viet-text-light/30"> / 3</span>
                 </div>
               </div>
             </div>
 
-            {/* Content Area - Giá»‘ng MissionModal */}
+            {/* Content Area - Giống MissionModal */}
             <div className="bg-[#fcf8f0] rounded-[30px] p-6 mb-8 border border-viet-border">
               {/* Professor Narrative */}
               <div className="flex items-start gap-4 mb-6">
@@ -147,7 +147,7 @@ const StageQuiz = () => {
                 />
                 <div className="bg-white px-4 py-3 rounded-2xl border border-viet-border text-[14px] font-medium text-viet-text-light relative shadow-sm">
                   <div className="absolute top-4 -left-2 w-4 h-4 bg-white border-l border-b border-viet-border rotate-45" />
-                  HÃ£y xem video bÃ i giáº£ng bÃªn dÆ°á»›i Ä‘á»ƒ náº¯m vá»¯ng kiáº¿n thá»©c trÆ°á»›c khi lÃ m bÃ i táº­p nhÃ©!
+                  Hãy xem video bài giảng bên dưới để nắm vững kiến thức trước khi làm bài tập nhé!
                 </div>
               </div>
 
@@ -164,9 +164,9 @@ const StageQuiz = () => {
                 </div>
               ) : (
                 <div className="aspect-video bg-slate-50 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-slate-200 mb-4">
-                  <div className="text-4xl mb-3">ðŸ“­</div>
-                  <h4 className="text-sm font-black text-slate-400">ChÆ°a cÃ³ video bÃ i giáº£ng</h4>
-                  <p className="text-[12px] text-slate-300 mt-1">BÃ i há»c nÃ y chÆ°a Ä‘Æ°á»£c cáº­p nháº­t video</p>
+                  <div className="text-4xl mb-3">📭</div>
+                  <h4 className="text-sm font-black text-slate-400">Chưa có video bài giảng</h4>
+                  <p className="text-[12px] text-slate-300 mt-1">Bài học này chưa được cập nhật video</p>
                 </div>
               )}
 
@@ -180,27 +180,27 @@ const StageQuiz = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="text-viet-green font-black text-[12px] uppercase flex items-center justify-center gap-2"
                     >
-                      <span>âœ… ÄÃ£ há»c xong â€” Báº¯t Ä‘áº§u lÃ m bÃ i táº­p ngay!</span>
+                      <span>✅ Đã học xong — Bắt đầu làm bài tập ngay!</span>
                     </motion.div>
                   ) : (
                     <motion.p 
                       key="watching"
                       className="text-[11px] font-bold text-viet-text-light/50 uppercase tracking-widest"
                     >
-                      Xem háº¿t video Ä‘á»ƒ hoÃ n thÃ nh Ä‘oáº¡n nÃ y
+                      Xem hết video để hoàn thành đoạn này
                     </motion.p>
                   )}
                 </AnimatePresence>
               </div>
             </div>
 
-            {/* Footer - Giá»‘ng MissionModal */}
+            {/* Footer - Giống MissionModal */}
             <div className="flex justify-between items-center">
               <button 
                 onClick={handleCancel}
                 className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest hover:text-red-500 transition-colors"
               >
-                Há»§y lá»™ trÃ¬nh
+                Hủy lộ trình
               </button>
 
               {videoCompleted ? (
@@ -210,14 +210,14 @@ const StageQuiz = () => {
                   onClick={() => setVideoCompleted(true)}
                   className="px-8 py-3 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest shadow-lg hover:brightness-110 hover:scale-105 transition-all"
                 >
-                  Báº¯t Ä‘áº§u há»c ngay â†’
+                  Bắt đầu học ngay →
                 </motion.button>
               ) : (
                 <button
                   onClick={handleVideoComplete}
                   className="px-6 py-3 bg-slate-100 text-slate-500 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-viet-green hover:text-white transition-all"
                 >
-                  ÄÃ£ xem xong
+                  Đã xem xong
                 </button>
               )}
             </div>
@@ -227,7 +227,7 @@ const StageQuiz = () => {
     );
   }
 
-  // ========== LEVEL 2 & 3: LÃ€M BÃ€I KIá»‚M TRA ==========
+  // ========== LEVEL 2 & 3: LÀM BÀI KIỂM TRA ==========
   if (currentQuestions.length === 0) {
     navigate(`/classroom/${grade}/journey`);
     return null;
@@ -237,16 +237,16 @@ const StageQuiz = () => {
     <div className="min-h-screen bg-[#fffbf0]">
        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4 bg-white/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl border border-viet-border">
          <div className="pr-4 border-r border-slate-200">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Äang lÃ m</div>
+            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đang làm</div>
             <div className="text-sm font-bold text-slate-700">
-               {currentLevel === 'level1' ? 'Äoáº¡n 1: Video + Há»c' : (currentLevel === 'level2' ? 'Äoáº¡n 2: Hiá»ƒu' : 'Äoáº¡n 3: Ã”n táº­p')}
+               {currentLevel === 'level1' ? 'Đoạn 1: Video + Học' : (currentLevel === 'level2' ? 'Đoạn 2: Hiểu' : 'Đoạn 3: Ôn tập')}
             </div>
          </div>
       </div>
 
       <MissionModal
         key={currentLevel}
-        lessonTitle={`${lesson?.title || 'BÃ i kiá»ƒm tra'}`}
+        lessonTitle={`${lesson?.title || 'Bài kiểm tra'}`}
         challenges={currentQuestions.map(q => ({
           ...q,
           type: 'multiple-choice',
@@ -264,20 +264,20 @@ const StageQuiz = () => {
               animate={{ scale: 1, opacity: 1 }}
               className="bg-white rounded-[40px] p-8 md:p-10 max-w-lg w-full text-center shadow-2xl border-4 border-viet-green my-8"
             >
-              <div className="text-6xl mb-4">ðŸŽ‰</div>
-              <h2 className="text-2xl font-black text-viet-text mb-2">HoÃ n thÃ nh Ä‘oáº¡n!</h2>
+              <div className="text-6xl mb-4">🎉</div>
+              <h2 className="text-2xl font-black text-viet-text mb-2">Hoàn thành đoạn!</h2>
               <p className="text-viet-text-light font-medium mb-6 uppercase tracking-widest text-xs">
-                {currentLevel === 'level1' ? 'Báº¡n Ä‘Ã£ báº¯t Ä‘áº§u hÃ nh trÃ¬nh xuáº¥t sáº¯c' : (currentLevel === 'level2' ? 'Báº¡n Ä‘Ã£ náº¯m vá»¯ng kiáº¿n thá»©c' : 'Báº¡n Ä‘Ã£ Ã´n táº­p xuáº¥t sáº¯c')}
+                {currentLevel === 'level1' ? 'Bạn đã bắt đầu hành trình xuất sắc' : (currentLevel === 'level2' ? 'Bạn đã nắm vững kiến thức' : 'Bạn đã ôn tập xuất sắc')}
               </p>
 
               <div className="bg-slate-50 rounded-2xl p-4 mb-6 flex justify-around">
                 <div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase">ChÃ­nh xÃ¡c</div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase">Chính xác</div>
                    <div className="text-xl font-black text-viet-green">{lastResult?.total - lastResult?.mistakes}/{lastResult?.total}</div>
                 </div>
                 <div className="w-px bg-slate-200" />
                 <div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase">ÄÃ¡nh giÃ¡</div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase">Đánh giá</div>
                    <div className="text-xl font-black text-amber-500">
                      {lastResult?.stars === 3 ? 'A+' : lastResult?.stars === 2 ? 'B' : 'C'}
                    </div>
@@ -293,13 +293,13 @@ const StageQuiz = () => {
               >
                 {/* Reward label ribbon */}
                 <div className="absolute top-3 left-3 z-20 px-3 py-1 bg-viet-green text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5">
-                  Trang sá»• tay má»›i
+                  Trang sổ tay mới
                 </div>
 
                 {/* Infographic image */}
                 <img 
                   src={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
-                  alt={`Infographic - ${lesson?.title || 'Pháº§n thÆ°á»Ÿng'}`}
+                  alt={`Infographic - ${lesson?.title || 'Phần thưởng'}`}
                   className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
@@ -314,14 +314,14 @@ const StageQuiz = () => {
               </motion.div>
 
               <p className="text-viet-text-light/40 text-[10px] font-black uppercase tracking-widest mb-6">
-                Trang infographic Ä‘Ã£ Ä‘Æ°á»£c lÆ°u vÃ o sá»• tay hÃ nh trÃ¬nh
+                Trang infographic đã được lưu vào sổ tay hành trình
               </p>
 
               <button 
                 onClick={handleContinue}
                 className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-viet-green/20 hover:scale-105 transition-all"
               >
-                Tiáº¿p tá»¥c hÃ nh trÃ¬nh
+                Tiếp tục hành trình
               </button>
             </motion.div>
           </div>

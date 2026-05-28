@@ -3,18 +3,18 @@
   "classId": 12,
   "lessonId": 8,
   "programId": "ketnoi",
-  "title": "BÃ i 8. Amine",
-  "chapter": "ChÆ°Æ¡ng 3. Há»£p cháº¥t chá»©a nitrogen",
+  "title": "Bài 8. Amine",
+  "chapter": "Chương 3. Hợp chất chứa nitrogen",
   "order": 8,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "KhÃ¡i niá»‡m, phÃ¢n báº­c amine. Giáº£i thÃ­ch tÃ­nh base Ä‘áº·c trÆ°ng vÃ  cÃ¡c pháº£n á»©ng táº¡o muá»‘i cá»§a amine, so sÃ¡nh vá»›i Ammonia.",
+  "description": "Khái niệm, phân bậc amine. Giải thích tính base đặc trưng và các phản ứng tạo muối của amine, so sánh với Ammonia.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡i niá»‡m vÃ  PhÃ¢n loáº¡i Amine",
+        "text": "1. Khái niệm và Phân loại Amine",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Amine lÃ  há»£p cháº¥t há»¯u cÆ¡ Ä‘Æ°á»£c táº¡o thÃ nh khi thay tháº¿ má»™t hoáº·c nhiá»u nguyÃªn tá»­ hydrogen trong phÃ¢n tá»­ ammonia ($NH_3$) báº±ng má»™t hoáº·c nhiá»u gá»‘c hydrocarbon. Dá»±a trÃªn sá»‘ lÆ°á»£ng gá»‘c hydrocarbon liÃªn káº¿t trá»±c tiáº¿p vá»›i nguyÃªn tá»­ nitrogen, amine Ä‘Æ°á»£c chia thÃ nh ba báº­c: Báº­c I ($R-NH_2$), Báº­c II ($R-NH-R'$), vÃ  Báº­c III ($R-N(R')R''$)."
+        "text": "Amine là hợp chất hữu cơ được tạo thành khi thay thế một hoặc nhiều nguyên tử hydrogen trong phân tử ammonia ($NH_3$) bằng một hoặc nhiều gốc hydrocarbon. Dựa trên số lượng gốc hydrocarbon liên kết trực tiếp với nguyên tử nitrogen, amine được chia thành ba bậc: Bậc I ($R-NH_2$), Bậc II ($R-NH-R'$), và Bậc III ($R-N(R')R''$)."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "PhÃ¢n loáº¡i theo gá»‘c hydrocarbon",
-        "content": "- **Amine bÃ©o**: Gá»‘c hydrocarbon lÃ  gá»‘c alkyl (vÃ­ dá»¥: $CH_3NH_2$ - methylamine, $(CH_3)_2NH$ - dimethylamine).\n- **Amine thÆ¡m**: NhÃ³m amine liÃªn káº¿t trá»±c tiáº¿p vá»›i vÃ²ng benzene (vÃ­ dá»¥: $C_6H_5NH_2$ - aniline).\n- **Danh phÃ¡p**: TÃªn gá»‘c hydrocarbon + tá»« 'amine'. VÃ­ dá»¥: $C_2H_5NH_2$ lÃ  ethylamine.",
+        "title": "Phân loại theo gốc hydrocarbon",
+        "content": "- **Amine béo**: Gốc hydrocarbon là gốc alkyl (ví dụ: $CH_3NH_2$ - methylamine, $(CH_3)_2NH$ - dimethylamine).\n- **Amine thơm**: Nhóm amine liên kết trực tiếp với vòng benzene (ví dụ: $C_6H_5NH_2$ - aniline).\n- **Danh pháp**: Tên gốc hydrocarbon + từ 'amine'. Ví dụ: $C_2H_5NH_2$ là ethylamine.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. TÃ­nh cháº¥t váº­t lÃ­ vÃ  Äá»™c tÃ­nh",
+        "text": "2. Tính chất vật lí và Độc tính",
         "level": "h2"
       }
     },
@@ -46,14 +46,14 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Methylamine, dimethylamine, trimethylamine vÃ  ethylamine lÃ  nhá»¯ng cháº¥t khÃ­ á»Ÿ Ä‘iá»u kiá»‡n thÆ°á»ng, cÃ³ mÃ¹i khai tÆ°Æ¡ng tá»± ammonia vÃ  tan ráº¥t tá»‘t trong nÆ°á»›c. CÃ¡c amine cÃ³ phÃ¢n tá»­ khá»‘i lá»›n hÆ¡n lÃ  cháº¥t lá»ng hoáº·c cháº¥t ráº¯n, Ä‘á»™ tan trong nÆ°á»›c giáº£m dáº§n khi máº¡ch carbon tÄƒng. Äáº·c biá»‡t, cÃ¡c amine Ä‘á»u ráº¥t Ä‘á»™c, aniline lÃ  cháº¥t lá»ng khÃ´ng mÃ u (nhÆ°ng dá»… bá»‹ oxi hÃ³a thÃ nh mÃ u Ä‘en), ráº¥t Ä‘á»™c vÃ  cÃ³ thá»ƒ tháº¥m qua da gÃ¢y ngá»™ Ä‘á»™c mÃ¡u."
+        "text": "Methylamine, dimethylamine, trimethylamine và ethylamine là những chất khí ở điều kiện thường, có mùi khai tương tự ammonia và tan rất tốt trong nước. Các amine có phân tử khối lớn hơn là chất lỏng hoặc chất rắn, độ tan trong nước giảm dần khi mạch carbon tăng. Đặc biệt, các amine đều rất độc, aniline là chất lỏng không màu (nhưng dễ bị oxi hóa thành màu đen), rất độc và có thể thấm qua da gây ngộ độc máu."
       }
     },
     {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. TÃ­nh cháº¥t hÃ³a há»c: TÃ­nh Base",
+        "text": "3. Tính chất hóa học: Tính Base",
         "level": "h2"
       }
     },
@@ -61,7 +61,7 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "TÆ°Æ¡ng tá»± ammonia, nguyÃªn tá»­ nitrogen trong phÃ¢n tá»­ amine váº«n cÃ²n má»™t cáº·p electron chÆ°a liÃªn káº¿t (cáº·p electron tá»± do). Nhá» cáº·p electron nÃ y, amine cÃ³ kháº£ nÄƒng nháº­n proton ($H^+$) nÃªn thá»ƒ hiá»‡n tÃ­nh base yáº¿u (theo thuyáº¿t BrÃ¸nstedâ€“Lowry). CÃ¡c amine bÃ©o cÃ³ tÃ­nh base máº¡nh hÆ¡n ammonia do hiá»‡u á»©ng Ä‘áº©y electron cá»§a gá»‘c alkyl, trong khi amine thÆ¡m (aniline) cÃ³ tÃ­nh base yáº¿u hÆ¡n ammonia do hiá»‡u á»©ng hÃºt electron cá»§a vÃ²ng benzene."
+        "text": "Tương tự ammonia, nguyên tử nitrogen trong phân tử amine vẫn còn một cặp electron chưa liên kết (cặp electron tự do). Nhờ cặp electron này, amine có khả năng nhận proton ($H^+$) nên thể hiện tính base yếu (theo thuyết Brønsted–Lowry). Các amine béo có tính base mạnh hơn ammonia do hiệu ứng đẩy electron của gốc alkyl, trong khi amine thơm (aniline) có tính base yếu hơn ammonia do hiệu ứng hút electron của vòng benzene."
       }
     },
     {
@@ -70,8 +70,8 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Pháº£n á»©ng vá»›i nÆ°á»›c:** CÃ¡c amine bÃ©o tan trong nÆ°á»›c lÃ m quá»³ tÃ­m chuyá»ƒn sang mÃ u xanh hoáº·c lÃ m há»“ng phenolphthalein. Aniline khÃ´ng lÃ m Ä‘á»•i mÃ u quá»³ tÃ­m do tÃ­nh base quÃ¡ yáº¿u.",
-          "**Pháº£n á»©ng vá»›i acid:** Amine tÃ¡c dá»¥ng vá»›i cÃ¡c acid ($HCl, H_2SO_4...$) táº¡o thÃ nh muá»‘i ammonium. VÃ­ dá»¥: $CH_3NH_2 + HCl \\rightarrow CH_3NH_3Cl$ (methylammonium chloride). Pháº£n á»©ng nÃ y giÃºp aniline (khÃ´ng tan trong nÆ°á»›c) tan Ä‘Æ°á»£c trong dung dá»‹ch acid máº¡nh."
+          "**Phản ứng với nước:** Các amine béo tan trong nước làm quỳ tím chuyển sang màu xanh hoặc làm hồng phenolphthalein. Aniline không làm đổi màu quỳ tím do tính base quá yếu.",
+          "**Phản ứng với acid:** Amine tác dụng với các acid ($HCl, H_2SO_4...$) tạo thành muối ammonium. Ví dụ: $CH_3NH_2 + HCl \\rightarrow CH_3NH_3Cl$ (methylammonium chloride). Phản ứng này giúp aniline (không tan trong nước) tan được trong dung dịch acid mạnh."
         ]
       }
     },
@@ -79,7 +79,7 @@
       "id": "mod9",
       "type": "heading",
       "content": {
-        "text": "4. Pháº£n á»©ng tháº¿ á»Ÿ vÃ²ng thÆ¡m cá»§a Aniline",
+        "text": "4. Phản ứng thế ở vòng thơm của Aniline",
         "level": "h2"
       }
     },
@@ -87,8 +87,8 @@
       "id": "mod10",
       "type": "infoBox",
       "content": {
-        "title": "Pháº£n á»©ng vá»›i nÆ°á»›c Bromine",
-        "content": "Do áº£nh hÆ°á»Ÿng cá»§a nhÃ³m $-NH_2$ Ä‘áº©y electron vÃ o vÃ²ng benzene, cÃ¡c vá»‹ trÃ­ ortho vÃ  para trong aniline trá»Ÿ nÃªn giÃ u máº­t Ä‘á»™ electron, lÃ m cho pháº£n á»©ng tháº¿ vÃ o vÃ²ng thÆ¡m xáº£y ra ráº¥t dá»… dÃ ng. Khi cho nÆ°á»›c bromine vÃ o dung dá»‹ch aniline, xuáº¥t hiá»‡n ngay láº­p tá»©c káº¿t tá»§a tráº¯ng cá»§a **2,4,6-tribromoaniline**: $C_6H_5NH_2 + 3Br_2 \\rightarrow C_6H_2Br_3NH_2 \\downarrow + 3HBr$. ÄÃ¢y lÃ  pháº£n á»©ng Ä‘áº·c trÆ°ng Ä‘á»ƒ nháº­n biáº¿t aniline.",
+        "title": "Phản ứng với nước Bromine",
+        "content": "Do ảnh hưởng của nhóm $-NH_2$ đẩy electron vào vòng benzene, các vị trí ortho và para trong aniline trở nên giàu mật độ electron, làm cho phản ứng thế vào vòng thơm xảy ra rất dễ dàng. Khi cho nước bromine vào dung dịch aniline, xuất hiện ngay lập tức kết tủa trắng của **2,4,6-tribromoaniline**: $C_6H_5NH_2 + 3Br_2 \\rightarrow C_6H_2Br_3NH_2 \\downarrow + 3HBr$. Đây là phản ứng đặc trưng để nhận biết aniline.",
         "color": "green"
       }
     }
@@ -96,7 +96,7 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Dung dá»‹ch cháº¥t nÃ o sau Ä‘Ã¢y KHÃ”NG lÃ m Ä‘á»•i mÃ u quá»³ tÃ­m?",
+      "question": "Dung dịch chất nào sau đây KHÔNG làm đổi màu quỳ tím?",
       "options": [
         "Methylamine ($CH_3NH_2$)",
         "Ammonia ($NH_3$)",
@@ -104,28 +104,28 @@
         "Sodium hydroxide ($NaOH$)"
       ],
       "correctAnswer": 2,
-      "explanation": "Aniline cÃ³ nhÃ³m $-NH_2$ liÃªn káº¿t trá»±c tiáº¿p with vÃ²ng benzene. Hiá»‡u á»©ng hÃºt electron cá»§a vÃ²ng thÆ¡m lÃ m giáº£m máº­t Ä‘á»™ electron trÃªn nguyÃªn tá»­ nitrogen, khiáº¿n tÃ­nh base cá»§a aniline ráº¥t yáº¿u, khÃ´ng Ä‘á»§ lÃ m Ä‘á»•i mÃ u quá»³ tÃ­m."
+      "explanation": "Aniline có nhóm $-NH_2$ liên kết trực tiếp with vòng benzene. Hiệu ứng hút electron của vòng thơm làm giảm mật độ electron trên nguyên tử nitrogen, khiến tính base của aniline rất yếu, không đủ làm đổi màu quỳ tím."
     },
     {
       "id": "q2",
-      "question": "Thuá»‘c thá»­ dÃ¹ng Ä‘á»ƒ nháº­n biáº¿t aniline báº±ng phÆ°Æ¡ng phÃ¡p hÃ³a há»c lÃ  gÃ¬?",
+      "question": "Thuốc thử dùng để nhận biết aniline bằng phương pháp hóa học là gì?",
       "options": [
-        "Dung dá»‹ch $NaOH$.",
-        "Quá»³ tÃ­m.",
-        "NÆ°á»›c bromine.",
-        "Dung dá»‹ch $NaCl$."
+        "Dung dịch $NaOH$.",
+        "Quỳ tím.",
+        "Nước bromine.",
+        "Dung dịch $NaCl$."
       ],
       "correctAnswer": 2,
-      "explanation": "Aniline pháº£n á»©ng with nÆ°á»›c bromine táº¡o káº¿t tá»§a tráº¯ng 2,4,6-tribromoaniline, Ä‘Ã¢y lÃ  hiá»‡n tÆ°á»£ng Ä‘áº·c trÆ°ng giÃºp nháº­n biáº¿t aniline dá»… dÃ ng."
+      "explanation": "Aniline phản ứng with nước bromine tạo kết tủa trắng 2,4,6-tribromoaniline, đây là hiện tượng đặc trưng giúp nhận biết aniline dễ dàng."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Amine",
+      "title": "Bài giảng: Amine",
       "url": "https://www.youtube.com/watch?v=5nPfKxoNEGE",
       "thumbnail": "https://img.youtube.com/vi/5nPfKxoNEGE/0.jpg",
-      "description": "KhÃ¡i niá»‡m, phÃ¢n loáº¡i, danh phÃ¡p and cÃ¡c tÃ­nh cháº¥t hÃ³a há»c Ä‘áº·c trÆ°ng cá»§a Amine (VietJack)."
+      "description": "Khái niệm, phân loại, danh pháp and các tính chất hóa học đặc trưng của Amine (VietJack)."
     }
   ],
   "practiceModules": [],

@@ -37,14 +37,14 @@ const StageIntro = () => {
             const isPrevUnlocked = currentIndex > 0 && user?.unlockedLessons?.includes(sortedLessons[currentIndex - 1].lessonId);
             
             if (!isFirstOfG8 && !isSelfUnlocked && !isPrevUnlocked) {
-              console.warn('Truy cáº­p bá»‹ cháº·n: BÃ i há»c chÆ°a Ä‘Æ°á»£c má»Ÿ khÃ³a (cáº§n pass test há»c vÆ°á»£t hoáº·c hoÃ n thÃ nh bÃ i trÆ°á»›c)');
+              console.warn('Truy cập bị chặn: Bài học chưa được mở khóa (cần pass test học vượt hoặc hoàn thành bài trước)');
               navigate(`/classroom/${grade}/journey`);
             }
           }
         }
 
       } catch (err) {
-        console.error('Lá»—i táº£i bÃ i há»c:', err);
+        console.error('Lỗi tải bài học:', err);
       } finally {
         setLoading(false);
       }

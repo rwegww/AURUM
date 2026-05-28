@@ -10,7 +10,7 @@ import { stableRange } from '@/utils/stableRandom';
 
 // --- Floating Chemistry Background ---
 const FallingChemistry = () => {
-  const symbols = ['Hâ‚‚O', 'COâ‚‚', 'NaCl', 'CHâ‚„', 'âš›ï¸', 'Oâ‚‚', 'Hâ‚‚', 'NHâ‚ƒ', 'Fe'];
+  const symbols = ['H₂O', 'CO₂', 'NaCl', 'CH₄', '⚛️', 'O₂', 'H₂', 'NH₃', 'Fe'];
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden h-full z-0 opacity-20">
       {[...Array(12)].map((_, i) => {
@@ -206,7 +206,7 @@ const Home = () => {
               </motion.div>
             </div>
 
-            {/* Right â€” Hero Image */}
+            {/* Right — Hero Image */}
             <motion.div variants={fadeUp} className="w-full lg:w-[45%] lg:flex-none max-w-[520px] lg:max-w-none">
               <div className="relative rounded-[32px] overflow-hidden shadow-[0_30px_80px_0_rgba(0,0,0,0.18)] group">
                 <img
@@ -232,7 +232,7 @@ const Home = () => {
 
       {/* â”€â”€â”€ FEATURE ROWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
 
-      {/* 1. Lá»™ trÃ¬nh há»c táº­p â€” image right */}
+      {/* 1. Lộ trình học tập — image right */}
       <FeatureRow
         badge={t('home.features.journey.badge')}
         badgeColor="text-viet-green"
@@ -249,7 +249,7 @@ const Home = () => {
         bgClass="bg-white"
       />
 
-      {/* 2. PhÃ²ng thÃ­ nghiá»‡m â€” image left */}
+      {/* 2. Phòng thí nghiệm — image left */}
       <FeatureRow
         badge={t('home.features.lab.badge')}
         badgeColor="text-blue-500"
@@ -266,7 +266,7 @@ const Home = () => {
         bgClass="bg-[#f8f9fa]"
       />
 
-      {/* 3. Äáº¥u trÆ°á»ng â€” image right */}
+      {/* 3. Đấu trường — image right */}
       <FeatureRow
         badge={t('home.features.arena.badge')}
         badgeColor="text-purple-600"
@@ -284,7 +284,7 @@ const Home = () => {
       />
 
 
-      {/* 5. BÃ i giáº£ng tÆ°Æ¡ng tÃ¡c â€” image right */}
+      {/* 5. Bài giảng tương tác — image right */}
       <FeatureRow
         badge={t('home.features.bai_hoc.badge')}
         badgeColor="text-viet-green"

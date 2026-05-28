@@ -1,15 +1,15 @@
 ﻿export const MATERIAL_CATEGORIES = [
-  { id: 'INFOGRAPHIC HÃ“A 11', i18nKey: 'infographic_11', label: 'INFOGRAPHIC HÃ“A 11' },
-  { id: 'INFOGRAPHIC HÃ“A 12', i18nKey: 'infographic_12', label: 'INFOGRAPHIC HÃ“A 12' },
-  { id: 'SÄTD HÃ“A 10', i18nKey: 'mindmap_10', label: 'SÄTD HÃ“A 10' },
-  { id: 'SÄTD HÃ“A 11', i18nKey: 'mindmap_11', label: 'SÄTD HÃ“A 11' },
-  { id: 'SÄTD HÃ“A 12', i18nKey: 'mindmap_12', label: 'SÄTD HÃ“A 12' },
-  { id: 'PHIáº¾U Há»ŒC Táº¬P HÃ“A 12', i18nKey: 'worksheet_12', label: 'PHIáº¾U Há»ŒC Táº¬P HÃ“A 12' },
-  { id: 'TRUYá»†N TRANH HÃ“A 10', i18nKey: 'comic_10', label: 'TRUYá»†N TRANH HÃ“A 10' },
-  { id: 'TRUYá»†N TRANH 11', i18nKey: 'comic_11', label: 'TRUYá»†N TRANH 11' },
-  { id: 'TRUYá»†N TRANH HÃ“A 12', i18nKey: 'comic_12', label: 'TRUYá»†N TRANH HÃ“A 12' },
-  { id: 'PHT HÃ“A 9', i18nKey: 'worksheet_9', label: 'PHT HÃ“A 9' },
-  { id: 'SÄTD KHTN 6', i18nKey: 'mindmap_6', label: 'SÄTD KHTN 6' },
+  { id: 'INFOGRAPHIC HÓA 11', i18nKey: 'infographic_11', label: 'INFOGRAPHIC HÓA 11' },
+  { id: 'INFOGRAPHIC HÓA 12', i18nKey: 'infographic_12', label: 'INFOGRAPHIC HÓA 12' },
+  { id: 'SĐTD HÓA 10', i18nKey: 'mindmap_10', label: 'SĐTD HÓA 10' },
+  { id: 'SĐTD HÓA 11', i18nKey: 'mindmap_11', label: 'SĐTD HÓA 11' },
+  { id: 'SĐTD HÓA 12', i18nKey: 'mindmap_12', label: 'SĐTD HÓA 12' },
+  { id: 'PHIẾU HỌC TẬP HÓA 12', i18nKey: 'worksheet_12', label: 'PHIẾU HỌC TẬP HÓA 12' },
+  { id: 'TRUYỆN TRANH HÓA 10', i18nKey: 'comic_10', label: 'TRUYỆN TRANH HÓA 10' },
+  { id: 'TRUYỆN TRANH 11', i18nKey: 'comic_11', label: 'TRUYỆN TRANH 11' },
+  { id: 'TRUYỆN TRANH HÓA 12', i18nKey: 'comic_12', label: 'TRUYỆN TRANH HÓA 12' },
+  { id: 'PHT HÓA 9', i18nKey: 'worksheet_9', label: 'PHT HÓA 9' },
+  { id: 'SĐTD KHTN 6', i18nKey: 'mindmap_6', label: 'SĐTD KHTN 6' },
 ];
 
 export const getMaterialCategoryOptions = (t, { includeAll = true } = {}) => {
@@ -21,7 +21,7 @@ export const getMaterialCategoryOptions = (t, { includeAll = true } = {}) => {
   if (!includeAll) return categories;
 
   return [
-    { id: '', name: t ? t('library.categories.all') : 'Táº¥t cáº£ tÃ i liá»‡u' },
+    { id: '', name: t ? t('library.categories.all') : 'Tất cả tài liệu' },
     ...categories,
   ];
 };

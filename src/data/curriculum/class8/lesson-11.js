@@ -4,61 +4,61 @@
   "lessonId": 11,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 11: muá»‘i",
-  "chapter": "ChÆ°Æ¡ng 2: Má»™t sá»‘ há»£p cháº¥t thÃ´ng dá»¥ng",
+  "title": "Bài 11: muối",
+  "chapter": "Chương 2: Một số hợp chất thông dụng",
   "order": 11,
   "isPremium": false,
-  "description": "KhÃ¡i niá»‡m muá»‘i, cÃ¡ch gá»i tÃªn, tÃ­nh tan, tÃ­nh cháº¥t hÃ³a há»c, cÃ¡c cÃ¡ch Ä‘iá»u cháº¿ muá»‘i and má»‘i quan há»‡ vÃ´ cÆ¡.",
+  "description": "Khái niệm muối, cách gọi tên, tính tan, tính chất hóa học, các cách điều chế muối and mối quan hệ vô cơ.",
   "challenges": [
     {
       "type": "matching",
-      "narrative": "HÃ£y ná»‘i cÃ¡c muá»‘i sau with mÃ u sáº¯c káº¿t tá»§a Ä‘áº·c trÆ°ng cá»§a chÃºng.",
+      "narrative": "Hãy nối các muối sau with màu sắc kết tủa đặc trưng của chúng.",
       "leftItems": [
-        { "id": "m1", "label": "Báº¡c clorua (AgCl)" },
-        { "id": "m2", "label": "Äá»“ng(II) hydroxide (táº¡o tá»« muá»‘i Cu)" },
+        { "id": "m1", "label": "Bạc clorua (AgCl)" },
+        { "id": "m2", "label": "Đồng(II) hydroxide (tạo từ muối Cu)" },
         { "id": "m3", "label": "Bari sunfat (BaSO4)" }
       ],
       "items": [
-        { "id": "m2", "label": "MÃ u xanh lam" },
-        { "id": "m1", "label": "MÃ u tráº¯ng" },
-        { "id": "m3", "label": "MÃ u tráº¯ng (ráº¥t bá»n)" }
+        { "id": "m2", "label": "Màu xanh lam" },
+        { "id": "m1", "label": "Màu trắng" },
+        { "id": "m3", "label": "Màu trắng (rất bền)" }
       ],
       "correctOrder": ["m1", "m2", "m3"],
-      "question": "Khá»›p muá»‘i/káº¿t tá»§a with mÃ u sáº¯c.",
-      "source": "Nháº­n biáº¿t hÃ³a cháº¥t"
+      "question": "Khớp muối/kết tủa with màu sắc.",
+      "source": "Nhận biết hóa chất"
     },
     {
       "type": "multiple-choice",
-      "narrative": "TÃ­nh tan cá»§a muá»‘i lÃ  kiáº¿n thá»©c ráº¥t quan trá»ng Ä‘á»ƒ xÃ¡c Ä‘á»‹nh sáº£n pháº©m pháº£n á»©ng.",
+      "narrative": "Tính tan của muối là kiến thức rất quan trọng để xác định sản phẩm phản ứng.",
       "options": [
-        "Táº¥t cáº£ muá»‘i Nitrate ($NO_3$) Ä‘á»u tan",
-        "Táº¥t cáº£ muá»‘i Clorua ($Cl$) Ä‘á»u khÃ´ng tan",
-        "Muá»‘i Bari Sunfat ($BaSO_4$) tan ráº¥t tá»‘t",
-        "Muá»‘i Cacbonat cá»§a kim loáº¡i kiá»m khÃ´ng tan"
+        "Tất cả muối Nitrate ($NO_3$) đều tan",
+        "Tất cả muối Clorua ($Cl$) đều không tan",
+        "Muối Bari Sunfat ($BaSO_4$) tan rất tốt",
+        "Muối Cacbonat của kim loại kiềm không tan"
       ],
       "correctAnswer": 0,
-      "question": "PhÃ¡t biá»ƒu nÃ o sau Ä‘Ã¢y Ä‘Ãºng vá» tÃ­nh tan cá»§a muá»‘i?",
-      "source": "Báº£ng tÃ­nh tan"
+      "question": "Phát biểu nào sau đây đúng về tính tan của muối?",
+      "source": "Bảng tính tan"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Pháº£n á»©ng trao Ä‘á»•i trong dung dá»‹ch chá»‰ xáº£y ra náº¿u sáº£n pháº©m táº¡o thÃ nh cÃ³ cháº¥t khÃ­, nÆ°á»›c hoáº·c cháº¥t ...",
-      "placeholder": "Nháº­p tá»« (vÃ­ dá»¥: Káº¿t tá»§a)...",
-      "correctAnswer": "Káº¿t tá»§a",
-      "question": "Äiá»u kiá»‡n quan trá»ng Ä‘á»ƒ pháº£n á»©ng trao Ä‘á»•i xáº£y ra lÃ  gÃ¬?",
-      "source": "Pháº£n á»©ng trao Ä‘á»•i"
+      "narrative": "Phản ứng trao đổi trong dung dịch chỉ xảy ra nếu sản phẩm tạo thành có chất khí, nước hoặc chất ...",
+      "placeholder": "Nhập từ (ví dụ: Kết tủa)...",
+      "correctAnswer": "Kết tủa",
+      "question": "Điều kiện quan trọng để phản ứng trao đổi xảy ra là gì?",
+      "source": "Phản ứng trao đổi"
     },
     {
       "type": "drag-drop",
-      "narrative": "HÃ£y sáº¯p xáº¿p cÃ¡c thÃ nh pháº§n cá»§a pháº£n á»©ng: $AgNO_3 + NaCl \\rightarrow$ ... + ...",
+      "narrative": "Hãy sắp xếp các thành phần của phản ứng: $AgNO_3 + NaCl \\rightarrow$ ... + ...",
       "items": [
-        { "id": "s1", "label": "AgCl (káº¿t tá»§a)" },
+        { "id": "s1", "label": "AgCl (kết tủa)" },
         { "id": "s2", "label": "+" },
         { "id": "s3", "label": "NaNO3" }
       ],
       "correctOrder": ["s1", "s2", "s3"],
-      "question": "Sáº£n pháº©m cá»§a pháº£n á»©ng giá»¯a báº¡c nitrate and muá»‘i Äƒn lÃ  gÃ¬?",
-      "source": "PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c"
+      "question": "Sản phẩm của phản ứng giữa bạc nitrate and muối ăn là gì?",
+      "source": "Phương trình hóa học"
     }
   ],
   "theoryModules": [
@@ -66,7 +66,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡i niá»‡m and PhÃ¢n loáº¡i Muá»‘i",
+        "text": "1. Khái niệm and Phân loại Muối",
         "level": "h2"
       }
     },
@@ -74,15 +74,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Muá»‘i lÃ  há»£p cháº¥t mÃ  phÃ¢n tá»­ gá»“m cÃ³ nguyÃªn tá»­ **kim loáº¡i** (hoáº·c nhÃ³m $NH_4^+$) liÃªn káº¿t with **gá»‘c acid**. Muá»‘i lÃ  sáº£n pháº©m chung cá»§a nhiá»u loáº¡i pháº£n á»©ng khÃ¡c nhau and cÃ³ á»©ng dá»¥ng rá»™ng rÃ£i trong Ä‘á»i sá»‘ng."
+        "text": "Muối là hợp chất mà phân tử gồm có nguyên tử **kim loại** (hoặc nhóm $NH_4^+$) liên kết with **gốc acid**. Muối là sản phẩm chung của nhiều loại phản ứng khác nhau and có ứng dụng rộng rãi trong đời sống."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "TÃªn gá»i and PhÃ¢n loáº¡i",
-        "content": "**TÃªn gá»i**: TÃªn kim loáº¡i (kÃ¨m hÃ³a trá»‹ náº¿u cáº§n) + tÃªn gá»‘c acid.\\nVÃ­ dá»¥: $NaCl$ â€” Natri clorua, $CuSO_4$ â€” Äá»“ng(II) sunfat, $CaCO_3$ â€” Canxi cacbonat.\\n\\n**PhÃ¢n loáº¡i**:\\n1. **Muá»‘i trung hÃ²a**: Gá»‘c acid **khÃ´ng cÃ²n** nguyÃªn tá»­ H cÃ³ thá»ƒ thay tháº¿. VÃ­ dá»¥: $Na_2SO_4$, $KCl$, $CaCO_3$.\\n2. **Muá»‘i acid**: Gá»‘c acid **cÃ²n** nguyÃªn tá»­ H chÆ°a Ä‘Æ°á»£c thay tháº¿ háº¿t. VÃ­ dá»¥: $NaHCO_3$ (baking soda), $NaHSO_4$, $Ca(HCO_3)_2$ (gÃ¢y nÆ°á»›c cá»©ng).",
+        "title": "Tên gọi and Phân loại",
+        "content": "**Tên gọi**: Tên kim loại (kèm hóa trị nếu cần) + tên gốc acid.\\nVí dụ: $NaCl$ — Natri clorua, $CuSO_4$ — Đồng(II) sunfat, $CaCO_3$ — Canxi cacbonat.\\n\\n**Phân loại**:\\n1. **Muối trung hòa**: Gốc acid **không còn** nguyên tử H có thể thay thế. Ví dụ: $Na_2SO_4$, $KCl$, $CaCO_3$.\\n2. **Muối acid**: Gốc acid **còn** nguyên tử H chưa được thay thế hết. Ví dụ: $NaHCO_3$ (baking soda), $NaHSO_4$, $Ca(HCO_3)_2$ (gây nước cứng).",
         "color": "blue"
       }
     },
@@ -90,7 +90,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. TÃ­nh tan cá»§a Muá»‘i",
+        "text": "2. Tính tan của Muối",
         "level": "h2"
       }
     },
@@ -98,7 +98,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "KhÃ´ng pháº£i táº¥t cáº£ cÃ¡c muá»‘i Ä‘á»u tan trong nÆ°á»›c. Äá»ƒ giáº£i bÃ i táº­p, cáº§n náº¯m vá»¯ng quy táº¯c tÃ­nh tan:"
+        "text": "Không phải tất cả các muối đều tan trong nước. Để giải bài tập, cần nắm vững quy tắc tính tan:"
       }
     },
     {
@@ -107,9 +107,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**LuÃ´n tan**: Háº§u háº¿t muá»‘i $Na^+$, $K^+$, $NH_4^+$ Ä‘á»u tan. Muá»‘i $NO_3^-$ (nitrate) Ä‘á»u tan. Muá»‘i $Cl^-$ (clorua) háº§u háº¿t tan (trá»« $AgCl$, $PbCl_2$).",
-          "**KhÃ´ng tan hoáº·c Ã­t tan**: Háº§u háº¿t muá»‘i $CO_3^{2-}$ (cacbonat) khÃ´ng tan (trá»« $Na_2CO_3$, $K_2CO_3$). $BaSO_4$ khÃ´ng tan. $AgCl$ káº¿t tá»§a tráº¯ng.",
-          "**Máº¹o nhá»› nhanh**: *'Natri Kali Amoni luÃ´n tan. Nitrate nÃ o cÅ©ng tan. Clorua tan trá»« Báº¡c, ChÃ¬.'*"
+          "**Luôn tan**: Hầu hết muối $Na^+$, $K^+$, $NH_4^+$ đều tan. Muối $NO_3^-$ (nitrate) đều tan. Muối $Cl^-$ (clorua) hầu hết tan (trừ $AgCl$, $PbCl_2$).",
+          "**Không tan hoặc ít tan**: Hầu hết muối $CO_3^{2-}$ (cacbonat) không tan (trừ $Na_2CO_3$, $K_2CO_3$). $BaSO_4$ không tan. $AgCl$ kết tủa trắng.",
+          "**Mẹo nhớ nhanh**: *'Natri Kali Amoni luôn tan. Nitrate nào cũng tan. Clorua tan trừ Bạc, Chì.'*"
         ]
       }
     },
@@ -117,7 +117,7 @@
       "id": "mod7",
       "type": "heading",
       "content": {
-        "text": "3. TÃ­nh cháº¥t hÃ³a há»c cá»§a Muá»‘i",
+        "text": "3. Tính chất hóa học của Muối",
         "level": "h2"
       }
     },
@@ -127,11 +127,11 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**a) TÃ¡c dá»¥ng with Kim loáº¡i**: Muá»‘i (dung dá»‹ch) + kim loáº¡i máº¡nh hÆ¡n â†’ muá»‘i má»›i + kim loáº¡i má»›i.\\n  *VÃ­ dá»¥*: $Fe + CuSO_4 \\rightarrow FeSO_4 + Cu \\downarrow$ (nhÃºng Ä‘inh sáº¯t vÃ o dung dá»‹ch $CuSO_4$ xanh â†’ Ä‘inh phá»§ lá»›p Ä‘á»“ng Ä‘á»).",
-          "**b) TÃ¡c dá»¥ng with Acid**: Muá»‘i + Acid â†’ Muá»‘i má»›i + Acid má»›i.\\n  *VÃ­ dá»¥*: $CaCO_3 + 2HCl \\rightarrow CaCl_2 + H_2O + CO_2 \\uparrow$ (Ä‘Ã¡ vÃ´i sá»§i bá»t trong acid).",
-          "**c) TÃ¡c dá»¥ng with Base tan (Kiá»m)**: Muá»‘i + Base â†’ Muá»‘i má»›i + Base má»›i.\\n  *VÃ­ dá»¥*: $CuSO_4 + 2NaOH \\rightarrow Cu(OH)_2 \\downarrow + Na_2SO_4$ (xuáº¥t hiá»‡n káº¿t tá»§a xanh lam).",
-          "**d) TÃ¡c dá»¥ng giá»¯a hai dung dá»‹ch Muá»‘i**: Muá»‘i + Muá»‘i â†’ 2 Muá»‘i má»›i.\\n  *VÃ­ dá»¥*: $AgNO_3 + NaCl \\rightarrow AgCl \\downarrow + NaNO_3$ (káº¿t tá»§a tráº¯ng $AgCl$ xuáº¥t hiá»‡n).",
-          "**e) Bá»‹ nhiá»‡t phÃ¢n há»§y**: Má»™t sá»‘ muá»‘i bá»‹ phÃ¢n há»§y khi nung nÃ³ng.\\n  *VÃ­ dá»¥*: $CaCO_3 \\xrightarrow{t^\\circ} CaO + CO_2 \\uparrow$ (nung Ä‘Ã¡ vÃ´i táº¡o vÃ´i sá»‘ng)."
+          "**a) Tác dụng with Kim loại**: Muối (dung dịch) + kim loại mạnh hơn → muối mới + kim loại mới.\\n  *Ví dụ*: $Fe + CuSO_4 \\rightarrow FeSO_4 + Cu \\downarrow$ (nhúng đinh sắt vào dung dịch $CuSO_4$ xanh → đinh phủ lớp đồng đỏ).",
+          "**b) Tác dụng with Acid**: Muối + Acid → Muối mới + Acid mới.\\n  *Ví dụ*: $CaCO_3 + 2HCl \\rightarrow CaCl_2 + H_2O + CO_2 \\uparrow$ (đá vôi sủi bọt trong acid).",
+          "**c) Tác dụng with Base tan (Kiềm)**: Muối + Base → Muối mới + Base mới.\\n  *Ví dụ*: $CuSO_4 + 2NaOH \\rightarrow Cu(OH)_2 \\downarrow + Na_2SO_4$ (xuất hiện kết tủa xanh lam).",
+          "**d) Tác dụng giữa hai dung dịch Muối**: Muối + Muối → 2 Muối mới.\\n  *Ví dụ*: $AgNO_3 + NaCl \\rightarrow AgCl \\downarrow + NaNO_3$ (kết tủa trắng $AgCl$ xuất hiện).",
+          "**e) Bị nhiệt phân hủy**: Một số muối bị phân hủy khi nung nóng.\\n  *Ví dụ*: $CaCO_3 \\xrightarrow{t^\\circ} CaO + CO_2 \\uparrow$ (nung đá vôi tạo vôi sống)."
         ]
       }
     },
@@ -139,7 +139,7 @@
       "id": "mod9",
       "type": "heading",
       "content": {
-        "text": "4. Pháº£n á»©ng trao Ä‘á»•i trong dung dá»‹ch",
+        "text": "4. Phản ứng trao đổi trong dung dịch",
         "level": "h2"
       }
     },
@@ -147,8 +147,8 @@
       "id": "mod10",
       "type": "warningBox",
       "content": {
-        "title": "Äiá»u kiá»‡n xáº£y ra pháº£n á»©ng trao Ä‘á»•i",
-        "content": "Pháº£n á»©ng trao Ä‘á»•i trong dung dá»‹ch chá»‰ xáº£y ra náº¿u sáº£n pháº©m táº¡o thÃ nh cÃ³ Ã­t nháº¥t má»™t trong cÃ¡c Ä‘iá»u kiá»‡n sau:\\n- Táº¡o **cháº¥t káº¿t tá»§a** (â†“ khÃ´ng tan).\\n- Táº¡o **cháº¥t khÃ­** (â†‘ bay hÆ¡i).\\n- Táº¡o **nÆ°á»›c** (pháº£n á»©ng trung hÃ²a).\\n\\n**VÃ­ dá»¥ khÃ´ng xáº£y ra**: $NaCl + KNO_3$ â†’ khÃ´ng pháº£n á»©ng vÃ¬ cáº£ $NaNO_3$ and $KCl$ Ä‘á»u tan tá»‘t, khÃ´ng táº¡o káº¿t tá»§a hay khÃ­.",
+        "title": "Điều kiện xảy ra phản ứng trao đổi",
+        "content": "Phản ứng trao đổi trong dung dịch chỉ xảy ra nếu sản phẩm tạo thành có ít nhất một trong các điều kiện sau:\\n- Tạo **chất kết tủa** (↓ không tan).\\n- Tạo **chất khí** (↑ bay hơi).\\n- Tạo **nước** (phản ứng trung hòa).\\n\\n**Ví dụ không xảy ra**: $NaCl + KNO_3$ → không phản ứng vì cả $NaNO_3$ and $KCl$ đều tan tốt, không tạo kết tủa hay khí.",
         "color": "red"
       }
     },
@@ -156,7 +156,7 @@
       "id": "mod11",
       "type": "heading",
       "content": {
-        "text": "5. Má»‘i quan há»‡ giá»¯a cÃ¡c há»£p cháº¥t vÃ´ cÆ¡",
+        "text": "5. Mối quan hệ giữa các hợp chất vô cơ",
         "level": "h2"
       }
     },
@@ -164,8 +164,8 @@
       "id": "mod12",
       "type": "infoBox",
       "content": {
-        "title": "SÆ¡ Ä‘á»“ chuyá»ƒn Ä‘á»•i giá»¯a cÃ¡c loáº¡i há»£p cháº¥t",
-        "content": "CÃ¡c loáº¡i há»£p cháº¥t vÃ´ cÆ¡ (Oxide, Acid, Base, Muá»‘i) cÃ³ thá»ƒ chuyá»ƒn Ä‘á»•i qua láº¡i with nhau theo sÆ¡ Ä‘á»“:\\n\\n- **Oxide base** + NÆ°á»›c â†’ **Base** (tan). Oxide base + Acid â†’ **Muá»‘i** + NÆ°á»›c.\\n- **Oxide acid** + NÆ°á»›c â†’ **Acid**. Oxide acid + Base â†’ **Muá»‘i** + NÆ°á»›c.\\n- **Acid** + Base â†’ **Muá»‘i** + NÆ°á»›c (trung hÃ²a).\\n- **Acid** + Kim loáº¡i â†’ **Muá»‘i** + $H_2$.\\n\\nÄÃ¢y lÃ  má»‘i quan há»‡ then chá»‘t giÃºp giáº£i cÃ¡c bÃ i táº­p chuá»—i pháº£n á»©ng and nháº­n biáº¿t cháº¥t.",
+        "title": "Sơ đồ chuyển đổi giữa các loại hợp chất",
+        "content": "Các loại hợp chất vô cơ (Oxide, Acid, Base, Muối) có thể chuyển đổi qua lại with nhau theo sơ đồ:\\n\\n- **Oxide base** + Nước → **Base** (tan). Oxide base + Acid → **Muối** + Nước.\\n- **Oxide acid** + Nước → **Acid**. Oxide acid + Base → **Muối** + Nước.\\n- **Acid** + Base → **Muối** + Nước (trung hòa).\\n- **Acid** + Kim loại → **Muối** + $H_2$.\\n\\nĐây là mối quan hệ then chốt giúp giải các bài tập chuỗi phản ứng and nhận biết chất.",
         "color": "green"
       }
     },
@@ -173,7 +173,7 @@
       "id": "mod13",
       "type": "heading",
       "content": {
-        "text": "6. á»¨ng dá»¥ng cá»§a Muá»‘i trong Ä‘á»i sá»‘ng",
+        "text": "6. Ứng dụng của Muối trong đời sống",
         "level": "h2"
       }
     },
@@ -183,10 +183,10 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**$NaCl$ (Muá»‘i Äƒn)**: Gia vá»‹, báº£o quáº£n thá»±c pháº©m (muá»‘i cÃ¡, muá»‘i dÆ°a), sáº£n xuáº¥t nÆ°á»›c máº¯m, Ä‘iá»‡n phÃ¢n táº¡o $NaOH$ and $Cl_2$.",
-          "**$CaCO_3$ (ÄÃ¡ vÃ´i)**: Sáº£n xuáº¥t xi mÄƒng, vÃ´i sá»‘ng, cháº¥t Ä‘á»™n trong sÆ¡n, kem Ä‘Ã¡nh rÄƒng (abrasive nháº¹).",
-          "**$NaHCO_3$ (Baking soda)**: LÃ m bÃ¡nh (táº¡o khÃ­ $CO_2$ lÃ m bÃ¡nh ná»Ÿ), thuá»‘c khÃ¡ng acid dáº¡ dÃ y, chá»¯a chÃ¡y nhá».",
-          "**$CuSO_4$ (Äá»“ng sunfat)**: Pha dung dá»‹ch Bordeaux diá»‡t náº¥m cho cÃ¢y trá»“ng, máº¡ Ä‘á»“ng Ä‘iá»‡n phÃ¢n."
+          "**$NaCl$ (Muối ăn)**: Gia vị, bảo quản thực phẩm (muối cá, muối dưa), sản xuất nước mắm, điện phân tạo $NaOH$ and $Cl_2$.",
+          "**$CaCO_3$ (Đá vôi)**: Sản xuất xi măng, vôi sống, chất độn trong sơn, kem đánh răng (abrasive nhẹ).",
+          "**$NaHCO_3$ (Baking soda)**: Làm bánh (tạo khí $CO_2$ làm bánh nở), thuốc kháng acid dạ dày, chữa cháy nhỏ.",
+          "**$CuSO_4$ (Đồng sunfat)**: Pha dung dịch Bordeaux diệt nấm cho cây trồng, mạ đồng điện phân."
         ]
       }
     }
@@ -195,10 +195,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: muá»‘i",
+      "title": "Bài giảng: muối",
       "url": "https://www.youtube.com/watch?v=9KfYiVCSof8",
       "thumbnail": "https://img.youtube.com/vi/9KfYiVCSof8/0.jpg",
-      "description": "CÃ¡ch gá»i tÃªn, tÃ­nh cháº¥t hÃ³a há»c and cÃ¡c pháº£n á»©ng trao Ä‘á»•i táº¡o thÃ nh muá»‘i (VietJack)."
+      "description": "Cách gọi tên, tính chất hóa học and các phản ứng trao đổi tạo thành muối (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -208,7 +208,7 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "TÃªn gá»i cá»§a muá»‘i $NaCl$ lÃ :",
+        "question": "Tên gọi của muối $NaCl$ là:",
         "options": [
           "Natri clorua",
           "Natri sunfat",
@@ -221,46 +221,46 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Pháº£n á»©ng trao Ä‘á»•i trong dung dá»‹ch chá»‰ xáº£y ra khi:",
+        "question": "Phản ứng trao đổi trong dung dịch chỉ xảy ra khi:",
         "options": [
-          "CÃ³ cháº¥t káº¿t tá»§a hoáº·c cháº¥t khÃ­",
-          "Hai muá»‘i Ä‘á»u tan",
-          "Cáº£ a and b",
-          "LuÃ´n xáº£y ra"
+          "Có chất kết tủa hoặc chất khí",
+          "Hai muối đều tan",
+          "Cả a and b",
+          "Luôn xảy ra"
         ],
         "correctAnswer": 2,
-        "explanation": "Äiá»u kiá»‡n pháº£n á»©ng trao Ä‘á»•i.",
+        "explanation": "Điều kiện phản ứng trao đổi.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Muá»‘i Bari sunfat ($BaSO_4$) cÃ³ mÃ u gÃ¬ and cÃ³ tan trong nÆ°á»›c khÃ´ng?",
+        "question": "Muối Bari sunfat ($BaSO_4$) có màu gì and có tan trong nước không?",
         "options": [
-          "MÃ u xanh, tan tá»‘t",
-          "MÃ u tráº¯ng, khÃ´ng tan (káº¿t tá»§a)",
-          "MÃ u vÃ ng, tan nháº¹",
-          "KhÃ´ng mÃ u, tan tá»‘t"
+          "Màu xanh, tan tốt",
+          "Màu trắng, không tan (kết tủa)",
+          "Màu vàng, tan nhẹ",
+          "Không màu, tan tốt"
         ],
         "correctAnswer": 1,
-        "explanation": "BaSO4 lÃ  káº¿t tá»§a tráº¯ng Ä‘áº·c trÆ°ng.",
+        "explanation": "BaSO4 là kết tủa trắng đặc trưng.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Äá»ƒ Ä‘iá»u cháº¿ muá»‘i, ta cÃ³ thá»ƒ dÃ¹ng cÃ¡ch nÃ o?",
+        "question": "Để điều chế muối, ta có thể dùng cách nào?",
         "options": [
-          "Kim loáº¡i + Axit",
+          "Kim loại + Axit",
           "Axit + base",
-          "Muá»‘i + muá»‘i",
-          "Táº¥t cáº£ cÃ¡c Ã½ trÃªn"
+          "Muối + muối",
+          "Tất cả các ý trên"
         ],
         "correctAnswer": 3,
-        "explanation": "CÃ³ ráº¥t nhiá»u con Ä‘Æ°á»ng táº¡o ra muá»‘i.",
+        "explanation": "Có rất nhiều con đường tạo ra muối.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "ThÃ nh pháº§n chÃ­nh cá»§a vá» trá»©ng lÃ  muá»‘i nÃ o?",
+        "question": "Thành phần chính của vỏ trứng là muối nào?",
         "options": [
           "$CaCO_3$",
           "$NaCl$",

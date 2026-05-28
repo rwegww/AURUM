@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     
     res.json(bai_hoc);
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i táº£i danh sÃ¡ch bÃ i há»c', error: err.message });
+    res.status(500).json({ message: 'Lỗi tải danh sách bài học', error: err.message });
   }
 });
 
@@ -27,12 +27,12 @@ router.get('/:lessonId', async (req, res) => {
     const lesson = await Lesson.findById(lessonId);
     
     if (!lesson) {
-      return res.status(404).json({ message: 'KhÃ´ng tÃ¬m tháº¥y bÃ i há»c' });
+      return res.status(404).json({ message: 'Không tìm thấy bài học' });
     }
 
     res.json(lesson);
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i táº£i bÃ i há»c', error: err.message });
+    res.status(500).json({ message: 'Lỗi tải bài học', error: err.message });
   }
 });
 

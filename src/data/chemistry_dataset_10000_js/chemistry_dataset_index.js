@@ -25,9 +25,9 @@ export const CHEMISTRY_DATASET_META = {
     "tutor_support": 1232
   },
   "notes": [
-    "Dá»¯ liá»‡u má»Ÿ rá»™ng tá»« knowledge base gá»‘c cá»§a ngÆ°á»i dÃ¹ng.",
-    "Bao gá»“m cÃ¢u há»i chÃ­nh quy, vÄƒn nÃ³i, khÃ´ng dáº¥u, há»i ngáº¯n, há»i Ã´n táº­p vÃ  chÃ o há»i cÆ¡ báº£n.",
-    "CÃ³ thÃªm ion, hÃ³a trá»‹, sá»‘ oxi hÃ³a vÃ  cÃ¡c máº«u tá»« chá»‘i ná»™i dung nguy hiá»ƒm."
+    "Dữ liệu mở rộng từ knowledge base gốc của người dùng.",
+    "Bao gồm câu hỏi chính quy, văn nói, không dấu, hỏi ngắn, hỏi ôn tập và chào hỏi cơ bản.",
+    "Có thêm ion, hóa trị, số oxi hóa và các mẫu từ chối nội dung nguy hiểm."
   ]
 };
 

@@ -36,23 +36,23 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{ title: "NhÃ ", tabBarIcon: tabIcon("home-outline") }}
+        options={{ title: "Nhà", tabBarIcon: tabIcon("home-outline") }}
       />
       <Tabs.Screen
         name="journey"
-        options={{ title: "Lá»™ trÃ¬nh", tabBarIcon: tabIcon("map-outline") }}
+        options={{ title: "Lộ trình", tabBarIcon: tabIcon("map-outline") }}
       />
       <Tabs.Screen
         name="classroom"
-        options={{ title: "Lá»›p há»c", tabBarIcon: tabIcon("school-outline") }}
+        options={{ title: "Lớp học", tabBarIcon: tabIcon("school-outline") }}
       />
       <Tabs.Screen
         name="arena"
-        options={{ title: "Äáº¥u trÆ°á»ng", tabBarIcon: tabIcon("trophy-outline") }}
+        options={{ title: "Đấu trường", tabBarIcon: tabIcon("trophy-outline") }}
       />
       <Tabs.Screen
         name="more"
-        options={{ title: "ThÃªm", tabBarIcon: tabIcon("grid-outline") }}
+        options={{ title: "Thêm", tabBarIcon: tabIcon("grid-outline") }}
       />
       <Tabs.Screen
         name="lab"

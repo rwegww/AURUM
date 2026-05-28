@@ -40,7 +40,7 @@ async function loadDataset() {
 }
 
 async function createTable() {
-  console.log('ðŸ“¦ Creating ai_knowledge_base table via RPC...');
+  console.log('📦 Creating ai_knowledge_base table via RPC...');
   
   // Try to create table using SQL via Supabase
   const { error } = await supabase.rpc('exec_sql', {
@@ -66,7 +66,7 @@ async function createTable() {
   });
   
   if (error) {
-    console.warn('âš ï¸ RPC not available. Please create the table manually in Supabase SQL Editor:');
+    console.warn('⚠️ RPC not available. Please create the table manually in Supabase SQL Editor:');
     console.log(`
 CREATE TABLE IF NOT EXISTS ai_knowledge_base (
   id TEXT PRIMARY KEY,
@@ -116,22 +116,22 @@ async function uploadData(dataset) {
       .upsert(batch, { onConflict: 'id' });
 
     if (error) {
-      console.error(`âŒ Batch ${i}-${i + batch.length}: ${error.message}`);
+      console.error(`❌ Batch ${i}-${i + batch.length}: ${error.message}`);
       errors += batch.length;
     } else {
       uploaded += batch.length;
-      console.log(`ðŸ“¤ Uploaded ${uploaded}/${dataset.length} (${((uploaded / dataset.length) * 100).toFixed(1)}%)`);
+      console.log(`📤 Uploaded ${uploaded}/${dataset.length} (${((uploaded / dataset.length) * 100).toFixed(1)}%)`);
     }
   }
 
-  console.log(`\nðŸ Migration complete: ${uploaded} uploaded, ${errors} errors`);
+  console.log(`\n🏁 Migration complete: ${uploaded} uploaded, ${errors} errors`);
 }
 
 async function main() {
-  console.log('ðŸš€ Starting Knowledge Base Migration...\n');
+  console.log('🚀 Starting Knowledge Base Migration...\n');
   
   const dataset = await loadDataset();
-  console.log(`\nðŸ“Š Total records: ${dataset.length}\n`);
+  console.log(`\n📊 Total records: ${dataset.length}\n`);
   
   await createTable();
   await uploadData(dataset);
