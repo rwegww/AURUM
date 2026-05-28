@@ -289,6 +289,56 @@ describe('security acceptance matrix', () => {
     expect(res.status).toBe(403);
   });
 
+  it('returns class detail for the owning teacher', async () => {
+    supabaseState.classData = {
+      id: 'class-1',
+      ten: 'Lop Hoa 10A1',
+      ma_lop: 'ABC123',
+      khoi_id: 10,
+      giao_vien_id: 'teacher',
+      student_count: [{ count: 3 }],
+    };
+
+    const res = await request(app)
+      .get('/api/classes/class-1')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({
+      id: 'class-1',
+      name: 'Lop Hoa 10A1',
+      code: 'ABC123',
+      gradeLevelId: 10,
+      teacher_id: 'teacher',
+      student_count: 3,
+    });
+  });
+
+  it('returns class detail for a joined student only', async () => {
+    supabaseState.classData = {
+      id: 'class-1',
+      ten: 'Lop Hoa 10A1',
+      ma_lop: 'ABC123',
+      khoi_id: 10,
+      giao_vien_id: 'teacher',
+      student_count: [{ count: 3 }],
+    };
+    supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'student' };
+
+    const allowed = await request(app)
+      .get('/api/classes/class-1')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(allowed.status).toBe(200);
+    expect(allowed.body.id).toBe('class-1');
+
+    const blocked = await request(app)
+      .get('/api/classes/class-1')
+      .set('Authorization', `Bearer ${tokenFor('outsider')}`);
+
+    expect(blocked.status).toBe(403);
+  });
+
   it('ignores student-submitted score and always stores submitted status', async () => {
     supabaseState.post = { id: 'post-1', lop_id: 'class-1', type: 'assignment', hoc_sinh_nhan_id: null };
     supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'student' };

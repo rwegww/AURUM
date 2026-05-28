@@ -82,8 +82,7 @@ AURUM/
 │   ├── services/          # Frontend services
 │   └── utils/             # Helper utilities
 ├── supabase/
-│   ├── migrations/        # Migration SQL
-│   └── V2.sql             # Snapshot/schema script
+│   └── schema.sql         # Snapshot/schema SQL mới nhất
 └── tests/                 # Vitest suites
 ```
 
@@ -296,12 +295,10 @@ Chạy backup trước mọi migration lớn.
 Chạy validate schema sau khi apply migration.
 Không sửa database thủ công nếu thay đổi đó cần được deploy lại.
 
-## 17. Migration quan trọng
-Các migration chuẩn hóa schema nằm trong `supabase/migrations/`.
-`20260604030000_vietnamese_business_schema_names.sql` đổi tên bảng và cột nghiệp vụ.
-`20260604035000_rename_remaining_constraint_index_names.sql` chuẩn hóa constraint và index còn sót.
-`20260604035500_rename_legacy_index_names.sql` đổi các index legacy còn dùng tên cũ.
-Các migration dùng rename thay vì drop/create để giữ dữ liệu.
+## 17. Schema SQL quan trọng
+Schema chuẩn hóa hiện được gom trong `supabase/schema.sql`.
+File này tạo schema nghiệp vụ tiếng Việt không dấu, RPC, index, RLS policy, realtime publication và seed hệ thống tối thiểu.
+Khi cần cập nhật database, sửa `supabase/schema.sql` và chạy validate schema sau khi apply.
 
 ## 18. Kiểm thử
 ```bash
@@ -355,7 +352,7 @@ Bắt đầu từ `src/App.jsx` để hiểu route tree.
 Đọc `api/_routes/arena.js` nếu làm phần đấu trường.
 Đọc `api/_routes/materials.js` nếu làm phần thư viện.
 Đọc `scripts/db/validateRestructure.js` khi kiểm tra schema.
-Đọc migration mới nhất trong `supabase/migrations/` trước khi sửa database.
+Đọc `supabase/schema.sql` trước khi sửa database.
 
 ---
 AURUM hiện dùng schema database đã chuẩn hóa theo nghiệp vụ, trong khi vẫn giữ API public đủ ổn định để giảm rủi ro khi triển khai.

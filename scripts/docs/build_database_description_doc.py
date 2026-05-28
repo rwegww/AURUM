@@ -361,7 +361,7 @@ def build() -> None:
         "Frontend/API sử dụng Supabase là nguồn dữ liệu chính; Google login đi qua Supabase OAuth.",
         "Backend dùng service role cho nhiều route Express, vì vậy RLS chủ yếu bảo vệ truy cập trực tiếp từ client/PostgREST.",
         "Cac bang user_unlocked_lessons va user_unlocked_chemicals chi con la legacy history; nguon tien do runtime hien hanh la user_progress.",
-        "Khi cần cập nhật schema, đối chiếu ba nguồn: full_clean_schema.sql, OpenAPI live của Supabase và danh sách .from()/rpc() trong code runtime.",
+        "Khi cần cập nhật schema, đối chiếu ba nguồn: supabase/schema.sql, OpenAPI live của Supabase và danh sách .from()/rpc() trong code runtime.",
     ]:
         p = doc.add_paragraph(style="List Bullet")
         p.add_run(item)
