@@ -1,20 +1,20 @@
-export const bai23 = {
+﻿export const bai23 = {
   "id": "hoa10_kntt_bai23",
   "classId": 10,
   "lessonId": 23,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 23: Ôn tập chương 7",
-  "chapter": "Chương 7: Nguyên tố nhóm VIIA (Helogen)",
+  "title": "BÃ i 23: Ã”n táº­p chÆ°Æ¡ng 7",
+  "chapter": "ChÆ°Æ¡ng 7: NguyÃªn tá»‘ nhÃ³m VIIA (Helogen)",
   "order": 23,
   "isPremium": false,
-  "description": "Luyện tập về Halogen and tính chất oxi hóa đặc biệt.",
+  "description": "Luyá»‡n táº­p vá» Halogen and tÃ­nh cháº¥t oxi hÃ³a Ä‘áº·c biá»‡t.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Hệ thống hóa tính chất của nhóm Halogen",
+        "text": "1. Há»‡ thá»‘ng hÃ³a tÃ­nh cháº¥t cá»§a nhÃ³m Halogen",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@ export const bai23 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong chương này, chúng ta đã nghiên cứu về nhóm phi kim hoạt động nhất trong bảng tuần hoàn. Cần lưu ý các quy luật biến đổi ngược chiều nhau giữa đơn chất and hợp chất acid:\\n1. **Tính oxi hóa của đơn chất**: Giảm dần từ **$F_2 > Cl_2 > Br_2 > I_2$**. Fluorine is phi kim mạnh nhất, có thể oxi hóa được hầu hết các chất."
+        "text": "Trong chÆ°Æ¡ng nÃ y, chÃºng ta Ä‘Ã£ nghiÃªn cá»©u vá» nhÃ³m phi kim hoáº¡t Ä‘á»™ng nháº¥t trong báº£ng tuáº§n hoÃ n. Cáº§n lÆ°u Ã½ cÃ¡c quy luáº­t biáº¿n Ä‘á»•i ngÆ°á»£c chiá»u nhau giá»¯a Ä‘Æ¡n cháº¥t and há»£p cháº¥t acid:\\n1. **TÃ­nh oxi hÃ³a cá»§a Ä‘Æ¡n cháº¥t**: Giáº£m dáº§n tá»« **$F_2 > Cl_2 > Br_2 > I_2$**. Fluorine is phi kim máº¡nh nháº¥t, cÃ³ thá»ƒ oxi hÃ³a Ä‘Æ°á»£c háº§u háº¿t cÃ¡c cháº¥t."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Quy luật biến đổi tính acid của HX",
-        "content": "Trái ngược với tính oxi hóa của đơn chất, tính acid của các dung dịch hydrogen halide **tăng dần** từ $HF$ đến $HI$:\\n**$HF \\ll HCl < HBr < HI$**.\\nNguyên nhân là do kích thước nguyên tử halogen tăng dần, làm độ bền liên kết $H-X$ giảm, giúp phân tử dễ dàng phân li ra ion $H^+$.",
+        "title": "Quy luáº­t biáº¿n Ä‘á»•i tÃ­nh acid cá»§a HX",
+        "content": "TrÃ¡i ngÆ°á»£c vá»›i tÃ­nh oxi hÃ³a cá»§a Ä‘Æ¡n cháº¥t, tÃ­nh acid cá»§a cÃ¡c dung dá»‹ch hydrogen halide **tÄƒng dáº§n** tá»« $HF$ Ä‘áº¿n $HI$:\\n**$HF \\ll HCl < HBr < HI$**.\\nNguyÃªn nhÃ¢n lÃ  do kÃ­ch thÆ°á»›c nguyÃªn tá»­ halogen tÄƒng dáº§n, lÃ m Ä‘á»™ bá»n liÃªn káº¿t $H-X$ giáº£m, giÃºp phÃ¢n tá»­ dá»… dÃ ng phÃ¢n li ra ion $H^+$.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@ export const bai23 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Các phản ứng nhận biết đặc trưng",
+        "text": "2. CÃ¡c pháº£n á»©ng nháº­n biáº¿t Ä‘áº·c trÆ°ng",
         "level": "h2"
       }
     },
@@ -48,8 +48,8 @@ export const bai23 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Nhận biết hồ tinh bột**: Iodine ($I_2$) tác dụng với hồ tinh bột tạo thành hợp chất có **màu xanh tím** đặc trưng. Phản ứng này được dùng để nhận biết Iodine hoặc tinh bột trong thực phẩm.",
-          "**Nhận biết ion halide ($X^-$)**: Dùng dung dịch $AgNO_3$ để tạo ra các kết tủa có màu sắc khác nhau ($AgCl$ trắng, $AgBr$ vàng nhạt, $AgI$ vàng đậm)."
+          "**Nháº­n biáº¿t há»“ tinh bá»™t**: Iodine ($I_2$) tÃ¡c dá»¥ng vá»›i há»“ tinh bá»™t táº¡o thÃ nh há»£p cháº¥t cÃ³ **mÃ u xanh tÃ­m** Ä‘áº·c trÆ°ng. Pháº£n á»©ng nÃ y Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ nháº­n biáº¿t Iodine hoáº·c tinh bá»™t trong thá»±c pháº©m.",
+          "**Nháº­n biáº¿t ion halide ($X^-$)**: DÃ¹ng dung dá»‹ch $AgNO_3$ Ä‘á»ƒ táº¡o ra cÃ¡c káº¿t tá»§a cÃ³ mÃ u sáº¯c khÃ¡c nhau ($AgCl$ tráº¯ng, $AgBr$ vÃ ng nháº¡t, $AgI$ vÃ ng Ä‘áº­m)."
         ]
       }
     },
@@ -57,8 +57,8 @@ export const bai23 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Ứng dụng and an toàn",
-        "content": "Các halogen and hợp chất của chúng có ứng dụng rộng rãi trong sát trùng ($Cl_2, Iodine$), sản xuất thuốc trừ sâu, and dược phẩm. Tuy nhiên, chúng đều là những chất độc hại, cần tuyệt đối tuân thủ quy tắc an toàn trong phòng thí nghiệm and công nghiệp.",
+        "title": "á»¨ng dá»¥ng and an toÃ n",
+        "content": "CÃ¡c halogen and há»£p cháº¥t cá»§a chÃºng cÃ³ á»©ng dá»¥ng rá»™ng rÃ£i trong sÃ¡t trÃ¹ng ($Cl_2, Iodine$), sáº£n xuáº¥t thuá»‘c trá»« sÃ¢u, and dÆ°á»£c pháº©m. Tuy nhiÃªn, chÃºng Ä‘á»u lÃ  nhá»¯ng cháº¥t Ä‘á»™c háº¡i, cáº§n tuyá»‡t Ä‘á»‘i tuÃ¢n thá»§ quy táº¯c an toÃ n trong phÃ²ng thÃ­ nghiá»‡m and cÃ´ng nghiá»‡p.",
         "color": "orange"
       }
     }
@@ -67,10 +67,10 @@ export const bai23 = {
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Ôn tập chương 7",
+      "title": "BÃ i giáº£ng: Ã”n táº­p chÆ°Æ¡ng 7",
       "url": "https://www.youtube.com/watch?v=Tmhkuq-g750",
       "thumbnail": "https://img.youtube.com/vi/Tmhkuq-g750/0.jpg",
-      "description": "Hệ thống hóa toàn bộ kiến thức về nhóm Halogen and hợp chất của chúng (VietJack)."
+      "description": "Há»‡ thá»‘ng hÃ³a toÃ n bá»™ kiáº¿n thá»©c vá» nhÃ³m Halogen and há»£p cháº¥t cá»§a chÃºng (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -80,7 +80,7 @@ export const bai23 = {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Nguyên tố Halogen nào được dùng để sản xuất thuốc sát trùng, tẩy trắng dân dụng phổ biến nhất?",
+        "question": "NguyÃªn tá»‘ Halogen nÃ o Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ sáº£n xuáº¥t thuá»‘c sÃ¡t trÃ¹ng, táº©y tráº¯ng dÃ¢n dá»¥ng phá»• biáº¿n nháº¥t?",
         "options": [
           "Clo",
           "Flo",
@@ -92,7 +92,7 @@ export const bai23 = {
       },
       {
         "type": "multiple-choice",
-        "question": "Flo phá hủy tầng ozon thông qua hợp chất nào?",
+        "question": "Flo phÃ¡ há»§y táº§ng ozon thÃ´ng qua há»£p cháº¥t nÃ o?",
         "options": [
           "CFC",
           "HF",
@@ -104,36 +104,36 @@ export const bai23 = {
       },
       {
         "type": "multiple-choice",
-        "question": "Muối Iot giúp phòng ngừa bệnh gì?",
+        "question": "Muá»‘i Iot giÃºp phÃ²ng ngá»«a bá»‡nh gÃ¬?",
         "options": [
-          "Bướu cổ",
-          "Tiểu đường",
-          "Sâu răng",
-          "Cận thị"
+          "BÆ°á»›u cá»•",
+          "Tiá»ƒu Ä‘Æ°á»ng",
+          "SÃ¢u rÄƒng",
+          "Cáº­n thá»‹"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Bạc bromua ($AgBr$) có ứng dụng trong:",
+        "question": "Báº¡c bromua ($AgBr$) cÃ³ á»©ng dá»¥ng trong:",
         "options": [
-          "Tráng phim ảnh kĩ thuật số cũ",
-          "Sản xuất gương",
-          "Chế thuốc pháo",
-          "Làm trắng giấy"
+          "TrÃ¡ng phim áº£nh kÄ© thuáº­t sá»‘ cÅ©",
+          "Sáº£n xuáº¥t gÆ°Æ¡ng",
+          "Cháº¿ thuá»‘c phÃ¡o",
+          "LÃ m tráº¯ng giáº¥y"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Độ tan của các hiđro halogenua trong nước như thế nào?",
+        "question": "Äá»™ tan cá»§a cÃ¡c hiÄ‘ro halogenua trong nÆ°á»›c nhÆ° tháº¿ nÃ o?",
         "options": [
-          "Tan tốt, tạo axit mạnh",
-          "Không tan",
-          "Tan ít",
-          "Sủi bọt"
+          "Tan tá»‘t, táº¡o axit máº¡nh",
+          "KhÃ´ng tan",
+          "Tan Ã­t",
+          "Sá»§i bá»t"
         ],
         "correctAnswer": 0,
         "points": 10
@@ -144,3 +144,4 @@ export const bai23 = {
   },
   "realWorldApplications": []
 };
+

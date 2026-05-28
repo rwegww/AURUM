@@ -13,7 +13,7 @@ const Lessons = () => {
   const queryGrade = searchParams.get('grade');
   
   const [selectedGrade, setSelectedGrade] = useState(null);
-  const [lessons, setLessons] = useState([]);
+  const [bai_hoc, setLessons] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Lessons = () => {
       const data = await res.json();
       setLessons(data);
     } catch (err) {
-      console.error(t('lessons.status.err_fetch'), err);
+      console.error(t('bai_hoc.status.err_fetch'), err);
     } finally {
       setLoading(false);
     }
@@ -60,15 +60,15 @@ const Lessons = () => {
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-viet-text mb-4 tracking-tight uppercase italic">
-            {isLoggedIn ? t('lessons.header.title_journey') : t('lessons.header.title_library')}{' '}
+            {isLoggedIn ? t('bai_hoc.header.title_journey') : t('bai_hoc.header.title_library')}{' '}
             <span className="text-viet-green">
-              {isLoggedIn ? t('lessons.header.subtitle_explore') : t('lessons.header.subtitle_materials')}
+              {isLoggedIn ? t('bai_hoc.header.subtitle_explore') : t('bai_hoc.header.subtitle_hoc_lieu')}
             </span>
           </h1>
           <p className="text-viet-text-light text-lg max-w-2xl mx-auto font-medium">
             {isLoggedIn 
-              ? t('lessons.header.desc_logged_in')
-              : t('lessons.header.desc_guest')}
+              ? t('bai_hoc.header.desc_logged_in')
+              : t('bai_hoc.header.desc_guest')}
           </p>
         </header>
 
@@ -84,7 +84,7 @@ const Lessons = () => {
                   : 'bg-transparent text-viet-text-light hover:text-viet-green hover:bg-white'
               }`}
             >
-              {isLoggedIn ? t(`lessons.story_parts.${grade}.title`) : t('lessons.grade_labels.label', { grade })}
+              {isLoggedIn ? t(`bai_hoc.story_parts.${grade}.title`) : t('bai_hoc.grade_labels.label', { grade })}
             </button>
           ))}
         </div>
@@ -97,10 +97,10 @@ const Lessons = () => {
             className="mb-12 text-center bg-white border border-viet-green/20 rounded-[30px] p-10 max-w-4xl mx-auto shadow-xl shadow-viet-green/5"
           >
             <h2 className="text-3xl font-bold text-viet-green mb-4">
-              {t(`lessons.story_parts.${selectedGrade}.name`)}
+              {t(`bai_hoc.story_parts.${selectedGrade}.name`)}
             </h2>
             <p className="text-viet-text-light text-lg italic leading-relaxed font-serif">
-              "{t(`lessons.story_parts.${selectedGrade}.story`)}"
+              "{t(`bai_hoc.story_parts.${selectedGrade}.story`)}"
             </p>
           </motion.div>
         )}
@@ -110,7 +110,7 @@ const Lessons = () => {
           loading ? (
             <div className="flex flex-col items-center justify-center py-24">
               <div className="w-16 h-16 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mb-4"></div>
-              <p className="text-viet-text-light font-bold">{t('lessons.status.loading')}</p>
+              <p className="text-viet-text-light font-bold">{t('bai_hoc.status.loading')}</p>
             </div>
           ) : (
             <motion.div
@@ -120,10 +120,10 @@ const Lessons = () => {
               animate="visible"
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {lessons.map((lesson, index) => (
+              {bai_hoc.map((lesson, index) => (
                 <motion.div key={lesson.lessonId} variants={itemVariants}>
                   <Link
-                    to={`/lessons/${selectedGrade}/${lesson.lessonId}`}
+                    to={`/bai_hoc/${selectedGrade}/${lesson.lessonId}`}
                     className="viet-card p-8 group h-full hover:border-viet-green/40 transition-all duration-300 relative !rounded-[32px] !shadow-lg hover:!shadow-2xl hover:!shadow-viet-green/10 hover:-translate-y-2 bg-white"
                   >
                     <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
@@ -139,7 +139,7 @@ const Lessons = () => {
                       </p>
                       <div className="flex items-center gap-2 text-viet-green font-bold text-[11px] uppercase tracking-widest border-t border-viet-border pt-4">
                         <span className="w-2 h-2 rounded-full bg-viet-green shadow-[0_0_10px_rgba(118,192,52,0.5)]" />
-                        {t('lessons.card.explore_btn')}
+                        {t('bai_hoc.card.explore_btn')}
                       </div>
                     </div>
                   </Link>
@@ -151,9 +151,9 @@ const Lessons = () => {
           <div className="text-center py-24 border-4 border-dashed border-viet-border rounded-[40px] bg-white/30">
             <div className="flex justify-center mb-8 opacity-20 filter grayscale"><FlaskConical className="w-20 h-20 text-slate-500" /></div>
             <h2 className="text-2xl font-bold text-viet-text-light">
-              {isLoggedIn ? t('lessons.status.empty_title_logged_in') : t('lessons.status.empty_title_guest')}
+              {isLoggedIn ? t('bai_hoc.status.empty_title_logged_in') : t('bai_hoc.status.empty_title_guest')}
             </h2>
-            <p className="mt-2 text-viet-text-light/60 font-medium">{t('lessons.status.empty_desc')}</p>
+            <p className="mt-2 text-viet-text-light/60 font-medium">{t('bai_hoc.status.empty_desc')}</p>
           </div>
         )}
       </div>

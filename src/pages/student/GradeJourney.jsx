@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+﻿import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -21,7 +21,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(118, 192, 52, 0.4)',
     gradient: 'from-[#76c034] to-[#589d24]',
     blobColor: 'bg-emerald-400',
-    doodleSymbol: 'O₂'
+    doodleSymbol: 'Oâ‚‚'
   },
   '9': {
     titleKey: 'journey.themes.9.title',
@@ -31,7 +31,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(99, 102, 241, 0.4)',
     gradient: 'from-indigo-500 to-purple-600',
     blobColor: 'bg-indigo-400',
-    doodleSymbol: '⚡'
+    doodleSymbol: 'âš¡'
   },
   '10': {
     titleKey: 'journey.themes.10.title',
@@ -41,7 +41,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(20, 184, 166, 0.4)',
     gradient: 'from-teal-500 to-emerald-600',
     blobColor: 'bg-teal-400',
-    doodleSymbol: '⚛️'
+    doodleSymbol: 'âš›ï¸'
   },
   '11': {
     titleKey: 'journey.themes.11.title',
@@ -51,7 +51,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(244, 63, 94, 0.4)',
     gradient: 'from-rose-500 to-pink-600',
     blobColor: 'bg-rose-400',
-    doodleSymbol: '🧬'
+    doodleSymbol: 'ðŸ§¬'
   },
   '12': {
     titleKey: 'journey.themes.12.title',
@@ -61,19 +61,19 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(245, 158, 11, 0.4)',
     gradient: 'from-amber-500 to-orange-600',
     blobColor: 'bg-amber-400',
-    doodleSymbol: '☢️'
+    doodleSymbol: 'â˜¢ï¸'
   }
 };
 
 const CHEMICAL_DOODLES = [
-  { symbol: 'H₂O', name: 'Nước', x: '8%', y: '15%' },
-  { symbol: 'CO₂', name: 'Cacbon đioxit', x: '88%', y: '25%' },
-  { symbol: 'O₂', name: 'Oxy', x: '5%', y: '45%' },
-  { symbol: 'NaCl', name: 'Muối ăn', x: '92%', y: '55%' },
-  { symbol: 'H₂', name: 'Hiđro', x: '7%', y: '70%' },
-  { symbol: 'HCl', name: 'Axit clohiđric', x: '89%', y: '80%' },
-  { symbol: 'NH₃', name: 'Amoniac', x: '4%', y: '90%' },
-  { symbol: 'CH₄', name: 'Metan', x: '91%', y: '12%' },
+  { symbol: 'Hâ‚‚O', name: 'NÆ°á»›c', x: '8%', y: '15%' },
+  { symbol: 'COâ‚‚', name: 'Cacbon Ä‘ioxit', x: '88%', y: '25%' },
+  { symbol: 'Oâ‚‚', name: 'Oxy', x: '5%', y: '45%' },
+  { symbol: 'NaCl', name: 'Muá»‘i Äƒn', x: '92%', y: '55%' },
+  { symbol: 'Hâ‚‚', name: 'HiÄ‘ro', x: '7%', y: '70%' },
+  { symbol: 'HCl', name: 'Axit clohiÄ‘ric', x: '89%', y: '80%' },
+  { symbol: 'NHâ‚ƒ', name: 'Amoniac', x: '4%', y: '90%' },
+  { symbol: 'CHâ‚„', name: 'Metan', x: '91%', y: '12%' },
 ];
 
 const GradeJourney = () => {
@@ -82,7 +82,7 @@ const GradeJourney = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
 
-  const [lessons, setLessons] = useState([]);
+  const [bai_hoc, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isBookOpen, setIsBookOpen] = useState(false);
   const [isTestOpen, setIsTestOpen] = useState(false);
@@ -95,12 +95,12 @@ const GradeJourney = () => {
         const res = await fetch(`/api/lessons?classId=${grade}`);
         if (!res.ok) {
           const text = await res.text();
-          throw new Error(`Lỗi server (${res.status}): ${text.substring(0, 100)}`);
+          throw new Error(`Lá»—i server (${res.status}): ${text.substring(0, 100)}`);
         }
         const data = await res.json();
         setLessons(data);
       } catch (err) {
-        console.error('Lỗi tải hành trình:', err);
+        console.error('Lá»—i táº£i hÃ nh trÃ¬nh:', err);
       } finally {
         setLoading(false);
       }
@@ -143,16 +143,16 @@ const GradeJourney = () => {
         <div className="absolute inset-0 border-4 border-dashed rounded-full animate-[spin_8s_linear_infinite]" style={{ borderColor: activeTheme.primary }} />
         <div className="text-3xl animate-bounce">{activeTheme.doodleSymbol}</div>
       </div>
-      <p className="mt-4 font-black uppercase tracking-[4px] text-viet-text-light text-xs animate-pulse">Khai mở bản đồ...</p>
+      <p className="mt-4 font-black uppercase tracking-[4px] text-viet-text-light text-xs animate-pulse">Khai má»Ÿ báº£n Ä‘á»“...</p>
     </div>
   );
 
   const isFirstLessonDefaultUnlocked = grade === '8';
   const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
 
-  const lessonsStatus = lessons.map((lesson, index) => {
+  const bai_hocStatus = bai_hoc.map((lesson, index) => {
     const prevLessonStars = index > 0 
-      ? (user?.balancingProgress?.lessonStars?.[lessons[index - 1].lessonId] || { level1: 0, level2: 0, level3: 0 })
+      ? (user?.balancingProgress?.lessonStars?.[bai_hoc[index - 1].lessonId] || { level1: 0, level2: 0, level3: 0 })
       : null;
     const previousLessonFullyCompleted = prevLessonStars 
       ? (prevLessonStars.level1 > 0 && prevLessonStars.level2 > 0 && prevLessonStars.level3 > 0)
@@ -171,14 +171,14 @@ const GradeJourney = () => {
   });
 
   let highestUnlockedIndex = 0;
-  lessonsStatus.forEach((lesson, index) => {
+  bai_hocStatus.forEach((lesson, index) => {
     if (lesson.isUnlocked) {
       highestUnlockedIndex = index;
     }
   });
 
-  const progressPercentage = lessonsStatus.length > 1 
-    ? (highestUnlockedIndex / (lessonsStatus.length - 1)) * 100 
+  const progressPercentage = bai_hocStatus.length > 1 
+    ? (highestUnlockedIndex / (bai_hocStatus.length - 1)) * 100 
     : 0;
 
   return (
@@ -246,7 +246,7 @@ const GradeJourney = () => {
         <div className="relative min-h-[500px]">
 
           {/* Placement Test Banner */}
-          {grade !== '8' && AVAILABLE_PLACEMENT_TEST_GRADES.includes(String(grade)) && lessons.length > 0 && !user?.balancingProgress?.passedGrades?.includes(grade) && !user?.unlockedLessons?.includes(lessons[0].lessonId) && user?.role === 'student' && (
+          {grade !== '8' && AVAILABLE_PLACEMENT_TEST_GRADES.includes(String(grade)) && bai_hoc.length > 0 && !user?.balancingProgress?.passedGrades?.includes(grade) && !user?.unlockedLessons?.includes(bai_hoc[0].lessonId) && user?.role === 'student' && (
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-12 relative z-10">
               <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-[36px] p-8 md:p-10 text-white shadow-2xl overflow-hidden relative border border-slate-800 group">
                 {/* Hologram details */}
@@ -294,7 +294,7 @@ const GradeJourney = () => {
               />
             </div>
 
-            {lessonsStatus.map((lesson, index) => {
+            {bai_hocStatus.map((lesson, index) => {
               const isLocked = !lesson.isUnlocked;
               const isCompleted = lesson.isCompleted;
               const lessonStars = lesson.stars;
@@ -417,7 +417,7 @@ const GradeJourney = () => {
                       {/* segment status trackers */}
                       {!isLocked && (
                         <div className="flex items-center gap-3 mt-auto">
-                          <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Tiến độ:</span>
+                          <span className="text-[9px] font-black uppercase tracking-wider text-slate-400">Tiáº¿n Ä‘á»™:</span>
                           <div className="flex gap-1.5 h-2.5 w-32 bg-slate-100 p-0.5 rounded-full border border-slate-200/50">
                             {['level1', 'level2', 'level3'].map((lvl) => {
                               const starsCount = lessonStars[lvl] || 0;
@@ -461,10 +461,10 @@ const GradeJourney = () => {
               );
             })}
 
-            {/* Book Milestone — Final Timeline Node */}
+            {/* Book Milestone â€” Final Timeline Node */}
             {(() => {
-              const lesson1Stars = lessons.length > 0 
-                ? (user?.balancingProgress?.lessonStars?.[lessons[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
+              const lesson1Stars = bai_hoc.length > 0 
+                ? (user?.balancingProgress?.lessonStars?.[bai_hoc[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
                 : { level1: 0, level2: 0, level3: 0 };
               const isLesson1Complete = lesson1Stars.level1 > 0 && lesson1Stars.level2 > 0 && lesson1Stars.level3 > 0;
               const canOpenBook = isLesson1Complete || user?.role === 'admin' || user?.role === 'teacher';
@@ -477,7 +477,7 @@ const GradeJourney = () => {
                   transition={{ duration: 0.5, delay: 0.1 }}
                   className={`relative flex gap-6 md:gap-8 items-start w-full ${!canOpenBook ? 'opacity-40 grayscale pointer-events-none' : ''}`}
                 >
-                  {/* Molecular Orbit Central Node — Special Book Node */}
+                  {/* Molecular Orbit Central Node â€” Special Book Node */}
                   <div className="w-10 flex-shrink-0 flex justify-center pt-3 relative">
                     <div className="relative w-10 h-10 flex items-center justify-center">
                       {canOpenBook && (
@@ -513,7 +513,7 @@ const GradeJourney = () => {
                     </div>
                   </div>
 
-                  {/* Book Milestone Card — same pattern as lesson cards */}
+                  {/* Book Milestone Card â€” same pattern as lesson cards */}
                   <div 
                     onClick={() => canOpenBook && setIsBookOpen(true)}
                     className={`group relative flex-1 rounded-[24px] p-6 transition-all border-2 shadow-sm overflow-hidden flex flex-col md:flex-row gap-6 items-center ${
@@ -557,7 +557,7 @@ const GradeJourney = () => {
                         )}
                         <div className="my-auto mx-auto text-center relative z-10">
                           <span className="text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
-                            {canOpenBook ? activeTheme.doodleSymbol : '🔒'}
+                            {canOpenBook ? activeTheme.doodleSymbol : 'ðŸ”’'}
                           </span>
                         </div>
                         <div className={`w-full text-center text-[6px] font-black uppercase tracking-widest relative z-10 select-none ${canOpenBook ? 'text-amber-300/90' : 'text-slate-400'}`}>
@@ -581,7 +581,7 @@ const GradeJourney = () => {
                             borderColor: !canOpenBook ? '#e2e8f0' : activeTheme.primaryLight
                           }}
                         >
-                          CỘT MỐC
+                          Cá»˜T Má»C
                         </span>
                         {canOpenBook && (
                           <Sparkles size={14} className="text-amber-500 animate-pulse" />
@@ -590,7 +590,7 @@ const GradeJourney = () => {
                       <h3 className={`text-[17px] font-black leading-snug tracking-tight mb-1.5 font-sora ${
                         !canOpenBook ? 'text-slate-400' : 'text-slate-800 group-hover:text-slate-900'
                       }`}>
-                        {canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}
+                        {canOpenBook ? t('journey.milestone.title') : 'HoÃ n thÃ nh cháº·ng 1 Ä‘á»ƒ má»Ÿ'}
                       </h3>
                       <p className={`text-[13px] leading-relaxed font-medium ${
                         !canOpenBook ? 'text-slate-300' : 'text-slate-500'
@@ -599,7 +599,7 @@ const GradeJourney = () => {
                       </p>
                     </div>
 
-                    {/* CTA Arrow — same as lesson cards */}
+                    {/* CTA Arrow â€” same as lesson cards */}
                     {canOpenBook && (
                       <div className="flex items-center justify-end md:self-center shrink-0 mt-4 md:mt-0">
                         <div 
@@ -627,7 +627,7 @@ const GradeJourney = () => {
           <InfographicBook 
             isOpen={isBookOpen} 
             onClose={() => setIsBookOpen(false)} 
-            lessons={lessons} 
+            bai_hoc={bai_hoc} 
             grade={grade} 
             unlockedLessons={user?.unlockedLessons} 
           />
@@ -639,7 +639,7 @@ const GradeJourney = () => {
             isOpen={isTestOpen} 
             onClose={() => setIsTestOpen(false)} 
             grade={grade} 
-            firstLessonId={lessons[0]?.lessonId} 
+            firstLessonId={bai_hoc[0]?.lessonId} 
             onPass={() => setIsTestOpen(false)} 
           />
         )}
@@ -683,3 +683,5 @@ const GradeJourney = () => {
 };
 
 export default GradeJourney;
+
+

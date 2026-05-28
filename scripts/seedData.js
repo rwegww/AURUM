@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+﻿import dotenv from 'dotenv';
 import { class8Data } from '../src/data/curriculum/class8.js';
 import { class9Data } from '../src/data/curriculum/class9.js';
 import { class10Data } from '../src/data/curriculum/class10.js';
@@ -18,12 +18,12 @@ const allData = [
 
 async function seed() {
   try {
-    console.log('🚀 Starting Supabase Seeding...');
+    console.log('ðŸš€ Starting Supabase Seeding...');
     
-    console.log('🧹 Cleaning old lessons...');
+    console.log('ðŸ§¹ Cleaning old bai_hoc...');
     await Lesson.deleteMany();
     
-    console.log(`📦 Preparing to seed ${allData.length} lessons...`);
+    console.log(`ðŸ“¦ Preparing to seed ${allData.length} bai_hoc...`);
     
     const formattedData = allData
       .filter(l => l && (l.id || l.lessonId)) // Ensure we only take items with an ID
@@ -40,9 +40,9 @@ async function seed() {
         challenges: l.challenges || [],
         quizzes: l.quizzes || [],
         storySlides: l.classId === 8 ? [
-          { character: 'professor', text: `Chào mừng bạn đến với ${l.title}! Tôi là Giáo sư Mole, người sẽ đồng hành cùng bạn.` },
-          { character: 'robot', text: `Tôi là Robot Chem-E! Để khám phá bài học này, chúng ta cần hoàn thành các thử thách phía trước.` },
-          { character: 'professor', text: 'Bạn đã sẵn sàng để trở thành một nhà giả kim thực thụ chưa? Hãy bắt đầu thôi!' }
+          { character: 'professor', text: `ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i ${l.title}! TÃ´i lÃ  GiÃ¡o sÆ° Mole, ngÆ°á»i sáº½ Ä‘á»“ng hÃ nh cÃ¹ng báº¡n.` },
+          { character: 'robot', text: `TÃ´i lÃ  Robot Chem-E! Äá»ƒ khÃ¡m phÃ¡ bÃ i há»c nÃ y, chÃºng ta cáº§n hoÃ n thÃ nh cÃ¡c thá»­ thÃ¡ch phÃ­a trÆ°á»›c.` },
+          { character: 'professor', text: 'Báº¡n Ä‘Ã£ sáºµn sÃ ng Ä‘á»ƒ trá»Ÿ thÃ nh má»™t nhÃ  giáº£ kim thá»±c thá»¥ chÆ°a? HÃ£y báº¯t Ä‘áº§u thÃ´i!' }
         ] : (l.storySlides || []),
         game: l.game || {},
         isPremium: l.isPremium || false
@@ -52,15 +52,16 @@ async function seed() {
       throw new Error('No valid lesson data found to seed!');
     }
 
-    console.log('⌛ Inserting lessons into Supabase...');
+    console.log('âŒ› Inserting bai_hoc into Supabase...');
     await Lesson.insertMany(formattedData);
-    console.log(`✅ Successfully seeded ${formattedData.length} lessons! 🎉`);
+    console.log(`âœ… Successfully seeded ${formattedData.length} bai_hoc! ðŸŽ‰`);
     
     process.exit(0);
   } catch (error) {
-    console.error('❌ Seed error:', error);
+    console.error('âŒ Seed error:', error);
     process.exit(1);
   }
 }
 
 seed();
+

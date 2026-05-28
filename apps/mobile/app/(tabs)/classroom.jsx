@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import {
@@ -19,12 +19,12 @@ import { useAuth } from "../../context/AuthContext";
 import { classApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
-const getGrade = (item) => item.grade_level || item.gradeLevel || "?";
+const getGrade = (item) => item.khoi_id || item.gradeLevelId || item.gradeLevel || "?";
 
 const postTypeLabel = (type) => {
-  if (type === "assignment") return "Bài tập";
+  if (type === "assignment") return "BÃ i táº­p";
   if (type === "video") return "Video";
-  return "Bài đăng";
+  return "BÃ i Ä‘Äƒng";
 };
 
 export default function ClassroomTab() {
@@ -33,15 +33,15 @@ export default function ClassroomTab() {
   const [joining, setJoining] = React.useState(false);
 
   const resource = useApiResource(async () => {
-    const classes = await classApi.list(token).catch(() => []);
+    const lop = await classApi.list(token).catch(() => []);
     const previews = await Promise.all(
-      classes.slice(0, 3).map(async (item) => {
+      lop.slice(0, 3).map(async (item) => {
         const posts = await classApi.posts(token, item.id).catch(() => []);
         const schedules = await classApi.schedules(token, item.id).catch(() => []);
         return { classId: item.id, posts, schedules };
       })
     );
-    return { classes, previews };
+    return { lop, previews };
   }, [token]);
 
   const joinClass = async () => {
@@ -50,20 +50,20 @@ export default function ClassroomTab() {
     try {
       await classApi.join(token, joinCode.trim().toUpperCase());
       setJoinCode("");
-      Alert.alert("Đã tham gia lớp", "Lớp học đã được thêm vào danh sách.");
+      Alert.alert("ÄÃ£ tham gia lá»›p", "Lá»›p há»c Ä‘Ã£ Ä‘Æ°á»£c thÃªm vÃ o danh sÃ¡ch.");
       await resource.reload();
     } catch (error) {
-      Alert.alert("Không tham gia được", error.message);
+      Alert.alert("KhÃ´ng tham gia Ä‘Æ°á»£c", error.message);
     } finally {
       setJoining(false);
     }
   };
 
   if (resource.loading && !resource.data) {
-    return <LoadingState label="Đang tải lớp học..." />;
+    return <LoadingState label="Äang táº£i lá»›p há»c..." />;
   }
 
-  const classes = resource.data?.classes || [];
+  const lop = resource.data?.lop || [];
   const previews = resource.data?.previews || [];
   const assignmentCount = previews.reduce((total, item) => (
     total + item.posts.filter((post) => post.type === "assignment" && !post.is_completed).length
@@ -73,11 +73,11 @@ export default function ClassroomTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Lớp học"
-        title="Lớp học"
-        subtitle="Trung tâm theo dõi lớp đã tham gia, bài giáo viên giao và lịch học."
+        eyebrow="Lá»›p há»c"
+        title="Lá»›p há»c"
+        subtitle="Trung tÃ¢m theo dÃµi lá»›p Ä‘Ã£ tham gia, bÃ i giÃ¡o viÃªn giao vÃ  lá»‹ch há»c."
         color={colors.green}
-        right={<Pill label={`${classes.length} lớp`} icon="school-outline" color={colors.green} />}
+        right={<Pill label={`${lop.length} lá»›p`} icon="school-outline" color={colors.green} />}
       />
 
       {resource.error ? (
@@ -87,38 +87,38 @@ export default function ClassroomTab() {
       <Card accent={colors.green} style={styles.summaryCard}>
         <View style={styles.summaryTop}>
           <View style={styles.summaryCopy}>
-            <Text style={styles.summaryTitle}>Lớp học là trung tâm</Text>
-            <Text style={styles.summaryText}>Ưu tiên xem thông báo, bài tập và lịch học trước khi mở các công cụ khác.</Text>
+            <Text style={styles.summaryTitle}>Lá»›p há»c lÃ  trung tÃ¢m</Text>
+            <Text style={styles.summaryText}>Æ¯u tiÃªn xem thÃ´ng bÃ¡o, bÃ i táº­p vÃ  lá»‹ch há»c trÆ°á»›c khi má»Ÿ cÃ¡c cÃ´ng cá»¥ khÃ¡c.</Text>
           </View>
           <View style={styles.summaryIcon}>
-            <Text style={styles.summaryIconText}>{classes.length}</Text>
+            <Text style={styles.summaryIconText}>{lop.length}</Text>
           </View>
         </View>
         <View style={styles.statRow}>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{assignmentCount}</Text>
-            <Text style={styles.statLabel}>bài chưa xong</Text>
+            <Text style={styles.statLabel}>bÃ i chÆ°a xong</Text>
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statValue}>{scheduleCount}</Text>
-            <Text style={styles.statLabel}>lịch học</Text>
+            <Text style={styles.statLabel}>lá»‹ch há»c</Text>
           </View>
         </View>
       </Card>
 
       <Card style={styles.joinCard}>
-        <Text style={styles.cardTitle}>Tham gia lớp mới</Text>
+        <Text style={styles.cardTitle}>Tham gia lá»›p má»›i</Text>
         <View style={styles.joinRow}>
           <TextField
             icon="key-outline"
-            placeholder="Mã lớp"
+            placeholder="MÃ£ lá»›p"
             value={joinCode}
             onChangeText={setJoinCode}
             autoCapitalize="characters"
             style={styles.joinInput}
           />
           <PrimaryButton
-            label={joining ? "Đang vào..." : "Vào lớp"}
+            label={joining ? "Äang vÃ o..." : "VÃ o lá»›p"}
             icon="enter-outline"
             color={colors.green}
             onPress={joinClass}
@@ -128,10 +128,10 @@ export default function ClassroomTab() {
         </View>
       </Card>
 
-      <SectionTitle title="Lớp của tôi" actionLabel="Tải lại" onAction={resource.reload} color={colors.green} />
-      {classes.length > 0 ? (
+      <SectionTitle title="Lá»›p cá»§a tÃ´i" actionLabel="Táº£i láº¡i" onAction={resource.reload} color={colors.green} />
+      {lop.length > 0 ? (
         <View style={styles.stack}>
-          {classes.map((item) => {
+          {lop.map((item) => {
             const preview = previews.find((entry) => entry.classId === item.id);
             const latestPost = preview?.posts?.[0];
             return (
@@ -141,18 +141,18 @@ export default function ClassroomTab() {
                     <View style={styles.classTitleBlock}>
                       <Text style={styles.className}>{item.name}</Text>
                       <Text style={styles.classMeta}>
-                        Khối {getGrade(item)} · {item.student_count || 0} học sinh
+                        Khá»‘i {getGrade(item)} Â· {item.student_count || 0} há»c sinh
                       </Text>
                     </View>
-                    <Pill label={item.code || "Lớp"} icon="key-outline" color={colors.green} />
+                    <Pill label={item.code || "Lá»›p"} icon="key-outline" color={colors.green} />
                   </View>
                   {latestPost ? (
                     <View style={styles.latestBox}>
-                      <Text style={styles.latestLabel}>Mới nhất</Text>
+                      <Text style={styles.latestLabel}>Má»›i nháº¥t</Text>
                       <Text style={styles.latestText} numberOfLines={2}>{latestPost.content}</Text>
                     </View>
                   ) : (
-                    <Text style={styles.classMeta}>Chưa có bài đăng mới.</Text>
+                    <Text style={styles.classMeta}>ChÆ°a cÃ³ bÃ i Ä‘Äƒng má»›i.</Text>
                   )}
                 </Card>
               </Pressable>
@@ -162,31 +162,31 @@ export default function ClassroomTab() {
       ) : (
         <EmptyState
           icon="school-outline"
-          title="Chưa tham gia lớp"
-          subtitle="Nhập mã lớp giáo viên cung cấp để bắt đầu theo dõi bài tập và lịch học."
+          title="ChÆ°a tham gia lá»›p"
+          subtitle="Nháº­p mÃ£ lá»›p giÃ¡o viÃªn cung cáº¥p Ä‘á»ƒ báº¯t Ä‘áº§u theo dÃµi bÃ i táº­p vÃ  lá»‹ch há»c."
         />
       )}
 
-      <SectionTitle title="Bài gần đây" color={colors.green} />
+      <SectionTitle title="BÃ i gáº§n Ä‘Ã¢y" color={colors.green} />
       {previews.some((item) => item.posts.length > 0) ? (
         <View style={styles.stack}>
           {previews.flatMap((item) => item.posts.slice(0, 2).map((post) => ({
             ...post,
             classId: item.classId,
-            className: classes.find((cls) => cls.id === item.classId)?.name
+            className: lop.find((cls) => cls.id === item.classId)?.name
           }))).slice(0, 5).map((post) => (
             <ListRow
               key={post.id}
               icon={post.type === "assignment" ? "clipboard-outline" : "chatbubble-text-outline"}
               title={post.content}
-              subtitle={`${post.className || "Lớp học"} · ${postTypeLabel(post.type)}`}
+              subtitle={`${post.className || "Lá»›p há»c"} Â· ${postTypeLabel(post.type)}`}
               color={post.type === "assignment" ? colors.green : colors.green}
               onPress={() => router.push(`/classroom/${post.classId}`)}
             />
           ))}
         </View>
       ) : (
-        <EmptyState icon="chatbubbles-outline" title="Chưa có bài đăng" subtitle="Thông báo và bài tập sẽ xuất hiện khi giáo viên đăng trong lớp." />
+        <EmptyState icon="chatbubbles-outline" title="ChÆ°a cÃ³ bÃ i Ä‘Äƒng" subtitle="ThÃ´ng bÃ¡o vÃ  bÃ i táº­p sáº½ xuáº¥t hiá»‡n khi giÃ¡o viÃªn Ä‘Äƒng trong lá»›p." />
       )}
     </Screen>
   );
@@ -312,4 +312,5 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   }
 });
+
 

@@ -1,20 +1,20 @@
-export const bai13 = {
+﻿export const bai13 = {
   "id": "hoa12_kntt_bai13",
   "classId": 12,
   "lessonId": 13,
   "programId": "ketnoi",
-  "title": "Bài 13. Vật liệu polymer",
-  "chapter": "Chương 4. Polymer và vật liệu polymer",
+  "title": "BÃ i 13. Váº­t liá»‡u polymer",
+  "chapter": "ChÆ°Æ¡ng 4. Polymer vÃ  váº­t liá»‡u polymer",
   "order": 13,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Các loại vật liệu polymer quan trọng: Chất dẻo, tơ sợi, cao su và keo dán.",
+  "description": "CÃ¡c loáº¡i váº­t liá»‡u polymer quan trá»ng: Cháº¥t dáº»o, tÆ¡ sá»£i, cao su vÃ  keo dÃ¡n.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Chất dẻo (Plastics)",
+        "text": "1. Cháº¥t dáº»o (Plastics)",
         "level": "h2"
       }
     },
@@ -24,8 +24,8 @@ export const bai13 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Khái niệm:** Chất dẻo là những vật liệu polymer có tính dẻo (bị biến dạng khi chịu tác dụng của nhiệt, áp suất và vẫn giữ nguyên sự biến dạng đó khi thôi tác dụng).",
-          "**Một số chất dẻo quan trọng:** Polyethylene (PE), Poly(vinyl chloride) (PVC), Poly(methyl methacrylate) (Plexiglas - thủy tinh hữu cơ), Poly(phenol-formaldehyde) (PPF)."
+          "**KhÃ¡i niá»‡m:** Cháº¥t dáº»o lÃ  nhá»¯ng váº­t liá»‡u polymer cÃ³ tÃ­nh dáº»o (bá»‹ biáº¿n dáº¡ng khi chá»‹u tÃ¡c dá»¥ng cá»§a nhiá»‡t, Ã¡p suáº¥t vÃ  váº«n giá»¯ nguyÃªn sá»± biáº¿n dáº¡ng Ä‘Ã³ khi thÃ´i tÃ¡c dá»¥ng).",
+          "**Má»™t sá»‘ cháº¥t dáº»o quan trá»ng:** Polyethylene (PE), Poly(vinyl chloride) (PVC), Poly(methyl methacrylate) (Plexiglas - thá»§y tinh há»¯u cÆ¡), Poly(phenol-formaldehyde) (PPF)."
         ]
       }
     },
@@ -33,7 +33,7 @@ export const bai13 = {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Tơ (Fibers)",
+        "text": "2. TÆ¡ (Fibers)",
         "level": "h2"
       }
     },
@@ -41,8 +41,8 @@ export const bai13 = {
       "id": "mod4",
       "type": "infoBox",
       "content": {
-        "title": "Phân loại Tơ",
-        "content": "1. **Tơ thiên nhiên**: Bông, len, tơ tằm.\n2. **Tơ hóa học**:\n   - **Tơ vổng hợp**: Chế biến từ polymer tổng hợp (tơ nylon-6,6, tơ nitron/olon).\n   - **Tơ bán tổng hợp (nhân tạo)**: Chế biến từ polymer thiên nhiên (tơ viscose, tơ cellulose acetate).",
+        "title": "PhÃ¢n loáº¡i TÆ¡",
+        "content": "1. **TÆ¡ thiÃªn nhiÃªn**: BÃ´ng, len, tÆ¡ táº±m.\n2. **TÆ¡ hÃ³a há»c**:\n   - **TÆ¡ vá»•ng há»£p**: Cháº¿ biáº¿n tá»« polymer tá»•ng há»£p (tÆ¡ nylon-6,6, tÆ¡ nitron/olon).\n   - **TÆ¡ bÃ¡n tá»•ng há»£p (nhÃ¢n táº¡o)**: Cháº¿ biáº¿n tá»« polymer thiÃªn nhiÃªn (tÆ¡ viscose, tÆ¡ cellulose acetate).",
         "color": "blue"
       }
     },
@@ -58,14 +58,14 @@ export const bai13 = {
       "id": "mod6",
       "type": "paragraph",
       "content": {
-        "text": "Cao su là vật liệu polymer có tính đàn hồi. Cao su thiên nhiên được lấy từ mủ cây cao su, là polymer của isoprene ($C_5H_8$). Cao su tổng hợp bao gồm cao su buna ($n CH_2=CH-CH=CH_2$), cao su buna-S, cao su buna-N. Quá trình **lưu hóa cao su** là tạo ra các cầu nối disulfide ($-S-S-$) giữa các mạch polymer, làm tăng tính đàn hồi và độ bền nhiệt của cao su."
+        "text": "Cao su lÃ  váº­t liá»‡u polymer cÃ³ tÃ­nh Ä‘Ã n há»“i. Cao su thiÃªn nhiÃªn Ä‘Æ°á»£c láº¥y tá»« má»§ cÃ¢y cao su, lÃ  polymer cá»§a isoprene ($C_5H_8$). Cao su tá»•ng há»£p bao gá»“m cao su buna ($n CH_2=CH-CH=CH_2$), cao su buna-S, cao su buna-N. QuÃ¡ trÃ¬nh **lÆ°u hÃ³a cao su** lÃ  táº¡o ra cÃ¡c cáº§u ná»‘i disulfide ($-S-S-$) giá»¯a cÃ¡c máº¡ch polymer, lÃ m tÄƒng tÃ­nh Ä‘Ã n há»“i vÃ  Ä‘á»™ bá»n nhiá»‡t cá»§a cao su."
       }
     }
   ],
   "quizzes": [
     {
       "id": "q1",
-      "question": "Thành phần chính của thủy tinh hữu cơ (Plexiglas) là polymer nào?",
+      "question": "ThÃ nh pháº§n chÃ­nh cá»§a thá»§y tinh há»¯u cÆ¡ (Plexiglas) lÃ  polymer nÃ o?",
       "options": [
         "Polyethylene.",
         "Poly(methyl methacrylate).",
@@ -73,28 +73,28 @@ export const bai13 = {
         "Poly(vinyl chloride)."
       ],
       "correctAnswer": 1,
-      "explanation": "Poly(methyl methacrylate) có đặc tính trong suốt, truyền sáng tốt, được dùng làm thủy tinh hữu cơ."
+      "explanation": "Poly(methyl methacrylate) cÃ³ Ä‘áº·c tÃ­nh trong suá»‘t, truyá»n sÃ¡ng tá»‘t, Ä‘Æ°á»£c dÃ¹ng lÃ m thá»§y tinh há»¯u cÆ¡."
     },
     {
       "id": "q2",
-      "question": "Trong số các loại tơ sau: tơ tằm, tơ nylon-6,6, tơ viscose, tơ nilon-6, những loại nào thuộc nhóm tơ bán tổng hợp (tơ nhân tạo)?",
+      "question": "Trong sá»‘ cÃ¡c loáº¡i tÆ¡ sau: tÆ¡ táº±m, tÆ¡ nylon-6,6, tÆ¡ viscose, tÆ¡ nilon-6, nhá»¯ng loáº¡i nÃ o thuá»™c nhÃ³m tÆ¡ bÃ¡n tá»•ng há»£p (tÆ¡ nhÃ¢n táº¡o)?",
       "options": [
-        "Tơ tằm.",
-        "Tơ nylon-6,6.",
-        "Tơ viscose.",
-        "Tơ nilon-6."
+        "TÆ¡ táº±m.",
+        "TÆ¡ nylon-6,6.",
+        "TÆ¡ viscose.",
+        "TÆ¡ nilon-6."
       ],
       "correctAnswer": 2,
-      "explanation": "Tơ viscose and tơ cellulose acetate được chế biến hóa học từ polymer thiên nhiên (cellulose) nên được gọi là tơ bán tổng hợp."
+      "explanation": "TÆ¡ viscose and tÆ¡ cellulose acetate Ä‘Æ°á»£c cháº¿ biáº¿n hÃ³a há»c tá»« polymer thiÃªn nhiÃªn (cellulose) nÃªn Ä‘Æ°á»£c gá»i lÃ  tÆ¡ bÃ¡n tá»•ng há»£p."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Vật liệu Polymer",
+      "title": "BÃ i giáº£ng: Váº­t liá»‡u Polymer",
       "url": "https://www.youtube.com/watch?v=iYpVgMWlkg0",
       "thumbnail": "https://img.youtube.com/vi/iYpVgMWlkg0/0.jpg",
-      "description": "Tìm hiểu về chất dẻo, tơ sợi, cao su and keo dán (VietJack)."
+      "description": "TÃ¬m hiá»ƒu vá» cháº¥t dáº»o, tÆ¡ sá»£i, cao su and keo dÃ¡n (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -103,3 +103,4 @@ export const bai13 = {
   "game": null,
   "realWorldApplications": []
 };
+

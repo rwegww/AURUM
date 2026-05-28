@@ -17,7 +17,11 @@ const { Client } = pg;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..', '..');
-const MIGRATION_PATH = path.join(ROOT, 'supabase', '20260525_restructure_schema.sql');
+const MIGRATION_PATHS = [
+  path.join(ROOT, 'supabase', '20260525_restructure_schema.sql'),
+  path.join(ROOT, 'supabase', 'migrations', '20260603154143_standardize_schema_names.sql'),
+  path.join(ROOT, 'supabase', 'migrations', '20260604030000_vietnamese_business_schema_names.sql')
+];
 
 const allCurriculumLessons = [
   ...class8Data.ketnoi,
@@ -77,39 +81,48 @@ const parseJson = (value) => {
   }
 };
 
-const findLessonTable = async (supabase) => {
-  for (const table of ['lessons', 'lesson']) {
-    const { error } = await supabase.from(table).select('id').limit(1);
-    if (!error) return table;
+const findLessonTheorySource = async (supabase) => {
+  const candidates = [
+    { table: 'bai_hoc', column: 'module_ly_thuyet' },
+    { table: 'bai_hoc', column: 'theory_modules' },
+    { table: 'lessons', column: 'theory_modules' },
+  ];
+
+  for (const candidate of candidates) {
+    const { error } = await supabase
+      .from(candidate.table)
+      .select(`id,${candidate.column}`)
+      .limit(1);
+    if (!error) return candidate;
   }
-  throw new Error('Neither lessons nor lesson table is available.');
+  throw new Error('No lesson table/theory module column is available.');
 };
 
 const repairLessonTheoryModules = async (supabase) => {
-  const table = await findLessonTable(supabase);
-  const { data, error } = await supabase.from(table).select('id,theory_modules').range(0, 999);
+  const { table, column } = await findLessonTheorySource(supabase);
+  const { data, error } = await supabase.from(table).select(`id,${column}`).range(0, 999);
   if (error) throw error;
 
-  const invalidRows = (data || []).filter((row) => !parseJson(row.theory_modules).ok);
+  const invalidRows = (data || []).filter((row) => !parseJson(row[column]).ok);
   if (invalidRows.length === 0) {
-    console.log('No invalid lesson theory_modules rows found.');
+    console.log(`No invalid lesson ${column} rows found.`);
     return;
   }
 
-  console.log(`Repairing ${invalidRows.length} invalid theory_modules rows in ${table}.`);
+  console.log(`Repairing ${invalidRows.length} invalid ${column} rows in ${table}.`);
   for (const row of invalidRows) {
     const localLesson = curriculumById.get(row.id);
     if (!localLesson) {
       throw new Error(`No local curriculum source found for lesson ${row.id}.`);
     }
 
-    const nextValue = typeof row.theory_modules === 'string'
+    const nextValue = typeof row[column] === 'string'
       ? JSON.stringify(localLesson.theoryModules || [])
       : (localLesson.theoryModules || []);
 
     const { error: updateError } = await supabase
       .from(table)
-      .update({ theory_modules: nextValue })
+      .update({ [column]: nextValue })
       .eq('id', row.id);
 
     if (updateError) throw updateError;
@@ -117,7 +130,6 @@ const repairLessonTheoryModules = async (supabase) => {
 };
 
 const runSqlMigration = async (databaseUrl) => {
-  const sql = await fs.readFile(MIGRATION_PATH, 'utf8');
   const client = new Client({
     connectionString: databaseUrl,
     ssl: { rejectUnauthorized: false }
@@ -125,7 +137,11 @@ const runSqlMigration = async (databaseUrl) => {
 
   await client.connect();
   try {
-    await client.query(sql);
+    for (const migrationPath of MIGRATION_PATHS) {
+      const sql = await fs.readFile(migrationPath, 'utf8');
+      console.log(`Running migration: ${path.relative(ROOT, migrationPath)}`);
+      await client.query(sql);
+    }
   } finally {
     await client.end();
   }

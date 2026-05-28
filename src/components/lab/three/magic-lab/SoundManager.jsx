@@ -1,34 +1,34 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
 import useLabStore from './store';
 import { useSoundEffects, useSoundStore } from './useSoundEffects';
 
 /**
- * SoundManager - Component quản lý âm thanh cho phòng thí nghiệm 3D
- * Lắng nghe các thay đổi trạng thái từ store và phát âm thanh phù hợp
+ * SoundManager - Component quáº£n lÃ½ Ã¢m thanh cho phÃ²ng thÃ­ nghiá»‡m 3D
+ * Láº¯ng nghe cÃ¡c thay Ä‘á»•i tráº¡ng thÃ¡i tá»« store vÃ  phÃ¡t Ã¢m thanh phÃ¹ há»£p
  */
 const SoundManager = () => {
   const { playSound, stopSound } = useSoundEffects();
   const { enabled } = useSoundStore();
 
-  // Lấy trạng thái từ store
+  // Láº¥y tráº¡ng thÃ¡i tá»« store
   const beakers = useLabStore(state => state.beakers);
   const isPouringFormula = useLabStore(state => state.isPouringFormula);
   const chemicals = useLabStore(state => state.chemicals);
 
-  // Refs để theo dõi trạng thái trước đó
+  // Refs Ä‘á»ƒ theo dÃµi tráº¡ng thÃ¡i trÆ°á»›c Ä‘Ã³
   const prevStateRef = useRef({
     isPouringFormula: null,
     beakerStates: {},
   });
 
-  // Lắng nghe khi đổ hóa chất
+  // Láº¯ng nghe khi Ä‘á»• hÃ³a cháº¥t
   useEffect(() => {
     if (!enabled) return;
 
     const prev = prevStateRef.current.isPouringFormula;
 
     if (isPouringFormula && !prev) {
-      // Xác định trạng thái của hóa chất đang đổ
+      // XÃ¡c Ä‘á»‹nh tráº¡ng thÃ¡i cá»§a hÃ³a cháº¥t Ä‘ang Ä‘á»•
       const chem = chemicals[isPouringFormula];
       playSound('pour', { chemicalState: chem?.state || 'liquid' });
     }
@@ -36,43 +36,43 @@ const SoundManager = () => {
     prevStateRef.current.isPouringFormula = isPouringFormula;
   }, [isPouringFormula, enabled, playSound, chemicals]);
 
-  // Lắng nghe thay đổi trạng thái của các cốc
+  // Láº¯ng nghe thay Ä‘á»•i tráº¡ng thÃ¡i cá»§a cÃ¡c cá»‘c
   useEffect(() => {
     if (!enabled) return;
 
     beakers.forEach((beaker) => {
       const prevState = prevStateRef.current.beakerStates[beaker.id] || {};
 
-      // --- QUẢN LÝ LỬA/NHIỆT ---
+      // --- QUáº¢N LÃ Lá»¬A/NHIá»†T ---
       if (beaker.isHeating && !prevState.isHeating) {
         playSound('fire', { continuous: true });
       } else if (!beaker.isHeating && prevState.isHeating) {
         stopSound('fire');
       }
 
-      // --- QUẢN LÝ KHÍ/SỦI BỌT ---
+      // --- QUáº¢N LÃ KHÃ/Sá»¦I Bá»ŒT ---
       if (beaker.activeBubbles && !prevState.activeBubbles) {
-        // Phát một chuỗi âm thanh fizz nếu có bọt khí
+        // PhÃ¡t má»™t chuá»—i Ã¢m thanh fizz náº¿u cÃ³ bá»t khÃ­
         playSound('fizz', { duration: 5 });
       }
 
-      // --- QUẢN LÝ KHÓI/HƠI NƯỚC ---
+      // --- QUáº¢N LÃ KHÃ“I/HÆ I NÆ¯á»šC ---
       if (beaker.activeSmoke && !prevState.activeSmoke) {
         const type = beaker.isHeating ? 'steam' : 'smoke';
         playSound(type, { duration: 3 });
       }
 
-      // --- QUẢN LÝ PHẢN ỨNG MẠNH/NỔ ---
+      // --- QUáº¢N LÃ PHáº¢N á»¨NG Máº NH/Ná»” ---
       if (beaker.activeFlame && !prevState.activeFlame) {
         playSound('explosion', { intensity: beaker.intensity });
       }
 
-      // Phát âm thanh rung khi có phản ứng mãnh liệt
+      // PhÃ¡t Ã¢m thanh rung khi cÃ³ pháº£n á»©ng mÃ£nh liá»‡t
       if (beaker.shake && !prevState.shake) {
         playSound('explosion', { intensity: 'low' });
       }
 
-      // Cập nhật trạng thái trước đó
+      // Cáº­p nháº­t tráº¡ng thÃ¡i trÆ°á»›c Ä‘Ã³
       prevStateRef.current.beakerStates[beaker.id] = {
         isHeating: beaker.isHeating,
         activeBubbles: beaker.activeBubbles,
@@ -83,8 +83,9 @@ const SoundManager = () => {
     });
   }, [beakers, enabled, playSound, stopSound]);
 
-  // Component này không render gì
+  // Component nÃ y khÃ´ng render gÃ¬
   return null;
 };
 
 export default SoundManager;
+

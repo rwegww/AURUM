@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
+﻿/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
@@ -109,20 +109,20 @@ export const AuthProvider = ({ children }) => {
         return userData;
       } else if (res.status === 401) {
         const errorData = await res.json().catch(() => ({}));
-        console.error('Lỗi 401 từ Server:', errorData);
-        if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
-          alert('Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất để bảo mật.');
+        console.error('Lá»—i 401 tá»« Server:', errorData);
+        if (errorData.message?.includes('Ä‘Äƒng nháº­p á»Ÿ má»™t thiáº¿t bá»‹ khÃ¡c') || errorData.error === 'DUAL_LOGIN') {
+          alert('TÃ i khoáº£n cá»§a báº¡n Ä‘Ã£ Ä‘Æ°á»£c Ä‘Äƒng nháº­p á»Ÿ má»™t thiáº¿t bá»‹ khÃ¡c. Báº¡n sáº½ bá»‹ Ä‘Äƒng xuáº¥t Ä‘á»ƒ báº£o máº­t.');
           await logout();
         } else {
-          alert(`Lỗi xác thực: ${errorData.message || 'Không rõ'}. Vui lòng kiểm tra Server Vercel.`);
+          alert(`Lá»—i xÃ¡c thá»±c: ${errorData.message || 'KhÃ´ng rÃµ'}. Vui lÃ²ng kiá»ƒm tra Server Vercel.`);
           await logout();
         }
       }
     } catch (err) {
       if (err.name !== 'AbortError') {
-        console.error('Lỗi tải profile:', err);
+        console.error('Lá»—i táº£i profile:', err);
         if (err.message.includes('DUAL_LOGIN')) {
-          setAuthError('Tài khoản đã đăng nhập ở nơi khác.');
+          setAuthError('TÃ i khoáº£n Ä‘Ã£ Ä‘Äƒng nháº­p á»Ÿ nÆ¡i khÃ¡c.');
         } else {
           setAuthError(err.message);
         }
@@ -141,7 +141,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ username, password, email, proofImageUrl })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Lỗi gửi yêu cầu đăng ký');
+      if (!res.ok) throw new Error(data.message || 'Lá»—i gá»­i yÃªu cáº§u Ä‘Äƒng kÃ½');
       return { success: true, message: data.message };
     } catch (err) {
       return { success: false, message: err.message };
@@ -163,7 +163,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(`Server status: ${res.status}`);
       }
 
-      if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
+      if (!res.ok) throw new Error(data?.message || 'Lá»—i Ä‘Äƒng nháº­p');
       
       const newSessionId = createClientSessionId(data.token);
       localStorage.setItem('sessionId', newSessionId);
@@ -191,7 +191,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(`Server status: ${res.status}`);
       }
 
-      if (!res.ok) throw new Error(data?.message || 'Lỗi đăng nhập');
+      if (!res.ok) throw new Error(data?.message || 'Lá»—i Ä‘Äƒng nháº­p');
       
       const newSessionId = createClientSessionId(data.token);
       localStorage.setItem('sessionId', newSessionId);
@@ -247,7 +247,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ username, password, email, role, teacherCode, grade })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Lỗi đăng ký');
+      if (!res.ok) throw new Error(data.message || 'Lá»—i Ä‘Äƒng kÃ½');
 
       const newSessionId = createClientSessionId(data.token);
       localStorage.setItem('sessionId', newSessionId);
@@ -288,16 +288,16 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: data };
       } else {
         const errData = await res.json();
-        throw new Error(errData.message || 'Lỗi cập nhật profile');
+        throw new Error(errData.message || 'Lá»—i cáº­p nháº­t profile');
       }
     } catch (err) {
-      console.error('Lỗi cập nhật profile:', err);
+      console.error('Lá»—i cáº­p nháº­t profile:', err);
       return { success: false, message: err.message };
     }
   }, [isLoggedIn, user]);
 
   const linkAccount = useCallback(async (provider, accountId, providerEmail) => {
-    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lÃ²ng Ä‘Äƒng nháº­p' };
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/user/link-account', {
@@ -315,7 +315,7 @@ export const AuthProvider = ({ children }) => {
         }
         return { success: true, message: data.message };
       } else {
-        throw new Error(data.message || 'Lỗi liên kết tài khoản');
+        throw new Error(data.message || 'Lá»—i liÃªn káº¿t tÃ i khoáº£n');
       }
     } catch (err) {
       return { success: false, message: err.message };
@@ -323,7 +323,7 @@ export const AuthProvider = ({ children }) => {
   }, [isLoggedIn, user]);
 
   const completeLessonSegment = useCallback(async (lessonId, level, stars) => {
-     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+     if (!isLoggedIn || !user) return { success: false, message: 'Vui lÃ²ng Ä‘Äƒng nháº­p' };
      
      try {
         const token = localStorage.getItem('token');
@@ -336,17 +336,17 @@ export const AuthProvider = ({ children }) => {
           body: JSON.stringify({ lessonId, level, stars })
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Không thể lưu tiến độ bài học');
+        if (!res.ok) throw new Error(data.message || 'KhÃ´ng thá»ƒ lÆ°u tiáº¿n Ä‘á»™ bÃ i há»c');
         if (mountedRef.current && data.user) setUser(data.user);
         return { success: true, user: data.user };
      } catch (err) {
-        console.error('Lỗi lưu đoạn bài học:', err);
+        console.error('Lá»—i lÆ°u Ä‘oáº¡n bÃ i há»c:', err);
         return { success: false, message: err.message };
      }
   }, [isLoggedIn, user]);
 
   const completePlacementTest = useCallback(async (grade) => {
-    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lÃ²ng Ä‘Äƒng nháº­p' };
 
     try {
       const token = localStorage.getItem('token');
@@ -359,17 +359,17 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ grade })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Không thể lưu kết quả test');
+      if (!res.ok) throw new Error(data.message || 'KhÃ´ng thá»ƒ lÆ°u káº¿t quáº£ test');
       if (mountedRef.current && data.user) setUser(data.user);
       return { success: true, user: data.user, xpGained: data.xpGained };
     } catch (err) {
-      console.error('Lỗi lưu kết quả test:', err);
+      console.error('Lá»—i lÆ°u káº¿t quáº£ test:', err);
       return { success: false, message: err.message };
     }
   }, [isLoggedIn, user]);
 
   const recoverStreak = useCallback(async (streakToRestore) => {
-    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lÃ²ng Ä‘Äƒng nháº­p' };
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/user/streak/recover', {
@@ -385,7 +385,7 @@ export const AuthProvider = ({ children }) => {
         if (mountedRef.current) setUser(prev => ({ ...prev, streakCount: data.streakCount, xp: data.xp }));
         return { success: true, message: data.message };
       } else {
-        throw new Error(data.message || 'Lỗi khôi phục chuỗi');
+        throw new Error(data.message || 'Lá»—i khÃ´i phá»¥c chuá»—i');
       }
     } catch (err) {
       return { success: false, message: err.message };
@@ -393,7 +393,7 @@ export const AuthProvider = ({ children }) => {
   }, [isLoggedIn, user]);
 
   const resetStreak = useCallback(async () => {
-    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lÃ²ng Ä‘Äƒng nháº­p' };
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/user/streak/reset', {
@@ -408,7 +408,7 @@ export const AuthProvider = ({ children }) => {
         if (mountedRef.current) setUser(prev => ({ ...prev, streakCount: data.streakCount }));
         return { success: true, message: data.message };
       } else {
-        throw new Error(data.message || 'Lỗi thiết lập lại chuỗi');
+        throw new Error(data.message || 'Lá»—i thiáº¿t láº­p láº¡i chuá»—i');
       }
     } catch (err) {
       return { success: false, message: err.message };
@@ -485,11 +485,11 @@ export const AuthProvider = ({ children }) => {
           }
         } else if (res.status === 401) {
           const errorData = await res.json().catch(() => ({}));
-          if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
-            alert('Phiên đăng nhập hết hạn vì bạn đã đăng nhập ở thiết bị khác.');
+          if (errorData.message?.includes('Ä‘Äƒng nháº­p á»Ÿ má»™t thiáº¿t bá»‹ khÃ¡c') || errorData.error === 'DUAL_LOGIN') {
+            alert('PhiÃªn Ä‘Äƒng nháº­p háº¿t háº¡n vÃ¬ báº¡n Ä‘Ã£ Ä‘Äƒng nháº­p á»Ÿ thiáº¿t bá»‹ khÃ¡c.');
           } else {
             // Silent logout for expired token
-            console.warn('Phiên đăng nhập không hợp lệ hoặc đã hết hạn.');
+            console.warn('PhiÃªn Ä‘Äƒng nháº­p khÃ´ng há»£p lá»‡ hoáº·c Ä‘Ã£ háº¿t háº¡n.');
           }
           await logout();
         }
@@ -530,3 +530,4 @@ export const AuthProvider = ({ children }) => {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+

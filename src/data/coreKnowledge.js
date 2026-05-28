@@ -1,321 +1,322 @@
-/**
- * KIẾN THỨC CỐT LÕI - Core Knowledge Data
- * Maps each knowledge topic in CHEMISTRY_KNOWLEDGE_BASE to specific curriculum lessons.
- * Used by KnowledgeMap to navigate directly to related lessons.
+﻿/**
+ * KIáº¾N THá»¨C Cá»T LÃ•I - Core Knowledge Data
+ * Maps each knowledge topic in CHEMISTRY_KNOWLEDGE_BASE to specific curriculum bai_hoc.
+ * Used by KnowledgeMap to navigate directly to related bai_hoc.
  * 
  * IMPORTANT: lessonId must match the string ID in the database (e.g., "hoa10_kntt_bai1")
  */
 
 export const CORE_KNOWLEDGE_LESSONS = {
-  // === ĐẠI CƯƠNG ===
+  // === Äáº I CÆ¯Æ NG ===
   'atom-structure': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'Bài 1: Thành phần của nguyên tử' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'BÃ i 1: ThÃ nh pháº§n cá»§a nguyÃªn tá»­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'BÃ i 2: NguyÃªn tá»‘ hÃ³a há»c' },
   ],
   'isotope': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'BÃ i 2: NguyÃªn tá»‘ hÃ³a há»c' },
   ],
   'electron-config': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai3', title: 'Bài 3: Cấu trúc lớp vỏ electron nguyên tử' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai3', title: 'BÃ i 3: Cáº¥u trÃºc lá»›p vá» electron nguyÃªn tá»­' },
   ],
   'periodic-law': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai5', title: 'Bài 5: Cấu tạo của bảng tuần hoàn' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai8', title: 'Bài 8: Định luật tuần hoàn and ý nghĩa' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai5', title: 'BÃ i 5: Cáº¥u táº¡o cá»§a báº£ng tuáº§n hoÃ n' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai8', title: 'BÃ i 8: Äá»‹nh luáº­t tuáº§n hoÃ n and Ã½ nghÄ©a' },
   ],
   'periodic-trends': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai6', title: 'Bài 6: Xu hướng biến đổi tính chất của nguyên tử' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai7', title: 'Bài 7: Xu hướng biến đổi tính chất của hợp chất' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai6', title: 'BÃ i 6: Xu hÆ°á»›ng biáº¿n Ä‘á»•i tÃ­nh cháº¥t cá»§a nguyÃªn tá»­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai7', title: 'BÃ i 7: Xu hÆ°á»›ng biáº¿n Ä‘á»•i tÃ­nh cháº¥t cá»§a há»£p cháº¥t' },
   ],
   'metals-nonmetals': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai4', title: 'Bài 4: Phân biệt Phi kim và Kim loại' },
-    { classId: 9, lessonId: 'hoa9_kntt_bai16', title: 'Bài 16: Sơ lược về hóa học vỏ Trái Đất' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai6', title: 'Bài 6: Xu hướng biến đổi tính chất của nguyên tử' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai18', title: 'Bài 18: Cấu tạo và liên kết trong tinh thể kim loại' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai19', title: 'Bài 19: Tính chất vật lí và hoá học của kim loại' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai4', title: 'BÃ i 4: PhÃ¢n biá»‡t Phi kim vÃ  Kim loáº¡i' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai16', title: 'BÃ i 16: SÆ¡ lÆ°á»£c vá» hÃ³a há»c vá» TrÃ¡i Äáº¥t' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai6', title: 'BÃ i 6: Xu hÆ°á»›ng biáº¿n Ä‘á»•i tÃ­nh cháº¥t cá»§a nguyÃªn tá»­' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai18', title: 'BÃ i 18: Cáº¥u táº¡o vÃ  liÃªn káº¿t trong tinh thá»ƒ kim loáº¡i' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai19', title: 'BÃ i 19: TÃ­nh cháº¥t váº­t lÃ­ vÃ  hoÃ¡ há»c cá»§a kim loáº¡i' },
   ],
 
-  // === LIÊN KẾT ===
+  // === LIÃŠN Káº¾T ===
   'chemical-bonding': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai10', title: 'Bài 10: Quy tắc octet' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai11', title: 'Bài 11: Liên kết ion' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai12', title: 'Bài 12: Liên kết cộng hóa trị' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai10', title: 'BÃ i 10: Quy táº¯c octet' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai11', title: 'BÃ i 11: LiÃªn káº¿t ion' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai12', title: 'BÃ i 12: LiÃªn káº¿t cá»™ng hÃ³a trá»‹' },
   ],
   'ionic-bond': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai11', title: 'Bài 11: Liên kết ion' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai11', title: 'BÃ i 11: LiÃªn káº¿t ion' },
   ],
   'covalent-bond': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai12', title: 'Bài 12: Liên kết cộng hóa trị' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai12', title: 'BÃ i 12: LiÃªn káº¿t cá»™ng hÃ³a trá»‹' },
   ],
   'metallic-bond': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai13', title: 'Bài 13: Liên kết hydrogen and Tương tác van der Waals' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai18', title: 'Bài 18: Cấu tạo và liên kết trong tinh thể kim loại' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai13', title: 'BÃ i 13: LiÃªn káº¿t hydrogen and TÆ°Æ¡ng tÃ¡c van der Waals' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai18', title: 'BÃ i 18: Cáº¥u táº¡o vÃ  liÃªn káº¿t trong tinh thá»ƒ kim loáº¡i' },
   ],
 
-  // === MOL VÀ ĐỊNH LƯỢNG ===
+  // === MOL VÃ€ Äá»ŠNH LÆ¯á»¢NG ===
   'mole-concept': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'Bài 3: Mol và tỉ khối chất khí' },
-    { classId: 8, lessonId: 'hoa8_kntt_bai6', title: 'Bài 6: Tính toán theo phương trình hóa học' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'Bài 1: Thành phần của nguyên tử' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai6', title: 'BÃ i 6: TÃ­nh toÃ¡n theo phÆ°Æ¡ng trÃ¬nh hÃ³a há»c' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'BÃ i 1: ThÃ nh pháº§n cá»§a nguyÃªn tá»­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'BÃ i 2: NguyÃªn tá»‘ hÃ³a há»c' },
   ],
   'molar-mass': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'Bài 3: Mol và tỉ khối chất khí' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'BÃ i 2: NguyÃªn tá»‘ hÃ³a há»c' },
   ],
   'mol-mass': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'Bài 3: Mol và tỉ khối chất khí' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'BÃ i 2: NguyÃªn tá»‘ hÃ³a há»c' },
   ],
   'mol-particles': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'Bài 3: Mol và tỉ khối chất khí' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'Bài 1: Thành phần của nguyên tử' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'BÃ i 1: ThÃ nh pháº§n cá»§a nguyÃªn tá»­' },
   ],
   'mol-vol': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'Bài 3: Mol và tỉ khối chất khí' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'BÃ i 2: NguyÃªn tá»‘ hÃ³a há»c' },
   ],
 
-  // === CHẤT KHÍ ===
+  // === CHáº¤T KHÃ ===
   'ideal-gas': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'Bài 1: Khái niệm về cân bằng hóa học' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'BÃ i 1: KhÃ¡i niá»‡m vá» cÃ¢n báº±ng hÃ³a há»c' },
   ],
   'boyle-law': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'Bài 1: Khái niệm về cân bằng hóa học' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'BÃ i 1: KhÃ¡i niá»‡m vá» cÃ¢n báº±ng hÃ³a há»c' },
   ],
   'charles-law': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'Bài 1: Khái niệm về cân bằng hóa học' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'BÃ i 1: KhÃ¡i niá»‡m vá» cÃ¢n báº±ng hÃ³a há»c' },
   ],
   'density-gas': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'Bài 3: Mol và tỉ khối chất khí' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai4', title: 'Bài 4: Nitrogen' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai3', title: 'BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai4', title: 'BÃ i 4: Nitrogen' },
   ],
 
-  // === DUNG DỊCH ===
+  // === DUNG Dá»ŠCH ===
   'solution-basic': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'Bài 4: Dung dịch và Nồng độ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'BÃ i 4: Dung dá»‹ch vÃ  Ná»“ng Ä‘á»™' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'molar-conc': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'Bài 4: Dung dịch và Nồng độ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'BÃ i 4: Dung dá»‹ch vÃ  Ná»“ng Ä‘á»™' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'percent-conc': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'Bài 4: Dung dịch và Nồng độ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'BÃ i 4: Dung dá»‹ch vÃ  Ná»“ng Ä‘á»™' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'dilution': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'Bài 4: Dung dịch và Nồng độ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'BÃ i 4: Dung dá»‹ch vÃ  Ná»“ng Ä‘á»™' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'solubility': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'Bài 4: Dung dịch và Nồng độ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai4', title: 'BÃ i 4: Dung dá»‹ch vÃ  Ná»“ng Ä‘á»™' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'electrolyte': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
 
-  // === AXIT – BAZƠ – MUỐI ===
+  // === AXIT â€“ BAZÆ  â€“ MUá»I ===
   'acid-definition': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai8', title: 'Bài 8: acid' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai8', title: 'Bài 8: Sulfuric acid and muối sulfate' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai8', title: 'BÃ i 8: acid' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai8', title: 'BÃ i 8: Sulfuric acid and muá»‘i sulfate' },
   ],
   'base-definition': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai9', title: 'Bài 9: Base - Thang pH' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai5', title: 'Bài 5: Ammonia – Muối ammonium' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai9', title: 'BÃ i 9: Base - Thang pH' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai5', title: 'BÃ i 5: Ammonia â€“ Muá»‘i ammonium' },
   ],
   'salt-definition': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai11', title: 'Bài 11: muối' },
-    { classId: 8, lessonId: 'hoa8_kntt_bai12', title: 'Bài 12: Phân bón hóa học' },
-    { classId: 9, lessonId: 'hoa9_kntt_bai17', title: 'Bài 17: Khai thác đá vôi. Công nghiệp Silicate' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai5', title: 'Bài 5: Ammonia – Muối ammonium' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai8', title: 'Bài 8: Sulfuric acid and muối sulfate' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai11', title: 'BÃ i 11: muá»‘i' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai12', title: 'BÃ i 12: PhÃ¢n bÃ³n hÃ³a há»c' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai17', title: 'BÃ i 17: Khai thÃ¡c Ä‘Ã¡ vÃ´i. CÃ´ng nghiá»‡p Silicate' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai5', title: 'BÃ i 5: Ammonia â€“ Muá»‘i ammonium' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai8', title: 'BÃ i 8: Sulfuric acid and muá»‘i sulfate' },
   ],
   'oxide-classification': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai10', title: 'Bài 10: oxide' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai6', title: 'Bài 6: Một số hợp chất của nitrogen với oxygen' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai7', title: 'Bài 7: Sulfur and sulfur dioxide' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai10', title: 'BÃ i 10: oxide' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai6', title: 'BÃ i 6: Má»™t sá»‘ há»£p cháº¥t cá»§a nitrogen vá»›i oxygen' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai7', title: 'BÃ i 7: Sulfur and sulfur dioxide' },
   ],
   'neutralization': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'ph-scale': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai9', title: 'Bài 9: Base - Thang pH' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai9', title: 'BÃ i 9: Base - Thang pH' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'strong-weak-acid-base': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai8', title: 'Bài 8: acid' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai8', title: 'BÃ i 8: acid' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
 
-  // === PHẢN ỨNG HÓA HỌC ===
+  // === PHáº¢N á»¨NG HÃ“A Há»ŒC ===
   'precipitation': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'Bài 2: Cân bằng trong dung dịch nước' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai2', title: 'BÃ i 2: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c' },
   ],
   'gas-evolution': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai6', title: 'Bài 6: Một số hợp chất của nitrogen với oxygen' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai6', title: 'BÃ i 6: Má»™t sá»‘ há»£p cháº¥t cá»§a nitrogen vá»›i oxygen' },
   ],
   'reaction-classification': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai2', title: 'Bài 2: Phản ứng hóa học' },
-    { classId: 8, lessonId: 'hoa8_kntt_bai5', title: 'Bài 5: Định luật bảo toàn khối lượng và Phương trình hóa học' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai15', title: 'Bài 15: Phản ứng oxi hóa - khử' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai2', title: 'BÃ i 2: Pháº£n á»©ng hÃ³a há»c' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai5', title: 'BÃ i 5: Äá»‹nh luáº­t báº£o toÃ n khá»‘i lÆ°á»£ng vÃ  PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai15', title: 'BÃ i 15: Pháº£n á»©ng oxi hÃ³a - khá»­' },
   ],
 
-  // === ĐỘNG HÓA HỌC ===
+  // === Äá»˜NG HÃ“A Há»ŒC ===
   'reaction-rate': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai7', title: 'Bài 7: Tốc độ phản ứng và chất xúc tác' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai19', title: 'Bài 19: Tốc độ phản ứng' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai7', title: 'BÃ i 7: Tá»‘c Ä‘á»™ pháº£n á»©ng vÃ  cháº¥t xÃºc tÃ¡c' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai19', title: 'BÃ i 19: Tá»‘c Ä‘á»™ pháº£n á»©ng' },
   ],
   'catalyst': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai7', title: 'Bài 7: Tốc độ phản ứng và chất xúc tác' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai19', title: 'Bài 19: Tốc độ phản ứng' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai7', title: 'BÃ i 7: Tá»‘c Ä‘á»™ pháº£n á»©ng vÃ  cháº¥t xÃºc tÃ¡c' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai19', title: 'BÃ i 19: Tá»‘c Ä‘á»™ pháº£n á»©ng' },
   ],
 
-  // === CÂN BẰNG HÓA HỌC ===
+  // === CÃ‚N Báº°NG HÃ“A Há»ŒC ===
   'chemical-equilibrium': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'Bài 1: Khái niệm về cân bằng hóa học' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'BÃ i 1: KhÃ¡i niá»‡m vá» cÃ¢n báº±ng hÃ³a há»c' },
   ],
   'le-chatelier': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'Bài 1: Khái niệm về cân bằng hóa học' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai1', title: 'BÃ i 1: KhÃ¡i niá»‡m vá» cÃ¢n báº±ng hÃ³a há»c' },
   ],
 
-  // === NHIỆT HÓA HỌC ===
+  // === NHIá»†T HÃ“A Há»ŒC ===
   'enthalpy': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai17', title: 'Bài 17: Biến thiên enthalpy trong các phản ứng hóa học' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai17', title: 'BÃ i 17: Biáº¿n thiÃªn enthalpy trong cÃ¡c pháº£n á»©ng hÃ³a há»c' },
   ],
   'hess-law': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai17', title: 'Bài 17: Biến thiên enthalpy trong các phản ứng hóa học' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai17', title: 'BÃ i 17: Biáº¿n thiÃªn enthalpy trong cÃ¡c pháº£n á»©ng hÃ³a há»c' },
   ],
 
-  // === OXI HÓA – KHỬ ===
+  // === OXI HÃ“A â€“ KHá»¬ ===
   'redox': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai15', title: 'Bài 15: Phản ứng oxi hóa - khử' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai15', title: 'BÃ i 15: Pháº£n á»©ng oxi hÃ³a - khá»­' },
   ],
   'oxidation-number': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai15', title: 'Bài 15: Phản ứng oxi hóa - khử' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai15', title: 'BÃ i 15: Pháº£n á»©ng oxi hÃ³a - khá»­' },
   ],
 
-  // === ĐIỆN HÓA ===
+  // === ÄIá»†N HÃ“A ===
   'electrochemistry': [
-    { classId: 12, lessonId: 'hoa12_kntt_bai15', title: 'Bài 15: Thế điện cực và nguồn điện hoá học' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai15', title: 'BÃ i 15: Tháº¿ Ä‘iá»‡n cá»±c vÃ  nguá»“n Ä‘iá»‡n hoÃ¡ há»c' },
   ],
   'electrolysis': [
-    { classId: 12, lessonId: 'hoa12_kntt_bai15', title: 'Bài 15: Thế điện cực và nguồn điện hoá học' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai15', title: 'BÃ i 15: Tháº¿ Ä‘iá»‡n cá»±c vÃ  nguá»“n Ä‘iá»‡n hoÃ¡ há»c' },
   ],
 
-  // === KIM LOẠI ===
+  // === KIM LOáº I ===
   'metal-activity-series': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai2', title: 'Bài 2: Dãy hoạt động hóa học' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai19', title: 'Bài 19: Tính chất vật lí và hoá học của kim loại' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai2', title: 'BÃ i 2: DÃ£y hoáº¡t Ä‘á»™ng hÃ³a há»c' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai19', title: 'BÃ i 19: TÃ­nh cháº¥t váº­t lÃ­ vÃ  hoÃ¡ há»c cá»§a kim loáº¡i' },
   ],
   'metal-properties': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai1', title: 'Bài 1: Tính chất chung của kim loại' },
-    { classId: 9, lessonId: 'hoa9_kntt_bai3', title: 'Bài 3: Tách kim loại và sử dụng hợp kim' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai18', title: 'Bài 18: Cấu tạo và liên kết trong tinh thể kim loại' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai19', title: 'Bài 19: Tính chất vật lí và hoá học của kim loại' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai1', title: 'BÃ i 1: TÃ­nh cháº¥t chung cá»§a kim loáº¡i' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai3', title: 'BÃ i 3: TÃ¡ch kim loáº¡i vÃ  sá»­ dá»¥ng há»£p kim' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai18', title: 'BÃ i 18: Cáº¥u táº¡o vÃ  liÃªn káº¿t trong tinh thá»ƒ kim loáº¡i' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai19', title: 'BÃ i 19: TÃ­nh cháº¥t váº­t lÃ­ vÃ  hoÃ¡ há»c cá»§a kim loáº¡i' },
   ],
   'corrosion': [
-    { classId: 12, lessonId: 'hoa12_kntt_bai22', title: 'Bài 22: Sự ăn mòn kim loại' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai22', title: 'BÃ i 22: Sá»± Äƒn mÃ²n kim loáº¡i' },
   ],
 
   // === PHI KIM ===
   'nonmetal-properties': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai21', title: 'Bài 21: Nhóm halogen' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai21', title: 'BÃ i 21: NhÃ³m halogen' },
   ],
   'halogen': [
-    { classId: 10, lessonId: 'hoa10_kntt_bai21', title: 'Bài 21: Nhóm halogen' },
-    { classId: 10, lessonId: 'hoa10_kntt_bai22', title: 'Bài 22: Hydrogen halide and Muối halide' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai21', title: 'BÃ i 21: NhÃ³m halogen' },
+    { classId: 10, lessonId: 'hoa10_kntt_bai22', title: 'BÃ i 22: Hydrogen halide and Muá»‘i halide' },
   ],
   'oxygen-sulfur': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai7', title: 'Bài 7: Sulfur and sulfur dioxide' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai8', title: 'Bài 8: Sulfuric acid and muối sulfate' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai7', title: 'BÃ i 7: Sulfur and sulfur dioxide' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai8', title: 'BÃ i 8: Sulfuric acid and muá»‘i sulfate' },
   ],
   'nitrogen-phosphorus': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai12', title: 'Bài 12: Phân bón hóa học' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai4', title: 'Bài 4: Nitrogen' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai5', title: 'Bài 5: Ammonia – Muối ammonium' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai6', title: 'Bài 6: Một số hợp chất của nitrogen với oxygen' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai12', title: 'BÃ i 12: PhÃ¢n bÃ³n hÃ³a há»c' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai4', title: 'BÃ i 4: Nitrogen' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai5', title: 'BÃ i 5: Ammonia â€“ Muá»‘i ammonium' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai6', title: 'BÃ i 6: Má»™t sá»‘ há»£p cháº¥t cá»§a nitrogen vá»›i oxygen' },
   ],
 
-  // === HỮU CƠ ===
+  // === Há»®U CÆ  ===
   'organic-overview': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai5', title: 'Bài 5: Giới thiệu Hợp chất hữu cơ' },
-    { classId: 9, lessonId: 'hoa9_kntt_bai18', title: 'Bài 18: Nhiên liệu hóa thạch, Chu trình Carbon và Sự ấm lên toàn cầu' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai10', title: 'Bài 10: Hợp chất hữu cơ and hóa học hữu cơ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai12', title: 'Bài 12: Công thức phân tử hợp chất hữu cơ' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai13', title: 'Bài 13: Cấu tạo hóa học hợp chất hữu cơ' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai5', title: 'BÃ i 5: Giá»›i thiá»‡u Há»£p cháº¥t há»¯u cÆ¡' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai18', title: 'BÃ i 18: NhiÃªn liá»‡u hÃ³a tháº¡ch, Chu trÃ¬nh Carbon vÃ  Sá»± áº¥m lÃªn toÃ n cáº§u' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai10', title: 'BÃ i 10: Há»£p cháº¥t há»¯u cÆ¡ and hÃ³a há»c há»¯u cÆ¡' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai12', title: 'BÃ i 12: CÃ´ng thá»©c phÃ¢n tá»­ há»£p cháº¥t há»¯u cÆ¡' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai13', title: 'BÃ i 13: Cáº¥u táº¡o hÃ³a há»c há»£p cháº¥t há»¯u cÆ¡' },
   ],
   'hydrocarbon': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai8', title: 'Bài 8: Nguồn nhiên liệu' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai15', title: 'Bài 15: Alkane' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai16', title: 'Bài 16: Hydrocarbon không no' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai17', title: 'Bài 17: Arene (hydrocarbon thơm)' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai8', title: 'BÃ i 8: Nguá»“n nhiÃªn liá»‡u' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai15', title: 'BÃ i 15: Alkane' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai16', title: 'BÃ i 16: Hydrocarbon khÃ´ng no' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai17', title: 'BÃ i 17: Arene (hydrocarbon thÆ¡m)' },
   ],
   'alkane': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai6', title: 'Bài 6: Alkane' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai15', title: 'Bài 15: Alkane' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai6', title: 'BÃ i 6: Alkane' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai15', title: 'BÃ i 15: Alkane' },
   ],
   'alkene': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai7', title: 'Bài 7: Alkene' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai16', title: 'Bài 16: Hydrocarbon không no' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai7', title: 'BÃ i 7: Alkene' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai16', title: 'BÃ i 16: Hydrocarbon khÃ´ng no' },
   ],
   'alkyne': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai16', title: 'Bài 16: Hydrocarbon không no' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai16', title: 'BÃ i 16: Hydrocarbon khÃ´ng no' },
   ],
   'benzene': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai17', title: 'Bài 17: Arene (hydrocarbon thơm)' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai17', title: 'BÃ i 17: Arene (hydrocarbon thÆ¡m)' },
   ],
   'functional-group': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai13', title: 'Bài 13: Cấu tạo hóa học hợp chất hữu cơ' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai13', title: 'BÃ i 13: Cáº¥u táº¡o hÃ³a há»c há»£p cháº¥t há»¯u cÆ¡' },
   ],
   'alcohol': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai9', title: 'Bài 9: Ethylic alcohol' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai20', title: 'Bài 20: Alcohol' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai9', title: 'BÃ i 9: Ethylic alcohol' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai20', title: 'BÃ i 20: Alcohol' },
   ],
   'phenol': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai21', title: 'Bài 21: Phenol' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai21', title: 'BÃ i 21: Phenol' },
   ],
   'aldehyde-ketone': [
-    { classId: 11, lessonId: 'hoa11_kntt_bai23', title: 'Bài 23: Hợp chất carbonyl' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai23', title: 'BÃ i 23: Há»£p cháº¥t carbonyl' },
   ],
   'carboxylic-acid': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai10', title: 'Bài 10: Acetic acid' },
-    { classId: 11, lessonId: 'hoa11_kntt_bai24', title: 'Bài 24: Carboxylic acid' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai10', title: 'BÃ i 10: Acetic acid' },
+    { classId: 11, lessonId: 'hoa11_kntt_bai24', title: 'BÃ i 24: Carboxylic acid' },
   ],
   'ester': [
-    { classId: 12, lessonId: 'hoa12_kntt_bai1', title: 'Bài 1: Ester – Lipid' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai1', title: 'BÃ i 1: Ester â€“ Lipid' },
   ],
   'lipid': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai11', title: 'Bài 11: Lipid' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai1', title: 'Bài 1: Ester – Lipid' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai2', title: 'Bài 2: Xà phòng và chất giặt rửa' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai11', title: 'BÃ i 11: Lipid' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai1', title: 'BÃ i 1: Ester â€“ Lipid' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai2', title: 'BÃ i 2: XÃ  phÃ²ng vÃ  cháº¥t giáº·t rá»­a' },
   ],
   'carbohydrate': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai12', title: 'Bài 12: Carbohydrate. Glucose và Saccharose' },
-    { classId: 9, lessonId: 'hoa9_kntt_bai13', title: 'Bài 13: Tinh bột và Cellulose' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai4', title: 'Bài 4: Glucose và fructose' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai5', title: 'Bài 5: Saccharose và maltose' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai6', title: 'Bài 6: Tinh bột và cellulose' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai12', title: 'BÃ i 12: Carbohydrate. Glucose vÃ  Saccharose' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai13', title: 'BÃ i 13: Tinh bá»™t vÃ  Cellulose' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai4', title: 'BÃ i 4: Glucose vÃ  fructose' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai5', title: 'BÃ i 5: Saccharose vÃ  maltose' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai6', title: 'BÃ i 6: Tinh bá»™t vÃ  cellulose' },
   ],
   'amine-amino-acid-protein': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai14', title: 'Bài 14: Protein' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai8', title: 'Bài 8: Amine' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai9', title: 'Bài 9: Amino acid và peptide' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai10', title: 'Bài 10: Protein và enzyme' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai14', title: 'BÃ i 14: Protein' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai8', title: 'BÃ i 8: Amine' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai9', title: 'BÃ i 9: Amino acid vÃ  peptide' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai10', title: 'BÃ i 10: Protein vÃ  enzyme' },
   ],
   'polymer': [
-    { classId: 9, lessonId: 'hoa9_kntt_bai15', title: 'Bài 15: Polymer' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai12', title: 'Bài 12: Đại cương về polymer' },
-    { classId: 12, lessonId: 'hoa12_kntt_bai13', title: 'Bài 13: Vật liệu polymer' },
+    { classId: 9, lessonId: 'hoa9_kntt_bai15', title: 'BÃ i 15: Polymer' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai12', title: 'BÃ i 12: Äáº¡i cÆ°Æ¡ng vá» polymer' },
+    { classId: 12, lessonId: 'hoa12_kntt_bai13', title: 'BÃ i 13: Váº­t liá»‡u polymer' },
   ],
 
-  // === AN TOÀN ===
+  // === AN TOÃ€N ===
   'lab-safety': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai1', title: 'Bài 1: Sử dụng hóa chất và thiết bị cơ bản' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai1', title: 'BÃ i 1: Sá»­ dá»¥ng hÃ³a cháº¥t vÃ  thiáº¿t bá»‹ cÆ¡ báº£n' },
   ],
   'hazard-symbols': [
-    { classId: 8, lessonId: 'hoa8_kntt_bai1', title: 'Bài 1: Sử dụng hóa chất và thiết bị cơ bản' },
+    { classId: 8, lessonId: 'hoa8_kntt_bai1', title: 'BÃ i 1: Sá»­ dá»¥ng hÃ³a cháº¥t vÃ  thiáº¿t bá»‹ cÆ¡ báº£n' },
   ],
 };
+

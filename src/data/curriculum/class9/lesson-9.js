@@ -1,21 +1,21 @@
-export const bai9 = {
+﻿export const bai9 = {
   "id": "hoa9_kntt_bai9",
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 8,
-  "chapterName": "Chương 8: Ethylic alcohol và Acetic acid",
+  "chapterName": "ChÆ°Æ¡ng 8: Ethylic alcohol vÃ  Acetic acid",
   "lessonId": 9,
-  "title": "Bài 9: Ethylic alcohol",
-  "description": "Khám phá cấu tạo phân tử, tính chất và những ứng dụng rộng rãi của cồn (Ethanol) trong đời sống, y tế và công nghiệp năng lượng.",
+  "title": "BÃ i 9: Ethylic alcohol",
+  "description": "KhÃ¡m phÃ¡ cáº¥u táº¡o phÃ¢n tá»­, tÃ­nh cháº¥t vÃ  nhá»¯ng á»©ng dá»¥ng rá»™ng rÃ£i cá»§a cá»“n (Ethanol) trong Ä‘á»i sá»‘ng, y táº¿ vÃ  cÃ´ng nghiá»‡p nÄƒng lÆ°á»£ng.",
   "level": "Intermediate",
   "order": 9,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Ethylic Alcohol: Hợp chất của những giấc say",
+      "title": "Ethylic Alcohol: Há»£p cháº¥t cá»§a nhá»¯ng giáº¥c say",
       "url": "https://www.youtube.com/watch?v=OQRVerxJ6l0",
       "thumbnail": "https://img.youtube.com/vi/OQRVerxJ6l0/0.jpg",
-      "description": "Tại sao Rượu lại tan vô hạn trong nước?"
+      "description": "Táº¡i sao RÆ°á»£u láº¡i tan vÃ´ háº¡n trong nÆ°á»›c?"
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@ export const bai9 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Cấu tạo phân tử",
+        "text": "1. Cáº¥u táº¡o phÃ¢n tá»­",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@ export const bai9 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Ethylic alcohol (hay Ethanol) có công thức phân tử $C_2H_6O$ và công thức cấu tạo $CH_3-CH_2-OH$. Đặc điểm quan trọng nhất là nhóm **-OH** (nhóm hydroxyl) gắn vào gốc hydrocarbon."
+        "text": "Ethylic alcohol (hay Ethanol) cÃ³ cÃ´ng thá»©c phÃ¢n tá»­ $C_2H_6O$ vÃ  cÃ´ng thá»©c cáº¥u táº¡o $CH_3-CH_2-OH$. Äáº·c Ä‘iá»ƒm quan trá»ng nháº¥t lÃ  nhÃ³m **-OH** (nhÃ³m hydroxyl) gáº¯n vÃ o gá»‘c hydrocarbon."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Tính chất vật lý",
-        "content": "Là chất lỏng không màu, mùi đặc trưng, vị cay, nhẹ hơn nước và **tan vô hạn** trong nước. Ethanol hòa tan được nhiều chất như iodine, benzene...",
+        "title": "TÃ­nh cháº¥t váº­t lÃ½",
+        "content": "LÃ  cháº¥t lá»ng khÃ´ng mÃ u, mÃ¹i Ä‘áº·c trÆ°ng, vá»‹ cay, nháº¹ hÆ¡n nÆ°á»›c vÃ  **tan vÃ´ háº¡n** trong nÆ°á»›c. Ethanol hÃ²a tan Ä‘Æ°á»£c nhiá»u cháº¥t nhÆ° iodine, benzene...",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@ export const bai9 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Tính chất hóa học",
+        "text": "2. TÃ­nh cháº¥t hÃ³a há»c",
         "level": "h2"
       }
     },
@@ -57,9 +57,9 @@ export const bai9 = {
       "type": "list",
       "content": {
         "items": [
-          "**Tác dụng với Natri:** Giải phóng khí Hydrogen. Phương trình: $2C_2H_5OH + 2Na \\rightarrow 2C_2H_5ONa + H_2 \\uparrow$.",
-          "**Phản ứng Cháy:** Cháy với ngọn lửa màu xanh nhạt, tỏa nhiều nhiệt: $C_2H_5OH + 3O_2 \\xrightarrow{t^o} 2CO_2 + 3H_2O$.",
-          "**Phản ứng với Axit:** Tạo thành Este (sẽ học kỹ ở bài sau)."
+          "**TÃ¡c dá»¥ng vá»›i Natri:** Giáº£i phÃ³ng khÃ­ Hydrogen. PhÆ°Æ¡ng trÃ¬nh: $2C_2H_5OH + 2Na \\rightarrow 2C_2H_5ONa + H_2 \\uparrow$.",
+          "**Pháº£n á»©ng ChÃ¡y:** ChÃ¡y vá»›i ngá»n lá»­a mÃ u xanh nháº¡t, tá»a nhiá»u nhiá»‡t: $C_2H_5OH + 3O_2 \\xrightarrow{t^o} 2CO_2 + 3H_2O$.",
+          "**Pháº£n á»©ng vá»›i Axit:** Táº¡o thÃ nh Este (sáº½ há»c ká»¹ á»Ÿ bÃ i sau)."
         ]
       }
     },
@@ -67,8 +67,8 @@ export const bai9 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Độ Rượu",
-        "content": "Là số ml rượu nguyên chất có trong 100 ml hỗn hợp rượu với nước. Ví dụ: Rượu 45 độ nghĩa là trong 100ml hỗn hợp có 45ml rượu nguyên chất.",
+        "title": "Äá»™ RÆ°á»£u",
+        "content": "LÃ  sá»‘ ml rÆ°á»£u nguyÃªn cháº¥t cÃ³ trong 100 ml há»—n há»£p rÆ°á»£u vá»›i nÆ°á»›c. VÃ­ dá»¥: RÆ°á»£u 45 Ä‘á»™ nghÄ©a lÃ  trong 100ml há»—n há»£p cÃ³ 45ml rÆ°á»£u nguyÃªn cháº¥t.",
         "color": "orange"
       }
     }
@@ -76,59 +76,59 @@ export const bai9 = {
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Ethanol không chỉ dùng làm đồ uống mà còn là một loại nhiên liệu sinh học tuyệt vời. Đâu là hình ảnh minh họa cho việc sử dụng Ethanol làm nhiên liệu cho phương tiện giao thông?",
+      "narrative": "Ethanol khÃ´ng chá»‰ dÃ¹ng lÃ m Ä‘á»“ uá»‘ng mÃ  cÃ²n lÃ  má»™t loáº¡i nhiÃªn liá»‡u sinh há»c tuyá»‡t vá»i. ÄÃ¢u lÃ  hÃ¬nh áº£nh minh há»a cho viá»‡c sá»­ dá»¥ng Ethanol lÃ m nhiÃªn liá»‡u cho phÆ°Æ¡ng tiá»‡n giao thÃ´ng?",
       "images": [
         "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1509391366360-fe5bb629340c?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "Hình ảnh nào mô tả cây xăng cung cấp xăng sinh học E5 (chứa 5% Ethanol)?",
+      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ cÃ¢y xÄƒng cung cáº¥p xÄƒng sinh há»c E5 (chá»©a 5% Ethanol)?",
       "correctAnswer": 0,
-      "targetType": "nhận biết",
-      "source": "Ứng dụng thực tiễn"
+      "targetType": "nháº­n biáº¿t",
+      "source": "á»¨ng dá»¥ng thá»±c tiá»…n"
     },
     {
       "type": "matching",
-      "narrative": "Hãy giúp tôi phân loại các đặc điểm của Ethylic alcohol.",
+      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i cÃ¡c Ä‘áº·c Ä‘iá»ƒm cá»§a Ethylic alcohol.",
       "leftItems": [
-        { "id": "al1", "label": "Cấu tạo" },
-        { "id": "al2", "label": "Vật lý" },
-        { "id": "al3", "label": "Hóa học" }
+        { "id": "al1", "label": "Cáº¥u táº¡o" },
+        { "id": "al2", "label": "Váº­t lÃ½" },
+        { "id": "al3", "label": "HÃ³a há»c" }
       ],
       "items": [
-        { "id": "al1", "label": "Nhóm định chức hydroxyl -OH" },
-        { "id": "al2", "label": "Tan vô hạn trong nước" },
-        { "id": "al3", "label": "Thế Hidro trong nhóm -OH bằng Natri" }
+        { "id": "al1", "label": "NhÃ³m Ä‘á»‹nh chá»©c hydroxyl -OH" },
+        { "id": "al2", "label": "Tan vÃ´ háº¡n trong nÆ°á»›c" },
+        { "id": "al3", "label": "Tháº¿ Hidro trong nhÃ³m -OH báº±ng Natri" }
       ],
       "correctOrder": ["al1", "al2", "al3"],
-      "question": "Kết nối đặc tính với bản chất tương ứng.",
-      "source": "Tổng kết bài học"
+      "question": "Káº¿t ná»‘i Ä‘áº·c tÃ­nh vá»›i báº£n cháº¥t tÆ°Æ¡ng á»©ng.",
+      "source": "Tá»•ng káº¿t bÃ i há»c"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Một chai rượu có nhãn ghi '30 độ'. Điều này có ý nghĩa gì về mặt định lượng?",
+      "narrative": "Má»™t chai rÆ°á»£u cÃ³ nhÃ£n ghi '30 Ä‘á»™'. Äiá»u nÃ y cÃ³ Ã½ nghÄ©a gÃ¬ vá» máº·t Ä‘á»‹nh lÆ°á»£ng?",
       "options": [
-        "Trong 100ml dung dịch có 30ml rượu nguyên chất",
-        "Rượu này sẽ sôi ở nhiệt độ 30 độ C",
-        "Có 30g rượu trong 1 lít nước",
-        "Rượu này đã được đun nóng đến 30 độ C"
+        "Trong 100ml dung dá»‹ch cÃ³ 30ml rÆ°á»£u nguyÃªn cháº¥t",
+        "RÆ°á»£u nÃ y sáº½ sÃ´i á»Ÿ nhiá»‡t Ä‘á»™ 30 Ä‘á»™ C",
+        "CÃ³ 30g rÆ°á»£u trong 1 lÃ­t nÆ°á»›c",
+        "RÆ°á»£u nÃ y Ä‘Ã£ Ä‘Æ°á»£c Ä‘un nÃ³ng Ä‘áº¿n 30 Ä‘á»™ C"
       ],
       "correctAnswer": 0,
-      "question": "Ý nghĩa của con số 'độ rượu' trên bao bì sản phẩm là gì?",
-      "source": "Kiến thức đời sống"
+      "question": "Ã nghÄ©a cá»§a con sá»‘ 'Ä‘á»™ rÆ°á»£u' trÃªn bao bÃ¬ sáº£n pháº©m lÃ  gÃ¬?",
+      "source": "Kiáº¿n thá»©c Ä‘á»i sá»‘ng"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Để điều chế Ethanol từ tinh bột (như gạo, ngô), người ta thực hiện quá trình ... rượu bằng men vi sinh.",
-      "placeholder": "Nhập tên quá trình...",
-      "correctAnswer": "Lên men",
-      "question": "Phương pháp truyền thống để sản xuất rượu từ ngũ cốc là gì?",
-      "source": "Sản xuất"
+      "narrative": "Äá»ƒ Ä‘iá»u cháº¿ Ethanol tá»« tinh bá»™t (nhÆ° gáº¡o, ngÃ´), ngÆ°á»i ta thá»±c hiá»‡n quÃ¡ trÃ¬nh ... rÆ°á»£u báº±ng men vi sinh.",
+      "placeholder": "Nháº­p tÃªn quÃ¡ trÃ¬nh...",
+      "correctAnswer": "LÃªn men",
+      "question": "PhÆ°Æ¡ng phÃ¡p truyá»n thá»‘ng Ä‘á»ƒ sáº£n xuáº¥t rÆ°á»£u tá»« ngÅ© cá»‘c lÃ  gÃ¬?",
+      "source": "Sáº£n xuáº¥t"
     },
     {
       "type": "drag-drop",
-      "narrative": "Hoàn thiện phương trình phản ứng giữa Ethylic alcohol và kim loại Natri.",
+      "narrative": "HoÃ n thiá»‡n phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng giá»¯a Ethylic alcohol vÃ  kim loáº¡i Natri.",
       "items": [
         { "id": "s1", "label": "$2C_2H_5OH$" },
         { "id": "s2", "label": "+" },
@@ -137,44 +137,44 @@ export const bai9 = {
         { "id": "s5", "label": "$2C_2H_5ONa + H_2 \\uparrow$" }
       ],
       "correctOrder": ["s1", "s2", "s3", "s4", "s5"],
-      "question": "Sắp xếp phương trình phản ứng thế Natri đúng.",
-      "source": "Phương trình hóa học"
+      "question": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng tháº¿ Natri Ä‘Ãºng.",
+      "source": "PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Chất nào sau đây tác dụng với Natri giải phóng khí Hidro?",
+        "question": "Cháº¥t nÃ o sau Ä‘Ã¢y tÃ¡c dá»¥ng vá»›i Natri giáº£i phÃ³ng khÃ­ Hidro?",
         "options": ["$CH_4$", "$C_2H_4$", "$C_2H_5OH$", "$CO_2$"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Rượu 90 độ dùng trong y tế có tính chất sát trùng là vì:",
-        "options": ["Nó làm hỏng protein vi khuẩn", "Nó quá nóng", "Nó có màu đẹp", "Nó cung cấp oxy"],
+        "question": "RÆ°á»£u 90 Ä‘á»™ dÃ¹ng trong y táº¿ cÃ³ tÃ­nh cháº¥t sÃ¡t trÃ¹ng lÃ  vÃ¬:",
+        "options": ["NÃ³ lÃ m há»ng protein vi khuáº©n", "NÃ³ quÃ¡ nÃ³ng", "NÃ³ cÃ³ mÃ u Ä‘áº¹p", "NÃ³ cung cáº¥p oxy"],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Sản phẩm của phản ứng đốt cháy rượu etylic hoàn toàn là:",
-        "options": ["$CO$ và $H_2O$", "$CO_2$ và $H_2O$", "$C$ và $H_2O$", "$CH_4$ và $O_2$"],
+        "question": "Sáº£n pháº©m cá»§a pháº£n á»©ng Ä‘á»‘t chÃ¡y rÆ°á»£u etylic hoÃ n toÃ n lÃ :",
+        "options": ["$CO$ vÃ  $H_2O$", "$CO_2$ vÃ  $H_2O$", "$C$ vÃ  $H_2O$", "$CH_4$ vÃ  $O_2$"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Trong phân tử rượu etylic, nguyên tử Hidro nào linh động nhất?",
-        "options": ["Hidro trong nhóm $-CH_3$", "Hidro trong nhóm $-CH_2-$", "Hidro trong nhóm $-OH$", "Tất cả như nhau"],
+        "question": "Trong phÃ¢n tá»­ rÆ°á»£u etylic, nguyÃªn tá»­ Hidro nÃ o linh Ä‘á»™ng nháº¥t?",
+        "options": ["Hidro trong nhÃ³m $-CH_3$", "Hidro trong nhÃ³m $-CH_2-$", "Hidro trong nhÃ³m $-OH$", "Táº¥t cáº£ nhÆ° nhau"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Hiện tượng lạm dụng rượu bia gây hại cho cơ quan nào nhất?",
-        "options": ["Tim mạch", "Hệ thần kinh và Gan", "Hệ xương", "Da và tóc"],
+        "question": "Hiá»‡n tÆ°á»£ng láº¡m dá»¥ng rÆ°á»£u bia gÃ¢y háº¡i cho cÆ¡ quan nÃ o nháº¥t?",
+        "options": ["Tim máº¡ch", "Há»‡ tháº§n kinh vÃ  Gan", "Há»‡ xÆ°Æ¡ng", "Da vÃ  tÃ³c"],
         "correctAnswer": 1,
         "points": 10
       }
@@ -183,3 +183,4 @@ export const bai9 = {
     "advanced": []
   }
 };
+

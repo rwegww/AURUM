@@ -1,20 +1,20 @@
-export const bai11 = {
+﻿export const bai11 = {
   "id": "hoa12_kntt_bai11",
   "classId": 12,
   "lessonId": 11,
   "programId": "ketnoi",
-  "title": "Bài 11. Ôn tập chương 3",
-  "chapter": "Chương 3. Hợp chất chứa nitrogen",
+  "title": "BÃ i 11. Ã”n táº­p chÆ°Æ¡ng 3",
+  "chapter": "ChÆ°Æ¡ng 3. Há»£p cháº¥t chá»©a nitrogen",
   "order": 11,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tổng kết Amine, Amino acid, Peptide và Protein. Mối liên hệ cấu tạo và tính chất đặc trưng.",
+  "description": "Tá»•ng káº¿t Amine, Amino acid, Peptide vÃ  Protein. Má»‘i liÃªn há»‡ cáº¥u táº¡o vÃ  tÃ­nh cháº¥t Ä‘áº·c trÆ°ng.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Hệ thống hóa Amine và Amino acid",
+        "text": "1. Há»‡ thá»‘ng hÃ³a Amine vÃ  Amino acid",
         "level": "h2"
       }
     },
@@ -24,8 +24,8 @@ export const bai11 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Amine:** Thể hiện tính base do cặp electron tự do trên nguyên tử N. Amine béo > NH3 > Amine thơm. Aniline có phản ứng đặc trưng với nước bromine tạo kết tủa trắng.",
-          "**Amino acid:** Là hợp chất lưỡng tính (tác dụng với cả acid và base mạnh). Tồn tại dưới dạng ion lưỡng cực nên là chất rắn, tan tốt trong nước. Glycine, Alanine, Valine là 3 amino acid trung tính; Glutamic acid có tính acid; Lysine có tính base."
+          "**Amine:** Thá»ƒ hiá»‡n tÃ­nh base do cáº·p electron tá»± do trÃªn nguyÃªn tá»­ N. Amine bÃ©o > NH3 > Amine thÆ¡m. Aniline cÃ³ pháº£n á»©ng Ä‘áº·c trÆ°ng vá»›i nÆ°á»›c bromine táº¡o káº¿t tá»§a tráº¯ng.",
+          "**Amino acid:** LÃ  há»£p cháº¥t lÆ°á»¡ng tÃ­nh (tÃ¡c dá»¥ng vá»›i cáº£ acid vÃ  base máº¡nh). Tá»“n táº¡i dÆ°á»›i dáº¡ng ion lÆ°á»¡ng cá»±c nÃªn lÃ  cháº¥t ráº¯n, tan tá»‘t trong nÆ°á»›c. Glycine, Alanine, Valine lÃ  3 amino acid trung tÃ­nh; Glutamic acid cÃ³ tÃ­nh acid; Lysine cÃ³ tÃ­nh base."
         ]
       }
     },
@@ -33,7 +33,7 @@ export const bai11 = {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Peptide và Protein",
+        "text": "2. Peptide vÃ  Protein",
         "level": "h2"
       }
     },
@@ -41,8 +41,8 @@ export const bai11 = {
       "id": "mod4",
       "type": "infoBox",
       "content": {
-        "title": "Các phản ứng đặc trưng cần ghi nhớ",
-        "content": "1. **Phản ứng thủy phân**: Đặc điểm chung của peptide và protein dưới tác dụng của xúc tác acid/base hoặc enzyme $\\rightarrow$ tạo amino acid.\n2. **Phản ứng màu Biuret**: Phức chất màu tím với $Cu(OH)_2/NaOH$ (áp dụng cho peptide có $\\ge$ 2 liên kết peptide và protein).\n3. **Phản ứng với $HNO_3$ đặc**: Kết tủa màu vàng đặc trưng của protein.\n4. **Tính đông tụ của protein**: Khi thay đổi nhiệt độ hoặc pH.",
+        "title": "CÃ¡c pháº£n á»©ng Ä‘áº·c trÆ°ng cáº§n ghi nhá»›",
+        "content": "1. **Pháº£n á»©ng thá»§y phÃ¢n**: Äáº·c Ä‘iá»ƒm chung cá»§a peptide vÃ  protein dÆ°á»›i tÃ¡c dá»¥ng cá»§a xÃºc tÃ¡c acid/base hoáº·c enzyme $\\rightarrow$ táº¡o amino acid.\n2. **Pháº£n á»©ng mÃ u Biuret**: Phá»©c cháº¥t mÃ u tÃ­m vá»›i $Cu(OH)_2/NaOH$ (Ã¡p dá»¥ng cho peptide cÃ³ $\\ge$ 2 liÃªn káº¿t peptide vÃ  protein).\n3. **Pháº£n á»©ng vá»›i $HNO_3$ Ä‘áº·c**: Káº¿t tá»§a mÃ u vÃ ng Ä‘áº·c trÆ°ng cá»§a protein.\n4. **TÃ­nh Ä‘Ã´ng tá»¥ cá»§a protein**: Khi thay Ä‘á»•i nhiá»‡t Ä‘á»™ hoáº·c pH.",
         "color": "blue"
       }
     },
@@ -50,8 +50,8 @@ export const bai11 = {
       "id": "mod5",
       "type": "warningBox",
       "content": {
-        "title": "Kỹ năng giải bài tập chương 3",
-        "content": "**1. Bảo toàn khối lượng**: Dùng cho phản ứng thủy phân peptide ($m_{Peptide} + m_{H_2O} = m_{Amino acid}$).\n**2. Bảo toàn nguyên tố N**: Số mol N trong peptide bằng tổng số mol N trong các amino acid cấu thành.\\n**3. Phản ứng đốt cháy**: Cần chú ý đến lượng khí Nitrogen ($N_2$) thoát ra.",
+        "title": "Ká»¹ nÄƒng giáº£i bÃ i táº­p chÆ°Æ¡ng 3",
+        "content": "**1. Báº£o toÃ n khá»‘i lÆ°á»£ng**: DÃ¹ng cho pháº£n á»©ng thá»§y phÃ¢n peptide ($m_{Peptide} + m_{H_2O} = m_{Amino acid}$).\n**2. Báº£o toÃ n nguyÃªn tá»‘ N**: Sá»‘ mol N trong peptide báº±ng tá»•ng sá»‘ mol N trong cÃ¡c amino acid cáº¥u thÃ nh.\\n**3. Pháº£n á»©ng Ä‘á»‘t chÃ¡y**: Cáº§n chÃº Ã½ Ä‘áº¿n lÆ°á»£ng khÃ­ Nitrogen ($N_2$) thoÃ¡t ra.",
         "color": "orange"
       }
     }
@@ -59,7 +59,7 @@ export const bai11 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Thứ tự sắp xếp tính base của các chất nào sau đây là ĐÚNG?",
+      "question": "Thá»© tá»± sáº¯p xáº¿p tÃ­nh base cá»§a cÃ¡c cháº¥t nÃ o sau Ä‘Ã¢y lÃ  ÄÃšNG?",
       "options": [
         "Aniline < Ammonia < Methylamine.",
         "Methylamine < Ammonia < Aniline.",
@@ -67,11 +67,11 @@ export const bai11 = {
         "Methylamine < Aniline < Ammonia."
       ],
       "correctAnswer": 0,
-      "explanation": "Gốc alkyl đẩy electron làm tăng tính base (Methylamine > NH3), gốc phenyl hút electron làm giảm tính base (Aniline < NH3)."
+      "explanation": "Gá»‘c alkyl Ä‘áº©y electron lÃ m tÄƒng tÃ­nh base (Methylamine > NH3), gá»‘c phenyl hÃºt electron lÃ m giáº£m tÃ­nh base (Aniline < NH3)."
     },
     {
       "id": "q2",
-      "question": "Một tripeptide X được cấu tạo từ 3 gốc Alanine. Khi thủy phân hoàn toàn 1 mol X trong môi trường acid, cần sử dụng tối đa bao nhiêu mol nước?",
+      "question": "Má»™t tripeptide X Ä‘Æ°á»£c cáº¥u táº¡o tá»« 3 gá»‘c Alanine. Khi thá»§y phÃ¢n hoÃ n toÃ n 1 mol X trong mÃ´i trÆ°á»ng acid, cáº§n sá»­ dá»¥ng tá»‘i Ä‘a bao nhiÃªu mol nÆ°á»›c?",
       "options": [
         "1 mol",
         "2 mol",
@@ -79,16 +79,16 @@ export const bai11 = {
         "4 mol"
       ],
       "correctAnswer": 1,
-      "explanation": "Một tripeptide có 2 liên kết peptide. Để bẻ gãy 2 liên kết đó cần 2 phân tử nước: $Peptide + (n-1)H_2O \\rightarrow n Amino acid$."
+      "explanation": "Má»™t tripeptide cÃ³ 2 liÃªn káº¿t peptide. Äá»ƒ báº» gÃ£y 2 liÃªn káº¿t Ä‘Ã³ cáº§n 2 phÃ¢n tá»­ nÆ°á»›c: $Peptide + (n-1)H_2O \\rightarrow n Amino acid$."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Ôn tập chương 3: Hợp chất chứa nitrogen",
+      "title": "Ã”n táº­p chÆ°Æ¡ng 3: Há»£p cháº¥t chá»©a nitrogen",
       "url": "https://www.youtube.com/watch?v=Foi6GiPxwfc",
       "thumbnail": "https://img.youtube.com/vi/Foi6GiPxwfc/0.jpg",
-      "description": "Tổng kết kiến thức trọng tâm and giải bài tập ôn tập chương 3 (Tech12h)."
+      "description": "Tá»•ng káº¿t kiáº¿n thá»©c trá»ng tÃ¢m and giáº£i bÃ i táº­p Ã´n táº­p chÆ°Æ¡ng 3 (Tech12h)."
     }
   ],
   "practiceModules": [],
@@ -97,3 +97,4 @@ export const bai11 = {
   "game": null,
   "realWorldApplications": []
 };
+

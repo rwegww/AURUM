@@ -7,14 +7,14 @@ const router = express.Router();
 
 // Auth Middleware (Simplified from lab.js)
 
-// GET /api/missions - Get all missions with current progress
+// GET /api/missions - Get all nhiem_vu with current progress
 router.get('/', auth, async (req, res) => {
   try {
     const data = await Mission.getUserMissions(req.user.id);
     res.status(200).json(data);
   } catch (error) {
-    console.error('❌ Error fetching missions:', error);
-    res.status(500).json({ message: 'Error fetching missions', error: error.message });
+    console.error('❌ Error fetching nhiem_vu:', error);
+    res.status(500).json({ message: 'Error fetching nhiem_vu', error: error.message });
   }
 });
 

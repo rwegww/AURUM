@@ -1,20 +1,20 @@
-export const bai6 = {
+﻿export const bai6 = {
   "id": "hoa10_kntt_bai6",
   "classId": 10,
   "lessonId": 6,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 6: Xu hướng biến đổi tính chất của nguyên tử",
-  "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học",
+  "title": "BÃ i 6: Xu hÆ°á»›ng biáº¿n Ä‘á»•i tÃ­nh cháº¥t cá»§a nguyÃªn tá»­",
+  "chapter": "ChÆ°Æ¡ng 2: Báº£ng tuáº§n hoÃ n cÃ¡c nguyÃªn tá»‘ hÃ³a há»c",
   "order": 6,
   "isPremium": false,
-  "description": "Biết quy luật biến đổi bán kính, năng lượng ion hóa and độ âm điện.",
+  "description": "Biáº¿t quy luáº­t biáº¿n Ä‘á»•i bÃ¡n kÃ­nh, nÄƒng lÆ°á»£ng ion hÃ³a and Ä‘á»™ Ã¢m Ä‘iá»‡n.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Biến đổi bán kính nguyên tử ($r$)",
+        "text": "1. Biáº¿n Ä‘á»•i bÃ¡n kÃ­nh nguyÃªn tá»­ ($r$)",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@ export const bai6 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Bán kính nguyên tử chịu ảnh hưởng của hai yếu tố chính: số lớp electron and lực hút của hạt nhân đối với các electron lớp ngoài cùng.\n\n- **Trong một chu kì (trái sang phải)**: Số lớp electron không đổi, nhưng điện tích hạt nhân ($Z$) tăng dần làm tăng lực hút tĩnh điện lên lớp vỏ, khiến bán kính nguyên tử **giảm dần**.\n- **Trong một nhóm A (trên xuống dưới)**: Số lớp electron tăng lên nhanh chóng, hiệu ứng chắn của các lớp electron bên trong làm giảm lực hút của hạt nhân. Kết quả là bán kính nguyên tử **tăng dần**."
+        "text": "BÃ¡n kÃ­nh nguyÃªn tá»­ chá»‹u áº£nh hÆ°á»Ÿng cá»§a hai yáº¿u tá»‘ chÃ­nh: sá»‘ lá»›p electron and lá»±c hÃºt cá»§a háº¡t nhÃ¢n Ä‘á»‘i vá»›i cÃ¡c electron lá»›p ngoÃ i cÃ¹ng.\n\n- **Trong má»™t chu kÃ¬ (trÃ¡i sang pháº£i)**: Sá»‘ lá»›p electron khÃ´ng Ä‘á»•i, nhÆ°ng Ä‘iá»‡n tÃ­ch háº¡t nhÃ¢n ($Z$) tÄƒng dáº§n lÃ m tÄƒng lá»±c hÃºt tÄ©nh Ä‘iá»‡n lÃªn lá»›p vá», khiáº¿n bÃ¡n kÃ­nh nguyÃªn tá»­ **giáº£m dáº§n**.\n- **Trong má»™t nhÃ³m A (trÃªn xuá»‘ng dÆ°á»›i)**: Sá»‘ lá»›p electron tÄƒng lÃªn nhanh chÃ³ng, hiá»‡u á»©ng cháº¯n cá»§a cÃ¡c lá»›p electron bÃªn trong lÃ m giáº£m lá»±c hÃºt cá»§a háº¡t nhÃ¢n. Káº¿t quáº£ lÃ  bÃ¡n kÃ­nh nguyÃªn tá»­ **tÄƒng dáº§n**."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Độ âm điện ($\\chi$)",
+        "text": "2. Äá»™ Ã¢m Ä‘iá»‡n ($\\chi$)",
         "level": "h2"
       }
     },
@@ -37,15 +37,15 @@ export const bai6 = {
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "Độ âm điện là đại lượng đặc trưng cho khả năng hút electron của một nguyên tử khi hình thành liên kết hóa học. Đây là chỉ số quan trọng để dự đoán loại liên kết and tính chất của hợp chất.\n\n- **Trong một chu kì**: Khi điện tích hạt nhân tăng and bán kính giảm, khả năng hút electron tăng lên, dẫn đến độ âm điện **tăng dần** (nguyên tố Fluorine có độ âm điện lớn nhất).\n- **Trong một nhóm A**: Bán kính nguyên tử tăng nhanh làm giảm lực hút của hạt nhân đối với electron liên kết, khiến độ âm điện **giảm dần**."
+        "text": "Äá»™ Ã¢m Ä‘iá»‡n lÃ  Ä‘áº¡i lÆ°á»£ng Ä‘áº·c trÆ°ng cho kháº£ nÄƒng hÃºt electron cá»§a má»™t nguyÃªn tá»­ khi hÃ¬nh thÃ nh liÃªn káº¿t hÃ³a há»c. ÄÃ¢y lÃ  chá»‰ sá»‘ quan trá»ng Ä‘á»ƒ dá»± Ä‘oÃ¡n loáº¡i liÃªn káº¿t and tÃ­nh cháº¥t cá»§a há»£p cháº¥t.\n\n- **Trong má»™t chu kÃ¬**: Khi Ä‘iá»‡n tÃ­ch háº¡t nhÃ¢n tÄƒng and bÃ¡n kÃ­nh giáº£m, kháº£ nÄƒng hÃºt electron tÄƒng lÃªn, dáº«n Ä‘áº¿n Ä‘á»™ Ã¢m Ä‘iá»‡n **tÄƒng dáº§n** (nguyÃªn tá»‘ Fluorine cÃ³ Ä‘á»™ Ã¢m Ä‘iá»‡n lá»›n nháº¥t).\n- **Trong má»™t nhÃ³m A**: BÃ¡n kÃ­nh nguyÃªn tá»­ tÄƒng nhanh lÃ m giáº£m lá»±c hÃºt cá»§a háº¡t nhÃ¢n Ä‘á»‘i vá»›i electron liÃªn káº¿t, khiáº¿n Ä‘á»™ Ã¢m Ä‘iá»‡n **giáº£m dáº§n**."
       }
     },
     {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Năng lượng ion hóa thứ nhất ($I_1$)",
-        "content": "Là năng lượng tối thiểu cần thiết để dứt một electron ra khỏi nguyên tử ở trạng thái cơ bản. Quy luật biến đổi của năng lượng ion hóa tương đồng với độ âm điện: **Tăng dần** trong chu kì and **Giảm dần** trong nhóm A. Nguyên tử càng nhỏ, electron lớp ngoài cùng càng bị giữ chặt, năng lượng ion hóa càng cao.",
+        "title": "NÄƒng lÆ°á»£ng ion hÃ³a thá»© nháº¥t ($I_1$)",
+        "content": "LÃ  nÄƒng lÆ°á»£ng tá»‘i thiá»ƒu cáº§n thiáº¿t Ä‘á»ƒ dá»©t má»™t electron ra khá»i nguyÃªn tá»­ á»Ÿ tráº¡ng thÃ¡i cÆ¡ báº£n. Quy luáº­t biáº¿n Ä‘á»•i cá»§a nÄƒng lÆ°á»£ng ion hÃ³a tÆ°Æ¡ng Ä‘á»“ng vá»›i Ä‘á»™ Ã¢m Ä‘iá»‡n: **TÄƒng dáº§n** trong chu kÃ¬ and **Giáº£m dáº§n** trong nhÃ³m A. NguyÃªn tá»­ cÃ ng nhá», electron lá»›p ngoÃ i cÃ¹ng cÃ ng bá»‹ giá»¯ cháº·t, nÄƒng lÆ°á»£ng ion hÃ³a cÃ ng cao.",
         "color": "blue"
       }
     },
@@ -53,8 +53,8 @@ export const bai6 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Mối quan hệ tổng quát",
-        "content": "Ghi nhớ: Bán kính nguyên tử biến đổi theo chiều ngược lại với Độ âm điện and Năng lượng ion hóa. Đây là chìa khóa để giải các bài tập về so sánh tính chất giữa các nguyên tố trong bảng tuần hoàn.",
+        "title": "Má»‘i quan há»‡ tá»•ng quÃ¡t",
+        "content": "Ghi nhá»›: BÃ¡n kÃ­nh nguyÃªn tá»­ biáº¿n Ä‘á»•i theo chiá»u ngÆ°á»£c láº¡i vá»›i Äá»™ Ã¢m Ä‘iá»‡n and NÄƒng lÆ°á»£ng ion hÃ³a. ÄÃ¢y lÃ  chÃ¬a khÃ³a Ä‘á»ƒ giáº£i cÃ¡c bÃ i táº­p vá» so sÃ¡nh tÃ­nh cháº¥t giá»¯a cÃ¡c nguyÃªn tá»‘ trong báº£ng tuáº§n hoÃ n.",
         "color": "orange"
       }
     }
@@ -63,10 +63,10 @@ export const bai6 = {
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Xu hướng biến đổi tính chất của nguyên tử",
+      "title": "BÃ i giáº£ng: Xu hÆ°á»›ng biáº¿n Ä‘á»•i tÃ­nh cháº¥t cá»§a nguyÃªn tá»­",
       "url": "https://www.youtube.com/watch?v=8P9ML8URq6M",
       "thumbnail": "https://img.youtube.com/vi/8P9ML8URq6M/0.jpg",
-      "description": "Quy luật biến đổi bán kính nguyên tử, độ âm điện and năng lượng ion hóa (VietJack)."
+      "description": "Quy luáº­t biáº¿n Ä‘á»•i bÃ¡n kÃ­nh nguyÃªn tá»­, Ä‘á»™ Ã¢m Ä‘iá»‡n and nÄƒng lÆ°á»£ng ion hÃ³a (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -76,60 +76,60 @@ export const bai6 = {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Trong một chu kì, bán kính nguyên tử biến đổi như thế nào từ trái sang phải?",
+        "question": "Trong má»™t chu kÃ¬, bÃ¡n kÃ­nh nguyÃªn tá»­ biáº¿n Ä‘á»•i nhÆ° tháº¿ nÃ o tá»« trÃ¡i sang pháº£i?",
         "options": [
-          "Giảm dần",
-          "Tăng dần",
-          "Không đổi",
-          "Biến thiên hỗn loạn"
+          "Giáº£m dáº§n",
+          "TÄƒng dáº§n",
+          "KhÃ´ng Ä‘á»•i",
+          "Biáº¿n thiÃªn há»—n loáº¡n"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Độ âm điện đặc trưng cho khả năng gì của nguyên tử?",
+        "question": "Äá»™ Ã¢m Ä‘iá»‡n Ä‘áº·c trÆ°ng cho kháº£ nÄƒng gÃ¬ cá»§a nguyÃªn tá»­?",
         "options": [
-          "Hút electron",
-          "Nhường electron",
-          "Trộn lẫn proton",
-          "Phát sáng"
+          "HÃºt electron",
+          "NhÆ°á»ng electron",
+          "Trá»™n láº«n proton",
+          "PhÃ¡t sÃ¡ng"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Năng lượng ion hóa ($I_1$) trong một chu kì thường:",
+        "question": "NÄƒng lÆ°á»£ng ion hÃ³a ($I_1$) trong má»™t chu kÃ¬ thÆ°á»ng:",
         "options": [
-          "Tăng dần",
-          "Giảm dần",
-          "Không đổi",
-          "Luôn bằng 0"
+          "TÄƒng dáº§n",
+          "Giáº£m dáº§n",
+          "KhÃ´ng Ä‘á»•i",
+          "LuÃ´n báº±ng 0"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Phi kim mạnh nhất trong bảng tuần hoàn là:",
+        "question": "Phi kim máº¡nh nháº¥t trong báº£ng tuáº§n hoÃ n lÃ :",
         "options": [
           "Flo (F)",
           "Clo (Cl)",
           "Oxi (O)",
-          "Nitơ (N)"
+          "NitÆ¡ (N)"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Trong một nhóm A, từ trên xuống dưới, tính kim loại của các nguyên tố:",
+        "question": "Trong má»™t nhÃ³m A, tá»« trÃªn xuá»‘ng dÆ°á»›i, tÃ­nh kim loáº¡i cá»§a cÃ¡c nguyÃªn tá»‘:",
         "options": [
-          "Tăng dần",
-          "Giảm dần",
-          "Không đổi",
-          "Biến mất"
+          "TÄƒng dáº§n",
+          "Giáº£m dáº§n",
+          "KhÃ´ng Ä‘á»•i",
+          "Biáº¿n máº¥t"
         ],
         "correctAnswer": 0,
         "points": 10
@@ -140,3 +140,4 @@ export const bai6 = {
   },
   "realWorldApplications": []
 };
+

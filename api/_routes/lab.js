@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
 import Mission from '../models/Mission.js';
@@ -6,18 +6,80 @@ import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
 
+const normalizeChemical = (chemical) => {
+  if (!chemical) return chemical;
+  return {
+    ...chemical,
+    formula: chemical.cong_thuc ?? chemical.formula,
+    name: chemical.ten ?? chemical.name,
+    state: chemical.trang_thai_vat_chat ?? chemical.state,
+    color: chemical.mau_sac ?? chemical.color,
+    category: chemical.danh_muc ?? chemical.category ?? null,
+    is_starter: chemical.la_chat_khoi_dau ?? chemical.is_starter,
+    cong_thuc: undefined,
+    ten: undefined,
+    trang_thai_vat_chat: undefined,
+    mau_sac: undefined,
+    danh_muc: undefined,
+    la_chat_khoi_dau: undefined,
+  };
+};
+
+const normalizeLabRecord = (record) => {
+  if (!record) return record;
+  return {
+    ...record,
+    name: record.ten ?? record.name,
+    equation: record.phuong_trinh ?? record.equation,
+    reactants: record.chat_tham_gia ?? record.reactants,
+    products: record.san_pham ?? record.products,
+    answer: record.dap_an ?? record.answer,
+    difficulty: record.do_kho ?? record.difficulty,
+    category: record.danh_muc ?? record.category,
+    grade_level_id: record.khoi_id ?? record.grade_level_id ?? null,
+    equation_string: record.chuoi_phuong_trinh ?? record.equation_string,
+    node_id: record.nut_id ?? record.node_id,
+    lesson_id: record.bai_hoc_id ?? record.lesson_id,
+    conditions: record.dieu_kien ?? record.conditions,
+    observation: record.hien_tuong ?? record.observation,
+    energy: record.nang_luong ?? record.energy,
+    animation: record.hieu_ung ?? record.animation,
+    requires_heat: record.can_nhiet ?? record.requires_heat,
+    danger_level: record.muc_do_nguy_hiem ?? record.danger_level,
+    safety_warning: record.canh_bao_an_toan ?? record.safety_warning,
+    ten: undefined,
+    phuong_trinh: undefined,
+    chat_tham_gia: undefined,
+    san_pham: undefined,
+    dap_an: undefined,
+    do_kho: undefined,
+    danh_muc: undefined,
+    khoi_id: undefined,
+    chuoi_phuong_trinh: undefined,
+    nut_id: undefined,
+    bai_hoc_id: undefined,
+    dieu_kien: undefined,
+    hien_tuong: undefined,
+    nang_luong: undefined,
+    hieu_ung: undefined,
+    can_nhiet: undefined,
+    muc_do_nguy_hiem: undefined,
+    canh_bao_an_toan: undefined,
+  };
+};
+
 // GET /api/lab/chemicals - Get all chemicals
 router.get('/chemicals', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('lab_chemicals')
+      .from('hoa_chat')
       .select('*')
-      .order('formula', { ascending: true });
+      .order('cong_thuc', { ascending: true });
 
     if (error) throw error;
-    res.status(200).json(data);
+    res.status(200).json((data || []).map(normalizeChemical));
   } catch (error) {
-    console.error('❌ Error fetching chemicals:', error);
+    console.error('âŒ Error fetching chemicals:', error);
     res.status(500).json({ message: 'Error fetching chemicals', error: error.message });
   }
 });
@@ -26,14 +88,14 @@ router.get('/chemicals', async (req, res) => {
 router.get('/reactions', async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('lab_reactions')
+      .from('phan_ung')
       .select('*')
       .order('id', { ascending: true });
 
     if (error) throw error;
-    res.status(200).json(data);
+    res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('❌ Error fetching reactions:', error);
+    console.error('âŒ Error fetching reactions:', error);
     res.status(500).json({ message: 'Error fetching reactions', error: error.message });
   }
 });
@@ -46,15 +108,15 @@ router.get('/balancing/search', async (req, res) => {
 
     // Simple search in equation_string
     const { data, error } = await supabase
-      .from('balancing_questions')
-      .select('reactants, products, answer, equation_string')
-      .ilike('equation_string', `%${q}%`)
+      .from('cau_hoi_can')
+      .select('chat_tham_gia, san_pham, dap_an, chuoi_phuong_trinh')
+      .ilike('chuoi_phuong_trinh', `%${q}%`)
       .limit(10);
 
     if (error) throw error;
-    res.status(200).json(data);
+    res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('❌ Error searching balancing equations:', error);
+    console.error('âŒ Error searching balancing equations:', error);
     res.status(500).json({ message: 'Error searching equations' });
   }
 });
@@ -64,17 +126,17 @@ router.get('/balancing/:nodeId', async (req, res) => {
   try {
     const { nodeId } = req.params;
     const { data, error } = await supabase
-      .from('balancing_questions')
+      .from('cau_hoi_can')
       .select('*')
-      .eq('node_id', nodeId);
+      .eq('nut_id', nodeId);
 
     if (error) throw error;
     
     // If no data found for this specific nodeId, maybe it's out of range, 
     // but we return whatever we have.
-    res.status(200).json(data);
+    res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('❌ Error fetching balancing questions:', error);
+    console.error('âŒ Error fetching balancing questions:', error);
     res.status(500).json({ message: 'Error fetching questions', error: error.message });
   }
 });
@@ -87,7 +149,7 @@ router.get('/balancing/progress', auth, async (req, res) => {
     }
     res.status(200).json(req.user.balancingProgress);
   } catch (error) {
-    console.error('❌ Error fetching balancing progress:', error);
+    console.error('âŒ Error fetching balancing progress:', error);
     res.status(500).json({ message: 'Error fetching progress' });
   }
 });
@@ -110,7 +172,7 @@ router.post('/balancing/progress', auth, async (req, res) => {
 
     res.status(200).json(updatedUser.balancingProgress);
   } catch (error) {
-    console.error('❌ Error updating balancing progress:', error);
+    console.error('âŒ Error updating balancing progress:', error);
     res.status(500).json({ message: 'Error updating progress' });
   }
 });
@@ -139,7 +201,7 @@ router.post('/unlock', auth, async (req, res) => {
       if (!unlockedChemicals.includes(f)) {
         unlockedChemicals.push(f);
         changed = true;
-        console.log(`🔓 Unlocking ${f} for user ${req.user.id}`);
+        console.log(`ðŸ”“ Unlocking ${f} for user ${req.user.id}`);
       }
     });
 
@@ -151,15 +213,16 @@ router.post('/unlock', auth, async (req, res) => {
       try {
         await Mission.updateProgress(req.user.id, 'reaction', 1);
       } catch (err) {
-        console.warn('⚠️ Failed to update mission progress:', err.message);
+        console.warn('âš ï¸ Failed to update mission progress:', err.message);
       }
     }
 
     res.status(200).json({ unlockedChemicals });
   } catch (error) {
-    console.error('❌ Error unlocking chemical:', error);
+    console.error('âŒ Error unlocking chemical:', error);
     res.status(500).json({ message: 'Error unlocking chemical', error: error.message });
   }
 });
 
 export default router;
+

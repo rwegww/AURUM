@@ -1,15 +1,18 @@
 import { supabase } from '../lib/supabase.js';
 
-const LESSON_TABLE = process.env.LESSONS_TABLE || 'lessons';
+const LESSON_TABLE = process.env.LESSONS_TABLE || 'bai_hoc';
+
+const getGradeLevelId = (lesson) => lesson?.khoi_id;
 
 const mapLesson = (lesson) => {
   if (!lesson) return null;
-  let theoryModules = lesson.theory_modules || [];
+  const gradeLevelId = getGradeLevelId(lesson);
+  let theoryModules = lesson.module_ly_thuyet || lesson.theory_modules || [];
   if (typeof theoryModules === 'string') {
     try {
       theoryModules = JSON.parse(theoryModules);
     } catch (e) {
-      console.error('Error parsing theory_modules:', e);
+      console.error('Error parsing module_ly_thuyet:', e);
       theoryModules = [];
     }
   }
@@ -17,41 +20,59 @@ const mapLesson = (lesson) => {
   return {
     ...lesson,
     lessonId: lesson.id,
-    classId: lesson.class_id,
-    programId: lesson.program_id,
+    classId: gradeLevelId,
+    gradeLevelId,
+    programId: lesson.chuong_trinh_id || lesson.program_id,
+    title: lesson.tieu_de ?? lesson.title,
+    chapter: lesson.chuong ?? lesson.chapter,
+    order: lesson.thu_tu ?? lesson.order,
+    description: lesson.mo_ta ?? lesson.description,
     theoryModules: theoryModules,
-    videoModules: lesson.video_modules || [],
-    quizzes: lesson.quizzes || [],
-    storySlides: lesson.story_slides || [],
-    challenges: lesson.challenges || [],
+    videoModules: lesson.module_video || lesson.video_modules || [],
+    quizzes: lesson.cau_do || lesson.quizzes || [],
+    storySlides: lesson.slide_cau_chuyen || lesson.story_slides || [],
+    challenges: lesson.thu_thach || lesson.challenges || [],
+    game: lesson.tro_choi || lesson.game || {},
     introVideoUrl: lesson.intro_video_url,
-    isPremium: lesson.is_premium,
+    isPremium: lesson.tra_phi ?? lesson.is_premium,
     // Remove snake_case versions to avoid confusion
-    class_id: undefined,
+    khoi_id: undefined,
     program_id: undefined,
+    chuong_trinh_id: undefined,
+    tieu_de: undefined,
+    chuong: undefined,
+    thu_tu: undefined,
+    mo_ta: undefined,
     theory_modules: undefined,
+    module_ly_thuyet: undefined,
     video_modules: undefined,
+    module_video: undefined,
+    cau_do: undefined,
     story_slides: undefined,
-    is_premium: undefined
+    slide_cau_chuyen: undefined,
+    thu_thach: undefined,
+    tro_choi: undefined,
+    is_premium: undefined,
+    tra_phi: undefined
   };
 };
 
 const mapToPostgres = (l) => ({
   id: l.lessonId || l.id,
-  class_id: l.classId,
-  program_id: l.programId,
-  title: l.title,
-  chapter: l.chapter,
-  order: l.order,
-  description: l.description,
-  theory_modules: l.theoryModules || [],
-  video_modules: l.videoModules || [],
-  quizzes: l.quizzes || [],
-  story_slides: l.storySlides || [],
-  challenges: l.challenges || [],
-  game: l.game || {},
+  khoi_id: l.gradeLevelId ?? l.khoi_id ?? l.classId,
+  chuong_trinh_id: l.programId,
+  tieu_de: l.title,
+  chuong: l.chapter,
+  thu_tu: l.order,
+  mo_ta: l.description,
+  module_ly_thuyet: l.theoryModules || [],
+  module_video: l.videoModules || [],
+  cau_do: l.quizzes || [],
+  slide_cau_chuyen: l.storySlides || [],
+  thu_thach: l.challenges || [],
+  tro_choi: l.game || {},
   intro_video_url: l.introVideoUrl,
-  is_premium: l.isPremium || false
+  tra_phi: l.isPremium || false
 });
 
 export const Lesson = {
@@ -60,14 +81,15 @@ export const Lesson = {
       .from(LESSON_TABLE)
       .select('*');
     
-    if (query.classId) {
-      supabaseQuery = supabaseQuery.eq('class_id', query.classId);
+    const gradeLevelId = query.gradeLevelId ?? query.classId;
+    if (gradeLevelId) {
+      supabaseQuery = supabaseQuery.eq('khoi_id', gradeLevelId);
     }
     if (query.programId) {
-      supabaseQuery = supabaseQuery.eq('program_id', query.programId);
+      supabaseQuery = supabaseQuery.eq('chuong_trinh_id', query.programId);
     }
 
-    const { data, error } = await supabaseQuery.order('order', { ascending: true });
+    const { data, error } = await supabaseQuery.order('thu_tu', { ascending: true });
     
     if (error) throw error;
     return data.map(mapLesson);
@@ -77,7 +99,7 @@ export const Lesson = {
     const { data, error } = await supabase
       .from(LESSON_TABLE)
       .select('*')
-      .order('order', { ascending: true });
+      .order('thu_tu', { ascending: true });
     
     if (error) throw error;
     return data.map(mapLesson);
@@ -87,8 +109,8 @@ export const Lesson = {
     const { data, error } = await supabase
       .from(LESSON_TABLE)
       .select('*')
-      .eq('class_id', classId)
-      .order('order', { ascending: true });
+      .eq('khoi_id', classId)
+      .order('thu_tu', { ascending: true });
     
     if (error) throw error;
     return data.map(mapLesson);
@@ -148,8 +170,12 @@ export const Lesson = {
   async updateProgress(lessonId, updateData) {
     // Keep this for backward compatibility if used elsewhere, but ideally use update()
     const pgUpdateData = { ...updateData };
-    if (updateData.classId) pgUpdateData.class_id = updateData.classId;
-    if (updateData.programId) pgUpdateData.program_id = updateData.programId;
+    if (updateData.classId || updateData.gradeLevelId || updateData.khoi_id) {
+      pgUpdateData.khoi_id = updateData.gradeLevelId ?? updateData.khoi_id ?? updateData.classId;
+      delete pgUpdateData.classId;
+      delete pgUpdateData.gradeLevelId;
+    }
+    if (updateData.programId) pgUpdateData.chuong_trinh_id = updateData.programId;
     
     const { data, error } = await supabase
       .from(LESSON_TABLE)
@@ -180,10 +206,10 @@ export const Lesson = {
     if (error) throw error;
   },
 
-  async insertMany(lessons) {
+  async insertMany(bai_hoc) {
     const { data, error } = await supabase
       .from(LESSON_TABLE)
-      .insert(lessons.map(mapToPostgres));
+      .insert(bai_hoc.map(mapToPostgres));
     
     if (error) throw error;
     return data;

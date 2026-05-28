@@ -1,20 +1,20 @@
-export const bai26 = {
+﻿export const bai26 = {
   "id": "hoa12_kntt_bai26",
   "classId": 12,
   "lessonId": 26,
   "programId": "ketnoi",
-  "title": "Bài 26. Ôn tập chương 7",
-  "chapter": "Chương 7. Nguyên tố nhóm IA và nhóm IIA",
+  "title": "BÃ i 26. Ã”n táº­p chÆ°Æ¡ng 7",
+  "chapter": "ChÆ°Æ¡ng 7. NguyÃªn tá»‘ nhÃ³m IA vÃ  nhÃ³m IIA",
   "order": 26,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Hệ thống hóa kiến thức về kim loại kiềm và kiềm thổ. Tổng kết các phương pháp làm mềm nước cứng.",
+  "description": "Há»‡ thá»‘ng hÃ³a kiáº¿n thá»©c vá» kim loáº¡i kiá»m vÃ  kiá»m thá»•. Tá»•ng káº¿t cÃ¡c phÆ°Æ¡ng phÃ¡p lÃ m má»m nÆ°á»›c cá»©ng.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Xu hướng biến đổi tính chất nhóm IA và IIA",
+        "text": "1. Xu hÆ°á»›ng biáº¿n Ä‘á»•i tÃ­nh cháº¥t nhÃ³m IA vÃ  IIA",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@ export const bai26 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong cùng một nhóm (IA hoặc IIA), khi đi từ trên xuống dưới theo chiều tăng của điện tích hạt nhân:\n- **Bán kính nguyên tử tăng dần**, lực hút giữa hạt nhân với electron lớp ngoài cùng giảm đi.\n- **Năng lượng ion hóa giảm dần**, dẫn đến khả năng nhường electron (tính khử) tăng dần.\n- **Tính base của các oxide và hydroxide** tương ứng cũng tăng dần theo chiều tăng tính kim loại."
+        "text": "Trong cÃ¹ng má»™t nhÃ³m (IA hoáº·c IIA), khi Ä‘i tá»« trÃªn xuá»‘ng dÆ°á»›i theo chiá»u tÄƒng cá»§a Ä‘iá»‡n tÃ­ch háº¡t nhÃ¢n:\n- **BÃ¡n kÃ­nh nguyÃªn tá»­ tÄƒng dáº§n**, lá»±c hÃºt giá»¯a háº¡t nhÃ¢n vá»›i electron lá»›p ngoÃ i cÃ¹ng giáº£m Ä‘i.\n- **NÄƒng lÆ°á»£ng ion hÃ³a giáº£m dáº§n**, dáº«n Ä‘áº¿n kháº£ nÄƒng nhÆ°á»ng electron (tÃ­nh khá»­) tÄƒng dáº§n.\n- **TÃ­nh base cá»§a cÃ¡c oxide vÃ  hydroxide** tÆ°Æ¡ng á»©ng cÅ©ng tÄƒng dáº§n theo chiá»u tÄƒng tÃ­nh kim loáº¡i."
       }
     },
     {
@@ -31,8 +31,8 @@ export const bai26 = {
       "content": {
         "type": "bullet",
         "items": [
-          "Kim loại kiềm (IA) luôn có tính khử mạnh hơn kim loại kiềm thổ (IIA) trong cùng một chu kì.",
-          "Các hợp chất của nhóm IA hầu hết tan tốt trong nước, trong khi nhiều hợp chất của nhóm IIA (carbonate, sulfate, phosphate) ít tan hoặc không tan."
+          "Kim loáº¡i kiá»m (IA) luÃ´n cÃ³ tÃ­nh khá»­ máº¡nh hÆ¡n kim loáº¡i kiá»m thá»• (IIA) trong cÃ¹ng má»™t chu kÃ¬.",
+          "CÃ¡c há»£p cháº¥t cá»§a nhÃ³m IA háº§u háº¿t tan tá»‘t trong nÆ°á»›c, trong khi nhiá»u há»£p cháº¥t cá»§a nhÃ³m IIA (carbonate, sulfate, phosphate) Ã­t tan hoáº·c khÃ´ng tan."
         ]
       }
     },
@@ -40,7 +40,7 @@ export const bai26 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Tổng kết phương pháp xử lý Nước cứng",
+        "text": "2. Tá»•ng káº¿t phÆ°Æ¡ng phÃ¡p xá»­ lÃ½ NÆ°á»›c cá»©ng",
         "level": "h2"
       }
     },
@@ -48,8 +48,8 @@ export const bai26 = {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Các phương pháp làm mềm nước",
-        "content": "- **Phương pháp đun sôi**: Chỉ áp dụng cho nước cứng tạm thời ($HCO_3^-$ bị nhiệt phân tạo kết tủa).\n- **Phương pháp hóa chất**: Dùng $Na_2CO_3$ hoặc $Na_3PO_4$ để kết tủa các ion $Ca^{2+}, Mg^{2+}$. Đây là cách vạn năng để xử lý cả nước cứng tạm thời và vĩnh cửu.\n- **Phương pháp trao đổi ion**: Cho nước đi qua các hạt nhựa ionite (zeolite) để thay thế ion $Ca^{2+}, Mg^{2+}$ bằng các ion vô hại như $Na^+$ hoặc $H^+$.",
+        "title": "CÃ¡c phÆ°Æ¡ng phÃ¡p lÃ m má»m nÆ°á»›c",
+        "content": "- **PhÆ°Æ¡ng phÃ¡p Ä‘un sÃ´i**: Chá»‰ Ã¡p dá»¥ng cho nÆ°á»›c cá»©ng táº¡m thá»i ($HCO_3^-$ bá»‹ nhiá»‡t phÃ¢n táº¡o káº¿t tá»§a).\n- **PhÆ°Æ¡ng phÃ¡p hÃ³a cháº¥t**: DÃ¹ng $Na_2CO_3$ hoáº·c $Na_3PO_4$ Ä‘á»ƒ káº¿t tá»§a cÃ¡c ion $Ca^{2+}, Mg^{2+}$. ÄÃ¢y lÃ  cÃ¡ch váº¡n nÄƒng Ä‘á»ƒ xá»­ lÃ½ cáº£ nÆ°á»›c cá»©ng táº¡m thá»i vÃ  vÄ©nh cá»­u.\n- **PhÆ°Æ¡ng phÃ¡p trao Ä‘á»•i ion**: Cho nÆ°á»›c Ä‘i qua cÃ¡c háº¡t nhá»±a ionite (zeolite) Ä‘á»ƒ thay tháº¿ ion $Ca^{2+}, Mg^{2+}$ báº±ng cÃ¡c ion vÃ´ háº¡i nhÆ° $Na^+$ hoáº·c $H^+$.",
         "color": "blue"
       }
     }
@@ -57,7 +57,7 @@ export const bai26 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Hóa chất nào sau đây có thể làm mềm cả nước cứng tạm thời và nước cứng vĩnh cửu?",
+      "question": "HÃ³a cháº¥t nÃ o sau Ä‘Ã¢y cÃ³ thá»ƒ lÃ m má»m cáº£ nÆ°á»›c cá»©ng táº¡m thá»i vÃ  nÆ°á»›c cá»©ng vÄ©nh cá»­u?",
       "options": [
         "HCl.",
         "Na2CO3.",
@@ -65,28 +65,28 @@ export const bai26 = {
         "NaCl."
       ],
       "correctAnswer": 1,
-      "explanation": "Ion $CO_3^{2-}$ từ $Na_2CO_3$ sẽ kết hợp with các ion $Ca^{2+}$ and $Mg^{2+}$ trong mọi loại nước cứng để tạo ra kết tủa carbonate, giúp loại bỏ độ cứng hiệu quả."
+      "explanation": "Ion $CO_3^{2-}$ tá»« $Na_2CO_3$ sáº½ káº¿t há»£p with cÃ¡c ion $Ca^{2+}$ and $Mg^{2+}$ trong má»i loáº¡i nÆ°á»›c cá»©ng Ä‘á»ƒ táº¡o ra káº¿t tá»§a carbonate, giÃºp loáº¡i bá» Ä‘á»™ cá»©ng hiá»‡u quáº£."
     },
     {
       "id": "q2",
-      "question": "Hiện tượng nào xảy ra khi cho một mẩu nhỏ natri vào cốc nước có thêm vài giọt phenolphtalein?",
+      "question": "Hiá»‡n tÆ°á»£ng nÃ o xáº£y ra khi cho má»™t máº©u nhá» natri vÃ o cá»‘c nÆ°á»›c cÃ³ thÃªm vÃ i giá»t phenolphtalein?",
       "options": [
-        "Natri chìm xuống đáy và sủi bọt khí.",
-        "Mẩu natri nóng chảy thành viên tròn, chạy trên mặt nước và dung dịch chuyển sang màu hồng.",
-        "Mẩu natri không phản ứng.",
-        "Có kết tủa trắng xuất hiện."
+        "Natri chÃ¬m xuá»‘ng Ä‘Ã¡y vÃ  sá»§i bá»t khÃ­.",
+        "Máº©u natri nÃ³ng cháº£y thÃ nh viÃªn trÃ²n, cháº¡y trÃªn máº·t nÆ°á»›c vÃ  dung dá»‹ch chuyá»ƒn sang mÃ u há»“ng.",
+        "Máº©u natri khÃ´ng pháº£n á»©ng.",
+        "CÃ³ káº¿t tá»§a tráº¯ng xuáº¥t hiá»‡n."
       ],
       "correctAnswer": 1,
-      "explanation": "Natri nhẹ hơn nước nên nổi, phản ứng tỏa nhiệt làm nó nóng chảy thành viên tròn. Khí $H_2$ thoát ra đẩy viên natri chạy trên mặt nước. Dung dịch thu được là NaOH có tính kiềm nên làm phenolphtalein hóa hồng."
+      "explanation": "Natri nháº¹ hÆ¡n nÆ°á»›c nÃªn ná»•i, pháº£n á»©ng tá»a nhiá»‡t lÃ m nÃ³ nÃ³ng cháº£y thÃ nh viÃªn trÃ²n. KhÃ­ $H_2$ thoÃ¡t ra Ä‘áº©y viÃªn natri cháº¡y trÃªn máº·t nÆ°á»›c. Dung dá»‹ch thu Ä‘Æ°á»£c lÃ  NaOH cÃ³ tÃ­nh kiá»m nÃªn lÃ m phenolphtalein hÃ³a há»“ng."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Ôn tập chương 7: Nguyên tố nhóm IA và IIA",
+      "title": "Ã”n táº­p chÆ°Æ¡ng 7: NguyÃªn tá»‘ nhÃ³m IA vÃ  IIA",
       "url": "https://www.youtube.com/watch?v=CfxMIsGiQrY",
       "thumbnail": "https://img.youtube.com/vi/CfxMIsGiQrY/0.jpg",
-      "description": "Tổng kết tính chất hóa học, phương pháp điều chế and ứng dụng của kim loại kiềm, kiềm thổ (Tech12h)."
+      "description": "Tá»•ng káº¿t tÃ­nh cháº¥t hÃ³a há»c, phÆ°Æ¡ng phÃ¡p Ä‘iá»u cháº¿ and á»©ng dá»¥ng cá»§a kim loáº¡i kiá»m, kiá»m thá»• (Tech12h)."
     }
   ],
   "practiceModules": [],
@@ -95,3 +95,4 @@ export const bai26 = {
   "game": null,
   "realWorldApplications": []
 };
+

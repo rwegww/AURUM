@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
 import multer from 'multer';
@@ -10,9 +10,85 @@ const router = express.Router();
 
 const canManageClasses = (user) => user?.role === 'teacher' || user?.role === 'admin';
 
+const normalizeClass = (classData) => {
+  if (!classData) return classData;
+  const gradeLevelId = classData.khoi_id ?? null;
+  return {
+    ...classData,
+    name: classData.ten ?? classData.name,
+    description: classData.mo_ta ?? classData.description,
+    code: classData.ma_lop ?? classData.code,
+    teacher_id: classData.giao_vien_id ?? classData.teacher_id,
+    grade_level_id: gradeLevelId,
+    khoi_id: gradeLevelId,
+    gradeLevelId,
+    ten: undefined,
+    mo_ta: undefined,
+    ma_lop: undefined,
+    giao_vien_id: undefined,
+  };
+};
+
+const normalizeSubmission = (submission) => {
+  if (!submission) return submission;
+  return {
+    ...submission,
+    post_id: submission.bai_dang_id ?? submission.post_id,
+    student_id: submission.hoc_sinh_id ?? submission.student_id,
+    score: submission.diem ?? submission.score,
+    teacher_feedback: submission.phan_hoi_giao_vien ?? submission.teacher_feedback ?? null,
+    submitted_at: submission.nop_luc ?? submission.submitted_at,
+    answers: submission.cau_tra_loi ?? submission.answers,
+    bai_dang_id: undefined,
+    hoc_sinh_id: undefined,
+    diem: undefined,
+    phan_hoi_giao_vien: undefined,
+    nop_luc: undefined,
+    cau_tra_loi: undefined,
+  };
+};
+
+const normalizeLessonRef = (lesson) => {
+  if (!lesson) return lesson;
+  const gradeLevelId = lesson.khoi_id ?? null;
+  return {
+    ...lesson,
+    grade_level_id: gradeLevelId,
+    khoi_id: gradeLevelId,
+  };
+};
+
+const normalizePost = (post) => post ? ({
+  ...post,
+  class_id: post.lop_id ?? post.class_id,
+  author_id: post.tac_gia_id ?? post.author_id,
+  target_student_id: post.hoc_sinh_nhan_id ?? post.target_student_id,
+  content: post.noi_dung ?? post.content,
+  deadline: post.han_nop ?? post.deadline,
+  questions: post.cau_hoi ?? post.questions ?? [],
+  lop_id: undefined,
+  tac_gia_id: undefined,
+  hoc_sinh_nhan_id: undefined,
+  noi_dung: undefined,
+  han_nop: undefined,
+  cau_hoi: undefined,
+}) : post;
+
+const normalizeSchedule = (schedule) => schedule ? ({
+  ...schedule,
+  class_id: schedule.lop_id ?? schedule.class_id,
+  title: schedule.tieu_de ?? schedule.title,
+  start_time: schedule.bat_dau_luc ?? schedule.start_time,
+  end_time: schedule.ket_thuc_luc ?? schedule.end_time,
+  lop_id: undefined,
+  tieu_de: undefined,
+  bat_dau_luc: undefined,
+  ket_thuc_luc: undefined,
+}) : schedule;
+
 const requireTeacherOrAdmin = (req, res) => {
   if (!canManageClasses(req.user)) {
-    res.status(403).json({ error: 'Chỉ giáo viên mới có quyền thực hiện thao tác này' });
+    res.status(403).json({ error: 'Chá»‰ giÃ¡o viÃªn má»›i cÃ³ quyá»n thá»±c hiá»‡n thao tÃ¡c nÃ y' });
     return false;
   }
   return true;
@@ -20,18 +96,18 @@ const requireTeacherOrAdmin = (req, res) => {
 
 const ensureClassOwner = async (classId, user, res) => {
   const { data: classData, error } = await supabase
-    .from('classes')
-    .select('id, teacher_id')
+    .from('lop')
+    .select('id, giao_vien_id')
     .eq('id', classId)
     .maybeSingle();
 
   if (error || !classData) {
-    res.status(404).json({ error: 'Không tìm thấy lớp học' });
+    res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y lá»›p há»c' });
     return null;
   }
 
-  if (user.role !== 'admin' && classData.teacher_id !== user.id) {
-    res.status(403).json({ error: 'Bạn không có quyền quản lý lớp học này' });
+  if (user.role !== 'admin' && classData.giao_vien_id !== user.id) {
+    res.status(403).json({ error: 'Báº¡n khÃ´ng cÃ³ quyá»n quáº£n lÃ½ lá»›p há»c nÃ y' });
     return null;
   }
 
@@ -40,10 +116,10 @@ const ensureClassOwner = async (classId, user, res) => {
 
 const isClassMember = async (classId, userId) => {
   const { data, error } = await supabase
-    .from('class_members')
-    .select('class_id')
-    .eq('class_id', classId)
-    .eq('student_id', userId)
+    .from('thanh_vien_lop')
+    .select('lop_id')
+    .eq('lop_id', classId)
+    .eq('hoc_sinh_id', userId)
     .maybeSingle();
 
   if (error) throw error;
@@ -52,8 +128,8 @@ const isClassMember = async (classId, userId) => {
 
 const ensureClassAccess = async (classId, user, res) => {
   const { data: classData, error } = await supabase
-    .from('classes')
-    .select('id, teacher_id')
+    .from('lop')
+    .select('id, giao_vien_id')
     .eq('id', classId)
     .maybeSingle();
 
@@ -63,7 +139,7 @@ const ensureClassAccess = async (classId, user, res) => {
     return null;
   }
 
-  if (user.role === 'admin' || classData.teacher_id === user.id) {
+  if (user.role === 'admin' || classData.giao_vien_id === user.id) {
     return classData;
   }
 
@@ -86,7 +162,7 @@ const ensureClassAccess = async (classId, user, res) => {
 router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
-    if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
+    if (!req.file) return res.status(400).json({ error: 'KhÃ´ng tÃ¬m tháº¥y tá»‡p' });
 
     let text = '';
     if (req.file.mimetype === 'application/pdf') {
@@ -116,31 +192,31 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
 
-        if (/^(--+)?\s*HẾT\s*(--+)?$/i.test(line) || /^ĐÁP ÁN/i.test(line) || /^HƯỚNG DẪN GIẢI/i.test(line)) {
+        if (/^(--+)?\s*Háº¾T\s*(--+)?$/i.test(line) || /^ÄÃP ÃN/i.test(line) || /^HÆ¯á»šNG DáºªN GIáº¢I/i.test(line)) {
             mode = 'answer';
         }
 
         if (mode === 'question') {
-            if (/^PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
-            if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
-            if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
+            if (/^PHáº¦N\s+I\b/i.test(line)) { currentPart = 1; continue; }
+            if (/^PHáº¦N\s+II\b/i.test(line)) { currentPart = 2; continue; }
+            if (/^PHáº¦N\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
-            const qMatch = line.match(/^(?:Câu\s*|Bài\s*|C\s*)?(\d+)\b\s*[.:]?\s*(.*)/i);
+            const qMatch = line.match(/^(?:CÃ¢u\s*|BÃ i\s*|C\s*)?(\d+)\b\s*[.:]?\s*(.*)/i);
             
-            // To prevent matching arbitrary numbers like "1 lít", we ensure it starts with Câu/Bài/C 
+            // To prevent matching arbitrary numbers like "1 lÃ­t", we ensure it starts with CÃ¢u/BÃ i/C 
             // OR we use the previous logic but with \b
             let isQuestionStart = false;
             let pNum = null;
             let contentStr = '';
             
-            const qMatchStrict = line.match(/^(?:Câu|Bài|C)\s*(\d+)\b(?:\s*\(.*?\))?\s*[.:]?\s*(.*)/i);
+            const qMatchStrict = line.match(/^(?:CÃ¢u|BÃ i|C)\s*(\d+)\b(?:\s*\(.*?\))?\s*[.:]?\s*(.*)/i);
             if (qMatchStrict) {
                 isQuestionStart = true;
                 pNum = parseInt(qMatchStrict[1]);
                 contentStr = qMatchStrict[2];
-            } else if (/^Câu\s*\d+/i.test(line)) {
+            } else if (/^CÃ¢u\s*\d+/i.test(line)) {
                 isQuestionStart = true;
-                const tempMatch = line.match(/^Câu\s*(\d+)\s*[.:]?\s*(.*)/i);
+                const tempMatch = line.match(/^CÃ¢u\s*(\d+)\s*[.:]?\s*(.*)/i);
                 if (tempMatch) {
                     pNum = parseInt(tempMatch[1]);
                     contentStr = tempMatch[2];
@@ -205,12 +281,12 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 currentQuestion.content += line;
             }
         } else if (mode === 'answer') {
-            if (/PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
-            else if (/PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
-            else if (/PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
+            if (/PHáº¦N\s+I\b/i.test(line)) { currentPart = 1; continue; }
+            else if (/PHáº¦N\s+II\b/i.test(line)) { currentPart = 2; continue; }
+            else if (/PHáº¦N\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
             if (currentPart === 1) {
-                let inlineMatches = [...line.matchAll(/(?:Câu\s*)?(\d+)\s*[.:-]?\s*([A-D])/gi)];
+                let inlineMatches = [...line.matchAll(/(?:CÃ¢u\s*)?(\d+)\s*[.:-]?\s*([A-D])/gi)];
                 if (inlineMatches.length > 0) {
                     for (let m of inlineMatches) {
                         answersObj.part1[parseInt(m[1])] = m[2].toUpperCase();
@@ -224,25 +300,25 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                     part1Letters.push(...line.split(/\s+/).filter(Boolean).map(l => l.toUpperCase()));
                 }
             } else if (currentPart === 2) {
-                let m = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]?\s*([SDĐ\s,;]+)$/i);
+                let m = line.match(/^(?:CÃ¢u\s*)?(\d+)\s*[.:-]?\s*([SDÄ\s,;]+)$/i);
                 if (m) {
                     let qNum = parseInt(m[1]);
-                    let chars = m[2].replace(/[^SDĐ]/gi, '').toUpperCase();
+                    let chars = m[2].replace(/[^SDÄ]/gi, '').toUpperCase();
                     if (chars.length === 4) {
                         answersObj.part2[qNum] = {
-                            a: chars[0] === 'D' || chars[0] === 'Đ',
-                            b: chars[1] === 'D' || chars[1] === 'Đ',
-                            c: chars[2] === 'D' || chars[2] === 'Đ',
-                            d: chars[3] === 'D' || chars[3] === 'Đ'
+                            a: chars[0] === 'D' || chars[0] === 'Ä',
+                            b: chars[1] === 'D' || chars[1] === 'Ä',
+                            c: chars[2] === 'D' || chars[2] === 'Ä',
+                            d: chars[3] === 'D' || chars[3] === 'Ä'
                         };
                     }
                     continue;
                 }
-                if (/^([SDĐ]\s*)+$/i.test(line.replace(/[,;]/g, ' '))) {
+                if (/^([SDÄ]\s*)+$/i.test(line.replace(/[,;]/g, ' '))) {
                     part2Letters.push(...line.replace(/[,;]/g, ' ').split(/\s+/).filter(Boolean).map(l => l.toUpperCase()));
                 }
             } else if (currentPart === 3) {
-                let match = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]\s*(-?\d+(?:[.,]\d+)?)$/i);
+                let match = line.match(/^(?:CÃ¢u\s*)?(\d+)\s*[.:-]\s*(-?\d+(?:[.,]\d+)?)$/i);
                 if (match) {
                     answersObj.part3[parseInt(match[1])] = match[2].trim();
                     continue;
@@ -267,10 +343,10 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
     for (let i = 0; i < p2NumQs; i++) {
         let chunk = part2Letters.slice(i * 4, i * 4 + 4);
         answersObj.part2[i + 1] = {
-            a: chunk[0] === 'D' || chunk[0] === 'Đ',
-            b: chunk[1] === 'D' || chunk[1] === 'Đ',
-            c: chunk[2] === 'D' || chunk[2] === 'Đ',
-            d: chunk[3] === 'D' || chunk[3] === 'Đ'
+            a: chunk[0] === 'D' || chunk[0] === 'Ä',
+            b: chunk[1] === 'D' || chunk[1] === 'Ä',
+            c: chunk[2] === 'D' || chunk[2] === 'Ä',
+            d: chunk[3] === 'D' || chunk[3] === 'Ä'
         };
     }
 
@@ -296,23 +372,23 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
   }
 });
 
-// Get all classes for a teacher or student
+// Get all lop for a teacher or student
 router.get('/', auth, async (req, res) => {
   try {
     const { role, id } = req.user;
     
     // Select class properties and count members
-    let query = supabase.from('classes')
-      .select('*, teacher:teacher_id(username), student_count:class_members(count)');
+    let query = supabase.from('lop')
+      .select('*, teacher:giao_vien_id(username), student_count:thanh_vien_lop(count)');
 
     if (role === 'teacher') {
-      query = query.eq('teacher_id', id);
+      query = query.eq('giao_vien_id', id);
     } else if (role === 'admin') {
-      // Admin can inspect all classes.
+      // Admin can inspect all lop.
     } else {
-      // For student, get classes they joined
-      const { data: memberData } = await supabase.from('class_members').select('class_id').eq('student_id', id);
-      const classIds = memberData?.map(m => m.class_id) || [];
+      // For student, get lop they joined
+      const { data: memberData } = await supabase.from('thanh_vien_lop').select('lop_id').eq('hoc_sinh_id', id);
+      const classIds = memberData?.map(m => m.lop_id) || [];
       if (classIds.length === 0) return res.json([]);
       query = query.in('id', classIds);
     }
@@ -322,7 +398,7 @@ router.get('/', auth, async (req, res) => {
     
     // Format response to flatten student_count
     const formattedData = data.map(cls => ({
-        ...cls,
+        ...normalizeClass(cls),
         student_count: cls.student_count?.[0]?.count || 0
     }));
 
@@ -337,35 +413,35 @@ router.get('/stats', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     
-    // 1. Get joined classes
+    // 1. Get joined lop
     const { data: members, error: memErr } = await supabase
-      .from('class_members')
-      .select('class_id')
-      .eq('student_id', userId);
+      .from('thanh_vien_lop')
+      .select('lop_id')
+      .eq('hoc_sinh_id', userId);
     
     if (memErr) throw memErr;
-    const classIds = members.map(m => m.class_id);
+    const classIds = members.map(m => m.lop_id);
     
     if (classIds.length === 0) return res.json({});
 
     // 2. For each class, count posts that the student can see
-    // This is a bit heavy for a single query if many classes, 
+    // This is a bit heavy for a single query if many lop, 
     // but for now we fetch recent posts count.
     const { data: posts, error: postErr } = await supabase
-      .from('class_posts')
-      .select('class_id, created_at')
-      .in('class_id', classIds)
-      .or(`target_student_id.is.null,target_student_id.eq.${userId},author_id.eq.${userId}`);
+      .from('bai_dang_lop')
+      .select('lop_id, created_at')
+      .in('lop_id', classIds)
+      .or(`hoc_sinh_nhan_id.is.null,hoc_sinh_nhan_id.eq.${userId},tac_gia_id.eq.${userId}`);
 
     if (postErr) throw postErr;
 
-    // 3. Group by class_id
+    // 3. Group by lop_id
     const stats = {};
     posts.forEach(p => {
-      if (!stats[p.class_id]) stats[p.class_id] = { count: 0, latest: p.created_at };
-      stats[p.class_id].count++;
-      if (new Date(p.created_at) > new Date(stats[p.class_id].latest)) {
-        stats[p.class_id].latest = p.created_at;
+      if (!stats[p.lop_id]) stats[p.lop_id] = { count: 0, latest: p.created_at };
+      stats[p.lop_id].count++;
+      if (new Date(p.created_at) > new Date(stats[p.lop_id].latest)) {
+        stats[p.lop_id].latest = p.created_at;
       }
     });
 
@@ -380,26 +456,26 @@ router.get('/teacher-summary', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-       return res.status(403).json({ error: 'Chỉ dành cho giáo viên' });
+       return res.status(403).json({ error: 'Chá»‰ dÃ nh cho giÃ¡o viÃªn' });
     }
 
     // 1. Get all class IDs for this teacher
-    const { data: classes } = await supabase.from('classes').select('id').eq('teacher_id', userId);
-    const classIds = classes?.map(c => c.id) || [];
+    const { data: lop } = await supabase.from('lop').select('id').eq('giao_vien_id', userId);
+    const classIds = lop?.map(c => c.id) || [];
 
     if (classIds.length === 0) {
       return res.json({ total_students: 0, active_assignments: 0 });
     }
 
     // 2. Count unique students
-    const { data: members } = await supabase.from('class_members').select('student_id').in('class_id', classIds);
-    const uniqueStudents = new Set(members?.map(m => m.student_id));
+    const { data: members } = await supabase.from('thanh_vien_lop').select('hoc_sinh_id').in('lop_id', classIds);
+    const uniqueStudents = new Set(members?.map(m => m.hoc_sinh_id));
 
     // 3. Count active assignments
     const { count: assignmentCount } = await supabase
-      .from('class_posts')
+      .from('bai_dang_lop')
       .select('*', { count: 'exact', head: true })
-      .in('class_id', classIds)
+      .in('lop_id', classIds)
       .eq('type', 'assignment');
 
     res.json({
@@ -416,18 +492,19 @@ router.post('/', auth, async (req, res) => {
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
 
-    const { name, grade_level, description } = req.body;
-    const teacher_id = req.user.id;
+    const { name, description } = req.body;
+    const khoi_id = req.body.khoi_id ?? req.body.gradeLevelId;
+    const giao_vien_id = req.user.id;
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
     const { data, error } = await supabase
-      .from('classes')
-      .insert([{ name, grade_level, description, teacher_id, code }])
+      .from('lop')
+      .insert([{ ten: name, khoi_id, mo_ta: description, giao_vien_id, ma_lop: code }])
       .select()
       .single();
 
     if (error) throw error;
-    res.status(201).json(data);
+    res.status(201).json(normalizeClass(data));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -450,14 +527,14 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (line.startsWith('Phần I.')) { currentPart = 1; continue; }
-      if (line.startsWith('Phần II.')) { currentPart = 2; continue; }
-      if (line.startsWith('Phần III.')) { currentPart = 3; continue; }
-      if (line.includes('------ HẾT ------') || line.startsWith('ĐÁP ÁN')) { break; }
+      if (line.startsWith('Pháº§n I.')) { currentPart = 1; continue; }
+      if (line.startsWith('Pháº§n II.')) { currentPart = 2; continue; }
+      if (line.startsWith('Pháº§n III.')) { currentPart = 3; continue; }
+      if (line.includes('------ Háº¾T ------') || line.startsWith('ÄÃP ÃN')) { break; }
 
       if (!currentPart) continue;
 
-      if (line.startsWith('Câu ')) {
+      if (line.startsWith('CÃ¢u ')) {
         if (currentQuestion) questions.push(currentQuestion);
         currentQuestion = {
           id: 'q' + (questions.length + 1),
@@ -507,28 +584,28 @@ router.post('/join', auth, async (req, res) => {
     }
 
     const { code } = req.body;
-    const student_id = req.user.id;
+    const hoc_sinh_id = req.user.id;
 
     const { data: classData, error: classErr } = await supabase
-      .from('classes')
-      .select('id, name, teacher_id')
-      .eq('code', code)
+      .from('lop')
+      .select('id, ten, giao_vien_id')
+      .eq('ma_lop', code)
       .single();
 
-    if (classErr || !classData) return res.status(404).json({ error: 'Mã lớp không hợp lệ' });
+    if (classErr || !classData) return res.status(404).json({ error: 'MÃ£ lá»›p khÃ´ng há»£p lá»‡' });
 
     const { error: joinErr } = await supabase
-      .from('class_members')
-      .insert([{ class_id: classData.id, student_id }]);
+      .from('thanh_vien_lop')
+      .insert([{ lop_id: classData.id, hoc_sinh_id }]);
 
     if (joinErr) {
-        if (joinErr.code === '23505') return res.status(400).json({ error: 'Bạn đã tham gia lớp này rồi' });
+        if (joinErr.code === '23505') return res.status(400).json({ error: 'Báº¡n Ä‘Ã£ tham gia lá»›p nÃ y rá»“i' });
         throw joinErr;
     }
     
 
 
-    res.json({ message: 'Tham gia lớp thành công', class_id: classData.id });
+    res.json({ message: 'Tham gia lá»›p thÃ nh cÃ´ng', lop_id: classData.id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -541,15 +618,19 @@ router.get('/:id/members', auth, async (req, res) => {
     if (!(await ensureClassAccess(id, req.user, res))) return;
 
     const { data, error } = await supabase
-      .from('class_members')
-      .select('student:student_id(id, username, last_active_at, active_minutes)')
-      .eq('class_id', id);
+      .from('thanh_vien_lop')
+      .select('student:hoc_sinh_id(id, username, hoat_dong_cuoi_luc, phut_hoat_dong)')
+      .eq('lop_id', id);
 
     if (error) throw error;
     
     const formatted = data.map(m => ({
       ...m.student,
-      isOnline: m.student?.last_active_at && new Date(m.student.last_active_at) > new Date(Date.now() - 5*60*1000)
+      last_active_at: m.student?.hoat_dong_cuoi_luc,
+      active_minutes: m.student?.phut_hoat_dong ?? 0,
+      isOnline: m.student?.hoat_dong_cuoi_luc && new Date(m.student.hoat_dong_cuoi_luc) > new Date(Date.now() - 5*60*1000),
+      hoat_dong_cuoi_luc: undefined,
+      phut_hoat_dong: undefined
     }));
     
     res.json(formatted);
@@ -565,9 +646,9 @@ router.get('/:id/posts', auth, async (req, res) => {
     if (!(await ensureClassAccess(id, req.user, res))) return;
 
     let query = supabase
-      .from('class_posts')
-      .select('*, author:author_id(username), target:target_student_id(username)')
-      .eq('class_id', id)
+      .from('bai_dang_lop')
+      .select('*, author:tac_gia_id(username), target:hoc_sinh_nhan_id(username)')
+      .eq('lop_id', id)
       .order('created_at', { ascending: false });
 
     // If student, only show:
@@ -575,7 +656,7 @@ router.get('/:id/posts', auth, async (req, res) => {
     // 2. Posts targeted specifically to them
     // 3. Posts AUTHORED by them (even if targeted to teacher)
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      query = query.or(`target_student_id.is.null,target_student_id.eq.${req.user.id},author_id.eq.${req.user.id}`);
+      query = query.or(`hoc_sinh_nhan_id.is.null,hoc_sinh_nhan_id.eq.${req.user.id},tac_gia_id.eq.${req.user.id}`);
     } else {
       // If teacher, they see everything for their class
     }
@@ -587,15 +668,15 @@ router.get('/:id/posts', auth, async (req, res) => {
     // For students, check if each assignment is completed
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
       const { data: submissions, error: subErr } = await supabase
-        .from('class_assignment_submissions')
-        .select('post_id, score, answers, status')
-        .eq('student_id', req.user.id);
+        .from('bai_nop')
+        .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien')
+        .eq('hoc_sinh_id', req.user.id);
       
       if (subErr) console.error('Submissions fetch error:', subErr);
 
       const submissionMap = {};
       (submissions || []).forEach(s => {
-        submissionMap[s.post_id] = s;
+        submissionMap[s.bai_dang_id] = normalizeSubmission(s);
       });
 
       posts = posts.map(p => ({
@@ -609,16 +690,16 @@ router.get('/:id/posts', auth, async (req, res) => {
     const enhancedPosts = await Promise.all(posts.map(async (p) => {
       if (p.type === 'assignment' && p.media_url) {
         const { data: lesson } = await supabase
-          .from('lessons')
-          .select('id, class_id')
+          .from('bai_hoc')
+          .select('id, khoi_id')
           .eq('id', p.media_url)
           .single();
-        if (lesson) p.lesson = lesson;
+        if (lesson) p.lesson = normalizeLessonRef(lesson);
       }
       return p;
     }));
 
-    res.json(enhancedPosts);
+    res.json(enhancedPosts.map(normalizePost));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -631,29 +712,29 @@ router.post('/:id/posts', auth, async (req, res) => {
     if (!requireTeacherOrAdmin(req, res)) return;
     if (!(await ensureClassOwner(id, req.user, res))) return;
 
-    const { type, content, media_url, deadline, target_student_id } = req.body;
-    const author_id = req.user.id;
+    const { type, content, media_url, deadline, hoc_sinh_nhan_id } = req.body;
+    const tac_gia_id = req.user.id;
 
     // Sanitize empty strings to null for DB insertion
     const insertData = {
-      class_id: id,
-      author_id,
+      lop_id: id,
+      tac_gia_id,
       type,
-      content,
+      noi_dung: content,
       media_url: media_url || null,
-      deadline: deadline || null,
-      target_student_id: target_student_id || null,
-      questions: req.body.questions || []
+      han_nop: deadline || null,
+      hoc_sinh_nhan_id: hoc_sinh_nhan_id || null,
+      cau_hoi: req.body.questions || []
     };
 
     const { data, error } = await supabase
-      .from('class_posts')
+      .from('bai_dang_lop')
       .insert([insertData])
-      .select('*, author:author_id(username)')
+      .select('*, author:tac_gia_id(username)')
       .single();
 
     if (error) throw error;
-    res.status(201).json(data);
+    res.status(201).json(normalizePost(data));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -666,13 +747,13 @@ router.get('/:id/schedules', auth, async (req, res) => {
     if (!(await ensureClassAccess(id, req.user, res))) return;
 
     const { data, error } = await supabase
-      .from('class_schedules')
+      .from('lich_lop')
       .select('*')
-      .eq('class_id', id)
-      .order('start_time', { ascending: true });
+      .eq('lop_id', id)
+      .order('bat_dau_luc', { ascending: true });
 
     if (error) throw error;
-    res.json(data);
+    res.json((data || []).map(normalizeSchedule));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -688,29 +769,29 @@ router.post('/:id/schedules', auth, async (req, res) => {
     const { title, start_time, end_time, meet_url } = req.body;
 
     const { data, error } = await supabase
-      .from('class_schedules')
-      .insert([{ class_id: id, title, start_time, end_time, meet_url }])
+      .from('lich_lop')
+      .insert([{ lop_id: id, tieu_de: title, bat_dau_luc: start_time, ket_thuc_luc: end_time, meet_url }])
       .select()
       .single();
 
     if (error) throw error;
-    res.status(201).json(data);
+    res.status(201).json(normalizeSchedule(data));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
 // Assignments Management
-// Get all assignments for teacher's classes
+// Get all assignments for teacher's lop
 router.get('/assignments/all', auth, async (req, res) => {
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
 
     const userId = req.user.id;
-    // Get classes teacher manages
-    let classQuery = supabase.from('classes').select('id');
+    // Get lop teacher manages
+    let classQuery = supabase.from('lop').select('id');
     if (req.user.role !== 'admin') {
-      classQuery = classQuery.eq('teacher_id', userId);
+      classQuery = classQuery.eq('giao_vien_id', userId);
     }
     const { data: teacherClasses, error: classError } = await classQuery;
     if (classError) throw classError;
@@ -718,14 +799,18 @@ router.get('/assignments/all', auth, async (req, res) => {
     if (classIds.length === 0) return res.json([]);
 
     const { data, error } = await supabase
-      .from('class_posts')
-      .select('*, class:class_id(name)')
-      .in('class_id', classIds)
+      .from('bai_dang_lop')
+      .select('*, class:lop_id(ten)')
+      .in('lop_id', classIds)
       .eq('type', 'assignment')
       .order('created_at', { ascending: false });
 
     if (error) throw error;
-    res.json(data);
+    res.json((data || []).map((post) => {
+      const normalized = normalizePost(post);
+      if (post.class) normalized.class = { ...post.class, name: post.class.ten ?? post.class.name, ten: undefined };
+      return normalized;
+    }));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -738,26 +823,28 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 
     const { postId } = req.params;
     
-    // Get assignment info to get class_id
-    const { data: post } = await supabase.from('class_posts').select('class_id').eq('id', postId).single();
-    if (post && !(await ensureClassOwner(post.class_id, req.user, res))) return;
-    if (!post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    // Get assignment info to get lop_id
+    const { data: post } = await supabase.from('bai_dang_lop').select('lop_id').eq('id', postId).single();
+    if (post && !(await ensureClassOwner(post.lop_id, req.user, res))) return;
+    if (!post) return res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y bÃ i táº­p' });
 
     // Get all class members
-    const { data: members } = await supabase.from('class_members').select('student:student_id(id, username)').eq('class_id', post.class_id);
+    const { data: members } = await supabase.from('thanh_vien_lop').select('student:hoc_sinh_id(id, username)').eq('lop_id', post.lop_id);
     
     // Get submissions
-    const { data: submissions } = await supabase.from('class_assignment_submissions').select('*').eq('post_id', postId);
+    const { data: submissions } = await supabase.from('bai_nop').select('*').eq('bai_dang_id', postId);
 
     // Map together
     const progress = (members || []).map(m => {
-      const sub = (submissions || []).find(s => s.student_id === m.student.id);
+      const sub = (submissions || []).find(s => s.hoc_sinh_id === m.student.id);
       return {
         student: m.student,
         submitted: !!sub,
-        submitted_at: sub?.submitted_at,
+        submitted_at: sub?.nop_luc,
         status: sub?.status,
-        score: sub?.score
+        score: sub?.diem,
+        teacher_feedback: sub?.phan_hoi_giao_vien ?? null,
+        answers: sub?.cau_tra_loi
       };
     });
 
@@ -775,42 +862,42 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
     }
 
     const { postId } = req.params;
-    const { answers, score } = req.body;
-    const student_id = req.user.id;
+    const { answers } = req.body;
+    const hoc_sinh_id = req.user.id;
 
     const { data: post, error: postError } = await supabase
-      .from('class_posts')
-      .select('class_id, type, target_student_id')
+      .from('bai_dang_lop')
+      .select('lop_id, type, hoc_sinh_nhan_id')
       .eq('id', postId)
       .single();
-    if (postError || !post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    if (postError || !post) return res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y bÃ i táº­p' });
     if (post.type !== 'assignment') {
       return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
     }
-    if (post.target_student_id && post.target_student_id !== student_id) {
+    if (post.hoc_sinh_nhan_id && post.hoc_sinh_nhan_id !== hoc_sinh_id) {
       return res.status(403).json({ error: 'Bai tap nay khong duoc giao cho ban' });
     }
 
     const { data: membership, error: membershipError } = await supabase
-      .from('class_members')
-      .select('class_id')
-      .eq('class_id', post.class_id)
-      .eq('student_id', student_id)
+      .from('thanh_vien_lop')
+      .select('lop_id')
+      .eq('lop_id', post.lop_id)
+      .eq('hoc_sinh_id', hoc_sinh_id)
       .maybeSingle();
 
     if (membershipError) throw membershipError;
-    if (!membership) return res.status(403).json({ error: 'Bạn chưa tham gia lớp học này' });
+    if (!membership) return res.status(403).json({ error: 'Báº¡n chÆ°a tham gia lá»›p há»c nÃ y' });
 
     const { data, error } = await supabase
-      .from('class_assignment_submissions')
+      .from('bai_nop')
       .upsert([{ 
-        post_id: postId, 
-        student_id, 
+        bai_dang_id: postId, 
+        hoc_sinh_id, 
         status: 'submitted',
-        answers: answers || {},
-        score: score ?? null,
-        feedback: null
-      }], { onConflict: 'post_id,student_id' })
+        cau_tra_loi: answers || {},
+        diem: null,
+        phan_hoi_giao_vien: null
+      }], { onConflict: 'bai_dang_id,hoc_sinh_id' })
       .select()
       .single();
 
@@ -818,7 +905,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
 
 
 
-    res.json(data);
+    res.json(normalizeSubmission(data));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -828,34 +915,34 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
 router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
   try {
     const { postId, studentId } = req.params;
-    const { score, feedback } = req.body;
+    const { score, phan_hoi } = req.body;
 
     // Check if user is teacher
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Chỉ giáo viên mới có quyền chấm điểm' });
+      return res.status(403).json({ error: 'Chá»‰ giÃ¡o viÃªn má»›i cÃ³ quyá»n cháº¥m Ä‘iá»ƒm' });
     }
 
     const { data: post, error: postError } = await supabase
-      .from('class_posts')
-      .select('class_id, type')
+      .from('bai_dang_lop')
+      .select('lop_id, type')
       .eq('id', postId)
       .single();
     if (postError || !post) return res.status(404).json({ error: 'Khong tim thay bai tap' });
     if (post.type !== 'assignment') {
       return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
     }
-    if (!(await ensureClassOwner(post.class_id, req.user, res))) return;
+    if (!(await ensureClassOwner(post.lop_id, req.user, res))) return;
 
     const { data, error } = await supabase
-      .from('class_assignment_submissions')
-      .update({ score, feedback, status: 'graded' })
-      .eq('post_id', postId)
-      .eq('student_id', studentId)
+      .from('bai_nop')
+      .update({ diem: score, phan_hoi_giao_vien: phan_hoi, status: 'graded' })
+      .eq('bai_dang_id', postId)
+      .eq('hoc_sinh_id', studentId)
       .select()
       .single();
 
     if (error) throw error;
-    res.json(data);
+    res.json(normalizeSubmission(data));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -867,65 +954,65 @@ router.delete('/assignments/:postId', auth, async (req, res) => {
     const { postId } = req.params;
     
     // Check if user is the author or teacher of the class
-    const { data: post } = await supabase.from('class_posts').select('author_id, class_id').eq('id', postId).single();
-    if (!post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    const { data: post } = await supabase.from('bai_dang_lop').select('tac_gia_id, lop_id').eq('id', postId).single();
+    if (!post) return res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y bÃ i táº­p' });
 
-    const ownsClass = req.user.role === 'admin' || !!(await ensureClassOwner(post.class_id, req.user, res));
+    const ownsClass = req.user.role === 'admin' || !!(await ensureClassOwner(post.lop_id, req.user, res));
     if (res.headersSent) return;
-    if (post.author_id !== req.user.id && !ownsClass) {
-      return res.status(403).json({ error: 'Bạn không có quyền xóa bài tập này' });
+    if (post.tac_gia_id !== req.user.id && !ownsClass) {
+      return res.status(403).json({ error: 'Báº¡n khÃ´ng cÃ³ quyá»n xÃ³a bÃ i táº­p nÃ y' });
     }
 
-    const { error } = await supabase.from('class_posts').delete().eq('id', postId);
+    const { error } = await supabase.from('bai_dang_lop').delete().eq('id', postId);
     if (error) throw error;
     
-    res.json({ message: 'Đã xóa bài tập' });
+    res.json({ message: 'ÄÃ£ xÃ³a bÃ i táº­p' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// GET /teacher/notifications - Fetch notifications for classes managed by this teacher
+// GET /teacher/notifications - Fetch notifications for lop managed by this teacher
 router.get('/teacher/notifications', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Chỉ dành cho giáo viên và quản trị viên' });
+      return res.status(403).json({ error: 'Chá»‰ dÃ nh cho giÃ¡o viÃªn vÃ  quáº£n trá»‹ viÃªn' });
     }
 
     // 1. Get all class IDs for this teacher
-    const { data: classes, error: classErr } = await supabase
-      .from('classes')
-      .select('id, name')
-      .eq('teacher_id', userId);
+    const { data: lop, error: classErr } = await supabase
+      .from('lop')
+      .select('id, ten')
+      .eq('giao_vien_id', userId);
 
     if (classErr) throw classErr;
-    if (!classes || classes.length === 0) {
+    if (!lop || lop.length === 0) {
       return res.json([]);
     }
 
-    const classIds = classes.map(c => c.id);
+    const classIds = lop.map(c => c.id);
     const classMap = {};
-    classes.forEach(c => {
-      classMap[c.id] = c.name;
+    lop.forEach(c => {
+      classMap[c.id] = c.ten;
     });
 
     // 2. Fetch new student joins
     const { data: newMembers, error: memErr } = await supabase
-      .from('class_members')
-      .select('class_id, student_id, joined_at, student:student_id(username)')
-      .in('class_id', classIds)
-      .order('joined_at', { ascending: false })
+      .from('thanh_vien_lop')
+      .select('lop_id, hoc_sinh_id, tham_gia_luc, student:hoc_sinh_id(username)')
+      .in('lop_id', classIds)
+      .order('tham_gia_luc', { ascending: false })
       .limit(15);
 
     if (memErr) throw memErr;
 
     // 3. Fetch student messages (posts that are not from this teacher)
     const { data: posts, error: msgErr } = await supabase
-      .from('class_posts')
-      .select('id, class_id, content, type, created_at, author:author_id(username)')
-      .in('class_id', classIds)
-      .neq('author_id', userId)
+      .from('bai_dang_lop')
+      .select('id, lop_id, noi_dung, type, created_at, author:tac_gia_id(username)')
+      .in('lop_id', classIds)
+      .neq('tac_gia_id', userId)
       .order('created_at', { ascending: false })
       .limit(15);
 
@@ -933,9 +1020,9 @@ router.get('/teacher/notifications', auth, async (req, res) => {
 
     // 4. Fetch homework submissions
     const { data: assignments, error: assignErr } = await supabase
-      .from('class_posts')
-      .select('id, content, class_id')
-      .in('class_id', classIds)
+      .from('bai_dang_lop')
+      .select('id, noi_dung, lop_id')
+      .in('lop_id', classIds)
       .eq('type', 'assignment');
 
     if (assignErr) throw assignErr;
@@ -949,22 +1036,22 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       });
 
       const { data: subs, error: subErr } = await supabase
-        .from('class_assignment_submissions')
-        .select('post_id, student_id, submitted_at, student:student_id(username)')
-        .in('post_id', assignmentIds)
-        .order('submitted_at', { ascending: false })
+        .from('bai_nop')
+        .select('bai_dang_id, hoc_sinh_id, nop_luc, student:hoc_sinh_id(username)')
+        .in('bai_dang_id', assignmentIds)
+        .order('nop_luc', { ascending: false })
         .limit(15);
 
       if (subErr) throw subErr;
 
       submissions = (subs || []).map(s => {
-        const assign = assignmentMap[s.post_id];
+        const assign = assignmentMap[s.bai_dang_id];
         return {
-          id: `sub-${s.post_id}-${s.student_id}-${new Date(s.submitted_at).getTime()}`,
+          id: `sub-${s.bai_dang_id}-${s.hoc_sinh_id}-${new Date(s.nop_luc).getTime()}`,
           type: 'submission',
-          title: 'Học sinh nộp bài tập',
-          message: `Học sinh ${s.student?.username || 'Học sinh'} đã nộp bài tập: "${assign?.content?.substring(0, 30) || 'Bài tập'}${assign?.content?.length > 30 ? '...' : ''}"`,
-          timestamp: s.submitted_at,
+          title: 'Há»c sinh ná»™p bÃ i táº­p',
+          message: `Há»c sinh ${s.student?.username || 'Há»c sinh'} Ä‘Ã£ ná»™p bÃ i táº­p: "${assign?.noi_dung?.substring(0, 30) || 'BÃ i táº­p'}${assign?.noi_dung?.length > 30 ? '...' : ''}"`,
+          timestamp: s.nop_luc,
           link: '/teacher/assignments'
         };
       });
@@ -974,12 +1061,12 @@ router.get('/teacher/notifications', auth, async (req, res) => {
     const now = new Date();
     const fortyEightHoursLater = new Date(now.getTime() + 48 * 60 * 60 * 1000);
     const { data: nearDue, error: dueErr } = await supabase
-      .from('class_posts')
-      .select('id, class_id, content, deadline')
-      .in('class_id', classIds)
+      .from('bai_dang_lop')
+      .select('id, lop_id, noi_dung, han_nop')
+      .in('lop_id', classIds)
       .eq('type', 'assignment')
-      .gt('deadline', now.toISOString())
-      .lt('deadline', fortyEightHoursLater.toISOString())
+      .gt('han_nop', now.toISOString())
+      .lt('han_nop', fortyEightHoursLater.toISOString())
       .limit(5);
 
     if (dueErr) throw dueErr;
@@ -990,12 +1077,12 @@ router.get('/teacher/notifications', auth, async (req, res) => {
     // Add student joins
     (newMembers || []).forEach(m => {
       notifications.push({
-        id: `join-${m.class_id}-${m.student_id}-${new Date(m.joined_at).getTime()}`,
+        id: `join-${m.lop_id}-${m.hoc_sinh_id}-${new Date(m.tham_gia_luc).getTime()}`,
         type: 'student_join',
-        title: 'Học sinh mới tham gia lớp',
-        message: `Học sinh ${m.student?.username || 'Học sinh'} đã tham gia lớp "${classMap[m.class_id]}"`,
-        timestamp: m.joined_at,
-        link: `/teacher/classes/${m.class_id}`
+        title: 'Há»c sinh má»›i tham gia lá»›p',
+        message: `Há»c sinh ${m.student?.username || 'Há»c sinh'} Ä‘Ã£ tham gia lá»›p "${classMap[m.lop_id]}"`,
+        timestamp: m.tham_gia_luc,
+        link: `/teacher/lop/${m.lop_id}`
       });
     });
 
@@ -1004,10 +1091,10 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       notifications.push({
         id: `msg-${p.id}`,
         type: 'message',
-        title: 'Tin nhắn mới từ học sinh',
-        message: `${p.author?.username || 'Học sinh'} ("${classMap[p.class_id]}"): "${p.content?.substring(0, 50)}${p.content?.length > 50 ? '...' : ''}"`,
+        title: 'Tin nháº¯n má»›i tá»« há»c sinh',
+        message: `${p.author?.username || 'Há»c sinh'} ("${classMap[p.lop_id]}"): "${p.noi_dung?.substring(0, 50)}${p.noi_dung?.length > 50 ? '...' : ''}"`,
         timestamp: p.created_at,
-        link: `/teacher/classes/${p.class_id}`
+        link: `/teacher/lop/${p.lop_id}`
       });
     });
 
@@ -1019,9 +1106,9 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       notifications.push({
         id: `due-${d.id}`,
         type: 'due_soon',
-        title: 'Bài tập sắp hết hạn',
-        message: `Bài tập "${d.content?.substring(0, 30)}${d.content?.length > 30 ? '...' : ''}" lớp "${classMap[d.class_id]}" sắp đến hạn nộp`,
-        timestamp: d.deadline,
+        title: 'BÃ i táº­p sáº¯p háº¿t háº¡n',
+        message: `BÃ i táº­p "${d.noi_dung?.substring(0, 30)}${d.noi_dung?.length > 30 ? '...' : ''}" lá»›p "${classMap[d.lop_id]}" sáº¯p Ä‘áº¿n háº¡n ná»™p`,
+        timestamp: d.han_nop,
         link: '/teacher/assignments'
       });
     });
@@ -1036,3 +1123,4 @@ router.get('/teacher/notifications', auth, async (req, res) => {
 });
 
 export default router;
+

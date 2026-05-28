@@ -1,56 +1,63 @@
 import { supabase } from '../lib/supabase.js';
 
+const mapFeedback = (f) => f && ({
+  ...f,
+  message: f.noi_dung ?? f.message,
+  is_approved: f.da_duyet ?? f.is_approved,
+  isApproved: f.da_duyet ?? f.isApproved,
+  metadata: f.thong_tin_bo_sung ?? f.metadata,
+  userId: f.nguoi_dung_id ?? f.userId,
+  createdAt: f.created_at,
+  imageUrl: f.image_url,
+});
+
 export const Feedback = {
-  async create(feedbackData) {
+  async create(phan_hoiData) {
     const { data, error } = await supabase
-      .from('feedback')
+      .from('phan_hoi')
       .insert([{
-        user_id: feedbackData.userId,
-        username: feedbackData.username,
-        message: feedbackData.message,
-        type: feedbackData.type || 'suggestion',
-        status: feedbackData.status || 'unread',
-        image_url: feedbackData.imageUrl || null
+        nguoi_dung_id: phan_hoiData.userId,
+        username: phan_hoiData.username,
+        noi_dung: phan_hoiData.message,
+        type: phan_hoiData.type || 'suggestion',
+        status: phan_hoiData.status || 'unread',
+        image_url: phan_hoiData.imageUrl || null
       }])
       .select()
       .single();
     
     if (error) throw error;
-    return data;
+    return mapFeedback(data);
   },
 
   async findAll() {
     const { data, error } = await supabase
-      .from('feedback')
-      .select('*, users(username)')
+      .from('phan_hoi')
+      .select('*, nguoi_dung(username)')
       .order('created_at', { ascending: false });
     
     if (error) throw error;
-    // Map internal users object to match what populate would provide if needed
+    // Map internal nguoi_dung object to match what populate would provide if needed
     return data.map(f => ({
-      ...f,
-      id: f.id,
-      createdAt: f.created_at,
-      imageUrl: f.image_url,
-      isApproved: f.is_approved,
-      userId: { username: f.users?.username }
+      ...mapFeedback(f),
+      userId: { username: f.nguoi_dung?.username }
     }));
   },
 
   async findById(id) {
     const { data, error } = await supabase
-      .from('feedback')
+      .from('phan_hoi')
       .select('*')
       .eq('id', id)
       .single();
     
     if (error && error.code !== 'PGRST116') throw error;
-    return data;
+    return mapFeedback(data);
   },
 
   async countUnread() {
     const { count, error } = await supabase
-      .from('feedback')
+      .from('phan_hoi')
       .select('id', { count: 'exact', head: true })
       .eq('status', 'unread');
     
@@ -60,31 +67,31 @@ export const Feedback = {
 
   async updateStatus(id, status) {
     const { data, error } = await supabase
-      .from('feedback')
+      .from('phan_hoi')
       .update({ status })
       .eq('id', id)
       .select()
       .single();
     
     if (error) throw error;
-    return data;
+    return mapFeedback(data);
   },
 
   async approve(id) {
     const { data, error } = await supabase
-      .from('feedback')
-      .update({ is_approved: true })
+      .from('phan_hoi')
+      .update({ da_duyet: true })
       .eq('id', id)
       .select()
       .single();
     
     if (error) throw error;
-    return data;
+    return mapFeedback(data);
   },
 
   async getTypeDistribution() {
     const { data, error } = await supabase
-      .from('feedback')
+      .from('phan_hoi')
       .select('type');
     if (error) throw error;
     
@@ -106,19 +113,19 @@ export const Feedback = {
 
   async getApprovedPraises() {
     const { data, error } = await supabase
-      .from('feedback')
-      .select('username, message, metadata, created_at, users(role)')
+      .from('phan_hoi')
+      .select('username, noi_dung, thong_tin_bo_sung, created_at, nguoi_dung(role)')
       .eq('type', 'praise')
-      .eq('is_approved', true)
+      .eq('da_duyet', true)
       .order('created_at', { ascending: false });
       
     if (error) throw error;
     
     return data.map(f => ({
       name: f.username || 'Anonymous',
-      role: f.users?.role || 'Học sinh',
-      content: f.metadata?.content_vi || f.metadata?.content_en || f.message,
-      rating: f.metadata?.rating || 5
+      role: f.nguoi_dung?.role || 'Học sinh',
+      content: f.thong_tin_bo_sung?.content_vi || f.thong_tin_bo_sung?.content_en || f.noi_dung,
+      rating: f.thong_tin_bo_sung?.rating || 5
     }));
   }
 };

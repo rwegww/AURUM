@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
@@ -10,7 +10,7 @@ const Lectures = () => {
   const queryGrade = searchParams.get('grade');
   
   const [selectedGrade, setSelectedGrade] = useState(queryGrade ? parseInt(queryGrade) : 8);
-  const [lessons, setLessons] = useState([]);
+  const [bai_hoc, setLessons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -21,7 +21,7 @@ const Lectures = () => {
       const data = await res.json();
       setLessons(data);
     } catch (err) {
-      console.error('Lỗi tải bài giảng:', err);
+      console.error('Lá»—i táº£i bÃ i giáº£ng:', err);
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,7 @@ const Lectures = () => {
     fetchLessons(selectedGrade);
   }, [selectedGrade]);
 
-  const filteredLessons = lessons.filter(l => 
+  const filteredLessons = bai_hoc.filter(l => 
     l.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     l.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -43,7 +43,7 @@ const Lectures = () => {
           <div>
             <h1 className="text-[32px] font-black text-viet-text uppercase tracking-tight italic mb-2">
               <Trans i18nKey="lectures.title">
-                Thư viện <span className="text-viet-green">Bài giảng</span>
+                ThÆ° viá»‡n <span className="text-viet-green">BÃ i giáº£ng</span>
               </Trans>
             </h1>
             <p className="text-viet-text-light font-bold">{t('lectures.subtitle')}</p>
@@ -88,7 +88,7 @@ const Lectures = () => {
             {filteredLessons.map((lesson) => (
               <Link
                 key={lesson.id}
-                to={`/lessons/${selectedGrade}/${lesson.lessonId}?mode=lecture`}
+                to={`/bai_hoc/${selectedGrade}/${lesson.lessonId}?mode=lecture`}
                 className="bg-white rounded-[24px] border border-viet-border p-6 hover:shadow-xl hover:shadow-viet-green/5 transition-all group flex flex-col h-full"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -129,3 +129,4 @@ const Lectures = () => {
 };
 
 export default Lectures;
+

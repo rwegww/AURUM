@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+﻿import React, { useRef, useMemo } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 
 const SkillNode = ({ node, index, isActive, isCompleted, onClick }) => {
@@ -35,7 +35,7 @@ const SkillNode = ({ node, index, isActive, isCompleted, onClick }) => {
         }}
       >
         {isCompleted ? (
-          <span className="text-2xl">✓</span>
+          <span className="text-2xl">âœ“</span>
         ) : (
           <span className="text-xl font-bold">{node.id}</span>
         )}
@@ -65,15 +65,15 @@ const EquationSkillTree = ({ progress = {}, onSelectNode }) => {
 
   const nodes = useMemo(() => {
     const getTopic = (i) => {
-      if (i < 11) return { cat: 'Hóa hợp', title: 'Nhập môn: Đơn chất & Oxy' };
-      if (i < 18) return { cat: 'Thế', title: 'Kim loại hoạt động & Axit' };
-      if (i < 25) return { cat: 'Trung hòa', title: 'Axit mạnh - Bazơ mạnh' };
-      if (i < 32) return { cat: 'Oxit + Axit', title: 'Oxit Bazơ & Axit' };
-      if (i < 110) return { cat: 'Trao đổi', title: 'Muối & Kết tủa' };
-      if (i < 120) return { cat: 'Hữu cơ', title: 'Phản ứng cháy Hydrocarbon' };
-      if (i < 125) return { cat: 'Khử oxit', title: 'Phản ứng Oxy hóa - Khử' };
-      if (i < 200) return { cat: 'Muối + Bazơ', title: 'Trao đổi Muối & Bazơ' };
-      return { cat: 'Nâng cao', title: 'Cân bằng phương trình phức tạp' };
+      if (i < 11) return { cat: 'HÃ³a há»£p', title: 'Nháº­p mÃ´n: ÄÆ¡n cháº¥t & Oxy' };
+      if (i < 18) return { cat: 'Tháº¿', title: 'Kim loáº¡i hoáº¡t Ä‘á»™ng & Axit' };
+      if (i < 25) return { cat: 'Trung hÃ²a', title: 'Axit máº¡nh - BazÆ¡ máº¡nh' };
+      if (i < 32) return { cat: 'Oxit + Axit', title: 'Oxit BazÆ¡ & Axit' };
+      if (i < 110) return { cat: 'Trao Ä‘á»•i', title: 'Muá»‘i & Káº¿t tá»§a' };
+      if (i < 120) return { cat: 'Há»¯u cÆ¡', title: 'Pháº£n á»©ng chÃ¡y Hydrocarbon' };
+      if (i < 125) return { cat: 'Khá»­ oxit', title: 'Pháº£n á»©ng Oxy hÃ³a - Khá»­' };
+      if (i < 200) return { cat: 'Muá»‘i + BazÆ¡', title: 'Trao Ä‘á»•i Muá»‘i & BazÆ¡' };
+      return { cat: 'NÃ¢ng cao', title: 'CÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh phá»©c táº¡p' };
     };
     
     return Array.from({ length: 500 }, (_, i) => {
@@ -91,8 +91,8 @@ const EquationSkillTree = ({ progress = {}, onSelectNode }) => {
     <div className="relative bg-[#f8f9fa] rounded-[32px] border border-viet-border p-12 overflow-hidden min-h-[800px]">
       <div className="relative z-10 flex flex-col items-center" ref={containerRef}>
         <div className="mb-16 text-center">
-            <h3 className="text-2xl font-black text-viet-text uppercase italic">Lộ trình <span className="text-viet-green">Chinh phục</span></h3>
-            <p className="text-[12px] font-bold text-viet-text-light uppercase tracking-widest mt-2">{progress.completedCount || 0} / 3000 Câu đã hoàn thành</p>
+            <h3 className="text-2xl font-black text-viet-text uppercase italic">Lá»™ trÃ¬nh <span className="text-viet-green">Chinh phá»¥c</span></h3>
+            <p className="text-[12px] font-bold text-viet-text-light uppercase tracking-widest mt-2">{progress.completedCount || 0} / 3000 CÃ¢u Ä‘Ã£ hoÃ n thÃ nh</p>
         </div>
 
         {/* Connecting Line */}
@@ -122,7 +122,7 @@ const EquationSkillTree = ({ progress = {}, onSelectNode }) => {
 
         {nodes.length > 20 && (
              <div className="mt-12 text-center">
-                <p className="text-[11px] font-bold text-viet-text-light italic">Và còn hàng trăm thử thách khác...</p>
+                <p className="text-[11px] font-bold text-viet-text-light italic">VÃ  cÃ²n hÃ ng trÄƒm thá»­ thÃ¡ch khÃ¡c...</p>
              </div>
         )}
       </div>
@@ -135,3 +135,4 @@ const EquationSkillTree = ({ progress = {}, onSelectNode }) => {
 };
 
 export default EquationSkillTree;
+

@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import {
@@ -22,34 +22,34 @@ export default function LibraryTab() {
   const [category, setCategory] = React.useState("");
   const [knownCategories, setKnownCategories] = React.useState([]);
 
-  const materialsResource = useApiResource(
+  const hoc_lieuResource = useApiResource(
     () => libraryApi.list({ category, search }),
     [category, search]
   );
 
   React.useEffect(() => {
     const nextCategories = Array.from(
-      new Set((materialsResource.data || []).map((item) => item.category).filter(Boolean))
+      new Set((hoc_lieuResource.data || []).map((item) => item.category).filter(Boolean))
     );
     if (nextCategories.length > 0 && category === "") {
       setKnownCategories(nextCategories.slice(0, 12));
     }
-  }, [category, materialsResource.data]);
+  }, [category, hoc_lieuResource.data]);
 
-  const materials = materialsResource.data || [];
+  const hoc_lieu = hoc_lieuResource.data || [];
 
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Thư viện"
-        title="Thư viện học liệu"
-        subtitle="Tài liệu, đồ họa thông tin, sơ đồ tư duy và học liệu giáo viên đã đăng."
-        right={<Pill label={`${materials.length} mục`} icon="documents-outline" color={colors.green} />}
+        eyebrow="ThÆ° viá»‡n"
+        title="ThÆ° viá»‡n há»c liá»‡u"
+        subtitle="TÃ i liá»‡u, Ä‘á»“ há»a thÃ´ng tin, sÆ¡ Ä‘á»“ tÆ° duy vÃ  há»c liá»‡u giÃ¡o viÃªn Ä‘Ã£ Ä‘Äƒng."
+        right={<Pill label={`${hoc_lieu.length} má»¥c`} icon="documents-outline" color={colors.green} />}
       />
 
       <TextField
         icon="search-outline"
-        placeholder="Tìm tài liệu"
+        placeholder="TÃ¬m tÃ i liá»‡u"
         value={search}
         onChangeText={setSearch}
       />
@@ -59,7 +59,7 @@ export default function LibraryTab() {
           onPress={() => setCategory("")}
           style={[styles.categoryChip, category === "" ? styles.categoryActive : null]}
         >
-          <Text style={[styles.categoryText, category === "" ? styles.categoryTextActive : null]}>Tất cả</Text>
+          <Text style={[styles.categoryText, category === "" ? styles.categoryTextActive : null]}>Táº¥t cáº£</Text>
         </Pressable>
         {knownCategories.map((item) => (
           <Pressable
@@ -74,22 +74,22 @@ export default function LibraryTab() {
         ))}
       </View>
 
-      <SectionTitle title="Học liệu" actionLabel="Tải lại" onAction={materialsResource.reload} />
+      <SectionTitle title="Há»c liá»‡u" actionLabel="Táº£i láº¡i" onAction={hoc_lieuResource.reload} />
 
-      {materialsResource.loading && !materialsResource.data ? (
-        <LoadingState label="Đang tải thư viện..." />
-      ) : materialsResource.error ? (
-        <ErrorState message={materialsResource.error.message} onRetry={materialsResource.reload} />
-      ) : materials.length === 0 ? (
-        <EmptyState icon="folder-open-outline" title="Không tìm thấy tài liệu" subtitle="Thử đổi từ khóa hoặc bỏ lọc danh mục." />
+      {hoc_lieuResource.loading && !hoc_lieuResource.data ? (
+        <LoadingState label="Äang táº£i thÆ° viá»‡n..." />
+      ) : hoc_lieuResource.error ? (
+        <ErrorState message={hoc_lieuResource.error.message} onRetry={hoc_lieuResource.reload} />
+      ) : hoc_lieu.length === 0 ? (
+        <EmptyState icon="folder-open-outline" title="KhÃ´ng tÃ¬m tháº¥y tÃ i liá»‡u" subtitle="Thá»­ Ä‘á»•i tá»« khÃ³a hoáº·c bá» lá»c danh má»¥c." />
       ) : (
         <View style={styles.stack}>
-          {materials.map((item) => (
+          {hoc_lieu.map((item) => (
             <ListRow
               key={item.id}
               icon={item.file_type === "pdf" ? "document-text-outline" : "image-outline"}
               title={item.title}
-              subtitle={`${item.category || "Học liệu"} · ${item.view_count || 0} lượt xem`}
+              subtitle={`${item.category || "Há»c liá»‡u"} Â· ${item.view_count || 0} lÆ°á»£t xem`}
               color={colors.green}
               onPress={() => router.push({ pathname: "/library/[id]", params: { id: item.id } })}
             />
@@ -132,4 +132,5 @@ const styles = StyleSheet.create({
     gap: spacing.sm
   }
 });
+
 

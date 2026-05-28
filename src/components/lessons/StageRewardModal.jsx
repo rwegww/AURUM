@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
@@ -23,7 +23,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
           transition={{ type: "spring", damping: 12 }}
           className="mb-8 px-8 py-3 bg-viet-green text-white rounded-full font-black text-[14px] uppercase tracking-[4px] shadow-2xl shadow-viet-green/30"
         >
-          ✨ Đã hoàn thành chặng đường ✨
+          âœ¨ ÄÃ£ hoÃ n thÃ nh cháº·ng Ä‘Æ°á»ng âœ¨
         </motion.div>
 
         <motion.h2 
@@ -32,9 +32,9 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
           transition={{ delay: 0.3 }}
           className="text-4xl md:text-5xl font-black text-viet-text mb-2 text-center italic"
         >
-          Thành Quả Tuyệt Vời
+          ThÃ nh Quáº£ Tuyá»‡t Vá»i
         </motion.h2>
-        <p className="text-viet-text-light font-bold text-lg mb-8 opacity-60">Ghi chép từ cuộc hành trình - {lessonTitle}</p>
+        <p className="text-viet-text-light font-bold text-lg mb-8 opacity-60">Ghi chÃ©p tá»« cuá»™c hÃ nh trÃ¬nh - {lessonTitle}</p>
 
         {/* Rewards Section */}
         <div className="flex gap-6 mb-12">
@@ -42,9 +42,9 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4 }}
              className="bg-white px-6 py-4 rounded-3xl border border-rose-100 flex items-center gap-3 shadow-lg"
            >
-              <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-xl">⚡</div>
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-xl">âš¡</div>
               <div>
-                 <div className="text-[10px] font-black text-slate-400 uppercase">Kinh nghiệm</div>
+                 <div className="text-[10px] font-black text-slate-400 uppercase">Kinh nghiá»‡m</div>
                  <div className="text-lg font-black text-rose-600">+{gameData?.rewardXp || 100} XP</div>
               </div>
            </motion.div>
@@ -52,9 +52,9 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }}
              className="bg-white px-6 py-4 rounded-3xl border border-sky-100 flex items-center gap-3 shadow-lg"
            >
-              <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center text-xl">💎</div>
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center text-xl">ðŸ’Ž</div>
               <div>
-                 <div className="text-[10px] font-black text-slate-400 uppercase">Đá Aurum</div>
+                 <div className="text-[10px] font-black text-slate-400 uppercase">ÄÃ¡ Aurum</div>
                  <div className="text-lg font-black text-sky-500">+{gameData?.rewardGem || 5}</div>
               </div>
            </motion.div>
@@ -89,13 +89,13 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
           className="group relative px-12 py-5 bg-viet-text text-white rounded-[24px] font-black text-[14px] uppercase tracking-[3px] hover:scale-105 active:scale-95 transition-all shadow-2xl hover:bg-viet-green"
         >
           <span className="relative z-10 flex items-center gap-3">
-            Bắt đầu bài học chính 🚀
+            Báº¯t Ä‘áº§u bÃ i há»c chÃ­nh ðŸš€
           </span>
           <div className="absolute inset-0 bg-viet-green rounded-[24px] blur-xl opacity-0 group-hover:opacity-40 transition-opacity" />
         </motion.button>
         
         <p className="mt-8 text-viet-text-light/40 text-[11px] font-black uppercase tracking-widest">
-          Phần thưởng này đã được lưu vào thư viện của bạn
+          Pháº§n thÆ°á»Ÿng nÃ y Ä‘Ã£ Ä‘Æ°á»£c lÆ°u vÃ o thÆ° viá»‡n cá»§a báº¡n
         </p>
       </div>
     </motion.div>
@@ -103,3 +103,4 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
 };
 
 export default StageRewardModal;
+

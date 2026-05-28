@@ -1,349 +1,349 @@
-{
+﻿{
   "nav": {
-    "journey": "LỘ TRÌNH HỌC TẬP",
-    "vault": "KHO HUY HIỆU",
-    "arena": "ĐẤU TRƯỜNG HÓA HỌC",
-    "lectures": "HỌC LIỆU HÓA HỌC",
-    "classroom": "KHÔNG GIAN HỌC TẬP",
-    "my_class": "LỚP CỦA TÔI",
-    "periodic_table": "BẢNG NGUYÊN TỐ",
-    "library": "THƯ VIỆN AURUM",
-    "lab": "PHÒNG LAB ẢO",
-    "arena_link": "ĐẤU TRƯỜNG",
-    "missions": "NHIỆM VỤ HỌC TẬP",
-    "knowledge_map": "BẢN ĐỒ TRI THỨC",
-    "calculator": "MÁY TÍNH HÓA HỌC",
-    "solver": "GỢI Ý CÔNG THỨC",
-    "support": "KÊNH HỖ TRỢ",
-    "profile": "Hồ sơ học viên",
-    "logout": "Đăng xuất",
-    "login": "Đăng nhập",
-    "login_now": "Đăng nhập ngay",
-    "feedback": "Góp ý Aurum"
+    "journey": "Lá»˜ TRÃŒNH Há»ŒC Táº¬P",
+    "vault": "KHO HUY HIá»†U",
+    "arena": "Äáº¤U TRÆ¯á»œNG HÃ“A Há»ŒC",
+    "lectures": "Há»ŒC LIá»†U HÃ“A Há»ŒC",
+    "classroom": "KHÃ”NG GIAN Há»ŒC Táº¬P",
+    "my_class": "Lá»šP Cá»¦A TÃ”I",
+    "periodic_table": "Báº¢NG NGUYÃŠN Tá»",
+    "library": "THÆ¯ VIá»†N AURUM",
+    "lab": "PHÃ’NG LAB áº¢O",
+    "arena_link": "Äáº¤U TRÆ¯á»œNG",
+    "nhiem_vu": "NHIá»†M Vá»¤ Há»ŒC Táº¬P",
+    "knowledge_map": "Báº¢N Äá»’ TRI THá»¨C",
+    "calculator": "MÃY TÃNH HÃ“A Há»ŒC",
+    "solver": "Gá»¢I Ã CÃ”NG THá»¨C",
+    "support": "KÃŠNH Há»– TRá»¢",
+    "profile": "Há»“ sÆ¡ há»c viÃªn",
+    "logout": "ÄÄƒng xuáº¥t",
+    "login": "ÄÄƒng nháº­p",
+    "login_now": "ÄÄƒng nháº­p ngay",
+    "phan_hoi": "GÃ³p Ã½ Aurum"
   },
   "home": {
-    "hero_title": "HÀNH TRÌNH KHÁM PHÁ",
-    "hero_title_highlight": "TRI THỨC",
-    "hero_statement": "Cùng Aurum tham gia các thử thách và phòng thí nghiệm ảo qua một hành trình học tập đầy cảm hứng.",
-    "hero_image_alt": "Hành trình khám phá tri thức",
-    "hero_badge_gamification": "Học qua thử thách",
-    "hero_badge_safe_lab": "Phòng lab an toàn",
-    "enter_classroom": "Bắt đầu hành trình",
-    "enter_lab": "Vào phòng thí nghiệm",
+    "hero_title": "HÃ€NH TRÃŒNH KHÃM PHÃ",
+    "hero_title_highlight": "TRI THá»¨C",
+    "hero_statement": "CÃ¹ng Aurum tham gia cÃ¡c thá»­ thÃ¡ch vÃ  phÃ²ng thÃ­ nghiá»‡m áº£o qua má»™t hÃ nh trÃ¬nh há»c táº­p Ä‘áº§y cáº£m há»©ng.",
+    "hero_image_alt": "HÃ nh trÃ¬nh khÃ¡m phÃ¡ tri thá»©c",
+    "hero_badge_gamification": "Há»c qua thá»­ thÃ¡ch",
+    "hero_badge_safe_lab": "PhÃ²ng lab an toÃ n",
+    "enter_classroom": "Báº¯t Ä‘áº§u hÃ nh trÃ¬nh",
+    "enter_lab": "VÃ o phÃ²ng thÃ­ nghiá»‡m",
     "stats": {
       "students_count": "10.000+",
-      "students_label": "Học viên Việt Nam",
+      "students_label": "Há»c viÃªn Viá»‡t Nam",
       "schools_count": "50+",
-      "schools_label": "Lớp học đồng hành",
-      "lessons_count": "1.000+",
-      "lessons_label": "Bài học Hóa học"
+      "schools_label": "Lá»›p há»c Ä‘á»“ng hÃ nh",
+      "bai_hoc_count": "1.000+",
+      "bai_hoc_label": "BÃ i há»c HÃ³a há»c"
     },
     "features": {
       "journey": {
-        "badge": "Lộ Trình",
-        "title": "Lộ trình học tập",
-        "highlight": "Đi qua bản đồ tri thức",
-        "desc": "Từ lớp 8 đến lớp 12, mỗi chặng học mở ra một mảng kiến thức Hóa học gần gũi và có hệ thống.",
-        "desc_long": "Từ lớp 8 đến lớp 12, Aurum dẫn bạn đi qua các chủ đề Hóa học theo từng chặng rõ ràng: nguyên tử, phản ứng, dung dịch, hữu cơ và ứng dụng đời sống. Mỗi bài học gắn với hình ảnh Việt Nam để việc học dễ nhớ hơn.",
-        "link": "Khám phá lộ trình",
-        "image_alt": "Bản đồ tri thức Hóa học phong cách Việt Nam"
+        "badge": "Lá»™ TrÃ¬nh",
+        "title": "Lá»™ trÃ¬nh há»c táº­p",
+        "highlight": "Äi qua báº£n Ä‘á»“ tri thá»©c",
+        "desc": "Tá»« lá»›p 8 Ä‘áº¿n lá»›p 12, má»—i cháº·ng há»c má»Ÿ ra má»™t máº£ng kiáº¿n thá»©c HÃ³a há»c gáº§n gÅ©i vÃ  cÃ³ há»‡ thá»‘ng.",
+        "desc_long": "Tá»« lá»›p 8 Ä‘áº¿n lá»›p 12, Aurum dáº«n báº¡n Ä‘i qua cÃ¡c chá»§ Ä‘á» HÃ³a há»c theo tá»«ng cháº·ng rÃµ rÃ ng: nguyÃªn tá»­, pháº£n á»©ng, dung dá»‹ch, há»¯u cÆ¡ vÃ  á»©ng dá»¥ng Ä‘á»i sá»‘ng. Má»—i bÃ i há»c gáº¯n vá»›i hÃ¬nh áº£nh Viá»‡t Nam Ä‘á»ƒ viá»‡c há»c dá»… nhá»› hÆ¡n.",
+        "link": "KhÃ¡m phÃ¡ lá»™ trÃ¬nh",
+        "image_alt": "Báº£n Ä‘á»“ tri thá»©c HÃ³a há»c phong cÃ¡ch Viá»‡t Nam"
       },
       "lab": {
-        "badge": "Thực Hành",
-        "title": "Phòng thí nghiệm ảo",
-        "highlight": "Thử phản ứng an toàn",
-        "desc": "Quan sát hiện tượng, pha dung dịch và kiểm tra giả thuyết trong môi trường mô phỏng trực quan.",
-        "desc_long": "Phòng thí nghiệm ảo giúp học sinh thực hành phản ứng, nhận biết chất và quan sát hiện tượng một cách an toàn. Các mô phỏng được thiết kế để hỗ trợ bài học trên lớp và khuyến khích tư duy thử nghiệm.",
-        "link": "Vào phòng thí nghiệm",
-        "image_alt": "Phòng thí nghiệm Hóa học an toàn trong trường học Việt Nam"
+        "badge": "Thá»±c HÃ nh",
+        "title": "PhÃ²ng thÃ­ nghiá»‡m áº£o",
+        "highlight": "Thá»­ pháº£n á»©ng an toÃ n",
+        "desc": "Quan sÃ¡t hiá»‡n tÆ°á»£ng, pha dung dá»‹ch vÃ  kiá»ƒm tra giáº£ thuyáº¿t trong mÃ´i trÆ°á»ng mÃ´ phá»ng trá»±c quan.",
+        "desc_long": "PhÃ²ng thÃ­ nghiá»‡m áº£o giÃºp há»c sinh thá»±c hÃ nh pháº£n á»©ng, nháº­n biáº¿t cháº¥t vÃ  quan sÃ¡t hiá»‡n tÆ°á»£ng má»™t cÃ¡ch an toÃ n. CÃ¡c mÃ´ phá»ng Ä‘Æ°á»£c thiáº¿t káº¿ Ä‘á»ƒ há»— trá»£ bÃ i há»c trÃªn lá»›p vÃ  khuyáº¿n khÃ­ch tÆ° duy thá»­ nghiá»‡m.",
+        "link": "VÃ o phÃ²ng thÃ­ nghiá»‡m",
+        "image_alt": "PhÃ²ng thÃ­ nghiá»‡m HÃ³a há»c an toÃ n trong trÆ°á»ng há»c Viá»‡t Nam"
       },
       "arena": {
-        "badge": "Thi Đấu",
-        "title": "Đấu trường kiến thức",
-        "highlight": "Thi đấu Hóa học",
-        "desc": "Trả lời nhanh, ghi điểm và rèn phản xạ với các câu hỏi Hóa học theo cấp độ.",
-        "desc_long": "Aurum biến luyện tập thành cuộc thi kiến thức thân thiện giữa các học viên. Bạn có thể kiểm tra tốc độ, độ chính xác và khả năng vận dụng công thức qua từng vòng thử thách.",
-        "link": "Thử sức ngay",
-        "image_alt": "Cuộc thi kiến thức Hóa học giữa học sinh Việt Nam"
+        "badge": "Thi Äáº¥u",
+        "title": "Äáº¥u trÆ°á»ng kiáº¿n thá»©c",
+        "highlight": "Thi Ä‘áº¥u HÃ³a há»c",
+        "desc": "Tráº£ lá»i nhanh, ghi Ä‘iá»ƒm vÃ  rÃ¨n pháº£n xáº¡ vá»›i cÃ¡c cÃ¢u há»i HÃ³a há»c theo cáº¥p Ä‘á»™.",
+        "desc_long": "Aurum biáº¿n luyá»‡n táº­p thÃ nh cuá»™c thi kiáº¿n thá»©c thÃ¢n thiá»‡n giá»¯a cÃ¡c há»c viÃªn. Báº¡n cÃ³ thá»ƒ kiá»ƒm tra tá»‘c Ä‘á»™, Ä‘á»™ chÃ­nh xÃ¡c vÃ  kháº£ nÄƒng váº­n dá»¥ng cÃ´ng thá»©c qua tá»«ng vÃ²ng thá»­ thÃ¡ch.",
+        "link": "Thá»­ sá»©c ngay",
+        "image_alt": "Cuá»™c thi kiáº¿n thá»©c HÃ³a há»c giá»¯a há»c sinh Viá»‡t Nam"
       },
       "library": {
-        "title": "Bách khoa Hóa học",
-        "highlight": "Tra cứu chính xác",
-        "desc": "Kho học liệu, bảng tuần hoàn và tài liệu trực quan giúp bạn ôn tập nhanh khi cần.",
-        "link": "Vào thư viện"
+        "title": "BÃ¡ch khoa HÃ³a há»c",
+        "highlight": "Tra cá»©u chÃ­nh xÃ¡c",
+        "desc": "Kho há»c liá»‡u, báº£ng tuáº§n hoÃ n vÃ  tÃ i liá»‡u trá»±c quan giÃºp báº¡n Ã´n táº­p nhanh khi cáº§n.",
+        "link": "VÃ o thÆ° viá»‡n"
       },
       "map": {
-        "badge": "Khám Phá Việt Nam",
-        "title": "Bản đồ học tập",
-        "highlight": "Chinh phục từng chặng",
-        "desc": "Theo dõi tiến độ qua bản đồ Việt Nam cách điệu, mở khóa từng chủ đề và ghi lại dấu mốc học tập của bạn.",
-        "link": "Bắt đầu hành trình",
-        "image_alt": "Bản đồ Việt Nam cách điệu với các chặng học Hóa học"
+        "badge": "KhÃ¡m PhÃ¡ Viá»‡t Nam",
+        "title": "Báº£n Ä‘á»“ há»c táº­p",
+        "highlight": "Chinh phá»¥c tá»«ng cháº·ng",
+        "desc": "Theo dÃµi tiáº¿n Ä‘á»™ qua báº£n Ä‘á»“ Viá»‡t Nam cÃ¡ch Ä‘iá»‡u, má»Ÿ khÃ³a tá»«ng chá»§ Ä‘á» vÃ  ghi láº¡i dáº¥u má»‘c há»c táº­p cá»§a báº¡n.",
+        "link": "Báº¯t Ä‘áº§u hÃ nh trÃ¬nh",
+        "image_alt": "Báº£n Ä‘á»“ Viá»‡t Nam cÃ¡ch Ä‘iá»‡u vá»›i cÃ¡c cháº·ng há»c HÃ³a há»c"
       },
-      "lessons": {
-        "badge": "Học Liệu",
-        "title": "Bài giảng sinh động",
-        "highlight": "Dễ hiểu, dễ nhớ",
-        "desc": "Lý thuyết Hóa học được trình bày bằng hình ảnh, ví dụ đời sống và hoạt động tương tác ngắn.",
-        "link": "Xem bài giảng",
-        "image_alt": "Bài giảng Hóa học trực quan phong cách tranh Việt"
+      "bai_hoc": {
+        "badge": "Há»c Liá»‡u",
+        "title": "BÃ i giáº£ng sinh Ä‘á»™ng",
+        "highlight": "Dá»… hiá»ƒu, dá»… nhá»›",
+        "desc": "LÃ½ thuyáº¿t HÃ³a há»c Ä‘Æ°á»£c trÃ¬nh bÃ y báº±ng hÃ¬nh áº£nh, vÃ­ dá»¥ Ä‘á»i sá»‘ng vÃ  hoáº¡t Ä‘á»™ng tÆ°Æ¡ng tÃ¡c ngáº¯n.",
+        "link": "Xem bÃ i giáº£ng",
+        "image_alt": "BÃ i giáº£ng HÃ³a há»c trá»±c quan phong cÃ¡ch tranh Viá»‡t"
       }
     },
     "leaderboard": {
-      "badge": "Bảng Vinh Danh",
+      "badge": "Báº£ng Vinh Danh",
       "title_main": "Vinh danh",
-      "title_highlight": "Nhà khám phá nổi bật",
-      "rank_master": "Học viên tiêu biểu",
-      "online": "Đang online",
-      "offline": "Ngoại tuyến",
-      "active": "hoạt động",
-      "level": "Cấp độ",
-      "activity": "Hoạt động:",
-      "disciple": "Học viên Aurum",
-      "transmitting": "Đang tải bảng xếp hạng...",
-      "empty": "Bảng xếp hạng đang chờ những người học đầu tiên...",
-      "conquer_btn": "Tham gia thử thách ngay"
+      "title_highlight": "NhÃ  khÃ¡m phÃ¡ ná»•i báº­t",
+      "rank_master": "Há»c viÃªn tiÃªu biá»ƒu",
+      "online": "Äang online",
+      "offline": "Ngoáº¡i tuyáº¿n",
+      "active": "hoáº¡t Ä‘á»™ng",
+      "level": "Cáº¥p Ä‘á»™",
+      "activity": "Hoáº¡t Ä‘á»™ng:",
+      "disciple": "Há»c viÃªn Aurum",
+      "transmitting": "Äang táº£i báº£ng xáº¿p háº¡ng...",
+      "empty": "Báº£ng xáº¿p háº¡ng Ä‘ang chá» nhá»¯ng ngÆ°á»i há»c Ä‘áº§u tiÃªn...",
+      "conquer_btn": "Tham gia thá»­ thÃ¡ch ngay"
     },
     "social_proof": {
-      "text": "10.000+ học viên Việt Nam",
-      "schools": "50+ lớp học đồng hành"
+      "text": "10.000+ há»c viÃªn Viá»‡t Nam",
+      "schools": "50+ lá»›p há»c Ä‘á»“ng hÃ nh"
     },
     "how_it_works": {
-      "badge": "Cách hoạt động",
-      "title": "3 Bước Chinh Phục Hóa Học",
+      "badge": "CÃ¡ch hoáº¡t Ä‘á»™ng",
+      "title": "3 BÆ°á»›c Chinh Phá»¥c HÃ³a Há»c",
       "steps": {
         "step1": {
-          "title": "Nắm chắc kiến thức nền",
-          "desc": "Học lý thuyết bằng hình ảnh trực quan và ví dụ gần gũi."
+          "title": "Náº¯m cháº¯c kiáº¿n thá»©c ná»n",
+          "desc": "Há»c lÃ½ thuyáº¿t báº±ng hÃ¬nh áº£nh trá»±c quan vÃ  vÃ­ dá»¥ gáº§n gÅ©i."
         },
         "step2": {
-          "title": "Thực hành trong lab ảo",
-          "desc": "Quan sát phản ứng, thử nghiệm giả thuyết và rút ra kết luận."
+          "title": "Thá»±c hÃ nh trong lab áº£o",
+          "desc": "Quan sÃ¡t pháº£n á»©ng, thá»­ nghiá»‡m giáº£ thuyáº¿t vÃ  rÃºt ra káº¿t luáº­n."
         },
         "step3": {
-          "title": "Thi đấu kiến thức",
-          "desc": "Rèn tốc độ, độ chính xác và lưu lại tiến độ qua từng thử thách."
+          "title": "Thi Ä‘áº¥u kiáº¿n thá»©c",
+          "desc": "RÃ¨n tá»‘c Ä‘á»™, Ä‘á»™ chÃ­nh xÃ¡c vÃ  lÆ°u láº¡i tiáº¿n Ä‘á»™ qua tá»«ng thá»­ thÃ¡ch."
         }
       }
     },
     "testimonials": {
-      "badge": "Góc chia sẻ",
-      "title": "Học viên và giáo viên nói gì về Aurum?",
+      "badge": "GÃ³c chia sáº»",
+      "title": "Há»c viÃªn vÃ  giÃ¡o viÃªn nÃ³i gÃ¬ vá» Aurum?",
       "reviews": [
         {
           "name": "Minh Anh",
-          "role": "Học sinh lớp 9",
-          "content": "Các bài học có hình minh họa rõ ràng nên mình hiểu phản ứng Hóa học nhanh hơn và bớt sợ bài tập."
+          "role": "Há»c sinh lá»›p 9",
+          "content": "CÃ¡c bÃ i há»c cÃ³ hÃ¬nh minh há»a rÃµ rÃ ng nÃªn mÃ¬nh hiá»ƒu pháº£n á»©ng HÃ³a há»c nhanh hÆ¡n vÃ  bá»›t sá»£ bÃ i táº­p."
         },
         {
-          "name": "Gia Bảo",
-          "role": "Học sinh lớp 11",
-          "content": "Phòng thí nghiệm ảo giúp mình thử nhiều hiện tượng trước khi làm bài thực hành trên lớp."
+          "name": "Gia Báº£o",
+          "role": "Há»c sinh lá»›p 11",
+          "content": "PhÃ²ng thÃ­ nghiá»‡m áº£o giÃºp mÃ¬nh thá»­ nhiá»u hiá»‡n tÆ°á»£ng trÆ°á»›c khi lÃ m bÃ i thá»±c hÃ nh trÃªn lá»›p."
         },
         {
-          "name": "Cô Lan",
-          "role": "Giáo viên Hóa học",
-          "content": "Aurum phù hợp để giao nhiệm vụ ôn tập ngắn, học sinh dễ theo dõi tiến độ và chủ động luyện tập hơn."
+          "name": "CÃ´ Lan",
+          "role": "GiÃ¡o viÃªn HÃ³a há»c",
+          "content": "Aurum phÃ¹ há»£p Ä‘á»ƒ giao nhiá»‡m vá»¥ Ã´n táº­p ngáº¯n, há»c sinh dá»… theo dÃµi tiáº¿n Ä‘á»™ vÃ  chá»§ Ä‘á»™ng luyá»‡n táº­p hÆ¡n."
         }
       ]
     },
     "final_cta": {
-      "title": "Sẵn sàng bắt đầu hành trình Hóa học?",
-      "subtitle": "Đăng nhập để học theo lộ trình cá nhân, lưu tiến độ và tiếp tục khám phá mỗi ngày.",
-      "button": "Bắt đầu ngay"
+      "title": "Sáºµn sÃ ng báº¯t Ä‘áº§u hÃ nh trÃ¬nh HÃ³a há»c?",
+      "subtitle": "ÄÄƒng nháº­p Ä‘á»ƒ há»c theo lá»™ trÃ¬nh cÃ¡ nhÃ¢n, lÆ°u tiáº¿n Ä‘á»™ vÃ  tiáº¿p tá»¥c khÃ¡m phÃ¡ má»—i ngÃ y.",
+      "button": "Báº¯t Ä‘áº§u ngay"
     }
   },
   "footer": {
-    "brand_desc": "Học Hóa học thông qua trò chơi tương tác và thí nghiệm ảo chân thực. Nền tảng không gian học tập công nghệ hiện đại dành cho thế hệ tương lai.",
+    "brand_desc": "Há»c HÃ³a há»c thÃ´ng qua trÃ² chÆ¡i tÆ°Æ¡ng tÃ¡c vÃ  thÃ­ nghiá»‡m áº£o chÃ¢n thá»±c. Ná»n táº£ng khÃ´ng gian há»c táº­p cÃ´ng nghá»‡ hiá»‡n Ä‘áº¡i dÃ nh cho tháº¿ há»‡ tÆ°Æ¡ng lai.",
     "explore": {
-      "title": "Khám phá",
-      "learning_center": "Trung tâm học tập",
-      "chem_tools": "Công cụ Hóa học",
-      "lectures": "Bài giảng tương tác",
-      "virtual_lab": "Phòng Thí nghiệm ảo",
-      "arena": "Cuộc đua PK"
+      "title": "KhÃ¡m phÃ¡",
+      "learning_center": "Trung tÃ¢m há»c táº­p",
+      "chem_tools": "CÃ´ng cá»¥ HÃ³a há»c",
+      "lectures": "BÃ i giáº£ng tÆ°Æ¡ng tÃ¡c",
+      "virtual_lab": "PhÃ²ng ThÃ­ nghiá»‡m áº£o",
+      "arena": "Cuá»™c Ä‘ua PK"
     },
     "support": {
-      "title": "Hỗ trợ",
-      "user_guide": "Hướng dẫn sử dụng",
-      "faq": "Câu hỏi thường gặp",
-      "privacy_policy": "Chính sách bảo mật",
-      "terms_of_service": "Điều khoản dịch vụ"
+      "title": "Há»— trá»£",
+      "user_guide": "HÆ°á»›ng dáº«n sá»­ dá»¥ng",
+      "faq": "CÃ¢u há»i thÆ°á»ng gáº·p",
+      "privacy_policy": "ChÃ­nh sÃ¡ch báº£o máº­t",
+      "terms_of_service": "Äiá»u khoáº£n dá»‹ch vá»¥"
     },
     "contact": {
-      "title": "Liên hệ",
+      "title": "LiÃªn há»‡",
       "email": "EMAIL",
       "hotline": "HOTLINE",
-      "address_title": "TRỤ SỞ CHÍNH",
-      "address_value": "ĐH Nguyễn Tất Thành TP.HCM\n3F Nguyễn Hữu Thọ, Tân Hưng"
+      "address_title": "TRá»¤ Sá»ž CHÃNH",
+      "address_value": "ÄH Nguyá»…n Táº¥t ThÃ nh TP.HCM\n3F Nguyá»…n Há»¯u Thá», TÃ¢n HÆ°ng"
     }
   },
   "classroom": {
-    "title": "Bắt đầu hành trình <1/><2> Hóa học</2> của bạn",
-    "subtitle": "Mỗi cấp độ học là một chặng khám phá mới, giúp bạn đi từ kiến thức nền đến ứng dụng Hóa học trong đời sống.",
-    "enter_class": "Vào không gian học tập",
+    "title": "Báº¯t Ä‘áº§u hÃ nh trÃ¬nh <1/><2> HÃ³a há»c</2> cá»§a báº¡n",
+    "subtitle": "Má»—i cáº¥p Ä‘á»™ há»c lÃ  má»™t cháº·ng khÃ¡m phÃ¡ má»›i, giÃºp báº¡n Ä‘i tá»« kiáº¿n thá»©c ná»n Ä‘áº¿n á»©ng dá»¥ng HÃ³a há»c trong Ä‘á»i sá»‘ng.",
+    "enter_class": "VÃ o khÃ´ng gian há»c táº­p",
     "knowledge_tree": {
-      "academic_map": "Bản đồ tri thức",
-      "title": "Cây kiến thức Hóa học tổng hợp",
-      "subtitle": "Hệ thống hóa toàn bộ kiến thức từ cơ bản đến nâng cao.",
-      "instruction": "Bấm vào từng bài học để bắt đầu luyện tập.",
-      "updating": "Đang tải học liệu bài học...",
-      "go_journey": "Mở lộ trình Nhà Lớp {{grade}}"
+      "academic_map": "Báº£n Ä‘á»“ tri thá»©c",
+      "title": "CÃ¢y kiáº¿n thá»©c HÃ³a há»c tá»•ng há»£p",
+      "subtitle": "Há»‡ thá»‘ng hÃ³a toÃ n bá»™ kiáº¿n thá»©c tá»« cÆ¡ báº£n Ä‘áº¿n nÃ¢ng cao.",
+      "instruction": "Báº¥m vÃ o tá»«ng bÃ i há»c Ä‘á»ƒ báº¯t Ä‘áº§u luyá»‡n táº­p.",
+      "updating": "Äang táº£i há»c liá»‡u bÃ i há»c...",
+      "go_journey": "Má»Ÿ lá»™ trÃ¬nh NhÃ  Lá»›p {{grade}}"
     },
     "grades": {
       "8": {
-        "title": "Khởi Động Hóa Học Lớp 8",
-        "desc": "Làm quen với chất, dụng cụ thí nghiệm và những hiện tượng Hóa học đầu tiên."
+        "title": "Khá»Ÿi Äá»™ng HÃ³a Há»c Lá»›p 8",
+        "desc": "LÃ m quen vá»›i cháº¥t, dá»¥ng cá»¥ thÃ­ nghiá»‡m vÃ  nhá»¯ng hiá»‡n tÆ°á»£ng HÃ³a há»c Ä‘áº§u tiÃªn."
       },
       "9": {
-        "title": "Quan Sát Phản Ứng Lớp 9",
-        "desc": "Tìm hiểu phản ứng, dung dịch và sự biến đổi của chất qua thí nghiệm an toàn."
+        "title": "Quan SÃ¡t Pháº£n á»¨ng Lá»›p 9",
+        "desc": "TÃ¬m hiá»ƒu pháº£n á»©ng, dung dá»‹ch vÃ  sá»± biáº¿n Ä‘á»•i cá»§a cháº¥t qua thÃ­ nghiá»‡m an toÃ n."
       },
       "10": {
-        "title": "Cấu Trúc Nguyên Tử Lớp 10",
-        "desc": "Nghiên cứu nguyên tử, liên kết, bảng tuần hoàn và quy luật nền tảng của Hóa học."
+        "title": "Cáº¥u TrÃºc NguyÃªn Tá»­ Lá»›p 10",
+        "desc": "NghiÃªn cá»©u nguyÃªn tá»­, liÃªn káº¿t, báº£ng tuáº§n hoÃ n vÃ  quy luáº­t ná»n táº£ng cá»§a HÃ³a há»c."
       },
       "11": {
-        "title": "Hóa Hữu Cơ Lớp 11",
-        "desc": "Khám phá mạch carbon, nhóm chức và những hợp chất gắn với đời sống."
+        "title": "HÃ³a Há»¯u CÆ¡ Lá»›p 11",
+        "desc": "KhÃ¡m phÃ¡ máº¡ch carbon, nhÃ³m chá»©c vÃ  nhá»¯ng há»£p cháº¥t gáº¯n vá»›i Ä‘á»i sá»‘ng."
       },
       "12": {
-        "title": "Hóa Học Ứng Dụng Lớp 12",
-        "desc": "Chinh phục điện hóa, polymer, kim loại và các ứng dụng thực tiễn trước kỳ thi quan trọng."
+        "title": "HÃ³a Há»c á»¨ng Dá»¥ng Lá»›p 12",
+        "desc": "Chinh phá»¥c Ä‘iá»‡n hÃ³a, polymer, kim loáº¡i vÃ  cÃ¡c á»©ng dá»¥ng thá»±c tiá»…n trÆ°á»›c ká»³ thi quan trá»ng."
       }
     }
   },
   "lectures": {
-    "title": "Thư viện <1>Học liệu Hóa học</1>",
-    "subtitle": "Tra cứu lý thuyết, video và bài ôn tập theo khối lớp",
-    "search_placeholder": "Tìm kiếm học liệu...",
-    "grade_filter": "Lớp {{grade}}",
-    "loading": "Đang tải học liệu...",
-    "no_results": "Không tìm thấy tài liệu phù hợp",
-    "clear_filters": "Xóa bộ lọc",
+    "title": "ThÆ° viá»‡n <1>Há»c liá»‡u HÃ³a há»c</1>",
+    "subtitle": "Tra cá»©u lÃ½ thuyáº¿t, video vÃ  bÃ i Ã´n táº­p theo khá»‘i lá»›p",
+    "search_placeholder": "TÃ¬m kiáº¿m há»c liá»‡u...",
+    "grade_filter": "Lá»›p {{grade}}",
+    "loading": "Äang táº£i há»c liá»‡u...",
+    "no_results": "KhÃ´ng tÃ¬m tháº¥y tÃ i liá»‡u phÃ¹ há»£p",
+    "clear_filters": "XÃ³a bá»™ lá»c",
     "metadata": {
-      "video": "1 video bài giảng",
-      "theory": "Chú giải"
+      "video": "1 video bÃ i giáº£ng",
+      "theory": "ChÃº giáº£i"
     }
   },
   "about": {
-    "mission_badge": "Tuyên ngôn Aurum",
-    "title": "Khơi nguồn đam mê <1/><2> Hóa học</2> cho thế hệ trẻ",
-    "description": "Aurum là hành trình học tập tương tác giúp học sinh khám phá thế giới vi mô của nguyên tử, liên kết và phản ứng. Chúng tôi tin Hóa học trở nên dễ hiểu nhất khi được quan sát và thực hành an toàn.",
+    "mission_badge": "TuyÃªn ngÃ´n Aurum",
+    "title": "KhÆ¡i nguá»“n Ä‘am mÃª <1/><2> HÃ³a há»c</2> cho tháº¿ há»‡ tráº»",
+    "description": "Aurum lÃ  hÃ nh trÃ¬nh há»c táº­p tÆ°Æ¡ng tÃ¡c giÃºp há»c sinh khÃ¡m phÃ¡ tháº¿ giá»›i vi mÃ´ cá»§a nguyÃªn tá»­, liÃªn káº¿t vÃ  pháº£n á»©ng. ChÃºng tÃ´i tin HÃ³a há»c trá»Ÿ nÃªn dá»… hiá»ƒu nháº¥t khi Ä‘Æ°á»£c quan sÃ¡t vÃ  thá»±c hÃ nh an toÃ n.",
     "pillars": {
       "safety": {
-        "title": "Phòng thực hành tuyệt mật an toàn",
-        "desc": "Thiết bị ảo 3D giúp các học viên tập sự thực hành pha chế các hóa chất nguy hiểm mà không sợ nổ tung học viện."
+        "title": "PhÃ²ng thá»±c hÃ nh tuyá»‡t máº­t an toÃ n",
+        "desc": "Thiáº¿t bá»‹ áº£o 3D giÃºp cÃ¡c há»c viÃªn táº­p sá»± thá»±c hÃ nh pha cháº¿ cÃ¡c hÃ³a cháº¥t nguy hiá»ƒm mÃ  khÃ´ng sá»£ ná»• tung há»c viá»‡n."
       },
       "gamification": {
-        "title": "Tu luyện thăng cấp",
-        "desc": "Hệ thống vinh danh tích lũy điểm học tập, huy hiệu học tập giúp việc luyện tập trở nên cuốn hút."
+        "title": "Tu luyá»‡n thÄƒng cáº¥p",
+        "desc": "Há»‡ thá»‘ng vinh danh tÃ­ch lÅ©y Ä‘iá»ƒm há»c táº­p, huy hiá»‡u há»c táº­p giÃºp viá»‡c luyá»‡n táº­p trá»Ÿ nÃªn cuá»‘n hÃºt."
       },
       "visualization": {
-        "title": "Quan sát hóa học",
-        "desc": "Mọi liên kết phân tử vô hình đều được tái hiện bằng hình ảnh 3D hóa học sống động."
+        "title": "Quan sÃ¡t hÃ³a há»c",
+        "desc": "Má»i liÃªn káº¿t phÃ¢n tá»­ vÃ´ hÃ¬nh Ä‘á»u Ä‘Æ°á»£c tÃ¡i hiá»‡n báº±ng hÃ¬nh áº£nh 3D hÃ³a há»c sá»‘ng Ä‘á»™ng."
       }
     },
     "team_section": {
-      "title": "Ban giám hiệu từ Aurum",
-      "description": "Chúng tôi quy tụ những Giáo viên hóa chất kỳ cựu và các nhà luyện kim tài năng. Với tâm niệm \"Hóa học hóa giáo dục là tương lai\", chúng tôi không ngừng cải tiến các công thức hóa chất và phòng thực hành hóa học.",
+      "title": "Ban giÃ¡m hiá»‡u tá»« Aurum",
+      "description": "ChÃºng tÃ´i quy tá»¥ nhá»¯ng GiÃ¡o viÃªn hÃ³a cháº¥t ká»³ cá»±u vÃ  cÃ¡c nhÃ  luyá»‡n kim tÃ i nÄƒng. Vá»›i tÃ¢m niá»‡m \"HÃ³a há»c hÃ³a giÃ¡o dá»¥c lÃ  tÆ°Æ¡ng lai\", chÃºng tÃ´i khÃ´ng ngá»«ng cáº£i tiáº¿n cÃ¡c cÃ´ng thá»©c hÃ³a cháº¥t vÃ  phÃ²ng thá»±c hÃ nh hÃ³a há»c.",
       "achievements": [
-        "Hơn 1.000 tài liệu bài học chất lượng cao",
-        "Công nghệ mô phỏng thiết bị hóa học 3D đỉnh cao",
-        "Cộng đồng học viên hơn 50.000 thành viên"
+        "HÆ¡n 1.000 tÃ i liá»‡u bÃ i há»c cháº¥t lÆ°á»£ng cao",
+        "CÃ´ng nghá»‡ mÃ´ phá»ng thiáº¿t bá»‹ hÃ³a há»c 3D Ä‘á»‰nh cao",
+        "Cá»™ng Ä‘á»“ng há»c viÃªn hÆ¡n 50.000 thÃ nh viÃªn"
       ]
     }
   },
   "contact": {
-    "badge": "Gửi tin nhắn cho chúng tôi",
-    "title": "Kết nối với <1/> đội ngũ Aurum",
-    "description": "Chúng tôi luôn sẵn lòng lắng nghe góp ý, báo cáo lỗi và đề xuất hợp tác từ bạn. Hãy dùng các kênh liên lạc chính thức dưới đây.",
+    "badge": "Gá»­i tin nháº¯n cho chÃºng tÃ´i",
+    "title": "Káº¿t ná»‘i vá»›i <1/> Ä‘á»™i ngÅ© Aurum",
+    "description": "ChÃºng tÃ´i luÃ´n sáºµn lÃ²ng láº¯ng nghe gÃ³p Ã½, bÃ¡o cÃ¡o lá»—i vÃ  Ä‘á» xuáº¥t há»£p tÃ¡c tá»« báº¡n. HÃ£y dÃ¹ng cÃ¡c kÃªnh liÃªn láº¡c chÃ­nh thá»©c dÆ°á»›i Ä‘Ã¢y.",
     "info": {
-      "hotline": "Đường dây tin nhắn nhanh",
-      "address": "Địa điểm văn phòng Hẻm Xéo",
-      "google_maps": "Xem trên bản đồ đạo tặc →"
+      "hotline": "ÄÆ°á»ng dÃ¢y tin nháº¯n nhanh",
+      "address": "Äá»‹a Ä‘iá»ƒm vÄƒn phÃ²ng Háº»m XÃ©o",
+      "google_maps": "Xem trÃªn báº£n Ä‘á»“ Ä‘áº¡o táº·c â†’"
     },
     "form": {
-      "title": "Soạn thư tin nhắn",
-      "name_label": "Danh xưng học viên",
-      "name_placeholder": "Nhập danh tính của bạn...",
-      "email_label": "Email tin nhắn liên hệ",
+      "title": "Soáº¡n thÆ° tin nháº¯n",
+      "name_label": "Danh xÆ°ng há»c viÃªn",
+      "name_placeholder": "Nháº­p danh tÃ­nh cá»§a báº¡n...",
+      "email_label": "Email tin nháº¯n liÃªn há»‡",
       "email_placeholder": "vi_rut_phap_thuat@example.com",
-      "message_label": "Nội dung thư tin nhắn",
-      "message_placeholder": "Bạn muốn truyền đạt điều gì đến Hội đồng...",
-      "submit": "Phóng thư tin nhắn đi",
-      "success": "tin nhắn đã cất cánh thành công! ✓"
+      "message_label": "Ná»™i dung thÆ° tin nháº¯n",
+      "message_placeholder": "Báº¡n muá»‘n truyá»n Ä‘áº¡t Ä‘iá»u gÃ¬ Ä‘áº¿n Há»™i Ä‘á»“ng...",
+      "submit": "PhÃ³ng thÆ° tin nháº¯n Ä‘i",
+      "success": "tin nháº¯n Ä‘Ã£ cáº¥t cÃ¡nh thÃ nh cÃ´ng! âœ“"
     }
   },
   "terms": {
-    "title": "Điều khoản & <1/> Chính sách Bảo mật",
-    "last_updated": "Cập nhật lần cuối: {{date}}",
+    "title": "Äiá»u khoáº£n & <1/> ChÃ­nh sÃ¡ch Báº£o máº­t",
+    "last_updated": "Cáº­p nháº­t láº§n cuá»‘i: {{date}}",
     "sections": {
       "acceptance": {
-        "title": "1. Chấp nhận điều khoản",
-        "p1": "Bằng việc truy cập và sử dụng Aurum Chemistry Odyssey, bạn đồng ý tuân thủ và bị ràng buộc bởi các điều khoản sử dụng này. Nếu bạn không đồng ý với bất kỳ phần nào của các điều khoản, vui lòng không sử dụng dịch vụ của chúng tôi.",
-        "p2": "Chúng tôi có quyền sửa đổi hoặc cập nhật các điều khoản này bất kỳ lúc nào mà không cần thông báo trước. Việc bạn tiếp tục sử dụng nền tảng sau khi có thay đổi đồng nghĩa với việc bạn chấp nhận các điều khoản mới."
+        "title": "1. Cháº¥p nháº­n Ä‘iá»u khoáº£n",
+        "p1": "Báº±ng viá»‡c truy cáº­p vÃ  sá»­ dá»¥ng Aurum Chemistry Odyssey, báº¡n Ä‘á»“ng Ã½ tuÃ¢n thá»§ vÃ  bá»‹ rÃ ng buá»™c bá»Ÿi cÃ¡c Ä‘iá»u khoáº£n sá»­ dá»¥ng nÃ y. Náº¿u báº¡n khÃ´ng Ä‘á»“ng Ã½ vá»›i báº¥t ká»³ pháº§n nÃ o cá»§a cÃ¡c Ä‘iá»u khoáº£n, vui lÃ²ng khÃ´ng sá»­ dá»¥ng dá»‹ch vá»¥ cá»§a chÃºng tÃ´i.",
+        "p2": "ChÃºng tÃ´i cÃ³ quyá»n sá»­a Ä‘á»•i hoáº·c cáº­p nháº­t cÃ¡c Ä‘iá»u khoáº£n nÃ y báº¥t ká»³ lÃºc nÃ o mÃ  khÃ´ng cáº§n thÃ´ng bÃ¡o trÆ°á»›c. Viá»‡c báº¡n tiáº¿p tá»¥c sá»­ dá»¥ng ná»n táº£ng sau khi cÃ³ thay Ä‘á»•i Ä‘á»“ng nghÄ©a vá»›i viá»‡c báº¡n cháº¥p nháº­n cÃ¡c Ä‘iá»u khoáº£n má»›i."
       },
       "accounts": {
-        "title": "2. Tài khoản người dùng",
-        "p1": "Để truy cập một số tính năng, bạn có thể cần đăng ký tài khoản. Bạn có trách nhiệm duy trì tính bảo mật của thông tin tài khoản và mật khẩu của mình. Mọi hoạt động xảy ra dưới tài khoản của bạn sẽ thuộc trách nhiệm của bạn.",
-        "p2": "Nghiêm cấm các hành vi chia sẻ tài khoản, sử dụng công cụ gian lận trong đấu trường hoặc cố tình gây rối cộng đồng. Chúng tôi có quyền khóa tài khoản vi phạm mà không cần báo trước."
+        "title": "2. TÃ i khoáº£n ngÆ°á»i dÃ¹ng",
+        "p1": "Äá»ƒ truy cáº­p má»™t sá»‘ tÃ­nh nÄƒng, báº¡n cÃ³ thá»ƒ cáº§n Ä‘Äƒng kÃ½ tÃ i khoáº£n. Báº¡n cÃ³ trÃ¡ch nhiá»‡m duy trÃ¬ tÃ­nh báº£o máº­t cá»§a thÃ´ng tin tÃ i khoáº£n vÃ  máº­t kháº©u cá»§a mÃ¬nh. Má»i hoáº¡t Ä‘á»™ng xáº£y ra dÆ°á»›i tÃ i khoáº£n cá»§a báº¡n sáº½ thuá»™c trÃ¡ch nhiá»‡m cá»§a báº¡n.",
+        "p2": "NghiÃªm cáº¥m cÃ¡c hÃ nh vi chia sáº» tÃ i khoáº£n, sá»­ dá»¥ng cÃ´ng cá»¥ gian láº­n trong Ä‘áº¥u trÆ°á»ng hoáº·c cá»‘ tÃ¬nh gÃ¢y rá»‘i cá»™ng Ä‘á»“ng. ChÃºng tÃ´i cÃ³ quyá»n khÃ³a tÃ i khoáº£n vi pháº¡m mÃ  khÃ´ng cáº§n bÃ¡o trÆ°á»›c."
       },
       "intellectual": {
-        "title": "3. Quyền sở hữu trí tuệ",
-        "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Aurum Hóa học Aurum hoặc các bên cấp phép.",
-        "p2": "Mọi hành vi sao chép, phân phối hoặc thương mại hóa nội dung mà không có sự đồng ý bằng văn bản của chúng tôi đều bị nghiêm cấm và có thể bị truy cứu trách nhiệm pháp lý."
+        "title": "3. Quyá»n sá»Ÿ há»¯u trÃ­ tuá»‡",
+        "p1": "Táº¥t cáº£ ná»™i dung trÃªn Aurum, bao gá»“m nhÆ°ng khÃ´ng giá»›i háº¡n á»Ÿ bÃ i giáº£ng, mÃ´ phá»ng 3D, hÃ¬nh áº£nh vÃ  mÃ£ nguá»“n, Ä‘á»u thuá»™c sá»Ÿ há»¯u cá»§a Aurum HÃ³a há»c Aurum hoáº·c cÃ¡c bÃªn cáº¥p phÃ©p.",
+        "p2": "Má»i hÃ nh vi sao chÃ©p, phÃ¢n phá»‘i hoáº·c thÆ°Æ¡ng máº¡i hÃ³a ná»™i dung mÃ  khÃ´ng cÃ³ sá»± Ä‘á»“ng Ã½ báº±ng vÄƒn báº£n cá»§a chÃºng tÃ´i Ä‘á»u bá»‹ nghiÃªm cáº¥m vÃ  cÃ³ thá»ƒ bá»‹ truy cá»©u trÃ¡ch nhiá»‡m phÃ¡p lÃ½."
       },
       "privacy": {
-        "title": "4. Chính sách bảo mật",
-        "p1": "Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn. Dữ liệu thu thập (như tên, email, tiến trình học tập) chỉ được sử dụng để cá nhân hóa trải nghiệm học tập và cải thiện chất lượng dịch vụ.",
-        "p2": "Chúng tôi không bao giờ bán hoặc chia sẻ thông tin cá nhân của bạn cho bên thứ ba vì mục đích tiếp thị mà không có sự đồng ý rõ ràng của bạn."
+        "title": "4. ChÃ­nh sÃ¡ch báº£o máº­t",
+        "p1": "ChÃºng tÃ´i cam káº¿t báº£o vá»‡ thÃ´ng tin cÃ¡ nhÃ¢n cá»§a báº¡n. Dá»¯ liá»‡u thu tháº­p (nhÆ° tÃªn, email, tiáº¿n trÃ¬nh há»c táº­p) chá»‰ Ä‘Æ°á»£c sá»­ dá»¥ng Ä‘á»ƒ cÃ¡ nhÃ¢n hÃ³a tráº£i nghiá»‡m há»c táº­p vÃ  cáº£i thiá»‡n cháº¥t lÆ°á»£ng dá»‹ch vá»¥.",
+        "p2": "ChÃºng tÃ´i khÃ´ng bao giá» bÃ¡n hoáº·c chia sáº» thÃ´ng tin cÃ¡ nhÃ¢n cá»§a báº¡n cho bÃªn thá»© ba vÃ¬ má»¥c Ä‘Ã­ch tiáº¿p thá»‹ mÃ  khÃ´ng cÃ³ sá»± Ä‘á»“ng Ã½ rÃµ rÃ ng cá»§a báº¡n."
       },
       "liability": {
-        "title": "5. Giới hạn trách nhiệm",
-        "p1": "Các mô phỏng phòng thí nghiệm và kiến thức trên nền tảng này chỉ phục vụ mục đích giáo dục và tham khảo. Người dùng không được tự ý thực hiện các thí nghiệm nguy hiểm ngoài đời thực mà không có sự giám sát của chuyên gia.",
-        "p2": "Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào phát sinh từ việc sử dụng thông tin hoặc thực hành sai lệch từ các hướng dẫn trên nền tảng."
+        "title": "5. Giá»›i háº¡n trÃ¡ch nhiá»‡m",
+        "p1": "CÃ¡c mÃ´ phá»ng phÃ²ng thÃ­ nghiá»‡m vÃ  kiáº¿n thá»©c trÃªn ná»n táº£ng nÃ y chá»‰ phá»¥c vá»¥ má»¥c Ä‘Ã­ch giÃ¡o dá»¥c vÃ  tham kháº£o. NgÆ°á»i dÃ¹ng khÃ´ng Ä‘Æ°á»£c tá»± Ã½ thá»±c hiá»‡n cÃ¡c thÃ­ nghiá»‡m nguy hiá»ƒm ngoÃ i Ä‘á»i thá»±c mÃ  khÃ´ng cÃ³ sá»± giÃ¡m sÃ¡t cá»§a chuyÃªn gia.",
+        "p2": "ChÃºng tÃ´i khÃ´ng chá»‹u trÃ¡ch nhiá»‡m cho báº¥t ká»³ thiá»‡t háº¡i trá»±c tiáº¿p hoáº·c giÃ¡n tiáº¿p nÃ o phÃ¡t sinh tá»« viá»‡c sá»­ dá»¥ng thÃ´ng tin hoáº·c thá»±c hÃ nh sai lá»‡ch tá»« cÃ¡c hÆ°á»›ng dáº«n trÃªn ná»n táº£ng."
       }
     },
-    "footer_question": "Bạn có câu hỏi về điều khoản?<1/>Vui lòng <contact>Liên hệ với chúng tôi</contact>."
+    "footer_question": "Báº¡n cÃ³ cÃ¢u há»i vá» Ä‘iá»u khoáº£n?<1/>Vui lÃ²ng <contact>LiÃªn há»‡ vá»›i chÃºng tÃ´i</contact>."
   },
   "profile": {
-    "not_logged_in": "Chưa ghi danh học viện",
-    "login_to_view": "Đăng nhập để xem hồ sơ học viên",
-    "member_role": "Học viên tập sự",
-    "member_since": "Học viên ưu tú của Aurum Hóa học Aurum.<1/>Đã nhập học từ {{date}}",
-    "online_status": "Đang ở Không Gian Học Tập",
-    "change_avatar": "Biến hình nhân vật ngẫu nhiên",
-    "save_changes": "Lưu ấn ký thay đổi",
+    "not_logged_in": "ChÆ°a ghi danh há»c viá»‡n",
+    "login_to_view": "ÄÄƒng nháº­p Ä‘á»ƒ xem há»“ sÆ¡ há»c viÃªn",
+    "member_role": "Há»c viÃªn táº­p sá»±",
+    "member_since": "Há»c viÃªn Æ°u tÃº cá»§a Aurum HÃ³a há»c Aurum.<1/>ÄÃ£ nháº­p há»c tá»« {{date}}",
+    "online_status": "Äang á»Ÿ KhÃ´ng Gian Há»c Táº­p",
+    "change_avatar": "Biáº¿n hÃ¬nh nhÃ¢n váº­t ngáº«u nhiÃªn",
+    "save_changes": "LÆ°u áº¥n kÃ½ thay Ä‘á»•i",
     "stats": {
-      "xp": "Pháp lực (XP)",
-      "level_title": "Cấp bậc chuyên gia",
-      "chemicals": "Hóa chất đã mở",
-      "arena_points": "điểm học tập tích lũy"
+      "xp": "PhÃ¡p lá»±c (XP)",
+      "level_title": "Cáº¥p báº­c chuyÃªn gia",
+      "chemicals": "HÃ³a cháº¥t Ä‘Ã£ má»Ÿ",
+      "arena_points": "Ä‘iá»ƒm há»c táº­p tÃ­ch lÅ©y"
     },
     "collection": {
-      "title": "Bộ sưu tập Hóa chất & Huy hiệu",
-      "unlocked_count": "Đã mở khóa: {{current}}/{{total}}",
-      "status": "Đã thu thập",
-      "empty": "Bộ sưu tập rỗng tuếch! Hãy pha chế hóa chất hoặc thu thập huy hiệu ngay!",
-      "go_to_lab": "Đến phòng Hóa học →"
+      "title": "Bá»™ sÆ°u táº­p HÃ³a cháº¥t & Huy hiá»‡u",
+      "unlocked_count": "ÄÃ£ má»Ÿ khÃ³a: {{current}}/{{total}}",
+      "status": "ÄÃ£ thu tháº­p",
+      "empty": "Bá»™ sÆ°u táº­p rá»—ng tuáº¿ch! HÃ£y pha cháº¿ hÃ³a cháº¥t hoáº·c thu tháº­p huy hiá»‡u ngay!",
+      "go_to_lab": "Äáº¿n phÃ²ng HÃ³a há»c â†’"
     },
     "study_plan": {
-      "title": "Kế hoạch luyện tập",
-      "subtitle": "Thiết lập mục tiêu hàng ngày để tích lũy điểm học tập",
-      "time_label": "Giờ luyện tập dự kiến",
-      "target_label": "Mục tiêu bài học/ngày",
-      "reminders_label": "tin nhắn thư nhắc nhở",
-      "save_btn": "Khắc ghi kế hoạch",
-      "saving": "Đang khắc ghi...",
-      "success": "Đã cập nhật kế hoạch luyện tập!",
-      "reminder_msg": "🔔 Đã đến giờ học rồi! Hôm nay bạn chưa hoàn thành mục tiêu nào. Hãy mở bài học và luyện tập ngay.",
-      "email_reminders": "tin nhắn đưa thư nhắc nhở",
-      "calendar_reminders": "Lên lịch luyện tập",
+      "title": "Káº¿ hoáº¡ch luyá»‡n táº­p",
+      "subtitle": "Thiáº¿t láº­p má»¥c tiÃªu hÃ ng ngÃ y Ä‘á»ƒ tÃ­ch lÅ©y Ä‘iá»ƒm há»c táº­p",
+      "time_label": "Giá» luyá»‡n táº­p dá»± kiáº¿n",
+      "target_label": "Má»¥c tiÃªu bÃ i há»c/ngÃ y",
+      "reminders_label": "tin nháº¯n thÆ° nháº¯c nhá»Ÿ",
+      "save_btn": "Kháº¯c ghi káº¿ hoáº¡ch",
+      "saving": "Äang kháº¯c ghi...",
+      "success": "ÄÃ£ cáº­p nháº­t káº¿ hoáº¡ch luyá»‡n táº­p!",
+      "reminder_msg": "ðŸ”” ÄÃ£ Ä‘áº¿n giá» há»c rá»“i! HÃ´m nay báº¡n chÆ°a hoÃ n thÃ nh má»¥c tiÃªu nÃ o. HÃ£y má»Ÿ bÃ i há»c vÃ  luyá»‡n táº­p ngay.",
+      "email_reminders": "tin nháº¯n Ä‘Æ°a thÆ° nháº¯c nhá»Ÿ",
+      "calendar_reminders": "LÃªn lá»‹ch luyá»‡n táº­p",
       "calendar": {
-        "title": "Lịch luyện tập cá nhân",
-        "prev_month": "Trăng trước",
-        "next_month": "Trăng sau",
+        "title": "Lá»‹ch luyá»‡n táº­p cÃ¡ nhÃ¢n",
+        "prev_month": "TrÄƒng trÆ°á»›c",
+        "next_month": "TrÄƒng sau",
         "weekday_sun": "CN",
         "weekday_mon": "T2",
         "weekday_tue": "T3",
@@ -351,651 +351,653 @@
         "weekday_thu": "T5",
         "weekday_fri": "T6",
         "weekday_sat": "T7",
-        "schedule_modal_title": "Chi tiết ngày luyện tập",
-        "schedule_modal_desc": "Điều chỉnh thời gian và mục tiêu học hóa học cho ngày này.",
-        "input_title_label": "Nội dung/Ghi chú hóa học",
-        "input_title_placeholder": "VD: Luyện công thức, pha chế dược thảo...",
-        "input_time_label": "Giờ tùy chỉnh",
-        "input_target_label": "Số bài học",
-        "status_completed": "Đã hoàn thành mục tiêu",
-        "btn_save": "Lưu lịch luyện tập",
-        "btn_delete": "Xóa lịch",
-        "btn_cancel": "Hủy bỏ",
-        "upcoming_title": "Lịch luyện tập sắp tới",
-        "upcoming_empty": "Chưa có lịch luyện tập nào được lên kế hoạch trong tháng này. Hãy chọn bất kỳ ngày nào trên lịch để lập lịch luyện tập của riêng bạn!",
-        "item_target": "{{count}} bài học",
-        "item_time": "Vào lúc {{time}}"
+        "schedule_modal_title": "Chi tiáº¿t ngÃ y luyá»‡n táº­p",
+        "schedule_modal_desc": "Äiá»u chá»‰nh thá»i gian vÃ  má»¥c tiÃªu há»c hÃ³a há»c cho ngÃ y nÃ y.",
+        "input_title_label": "Ná»™i dung/Ghi chÃº hÃ³a há»c",
+        "input_title_placeholder": "VD: Luyá»‡n cÃ´ng thá»©c, pha cháº¿ dÆ°á»£c tháº£o...",
+        "input_time_label": "Giá» tÃ¹y chá»‰nh",
+        "input_target_label": "Sá»‘ bÃ i há»c",
+        "status_completed": "ÄÃ£ hoÃ n thÃ nh má»¥c tiÃªu",
+        "btn_save": "LÆ°u lá»‹ch luyá»‡n táº­p",
+        "btn_delete": "XÃ³a lá»‹ch",
+        "btn_cancel": "Há»§y bá»",
+        "upcoming_title": "Lá»‹ch luyá»‡n táº­p sáº¯p tá»›i",
+        "upcoming_empty": "ChÆ°a cÃ³ lá»‹ch luyá»‡n táº­p nÃ o Ä‘Æ°á»£c lÃªn káº¿ hoáº¡ch trong thÃ¡ng nÃ y. HÃ£y chá»n báº¥t ká»³ ngÃ y nÃ o trÃªn lá»‹ch Ä‘á»ƒ láº­p lá»‹ch luyá»‡n táº­p cá»§a riÃªng báº¡n!",
+        "item_target": "{{count}} bÃ i há»c",
+        "item_time": "VÃ o lÃºc {{time}}"
       }
     },
     "arena_stats": {
-      "title": "Thống kê Quyết Đấu",
-      "total_matches": "Tổng số trận",
-      "wins": "Số trận thắng",
-      "losses": "Số trận thua",
-      "win_rate": "Tỉ lệ thắng",
-      "challenge_now": "Quyết đấu ngay →"
+      "title": "Thá»‘ng kÃª Quyáº¿t Äáº¥u",
+      "total_matches": "Tá»•ng sá»‘ tráº­n",
+      "wins": "Sá»‘ tráº­n tháº¯ng",
+      "losses": "Sá»‘ tráº­n thua",
+      "win_rate": "Tá»‰ lá»‡ tháº¯ng",
+      "challenge_now": "Quyáº¿t Ä‘áº¥u ngay â†’"
     },
-    "history_title": "Nhật ký luyện tập",
-    "history_empty": "Nhật ký của bạn trống không. Hãy thực hiện hóa học đầu tiên!",
-    "history_clear": "Xóa nhật ký",
-    "history_time_ago": "Lúc"
+    "history_title": "Nháº­t kÃ½ luyá»‡n táº­p",
+    "history_empty": "Nháº­t kÃ½ cá»§a báº¡n trá»‘ng khÃ´ng. HÃ£y thá»±c hiá»‡n hÃ³a há»c Ä‘áº§u tiÃªn!",
+    "history_clear": "XÃ³a nháº­t kÃ½",
+    "history_time_ago": "LÃºc"
   },
-  "missions": {
-    "badge": "Văn phòng Thần Sáng",
-    "title": "Nhiệm Vụ <1>Học Viên</1>",
-    "subtitle": "Hoàn thành các thử thách học tập để tăng cấp và nhận huy hiệu giá trị.",
-    "current_level": "Cấp độ pháp lực",
-    "level_val": "Cấp {{level}}",
-    "total_xp": "Tổng điểm học tập",
-    "reset_in": "Làm mới sau: <1>{{time}}</1>",
+  "nhiem_vu": {
+    "badge": "VÄƒn phÃ²ng Tháº§n SÃ¡ng",
+    "title": "Nhiá»‡m Vá»¥ <1>Há»c ViÃªn</1>",
+    "subtitle": "HoÃ n thÃ nh cÃ¡c thá»­ thÃ¡ch há»c táº­p Ä‘á»ƒ tÄƒng cáº¥p vÃ  nháº­n huy hiá»‡u giÃ¡ trá»‹.",
+    "current_level": "Cáº¥p Ä‘á»™ phÃ¡p lá»±c",
+    "level_val": "Cáº¥p {{level}}",
+    "total_xp": "Tá»•ng Ä‘iá»ƒm há»c táº­p",
+    "reset_in": "LÃ m má»›i sau: <1>{{time}}</1>",
     "tabs": {
-      "daily": "Hàng ngày",
-      "achievement": "Thành tựu"
+      "daily": "HÃ ng ngÃ y",
+      "achievement": "ThÃ nh tá»±u"
     },
     "card": {
-      "status": "Tình trạng",
-      "claimed": "Đã nhận",
-      "completed": "Hoàn thành",
-      "in_progress": "Đang thực hiện",
-      "reward": "Thưởng",
-      "claim_btn": "Nhận điểm học tập ⚡",
-      "claiming": "Đang nhận...",
-      "not_reached": "Chưa đạt"
+      "status": "TÃ¬nh tráº¡ng",
+      "claimed": "ÄÃ£ nháº­n",
+      "completed": "HoÃ n thÃ nh",
+      "in_progress": "Äang thá»±c hiá»‡n",
+      "reward": "ThÆ°á»Ÿng",
+      "claim_btn": "Nháº­n Ä‘iá»ƒm há»c táº­p âš¡",
+      "claiming": "Äang nháº­n...",
+      "not_reached": "ChÆ°a Ä‘áº¡t"
     },
-    "empty": "đội ngũ Aurum chưa giao nhiệm vụ mới cho ngày hôm nay."
+    "empty": "Ä‘á»™i ngÅ© Aurum chÆ°a giao nhiá»‡m vá»¥ má»›i cho ngÃ y hÃ´m nay."
   },
   "journey": {
-    "badge": "Lộ trình luyện tập Lớp {{grade}}",
+    "badge": "Lá»™ trÃ¬nh luyá»‡n táº­p Lá»›p {{grade}}",
     "themes": {
       "8": {
-        "title": "Hành Trình Khởi Đầu",
-        "subtitle": "Làm chủ các nguyên tố hóa học cơ bản"
+        "title": "HÃ nh TrÃ¬nh Khá»Ÿi Äáº§u",
+        "subtitle": "LÃ m chá»§ cÃ¡c nguyÃªn tá»‘ hÃ³a há»c cÆ¡ báº£n"
       },
       "9": {
-        "title": "Bí Thuật Chuyển Hóa",
-        "subtitle": "Bí thuật phản ứng hóa học"
+        "title": "BÃ­ Thuáº­t Chuyá»ƒn HÃ³a",
+        "subtitle": "BÃ­ thuáº­t pháº£n á»©ng hÃ³a há»c"
       },
       "10": {
-        "title": "Kiến Trúc Sư Hóa Học",
-        "subtitle": "Xây dựng thế giới điểm học tập"
+        "title": "Kiáº¿n TrÃºc SÆ° HÃ³a Há»c",
+        "subtitle": "XÃ¢y dá»±ng tháº¿ giá»›i Ä‘iá»ƒm há»c táº­p"
       }
     },
     "test_banner": {
-      "bg_text": "KIỂM TRA",
-      "badge": "Hành Trình Vượt Cấp",
-      "title": "Mở Điểm Học Tập Lớp {{grade}}",
-      "description": "Chào mừng chuyên gia tài ba! Thử thách bản thân với bài kiểm tra học vượt để mở khóa chương trình Lớp {{grade}} ngay lập tức.",
-      "button": "Bắt đầu quyết đấu ➔"
+      "bg_text": "KIá»‚M TRA",
+      "badge": "HÃ nh TrÃ¬nh VÆ°á»£t Cáº¥p",
+      "title": "Má»Ÿ Äiá»ƒm Há»c Táº­p Lá»›p {{grade}}",
+      "description": "ChÃ o má»«ng chuyÃªn gia tÃ i ba! Thá»­ thÃ¡ch báº£n thÃ¢n vá»›i bÃ i kiá»ƒm tra há»c vÆ°á»£t Ä‘á»ƒ má»Ÿ khÃ³a chÆ°Æ¡ng trÃ¬nh Lá»›p {{grade}} ngay láº­p tá»©c.",
+      "button": "Báº¯t Ä‘áº§u quyáº¿t Ä‘áº¥u âž”"
     },
     "stage": {
-      "label": "Giai đoạn {{order}}",
-      "mission": "Nhiệm vụ ➔",
-      "locked_desc": "Chặng học này vẫn còn bị chưa mở...",
-      "default_desc": "Hãy chuẩn bị tâm thế để mở bí mật hóa học này."
+      "label": "Giai Ä‘oáº¡n {{order}}",
+      "mission": "Nhiá»‡m vá»¥ âž”",
+      "locked_desc": "Cháº·ng há»c nÃ y váº«n cÃ²n bá»‹ chÆ°a má»Ÿ...",
+      "default_desc": "HÃ£y chuáº©n bá»‹ tÃ¢m tháº¿ Ä‘á»ƒ má»Ÿ bÃ­ máº­t hÃ³a há»c nÃ y."
     },
     "milestone": {
-      "book_badge": "MỚI",
-      "book_label": "Cẩm nang",
-      "title": "Sổ Tay Hóa Học",
-      "subtitle": "Khám phá bản đồ Infographic tổng hợp Lớp {{grade}}"
+      "book_badge": "Má»šI",
+      "book_label": "Cáº©m nang",
+      "title": "Sá»• Tay HÃ³a Há»c",
+      "subtitle": "KhÃ¡m phÃ¡ báº£n Ä‘á»“ Infographic tá»•ng há»£p Lá»›p {{grade}}"
     }
   },
   "arena": {
-    "badge": "Aurum Hóa Học",
-    "title": "ĐẤU TRƯỜNG <1>HÓA HỌC</1>",
-    "subtitle": "Thi đấu & chinh phục kiến thức",
-    "online_count": "{{count}} học viên đang trực tuyến",
+    "badge": "Aurum HÃ³a Há»c",
+    "title": "Äáº¤U TRÆ¯á»œNG <1>HÃ“A Há»ŒC</1>",
+    "subtitle": "Thi Ä‘áº¥u & chinh phá»¥c kiáº¿n thá»©c",
+    "online_count": "{{count}} há»c viÃªn Ä‘ang trá»±c tuyáº¿n",
     "ui": {
-      "arena_image_alt": "Minh họa đấu trường hóa học Aurum",
-      "profile_panel_title": "Hồ sơ thi đấu",
-      "avatar_synced": "Đồng bộ hồ sơ",
-      "edit_profile": "Chỉnh hồ sơ",
-      "level_label": "Cấp độ",
-      "grade_label": "Lớp",
-      "no_grade": "Chưa có",
-      "streak_label": "Chuỗi ngày",
-      "points_label": "Điểm đấu",
-      "stats_panel_title": "Hiệu suất",
-      "leaderboard_panel_title": "Bảng xếp hạng",
-      "recent_panel_title": "Trận gần đây",
-      "current_rank": "Hạng hiện tại",
-      "next_rank": "Còn {{count}} điểm để lên hạng",
-      "max_rank": "Bạn đang ở hạng cao nhất",
-      "quick_match": "Thi đấu nhanh",
-      "choose_mode": "Chọn chế độ",
-      "online_students": "học viên trực tuyến",
-      "question_count": "10 câu",
-      "time_limit": "30 giây/câu",
-      "player_count": "người chơi",
-      "open_room_browser": "Danh sách phòng",
-      "join_code_title": "Mã phòng",
-      "room_browser_subtitle": "Chọn một phòng đang chờ để tham gia ngay.",
-      "create_room_subtitle": "Thiết lập phòng đấu",
-      "difficulty_auto": "Tự động theo lớp",
-      "room_id": "Mã {{id}}",
-      "host_label": "Chủ phòng",
-      "full_room": "Đã đầy",
-      "waiting_share": "Chia sẻ mã này cho bạn học để đủ người bắt đầu.",
-      "ready_count": "Mức sẵn sàng",
-      "start_locked": "Chờ đủ người",
-      "battle_unavailable_title": "Trận đấu chưa sẵn sàng",
-      "battle_unavailable_desc": "Chưa tìm thấy bộ câu hỏi phù hợp cho phòng này. Hãy quay lại và chọn cấp độ khác.",
-      "progress_label": "Tiến trình",
-      "points_change": "Biến động điểm",
-      "moderator_title": "Bảng điều phối",
-      "moderator_subtitle": "Hiển thị mã PIN và theo dõi trạng thái phòng theo thời gian thực.",
-      "participant_status": "Trạng thái người chơi",
-      "room_ready": "Sẵn sàng",
-      "room_waiting": "Đang chờ"
+      "arena_image_alt": "Minh há»a Ä‘áº¥u trÆ°á»ng hÃ³a há»c Aurum",
+      "profile_panel_title": "Há»“ sÆ¡ thi Ä‘áº¥u",
+      "avatar_synced": "Äá»“ng bá»™ há»“ sÆ¡",
+      "edit_profile": "Chá»‰nh há»“ sÆ¡",
+      "level_label": "Cáº¥p Ä‘á»™",
+      "grade_label": "Lá»›p",
+      "no_grade": "ChÆ°a cÃ³",
+      "streak_label": "Chuá»—i ngÃ y",
+      "points_label": "Äiá»ƒm Ä‘áº¥u",
+      "stats_panel_title": "Hiá»‡u suáº¥t",
+      "leaderboard_panel_title": "Báº£ng xáº¿p háº¡ng",
+      "recent_panel_title": "Tráº­n gáº§n Ä‘Ã¢y",
+      "current_rank": "Háº¡ng hiá»‡n táº¡i",
+      "next_rank": "CÃ²n {{count}} Ä‘iá»ƒm Ä‘á»ƒ lÃªn háº¡ng",
+      "max_rank": "Báº¡n Ä‘ang á»Ÿ háº¡ng cao nháº¥t",
+      "quick_match": "Thi Ä‘áº¥u nhanh",
+      "choose_mode": "Chá»n cháº¿ Ä‘á»™",
+      "online_students": "há»c viÃªn trá»±c tuyáº¿n",
+      "question_count": "10 cÃ¢u",
+      "time_limit": "30 giÃ¢y/cÃ¢u",
+      "player_count": "ngÆ°á»i chÆ¡i",
+      "open_room_browser": "Danh sÃ¡ch phÃ²ng",
+      "join_code_title": "MÃ£ phÃ²ng",
+      "room_browser_subtitle": "Chá»n má»™t phÃ²ng Ä‘ang chá» Ä‘á»ƒ tham gia ngay.",
+      "create_room_subtitle": "Thiáº¿t láº­p phÃ²ng Ä‘áº¥u",
+      "difficulty_auto": "Tá»± Ä‘á»™ng theo lá»›p",
+      "phong_dau_id": "MÃ£ {{id}}",
+      "host_label": "Chá»§ phÃ²ng",
+      "full_room": "ÄÃ£ Ä‘áº§y",
+      "waiting_share": "Chia sáº» mÃ£ nÃ y cho báº¡n há»c Ä‘á»ƒ Ä‘á»§ ngÆ°á»i báº¯t Ä‘áº§u.",
+      "ready_count": "Má»©c sáºµn sÃ ng",
+      "start_locked": "Chá» Ä‘á»§ ngÆ°á»i",
+      "battle_unavailable_title": "Tráº­n Ä‘áº¥u chÆ°a sáºµn sÃ ng",
+      "battle_unavailable_desc": "ChÆ°a tÃ¬m tháº¥y bá»™ cÃ¢u há»i phÃ¹ há»£p cho phÃ²ng nÃ y. HÃ£y quay láº¡i vÃ  chá»n cáº¥p Ä‘á»™ khÃ¡c.",
+      "progress_label": "Tiáº¿n trÃ¬nh",
+      "points_change": "Biáº¿n Ä‘á»™ng Ä‘iá»ƒm",
+      "moderator_title": "Báº£ng Ä‘iá»u phá»‘i",
+      "moderator_subtitle": "Hiá»ƒn thá»‹ mÃ£ PIN vÃ  theo dÃµi tráº¡ng thÃ¡i phÃ²ng theo thá»i gian thá»±c.",
+      "participant_status": "Tráº¡ng thÃ¡i ngÆ°á»i chÆ¡i",
+      "room_ready": "Sáºµn sÃ ng",
+      "room_waiting": "Äang chá»"
     },
     "character": {
-      "badge": "Nhân vật học viên",
-      "name_label": "Tên học viên:",
-      "aura_label": "Màu màu đại diện:",
-      "random_btn": "Biến đổi dung mạo",
-      "expand": "↓ Thêm kiểu ({{count}} kiểu)",
-      "collapse": "↑ Thu gọn",
+      "badge": "NhÃ¢n váº­t há»c viÃªn",
+      "name_label": "TÃªn há»c viÃªn:",
+      "aura_label": "MÃ u mÃ u Ä‘áº¡i diá»‡n:",
+      "random_btn": "Biáº¿n Ä‘á»•i dung máº¡o",
+      "expand": "â†“ ThÃªm kiá»ƒu ({{count}} kiá»ƒu)",
+      "collapse": "â†‘ Thu gá»n",
       "presets": {
-        "chem_master": "Hóa Chất Sư",
-        "lab_wizard": "Nhà Thực Hành",
-        "science_hero": "Thần Sáng",
-        "atom_breaker": "Pháp Sư Nguyên Tố",
-        "dna_explorer": "Huyết Linh Sư",
-        "ion_storm": "Lôi Pháp Sư",
-        "thermo_king": "Hỏa Pháp Sư",
-        "crystal_lord": "Tinh Thể Sư",
-        "proton_rush": "Quang Pháp Sư",
-        "quark_force": "Thượng Cổ Sư",
-        "neutron_star": "Tinh Phù Sư",
-        "plasma_wave": "Vô Cực Sư"
+        "chem_master": "HÃ³a Cháº¥t SÆ°",
+        "lab_wizard": "NhÃ  Thá»±c HÃ nh",
+        "science_hero": "Tháº§n SÃ¡ng",
+        "atom_breaker": "PhÃ¡p SÆ° NguyÃªn Tá»‘",
+        "dna_explorer": "Huyáº¿t Linh SÆ°",
+        "ion_storm": "LÃ´i PhÃ¡p SÆ°",
+        "thermo_king": "Há»a PhÃ¡p SÆ°",
+        "crystal_lord": "Tinh Thá»ƒ SÆ°",
+        "proton_rush": "Quang PhÃ¡p SÆ°",
+        "quark_force": "ThÆ°á»£ng Cá»• SÆ°",
+        "neutron_star": "Tinh PhÃ¹ SÆ°",
+        "plasma_wave": "VÃ´ Cá»±c SÆ°"
       }
     },
     "stats": {
-      "badge": "Pháp lực của bạn",
-      "rank_label": "Hạng học viên",
-      "total_matches": "Tổng trận quyết đấu",
-      "wins": "Thắng",
-      "losses": "Bại",
-      "win_rate": "Tỷ lệ thắng",
-      "total_points": "điểm học tập tích lũy",
-      "history": "Nhật ký quyết đấu",
-      "empty_history": "Chưa thực hiện trận đấu nào gần đây",
-      "leaderboard_btn": "Bảng xếp hạng không gian học tập",
-      "leaderboard_title": "Bảng vàng Không Gian Học Tập",
-      "empty_leaderboard": "không gian học tập chưa ghi nhận huyền thoại nào",
+      "badge": "PhÃ¡p lá»±c cá»§a báº¡n",
+      "rank_label": "Háº¡ng há»c viÃªn",
+      "total_matches": "Tá»•ng tráº­n quyáº¿t Ä‘áº¥u",
+      "wins": "Tháº¯ng",
+      "losses": "Báº¡i",
+      "win_rate": "Tá»· lá»‡ tháº¯ng",
+      "total_points": "Ä‘iá»ƒm há»c táº­p tÃ­ch lÅ©y",
+      "history": "Nháº­t kÃ½ quyáº¿t Ä‘áº¥u",
+      "empty_history": "ChÆ°a thá»±c hiá»‡n tráº­n Ä‘áº¥u nÃ o gáº§n Ä‘Ã¢y",
+      "leaderboard_btn": "Báº£ng xáº¿p háº¡ng khÃ´ng gian há»c táº­p",
+      "leaderboard_title": "Báº£ng vÃ ng KhÃ´ng Gian Há»c Táº­p",
+      "empty_leaderboard": "khÃ´ng gian há»c táº­p chÆ°a ghi nháº­n huyá»n thoáº¡i nÃ o",
       "history_item": {
-        "just_now": "Vừa xong",
-        "minutes_ago": "{{count}} phút trước",
-        "hours_ago": "{{count}} giờ trước",
-        "days_ago": "{{count}} ngày trước"
+        "just_now": "Vá»«a xong",
+        "minutes_ago": "{{count}} phÃºt trÆ°á»›c",
+        "hours_ago": "{{count}} giá» trÆ°á»›c",
+        "days_ago": "{{count}} ngÃ y trÆ°á»›c"
       }
     },
     "ranks": {
-      "bronze": "Tập Sự",
-      "silver": "Học Viên",
-      "gold": "Pháp Sư",
-      "diamond": "Thần Sáng",
-      "master": "Đại Pháp Sư"
+      "bronze": "Táº­p Sá»±",
+      "silver": "Há»c ViÃªn",
+      "gold": "PhÃ¡p SÆ°",
+      "diamond": "Tháº§n SÃ¡ng",
+      "master": "Äáº¡i PhÃ¡p SÆ°"
     },
     "actions": {
-      "find_match": "Tìm Đối Thủ Quyết Đấu",
-      "cancel_find": "Hủy Quyết Đấu",
-      "create_room": "Tạo Sảnh Quyết Đấu",
-      "join_pin": "Nhập mã PIN sảnh",
-      "lobby": "không gian học tập chờ",
-      "pin_placeholder": "MÃ PHÒNG PHÉP",
-      "close": "Đóng cổng",
-      "enter": "Vào Phòng →",
+      "find_match": "TÃ¬m Äá»‘i Thá»§ Quyáº¿t Äáº¥u",
+      "cancel_find": "Há»§y Quyáº¿t Äáº¥u",
+      "create_room": "Táº¡o Sáº£nh Quyáº¿t Äáº¥u",
+      "join_pin": "Nháº­p mÃ£ PIN sáº£nh",
+      "lobby": "khÃ´ng gian há»c táº­p chá»",
+      "pin_placeholder": "MÃƒ PHÃ’NG PHÃ‰P",
+      "close": "ÄÃ³ng cá»•ng",
+      "enter": "VÃ o PhÃ²ng â†’",
       "footer_info": {
-        "summary": "Tổng hợp công thức",
-        "questions": "10 Câu",
-        "time": "30 Giây"
+        "summary": "Tá»•ng há»£p cÃ´ng thá»©c",
+        "questions": "10 CÃ¢u",
+        "time": "30 GiÃ¢y"
       },
-      "practice_room": "Vào Phòng Chơi Thử"
+      "practice_room": "VÃ o PhÃ²ng ChÆ¡i Thá»­"
     },
     "create_room": {
-      "title": "MỞ SẢNH <1>QUYẾT ĐẤU</1>",
-      "name_label": "Tên Sảnh Đấu",
-      "name_placeholder": "VD: Thử thách hóa chất Lớp 8...",
-      "mode_label": "Thể Thức Quyết Đấu",
-      "difficulty_label": "Cuộn Sách Câu Hỏi",
-      "admin_badge": "ĐẠI PHÁP SƯ TRƯỞNG",
-      "auto_grade": "Lộ trình Nhà Lớp {{grade}}",
-      "submit_btn": "Mở cổng Quyết đấu ngay →"
+      "title": "Má»ž Sáº¢NH <1>QUYáº¾T Äáº¤U</1>",
+      "name_label": "TÃªn Sáº£nh Äáº¥u",
+      "name_placeholder": "VD: Thá»­ thÃ¡ch hÃ³a cháº¥t Lá»›p 8...",
+      "mode_label": "Thá»ƒ Thá»©c Quyáº¿t Äáº¥u",
+      "difficulty_label": "Cuá»™n SÃ¡ch CÃ¢u Há»i",
+      "admin_badge": "Äáº I PHÃP SÆ¯ TRÆ¯á»žNG",
+      "auto_grade": "Lá»™ trÃ¬nh NhÃ  Lá»›p {{grade}}",
+      "submit_btn": "Má»Ÿ cá»•ng Quyáº¿t Ä‘áº¥u ngay â†’"
     },
     "browser": {
-      "title": "CỔNG DỊCH CHUYỂN <1>TRỰC TUYẾN</1>",
-      "refresh": "Quan sát quét phòng",
-      "scanning": "Đang định vị sảnh đấu...",
-      "empty_title": "Chưa có sảnh đấu nào!",
-      "empty_desc": "Hãy tự mở sảnh quyết đấu đầu tiên",
-      "enter_btn": "Vào →"
+      "title": "Cá»”NG Dá»ŠCH CHUYá»‚N <1>TRá»°C TUYáº¾N</1>",
+      "refresh": "Quan sÃ¡t quÃ©t phÃ²ng",
+      "scanning": "Äang Ä‘á»‹nh vá»‹ sáº£nh Ä‘áº¥u...",
+      "empty_title": "ChÆ°a cÃ³ sáº£nh Ä‘áº¥u nÃ o!",
+      "empty_desc": "HÃ£y tá»± má»Ÿ sáº£nh quyáº¿t Ä‘áº¥u Ä‘áº§u tiÃªn",
+      "enter_btn": "VÃ o â†’"
     },
     "room": {
-      "join_error": "Không thể tham gia phòng này",
-      "loading": "Đang dịch chuyển...",
-      "back_btn": "Quay lại",
+      "join_error": "KhÃ´ng thá»ƒ tham gia phÃ²ng nÃ y",
+      "loading": "Äang dá»‹ch chuyá»ƒn...",
+      "back_btn": "Quay láº¡i",
       "waiting": {
-        "title": "ĐẠI SẢNH CHỜ",
-        "mode": "Thể thức",
-        "difficulty": "Cấp bậc",
-        "players": "Học viên",
-        "exit_btn": "Rời phòng",
-        "start_btn": "Vào trận ngay"
+        "title": "Äáº I Sáº¢NH CHá»œ",
+        "mode": "Thá»ƒ thá»©c",
+        "difficulty": "Cáº¥p báº­c",
+        "players": "Há»c viÃªn",
+        "exit_btn": "Rá»i phÃ²ng",
+        "start_btn": "VÃ o tráº­n ngay"
       },
       "battle": {
-        "question": "Công thức {{current}}/{{total}}",
-        "score": "Điểm học tập điểm",
-        "time": "THỜI GIAN",
+        "question": "CÃ´ng thá»©c {{current}}/{{total}}",
+        "score": "Äiá»ƒm há»c táº­p Ä‘iá»ƒm",
+        "time": "THá»œI GIAN",
         "status": {
-          "label": "Tình trạng",
-          "claimed": "Đã thu nhận",
-          "completed": "Hoàn thành",
-          "in_progress": "Đang luyện tập"
+          "label": "TÃ¬nh tráº¡ng",
+          "claimed": "ÄÃ£ thu nháº­n",
+          "completed": "HoÃ n thÃ nh",
+          "in_progress": "Äang luyá»‡n táº­p"
         }
       }
     },
     "moderator": {
-      "instruction": "THAM GIA TẠI <1>AURUM-APPS.COM</1> VỚI MẬT KHẨU PIN:",
-      "leaderboard_title": "BẢNG PHONG THẦN THỜI GIAN THỰC",
-      "live_badge": "Trực tiếp",
-      "server_status": "Vòng Hóa Học Đang Chạy",
-      "close_btn": "Đóng Đấu Trường ✕"
+      "instruction": "THAM GIA Táº I <1>AURUM-APPS.COM</1> Vá»šI Máº¬T KHáº¨U PIN:",
+      "leaderboard_title": "Báº¢NG PHONG THáº¦N THá»œI GIAN THá»°C",
+      "live_badge": "Trá»±c tiáº¿p",
+      "server_status": "VÃ²ng HÃ³a Há»c Äang Cháº¡y",
+      "close_btn": "ÄÃ³ng Äáº¥u TrÆ°á»ng âœ•"
     },
     "result": {
-      "opponent_default": "Đối thủ",
-      "win": "XUẤT SẮC!",
-      "lose": "HẸN GẶP LẠI",
-      "win_desc": "Bạn đã chinh phục đấu trường hóa học",
-      "lose_desc": "Hãy luyện tập thêm để phục thù",
-      "score": "Điểm số",
-      "rank": "Xếp hạng",
-      "continue_btn": "Tiếp tục nào →"
+      "opponent_default": "Äá»‘i thá»§",
+      "win": "XUáº¤T Sáº®C!",
+      "lose": "Háº¸N Gáº¶P Láº I",
+      "win_desc": "Báº¡n Ä‘Ã£ chinh phá»¥c Ä‘áº¥u trÆ°á»ng hÃ³a há»c",
+      "lose_desc": "HÃ£y luyá»‡n táº­p thÃªm Ä‘á»ƒ phá»¥c thÃ¹",
+      "score": "Äiá»ƒm sá»‘",
+      "rank": "Xáº¿p háº¡ng",
+      "continue_btn": "Tiáº¿p tá»¥c nÃ o â†’"
     },
     "difficulties": {
-      "easy": "Dễ (Tập sự)",
-      "medium": "Vừa (Học viên)",
-      "hard": "Khó (Thần Sáng)",
-      "super": "Tối Thượng"
+      "easy": "Dá»… (Táº­p sá»±)",
+      "medium": "Vá»«a (Há»c viÃªn)",
+      "hard": "KhÃ³ (Tháº§n SÃ¡ng)",
+      "super": "Tá»‘i ThÆ°á»£ng"
     },
     "practice": {
-      "title": "Phòng Chơi Thử"
+      "title": "PhÃ²ng ChÆ¡i Thá»­"
     }
   },
   "common": {
-    "grade": "Nhà Lớp {{grade}}",
-    "lesson": "Học liệu {{order}}",
-    "lesson_count": "Học liệu",
-    "loading": "Đang tải...",
-    "back": "Quay lại",
-    "continue": "Tiếp tục",
-    "save": "Lưu"
+    "grade": "NhÃ  Lá»›p {{grade}}",
+    "lesson": "Há»c liá»‡u {{order}}",
+    "lesson_count": "Há»c liá»‡u",
+    "loading": "Äang táº£i...",
+    "back": "Quay láº¡i",
+    "continue": "Tiáº¿p tá»¥c",
+    "save": "LÆ°u"
   },
   "my_class": {
     "sidebar": {
-      "title": "Nhà của bạn",
-      "join_other": "Gia nhập Nhà khác",
-      "code_placeholder": "Mã Nhà",
-      "join_btn": "VÀO",
-      "grade_label": "Lớp {{grade}}",
-      "teacher_prefix": "Giáo viên:"
+      "title": "NhÃ  cá»§a báº¡n",
+      "join_other": "Gia nháº­p NhÃ  khÃ¡c",
+      "code_placeholder": "MÃ£ NhÃ ",
+      "join_btn": "VÃ€O",
+      "grade_label": "Lá»›p {{grade}}",
+      "teacher_prefix": "GiÃ¡o viÃªn:"
     },
     "empty": {
-      "title": "Chưa thuộc Nhà nào",
-      "desc": "Bạn chưa gia nhập bất kỳ Nhà nào của học viện. Vui lòng nhập mã lớp học do Giáo viên cung cấp để bắt đầu.",
-      "placeholder": "Nhập mã Nhà (VD: XYZ1A2)",
-      "submit": "Gia nhập ngay"
+      "title": "ChÆ°a thuá»™c NhÃ  nÃ o",
+      "desc": "Báº¡n chÆ°a gia nháº­p báº¥t ká»³ NhÃ  nÃ o cá»§a há»c viá»‡n. Vui lÃ²ng nháº­p mÃ£ lá»›p há»c do GiÃ¡o viÃªn cung cáº¥p Ä‘á»ƒ báº¯t Ä‘áº§u.",
+      "placeholder": "Nháº­p mÃ£ NhÃ  (VD: XYZ1A2)",
+      "submit": "Gia nháº­p ngay"
     },
     "header": {
-      "badge": "HOẠT ĐỘNG CHUNG"
+      "badge": "HOáº T Äá»˜NG CHUNG"
     },
     "feed": {
-      "title": "Bảng tin của Nhà",
-      "empty": "Chưa có thông báo hoặc mật thư nào từ Giáo viên.",
-      "author_you": "Bạn",
-      "private_badge": "🔒 MẬT THƯ RIÊNG",
-      "sent_to_teacher": "Đã gửi Giáo viên",
-      "type_video": "ẢNH CHIẾU HÓA HỌC",
-      "type_assignment": "THỬ THÁCH HÓA HỌC",
-      "type_announcement": "THÔNG BÁO TỪ HỌC VIỆN",
-      "deadline": "Hạn nộp thử thách",
+      "title": "Báº£ng tin cá»§a NhÃ ",
+      "empty": "ChÆ°a cÃ³ thÃ´ng bÃ¡o hoáº·c máº­t thÆ° nÃ o tá»« GiÃ¡o viÃªn.",
+      "author_you": "Báº¡n",
+      "private_badge": "ðŸ”’ Máº¬T THÆ¯ RIÃŠNG",
+      "sent_to_teacher": "ÄÃ£ gá»­i GiÃ¡o viÃªn",
+      "type_video": "áº¢NH CHIáº¾U HÃ“A Há»ŒC",
+      "type_assignment": "THá»¬ THÃCH HÃ“A Há»ŒC",
+      "type_announcement": "THÃ”NG BÃO Tá»ª Há»ŒC VIá»†N",
+      "deadline": "Háº¡n ná»™p thá»­ thÃ¡ch",
       "assignment": {
-        "completed": "✓ Đã hoàn thành thử thách",
-        "online_label": "Trực tuyến",
-        "result_label": "Điểm hóa học của bạn:",
-        "start_online": "🚀 Làm bài trực tuyến ({{count}} câu)",
-        "confirm_btn": "Xác nhận đã hoàn thành thử thách",
-        "file_PDF": "Mở Cuộn thư PDF",
-        "file_Word": "Mở Cuộn thư Word",
-        "file_Excel": "Mở Cuộn thư Excel",
-        "file_Link": "Mở liên kết hóa học",
-        "file_Default": "Xem tài liệu",
-        "file_Placeholder": "Dán đường dẫn hóa học"
+        "completed": "âœ“ ÄÃ£ hoÃ n thÃ nh thá»­ thÃ¡ch",
+        "online_label": "Trá»±c tuyáº¿n",
+        "result_label": "Äiá»ƒm hÃ³a há»c cá»§a báº¡n:",
+        "start_online": "ðŸš€ LÃ m bÃ i trá»±c tuyáº¿n ({{count}} cÃ¢u)",
+        "confirm_btn": "XÃ¡c nháº­n Ä‘Ã£ hoÃ n thÃ nh thá»­ thÃ¡ch",
+        "file_PDF": "Má»Ÿ Cuá»™n thÆ° PDF",
+        "file_Word": "Má»Ÿ Cuá»™n thÆ° Word",
+        "file_Excel": "Má»Ÿ Cuá»™n thÆ° Excel",
+        "file_Link": "Má»Ÿ liÃªn káº¿t hÃ³a há»c",
+        "file_Default": "Xem tÃ i liá»‡u",
+        "file_Placeholder": "DÃ¡n Ä‘Æ°á»ng dáº«n hÃ³a há»c"
       }
     },
     "schedules": {
-      "title": "Lịch học tập sắp tới",
-      "empty": "Không có lịch học nào",
-      "join_meet": "Tham gia không gian học tập học"
+      "title": "Lá»‹ch há»c táº­p sáº¯p tá»›i",
+      "empty": "KhÃ´ng cÃ³ lá»‹ch há»c nÃ o",
+      "join_meet": "Tham gia khÃ´ng gian há»c táº­p há»c"
     },
     "support": {
-      "title": "Cần hỗ trợ hóa học?",
-      "desc": "Gửi thư tin nhắn riêng cho Giáo viên để được giải đáp thắc mắc.",
-      "btn": "Gửi mật thư riêng"
+      "title": "Cáº§n há»— trá»£ hÃ³a há»c?",
+      "desc": "Gá»­i thÆ° tin nháº¯n riÃªng cho GiÃ¡o viÃªn Ä‘á»ƒ Ä‘Æ°á»£c giáº£i Ä‘Ã¡p tháº¯c máº¯c.",
+      "btn": "Gá»­i máº­t thÆ° riÃªng"
     },
     "message_modal": {
-      "title": "Nhắn tin cho Giáo viên",
-      "class_prefix": "Nhà:",
-      "placeholder": "Nhập nội dung thắc mắc hoặc câu hỏi của bạn...",
-      "sending": "tin nhắn đang bay...",
-      "send_btn": "Gửi thư tin nhắn ➔"
+      "title": "Nháº¯n tin cho GiÃ¡o viÃªn",
+      "class_prefix": "NhÃ :",
+      "placeholder": "Nháº­p ná»™i dung tháº¯c máº¯c hoáº·c cÃ¢u há»i cá»§a báº¡n...",
+      "sending": "tin nháº¯n Ä‘ang bay...",
+      "send_btn": "Gá»­i thÆ° tin nháº¯n âž”"
     },
     "viewer": {
-      "from": "Của giáo viên",
-      "deadline": "Hạn nộp:",
-      "no_deadline": "Không giới hạn",
-      "download": "Thu nhận cuộn sách",
-      "loading": "Đang giải ấn nội dung...",
-      "tab_fallback": "Mở trong tab mới nếu lỗi giải ấn"
+      "from": "Cá»§a giÃ¡o viÃªn",
+      "deadline": "Háº¡n ná»™p:",
+      "no_deadline": "KhÃ´ng giá»›i háº¡n",
+      "download": "Thu nháº­n cuá»™n sÃ¡ch",
+      "loading": "Äang giáº£i áº¥n ná»™i dung...",
+      "tab_fallback": "Má»Ÿ trong tab má»›i náº¿u lá»—i giáº£i áº¥n"
     },
     "quiz": {
-      "badge": "THỬ THÁCH HÓA HỌC",
-      "progress": "Tiến độ:",
-      "count_done": "{{done}} / {{total}} CHÚ NGỮ ĐÃ GIẢI",
-      "submitting": "Đang nộp thư...",
-      "submit_btn": "Nộp bài cho Giáo viên ➔",
-      "essay_placeholder": "Nhập câu trả lời tự luận hóa học vào đây...",
-      "essay_badge": "Phần Tự Luận Hóa Học",
-      "score_msg": "Phần trắc nghiệm: {{score}}/10 điểm.\nPhần tự luận sẽ được Giáo viên chấm riêng.",
-      "success_msg": "Đã nộp thành công! Giáo viên sẽ chấm điểm hóa học cho bạn."
+      "badge": "THá»¬ THÃCH HÃ“A Há»ŒC",
+      "progress": "Tiáº¿n Ä‘á»™:",
+      "count_done": "{{done}} / {{total}} CHÃš NGá»® ÄÃƒ GIáº¢I",
+      "submitting": "Äang ná»™p thÆ°...",
+      "submit_btn": "Ná»™p bÃ i cho GiÃ¡o viÃªn âž”",
+      "essay_placeholder": "Nháº­p cÃ¢u tráº£ lá»i tá»± luáº­n hÃ³a há»c vÃ o Ä‘Ã¢y...",
+      "essay_badge": "Pháº§n Tá»± Luáº­n HÃ³a Há»c",
+      "score_msg": "Pháº§n tráº¯c nghiá»‡m: {{score}}/10 Ä‘iá»ƒm.\nPháº§n tá»± luáº­n sáº½ Ä‘Æ°á»£c GiÃ¡o viÃªn cháº¥m riÃªng.",
+      "success_msg": "ÄÃ£ ná»™p thÃ nh cÃ´ng! GiÃ¡o viÃªn sáº½ cháº¥m Ä‘iá»ƒm hÃ³a há»c cho báº¡n."
     }
   },
   "periodic_table": {
-    "title_main": "Bảng tuần",
-    "title_sub": " hoàn",
-    "title_highlight": " nguyên tố hóa học",
-    "database_label": "Cơ sở dữ liệu Cổ đại",
-    "system_desc": "Hệ thống tra cứu nguyên tử đa chiều",
-    "categories_title": "Phân loại dòng khí",
-    "tech_manual": "Học liệu thư viện v1.0",
+    "title_main": "Báº£ng tuáº§n",
+    "title_sub": " hoÃ n",
+    "title_highlight": " nguyÃªn tá»‘ hÃ³a há»c",
+    "database_label": "CÆ¡ sá»Ÿ dá»¯ liá»‡u Cá»• Ä‘áº¡i",
+    "system_desc": "Há»‡ thá»‘ng tra cá»©u nguyÃªn tá»­ Ä‘a chiá»u",
+    "categories_title": "PhÃ¢n loáº¡i dÃ²ng khÃ­",
+    "tech_manual": "Há»c liá»‡u thÆ° viá»‡n v1.0",
     "quick_guide": {
-      "title": "Quan sát nhanh",
-      "desc": "Nhấn vào từng ô để mở cấu trúc hóa học 3D"
+      "title": "Quan sÃ¡t nhanh",
+      "desc": "Nháº¥n vÃ o tá»«ng Ã´ Ä‘á»ƒ má»Ÿ cáº¥u trÃºc hÃ³a há»c 3D"
     },
     "legend": {
-      "high_boiling": "Điểm sôi cực hạn",
-      "gas_state": "Dạng phong linh"
+      "high_boiling": "Äiá»ƒm sÃ´i cá»±c háº¡n",
+      "gas_state": "Dáº¡ng phong linh"
     },
     "categories": {
-      "all": "Tất cả",
-      "diatomic-nonmetal": "Phi kim đối hóa học",
-      "noble-gas": "Khí tinh khiết",
-      "alkali-metal": "Kim loại linh động",
-      "alkaline-earth-metal": "Kim loại kiềm thổ hóa học",
-      "metalloid": "Á hóa học nguyên",
-      "polyatomic-nonmetal": "Phi kim đa hóa học",
-      "post-transition-metal": "Kim loại chuyển hóa chậm",
-      "transition-metal": "Kim loại hóa học chuyển tiếp",
-      "lanthanide": "Họ Lanthan cổ xưa",
-      "actinide": "Họ Actini huyền bí"
+      "all": "Táº¥t cáº£",
+      "diatomic-nonmetal": "Phi kim Ä‘á»‘i hÃ³a há»c",
+      "noble-gas": "KhÃ­ tinh khiáº¿t",
+      "alkali-metal": "Kim loáº¡i linh Ä‘á»™ng",
+      "alkaline-earth-metal": "Kim loáº¡i kiá»m thá»• hÃ³a há»c",
+      "metalloid": "Ã hÃ³a há»c nguyÃªn",
+      "polyatomic-nonmetal": "Phi kim Ä‘a hÃ³a há»c",
+      "post-transition-metal": "Kim loáº¡i chuyá»ƒn hÃ³a cháº­m",
+      "transition-metal": "Kim loáº¡i hÃ³a há»c chuyá»ƒn tiáº¿p",
+      "lanthanide": "Há» Lanthan cá»• xÆ°a",
+      "actinide": "Há» Actini huyá»n bÃ­"
     },
     "modal": {
-      "atomic_no": "Số hiệu hóa học",
-      "mass_wt": "Trọng lượng nguyên tố",
-      "category_label": "Thuộc tính điểm học tập:",
+      "atomic_no": "Sá»‘ hiá»‡u hÃ³a há»c",
+      "mass_wt": "Trá»ng lÆ°á»£ng nguyÃªn tá»‘",
+      "category_label": "Thuá»™c tÃ­nh Ä‘iá»ƒm há»c táº­p:",
       "tabs": {
-        "overview": "📊 Tổng quan điểm học tập",
-        "discover": "🌟 Nguồn gốc phát hiện"
+        "overview": "ðŸ“Š Tá»•ng quan Ä‘iá»ƒm há»c táº­p",
+        "discover": "ðŸŒŸ Nguá»“n gá»‘c phÃ¡t hiá»‡n"
       },
-      "bohr_config": "Cấu hình vòng Bohr điểm học tập",
-      "brief_intro": "Tóm lược tài liệu",
+      "bohr_config": "Cáº¥u hÃ¬nh vÃ²ng Bohr Ä‘iá»ƒm há»c táº­p",
+      "brief_intro": "TÃ³m lÆ°á»£c tÃ i liá»‡u",
       "properties": {
-        "state": "Trạng thái vật chất",
-        "meltingPoint": "Nhiệt độ nóng chảy",
-        "boilingPoint": "Nhiệt độ bay hơi",
-        "density": "Khối lượng mẫu chất",
-        "electronConfig": "Cấu hình dòng chảy linh lượng"
+        "state": "Tráº¡ng thÃ¡i váº­t cháº¥t",
+        "meltingPoint": "Nhiá»‡t Ä‘á»™ nÃ³ng cháº£y",
+        "boilingPoint": "Nhiá»‡t Ä‘á»™ bay hÆ¡i",
+        "density": "Khá»‘i lÆ°á»£ng máº«u cháº¥t",
+        "electronConfig": "Cáº¥u hÃ¬nh dÃ²ng cháº£y linh lÆ°á»£ng"
       },
       "discovery": {
-        "title": "Lịch sử khám phá",
-        "year": "Năm phát hiện",
-        "by": "Bậc thầy phát hiện",
-        "ancient": "Thời Thượng Cổ",
-        "unknown": "Chưa thể giải mã"
+        "title": "Lá»‹ch sá»­ khÃ¡m phÃ¡",
+        "year": "NÄƒm phÃ¡t hiá»‡n",
+        "by": "Báº­c tháº§y phÃ¡t hiá»‡n",
+        "ancient": "Thá»i ThÆ°á»£ng Cá»•",
+        "unknown": "ChÆ°a thá»ƒ giáº£i mÃ£"
       },
-      "media_sample": "Mẫu tham chiếu thư viện cổ",
+      "media_sample": "Máº«u tham chiáº¿u thÆ° viá»‡n cá»•",
       "facts": {
-        "badge": "Sự thật huyền bí",
-        "updating": "Bản ghi đang được giải ấn..."
+        "badge": "Sá»± tháº­t huyá»n bÃ­",
+        "updating": "Báº£n ghi Ä‘ang Ä‘Æ°á»£c giáº£i áº¥n..."
       },
       "applications": {
-        "badge": "Ứng dụng hóa học",
-        "updating": "Đang giải ấn ứng dụng hóa học..."
+        "badge": "á»¨ng dá»¥ng hÃ³a há»c",
+        "updating": "Äang giáº£i áº¥n á»©ng dá»¥ng hÃ³a há»c..."
       },
-      "wiki_btn": "Xem chi tiết tại Thư viện Chung"
+      "wiki_btn": "Xem chi tiáº¿t táº¡i ThÆ° viá»‡n Chung"
     }
   },
   "chem_lab": {
     "header": {
-      "badge": "Phòng thí nghiệm ảo",
-      "title_1": "Khám phá thế giới",
-      "title_2": "Hóa học",
-      "title_3": "kỳ diệu",
-      "desc": "Lựa chọn mô-đun học tập để bắt đầu thực hành Hóa học an toàn."
+      "badge": "PhÃ²ng thÃ­ nghiá»‡m áº£o",
+      "title_1": "KhÃ¡m phÃ¡ tháº¿ giá»›i",
+      "title_2": "HÃ³a há»c",
+      "title_3": "ká»³ diá»‡u",
+      "desc": "Lá»±a chá»n mÃ´-Ä‘un há»c táº­p Ä‘á»ƒ báº¯t Ä‘áº§u thá»±c hÃ nh HÃ³a há»c an toÃ n."
     },
     "modules": {
       "reaction": {
-        "label": "Phòng thực hành hóa chất",
-        "desc": "Kết hợp các chất và quan sát phản ứng trực quan."
+        "label": "PhÃ²ng thá»±c hÃ nh hÃ³a cháº¥t",
+        "desc": "Káº¿t há»£p cÃ¡c cháº¥t vÃ  quan sÃ¡t pháº£n á»©ng trá»±c quan."
       },
       "balance": {
-        "label": "Cân bằng công thức",
-        "desc": "Rèn luyện kỹ năng cân bằng các dòng chảy công thức với hàng nghìn bài tập."
+        "label": "CÃ¢n báº±ng cÃ´ng thá»©c",
+        "desc": "RÃ¨n luyá»‡n ká»¹ nÄƒng cÃ¢n báº±ng cÃ¡c dÃ²ng cháº£y cÃ´ng thá»©c vá»›i hÃ ng nghÃ¬n bÃ i táº­p."
       },
       "molecule": {
-        "label": "Mô hình mẫu chất",
-        "desc": "Xem cấu trúc không gian 3D của các phân tử và liên kết điểm học tập."
+        "label": "MÃ´ hÃ¬nh máº«u cháº¥t",
+        "desc": "Xem cáº¥u trÃºc khÃ´ng gian 3D cá»§a cÃ¡c phÃ¢n tá»­ vÃ  liÃªn káº¿t Ä‘iá»ƒm há»c táº­p."
       },
       "solver": {
-        "label": "Gợi ý công thức",
-        "desc": "Truy tìm công thức cân bằng chính xác từ kho sách cổ."
+        "label": "Gá»£i Ã½ cÃ´ng thá»©c",
+        "desc": "Truy tÃ¬m cÃ´ng thá»©c cÃ¢n báº±ng chÃ­nh xÃ¡c tá»« kho sÃ¡ch cá»•."
       },
       "calculator": {
-        "label": "Máy tính Hóa học hóa học",
-        "desc": "Tính toán khối lượng nguyên tố, nồng độ dung dịch và công thức vạn năng."
+        "label": "MÃ¡y tÃ­nh HÃ³a há»c hÃ³a há»c",
+        "desc": "TÃ­nh toÃ¡n khá»‘i lÆ°á»£ng nguyÃªn tá»‘, ná»“ng Ä‘á»™ dung dá»‹ch vÃ  cÃ´ng thá»©c váº¡n nÄƒng."
       },
-      "start_btn": "Khai phòng ngay"
+      "start_btn": "Khai phÃ²ng ngay"
     },
     "stats": {
-      "chemicals": "Hóa chất đã pha chế",
-      "reactions": "Phản ứng hóa học khám phá",
-      "creativity": "Màu đại diện sáng tạo"
+      "chemicals": "HÃ³a cháº¥t Ä‘Ã£ pha cháº¿",
+      "reactions": "Pháº£n á»©ng hÃ³a há»c khÃ¡m phÃ¡",
+      "creativity": "MÃ u Ä‘áº¡i diá»‡n sÃ¡ng táº¡o"
     }
   },
   "material_detail": {
-    "back_btn": "Quay lại thư viện",
-    "not_found": "Học liệu không tồn tại",
-    "views": "học viên đã xem",
-    "downloads": "lượt sao chép",
-    "unsupported_format": "Định dạng #{{type}} không hỗ trợ đọc trực tiếp",
-    "download_to_view": "Sao chép tài liệu về để đọc",
-    "no_desc": "Không có chú giải cho tài liệu này.",
-    "download_btn": "Sao chép tài liệu (FREE)",
-    "feedback": {
-      "title_main": "Bàn luận",
-      "title_highlight": "không gian học tập",
-      "placeholder": "Viết cảm nghĩ của bạn vào tài liệu này...",
-      "submit_btn": "Gửi bình luận",
-      "submitting_btn": "tin nhắn đang chuyển...",
-      "login_required": "Vui lòng nhập học để tham gia thảo luận",
-      "login_link": "Đến trang nhập học",
-      "no_feedback": "Chưa có cuộc thảo luận nào. Hãy là học viên đầu tiên!",
-      "alert_login": "Vui lòng đăng nhập để gửi thảo luận!",
-      "err_fetch": "Lỗi tải bản ghi thảo luận",
-      "err_submit": "Lỗi gửi thảo luận",
-      "default_user": "Học viên tập sự"
+    "back_btn": "Quay láº¡i thÆ° viá»‡n",
+    "not_found": "Há»c liá»‡u khÃ´ng tá»“n táº¡i",
+    "views": "há»c viÃªn Ä‘Ã£ xem",
+    "downloads": "lÆ°á»£t táº£i",
+    "unsupported_format": "Äá»‹nh dáº¡ng #{{type}} khÃ´ng há»— trá»£ Ä‘á»c trá»±c tiáº¿p",
+    "download_to_view": "Táº£i tÃ i liá»‡u vá» Ä‘á»ƒ Ä‘á»c",
+    "no_desc": "KhÃ´ng cÃ³ chÃº giáº£i cho tÃ i liá»‡u nÃ y.",
+    "download_btn": "Táº£i vá» tÃ i liá»‡u (FREE)",
+    "downloading_btn": "Äang táº£i tÃ i liá»‡u...",
+    "download_error": "KhÃ´ng thá»ƒ táº£i tá»± Ä‘á»™ng. TrÃ¬nh duyá»‡t Ä‘Ã£ má»Ÿ tÃ i liá»‡u trong tab má»›i.",
+    "phan_hoi": {
+      "title_main": "BÃ n luáº­n",
+      "title_highlight": "khÃ´ng gian há»c táº­p",
+      "placeholder": "Viáº¿t cáº£m nghÄ© cá»§a báº¡n vÃ o tÃ i liá»‡u nÃ y...",
+      "submit_btn": "Gá»­i bÃ¬nh luáº­n",
+      "submitting_btn": "tin nháº¯n Ä‘ang chuyá»ƒn...",
+      "login_required": "Vui lÃ²ng nháº­p há»c Ä‘á»ƒ tham gia tháº£o luáº­n",
+      "login_link": "Äáº¿n trang nháº­p há»c",
+      "no_phan_hoi": "ChÆ°a cÃ³ cuá»™c tháº£o luáº­n nÃ o. HÃ£y lÃ  há»c viÃªn Ä‘áº§u tiÃªn!",
+      "alert_login": "Vui lÃ²ng Ä‘Äƒng nháº­p Ä‘á»ƒ gá»­i tháº£o luáº­n!",
+      "err_fetch": "Lá»—i táº£i báº£n ghi tháº£o luáº­n",
+      "err_submit": "Lá»—i gá»­i tháº£o luáº­n",
+      "default_user": "Há»c viÃªn táº­p sá»±"
     },
     "sidebar": {
-      "file_info": "Thông tin tài liệu",
-      "format": "Ấn bản",
-      "posted_date": "Ngày khắc chú",
-      "size": "Dung lượng tài liệu",
-      "disclaimer": "Tất cả tài liệu hóa học tại Aurum đều được cung cấp miễn phí nhằm hỗ trợ luyện tập điểm học tập. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của đội ngũ Aurum."
+      "file_info": "ThÃ´ng tin tÃ i liá»‡u",
+      "format": "áº¤n báº£n",
+      "posted_date": "NgÃ y kháº¯c chÃº",
+      "size": "Dung lÆ°á»£ng tÃ i liá»‡u",
+      "disclaimer": "Táº¥t cáº£ tÃ i liá»‡u hÃ³a há»c táº¡i Aurum Ä‘á»u Ä‘Æ°á»£c cung cáº¥p miá»…n phÃ­ nháº±m há»— trá»£ luyá»‡n táº­p Ä‘iá»ƒm há»c táº­p. NghiÃªm cáº¥m má»i hÃ nh vi thÆ°Æ¡ng máº¡i hÃ³a náº¿u khÃ´ng cÃ³ sá»± Ä‘á»“ng Ã½ cá»§a Ä‘á»™i ngÅ© Aurum."
     }
   },
   "library": {
-    "title": "Thư viện <1>Học liệu Hóa học</1>",
-    "subtitle": "Kho tàng tri thức đa dạng với infographic, bản đồ tư duy, bài tập và tài liệu ôn luyện.",
-    "search_placeholder": "Tìm kiếm tài liệu...",
-    "loading": "Đang dịch chuyển tài liệu...",
+    "title": "ThÆ° viá»‡n <1>Há»c liá»‡u HÃ³a há»c</1>",
+    "subtitle": "Kho tÃ ng tri thá»©c Ä‘a dáº¡ng vá»›i infographic, báº£n Ä‘á»“ tÆ° duy, bÃ i táº­p vÃ  tÃ i liá»‡u Ã´n luyá»‡n.",
+    "search_placeholder": "TÃ¬m kiáº¿m tÃ i liá»‡u...",
+    "loading": "Äang dá»‹ch chuyá»ƒn tÃ i liá»‡u...",
     "categories": {
-      "all": "Tất cả tài liệu",
-      "infographic_11": "HÓA HỌC HỌC LỚP 11",
-      "infographic_12": "HÓA HỌC HỌC LỚP 12",
-      "mindmap_10": "SĐTD CHÚ NGỮ LỚP 10",
-      "mindmap_11": "SĐTD CHÚ NGỮ LỚP 11",
-      "mindmap_12": "SĐTD CHÚ NGỮ LỚP 12",
-      "worksheet_12": "CUỘN THƯ TU LUYỆN LỚP 12",
-      "comic_10": "HỌC PHÁP QUA TRANH LỚP 10",
-      "comic_11": "HỌC PHÁP QUA TRANH LỚP 11",
-      "comic_12": "HỌC PHÁP QUA TRANH LỚP 12",
-      "worksheet_9": "CUỘN THƯ TU LUYỆN LỚP 9",
-      "mindmap_6": "SĐTD HÓA HỌC LỚP 6"
+      "all": "Táº¥t cáº£ tÃ i liá»‡u",
+      "infographic_11": "HÃ“A Há»ŒC Há»ŒC Lá»šP 11",
+      "infographic_12": "HÃ“A Há»ŒC Há»ŒC Lá»šP 12",
+      "mindmap_10": "SÄTD CHÃš NGá»® Lá»šP 10",
+      "mindmap_11": "SÄTD CHÃš NGá»® Lá»šP 11",
+      "mindmap_12": "SÄTD CHÃš NGá»® Lá»šP 12",
+      "worksheet_12": "CUá»˜N THÆ¯ TU LUYá»†N Lá»šP 12",
+      "comic_10": "Há»ŒC PHÃP QUA TRANH Lá»šP 10",
+      "comic_11": "Há»ŒC PHÃP QUA TRANH Lá»šP 11",
+      "comic_12": "Há»ŒC PHÃP QUA TRANH Lá»šP 12",
+      "worksheet_9": "CUá»˜N THÆ¯ TU LUYá»†N Lá»šP 9",
+      "mindmap_6": "SÄTD HÃ“A Há»ŒC Lá»šP 6"
     },
     "card": {
-      "view_details": "Xem tài liệu",
-      "default_category": "Cuộn thư"
+      "view_details": "Xem tÃ i liá»‡u",
+      "default_category": "Cuá»™n thÆ°"
     },
     "empty": {
-      "title": "Không tìm thấy tài liệu hóa học phù hợp",
-      "clear_btn": "Hủy bộ lọc lọc và thử lại"
+      "title": "KhÃ´ng tÃ¬m tháº¥y tÃ i liá»‡u hÃ³a há»c phÃ¹ há»£p",
+      "clear_btn": "Há»§y bá»™ lá»c lá»c vÃ  thá»­ láº¡i"
     }
   },
-  "lessons": {
+  "bai_hoc": {
     "header": {
-      "title_journey": "Bản Đồ Tri Thức",
-      "title_library": "Thư Viện Học Liệu",
-      "subtitle_explore": "Luyện Tập",
-      "subtitle_materials": "Sách Phép",
-      "desc_logged_in": "Hoàn thành các chương truyện để trở thành bậc thầy giả kim thuật thực thụ.",
-      "desc_guest": "Hành trình học Hóa học từ cơ bản đến chuyên sâu dành cho học viên lớp 8 - 12."
+      "title_journey": "Báº£n Äá»“ Tri Thá»©c",
+      "title_library": "ThÆ° Viá»‡n Há»c Liá»‡u",
+      "subtitle_explore": "Luyá»‡n Táº­p",
+      "subtitle_hoc_lieu": "SÃ¡ch PhÃ©p",
+      "desc_logged_in": "HoÃ n thÃ nh cÃ¡c chÆ°Æ¡ng truyá»‡n Ä‘á»ƒ trá»Ÿ thÃ nh báº­c tháº§y giáº£ kim thuáº­t thá»±c thá»¥.",
+      "desc_guest": "HÃ nh trÃ¬nh há»c HÃ³a há»c tá»« cÆ¡ báº£n Ä‘áº¿n chuyÃªn sÃ¢u dÃ nh cho há»c viÃªn lá»›p 8 - 12."
     },
     "grade_labels": {
-      "label": "Lớp {{grade}}"
+      "label": "Lá»›p {{grade}}"
     },
     "status": {
-      "loading": "Đang mở cuộn tài liệu...",
-      "empty_title_logged_in": "Vui lòng chọn chặng học trên bản đồ để bắt đầu hành trình",
-      "empty_title_guest": "Vui lòng chọn nhà lớp học để hiển thị bài học hóa học",
-      "empty_desc": "Khám phá thế giới hóa học nhiệm màu ngay bây giờ",
-      "err_fetch": "Lỗi triệu hồi bài học"
+      "loading": "Äang má»Ÿ cuá»™n tÃ i liá»‡u...",
+      "empty_title_logged_in": "Vui lÃ²ng chá»n cháº·ng há»c trÃªn báº£n Ä‘á»“ Ä‘á»ƒ báº¯t Ä‘áº§u hÃ nh trÃ¬nh",
+      "empty_title_guest": "Vui lÃ²ng chá»n nhÃ  lá»›p há»c Ä‘á»ƒ hiá»ƒn thá»‹ bÃ i há»c hÃ³a há»c",
+      "empty_desc": "KhÃ¡m phÃ¡ tháº¿ giá»›i hÃ³a há»c nhiá»‡m mÃ u ngay bÃ¢y giá»",
+      "err_fetch": "Lá»—i triá»‡u há»“i bÃ i há»c"
     },
     "card": {
-      "explore_btn": "KHÁM PHÁ MẬT CẢNH"
+      "explore_btn": "KHÃM PHÃ Máº¬T Cáº¢NH"
     },
     "story_parts": {
       "8": {
-        "title": "Phần 1",
-        "name": "Sự Khởi Đầu Thức Tỉnh Điểm Học Tập",
-        "story": "Bước vào thế giới chất và nguyên tử, nơi mọi kiến thức Hóa học bắt đầu. Nhiệm vụ của bạn là hiểu bản chất vật chất và ngôn ngữ công thức."
+        "title": "Pháº§n 1",
+        "name": "Sá»± Khá»Ÿi Äáº§u Thá»©c Tá»‰nh Äiá»ƒm Há»c Táº­p",
+        "story": "BÆ°á»›c vÃ o tháº¿ giá»›i cháº¥t vÃ  nguyÃªn tá»­, nÆ¡i má»i kiáº¿n thá»©c HÃ³a há»c báº¯t Ä‘áº§u. Nhiá»‡m vá»¥ cá»§a báº¡n lÃ  hiá»ƒu báº£n cháº¥t váº­t cháº¥t vÃ  ngÃ´n ngá»¯ cÃ´ng thá»©c."
       },
       "9": {
-        "title": "Phần 2",
-        "name": "Hành Trình Chuyển Hóa Điểm Học Tập",
-        "story": "Những phản ứng và hiện tượng biến đổi chất mở ra quy luật tương tác giữa các nguyên tố."
+        "title": "Pháº§n 2",
+        "name": "HÃ nh TrÃ¬nh Chuyá»ƒn HÃ³a Äiá»ƒm Há»c Táº­p",
+        "story": "Nhá»¯ng pháº£n á»©ng vÃ  hiá»‡n tÆ°á»£ng biáº¿n Ä‘á»•i cháº¥t má»Ÿ ra quy luáº­t tÆ°Æ¡ng tÃ¡c giá»¯a cÃ¡c nguyÃªn tá»‘."
       },
       "10": {
-        "title": "Phần 3",
-        "name": "Bước Nhảy Vĩ Mô Hóa Học",
-        "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ làm quen với cân bằng, nhiệt lượng và động lượng trong Hóa học."
+        "title": "Pháº§n 3",
+        "name": "BÆ°á»›c Nháº£y VÄ© MÃ´ HÃ³a Há»c",
+        "story": "Tiáº¿n sÃ¢u vÃ o Ä‘á»™ng lá»±c há»c vÃ  cáº¥u trÃºc báº£ng tuáº§n hoÃ n. Báº¡n sáº½ lÃ m quen vá»›i cÃ¢n báº±ng, nhiá»‡t lÆ°á»£ng vÃ  Ä‘á»™ng lÆ°á»£ng trong HÃ³a há»c."
       },
       "11": {
-        "title": "Phần 4",
-        "name": "Ma Trận Hữu Cơ Huyền Bí",
-        "story": "Lạc vào mê cung của các nguyên tố carbon hóa học. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên sinh vật hóa học."
+        "title": "Pháº§n 4",
+        "name": "Ma Tráº­n Há»¯u CÆ¡ Huyá»n BÃ­",
+        "story": "Láº¡c vÃ o mÃª cung cá»§a cÃ¡c nguyÃªn tá»‘ carbon hÃ³a há»c. NÆ¡i Ä‘Ã¢y, sá»± sá»‘ng hÃ¬nh thÃ nh tá»« nhá»¯ng máº¡ch phá»©c táº¡p vÃ  bÃ­ áº©n. Báº¡n pháº£i tÃ¬m ra quy luáº­t kiáº¿n táº¡o nÃªn sinh váº­t hÃ³a há»c."
       },
       "12": {
-        "title": "Phần 5",
-        "name": "Chạm Đỉnh Tiến Hóa Tối Thượng",
-        "story": "Chặng cuối của Hóa học phổ thông. Vượt qua điện hóa, polymer và vật liệu để sẵn sàng cho những ứng dụng thực tế."
+        "title": "Pháº§n 5",
+        "name": "Cháº¡m Äá»‰nh Tiáº¿n HÃ³a Tá»‘i ThÆ°á»£ng",
+        "story": "Cháº·ng cuá»‘i cá»§a HÃ³a há»c phá»• thÃ´ng. VÆ°á»£t qua Ä‘iá»‡n hÃ³a, polymer vÃ  váº­t liá»‡u Ä‘á»ƒ sáºµn sÃ ng cho nhá»¯ng á»©ng dá»¥ng thá»±c táº¿."
       }
     }
   },
   "lesson_page": {
-    "loading": "Đang tải bài học...",
-    "back_btn": "Quay lại danh sách",
-    "grade_label": "HÓA HỌC LỚP {{grade}}",
-    "content_title": "Nội dung bài học",
+    "loading": "Äang táº£i bÃ i há»c...",
+    "back_btn": "Quay láº¡i danh sÃ¡ch",
+    "grade_label": "HÃ“A Há»ŒC Lá»šP {{grade}}",
+    "content_title": "Ná»™i dung bÃ i há»c",
     "video": {
-      "placeholder": "Video không khả dụng",
-      "powered_by": "Phát triển bởi"
+      "placeholder": "Video khÃ´ng kháº£ dá»¥ng",
+      "powered_by": "PhÃ¡t triá»ƒn bá»Ÿi"
     },
     "error": {
-      "fetch": "Lỗi tải dữ liệu bài học"
+      "fetch": "Lá»—i táº£i dá»¯ liá»‡u bÃ i há»c"
     }
   },
   "mission_modal": {
     "labels": {
-      "multiple-choice": "Trắc nghiệm",
-      "image-selection": "Nhận biết hình ảnh",
-      "fill-in-the-blank": "Điền đáp án",
-      "drag-drop": "Sắp xếp",
-      "matching": "Nối cột A - B",
-      "mission": "Nhiệm vụ",
-      "goal": "Mục tiêu"
+      "multiple-choice": "Tráº¯c nghiá»‡m",
+      "image-selection": "Nháº­n biáº¿t hÃ¬nh áº£nh",
+      "fill-in-the-blank": "Äiá»n Ä‘Ã¡p Ã¡n",
+      "drag-drop": "Sáº¯p xáº¿p",
+      "matching": "Ná»‘i cá»™t A - B",
+      "mission": "Nhiá»‡m vá»¥",
+      "goal": "Má»¥c tiÃªu"
     },
-    "narrative_fallback": "Hãy sử dụng kiến thức của bạn để hoàn thành thử thách này!",
-    "source_fallback": "Tư liệu",
+    "narrative_fallback": "HÃ£y sá»­ dá»¥ng kiáº¿n thá»©c cá»§a báº¡n Ä‘á»ƒ hoÃ n thÃ nh thá»­ thÃ¡ch nÃ y!",
+    "source_fallback": "TÆ° liá»‡u",
     "image_selection": {
-      "confirm": "Xác nhận lựa chọn {{label}} ➔",
-      "label_prefix": "Lựa chọn "
+      "confirm": "XÃ¡c nháº­n lá»±a chá»n {{label}} âž”",
+      "label_prefix": "Lá»±a chá»n "
     },
     "fill_blank": {
-      "placeholder": "Gõ câu trả lời...",
-      "confirm": "Xác nhận"
+      "placeholder": "GÃµ cÃ¢u tráº£ lá»i...",
+      "confirm": "XÃ¡c nháº­n"
     },
     "drag_drop": {
-      "instruction": "Kéo để sắp xếp lại thứ tự đúng",
-      "confirm": "Xác nhận thứ tự ➔"
+      "instruction": "KÃ©o Ä‘á»ƒ sáº¯p xáº¿p láº¡i thá»© tá»± Ä‘Ãºng",
+      "confirm": "XÃ¡c nháº­n thá»© tá»± âž”"
     },
     "matching": {
-      "instruction": "Cột B (Kéo thả)",
-      "col_a": "Cột A",
-      "col_b": "Cột B",
-      "confirm": "Xác nhận liên kết ➔"
+      "instruction": "Cá»™t B (KÃ©o tháº£)",
+      "col_a": "Cá»™t A",
+      "col_b": "Cá»™t B",
+      "confirm": "XÃ¡c nháº­n liÃªn káº¿t âž”"
     },
     "footer": {
-      "cancel": "Hủy lộ trình",
-      "correct": "✨ Chính xác! {{status}}",
-      "wrong": "❌ Chưa đúng, hãy thử lại!",
-      "status_final": "Hoàn thành nhiệm vụ!",
-      "status_next": "Tiếp theo..."
+      "cancel": "Há»§y lá»™ trÃ¬nh",
+      "correct": "âœ¨ ChÃ­nh xÃ¡c! {{status}}",
+      "wrong": "âŒ ChÆ°a Ä‘Ãºng, hÃ£y thá»­ láº¡i!",
+      "status_final": "HoÃ n thÃ nh nhiá»‡m vá»¥!",
+      "status_next": "Tiáº¿p theo..."
     }
   },
   "stage_video": {
-    "back_btn": "Quay lại",
+    "back_btn": "Quay láº¡i",
     "status": {
-      "label": "Trạng thái:",
-      "ready": "Sẵn sàng",
-      "analyzing": "Đang xử lý"
+      "label": "Tráº¡ng thÃ¡i:",
+      "ready": "Sáºµn sÃ ng",
+      "analyzing": "Äang xá»­ lÃ½"
     },
     "metadata": {
-      "source": "Nguồn: Camera Phòng Thí Nghiệm 01",
-      "format": "Định dạng: 1080p Digital Feed"
+      "source": "Nguá»“n: Camera PhÃ²ng ThÃ­ Nghiá»‡m 01",
+      "format": "Äá»‹nh dáº¡ng: 1080p Digital Feed"
     },
     "action_btn": {
-      "ready": "Tiếp nhận nhiệm vụ",
-      "processing": "Đang xử lý dữ liệu..."
+      "ready": "Tiáº¿p nháº­n nhiá»‡m vá»¥",
+      "processing": "Äang xá»­ lÃ½ dá»¯ liá»‡u..."
     },
     "hints": {
-      "ready": "Dữ liệu đã sẵn sàng! Chúc Nhà Hóa học thành công.",
-      "processing": "Gợi ý: Theo dõi clip kỹ để chuẩn bị cho thử thách nhé!"
+      "ready": "Dá»¯ liá»‡u Ä‘Ã£ sáºµn sÃ ng! ChÃºc NhÃ  HÃ³a há»c thÃ nh cÃ´ng.",
+      "processing": "Gá»£i Ã½: Theo dÃµi clip ká»¹ Ä‘á»ƒ chuáº©n bá»‹ cho thá»­ thÃ¡ch nhÃ©!"
     }
   },
   "arena_modes": {
     "solo": "1 VS 1",
-    "3vs3": "Tổ đội 3 (3 VS 3)",
-    "5vs5": "Tổ đội 5 (5 VS 5)",
+    "3vs3": "Tá»• Ä‘á»™i 3 (3 VS 3)",
+    "5vs5": "Tá»• Ä‘á»™i 5 (5 VS 5)",
     "1vs100": "Battle Royale (1 vs 100)",
     "solo_short": "1 VS 1",
     "3vs3_short": "3 VS 3",
@@ -1003,78 +1005,79 @@
     "br_short": "Battle Royale",
     "mission_modal": {
       "labels": {
-        "mission": "Nhiệm vụ",
-        "goal": "Mục tiêu",
-        "multiple-choice": "Trắc nghiệm",
-        "image-selection": "Nhận biết hình ảnh",
-        "fill-in-the-blank": "Điền vào chỗ trống",
-        "drag-drop": "Sắp xếp thứ tự",
-        "matching": "Nối cặp",
-        "target_type_fallback": "dụng cụ"
+        "mission": "Nhiá»‡m vá»¥",
+        "goal": "Má»¥c tiÃªu",
+        "multiple-choice": "Tráº¯c nghiá»‡m",
+        "image-selection": "Nháº­n biáº¿t hÃ¬nh áº£nh",
+        "fill-in-the-blank": "Äiá»n vÃ o chá»— trá»‘ng",
+        "drag-drop": "Sáº¯p xáº¿p thá»© tá»±",
+        "matching": "Ná»‘i cáº·p",
+        "target_type_fallback": "dá»¥ng cá»¥"
       },
       "image_selection": {
-        "fallback_question": "Đâu là hình ảnh mô tả đúng nhất về đối tượng này?",
-        "confirm": "Tôi chọn hình số {{label}}",
-        "label_prefix": "Hình "
+        "fallback_question": "ÄÃ¢u lÃ  hÃ¬nh áº£nh mÃ´ táº£ Ä‘Ãºng nháº¥t vá» Ä‘á»‘i tÆ°á»£ng nÃ y?",
+        "confirm": "TÃ´i chá»n hÃ¬nh sá»‘ {{label}}",
+        "label_prefix": "HÃ¬nh "
       },
       "fill_blank": {
-        "placeholder": "Nhập câu trả lời của bạn...",
-        "confirm": "Xác nhận câu trả lời"
+        "placeholder": "Nháº­p cÃ¢u tráº£ lá»i cá»§a báº¡n...",
+        "confirm": "XÃ¡c nháº­n cÃ¢u tráº£ lá»i"
       },
       "drag_drop": {
-        "instruction": "Kéo thả để sắp xếp lại đúng thứ tự",
-        "confirm": "Kiểm tra thứ tự"
+        "instruction": "KÃ©o tháº£ Ä‘á»ƒ sáº¯p xáº¿p láº¡i Ä‘Ãºng thá»© tá»±",
+        "confirm": "Kiá»ƒm tra thá»© tá»±"
       },
       "matching": {
-        "col_a": "Cột A",
-        "instruction": "Kéo các thẻ ở đây",
-        "confirm": "Kiểm tra kết quả"
+        "col_a": "Cá»™t A",
+        "instruction": "KÃ©o cÃ¡c tháº» á»Ÿ Ä‘Ã¢y",
+        "confirm": "Kiá»ƒm tra káº¿t quáº£"
       },
       "footer": {
-        "cancel": "Tạm dừng hành trình",
-        "correct": "Chính xác! {{status}}",
-        "wrong": "Chưa đúng rồi, hãy thử lại nhé!",
-        "status_next": "Tiếp tục thôi...",
-        "status_final": "Bạn đã hoàn thành!"
+        "cancel": "Táº¡m dá»«ng hÃ nh trÃ¬nh",
+        "correct": "ChÃ­nh xÃ¡c! {{status}}",
+        "wrong": "ChÆ°a Ä‘Ãºng rá»“i, hÃ£y thá»­ láº¡i nhÃ©!",
+        "status_next": "Tiáº¿p tá»¥c thÃ´i...",
+        "status_final": "Báº¡n Ä‘Ã£ hoÃ n thÃ nh!"
       },
-      "narrative_fallback": "Hãy sử dụng kiến thức của bạn để hoàn thành thử thách này!",
-      "source_fallback": "Tư liệu thực tế"
+      "narrative_fallback": "HÃ£y sá»­ dá»¥ng kiáº¿n thá»©c cá»§a báº¡n Ä‘á»ƒ hoÃ n thÃ nh thá»­ thÃ¡ch nÃ y!",
+      "source_fallback": "TÆ° liá»‡u thá»±c táº¿"
     }
   },
   "widget": {
-    "title": "Trợ lý Aurum",
-    "status_active": "Đang hoạt động",
-    "minimize": "Thu nhỏ",
-    "close": "Đóng",
-    "tooltip": "Trợ lý Aurum",
-    "login_required": "Yêu cầu đăng nhập",
-    "login_required_desc": "Vui lòng đăng nhập tài khoản để theo dõi và nhận phần thưởng từ hệ thống nhiệm vụ mỗi ngày.",
-    "login_now": "Đăng nhập ngay",
-    "level_prefix": "Cấp",
+    "title": "Trá»£ lÃ½ Aurum",
+    "status_active": "Äang hoáº¡t Ä‘á»™ng",
+    "minimize": "Thu nhá»",
+    "close": "ÄÃ³ng",
+    "tooltip": "Trá»£ lÃ½ Aurum",
+    "login_required": "YÃªu cáº§u Ä‘Äƒng nháº­p",
+    "login_required_desc": "Vui lÃ²ng Ä‘Äƒng nháº­p tÃ i khoáº£n Ä‘á»ƒ theo dÃµi vÃ  nháº­n pháº§n thÆ°á»Ÿng tá»« há»‡ thá»‘ng nhiá»‡m vá»¥ má»—i ngÃ y.",
+    "login_now": "ÄÄƒng nháº­p ngay",
+    "level_prefix": "Cáº¥p",
     "streak": "Streak",
-    "reset_in": "Làm mới sau:",
-    "reward": "Thưởng",
-    "claim": "Nhận",
-    "claimed": "Nhận ✓",
-    "locked": "Chưa đạt",
-    "no_missions": "Không có nhiệm vụ khả dụng",
-    "feedback_type": "Chọn loại phản hồi:",
-    "feedback_details": "Nội dung chi tiết:",
-    "type_suggestion": "💡 Góp ý",
-    "type_bug": "🐛 Báo lỗi",
-    "type_praise": "❤️ Khen ngợi",
-    "placeholder_suggestion": "Hãy mô tả ý tưởng hoặc đề xuất tính năng giúp Aurum hoàn thiện hơn...",
-    "placeholder_bug": "Hãy mô tả chi tiết lỗi bạn gặp phải (và nhấn Ctrl+V để dán trực tiếp ảnh chụp màn hình nếu có)...",
-    "placeholder_praise": "Hãy chia sẻ những điều bạn yêu thích về Aurum...",
-    "attach_image": "📷 Đính kèm ảnh (Hoặc Ctrl+V)",
-    "remove": "Xóa",
-    "attach_hint": "Hỗ trợ tải tệp ảnh hoặc chụp ảnh màn hình rồi nhấn Ctrl+V để dán trực tiếp.",
-    "sending": "Đang gửi phản hồi...",
-    "send_suggestion": "Gửi ý kiến đóng góp ➔",
-    "send_bug": "Báo cáo lỗi hệ thống ➔",
-    "send_praise": "Gửi lời khen ngợi ➔",
-    "success_title": "Cảm ơn bạn!",
-    "success_desc": "Ý kiến đóng góp của bạn đã được gửi thành công đến ban quản trị Aurum.",
-    "send_another": "Gửi phản hồi khác"
+    "reset_in": "LÃ m má»›i sau:",
+    "reward": "ThÆ°á»Ÿng",
+    "claim": "Nháº­n",
+    "claimed": "Nháº­n âœ“",
+    "locked": "ChÆ°a Ä‘áº¡t",
+    "no_nhiem_vu": "KhÃ´ng cÃ³ nhiá»‡m vá»¥ kháº£ dá»¥ng",
+    "phan_hoi_type": "Chá»n loáº¡i pháº£n há»“i:",
+    "phan_hoi_details": "Ná»™i dung chi tiáº¿t:",
+    "type_suggestion": "ðŸ’¡ GÃ³p Ã½",
+    "type_bug": "ðŸ› BÃ¡o lá»—i",
+    "type_praise": "â¤ï¸ Khen ngá»£i",
+    "placeholder_suggestion": "HÃ£y mÃ´ táº£ Ã½ tÆ°á»Ÿng hoáº·c Ä‘á» xuáº¥t tÃ­nh nÄƒng giÃºp Aurum hoÃ n thiá»‡n hÆ¡n...",
+    "placeholder_bug": "HÃ£y mÃ´ táº£ chi tiáº¿t lá»—i báº¡n gáº·p pháº£i (vÃ  nháº¥n Ctrl+V Ä‘á»ƒ dÃ¡n trá»±c tiáº¿p áº£nh chá»¥p mÃ n hÃ¬nh náº¿u cÃ³)...",
+    "placeholder_praise": "HÃ£y chia sáº» nhá»¯ng Ä‘iá»u báº¡n yÃªu thÃ­ch vá» Aurum...",
+    "attach_image": "ðŸ“· ÄÃ­nh kÃ¨m áº£nh (Hoáº·c Ctrl+V)",
+    "remove": "XÃ³a",
+    "attach_hint": "Há»— trá»£ táº£i tá»‡p áº£nh hoáº·c chá»¥p áº£nh mÃ n hÃ¬nh rá»“i nháº¥n Ctrl+V Ä‘á»ƒ dÃ¡n trá»±c tiáº¿p.",
+    "sending": "Äang gá»­i pháº£n há»“i...",
+    "send_suggestion": "Gá»­i Ã½ kiáº¿n Ä‘Ã³ng gÃ³p âž”",
+    "send_bug": "BÃ¡o cÃ¡o lá»—i há»‡ thá»‘ng âž”",
+    "send_praise": "Gá»­i lá»i khen ngá»£i âž”",
+    "success_title": "Cáº£m Æ¡n báº¡n!",
+    "success_desc": "Ã kiáº¿n Ä‘Ã³ng gÃ³p cá»§a báº¡n Ä‘Ã£ Ä‘Æ°á»£c gá»­i thÃ nh cÃ´ng Ä‘áº¿n ban quáº£n trá»‹ Aurum.",
+    "send_another": "Gá»­i pháº£n há»“i khÃ¡c"
   }
 }
+

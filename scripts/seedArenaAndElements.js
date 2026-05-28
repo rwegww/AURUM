@@ -9,9 +9,9 @@ async function seed() {
     console.log('Starting Arena DB seeding...');
 
     await supabase
-      .from('arena_questions')
+      .from('cau_hoi_dau')
       .delete()
-      .neq('question', 'placeholder-to-delete-all');
+      .neq('cau_hoi', 'placeholder-to-delete-all');
 
     const questionsToSeed = [];
     Object.keys(arenaQuestions).forEach((difficulty) => {
@@ -19,24 +19,24 @@ async function seed() {
 
       arenaQuestions[difficulty].forEach((question) => {
         questionsToSeed.push({
-          difficulty: difficulty === 'auto' ? 'easy' : difficulty,
-          grade_level: question.gradeLevel || 8,
-          question: question.question,
-          options: question.options || [],
-          correct_option_index: question.correct ?? null,
-          game_type: question.gameType || 'calculation',
-          payload: question.payload || {},
-          answer: question.answer || {},
-          points: question.points || 100,
-          time_limit_seconds: question.timeLimitSeconds || 45,
-          explanation: question.explanation || null,
-          is_active: question.isActive ?? true,
+          do_kho: difficulty === 'auto' ? 'easy' : difficulty,
+          khoi_id: question.gradeLevel || 8,
+          cau_hoi: question.question,
+          lua_chon: question.options || [],
+          chi_so_dap_an_dung: question.correct ?? null,
+          loai_game: question.gameType || 'calculation',
+          noi_dung_game: question.payload || {},
+          dap_an: question.answer || {},
+          diem: question.points || 100,
+          gioi_han_giay: question.timeLimitSeconds || 45,
+          giai_thich: question.explanation || null,
+          dang_hoat_dong: question.isActive ?? true,
         });
       });
     });
 
     if (questionsToSeed.length > 0) {
-      const { error } = await supabase.from('arena_questions').insert(questionsToSeed);
+      const { error } = await supabase.from('cau_hoi_dau').insert(questionsToSeed);
       if (error) throw error;
       console.log(`Successfully seeded ${questionsToSeed.length} arena questions.`);
     } else {

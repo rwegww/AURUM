@@ -1,35 +1,35 @@
-/* eslint-disable react-refresh/only-export-components */
+﻿/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 
 const PLACEMENT_TESTS = {
   9: [
-    { question: "Nguyên tử được cấu tạo từ các loại hạt nào?", options: ["Proton và Neutron", "Proton và Electron", "Proton, Neutron và Electron", "Neutron và Electron"], correctAnswer: 2 },
-    { question: "Hóa trị của Oxy thường là bao nhiêu?", options: ["I", "II", "III", "IV"], correctAnswer: 1 },
-    { question: "Ký hiệu hóa học của Sắt là gì?", options: ["Fe", "Cu", "Ag", "Au"], correctAnswer: 0 },
-    { question: "Phân tử khối của Nước (H2O) là bao nhiêu?", options: ["16", "17", "18", "20"], correctAnswer: 2 },
-    { question: "Hiện tượng nào sau đây là hiện tượng hóa học?", options: ["Nước bay hơi", "Củi cháy thành than", "Hòa tan muối vào nước", "Bẻ gãy thước kẻ"], correctAnswer: 1 },
-    { question: "Axit nào có trong dịch vị dạ dày?", options: ["H2SO4", "HNO3", "HCl", "CH3COOH"], correctAnswer: 2 },
-    { question: "Chất nào làm quỳ tím hóa đỏ?", options: ["Bazơ", "Axit", "Muối", "Nước"], correctAnswer: 1 },
-    { question: "Khí nào duy trì sự cháy?", options: ["Nitơ", "Cacbon đioxit", "Oxy", "Hiđro"], correctAnswer: 2 },
-    { question: "Công thức hóa học của Muối ăn là gì?", options: ["NaOH", "HCl", "NaCl", "KCl"], correctAnswer: 2 },
-    { question: "Đơn vị đo lượng chất trong hóa học là gì?", options: ["Gam", "Lít", "Mol", "Nguyên tử khối"], correctAnswer: 2 },
-    { question: "Thanh kim loại nào dẫn điện tốt nhất?", options: ["Sắt", "Nhôm", "Bạc", "Đồng"], correctAnswer: 2 },
-    { question: "Khí Hiđro nhẹ hơn hay nặng hơn không khí?", options: ["Nặng hơn nhiều", "Nặng hơn một chút", "Nhẹ hơn", "Bằng nhau"], correctAnswer: 2 }
+    { question: "NguyÃªn tá»­ Ä‘Æ°á»£c cáº¥u táº¡o tá»« cÃ¡c loáº¡i háº¡t nÃ o?", options: ["Proton vÃ  Neutron", "Proton vÃ  Electron", "Proton, Neutron vÃ  Electron", "Neutron vÃ  Electron"], correctAnswer: 2 },
+    { question: "HÃ³a trá»‹ cá»§a Oxy thÆ°á»ng lÃ  bao nhiÃªu?", options: ["I", "II", "III", "IV"], correctAnswer: 1 },
+    { question: "KÃ½ hiá»‡u hÃ³a há»c cá»§a Sáº¯t lÃ  gÃ¬?", options: ["Fe", "Cu", "Ag", "Au"], correctAnswer: 0 },
+    { question: "PhÃ¢n tá»­ khá»‘i cá»§a NÆ°á»›c (H2O) lÃ  bao nhiÃªu?", options: ["16", "17", "18", "20"], correctAnswer: 2 },
+    { question: "Hiá»‡n tÆ°á»£ng nÃ o sau Ä‘Ã¢y lÃ  hiá»‡n tÆ°á»£ng hÃ³a há»c?", options: ["NÆ°á»›c bay hÆ¡i", "Cá»§i chÃ¡y thÃ nh than", "HÃ²a tan muá»‘i vÃ o nÆ°á»›c", "Báº» gÃ£y thÆ°á»›c káº»"], correctAnswer: 1 },
+    { question: "Axit nÃ o cÃ³ trong dá»‹ch vá»‹ dáº¡ dÃ y?", options: ["H2SO4", "HNO3", "HCl", "CH3COOH"], correctAnswer: 2 },
+    { question: "Cháº¥t nÃ o lÃ m quá»³ tÃ­m hÃ³a Ä‘á»?", options: ["BazÆ¡", "Axit", "Muá»‘i", "NÆ°á»›c"], correctAnswer: 1 },
+    { question: "KhÃ­ nÃ o duy trÃ¬ sá»± chÃ¡y?", options: ["NitÆ¡", "Cacbon Ä‘ioxit", "Oxy", "HiÄ‘ro"], correctAnswer: 2 },
+    { question: "CÃ´ng thá»©c hÃ³a há»c cá»§a Muá»‘i Äƒn lÃ  gÃ¬?", options: ["NaOH", "HCl", "NaCl", "KCl"], correctAnswer: 2 },
+    { question: "ÄÆ¡n vá»‹ Ä‘o lÆ°á»£ng cháº¥t trong hÃ³a há»c lÃ  gÃ¬?", options: ["Gam", "LÃ­t", "Mol", "NguyÃªn tá»­ khá»‘i"], correctAnswer: 2 },
+    { question: "Thanh kim loáº¡i nÃ o dáº«n Ä‘iá»‡n tá»‘t nháº¥t?", options: ["Sáº¯t", "NhÃ´m", "Báº¡c", "Äá»“ng"], correctAnswer: 2 },
+    { question: "KhÃ­ HiÄ‘ro nháº¹ hÆ¡n hay náº·ng hÆ¡n khÃ´ng khÃ­?", options: ["Náº·ng hÆ¡n nhiá»u", "Náº·ng hÆ¡n má»™t chÃºt", "Nháº¹ hÆ¡n", "Báº±ng nhau"], correctAnswer: 2 }
   ],
   10: [
       // Placeholder for G10
-      { question: "Bảng tuần hoàn hiện đại được sắp xếp theo chiều tăng dần của?", options: ["Khối lượng nguyên tử", "Số hiệu nguyên tử", "Số Neutron", "Số khối"], correctAnswer: 1 },
-      { question: "Liên kết trong phân tử NaCl là liên kết gì?", options: ["Liên kết cộng hóa trị", "Liên kết Ion", "Liên kết Kim loại", "Liên kết Hiđro"], correctAnswer: 1 },
-      { question: "Lớp electron ngoài cùng của khí hiếm thường có bao nhiêu electron?", options: ["2 hoặc 8", "4", "6", "1"], correctAnswer: 0 },
-      { question: "Nguyên tố nào có độ âm điện lớn nhất?", options: ["Oxy", "Clo", "Flo", "Nitơ"], correctAnswer: 2 },
-      { question: "Số electron tối đa trong lớp L (n=2) là?", options: ["2", "8", "18", "32"], correctAnswer: 1 },
-      { question: "Phản ứng tỏa nhiệt là phản ứng?", options: ["Hấp thụ năng lượng", "Giải phóng năng lượng", "Không thay đổi năng lượng", "Xảy ra ở nhiệt độ thấp"], correctAnswer: 1 },
-      { question: "Chất oxi hóa là chất?", options: ["Cho electron", "Nhận electron", "Tăng số oxi hóa", "Không tham gia phản ứng"], correctAnswer: 1 },
-      { question: "Cấu hình electron của Neon (Z=10) là?", options: ["1s2 2s2 2p4", "1s2 2s2 2p6", "1s2 2s2 2p5", "1s2 2s2 2p2"], correctAnswer: 1 },
-      { question: "Nguyên tố Halogen thuộc nhóm mấy?", options: ["IA", "VIIA", "VIIIA", "IVA"], correctAnswer: 1 },
-      { question: "Công thức Lewis đại diện cho?", options: ["Tổng số hạt", "Lớp electron vỏ", "Số electron hóa trị", "Hạt nhân nguyên tử"], correctAnswer: 2 }
+      { question: "Báº£ng tuáº§n hoÃ n hiá»‡n Ä‘áº¡i Ä‘Æ°á»£c sáº¯p xáº¿p theo chiá»u tÄƒng dáº§n cá»§a?", options: ["Khá»‘i lÆ°á»£ng nguyÃªn tá»­", "Sá»‘ hiá»‡u nguyÃªn tá»­", "Sá»‘ Neutron", "Sá»‘ khá»‘i"], correctAnswer: 1 },
+      { question: "LiÃªn káº¿t trong phÃ¢n tá»­ NaCl lÃ  liÃªn káº¿t gÃ¬?", options: ["LiÃªn káº¿t cá»™ng hÃ³a trá»‹", "LiÃªn káº¿t Ion", "LiÃªn káº¿t Kim loáº¡i", "LiÃªn káº¿t HiÄ‘ro"], correctAnswer: 1 },
+      { question: "Lá»›p electron ngoÃ i cÃ¹ng cá»§a khÃ­ hiáº¿m thÆ°á»ng cÃ³ bao nhiÃªu electron?", options: ["2 hoáº·c 8", "4", "6", "1"], correctAnswer: 0 },
+      { question: "NguyÃªn tá»‘ nÃ o cÃ³ Ä‘á»™ Ã¢m Ä‘iá»‡n lá»›n nháº¥t?", options: ["Oxy", "Clo", "Flo", "NitÆ¡"], correctAnswer: 2 },
+      { question: "Sá»‘ electron tá»‘i Ä‘a trong lá»›p L (n=2) lÃ ?", options: ["2", "8", "18", "32"], correctAnswer: 1 },
+      { question: "Pháº£n á»©ng tá»a nhiá»‡t lÃ  pháº£n á»©ng?", options: ["Háº¥p thá»¥ nÄƒng lÆ°á»£ng", "Giáº£i phÃ³ng nÄƒng lÆ°á»£ng", "KhÃ´ng thay Ä‘á»•i nÄƒng lÆ°á»£ng", "Xáº£y ra á»Ÿ nhiá»‡t Ä‘á»™ tháº¥p"], correctAnswer: 1 },
+      { question: "Cháº¥t oxi hÃ³a lÃ  cháº¥t?", options: ["Cho electron", "Nháº­n electron", "TÄƒng sá»‘ oxi hÃ³a", "KhÃ´ng tham gia pháº£n á»©ng"], correctAnswer: 1 },
+      { question: "Cáº¥u hÃ¬nh electron cá»§a Neon (Z=10) lÃ ?", options: ["1s2 2s2 2p4", "1s2 2s2 2p6", "1s2 2s2 2p5", "1s2 2s2 2p2"], correctAnswer: 1 },
+      { question: "NguyÃªn tá»‘ Halogen thuá»™c nhÃ³m máº¥y?", options: ["IA", "VIIA", "VIIIA", "IVA"], correctAnswer: 1 },
+      { question: "CÃ´ng thá»©c Lewis Ä‘áº¡i diá»‡n cho?", options: ["Tá»•ng sá»‘ háº¡t", "Lá»›p electron vá»", "Sá»‘ electron hÃ³a trá»‹", "Háº¡t nhÃ¢n nguyÃªn tá»­"], correctAnswer: 2 }
   ]
 };
 
@@ -111,8 +111,8 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
           {/* Header */}
           <div className="bg-viet-green p-8 text-white relative">
              <div className="absolute top-4 right-4 text-white/20 text-6xl font-black">TEST</div>
-             <h2 className="text-3xl font-black font-sora italic uppercase">Bài Test Học Vượt</h2>
-             <p className="text-white/80 font-bold">Khám phá tiềm năng hóa học lớp {grade} của bạn</p>
+             <h2 className="text-3xl font-black font-sora italic uppercase">BÃ i Test Há»c VÆ°á»£t</h2>
+             <p className="text-white/80 font-bold">KhÃ¡m phÃ¡ tiá»m nÄƒng hÃ³a há»c lá»›p {grade} cá»§a báº¡n</p>
           </div>
 
           <div className="p-10 flex-1 overflow-y-auto">
@@ -125,17 +125,17 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                     exit={{ opacity: 0, y: -20 }}
                     className="text-center py-10"
                   >
-                     <div className="text-6xl mb-6">🎓</div>
-                     <h3 className="text-2xl font-black text-viet-text mb-4 uppercase">Sẵn sàng thử thách?</h3>
+                     <div className="text-6xl mb-6">ðŸŽ“</div>
+                     <h3 className="text-2xl font-black text-viet-text mb-4 uppercase">Sáºµn sÃ ng thá»­ thÃ¡ch?</h3>
                      <p className="text-viet-text-light font-bold mb-8 leading-relaxed">
-                        Bài test gồm {questions.length} câu hỏi tổng hợp kiến thức nền tảng. 
-                        Vượt qua {passingScore} câu để mở khóa chương trình Lớp {grade} ngay lập tức!
+                        BÃ i test gá»“m {questions.length} cÃ¢u há»i tá»•ng há»£p kiáº¿n thá»©c ná»n táº£ng. 
+                        VÆ°á»£t qua {passingScore} cÃ¢u Ä‘á»ƒ má»Ÿ khÃ³a chÆ°Æ¡ng trÃ¬nh Lá»›p {grade} ngay láº­p tá»©c!
                      </p>
                      <button 
                        onClick={() => setStep('quiz')}
                        className="viet-btn-green w-full py-4 text-lg"
                      >
-                       Bắt đầu ngay ➔
+                       Báº¯t Ä‘áº§u ngay âž”
                      </button>
                   </motion.div>
                 )}
@@ -150,7 +150,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                   >
                      <div className="flex justify-between items-center">
                         <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/5 px-4 py-2 rounded-full border border-viet-green/20">
-                          Câu {currentQuestion + 1} / {questions.length}
+                          CÃ¢u {currentQuestion + 1} / {questions.length}
                         </span>
                         <div className="w-32 h-2 bg-gray-100 rounded-full overflow-hidden">
                            <div 
@@ -180,7 +180,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                            >
                               <span className="font-bold">{option}</span>
                               {selectedAnswer === idx && (
-                                <span className="text-2xl">{isCorrect ? '✨' : '💥'}</span>
+                                <span className="text-2xl">{isCorrect ? 'âœ¨' : 'ðŸ’¥'}</span>
                               )}
                            </button>
                         ))}
@@ -197,24 +197,24 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                   >
                      {score >= passingScore ? (
                        <>
-                         <div className="text-7xl mb-6">🏆</div>
-                         <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">Hành Trình Đã Mở!</h3>
+                         <div className="text-7xl mb-6">ðŸ†</div>
+                         <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">HÃ nh TrÃ¬nh ÄÃ£ Má»Ÿ!</h3>
                          <p className="text-viet-text-light font-bold mb-8">
-                           Tuyệt vời! Bạn đã đúng {score}/{questions.length} câu. 
-                           Chương trình lớp {grade} đã sẵn sàng chờ đón bạn.
+                           Tuyá»‡t vá»i! Báº¡n Ä‘Ã£ Ä‘Ãºng {score}/{questions.length} cÃ¢u. 
+                           ChÆ°Æ¡ng trÃ¬nh lá»›p {grade} Ä‘Ã£ sáºµn sÃ ng chá» Ä‘Ã³n báº¡n.
                          </p>
                          <div className="bg-viet-green/10 p-6 rounded-3xl border border-viet-green/20 mb-8 inline-block">
-                            <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-1">Thưởng Học Vượt</p>
+                            <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-1">ThÆ°á»Ÿng Há»c VÆ°á»£t</p>
                             <p className="text-4xl font-black text-viet-green">+500 XP</p>
                          </div>
                        </>
                      ) : (
                        <>
-                         <div className="text-7xl mb-6">📚</div>
-                         <h3 className="text-3xl font-black text-red-500 mb-2 uppercase italic">Cần Cố Gắng Thêm</h3>
+                         <div className="text-7xl mb-6">ðŸ“š</div>
+                         <h3 className="text-3xl font-black text-red-500 mb-2 uppercase italic">Cáº§n Cá»‘ Gáº¯ng ThÃªm</h3>
                          <p className="text-viet-text-light font-bold mb-8">
-                           Bạn đúng {score}/{questions.length} câu. (Cần tối thiểu {passingScore} câu). 
-                           Hãy ôn tập lại kiến thức lớp cũ trước khi thử lại nhé!
+                           Báº¡n Ä‘Ãºng {score}/{questions.length} cÃ¢u. (Cáº§n tá»‘i thiá»ƒu {passingScore} cÃ¢u). 
+                           HÃ£y Ã´n táº­p láº¡i kiáº¿n thá»©c lá»›p cÅ© trÆ°á»›c khi thá»­ láº¡i nhÃ©!
                          </p>
                        </>
                      )}
@@ -223,7 +223,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                        onClick={handleFinish}
                        className="viet-btn-green w-full py-4 text-lg"
                      >
-                       {score >= passingScore ? "Bắt đầu hành trình ➔" : "Quay lại map"}
+                       {score >= passingScore ? "Báº¯t Ä‘áº§u hÃ nh trÃ¬nh âž”" : "Quay láº¡i map"}
                      </button>
                   </motion.div>
                 )}
@@ -234,7 +234,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
             onClick={onClose}
             className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-white/40 hover:text-white transition-colors"
           >
-            ✕
+            âœ•
           </button>
       </div>
     </motion.div>
@@ -242,3 +242,4 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
 };
 
 export default PlacementTestModal;
+

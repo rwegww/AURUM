@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Lock, Unlock, Eye, Search } from 'lucide-react';
 
 const UserManager = () => {
-  const [users, setUsers] = useState([]);
+  const [nguoi_dung, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/admin/users', {
+      const res = await fetch('/api/admin/nguoi_dung', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await res.json();
       setUsers(data);
     } catch (err) {
-      console.error('Lỗi tải danh sách học sinh:', err);
+      console.error('Lá»—i táº£i danh sÃ¡ch há»c sinh:', err);
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ const UserManager = () => {
     fetchUsers();
   }, []);
 
-  const filteredUsers = users.filter(u => 
+  const filteredUsers = nguoi_dung.filter(u => 
     u.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -36,15 +36,15 @@ const UserManager = () => {
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
-            <h1 className="text-3xl font-bold text-viet-text tracking-tight">Thống kê <span className="text-viet-green">Học sinh</span></h1>
-            <p className="text-viet-text-light mt-1 font-medium italic">Theo dõi quá trình rèn luyện và tiến độ của học viên.</p>
+            <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">â† Quay láº¡i Báº£ng Ä‘iá»u khiá»ƒn</Link>
+            <h1 className="text-3xl font-bold text-viet-text tracking-tight">Thá»‘ng kÃª <span className="text-viet-green">Há»c sinh</span></h1>
+            <p className="text-viet-text-light mt-1 font-medium italic">Theo dÃµi quÃ¡ trÃ¬nh rÃ¨n luyá»‡n vÃ  tiáº¿n Ä‘á»™ cá»§a há»c viÃªn.</p>
           </div>
           
           <div className="relative w-full md:w-80">
             <input 
               type="text" 
-              placeholder="Tìm kiếm tên học sinh..." 
+              placeholder="TÃ¬m kiáº¿m tÃªn há»c sinh..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full h-12 px-12 rounded-2xl border border-viet-border bg-white text-sm font-bold focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none"
@@ -63,11 +63,11 @@ const UserManager = () => {
               <table className="w-full text-left">
                 <thead className="bg-viet-bg/30 border-b border-viet-border">
                   <tr>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Người dùng</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Trạng thái</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Hoạt động</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Tiến trình</th>
-                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Thao tác</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest">NgÆ°á»i dÃ¹ng</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Tráº¡ng thÃ¡i</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Hoáº¡t Ä‘á»™ng</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Tiáº¿n trÃ¬nh</th>
+                    <th className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Thao tÃ¡c</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-viet-border">
@@ -90,8 +90,8 @@ const UserManager = () => {
                           <div>
                             <p className="text-sm font-bold text-viet-text flex items-center gap-2">
                               {u.username}
-                              {u.role === 'teacher' && <span className="bg-blue-100 text-blue-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase">Giáo viên</span>}
-                              {u.is_locked && <span className="bg-red-100 text-red-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-widest">ĐÃ KHÓA</span>}
+                              {u.role === 'teacher' && <span className="bg-blue-100 text-blue-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase">GiÃ¡o viÃªn</span>}
+                              {u.is_locked && <span className="bg-red-100 text-red-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-widest">ÄÃƒ KHÃ“A</span>}
                             </p>
                             <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Tham gia: {new Date(u.createdAt).toLocaleDateString('vi-VN')}</p>
                           </div>
@@ -108,13 +108,13 @@ const UserManager = () => {
                           <span className="text-sm font-black text-viet-text">
                             {u.active_minutes ? `${Math.floor(u.active_minutes / 60)}h ${u.active_minutes % 60}m` : '0m'}
                           </span>
-                          <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-tighter">Tổng thời gian</span>
+                          <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-tighter">Tá»•ng thá»i gian</span>
                         </div>
                       </td>
                       <td className="px-8 py-6">
                          <div className="max-w-[120px] mx-auto">
                             <div className="flex justify-between text-[10px] font-bold text-viet-text-light mb-1.5 uppercase tracking-tighter">
-                               <span>Tiến trình</span>
+                               <span>Tiáº¿n trÃ¬nh</span>
                                <span>{(u.xp % 1000) / 10}%</span>
                             </div>
                             <div className="w-full h-1.5 bg-viet-bg rounded-full overflow-hidden">
@@ -126,10 +126,10 @@ const UserManager = () => {
                          <div className="flex items-center justify-end gap-3">
                            <button 
                              onClick={async () => {
-                               if (!window.confirm(`Bạn có chắc muốn ${u.is_locked ? 'mở khóa' : 'khóa'} tài khoản ${u.username}?`)) return;
+                               if (!window.confirm(`Báº¡n cÃ³ cháº¯c muá»‘n ${u.is_locked ? 'má»Ÿ khÃ³a' : 'khÃ³a'} tÃ i khoáº£n ${u.username}?`)) return;
                                try {
                                  const token = localStorage.getItem('token');
-                                 const res = await fetch(`/api/admin/users/${u.id}/lock`, {
+                                 const res = await fetch(`/api/admin/nguoi_dung/${u.id}/lock`, {
                                    method: 'PATCH',
                                    headers: { 
                                      'Content-Type': 'application/json',
@@ -146,12 +146,12 @@ const UserManager = () => {
                                : 'border-red-200 text-red-500 hover:bg-red-50'
                              }`}
                            >
-                             {u.is_locked ? <><Unlock className="w-3.5 h-3.5" /> Mở khóa</> : <><Lock className="w-3.5 h-3.5" /> Khóa</>}
+                             {u.is_locked ? <><Unlock className="w-3.5 h-3.5" /> Má»Ÿ khÃ³a</> : <><Lock className="w-3.5 h-3.5" /> KhÃ³a</>}
                            </button>
                            <Link 
-                             to={`/admin/users/${u.id}`}
+                             to={`/admin/nguoi_dung/${u.id}`}
                              className="p-2 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white text-slate-500 hover:text-blue-600 transition-all shadow-sm"
-                             title="Chi tiết"
+                             title="Chi tiáº¿t"
                            >
                              <Eye className="w-4 h-4" />
                            </Link>
@@ -165,7 +165,7 @@ const UserManager = () => {
             {filteredUsers.length === 0 && (
                <div className="py-24 text-center flex flex-col items-center">
                   <Search className="w-12 h-12 text-viet-text-light mb-4" />
-                  <p className="text-viet-text-light font-bold">Không tìm thấy người dùng nào khớp với từ khóa</p>
+                  <p className="text-viet-text-light font-bold">KhÃ´ng tÃ¬m tháº¥y ngÆ°á»i dÃ¹ng nÃ o khá»›p vá»›i tá»« khÃ³a</p>
                </div>
             )}
           </div>
@@ -176,3 +176,4 @@ const UserManager = () => {
 };
 
 export default UserManager;
+

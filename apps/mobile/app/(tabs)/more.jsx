@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,22 +17,22 @@ import { useAuth } from "../../context/AuthContext";
 
 const menuItems = [
   {
-    title: "Công cụ",
-    subtitle: "Gợi ý công thức và máy tính hóa học",
+    title: "CÃ´ng cá»¥",
+    subtitle: "Gá»£i Ã½ cÃ´ng thá»©c vÃ  mÃ¡y tÃ­nh hÃ³a há»c",
     icon: "construct-outline",
     color: colors.green,
     href: "/lab"
   },
   {
-    title: "Tài liệu",
-    subtitle: "Thư viện học liệu và phản hồi",
+    title: "TÃ i liá»‡u",
+    subtitle: "ThÆ° viá»‡n há»c liá»‡u vÃ  pháº£n há»“i",
     icon: "library-outline",
     color: colors.green,
     href: "/library"
   },
   {
-    title: "Hồ sơ",
-    subtitle: "Tài khoản, kinh nghiệm, chuỗi học và kế hoạch học",
+    title: "Há»“ sÆ¡",
+    subtitle: "TÃ i khoáº£n, kinh nghiá»‡m, chuá»—i há»c vÃ  káº¿ hoáº¡ch há»c",
     icon: "person-circle-outline",
     color: colors.green,
     href: "/profile"
@@ -45,10 +45,10 @@ export default function MoreTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Trình đơn"
-        title="Thêm"
-        subtitle="Các mục phụ được gom lại để lớp học là trung tâm của ứng dụng."
-        right={<Pill label={`Cấp ${user?.level || 1}`} icon="sparkles-outline" color={colors.green} />}
+        eyebrow="TrÃ¬nh Ä‘Æ¡n"
+        title="ThÃªm"
+        subtitle="CÃ¡c má»¥c phá»¥ Ä‘Æ°á»£c gom láº¡i Ä‘á»ƒ lá»›p há»c lÃ  trung tÃ¢m cá»§a á»©ng dá»¥ng."
+        right={<Pill label={`Cáº¥p ${user?.level || 1}`} icon="sparkles-outline" color={colors.green} />}
       />
 
       <Card accent={colors.green} style={styles.profileCard}>
@@ -56,18 +56,18 @@ export default function MoreTab() {
           <Text style={styles.avatarText}>{String(user?.username || "A").charAt(0).toUpperCase()}</Text>
         </View>
         <View style={styles.profileCopy}>
-          <Text style={styles.profileName}>{user?.username || "Học sinh"}</Text>
-          <Text style={styles.profileMeta}>{user?.email || "Tài khoản AURUM"}</Text>
+          <Text style={styles.profileName}>{user?.username || "Há»c sinh"}</Text>
+          <Text style={styles.profileMeta}>{user?.email || "TÃ i khoáº£n AURUM"}</Text>
         </View>
       </Card>
 
       <View style={styles.metricRow}>
-        <Metric label="Kinh nghiệm" value={user?.xp || 0} icon="flash-outline" color={colors.green} />
-        <Metric label="Chuỗi học" value={user?.streakCount || 0} icon="flame-outline" color={colors.green} />
-        <Metric label="Trực tuyến" value={`${user?.todayOnlineMinutes || 0}p`} icon="time-outline" color={colors.green} />
+        <Metric label="Kinh nghiá»‡m" value={user?.xp || 0} icon="flash-outline" color={colors.green} />
+        <Metric label="Chuá»—i há»c" value={user?.streakCount || 0} icon="flame-outline" color={colors.green} />
+        <Metric label="Trá»±c tuyáº¿n" value={`${user?.todayOnlineMinutes || 0}p`} icon="time-outline" color={colors.green} />
       </View>
 
-      <SectionTitle title="Lối tắt" />
+      <SectionTitle title="Lá»‘i táº¯t" />
       <View style={styles.menuGrid}>
         {menuItems.map((item) => (
           <Pressable
@@ -87,15 +87,15 @@ export default function MoreTab() {
         ))}
       </View>
 
-      <SectionTitle title="Tài khoản" />
+      <SectionTitle title="TÃ i khoáº£n" />
       <ListRow
         icon="person-outline"
-        title="Mở hồ sơ đầy đủ"
-        subtitle="Cập nhật kế hoạch học và tham gia lớp bằng mã"
+        title="Má»Ÿ há»“ sÆ¡ Ä‘áº§y Ä‘á»§"
+        subtitle="Cáº­p nháº­t káº¿ hoáº¡ch há»c vÃ  tham gia lá»›p báº±ng mÃ£"
         color={colors.green}
         onPress={() => router.push("/profile")}
       />
-      <GhostButton label="Đăng xuất" icon="log-out-outline" color={colors.red} onPress={logout} />
+      <GhostButton label="ÄÄƒng xuáº¥t" icon="log-out-outline" color={colors.red} onPress={logout} />
     </Screen>
   );
 }
@@ -168,4 +168,5 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   }
 });
+
 

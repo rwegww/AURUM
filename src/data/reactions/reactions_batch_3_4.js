@@ -1,1990 +1,1990 @@
-export const reactionsBatch3_4 = [
-  // --- BỔ SUNG KHỐI LƯỢNG LỚN (BATCH 3: HỮU CƠ ĐẠI CƯƠNG & CHUYÊN SÂU - PHẦN A) ---
+﻿export const reactionsBatch3_4 = [
+  // --- Bá»” SUNG KHá»I LÆ¯á»¢NG Lá»šN (BATCH 3: Há»®U CÆ  Äáº I CÆ¯Æ NG & CHUYÃŠN SÃ‚U - PHáº¦N A) ---
   {
     id: "rx_075",
-    name: "Phản ứng thế Clo của Metan (Giai đoạn 1)",
+    name: "Pháº£n á»©ng tháº¿ Clo cá»§a Metan (Giai Ä‘oáº¡n 1)",
     type: "single-replacement",
     reactants: [
-      { formula: "CH₄", coeff: 1, name: "Khí Metan" },
-      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
+      { formula: "CHâ‚„", coeff: 1, name: "KhÃ­ Metan" },
+      { formula: "Clâ‚‚", coeff: 1, name: "KhÃ­ Clo" }
     ],
     products: [
-      { formula: "CH₃Cl", coeff: 1, name: "Metyl Clorua" },
+      { formula: "CHâ‚ƒCl", coeff: 1, name: "Metyl Clorua" },
       { formula: "HCl", coeff: 1, name: "Hydro Clo" }
     ],
-    equation: "CH₄ + Cl₂ →(as) CH₃Cl + HCl",
+    equation: "CHâ‚„ + Clâ‚‚ â†’(as) CHâ‚ƒCl + HCl",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Ánh sáng khuếch tán",
-    observation: "Màu vàng lục của clo nhạt dần, tạo ra khí hydro clorua làm đỏ quỳ tím ẩm.",
+    conditions: "Ãnh sÃ¡ng khuáº¿ch tÃ¡n",
+    observation: "MÃ u vÃ ng lá»¥c cá»§a clo nháº¡t dáº§n, táº¡o ra khÃ­ hydro clorua lÃ m Ä‘á» quá»³ tÃ­m áº©m.",
     energy: -103,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_076",
-    name: "Nhiệt phân Metan (1500°C)",
+    name: "Nhiá»‡t phÃ¢n Metan (1500Â°C)",
     type: "decomposition",
     reactants: [
-      { formula: "CH₄", coeff: 2, name: "Khí Metan" }
+      { formula: "CHâ‚„", coeff: 2, name: "KhÃ­ Metan" }
     ],
     products: [
-      { formula: "C₂H₂", coeff: 1, name: "Axetilen" },
-      { formula: "H₂", coeff: 3, name: "Khí Hydro" }
+      { formula: "Câ‚‚Hâ‚‚", coeff: 1, name: "Axetilen" },
+      { formula: "Hâ‚‚", coeff: 3, name: "KhÃ­ Hydro" }
     ],
-    equation: "2CH₄ →(1500°C, làm lạnh nhanh) C₂H₂ + 3H₂↑",
+    equation: "2CHâ‚„ â†’(1500Â°C, lÃ m láº¡nh nhanh) Câ‚‚Hâ‚‚ + 3Hâ‚‚â†‘",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "1500°C, làm lạnh nhanh",
-    observation: "Metan bị phân hủy tạo khí axetilen dùng trong công nghiệp.",
+    conditions: "1500Â°C, lÃ m láº¡nh nhanh",
+    observation: "Metan bá»‹ phÃ¢n há»§y táº¡o khÃ­ axetilen dÃ¹ng trong cÃ´ng nghiá»‡p.",
     energy: 377,
     animation: "fizz",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_077",
-    name: "Đốt cháy Etan",
+    name: "Äá»‘t chÃ¡y Etan",
     type: "combustion",
     reactants: [
-      { formula: "C₂H₆", coeff: 2, name: "Khí Etan" },
-      { formula: "O₂", coeff: 7, name: "Khí Oxy" }
+      { formula: "Câ‚‚Hâ‚†", coeff: 2, name: "KhÃ­ Etan" },
+      { formula: "Oâ‚‚", coeff: 7, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CO₂", coeff: 4, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 6, name: "Nước" }
+      { formula: "COâ‚‚", coeff: 4, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 6, name: "NÆ°á»›c" }
     ],
-    equation: "2C₂H₆ + 7O₂ →(t°) 4CO₂ + 6H₂O",
+    equation: "2Câ‚‚Hâ‚† + 7Oâ‚‚ â†’(tÂ°) 4COâ‚‚ + 6Hâ‚‚O",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ cao",
-    observation: "Etan cháy mạnh tỏa nhiều nhiệt, tạo khí làm đục nước vôi trong.",
+    conditions: "Nhiá»‡t Ä‘á»™ cao",
+    observation: "Etan chÃ¡y máº¡nh tá»a nhiá»u nhiá»‡t, táº¡o khÃ­ lÃ m Ä‘á»¥c nÆ°á»›c vÃ´i trong.",
     energy: -3120,
     animation: "burn",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_078",
-    name: "Cộng Hydro vào Etilen",
+    name: "Cá»™ng Hydro vÃ o Etilen",
     type: "combination",
     reactants: [
-      { formula: "C₂H₄", coeff: 1, name: "Etilen" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "Câ‚‚Hâ‚„", coeff: 1, name: "Etilen" },
+      { formula: "Hâ‚‚", coeff: 1, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "C₂H₆", coeff: 1, name: "Etan" }
+      { formula: "Câ‚‚Hâ‚†", coeff: 1, name: "Etan" }
     ],
-    equation: "C₂H₄ + H₂ →(t°, Ni) C₂H₆",
+    equation: "Câ‚‚Hâ‚„ + Hâ‚‚ â†’(tÂ°, Ni) Câ‚‚Hâ‚†",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ, xúc tác Ni",
-    observation: "Etilen phản ứng tạo thành Etan.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c Ni",
+    observation: "Etilen pháº£n á»©ng táº¡o thÃ nh Etan.",
     energy: -137,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_079",
-    name: "Cộng Hydro vào Axetilen (Tỉ lệ 1:1)",
+    name: "Cá»™ng Hydro vÃ o Axetilen (Tá»‰ lá»‡ 1:1)",
     type: "combination",
     reactants: [
-      { formula: "C₂H₂", coeff: 1, name: "Axetilen" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "Câ‚‚Hâ‚‚", coeff: 1, name: "Axetilen" },
+      { formula: "Hâ‚‚", coeff: 1, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "C₂H₄", coeff: 1, name: "Etilen" }
+      { formula: "Câ‚‚Hâ‚„", coeff: 1, name: "Etilen" }
     ],
-    equation: "C₂H₂ + H₂ →(t°, Pd/PbCO₃) C₂H₄",
+    equation: "Câ‚‚Hâ‚‚ + Hâ‚‚ â†’(tÂ°, Pd/PbCOâ‚ƒ) Câ‚‚Hâ‚„",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ, xúc tác Pd/PbCO₃",
-    observation: "Phản ứng dừng lại ở giai đoạn tạo Etilen nhờ xúc tác đặc biệt.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c Pd/PbCOâ‚ƒ",
+    observation: "Pháº£n á»©ng dá»«ng láº¡i á»Ÿ giai Ä‘oáº¡n táº¡o Etilen nhá» xÃºc tÃ¡c Ä‘áº·c biá»‡t.",
     energy: -175,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_080",
-    name: "Cộng Hydro vào Axetilen (Tỉ lệ 1:2)",
+    name: "Cá»™ng Hydro vÃ o Axetilen (Tá»‰ lá»‡ 1:2)",
     type: "combination",
     reactants: [
-      { formula: "C₂H₂", coeff: 1, name: "Axetilen" },
-      { formula: "H₂", coeff: 2, name: "Khí Hydro" }
+      { formula: "Câ‚‚Hâ‚‚", coeff: 1, name: "Axetilen" },
+      { formula: "Hâ‚‚", coeff: 2, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "C₂H₆", coeff: 1, name: "Etan" }
+      { formula: "Câ‚‚Hâ‚†", coeff: 1, name: "Etan" }
     ],
-    equation: "C₂H₂ + 2H₂ →(t°, Ni) C₂H₆",
+    equation: "Câ‚‚Hâ‚‚ + 2Hâ‚‚ â†’(tÂ°, Ni) Câ‚‚Hâ‚†",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ, xúc tác Ni",
-    observation: "Axetilen phản ứng hoàn toàn tạo thành Etan.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c Ni",
+    observation: "Axetilen pháº£n á»©ng hoÃ n toÃ n táº¡o thÃ nh Etan.",
     energy: -312,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_081",
-    name: "Đime hóa Axetilen",
+    name: "Äime hÃ³a Axetilen",
     type: "combination",
     reactants: [
-      { formula: "C₂H₂", coeff: 2, name: "Axetilen" }
+      { formula: "Câ‚‚Hâ‚‚", coeff: 2, name: "Axetilen" }
     ],
     products: [
-      { formula: "C₄H₄", coeff: 1, name: "Vinylaxetilen" }
+      { formula: "Câ‚„Hâ‚„", coeff: 1, name: "Vinylaxetilen" }
     ],
-    equation: "2C₂H₂ →(t°, xt) CH₂=CH-C≡CH",
+    equation: "2Câ‚‚Hâ‚‚ â†’(tÂ°, xt) CHâ‚‚=CH-Câ‰¡CH",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ, xúc tác CuCl/NH₄Cl",
-    observation: "Tạo thành Vinylaxetilen dùng trong sản xuất cao su chloroprene.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c CuCl/NHâ‚„Cl",
+    observation: "Táº¡o thÃ nh Vinylaxetilen dÃ¹ng trong sáº£n xuáº¥t cao su chloroprene.",
     energy: -200,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_082",
-    name: "Trime hóa Axetilen (Tạo Benzen)",
+    name: "Trime hÃ³a Axetilen (Táº¡o Benzen)",
     type: "combination",
     reactants: [
-      { formula: "C₂H₂", coeff: 3, name: "Axetilen" }
+      { formula: "Câ‚‚Hâ‚‚", coeff: 3, name: "Axetilen" }
     ],
     products: [
-      { formula: "C₆H₆", coeff: 1, name: "Benzen" }
+      { formula: "Câ‚†Hâ‚†", coeff: 1, name: "Benzen" }
     ],
-    equation: "3C₂H₂ →(600°C, C) C₆H₆",
+    equation: "3Câ‚‚Hâ‚‚ â†’(600Â°C, C) Câ‚†Hâ‚†",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "600°C, xúc tác Than hoạt tính",
-    observation: "Ba phân tử axetilen kết hợp tạo thành vòng benzen.",
+    conditions: "600Â°C, xÃºc tÃ¡c Than hoáº¡t tÃ­nh",
+    observation: "Ba phÃ¢n tá»­ axetilen káº¿t há»£p táº¡o thÃ nh vÃ²ng benzen.",
     energy: -600,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_083",
-    name: "Cộng nước vào Axetilen (Điều chế Andehit)",
+    name: "Cá»™ng nÆ°á»›c vÃ o Axetilen (Äiá»u cháº¿ Andehit)",
     type: "combination",
     reactants: [
-      { formula: "C₂H₂", coeff: 1, name: "Axetilen" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚‚Hâ‚‚", coeff: 1, name: "Axetilen" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "CH₃CHO", coeff: 1, name: "Andehit Axetic" }
+      { formula: "CHâ‚ƒCHO", coeff: 1, name: "Andehit Axetic" }
     ],
-    equation: "C₂H₂ + H₂O →(80°C, HgSO₄) CH₃CHO",
+    equation: "Câ‚‚Hâ‚‚ + Hâ‚‚O â†’(80Â°C, HgSOâ‚„) CHâ‚ƒCHO",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "80°C, xúc tác HgSO₄",
-    observation: "Sản phẩm trung gian bền chuyển hóa ngay thành andehit axetic.",
+    conditions: "80Â°C, xÃºc tÃ¡c HgSOâ‚„",
+    observation: "Sáº£n pháº©m trung gian bá»n chuyá»ƒn hÃ³a ngay thÃ nh andehit axetic.",
     energy: -138,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_084",
-    name: "Cộng Hydro vào Benzen",
+    name: "Cá»™ng Hydro vÃ o Benzen",
     type: "combination",
     reactants: [
-      { formula: "C₆H₆", coeff: 1, name: "Benzen" },
-      { formula: "H₂", coeff: 3, name: "Khí Hydro" }
+      { formula: "Câ‚†Hâ‚†", coeff: 1, name: "Benzen" },
+      { formula: "Hâ‚‚", coeff: 3, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "C₆H₁₂", coeff: 1, name: "Xyclohexan" }
+      { formula: "Câ‚†Hâ‚â‚‚", coeff: 1, name: "Xyclohexan" }
     ],
-    equation: "C₆H₆ + 3H₂ →(t°, Ni) C₆H₁₂",
+    equation: "Câ‚†Hâ‚† + 3Hâ‚‚ â†’(tÂ°, Ni) Câ‚†Hâ‚â‚‚",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ, xúc tác Ni",
-    observation: "Vòng benzen bị phá vỡ tạo thành hợp chất vòng bão hòa.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c Ni",
+    observation: "VÃ²ng benzen bá»‹ phÃ¡ vá»¡ táº¡o thÃ nh há»£p cháº¥t vÃ²ng bÃ£o hÃ²a.",
     energy: -206,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_085",
-    name: "Nitrat hóa Benzen",
+    name: "Nitrat hÃ³a Benzen",
     type: "single-replacement",
     reactants: [
-      { formula: "C₆H₆", coeff: 1, name: "Benzen" },
-      { formula: "HNO₃", coeff: 1, name: "Axit Nitric" }
+      { formula: "Câ‚†Hâ‚†", coeff: 1, name: "Benzen" },
+      { formula: "HNOâ‚ƒ", coeff: 1, name: "Axit Nitric" }
     ],
     products: [
-      { formula: "C₆H₅NO₂", coeff: 1, name: "Nitrobenzen" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚†Hâ‚…NOâ‚‚", coeff: 1, name: "Nitrobenzen" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "C₆H₆ + HNO₃(đ) →(H₂SO₄ đ) C₆H₅NO₂ + H₂O",
+    equation: "Câ‚†Hâ‚† + HNOâ‚ƒ(Ä‘) â†’(Hâ‚‚SOâ‚„ Ä‘) Câ‚†Hâ‚…NOâ‚‚ + Hâ‚‚O",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "H₂SO₄ đặc làm xúc tác",
-    observation: "Tạo thành chất lỏng màu vàng nhạt, mùi hạnh nhân (Nitrobenzen) lắng xuống.",
+    conditions: "Hâ‚‚SOâ‚„ Ä‘áº·c lÃ m xÃºc tÃ¡c",
+    observation: "Táº¡o thÃ nh cháº¥t lá»ng mÃ u vÃ ng nháº¡t, mÃ¹i háº¡nh nhÃ¢n (Nitrobenzen) láº¯ng xuá»‘ng.",
     energy: -150,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_086",
-    name: "Đốt cháy Benzen",
+    name: "Äá»‘t chÃ¡y Benzen",
     type: "combustion",
     reactants: [
-      { formula: "C₆H₆", coeff: 2, name: "Benzen" },
-      { formula: "O₂", coeff: 15, name: "Khí Oxy" }
+      { formula: "Câ‚†Hâ‚†", coeff: 2, name: "Benzen" },
+      { formula: "Oâ‚‚", coeff: 15, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CO₂", coeff: 12, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 6, name: "Nước" }
+      { formula: "COâ‚‚", coeff: 12, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 6, name: "NÆ°á»›c" }
     ],
-    equation: "2C₆H₆ + 15O₂ →(t°) 12CO₂ + 6H₂O",
+    equation: "2Câ‚†Hâ‚† + 15Oâ‚‚ â†’(tÂ°) 12COâ‚‚ + 6Hâ‚‚O",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Nhiệt độ cao",
-    observation: "Benzen cháy trong không khí với ngọn lửa nhiều khói đen do hàm lượng carbon cao.",
+    conditions: "Nhiá»‡t Ä‘á»™ cao",
+    observation: "Benzen chÃ¡y trong khÃ´ng khÃ­ vá»›i ngá»n lá»­a nhiá»u khÃ³i Ä‘en do hÃ m lÆ°á»£ng carbon cao.",
     energy: -6540,
     animation: "burn",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_087",
-    name: "Methanol hóa (Điều chế rượu metylic)",
+    name: "Methanol hÃ³a (Äiá»u cháº¿ rÆ°á»£u metylic)",
     type: "combination",
     reactants: [
       { formula: "CO", coeff: 1, name: "Oxit Cacbon" },
-      { formula: "H₂", coeff: 2, name: "Khí Hydro" }
+      { formula: "Hâ‚‚", coeff: 2, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "CH₃OH", coeff: 1, name: "Rượu Metylic" }
+      { formula: "CHâ‚ƒOH", coeff: 1, name: "RÆ°á»£u Metylic" }
     ],
-    equation: "CO + 2H₂ →(t°, xt) CH₃OH",
+    equation: "CO + 2Hâ‚‚ â†’(tÂ°, xt) CHâ‚ƒOH",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "400°C, xúc tác ZnO/Cr₂O₃",
-    observation: "Phản ứng công nghiệp quan trọng để sản xuất methanol.",
+    conditions: "400Â°C, xÃºc tÃ¡c ZnO/Crâ‚‚Oâ‚ƒ",
+    observation: "Pháº£n á»©ng cÃ´ng nghiá»‡p quan trá»ng Ä‘á»ƒ sáº£n xuáº¥t methanol.",
     energy: -91,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_088",
-    name: "Thủy phân Dẫn xuất Halogen (Tạo rượu)",
+    name: "Thá»§y phÃ¢n Dáº«n xuáº¥t Halogen (Táº¡o rÆ°á»£u)",
     type: "double-replacement",
     reactants: [
-      { formula: "C₂H₅Cl", coeff: 1, name: "Etyl Clorua" },
+      { formula: "Câ‚‚Hâ‚…Cl", coeff: 1, name: "Etyl Clorua" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "C₂H₅OH", coeff: 1, name: "Rượu Etylic" },
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 1, name: "RÆ°á»£u Etylic" },
       { formula: "NaCl", coeff: 1, name: "Natri Clorua" }
     ],
-    equation: "C₂H₅Cl + NaOH →(t°) C₂H₅OH + NaCl",
+    equation: "Câ‚‚Hâ‚…Cl + NaOH â†’(tÂ°) Câ‚‚Hâ‚…OH + NaCl",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "Đun nóng",
-    observation: "Dẫn xuất halogen bị thủy phân tạo rượu tương ứng.",
+    conditions: "Äun nÃ³ng",
+    observation: "Dáº«n xuáº¥t halogen bá»‹ thá»§y phÃ¢n táº¡o rÆ°á»£u tÆ°Æ¡ng á»©ng.",
     energy: -50,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_089",
-    name: "Rượu Etylic tác dụng với Axit HCl",
+    name: "RÆ°á»£u Etylic tÃ¡c dá»¥ng vá»›i Axit HCl",
     type: "double-replacement",
     reactants: [
-      { formula: "C₂H₅OH", coeff: 1, name: "Rượu Etylic" },
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 1, name: "RÆ°á»£u Etylic" },
       { formula: "HCl", coeff: 1, name: "Axit Clohidric" }
     ],
     products: [
-      { formula: "C₂H₅Cl", coeff: 1, name: "Etyl Clorua" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚‚Hâ‚…Cl", coeff: 1, name: "Etyl Clorua" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "C₂H₅OH + HCl →(t°) C₂H₅Cl + H₂O",
+    equation: "Câ‚‚Hâ‚…OH + HCl â†’(tÂ°) Câ‚‚Hâ‚…Cl + Hâ‚‚O",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "Đun nóng",
-    observation: "Nhóm OH bị thay thế bởi nguyên tử Clo.",
+    conditions: "Äun nÃ³ng",
+    observation: "NhÃ³m OH bá»‹ thay tháº¿ bá»Ÿi nguyÃªn tá»­ Clo.",
     energy: -10,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_090",
-    name: "Tách nước rượu Etylic ở 140°C (Tạo Ête)",
+    name: "TÃ¡ch nÆ°á»›c rÆ°á»£u Etylic á»Ÿ 140Â°C (Táº¡o ÃŠte)",
     type: "decomposition",
     reactants: [
-      { formula: "C₂H₅OH", coeff: 2, name: "Rượu Etylic" }
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 2, name: "RÆ°á»£u Etylic" }
     ],
     products: [
-      { formula: "C₂H₅OC₂H₅", coeff: 1, name: "Đietyl Ête" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚‚Hâ‚…OCâ‚‚Hâ‚…", coeff: 1, name: "Äietyl ÃŠte" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "2C₂H₅OH →(140°C, H₂SO₄) C₂H₅OC₂H₅ + H₂O",
+    equation: "2Câ‚‚Hâ‚…OH â†’(140Â°C, Hâ‚‚SOâ‚„) Câ‚‚Hâ‚…OCâ‚‚Hâ‚… + Hâ‚‚O",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "140°C, xúc tác H₂SO₄ đặc",
-    observation: "Hai phân tử rượu tách nước tạo thành ete.",
+    conditions: "140Â°C, xÃºc tÃ¡c Hâ‚‚SOâ‚„ Ä‘áº·c",
+    observation: "Hai phÃ¢n tá»­ rÆ°á»£u tÃ¡ch nÆ°á»›c táº¡o thÃ nh ete.",
     energy: -20,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_091",
-    name: "Đốt cháy Rượu Etylic",
+    name: "Äá»‘t chÃ¡y RÆ°á»£u Etylic",
     type: "combustion",
     reactants: [
-      { formula: "C₂H₅OH", coeff: 1, name: "Rượu Etylic" },
-      { formula: "O₂", coeff: 3, name: "Khí Oxy" }
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 1, name: "RÆ°á»£u Etylic" },
+      { formula: "Oâ‚‚", coeff: 3, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CO₂", coeff: 2, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 3, name: "Nước" }
+      { formula: "COâ‚‚", coeff: 2, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 3, name: "NÆ°á»›c" }
     ],
-    equation: "C₂H₅OH + 3O₂ →(t°) 2CO₂ + 3H₂O",
+    equation: "Câ‚‚Hâ‚…OH + 3Oâ‚‚ â†’(tÂ°) 2COâ‚‚ + 3Hâ‚‚O",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "Đốt cháy",
-    observation: "Rượu cháy với ngọn lửa màu xanh nhạt, tỏa nhiều nhiệt.",
+    conditions: "Äá»‘t chÃ¡y",
+    observation: "RÆ°á»£u chÃ¡y vá»›i ngá»n lá»­a mÃ u xanh nháº¡t, tá»a nhiá»u nhiá»‡t.",
     energy: -1367,
     animation: "burn",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_092",
-    name: "Phenol tác dụng với Natri",
+    name: "Phenol tÃ¡c dá»¥ng vá»›i Natri",
     type: "single-replacement",
     reactants: [
-      { formula: "C₆H₅OH", coeff: 2, name: "Phenol" },
+      { formula: "Câ‚†Hâ‚…OH", coeff: 2, name: "Phenol" },
       { formula: "Na", coeff: 2, name: "Natri" }
     ],
     products: [
-      { formula: "C₆H₅ONa", coeff: 2, name: "Natri Phenolat" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "Câ‚†Hâ‚…ONa", coeff: 2, name: "Natri Phenolat" },
+      { formula: "Hâ‚‚", coeff: 1, name: "KhÃ­ Hydro" }
     ],
-    equation: "2C₆H₅OH + 2Na → 2C₆H₅ONa + H₂↑",
+    equation: "2Câ‚†Hâ‚…OH + 2Na â†’ 2Câ‚†Hâ‚…ONa + Hâ‚‚â†‘",
     gradeLevel: 11,
     category: "Phenol",
-    conditions: "Đun nóng chảy phenol",
-    observation: "Natri tan, giải phóng khí hydro.",
+    conditions: "Äun nÃ³ng cháº£y phenol",
+    observation: "Natri tan, giáº£i phÃ³ng khÃ­ hydro.",
     energy: -170,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_093",
-    name: "Phenol tác dụng với NaOH",
+    name: "Phenol tÃ¡c dá»¥ng vá»›i NaOH",
     type: "double-replacement",
     reactants: [
-      { formula: "C₆H₅OH", coeff: 1, name: "Phenol" },
+      { formula: "Câ‚†Hâ‚…OH", coeff: 1, name: "Phenol" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "C₆H₅ONa", coeff: 1, name: "Natri Phenolat" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚†Hâ‚…ONa", coeff: 1, name: "Natri Phenolat" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "C₆H₅OH + NaOH → C₆H₅ONa + H₂O",
+    equation: "Câ‚†Hâ‚…OH + NaOH â†’ Câ‚†Hâ‚…ONa + Hâ‚‚O",
     gradeLevel: 11,
     category: "Phenol",
-    conditions: "Nhiệt độ thường",
-    observation: "Phenol (đục) tan dần tạo dung dịch đồng nhất (Natri Phenolat).",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Phenol (Ä‘á»¥c) tan dáº§n táº¡o dung dá»‹ch Ä‘á»“ng nháº¥t (Natri Phenolat).",
     energy: -30,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_094",
-    name: "Phản ứng của Natri Phenolat với CO₂",
+    name: "Pháº£n á»©ng cá»§a Natri Phenolat vá»›i COâ‚‚",
     type: "double-replacement",
     reactants: [
-      { formula: "C₆H₅ONa", coeff: 1, name: "Natri Phenolat" },
-      { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚†Hâ‚…ONa", coeff: 1, name: "Natri Phenolat" },
+      { formula: "COâ‚‚", coeff: 1, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "C₆H₅OH", coeff: 1, name: "Phenol" },
-      { formula: "NaHCO₃", coeff: 1, name: "Natri Bicacbonat" }
+      { formula: "Câ‚†Hâ‚…OH", coeff: 1, name: "Phenol" },
+      { formula: "NaHCOâ‚ƒ", coeff: 1, name: "Natri Bicacbonat" }
     ],
-    equation: "C₆H₅ONa + CO₂ + H₂O → C₆H₅OH↓ + NaHCO₃",
+    equation: "Câ‚†Hâ‚…ONa + COâ‚‚ + Hâ‚‚O â†’ Câ‚†Hâ‚…OHâ†“ + NaHCOâ‚ƒ",
     gradeLevel: 11,
     category: "Phenol",
-    conditions: "Nhiệt độ thường",
-    observation: "Dung dịch bị vẩn đục do Phenol tách ra (Axit cacbonic mạnh hơn phenol).",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Dung dá»‹ch bá»‹ váº©n Ä‘á»¥c do Phenol tÃ¡ch ra (Axit cacbonic máº¡nh hÆ¡n phenol).",
     energy: -15,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_095",
-    name: "Khử Andehit thành Rượu (Cộng H₂)",
+    name: "Khá»­ Andehit thÃ nh RÆ°á»£u (Cá»™ng Hâ‚‚)",
     type: "combination",
     reactants: [
-      { formula: "CH₃CHO", coeff: 1, name: "Andehit Axetic" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "CHâ‚ƒCHO", coeff: 1, name: "Andehit Axetic" },
+      { formula: "Hâ‚‚", coeff: 1, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "C₂H₅OH", coeff: 1, name: "Rượu Etylic" }
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 1, name: "RÆ°á»£u Etylic" }
     ],
-    equation: "CH₃CHO + H₂ →(t°, Ni) C₂H₅OH",
+    equation: "CHâ‚ƒCHO + Hâ‚‚ â†’(tÂ°, Ni) Câ‚‚Hâ‚…OH",
     gradeLevel: 11,
     category: "Andehit",
-    conditions: "Nhiệt độ, xúc tác Ni",
-    observation: "Andehit bị khử thành rượu etylic bão hòa.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c Ni",
+    observation: "Andehit bá»‹ khá»­ thÃ nh rÆ°á»£u etylic bÃ£o hÃ²a.",
     energy: -70,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_096",
-    name: "Oxi hóa Andehit bằng Oxy (Sản xuất axit)",
+    name: "Oxi hÃ³a Andehit báº±ng Oxy (Sáº£n xuáº¥t axit)",
     type: "redox",
     reactants: [
-      { formula: "CH₃CHO", coeff: 2, name: "Andehit Axetic" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+      { formula: "CHâ‚ƒCHO", coeff: 2, name: "Andehit Axetic" },
+      { formula: "Oâ‚‚", coeff: 1, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CH₃COOH", coeff: 2, name: "Axit Axetic" }
+      { formula: "CHâ‚ƒCOOH", coeff: 2, name: "Axit Axetic" }
     ],
-    equation: "2CH₃CHO + O₂ →(t°, xt) 2CH₃COOH",
+    equation: "2CHâ‚ƒCHO + Oâ‚‚ â†’(tÂ°, xt) 2CHâ‚ƒCOOH",
     gradeLevel: 11,
     category: "Andehit",
-    conditions: "Nhiệt độ, xúc tác Mn²⁺",
-    observation: "Andehit bị oxi hóa thành axit tương ứng.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c MnÂ²âº",
+    observation: "Andehit bá»‹ oxi hÃ³a thÃ nh axit tÆ°Æ¡ng á»©ng.",
     energy: -300,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_097",
-    name: "Axit Axetic tác dụng với NaOH",
+    name: "Axit Axetic tÃ¡c dá»¥ng vá»›i NaOH",
     type: "double-replacement",
     reactants: [
-      { formula: "CH₃COOH", coeff: 1, name: "Axit Axetic" },
+      { formula: "CHâ‚ƒCOOH", coeff: 1, name: "Axit Axetic" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "CH₃COONa", coeff: 1, name: "Natri Axetat" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "CHâ‚ƒCOONa", coeff: 1, name: "Natri Axetat" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "CH₃COOH + NaOH → CH₃COONa + H₂O",
+    equation: "CHâ‚ƒCOOH + NaOH â†’ CHâ‚ƒCOONa + Hâ‚‚O",
     gradeLevel: 11,
-    category: "Axit hữu cơ",
-    conditions: "Nhiệt độ thường",
-    observation: "Phản ứng trung hòa tỏa nhiệt nhẹ.",
+    category: "Axit há»¯u cÆ¡",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Pháº£n á»©ng trung hÃ²a tá»a nhiá»‡t nháº¹.",
     energy: -57,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_098",
-    name: "Saponification (Thủy phân este trong kiềm)",
+    name: "Saponification (Thá»§y phÃ¢n este trong kiá»m)",
     type: "double-replacement",
     reactants: [
-      { formula: "CH₃COOC₂H₅", coeff: 1, name: "Etyl Axetat" },
+      { formula: "CHâ‚ƒCOOCâ‚‚Hâ‚…", coeff: 1, name: "Etyl Axetat" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "CH₃COONa", coeff: 1, name: "Natri Axetat" },
-      { formula: "C₂H₅OH", coeff: 1, name: "Rượu Etylic" }
+      { formula: "CHâ‚ƒCOONa", coeff: 1, name: "Natri Axetat" },
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 1, name: "RÆ°á»£u Etylic" }
     ],
-    equation: "CH₃COOC₂H₅ + NaOH →(t°) CH₃COONa + C₂H₅OH",
+    equation: "CHâ‚ƒCOOCâ‚‚Hâ‚… + NaOH â†’(tÂ°) CHâ‚ƒCOONa + Câ‚‚Hâ‚…OH",
     gradeLevel: 12,
     category: "Este",
-    conditions: "Đun nóng",
-    observation: "Mùi este mất dần, dung dịch trở nên đồng nhất.",
+    conditions: "Äun nÃ³ng",
+    observation: "MÃ¹i este máº¥t dáº§n, dung dá»‹ch trá»Ÿ nÃªn Ä‘á»“ng nháº¥t.",
     energy: -40,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_099",
-    name: "Phản ứng của Glyxin với HCl",
+    name: "Pháº£n á»©ng cá»§a Glyxin vá»›i HCl",
     type: "combination",
     reactants: [
       { formula: "Gly", coeff: 1, name: "Glyxin" },
       { formula: "HCl", coeff: 1, name: "Axit Clohidric" }
     ],
     products: [
-      { formula: "ClH₃N-CH₂-COOH", coeff: 1, name: "Muối Glyxinat" }
+      { formula: "ClHâ‚ƒN-CHâ‚‚-COOH", coeff: 1, name: "Muá»‘i Glyxinat" }
     ],
-    equation: "H₂N-CH₂-COOH + HCl → ClH₃N-CH₂-COOH",
+    equation: "Hâ‚‚N-CHâ‚‚-COOH + HCl â†’ ClHâ‚ƒN-CHâ‚‚-COOH",
     gradeLevel: 12,
     category: "Amino Acid",
-    conditions: "Nhiệt độ thường",
-    observation: "Amino acid thể hiện tính bazơ.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Amino acid thá»ƒ hiá»‡n tÃ­nh bazÆ¡.",
     energy: -45,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_100",
-    name: "Phản ứng của Glyxin với NaOH",
+    name: "Pháº£n á»©ng cá»§a Glyxin vá»›i NaOH",
     type: "double-replacement",
     reactants: [
       { formula: "Gly", coeff: 1, name: "Glyxin" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "H₂N-CH₂-COONa", coeff: 1, name: "Natri Glyxinat" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Hâ‚‚N-CHâ‚‚-COONa", coeff: 1, name: "Natri Glyxinat" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "H₂N-CH₂-COOH + NaOH → H₂N-CH₂-COONa + H₂O",
+    equation: "Hâ‚‚N-CHâ‚‚-COOH + NaOH â†’ Hâ‚‚N-CHâ‚‚-COONa + Hâ‚‚O",
     gradeLevel: 12,
     category: "Amino Acid",
-    conditions: "Nhiệt độ thường",
-    observation: "Amino acid thể hiện tính axit.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Amino acid thá»ƒ hiá»‡n tÃ­nh axit.",
     energy: -50,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_101",
-    name: "Thủy phân Saccarozơ",
+    name: "Thá»§y phÃ¢n SaccarozÆ¡",
     type: "double-replacement",
     reactants: [
-      { formula: "C₁₂H₂₂O₁₁", coeff: 1, name: "Saccarozơ" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚â‚‚Hâ‚‚â‚‚Oâ‚â‚", coeff: 1, name: "SaccarozÆ¡" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "C₆H₁₂O₆", coeff: 2, name: "Glucozơ & Fructozơ" }
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 2, name: "GlucozÆ¡ & FructozÆ¡" }
     ],
-    equation: "C₁₂H₂₂O₁₁ + H₂O →(t°, H⁺) C₆H₁₂O₆ + C₆H₁₂O₆",
+    equation: "Câ‚â‚‚Hâ‚‚â‚‚Oâ‚â‚ + Hâ‚‚O â†’(tÂ°, Hâº) Câ‚†Hâ‚â‚‚Oâ‚† + Câ‚†Hâ‚â‚‚Oâ‚†",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Đun nóng, xúc tác axit",
-    observation: "Đường đôi bị phân cắt thành hai đường đơn.",
+    conditions: "Äun nÃ³ng, xÃºc tÃ¡c axit",
+    observation: "ÄÆ°á»ng Ä‘Ã´i bá»‹ phÃ¢n cáº¯t thÃ nh hai Ä‘Æ°á»ng Ä‘Æ¡n.",
     energy: -10,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_102",
-    name: "Thủy phân Tinh bột",
+    name: "Thá»§y phÃ¢n Tinh bá»™t",
     type: "double-replacement",
     reactants: [
-      { formula: "Starch", coeff: 1, name: "Tinh bột" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Starch", coeff: 1, name: "Tinh bá»™t" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "C₆H₁₂O₆", coeff: 1, name: "Glucozơ" }
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 1, name: "GlucozÆ¡" }
     ],
-    equation: "(C₆H₁₀O₅)n + nH₂O →(t°, H⁺) nC₆H₁₂O₆",
+    equation: "(Câ‚†Hâ‚â‚€Oâ‚…)n + nHâ‚‚O â†’(tÂ°, Hâº) nCâ‚†Hâ‚â‚‚Oâ‚†",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Đun nóng, xúc tác axit hoặc enzyme",
-    observation: "Tinh bột dần biến đổi thành đường glucozơ.",
+    conditions: "Äun nÃ³ng, xÃºc tÃ¡c axit hoáº·c enzyme",
+    observation: "Tinh bá»™t dáº§n biáº¿n Ä‘á»•i thÃ nh Ä‘Æ°á»ng glucozÆ¡.",
     energy: -5,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_103",
-    name: "Phản ứng màu Iốt của Tinh bột",
+    name: "Pháº£n á»©ng mÃ u Iá»‘t cá»§a Tinh bá»™t",
     type: "combination",
     reactants: [
-      { formula: "Starch", coeff: 1, name: "Tinh bột" },
-      { formula: "I₂", coeff: 1, name: "Dung dịch Iốt" }
+      { formula: "Starch", coeff: 1, name: "Tinh bá»™t" },
+      { formula: "Iâ‚‚", coeff: 1, name: "Dung dá»‹ch Iá»‘t" }
     ],
     products: [
-      { formula: "Starch-I2", coeff: 1, name: "Hợp chất màu xanh tím" }
+      { formula: "Starch-I2", coeff: 1, name: "Há»£p cháº¥t mÃ u xanh tÃ­m" }
     ],
-    equation: "Tinh bột + I₂ → Hợp chất màu xanh tím",
+    equation: "Tinh bá»™t + Iâ‚‚ â†’ Há»£p cháº¥t mÃ u xanh tÃ­m",
     gradeLevel: 10,
     category: "Carbohydrate",
-    conditions: "Nhiệt độ thường (mất màu khi đun nóng)",
-    observation: "Dung dịch xuất hiện màu xanh tím đặc trưng, khi đun nóng màu biến mất, để nguội lại hiện ra.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng (máº¥t mÃ u khi Ä‘un nÃ³ng)",
+    observation: "Dung dá»‹ch xuáº¥t hiá»‡n mÃ u xanh tÃ­m Ä‘áº·c trÆ°ng, khi Ä‘un nÃ³ng mÃ u biáº¿n máº¥t, Ä‘á»ƒ nguá»™i láº¡i hiá»‡n ra.",
     energy: -10,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_104",
-    name: "Glucozơ tác dụng với Cu(OH)₂ (Nhiệt độ thường)",
+    name: "GlucozÆ¡ tÃ¡c dá»¥ng vá»›i Cu(OH)â‚‚ (Nhiá»‡t Ä‘á»™ thÆ°á»ng)",
     type: "combination",
     reactants: [
-      { formula: "C₆H₁₂O₆", coeff: 2, name: "Glucozơ" },
-      { formula: "Cu(OH)₂", coeff: 1, name: "Đồng(II) Hidroxit" }
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 2, name: "GlucozÆ¡" },
+      { formula: "Cu(OH)â‚‚", coeff: 1, name: "Äá»“ng(II) Hidroxit" }
     ],
     products: [
-      { formula: "Glucose-Cu", coeff: 1, name: "Phức đồng-glucozơ" }
+      { formula: "Glucose-Cu", coeff: 1, name: "Phá»©c Ä‘á»“ng-glucozÆ¡" }
     ],
-    equation: "2C₆H₁₂O₆ + Cu(OH)₂ → Phức đồng glucozơ + 2H₂O",
+    equation: "2Câ‚†Hâ‚â‚‚Oâ‚† + Cu(OH)â‚‚ â†’ Phá»©c Ä‘á»“ng glucozÆ¡ + 2Hâ‚‚O",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Nhiệt độ thường",
-    observation: "Kết tủa xanh lơ tan tạo thành dung dịch màu xanh lam thẫm đặc trưng.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Káº¿t tá»§a xanh lÆ¡ tan táº¡o thÃ nh dung dá»‹ch mÃ u xanh lam tháº«m Ä‘áº·c trÆ°ng.",
     energy: -20,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_105",
-    name: "Glucozơ tác dụng với Cu(OH)₂ (Đun nóng)",
+    name: "GlucozÆ¡ tÃ¡c dá»¥ng vá»›i Cu(OH)â‚‚ (Äun nÃ³ng)",
     type: "redox",
     reactants: [
-      { formula: "C₆H₁₂O₆", coeff: 1, name: "Glucozơ" },
-      { formula: "Cu(OH)₂", coeff: 2, name: "Đồng(II) Hidroxit" },
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 1, name: "GlucozÆ¡" },
+      { formula: "Cu(OH)â‚‚", coeff: 2, name: "Äá»“ng(II) Hidroxit" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "C₆H₁₁O₇Na", coeff: 1, name: "Natri Gluconat" },
-      { formula: "Cu₂O", coeff: 1, name: "Đồng(I) Oxit" },
-      { formula: "H₂O", coeff: 3, name: "Nước" }
+      { formula: "Câ‚†Hâ‚â‚Oâ‚‡Na", coeff: 1, name: "Natri Gluconat" },
+      { formula: "Cuâ‚‚O", coeff: 1, name: "Äá»“ng(I) Oxit" },
+      { formula: "Hâ‚‚O", coeff: 3, name: "NÆ°á»›c" }
     ],
-    equation: "C₆H₁₂O₆ + 2Cu(OH)₂ + NaOH → C₆H₁₁O₇Na + Cu₂O↓ + 3H₂O",
+    equation: "Câ‚†Hâ‚â‚‚Oâ‚† + 2Cu(OH)â‚‚ + NaOH â†’ Câ‚†Hâ‚â‚Oâ‚‡Na + Cuâ‚‚Oâ†“ + 3Hâ‚‚O",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Đun nóng",
-    observation: "Dung dịch xanh lam xuất hiện kết tủa màu đỏ gạch của Cu₂O.",
+    conditions: "Äun nÃ³ng",
+    observation: "Dung dá»‹ch xanh lam xuáº¥t hiá»‡n káº¿t tá»§a mÃ u Ä‘á» gáº¡ch cá»§a Cuâ‚‚O.",
     energy: -80,
     animation: "precipitation",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_106",
-    name: "Phản ứng thế của Toluen với Brom",
+    name: "Pháº£n á»©ng tháº¿ cá»§a Toluen vá»›i Brom",
     type: "single-replacement",
     reactants: [
-      { formula: "C₇H₈", coeff: 1, name: "Toluen" },
-      { formula: "Br₂", coeff: 1, name: "Brom lỏng" }
+      { formula: "Câ‚‡Hâ‚ˆ", coeff: 1, name: "Toluen" },
+      { formula: "Brâ‚‚", coeff: 1, name: "Brom lá»ng" }
     ],
     products: [
-      { formula: "C₇H₇Br", coeff: 1, name: "Benzyl Bromua" },
+      { formula: "Câ‚‡Hâ‚‡Br", coeff: 1, name: "Benzyl Bromua" },
       { formula: "HBr", coeff: 1, name: "Hydro Bromua" }
     ],
-    equation: "C₆H₅-CH₃ + Br₂ →(t°, as) C₆H₅-CH₂Br + HBr",
+    equation: "Câ‚†Hâ‚…-CHâ‚ƒ + Brâ‚‚ â†’(tÂ°, as) Câ‚†Hâ‚…-CHâ‚‚Br + HBr",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Chiếu sáng hoặc đun nóng (thế vào nhánh)",
-    observation: "Màu nâu đỏ của brom mất dần, có khí thoát ra.",
+    conditions: "Chiáº¿u sÃ¡ng hoáº·c Ä‘un nÃ³ng (tháº¿ vÃ o nhÃ¡nh)",
+    observation: "MÃ u nÃ¢u Ä‘á» cá»§a brom máº¥t dáº§n, cÃ³ khÃ­ thoÃ¡t ra.",
     energy: -45,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_107",
-    name: "Oxihóa Toluen bằng KMnO₄",
+    name: "OxihÃ³a Toluen báº±ng KMnOâ‚„",
     type: "redox",
     reactants: [
-      { formula: "C₇H₈", coeff: 1, name: "Toluen" },
-      { formula: "KMnO₄", coeff: 2, name: "Thuốc tím" }
+      { formula: "Câ‚‡Hâ‚ˆ", coeff: 1, name: "Toluen" },
+      { formula: "KMnOâ‚„", coeff: 2, name: "Thuá»‘c tÃ­m" }
     ],
     products: [
-      { formula: "C₆H₅COOK", coeff: 1, name: "Kali Benzoat" },
-      { formula: "MnO₂", coeff: 2, name: "Mangan Đioxit" },
+      { formula: "Câ‚†Hâ‚…COOK", coeff: 1, name: "Kali Benzoat" },
+      { formula: "MnOâ‚‚", coeff: 2, name: "Mangan Äioxit" },
       { formula: "KOH", coeff: 1, name: "Kali Hidroxit" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "C₆H₅-CH₃ + 2KMnO₄ →(t°) C₆H₅-COOK + 2MnO₂↓ + KOH + H₂O",
+    equation: "Câ‚†Hâ‚…-CHâ‚ƒ + 2KMnOâ‚„ â†’(tÂ°) Câ‚†Hâ‚…-COOK + 2MnOâ‚‚â†“ + KOH + Hâ‚‚O",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Đun nóng",
-    observation: "Màu tím của dung dịch bị mất đi, xuất hiện kết tủa đen.",
+    conditions: "Äun nÃ³ng",
+    observation: "MÃ u tÃ­m cá»§a dung dá»‹ch bá»‹ máº¥t Ä‘i, xuáº¥t hiá»‡n káº¿t tá»§a Ä‘en.",
     energy: -250,
     animation: "color-change",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_108",
-    name: "Đốt cháy Methanol",
+    name: "Äá»‘t chÃ¡y Methanol",
     type: "combustion",
     reactants: [
-      { formula: "CH₃OH", coeff: 2, name: "Rượu Metylic" },
-      { formula: "O₂", coeff: 3, name: "Khí Oxy" }
+      { formula: "CHâ‚ƒOH", coeff: 2, name: "RÆ°á»£u Metylic" },
+      { formula: "Oâ‚‚", coeff: 3, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CO₂", coeff: 2, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 4, name: "Nước" }
+      { formula: "COâ‚‚", coeff: 2, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 4, name: "NÆ°á»›c" }
     ],
-    equation: "2CH₃OH + 3O₂ →(t°) 2CO₂ + 4H₂O",
+    equation: "2CHâ‚ƒOH + 3Oâ‚‚ â†’(tÂ°) 2COâ‚‚ + 4Hâ‚‚O",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "Đốt cháy",
-    observation: "Cháy với ngọn lửa xanh nhạt mãnh liệt.",
+    conditions: "Äá»‘t chÃ¡y",
+    observation: "ChÃ¡y vá»›i ngá»n lá»­a xanh nháº¡t mÃ£nh liá»‡t.",
     energy: -1450,
     animation: "burn",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_109",
-    name: "Glixerol tác dụng với Cu(OH)₂",
+    name: "Glixerol tÃ¡c dá»¥ng vá»›i Cu(OH)â‚‚",
     type: "combination",
     reactants: [
-      { formula: "C₃H₈O₃", coeff: 2, name: "Glixerol" },
-      { formula: "Cu(OH)₂", coeff: 1, name: "Đồng(II) Hidroxit" }
+      { formula: "Câ‚ƒHâ‚ˆOâ‚ƒ", coeff: 2, name: "Glixerol" },
+      { formula: "Cu(OH)â‚‚", coeff: 1, name: "Äá»“ng(II) Hidroxit" }
     ],
     products: [
-      { formula: "Glycerol-Cu", coeff: 1, name: "Phức đồng-glixerol" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "Glycerol-Cu", coeff: 1, name: "Phá»©c Ä‘á»“ng-glixerol" },
+      { formula: "Hâ‚‚O", coeff: 2, name: "NÆ°á»›c" }
     ],
-    equation: "2C₃H₈O₃ + Cu(OH)₂ → Phức đồng-glixerol + 2H₂O",
+    equation: "2Câ‚ƒHâ‚ˆOâ‚ƒ + Cu(OH)â‚‚ â†’ Phá»©c Ä‘á»“ng-glixerol + 2Hâ‚‚O",
     gradeLevel: 11,
     category: "Ancol",
-    conditions: "Nhiệt độ thường",
-    observation: "Hòa tan kết tủa Cu(OH)₂ tạo dung dịch màu xanh lam thẫm.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "HÃ²a tan káº¿t tá»§a Cu(OH)â‚‚ táº¡o dung dá»‹ch mÃ u xanh lam tháº«m.",
     energy: -30,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_110",
-    name: "Sản xuất Axit Axetic bằng cách lên men giấm",
+    name: "Sáº£n xuáº¥t Axit Axetic báº±ng cÃ¡ch lÃªn men giáº¥m",
     type: "redox",
     reactants: [
-      { formula: "C₂H₅OH", coeff: 1, name: "Rượu Etylic" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+      { formula: "Câ‚‚Hâ‚…OH", coeff: 1, name: "RÆ°á»£u Etylic" },
+      { formula: "Oâ‚‚", coeff: 1, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CH₃COOH", coeff: 1, name: "Axit Axetic" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "CHâ‚ƒCOOH", coeff: 1, name: "Axit Axetic" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "C₂H₅OH + O₂ →(men) CH₃COOH + H₂O",
+    equation: "Câ‚‚Hâ‚…OH + Oâ‚‚ â†’(men) CHâ‚ƒCOOH + Hâ‚‚O",
     gradeLevel: 9,
-    category: "Hữu cơ",
-    conditions: "Men giấm, 25-30°C",
-    observation: "Rượu loãng chuyển thành giấm có vị chua đặc trưng.",
+    category: "Há»¯u cÆ¡",
+    conditions: "Men giáº¥m, 25-30Â°C",
+    observation: "RÆ°á»£u loÃ£ng chuyá»ƒn thÃ nh giáº¥m cÃ³ vá»‹ chua Ä‘áº·c trÆ°ng.",
     energy: -480,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_111",
-    name: "Axit Axetic tác dụng với Magie",
+    name: "Axit Axetic tÃ¡c dá»¥ng vá»›i Magie",
     type: "single-replacement",
     reactants: [
-      { formula: "CH₃COOH", coeff: 2, name: "Axit Axetic" },
-      { formula: "Mg", coeff: 1, name: "Magiê" }
+      { formula: "CHâ‚ƒCOOH", coeff: 2, name: "Axit Axetic" },
+      { formula: "Mg", coeff: 1, name: "MagiÃª" }
     ],
     products: [
-      { formula: "(CH₃COO)₂Mg", coeff: 1, name: "Magiê Axetat" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "(CHâ‚ƒCOO)â‚‚Mg", coeff: 1, name: "MagiÃª Axetat" },
+      { formula: "Hâ‚‚", coeff: 1, name: "KhÃ­ Hydro" }
     ],
-    equation: "2CH₃COOH + Mg → (CH₃COO)₂Mg + H₂↑",
+    equation: "2CHâ‚ƒCOOH + Mg â†’ (CHâ‚ƒCOO)â‚‚Mg + Hâ‚‚â†‘",
     gradeLevel: 9,
-    category: "Hữu cơ",
-    conditions: "Nhiệt độ thường",
-    observation: "Magiê tan dần, sủi bọt khí hydro.",
+    category: "Há»¯u cÆ¡",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "MagiÃª tan dáº§n, sá»§i bá»t khÃ­ hydro.",
     energy: -250,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_112",
-    name: "Axit Axetic tác dụng với Na₂CO₃",
+    name: "Axit Axetic tÃ¡c dá»¥ng vá»›i Naâ‚‚COâ‚ƒ",
     type: "double-replacement",
     reactants: [
-      { formula: "CH₃COOH", coeff: 2, name: "Axit Axetic" },
-      { formula: "Na₂CO₃", coeff: 1, name: "Natri Cacbonat" }
+      { formula: "CHâ‚ƒCOOH", coeff: 2, name: "Axit Axetic" },
+      { formula: "Naâ‚‚COâ‚ƒ", coeff: 1, name: "Natri Cacbonat" }
     ],
     products: [
-      { formula: "CH₃COONa", coeff: 2, name: "Natri Axetat" },
-      { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "CHâ‚ƒCOONa", coeff: 2, name: "Natri Axetat" },
+      { formula: "COâ‚‚", coeff: 1, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "2CH₃COOH + Na₂CO₃ → 2CH₃COONa + CO₂↑ + H₂O",
+    equation: "2CHâ‚ƒCOOH + Naâ‚‚COâ‚ƒ â†’ 2CHâ‚ƒCOONa + COâ‚‚â†‘ + Hâ‚‚O",
     gradeLevel: 9,
-    category: "Hữu cơ",
-    conditions: "Nhiệt độ thường",
-    observation: "Sủi bọt khí CO₂ mãnh liệt.",
+    category: "Há»¯u cÆ¡",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Sá»§i bá»t khÃ­ COâ‚‚ mÃ£nh liá»‡t.",
     energy: -30,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_113",
-    name: "Đốt cháy Methan trong Clo (Tạo muội than)",
+    name: "Äá»‘t chÃ¡y Methan trong Clo (Táº¡o muá»™i than)",
     type: "redox",
     reactants: [
-      { formula: "CH₄", coeff: 1, name: "Khí Metan" },
-      { formula: "Cl₂", coeff: 2, name: "Khí Clo" }
+      { formula: "CHâ‚„", coeff: 1, name: "KhÃ­ Metan" },
+      { formula: "Clâ‚‚", coeff: 2, name: "KhÃ­ Clo" }
     ],
     products: [
-      { formula: "C", coeff: 1, name: "Muội than" },
+      { formula: "C", coeff: 1, name: "Muá»™i than" },
       { formula: "HCl", coeff: 4, name: "Hydro Clo" }
     ],
-    equation: "CH₄ + 2Cl₂ →(t°) C + 4HCl",
+    equation: "CHâ‚„ + 2Clâ‚‚ â†’(tÂ°) C + 4HCl",
     gradeLevel: 11,
     category: "Hydrocarbon",
-    conditions: "Đốt cháy trong khí clo",
-    observation: "Ngọn lửa sẫm màu, xuất hiện nhiều muội than đen và khí HCl.",
+    conditions: "Äá»‘t chÃ¡y trong khÃ­ clo",
+    observation: "Ngá»n lá»­a sáº«m mÃ u, xuáº¥t hiá»‡n nhiá»u muá»™i than Ä‘en vÃ  khÃ­ HCl.",
     energy: -300,
     animation: "smoke",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_114",
-    name: "Phản ứng của Anilin với dung dịch Brom",
+    name: "Pháº£n á»©ng cá»§a Anilin vá»›i dung dá»‹ch Brom",
     type: "double-replacement",
     reactants: [
-      { formula: "C₆H₅NH₂", coeff: 1, name: "Anilin" },
-      { formula: "Br₂", coeff: 3, name: "Nước Brom" }
+      { formula: "Câ‚†Hâ‚…NHâ‚‚", coeff: 1, name: "Anilin" },
+      { formula: "Brâ‚‚", coeff: 3, name: "NÆ°á»›c Brom" }
     ],
     products: [
-      { formula: "C₆H₂Br₃NH₂", coeff: 1, name: "2,4,6-Tribromanilin" },
+      { formula: "Câ‚†Hâ‚‚Brâ‚ƒNHâ‚‚", coeff: 1, name: "2,4,6-Tribromanilin" },
       { formula: "HBr", coeff: 3, name: "Hydro Bromua" }
     ],
-    equation: "C₆H₅NH₂ + 3Br₂ → C₆H₂Br₃NH₂↓ + 3HBr",
+    equation: "Câ‚†Hâ‚…NHâ‚‚ + 3Brâ‚‚ â†’ Câ‚†Hâ‚‚Brâ‚ƒNHâ‚‚â†“ + 3HBr",
     gradeLevel: 12,
     category: "Amin",
-    conditions: "Nhiệt độ thường",
-    observation: "Dung dịch brom bị mất màu, xuất hiện kết tủa trắng (Tribromanilin).",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Dung dá»‹ch brom bá»‹ máº¥t mÃ u, xuáº¥t hiá»‡n káº¿t tá»§a tráº¯ng (Tribromanilin).",
     energy: -110,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_115",
-    name: "Phản ứng cộng H₂ vào dầu thực vật (Lỏng thành Rắn)",
+    name: "Pháº£n á»©ng cá»™ng Hâ‚‚ vÃ o dáº§u thá»±c váº­t (Lá»ng thÃ nh Ráº¯n)",
     type: "combination",
     reactants: [
-      { formula: "(C₁₇H₃₃COO)₃C₃H₅", coeff: 1, name: "Triolein (Dầu)" },
-      { formula: "H₂", coeff: 3, name: "Khí Hydro" }
+      { formula: "(Câ‚â‚‡Hâ‚ƒâ‚ƒCOO)â‚ƒCâ‚ƒHâ‚…", coeff: 1, name: "Triolein (Dáº§u)" },
+      { formula: "Hâ‚‚", coeff: 3, name: "KhÃ­ Hydro" }
     ],
     products: [
-      { formula: "(C₁₇H₃₅COO)₃C₃H₅", coeff: 1, name: "Tristearin (Mỡ)" }
+      { formula: "(Câ‚â‚‡Hâ‚ƒâ‚…COO)â‚ƒCâ‚ƒHâ‚…", coeff: 1, name: "Tristearin (Má»¡)" }
     ],
-    equation: "(C₁₇H₃₃COO)₃C₃H₅ + 3H₂ →(t°, Ni) (C₁₇H₃₅COO)₃C₃H₅",
+    equation: "(Câ‚â‚‡Hâ‚ƒâ‚ƒCOO)â‚ƒCâ‚ƒHâ‚… + 3Hâ‚‚ â†’(tÂ°, Ni) (Câ‚â‚‡Hâ‚ƒâ‚…COO)â‚ƒCâ‚ƒHâ‚…",
     gradeLevel: 12,
     category: "Lipit",
-    conditions: "Nhiệt độ, áp suất, Ni",
-    observation: "Dầu thực vật lỏng chuyển hóa thành chất béo rắn (bơ thực vật).",
+    conditions: "Nhiá»‡t Ä‘á»™, Ã¡p suáº¥t, Ni",
+    observation: "Dáº§u thá»±c váº­t lá»ng chuyá»ƒn hÃ³a thÃ nh cháº¥t bÃ©o ráº¯n (bÆ¡ thá»±c váº­t).",
     energy: -350,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
-  // --- BỔ SUNG KHỐI LƯỢNG LỚN (BATCH 3 PHẦN B & BATCH 4: NHẬN BIẾT & CHUYÊN SÂU) ---
+  // --- Bá»” SUNG KHá»I LÆ¯á»¢NG Lá»šN (BATCH 3 PHáº¦N B & BATCH 4: NHáº¬N BIáº¾T & CHUYÃŠN SÃ‚U) ---
   {
     id: "rx_116",
-    name: "Thủy phân Tristearin trong môi trường Axit",
+    name: "Thá»§y phÃ¢n Tristearin trong mÃ´i trÆ°á»ng Axit",
     type: "double-replacement",
     reactants: [
-      { formula: "(C₁₇H₃₅COO)₃C₃H₅", coeff: 1, name: "Tristearin" },
-      { formula: "H₂O", coeff: 3, name: "Nước" }
+      { formula: "(Câ‚â‚‡Hâ‚ƒâ‚…COO)â‚ƒCâ‚ƒHâ‚…", coeff: 1, name: "Tristearin" },
+      { formula: "Hâ‚‚O", coeff: 3, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "C₁₇H₃₅COOH", coeff: 3, name: "Axit Stearic" },
-      { formula: "C₃H₈O₃", coeff: 1, name: "Glixerol" }
+      { formula: "Câ‚â‚‡Hâ‚ƒâ‚…COOH", coeff: 3, name: "Axit Stearic" },
+      { formula: "Câ‚ƒHâ‚ˆOâ‚ƒ", coeff: 1, name: "Glixerol" }
     ],
-    equation: "(C₁₇H₃₅COO)₃C₃H₅ + 3H₂O →(t°, H⁺) 3C₁₇H₃₅COOH + C₃H₈O₃",
+    equation: "(Câ‚â‚‡Hâ‚ƒâ‚…COO)â‚ƒCâ‚ƒHâ‚… + 3Hâ‚‚O â†’(tÂ°, Hâº) 3Câ‚â‚‡Hâ‚ƒâ‚…COOH + Câ‚ƒHâ‚ˆOâ‚ƒ",
     gradeLevel: 12,
     category: "Lipit",
-    conditions: "Đun nóng, xúc tác axit",
-    observation: "Hỗn hợp chất béo dần tan ra, tạo thành axit béo và glixerol.",
+    conditions: "Äun nÃ³ng, xÃºc tÃ¡c axit",
+    observation: "Há»—n há»£p cháº¥t bÃ©o dáº§n tan ra, táº¡o thÃ nh axit bÃ©o vÃ  glixerol.",
     energy: -20,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_117",
-    name: "Xà phòng hóa Tristearin",
+    name: "XÃ  phÃ²ng hÃ³a Tristearin",
     type: "double-replacement",
     reactants: [
-      { formula: "(C₁₇H₃₅COO)₃C₃H₅", coeff: 1, name: "Tristearin" },
+      { formula: "(Câ‚â‚‡Hâ‚ƒâ‚…COO)â‚ƒCâ‚ƒHâ‚…", coeff: 1, name: "Tristearin" },
       { formula: "NaOH", coeff: 3, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "C₁₇H₃₅COONa", coeff: 3, name: "Natri Stearat (Xà phòng)" },
-      { formula: "C₃H₈O₃", coeff: 1, name: "Glixerol" }
+      { formula: "Câ‚â‚‡Hâ‚ƒâ‚…COONa", coeff: 3, name: "Natri Stearat (XÃ  phÃ²ng)" },
+      { formula: "Câ‚ƒHâ‚ˆOâ‚ƒ", coeff: 1, name: "Glixerol" }
     ],
-    equation: "(C₁₇H₃₅COO)₃C₃H₅ + 3NaOH →(t°) 3C₁₇H₃₅COONa + C₃H₈O₃",
+    equation: "(Câ‚â‚‡Hâ‚ƒâ‚…COO)â‚ƒCâ‚ƒHâ‚… + 3NaOH â†’(tÂ°) 3Câ‚â‚‡Hâ‚ƒâ‚…COONa + Câ‚ƒHâ‚ˆOâ‚ƒ",
     gradeLevel: 12,
     category: "Lipit",
-    conditions: "Đun nóng",
-    observation: "Chất béo tan trong kiềm, sau đó thêm NaCl bão hòa thấy xà phòng nổi lên trên.",
+    conditions: "Äun nÃ³ng",
+    observation: "Cháº¥t bÃ©o tan trong kiá»m, sau Ä‘Ã³ thÃªm NaCl bÃ£o hÃ²a tháº¥y xÃ  phÃ²ng ná»•i lÃªn trÃªn.",
     energy: -100,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_118",
-    name: "Phản ứng este hóa giữa Axit Axetic và Methanol",
+    name: "Pháº£n á»©ng este hÃ³a giá»¯a Axit Axetic vÃ  Methanol",
     type: "double-replacement",
     reactants: [
-      { formula: "CH₃COOH", coeff: 1, name: "Axit Axetic" },
-      { formula: "CH₃OH", coeff: 1, name: "Rượu Metylic" }
+      { formula: "CHâ‚ƒCOOH", coeff: 1, name: "Axit Axetic" },
+      { formula: "CHâ‚ƒOH", coeff: 1, name: "RÆ°á»£u Metylic" }
     ],
     products: [
-      { formula: "CH₃COOCH₃", coeff: 1, name: "Metyl Axetat" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "CHâ‚ƒCOOCHâ‚ƒ", coeff: 1, name: "Metyl Axetat" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "CH₃COOH + CH₃OH ⇌(t°, H₂SO₄) CH₃COOCH₃ + H₂O",
+    equation: "CHâ‚ƒCOOH + CHâ‚ƒOH â‡Œ(tÂ°, Hâ‚‚SOâ‚„) CHâ‚ƒCOOCHâ‚ƒ + Hâ‚‚O",
     gradeLevel: 12,
     category: "Este",
-    conditions: "Đun nóng, H₂SO₄ đặc làm xúc tác",
-    observation: "Tạo thành chất lỏng không màu, mùi thơm dễ chịu của este.",
+    conditions: "Äun nÃ³ng, Hâ‚‚SOâ‚„ Ä‘áº·c lÃ m xÃºc tÃ¡c",
+    observation: "Táº¡o thÃ nh cháº¥t lá»ng khÃ´ng mÃ u, mÃ¹i thÆ¡m dá»… chá»‹u cá»§a este.",
     energy: -10,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_119",
-    name: "Thủy phân Xenlulozơ",
+    name: "Thá»§y phÃ¢n XenlulozÆ¡",
     type: "double-replacement",
     reactants: [
-      { formula: "Cellulose", coeff: 1, name: "Xenlulozơ" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Cellulose", coeff: 1, name: "XenlulozÆ¡" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "C₆H₁₂O₆", coeff: 1, name: "Glucozơ" }
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 1, name: "GlucozÆ¡" }
     ],
-    equation: "(C₆H₁₀O₅)n + nH₂O →(t°, H⁺) nC₆H₁₂O₆",
+    equation: "(Câ‚†Hâ‚â‚€Oâ‚…)n + nHâ‚‚O â†’(tÂ°, Hâº) nCâ‚†Hâ‚â‚‚Oâ‚†",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Đun nóng lâu với xác tác axit đặc",
-    observation: "Nguyên liệu chứa xenlulozơ (bông, gỗ) bị hòa tan tạo dung dịch đường.",
+    conditions: "Äun nÃ³ng lÃ¢u vá»›i xÃ¡c tÃ¡c axit Ä‘áº·c",
+    observation: "NguyÃªn liá»‡u chá»©a xenlulozÆ¡ (bÃ´ng, gá»—) bá»‹ hÃ²a tan táº¡o dung dá»‹ch Ä‘Æ°á»ng.",
     energy: -5,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_120",
-    name: "Phản ứng nhựa Novolac (Phenol + Fomanđehit)",
+    name: "Pháº£n á»©ng nhá»±a Novolac (Phenol + FomanÄ‘ehit)",
     type: "combination",
     reactants: [
-      { formula: "C₆H₅OH", coeff: 1, name: "Phenol" },
-      { formula: "HCHO", coeff: 1, name: "Fomanđehit" }
+      { formula: "Câ‚†Hâ‚…OH", coeff: 1, name: "Phenol" },
+      { formula: "HCHO", coeff: 1, name: "FomanÄ‘ehit" }
     ],
     products: [
-      { formula: "Novolac", coeff: 1, name: "Nhựa Novolac" }
+      { formula: "Novolac", coeff: 1, name: "Nhá»±a Novolac" }
     ],
-    equation: "nC₆H₅OH + nHCHO →(H⁺, t°) Nhựa Novolac + nH₂O",
+    equation: "nCâ‚†Hâ‚…OH + nHCHO â†’(Hâº, tÂ°) Nhá»±a Novolac + nHâ‚‚O",
     gradeLevel: 12,
     category: "Polyme",
-    conditions: "Xúc tác Axit, dư Phenol",
-    observation: "Hỗn hợp lỏng chuyển sang dạng nhựa dẻo, rồi rắn lại khi nguội.",
+    conditions: "XÃºc tÃ¡c Axit, dÆ° Phenol",
+    observation: "Há»—n há»£p lá»ng chuyá»ƒn sang dáº¡ng nhá»±a dáº»o, rá»“i ráº¯n láº¡i khi nguá»™i.",
     energy: -150,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_121",
-    name: "Phản ứng trùng hợp Etilen (Tạo nhựa PE)",
+    name: "Pháº£n á»©ng trÃ¹ng há»£p Etilen (Táº¡o nhá»±a PE)",
     type: "combination",
     reactants: [
-      { formula: "C₂H₄", coeff: 1, name: "Etilen" }
+      { formula: "Câ‚‚Hâ‚„", coeff: 1, name: "Etilen" }
     ],
     products: [
-      { formula: "(C₂H₄)n", coeff: 1, name: "Nhựa Polietilen" }
+      { formula: "(Câ‚‚Hâ‚„)n", coeff: 1, name: "Nhá»±a Polietilen" }
     ],
-    equation: "nCH₂=CH₂ →(t°, p, xt) (-CH₂-CH₂-)n",
+    equation: "nCHâ‚‚=CHâ‚‚ â†’(tÂ°, p, xt) (-CHâ‚‚-CHâ‚‚-)n",
     gradeLevel: 12,
     category: "Polyme",
-    conditions: "Nhiệt độ, áp suất cao, chất xúc tác",
-    observation: "Khí Etilen kết hợp thành chất rắn dẻo, màu trắng đục.",
+    conditions: "Nhiá»‡t Ä‘á»™, Ã¡p suáº¥t cao, cháº¥t xÃºc tÃ¡c",
+    observation: "KhÃ­ Etilen káº¿t há»£p thÃ nh cháº¥t ráº¯n dáº»o, mÃ u tráº¯ng Ä‘á»¥c.",
     energy: -90,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_122",
-    name: "Phản ứng trùng hợp Styren (Tạo nhựa PS)",
+    name: "Pháº£n á»©ng trÃ¹ng há»£p Styren (Táº¡o nhá»±a PS)",
     type: "combination",
     reactants: [
-      { formula: "C₆H₅-CH=CH₂", coeff: 1, name: "Styren" }
+      { formula: "Câ‚†Hâ‚…-CH=CHâ‚‚", coeff: 1, name: "Styren" }
     ],
     products: [
-      { formula: "PS", coeff: 1, name: "Nhựa Polystyren" }
+      { formula: "PS", coeff: 1, name: "Nhá»±a Polystyren" }
     ],
-    equation: "nC₆H₅-CH=CH₂ →(t°, xt) (-CH(C₆H₅)-CH₂-)n",
+    equation: "nCâ‚†Hâ‚…-CH=CHâ‚‚ â†’(tÂ°, xt) (-CH(Câ‚†Hâ‚…)-CHâ‚‚-)n",
     gradeLevel: 12,
     category: "Polyme",
-    conditions: "Nhiệt độ, xúc tác",
-    observation: "Chất lỏng chuyển thành chất rắn trong suốt, giòn.",
+    conditions: "Nhiá»‡t Ä‘á»™, xÃºc tÃ¡c",
+    observation: "Cháº¥t lá»ng chuyá»ƒn thÃ nh cháº¥t ráº¯n trong suá»‘t, giÃ²n.",
     energy: -70,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_123",
-    name: "Anilin tác dụng với HCl",
+    name: "Anilin tÃ¡c dá»¥ng vá»›i HCl",
     type: "combination",
     reactants: [
-      { formula: "C₆H₅NH₂", coeff: 1, name: "Anilin" },
+      { formula: "Câ‚†Hâ‚…NHâ‚‚", coeff: 1, name: "Anilin" },
       { formula: "HCl", coeff: 1, name: "Axit Clohidric" }
     ],
     products: [
-      { formula: "C₆H₅NH₃Cl", coeff: 1, name: "Phenylamôni Clorua" }
+      { formula: "Câ‚†Hâ‚…NHâ‚ƒCl", coeff: 1, name: "PhenylamÃ´ni Clorua" }
     ],
-    equation: "C₆H₅NH₂ + HCl → C₆H₅NH₃Cl",
+    equation: "Câ‚†Hâ‚…NHâ‚‚ + HCl â†’ Câ‚†Hâ‚…NHâ‚ƒCl",
     gradeLevel: 12,
     category: "Amin",
-    conditions: "Nhiệt độ thường",
-    observation: "Anilin (ít tan, vẩn đục) tan dần tạo dung dịch trong suốt.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Anilin (Ã­t tan, váº©n Ä‘á»¥c) tan dáº§n táº¡o dung dá»‹ch trong suá»‘t.",
     energy: -60,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_124",
-    name: "Phản ứng trùng hợp Vinyl Clorua (Tạo nhựa PVC)",
+    name: "Pháº£n á»©ng trÃ¹ng há»£p Vinyl Clorua (Táº¡o nhá»±a PVC)",
     type: "combination",
     reactants: [
-      { formula: "C₂H₃Cl", coeff: 1, name: "Vinyl Clorua" }
+      { formula: "Câ‚‚Hâ‚ƒCl", coeff: 1, name: "Vinyl Clorua" }
     ],
     products: [
-      { formula: "PVC", coeff: 1, name: "Nhựa PVC" }
+      { formula: "PVC", coeff: 1, name: "Nhá»±a PVC" }
     ],
-    equation: "nCH₂=CHCl →(t°, p, xt) (-CH₂-CHCl-)n",
+    equation: "nCHâ‚‚=CHCl â†’(tÂ°, p, xt) (-CHâ‚‚-CHCl-)n",
     gradeLevel: 12,
     category: "Polyme",
-    conditions: "Áp suất, nhiệt độ, chất xúc tác",
-    observation: "Tạo thành chất bột màu trắng, dùng làm ống nhựa.",
+    conditions: "Ãp suáº¥t, nhiá»‡t Ä‘á»™, cháº¥t xÃºc tÃ¡c",
+    observation: "Táº¡o thÃ nh cháº¥t bá»™t mÃ u tráº¯ng, dÃ¹ng lÃ m á»‘ng nhá»±a.",
     energy: -100,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_125",
-    name: "Phản ứng màu Biure của Protein",
+    name: "Pháº£n á»©ng mÃ u Biure cá»§a Protein",
     type: "combination",
     reactants: [
-      { formula: "Protein", coeff: 1, name: "Lòng trắng trứng" },
-      { formula: "Cu(OH)₂", coeff: 1, name: "Đồng(II) Hidroxit" }
+      { formula: "Protein", coeff: 1, name: "LÃ²ng tráº¯ng trá»©ng" },
+      { formula: "Cu(OH)â‚‚", coeff: 1, name: "Äá»“ng(II) Hidroxit" }
     ],
     products: [
-      { formula: "Protein-Cu", coeff: 1, name: "Hợp chất màu tím" }
+      { formula: "Protein-Cu", coeff: 1, name: "Há»£p cháº¥t mÃ u tÃ­m" }
     ],
-    equation: "Protein + Cu(OH)₂ → Hợp chất phức màu tím đặc trưng",
+    equation: "Protein + Cu(OH)â‚‚ â†’ Há»£p cháº¥t phá»©c mÃ u tÃ­m Ä‘áº·c trÆ°ng",
     gradeLevel: 12,
     category: "Peptit - Protein",
-    conditions: "Nhiệt độ thường, môi trường kiềm",
-    observation: "Hòa tan kết tủa Cu(OH)₂ tạo dung dịch có màu tím đặc trưng.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng, mÃ´i trÆ°á»ng kiá»m",
+    observation: "HÃ²a tan káº¿t tá»§a Cu(OH)â‚‚ táº¡o dung dá»‹ch cÃ³ mÃ u tÃ­m Ä‘áº·c trÆ°ng.",
     energy: -10,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_126",
-    name: "Nhận biết Ion Fe²⁺ bằng dung dịch kiềm",
+    name: "Nháº­n biáº¿t Ion FeÂ²âº báº±ng dung dá»‹ch kiá»m",
     type: "double-replacement",
     reactants: [
-      { formula: "FeCl₂", coeff: 1, name: "Sắt(II) Clorua" },
+      { formula: "FeClâ‚‚", coeff: 1, name: "Sáº¯t(II) Clorua" },
       { formula: "NaOH", coeff: 2, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "Fe(OH)₂", coeff: 1, name: "Sắt(II) Hidroxit" },
+      { formula: "Fe(OH)â‚‚", coeff: 1, name: "Sáº¯t(II) Hidroxit" },
       { formula: "NaCl", coeff: 2, name: "Natri Clorua" }
     ],
-    equation: "FeCl₂ + 2NaOH → Fe(OH)₂↓ + 2NaCl",
+    equation: "FeClâ‚‚ + 2NaOH â†’ Fe(OH)â‚‚â†“ + 2NaCl",
     gradeLevel: 11,
-    category: "Phân tích định tính",
-    conditions: "Không có không khí",
-    observation: "Xuất hiện kết tủa trắng xanh.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "KhÃ´ng cÃ³ khÃ´ng khÃ­",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a tráº¯ng xanh.",
     energy: -30,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_127",
-    name: "Nhận biết Ion Fe³⁺ bằng dung dịch kiềm",
+    name: "Nháº­n biáº¿t Ion FeÂ³âº báº±ng dung dá»‹ch kiá»m",
     type: "double-replacement",
     reactants: [
-      { formula: "FeCl₃", coeff: 1, name: "Sắt(III) Clorua" },
+      { formula: "FeClâ‚ƒ", coeff: 1, name: "Sáº¯t(III) Clorua" },
       { formula: "NaOH", coeff: 3, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "Fe(OH)₃", coeff: 1, name: "Sắt(III) Hidroxit" },
+      { formula: "Fe(OH)â‚ƒ", coeff: 1, name: "Sáº¯t(III) Hidroxit" },
       { formula: "NaCl", coeff: 3, name: "Natri Clorua" }
     ],
-    equation: "FeCl₃ + 3NaOH → Fe(OH)₃↓ + 3NaCl",
+    equation: "FeClâ‚ƒ + 3NaOH â†’ Fe(OH)â‚ƒâ†“ + 3NaCl",
     gradeLevel: 11,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa màu nâu đỏ.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a mÃ u nÃ¢u Ä‘á».",
     energy: -45,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_128",
-    name: "Oxy hóa Sắt(II) Hidroxit trong không khí",
+    name: "Oxy hÃ³a Sáº¯t(II) Hidroxit trong khÃ´ng khÃ­",
     type: "redox",
     reactants: [
-      { formula: "Fe(OH)₂", coeff: 4, name: "Sắt(II) Hidroxit" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "Fe(OH)â‚‚", coeff: 4, name: "Sáº¯t(II) Hidroxit" },
+      { formula: "Oâ‚‚", coeff: 1, name: "KhÃ­ Oxy" },
+      { formula: "Hâ‚‚O", coeff: 2, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "Fe(OH)₃", coeff: 4, name: "Sắt(III) Hidroxit" }
+      { formula: "Fe(OH)â‚ƒ", coeff: 4, name: "Sáº¯t(III) Hidroxit" }
     ],
-    equation: "4Fe(OH)₂ + O₂ + 2H₂O → 4Fe(OH)₃",
+    equation: "4Fe(OH)â‚‚ + Oâ‚‚ + 2Hâ‚‚O â†’ 4Fe(OH)â‚ƒ",
     gradeLevel: 12,
-    category: "Phân tích định tính",
-    conditions: "Tiếp xúc không khí ẩm",
-    observation: "Kết tủa trắng xanh nhanh chóng chuyển sang màu nâu đỏ.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Tiáº¿p xÃºc khÃ´ng khÃ­ áº©m",
+    observation: "Káº¿t tá»§a tráº¯ng xanh nhanh chÃ³ng chuyá»ƒn sang mÃ u nÃ¢u Ä‘á».",
     energy: -280,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_129",
-    name: "Nhận biết Ion Cu²⁺ bằng Amoniac (Dư NH₃)",
+    name: "Nháº­n biáº¿t Ion CuÂ²âº báº±ng Amoniac (DÆ° NHâ‚ƒ)",
     type: "combination",
     reactants: [
-      { formula: "CuSO₄", coeff: 1, name: "Đồng(II) Sunfat" },
-      { formula: "NH₃", coeff: 4, name: "Amoniac" }
+      { formula: "CuSOâ‚„", coeff: 1, name: "Äá»“ng(II) Sunfat" },
+      { formula: "NHâ‚ƒ", coeff: 4, name: "Amoniac" }
     ],
     products: [
-      { formula: "[Cu(NH₃)₄]SO₄", coeff: 1, name: "Phức đồng-amoniac" }
+      { formula: "[Cu(NHâ‚ƒ)â‚„]SOâ‚„", coeff: 1, name: "Phá»©c Ä‘á»“ng-amoniac" }
     ],
-    equation: "CuSO₄ + 4NH₃ → [Cu(NH₃)₄]SO₄",
+    equation: "CuSOâ‚„ + 4NHâ‚ƒ â†’ [Cu(NHâ‚ƒ)â‚„]SOâ‚„",
     gradeLevel: 12,
-    category: "Phân tích định tính",
-    conditions: "Dung dịch NH₃ dư",
-    observation: "Tạo kết tủa xanh, sau đó tan tạo dung dịch màu xanh lam thẫm đặc trưng.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Dung dá»‹ch NHâ‚ƒ dÆ°",
+    observation: "Táº¡o káº¿t tá»§a xanh, sau Ä‘Ã³ tan táº¡o dung dá»‹ch mÃ u xanh lam tháº«m Ä‘áº·c trÆ°ng.",
     energy: -120,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_130",
-    name: "Nhận biết Ion Al³⁺ bằng dung dịch kiềm (Dư kiềm)",
+    name: "Nháº­n biáº¿t Ion AlÂ³âº báº±ng dung dá»‹ch kiá»m (DÆ° kiá»m)",
     type: "redox",
     reactants: [
-      { formula: "AlCl₃", coeff: 1, name: "Nhôm Clorua" },
+      { formula: "AlClâ‚ƒ", coeff: 1, name: "NhÃ´m Clorua" },
       { formula: "NaOH", coeff: 4, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "NaAlO₂", coeff: 1, name: "Natri Aluminat" },
+      { formula: "NaAlOâ‚‚", coeff: 1, name: "Natri Aluminat" },
       { formula: "NaCl", coeff: 3, name: "Natri Clorua" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "Hâ‚‚O", coeff: 2, name: "NÆ°á»›c" }
     ],
-    equation: "AlCl₃ + 4NaOH → NaAlO₂ + 3NaCl + 2H₂O",
+    equation: "AlClâ‚ƒ + 4NaOH â†’ NaAlOâ‚‚ + 3NaCl + 2Hâ‚‚O",
     gradeLevel: 12,
-    category: "Phân tích định tính",
-    conditions: "NaOH dư",
-    observation: "Kết tủa trắng keo tan hoàn toàn trong kiềm dư.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "NaOH dÆ°",
+    observation: "Káº¿t tá»§a tráº¯ng keo tan hoÃ n toÃ n trong kiá»m dÆ°.",
     energy: -150,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_131",
-    name: "Sắt(III) Clorua tác dụng với KI",
+    name: "Sáº¯t(III) Clorua tÃ¡c dá»¥ng vá»›i KI",
     type: "redox",
     reactants: [
-      { formula: "FeCl₃", coeff: 2, name: "Sắt(III) Clorua" },
+      { formula: "FeClâ‚ƒ", coeff: 2, name: "Sáº¯t(III) Clorua" },
       { formula: "KI", coeff: 2, name: "Kali Iotua" }
     ],
     products: [
-      { formula: "FeCl₂", coeff: 2, name: "Sắt(II) Clorua" },
+      { formula: "FeClâ‚‚", coeff: 2, name: "Sáº¯t(II) Clorua" },
       { formula: "KCl", coeff: 2, name: "Kali Clorua" },
-      { formula: "I₂", coeff: 1, name: "Iốt" }
+      { formula: "Iâ‚‚", coeff: 1, name: "Iá»‘t" }
     ],
-    equation: "2FeCl₃ + 2KI → 2FeCl₂ + 2KCl + I₂",
+    equation: "2FeClâ‚ƒ + 2KI â†’ 2FeClâ‚‚ + 2KCl + Iâ‚‚",
     gradeLevel: 12,
     category: "Redox",
-    conditions: "Nhiệt độ thường",
-    observation: "Dung dịch chuyển từ vàng nâu sang màu đen tím của Iốt.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Dung dá»‹ch chuyá»ƒn tá»« vÃ ng nÃ¢u sang mÃ u Ä‘en tÃ­m cá»§a Iá»‘t.",
     energy: -120,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_132",
-    name: "Thủy phân Protein bằng Axit",
+    name: "Thá»§y phÃ¢n Protein báº±ng Axit",
     type: "double-replacement",
     reactants: [
       { formula: "Protein", coeff: 1, name: "Protein" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
       { formula: "Gly", coeff: 2, name: "Amino Acid (Glyxin)" }
     ],
-    equation: "Protein + nH₂O →(H⁺) n Amino Acid",
+    equation: "Protein + nHâ‚‚O â†’(Hâº) n Amino Acid",
     gradeLevel: 12,
     category: "Protein",
-    conditions: "Đun nóng lâu",
-    observation: "Protein bị phân cắt thành các amino acid đơn giản.",
+    conditions: "Äun nÃ³ng lÃ¢u",
+    observation: "Protein bá»‹ phÃ¢n cáº¯t thÃ nh cÃ¡c amino acid Ä‘Æ¡n giáº£n.",
     energy: -5,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_133",
-    name: "Lên men Axit Lactic (Từ Glucozơ)",
+    name: "LÃªn men Axit Lactic (Tá»« GlucozÆ¡)",
     type: "decomposition",
     reactants: [
-      { formula: "C₆H₁₂O₆", coeff: 1, name: "Glucozơ" }
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 1, name: "GlucozÆ¡" }
     ],
     products: [
-      { formula: "CH₃CH(OH)COOH", coeff: 2, name: "Axit Lactic" }
+      { formula: "CHâ‚ƒCH(OH)COOH", coeff: 2, name: "Axit Lactic" }
     ],
-    equation: "C₆H₁₂O₆ → 2CH₃CH(OH)COOH",
+    equation: "Câ‚†Hâ‚â‚‚Oâ‚† â†’ 2CHâ‚ƒCH(OH)COOH",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Vi khuẩn lactic",
-    observation: "Tạo thành vị chua của sữa chua.",
+    conditions: "Vi khuáº©n lactic",
+    observation: "Táº¡o thÃ nh vá»‹ chua cá»§a sá»¯a chua.",
     energy: -120,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_134",
-    name: "Nhận biết Ion NH₄⁺ bằng kiềm",
+    name: "Nháº­n biáº¿t Ion NHâ‚„âº báº±ng kiá»m",
     type: "double-replacement",
     reactants: [
-      { formula: "NH₄Cl", coeff: 1, name: "Amôni Clorua" },
+      { formula: "NHâ‚„Cl", coeff: 1, name: "AmÃ´ni Clorua" },
       { formula: "NaOH", coeff: 1, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "NH₃", coeff: 1, name: "Amoniac" },
+      { formula: "NHâ‚ƒ", coeff: 1, name: "Amoniac" },
       { formula: "NaCl", coeff: 1, name: "Natri Clorua" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "NH₄Cl + NaOH → NaCl + NH₃↑ + H₂O",
+    equation: "NHâ‚„Cl + NaOH â†’ NaCl + NHâ‚ƒâ†‘ + Hâ‚‚O",
     gradeLevel: 11,
-    category: "Phân tích định tính",
-    conditions: "Đun nhẹ",
-    observation: "Giải phóng khí mùi khai, làm xanh giấy quỳ tím ẩm.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Äun nháº¹",
+    observation: "Giáº£i phÃ³ng khÃ­ mÃ¹i khai, lÃ m xanh giáº¥y quá»³ tÃ­m áº©m.",
     energy: -20,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_135",
-    name: "Axit Nitric đặc nóng tác dụng với S",
+    name: "Axit Nitric Ä‘áº·c nÃ³ng tÃ¡c dá»¥ng vá»›i S",
     type: "redox",
     reactants: [
-      { formula: "S", coeff: 1, name: "Lưu huỳnh" },
-      { formula: "HNO₃", coeff: 6, name: "Axit Nitric đặc" }
+      { formula: "S", coeff: 1, name: "LÆ°u huá»³nh" },
+      { formula: "HNOâ‚ƒ", coeff: 6, name: "Axit Nitric Ä‘áº·c" }
     ],
     products: [
-      { formula: "H₂SO₄", coeff: 1, name: "Axit Sunfuric" },
-      { formula: "NO₂", coeff: 6, name: "Nitơ Đioxit" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "Hâ‚‚SOâ‚„", coeff: 1, name: "Axit Sunfuric" },
+      { formula: "NOâ‚‚", coeff: 6, name: "NitÆ¡ Äioxit" },
+      { formula: "Hâ‚‚O", coeff: 2, name: "NÆ°á»›c" }
     ],
-    equation: "S + 6HNO₃(đ) → H₂SO₄ + 6NO₂↑ + 2H₂O",
+    equation: "S + 6HNOâ‚ƒ(Ä‘) â†’ Hâ‚‚SOâ‚„ + 6NOâ‚‚â†‘ + 2Hâ‚‚O",
     gradeLevel: 11,
-    category: "Nitơ",
-    conditions: "Nhiệt độ cao",
-    observation: "Giải phóng khí nâu đỏ NO₂.",
+    category: "NitÆ¡",
+    conditions: "Nhiá»‡t Ä‘á»™ cao",
+    observation: "Giáº£i phÃ³ng khÃ­ nÃ¢u Ä‘á» NOâ‚‚.",
     energy: -380,
     animation: "fizz",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_136",
-    name: "Phản ứng của NH₃ với khí Clo",
+    name: "Pháº£n á»©ng cá»§a NHâ‚ƒ vá»›i khÃ­ Clo",
     type: "redox",
     reactants: [
-      { formula: "NH₃", coeff: 2, name: "Amoniac" },
-      { formula: "Cl₂", coeff: 3, name: "Khí Clo" }
+      { formula: "NHâ‚ƒ", coeff: 2, name: "Amoniac" },
+      { formula: "Clâ‚‚", coeff: 3, name: "KhÃ­ Clo" }
     ],
     products: [
-      { formula: "N₂", coeff: 1, name: "Khí Nitơ" },
+      { formula: "Nâ‚‚", coeff: 1, name: "KhÃ­ NitÆ¡" },
       { formula: "HCl", coeff: 6, name: "Hydro Clo" }
     ],
-    equation: "2NH₃ + 3Cl₂ → N₂ + 6HCl",
+    equation: "2NHâ‚ƒ + 3Clâ‚‚ â†’ Nâ‚‚ + 6HCl",
     gradeLevel: 11,
-    category: "Nitơ",
-    conditions: "Tự cháy trong khí Clo",
-    observation: "Amoniac bùng cháy trong Clo, tạo khói trắng.",
+    category: "NitÆ¡",
+    conditions: "Tá»± chÃ¡y trong khÃ­ Clo",
+    observation: "Amoniac bÃ¹ng chÃ¡y trong Clo, táº¡o khÃ³i tráº¯ng.",
     energy: -460,
     animation: "smoke",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_137",
-    name: "Bạc clorua bị phân hủy bởi ánh sáng",
+    name: "Báº¡c clorua bá»‹ phÃ¢n há»§y bá»Ÿi Ã¡nh sÃ¡ng",
     type: "decomposition",
     reactants: [
-      { formula: "AgCl", coeff: 2, name: "Bạc Clorua" }
+      { formula: "AgCl", coeff: 2, name: "Báº¡c Clorua" }
     ],
     products: [
-      { formula: "Ag", coeff: 2, name: "Bạc" },
-      { formula: "Cl₂", coeff: 1, name: "Khí Clo" }
+      { formula: "Ag", coeff: 2, name: "Báº¡c" },
+      { formula: "Clâ‚‚", coeff: 1, name: "KhÃ­ Clo" }
     ],
-    equation: "2AgCl → 2Ag + Cl₂↑",
+    equation: "2AgCl â†’ 2Ag + Clâ‚‚â†‘",
     gradeLevel: 10,
     category: "Halogen",
-    conditions: "Ánh sáng mặt trời",
-    observation: "Kết tủa trắng chuyển sang màu xám đen của bạc.",
+    conditions: "Ãnh sÃ¡ng máº·t trá»i",
+    observation: "Káº¿t tá»§a tráº¯ng chuyá»ƒn sang mÃ u xÃ¡m Ä‘en cá»§a báº¡c.",
     energy: 127,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_138",
-    name: "Phản ứng giữa SO₂ và H₂S (Tạo Lưu huỳnh vụn)",
+    name: "Pháº£n á»©ng giá»¯a SOâ‚‚ vÃ  Hâ‚‚S (Táº¡o LÆ°u huá»³nh vá»¥n)",
     type: "redox",
     reactants: [
-      { formula: "SO₂", coeff: 1, name: "Lưu huỳnh Đioxit" },
-      { formula: "H₂S", coeff: 2, name: "Hydro Sunfua" }
+      { formula: "SOâ‚‚", coeff: 1, name: "LÆ°u huá»³nh Äioxit" },
+      { formula: "Hâ‚‚S", coeff: 2, name: "Hydro Sunfua" }
     ],
     products: [
-      { formula: "S", coeff: 3, name: "Lưu huỳnh" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "S", coeff: 3, name: "LÆ°u huá»³nh" },
+      { formula: "Hâ‚‚O", coeff: 2, name: "NÆ°á»›c" }
     ],
-    equation: "SO₂ + 2H₂S → 3S↓ + 2H₂O",
+    equation: "SOâ‚‚ + 2Hâ‚‚S â†’ 3Sâ†“ + 2Hâ‚‚O",
     gradeLevel: 10,
-    category: "Lưu huỳnh",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện lớp bột màu vàng bám trên thành ống nghiệm.",
+    category: "LÆ°u huá»³nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n lá»›p bá»™t mÃ u vÃ ng bÃ¡m trÃªn thÃ nh á»‘ng nghiá»‡m.",
     energy: -230,
     animation: "smoke",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_139",
-    name: "Tính háo nước của H₂SO₄ đặc (Đường ăn)",
+    name: "TÃ­nh hÃ¡o nÆ°á»›c cá»§a Hâ‚‚SOâ‚„ Ä‘áº·c (ÄÆ°á»ng Äƒn)",
     type: "decomposition",
     reactants: [
-      { formula: "C₁₂H₂₂O₁₁", coeff: 1, name: "Đường Saccarozơ" },
-      { formula: "H₂SO₄", coeff: 1, name: "Axit Sunfuric đặc" }
+      { formula: "Câ‚â‚‚Hâ‚‚â‚‚Oâ‚â‚", coeff: 1, name: "ÄÆ°á»ng SaccarozÆ¡" },
+      { formula: "Hâ‚‚SOâ‚„", coeff: 1, name: "Axit Sunfuric Ä‘áº·c" }
     ],
     products: [
       { formula: "C", coeff: 12, name: "Cacbon" },
-      { formula: "H₂O", coeff: 11, name: "Hơi nước" }
+      { formula: "Hâ‚‚O", coeff: 11, name: "HÆ¡i nÆ°á»›c" }
     ],
-    equation: "C₁₂H₂₂O₁₁ → 12C + 11H₂O",
+    equation: "Câ‚â‚‚Hâ‚‚â‚‚Oâ‚â‚ â†’ 12C + 11Hâ‚‚O",
     gradeLevel: 10,
-    category: "Lưu huỳnh",
-    conditions: "Nhiệt độ thường",
-    observation: "Đường hóa đen và trào lên khỏi cốc như cột than.",
+    category: "LÆ°u huá»³nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "ÄÆ°á»ng hÃ³a Ä‘en vÃ  trÃ o lÃªn khá»i cá»‘c nhÆ° cá»™t than.",
     energy: -500,
     animation: "smoke",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_140",
-    name: "Điều chế Khí Cacbonic trong Lab",
+    name: "Äiá»u cháº¿ KhÃ­ Cacbonic trong Lab",
     type: "double-replacement",
     reactants: [
-      { formula: "CaCO₃", coeff: 1, name: "Đá vôi" },
+      { formula: "CaCOâ‚ƒ", coeff: 1, name: "ÄÃ¡ vÃ´i" },
       { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
     ],
     products: [
-      { formula: "CaCl₂", coeff: 1, name: "Canxi Clorua" },
-      { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "CaClâ‚‚", coeff: 1, name: "Canxi Clorua" },
+      { formula: "COâ‚‚", coeff: 1, name: "KhÃ­ Cacbonic" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "CaCO₃ + 2HCl → CaCl₂ + CO₂↑ + H₂O",
+    equation: "CaCOâ‚ƒ + 2HCl â†’ CaClâ‚‚ + COâ‚‚â†‘ + Hâ‚‚O",
     gradeLevel: 9,
     category: "Cacbon",
-    conditions: "Nhiệt độ thường",
-    observation: "Đá vôi sủi bọt khí mạnh mẽ, tan dần.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "ÄÃ¡ vÃ´i sá»§i bá»t khÃ­ máº¡nh máº½, tan dáº§n.",
     energy: -20,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_141",
-    name: "Sản xuất Gang (Khử Fe₂O₃ bằng CO)",
+    name: "Sáº£n xuáº¥t Gang (Khá»­ Feâ‚‚Oâ‚ƒ báº±ng CO)",
     type: "redox",
     reactants: [
-      { formula: "Fe₂O₃", coeff: 1, name: "Oxit sắt(III)" },
+      { formula: "Feâ‚‚Oâ‚ƒ", coeff: 1, name: "Oxit sáº¯t(III)" },
       { formula: "CO", coeff: 3, name: "Cacbon Monoxit" }
     ],
     products: [
-      { formula: "Fe", coeff: 2, name: "Sắt" },
-      { formula: "CO₂", coeff: 3, name: "Khí Cacbonic" }
+      { formula: "Fe", coeff: 2, name: "Sáº¯t" },
+      { formula: "COâ‚‚", coeff: 3, name: "KhÃ­ Cacbonic" }
     ],
-    equation: "Fe₂O₃ + 3CO → 2Fe + 3CO₂",
+    equation: "Feâ‚‚Oâ‚ƒ + 3CO â†’ 2Fe + 3COâ‚‚",
     gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Nhiệt độ cao",
-    observation: "Oxit đỏ nâu chuyển thành chất rắn màu xám đen.",
+    category: "Kim loáº¡i",
+    conditions: "Nhiá»‡t Ä‘á»™ cao",
+    observation: "Oxit Ä‘á» nÃ¢u chuyá»ƒn thÃ nh cháº¥t ráº¯n mÃ u xÃ¡m Ä‘en.",
     energy: -30,
     animation: "color-change",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_142",
-    name: "Nhận biết hồ tinh bột bằng Iốt",
+    name: "Nháº­n biáº¿t há»“ tinh bá»™t báº±ng Iá»‘t",
     type: "combination",
     reactants: [
-      { formula: "Starch", coeff: 1, name: "Hồ tinh bột" },
-      { formula: "I₂", coeff: 1, name: "Dung dịch Iốt" }
+      { formula: "Starch", coeff: 1, name: "Há»“ tinh bá»™t" },
+      { formula: "Iâ‚‚", coeff: 1, name: "Dung dá»‹ch Iá»‘t" }
     ],
     products: [
-      { formula: "Starch-I2", coeff: 1, name: "Phức màu xanh tím" }
+      { formula: "Starch-I2", coeff: 1, name: "Phá»©c mÃ u xanh tÃ­m" }
     ],
-    equation: "Tinh bột + I₂ → Hợp chất màu xanh tím",
+    equation: "Tinh bá»™t + Iâ‚‚ â†’ Há»£p cháº¥t mÃ u xanh tÃ­m",
     gradeLevel: 10,
-    category: "Hữu cơ",
-    conditions: "Nhiệt độ phòng",
-    observation: "Dung dịch chuyển sang màu xanh tím đặc trưng ngay lập tức.",
+    category: "Há»¯u cÆ¡",
+    conditions: "Nhiá»‡t Ä‘á»™ phÃ²ng",
+    observation: "Dung dá»‹ch chuyá»ƒn sang mÃ u xanh tÃ­m Ä‘áº·c trÆ°ng ngay láº­p tá»©c.",
     energy: -10,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_143",
-    name: "Thủy phân Saccarozơ bằng Axit",
+    name: "Thá»§y phÃ¢n SaccarozÆ¡ báº±ng Axit",
     type: "double-replacement",
     reactants: [
-      { formula: "C₁₂H₂₂O₁₁", coeff: 1, name: "Saccarozơ" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "Câ‚â‚‚Hâ‚‚â‚‚Oâ‚â‚", coeff: 1, name: "SaccarozÆ¡" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
     products: [
-      { formula: "C₆H₁₂O₆", coeff: 2, name: "Glucozơ & Fructozơ" }
+      { formula: "Câ‚†Hâ‚â‚‚Oâ‚†", coeff: 2, name: "GlucozÆ¡ & FructozÆ¡" }
     ],
-    equation: "C₁₂H₂₂O₁₁ + H₂O →(H⁺, t°) C₆H₁₂O₆ + C₆H₁₂O₆",
+    equation: "Câ‚â‚‚Hâ‚‚â‚‚Oâ‚â‚ + Hâ‚‚O â†’(Hâº, tÂ°) Câ‚†Hâ‚â‚‚Oâ‚† + Câ‚†Hâ‚â‚‚Oâ‚†",
     gradeLevel: 12,
     category: "Carbohydrate",
-    conditions: "Đun nóng, xúc tác Axit",
-    observation: "Saccarozơ bị thủy phân, tạo ra các đường đơn có tính khử.",
+    conditions: "Äun nÃ³ng, xÃºc tÃ¡c Axit",
+    observation: "SaccarozÆ¡ bá»‹ thá»§y phÃ¢n, táº¡o ra cÃ¡c Ä‘Æ°á»ng Ä‘Æ¡n cÃ³ tÃ­nh khá»­.",
     energy: -10,
     animation: "mix",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_144",
-    name: "Anilin tác dụng với nước Brom (Nhận biết)",
+    name: "Anilin tÃ¡c dá»¥ng vá»›i nÆ°á»›c Brom (Nháº­n biáº¿t)",
     type: "double-replacement",
     reactants: [
-      { formula: "C₆H₅NH₂", coeff: 1, name: "Anilin" },
-      { formula: "Br₂", coeff: 3, name: "Nước Brom" }
+      { formula: "Câ‚†Hâ‚…NHâ‚‚", coeff: 1, name: "Anilin" },
+      { formula: "Brâ‚‚", coeff: 3, name: "NÆ°á»›c Brom" }
     ],
     products: [
-      { formula: "C₆H₂Br₃NH₂", coeff: 1, name: "2,4,6-Tribromanilin" }
+      { formula: "Câ‚†Hâ‚‚Brâ‚ƒNHâ‚‚", coeff: 1, name: "2,4,6-Tribromanilin" }
     ],
-    equation: "C₆H₅NH₂ + 3Br₂ → C₆H₂Br₃NH₂↓ + 3HBr",
+    equation: "Câ‚†Hâ‚…NHâ‚‚ + 3Brâ‚‚ â†’ Câ‚†Hâ‚‚Brâ‚ƒNHâ‚‚â†“ + 3HBr",
     gradeLevel: 12,
     category: "Amin",
-    conditions: "Nhiệt độ thường",
-    observation: "Mất màu nước brom, xuất hiện kết tủa trắng.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Máº¥t mÃ u nÆ°á»›c brom, xuáº¥t hiá»‡n káº¿t tá»§a tráº¯ng.",
     energy: -120,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_145",
-    name: "Nhận biết Ion Cl⁻ bằng Bạc Nitrat",
+    name: "Nháº­n biáº¿t Ion Clâ» báº±ng Báº¡c Nitrat",
     type: "double-replacement",
     reactants: [
       { formula: "NaCl", coeff: 1, name: "Natri Clorua" },
-      { formula: "AgNO₃", coeff: 1, name: "Bạc Nitrat" }
+      { formula: "AgNOâ‚ƒ", coeff: 1, name: "Báº¡c Nitrat" }
     ],
     products: [
-      { formula: "AgCl", coeff: 1, name: "Bạc Clorua" },
-      { formula: "NaNO₃", coeff: 1, name: "Natri Nitrat" }
+      { formula: "AgCl", coeff: 1, name: "Báº¡c Clorua" },
+      { formula: "NaNOâ‚ƒ", coeff: 1, name: "Natri Nitrat" }
     ],
-    equation: "NaCl + AgNO₃ → AgCl↓ + NaNO₃",
+    equation: "NaCl + AgNOâ‚ƒ â†’ AgClâ†“ + NaNOâ‚ƒ",
     gradeLevel: 10,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa trắng vón cục, không tan trong axit.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a tráº¯ng vÃ³n cá»¥c, khÃ´ng tan trong axit.",
     energy: -65,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_146",
-    name: "Nhận biết Ion SO₄²⁻ bằng Bari Clorua",
+    name: "Nháº­n biáº¿t Ion SOâ‚„Â²â» báº±ng Bari Clorua",
     type: "double-replacement",
     reactants: [
-      { formula: "Na₂SO₄", coeff: 1, name: "Natri Sunfat" },
-      { formula: "BaCl₂", coeff: 1, name: "Bari Clorua" }
+      { formula: "Naâ‚‚SOâ‚„", coeff: 1, name: "Natri Sunfat" },
+      { formula: "BaClâ‚‚", coeff: 1, name: "Bari Clorua" }
     ],
     products: [
-      { formula: "BaSO₄", coeff: 1, name: "Bari Sunfat" },
+      { formula: "BaSOâ‚„", coeff: 1, name: "Bari Sunfat" },
       { formula: "NaCl", coeff: 2, name: "Natri Clorua" }
     ],
-    equation: "Na₂SO₄ + BaCl₂ → BaSO₄↓ + 2NaCl",
+    equation: "Naâ‚‚SOâ‚„ + BaClâ‚‚ â†’ BaSOâ‚„â†“ + 2NaCl",
     gradeLevel: 10,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa trắng, bền trong axit.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a tráº¯ng, bá»n trong axit.",
     energy: -40,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_147",
-    name: "Nhận biết Ion PO₄³⁻ bằng Bạc Nitrat",
+    name: "Nháº­n biáº¿t Ion POâ‚„Â³â» báº±ng Báº¡c Nitrat",
     type: "double-replacement",
     reactants: [
-      { formula: "Na₃PO₄", coeff: 1, name: "Natri Photphat" },
-      { formula: "AgNO₃", coeff: 3, name: "Bạc Nitrat" }
+      { formula: "Naâ‚ƒPOâ‚„", coeff: 1, name: "Natri Photphat" },
+      { formula: "AgNOâ‚ƒ", coeff: 3, name: "Báº¡c Nitrat" }
     ],
     products: [
-      { formula: "Ag₃PO₄", coeff: 1, name: "Bạc Photphat" },
-      { formula: "NaNO₃", coeff: 3, name: "Natri Nitrat" }
+      { formula: "Agâ‚ƒPOâ‚„", coeff: 1, name: "Báº¡c Photphat" },
+      { formula: "NaNOâ‚ƒ", coeff: 3, name: "Natri Nitrat" }
     ],
-    equation: "Na₃PO₄ + 3AgNO₃ → Ag₃PO₄↓ + 3NaNO₃",
+    equation: "Naâ‚ƒPOâ‚„ + 3AgNOâ‚ƒ â†’ Agâ‚ƒPOâ‚„â†“ + 3NaNOâ‚ƒ",
     gradeLevel: 11,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa màu vàng tinh khiết.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a mÃ u vÃ ng tinh khiáº¿t.",
     energy: -150,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_148",
-    name: "Nhôm tác dụng với Axit Nitric (Tạo khí N₂O)",
+    name: "NhÃ´m tÃ¡c dá»¥ng vá»›i Axit Nitric (Táº¡o khÃ­ Nâ‚‚O)",
     type: "redox",
     reactants: [
-      { formula: "Al", coeff: 8, name: "Nhôm" },
-      { formula: "HNO₃", coeff: 30, name: "Axit Nitric loãng" }
+      { formula: "Al", coeff: 8, name: "NhÃ´m" },
+      { formula: "HNOâ‚ƒ", coeff: 30, name: "Axit Nitric loÃ£ng" }
     ],
     products: [
-      { formula: "Al(NO₃)₃", coeff: 8, name: "Nhôm Nitrat" },
-      { formula: "N₂O", coeff: 3, name: "Khí Cười" },
-      { formula: "H₂O", coeff: 15, name: "Nước" }
+      { formula: "Al(NOâ‚ƒ)â‚ƒ", coeff: 8, name: "NhÃ´m Nitrat" },
+      { formula: "Nâ‚‚O", coeff: 3, name: "KhÃ­ CÆ°á»i" },
+      { formula: "Hâ‚‚O", coeff: 15, name: "NÆ°á»›c" }
     ],
-    equation: "8Al + 30HNO₃ → 8Al(NO₃)₃ + 3N₂O + 15H₂O",
+    equation: "8Al + 30HNOâ‚ƒ â†’ 8Al(NOâ‚ƒ)â‚ƒ + 3Nâ‚‚O + 15Hâ‚‚O",
     gradeLevel: 12,
     category: "Redox",
-    conditions: "Axit Nitric loãng",
-    observation: "Nhôm tan, giải phóng bọt khí không màu.",
+    conditions: "Axit Nitric loÃ£ng",
+    observation: "NhÃ´m tan, giáº£i phÃ³ng bá»t khÃ­ khÃ´ng mÃ u.",
     energy: -4500,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_149",
-    name: "Đốt cháy Magie trong hơi nước",
+    name: "Äá»‘t chÃ¡y Magie trong hÆ¡i nÆ°á»›c",
     type: "redox",
     reactants: [
-      { formula: "Mg", coeff: 1, name: "Magiê" },
-      { formula: "H₂O", coeff: 2, name: "Hơi nước" }
+      { formula: "Mg", coeff: 1, name: "MagiÃª" },
+      { formula: "Hâ‚‚O", coeff: 2, name: "HÆ¡i nÆ°á»›c" }
     ],
     products: [
-      { formula: "Mg(OH)₂", coeff: 1, name: "Magiê Hidroxit" },
-      { formula: "H₂", coeff: 1, name: "Khí Hydro" }
+      { formula: "Mg(OH)â‚‚", coeff: 1, name: "MagiÃª Hidroxit" },
+      { formula: "Hâ‚‚", coeff: 1, name: "KhÃ­ Hydro" }
     ],
-    equation: "Mg + 2H₂O → Mg(OH)₂ + H₂↑",
+    equation: "Mg + 2Hâ‚‚O â†’ Mg(OH)â‚‚ + Hâ‚‚â†‘",
     gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Nhiệt độ cao",
-    observation: "Magiê cháy sáng trong hơi nước giải phóng Hydro.",
+    category: "Kim loáº¡i",
+    conditions: "Nhiá»‡t Ä‘á»™ cao",
+    observation: "MagiÃª chÃ¡y sÃ¡ng trong hÆ¡i nÆ°á»›c giáº£i phÃ³ng Hydro.",
     energy: -350,
     animation: "burn",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_150",
-    name: "Nhôm tác dụng với Axit Nitric rất loãng (Tạo NH₄⁺)",
+    name: "NhÃ´m tÃ¡c dá»¥ng vá»›i Axit Nitric ráº¥t loÃ£ng (Táº¡o NHâ‚„âº)",
     type: "redox",
     reactants: [
-      { formula: "Al", coeff: 8, name: "Nhôm" },
-      { formula: "HNO₃", coeff: 30, name: "Axit Nitric rất loãng" }
+      { formula: "Al", coeff: 8, name: "NhÃ´m" },
+      { formula: "HNOâ‚ƒ", coeff: 30, name: "Axit Nitric ráº¥t loÃ£ng" }
     ],
     products: [
-      { formula: "Al(NO₃)₃", coeff: 8, name: "Nhôm Nitrat" },
-      { formula: "NH₄NO₃", coeff: 3, name: "Amôni Nitrat" },
-      { formula: "H₂O", coeff: 9, name: "Nước" }
+      { formula: "Al(NOâ‚ƒ)â‚ƒ", coeff: 8, name: "NhÃ´m Nitrat" },
+      { formula: "NHâ‚„NOâ‚ƒ", coeff: 3, name: "AmÃ´ni Nitrat" },
+      { formula: "Hâ‚‚O", coeff: 9, name: "NÆ°á»›c" }
     ],
-    equation: "8Al + 30HNO₃ → 8Al(NO₃)₃ + 3NH₄NO₃ + 9H₂O",
+    equation: "8Al + 30HNOâ‚ƒ â†’ 8Al(NOâ‚ƒ)â‚ƒ + 3NHâ‚„NOâ‚ƒ + 9Hâ‚‚O",
     gradeLevel: 12,
     category: "Redox",
-    conditions: "Axit Nitric cực loãng",
-    observation: "Nhôm tan nhưng không thấy bọt khí thoát ra.",
+    conditions: "Axit Nitric cá»±c loÃ£ng",
+    observation: "NhÃ´m tan nhÆ°ng khÃ´ng tháº¥y bá»t khÃ­ thoÃ¡t ra.",
     energy: -5000,
     animation: "mix",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_151",
-    name: "Baking Soda tác dụng với Axit dạ dày",
+    name: "Baking Soda tÃ¡c dá»¥ng vá»›i Axit dáº¡ dÃ y",
     type: "double-replacement",
     reactants: [
-      { formula: "NaHCO₃", coeff: 1, name: "Baking Soda" },
+      { formula: "NaHCOâ‚ƒ", coeff: 1, name: "Baking Soda" },
       { formula: "HCl", coeff: 1, name: "Axit Clohidric" }
     ],
     products: [
-      { formula: "NaCl", coeff: 1, name: "Muối" },
-      { formula: "CO₂", coeff: 1, name: "Khí" },
-      { formula: "H₂O", coeff: 1, name: "Nước" }
+      { formula: "NaCl", coeff: 1, name: "Muá»‘i" },
+      { formula: "COâ‚‚", coeff: 1, name: "KhÃ­" },
+      { formula: "Hâ‚‚O", coeff: 1, name: "NÆ°á»›c" }
     ],
-    equation: "NaHCO₃ + HCl → NaCl + H₂O + CO₂↑",
+    equation: "NaHCOâ‚ƒ + HCl â†’ NaCl + Hâ‚‚O + COâ‚‚â†‘",
     gradeLevel: 9,
-    category: "Ứng dụng",
-    conditions: "Nhiệt độ thường",
-    observation: "Sủi bọt khí mạnh (giúp giảm đầy hơi).",
+    category: "á»¨ng dá»¥ng",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Sá»§i bá»t khÃ­ máº¡nh (giÃºp giáº£m Ä‘áº§y hÆ¡i).",
     energy: -20,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_152",
-    name: "Kết tủa Bari Sunfat do tác dụng của axit",
+    name: "Káº¿t tá»§a Bari Sunfat do tÃ¡c dá»¥ng cá»§a axit",
     type: "double-replacement",
     reactants: [
-      { formula: "BaCl₂", coeff: 1, name: "Bari Clorua" },
-      { formula: "H₂SO₄", coeff: 1, name: "Axit Sunfuric" }
+      { formula: "BaClâ‚‚", coeff: 1, name: "Bari Clorua" },
+      { formula: "Hâ‚‚SOâ‚„", coeff: 1, name: "Axit Sunfuric" }
     ],
     products: [
-      { formula: "BaSO₄", coeff: 1, name: "Bari Sunfat" },
+      { formula: "BaSOâ‚„", coeff: 1, name: "Bari Sunfat" },
       { formula: "HCl", coeff: 2, name: "Axit Clohidric" }
     ],
-    equation: "BaCl₂ + H₂SO₄ → BaSO₄↓ + 2HCl",
+    equation: "BaClâ‚‚ + Hâ‚‚SOâ‚„ â†’ BaSOâ‚„â†“ + 2HCl",
     gradeLevel: 10,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Kết tủa trắng mịn xuất hiện ngay lập tức.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Káº¿t tá»§a tráº¯ng má»‹n xuáº¥t hiá»‡n ngay láº­p tá»©c.",
     energy: -45,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_153",
-    name: "Natri Peroxit tác dụng với nước (Giải phóng Oxy)",
+    name: "Natri Peroxit tÃ¡c dá»¥ng vá»›i nÆ°á»›c (Giáº£i phÃ³ng Oxy)",
     type: "redox",
     reactants: [
-      { formula: "Na₂O₂", coeff: 2, name: "Natri Peroxit" },
-      { formula: "H₂O", coeff: 2, name: "Nước" }
+      { formula: "Naâ‚‚Oâ‚‚", coeff: 2, name: "Natri Peroxit" },
+      { formula: "Hâ‚‚O", coeff: 2, name: "NÆ°á»›c" }
     ],
     products: [
       { formula: "NaOH", coeff: 4, name: "Natri Hidroxit" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+      { formula: "Oâ‚‚", coeff: 1, name: "KhÃ­ Oxy" }
     ],
-    equation: "2Na₂O₂ + 2H₂O → 4NaOH + O₂↑",
+    equation: "2Naâ‚‚Oâ‚‚ + 2Hâ‚‚O â†’ 4NaOH + Oâ‚‚â†‘",
     gradeLevel: 12,
-    category: "Kim loại kiềm",
-    conditions: "Nhiệt độ thường",
-    observation: "Sủi bọt khí Oxy mạnh mẽ, tỏa nhiệt.",
+    category: "Kim loáº¡i kiá»m",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Sá»§i bá»t khÃ­ Oxy máº¡nh máº½, tá»a nhiá»‡t.",
     energy: -200,
     animation: "fizz",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_154",
-    name: "Đốt cháy Ma Trơi (Phosphine)",
+    name: "Äá»‘t chÃ¡y Ma TrÆ¡i (Phosphine)",
     type: "redox",
     reactants: [
-      { formula: "PH₃", coeff: 2, name: "Phosphine" },
-      { formula: "O₂", coeff: 4, name: "Khí Oxy" }
+      { formula: "PHâ‚ƒ", coeff: 2, name: "Phosphine" },
+      { formula: "Oâ‚‚", coeff: 4, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "P₂O₅", coeff: 1, name: "Pentaoxit" },
-      { formula: "H₂O", coeff: 3, name: "Hơi nước" }
+      { formula: "Pâ‚‚Oâ‚…", coeff: 1, name: "Pentaoxit" },
+      { formula: "Hâ‚‚O", coeff: 3, name: "HÆ¡i nÆ°á»›c" }
     ],
-    equation: "2PH₃ + 4O₂ → P₂O₅ + 3H₂O",
+    equation: "2PHâ‚ƒ + 4Oâ‚‚ â†’ Pâ‚‚Oâ‚… + 3Hâ‚‚O",
     gradeLevel: 11,
-    category: "Nitơ - Photpho",
-    conditions: "Tự cháy trong không khí",
-    observation: "Khí tự cháy trong không khí tạo khói trắng, ánh sáng xanh mờ.",
+    category: "NitÆ¡ - Photpho",
+    conditions: "Tá»± chÃ¡y trong khÃ´ng khÃ­",
+    observation: "KhÃ­ tá»± chÃ¡y trong khÃ´ng khÃ­ táº¡o khÃ³i tráº¯ng, Ã¡nh sÃ¡ng xanh má».",
     energy: -1200,
     animation: "smoke",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_155",
-    name: "Luyện thép (Oxihóa Cacbon trong gang)",
+    name: "Luyá»‡n thÃ©p (OxihÃ³a Cacbon trong gang)",
     type: "redox",
     reactants: [
       { formula: "C", coeff: 1, name: "Cacbon" },
-      { formula: "O₂", coeff: 1, name: "Khí Oxy" }
+      { formula: "Oâ‚‚", coeff: 1, name: "KhÃ­ Oxy" }
     ],
     products: [
-      { formula: "CO₂", coeff: 1, name: "Khí Cacbonic" }
+      { formula: "COâ‚‚", coeff: 1, name: "KhÃ­ Cacbonic" }
     ],
-    equation: "C + O₂ → CO₂",
+    equation: "C + Oâ‚‚ â†’ COâ‚‚",
     gradeLevel: 12,
-    category: "Kim loại",
-    conditions: "Nhiệt độ cao (Lò oxy)",
-    observation: "Hàm lượng cacbon giảm giúp gang chuyển thành thép.",
+    category: "Kim loáº¡i",
+    conditions: "Nhiá»‡t Ä‘á»™ cao (LÃ² oxy)",
+    observation: "HÃ m lÆ°á»£ng cacbon giáº£m giÃºp gang chuyá»ƒn thÃ nh thÃ©p.",
     energy: -393,
     animation: "burn",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_156",
-    name: "Nhận biết Ion Cu²⁺ bằng dung dịch kiềm",
+    name: "Nháº­n biáº¿t Ion CuÂ²âº báº±ng dung dá»‹ch kiá»m",
     type: "double-replacement",
     reactants: [
-      { formula: "CuSO₄", coeff: 1, name: "Đồng(II) Sunfat" },
+      { formula: "CuSOâ‚„", coeff: 1, name: "Äá»“ng(II) Sunfat" },
       { formula: "NaOH", coeff: 2, name: "Natri Hidroxit" }
     ],
     products: [
-      { formula: "Cu(OH)₂", coeff: 1, name: "Đồng Hidroxit" },
-      { formula: "Na₂SO₄", coeff: 1, name: "Natri Sunfat" }
+      { formula: "Cu(OH)â‚‚", coeff: 1, name: "Äá»“ng Hidroxit" },
+      { formula: "Naâ‚‚SOâ‚„", coeff: 1, name: "Natri Sunfat" }
     ],
-    equation: "CuSO₄ + 2NaOH → Cu(OH)₂↓ + Na₂SO₄",
+    equation: "CuSOâ‚„ + 2NaOH â†’ Cu(OH)â‚‚â†“ + Naâ‚‚SOâ‚„",
     gradeLevel: 11,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Kết tủa xanh lơ dạng keo.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Káº¿t tá»§a xanh lÆ¡ dáº¡ng keo.",
     energy: -40,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_157",
-    name: "Đun nóng Sét (Sản xuất gốm)",
+    name: "Äun nÃ³ng SÃ©t (Sáº£n xuáº¥t gá»‘m)",
     type: "decomposition",
     reactants: [
-      { formula: "Clay", coeff: 1, name: "Sét" }
+      { formula: "Clay", coeff: 1, name: "SÃ©t" }
     ],
     products: [
-      { formula: "Ceramic", coeff: 1, name: "Gốm sứ" }
+      { formula: "Ceramic", coeff: 1, name: "Gá»‘m sá»©" }
     ],
-    equation: "Sét (chưa nung) →(t°) Gốm sứ",
+    equation: "SÃ©t (chÆ°a nung) â†’(tÂ°) Gá»‘m sá»©",
     gradeLevel: 11,
     category: "Silicat",
-    conditions: "Nhiệt độ rất cao (~1000°C)",
-    observation: "Nguyên liệu mềm dẻo biến thành vật liệu cứng, giòn.",
+    conditions: "Nhiá»‡t Ä‘á»™ ráº¥t cao (~1000Â°C)",
+    observation: "NguyÃªn liá»‡u má»m dáº»o biáº¿n thÃ nh váº­t liá»‡u cá»©ng, giÃ²n.",
     energy: 100,
     animation: "smoke",
     requiresHeat: true,
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_158",
-    name: "Phản ứng của Clo với dung dịch KI",
+    name: "Pháº£n á»©ng cá»§a Clo vá»›i dung dá»‹ch KI",
     type: "redox",
     reactants: [
-      { formula: "Cl₂", coeff: 1, name: "Khí Clo" },
+      { formula: "Clâ‚‚", coeff: 1, name: "KhÃ­ Clo" },
       { formula: "KI", coeff: 2, name: "Kali Iotua" }
     ],
     products: [
       { formula: "KCl", coeff: 2, name: "Kali Clorua" },
-      { formula: "I₂", coeff: 1, name: "Iốt" }
+      { formula: "Iâ‚‚", coeff: 1, name: "Iá»‘t" }
     ],
-    equation: "Cl₂ + 2KI → 2KCl + I₂",
+    equation: "Clâ‚‚ + 2KI â†’ 2KCl + Iâ‚‚",
     gradeLevel: 10,
     category: "Halogen",
-    conditions: "Nhiệt độ thường",
-    observation: "Dung dịch không màu chuyển sang màu nâu đặc trưng của Iốt.",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Dung dá»‹ch khÃ´ng mÃ u chuyá»ƒn sang mÃ u nÃ¢u Ä‘áº·c trÆ°ng cá»§a Iá»‘t.",
     energy: -150,
     animation: "color-change",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_159",
-    name: "Nhận biết Ion Br⁻ bằng Bạc Nitrat",
+    name: "Nháº­n biáº¿t Ion Brâ» báº±ng Báº¡c Nitrat",
     type: "double-replacement",
     reactants: [
       { formula: "NaBr", coeff: 1, name: "Natri Bromua" },
-      { formula: "AgNO₃", coeff: 1, name: "Bạc Nitrat" }
+      { formula: "AgNOâ‚ƒ", coeff: 1, name: "Báº¡c Nitrat" }
     ],
     products: [
-      { formula: "AgBr", coeff: 1, name: "Bạc Bromua" },
-      { formula: "NaNO₃", coeff: 1, name: "Natri Nitrat" }
+      { formula: "AgBr", coeff: 1, name: "Báº¡c Bromua" },
+      { formula: "NaNOâ‚ƒ", coeff: 1, name: "Natri Nitrat" }
     ],
-    equation: "NaBr + AgNO₃ → AgBr↓ + NaNO₃",
+    equation: "NaBr + AgNOâ‚ƒ â†’ AgBrâ†“ + NaNOâ‚ƒ",
     gradeLevel: 10,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa màu vàng nhạt.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a mÃ u vÃ ng nháº¡t.",
     energy: -70,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
   {
     id: "rx_160",
-    name: "Nhận biết Ion I⁻ bằng Bạc Nitrat",
+    name: "Nháº­n biáº¿t Ion Iâ» báº±ng Báº¡c Nitrat",
     type: "double-replacement",
     reactants: [
       { formula: "NaI", coeff: 1, name: "Natri Iotua" },
-      { formula: "AgNO₃", coeff: 1, name: "Bạc Nitrat" }
+      { formula: "AgNOâ‚ƒ", coeff: 1, name: "Báº¡c Nitrat" }
     ],
     products: [
-      { formula: "AgI", coeff: 1, name: "Bạc Iotua" },
-      { formula: "NaNO₃", coeff: 1, name: "Natri Nitrat" }
+      { formula: "AgI", coeff: 1, name: "Báº¡c Iotua" },
+      { formula: "NaNOâ‚ƒ", coeff: 1, name: "Natri Nitrat" }
     ],
-    equation: "NaI + AgNO₃ → AgI↓ + NaNO₃",
+    equation: "NaI + AgNOâ‚ƒ â†’ AgIâ†“ + NaNOâ‚ƒ",
     gradeLevel: 10,
-    category: "Phân tích định tính",
-    conditions: "Nhiệt độ thường",
-    observation: "Xuất hiện kết tủa màu vàng đậm.",
+    category: "PhÃ¢n tÃ­ch Ä‘á»‹nh tÃ­nh",
+    conditions: "Nhiá»‡t Ä‘á»™ thÆ°á»ng",
+    observation: "Xuáº¥t hiá»‡n káº¿t tá»§a mÃ u vÃ ng Ä‘áº­m.",
     energy: -80,
     animation: "precipitation",
     dangerLevel: 1,
-    safetyWarning: "Thí nghiệm an toàn, có thể thực hiện trên mô phỏng",
+    safetyWarning: "ThÃ­ nghiá»‡m an toÃ n, cÃ³ thá»ƒ thá»±c hiá»‡n trÃªn mÃ´ phá»ng",
     isBlocked: false
   },
 ];

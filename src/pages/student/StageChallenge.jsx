@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import MissionModal from '@/components/lessons/MissionModal';
 import { useAuth } from '@/context/AuthContext';
@@ -18,7 +18,7 @@ const StageChallenge = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch all lessons for this grade to determine order
+        // Fetch all bai_hoc for this grade to determine order
         const listRes = await fetch(`/api/lessons?classId=${grade}`);
         const listData = await listRes.json();
         const sortedLessons = Array.isArray(listData) ? listData : [];
@@ -36,14 +36,14 @@ const StageChallenge = () => {
             const isPrevUnlocked = currentIndex > 0 && user?.unlockedLessons?.includes(sortedLessons[currentIndex - 1].lessonId);
             
             if (!isFirstOfG8 && !isSelfUnlocked && !isPrevUnlocked) {
-              console.warn('Truy cập bị chặn: Bài học chưa được mở khóa (cần pass test học vượt hoặc hoàn thành bài trước)');
+              console.warn('Truy cáº­p bá»‹ cháº·n: BÃ i há»c chÆ°a Ä‘Æ°á»£c má»Ÿ khÃ³a (cáº§n pass test há»c vÆ°á»£t hoáº·c hoÃ n thÃ nh bÃ i trÆ°á»›c)');
               navigate(`/classroom/${grade}/journey`);
             }
           }
         }
 
       } catch (err) {
-        console.error('Lỗi tải thử thách:', err);
+        console.error('Lá»—i táº£i thá»­ thÃ¡ch:', err);
       } finally {
         setLoading(false);
       }
@@ -88,3 +88,5 @@ const StageChallenge = () => {
 };
 
 export default StageChallenge;
+
+

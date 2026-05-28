@@ -1,20 +1,20 @@
-export const bai17 = {
+﻿export const bai17 = {
   "id": "hoa11_kntt_bai17",
   "classId": 11,
   "lessonId": 17,
   "programId": "ketnoi",
-  "title": "Bài 17. Arene (hydrocarbon thơm)",
-  "chapter": "Chương 4. Hydrocarbon",
+  "title": "BÃ i 17. Arene (hydrocarbon thÆ¡m)",
+  "chapter": "ChÆ°Æ¡ng 4. Hydrocarbon",
   "order": 17,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Cấu tạo vòng thơm đặc trưng. Tính chất hóa học chủ yếu của benzene and các hydrocarbon thơm khác (phản ứng thế).",
+  "description": "Cáº¥u táº¡o vÃ²ng thÆ¡m Ä‘áº·c trÆ°ng. TÃ­nh cháº¥t hÃ³a há»c chá»§ yáº¿u cá»§a benzene and cÃ¡c hydrocarbon thÆ¡m khÃ¡c (pháº£n á»©ng tháº¿).",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Cấu tạo",
+        "text": "1. KhÃ¡i niá»‡m and Cáº¥u táº¡o",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@ export const bai17 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "ARENE - Kẹp Ngạt Hương Hoa Thơm (Hương Tình Hiểm Ác Hóa Học Hữu Cơ).\nĐây Xưng Hiệu Chúa Tể Các Vòng Nhẫn Lục Giác: BENZENE ($C_6H_6$). Dãy các Vị Tướng Có Chứa Hạt Nhân Chóp Lục Vòng Này Đều Mang Cái Danh Đẹp Đẽ Xào Trá Lụa Là: Hydrocarbon THƠM. Sáu Phân Vị C đều nằm Xẹp bẹp Trơn Cùng 1 Sàng Lưới Trục Mặt Phẳng Nhẵn Cứng ngắt."
+        "text": "ARENE - Káº¹p Ngáº¡t HÆ°Æ¡ng Hoa ThÆ¡m (HÆ°Æ¡ng TÃ¬nh Hiá»ƒm Ãc HÃ³a Há»c Há»¯u CÆ¡).\nÄÃ¢y XÆ°ng Hiá»‡u ChÃºa Tá»ƒ CÃ¡c VÃ²ng Nháº«n Lá»¥c GiÃ¡c: BENZENE ($C_6H_6$). DÃ£y cÃ¡c Vá»‹ TÆ°á»›ng CÃ³ Chá»©a Háº¡t NhÃ¢n ChÃ³p Lá»¥c VÃ²ng NÃ y Äá»u Mang CÃ¡i Danh Äáº¹p Äáº½ XÃ o TrÃ¡ Lá»¥a LÃ : Hydrocarbon THÆ M. SÃ¡u PhÃ¢n Vá»‹ C Ä‘á»u náº±m Xáº¹p báº¹p TrÆ¡n CÃ¹ng 1 SÃ ng LÆ°á»›i Trá»¥c Máº·t Pháº³ng Nháºµn Cá»©ng ngáº¯t."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Hệ Mặt Trận Chống Đạn $\\pi$ (Lớp Khiên Thần Nữ)",
-        "content": "Trong Vòng Benzene $C_6H_6$: Có 3 Nấc C=C Gãy Kẽ Xen Kéo C-C Chạy Tuột Xoay Vòng. Nhưng Chúng KO Cố Định Cứng. 3 Dây Lưới Lực $\\pi$ Điên Cuồng Khỏa Nhập Vuốt Lan Truyền Rỗng Lấp 6 Cục C Đều Băng Tắp Lắp Tạo 1 Đám Mây Mù Bánh Mì Lôi Kéo Bề Mặt. Độ Bền Cực Khủng Của Đám Mây Mù Liên Hợp Điện Này GỌI LÀ MẶT TRẬN TÍNH THƠM.\nCốt Chốt Kính Chiếu Ma: Vì Khiên Giáp Rát Bền. BENZENE Dễ Làm Phản Ứng THẾ ÉP NGỌAI. Tuyệt Đối Mọi Giá KHÓ TRĂM BỀ Phản Ứng Bẻ Gãy Tách CỘNG (Thách Thức Đánh Brom Tím, Xé Đứt Tầng Ống Than Mới Lùa Hydro Vào Mở Nút).",
+        "title": "Há»‡ Máº·t Tráº­n Chá»‘ng Äáº¡n $\\pi$ (Lá»›p KhiÃªn Tháº§n Ná»¯)",
+        "content": "Trong VÃ²ng Benzene $C_6H_6$: CÃ³ 3 Náº¥c C=C GÃ£y Káº½ Xen KÃ©o C-C Cháº¡y Tuá»™t Xoay VÃ²ng. NhÆ°ng ChÃºng KO Cá»‘ Äá»‹nh Cá»©ng. 3 DÃ¢y LÆ°á»›i Lá»±c $\\pi$ ÄiÃªn Cuá»“ng Khá»a Nháº­p Vuá»‘t Lan Truyá»n Rá»—ng Láº¥p 6 Cá»¥c C Äá»u BÄƒng Táº¯p Láº¯p Táº¡o 1 ÄÃ¡m MÃ¢y MÃ¹ BÃ¡nh MÃ¬ LÃ´i KÃ©o Bá» Máº·t. Äá»™ Bá»n Cá»±c Khá»§ng Cá»§a ÄÃ¡m MÃ¢y MÃ¹ LiÃªn Há»£p Äiá»‡n NÃ y Gá»ŒI LÃ€ Máº¶T TRáº¬N TÃNH THÆ M.\nCá»‘t Chá»‘t KÃ­nh Chiáº¿u Ma: VÃ¬ KhiÃªn GiÃ¡p RÃ¡t Bá»n. BENZENE Dá»… LÃ m Pháº£n á»¨ng THáº¾ Ã‰P NGá»ŒAI. Tuyá»‡t Äá»‘i Má»i GiÃ¡ KHÃ“ TRÄ‚M Bá»€ Pháº£n á»¨ng Báº» GÃ£y TÃ¡ch Cá»˜NG (ThÃ¡ch Thá»©c ÄÃ¡nh Brom TÃ­m, XÃ© Äá»©t Táº§ng á»ng Than Má»›i LÃ¹a Hydro VÃ o Má»Ÿ NÃºt).",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@ export const bai17 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Tính chất vật lí",
+        "text": "2. TÃ­nh cháº¥t váº­t lÃ­",
         "level": "h2"
       }
     },
@@ -46,14 +46,14 @@ export const bai17 = {
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Benzene Cạo Trần Tĩnh Thể Xít Khói Trong Vắt Lỏng Nhược ($C_6H_6$) Mùi Thơm Xộc Quyến Rũ Mũi Đáy Ngực. Nó là Ông Trùm Mạng Lưới Nhúng Rửa Dung Môi (Tan Sạch Vết Mực Dơ Dính, Nhớt Mỡ Cứng Tái Cáo Rộp Mạng). NHƯNG Hãy Cảnh Giác:\nSát Nhân Thầm Kín Độc Ngụy Dẫn Mạng Ung Thư Ung Huyết Phá Tế Bào Thần Kinh nếu hít Nặng Liên tục Ngấm Mạch Cửa Tử Vòng Đời Thấm Xăng. Cháy Rò rỉ Không No Toát Khói Đen Mù Cặn Xỉ Nám Lửa Bếp Than Bồi Thất."
+        "text": "Benzene Cáº¡o Tráº§n TÄ©nh Thá»ƒ XÃ­t KhÃ³i Trong Váº¯t Lá»ng NhÆ°á»£c ($C_6H_6$) MÃ¹i ThÆ¡m Xá»™c Quyáº¿n RÅ© MÅ©i ÄÃ¡y Ngá»±c. NÃ³ lÃ  Ã”ng TrÃ¹m Máº¡ng LÆ°á»›i NhÃºng Rá»­a Dung MÃ´i (Tan Sáº¡ch Váº¿t Má»±c DÆ¡ DÃ­nh, Nhá»›t Má»¡ Cá»©ng TÃ¡i CÃ¡o Rá»™p Máº¡ng). NHÆ¯NG HÃ£y Cáº£nh GiÃ¡c:\nSÃ¡t NhÃ¢n Tháº§m KÃ­n Äá»™c Ngá»¥y Dáº«n Máº¡ng Ung ThÆ° Ung Huyáº¿t PhÃ¡ Táº¿ BÃ o Tháº§n Kinh náº¿u hÃ­t Náº·ng LiÃªn tá»¥c Ngáº¥m Máº¡ch Cá»­a Tá»­ VÃ²ng Äá»i Tháº¥m XÄƒng. ChÃ¡y RÃ² rá»‰ KhÃ´ng No ToÃ¡t KhÃ³i Äen MÃ¹ Cáº·n Xá»‰ NÃ¡m Lá»­a Báº¿p Than Bá»“i Tháº¥t."
       }
     },
     {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Tính chất hóa học: Phản ứng Thế vòng Benzene",
+        "text": "3. TÃ­nh cháº¥t hÃ³a há»c: Pháº£n á»©ng Tháº¿ vÃ²ng Benzene",
         "level": "h2"
       }
     },
@@ -63,9 +63,9 @@ export const bai17 = {
       "content": {
         "type": "bullet",
         "items": [
-          "Bộ Ba Lấy Đuôi Phá Ngai Thế Vòng Lõi (Cắm Ngập Gai Cọc):",
-          "1. **Bạo Phong Thế Halogen Rụng Nhánh (Vòng Chạy Brom Nguyên Chất Lệnh Cấm Nước):** \nPhải Nhỏ Sợi Lông Bром Lỏng Trực Lượng Không Xào Nước Trích Bromine ($Br_2$ Lỏng Khan). Gõ Nhịp Đun Với Rắc Bột Sắt Tinh $FeBr_3 / Fe$ làm Mũi Khoan.\nLưới Nhẫn Bức Bách Vứt Rớt Bỏ 1 Thằng Hydro Mép Khung Để Lòi Bromine Dính Cắm Gai Thế Nỏ Chốt:\n$C_6H_6 + Br_2 \\xrightarrow{Fe, t\\circ} C_6H_5Br (Bromobenzene) + HBr\\uparrow$.",
-          "2. **Bom Đạn Nitro Hóa Chảy Mực Vàng Rét Nguy Hiểm:**\nRúng Đổ Dung Dịch Acid HNO3 Đặc Quắn + Rót H2SO4 Siêu Khát Nước Nóng Nấu Sóng Nhịp.\nNhóm Tên Lửa Bộc Phá $(-NO_2)$ Chọc Thủng Khiên Chồi Nhọn Đổ Ghép Thay H Bắn Rát Axit Nước Bo.\n$C_6H_6 + HNO_3 \\xrightarrow{H_2SO_4(đ)} C_6H_5NO_2 (Váng\\ Kịt\\ Nhũ\\ Vàng\\ Nặng\\ Trũ\\ Rót\\ Nitrobenzene) + H_2O$."
+          "Bá»™ Ba Láº¥y ÄuÃ´i PhÃ¡ Ngai Tháº¿ VÃ²ng LÃµi (Cáº¯m Ngáº­p Gai Cá»c):",
+          "1. **Báº¡o Phong Tháº¿ Halogen Rá»¥ng NhÃ¡nh (VÃ²ng Cháº¡y Brom NguyÃªn Cháº¥t Lá»‡nh Cáº¥m NÆ°á»›c):** \nPháº£i Nhá» Sá»£i LÃ´ng BÑ€Ð¾Ð¼ Lá»ng Trá»±c LÆ°á»£ng KhÃ´ng XÃ o NÆ°á»›c TrÃ­ch Bromine ($Br_2$ Lá»ng Khan). GÃµ Nhá»‹p Äun Vá»›i Ráº¯c Bá»™t Sáº¯t Tinh $FeBr_3 / Fe$ lÃ m MÅ©i Khoan.\nLÆ°á»›i Nháº«n Bá»©c BÃ¡ch Vá»©t Rá»›t Bá» 1 Tháº±ng Hydro MÃ©p Khung Äá»ƒ LÃ²i Bromine DÃ­nh Cáº¯m Gai Tháº¿ Ná» Chá»‘t:\n$C_6H_6 + Br_2 \\xrightarrow{Fe, t\\circ} C_6H_5Br (Bromobenzene) + HBr\\uparrow$.",
+          "2. **Bom Äáº¡n Nitro HÃ³a Cháº£y Má»±c VÃ ng RÃ©t Nguy Hiá»ƒm:**\nRÃºng Äá»• Dung Dá»‹ch Acid HNO3 Äáº·c Quáº¯n + RÃ³t H2SO4 SiÃªu KhÃ¡t NÆ°á»›c NÃ³ng Náº¥u SÃ³ng Nhá»‹p.\nNhÃ³m TÃªn Lá»­a Bá»™c PhÃ¡ $(-NO_2)$ Chá»c Thá»§ng KhiÃªn Chá»“i Nhá»n Äá»• GhÃ©p Thay H Báº¯n RÃ¡t Axit NÆ°á»›c Bo.\n$C_6H_6 + HNO_3 \\xrightarrow{H_2SO_4(Ä‘)} C_6H_5NO_2 (VÃ¡ng\\ Ká»‹t\\ NhÅ©\\ VÃ ng\\ Náº·ng\\ TrÅ©\\ RÃ³t\\ Nitrobenzene) + H_2O$."
         ]
       }
     },
@@ -73,15 +73,15 @@ export const bai17 = {
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Thuật Tiên Tri Định Hướng Rẽ Bàn Tay Trái – Phải (Dành Riêng Alkylbenzene Toluene $C_6H_5CH_3$). \nKhi Gốc Rễ Benzene đã bị chốt 1 Cấu Gốc Lạ nằm sẵn ở Tọa Khung Vị Đầu. Việc Nạp Thêm Thằng Khác Vô Chốt Lần 2 Không Thể Trở Lại Dễ Dãi Cắm Đầu.\nNếu Kẻ Ngồi Sẵn là NHÓM ĐẨY ELECTRON Rộng Cửa (Các Mạch Cắn Chồi Đẩy $-CH_3$, $-C_2H_5$, Gốc Cồn $-OH$, Gốc Mùi $-NH_2$): Lập Tức Nó Ép Bắn Đạo Quân Cắm Thế Mới Vào Buộc Chui Núp 2 Góc Tử Huyệt Lân Cận ortho (2, 6) and Hạ Bộ para (4). Đóng Kín Cổng Giữa Meta (3).\nNgược Dòng, Kẻ Ngồi Sẵn Mà Là QUỶ HÚT TỤT ELECTRON (-NO2, Gốc Rút -COOH, Vòi -CHO): Hệ Cửa Tiềm Năng Duy Nhất Không Khóa Chặt Vẫn Lả Phân Tỏa Meta (3). Bức Ép Kẻ Đón Ngã Vịn Chật."
+        "text": "Thuáº­t TiÃªn Tri Äá»‹nh HÆ°á»›ng Ráº½ BÃ n Tay TrÃ¡i â€“ Pháº£i (DÃ nh RiÃªng Alkylbenzene Toluene $C_6H_5CH_3$). \nKhi Gá»‘c Rá»… Benzene Ä‘Ã£ bá»‹ chá»‘t 1 Cáº¥u Gá»‘c Láº¡ náº±m sáºµn á»Ÿ Tá»a Khung Vá»‹ Äáº§u. Viá»‡c Náº¡p ThÃªm Tháº±ng KhÃ¡c VÃ´ Chá»‘t Láº§n 2 KhÃ´ng Thá»ƒ Trá»Ÿ Láº¡i Dá»… DÃ£i Cáº¯m Äáº§u.\nNáº¿u Káº» Ngá»“i Sáºµn lÃ  NHÃ“M Äáº¨Y ELECTRON Rá»™ng Cá»­a (CÃ¡c Máº¡ch Cáº¯n Chá»“i Äáº©y $-CH_3$, $-C_2H_5$, Gá»‘c Cá»“n $-OH$, Gá»‘c MÃ¹i $-NH_2$): Láº­p Tá»©c NÃ³ Ã‰p Báº¯n Äáº¡o QuÃ¢n Cáº¯m Tháº¿ Má»›i VÃ o Buá»™c Chui NÃºp 2 GÃ³c Tá»­ Huyá»‡t LÃ¢n Cáº­n ortho (2, 6) and Háº¡ Bá»™ para (4). ÄÃ³ng KÃ­n Cá»•ng Giá»¯a Meta (3).\nNgÆ°á»£c DÃ²ng, Káº» Ngá»“i Sáºµn MÃ  LÃ  QUá»¶ HÃšT Tá»¤T ELECTRON (-NO2, Gá»‘c RÃºt -COOH, VÃ²i -CHO): Há»‡ Cá»­a Tiá»m NÄƒng Duy Nháº¥t KhÃ´ng KhÃ³a Cháº·t Váº«n Láº£ PhÃ¢n Tá»a Meta (3). Bá»©c Ã‰p Káº» ÄÃ³n NgÃ£ Vá»‹n Cháº­t."
       }
     },
     {
       "id": "mod9",
       "type": "warningBox",
       "content": {
-        "title": "Quyền Trượng Nhánh Toluene Thuốc Nổ Dò Điểm Màu Tím Héo",
-        "content": "Mẫu Chốt Thi Đấu: Thuốc Tím Lược (KMnO4) Không Hề Thấy Mặt Vòng Benzene Tĩnh. Nhưng Toluene ($C_6H_5CH_3$) Do Có Thằn Lằn Đuôi Nhánh Alkyl Chắp Ngoài Nên Lực Trùng Khi Đun Sôi Thổi Nóng Lò Thác Lũ ($t^\\circ$) Nó Giật Bẻ Cắt Bay Mõm Phân Thảy Chùm Dây Nối Chọc Tan Tím Cục Máng $KMnO_4$. Dãy Cực Đoan Mát Không Nóng Vẫn Trơ.\nThuyết Thể Kết Thế Nitro Toluene Điên Dày 3 Mạch $HNO_3$ Sinh TNT (TrinitroToluene Thuốc Nổ Ném Công Phá Sụp Sườn Bom Ngầm Trí Ác).",
+        "title": "Quyá»n TrÆ°á»£ng NhÃ¡nh Toluene Thuá»‘c Ná»• DÃ² Äiá»ƒm MÃ u TÃ­m HÃ©o",
+        "content": "Máº«u Chá»‘t Thi Äáº¥u: Thuá»‘c TÃ­m LÆ°á»£c (KMnO4) KhÃ´ng Há» Tháº¥y Máº·t VÃ²ng Benzene TÄ©nh. NhÆ°ng Toluene ($C_6H_5CH_3$) Do CÃ³ Tháº±n Láº±n ÄuÃ´i NhÃ¡nh Alkyl Cháº¯p NgoÃ i NÃªn Lá»±c TrÃ¹ng Khi Äun SÃ´i Thá»•i NÃ³ng LÃ² ThÃ¡c LÅ© ($t^\\circ$) NÃ³ Giáº­t Báº» Cáº¯t Bay MÃµm PhÃ¢n Tháº£y ChÃ¹m DÃ¢y Ná»‘i Chá»c Tan TÃ­m Cá»¥c MÃ¡ng $KMnO_4$. DÃ£y Cá»±c Äoan MÃ¡t KhÃ´ng NÃ³ng Váº«n TrÆ¡.\nThuyáº¿t Thá»ƒ Káº¿t Tháº¿ Nitro Toluene ÄiÃªn DÃ y 3 Máº¡ch $HNO_3$ Sinh TNT (TrinitroToluene Thuá»‘c Ná»• NÃ©m CÃ´ng PhÃ¡ Sá»¥p SÆ°á»n Bom Ngáº§m TrÃ­ Ãc).",
         "color": "orange"
       }
     }
@@ -89,36 +89,36 @@ export const bai17 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Câu nào ĐÚNG khi nói về khả năng phản ứng của Benzene so with Alkene with Bromine?",
+      "question": "CÃ¢u nÃ o ÄÃšNG khi nÃ³i vá» kháº£ nÄƒng pháº£n á»©ng cá»§a Benzene so with Alkene with Bromine?",
       "options": [
-        "Benzene làm mất màu nhanh dung dịch brom hơn nhiều.",
-        "Cả Benzene and Alkene đều dễ dàng thực hiện phản ứng cộng dung dịch brom.",
-        "Benzene chỉ phản ứng cộng with brôm khi có ánh sáng mạnh, nếu không phải dùng brom nguyên chất có xúc tác Fe bột để thế.",
-        "Mọi hợp chất hydrocacbon vòng đều tác dụng y hệt."
+        "Benzene lÃ m máº¥t mÃ u nhanh dung dá»‹ch brom hÆ¡n nhiá»u.",
+        "Cáº£ Benzene and Alkene Ä‘á»u dá»… dÃ ng thá»±c hiá»‡n pháº£n á»©ng cá»™ng dung dá»‹ch brom.",
+        "Benzene chá»‰ pháº£n á»©ng cá»™ng with brÃ´m khi cÃ³ Ã¡nh sÃ¡ng máº¡nh, náº¿u khÃ´ng pháº£i dÃ¹ng brom nguyÃªn cháº¥t cÃ³ xÃºc tÃ¡c Fe bá»™t Ä‘á»ƒ tháº¿.",
+        "Má»i há»£p cháº¥t hydrocacbon vÃ²ng Ä‘á»u tÃ¡c dá»¥ng y há»‡t."
       ],
       "correctAnswer": 2,
-      "explanation": "Benzene có độ bền thơm nên không tẩy màu nước Brom. Nó phản ứng thế Br2 nhờ xúc tác Fe."
+      "explanation": "Benzene cÃ³ Ä‘á»™ bá»n thÆ¡m nÃªn khÃ´ng táº©y mÃ u nÆ°á»›c Brom. NÃ³ pháº£n á»©ng tháº¿ Br2 nhá» xÃºc tÃ¡c Fe."
     },
     {
       "id": "q2",
-      "question": "Sản phẩm chính của phản ứng Nitro hóa Toluene ($C_6H_5CH_3$) là tại vị trí nào trên vòng?",
+      "question": "Sáº£n pháº©m chÃ­nh cá»§a pháº£n á»©ng Nitro hÃ³a Toluene ($C_6H_5CH_3$) lÃ  táº¡i vá»‹ trÃ­ nÃ o trÃªn vÃ²ng?",
       "options": [
         "ortho and meta",
         "ortho and para",
-        "meta duy nhất",
-        "toàn vòng chia đều"
+        "meta duy nháº¥t",
+        "toÃ n vÃ²ng chia Ä‘á»u"
       ],
       "correctAnswer": 1,
-      "explanation": "Nhóm -CH3 là nhóm đẩy e, nên nó kích hoạt vòng ưu tiên phản ứng ở vị trí o- and p-."
+      "explanation": "NhÃ³m -CH3 lÃ  nhÃ³m Ä‘áº©y e, nÃªn nÃ³ kÃ­ch hoáº¡t vÃ²ng Æ°u tiÃªn pháº£n á»©ng á»Ÿ vá»‹ trÃ­ o- and p-."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Arene (Hydrocarbon thơm)",
+      "title": "BÃ i giáº£ng: Arene (Hydrocarbon thÆ¡m)",
       "url": "https://www.youtube.com/watch?v=E3ps3CJkGAc",
       "thumbnail": "https://img.youtube.com/vi/E3ps3CJkGAc/0.jpg",
-      "description": "Cấu tạo vòng benzene, tính chất hóa học của arene and ứng dụng trong công nghiệp (VietJack)."
+      "description": "Cáº¥u táº¡o vÃ²ng benzene, tÃ­nh cháº¥t hÃ³a há»c cá»§a arene and á»©ng dá»¥ng trong cÃ´ng nghiá»‡p (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -127,3 +127,4 @@ export const bai17 = {
   "game": null,
   "realWorldApplications": []
 };
+

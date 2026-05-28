@@ -80,6 +80,7 @@ const TeacherDashboard = lazyWithRetry(() => import('@/pages/teacher/TeacherDash
 const ClassManager = lazyWithRetry(() => import('@/pages/teacher/ClassManager'));
 const ClassDetail = lazyWithRetry(() => import('@/pages/teacher/ClassDetail'));
 const AssignmentManager = lazyWithRetry(() => import('@/pages/teacher/AssignmentManager'));
+const TeacherLibrary = lazyWithRetry(() => import('@/pages/teacher/TeacherLibrary'));
 
 
 function AppContent() {
@@ -94,7 +95,7 @@ function AppContent() {
   React.useEffect(() => {
     if (location.state?.openMissions) {
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('aurum_open_missions'));
+        window.dispatchEvent(new CustomEvent('aurum_open_nhiem_vu'));
       }, 300);
       // Clear location state
       window.history.replaceState({}, document.title);
@@ -122,9 +123,9 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/lectures" element={<Lectures />} />
-          <Route path="/lessons" element={<Lessons />} />
-          <Route path="/lessons/:grade" element={<Lessons />} />
-          <Route path="/lessons/:grade/:lessonId" element={<LessonPage />} />
+          <Route path="/bai_hoc" element={<Lessons />} />
+          <Route path="/bai_hoc/:grade" element={<Lessons />} />
+          <Route path="/bai_hoc/:grade/:lessonId" element={<LessonPage />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
@@ -151,7 +152,7 @@ function AppContent() {
           <Route path="/arena" element={<ProtectedRoute><Arena /></ProtectedRoute>} />
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
           <Route path="/library/:id" element={<ProtectedRoute><MaterialDetail /></ProtectedRoute>} />
-          <Route path="/missions" element={<Navigate to="/" replace state={{ openMissions: true }} />} />
+          <Route path="/nhiem_vu" element={<Navigate to="/" replace state={{ openMissions: true }} />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
@@ -162,18 +163,19 @@ function AppContent() {
              <Route index element={<AdminDashboard />} />
              <Route path="journey" element={<JourneyManager />} />
              <Route path="journey/:lessonId" element={<JourneyDetail />} />
-             <Route path="lessons" element={<LessonManager />} />
-             <Route path="users" element={<UserManager />} />
-             <Route path="users/:id" element={<UserDetail />} />
-             <Route path="feedback" element={<FeedbackManager />} />
+             <Route path="bai_hoc" element={<LessonManager />} />
+             <Route path="nguoi_dung" element={<UserManager />} />
+             <Route path="nguoi_dung/:id" element={<UserDetail />} />
+             <Route path="phan_hoi" element={<FeedbackManager />} />
           </Route>
 
           {/* Protected Teacher Routes */}
           <Route path="/teacher" element={<ProtectedRoute><TeacherLayout /></ProtectedRoute>}>
              <Route index element={<TeacherDashboard />} />
-             <Route path="classes" element={<ClassManager />} />
-             <Route path="classes/:id" element={<ClassDetail />} />
+             <Route path="lop" element={<ClassManager />} />
+             <Route path="lop/:id" element={<ClassDetail />} />
              <Route path="assignments" element={<AssignmentManager />} />
+             <Route path="library" element={<TeacherLibrary />} />
           </Route>
         </Routes>
       </Suspense>

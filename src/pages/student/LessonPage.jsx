@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -61,10 +61,10 @@ const LessonPage = () => {
       // LOG ACTIVITY
       activityService.log({
         type: 'lesson',
-        label: `Học bài: ${lessonData.title}`,
-        description: `Đã truy cập bài học ${lessonData.title} (Lớp ${grade})`,
-        icon: '📚',
-        link: `/lessons/${grade}/${lessonId}`
+        label: `Há»c bÃ i: ${lessonData.title}`,
+        description: `ÄÃ£ truy cáº­p bÃ i há»c ${lessonData.title} (Lá»›p ${grade})`,
+        icon: 'ðŸ“š',
+        link: `/bai_hoc/${grade}/${lessonId}`
       });
 
     } catch (err) {
@@ -86,7 +86,7 @@ const LessonPage = () => {
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-xl font-bold mb-4">{t('lesson_page.loading')}</h2>
-          <Link to="/lessons" className="text-viet-green hover:underline">{t('lesson_page.back_btn')}</Link>
+          <Link to="/bai_hoc" className="text-viet-green hover:underline">{t('lesson_page.back_btn')}</Link>
         </div>
       </div>
     );
@@ -98,11 +98,11 @@ const LessonPage = () => {
   return (
     <div className="min-h-screen bg-viet-bg pt-[70px]">
       <div className="flex relative">
-        {/* Sidebar - Only show for logged in users or if desired for all */}
+        {/* Sidebar - Only show for logged in nguoi_dung or if desired for all */}
         {isLoggedIn && (
           <LessonSidebar 
             grade={grade} 
-            lessons={gradeLessons} 
+            bai_hoc={gradeLessons} 
             currentLessonId={lesson.lessonId} 
           />
         )}
@@ -180,3 +180,5 @@ const LessonPage = () => {
 };
 
 export default LessonPage;
+
+

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -8,7 +8,7 @@ const MyClass = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
-  const [classes, setClasses] = useState([]);
+  const [lop, setClasses] = useState([]);
   const [joinCode, setJoinCode] = useState('');
   const [error, setError] = useState('');
   
@@ -107,7 +107,7 @@ const MyClass = () => {
       });
       
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || t('common.error_joining_class', { defaultValue: 'Lỗi tham gia lớp' }));
+      if (!res.ok) throw new Error(data.error || t('common.error_joining_class', { defaultValue: 'Lá»—i tham gia lá»›p' }));
       
       setJoinCode('');
       setError('');
@@ -134,7 +134,7 @@ const MyClass = () => {
         setActiveQuiz(null);
       } else {
         const data = await res.json();
-        throw new Error(data.error || 'Nộp bài thất bại!');
+        throw new Error(data.error || 'Ná»™p bÃ i tháº¥t báº¡i!');
       }
     } catch (err) {
       console.error(err);
@@ -145,7 +145,7 @@ const MyClass = () => {
 
   const calculateScore = (questions, answers) => {
     const mcQuestions = questions.filter(q => (q.type || 'multiple_choice') === 'multiple_choice');
-    if (mcQuestions.length === 0) return null; // All essay — needs manual grading
+    if (mcQuestions.length === 0) return null; // All essay â€” needs manual grading
     
     let correctCount = 0;
     questions.forEach((q, idx) => {
@@ -175,12 +175,12 @@ const MyClass = () => {
   };
 
   const getFileIcon = (url) => {
-    if (!url) return '🔗';
+    if (!url) return 'ðŸ”—';
     const lowerUrl = url.toLowerCase();
-    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return '📕';
-    if (lowerUrl.includes('doc') || lowerUrl.includes('word') || lowerUrl.includes('docx')) return '📘';
-    if (lowerUrl.includes('xls') || lowerUrl.includes('excel') || lowerUrl.includes('xlsx')) return '📗';
-    return '🔗';
+    if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return 'ðŸ“•';
+    if (lowerUrl.includes('doc') || lowerUrl.includes('word') || lowerUrl.includes('docx')) return 'ðŸ“˜';
+    if (lowerUrl.includes('xls') || lowerUrl.includes('excel') || lowerUrl.includes('xlsx')) return 'ðŸ“—';
+    return 'ðŸ”—';
   };
 
   const getFileLabel = (url) => {
@@ -244,7 +244,7 @@ const MyClass = () => {
         body: JSON.stringify({
           type: 'announcement',
           content: privateMessage,
-          target_student_id: selectedClass.teacher_id,
+          hoc_sinh_nhan_id: selectedClass.giao_vien_id,
         })
       });
 
@@ -268,7 +268,7 @@ const MyClass = () => {
     );
   }
 
-  if (classes.length === 0) {
+  if (lop.length === 0) {
     return (
       <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 flex items-center justify-center">
         <motion.div 
@@ -277,7 +277,7 @@ const MyClass = () => {
           className="bg-white p-10 rounded-[40px] max-w-md w-full text-center border border-viet-border shadow-xl shadow-black/5"
         >
           <div className="w-20 h-20 bg-viet-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-4xl text-viet-green">🏫</span>
+            <span className="text-4xl text-viet-green">ðŸ«</span>
           </div>
           <h2 className="text-2xl font-black text-viet-text mb-2 uppercase tracking-tight">{t('my_class.empty.title')}</h2>
           <p className="text-sm font-medium text-viet-text-light mb-8">
@@ -309,10 +309,10 @@ const MyClass = () => {
     <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        {/* Lớp Sidebar */}
+        {/* Lá»›p Sidebar */}
         <div className="lg:col-span-3 space-y-4">
           <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">{t('my_class.sidebar.title')}</h2>
-          {classes.map(cls => (
+          {lop.map(cls => (
             <button
               key={cls.id}
               onClick={() => selectClass(cls)}
@@ -324,7 +324,7 @@ const MyClass = () => {
             >
               <h3 className={`text-lg font-black leading-tight ${selectedClass?.id === cls.id ? 'text-white' : 'text-viet-text'}`}>{cls.name}</h3>
               <p className={`text-[11px] font-bold uppercase tracking-wider ${selectedClass?.id === cls.id ? 'text-white/80' : 'text-viet-text-light'}`}>
-                {t('my_class.sidebar.teacher_prefix')} {cls.teacher?.username} • {t('my_class.sidebar.grade_label', { grade: cls.grade_level })}
+                {t('my_class.sidebar.teacher_prefix')} {cls.teacher?.username} â€¢ {t('my_class.sidebar.grade_label', { grade: cls.khoi_id || cls.gradeLevelId })}
               </p>
             </button>
           ))}
@@ -347,7 +347,7 @@ const MyClass = () => {
           </div>
         </div>
 
-        {/* Nội dung chính */}
+        {/* Ná»™i dung chÃ­nh */}
         {selectedClass && (
           <div className="lg:col-span-6 space-y-6">
             <header className="bg-white p-8 rounded-[32px] border border-viet-border flex flex-col gap-2 relative overflow-hidden">
@@ -362,7 +362,7 @@ const MyClass = () => {
               
               {posts.length === 0 ? (
                 <div className="bg-white border text-center border-viet-border border-dashed p-12 rounded-[32px]">
-                   <span className="text-4xl block mb-2 opacity-30">📭</span>
+                   <span className="text-4xl block mb-2 opacity-30">ðŸ“­</span>
                    <p className="text-viet-text-light font-bold text-sm">{t('my_class.feed.empty')}</p>
                 </div>
               ) : (
@@ -383,7 +383,7 @@ const MyClass = () => {
                         </div>
                         <div className="ml-auto flex items-center gap-2">
                            {post.target && <span className="px-2 py-1 bg-purple-50 text-purple-600 font-black text-[10px] rounded-lg tracking-widest uppercase flex items-center gap-1">{t('my_class.feed.private_badge')}</span>}
-                           {post.author_id === user?.id && post.target_student_id && <span className="px-2 py-1 bg-slate-100 text-viet-text-light font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.sent_to_teacher')}</span>}
+                           {post.tac_gia_id === user?.id && post.hoc_sinh_nhan_id && <span className="px-2 py-1 bg-slate-100 text-viet-text-light font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.sent_to_teacher')}</span>}
                            {post.type === 'video' && <span className="px-2 py-1 bg-red-50 text-red-500 font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.type_video')}</span>}
                            {post.type === 'assignment' && <span className="px-2 py-1 bg-blue-50 text-blue-500 font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.type_assignment')}</span>}
                            {post.type === 'announcement' && !post.target && <span className="px-2 py-1 bg-orange-50 text-orange-500 font-black text-[10px] rounded-lg tracking-widest uppercase">{t('my_class.feed.type_announcement')}</span>}
@@ -432,7 +432,7 @@ const MyClass = () => {
                           {post.is_completed ? (
                             <div className="flex flex-col gap-2">
                                 <div className="w-full py-4 bg-emerald-50 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
-                                  <span>✓</span> {t('my_class.feed.assignment.completed')}
+                                  <span>âœ“</span> {t('my_class.feed.assignment.completed')}
                                 </div>
                                 {post.user_submission?.score !== null && post.user_submission?.score !== undefined && (
                                    <div className="flex items-center justify-between p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-sm">
@@ -455,7 +455,7 @@ const MyClass = () => {
                               }}
                               className="w-full py-4 bg-viet-green text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all border-b-4 border-emerald-700"
                             >
-                              🚀 {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
+                              ðŸš€ {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
                             </button>
                           ) : (
                             <button 
@@ -474,7 +474,7 @@ const MyClass = () => {
           </div>
         )}
 
-        {/* Lịch học & Khác (Right Sidebar) */}
+        {/* Lá»‹ch há»c & KhÃ¡c (Right Sidebar) */}
         {selectedClass && (
           <div className="lg:col-span-3 space-y-6">
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
@@ -505,12 +505,12 @@ const MyClass = () => {
 
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span>👥</span> {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
+                 <span>ðŸ‘¥</span> {t('my_class.members.title', { defaultValue: 'Báº¡n cÃ¹ng lá»›p' })}
                </h3>
                
                <div className="space-y-3">
                  {members.length === 0 ? (
-                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
+                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'ChÆ°a cÃ³ thÃ nh viÃªn nÃ o' })}</p>
                  ) : (
                    members.map(m => (
                      <div key={m.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
@@ -543,7 +543,7 @@ const MyClass = () => {
                     {t('my_class.support.btn')}
                   </button>
                </div>
-               <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">💬</div>
+               <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">ðŸ’¬</div>
             </div>
 
             {/* Messaging Modal */}
@@ -561,7 +561,7 @@ const MyClass = () => {
                              <h3 className="text-lg font-black text-viet-text uppercase tracking-tight">{t('my_class.message_modal.title')}</h3>
                              <p className="text-[10px] font-bold text-viet-green uppercase tracking-widest">{t('my_class.message_modal.class_prefix')} {selectedClass.name}</p>
                           </div>
-                          <button onClick={() => setIsMessageModalOpen(false)} className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-viet-text-light transition-colors">✕</button>
+                          <button onClick={() => setIsMessageModalOpen(false)} className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-viet-text-light transition-colors">âœ•</button>
                        </div>
                        <form onSubmit={handleSendToTeacher} className="p-6 space-y-4">
                           <textarea 
@@ -606,7 +606,7 @@ const MyClass = () => {
                            {getFileLabel(viewingAssignment.media_url)}
                         </h3>
                         <p className="text-[10px] font-bold text-viet-text-light uppercase tracking-widest">
-                           {t('my_class.viewer.from')} {viewingAssignment.author?.username} • {t('my_class.viewer.deadline')} {viewingAssignment.deadline ? new Date(viewingAssignment.deadline).toLocaleString() : t('my_class.viewer.no_deadline')}
+                           {t('my_class.viewer.from')} {viewingAssignment.author?.username} â€¢ {t('my_class.viewer.deadline')} {viewingAssignment.deadline ? new Date(viewingAssignment.deadline).toLocaleString() : t('my_class.viewer.no_deadline')}
                         </p>
                      </div>
                   </div>
@@ -618,12 +618,12 @@ const MyClass = () => {
                         rel="noreferrer"
                         className="hidden sm:flex px-6 py-3 bg-white border-2 border-slate-200 text-viet-text font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-slate-50 transition-all items-center gap-2"
                      >
-                        <span>📥</span> {t('my_class.viewer.download')}
+                        <span>ðŸ“¥</span> {t('my_class.viewer.download')}
                      </a>
                      <button 
                         onClick={() => setViewingAssignment(null)} 
                         className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-200 flex items-center justify-center text-viet-text-light hover:text-red-500 hover:border-red-100 transition-all font-black text-xl shadow-sm"
-                     >✕</button>
+                     >âœ•</button>
                   </div>
                </div>
                
@@ -650,7 +650,7 @@ const MyClass = () => {
                          rel="noreferrer"
                          className="px-6 py-3 bg-white/90 backdrop-blur shadow-xl border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all flex items-center gap-2"
                        >
-                         <span>🔗</span> {t('my_class.viewer.tab_fallback')}
+                         <span>ðŸ”—</span> {t('my_class.viewer.tab_fallback')}
                        </a>
                     </div>
                   )}
@@ -662,7 +662,7 @@ const MyClass = () => {
                     target="_blank" 
                     rel="noreferrer"
                     className="flex-1 py-4 bg-viet-text text-white font-black text-[10px] uppercase tracking-widest rounded-xl text-center"
-                  >{t('my_class.viewer.download')} 📥</a>
+                  >{t('my_class.viewer.download')} ðŸ“¥</a>
                </div>
             </motion.div>
           </div>
@@ -683,7 +683,7 @@ const MyClass = () => {
                    <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/10 px-3 py-1 rounded-full mb-2 inline-block">{t('my_class.quiz.badge')}</span>
                    <h3 className="text-2xl font-black text-viet-text uppercase tracking-tight">{activeQuiz.content}</h3>
                 </div>
-                <button onClick={() => setActiveQuiz(null)} className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center text-viet-text-light hover:text-red-500 transition-all font-black text-xl shadow-sm">✕</button>
+                <button onClick={() => setActiveQuiz(null)} className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center text-viet-text-light hover:text-red-500 transition-all font-black text-xl shadow-sm">âœ•</button>
               </div>
 
               <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
@@ -693,7 +693,7 @@ const MyClass = () => {
                       <div className="flex items-center gap-4 pt-8 pb-4">
                         <div className="h-px flex-1 bg-slate-200"></div>
                         <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">
-                          {q.part === 1 ? 'Phần I - Trắc nghiệm' : q.part === 2 ? 'Phần II - Đúng/Sai' : q.part === 3 ? 'Phần III - Trả lời ngắn' : `Phần ${q.part}`}
+                          {q.part === 1 ? 'Pháº§n I - Tráº¯c nghiá»‡m' : q.part === 2 ? 'Pháº§n II - ÄÃºng/Sai' : q.part === 3 ? 'Pháº§n III - Tráº£ lá»i ngáº¯n' : `Pháº§n ${q.part}`}
                         </h3>
                         <div className="h-px flex-1 bg-slate-200"></div>
                       </div>
@@ -742,7 +742,7 @@ const MyClass = () => {
                                 <button 
                                   onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: { ...(quizAnswers[qIdx] || {}), [key]: true } })}
                                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition-all ${quizAnswers[qIdx]?.[key] === true ? 'bg-viet-green text-white shadow-md shadow-viet-green/20' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
-                                >Đúng</button>
+                                >ÄÃºng</button>
                                 <button 
                                   onClick={() => setQuizAnswers({ ...quizAnswers, [qIdx]: { ...(quizAnswers[qIdx] || {}), [key]: false } })}
                                   className={`px-4 py-2 rounded-xl text-xs font-black uppercase transition-all ${quizAnswers[qIdx]?.[key] === false ? 'bg-red-500 text-white shadow-md shadow-red-500/20' : 'bg-slate-100 text-slate-400 hover:bg-slate-200'}`}
@@ -796,3 +796,4 @@ const MyClass = () => {
 };
 
 export default MyClass;
+

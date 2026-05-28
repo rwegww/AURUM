@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -10,7 +10,7 @@ import { stableRange } from '@/utils/stableRandom';
 
 // --- Floating Chemistry Background ---
 const FallingChemistry = () => {
-  const symbols = ['H₂O', 'CO₂', 'NaCl', 'CH₄', '⚛️', 'O₂', 'H₂', 'NH₃', 'Fe'];
+  const symbols = ['Hâ‚‚O', 'COâ‚‚', 'NaCl', 'CHâ‚„', 'âš›ï¸', 'Oâ‚‚', 'Hâ‚‚', 'NHâ‚ƒ', 'Fe'];
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden h-full z-0 opacity-20">
       {[...Array(12)].map((_, i) => {
@@ -164,7 +164,7 @@ const Home = () => {
   return (
     <div className="min-h-screen font-sans bg-[#fbfbfb] selection:bg-viet-green selection:text-white">
 
-      {/* ─── HERO ────────────────────────────────────────── */}
+      {/* â”€â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="relative pt-[120px] lg:pt-[160px] pb-20 overflow-hidden bg-gradient-to-b from-[#f4faef] to-[#fbfbfb]">
         <FallingChemistry />
         <div className="max-w-[1100px] mx-auto px-6 relative z-10">
@@ -206,7 +206,7 @@ const Home = () => {
               </motion.div>
             </div>
 
-            {/* Right — Hero Image */}
+            {/* Right â€” Hero Image */}
             <motion.div variants={fadeUp} className="w-full lg:w-[45%] lg:flex-none max-w-[520px] lg:max-w-none">
               <div className="relative rounded-[32px] overflow-hidden shadow-[0_30px_80px_0_rgba(0,0,0,0.18)] group">
                 <img
@@ -221,18 +221,18 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── STATS BAR ───────────────────────────────────── */}
+      {/* â”€â”€â”€ STATS BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="bg-white py-10 border-b border-gray-100">
         <div className="max-w-[900px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-100">
           <StatItem value={t('home.stats.students_count')} label={t('home.stats.students_label')} />
           <StatItem value={t('home.stats.schools_count')} label={t('home.stats.schools_label')} />
-          <StatItem value={t('home.stats.lessons_count')} label={t('home.stats.lessons_label')} />
+          <StatItem value={t('home.stats.bai_hoc_count')} label={t('home.stats.bai_hoc_label')} />
         </div>
       </section>
 
-      {/* ─── FEATURE ROWS ────────────────────────────────── */}
+      {/* â”€â”€â”€ FEATURE ROWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
 
-      {/* 1. Lộ trình học tập — image right */}
+      {/* 1. Lá»™ trÃ¬nh há»c táº­p â€” image right */}
       <FeatureRow
         badge={t('home.features.journey.badge')}
         badgeColor="text-viet-green"
@@ -249,7 +249,7 @@ const Home = () => {
         bgClass="bg-white"
       />
 
-      {/* 2. Phòng thí nghiệm — image left */}
+      {/* 2. PhÃ²ng thÃ­ nghiá»‡m â€” image left */}
       <FeatureRow
         badge={t('home.features.lab.badge')}
         badgeColor="text-blue-500"
@@ -266,7 +266,7 @@ const Home = () => {
         bgClass="bg-[#f8f9fa]"
       />
 
-      {/* 3. Đấu trường — image right */}
+      {/* 3. Äáº¥u trÆ°á»ng â€” image right */}
       <FeatureRow
         badge={t('home.features.arena.badge')}
         badgeColor="text-purple-600"
@@ -284,24 +284,24 @@ const Home = () => {
       />
 
 
-      {/* 5. Bài giảng tương tác — image right */}
+      {/* 5. BÃ i giáº£ng tÆ°Æ¡ng tÃ¡c â€” image right */}
       <FeatureRow
-        badge={t('home.features.lessons.badge')}
+        badge={t('home.features.bai_hoc.badge')}
         badgeColor="text-viet-green"
-        title={t('home.features.lessons.title')}
-        titleHighlight={t('home.features.lessons.highlight')}
+        title={t('home.features.bai_hoc.title')}
+        titleHighlight={t('home.features.bai_hoc.highlight')}
         highlightColor="text-viet-green"
-        description={t('home.features.lessons.desc')}
-        buttonText={t('home.features.lessons.link')}
+        description={t('home.features.bai_hoc.desc')}
+        buttonText={t('home.features.bai_hoc.link')}
         buttonUrl="/classroom"
         buttonIcon={<BookOpen size={16} />}
-        imageSrc="/assets/images/home-viet-lessons.png"
-        imageAlt={t('home.features.lessons.image_alt')}
+        imageSrc="/assets/images/home-viet-bai_hoc.png"
+        imageAlt={t('home.features.bai_hoc.image_alt')}
         imageRight={true}
         bgClass="bg-white"
       />
 
-      {/* ─── TESTIMONIALS ─────────────────────────────────── */}
+      {/* â”€â”€â”€ TESTIMONIALS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className="py-24 bg-[#f8f9fa] overflow-hidden border-t border-gray-100">
         <div className="max-w-[1100px] mx-auto px-6">
           <div className="text-center mb-14">
@@ -344,12 +344,12 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── LEADERBOARD ─────────────────────────────────── */}
+      {/* â”€â”€â”€ LEADERBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <div className="bg-[#f4faef] py-20 border-t-2 border-duo-border">
         <LeaderboardSection />
       </div>
 
-      {/* ─── FINAL CTA ───────────────────────────────────── */}
+      {/* â”€â”€â”€ FINAL CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {!isLoggedIn && (
         <section className="py-24 bg-viet-green relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[url('/icons.svg')] bg-repeat bg-[length:100px_100px]" />
@@ -377,3 +377,4 @@ const Home = () => {
 };
 
 export default Home;
+

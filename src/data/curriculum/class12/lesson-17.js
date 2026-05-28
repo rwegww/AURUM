@@ -1,20 +1,20 @@
-export const bai17 = {
+﻿export const bai17 = {
   "id": "hoa12_kntt_bai17",
   "classId": 12,
   "lessonId": 17,
   "programId": "ketnoi",
-  "title": "Bài 17. Ôn tập chương 5",
-  "chapter": "Chương 5. Pin điện và điện phân",
+  "title": "BÃ i 17. Ã”n táº­p chÆ°Æ¡ng 5",
+  "chapter": "ChÆ°Æ¡ng 5. Pin Ä‘iá»‡n vÃ  Ä‘iá»‡n phÃ¢n",
   "order": 17,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tổng kết kiến thức về pin điện hóa và điện phân. Phân biệt bản chất và quy tắc xác định sản phẩm tại các điện cực.",
+  "description": "Tá»•ng káº¿t kiáº¿n thá»©c vá» pin Ä‘iá»‡n hÃ³a vÃ  Ä‘iá»‡n phÃ¢n. PhÃ¢n biá»‡t báº£n cháº¥t vÃ  quy táº¯c xÃ¡c Ä‘á»‹nh sáº£n pháº©m táº¡i cÃ¡c Ä‘iá»‡n cá»±c.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. So sánh Pin điện và Điện phân",
+        "text": "1. So sÃ¡nh Pin Ä‘iá»‡n vÃ  Äiá»‡n phÃ¢n",
         "level": "h2"
       }
     },
@@ -24,8 +24,8 @@ export const bai17 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Pin điện hóa:** Chuyển hóa năng lượng của phản ứng hóa học tự phát thành điện năng. Đây là nguồn điện (cung cấp dòng điện cho mạch ngoài).",
-          "**Điện phân:** Chuyển hóa điện năng từ nguồn ngoài thành năng lượng hóa học để thực hiện các phản ứng không tự phát. Đây là thiết bị tiêu thụ năng lượng điện."
+          "**Pin Ä‘iá»‡n hÃ³a:** Chuyá»ƒn hÃ³a nÄƒng lÆ°á»£ng cá»§a pháº£n á»©ng hÃ³a há»c tá»± phÃ¡t thÃ nh Ä‘iá»‡n nÄƒng. ÄÃ¢y lÃ  nguá»“n Ä‘iá»‡n (cung cáº¥p dÃ²ng Ä‘iá»‡n cho máº¡ch ngoÃ i).",
+          "**Äiá»‡n phÃ¢n:** Chuyá»ƒn hÃ³a Ä‘iá»‡n nÄƒng tá»« nguá»“n ngoÃ i thÃ nh nÄƒng lÆ°á»£ng hÃ³a há»c Ä‘á»ƒ thá»±c hiá»‡n cÃ¡c pháº£n á»©ng khÃ´ng tá»± phÃ¡t. ÄÃ¢y lÃ  thiáº¿t bá»‹ tiÃªu thá»¥ nÄƒng lÆ°á»£ng Ä‘iá»‡n."
         ]
       }
     },
@@ -33,8 +33,8 @@ export const bai17 = {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Quy tắc xác định tên điện cực",
-        "content": "Một nguyên tắc thống nhất cho cả hai quá trình:\n- **Anode** luôn là nơi xảy ra quá trình **oxi hóa**.\n- **Cathode** luôn là nơi xảy ra quá trình **khử**.\nTuy nhiên, dấu của điện cực sẽ khác nhau:\n- Trong **Pin điện**: Anode là cực âm (-), Cathode là cực dương (+).\n- Trong **Điện phân**: Anode nối với cực dương (+) của nguồn, Cathode nối với cực âm (-) của nguồn.",
+        "title": "Quy táº¯c xÃ¡c Ä‘á»‹nh tÃªn Ä‘iá»‡n cá»±c",
+        "content": "Má»™t nguyÃªn táº¯c thá»‘ng nháº¥t cho cáº£ hai quÃ¡ trÃ¬nh:\n- **Anode** luÃ´n lÃ  nÆ¡i xáº£y ra quÃ¡ trÃ¬nh **oxi hÃ³a**.\n- **Cathode** luÃ´n lÃ  nÆ¡i xáº£y ra quÃ¡ trÃ¬nh **khá»­**.\nTuy nhiÃªn, dáº¥u cá»§a Ä‘iá»‡n cá»±c sáº½ khÃ¡c nhau:\n- Trong **Pin Ä‘iá»‡n**: Anode lÃ  cá»±c Ã¢m (-), Cathode lÃ  cá»±c dÆ°Æ¡ng (+).\n- Trong **Äiá»‡n phÃ¢n**: Anode ná»‘i vá»›i cá»±c dÆ°Æ¡ng (+) cá»§a nguá»“n, Cathode ná»‘i vá»›i cá»±c Ã¢m (-) cá»§a nguá»“n.",
         "color": "blue"
       }
     },
@@ -42,7 +42,7 @@ export const bai17 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Chiến thuật giải bài toán điện phân",
+        "text": "2. Chiáº¿n thuáº­t giáº£i bÃ i toÃ¡n Ä‘iá»‡n phÃ¢n",
         "level": "h2"
       }
     },
@@ -50,43 +50,43 @@ export const bai17 = {
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Để giải quyết các bài toán định lượng điện phân, cần sử dụng bảo toàn electron xuyên suốt các điện cực. Số mol electron trao đổi được tính theo công thức:\n**$n_e = \\frac{I \\cdot t}{F}$**\nSau đó, dựa vào các bán phương trình tại anode và cathode để tính khối lượng hay thể tích các chất tạo thành. Cần đặc biệt chú ý đến thứ tự ưu tiên của các ion và sự tham gia của nước khi các ion chính đã hết hoặc không bị điện phân."
+        "text": "Äá»ƒ giáº£i quyáº¿t cÃ¡c bÃ i toÃ¡n Ä‘á»‹nh lÆ°á»£ng Ä‘iá»‡n phÃ¢n, cáº§n sá»­ dá»¥ng báº£o toÃ n electron xuyÃªn suá»‘t cÃ¡c Ä‘iá»‡n cá»±c. Sá»‘ mol electron trao Ä‘á»•i Ä‘Æ°á»£c tÃ­nh theo cÃ´ng thá»©c:\n**$n_e = \\frac{I \\cdot t}{F}$**\nSau Ä‘Ã³, dá»±a vÃ o cÃ¡c bÃ¡n phÆ°Æ¡ng trÃ¬nh táº¡i anode vÃ  cathode Ä‘á»ƒ tÃ­nh khá»‘i lÆ°á»£ng hay thá»ƒ tÃ­ch cÃ¡c cháº¥t táº¡o thÃ nh. Cáº§n Ä‘áº·c biá»‡t chÃº Ã½ Ä‘áº¿n thá»© tá»± Æ°u tiÃªn cá»§a cÃ¡c ion vÃ  sá»± tham gia cá»§a nÆ°á»›c khi cÃ¡c ion chÃ­nh Ä‘Ã£ háº¿t hoáº·c khÃ´ng bá»‹ Ä‘iá»‡n phÃ¢n."
       }
     }
   ],
   "quizzes": [
     {
       "id": "q1",
-      "question": "Phát biểu nào sau đây là ĐÚNG về bản chất của các quá trình điện hóa?",
+      "question": "PhÃ¡t biá»ƒu nÃ o sau Ä‘Ã¢y lÃ  ÄÃšNG vá» báº£n cháº¥t cá»§a cÃ¡c quÃ¡ trÃ¬nh Ä‘iá»‡n hÃ³a?",
       "options": [
-        "Sự khử luôn xảy ra tại anode trong cả pin điện và điện phân.",
-        "Anode của pin điện hóa là cực dương.",
-        "Trong điện phân, anode là nơi xảy ra quá trình oxi hóa các anion hoặc nước.",
-        "Điện phân là quá trình tự phát sinh ra dòng điện một chiều."
+        "Sá»± khá»­ luÃ´n xáº£y ra táº¡i anode trong cáº£ pin Ä‘iá»‡n vÃ  Ä‘iá»‡n phÃ¢n.",
+        "Anode cá»§a pin Ä‘iá»‡n hÃ³a lÃ  cá»±c dÆ°Æ¡ng.",
+        "Trong Ä‘iá»‡n phÃ¢n, anode lÃ  nÆ¡i xáº£y ra quÃ¡ trÃ¬nh oxi hÃ³a cÃ¡c anion hoáº·c nÆ°á»›c.",
+        "Äiá»‡n phÃ¢n lÃ  quÃ¡ trÃ¬nh tá»± phÃ¡t sinh ra dÃ²ng Ä‘iá»‡n má»™t chiá»u."
       ],
       "correctAnswer": 2,
-      "explanation": "Trong mọi thiết bị điện hóa (pin hay điện phân), Anode luôn là nơi xảy ra quá trình oxi hóa. Trong điện phân, Anode là cực dương và là nơi các anion nhường electron."
+      "explanation": "Trong má»i thiáº¿t bá»‹ Ä‘iá»‡n hÃ³a (pin hay Ä‘iá»‡n phÃ¢n), Anode luÃ´n lÃ  nÆ¡i xáº£y ra quÃ¡ trÃ¬nh oxi hÃ³a. Trong Ä‘iá»‡n phÃ¢n, Anode lÃ  cá»±c dÆ°Æ¡ng vÃ  lÃ  nÆ¡i cÃ¡c anion nhÆ°á»ng electron."
     },
     {
       "id": "q2",
-      "question": "Phản ứng nào xảy ra khi nạp điện (sạc) cho acquy chì?",
+      "question": "Pháº£n á»©ng nÃ o xáº£y ra khi náº¡p Ä‘iá»‡n (sáº¡c) cho acquy chÃ¬?",
       "options": [
-        "Phản ứng oxi hóa - khử tự phát.",
-        "Phản ứng nhiệt nhôm.",
-        "Quá trình điện phân cưỡng bức để tái tạo các chất đầu.",
-        "Sự phân hủy muối sunfat."
+        "Pháº£n á»©ng oxi hÃ³a - khá»­ tá»± phÃ¡t.",
+        "Pháº£n á»©ng nhiá»‡t nhÃ´m.",
+        "QuÃ¡ trÃ¬nh Ä‘iá»‡n phÃ¢n cÆ°á»¡ng bá»©c Ä‘á»ƒ tÃ¡i táº¡o cÃ¡c cháº¥t Ä‘áº§u.",
+        "Sá»± phÃ¢n há»§y muá»‘i sunfat."
       ],
       "correctAnswer": 2,
-      "explanation": "Quá trình sạc pin/acquy thực chất là quá trình điện phân, sử dụng năng lượng điện từ bên ngoài để thúc đẩy phản ứng nghịch xảy ra, khôi phục lại các hóa chất ban đầu cho thiết bị."
+      "explanation": "QuÃ¡ trÃ¬nh sáº¡c pin/acquy thá»±c cháº¥t lÃ  quÃ¡ trÃ¬nh Ä‘iá»‡n phÃ¢n, sá»­ dá»¥ng nÄƒng lÆ°á»£ng Ä‘iá»‡n tá»« bÃªn ngoÃ i Ä‘á»ƒ thÃºc Ä‘áº©y pháº£n á»©ng nghá»‹ch xáº£y ra, khÃ´i phá»¥c láº¡i cÃ¡c hÃ³a cháº¥t ban Ä‘áº§u cho thiáº¿t bá»‹."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Ôn tập chương 5: Pin điện và Điện phân",
+      "title": "Ã”n táº­p chÆ°Æ¡ng 5: Pin Ä‘iá»‡n vÃ  Äiá»‡n phÃ¢n",
       "url": "https://www.youtube.com/watch?v=lryaZcP35kI",
       "thumbnail": "https://img.youtube.com/vi/lryaZcP35kI/0.jpg",
-      "description": "Tổng kết kiến thức trọng tâm chương 5 và hướng dẫn giải các dạng bài tập thực tế (VietJack)."
+      "description": "Tá»•ng káº¿t kiáº¿n thá»©c trá»ng tÃ¢m chÆ°Æ¡ng 5 vÃ  hÆ°á»›ng dáº«n giáº£i cÃ¡c dáº¡ng bÃ i táº­p thá»±c táº¿ (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -95,3 +95,4 @@ export const bai17 = {
   "game": null,
   "realWorldApplications": []
 };
+

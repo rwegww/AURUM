@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Leaf, FlaskConical, Beaker, Flame } from 'lucide-react';
@@ -60,10 +60,10 @@ const StreakBadge = () => {
   };
 
   const milestones = [
-    { days: 3, label: 'Tập sự', icon: <Leaf className="w-8 h-8 text-green-500" /> },
-    { days: 7, label: 'Nhà hóa học', icon: <FlaskConical className="w-8 h-8 text-emerald-500" /> },
-    { days: 14, label: 'Bậc thầy', icon: <Beaker className="w-8 h-8 text-amber-500" /> },
-    { days: 30, label: 'Huyền thoại', icon: <Flame className="w-8 h-8 text-orange-500" /> },
+    { days: 3, label: 'Táº­p sá»±', icon: <Leaf className="w-8 h-8 text-green-500" /> },
+    { days: 7, label: 'NhÃ  hÃ³a há»c', icon: <FlaskConical className="w-8 h-8 text-emerald-500" /> },
+    { days: 14, label: 'Báº­c tháº§y', icon: <Beaker className="w-8 h-8 text-amber-500" /> },
+    { days: 30, label: 'Huyá»n thoáº¡i', icon: <Flame className="w-8 h-8 text-orange-500" /> },
   ];
 
   return (
@@ -77,7 +77,7 @@ const StreakBadge = () => {
           : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
           }`}
       >
-        <span className="font-bold text-sm">🔥 {streak}</span>
+        <span className="font-bold text-sm">ðŸ”¥ {streak}</span>
       </motion.div>
 
       <AnimatePresence>
@@ -91,10 +91,10 @@ const StreakBadge = () => {
             >
               <div className="p-6 text-center">
                 <div className="text-6xl mb-4">
-                  {isMaintainedToday ? '🔥' : '⏳'}
+                  {isMaintainedToday ? 'ðŸ”¥' : 'â³'}
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2">
-                  Chuỗi {streak} ngày!
+                  Chuá»—i {streak} ngÃ y!
                 </h2>
 
 
@@ -116,24 +116,24 @@ const StreakBadge = () => {
                 {isBroken && (
                   <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 mb-6">
                     <p className="text-red-500 text-sm font-bold mb-1">
-                      Chuỗi của bạn đã bị nguội!
+                      Chuá»—i cá»§a báº¡n Ä‘Ã£ bá»‹ nguá»™i!
                     </p>
                     <p className="text-red-400 text-xs mb-4">
-                      Bạn có thể dùng XP để khôi phục hoặc chấp nhận mất. Nếu không khôi phục, chuỗi sẽ mất vĩnh viễn vào ngày mai.
+                      Báº¡n cÃ³ thá»ƒ dÃ¹ng XP Ä‘á»ƒ khÃ´i phá»¥c hoáº·c cháº¥p nháº­n máº¥t. Náº¿u khÃ´ng khÃ´i phá»¥c, chuá»—i sáº½ máº¥t vÄ©nh viá»…n vÃ o ngÃ y mai.
                     </p>
                     <button
                       onClick={handleRecover}
                       disabled={recovering}
                       className="w-full py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold transition-all disabled:opacity-50"
                     >
-                      {recovering ? 'Đang xử lý...' : `Khôi phục với ${100 + streak * 20} XP`}
+                      {recovering ? 'Äang xá»­ lÃ½...' : `KhÃ´i phá»¥c vá»›i ${100 + streak * 20} XP`}
                     </button>
                     <button
                       onClick={handleAcceptLoss}
                       disabled={recovering}
                       className="w-full mt-2 py-2 bg-transparent border border-red-500/50 hover:bg-red-500/10 text-red-400 rounded-xl font-bold transition-all disabled:opacity-50"
                     >
-                      Chấp nhận mất chuỗi
+                      Cháº¥p nháº­n máº¥t chuá»—i
                     </button>
                     {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
                   </div>
@@ -143,7 +143,7 @@ const StreakBadge = () => {
                   onClick={() => setShowModal(false)}
                   className="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-2xl font-bold transition-all"
                 >
-                  Đóng
+                  ÄÃ³ng
                 </button>
               </div>
             </motion.div>
@@ -155,3 +155,4 @@ const StreakBadge = () => {
 };
 
 export default StreakBadge;
+

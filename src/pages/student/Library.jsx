@@ -4,10 +4,11 @@ import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import Footer from '@/components/common/Footer';
 import { Download, Eye, FileText, Folder, PackageOpen, Search } from 'lucide-react';
+import { getMaterialCategoryOptions } from '@/constants/materialCategories';
 
 const Library = () => {
   const { t } = useTranslation();
-  const [materials, setMaterials] = useState([]);
+  const [hoc_lieu, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState('');
   const [search, setSearch] = useState('');
@@ -30,20 +31,7 @@ const Library = () => {
     fetchMaterials();
   }, [fetchMaterials]);
 
-  const categories = [
-    { id: '', name: t('library.categories.all') },
-    { id: 'INFOGRAPHIC HÓA 11', name: t('library.categories.infographic_11') },
-    { id: 'INFOGRAPHIC HÓA 12', name: t('library.categories.infographic_12') },
-    { id: 'SĐTD HÓA 10', name: t('library.categories.mindmap_10') },
-    { id: 'SĐTD HÓA 11', name: t('library.categories.mindmap_11') },
-    { id: 'SĐTD HÓA 12', name: t('library.categories.mindmap_12') },
-    { id: 'PHIẾU HỌC TẬP HÓA 12', name: t('library.categories.worksheet_12') },
-    { id: 'TRUYỆN TRANH HÓA 10', name: t('library.categories.comic_10') },
-    { id: 'TRUYỆN TRANH 11', name: t('library.categories.comic_11') },
-    { id: 'TRUYỆN TRANH HÓA 12', name: t('library.categories.comic_12') },
-    { id: 'PHT HÓA 9', name: t('library.categories.worksheet_9') },
-    { id: 'SĐTD KHTN 6', name: t('library.categories.mindmap_6') },
-  ];
+  const categories = getMaterialCategoryOptions(t);
 
   return (
     <div className="min-h-screen bg-[oklch(0.98_0.02_135)] pt-28 pb-20 px-4 sm:px-6 lg:px-8 selection:bg-viet-green selection:text-white">
@@ -100,7 +88,7 @@ const Library = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {materials.map((item, index) => (
+            {hoc_lieu.map((item, index) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -146,7 +134,7 @@ const Library = () => {
               </motion.div>
             ))}
 
-            {materials.length === 0 && (
+            {hoc_lieu.length === 0 && (
               <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-2 border-dashed border-duo-border">
                 <PackageOpen size={56} className="mx-auto mb-4 text-viet-text-light/30" aria-hidden="true" />
                 <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>

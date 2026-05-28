@@ -1,4 +1,4 @@
-const HISTORY_KEY = 'aurum_user_activity_history';
+﻿const HISTORY_KEY = 'aurum_user_activity_history';
 const MAX_HISTORY_ITEMS = 50;
 
 const getSupabase = async () => {
@@ -19,7 +19,7 @@ class ActivityService {
         timestamp: new Date().toISOString()
       };
 
-      // 1. Save to LocalStorage (Immediate feedback/offline)
+      // 1. Save to LocalStorage (Immediate phan_hoi/offline)
       const localHistory = this.getLocalHistory();
       const updatedLocal = [newActivity, ...localHistory].slice(0, MAX_HISTORY_ITEMS);
       localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedLocal));
@@ -52,11 +52,11 @@ class ActivityService {
         const supabase = await getSupabase();
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user?.id) {
-          const { error } = await supabase.from('user_activities').insert([{
-            user_id: session.user.id,
-            action_type: activity.type,
-            description: activity.description,
-            metadata: {
+          const { error } = await supabase.from('hoat_dong_nguoi_dung').insert([{
+            nguoi_dung_id: session.user.id,
+            loai_hanh_dong: activity.type,
+            mo_ta: activity.description,
+            thong_tin_bo_sung: {
               label: activity.label,
               icon: activity.icon,
               link: activity.link
@@ -92,11 +92,11 @@ class ActivityService {
           return data.map(item => ({
             id: item.id,
             timestamp: item.created_at,
-            type: item.action_type || item.type,
-            label: item.metadata?.label || item.label || '',
-            description: item.description,
-            icon: item.metadata?.icon || item.icon || '',
-            link: item.metadata?.link || item.link || ''
+            type: item.action_type || item.loai_hanh_dong || item.type,
+            label: item.metadata?.label || item.thong_tin_bo_sung?.label || item.label || '',
+            description: item.description || item.mo_ta,
+            icon: item.metadata?.icon || item.thong_tin_bo_sung?.icon || item.icon || '',
+            link: item.metadata?.link || item.thong_tin_bo_sung?.link || item.link || ''
           }));
         }
       } else if (authType === 'supabase') {
@@ -104,9 +104,9 @@ class ActivityService {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user?.id) {
           const { data, error } = await supabase
-            .from('user_activities')
+            .from('hoat_dong_nguoi_dung')
             .select('*')
-            .eq('user_id', session.user.id)
+            .eq('nguoi_dung_id', session.user.id)
             .order('created_at', { ascending: false })
             .limit(MAX_HISTORY_ITEMS);
 
@@ -114,11 +114,11 @@ class ActivityService {
             return data.map(item => ({
               id: item.id,
               timestamp: item.created_at,
-              type: item.action_type || item.type,
-              label: item.metadata?.label || item.label || '',
-              description: item.description,
-              icon: item.metadata?.icon || item.icon || '',
-              link: item.metadata?.link || item.link || ''
+              type: item.loai_hanh_dong || item.action_type || item.type,
+              label: item.thong_tin_bo_sung?.label || item.metadata?.label || item.label || '',
+              description: item.mo_ta || item.description,
+              icon: item.thong_tin_bo_sung?.icon || item.metadata?.icon || item.icon || '',
+              link: item.thong_tin_bo_sung?.link || item.metadata?.link || item.link || ''
             }));
           }
         }
@@ -161,7 +161,7 @@ class ActivityService {
         const supabase = await getSupabase();
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user?.id) {
-          await supabase.from('user_activities').delete().eq('user_id', session.user.id);
+          await supabase.from('hoat_dong_nguoi_dung').delete().eq('nguoi_dung_id', session.user.id);
         }
       }
 
@@ -179,12 +179,13 @@ class ActivityService {
     const now = new Date();
     const diffInSeconds = Math.floor((now - date) / 1000);
 
-    if (diffInSeconds < 60) return 'Vừa xong';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} phút trước`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} giờ trước`;
-    return `${Math.floor(diffInSeconds / 86400)} ngày trước`;
+    if (diffInSeconds < 60) return 'Vá»«a xong';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} phÃºt trÆ°á»›c`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} giá» trÆ°á»›c`;
+    return `${Math.floor(diffInSeconds / 86400)} ngÃ y trÆ°á»›c`;
   }
 }
 
 export const activityService = new ActivityService();
 export default activityService;
+

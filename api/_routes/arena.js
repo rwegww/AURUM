@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import jwt from 'jsonwebtoken';
 import { supabase } from '../lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
@@ -11,15 +11,15 @@ const MODE_MAX_PLAYERS = { solo: 2, '3vs3': 6, '5vs5': 10 };
 const GAME_TYPES = ['calculation', 'balancing', 'atom_match', 'electron_match'];
 const QUESTION_COLUMNS = [
   'id',
-  'grade_level',
-  'difficulty',
-  'game_type',
-  'question',
-  'payload',
-  'answer',
-  'points',
-  'time_limit_seconds',
-  'explanation',
+  'khoi_id',
+  'do_kho',
+  'loai_game',
+  'cau_hoi',
+  'noi_dung_game',
+  'dap_an',
+  'diem',
+  'gioi_han_giay',
+  'giai_thich',
 ].join(',');
 
 const calcPoints = (result, score) => {
@@ -28,7 +28,86 @@ const calcPoints = (result, score) => {
   return base + bonus;
 };
 
-const normalizeRpcRoom = (room) => Array.isArray(room) ? room[0] : room;
+const normalizeQuestionRow = (question) => {
+  if (!question) return null;
+  return {
+    ...question,
+    difficulty: question.do_kho ?? question.difficulty,
+    game_type: question.loai_game ?? question.game_type,
+    question: question.cau_hoi ?? question.question,
+    payload: question.noi_dung_game ?? question.payload,
+    answer: question.dap_an ?? question.answer,
+    points: question.diem ?? question.points,
+    time_limit_seconds: question.gioi_han_giay ?? question.time_limit_seconds,
+    explanation: question.giai_thich ?? question.explanation,
+    is_active: question.dang_hoat_dong ?? question.is_active,
+  };
+};
+
+const normalizeRoomRow = (room) => {
+  if (!room) return null;
+  return {
+    ...room,
+    name: room.ten ?? room.name,
+    host_id: room.chu_phong_id ?? room.host_id,
+    mode: room.che_do ?? room.mode,
+    difficulty: room.do_kho ?? room.difficulty,
+    max_players: room.so_nguoi_toi_da ?? room.max_players,
+    current_players: room.so_nguoi_hien_tai ?? room.current_players,
+    question_ids: room.danh_sach_cau_hoi_id ?? room.question_ids ?? room.cau_hoi_ids,
+    current_round_index: room.vong_hien_tai ?? room.current_round_index,
+    round_started_at: room.vong_bat_dau_luc ?? room.round_started_at,
+    round_ends_at: room.vong_ket_thuc_luc ?? room.round_ends_at,
+    started_at: room.bat_dau_luc ?? room.started_at,
+    finished_at: room.ket_thuc_luc ?? room.finished_at,
+    winner_user_id: room.nguoi_thang_id ?? room.winner_user_id,
+    is_practice: room.la_luyen_tap ?? room.is_practice,
+  };
+};
+
+const normalizePlayerRow = (player) => {
+  if (!player) return null;
+  return {
+    ...player,
+    room_id: player.phong_dau_id ?? player.room_id,
+    user_id: player.nguoi_dung_id ?? player.user_id,
+    correct_count: player.so_cau_dung ?? player.correct_count,
+    answered_rounds: player.vong_da_tra_loi ?? player.answered_rounds,
+    joined_at: player.tham_gia_luc ?? player.joined_at,
+    last_seen_at: player.xem_cuoi_luc ?? player.last_seen_at,
+  };
+};
+
+const normalizeAnswerRow = (answer) => {
+  if (!answer) return null;
+  return {
+    ...answer,
+    room_id: answer.phong_dau_id ?? answer.room_id,
+    question_id: answer.cau_hoi_id ?? answer.question_id,
+    user_id: answer.nguoi_dung_id ?? answer.user_id,
+    round_index: answer.thu_tu_vong ?? answer.round_index,
+    answer_payload: answer.noi_dung_tra_loi ?? answer.answer_payload,
+    is_correct: answer.dung ?? answer.is_correct,
+    score_awarded: answer.diem_duoc_cong ?? answer.score_awarded,
+    submitted_at: answer.nop_luc ?? answer.submitted_at,
+  };
+};
+
+const normalizeBattleRow = (battle) => {
+  if (!battle) return null;
+  return {
+    ...battle,
+    user_id: battle.nguoi_dung_id ?? battle.user_id,
+    room_id: battle.phong_dau_id ?? battle.room_id,
+    opponent_name: battle.ten_doi_thu ?? battle.opponent_name,
+    result: battle.ket_qua ?? battle.result,
+    score: battle.diem ?? battle.score,
+    points_delta: battle.diem_thay_doi ?? battle.points_delta,
+    played_at: battle.dau_luc ?? battle.played_at,
+  };
+};
+
+const normalizeRpcRoom = (room) => normalizeRoomRow(Array.isArray(room) ? room[0] : room);
 
 const shuffle = (items) => {
   const cloned = [...items];
@@ -72,9 +151,11 @@ const filterPlayableMiniGameQuestions = (questions) => (
 
 const sanitizeQuestion = (question, includeExplanation = false) => {
   if (!question) return null;
+  const gradeLevelId = question.khoi_id;
   return {
     id: question.id,
-    gradeLevel: question.grade_level,
+    gradeLevel: gradeLevelId,
+    khoi_id: gradeLevelId,
     difficulty: question.difficulty,
     gameType: question.game_type,
     question: question.question,
@@ -139,49 +220,50 @@ const roundScore = (question, room, isCorrect) => {
 
 const getRoom = async (roomId) => {
   const { data, error } = await supabase
-    .from('arena_rooms')
+    .from('phong_dau')
     .select('*')
     .eq('id', roomId)
     .single();
   if (error) throw error;
-  return data;
+  return normalizeRoomRow(data);
 };
 
 const getPlayers = async (roomId, { includeLeft = false } = {}) => {
   let query = supabase
-    .from('arena_room_players')
+    .from('nguoi_choi')
     .select('*')
-    .eq('room_id', roomId);
+    .eq('phong_dau_id', roomId);
 
   if (!includeLeft) query = query.neq('status', 'left');
 
   const { data, error } = await query.order('score', { ascending: false });
   if (error) throw error;
-  return data || [];
+  return (data || []).map(normalizePlayerRow);
 };
 
 const getRoundAnswers = async (roomId, roundIndex) => {
   const { data, error } = await supabase
-    .from('arena_round_answers')
-    .select('id,user_id,is_correct,score_awarded,submitted_at')
-    .eq('room_id', roomId)
-    .eq('round_index', roundIndex);
+    .from('tra_loi_vong')
+    .select('id,nguoi_dung_id,dung,diem_duoc_cong,nop_luc')
+    .eq('phong_dau_id', roomId)
+    .eq('thu_tu_vong', roundIndex);
   if (error) throw error;
-  return data || [];
+  return (data || []).map(normalizeAnswerRow);
 };
 
 const getQuestion = async (questionId) => {
   if (!questionId) return null;
   const { data, error } = await supabase
-    .from('arena_questions')
+    .from('cau_hoi_dau')
     .select(QUESTION_COLUMNS)
     .eq('id', questionId)
     .single();
   if (error) throw error;
-  if (!isPlayableMiniGameQuestion(data)) {
-    throw new Error('Câu hỏi Arena không có payload mini game hợp lệ.');
+  const question = normalizeQuestionRow(data);
+  if (!isPlayableMiniGameQuestion(question)) {
+    throw new Error('CÃ¢u há»i Arena khÃ´ng cÃ³ payload mini game há»£p lá»‡.');
   }
-  return data;
+  return question;
 };
 
 const currentQuestionForRoom = async (room) => {
@@ -192,15 +274,15 @@ const currentQuestionForRoom = async (room) => {
 
 const upsertRoomPlayer = async (roomId, user, status = 'joined') => {
   const { error } = await supabase
-    .from('arena_room_players')
+    .from('nguoi_choi')
     .upsert({
-      room_id: roomId,
-      user_id: user.id,
-      username: user.username || 'Ẩn danh',
+      phong_dau_id: roomId,
+      nguoi_dung_id: user.id,
+      username: user.username || 'áº¨n danh',
       avatar_seed: user.avatarSeed || user.avatar_seed || user.username || 'Aurum',
       status,
-      last_seen_at: new Date().toISOString(),
-    }, { onConflict: 'room_id,user_id' });
+      xem_cuoi_luc: new Date().toISOString(),
+    }, { onConflict: 'phong_dau_id,nguoi_dung_id' });
 
   if (error) throw error;
 };
@@ -231,27 +313,27 @@ const selectQuestionSet = (questions) => {
 
 const fetchCandidateQuestions = async (difficulty) => {
   let query = supabase
-    .from('arena_questions')
+    .from('cau_hoi_dau')
     .select(QUESTION_COLUMNS)
-    .eq('is_active', true);
+    .eq('dang_hoat_dong', true);
 
-  if (difficulty && difficulty !== 'auto') query = query.eq('difficulty', difficulty);
+  if (difficulty && difficulty !== 'auto') query = query.eq('do_kho', difficulty);
 
   const { data, error } = await query.order('created_at', { ascending: false }).limit(80);
   if (error) throw error;
 
-  const playable = filterPlayableMiniGameQuestions(data);
+  const playable = filterPlayableMiniGameQuestions((data || []).map(normalizeQuestionRow));
   if (playable.length >= ROUND_COUNT || difficulty === 'auto') return playable;
 
   const fallback = await supabase
-    .from('arena_questions')
+    .from('cau_hoi_dau')
     .select(QUESTION_COLUMNS)
-    .eq('is_active', true)
+    .eq('dang_hoat_dong', true)
     .order('created_at', { ascending: false })
     .limit(80);
 
   if (fallback.error) throw fallback.error;
-  return filterPlayableMiniGameQuestions(fallback.data);
+  return filterPlayableMiniGameQuestions((fallback.data || []).map(normalizeQuestionRow));
 };
 
 const ensureRoomQuestionSet = async (room) => {
@@ -261,23 +343,23 @@ const ensureRoomQuestionSet = async (room) => {
   const questions = await fetchCandidateQuestions(room.difficulty);
   const selected = selectQuestionSet(questions);
   if (selected.length === 0) {
-    throw new Error('Chưa có câu hỏi mini game Arena đang hoạt động.');
+    throw new Error('ChÆ°a cÃ³ cÃ¢u há»i mini game Arena Ä‘ang hoáº¡t Ä‘á»™ng.');
   }
 
   const { data: updatedRoom, error } = await supabase
-    .from('arena_rooms')
-    .update({ question_ids: selected.map((question) => question.id) })
+    .from('phong_dau')
+    .update({ danh_sach_cau_hoi_id: selected.map((question) => question.id) })
     .eq('id', room.id)
     .select('*')
     .single();
 
   if (error) throw error;
-  return { room: updatedRoom, questions: selected };
+  return { room: normalizeRoomRow(updatedRoom), questions: selected };
 };
 
 const roundTiming = (question, now = new Date()) => ({
-  round_started_at: now.toISOString(),
-  round_ends_at: new Date(now.getTime() + (question.time_limit_seconds || 45) * 1000).toISOString(),
+  vong_bat_dau_luc: now.toISOString(),
+  vong_ket_thuc_luc: new Date(now.getTime() + (question.time_limit_seconds || 45) * 1000).toISOString(),
 });
 
 const buildRoomState = async (room, userId) => {
@@ -285,11 +367,11 @@ const buildRoomState = async (room, userId) => {
     getPlayers(room.id),
     room.status === 'playing' ? currentQuestionForRoom(room) : Promise.resolve(null),
     supabase
-      .from('arena_round_answers')
-      .select('round_index,is_correct,score_awarded,submitted_at')
-      .eq('room_id', room.id)
-      .eq('user_id', userId)
-      .order('round_index', { ascending: true }),
+      .from('tra_loi_vong')
+      .select('thu_tu_vong,dung,diem_duoc_cong,nop_luc')
+      .eq('phong_dau_id', room.id)
+      .eq('nguoi_dung_id', userId)
+      .order('thu_tu_vong', { ascending: true }),
   ]);
 
   if (ownAnswers.error) throw ownAnswers.error;
@@ -299,6 +381,7 @@ const buildRoomState = async (room, userId) => {
       id: room.id,
       name: room.name,
       host_id: room.host_id,
+      chu_phong_id: room.host_id,
       mode: room.mode,
       difficulty: room.difficulty,
       status: room.status,
@@ -310,11 +393,12 @@ const buildRoomState = async (room, userId) => {
       started_at: room.started_at,
       finished_at: room.finished_at,
       winner_user_id: room.winner_user_id,
+      nguoi_thang_id: room.winner_user_id,
       is_practice: Boolean(room.is_practice),
       total_rounds: Math.min(ROUND_COUNT, normalizeQuestionIds(room.question_ids).length || ROUND_COUNT),
     },
     players: players.map((player) => ({
-      user_id: player.user_id,
+      nguoi_dung_id: player.nguoi_dung_id,
       username: player.username,
       avatar_seed: player.avatar_seed,
       score: player.score || 0,
@@ -323,32 +407,33 @@ const buildRoomState = async (room, userId) => {
       status: player.status,
     })),
     currentQuestion: sanitizeQuestion(currentQuestion),
-    myAnswers: ownAnswers.data || [],
+    myAnswers: (ownAnswers.data || []).map(normalizeAnswerRow),
     serverTime: new Date().toISOString(),
   };
 };
 
 const updatePlayerAfterAnswer = async (roomId, userId, roundIndex, isCorrect, scoreAwarded) => {
   const { data: player, error: fetchError } = await supabase
-    .from('arena_room_players')
+    .from('nguoi_choi')
     .select('*')
-    .eq('room_id', roomId)
-    .eq('user_id', userId)
+    .eq('phong_dau_id', roomId)
+    .eq('nguoi_dung_id', userId)
     .single();
 
   if (fetchError) throw fetchError;
 
-  const answeredRounds = Array.from(new Set([...(player.answered_rounds || []), roundIndex])).sort((a, b) => a - b);
+  const normalizedPlayer = normalizePlayerRow(player);
+  const answeredRounds = Array.from(new Set([...(normalizedPlayer.answered_rounds || []), roundIndex])).sort((a, b) => a - b);
   const { error } = await supabase
-    .from('arena_room_players')
+    .from('nguoi_choi')
     .update({
-      score: (player.score || 0) + scoreAwarded,
-      correct_count: (player.correct_count || 0) + (isCorrect ? 1 : 0),
-      answered_rounds: answeredRounds,
-      last_seen_at: new Date().toISOString(),
+      score: (normalizedPlayer.score || 0) + scoreAwarded,
+      so_cau_dung: (normalizedPlayer.correct_count || 0) + (isCorrect ? 1 : 0),
+      vong_da_tra_loi: answeredRounds,
+      xem_cuoi_luc: new Date().toISOString(),
     })
-    .eq('room_id', roomId)
-    .eq('user_id', userId);
+    .eq('phong_dau_id', roomId)
+    .eq('nguoi_dung_id', userId);
 
   if (error) throw error;
 };
@@ -356,22 +441,22 @@ const updatePlayerAfterAnswer = async (roomId, userId, roundIndex, isCorrect, sc
 const recordArenaStats = async (room, players, winnerUserId) => {
   if (room.is_practice) return;
 
-  const winner = players.find((player) => player.user_id === winnerUserId);
+  const winner = players.find((player) => player.nguoi_dung_id === winnerUserId);
   const isDraw = !winnerUserId;
 
   for (const player of players) {
-    const result = isDraw ? 'draw' : (player.user_id === winnerUserId ? 'win' : 'lose');
+    const result = isDraw ? 'draw' : (player.nguoi_dung_id === winnerUserId ? 'win' : 'lose');
     const ptsChange = calcPoints(result, player.score || 0);
 
     const { data: userData, error: fetchErr } = await supabase
-      .from('users')
-      .select('arena_stats')
-      .eq('id', player.user_id)
+      .from('nguoi_dung')
+      .select('thong_ke_dau')
+      .eq('id', player.nguoi_dung_id)
       .single();
 
     if (fetchErr) throw fetchErr;
 
-    const previous = userData?.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 };
+    const previous = userData?.thong_ke_dau || { total: 0, wins: 0, losses: 0, points: 0 };
     const nextStats = {
       total: (previous.total || 0) + 1,
       wins: (previous.wins || 0) + (result === 'win' ? 1 : 0),
@@ -380,25 +465,25 @@ const recordArenaStats = async (room, players, winnerUserId) => {
     };
 
     const { error: updateErr } = await supabase
-      .from('users')
-      .update({ arena_stats: nextStats })
-      .eq('id', player.user_id);
+      .from('nguoi_dung')
+      .update({ thong_ke_dau: nextStats })
+      .eq('id', player.nguoi_dung_id);
 
     if (updateErr) throw updateErr;
 
-    await supabase.from('arena_match_history').insert([{
-      user_id: player.user_id,
-      room_id: room.id,
-      opponent_name: isDraw ? 'Đấu trường Arena' : (winner?.username || 'Đấu trường Arena'),
-      result,
-      score: player.score || 0,
-      pts_change: ptsChange,
+    await supabase.from('lich_su_dau').insert([{
+      nguoi_dung_id: player.nguoi_dung_id,
+      phong_dau_id: room.id,
+      ten_doi_thu: isDraw ? 'Äáº¥u trÆ°á»ng Arena' : (winner?.username || 'Äáº¥u trÆ°á»ng Arena'),
+      ket_qua: result,
+      diem: player.score || 0,
+      diem_thay_doi: ptsChange,
     }]);
 
     if (result === 'win') {
       try {
         const Mission = (await import('../models/Mission.js')).default;
-        await Mission.updateProgress(player.user_id, 'arena_win', 1);
+        await Mission.updateProgress(player.nguoi_dung_id, 'arena_win', 1);
       } catch (err) {
         console.warn('Failed to update arena mission progress:', err.message);
       }
@@ -413,16 +498,16 @@ const finishRoom = async (room) => {
   const players = await getPlayers(room.id);
   const topScore = players.reduce((max, player) => Math.max(max, player.score || 0), 0);
   const winners = players.filter((player) => (player.score || 0) === topScore);
-  const winnerUserId = winners.length === 1 ? winners[0].user_id : null;
+  const winnerUserId = winners.length === 1 ? winners[0].nguoi_dung_id : null;
   const now = new Date().toISOString();
 
   const { data: finishedRoom, error } = await supabase
-    .from('arena_rooms')
+    .from('phong_dau')
     .update({
       status: 'finished',
-      finished_at: now,
-      round_ends_at: now,
-      winner_user_id: winnerUserId,
+      ket_thuc_luc: now,
+      vong_ket_thuc_luc: now,
+      nguoi_thang_id: winnerUserId,
     })
     .eq('id', room.id)
     .select('*')
@@ -430,14 +515,16 @@ const finishRoom = async (room) => {
 
   if (error) throw error;
 
+  const normalizedFinishedRoom = normalizeRoomRow(finishedRoom);
+
   await supabase
-    .from('arena_room_players')
-    .update({ status: 'finished', last_seen_at: now })
-    .eq('room_id', room.id)
+    .from('nguoi_choi')
+    .update({ status: 'finished', xem_cuoi_luc: now })
+    .eq('phong_dau_id', room.id)
     .neq('status', 'left');
 
-  await recordArenaStats(finishedRoom, players, winnerUserId);
-  return finishedRoom;
+  await recordArenaStats(normalizedFinishedRoom, players, winnerUserId);
+  return normalizedFinishedRoom;
 };
 
 const canAdvanceRound = async (room) => {
@@ -464,9 +551,9 @@ const advanceRoomRound = async (room) => {
   const nextQuestion = await getQuestion(questionIds[nextIndex]);
   const now = new Date();
   const { data: updatedRoom, error } = await supabase
-    .from('arena_rooms')
+    .from('phong_dau')
     .update({
-      current_round_index: nextIndex,
+      vong_hien_tai: nextIndex,
       ...roundTiming(nextQuestion, now),
     })
     .eq('id', room.id)
@@ -474,7 +561,7 @@ const advanceRoomRound = async (room) => {
     .single();
 
   if (error) throw error;
-  return updatedRoom;
+  return normalizeRoomRow(updatedRoom);
 };
 
 const maybeAdvanceAfterAnswer = async (room) => {
@@ -491,17 +578,17 @@ router.post('/create', auth, async (req, res) => {
     const maxPlayers = is_practice ? 1 : Math.max(1, Math.min(10, Number(max_players) || MODE_MAX_PLAYERS[mode] || 2));
 
     const { data: newRoom, error } = await supabase
-      .from('arena_rooms')
+      .from('phong_dau')
       .insert([{
         id: roomId,
-        name: name || `Arena ${roomId}`,
-        host_id: req.userId,
-        mode,
-        difficulty,
+        ten: name || `Arena ${roomId}`,
+        chu_phong_id: req.userId,
+        che_do: mode,
+        do_kho: difficulty,
         status: 'waiting',
-        max_players: maxPlayers,
-        current_players: 1,
-        is_practice,
+        so_nguoi_toi_da: maxPlayers,
+        so_nguoi_hien_tai: 1,
+        la_luyen_tap: is_practice,
       }])
       .select('*')
       .single();
@@ -509,29 +596,29 @@ router.post('/create', auth, async (req, res) => {
     if (error) throw error;
 
     await upsertRoomPlayer(newRoom.id, req.user, is_practice ? 'ready' : 'joined');
-    res.status(201).json({ success: true, room: newRoom });
+    res.status(201).json({ success: true, room: normalizeRoomRow(newRoom) });
   } catch (error) {
-    console.error('Lỗi tạo phòng Arena:', error);
+    console.error('Lá»—i táº¡o phÃ²ng Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
 router.post('/join', auth, async (req, res) => {
   try {
-    const { room_id } = req.body || {};
-    if (!room_id) return res.status(400).json({ success: false, message: 'Thiếu mã phòng.' });
+    const { phong_dau_id } = req.body || {};
+    if (!phong_dau_id) return res.status(400).json({ success: false, message: 'Thiáº¿u mÃ£ phÃ²ng.' });
 
-    const room = await getRoom(room_id);
-    if (room.is_practice) return res.status(400).json({ success: false, message: 'Phòng luyện tập không cho tham gia.' });
+    const room = await getRoom(phong_dau_id);
+    if (room.is_practice) return res.status(400).json({ success: false, message: 'PhÃ²ng luyá»‡n táº­p khÃ´ng cho tham gia.' });
     if (room.status !== 'waiting') {
-      return res.status(400).json({ success: false, message: 'Phòng này đang thi đấu hoặc đã kết thúc.' });
+      return res.status(400).json({ success: false, message: 'PhÃ²ng nÃ y Ä‘ang thi Ä‘áº¥u hoáº·c Ä‘Ã£ káº¿t thÃºc.' });
     }
 
     const { data: existingPlayer } = await supabase
-      .from('arena_room_players')
-      .select('user_id,status')
-      .eq('room_id', room_id)
-      .eq('user_id', req.userId)
+      .from('nguoi_choi')
+      .select('nguoi_dung_id,status')
+      .eq('phong_dau_id', phong_dau_id)
+      .eq('nguoi_dung_id', req.userId)
       .maybeSingle();
 
     if (existingPlayer && existingPlayer.status !== 'left') {
@@ -539,20 +626,20 @@ router.post('/join', auth, async (req, res) => {
     }
 
     if ((room.current_players || 0) >= (room.max_players || 2)) {
-      return res.status(400).json({ success: false, message: 'Phòng đã đầy.' });
+      return res.status(400).json({ success: false, message: 'PhÃ²ng Ä‘Ã£ Ä‘áº§y.' });
     }
 
     const { data: updatedRoomData, error: updateError } = await supabase
-      .rpc('join_arena_room', { p_room_id: room_id });
+      .rpc('join_arena_room', { p_room_id: phong_dau_id });
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
-    if (!updatedRoom) return res.status(400).json({ success: false, message: 'Phòng đã đầy hoặc không còn chỗ.' });
+    if (!updatedRoom) return res.status(400).json({ success: false, message: 'PhÃ²ng Ä‘Ã£ Ä‘áº§y hoáº·c khÃ´ng cÃ²n chá»—.' });
 
-    await upsertRoomPlayer(room_id, req.user, 'joined');
+    await upsertRoomPlayer(phong_dau_id, req.user, 'joined');
     res.status(200).json({ success: true, room: updatedRoom });
   } catch (error) {
-    console.error('Lỗi tham gia phòng Arena:', error);
+    console.error('Lá»—i tham gia phÃ²ng Arena:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -561,20 +648,21 @@ router.post('/find-match', auth, async (req, res) => {
   try {
     const { mode } = req.body || {};
     let query = supabase
-      .from('arena_rooms')
+      .from('phong_dau')
       .select('*')
       .eq('status', 'waiting')
-      .eq('is_practice', false)
-      .neq('host_id', req.userId);
+      .eq('la_luyen_tap', false)
+      .neq('chu_phong_id', req.userId);
 
-    if (mode) query = query.eq('mode', mode);
+    if (mode) query = query.eq('che_do', mode);
 
     const { data: rooms, error } = await query.order('created_at', { ascending: true });
     if (error) throw error;
 
-    const roomToJoin = (rooms || []).find((room) => (room.current_players || 0) < (room.max_players || 2));
+    const normalizedRooms = (rooms || []).map(normalizeRoomRow);
+    const roomToJoin = normalizedRooms.find((room) => (room.current_players || 0) < (room.max_players || 2));
     if (!roomToJoin) {
-      return res.status(200).json({ success: true, found: false, message: 'Đang xếp trận...' });
+      return res.status(200).json({ success: true, found: false, message: 'Äang xáº¿p tráº­n...' });
     }
 
     const { data: updatedRoomData, error: updateError } = await supabase
@@ -582,12 +670,12 @@ router.post('/find-match', auth, async (req, res) => {
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
-    if (!updatedRoom) return res.status(200).json({ success: true, found: false, message: 'Đang xếp trận...' });
+    if (!updatedRoom) return res.status(200).json({ success: true, found: false, message: 'Äang xáº¿p tráº­n...' });
 
     await upsertRoomPlayer(roomToJoin.id, req.user, 'joined');
     return res.status(200).json({ success: true, room: updatedRoom, found: true });
   } catch (error) {
-    console.error('Lỗi tìm trận:', error);
+    console.error('Lá»—i tÃ¬m tráº­n:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -598,7 +686,7 @@ router.get('/questions/:difficulty', async (req, res) => {
     const selected = selectQuestionSet(questions).map((question) => sanitizeQuestion(question));
     res.status(200).json({ success: true, questions: selected });
   } catch (error) {
-    console.error('Lỗi tải câu hỏi Arena:', error);
+    console.error('Lá»—i táº£i cÃ¢u há»i Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -607,7 +695,7 @@ router.get('/realtime-token', auth, async (req, res) => {
   try {
     const secret = process.env.SUPABASE_JWT_SECRET || (process.env.NODE_ENV !== 'production' ? process.env.JWT_SECRET : null);
     if (!secret) {
-      return res.status(500).json({ success: false, message: 'Thiếu SUPABASE_JWT_SECRET để cấp realtime token.' });
+      return res.status(500).json({ success: false, message: 'Thiáº¿u SUPABASE_JWT_SECRET Ä‘á»ƒ cáº¥p realtime token.' });
     }
 
     const token = jwt.sign(
@@ -622,7 +710,7 @@ router.get('/realtime-token', auth, async (req, res) => {
 
     res.json({ success: true, token, expiresIn: 900 });
   } catch (error) {
-    console.error('Lỗi cấp realtime token:', error);
+    console.error('Lá»—i cáº¥p realtime token:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -635,18 +723,18 @@ router.post('/realtime-token', auth, async (req, res) => {
 router.post('/room/:id/start', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
-    if (room.status === 'finished') return res.status(400).json({ success: false, message: 'Trận đã kết thúc.' });
+    if (room.status === 'finished') return res.status(400).json({ success: false, message: 'Tráº­n Ä‘Ã£ káº¿t thÃºc.' });
     if (room.status === 'playing') {
       return res.json({ success: true, state: await buildRoomState(room, req.userId) });
     }
-    if (room.host_id !== req.userId) {
-      return res.status(403).json({ success: false, message: 'Chỉ chủ phòng được bắt đầu trận.' });
+    if (room.chu_phong_id !== req.userId) {
+      return res.status(403).json({ success: false, message: 'Chá»‰ chá»§ phÃ²ng Ä‘Æ°á»£c báº¯t Ä‘áº§u tráº­n.' });
     }
 
     const players = await getPlayers(room.id);
     const playerCount = Math.max(players.length, room.current_players || 1);
     if (!room.is_practice && playerCount < (room.max_players || 2)) {
-      return res.status(400).json({ success: false, message: 'Chưa đủ người chơi để bắt đầu.' });
+      return res.status(400).json({ success: false, message: 'ChÆ°a Ä‘á»§ ngÆ°á»i chÆ¡i Ä‘á»ƒ báº¯t Ä‘áº§u.' });
     }
 
     const ensured = await ensureRoomQuestionSet(room);
@@ -654,14 +742,14 @@ router.post('/room/:id/start', auth, async (req, res) => {
     const firstQuestion = ensured.questions.find((question) => question.id === questionIds[0]) || await getQuestion(questionIds[0]);
     const now = new Date();
     const { data: startedRoom, error } = await supabase
-      .from('arena_rooms')
-      .update({
-        status: 'playing',
-        current_round_index: 0,
-        started_at: now.toISOString(),
-        finished_at: null,
-        winner_user_id: null,
-        ...roundTiming(firstQuestion, now),
+    .from('phong_dau')
+    .update({
+      status: 'playing',
+      vong_hien_tai: 0,
+      bat_dau_luc: now.toISOString(),
+      ket_thuc_luc: null,
+      nguoi_thang_id: null,
+      ...roundTiming(firstQuestion, now),
       })
       .eq('id', room.id)
       .select('*')
@@ -669,15 +757,15 @@ router.post('/room/:id/start', auth, async (req, res) => {
 
     if (error) throw error;
 
-    await supabase
-      .from('arena_room_players')
-      .update({ status: 'playing', last_seen_at: now.toISOString() })
-      .eq('room_id', room.id)
+  await supabase
+    .from('nguoi_choi')
+    .update({ status: 'playing', xem_cuoi_luc: now.toISOString() })
+      .eq('phong_dau_id', room.id)
       .neq('status', 'left');
 
-    res.json({ success: true, state: await buildRoomState(startedRoom, req.userId) });
+  res.json({ success: true, state: await buildRoomState(normalizeRoomRow(startedRoom), req.userId) });
   } catch (error) {
-    console.error('Lỗi bắt đầu trận Arena:', error);
+    console.error('Lá»—i báº¯t Ä‘áº§u tráº­n Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -687,7 +775,7 @@ router.get('/room/:id/state', auth, async (req, res) => {
     const room = await getRoom(req.params.id);
     res.json({ success: true, state: await buildRoomState(room, req.userId) });
   } catch (error) {
-    console.error('Lỗi lấy trạng thái phòng Arena:', error);
+    console.error('Lá»—i láº¥y tráº¡ng thÃ¡i phÃ²ng Arena:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -696,43 +784,43 @@ router.post('/room/:id/answer', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
     if (room.status !== 'playing') {
-      return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
+      return res.status(400).json({ success: false, message: 'PhÃ²ng chÆ°a á»Ÿ tráº¡ng thÃ¡i thi Ä‘áº¥u.' });
     }
 
     const endsAt = room.round_ends_at ? new Date(room.round_ends_at).getTime() : 0;
     if (endsAt && Date.now() > endsAt + 1000) {
-      return res.status(400).json({ success: false, message: 'Vòng chơi đã hết thời gian.' });
+      return res.status(400).json({ success: false, message: 'VÃ²ng chÆ¡i Ä‘Ã£ háº¿t thá»i gian.' });
     }
 
     const question = await currentQuestionForRoom(room);
-    if (!question) return res.status(400).json({ success: false, message: 'Không tìm thấy câu hỏi hiện tại.' });
+    if (!question) return res.status(400).json({ success: false, message: 'KhÃ´ng tÃ¬m tháº¥y cÃ¢u há»i hiá»‡n táº¡i.' });
 
     const roundIndex = room.current_round_index || 0;
     const { data: duplicate, error: duplicateError } = await supabase
-      .from('arena_round_answers')
+      .from('tra_loi_vong')
       .select('id')
-      .eq('room_id', room.id)
-      .eq('user_id', req.userId)
-      .eq('round_index', roundIndex)
+      .eq('phong_dau_id', room.id)
+      .eq('nguoi_dung_id', req.userId)
+      .eq('thu_tu_vong', roundIndex)
       .maybeSingle();
 
     if (duplicateError) throw duplicateError;
     if (duplicate) {
-      return res.status(409).json({ success: false, message: 'Bạn đã trả lời vòng này.' });
+      return res.status(409).json({ success: false, message: 'Báº¡n Ä‘Ã£ tráº£ lá»i vÃ²ng nÃ y.' });
     }
 
     const answerPayload = req.body || {};
     const isCorrect = evaluateAnswer(question, answerPayload);
     const scoreAwarded = roundScore(question, room, isCorrect);
 
-    const { error: insertError } = await supabase.from('arena_round_answers').insert([{
-      room_id: room.id,
-      question_id: question.id,
-      user_id: req.userId,
-      round_index: roundIndex,
-      answer_payload: answerPayload,
-      is_correct: isCorrect,
-      score_awarded: scoreAwarded,
+    const { error: insertError } = await supabase.from('tra_loi_vong').insert([{
+      phong_dau_id: room.id,
+      cau_hoi_id: question.id,
+      nguoi_dung_id: req.userId,
+      thu_tu_vong: roundIndex,
+      noi_dung_tra_loi: answerPayload,
+      dung: isCorrect,
+      diem_duoc_cong: scoreAwarded,
     }]);
 
     if (insertError) throw insertError;
@@ -748,7 +836,7 @@ router.post('/room/:id/answer', auth, async (req, res) => {
       state: await buildRoomState(advancedRoom, req.userId),
     });
   } catch (error) {
-    console.error('Lỗi nộp đáp án Arena:', error);
+    console.error('Lá»—i ná»™p Ä‘Ã¡p Ã¡n Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -757,35 +845,35 @@ router.post('/room/:id/advance', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
     if (room.status !== 'playing') {
-      return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
+      return res.status(400).json({ success: false, message: 'PhÃ²ng chÆ°a á»Ÿ tráº¡ng thÃ¡i thi Ä‘áº¥u.' });
     }
 
     if (!(await canAdvanceRound(room))) {
-      return res.status(400).json({ success: false, message: 'Chưa thể chuyển vòng vì còn thời gian hoặc còn người chưa trả lời.' });
+      return res.status(400).json({ success: false, message: 'ChÆ°a thá»ƒ chuyá»ƒn vÃ²ng vÃ¬ cÃ²n thá»i gian hoáº·c cÃ²n ngÆ°á»i chÆ°a tráº£ lá»i.' });
     }
 
     const advancedRoom = await advanceRoomRound(room);
     res.json({ success: true, state: await buildRoomState(advancedRoom, req.userId) });
   } catch (error) {
-    console.error('Lỗi chuyển vòng Arena:', error);
+    console.error('Lá»—i chuyá»ƒn vÃ²ng Arena:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
 router.post('/match-result', auth, async (req, res) => {
   try {
-    const { room_id, result, score, opponent_name } = req.body || {};
+    const { phong_dau_id, result, score, opponent_name } = req.body || {};
     const ptsChange = calcPoints(result, score || 0);
 
     const { data: userData, error: fetchErr } = await supabase
-      .from('users')
-      .select('arena_stats')
+      .from('nguoi_dung')
+      .select('thong_ke_dau')
       .eq('id', req.userId)
       .single();
 
     if (fetchErr) throw fetchErr;
 
-    const prev = userData?.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 };
+    const prev = userData?.thong_ke_dau || { total: 0, wins: 0, losses: 0, points: 0 };
     const newStats = {
       total: (prev.total || 0) + 1,
       wins: (prev.wins || 0) + (result === 'win' ? 1 : 0),
@@ -794,23 +882,23 @@ router.post('/match-result', auth, async (req, res) => {
     };
 
     const { error: updateErr } = await supabase
-      .from('users')
-      .update({ arena_stats: newStats })
+      .from('nguoi_dung')
+      .update({ thong_ke_dau: newStats })
       .eq('id', req.userId);
 
     if (updateErr) throw updateErr;
 
-    await supabase.from('arena_match_history').insert([{
-      user_id: req.userId,
-      room_id: room_id || null,
-      opponent_name: opponent_name || 'Đối thủ ẩn danh',
-      result,
-      score: score || 0,
-      pts_change: ptsChange,
+    await supabase.from('lich_su_dau').insert([{
+      nguoi_dung_id: req.userId,
+      phong_dau_id: phong_dau_id || null,
+      ten_doi_thu: opponent_name || 'Äá»‘i thá»§ áº©n danh',
+      ket_qua: result,
+      diem: score || 0,
+      diem_thay_doi: ptsChange,
     }]);
 
-    if (room_id) {
-      await supabase.from('arena_rooms').update({ status: 'finished' }).eq('id', room_id);
+    if (phong_dau_id) {
+      await supabase.from('phong_dau').update({ status: 'finished' }).eq('id', phong_dau_id);
     }
 
     if (result === 'win') {
@@ -824,38 +912,38 @@ router.post('/match-result', auth, async (req, res) => {
 
     res.json({ success: true, stats: newStats, ptsChange });
   } catch (error) {
-    console.error('Lỗi ghi kết quả trận đấu:', error);
+    console.error('Lá»—i ghi káº¿t quáº£ tráº­n Ä‘áº¥u:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
 router.get('/leaderboard', async (req, res) => {
   try {
-    const { data: users, error } = await supabase
-      .from('users')
-      .select('id, username, arena_stats, avatar_seed, streak_count, level')
-      .not('arena_stats', 'is', null)
-      .order('arena_stats->>points', { ascending: false })
+    const { data: nguoi_dung, error } = await supabase
+      .from('nguoi_dung')
+      .select('id, username, thong_ke_dau, avatar_seed, so_ngay_chuoi, cap_do')
+      .not('thong_ke_dau', 'is', null)
+      .order('thong_ke_dau->>points', { ascending: false })
       .limit(10);
 
     if (error) throw error;
 
-    const leaderboard = (users || [])
-      .filter((user) => (user.arena_stats?.points || 0) > 0)
+    const leaderboard = (nguoi_dung || [])
+      .filter((user) => (user.thong_ke_dau?.points || 0) > 0)
       .map((user, index) => ({
         rank: index + 1,
         name: user.username,
-        points: user.arena_stats?.points || 0,
-        wins: user.arena_stats?.wins || 0,
-        total: user.arena_stats?.total || 0,
+        points: user.thong_ke_dau?.points || 0,
+        wins: user.thong_ke_dau?.wins || 0,
+        total: user.thong_ke_dau?.total || 0,
         avatarSeed: user.avatar_seed || user.username,
-        streakCount: user.streak_count || 0,
-        level: user.level || 1,
+        streakCount: user.so_ngay_chuoi || 0,
+        level: user.cap_do || 1,
       }));
 
     res.json({ success: true, leaderboard });
   } catch (error) {
-    console.error('Lỗi tải bảng xếp hạng:', error);
+    console.error('Lá»—i táº£i báº£ng xáº¿p háº¡ng:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -863,16 +951,23 @@ router.get('/leaderboard', async (req, res) => {
 router.get('/my-battles', auth, async (req, res) => {
   try {
     const { data: battles, error } = await supabase
-      .from('arena_match_history')
+      .from('lich_su_dau')
       .select('*')
-      .eq('user_id', req.userId)
-      .order('played_at', { ascending: false })
+      .eq('nguoi_dung_id', req.userId)
+      .order('dau_luc', { ascending: false })
       .limit(5);
 
     if (error) throw error;
-    res.json({ success: true, battles: battles || [] });
+    const formattedBattles = (battles || []).map((battle) => {
+      const normalizedBattle = normalizeBattleRow(battle);
+      return {
+        ...normalizedBattle,
+        diem_thay_doi: normalizedBattle.points_delta ?? 0,
+      };
+    });
+    res.json({ success: true, battles: formattedBattles });
   } catch (error) {
-    console.error('Lỗi tải lịch sử trận đấu:', error);
+    console.error('Lá»—i táº£i lá»‹ch sá»­ tráº­n Ä‘áº¥u:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -881,18 +976,18 @@ router.patch('/save-avatar', auth, async (req, res) => {
   try {
     const { seed } = req.body || {};
     if (!seed || typeof seed !== 'string') {
-      return res.status(400).json({ success: false, message: 'Thiếu avatar seed' });
+      return res.status(400).json({ success: false, message: 'Thiáº¿u avatar seed' });
     }
 
     const { error } = await supabase
-      .from('users')
+      .from('nguoi_dung')
       .update({ avatar_seed: seed })
       .eq('id', req.userId);
 
     if (error) throw error;
     res.json({ success: true });
   } catch (error) {
-    console.error('Lỗi lưu avatar:', error);
+    console.error('Lá»—i lÆ°u avatar:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -902,41 +997,41 @@ router.get('/room/:id', async (req, res) => {
     const room = await getRoom(req.params.id);
     res.json({ success: true, room });
   } catch (error) {
-    console.error('Lỗi lấy thông tin phòng:', error);
+    console.error('Lá»—i láº¥y thÃ´ng tin phÃ²ng:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
 
 router.post('/leave', auth, async (req, res) => {
   try {
-    const { room_id } = req.body || {};
-    if (!room_id) return res.status(400).json({ success: false, message: 'Thiếu mã phòng' });
+    const { phong_dau_id } = req.body || {};
+    if (!phong_dau_id) return res.status(400).json({ success: false, message: 'Thiáº¿u mÃ£ phÃ²ng' });
 
-    const room = await getRoom(room_id);
+    const room = await getRoom(phong_dau_id);
     await supabase
-      .from('arena_room_players')
-      .update({ status: 'left', last_seen_at: new Date().toISOString() })
-      .eq('room_id', room_id)
-      .eq('user_id', req.userId);
+      .from('nguoi_choi')
+      .update({ status: 'left', xem_cuoi_luc: new Date().toISOString() })
+      .eq('phong_dau_id', phong_dau_id)
+      .eq('nguoi_dung_id', req.userId);
 
-    const remainingPlayers = await getPlayers(room_id);
+    const remainingPlayers = await getPlayers(phong_dau_id);
     const nextCount = remainingPlayers.length;
 
     if (nextCount <= 0 && room.status !== 'playing') {
-      const { error: deleteError } = await supabase.from('arena_rooms').delete().eq('id', room_id);
+      const { error: deleteError } = await supabase.from('phong_dau').delete().eq('id', phong_dau_id);
       if (deleteError) throw deleteError;
       return res.json({ success: true, current_players: 0, deleted: true });
     }
 
     const { error: updateError } = await supabase
-      .from('arena_rooms')
-      .update({ current_players: nextCount })
-      .eq('id', room_id);
+      .from('phong_dau')
+      .update({ so_nguoi_hien_tai: nextCount })
+      .eq('id', phong_dau_id);
 
     if (updateError) throw updateError;
     res.json({ success: true, current_players: nextCount });
   } catch (error) {
-    console.error('Lỗi rời phòng:', error);
+    console.error('Lá»—i rá»i phÃ²ng:', error);
     res.status(error?.code === 'PGRST116' ? 404 : 500).json({ success: false, message: error.message });
   }
 });
@@ -944,32 +1039,33 @@ router.post('/leave', auth, async (req, res) => {
 router.get('/rooms', async (req, res) => {
   try {
     const { data: rooms, error } = await supabase
-      .from('arena_rooms')
+      .from('phong_dau')
       .select(`
         *,
-        users:host_id (username, avatar_seed, streak_count, level)
+        nguoi_dung:chu_phong_id (username, avatar_seed, so_ngay_chuoi, cap_do)
       `)
       .eq('status', 'waiting')
-      .eq('is_practice', false)
+      .eq('la_luyen_tap', false)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
 
     const formatted = (rooms || []).map((room) => ({
-      ...room,
-      host_name: room.users?.username || 'Ẩn danh',
+      ...normalizeRoomRow(room),
+      host_name: room.nguoi_dung?.username || 'áº¨n danh',
       host_avatar: {
-        seed: room.users?.avatar_seed || room.users?.username || 'Aurum',
-        streakCount: room.users?.streak_count || 0,
-        level: room.users?.level || 1,
+        seed: room.nguoi_dung?.avatar_seed || room.nguoi_dung?.username || 'Aurum',
+        streakCount: room.nguoi_dung?.so_ngay_chuoi || 0,
+        level: room.nguoi_dung?.cap_do || 1,
       },
     }));
 
     res.json({ success: true, rooms: formatted });
   } catch (error) {
-    console.error('Lỗi lấy danh sách phòng:', error);
+    console.error('Lá»—i láº¥y danh sÃ¡ch phÃ²ng:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
 export default router;
+

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 
 const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'single' }) => {
@@ -52,7 +52,7 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'singl
             </div>
           ) : (
             <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
-              <p className="text-[12px] text-viet-text-light italic">Đang tổng hợp dữ liệu...</p>
+              <p className="text-[12px] text-viet-text-light italic">Äang tá»•ng há»£p dá»¯ liá»‡u...</p>
             </div>
           )}
         </div>
@@ -77,14 +77,14 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'singl
              animate={{ scale: 1, opacity: 1 }}
              className="w-20 h-20 bg-white rounded-3xl border-4 border-viet-green shadow-2xl flex items-center justify-center text-4xl mb-6"
            >
-              🔒
+              ðŸ”’
            </motion.div>
-           <h3 className="text-2xl font-black text-viet-text font-sora uppercase italic">Nhiệm vụ chưa hoàn thành</h3>
+           <h3 className="text-2xl font-black text-viet-text font-sora uppercase italic">Nhiá»‡m vá»¥ chÆ°a hoÃ n thÃ nh</h3>
            <p className="max-w-[280px] text-viet-text-light font-bold text-sm mt-2 leading-relaxed">
-             Hãy khai mở bí mật của chương này bằng cách vượt qua thử thách hành trình!
+             HÃ£y khai má»Ÿ bÃ­ máº­t cá»§a chÆ°Æ¡ng nÃ y báº±ng cÃ¡ch vÆ°á»£t qua thá»­ thÃ¡ch hÃ nh trÃ¬nh!
            </p>
            <div className="mt-8 px-6 py-2 bg-viet-green text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-             Đang khóa ➔
+             Äang khÃ³a âž”
            </div>
         </div>
       )}
@@ -93,3 +93,4 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'singl
 };
 
 export default InfographicPage;
+

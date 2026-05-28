@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -18,17 +18,17 @@ import { labApi } from "../../services/api";
 const formulaGroups = [
   {
     id: "basic",
-    title: "Số mol và khối lượng",
+    title: "Sá»‘ mol vÃ  khá»‘i lÆ°á»£ng",
     formulas: [
       {
         id: "mol_mass",
-        name: "Mol từ khối lượng",
+        name: "Mol tá»« khá»‘i lÆ°á»£ng",
         formula: "n = m / M",
         keywords: "mol khoi luong m M",
         variables: [
-          { key: "n", label: "Số mol", unit: "mol" },
-          { key: "m", label: "Khối lượng chất", unit: "g" },
-          { key: "M", label: "Khối lượng mol", unit: "g/mol" }
+          { key: "n", label: "Sá»‘ mol", unit: "mol" },
+          { key: "m", label: "Khá»‘i lÆ°á»£ng cháº¥t", unit: "g" },
+          { key: "M", label: "Khá»‘i lÆ°á»£ng mol", unit: "g/mol" }
         ],
         solve: ({ n, m, M }) => {
           if (m !== null && M !== null) return { n: m / M };
@@ -39,12 +39,12 @@ const formulaGroups = [
       },
       {
         id: "mol_volume",
-        name: "Mol khí ở điều kiện chuẩn",
+        name: "Mol khÃ­ á»Ÿ Ä‘iá»u kiá»‡n chuáº©n",
         formula: "n = V / 22,4",
         keywords: "mol khi the tich dieu kien chuan",
         variables: [
-          { key: "n", label: "Số mol", unit: "mol" },
-          { key: "V", label: "Thể tích khí", unit: "L" }
+          { key: "n", label: "Sá»‘ mol", unit: "mol" },
+          { key: "V", label: "Thá»ƒ tÃ­ch khÃ­", unit: "L" }
         ],
         solve: ({ n, V }) => {
           if (V !== null) return { n: V / 22.4 };
@@ -54,12 +54,12 @@ const formulaGroups = [
       },
       {
         id: "particles",
-        name: "Mol từ số hạt",
+        name: "Mol tá»« sá»‘ háº¡t",
         formula: "n = N / NA",
         keywords: "mol so hat avogadro",
         variables: [
-          { key: "n", label: "Số mol", unit: "mol" },
-          { key: "N", label: "Số hạt", unit: "hạt" }
+          { key: "n", label: "Sá»‘ mol", unit: "mol" },
+          { key: "N", label: "Sá»‘ háº¡t", unit: "háº¡t" }
         ],
         solve: ({ n, N }) => {
           const avogadro = 6.022e23;
@@ -72,17 +72,17 @@ const formulaGroups = [
   },
   {
     id: "solution",
-    title: "Dung dịch",
+    title: "Dung dá»‹ch",
     formulas: [
       {
         id: "percent_concentration",
-        name: "Nồng độ phần trăm",
-        formula: "C% = mct / mdd × 100",
+        name: "Ná»“ng Ä‘á»™ pháº§n trÄƒm",
+        formula: "C% = mct / mdd Ã— 100",
         keywords: "nong do phan tram dung dich chat tan",
         variables: [
-          { key: "C", label: "Nồng độ phần trăm", unit: "%" },
-          { key: "mct", label: "Khối lượng chất tan", unit: "g" },
-          { key: "mdd", label: "Khối lượng dung dịch", unit: "g" }
+          { key: "C", label: "Ná»“ng Ä‘á»™ pháº§n trÄƒm", unit: "%" },
+          { key: "mct", label: "Khá»‘i lÆ°á»£ng cháº¥t tan", unit: "g" },
+          { key: "mdd", label: "Khá»‘i lÆ°á»£ng dung dá»‹ch", unit: "g" }
         ],
         solve: ({ C, mct, mdd }) => {
           if (mct !== null && mdd !== null) return { C: (mct / mdd) * 100 };
@@ -93,13 +93,13 @@ const formulaGroups = [
       },
       {
         id: "molarity",
-        name: "Nồng độ mol",
+        name: "Ná»“ng Ä‘á»™ mol",
         formula: "CM = n / V",
         keywords: "nong do mol molarity the tich",
         variables: [
-          { key: "CM", label: "Nồng độ mol", unit: "M" },
-          { key: "n", label: "Số mol chất tan", unit: "mol" },
-          { key: "V", label: "Thể tích dung dịch", unit: "L" }
+          { key: "CM", label: "Ná»“ng Ä‘á»™ mol", unit: "M" },
+          { key: "n", label: "Sá»‘ mol cháº¥t tan", unit: "mol" },
+          { key: "V", label: "Thá»ƒ tÃ­ch dung dá»‹ch", unit: "L" }
         ],
         solve: ({ CM, n, V }) => {
           if (n !== null && V !== null) return { CM: n / V };
@@ -110,14 +110,14 @@ const formulaGroups = [
       },
       {
         id: "dilution",
-        name: "Pha loãng dung dịch",
+        name: "Pha loÃ£ng dung dá»‹ch",
         formula: "C1V1 = C2V2",
         keywords: "pha loang dung dich",
         variables: [
-          { key: "C1", label: "Nồng độ ban đầu", unit: "M" },
-          { key: "V1", label: "Thể tích ban đầu", unit: "mL" },
-          { key: "C2", label: "Nồng độ sau pha", unit: "M" },
-          { key: "V2", label: "Thể tích sau pha", unit: "mL" }
+          { key: "C1", label: "Ná»“ng Ä‘á»™ ban Ä‘áº§u", unit: "M" },
+          { key: "V1", label: "Thá»ƒ tÃ­ch ban Ä‘áº§u", unit: "mL" },
+          { key: "C2", label: "Ná»“ng Ä‘á»™ sau pha", unit: "M" },
+          { key: "V2", label: "Thá»ƒ tÃ­ch sau pha", unit: "mL" }
         ],
         solve: ({ C1, V1, C2, V2 }) => {
           if (C1 !== null && V1 !== null && V2 !== null) return { C2: (C1 * V1) / V2 };
@@ -131,17 +131,17 @@ const formulaGroups = [
   },
   {
     id: "reaction",
-    title: "Phản ứng và pH",
+    title: "Pháº£n á»©ng vÃ  pH",
     formulas: [
       {
         id: "yield",
-        name: "Hiệu suất phản ứng",
-        formula: "H% = thực tế / lý thuyết × 100",
+        name: "Hiá»‡u suáº¥t pháº£n á»©ng",
+        formula: "H% = thá»±c táº¿ / lÃ½ thuyáº¿t Ã— 100",
         keywords: "hieu suat phan ung",
         variables: [
-          { key: "H", label: "Hiệu suất", unit: "%" },
-          { key: "actual", label: "Lượng thực tế", unit: "" },
-          { key: "theory", label: "Lượng lý thuyết", unit: "" }
+          { key: "H", label: "Hiá»‡u suáº¥t", unit: "%" },
+          { key: "actual", label: "LÆ°á»£ng thá»±c táº¿", unit: "" },
+          { key: "theory", label: "LÆ°á»£ng lÃ½ thuyáº¿t", unit: "" }
         ],
         solve: ({ H, actual, theory }) => {
           if (actual !== null && theory !== null) return { H: (actual / theory) * 100 };
@@ -152,12 +152,12 @@ const formulaGroups = [
       },
       {
         id: "ph",
-        name: "Tính pH",
+        name: "TÃ­nh pH",
         formula: "pH = -log[H+]",
         keywords: "ph acid base H+",
         variables: [
           { key: "pH", label: "pH", unit: "" },
-          { key: "H", label: "Nồng độ H+", unit: "mol/L" }
+          { key: "H", label: "Ná»“ng Ä‘á»™ H+", unit: "mol/L" }
         ],
         solve: ({ pH, H }) => {
           if (H !== null && H > 0) return { pH: -Math.log10(H) };
@@ -172,8 +172,8 @@ const formulaGroups = [
 const unitConversions = [
   "1 L = 1000 mL",
   "1 kg = 1000 g",
-  "T(K) = t°C + 273",
-  "NA = 6,022 × 10^23",
+  "T(K) = tÂ°C + 273",
+  "NA = 6,022 Ã— 10^23",
   "R = 0,0821 L.atm/(mol.K)",
   "F = 96500 C/mol"
 ];
@@ -184,20 +184,20 @@ const allFormulas = formulaGroups.flatMap((group) =>
 
 const toolConfig = {
   formula: {
-    title: "Gợi ý công thức",
-    subtitle: "Tra phương trình cân bằng và công thức thường dùng",
-    introTitle: "Khu tra cứu",
-    introText: "Tìm phương trình đã cân bằng, xem công thức nhanh và đổi đơn vị.",
+    title: "Gá»£i Ã½ cÃ´ng thá»©c",
+    subtitle: "Tra phÆ°Æ¡ng trÃ¬nh cÃ¢n báº±ng vÃ  cÃ´ng thá»©c thÆ°á»ng dÃ¹ng",
+    introTitle: "Khu tra cá»©u",
+    introText: "TÃ¬m phÆ°Æ¡ng trÃ¬nh Ä‘Ã£ cÃ¢n báº±ng, xem cÃ´ng thá»©c nhanh vÃ  Ä‘á»•i Ä‘Æ¡n vá»‹.",
     icon: "shield-checkmark-outline",
     color: colors.green,
     softBg: "#f2faeb",
     border: "#d8efc7"
   },
   calculator: {
-    title: "Máy tính hóa học",
-    subtitle: "Nhập dữ kiện và tính biến còn thiếu",
-    introTitle: "Khu tính toán",
-    introText: "Chọn một công thức, nhập các ô đã biết và để trống đại lượng cần tìm.",
+    title: "MÃ¡y tÃ­nh hÃ³a há»c",
+    subtitle: "Nháº­p dá»¯ kiá»‡n vÃ  tÃ­nh biáº¿n cÃ²n thiáº¿u",
+    introTitle: "Khu tÃ­nh toÃ¡n",
+    introText: "Chá»n má»™t cÃ´ng thá»©c, nháº­p cÃ¡c Ã´ Ä‘Ã£ biáº¿t vÃ  Ä‘á»ƒ trá»‘ng Ä‘áº¡i lÆ°á»£ng cáº§n tÃ¬m.",
     icon: "calculator-outline",
     color: colors.green,
     softBg: "#eef8ff",
@@ -262,12 +262,12 @@ export default function SupportToolsTab() {
 
     const filled = Object.values(vars).filter((value) => value !== null && Number.isFinite(value)).length;
     if (filled < selectedFormula.variables.length - 1) {
-      setResult({ error: `Nhập ít nhất ${selectedFormula.variables.length - 1} giá trị để hệ thống suy ra ô còn lại.` });
+      setResult({ error: `Nháº­p Ã­t nháº¥t ${selectedFormula.variables.length - 1} giÃ¡ trá»‹ Ä‘á»ƒ há»‡ thá»‘ng suy ra Ã´ cÃ²n láº¡i.` });
       return;
     }
 
     const solved = selectedFormula.solve(vars);
-    setResult(solved ? { values: solved } : { error: "Tổ hợp dữ liệu này chưa đủ hoặc chưa được công thức hỗ trợ." });
+    setResult(solved ? { values: solved } : { error: "Tá»• há»£p dá»¯ liá»‡u nÃ y chÆ°a Ä‘á»§ hoáº·c chÆ°a Ä‘Æ°á»£c cÃ´ng thá»©c há»— trá»£." });
   };
 
   const clearCalculator = () => {
@@ -316,10 +316,10 @@ export default function SupportToolsTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Hỗ trợ"
-        title="Công cụ hỗ trợ"
-        subtitle="Tra công thức, tìm phương trình cân bằng và tính nhanh các bài toán hóa học."
-        right={<Pill label="2 công cụ" icon="construct-outline" color={colors.green} />}
+        eyebrow="Há»— trá»£"
+        title="CÃ´ng cá»¥ há»— trá»£"
+        subtitle="Tra cÃ´ng thá»©c, tÃ¬m phÆ°Æ¡ng trÃ¬nh cÃ¢n báº±ng vÃ  tÃ­nh nhanh cÃ¡c bÃ i toÃ¡n hÃ³a há»c."
+        right={<Pill label="2 cÃ´ng cá»¥" icon="construct-outline" color={colors.green} />}
       />
 
       {renderToolSwitch()}
@@ -328,18 +328,18 @@ export default function SupportToolsTab() {
       {activeTool === "formula" ? (
         <>
           <Card accent={colors.green} style={styles.searchCard}>
-            <Text style={styles.cardTitle}>Gợi ý phương trình cân bằng</Text>
-            <Text style={styles.cardSubtitle}>Nhập chất tham gia hoặc sản phẩm để tìm phương trình có sẵn trong hệ thống.</Text>
+            <Text style={styles.cardTitle}>Gá»£i Ã½ phÆ°Æ¡ng trÃ¬nh cÃ¢n báº±ng</Text>
+            <Text style={styles.cardSubtitle}>Nháº­p cháº¥t tham gia hoáº·c sáº£n pháº©m Ä‘á»ƒ tÃ¬m phÆ°Æ¡ng trÃ¬nh cÃ³ sáºµn trong há»‡ thá»‘ng.</Text>
             <TextField
               icon="search-outline"
-              placeholder="Ví dụ: H2 + O2, Fe, KMnO4"
+              placeholder="VÃ­ dá»¥: H2 + O2, Fe, KMnO4"
               value={equationQuery}
               onChangeText={setEquationQuery}
               autoCorrect={false}
               onSubmitEditing={searchEquation}
             />
             <GhostButton
-              label={searching ? "Đang tìm..." : "Tìm phương trình"}
+              label={searching ? "Äang tÃ¬m..." : "TÃ¬m phÆ°Æ¡ng trÃ¬nh"}
               icon="search-outline"
               onPress={searchEquation}
               color={colors.green}
@@ -348,14 +348,14 @@ export default function SupportToolsTab() {
 
           {equationResults.length > 0 ? (
             <>
-              <SectionTitle title="Phương trình gợi ý" />
+              <SectionTitle title="PhÆ°Æ¡ng trÃ¬nh gá»£i Ã½" />
               <View style={styles.stack}>
                 {equationResults.map((item, index) => (
                   <Card key={`${item.equation_string}-${index}`} style={styles.resultCard}>
-                    <Pill label="Đã cân bằng" icon="checkmark-outline" color={colors.green} />
-                    <Text style={styles.equation}>{item.equation_string || "Phương trình"}</Text>
+                    <Pill label="ÄÃ£ cÃ¢n báº±ng" icon="checkmark-outline" color={colors.green} />
+                    <Text style={styles.equation}>{item.equation_string || "PhÆ°Æ¡ng trÃ¬nh"}</Text>
                     <Text style={styles.equationMeta}>
-                      Hệ số: {Array.isArray(item.answer) ? item.answer.join(", ") : JSON.stringify(item.answer || {})}
+                      Há»‡ sá»‘: {Array.isArray(item.answer) ? item.answer.join(", ") : JSON.stringify(item.answer || {})}
                     </Text>
                   </Card>
                 ))}
@@ -364,8 +364,8 @@ export default function SupportToolsTab() {
           ) : equationSearched && !searching ? (
             <EmptyState
               icon="search-outline"
-              title="Chưa tìm thấy phương trình"
-              subtitle="Thử nhập công thức ngắn hơn, ví dụ Fe, O2 hoặc NaOH."
+              title="ChÆ°a tÃ¬m tháº¥y phÆ°Æ¡ng trÃ¬nh"
+              subtitle="Thá»­ nháº­p cÃ´ng thá»©c ngáº¯n hÆ¡n, vÃ­ dá»¥ Fe, O2 hoáº·c NaOH."
             />
           ) : null}
 
@@ -374,7 +374,7 @@ export default function SupportToolsTab() {
         </>
       ) : (
         <>
-          <SectionTitle title="Công thức đang tính" />
+          <SectionTitle title="CÃ´ng thá»©c Ä‘ang tÃ­nh" />
           <Card accent={colors.green} style={styles.calculatorCard}>
             <View style={styles.calculatorTop}>
               <View style={styles.calculatorTitleBlock}>
@@ -395,7 +395,7 @@ export default function SupportToolsTab() {
                     </Text>
                     <TextField
                       icon={isSolved ? "checkmark-circle-outline" : "create-outline"}
-                      placeholder={isSolved ? formatNumber(solvedValue) : `Nhập ${variable.key}`}
+                      placeholder={isSolved ? formatNumber(solvedValue) : `Nháº­p ${variable.key}`}
                       value={isSolved ? formatNumber(solvedValue) : (inputs[variable.key] || "")}
                       onChangeText={(value) => {
                         setInputs((previous) => ({ ...previous, [variable.key]: value }));
@@ -412,14 +412,14 @@ export default function SupportToolsTab() {
             {result?.error ? <Text style={styles.errorText}>{result.error}</Text> : null}
 
             <View style={styles.actionRow}>
-              <PrimaryButton label="Tính kết quả" icon="calculator-outline" color={colors.green} onPress={calculate} style={styles.actionButton} />
-              <GhostButton label="Xóa" icon="refresh-outline" onPress={clearCalculator} color={colors.red} style={styles.clearButton} />
+              <PrimaryButton label="TÃ­nh káº¿t quáº£" icon="calculator-outline" color={colors.green} onPress={calculate} style={styles.actionButton} />
+              <GhostButton label="XÃ³a" icon="refresh-outline" onPress={clearCalculator} color={colors.red} style={styles.clearButton} />
             </View>
           </Card>
 
           {result?.values ? (
             <Card accent={colors.green} style={styles.resultCard}>
-              <Text style={styles.cardTitle}>Kết quả</Text>
+              <Text style={styles.cardTitle}>Káº¿t quáº£</Text>
               {Object.entries(result.values).map(([key, value]) => {
                 const variable = selectedFormula.variables.find((item) => item.key === key);
                 return (
@@ -434,7 +434,7 @@ export default function SupportToolsTab() {
             </Card>
           ) : null}
 
-          <SectionTitle title="Đổi công thức" />
+          <SectionTitle title="Äá»•i cÃ´ng thá»©c" />
           <View style={styles.stack}>
             {formulaGroups.map((group) => (
               <Card key={group.id} style={styles.groupCard}>
@@ -717,3 +717,4 @@ const styles = StyleSheet.create({
     color: "#ffffff"
   }
 });
+

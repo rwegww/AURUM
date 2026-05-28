@@ -1,21 +1,21 @@
-export const bai7 = {
+﻿export const bai7 = {
   "id": "hoa9_kntt_bai7",
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 7,
-  "chapterName": "Chương 7: Hydrocarbon và nhiên liệu",
+  "chapterName": "ChÆ°Æ¡ng 7: Hydrocarbon vÃ  nhiÃªn liá»‡u",
   "lessonId": 7,
-  "title": "Bài 7: Alkene",
-  "description": "Tìm hiểu về Ethylene ($C_2H_4$) - đại diện tiêu biểu của nhóm Alkene với liên kết đôi bứt phá và khả năng tạo nên vật liệu nhựa PE thần kỳ.",
+  "title": "BÃ i 7: Alkene",
+  "description": "TÃ¬m hiá»ƒu vá» Ethylene ($C_2H_4$) - Ä‘áº¡i diá»‡n tiÃªu biá»ƒu cá»§a nhÃ³m Alkene vá»›i liÃªn káº¿t Ä‘Ã´i bá»©t phÃ¡ vÃ  kháº£ nÄƒng táº¡o nÃªn váº­t liá»‡u nhá»±a PE tháº§n ká»³.",
   "level": "Intermediate",
   "order": 7,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Ethylene: Nguồn gốc của Nhựa",
+      "title": "Ethylene: Nguá»“n gá»‘c cá»§a Nhá»±a",
       "url": "https://www.youtube.com/watch?v=Tp3V2Jfcux4",
       "thumbnail": "https://img.youtube.com/vi/Tp3V2Jfcux4/0.jpg",
-      "description": "Khám phá bí mật về liên kết đôi giúp trái cây chín nhanh và tạo ra polymer."
+      "description": "KhÃ¡m phÃ¡ bÃ­ máº­t vá» liÃªn káº¿t Ä‘Ã´i giÃºp trÃ¡i cÃ¢y chÃ­n nhanh vÃ  táº¡o ra polymer."
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@ export const bai7 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Cấu trúc Liên kết Đôi",
+        "text": "1. Cáº¥u trÃºc LiÃªn káº¿t ÄÃ´i",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@ export const bai7 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Khác với Alkane chỉ có liên kết đơn, Alkene chứa ít nhất một **liên kết đôi** ($C=C$). Trong liên kết đôi này, có một liên kết bền và một liên kết kém bền (liên kết $\\pi$) dễ bị bẻ gãy."
+        "text": "KhÃ¡c vá»›i Alkane chá»‰ cÃ³ liÃªn káº¿t Ä‘Æ¡n, Alkene chá»©a Ã­t nháº¥t má»™t **liÃªn káº¿t Ä‘Ã´i** ($C=C$). Trong liÃªn káº¿t Ä‘Ã´i nÃ y, cÃ³ má»™t liÃªn káº¿t bá»n vÃ  má»™t liÃªn káº¿t kÃ©m bá»n (liÃªn káº¿t $\\pi$) dá»… bá»‹ báº» gÃ£y."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Ethylene ($C_2H_4$) - Đại diện tiêu biểu",
-        "content": "Là chất khí không màu, không mùi, ít tan trong nước. Đặc biệt, Ethylene có khả năng kích thích trái cây chín nhanh một cách tự nhiên.",
+        "title": "Ethylene ($C_2H_4$) - Äáº¡i diá»‡n tiÃªu biá»ƒu",
+        "content": "LÃ  cháº¥t khÃ­ khÃ´ng mÃ u, khÃ´ng mÃ¹i, Ã­t tan trong nÆ°á»›c. Äáº·c biá»‡t, Ethylene cÃ³ kháº£ nÄƒng kÃ­ch thÃ­ch trÃ¡i cÃ¢y chÃ­n nhanh má»™t cÃ¡ch tá»± nhiÃªn.",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@ export const bai7 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Phản ứng hóa học đặc trưng",
+        "text": "2. Pháº£n á»©ng hÃ³a há»c Ä‘áº·c trÆ°ng",
         "level": "h2"
       }
     },
@@ -57,9 +57,9 @@ export const bai7 = {
       "type": "list",
       "content": {
         "items": [
-          "**Phản ứng Cộng (Đặc trưng):** Ethylene làm mất màu dung dịch nước Brom. Phương trình: $CH_2=CH_2 + Br_2 \\rightarrow CH_2Br-CH_2Br$.",
-          "**Phản ứng Trùng hợp:** Nhiều phân tử Ethylene kết hợp lại tạo thành chuỗi dài gọi là Polyethylene (nhựa PE).",
-          "**Phản ứng Cháy:** Tạo ra $CO_2$ và $H_2O$, tỏa nhiều nhiệt."
+          "**Pháº£n á»©ng Cá»™ng (Äáº·c trÆ°ng):** Ethylene lÃ m máº¥t mÃ u dung dá»‹ch nÆ°á»›c Brom. PhÆ°Æ¡ng trÃ¬nh: $CH_2=CH_2 + Br_2 \\rightarrow CH_2Br-CH_2Br$.",
+          "**Pháº£n á»©ng TrÃ¹ng há»£p:** Nhiá»u phÃ¢n tá»­ Ethylene káº¿t há»£p láº¡i táº¡o thÃ nh chuá»—i dÃ i gá»i lÃ  Polyethylene (nhá»±a PE).",
+          "**Pháº£n á»©ng ChÃ¡y:** Táº¡o ra $CO_2$ vÃ  $H_2O$, tá»a nhiá»u nhiá»‡t."
         ]
       }
     },
@@ -67,8 +67,8 @@ export const bai7 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Nhận biết Hydrocarbon không no",
-        "content": "Dung dịch **Brom** là 'thuốc thử' vàng để phân biệt Alkene (mất màu Brom) và Alkane (không phản ứng ở điều kiện thường).",
+        "title": "Nháº­n biáº¿t Hydrocarbon khÃ´ng no",
+        "content": "Dung dá»‹ch **Brom** lÃ  'thuá»‘c thá»­' vÃ ng Ä‘á»ƒ phÃ¢n biá»‡t Alkene (máº¥t mÃ u Brom) vÃ  Alkane (khÃ´ng pháº£n á»©ng á»Ÿ Ä‘iá»u kiá»‡n thÆ°á»ng).",
         "color": "orange"
       }
     }
@@ -76,59 +76,59 @@ export const bai7 = {
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Ethylene có một ứng dụng rất thú vị trong nông nghiệp là giúp trái cây chín vàng đều. Đâu là hình ảnh minh họa cho ứng dụng này?",
+      "narrative": "Ethylene cÃ³ má»™t á»©ng dá»¥ng ráº¥t thÃº vá»‹ trong nÃ´ng nghiá»‡p lÃ  giÃºp trÃ¡i cÃ¢y chÃ­n vÃ ng Ä‘á»u. ÄÃ¢u lÃ  hÃ¬nh áº£nh minh há»a cho á»©ng dá»¥ng nÃ y?",
       "images": [
         "https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "Hình ảnh nào mô tả những nải chuối chín vàng nhờ tác động của Ethylene?",
+      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ nhá»¯ng náº£i chuá»‘i chÃ­n vÃ ng nhá» tÃ¡c Ä‘á»™ng cá»§a Ethylene?",
       "correctAnswer": 0,
-      "targetType": "nhận biết",
-      "source": "Ứng dụng thực tế"
+      "targetType": "nháº­n biáº¿t",
+      "source": "á»¨ng dá»¥ng thá»±c táº¿"
     },
     {
       "type": "matching",
-      "narrative": "Hãy giúp tôi phân loại các đặc điểm hóa lý của Ethylene.",
+      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i cÃ¡c Ä‘áº·c Ä‘iá»ƒm hÃ³a lÃ½ cá»§a Ethylene.",
       "leftItems": [
-        { "id": "et1", "label": "Liên kết" },
-        { "id": "et2", "label": "Nhận biết" },
-        { "id": "et3", "label": "Trùng hợp" }
+        { "id": "et1", "label": "LiÃªn káº¿t" },
+        { "id": "et2", "label": "Nháº­n biáº¿t" },
+        { "id": "et3", "label": "TrÃ¹ng há»£p" }
       ],
       "items": [
-        { "id": "et1", "label": "Có một liên kết đôi $C=C$" },
-        { "id": "et2", "label": "Làm mất màu nước Brom" },
-        { "id": "et3", "label": "Tạo ra nhựa PE dùng làm túi nilon" }
+        { "id": "et1", "label": "CÃ³ má»™t liÃªn káº¿t Ä‘Ã´i $C=C$" },
+        { "id": "et2", "label": "LÃ m máº¥t mÃ u nÆ°á»›c Brom" },
+        { "id": "et3", "label": "Táº¡o ra nhá»±a PE dÃ¹ng lÃ m tÃºi nilon" }
       ],
       "correctOrder": ["et1", "et2", "et3"],
-      "question": "Kết nối đặc tính với hiện tượng/ứng dụng tương ứng.",
-      "source": "Tính chất & Ứng dụng"
+      "question": "Káº¿t ná»‘i Ä‘áº·c tÃ­nh vá»›i hiá»‡n tÆ°á»£ng/á»©ng dá»¥ng tÆ°Æ¡ng á»©ng.",
+      "source": "TÃ­nh cháº¥t & á»¨ng dá»¥ng"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Tại sao Ethylene lại có phản ứng cộng, trong khi Methane thì không?",
+      "narrative": "Táº¡i sao Ethylene láº¡i cÃ³ pháº£n á»©ng cá»™ng, trong khi Methane thÃ¬ khÃ´ng?",
       "options": [
-        "Vì Ethylene có liên kết đôi kém bền",
-        "Vì Ethylene là chất khí",
-        "Vì Ethylene nhẹ hơn không khí",
-        "Vì Ethylene có nhiều nguyên tử Carbon hơn"
+        "VÃ¬ Ethylene cÃ³ liÃªn káº¿t Ä‘Ã´i kÃ©m bá»n",
+        "VÃ¬ Ethylene lÃ  cháº¥t khÃ­",
+        "VÃ¬ Ethylene nháº¹ hÆ¡n khÃ´ng khÃ­",
+        "VÃ¬ Ethylene cÃ³ nhiá»u nguyÃªn tá»­ Carbon hÆ¡n"
       ],
       "correctAnswer": 0,
-      "question": "Nguyên nhân chính dẫn đến phản ứng cộng đặc trưng của Alkene là gì?",
-      "source": "Bản chất cấu tạo"
+      "question": "NguyÃªn nhÃ¢n chÃ­nh dáº«n Ä‘áº¿n pháº£n á»©ng cá»™ng Ä‘áº·c trÆ°ng cá»§a Alkene lÃ  gÃ¬?",
+      "source": "Báº£n cháº¥t cáº¥u táº¡o"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Khi dẫn khí Ethylene vào dung dịch nước Brom màu da cam, ta sẽ thấy dung dịch dần dần bị ...",
-      "placeholder": "Nhập hiện tượng...",
-      "correctAnswer": "Mất màu",
-      "question": "Hiện tượng quan sát được khi Ethylene phản ứng with nước Brom là gì?",
-      "source": "Thí nghiệm"
+      "narrative": "Khi dáº«n khÃ­ Ethylene vÃ o dung dá»‹ch nÆ°á»›c Brom mÃ u da cam, ta sáº½ tháº¥y dung dá»‹ch dáº§n dáº§n bá»‹ ...",
+      "placeholder": "Nháº­p hiá»‡n tÆ°á»£ng...",
+      "correctAnswer": "Máº¥t mÃ u",
+      "question": "Hiá»‡n tÆ°á»£ng quan sÃ¡t Ä‘Æ°á»£c khi Ethylene pháº£n á»©ng with nÆ°á»›c Brom lÃ  gÃ¬?",
+      "source": "ThÃ­ nghiá»‡m"
     },
     {
       "type": "drag-drop",
-      "narrative": "Hãy hoàn thành phương trình phản ứng cộng giữa Ethylene và Brom.",
+      "narrative": "HÃ£y hoÃ n thÃ nh phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng cá»™ng giá»¯a Ethylene vÃ  Brom.",
       "items": [
         { "id": "s1", "label": "$C_2H_4$" },
         { "id": "s2", "label": "+" },
@@ -137,43 +137,43 @@ export const bai7 = {
         { "id": "s5", "label": "$C_2H_4Br_2$" }
       ],
       "correctOrder": ["s1", "s2", "s3", "s4", "s5"],
-      "question": "Sắp xếp phương trình phản ứng cộng Brom đúng.",
-      "source": "Phương trình hóa học"
+      "question": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng cá»™ng Brom Ä‘Ãºng.",
+      "source": "PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Chất nào sau đây làm mất màu nước Brom?",
+        "question": "Cháº¥t nÃ o sau Ä‘Ã¢y lÃ m máº¥t mÃ u nÆ°á»›c Brom?",
         "options": ["$CH_4$", "$C_2H_4$", "$C_2H_6$", "$CO_2$"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tên viết tắt của loại nhựa tạo thành từ Ethylene là:",
+        "question": "TÃªn viáº¿t táº¯t cá»§a loáº¡i nhá»±a táº¡o thÃ nh tá»« Ethylene lÃ :",
         "options": ["PVC", "PS", "PE", "PET"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Liên kết đôi trong phân tử Ethylene gồm:",
-        "options": ["2 liên kết bền", "2 liên kết kém bền", "1 bền, 1 kém bền", "Chỉ có 1 liên kết"],
+        "question": "LiÃªn káº¿t Ä‘Ã´i trong phÃ¢n tá»­ Ethylene gá»“m:",
+        "options": ["2 liÃªn káº¿t bá»n", "2 liÃªn káº¿t kÃ©m bá»n", "1 bá»n, 1 kÃ©m bá»n", "Chá»‰ cÃ³ 1 liÃªn káº¿t"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Ứng dụng nào KHÔNG phải của Ethylene?",
-        "options": ["Làm nhựa PE", "Kích thích chín trái cây", "Sản xuất rượu etylic", "Làm nước giải khát"],
+        "question": "á»¨ng dá»¥ng nÃ o KHÃ”NG pháº£i cá»§a Ethylene?",
+        "options": ["LÃ m nhá»±a PE", "KÃ­ch thÃ­ch chÃ­n trÃ¡i cÃ¢y", "Sáº£n xuáº¥t rÆ°á»£u etylic", "LÃ m nÆ°á»›c giáº£i khÃ¡t"],
         "correctAnswer": 3,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Công thức tổng quát của dãy Alkene là:",
+        "question": "CÃ´ng thá»©c tá»•ng quÃ¡t cá»§a dÃ£y Alkene lÃ :",
         "options": ["$C_nH_{2n+2}$", "$C_nH_{2n}$", "$C_nH_{2n-2}$", "$C_nH_{2n+1}$"],
         "correctAnswer": 1,
         "points": 10
@@ -183,3 +183,4 @@ export const bai7 = {
     "advanced": []
   }
 };
+

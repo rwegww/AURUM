@@ -1,20 +1,20 @@
-export const bai15 = {
+﻿export const bai15 = {
   "id": "hoa12_kntt_bai15",
   "classId": 12,
   "lessonId": 15,
   "programId": "ketnoi",
-  "title": "Bài 15. Thế điện cực và nguồn điện hoá học",
-  "chapter": "Chương 5. Pin điện và điện phân",
+  "title": "BÃ i 15. Tháº¿ Ä‘iá»‡n cá»±c vÃ  nguá»“n Ä‘iá»‡n hoÃ¡ há»c",
+  "chapter": "ChÆ°Æ¡ng 5. Pin Ä‘iá»‡n vÃ  Ä‘iá»‡n phÃ¢n",
   "order": 15,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Nguyên lý hoạt động của pin điện hóa. Tìm hiểu về thế điện cực chuẩn, suất điện động của pin và các loại nguồn điện thông dụng.",
+  "description": "NguyÃªn lÃ½ hoáº¡t Ä‘á»™ng cá»§a pin Ä‘iá»‡n hÃ³a. TÃ¬m hiá»ƒu vá» tháº¿ Ä‘iá»‡n cá»±c chuáº©n, suáº¥t Ä‘iá»‡n Ä‘á»™ng cá»§a pin vÃ  cÃ¡c loáº¡i nguá»“n Ä‘iá»‡n thÃ´ng dá»¥ng.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Nguyên lý hoạt động của Pin điện hóa",
+        "text": "1. NguyÃªn lÃ½ hoáº¡t Ä‘á»™ng cá»§a Pin Ä‘iá»‡n hÃ³a",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@ export const bai15 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Pin điện hóa là thiết bị chuyển hóa năng lượng của phản ứng oxi hóa - khử tự phát thành điện năng. Một pin điện hóa điển hình gồm hai nửa tế bào (hai điện cực) nối với nhau bằng cầu muối. Trong pin, dòng electron di chuyển từ cực âm sang cực dương ở mạch ngoài, tạo ra dòng điện một chiều."
+        "text": "Pin Ä‘iá»‡n hÃ³a lÃ  thiáº¿t bá»‹ chuyá»ƒn hÃ³a nÄƒng lÆ°á»£ng cá»§a pháº£n á»©ng oxi hÃ³a - khá»­ tá»± phÃ¡t thÃ nh Ä‘iá»‡n nÄƒng. Má»™t pin Ä‘iá»‡n hÃ³a Ä‘iá»ƒn hÃ¬nh gá»“m hai ná»­a táº¿ bÃ o (hai Ä‘iá»‡n cá»±c) ná»‘i vá»›i nhau báº±ng cáº§u muá»‘i. Trong pin, dÃ²ng electron di chuyá»ƒn tá»« cá»±c Ã¢m sang cá»±c dÆ°Æ¡ng á»Ÿ máº¡ch ngoÃ i, táº¡o ra dÃ²ng Ä‘iá»‡n má»™t chiá»u."
       }
     },
     {
@@ -31,8 +31,8 @@ export const bai15 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Anode (Cực âm -):** Là điện cực xảy ra quá trình oxi hóa (kim loại mạnh hơn nhường electron). Ví dụ: $Zn \\rightarrow Zn^{2+} + 2e^-$.",
-          "**Cathode (Cực dương +):** Là điện cực xảy ra quá trình khử (ion kim loại yếu hơn nhận electron). Ví dụ: $Cu^{2+} + 2e^- \\rightarrow Cu$."
+          "**Anode (Cá»±c Ã¢m -):** LÃ  Ä‘iá»‡n cá»±c xáº£y ra quÃ¡ trÃ¬nh oxi hÃ³a (kim loáº¡i máº¡nh hÆ¡n nhÆ°á»ng electron). VÃ­ dá»¥: $Zn \\rightarrow Zn^{2+} + 2e^-$.",
+          "**Cathode (Cá»±c dÆ°Æ¡ng +):** LÃ  Ä‘iá»‡n cá»±c xáº£y ra quÃ¡ trÃ¬nh khá»­ (ion kim loáº¡i yáº¿u hÆ¡n nháº­n electron). VÃ­ dá»¥: $Cu^{2+} + 2e^- \\rightarrow Cu$."
         ]
       }
     },
@@ -40,7 +40,7 @@ export const bai15 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Pin Daniell và Cầu muối",
+        "text": "2. Pin Daniell vÃ  Cáº§u muá»‘i",
         "level": "h2"
       }
     },
@@ -48,8 +48,8 @@ export const bai15 = {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Cấu tạo Pin Daniell",
-        "content": "Pin Daniell gồm thanh kẽm nhúng trong dung dịch $ZnSO_4$ và thanh đồng nhúng trong dung dịch $CuSO_4$, hai dung dịch nối với nhau bằng cầu muối (chứa dung dịch chất điện li trơ như $KNO_3$ hoặc $KCl$).\n- **Vai trò cầu muối**: Giúp duy trì sự trung hòa điện trong cả hai nửa tế bào bằng cách cho các ion di chuyển qua lại, đảm bảo pin hoạt động liên tục.",
+        "title": "Cáº¥u táº¡o Pin Daniell",
+        "content": "Pin Daniell gá»“m thanh káº½m nhÃºng trong dung dá»‹ch $ZnSO_4$ vÃ  thanh Ä‘á»“ng nhÃºng trong dung dá»‹ch $CuSO_4$, hai dung dá»‹ch ná»‘i vá»›i nhau báº±ng cáº§u muá»‘i (chá»©a dung dá»‹ch cháº¥t Ä‘iá»‡n li trÆ¡ nhÆ° $KNO_3$ hoáº·c $KCl$).\n- **Vai trÃ² cáº§u muá»‘i**: GiÃºp duy trÃ¬ sá»± trung hÃ²a Ä‘iá»‡n trong cáº£ hai ná»­a táº¿ bÃ o báº±ng cÃ¡ch cho cÃ¡c ion di chuyá»ƒn qua láº¡i, Ä‘áº£m báº£o pin hoáº¡t Ä‘á»™ng liÃªn tá»¥c.",
         "color": "blue"
       }
     },
@@ -57,7 +57,7 @@ export const bai15 = {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Thế điện cực chuẩn và Suất điện động",
+        "text": "3. Tháº¿ Ä‘iá»‡n cá»±c chuáº©n vÃ  Suáº¥t Ä‘iá»‡n Ä‘á»™ng",
         "level": "h2"
       }
     },
@@ -65,15 +65,15 @@ export const bai15 = {
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "Để đánh giá sức mạnh oxi hóa - khử của một cặp điện cực, người ta sử dụng **Thế điện cực chuẩn** ($E^o$), được đo so với Điện cực Hydrogen chuẩn ($E^o(2H^+/H_2) = 0V$). Suất điện động của pin ($E^o_{pin}$) được tính bằng hiệu số giữa thế điện cực của cathode và anode:\n**$E^o_{pin} = E^o_{cathode} - E^o_{anode}$**.\nGiá trị $E^o_{pin}$ luôn dương đối với các pin điện hóa hoạt động tự phát."
+        "text": "Äá»ƒ Ä‘Ã¡nh giÃ¡ sá»©c máº¡nh oxi hÃ³a - khá»­ cá»§a má»™t cáº·p Ä‘iá»‡n cá»±c, ngÆ°á»i ta sá»­ dá»¥ng **Tháº¿ Ä‘iá»‡n cá»±c chuáº©n** ($E^o$), Ä‘Æ°á»£c Ä‘o so vá»›i Äiá»‡n cá»±c Hydrogen chuáº©n ($E^o(2H^+/H_2) = 0V$). Suáº¥t Ä‘iá»‡n Ä‘á»™ng cá»§a pin ($E^o_{pin}$) Ä‘Æ°á»£c tÃ­nh báº±ng hiá»‡u sá»‘ giá»¯a tháº¿ Ä‘iá»‡n cá»±c cá»§a cathode vÃ  anode:\n**$E^o_{pin} = E^o_{cathode} - E^o_{anode}$**.\nGiÃ¡ trá»‹ $E^o_{pin}$ luÃ´n dÆ°Æ¡ng Ä‘á»‘i vá»›i cÃ¡c pin Ä‘iá»‡n hÃ³a hoáº¡t Ä‘á»™ng tá»± phÃ¡t."
       }
     },
     {
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "Pin và Acquy thực tế",
-        "content": "- **Pin sơ cấp**: Chỉ dùng một lần, phản ứng hóa học không thể đảo ngược (ví dụ: pin kẽm-carbon).\n- **Pin thứ cấp (Acquy/Pin sạc)**: Có thể nạp điện (sạc) để sử dụng nhiều lần do phản ứng hóa học trong pin có tính thuận nghịch. Pin Lithium-ion trong điện thoại và xe điện là đại diện tiêu biểu nhờ mật độ năng lượng cao và tuổi thọ lớn.",
+        "title": "Pin vÃ  Acquy thá»±c táº¿",
+        "content": "- **Pin sÆ¡ cáº¥p**: Chá»‰ dÃ¹ng má»™t láº§n, pháº£n á»©ng hÃ³a há»c khÃ´ng thá»ƒ Ä‘áº£o ngÆ°á»£c (vÃ­ dá»¥: pin káº½m-carbon).\n- **Pin thá»© cáº¥p (Acquy/Pin sáº¡c)**: CÃ³ thá»ƒ náº¡p Ä‘iá»‡n (sáº¡c) Ä‘á»ƒ sá»­ dá»¥ng nhiá»u láº§n do pháº£n á»©ng hÃ³a há»c trong pin cÃ³ tÃ­nh thuáº­n nghá»‹ch. Pin Lithium-ion trong Ä‘iá»‡n thoáº¡i vÃ  xe Ä‘iá»‡n lÃ  Ä‘áº¡i diá»‡n tiÃªu biá»ƒu nhá» máº­t Ä‘á»™ nÄƒng lÆ°á»£ng cao vÃ  tuá»•i thá» lá»›n.",
         "color": "orange"
       }
     }
@@ -81,19 +81,19 @@ export const bai15 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Trong pin điện hóa Zn-Cu, quá trình nào xảy ra ở cực âm (anode)?",
+      "question": "Trong pin Ä‘iá»‡n hÃ³a Zn-Cu, quÃ¡ trÃ¬nh nÃ o xáº£y ra á»Ÿ cá»±c Ã¢m (anode)?",
       "options": [
-        "Sự oxi hóa kẽm ($Zn \\rightarrow Zn^{2+} + 2e^-$).",
-        "Sự khử kẽm ($Zn^{2+} + 2e^- \\rightarrow Zn$).",
-        "Sự oxi hóa đồng ($Cu \\rightarrow Cu^{2+} + 2e^-$).",
-        "Sự khử đồng ($Cu^{2+} + 2e^- \\rightarrow Cu$)."
+        "Sá»± oxi hÃ³a káº½m ($Zn \\rightarrow Zn^{2+} + 2e^-$).",
+        "Sá»± khá»­ káº½m ($Zn^{2+} + 2e^- \\rightarrow Zn$).",
+        "Sá»± oxi hÃ³a Ä‘á»“ng ($Cu \\rightarrow Cu^{2+} + 2e^-$).",
+        "Sá»± khá»­ Ä‘á»“ng ($Cu^{2+} + 2e^- \\rightarrow Cu$)."
       ],
       "correctAnswer": 0,
-      "explanation": "Ở cực âm (anode) của pin điện hóa, kim loại mạnh hơn (kẽm) sẽ bị oxi hóa để giải phóng electron vào mạch ngoài."
+      "explanation": "á»ž cá»±c Ã¢m (anode) cá»§a pin Ä‘iá»‡n hÃ³a, kim loáº¡i máº¡nh hÆ¡n (káº½m) sáº½ bá»‹ oxi hÃ³a Ä‘á»ƒ giáº£i phÃ³ng electron vÃ o máº¡ch ngoÃ i."
     },
     {
       "id": "q2",
-      "question": "Tính suất điện động chuẩn của pin điện hóa tạo bởi cặp điện cực $Fe^{2+}/Fe$ ($E^o = -0,44V$) và $Ag^+/Ag$ ($E^o = +0,80V$)?",
+      "question": "TÃ­nh suáº¥t Ä‘iá»‡n Ä‘á»™ng chuáº©n cá»§a pin Ä‘iá»‡n hÃ³a táº¡o bá»Ÿi cáº·p Ä‘iá»‡n cá»±c $Fe^{2+}/Fe$ ($E^o = -0,44V$) vÃ  $Ag^+/Ag$ ($E^o = +0,80V$)?",
       "options": [
         "0,36 V.",
         "1,24 V.",
@@ -101,16 +101,16 @@ export const bai15 = {
         "0,44 V."
       ],
       "correctAnswer": 1,
-      "explanation": "Suất điện động $E^o_{pin} = E^o_{cathode} - E^o_{anode} = E^o_{Ag^+/Ag} - E^o_{Fe^{2+}/Fe} = 0,80 - (-0,44) = 1,24 V$."
+      "explanation": "Suáº¥t Ä‘iá»‡n Ä‘á»™ng $E^o_{pin} = E^o_{cathode} - E^o_{anode} = E^o_{Ag^+/Ag} - E^o_{Fe^{2+}/Fe} = 0,80 - (-0,44) = 1,24 V$."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Thế điện cực và Nguồn điện hóa học",
+      "title": "BÃ i giáº£ng: Tháº¿ Ä‘iá»‡n cá»±c vÃ  Nguá»“n Ä‘iá»‡n hÃ³a há»c",
       "url": "https://www.youtube.com/watch?v=oKKg9Hs0xL0",
       "thumbnail": "https://img.youtube.com/vi/oKKg9Hs0xL0/0.jpg",
-      "description": "Nguyên lý hoạt động của pin điện hóa, suất điện động và cách tính hiệu điện thế (VietJack)."
+      "description": "NguyÃªn lÃ½ hoáº¡t Ä‘á»™ng cá»§a pin Ä‘iá»‡n hÃ³a, suáº¥t Ä‘iá»‡n Ä‘á»™ng vÃ  cÃ¡ch tÃ­nh hiá»‡u Ä‘iá»‡n tháº¿ (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -119,3 +119,4 @@ export const bai15 = {
   "game": null,
   "realWorldApplications": []
 };
+

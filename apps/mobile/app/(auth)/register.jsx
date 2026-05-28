@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { Link, router } from "expo-router";
 import {
@@ -23,11 +23,11 @@ export default function RegisterScreen() {
 
   const submit = async () => {
     if (!username.trim() || !email.trim() || !password) {
-      setAuthError("Vui lòng nhập đầy đủ thông tin");
+      setAuthError("Vui lÃ²ng nháº­p Ä‘áº§y Ä‘á»§ thÃ´ng tin");
       return;
     }
     if (password.length < 6) {
-      setAuthError("Mật khẩu cần tối thiểu 6 ký tự");
+      setAuthError("Máº­t kháº©u cáº§n tá»‘i thiá»ƒu 6 kÃ½ tá»±");
       return;
     }
 
@@ -46,32 +46,32 @@ export default function RegisterScreen() {
     >
       <Screen>
         <Card style={styles.formCard}>
-          <Text style={styles.title}>Tạo tài khoản học sinh</Text>
-          <Text style={styles.subtitle}>Tài khoản mới sẽ được nối ngay với hồ sơ học tập, điểm kinh nghiệm và chuỗi học.</Text>
+          <Text style={styles.title}>Táº¡o tÃ i khoáº£n há»c sinh</Text>
+          <Text style={styles.subtitle}>TÃ i khoáº£n má»›i sáº½ Ä‘Æ°á»£c ná»‘i ngay vá»›i há»“ sÆ¡ há»c táº­p, Ä‘iá»ƒm kinh nghiá»‡m vÃ  chuá»—i há»c.</Text>
 
           <TextField
             icon="person-outline"
-            placeholder="Tên đăng nhập"
+            placeholder="TÃªn Ä‘Äƒng nháº­p"
             value={username}
             onChangeText={setUsername}
           />
           <TextField
             icon="mail-outline"
-            placeholder="Thư điện tử"
+            placeholder="ThÆ° Ä‘iá»‡n tá»­"
             value={email}
             keyboardType="email-address"
             onChangeText={setEmail}
           />
           <TextField
             icon="lock-closed-outline"
-            placeholder="Mật khẩu"
+            placeholder="Máº­t kháº©u"
             value={password}
             secureTextEntry
             onChangeText={setPassword}
           />
 
           <View style={styles.gradeBlock}>
-            <Text style={styles.gradeLabel}>Khối đang học</Text>
+            <Text style={styles.gradeLabel}>Khá»‘i Ä‘ang há»c</Text>
             <View style={styles.gradeRow}>
               {grades.map((item) => {
                 const selected = item === grade;
@@ -93,13 +93,13 @@ export default function RegisterScreen() {
           {authError ? <Text style={styles.errorText}>{authError}</Text> : null}
 
           <PrimaryButton
-            label={submitting ? "Đang tạo..." : "Tạo tài khoản"}
+            label={submitting ? "Äang táº¡o..." : "Táº¡o tÃ i khoáº£n"}
             icon="sparkles-outline"
             onPress={submit}
             disabled={submitting}
           />
           <Link href="/login" asChild>
-            <GhostButton label="Đã có tài khoản" icon="arrow-back-outline" />
+            <GhostButton label="ÄÃ£ cÃ³ tÃ i khoáº£n" icon="arrow-back-outline" />
           </Link>
         </Card>
       </Screen>
@@ -164,4 +164,5 @@ const styles = StyleSheet.create({
     fontWeight: "800"
   }
 });
+
 

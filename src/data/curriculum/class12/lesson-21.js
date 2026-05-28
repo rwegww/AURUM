@@ -1,20 +1,20 @@
-export const bai21 = {
+﻿export const bai21 = {
   "id": "hoa12_kntt_bai21",
   "classId": 12,
   "lessonId": 21,
   "programId": "ketnoi",
-  "title": "Bài 21. Hợp kim",
-  "chapter": "Chương 6. Đại cương về kim loại",
+  "title": "BÃ i 21. Há»£p kim",
+  "chapter": "ChÆ°Æ¡ng 6. Äáº¡i cÆ°Æ¡ng vá» kim loáº¡i",
   "order": 21,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Khái niệm, tính chất và ứng dụng của các loại hợp kim quan trọng như gang, thép, đồng thau và duralumin.",
+  "description": "KhÃ¡i niá»‡m, tÃ­nh cháº¥t vÃ  á»©ng dá»¥ng cá»§a cÃ¡c loáº¡i há»£p kim quan trá»ng nhÆ° gang, thÃ©p, Ä‘á»“ng thau vÃ  duralumin.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm và Tính chất của Hợp Kim",
+        "text": "1. KhÃ¡i niá»‡m vÃ  TÃ­nh cháº¥t cá»§a Há»£p Kim",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@ export const bai21 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Hợp kim là vật liệu kim loại có chứa một kim loại cơ bản và một số kim loại hoặc phi kim khác. Hợp kim thường được chế tạo bằng cách làm nóng chảy hỗn hợp các thành phần rồi để nguội cho kết tinh."
+        "text": "Há»£p kim lÃ  váº­t liá»‡u kim loáº¡i cÃ³ chá»©a má»™t kim loáº¡i cÆ¡ báº£n vÃ  má»™t sá»‘ kim loáº¡i hoáº·c phi kim khÃ¡c. Há»£p kim thÆ°á»ng Ä‘Æ°á»£c cháº¿ táº¡o báº±ng cÃ¡ch lÃ m nÃ³ng cháº£y há»—n há»£p cÃ¡c thÃ nh pháº§n rá»“i Ä‘á»ƒ nguá»™i cho káº¿t tinh."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Ưu điểm của Hợp kim so với Kim loại nguyên chất",
-        "content": "- **Độ bền cơ học**: Hợp kim thường cứng và bền hơn kim loại thành phần do sự có mặt của các nguyên tử khác kích thước làm cản trở sự trượt của các lớp mạng tinh thể.\n- **Khả năng chống ăn mòn**: Nhiều hợp kim có khả năng chịu hóa chất và chống gỉ sét vượt trội (như thép không gỉ).\n- **Nhiệt độ nóng chảy**: Hợp kim thường có nhiệt độ nóng chảy thấp hơn các kim loại thành phần.\n- **Tính dẫn điện và nhiệt**: Thường kém hơn kim loại nguyên khối do mạng tinh thể bị biến dạng.",
+        "title": "Æ¯u Ä‘iá»ƒm cá»§a Há»£p kim so vá»›i Kim loáº¡i nguyÃªn cháº¥t",
+        "content": "- **Äá»™ bá»n cÆ¡ há»c**: Há»£p kim thÆ°á»ng cá»©ng vÃ  bá»n hÆ¡n kim loáº¡i thÃ nh pháº§n do sá»± cÃ³ máº·t cá»§a cÃ¡c nguyÃªn tá»­ khÃ¡c kÃ­ch thÆ°á»›c lÃ m cáº£n trá»Ÿ sá»± trÆ°á»£t cá»§a cÃ¡c lá»›p máº¡ng tinh thá»ƒ.\n- **Kháº£ nÄƒng chá»‘ng Äƒn mÃ²n**: Nhiá»u há»£p kim cÃ³ kháº£ nÄƒng chá»‹u hÃ³a cháº¥t vÃ  chá»‘ng gá»‰ sÃ©t vÆ°á»£t trá»™i (nhÆ° thÃ©p khÃ´ng gá»‰).\n- **Nhiá»‡t Ä‘á»™ nÃ³ng cháº£y**: Há»£p kim thÆ°á»ng cÃ³ nhiá»‡t Ä‘á»™ nÃ³ng cháº£y tháº¥p hÆ¡n cÃ¡c kim loáº¡i thÃ nh pháº§n.\n- **TÃ­nh dáº«n Ä‘iá»‡n vÃ  nhiá»‡t**: ThÆ°á»ng kÃ©m hÆ¡n kim loáº¡i nguyÃªn khá»‘i do máº¡ng tinh thá»ƒ bá»‹ biáº¿n dáº¡ng.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@ export const bai21 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Một số Hợp kim quan trọng",
+        "text": "2. Má»™t sá»‘ Há»£p kim quan trá»ng",
         "level": "h2"
       }
     },
@@ -48,9 +48,9 @@ export const bai21 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Hợp kim của Sắt:**\n  - **Gang**: Hợp kim Fe-C (hàm lượng C từ 2 - 5%), ngoài ra còn có Si, Mn, S... Gang cứng và giòn.\n  - **Thép**: Hợp kim Fe-C (hàm lượng C dưới 2%), bền, dẻo, dễ rèn và gia công. Thép không gỉ (Inox) chứa thêm Cr và Ni.",
-          "**Hợp kim của Đồng:**\n  - **Đồng thau**: Hợp kim Cu-Zn, có màu vàng, độ bền cao, dùng chế tạo thiết bị điện, nhạc cụ.\n  - **Đồng bạch**: Hợp kim Cu-Ni, bền trong nước biển.\n  - **Đồng thiếc (Đồng thanh)**: Hợp kim Cu-Sn.",
-          "**Hợp kim của Nhôm:**\n  - **Duralumin**: Hợp kim Al-Cu-Mg-Mn, nhẹ bằng 1/3 thép nhưng độ bền tương đương thép, dùng rộng rãi trong công nghiệp hàng không."
+          "**Há»£p kim cá»§a Sáº¯t:**\n  - **Gang**: Há»£p kim Fe-C (hÃ m lÆ°á»£ng C tá»« 2 - 5%), ngoÃ i ra cÃ²n cÃ³ Si, Mn, S... Gang cá»©ng vÃ  giÃ²n.\n  - **ThÃ©p**: Há»£p kim Fe-C (hÃ m lÆ°á»£ng C dÆ°á»›i 2%), bá»n, dáº»o, dá»… rÃ¨n vÃ  gia cÃ´ng. ThÃ©p khÃ´ng gá»‰ (Inox) chá»©a thÃªm Cr vÃ  Ni.",
+          "**Há»£p kim cá»§a Äá»“ng:**\n  - **Äá»“ng thau**: Há»£p kim Cu-Zn, cÃ³ mÃ u vÃ ng, Ä‘á»™ bá»n cao, dÃ¹ng cháº¿ táº¡o thiáº¿t bá»‹ Ä‘iá»‡n, nháº¡c cá»¥.\n  - **Äá»“ng báº¡ch**: Há»£p kim Cu-Ni, bá»n trong nÆ°á»›c biá»ƒn.\n  - **Äá»“ng thiáº¿c (Äá»“ng thanh)**: Há»£p kim Cu-Sn.",
+          "**Há»£p kim cá»§a NhÃ´m:**\n  - **Duralumin**: Há»£p kim Al-Cu-Mg-Mn, nháº¹ báº±ng 1/3 thÃ©p nhÆ°ng Ä‘á»™ bá»n tÆ°Æ¡ng Ä‘Æ°Æ¡ng thÃ©p, dÃ¹ng rá»™ng rÃ£i trong cÃ´ng nghiá»‡p hÃ ng khÃ´ng."
         ]
       }
     },
@@ -58,8 +58,8 @@ export const bai21 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Ứng dụng thực tiễn",
-        "content": "Trong đời sống và sản xuất, hợp kim được sử dụng phổ biến hơn nhiều so với kim loại nguyên chất nhờ các đặc tính cơ lí đặc biệt, cho phép con người thiết kế các vật liệu chuyên dụng cho từng môi trường khắc nghiệt.",
+        "title": "á»¨ng dá»¥ng thá»±c tiá»…n",
+        "content": "Trong Ä‘á»i sá»‘ng vÃ  sáº£n xuáº¥t, há»£p kim Ä‘Æ°á»£c sá»­ dá»¥ng phá»• biáº¿n hÆ¡n nhiá»u so vá»›i kim loáº¡i nguyÃªn cháº¥t nhá» cÃ¡c Ä‘áº·c tÃ­nh cÆ¡ lÃ­ Ä‘áº·c biá»‡t, cho phÃ©p con ngÆ°á»i thiáº¿t káº¿ cÃ¡c váº­t liá»‡u chuyÃªn dá»¥ng cho tá»«ng mÃ´i trÆ°á»ng kháº¯c nghiá»‡t.",
         "color": "orange"
       }
     }
@@ -67,36 +67,36 @@ export const bai21 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Tính chất nào sau đây của hợp kim thường KÉM hơn kim loại nguyên chất thành phần?",
+      "question": "TÃ­nh cháº¥t nÃ o sau Ä‘Ã¢y cá»§a há»£p kim thÆ°á»ng KÃ‰M hÆ¡n kim loáº¡i nguyÃªn cháº¥t thÃ nh pháº§n?",
       "options": [
-        "Độ cứng.",
-        "Khả năng chống ăn mòn.",
-        "Tính dẫn điện và dẫn nhiệt.",
-        "Độ bền cơ học."
+        "Äá»™ cá»©ng.",
+        "Kháº£ nÄƒng chá»‘ng Äƒn mÃ²n.",
+        "TÃ­nh dáº«n Ä‘iá»‡n vÃ  dáº«n nhiá»‡t.",
+        "Äá»™ bá»n cÆ¡ há»c."
       ],
       "correctAnswer": 2,
-      "explanation": "Trong hợp kim, sự có mặt của các nguyên tử khác loại làm biến dạng mạng tinh thể, gây cản trở sự di chuyển của các electron tự do, dẫn đến độ dẫn điện và dẫn nhiệt giảm."
+      "explanation": "Trong há»£p kim, sá»± cÃ³ máº·t cá»§a cÃ¡c nguyÃªn tá»­ khÃ¡c loáº¡i lÃ m biáº¿n dáº¡ng máº¡ng tinh thá»ƒ, gÃ¢y cáº£n trá»Ÿ sá»± di chuyá»ƒn cá»§a cÃ¡c electron tá»± do, dáº«n Ä‘áº¿n Ä‘á»™ dáº«n Ä‘iá»‡n vÃ  dáº«n nhiá»‡t giáº£m."
     },
     {
       "id": "q2",
-      "question": "Thành phần chính của hợp kim Duralumin gồm nhôm và kim loại nào sau đây?",
+      "question": "ThÃ nh pháº§n chÃ­nh cá»§a há»£p kim Duralumin gá»“m nhÃ´m vÃ  kim loáº¡i nÃ o sau Ä‘Ã¢y?",
       "options": [
-        "Sắt (Fe).",
-        "Đồng (Cu).",
-        "Kẽm (Zn).",
-        "Thiếc (Sn)."
+        "Sáº¯t (Fe).",
+        "Äá»“ng (Cu).",
+        "Káº½m (Zn).",
+        "Thiáº¿c (Sn)."
       ],
       "correctAnswer": 1,
-      "explanation": "Duralumin là hợp kim nhẹ và bền của nhôm với đồng (chủ yếu) cùng một lượng nhỏ magnesium và manganese."
+      "explanation": "Duralumin lÃ  há»£p kim nháº¹ vÃ  bá»n cá»§a nhÃ´m vá»›i Ä‘á»“ng (chá»§ yáº¿u) cÃ¹ng má»™t lÆ°á»£ng nhá» magnesium vÃ  manganese."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Hợp kim",
+      "title": "BÃ i giáº£ng: Há»£p kim",
       "url": "https://www.youtube.com/watch?v=w5WhyYGHt7I",
       "thumbnail": "https://img.youtube.com/vi/w5WhyYGHt7I/0.jpg",
-      "description": "Khái niệm vật liệu hợp kim và sự đa dạng hóa tính bền vững của kim loại gốc (VietJack)."
+      "description": "KhÃ¡i niá»‡m váº­t liá»‡u há»£p kim vÃ  sá»± Ä‘a dáº¡ng hÃ³a tÃ­nh bá»n vá»¯ng cá»§a kim loáº¡i gá»‘c (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -105,3 +105,4 @@ export const bai21 = {
   "game": null,
   "realWorldApplications": []
 };
+

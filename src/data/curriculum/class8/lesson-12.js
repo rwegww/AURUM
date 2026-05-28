@@ -1,64 +1,64 @@
-export const bai12 = {
+﻿export const bai12 = {
   "id": "hoa8_kntt_bai12",
   "classId": 8,
   "lessonId": 12,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 12: Phân bón hóa học",
-  "chapter": "Chương 2: Một số hợp chất thông dụng",
+  "title": "BÃ i 12: PhÃ¢n bÃ³n hÃ³a há»c",
+  "chapter": "ChÆ°Æ¡ng 2: Má»™t sá»‘ há»£p cháº¥t thÃ´ng dá»¥ng",
   "order": 12,
   "isPremium": false,
-  "description": "Vai trò nguyên tố dinh dưỡng, các loại phân bón thông dụng (Đạm, Lân, Kali, NPK) and nguyên tắc sử dụng hợp lí.",
+  "description": "Vai trÃ² nguyÃªn tá»‘ dinh dÆ°á»¡ng, cÃ¡c loáº¡i phÃ¢n bÃ³n thÃ´ng dá»¥ng (Äáº¡m, LÃ¢n, Kali, NPK) and nguyÃªn táº¯c sá»­ dá»¥ng há»£p lÃ­.",
   "challenges": [
     {
       "type": "matching",
-      "narrative": "Hãy nối các nguyên tố dinh dưỡng with vai trò chính của chúng đối with cây.",
+      "narrative": "HÃ£y ná»‘i cÃ¡c nguyÃªn tá»‘ dinh dÆ°á»¡ng with vai trÃ² chÃ­nh cá»§a chÃºng Ä‘á»‘i with cÃ¢y.",
       "leftItems": [
-        { "id": "p1", "label": "Đạm (N)" },
-        { "id": "p2", "label": "Lân (P)" },
+        { "id": "p1", "label": "Äáº¡m (N)" },
+        { "id": "p2", "label": "LÃ¢n (P)" },
         { "id": "p3", "label": "Kali (K)" }
       ],
       "items": [
-        { "id": "p2", "label": "Phát triển rễ and hoa" },
-        { "id": "p1", "label": "Phát triển thân and lá" },
-        { "id": "p3", "label": "Năng suất, chống chịu sâu bệnh" }
+        { "id": "p2", "label": "PhÃ¡t triá»ƒn rá»… and hoa" },
+        { "id": "p1", "label": "PhÃ¡t triá»ƒn thÃ¢n and lÃ¡" },
+        { "id": "p3", "label": "NÄƒng suáº¥t, chá»‘ng chá»‹u sÃ¢u bá»‡nh" }
       ],
       "correctOrder": ["p1", "p2", "p3"],
-      "question": "Vai trò của các nguyên tố đa lượng.",
-      "source": "Giá trị dinh dưỡng"
+      "question": "Vai trÃ² cá»§a cÃ¡c nguyÃªn tá»‘ Ä‘a lÆ°á»£ng.",
+      "source": "GiÃ¡ trá»‹ dinh dÆ°á»¡ng"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Phân bón giúp cung cấp các nguyên tố thiết yếu cho cây trồng. 'NPK' là loại phân hỗn hợp rất phổ biến.",
+      "narrative": "PhÃ¢n bÃ³n giÃºp cung cáº¥p cÃ¡c nguyÃªn tá»‘ thiáº¿t yáº¿u cho cÃ¢y trá»“ng. 'NPK' lÃ  loáº¡i phÃ¢n há»—n há»£p ráº¥t phá»• biáº¿n.",
       "options": [
-        "Nitơ (N), Photpho (P), Kali (K)",
+        "NitÆ¡ (N), Photpho (P), Kali (K)",
         "Natri (Na), Photpho (P), Kali (K)",
-        "Nitơ (N), Lưu huỳnh (S), Kali (K)",
+        "NitÆ¡ (N), LÆ°u huá»³nh (S), Kali (K)",
         "Niken (Ni), Photpho (P), Kali (K)"
       ],
       "correctAnswer": 0,
-      "question": "Ba nguyên tố chính trong phân NPK là gì?",
-      "source": "Phân bón hỗn hợp"
+      "question": "Ba nguyÃªn tá»‘ chÃ­nh trong phÃ¢n NPK lÃ  gÃ¬?",
+      "source": "PhÃ¢n bÃ³n há»—n há»£p"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Một loại phân đạm rất phổ biến có công thức $(NH_2)_2CO$ and chứa hàm lượng đạm rất cao (khoảng 46%N).",
-      "placeholder": "Nhập tên (ví dụ: Ure)...",
+      "narrative": "Má»™t loáº¡i phÃ¢n Ä‘áº¡m ráº¥t phá»• biáº¿n cÃ³ cÃ´ng thá»©c $(NH_2)_2CO$ and chá»©a hÃ m lÆ°á»£ng Ä‘áº¡m ráº¥t cao (khoáº£ng 46%N).",
+      "placeholder": "Nháº­p tÃªn (vÃ­ dá»¥: Ure)...",
       "correctAnswer": "Ure",
-      "question": "Tên gọi của loại phân đạm này là gì?",
-      "source": "Sản xuất nông nghiệp"
+      "question": "TÃªn gá»i cá»§a loáº¡i phÃ¢n Ä‘áº¡m nÃ y lÃ  gÃ¬?",
+      "source": "Sáº£n xuáº¥t nÃ´ng nghiá»‡p"
     },
     {
       "type": "drag-drop",
-      "narrative": "Hãy sắp xếp các 'nguyên tắc 4 đúng' trong việc bón phân.",
+      "narrative": "HÃ£y sáº¯p xáº¿p cÃ¡c 'nguyÃªn táº¯c 4 Ä‘Ãºng' trong viá»‡c bÃ³n phÃ¢n.",
       "items": [
-        { "id": "d1", "label": "Đúng loại, Đúng lượng" },
-        { "id": "d2", "label": "Đúng lúc" },
-        { "id": "d3", "label": "Đúng cách" }
+        { "id": "d1", "label": "ÄÃºng loáº¡i, ÄÃºng lÆ°á»£ng" },
+        { "id": "d2", "label": "ÄÃºng lÃºc" },
+        { "id": "d3", "label": "ÄÃºng cÃ¡ch" }
       ],
       "correctOrder": ["d1", "d2", "d3"],
-      "question": "Các nguyên tắc bón phân hợp lý là gì?",
-      "source": "Kỹ thuật canh tác"
+      "question": "CÃ¡c nguyÃªn táº¯c bÃ³n phÃ¢n há»£p lÃ½ lÃ  gÃ¬?",
+      "source": "Ká»¹ thuáº­t canh tÃ¡c"
     }
   ],
   "theoryModules": [
@@ -66,7 +66,7 @@ export const bai12 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Vai trò của Phân bón hóa học",
+        "text": "1. Vai trÃ² cá»§a PhÃ¢n bÃ³n hÃ³a há»c",
         "level": "h2"
       }
     },
@@ -74,15 +74,15 @@ export const bai12 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Phân bón hóa học là những hóa chất có chứa các **nguyên tố dinh dưỡng** cần thiết cho cây trồng, được bón vào đất hoặc phun lên lá nhằm nâng cao năng suất and chất lượng nông sản. Ba nguyên tố dinh dưỡng chính (đa lượng) mà cây cần nhiều nhất là **Nitrogen (N)**, **Phosphorus (P)** and **Potassium (K)**."
+        "text": "PhÃ¢n bÃ³n hÃ³a há»c lÃ  nhá»¯ng hÃ³a cháº¥t cÃ³ chá»©a cÃ¡c **nguyÃªn tá»‘ dinh dÆ°á»¡ng** cáº§n thiáº¿t cho cÃ¢y trá»“ng, Ä‘Æ°á»£c bÃ³n vÃ o Ä‘áº¥t hoáº·c phun lÃªn lÃ¡ nháº±m nÃ¢ng cao nÄƒng suáº¥t and cháº¥t lÆ°á»£ng nÃ´ng sáº£n. Ba nguyÃªn tá»‘ dinh dÆ°á»¡ng chÃ­nh (Ä‘a lÆ°á»£ng) mÃ  cÃ¢y cáº§n nhiá»u nháº¥t lÃ  **Nitrogen (N)**, **Phosphorus (P)** and **Potassium (K)**."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Vai trò của từng nguyên tố",
-        "content": "- **Nitrogen (N)**: Thành phần của protein, axit nucleic (DNA/RNA) and chlorophyll. Giúp cây **phát triển thân, lá**, lá xanh tốt. Thiếu N → cây còi cọc, lá vàng.\\n- **Phosphorus (P)**: Tham gia cấu tạo ATP (năng lượng tế bào), DNA. Giúp cây **phát triển rễ, ra hoa, kết quả**. Thiếu P → rễ yếu, ra hoa muộn.\\n- **Potassium (K)**: Điều hòa áp suất thẩm thấu, tổng hợp đường, tinh bột. Giúp cây **chống chịu** (hạn, rét, sâu bệnh), tăng chất lượng nông sản. Thiếu K → lá mép vàng, quả nhỏ.",
+        "title": "Vai trÃ² cá»§a tá»«ng nguyÃªn tá»‘",
+        "content": "- **Nitrogen (N)**: ThÃ nh pháº§n cá»§a protein, axit nucleic (DNA/RNA) and chlorophyll. GiÃºp cÃ¢y **phÃ¡t triá»ƒn thÃ¢n, lÃ¡**, lÃ¡ xanh tá»‘t. Thiáº¿u N â†’ cÃ¢y cÃ²i cá»c, lÃ¡ vÃ ng.\\n- **Phosphorus (P)**: Tham gia cáº¥u táº¡o ATP (nÄƒng lÆ°á»£ng táº¿ bÃ o), DNA. GiÃºp cÃ¢y **phÃ¡t triá»ƒn rá»…, ra hoa, káº¿t quáº£**. Thiáº¿u P â†’ rá»… yáº¿u, ra hoa muá»™n.\\n- **Potassium (K)**: Äiá»u hÃ²a Ã¡p suáº¥t tháº©m tháº¥u, tá»•ng há»£p Ä‘Æ°á»ng, tinh bá»™t. GiÃºp cÃ¢y **chá»‘ng chá»‹u** (háº¡n, rÃ©t, sÃ¢u bá»‡nh), tÄƒng cháº¥t lÆ°á»£ng nÃ´ng sáº£n. Thiáº¿u K â†’ lÃ¡ mÃ©p vÃ ng, quáº£ nhá».",
         "color": "blue"
       }
     },
@@ -90,7 +90,7 @@ export const bai12 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Các loại phân bón đơn",
+        "text": "2. CÃ¡c loáº¡i phÃ¢n bÃ³n Ä‘Æ¡n",
         "level": "h2"
       }
     },
@@ -100,9 +100,9 @@ export const bai12 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Phân Đạm (cung cấp N)**:\\n  - **Urea** $(NH_2)_2CO$ — chứa $46\\%$ N, phổ biến nhất, hòa tan tốt.\\n  - **Ammonium nitrate** $NH_4NO_3$ — chứa $35\\%$ N, tan tốt nhưng dễ hút ẩm.\\n  - **Ammonium sulfate** $(NH_4)_2SO_4$ — chứa $21\\%$ N and S, ít hút ẩm hơn.\\n  *Tác dụng*: Kích thích cây ra lá, phát triển thân nhanh.",
-          "**Phân Lân (cung cấp P)**:\\n  - **Supephốtphat đơn**: $Ca(H_2PO_4)_2 + CaSO_4$.\\n  - **Supephốtphat kép**: $Ca(H_2PO_4)_2$ (hàm lượng P cao hơn).\\n  - **Phân lân nung chảy**: Không tan trong nước, thích hợp cho đất chua.\\n  *Tác dụng*: Giúp rễ phát triển, cây ra hoa kết quả tốt.",
-          "**Phân Kali (cung cấp K)**:\\n  - $KCl$ (Kali clorua) — phổ biến, rẻ, dễ kiếm.\\n  - $K_2SO_4$ (Kali sunfat) — dùng cho cây không ưa Clo.\\n  *Tác dụng*: Tăng sức đề kháng, giúp cây cứng cáp, tăng phẩm chất nông sản."
+          "**PhÃ¢n Äáº¡m (cung cáº¥p N)**:\\n  - **Urea** $(NH_2)_2CO$ â€” chá»©a $46\\%$ N, phá»• biáº¿n nháº¥t, hÃ²a tan tá»‘t.\\n  - **Ammonium nitrate** $NH_4NO_3$ â€” chá»©a $35\\%$ N, tan tá»‘t nhÆ°ng dá»… hÃºt áº©m.\\n  - **Ammonium sulfate** $(NH_4)_2SO_4$ â€” chá»©a $21\\%$ N and S, Ã­t hÃºt áº©m hÆ¡n.\\n  *TÃ¡c dá»¥ng*: KÃ­ch thÃ­ch cÃ¢y ra lÃ¡, phÃ¡t triá»ƒn thÃ¢n nhanh.",
+          "**PhÃ¢n LÃ¢n (cung cáº¥p P)**:\\n  - **Supephá»‘tphat Ä‘Æ¡n**: $Ca(H_2PO_4)_2 + CaSO_4$.\\n  - **Supephá»‘tphat kÃ©p**: $Ca(H_2PO_4)_2$ (hÃ m lÆ°á»£ng P cao hÆ¡n).\\n  - **PhÃ¢n lÃ¢n nung cháº£y**: KhÃ´ng tan trong nÆ°á»›c, thÃ­ch há»£p cho Ä‘áº¥t chua.\\n  *TÃ¡c dá»¥ng*: GiÃºp rá»… phÃ¡t triá»ƒn, cÃ¢y ra hoa káº¿t quáº£ tá»‘t.",
+          "**PhÃ¢n Kali (cung cáº¥p K)**:\\n  - $KCl$ (Kali clorua) â€” phá»• biáº¿n, ráº», dá»… kiáº¿m.\\n  - $K_2SO_4$ (Kali sunfat) â€” dÃ¹ng cho cÃ¢y khÃ´ng Æ°a Clo.\\n  *TÃ¡c dá»¥ng*: TÄƒng sá»©c Ä‘á» khÃ¡ng, giÃºp cÃ¢y cá»©ng cÃ¡p, tÄƒng pháº©m cháº¥t nÃ´ng sáº£n."
         ]
       }
     },
@@ -110,7 +110,7 @@ export const bai12 = {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Phân hỗn hợp and phân vi lượng",
+        "text": "3. PhÃ¢n há»—n há»£p and phÃ¢n vi lÆ°á»£ng",
         "level": "h2"
       }
     },
@@ -120,9 +120,9 @@ export const bai12 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Phân hỗn hợp NPK**: Chứa cả ba nguyên tố N, P, K theo tỉ lệ khác nhau (ví dụ NPK 16-16-8 nghĩa là 16%N, 16%P₂O₅, 8%K₂O). Tiện lợi, cung cấp dinh dưỡng cân đối.",
-          "**Phân phức hợp**: Vừa chứa N vừa chứa P trong cùng một phân tử. Ví dụ: Diamoni hydro phosphate $(NH_4)_2HPO_4$ (DAP).",
-          "**Phân vi lượng**: Cung cấp các nguyên tố cây cần **rất ít** nhưng cực kỳ quan trọng: Bo (B), Mangan (Mn), Kẽm (Zn), Đồng (Cu), Molypden (Mo)... Thiếu vi lượng → cây sinh bệnh; thừa → gây ngộ độc."
+          "**PhÃ¢n há»—n há»£p NPK**: Chá»©a cáº£ ba nguyÃªn tá»‘ N, P, K theo tá»‰ lá»‡ khÃ¡c nhau (vÃ­ dá»¥ NPK 16-16-8 nghÄ©a lÃ  16%N, 16%Pâ‚‚Oâ‚…, 8%Kâ‚‚O). Tiá»‡n lá»£i, cung cáº¥p dinh dÆ°á»¡ng cÃ¢n Ä‘á»‘i.",
+          "**PhÃ¢n phá»©c há»£p**: Vá»«a chá»©a N vá»«a chá»©a P trong cÃ¹ng má»™t phÃ¢n tá»­. VÃ­ dá»¥: Diamoni hydro phosphate $(NH_4)_2HPO_4$ (DAP).",
+          "**PhÃ¢n vi lÆ°á»£ng**: Cung cáº¥p cÃ¡c nguyÃªn tá»‘ cÃ¢y cáº§n **ráº¥t Ã­t** nhÆ°ng cá»±c ká»³ quan trá»ng: Bo (B), Mangan (Mn), Káº½m (Zn), Äá»“ng (Cu), Molypden (Mo)... Thiáº¿u vi lÆ°á»£ng â†’ cÃ¢y sinh bá»‡nh; thá»«a â†’ gÃ¢y ngá»™ Ä‘á»™c."
         ]
       }
     },
@@ -130,7 +130,7 @@ export const bai12 = {
       "id": "mod8",
       "type": "heading",
       "content": {
-        "text": "4. Nguyên tắc sử dụng phân bón hợp lý",
+        "text": "4. NguyÃªn táº¯c sá»­ dá»¥ng phÃ¢n bÃ³n há»£p lÃ½",
         "level": "h2"
       }
     },
@@ -138,8 +138,8 @@ export const bai12 = {
       "id": "mod9",
       "type": "warningBox",
       "content": {
-        "title": "Bón phân đúng kỹ thuật — 4 ĐÚNG",
-        "content": "1. **Đúng loại**: Chọn phân phù hợp with loại đất and loại cây (cây lá cần nhiều N, cây quả cần nhiều K).\\n2. **Đúng lượng**: Không bón quá nhiều (gây lãng phí, ô nhiễm) hoặc quá ít (cây thiếu dinh dưỡng). Theo khuyến cáo trên bao bì.\\n3. **Đúng thời kỳ**: Bón lót trước khi gieo (phân lân), bón thúc khi cây đang sinh trưởng (phân đạm), bón khi cây ra hoa (phân kali).\\n4. **Đúng cách**: Bón vào gốc rễ (phân rễ), phun lên lá (phân bón lá), không bón khi trời mưa to.",
+        "title": "BÃ³n phÃ¢n Ä‘Ãºng ká»¹ thuáº­t â€” 4 ÄÃšNG",
+        "content": "1. **ÄÃºng loáº¡i**: Chá»n phÃ¢n phÃ¹ há»£p with loáº¡i Ä‘áº¥t and loáº¡i cÃ¢y (cÃ¢y lÃ¡ cáº§n nhiá»u N, cÃ¢y quáº£ cáº§n nhiá»u K).\\n2. **ÄÃºng lÆ°á»£ng**: KhÃ´ng bÃ³n quÃ¡ nhiá»u (gÃ¢y lÃ£ng phÃ­, Ã´ nhiá»…m) hoáº·c quÃ¡ Ã­t (cÃ¢y thiáº¿u dinh dÆ°á»¡ng). Theo khuyáº¿n cÃ¡o trÃªn bao bÃ¬.\\n3. **ÄÃºng thá»i ká»³**: BÃ³n lÃ³t trÆ°á»›c khi gieo (phÃ¢n lÃ¢n), bÃ³n thÃºc khi cÃ¢y Ä‘ang sinh trÆ°á»Ÿng (phÃ¢n Ä‘áº¡m), bÃ³n khi cÃ¢y ra hoa (phÃ¢n kali).\\n4. **ÄÃºng cÃ¡ch**: BÃ³n vÃ o gá»‘c rá»… (phÃ¢n rá»…), phun lÃªn lÃ¡ (phÃ¢n bÃ³n lÃ¡), khÃ´ng bÃ³n khi trá»i mÆ°a to.",
         "color": "orange"
       }
     },
@@ -147,7 +147,7 @@ export const bai12 = {
       "id": "mod10",
       "type": "heading",
       "content": {
-        "text": "5. Tác hại của việc lạm dụng phân bón",
+        "text": "5. TÃ¡c háº¡i cá»§a viá»‡c láº¡m dá»¥ng phÃ¢n bÃ³n",
         "level": "h2"
       }
     },
@@ -157,10 +157,10 @@ export const bai12 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Ô nhiễm nguồn nước**: Phân bón dư thừa bị rửa trôi xuống sông hồ → tảo phát triển mạnh (phú dưỡng hóa) → hút hết oxy → cá and sinh vật thủy sinh chết.",
-          "**Đất bạc màu**: Bón quá nhiều phân hóa học lâu dài → phá hủy cấu trúc đất, giảm vi sinh vật có ích, đất chai cứng.",
-          "**Nguy hại sức khỏe**: Dư lượng nitrate ($NO_3^-$) trong rau quả có thể chuyển hóa thành nitrite ($NO_2^-$) — chất gây ung thư.",
-          "**Khuyến nghị**: Nên kết hợp phân hóa học with phân hữu cơ (phân chuồng, phân xanh) để vừa cung cấp dinh dưỡng vừa cải tạo đất."
+          "**Ã” nhiá»…m nguá»“n nÆ°á»›c**: PhÃ¢n bÃ³n dÆ° thá»«a bá»‹ rá»­a trÃ´i xuá»‘ng sÃ´ng há»“ â†’ táº£o phÃ¡t triá»ƒn máº¡nh (phÃº dÆ°á»¡ng hÃ³a) â†’ hÃºt háº¿t oxy â†’ cÃ¡ and sinh váº­t thá»§y sinh cháº¿t.",
+          "**Äáº¥t báº¡c mÃ u**: BÃ³n quÃ¡ nhiá»u phÃ¢n hÃ³a há»c lÃ¢u dÃ i â†’ phÃ¡ há»§y cáº¥u trÃºc Ä‘áº¥t, giáº£m vi sinh váº­t cÃ³ Ã­ch, Ä‘áº¥t chai cá»©ng.",
+          "**Nguy háº¡i sá»©c khá»e**: DÆ° lÆ°á»£ng nitrate ($NO_3^-$) trong rau quáº£ cÃ³ thá»ƒ chuyá»ƒn hÃ³a thÃ nh nitrite ($NO_2^-$) â€” cháº¥t gÃ¢y ung thÆ°.",
+          "**Khuyáº¿n nghá»‹**: NÃªn káº¿t há»£p phÃ¢n hÃ³a há»c with phÃ¢n há»¯u cÆ¡ (phÃ¢n chuá»“ng, phÃ¢n xanh) Ä‘á»ƒ vá»«a cung cáº¥p dinh dÆ°á»¡ng vá»«a cáº£i táº¡o Ä‘áº¥t."
         ]
       }
     },
@@ -168,8 +168,8 @@ export const bai12 = {
       "id": "mod12",
       "type": "infoBox",
       "content": {
-        "title": "Lưu ý thực tế quan trọng",
-        "content": "- **Không** bón phân đạm ($NH_4^+$) cùng with vôi ($Ca(OH)_2$) vì sẽ xảy ra phản ứng giải phóng khí $NH_3$ (amoniac), làm mất đạm.\\n- **Phân lân nung chảy** thích hợp cho đất chua (đất có pH thấp). **Supephốtphat** thích hợp cho đất trung tính hoặc kiềm.\\n- Bón phân NPK là cách tiện lợi nhất để cung cấp đủ 3 nguyên tố cùng lúc.",
+        "title": "LÆ°u Ã½ thá»±c táº¿ quan trá»ng",
+        "content": "- **KhÃ´ng** bÃ³n phÃ¢n Ä‘áº¡m ($NH_4^+$) cÃ¹ng with vÃ´i ($Ca(OH)_2$) vÃ¬ sáº½ xáº£y ra pháº£n á»©ng giáº£i phÃ³ng khÃ­ $NH_3$ (amoniac), lÃ m máº¥t Ä‘áº¡m.\\n- **PhÃ¢n lÃ¢n nung cháº£y** thÃ­ch há»£p cho Ä‘áº¥t chua (Ä‘áº¥t cÃ³ pH tháº¥p). **Supephá»‘tphat** thÃ­ch há»£p cho Ä‘áº¥t trung tÃ­nh hoáº·c kiá»m.\\n- BÃ³n phÃ¢n NPK lÃ  cÃ¡ch tiá»‡n lá»£i nháº¥t Ä‘á»ƒ cung cáº¥p Ä‘á»§ 3 nguyÃªn tá»‘ cÃ¹ng lÃºc.",
         "color": "green"
       }
     }
@@ -178,10 +178,10 @@ export const bai12 = {
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Phân bón hóa học",
+      "title": "BÃ i giáº£ng: PhÃ¢n bÃ³n hÃ³a há»c",
       "url": "https://www.youtube.com/watch?v=zPQFk6U7b9c",
       "thumbnail": "https://img.youtube.com/vi/zPQFk6U7b9c/0.jpg",
-      "description": "Vai trò của phân bón đối with cây trồng and các loại phân N, P, K phổ biến (VietJack)."
+      "description": "Vai trÃ² cá»§a phÃ¢n bÃ³n Ä‘á»‘i with cÃ¢y trá»“ng and cÃ¡c loáº¡i phÃ¢n N, P, K phá»• biáº¿n (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -191,7 +191,7 @@ export const bai12 = {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Phân đạm cung cấp nguyên tố dinh dưỡng nào?",
+        "question": "PhÃ¢n Ä‘áº¡m cung cáº¥p nguyÃªn tá»‘ dinh dÆ°á»¡ng nÃ o?",
         "options": [
           "N (Nitrogen)",
           "P (Phosphorus)",
@@ -204,54 +204,54 @@ export const bai12 = {
       },
       {
         "type": "multiple-choice",
-        "question": "Phân bón NPK là loại phân bón:",
+        "question": "PhÃ¢n bÃ³n NPK lÃ  loáº¡i phÃ¢n bÃ³n:",
         "options": [
-          "Phân đơn",
-          "Phân hỗn hợp",
-          "Phân vi lượng",
-          "Phân hữu cơ"
+          "PhÃ¢n Ä‘Æ¡n",
+          "PhÃ¢n há»—n há»£p",
+          "PhÃ¢n vi lÆ°á»£ng",
+          "PhÃ¢n há»¯u cÆ¡"
         ],
         "correctAnswer": 1,
-        "explanation": "Chứa cả 3 nguyên tố chính.",
+        "explanation": "Chá»©a cáº£ 3 nguyÃªn tá»‘ chÃ­nh.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Phân Kali ($K$) có tác dụng chính là giúp cây:",
+        "question": "PhÃ¢n Kali ($K$) cÃ³ tÃ¡c dá»¥ng chÃ­nh lÃ  giÃºp cÃ¢y:",
         "options": [
-          "Phát triển lá xanh",
-          "Cứng cáp, chịu rét, chống sâu bệnh",
-          "Nảy mầm nhanh",
-          "Thơm quả"
+          "PhÃ¡t triá»ƒn lÃ¡ xanh",
+          "Cá»©ng cÃ¡p, chá»‹u rÃ©t, chá»‘ng sÃ¢u bá»‡nh",
+          "Náº£y máº§m nhanh",
+          "ThÆ¡m quáº£"
         ],
         "correctAnswer": 1,
-        "explanation": "Kali giúp tăng sức đề kháng cho cây.",
+        "explanation": "Kali giÃºp tÄƒng sá»©c Ä‘á» khÃ¡ng cho cÃ¢y.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Người ta không bón phân đạm cùng with vôi vì:",
+        "question": "NgÆ°á»i ta khÃ´ng bÃ³n phÃ¢n Ä‘áº¡m cÃ¹ng with vÃ´i vÃ¬:",
         "options": [
-          "Làm tốn phân",
-          "Xảy ra phản ứng giải phóng khí amoniac làm mất đạm",
-          "Làm đất quá cứng",
-          "Làm cây héo"
+          "LÃ m tá»‘n phÃ¢n",
+          "Xáº£y ra pháº£n á»©ng giáº£i phÃ³ng khÃ­ amoniac lÃ m máº¥t Ä‘áº¡m",
+          "LÃ m Ä‘áº¥t quÃ¡ cá»©ng",
+          "LÃ m cÃ¢y hÃ©o"
         ],
         "correctAnswer": 1,
-        "explanation": "Mất chất dinh dưỡng dưới dạng khí.",
+        "explanation": "Máº¥t cháº¥t dinh dÆ°á»¡ng dÆ°á»›i dáº¡ng khÃ­.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tại sao cần bón phân vi lượng cho cây with lượng rất nhỏ?",
+        "question": "Táº¡i sao cáº§n bÃ³n phÃ¢n vi lÆ°á»£ng cho cÃ¢y with lÆ°á»£ng ráº¥t nhá»?",
         "options": [
-          "Vì nó đắt",
-          "Vì cây chỉ cần một lượng rất ít nhưng cực kỳ quan trọng",
-          "Vì nó gây độc nếu dùng nhiều",
-          "Cả b and c"
+          "VÃ¬ nÃ³ Ä‘áº¯t",
+          "VÃ¬ cÃ¢y chá»‰ cáº§n má»™t lÆ°á»£ng ráº¥t Ã­t nhÆ°ng cá»±c ká»³ quan trá»ng",
+          "VÃ¬ nÃ³ gÃ¢y Ä‘á»™c náº¿u dÃ¹ng nhiá»u",
+          "Cáº£ b and c"
         ],
         "correctAnswer": 3,
-        "explanation": "Thiếu thì cây bệnh, thừa thì gây độc.",
+        "explanation": "Thiáº¿u thÃ¬ cÃ¢y bá»‡nh, thá»«a thÃ¬ gÃ¢y Ä‘á»™c.",
         "points": 10
       }
     ],
@@ -260,3 +260,4 @@ export const bai12 = {
   },
   "realWorldApplications": []
 };
+

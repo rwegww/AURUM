@@ -1,21 +1,22 @@
-import express from 'express';
+﻿import express from 'express';
 import Lesson from '../models/Lesson.js';
 
 const router = express.Router();
 
-// Get all lessons with optional class filter
+// Get all bai_hoc with optional class filter
 router.get('/', async (req, res) => {
   try {
-    const { classId, programId } = req.query;
+    const { classId, gradeLevelId, programId } = req.query;
     let query = {};
-    if (classId) query.classId = parseInt(classId);
+    const requestedGradeLevelId = gradeLevelId ?? classId;
+    if (requestedGradeLevelId) query.gradeLevelId = parseInt(requestedGradeLevelId);
     if (programId) query.programId = programId;
 
-    const lessons = await Lesson.find(query);
+    const bai_hoc = await Lesson.find(query);
     
-    res.json(lessons);
+    res.json(bai_hoc);
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi tải danh sách bài học', error: err.message });
+    res.status(500).json({ message: 'Lá»—i táº£i danh sÃ¡ch bÃ i há»c', error: err.message });
   }
 });
 
@@ -26,13 +27,14 @@ router.get('/:lessonId', async (req, res) => {
     const lesson = await Lesson.findById(lessonId);
     
     if (!lesson) {
-      return res.status(404).json({ message: 'Không tìm thấy bài học' });
+      return res.status(404).json({ message: 'KhÃ´ng tÃ¬m tháº¥y bÃ i há»c' });
     }
 
     res.json(lesson);
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi tải bài học', error: err.message });
+    res.status(500).json({ message: 'Lá»—i táº£i bÃ i há»c', error: err.message });
   }
 });
 
 export default router;
+

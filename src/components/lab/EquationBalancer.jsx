@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+﻿import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import EquationSkillTree from './EquationSkillTree';
@@ -27,7 +27,7 @@ const EquationBalancer = () => {
                 setProgress(data);
             }
         } catch (err) {
-            console.error('Lỗi tải tiến trình cân bằng:', err);
+            console.error('Lá»—i táº£i tiáº¿n trÃ¬nh cÃ¢n báº±ng:', err);
         }
     };
     fetchProgress();
@@ -45,7 +45,7 @@ const EquationBalancer = () => {
             body: JSON.stringify({ balancingProgress: newProgress })
         });
     } catch (err) {
-        console.error('Lỗi lưu tiến trình:', err);
+        console.error('Lá»—i lÆ°u tiáº¿n trÃ¬nh:', err);
     }
   };
 
@@ -169,23 +169,23 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
     if (loading) return (
         <div className="bg-white rounded-[32px] border border-viet-border p-20 flex flex-col items-center justify-center min-h-[400px]">
             <div className="w-12 h-12 border-4 border-viet-green border-t-transparent rounded-full animate-spin mb-4" />
-            <p className="text-viet-green font-black uppercase tracking-widest text-[10px]">Đang tải thử thách...</p>
+            <p className="text-viet-green font-black uppercase tracking-widest text-[10px]">Äang táº£i thá»­ thÃ¡ch...</p>
         </div>
     );
 
     if (!questions || questions.length === 0) return (
         <div className="bg-white rounded-[32px] border border-viet-border p-20 text-center">
-            <p className="text-red-500 font-bold mb-4">Rất tiếc, không tìm thấy câu hỏi cho chặng này!</p>
-            <button onClick={onBack} className="viet-btn-pill px-8 py-2">Quay lại cây kỹ năng</button>
+            <p className="text-red-500 font-bold mb-4">Ráº¥t tiáº¿c, khÃ´ng tÃ¬m tháº¥y cÃ¢u há»i cho cháº·ng nÃ y!</p>
+            <button onClick={onBack} className="viet-btn-pill px-8 py-2">Quay láº¡i cÃ¢y ká»¹ nÄƒng</button>
         </div>
     );
 
     return (
         <div className="bg-white rounded-[32px] border border-viet-border p-10 shadow-sm relative overflow-hidden">
-            <button onClick={onBack} className="absolute top-8 left-8 text-viet-text-light font-bold hover:text-viet-green transition-colors">← Thoát</button>
+            <button onClick={onBack} className="absolute top-8 left-8 text-viet-text-light font-bold hover:text-viet-green transition-colors">â† ThoÃ¡t</button>
             <div className="text-center mb-12">
-                <span className="text-[10px] font-black text-viet-green uppercase tracking-[4px]">Chặng số {nodeId}</span>
-                <h2 className="text-2xl font-black text-viet-text italic">THỬ THÁCH CÂN BẰNG</h2>
+                <span className="text-[10px] font-black text-viet-green uppercase tracking-[4px]">Cháº·ng sá»‘ {nodeId}</span>
+                <h2 className="text-2xl font-black text-viet-text italic">THá»¬ THÃCH CÃ‚N Báº°NG</h2>
             </div>
 
             {/* Step Indicators (the 6 dots/tabs) */}
@@ -206,16 +206,16 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
             </div>
 
             <div className="bg-[#fdfaf1] rounded-[24px] p-12 border border-viet-border/50 text-center">
-                 <p className="text-[11px] font-black text-viet-green uppercase tracking-[3px] mb-8">Cân bằng phương trình sau</p>
+                 <p className="text-[11px] font-black text-viet-green uppercase tracking-[3px] mb-8">CÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh sau</p>
                  
                  <div className="flex flex-wrap items-center justify-center gap-6 mb-12">
                     {allFormulas.map((f, i) => (
                         <React.Fragment key={i}>
-                            {i === currentQuestion.reactants.length && <span className="text-3xl font-black text-viet-green">→</span>}
+                            {i === currentQuestion.reactants.length && <span className="text-3xl font-black text-viet-green">â†’</span>}
                             {i > 0 && i !== currentQuestion.reactants.length && <span className="text-2xl font-bold text-gray-300">+</span>}
                             <div className="flex flex-col items-center gap-3">
                                 <div className="flex items-center gap-1">
-                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.max(1, next[i]-1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">−</button>
+                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.max(1, next[i]-1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">âˆ’</button>
                                     <div className="w-12 h-12 rounded-xl bg-white border-2 border-viet-green/20 flex items-center justify-center text-xl font-black">{userCoeffs[i]}</div>
                                     <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.min(20, next[i]+1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">+</button>
                                 </div>
@@ -228,14 +228,14 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
                  {showResult ? (
                     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                         <p className={`text-lg font-black mb-6 ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}>
-                            {isCorrect ? '✨ TUYỆT VỜI, CHÍNH XÁC!' : `❌ SAI RỒI! ĐÁP ÁN LÀ: ${currentQuestion.answer.join(', ')}`}
+                            {isCorrect ? 'âœ¨ TUYá»†T Vá»œI, CHÃNH XÃC!' : `âŒ SAI Rá»’I! ÄÃP ÃN LÃ€: ${currentQuestion.answer.join(', ')}`}
                         </p>
                         <button onClick={handleNext} className="viet-btn-green px-12 py-4 shadow-xl">
-                            {currentStep < 5 ? 'Câu tiếp theo →' : 'Hoàn thành chặng'}
+                            {currentStep < 5 ? 'CÃ¢u tiáº¿p theo â†’' : 'HoÃ n thÃ nh cháº·ng'}
                         </button>
                     </motion.div>
                  ) : (
-                    <button onClick={checkAnswer} className="viet-btn-green px-12 py-4 shadow-xl">Kiểm tra kết quả</button>
+                    <button onClick={checkAnswer} className="viet-btn-green px-12 py-4 shadow-xl">Kiá»ƒm tra káº¿t quáº£</button>
                  )}
             </div>
         </div>
@@ -243,3 +243,4 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
 };
 
 export default EquationBalancer;
+

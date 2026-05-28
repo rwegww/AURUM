@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     id TEXT PRIMARY KEY, 
     username TEXT UNIQUE NOT NULL,
     email TEXT UNIQUE,
-    password TEXT,
+    password_hash TEXT,
     role TEXT DEFAULT 'student' CHECK (role IN ('student', 'teacher', 'admin')),
     xp INTEGER DEFAULT 0,
     level INTEGER DEFAULT 1,
@@ -32,7 +32,7 @@ ON CONFLICT (id) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS lessons (
     id TEXT PRIMARY KEY,
-    class_id INTEGER NOT NULL REFERENCES grade_levels(id) ON DELETE CASCADE,
+    grade_level_id INTEGER NOT NULL REFERENCES grade_levels(id) ON DELETE CASCADE,
     program_id TEXT DEFAULT 'ketnoi',
     title TEXT NOT NULL,
     chapter TEXT,
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS lab_chemicals (
     name TEXT NOT NULL,
     state TEXT CHECK (state IN ('solid', 'liquid', 'gas')),
     color TEXT,
-    type TEXT,
+    category TEXT,
     is_starter BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS lab_reactions (
     equation TEXT NOT NULL,
     reactants JSONB NOT NULL,
     products JSONB NOT NULL,
-    grade_level INTEGER REFERENCES grade_levels(id) ON DELETE CASCADE,
+    grade_level_id INTEGER REFERENCES grade_levels(id) ON DELETE CASCADE,
     lesson_id TEXT REFERENCES lessons(id) ON DELETE SET NULL,
     category TEXT,
     conditions TEXT,
@@ -102,13 +102,13 @@ CREATE TABLE IF NOT EXISTS periodic_elements (
     color_hex TEXT,
     electron_configuration TEXT,
     is_discovered_by_default BOOLEAN DEFAULT false,
-    grade_level INTEGER REFERENCES grade_levels(id) ON DELETE CASCADE,
+    grade_level_id INTEGER REFERENCES grade_levels(id) ON DELETE CASCADE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS arena_questions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    grade_level INTEGER NOT NULL DEFAULT 8 REFERENCES grade_levels(id) ON DELETE CASCADE,
+    grade_level_id INTEGER NOT NULL DEFAULT 8 REFERENCES grade_levels(id) ON DELETE CASCADE,
     difficulty TEXT DEFAULT 'easy' CHECK (difficulty IN ('easy', 'medium', 'hard', 'super', 'auto')),
     question TEXT NOT NULL,
     options JSONB NOT NULL DEFAULT '[]',
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS arena_match_history (
     opponent_name TEXT,
     result TEXT CHECK (result IN ('win', 'lose', 'draw')),
     score INTEGER DEFAULT 0,
-    pts_change INTEGER DEFAULT 0,
+    points_delta INTEGER DEFAULT 0,
     played_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS materials (
     file_url TEXT NOT NULL,
     file_type TEXT,
     category TEXT,
-    author_id TEXT REFERENCES users(id),
+    created_by_user_id TEXT REFERENCES users(id),
     view_count INTEGER DEFAULT 0,
     download_count INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS material_feedback (
 CREATE TABLE IF NOT EXISTS classes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    grade_level INTEGER NOT NULL REFERENCES grade_levels(id) ON DELETE CASCADE,
+    grade_level_id INTEGER NOT NULL REFERENCES grade_levels(id) ON DELETE CASCADE,
     teacher_id TEXT REFERENCES users(id) ON DELETE CASCADE,
     description TEXT,
     code TEXT UNIQUE NOT NULL,
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS class_assignment_submissions (
     student_id TEXT REFERENCES users(id) ON DELETE CASCADE,
     status TEXT DEFAULT 'submitted' CHECK (status IN ('submitted', 'graded')),
     score NUMERIC,
-    feedback TEXT,
+    teacher_feedback TEXT,
     answers JSONB DEFAULT '[]',
     submitted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(post_id, student_id)
@@ -275,11 +275,14 @@ CREATE TABLE IF NOT EXISTS ai_cache (
 );
 
 -- PROGRESS TRACKING
-CREATE TABLE IF NOT EXISTS user_unlocked_lessons (
+CREATE TABLE IF NOT EXISTS user_progress (
     user_id TEXT REFERENCES users(id) ON DELETE CASCADE,
-    lesson_id TEXT REFERENCES lessons(id) ON DELETE CASCADE,
+    progress_type TEXT NOT NULL CHECK (progress_type IN ('lesson', 'chemical', 'achievement', 'balancing')),
+    target_id TEXT NOT NULL,
+    progress_payload JSONB NOT NULL DEFAULT '{}',
     unlocked_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, lesson_id)
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, progress_type, target_id)
 );
 
 -- FUNCTIONS
@@ -300,7 +303,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- INDEXES
 CREATE INDEX IF NOT EXISTS idx_kb_input_normalized ON ai_knowledge_base(input_normalized);
-CREATE INDEX IF NOT EXISTS idx_lessons_grade ON lessons(class_id);
+CREATE INDEX IF NOT EXISTS idx_lessons_grade_level ON lessons(grade_level_id);
 CREATE INDEX IF NOT EXISTS idx_discussions_lesson ON lesson_discussions(lesson_id);
 CREATE INDEX IF NOT EXISTS idx_user_missions_user ON user_missions(user_id);
 

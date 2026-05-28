@@ -33,17 +33,17 @@ async function migrate() {
   
   console.log(`🧪 Migrating ${uniqueChemicals.length} unique chemicals...`);
   const formattedChemicals = uniqueChemicals.map(c => ({
-    formula: c.formula,
-    name: c.name,
-    state: c.state,
-    color: c.color,
-    type: c.category,
-    is_starter: c.isStarter || false
+    cong_thuc: c.formula,
+    ten: c.name,
+    trang_thai_vat_chat: c.state,
+    mau_sac: c.color,
+    danh_muc: c.category,
+    la_chat_khoi_dau: c.isStarter || false
   }));
 
   const { error: chemError } = await supabase
-    .from('lab_chemicals')
-    .upsert(formattedChemicals, { onConflict: 'formula' });
+    .from('hoa_chat')
+    .upsert(formattedChemicals, { onConflict: 'cong_thuc' });
 
   if (chemError) {
     console.error('❌ Error migrating chemicals:', chemError);
@@ -55,24 +55,24 @@ async function migrate() {
   console.log(`⚗️ Migrating ${reactions.length} reactions...`);
   const formattedReactions = reactions.map(r => ({
     id: r.id,
-    name: r.name,
+    ten: r.name,
     type: r.type,
-    equation: r.equation,
-    reactants: r.reactants,
-    products: r.products,
-    grade_level: r.gradeLevel,
-    category: r.category,
-    conditions: r.conditions,
-    observation: r.observation,
-    energy: r.energy,
-    animation: r.animation,
-    requires_heat: r.requiresHeat || false,
-    danger_level: r.dangerLevel || 0,
-    safety_warning: r.safetyWarning
+    phuong_trinh: r.equation,
+    chat_tham_gia: r.reactants,
+    san_pham: r.products,
+    khoi_id: r.gradeLevel,
+    danh_muc: r.category,
+    dieu_kien: r.conditions,
+    hien_tuong: r.observation,
+    nang_luong: r.energy,
+    hieu_ung: r.animation,
+    can_nhiet: r.requiresHeat || false,
+    muc_do_nguy_hiem: r.dangerLevel || 0,
+    canh_bao_an_toan: r.safetyWarning
   }));
 
   const { error: rxError } = await supabase
-    .from('lab_reactions')
+    .from('phan_ung')
     .upsert(formattedReactions, { onConflict: 'id' });
 
   if (rxError) {

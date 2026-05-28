@@ -1,21 +1,21 @@
-export const bai2 = {
+﻿export const bai2 = {
   "id": "hoa9_kntt_bai2",
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 6,
-  "chapterName": "Chương 6: Kim loại",
+  "chapterName": "ChÆ°Æ¡ng 6: Kim loáº¡i",
   "lessonId": 2,
-  "title": "Bài 2: Dãy hoạt động hóa học",
-  "description": "Nghiên cứu thứ tự hoạt động hóa học of các kim loại và ý nghĩa của dãy trong việc dự đoán phản ứng.",
+  "title": "BÃ i 2: DÃ£y hoáº¡t Ä‘á»™ng hÃ³a há»c",
+  "description": "NghiÃªn cá»©u thá»© tá»± hoáº¡t Ä‘á»™ng hÃ³a há»c of cÃ¡c kim loáº¡i vÃ  Ã½ nghÄ©a cá»§a dÃ£y trong viá»‡c dá»± Ä‘oÃ¡n pháº£n á»©ng.",
   "level": "Intermediate",
   "order": 2,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bí thuật: Dãy Hoạt Động Hóa Học",
+      "title": "BÃ­ thuáº­t: DÃ£y Hoáº¡t Äá»™ng HÃ³a Há»c",
       "url": "https://www.youtube.com/watch?v=Trq879pu8Mw",
       "thumbnail": "https://img.youtube.com/vi/Trq879pu8Mw/0.jpg",
-      "description": "Khám phá câu công thức vạn năng để làm chủ mọi phản ứng kim loại."
+      "description": "KhÃ¡m phÃ¡ cÃ¢u cÃ´ng thá»©c váº¡n nÄƒng Ä‘á»ƒ lÃ m chá»§ má»i pháº£n á»©ng kim loáº¡i."
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@ export const bai2 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Câu Công Thức Bất Hủ",
+        "text": "1. CÃ¢u CÃ´ng Thá»©c Báº¥t Há»§",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@ export const bai2 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Dãy hoạt động hóa học sắp xếp các kim loại theo chiều giảm dần mức độ hoạt động: từ cực mạnh đến cực yếu."
+        "text": "DÃ£y hoáº¡t Ä‘á»™ng hÃ³a há»c sáº¯p xáº¿p cÃ¡c kim loáº¡i theo chiá»u giáº£m dáº§n má»©c Ä‘á»™ hoáº¡t Ä‘á»™ng: tá»« cá»±c máº¡nh Ä‘áº¿n cá»±c yáº¿u."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Công Thức Lướt Não",
-        "content": "**K - Na - Ca - Mg - Al - Zn - Fe - Ni - Sn - Pb - (H) - Cu - Hg - Ag - Pt - Au**\n\n*Khi Nào Cần May Áo Giáp Sắt Nhớ Sang Phố Hỏi Cửa Hàng Á Phi Âu.*\n\n(Lưu ý: Kim loại đứng trước mạnh hơn, đứng sau yếu hơn).",
+        "title": "CÃ´ng Thá»©c LÆ°á»›t NÃ£o",
+        "content": "**K - Na - Ca - Mg - Al - Zn - Fe - Ni - Sn - Pb - (H) - Cu - Hg - Ag - Pt - Au**\n\n*Khi NÃ o Cáº§n May Ão GiÃ¡p Sáº¯t Nhá»› Sang Phá»‘ Há»i Cá»­a HÃ ng Ã Phi Ã‚u.*\n\n(LÆ°u Ã½: Kim loáº¡i Ä‘á»©ng trÆ°á»›c máº¡nh hÆ¡n, Ä‘á»©ng sau yáº¿u hÆ¡n).",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@ export const bai2 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Ý Nghĩa Của Dãy Sấm Truyền",
+        "text": "2. Ã NghÄ©a Cá»§a DÃ£y Sáº¥m Truyá»n",
         "level": "h2"
       }
     },
@@ -57,9 +57,9 @@ export const bai2 = {
       "type": "list",
       "content": {
         "items": [
-          "**Tác dụng với nước:** 4 tiền bối (K, Na, Ba, Ca) phản ứng mãnh liệt với nước ở nhiệt độ thường tạo dung dịch Kiềm và khí $H_2$.",
-          "**Tác dụng với Axit:** Kim loại đứng trước (H) đẩy được Hydro ra khỏi dung dịch axit loãng ($HCl, H_2SO_4$).",
-          "**Phản ứng đẩy muối:** Kim loại mạnh hơn (đứng trước) đẩy kim loại yếu hơn (đứng sau) ra khỏi dung dịch muối (Trừ 4 kim loại tan trong nước)."
+          "**TÃ¡c dá»¥ng vá»›i nÆ°á»›c:** 4 tiá»n bá»‘i (K, Na, Ba, Ca) pháº£n á»©ng mÃ£nh liá»‡t vá»›i nÆ°á»›c á»Ÿ nhiá»‡t Ä‘á»™ thÆ°á»ng táº¡o dung dá»‹ch Kiá»m vÃ  khÃ­ $H_2$.",
+          "**TÃ¡c dá»¥ng vá»›i Axit:** Kim loáº¡i Ä‘á»©ng trÆ°á»›c (H) Ä‘áº©y Ä‘Æ°á»£c Hydro ra khá»i dung dá»‹ch axit loÃ£ng ($HCl, H_2SO_4$).",
+          "**Pháº£n á»©ng Ä‘áº©y muá»‘i:** Kim loáº¡i máº¡nh hÆ¡n (Ä‘á»©ng trÆ°á»›c) Ä‘áº©y kim loáº¡i yáº¿u hÆ¡n (Ä‘á»©ng sau) ra khá»i dung dá»‹ch muá»‘i (Trá»« 4 kim loáº¡i tan trong nÆ°á»›c)."
         ]
       }
     },
@@ -67,8 +67,8 @@ export const bai2 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Cảnh báo Lừa Đảo!",
-        "content": "Đừng bao giờ dùng luật 'đẩy muối' cho K, Na, Ba, Ca trong dung dịch nước. Tụi nó sẽ 'ăn' nước trước khi kịp chạm vào muối! \n\nVí dụ: $Na$ vào $CuSO_4$ sẽ tạo $Cu(OH)_2$ kết tủa xanh chứ không tạo ra kim loại $Cu$.",
+        "title": "Cáº£nh bÃ¡o Lá»«a Äáº£o!",
+        "content": "Äá»«ng bao giá» dÃ¹ng luáº­t 'Ä‘áº©y muá»‘i' cho K, Na, Ba, Ca trong dung dá»‹ch nÆ°á»›c. Tá»¥i nÃ³ sáº½ 'Äƒn' nÆ°á»›c trÆ°á»›c khi ká»‹p cháº¡m vÃ o muá»‘i! \n\nVÃ­ dá»¥: $Na$ vÃ o $CuSO_4$ sáº½ táº¡o $Cu(OH)_2$ káº¿t tá»§a xanh chá»© khÃ´ng táº¡o ra kim loáº¡i $Cu$.",
         "color": "orange"
       }
     }
@@ -76,25 +76,25 @@ export const bai2 = {
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Trong phòng thí nghiệm, có một số kim loại cực kỳ 'hiếu động', chúng phản ứng mãnh liệt ngay khi vừa chạm vào nước.",
+      "narrative": "Trong phÃ²ng thÃ­ nghiá»‡m, cÃ³ má»™t sá»‘ kim loáº¡i cá»±c ká»³ 'hiáº¿u Ä‘á»™ng', chÃºng pháº£n á»©ng mÃ£nh liá»‡t ngay khi vá»«a cháº¡m vÃ o nÆ°á»›c.",
       "images": [
         "https://images.unsplash.com/photo-1532187863486-abf9d39d99c5?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1554110397-9bac083977c6?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "Hình ảnh nào mô tả hiện tượng Natri (Sodium) phản ứng mãnh liệt, chạy trên mặt nước và bốc cháy?",
+      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ hiá»‡n tÆ°á»£ng Natri (Sodium) pháº£n á»©ng mÃ£nh liá»‡t, cháº¡y trÃªn máº·t nÆ°á»›c vÃ  bá»‘c chÃ¡y?",
       "correctAnswer": 0,
-      "targetType": "nhận biết",
-      "source": "Thí nghiệm thực tế"
+      "targetType": "nháº­n biáº¿t",
+      "source": "ThÃ­ nghiá»‡m thá»±c táº¿"
     },
     {
       "type": "matching",
-      "narrative": "Hãy giúp tôi phân loại các nhóm kim loại dựa theo 'quyền năng' của chúng trong dãy hoạt động.",
+      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i cÃ¡c nhÃ³m kim loáº¡i dá»±a theo 'quyá»n nÄƒng' cá»§a chÃºng trong dÃ£y hoáº¡t Ä‘á»™ng.",
       "leftItems": [
-        { "id": "m1", "label": "Nhóm Tan Trong Nước" },
-        { "id": "m2", "label": "Nhóm Đẩy Hydro" },
-        { "id": "m3", "label": "Nhóm Quý Tộc (Yếu)" }
+        { "id": "m1", "label": "NhÃ³m Tan Trong NÆ°á»›c" },
+        { "id": "m2", "label": "NhÃ³m Äáº©y Hydro" },
+        { "id": "m3", "label": "NhÃ³m QuÃ½ Tá»™c (Yáº¿u)" }
       ],
       "items": [
         { "id": "m1", "label": "K, Na, Ba, Ca" },
@@ -102,79 +102,79 @@ export const bai2 = {
         { "id": "m3", "label": "Cu, Ag, Au" }
       ],
       "correctOrder": ["m1", "m2", "m3"],
-      "question": "Nối nhóm kim loại với danh sách các nguyên tố tương ứng.",
-      "source": "Phân loại dãy"
+      "question": "Ná»‘i nhÃ³m kim loáº¡i vá»›i danh sÃ¡ch cÃ¡c nguyÃªn tá»‘ tÆ°Æ¡ng á»©ng.",
+      "source": "PhÃ¢n loáº¡i dÃ£y"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Bạn được cho một mảnh Sắt (Fe) và dung dịch Đồng(II) Sunfat. Hãy dự đoán điều gì sẽ xảy ra.",
+      "narrative": "Báº¡n Ä‘Æ°á»£c cho má»™t máº£nh Sáº¯t (Fe) vÃ  dung dá»‹ch Äá»“ng(II) Sunfat. HÃ£y dá»± Ä‘oÃ¡n Ä‘iá»u gÃ¬ sáº½ xáº£y ra.",
       "options": [
-        "Đồng bị đẩy ra, bám màu đỏ vào đinh sắt",
-        "Sắt không phản ứng với đồng",
-        "Dung dịch bốc cháy mãnh liệt",
-        "Sắt biến thành vàng"
+        "Äá»“ng bá»‹ Ä‘áº©y ra, bÃ¡m mÃ u Ä‘á» vÃ o Ä‘inh sáº¯t",
+        "Sáº¯t khÃ´ng pháº£n á»©ng vá»›i Ä‘á»“ng",
+        "Dung dá»‹ch bá»‘c chÃ¡y mÃ£nh liá»‡t",
+        "Sáº¯t biáº¿n thÃ nh vÃ ng"
       ],
       "correctAnswer": 0,
-      "question": "Hiện tượng thực tế khi cho đinh sắt vào dung dịch $CuSO_4$ là gì?",
-      "source": "Tính chất đẩy muối"
+      "question": "Hiá»‡n tÆ°á»£ng thá»±c táº¿ khi cho Ä‘inh sáº¯t vÃ o dung dá»‹ch $CuSO_4$ lÃ  gÃ¬?",
+      "source": "TÃ­nh cháº¥t Ä‘áº©y muá»‘i"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Để dự đoán xem một kim loại có tác dụng được với Axit loãng hay không, ta cần so sánh vị trí của nó với một nguyên tố phi kim đặc biệt trong dãy.",
-      "placeholder": "Nhập ký hiệu hóa học...",
+      "narrative": "Äá»ƒ dá»± Ä‘oÃ¡n xem má»™t kim loáº¡i cÃ³ tÃ¡c dá»¥ng Ä‘Æ°á»£c vá»›i Axit loÃ£ng hay khÃ´ng, ta cáº§n so sÃ¡nh vá»‹ trÃ­ cá»§a nÃ³ vá»›i má»™t nguyÃªn tá»‘ phi kim Ä‘áº·c biá»‡t trong dÃ£y.",
+      "placeholder": "Nháº­p kÃ½ hiá»‡u hÃ³a há»c...",
       "correctAnswer": "H",
-      "question": "Kim loại phải đứng trước nguyên tố nào trong dãy để đẩy được $H_2$ ra khỏi axit?",
-      "source": "Quy tắc axit"
+      "question": "Kim loáº¡i pháº£i Ä‘á»©ng trÆ°á»›c nguyÃªn tá»‘ nÃ o trong dÃ£y Ä‘á»ƒ Ä‘áº©y Ä‘Æ°á»£c $H_2$ ra khá»i axit?",
+      "source": "Quy táº¯c axit"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thử thách sắp xếp: Hãy đưa các kim loại sau về đúng thứ tự GIẢM DẦN mức độ hoạt động hóa học.",
+      "narrative": "Thá»­ thÃ¡ch sáº¯p xáº¿p: HÃ£y Ä‘Æ°a cÃ¡c kim loáº¡i sau vá» Ä‘Ãºng thá»© tá»± GIáº¢M Dáº¦N má»©c Ä‘á»™ hoáº¡t Ä‘á»™ng hÃ³a há»c.",
       "items": [
         { "id": "d1", "label": "K (Kali)" },
-        { "id": "d2", "label": "Al (Nhôm)" },
-        { "id": "d3", "label": "Fe (Sắt)" },
+        { "id": "d2", "label": "Al (NhÃ´m)" },
+        { "id": "d3", "label": "Fe (Sáº¯t)" },
         { "id": "d4", "label": "H (Hydro)" },
-        { "id": "d5", "label": "Cu (Đồng)" }
+        { "id": "d5", "label": "Cu (Äá»“ng)" }
       ],
       "correctOrder": ["d1", "d2", "d3", "d4", "d5"],
-      "question": "Sắp xếp theo chiều hoạt động hóa học yếu dần.",
-      "source": "Thứ tự công thức"
+      "question": "Sáº¯p xáº¿p theo chiá»u hoáº¡t Ä‘á»™ng hÃ³a há»c yáº¿u dáº§n.",
+      "source": "Thá»© tá»± cÃ´ng thá»©c"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Kim loại nào đứng đầu dãy (mạnh nhất) trong các nguyên tố sau?",
+        "question": "Kim loáº¡i nÃ o Ä‘á»©ng Ä‘áº§u dÃ£y (máº¡nh nháº¥t) trong cÃ¡c nguyÃªn tá»‘ sau?",
         "options": ["K", "Fe", "Cu", "Ag"],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Kim loại đứng sau (H) có tác dụng được với HCl loãng không?",
-        "options": ["Có", "Không", "Chỉ khi đun nóng", "Tùy loại axit"],
+        "question": "Kim loáº¡i Ä‘á»©ng sau (H) cÃ³ tÃ¡c dá»¥ng Ä‘Æ°á»£c vá»›i HCl loÃ£ng khÃ´ng?",
+        "options": ["CÃ³", "KhÃ´ng", "Chá»‰ khi Ä‘un nÃ³ng", "TÃ¹y loáº¡i axit"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Hiện tượng khi cho Na vào nước là:",
-        "options": ["Chìm xuống", "Tan chậm", "Chạy trên mặt nước, có khí thoát ra", "Không hiện tượng"],
+        "question": "Hiá»‡n tÆ°á»£ng khi cho Na vÃ o nÆ°á»›c lÃ :",
+        "options": ["ChÃ¬m xuá»‘ng", "Tan cháº­m", "Cháº¡y trÃªn máº·t nÆ°á»›c, cÃ³ khÃ­ thoÃ¡t ra", "KhÃ´ng hiá»‡n tÆ°á»£ng"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Phản ứng $Cu + AgNO_3 \to Cu(NO_3)_2 + Ag$ cho thấy:",
-        "options": ["Cu mạnh hơn Ag", "Ag mạnh hơn Cu", "Cu và Ag mạnh bằng nhau", "Phản ứng không xảy ra"],
+        "question": "Pháº£n á»©ng $Cu + AgNO_3 \to Cu(NO_3)_2 + Ag$ cho tháº¥y:",
+        "options": ["Cu máº¡nh hÆ¡n Ag", "Ag máº¡nh hÆ¡n Cu", "Cu vÃ  Ag máº¡nh báº±ng nhau", "Pháº£n á»©ng khÃ´ng xáº£y ra"],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tại sao không dùng K để đẩy Cu ra khỏi $CuSO_4$ trong dung dịch?",
-        "options": ["K yếu hơn Cu", "K phản ứng với nước trước", "K không phản ứng với muối", "K quá đắt"],
+        "question": "Táº¡i sao khÃ´ng dÃ¹ng K Ä‘á»ƒ Ä‘áº©y Cu ra khá»i $CuSO_4$ trong dung dá»‹ch?",
+        "options": ["K yáº¿u hÆ¡n Cu", "K pháº£n á»©ng vá»›i nÆ°á»›c trÆ°á»›c", "K khÃ´ng pháº£n á»©ng vá»›i muá»‘i", "K quÃ¡ Ä‘áº¯t"],
         "correctAnswer": 1,
         "points": 10
       }
@@ -183,3 +183,4 @@ export const bai2 = {
     "advanced": []
   }
 };
+

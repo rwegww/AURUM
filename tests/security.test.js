@@ -1,4 +1,4 @@
-import request from 'supertest';
+﻿import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -7,7 +7,7 @@ process.env.JWT_SECRET = 'test-secret';
 
 const sessionId = 'session-1';
 
-const users = {
+const nguoi_dung = {
   student: { id: 'student', username: 'student', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   outsider: { id: 'outsider', username: 'outsider', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   teacher: { id: 'teacher', username: 'teacher', role: 'teacher', currentSessionId: sessionId, xp: 0, level: 1 },
@@ -16,10 +16,10 @@ const users = {
 };
 
 const userModel = {
-  findById: vi.fn(async (id) => users[id] || null),
+  findById: vi.fn(async (id) => nguoi_dung[id] || null),
   findOne: vi.fn(async () => null),
   create: vi.fn(async (data) => ({ id: 'new-user', ...data, xp: 0, level: 1 })),
-  update: vi.fn(async (id, data) => ({ ...users[id], ...data })),
+  update: vi.fn(async (id, data) => ({ ...nguoi_dung[id], ...data })),
   countStudents: vi.fn(async () => 0),
   aggregateStats: vi.fn(async () => ({ totalXP: 0, avgLevel: 1, levelDistribution: {}, gradeDistribution: {}, topXP: [], topStreak: [] })),
 };
@@ -29,7 +29,7 @@ const lessonModel = {
   findById: vi.fn(async (id) => ({ id, lessonId: id })),
 };
 
-const feedbackModel = {
+const phan_hoiModel = {
   countUnread: vi.fn(async () => 0),
   getTypeDistribution: vi.fn(async () => ({})),
 };
@@ -52,21 +52,29 @@ const supabaseState = {
   upsertedSubmission: null,
   updatedSubmission: null,
   lastUpsertPayload: null,
+  insertedMaterial: null,
+  lastInsertPayload: null,
+  insertAttempted: false,
   updateAttempted: false,
 };
 
 const matchFilter = (ctx, column) => ctx.filters.find((filter) => filter.column === column)?.value;
 
 const resolveSingle = async (ctx) => {
-  if (ctx.table === 'class_posts' && ctx.action === 'select') {
+  if (ctx.table === 'hoc_lieu' && ctx.action === 'insert') {
+    const row = Array.isArray(ctx.payload) ? ctx.payload[0] : ctx.payload;
+    return { data: supabaseState.insertedMaterial || { id: 'material-1', ...row }, error: null };
+  }
+
+  if (ctx.table === 'bai_dang_lop' && ctx.action === 'select') {
     return supabaseState.post ? { data: supabaseState.post, error: null } : { data: null, error: { message: 'not found' } };
   }
 
-  if (ctx.table === 'class_assignment_submissions' && ctx.action === 'upsert') {
+  if (ctx.table === 'bai_nop' && ctx.action === 'upsert') {
     return { data: supabaseState.upsertedSubmission, error: null };
   }
 
-  if (ctx.table === 'class_assignment_submissions' && ctx.action === 'update') {
+  if (ctx.table === 'bai_nop' && ctx.action === 'update') {
     supabaseState.updateAttempted = true;
     return { data: supabaseState.updatedSubmission, error: null };
   }
@@ -75,14 +83,14 @@ const resolveSingle = async (ctx) => {
 };
 
 const resolveMaybeSingle = async (ctx) => {
-  if (ctx.table === 'classes') {
+  if (ctx.table === 'lop') {
     return supabaseState.classData ? { data: supabaseState.classData, error: null } : { data: null, error: null };
   }
 
-  if (ctx.table === 'class_members') {
-    const studentId = matchFilter(ctx, 'student_id');
-    const classId = matchFilter(ctx, 'class_id');
-    const membership = supabaseState.membership && supabaseState.membership.student_id === studentId && supabaseState.membership.class_id === classId
+  if (ctx.table === 'thanh_vien_lop') {
+    const studentId = matchFilter(ctx, 'hoc_sinh_id');
+    const classId = matchFilter(ctx, 'lop_id');
+    const membership = supabaseState.membership && supabaseState.membership.hoc_sinh_id === studentId && supabaseState.membership.lop_id === classId
       ? supabaseState.membership
       : null;
     return { data: membership, error: null };
@@ -101,6 +109,8 @@ const createQueryBuilder = (table) => {
     insert: vi.fn((payload) => {
       ctx.action = 'insert';
       ctx.payload = payload;
+      supabaseState.lastInsertPayload = payload;
+      if (table === 'hoc_lieu') supabaseState.insertAttempted = true;
       return builder;
     }),
     update: vi.fn((payload) => {
@@ -143,7 +153,7 @@ const supabase = {
 
 vi.mock('../api/models/User.js', () => ({ default: userModel }));
 vi.mock('../api/models/Lesson.js', () => ({ default: lessonModel }));
-vi.mock('../api/models/Feedback.js', () => ({ default: feedbackModel }));
+vi.mock('../api/models/Feedback.js', () => ({ default: phan_hoiModel }));
 vi.mock('../api/models/Discussion.js', () => ({ Discussion: discussionModel, Note: noteModel }));
 vi.mock('../api/lib/supabase.js', () => ({ supabase }));
 vi.mock('../api/lib/mailer.js', () => ({
@@ -153,7 +163,7 @@ vi.mock('../api/lib/mailer.js', () => ({
 
 const { default: app } = await import('../api/index.js');
 
-const tokenFor = (id) => jwt.sign({ id, role: users[id].role, sessionId }, process.env.JWT_SECRET);
+const tokenFor = (id) => jwt.sign({ id, role: nguoi_dung[id].role, sessionId }, process.env.JWT_SECRET);
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -163,8 +173,19 @@ beforeEach(() => {
   supabaseState.upsertedSubmission = null;
   supabaseState.updatedSubmission = null;
   supabaseState.lastUpsertPayload = null;
+  supabaseState.insertedMaterial = null;
+  supabaseState.lastInsertPayload = null;
+  supabaseState.insertAttempted = false;
   supabaseState.updateAttempted = false;
 });
+
+const validMaterialPayload = {
+  title: 'Phiáº¿u luyá»‡n táº­p cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh',
+  description: 'BÃ i luyá»‡n táº­p ngáº¯n cho há»c sinh.',
+  category: 'PHT HÃ“A 9',
+  file_url: 'https://example.com/material.pdf',
+  file_type: 'pdf',
+};
 
 describe('security acceptance matrix', () => {
   it('rejects public admin registration', async () => {
@@ -195,8 +216,71 @@ describe('security acceptance matrix', () => {
     expect(res.status).toBe(403);
   });
 
+  it('blocks students from uploading library hoc_lieu', async () => {
+    const res = await request(app)
+      .post('/api/materials')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send(validMaterialPayload);
+
+    expect(res.status).toBe(403);
+    expect(supabaseState.insertAttempted).toBe(false);
+  });
+
+  it('blocks admins from teacher-only library material uploads', async () => {
+    const res = await request(app)
+      .post('/api/materials')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`)
+      .send(validMaterialPayload);
+
+    expect(res.status).toBe(403);
+    expect(supabaseState.insertAttempted).toBe(false);
+  });
+
+  it('validates teacher library material uploads before insert', async () => {
+    const res = await request(app)
+      .post('/api/materials')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({
+        title: '',
+        category: '',
+        file_url: 'not-a-url',
+        file_type: 'exe',
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body.errors).toMatchObject({
+      title: expect.any(String),
+      category: expect.any(String),
+      file_url: expect.any(String),
+      file_type: expect.any(String),
+    });
+    expect(supabaseState.insertAttempted).toBe(false);
+  });
+
+  it('stores teacher as creator when uploading library hoc_lieu', async () => {
+    const res = await request(app)
+      .post('/api/materials')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send(validMaterialPayload);
+
+    expect(res.status).toBe(201);
+    expect(supabaseState.lastInsertPayload[0]).toMatchObject({
+      tieu_de: validMaterialPayload.title,
+      mo_ta: validMaterialPayload.description,
+      danh_muc: validMaterialPayload.category,
+      file_url: validMaterialPayload.file_url,
+      file_type: validMaterialPayload.file_type,
+      nguoi_tao_id: 'teacher',
+    });
+    expect(res.body).toMatchObject({
+      id: 'material-1',
+      title: validMaterialPayload.title,
+      created_by_user_id: 'teacher',
+    });
+  });
+
   it('blocks non-members from class members', async () => {
-    supabaseState.classData = { id: 'class-1', teacher_id: 'teacher' };
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
 
     const res = await request(app)
       .get('/api/classes/class-1/members')
@@ -206,9 +290,9 @@ describe('security acceptance matrix', () => {
   });
 
   it('ignores student-submitted score and always stores submitted status', async () => {
-    supabaseState.post = { id: 'post-1', class_id: 'class-1', type: 'assignment', target_student_id: null };
-    supabaseState.membership = { class_id: 'class-1', student_id: 'student' };
-    supabaseState.upsertedSubmission = { post_id: 'post-1', student_id: 'student', status: 'submitted', score: null, answers: ['A'] };
+    supabaseState.post = { id: 'post-1', lop_id: 'class-1', type: 'assignment', hoc_sinh_nhan_id: null };
+    supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'student' };
+    supabaseState.upsertedSubmission = { bai_dang_id: 'post-1', hoc_sinh_id: 'student', status: 'submitted', diem: null, cau_tra_loi: ['A'] };
 
     const res = await request(app)
       .post('/api/classes/assignments/post-1/submit')
@@ -218,20 +302,20 @@ describe('security acceptance matrix', () => {
     expect(res.status).toBe(200);
     expect(supabaseState.lastUpsertPayload[0]).toMatchObject({
       status: 'submitted',
-      score: null,
-      feedback: null,
-      answers: ['A'],
+      diem: null,
+      phan_hoi_giao_vien: null,
+      cau_tra_loi: ['A'],
     });
   });
 
   it('blocks teachers who do not own the class from grading', async () => {
-    supabaseState.post = { id: 'post-1', class_id: 'class-1', type: 'assignment' };
-    supabaseState.classData = { id: 'class-1', teacher_id: 'teacher' };
+    supabaseState.post = { id: 'post-1', lop_id: 'class-1', type: 'assignment' };
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
 
     const res = await request(app)
       .post('/api/classes/assignments/post-1/grade/student')
       .set('Authorization', `Bearer ${tokenFor('otherTeacher')}`)
-      .send({ score: 100, feedback: 'done' });
+      .send({ score: 100, phan_hoi: 'done' });
 
     expect(res.status).toBe(403);
     expect(supabaseState.updateAttempted).toBe(false);
@@ -248,3 +332,4 @@ describe('security acceptance matrix', () => {
     expect(discussionModel.getByLesson).not.toHaveBeenCalled();
   });
 });
+

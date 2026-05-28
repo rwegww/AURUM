@@ -12,6 +12,7 @@ const defaultBalancingProgress = {
 const isMissingDbObject = (error) =>
   error?.code === '42P01' ||
   error?.code === '42703' ||
+  error?.code === 'PGRST204' ||
   error?.code === 'PGRST205' ||
   error?.message?.includes('Could not find the table') ||
   error?.message?.includes('Could not find the column');
@@ -19,8 +20,18 @@ const isMissingDbObject = (error) =>
 const normalizeIdList = (items, objectKey) => {
   if (!Array.isArray(items)) return [];
   return items
-    .map((item) => (typeof item === 'string' ? item : item?.[objectKey] || item?.item_id))
+    .map((item) => (typeof item === 'string' ? item : item?.[objectKey] || item?.doi_tuong_id))
     .filter(Boolean);
+};
+
+const fetchUserProgressRows = async (userId) => {
+  const { data, error } = await supabase
+    .from('tien_do_nguoi_dung')
+    .select('loai_tien_do, doi_tuong_id, noi_dung_tien_do, mo_khoa_luc')
+    .eq('nguoi_dung_id', userId);
+
+  if (error) throw error;
+  return data || [];
 };
 
 const normalizeBalancingProgress = (progress) => {
@@ -38,44 +49,24 @@ const normalizeBalancingProgress = (progress) => {
 
 const attachUserProgress = async (user) => {
   try {
-    const { data, error } = await supabase
-      .from('user_progress')
-      .select('item_type, item_id, progress_data, unlocked_at')
-      .eq('user_id', user.id);
+    const data = await fetchUserProgressRows(user.id);
 
-    if (error) throw error;
-
-    user.unlocked_lessons = (data || [])
-      .filter((item) => item.item_type === 'lesson')
-      .map((item) => item.item_id);
+    user.unlocked_bai_hoc = (data || [])
+      .filter((item) => item.loai_tien_do === 'lesson')
+      .map((item) => item.doi_tuong_id);
     user.unlocked_chemicals = (data || [])
-      .filter((item) => item.item_type === 'chemical')
-      .map((item) => item.item_id);
+      .filter((item) => item.loai_tien_do === 'chemical')
+      .map((item) => item.doi_tuong_id);
 
     const balancing = (data || []).find(
-      (item) => item.item_type === 'balancing' && item.item_id === 'current'
+      (item) => item.loai_tien_do === 'balancing' && item.doi_tuong_id === 'current'
     );
-    user.balancing_progress = balancing?.progress_data || user.balancing_progress;
+    user.balancingProgressPayload = balancing?.noi_dung_tien_do || user.balancingProgressPayload;
     return user;
   } catch (error) {
     if (!isMissingDbObject(error)) throw error;
-  }
-
-  try {
-    const { data: lessons } = await supabase
-      .from('user_unlocked_lessons')
-      .select('lesson_id')
-      .eq('user_id', user.id);
-    const { data: chemicals } = await supabase
-      .from('user_unlocked_chemicals')
-      .select('chemical_formula')
-      .eq('user_id', user.id);
-
-    user.unlocked_lessons = lessons || [];
-    user.unlocked_chemicals = chemicals || [];
-  } catch (_e) {
-    console.warn('User progress tables missing or inaccessible, returning base user.');
-    user.unlocked_lessons = [];
+    console.warn('tien_do_nguoi_dung table or columns missing, returning base user.');
+    user.unlocked_bai_hoc = [];
     user.unlocked_chemicals = [];
   }
 
@@ -86,75 +77,76 @@ const upsertUserProgress = async (rows) => {
   if (!rows.length) return false;
 
   const { error } = await supabase
-    .from('user_progress')
-    .upsert(rows, { onConflict: 'user_id,item_type,item_id' });
+    .from('tien_do_nguoi_dung')
+    .upsert(rows, { onConflict: 'nguoi_dung_id,loai_tien_do,doi_tuong_id' });
 
-  if (error) {
-    if (isMissingDbObject(error)) return false;
-    throw error;
-  }
+  if (error) throw error;
 
   return true;
 };
 
-const upsertLegacyProgress = async (userId, { lessons = [], chemicals = [], balancingProgress } = {}) => {
-  if (balancingProgress) {
-    const { error } = await supabase
-      .from('users')
-      .update({ balancing_progress: balancingProgress })
-      .eq('id', userId);
-    if (error && !isMissingDbObject(error)) throw error;
-  }
-
-  for (const lessonId of lessons) {
-    const { error } = await supabase
-      .from('user_unlocked_lessons')
-      .upsert({ user_id: userId, lesson_id: lessonId }, { onConflict: 'user_id,lesson_id' });
-    if (error && !isMissingDbObject(error)) throw error;
-  }
-
-  for (const chemical of chemicals) {
-    const { error } = await supabase
-      .from('user_unlocked_chemicals')
-      .upsert({ user_id: userId, chemical_formula: chemical }, { onConflict: 'user_id,chemical_formula' });
-    if (error && !isMissingDbObject(error)) throw error;
-  }
-};
-
 const mapUser = (user) => {
   if (!user) return null;
+  const xp = user.diem_kinh_nghiem ?? user.xp ?? 0;
+  const level = user.cap_do ?? user.level ?? 1;
+  const arenaStats = user.thong_ke_dau || user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 };
+  const activeMinutes = user.phut_hoat_dong ?? user.active_minutes ?? 0;
+  const lastActiveAt = user.hoat_dong_cuoi_luc || user.last_active_at;
+  const isLocked = user.bi_khoa ?? user.is_locked ?? false;
+  const streakCount = user.so_ngay_chuoi ?? user.streak_count ?? 0;
+  const todayOnlineMinutes = user.phut_online_hom_nay ?? user.today_online_minutes ?? 0;
+  const todayLessonCompleted = user.da_hoan_thanh_bai_hom_nay ?? user.today_lesson_completed ?? false;
+  const studyPlan = user.ke_hoach_hoc || user.study_plan || { emailEnabled: false, dailyLessonTarget: 1, completed: false };
+  const linkedAccounts = user.tai_khoan_lien_ket || user.linked_accounts || {};
   return {
     ...user,
     id: user.id,
+    xp,
+    level,
     createdAt: user.created_at,
     // Flatten normalized arrays if they exist in the joined record
-    unlockedLessons: normalizeIdList(user.unlocked_lessons, 'lesson_id').length > 0
-      ? normalizeIdList(user.unlocked_lessons, 'lesson_id')
+    unlockedLessons: normalizeIdList(user.unlocked_bai_hoc, 'bai_hoc_id').length > 0
+      ? normalizeIdList(user.unlocked_bai_hoc, 'bai_hoc_id')
       : (user.unlockedLessons || []),
     unlockedChemicals: normalizeIdList(user.unlocked_chemicals, 'chemical_formula').length > 0
       ? normalizeIdList(user.unlocked_chemicals, 'chemical_formula')
       : (user.unlockedChemicals || []),
     avatarSeed: user.avatar_seed || user.username,
-    arenaStats: user.arena_stats || { total: 0, wins: 0, losses: 0, points: 0 },
+    arenaStats,
     arenaAvatar: { seed: 'Chem Master', aura: '#a855f7' },
     // Cleanup
-    unlocked_lessons: undefined,
+    unlocked_bai_hoc: undefined,
     unlocked_chemicals: undefined,
     avatar_seed: undefined,
     arena_stats: undefined,
+    thong_ke_dau: undefined,
     created_at: undefined,
-    lastActiveAt: user.updated_at || user.last_active_at,
-    activeMinutes: user.active_minutes || 0,
-    isOnline: user.is_online || (user.last_active_at && new Date(user.last_active_at) > new Date(Date.now() - 5*60*1000)),
-    isLocked: user.is_locked || false,
-    balancingProgress: normalizeBalancingProgress(user.balancing_progress),
-    streakCount: user.streak_count || 0,
-    lastStreakAt: user.last_streak_at,
-    todayOnlineMinutes: user.today_online_minutes || 0,
-    todayLessonCompleted: user.today_lesson_completed || false,
+    lastActiveAt: user.updated_at || lastActiveAt,
+    activeMinutes,
+    isOnline: user.is_online || (lastActiveAt && new Date(lastActiveAt) > new Date(Date.now() - 5*60*1000)),
+    isLocked,
+    balancingProgress: normalizeBalancingProgress(user.balancingProgressPayload || user.balancingProgress),
+    balancingProgressPayload: undefined,
+    streakCount,
+    lastStreakAt: user.chuoi_cuoi_luc || user.last_streak_at,
+    todayOnlineMinutes,
+    todayLessonCompleted,
     currentSessionId: user.current_session_id,
-    studyPlan: user.study_plan || { emailEnabled: false, dailyLessonTarget: 1, completed: false },
-    linkedAccounts: user.linked_accounts || {}
+    studyPlan,
+    linkedAccounts,
+    password: user.password_hash,
+    password_hash: undefined,
+    diem_kinh_nghiem: undefined,
+    cap_do: undefined,
+    phut_hoat_dong: undefined,
+    hoat_dong_cuoi_luc: undefined,
+    bi_khoa: undefined,
+    so_ngay_chuoi: undefined,
+    chuoi_cuoi_luc: undefined,
+    phut_online_hom_nay: undefined,
+    da_hoan_thanh_bai_hom_nay: undefined,
+    ke_hoach_hoc: undefined,
+    tai_khoan_lien_ket: undefined
   };
 };
 
@@ -167,7 +159,7 @@ export const User = {
       return this.findOne({ email: filter.email });
     }
 
-    let query = supabase.from('users').select('*');
+    let query = supabase.from('nguoi_dung').select('*');
 
     if (filter.username) {
       query = query.eq('username', filter.username);
@@ -176,14 +168,14 @@ export const User = {
     } else if (filter.id) {
       query = query.eq('id', filter.id);
     } else if (filter.googleId) {
-      query = query.eq('linked_accounts->>google', filter.googleId);
+      query = query.eq('tai_khoan_lien_ket->>google', filter.googleId);
     }
 
     const { data: user, error: userError } = await query.maybeSingle();
     if (userError) {
       // Gracefully handle missing linked_accounts column
       if (userError.message?.includes('Could not find the column') || userError.code === '42703') {
-        console.warn('Column not found in users table, returning null for findOne:', userError.message);
+        console.warn('Column not found in nguoi_dung table, returning null for findOne:', userError.message);
         return null;
       }
       throw userError;
@@ -195,7 +187,7 @@ export const User = {
   async findById(id) {
     // 1. Fetch core (safe)
     const { data: user, error: userError } = await supabase
-      .from('users')
+      .from('nguoi_dung')
       .select('*')
       .eq('id', id)
       .maybeSingle();
@@ -210,24 +202,26 @@ export const User = {
     const userId = userData.id || crypto.randomUUID();
     
     // 1. Create User
-    const { error } = await supabase
-      .from('users')
-      .insert([{
-        id: userId,
-        username: userData.username,
-        email: userData.email,
-        password: hashedPassword,
-        role: userData.role || 'student',
-        avatar_seed: userData.avatarSeed || userData.username,
-        study_plan: { emailEnabled: false, dailyLessonTarget: 1, completed: false, grade: userData.grade || null },
-        streak_count: 0,
-        today_online_minutes: 0,
-        today_lesson_completed: false
-      }])
+    const userPayload = {
+      id: userId,
+      username: userData.username,
+      email: userData.email,
+      password_hash: hashedPassword,
+      role: userData.role || 'student',
+      avatar_seed: userData.avatarSeed || userData.username,
+      ke_hoach_hoc: { emailEnabled: false, dailyLessonTarget: 1, completed: false, grade: userData.grade || null },
+      so_ngay_chuoi: 0,
+      phut_online_hom_nay: 0,
+      da_hoan_thanh_bai_hom_nay: false
+    };
+
+    const insertResult = await supabase
+      .from('nguoi_dung')
+      .insert([userPayload])
       .select()
       .single();
     
-    if (error) throw error;
+    if (insertResult.error) throw insertResult.error;
 
     // 2. Initial Unlocked Content (if any)
     const initialLessons = userData.unlockedLessons || [];
@@ -235,42 +229,57 @@ export const User = {
     const initialBalancingProgress = { ...defaultBalancingProgress };
     const progressRows = [
       ...initialLessons.map((lessonId) => ({
-        user_id: userId,
-        item_type: 'lesson',
-        item_id: lessonId,
-        progress_data: {}
+        nguoi_dung_id: userId,
+        loai_tien_do: 'lesson',
+        doi_tuong_id: lessonId,
+        noi_dung_tien_do: {}
       })),
       ...initialChemicals.map((chemical) => ({
-        user_id: userId,
-        item_type: 'chemical',
-        item_id: chemical,
-        progress_data: {}
+        nguoi_dung_id: userId,
+        loai_tien_do: 'chemical',
+        doi_tuong_id: chemical,
+        noi_dung_tien_do: {}
       })),
       {
-        user_id: userId,
-        item_type: 'balancing',
-        item_id: 'current',
-        progress_data: initialBalancingProgress
+        nguoi_dung_id: userId,
+        loai_tien_do: 'balancing',
+        doi_tuong_id: 'current',
+        noi_dung_tien_do: initialBalancingProgress
       }
     ];
 
-    const savedToProgress = await upsertUserProgress(progressRows);
-    if (!savedToProgress) {
-      await upsertLegacyProgress(userId, {
-        lessons: initialLessons,
-        chemicals: initialChemicals,
-        balancingProgress: initialBalancingProgress
-      });
-    }
+    await upsertUserProgress(progressRows);
 
     return this.findById(userId);
   },
 
   async update(id, updateData) {
     const pgUpdateData = { ...updateData };
+    const directFieldMap = {
+      xp: 'diem_kinh_nghiem',
+      level: 'cap_do',
+      arena_stats: 'thong_ke_dau',
+      active_minutes: 'phut_hoat_dong',
+      last_active_at: 'hoat_dong_cuoi_luc',
+      is_locked: 'bi_khoa',
+      streak_count: 'so_ngay_chuoi',
+      last_streak_at: 'chuoi_cuoi_luc',
+      today_online_minutes: 'phut_online_hom_nay',
+      today_lesson_completed: 'da_hoan_thanh_bai_hom_nay',
+      study_plan: 'ke_hoach_hoc',
+      linked_accounts: 'tai_khoan_lien_ket'
+    };
+
+    Object.entries(directFieldMap).forEach(([from, to]) => {
+      if (pgUpdateData[from] !== undefined) {
+        pgUpdateData[to] = pgUpdateData[from];
+        delete pgUpdateData[from];
+      }
+    });
     
     if (updateData.password) {
-      pgUpdateData.password = await bcrypt.hash(updateData.password, 10);
+      pgUpdateData.password_hash = await bcrypt.hash(updateData.password, 10);
+      delete pgUpdateData.password;
     }
     
     // Handle special mappings
@@ -283,7 +292,7 @@ export const User = {
     delete pgUpdateData.balancingProgress;
 
     if (updateData.linkedAccounts) {
-      pgUpdateData.linked_accounts = updateData.linkedAccounts;
+      pgUpdateData.tai_khoan_lien_ket = updateData.linkedAccounts;
       delete pgUpdateData.linkedAccounts;
     }
     
@@ -299,20 +308,20 @@ export const User = {
     }
 
     if (updateData.studyPlan) {
-      pgUpdateData.study_plan = updateData.studyPlan;
+      pgUpdateData.ke_hoach_hoc = updateData.studyPlan;
       delete pgUpdateData.studyPlan;
     }
 
     if (Object.keys(pgUpdateData).length > 0) {
       console.log(`[User.update] Updating ID ${id} with:`, JSON.stringify(pgUpdateData, null, 2));
       const { error } = await supabase
-        .from('users')
+        .from('nguoi_dung')
         .update(pgUpdateData)
         .eq('id', id);
       if (error) {
         // Gracefully handle missing columns (e.g. current_session_id, linked_accounts, etc.)
         if (isMissingDbObject(error)) {
-          console.warn('[User.update] Column missing in users table, skipping update:', error.message || error);
+          console.warn('[User.update] Column missing in nguoi_dung table, skipping update:', error.message || error);
         } else {
           console.error('[User.update] Supabase error:', error);
           throw error;
@@ -326,40 +335,33 @@ export const User = {
     const progressRows = [];
     if (junctionLessons) {
       progressRows.push(...junctionLessons.map((lessonId) => ({
-        user_id: id,
-        item_type: 'lesson',
-        item_id: lessonId,
-        progress_data: {}
+        nguoi_dung_id: id,
+        loai_tien_do: 'lesson',
+        doi_tuong_id: lessonId,
+        noi_dung_tien_do: {}
       })));
     }
 
     if (junctionChemicals) {
       progressRows.push(...junctionChemicals.map((chemical) => ({
-        user_id: id,
-        item_type: 'chemical',
-        item_id: chemical,
-        progress_data: {}
+        nguoi_dung_id: id,
+        loai_tien_do: 'chemical',
+        doi_tuong_id: chemical,
+        noi_dung_tien_do: {}
       })));
     }
 
     if (balancingProgress) {
       progressRows.push({
-        user_id: id,
-        item_type: 'balancing',
-        item_id: 'current',
-        progress_data: balancingProgress
+        nguoi_dung_id: id,
+        loai_tien_do: 'balancing',
+        doi_tuong_id: 'current',
+        noi_dung_tien_do: balancingProgress
       });
     }
 
     if (progressRows.length > 0) {
-      const savedToProgress = await upsertUserProgress(progressRows);
-      if (!savedToProgress) {
-        await upsertLegacyProgress(id, {
-          lessons: junctionLessons || [],
-          chemicals: junctionChemicals || [],
-          balancingProgress
-        });
-      }
+      await upsertUserProgress(progressRows);
     }
 
     return this.findById(id);
@@ -369,12 +371,12 @@ export const User = {
     // For the leaderboard, we ONLY need names and XP. 
     // This query is extremely safe because it doesn't use any complex joins.
     const { data, error } = await supabase
-      .from('users')
+      .from('nguoi_dung')
       .select(`
-        id, username, role, xp, level, avatar_seed, updated_at, last_active_at, active_minutes, is_locked
+        id, username, role, diem_kinh_nghiem, cap_do, avatar_seed, updated_at, hoat_dong_cuoi_luc, phut_hoat_dong, bi_khoa
       `)
       .eq('role', 'student')
-      .order('xp', { ascending: false });
+      .order('diem_kinh_nghiem', { ascending: false });
     
     if (error) throw error;
     return data.map(mapUser);
@@ -382,7 +384,7 @@ export const User = {
 
   async countStudents() {
     const { count, error } = await supabase
-      .from('users')
+      .from('nguoi_dung')
       .select('id', { count: 'exact', head: true })
       .eq('role', 'student');
     
@@ -393,10 +395,10 @@ export const User = {
   async countActiveStudents() {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
     const { count, error } = await supabase
-      .from('users')
+      .from('nguoi_dung')
       .select('id', { count: 'exact', head: true })
       .eq('role', 'student')
-      .gt('last_active_at', fiveMinutesAgo);
+      .gt('hoat_dong_cuoi_luc', fiveMinutesAgo);
     
     if (error) throw error;
     return count;
@@ -404,23 +406,23 @@ export const User = {
 
   async aggregateStats() {
     const { data, error } = await supabase
-      .from('users')
-      .select('id, username, xp, level, study_plan, streak_count, avatar_seed')
+      .from('nguoi_dung')
+      .select('id, username, diem_kinh_nghiem, cap_do, ke_hoach_hoc, so_ngay_chuoi, avatar_seed')
       .eq('role', 'student');
     
     if (error) throw error;
     
-    const totalXP = data.reduce((sum, u) => sum + (u.xp || 0), 0);
-    const avgLevel = data.length > 0 ? data.reduce((sum, u) => sum + (u.level || 1), 0) / data.length : 1;
+    const totalXP = data.reduce((sum, u) => sum + (u.diem_kinh_nghiem || 0), 0);
+    const avgLevel = data.length > 0 ? data.reduce((sum, u) => sum + (u.cap_do || 1), 0) / data.length : 1;
     
     const levels = {};
     const grades = {};
     
     data.forEach(u => {
-      const lvl = u.level || 1;
+      const lvl = u.cap_do || 1;
       levels[lvl] = (levels[lvl] || 0) + 1;
       
-      const grade = u.study_plan?.grade || 'Chưa rõ';
+      const grade = u.ke_hoach_hoc?.grade || 'Chưa rõ';
       grades[grade] = (grades[grade] || 0) + 1;
     });
     
@@ -435,18 +437,18 @@ export const User = {
       color: g === 'Chưa rõ' ? '#94a3b8' : (g == 8 ? '#f43f5e' : (g == 9 ? '#eab308' : (g == 10 ? '#3b82f6' : (g == 11 ? '#a855f7' : '#14b8a6'))))
     }));
 
-    const topXP = [...data].sort((a, b) => (b.xp || 0) - (a.xp || 0)).slice(0, 5).map(u => ({
+    const topXP = [...data].sort((a, b) => (b.diem_kinh_nghiem || 0) - (a.diem_kinh_nghiem || 0)).slice(0, 5).map(u => ({
       id: u.id,
       name: u.username,
-      xp: u.xp || 0,
-      level: u.level || 1,
+      xp: u.diem_kinh_nghiem || 0,
+      level: u.cap_do || 1,
       avatar: u.avatar_seed || u.username
     }));
     
-    const topStreak = [...data].sort((a, b) => (b.streak_count || 0) - (a.streak_count || 0)).slice(0, 5).map(u => ({
+    const topStreak = [...data].sort((a, b) => (b.so_ngay_chuoi || 0) - (a.so_ngay_chuoi || 0)).slice(0, 5).map(u => ({
       id: u.id,
       name: u.username,
-      streak: u.streak_count || 0,
+      streak: u.so_ngay_chuoi || 0,
       avatar: u.avatar_seed || u.username
     }));
 
@@ -459,8 +461,8 @@ export const User = {
 
   async toggleLock(id, lockStatus) {
     const { data, error } = await supabase
-      .from('users')
-      .update({ is_locked: lockStatus })
+      .from('nguoi_dung')
+      .update({ bi_khoa: lockStatus })
       .eq('id', id)
       .select()
       .single();

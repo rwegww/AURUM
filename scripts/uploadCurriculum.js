@@ -18,7 +18,7 @@ const args = new Set(process.argv.slice(2));
 const APPLY = args.has('--apply');
 const DELETE_LOCAL = args.has('--delete-local');
 const FORCE = args.has('--force');
-const LESSON_TABLE = process.env.LESSONS_TABLE || 'lessons';
+const LESSON_TABLE = process.env.LESSONS_TABLE || 'bai_hoc';
 
 const requiredWhenApply = [
   'CLOUDINARY_CLOUD_NAME',
@@ -91,8 +91,8 @@ const verifyUrl = async (url) => {
 const loadLessonsByGrade = async (supabase, grade) => {
   const { data, error } = await supabase
     .from(LESSON_TABLE)
-    .select('id, title, order')
-    .eq('class_id', grade);
+    .select('id, tieu_de, thu_tu')
+    .eq('khoi_id', grade);
 
   if (error) throw error;
   return data || [];
@@ -125,16 +125,16 @@ const main = async () => {
   });
 
   const supabase = createClient(process.env.SUPABASE_URL, getSupabaseKey());
-  const lessonsByGrade = new Map();
+  const bai_hocByGrade = new Map();
   const manifest = [];
   await writeManifest(manifest);
 
   for (const video of videos) {
-    if (!lessonsByGrade.has(video.grade)) {
-      lessonsByGrade.set(video.grade, await loadLessonsByGrade(supabase, video.grade));
+    if (!bai_hocByGrade.has(video.grade)) {
+      bai_hocByGrade.set(video.grade, await loadLessonsByGrade(supabase, video.grade));
     }
 
-    const lesson = lessonsByGrade.get(video.grade).find((item) => Number(item.order) === video.order);
+    const lesson = bai_hocByGrade.get(video.grade).find((item) => Number(item.thu_tu) === video.order);
     if (!lesson) {
       console.warn(`No lesson found for grade ${video.grade}, order ${video.order}, file ${video.fileName}`);
       manifest.push({ ...video, status: 'skipped_no_lesson' });
@@ -142,7 +142,7 @@ const main = async () => {
       continue;
     }
 
-    console.log(`Uploading ${video.fileName} -> ${lesson.title}`);
+    console.log(`Uploading ${video.fileName} -> ${lesson.tieu_de}`);
     const videoUrl = await uploadVideo(video, FORCE);
     await verifyUrl(videoUrl);
 
