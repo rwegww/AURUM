@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { FlaskConical } from 'lucide-react';
 
 const Lessons = () => {
   const { t } = useTranslation();
@@ -148,7 +149,7 @@ const Lessons = () => {
           )
         ) : (
           <div className="text-center py-24 border-4 border-dashed border-viet-border rounded-[40px] bg-white/30">
-            <div className="text-7xl mb-8 opacity-20 filter grayscale">🧪</div>
+            <div className="flex justify-center mb-8 opacity-20 filter grayscale"><FlaskConical className="w-20 h-20 text-slate-500" /></div>
             <h2 className="text-2xl font-bold text-viet-text-light">
               {isLoggedIn ? t('lessons.status.empty_title_logged_in') : t('lessons.status.empty_title_guest')}
             </h2>

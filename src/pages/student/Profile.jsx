@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
-import { Settings as SettingsIcon } from 'lucide-react';
+import { Settings as SettingsIcon, FlaskConical } from 'lucide-react';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div
@@ -218,7 +218,7 @@ const Profile = () => {
               ))
             ) : (
               <div className="col-span-full py-16 text-center bg-white rounded-[40px] border-2 border-dashed border-viet-border flex flex-col items-center gap-6">
-                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl">🧪</div>
+                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl"><FlaskConical className="w-10 h-10 text-slate-400" /></div>
                 <p className="text-viet-text-light font-medium">{t('profile.collection.empty')}</p>
                 <Link to="/lab" className="text-viet-green font-black text-sm uppercase tracking-widest hover:underline">{t('profile.collection.go_to_lab')}</Link>
               </div>
