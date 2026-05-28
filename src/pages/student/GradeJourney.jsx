@@ -21,7 +21,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(118, 192, 52, 0.4)',
     gradient: 'from-[#76c034] to-[#589d24]',
     blobColor: 'bg-emerald-400',
-    doodleSymbol: '🧪'
+    doodleSymbol: 'O₂'
   },
   '9': {
     titleKey: 'journey.themes.9.title',

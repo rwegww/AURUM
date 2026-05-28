@@ -10,7 +10,7 @@ import { stableRange } from '@/utils/stableRandom';
 
 // --- Floating Chemistry Background ---
 const FallingChemistry = () => {
-  const symbols = ['H₂O', 'CO₂', 'NaCl', 'CH₄', '⚛️', 'O₂', 'H₂', 'NH₃', '🧪'];
+  const symbols = ['H₂O', 'CO₂', 'NaCl', 'CH₄', '⚛️', 'O₂', 'H₂', 'NH₃', 'Fe'];
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden h-full z-0 opacity-20">
       {[...Array(12)].map((_, i) => {

@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
 import { stableRange } from '@/utils/stableRandom';
+import { Beaker } from 'lucide-react';
 
 // ─── AVATAR DATA ──────────────────────────────────────────────────────────────
 // Preset avatar seeds for quick selection
@@ -384,7 +385,7 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
           
           {/* Decorative glass elements */}
           <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 flex items-center justify-center text-lg shadow-sm">✨</div>
-          <div className="absolute -bottom-2 -left-6 w-10 h-10 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 flex items-center justify-center text-sm shadow-sm">⚗️</div>
+          <div className="absolute -bottom-2 -left-6 w-10 h-10 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 flex items-center justify-center shadow-sm"><Beaker className="w-5 h-5 text-slate-500" /></div>
         </motion.div>
         
         {/* Modern decorative rings */}

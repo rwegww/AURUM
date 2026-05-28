@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { stableRandom } from '@/utils/stableRandom';
+import { Search, FlaskConical, Compass } from 'lucide-react';
 
 const getDragItemsForStep = (challenge, step) => {
   const type = challenge?.type || 'multiple-choice';
@@ -128,19 +129,6 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
              animate={{ width: `${progress}%` }} 
              transition={{ duration: 0.5 }}
            />
-        </div>
-
-        <div className="p-8 md:p-10">
-          {/* Header */}
-          <div className="flex items-center justify-between gap-4 mb-8">
-             <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-viet-green/5 rounded-2xl flex items-center justify-center text-4xl border border-viet-green/10">
-                   {type === 'image-selection' ? '🔍' : type === 'lab-task' ? '🧪' : '🧭'}
-                </div>
-                <div>
-                   <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">{typeLabels[type] || t('mission_modal.labels.mission')}</h3>
-                   <h2 className="text-xl font-bold text-viet-text line-clamp-1">{lessonTitle}</h2>
-                </div>
              </div>
              <div className="text-right">
                 <div className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">{t('mission_modal.labels.goal')}</div>

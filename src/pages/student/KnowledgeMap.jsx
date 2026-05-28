@@ -124,7 +124,7 @@ const KnowledgeMap = () => {
               className="shrink-0 relative z-10"
             >
               <div className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none">
-                🧪 Hóa Học
+                Hóa Học
               </div>
             </motion.div>
 

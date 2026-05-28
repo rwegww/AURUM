@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { activityService } from '@/services/ActivityService';
+import { Beaker, Scale, Microscope, FlaskConical, Calculator } from 'lucide-react';
 
 // --- Animations ---
 const containerVariants = {
@@ -29,7 +30,7 @@ const ChemLab = () => {
     { 
       id: 'reaction', 
       label: t('chem_lab.modules.reaction.label'), 
-      icon: '⚗️', 
+      icon: <Beaker className="w-8 h-8 text-blue-500" />, 
       desc: t('chem_lab.modules.reaction.desc'),
       path: '/lab/simulator',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-blue-600'
@@ -37,7 +38,7 @@ const ChemLab = () => {
     { 
       id: 'balance', 
       label: t('chem_lab.modules.balance.label'), 
-      icon: '⚖️', 
+      icon: <Scale className="w-8 h-8 text-amber-500" />, 
       desc: t('chem_lab.modules.balance.desc'),
       path: '/lab/balancer',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
@@ -45,7 +46,7 @@ const ChemLab = () => {
     { 
       id: 'molecule', 
       label: t('chem_lab.modules.molecule.label'), 
-      icon: '🔬', 
+      icon: <Microscope className="w-8 h-8 text-emerald-500" />, 
       desc: t('chem_lab.modules.molecule.desc'),
       path: '/lab/molecules',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-emerald-500'
@@ -53,7 +54,7 @@ const ChemLab = () => {
     { 
       id: 'solver', 
       label: t('chem_lab.modules.solver.label'), 
-      icon: '🧪', 
+      icon: <FlaskConical className="w-8 h-8 text-purple-500" />, 
       desc: t('chem_lab.modules.solver.desc'),
       path: '/lab/solver',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-purple-500'
@@ -61,7 +62,7 @@ const ChemLab = () => {
     { 
       id: 'calculator', 
       label: t('chem_lab.modules.calculator.label'), 
-      icon: '🧮', 
+      icon: <Calculator className="w-8 h-8 text-pink-500" />, 
       desc: t('chem_lab.modules.calculator.desc'),
       path: '/calculator',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-pink-500'

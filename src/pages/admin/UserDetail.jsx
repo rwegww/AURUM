@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Avatar from '@/components/common/Avatar';
-import { FlaskConical } from 'lucide-react';
+import { FlaskConical, Beaker } from 'lucide-react';
 
 const UserDetail = () => {
   const { id } = useParams();
@@ -146,7 +146,7 @@ const UserDetail = () => {
                     {student.unlockedChemicals && student.unlockedChemicals.length > 0 ? (
                       student.unlockedChemicals.map((chem, i) => (
                         <div key={i} className="aspect-square bg-white rounded-2xl border border-viet-border/50 flex flex-col items-center justify-center p-3 hover:border-viet-green/30 hover:shadow-lg hover:shadow-viet-green/5 transition-all group">
-                           <div className="text-2xl mb-2 group-hover:scale-110 transition-transform">⚗️</div>
+                           <div className="mb-2 flex justify-center group-hover:scale-110 transition-transform"><Beaker className="w-8 h-8 text-viet-green" /></div>
                            <span className="text-[10px] font-black text-viet-text uppercase tracking-widest text-center">{chem}</span>
                         </div>
                       ))
