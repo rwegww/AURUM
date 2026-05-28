@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "AURUM Mobile",
+    "slug": "aurum-mobile",
+    "version": "0.1.0",
+    "scheme": "aurum-mobile",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "platforms": ["ios", "android", "web"],
+    "plugins": ["expo-router", "expo-secure-store"],
+    "experiments": {
+      "typedRoutes": false
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aurum.mobile"
+    },
+    "android": {
+      "package": "com.aurum.mobile",
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    }
+  }
+}
+
