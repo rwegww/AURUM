@@ -195,7 +195,9 @@ const FloatingWidget = () => {
     <>
       {/* 1. COLLAPSED FLOATING BUBBLE BUTTON */}
       {!isExpanded && (
-        <button 
+        <motion.button 
+          animate={{ y: [0, -6, 0] }}
+          transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
           onClick={() => {
             setIsExpanded(true);
             if (!isLoggedIn) {
@@ -206,7 +208,7 @@ const FloatingWidget = () => {
           aria-label={t('widget.tooltip')}
         >
           <span className="relative flex items-center justify-center">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
             {claimableCount > 0 && (
@@ -218,7 +220,7 @@ const FloatingWidget = () => {
           <span className="absolute right-full mr-4 px-4 py-2 bg-viet-text text-white text-xs font-bold rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-md">
             {t('widget.tooltip')}
           </span>
-        </button>
+        </motion.button>
       )}
 
       {/* 2. EXPANDED MESSENGER-STYLE CHAT WINDOW */}
