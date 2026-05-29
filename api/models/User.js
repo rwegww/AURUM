@@ -376,6 +376,7 @@ export const User = {
         id, username, role, diem_kinh_nghiem, cap_do, avatar_seed, updated_at, hoat_dong_cuoi_luc, phut_hoat_dong, bi_khoa
       `)
       .eq('role', 'student')
+      .gt('diem_kinh_nghiem', 0)
       .order('diem_kinh_nghiem', { ascending: false });
     
     if (error) throw error;

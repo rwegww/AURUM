@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
@@ -156,17 +156,20 @@ router.get('/leaderboard', async (req, res) => {
   try {
     const students = await User.findStudents();
     // Return only top 10 and strip sensitive data if any
-    const topStudents = students.slice(0, 10).map(s => ({
-      username: s.username,
-      xp: s.xp || 0,
-      level: s.level || 1,
-      role: s.role,
-      avatarSeed: s.avatarSeed,
-      streakCount: s.streakCount || 0,
-      lastActiveAt: s.lastActiveAt,
-      activeMinutes: s.activeMinutes,
-      isOnline: s.isOnline
-    }));
+    const topStudents = students
+      .filter(s => (s.xp || 0) > 0)
+      .slice(0, 10)
+      .map(s => ({
+        username: s.username,
+        xp: s.xp || 0,
+        level: s.level || 1,
+        role: s.role,
+        avatarSeed: s.avatarSeed,
+        streakCount: s.streakCount || 0,
+        lastActiveAt: s.lastActiveAt,
+        activeMinutes: s.activeMinutes,
+        isOnline: s.isOnline
+      }));
     res.json(topStudents);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi tải bảng xếp hạng', error: err.message });
