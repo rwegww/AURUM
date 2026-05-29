@@ -84,44 +84,56 @@ const ensureClassAccess = async (classId, user, res) => {
 
 // Parse exam files for 2025 format
 router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
-    try {
-        if (!requireTeacherOrAdmin(req, res)) return;
-        if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
+  try {
+    if (!requireTeacherOrAdmin(req, res)) return;
+    if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
 
-        let text = '';
-        if (req.file.mimetype === 'application/pdf') {
-            const pdf = (await import('pdf-parse')).default;
-            const data = await pdf(req.file.buffer);
-            text = data.text;
-        } else {
-            const data = await mammoth.extractRawText({ buffer: req.file.buffer });
-            text = data.value;
+    let text = '';
+    if (req.file.mimetype === 'application/pdf') {
+        const pdf = (await import('pdf-parse')).default;
+        const data = await pdf(req.file.buffer);
+        text = data.text;
+    } else {
+        const mammoth = require('mammoth');
+        const data = await mammoth.extractRawText({ buffer: req.file.buffer });
+        text = data.value;
+    }
+
+    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const questions = [];
+    let currentPart = 1;
+    let qIndex = 0;
+    let partQIndices = { 1: 0, 2: 0, 3: 0 };
+    let currentQuestion = null;
+    let mode = 'question';
+
+    let answersObj = { part1: {}, part2: {}, part3: {} };
+    let numberQueue = [];
+
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+
+        if (/^(--+)?\s*HẾT\s*(--+)?$/i.test(line) || /^ĐÁP ÁN/i.test(line) || /^HƯỚNG DẪN GIẢI/i.test(line)) {
+            mode = 'answer';
         }
 
-        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-        const questions = [];
-        let currentPart = 1;
-        let qIndex = 0;
-        let currentQuestion = null;
-
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i];
-            
-            // Determine Part
+        if (mode === 'question') {
             if (/^PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
             if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
             if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
-            // Check for end of exam / answer section
-            if (/^(--+)?\s*HẾT\s*(--+)?$/i.test(line) || /^ĐÁP ÁN/i.test(line) || /^HƯỚNG DẪN GIẢI/i.test(line)) {
-                break;
-            }
-            
-            // Detect Question start
-            const qMatch = line.match(/^(?:Câu\s*\d+|Bài\s*\d+|C\d+)\s*[.:]?\s*(.*)/i);
-            if (qMatch) {
+            const qMatch = line.match(/^(?:Câu\s*(\d+)|Bài\s*(\d+)|C(\d+))\s*[.:]?\s*(.*)/i);
+            if (qMatch || /^Câu\s*\d+/i.test(line)) { 
                 if (currentQuestion) questions.push(currentQuestion);
                 qIndex++;
+                let parsedNum = parseInt(qMatch?.[1] || qMatch?.[2] || qMatch?.[3]);
+                if (isNaN(parsedNum)) {
+                   partQIndices[currentPart]++;
+                   parsedNum = partQIndices[currentPart];
+                } else {
+                   partQIndices[currentPart] = parsedNum;
+                }
+
                 let type = 'multiple_choice';
                 if (currentPart === 2) type = 'true_false';
                 if (currentPart === 3) type = 'short_answer';
@@ -129,8 +141,9 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 currentQuestion = {
                     id: 'q_' + Date.now() + '_' + qIndex,
                     part: currentPart,
+                    partNum: parsedNum,
                     type: type,
-                    content: qMatch[1],
+                    content: qMatch ? qMatch[4] : line.replace(/^Câu\s*\d+\s*[.:]?\s*/i, ''),
                     options: type === 'multiple_choice' ? {A:'', B:'', C:'', D:''} : (type === 'true_false' ? {a:'', b:'', c:'', d:''} : null),
                     correct_answer: type === 'true_false' ? {a:'', b:'', c:'', d:''} : ''
                 };
@@ -138,242 +151,86 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             }
 
             if (currentQuestion) {
-                // Detect options for Multiple Choice
                 if (currentQuestion.type === 'multiple_choice') {
-                    const mcRegex = /(?:^|\s+)([A-D])\s*[.:]\s*(.*?)(?=\s+[A-D]\s*[.:]|$)/gi;
-                    let match;
-                    let hasMatch = false;
-                    while ((match = mcRegex.exec(line)) !== null) {
-                        const key = match[1].toUpperCase();
-                        currentQuestion.options[key] = match[2].trim();
-                        hasMatch = true;
+                    const optMatch = line.match(/^([A-D])\s*[.:]\s*(.*)/i);
+                    if (optMatch) {
+                        const key = optMatch[1].toUpperCase();
+                        currentQuestion.options[key] = optMatch[2];
+                        continue;
                     }
-                    if (hasMatch) continue;
                 }
                 
-                // Detect options for True/False
                 if (currentQuestion.type === 'true_false') {
-                    const tfRegex = /(?:^|\s+)([a-d])\s*[.:)]\s*(.*?)(?=\s+[a-d]\s*[.:)]|$)/gi;
-                    let match;
-                    let hasMatch = false;
-                    while ((match = tfRegex.exec(line)) !== null) {
-                        const key = match[1].toLowerCase();
-                        currentQuestion.options[key] = match[2].trim();
-                        hasMatch = true;
+                    const optMatch = line.match(/^([a-d])\s*[.:)]\s*(.*)/i);
+                    if (optMatch) {
+                        const key = optMatch[1].toLowerCase();
+                        currentQuestion.options[key] = optMatch[2];
+                        continue;
                     }
-                    if (hasMatch) continue;
                 }
 
-                // If not an option, it's continuation of question content
                 if (currentQuestion.content.length > 0) currentQuestion.content += '\n';
                 currentQuestion.content += line;
             }
+        } else if (mode === 'answer') {
+            if (/PHẦN\s+I\b/i.test(line)) { currentPart = 1; numberQueue = []; }
+            else if (/PHẦN\s+II\b/i.test(line)) { currentPart = 2; numberQueue = []; }
+            else if (/PHẦN\s+III\b/i.test(line)) { currentPart = 3; numberQueue = []; }
+
+            if (currentPart === 1) {
+                if (/^(\d+\s+)+\d+$/.test(line) || /^\d+$/.test(line)) {
+                    numberQueue = line.split(/\s+/).map(Number);
+                }
+                else if (/^([A-D]\s+)+[A-D]$/i.test(line) || /^[A-D]$/i.test(line)) {
+                    let letters = line.split(/\s+/).map(l => l.toUpperCase());
+                    if (numberQueue.length === letters.length) {
+                        for(let j=0; j<numberQueue.length; j++) {
+                            answersObj.part1[numberQueue[j]] = letters[j];
+                        }
+                    }
+                    numberQueue = [];
+                }
+                let inlineMatches = [...line.matchAll(/(?:Câu\s*)?(\d+)\s*[.:-]?\s*([A-D])/gi)];
+                for (let m of inlineMatches) {
+                    answersObj.part1[parseInt(m[1])] = m[2].toUpperCase();
+                }
+            } else if (currentPart === 2) {
+                let chars = line.replace(/[^SDĐ]/gi, '');
+                if (chars.length >= 4) {
+                    let qNum = Object.keys(answersObj.part2).length + 1;
+                    for (let j=0; j<chars.length; j+=4) {
+                        let chunk = chars.substr(j, 4).toUpperCase();
+                        if (chunk.length === 4) {
+                            answersObj.part2[qNum] = {
+                                a: chunk[0] === 'D' || chunk[0] === 'Đ',
+                                b: chunk[1] === 'D' || chunk[1] === 'Đ',
+                                c: chunk[2] === 'D' || chunk[2] === 'Đ',
+                                d: chunk[3] === 'D' || chunk[3] === 'Đ'
+                            };
+                            qNum++;
+                        }
+                    }
+                }
+            } else if (currentPart === 3) {
+                let match = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]\s*(.*)$/i);
+                if (match) {
+                    answersObj.part3[parseInt(match[1])] = match[2].trim();
+                }
+            }
         }
-        
-        if (currentQuestion) questions.push(currentQuestion);
-
-        res.json(questions);
-    } catch (err) {
-        console.error('Parse exam file error:', err);
-        res.status(500).json({ error: 'Lỗi hệ thống khi phân tích đề thi' });
     }
-});
-
-// Get all classes for a teacher or student
-router.get('/', auth, async (req, res) => {
-  try {
-    const { role, id } = req.user;
     
-    // Select class properties and count members
-    let query = supabase.from('classes')
-      .select('*, teacher:teacher_id(username), student_count:class_members(count)');
-
-    if (role === 'teacher') {
-      query = query.eq('teacher_id', id);
-    } else if (role === 'admin') {
-      // Admin can inspect all classes.
-    } else {
-      // For student, get classes they joined
-      const { data: memberData } = await supabase.from('class_members').select('class_id').eq('student_id', id);
-      const classIds = memberData?.map(m => m.class_id) || [];
-      if (classIds.length === 0) return res.json([]);
-      query = query.in('id', classIds);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    
-    // Format response to flatten student_count
-    const formattedData = data.map(cls => ({
-        ...cls,
-        student_count: cls.student_count?.[0]?.count || 0
-    }));
-
-    res.json(formattedData);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Get class stats for notifications
-router.get('/stats', auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    
-    // 1. Get joined classes
-    const { data: members, error: memErr } = await supabase
-      .from('class_members')
-      .select('class_id')
-      .eq('student_id', userId);
-    
-    if (memErr) throw memErr;
-    const classIds = members.map(m => m.class_id);
-    
-    if (classIds.length === 0) return res.json({});
-
-    // 2. For each class, count posts that the student can see
-    // This is a bit heavy for a single query if many classes, 
-    // but for now we fetch recent posts count.
-    const { data: posts, error: postErr } = await supabase
-      .from('class_posts')
-      .select('class_id, created_at')
-      .in('class_id', classIds)
-      .or(`target_student_id.is.null,target_student_id.eq.${userId},author_id.eq.${userId}`);
-
-    if (postErr) throw postErr;
-
-    // 3. Group by class_id
-    const stats = {};
-    posts.forEach(p => {
-      if (!stats[p.class_id]) stats[p.class_id] = { count: 0, latest: p.created_at };
-      stats[p.class_id].count++;
-      if (new Date(p.created_at) > new Date(stats[p.class_id].latest)) {
-        stats[p.class_id].latest = p.created_at;
-      }
-    });
-
-    res.json(stats);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Get total summary for teacher dashboard
-router.get('/teacher-summary', auth, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-       return res.status(403).json({ error: 'Chỉ dành cho giáo viên' });
-    }
-
-    // 1. Get all class IDs for this teacher
-    const { data: classes } = await supabase.from('classes').select('id').eq('teacher_id', userId);
-    const classIds = classes?.map(c => c.id) || [];
-
-    if (classIds.length === 0) {
-      return res.json({ total_students: 0, active_assignments: 0 });
-    }
-
-    // 2. Count unique students
-    const { data: members } = await supabase.from('class_members').select('student_id').in('class_id', classIds);
-    const uniqueStudents = new Set(members?.map(m => m.student_id));
-
-    // 3. Count active assignments
-    const { count: assignmentCount } = await supabase
-      .from('class_posts')
-      .select('*', { count: 'exact', head: true })
-      .in('class_id', classIds)
-      .eq('type', 'assignment');
-
-    res.json({
-      total_students: uniqueStudents.size,
-      active_assignments: assignmentCount || 0
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Create a new class (Teacher only)
-router.post('/', auth, async (req, res) => {
-  try {
-    if (!requireTeacherOrAdmin(req, res)) return;
-
-    const { name, grade_level, description } = req.body;
-    const teacher_id = req.user.id;
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-    const { data, error } = await supabase
-      .from('classes')
-      .insert([{ name, grade_level, description, teacher_id, code }])
-      .select()
-      .single();
-
-    if (error) throw error;
-    res.status(201).json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Parse exam file (Format 2025)
-router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
-  try {
-    if (!requireTeacherOrAdmin(req, res)) return;
-    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-    
-    // Extract text from DOCX
-    const result = await mammoth.extractRawText({ buffer: req.file.buffer });
-    const text = result.value;
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-
-    const questions = [];
-    let currentPart = 0;
-    let currentQuestion = null;
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      if (line.startsWith('Phần I.')) { currentPart = 1; continue; }
-      if (line.startsWith('Phần II.')) { currentPart = 2; continue; }
-      if (line.startsWith('Phần III.')) { currentPart = 3; continue; }
-      if (line.includes('------ HẾT ------') || line.startsWith('ĐÁP ÁN')) { break; }
-
-      if (!currentPart) continue;
-
-      if (line.startsWith('Câu ')) {
-        if (currentQuestion) questions.push(currentQuestion);
-        currentQuestion = {
-          id: 'q' + (questions.length + 1),
-          part: currentPart,
-          type: currentPart === 1 ? 'multiple_choice' : currentPart === 2 ? 'true_false' : 'short_answer',
-          content: line,
-          options: currentPart !== 3 ? {} : undefined,
-          correct_answer: currentPart === 2 ? {a:'', b:'', c:'', d:''} : ''
-        };
-      } else if (currentQuestion) {
-        if (currentPart === 1) {
-          if (line.match(/^[A-D]\./)) {
-            const parts = line.split(/(?=[A-D]\.)/);
-            parts.forEach(p => {
-              const m = p.trim().match(/^([A-D])\.\s*(.*)/);
-              if (m) currentQuestion.options[m[1]] = m[2];
-            });
-          } else {
-            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
-          }
-        } else if (currentPart === 2) {
-          if (line.match(/^[a-d]\)/)) {
-            const m = line.match(/^([a-d])\)\s*(.*)/);
-            if (m) currentQuestion.options[m[1]] = m[2];
-          } else {
-            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
-          }
-        } else if (currentPart === 3) {
-          currentQuestion.content += '\n' + line;
-        }
-      }
-    }
     if (currentQuestion) questions.push(currentQuestion);
+
+    for (let q of questions) {
+        if (q.part === 1 && answersObj.part1[q.partNum]) {
+            q.correct_answer = answersObj.part1[q.partNum];
+        } else if (q.part === 2 && answersObj.part2[q.partNum]) {
+            q.correct_answer = answersObj.part2[q.partNum];
+        } else if (q.part === 3 && answersObj.part3[q.partNum]) {
+            q.correct_answer = answersObj.part3[q.partNum];
+        }
+    }
 
     res.json(questions);
   } catch (err) {
