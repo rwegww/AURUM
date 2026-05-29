@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import LeaderboardSection from '@/components/home/LeaderboardSection';
 import Footer from '@/components/common/Footer';
-import { Play, FlaskConical, Trophy, BookOpen, Star, Zap, Map, ChevronRight, Smartphone } from 'lucide-react';
+import { Play, FlaskConical, Trophy, BookOpen, Star, Zap, Map, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { stableRange } from '@/utils/stableRandom';
 
@@ -140,7 +140,6 @@ const Home = () => {
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useAuth();
   const [testimonials, setTestimonials] = React.useState([]);
-  const expoGoUrl = import.meta.env.VITE_EXPO_GO_URL;
 
   React.useEffect(() => {
     const fetchTestimonials = async () => {
@@ -204,15 +203,6 @@ const Home = () => {
                   {t('home.enter_lab')}
                   <FlaskConical size={20} />
                 </Link>
-                {expoGoUrl && (
-                  <a
-                    href={expoGoUrl}
-                    className="bg-purple-600 text-white hover:bg-purple-700 hover:scale-105 transition-all text-lg font-black px-8 py-4 rounded-[1.5rem] flex items-center justify-center gap-3 shadow-[0_4px_20px_0_rgba(124,58,237,0.32)]"
-                  >
-                    {t('home.open_expo_app')}
-                    <Smartphone size={20} />
-                  </a>
-                )}
               </motion.div>
             </div>
 
