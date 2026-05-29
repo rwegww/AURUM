@@ -4,34 +4,80 @@ import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import Footer from '@/components/common/Footer';
 import { Download, Eye, FileText, Folder, PackageOpen, Search } from 'lucide-react';
-import { getMaterialCategoryOptions } from '@/constants/materialCategories';
+import { CHEMISTRY_GRADES, CHEMISTRY_TYPES } from '@/constants/materialCategories';
 
 const Library = () => {
   const { t } = useTranslation();
   const [hoc_lieu, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState('');
+  const [selectedGrade, setSelectedGrade] = useState('');
+  const [selectedType, setSelectedType] = useState('');
   const [search, setSearch] = useState('');
 
   const fetchMaterials = useCallback(async () => {
     setLoading(true);
     try {
-      const url = `/api/materials?category=${encodeURIComponent(category)}&search=${encodeURIComponent(search)}`;
+      // 1. Tính toán category chính xác nếu người dùng chọn cả Grade và Type
+      let queryCategory = '';
+      if (selectedGrade && selectedType) {
+        const gradeLabel = selectedGrade === 'chung' ? 'CHUNG' : `LỚP ${selectedGrade}`;
+        const typeObj = CHEMISTRY_TYPES.find(t => t.id === selectedType);
+        const typeLabel = typeObj ? typeObj.label : '';
+        queryCategory = `HÓA ${gradeLabel} - ${typeLabel}`;
+      }
+
+      // 2. Fetch từ API. Nếu queryCategory trống, API sẽ trả về tất cả
+      const url = `/api/materials?category=${encodeURIComponent(queryCategory)}&search=${encodeURIComponent(search)}`;
       const res = await fetch(url);
       const data = await res.json();
-      setMaterials(data);
+
+      // 3. Thực hiện lọc client-side nếu queryCategory trống (tức là fetch tất cả vì 1 trong 2 filter là 'Tất cả')
+      let filteredData = Array.isArray(data) ? data : [];
+      if (!queryCategory) {
+        if (selectedGrade) {
+          const gradeLabel = selectedGrade === 'chung' ? 'CHUNG' : `LỚP ${selectedGrade}`;
+          filteredData = filteredData.filter(item => 
+            item.category && item.category.includes(`HÓA ${gradeLabel}`)
+          );
+        }
+        if (selectedType) {
+          const typeObj = CHEMISTRY_TYPES.find(t => t.id === selectedType);
+          const typeLabel = typeObj ? typeObj.label : '';
+          filteredData = filteredData.filter(item => 
+            item.category && item.category.includes(` - ${typeLabel}`)
+          );
+        }
+      }
+
+      setMaterials(filteredData);
     } catch (err) {
       console.error(t('library.loading_error'), err);
     } finally {
       setLoading(false);
     }
-  }, [category, search, t]);
+  }, [selectedGrade, selectedType, search, t]);
 
   useEffect(() => {
     fetchMaterials();
   }, [fetchMaterials]);
 
-  const categories = getMaterialCategoryOptions(t);
+  const grades = [
+    { id: '', label: t('library.filter.all_grades', 'Tất cả lớp') },
+    { id: 'chung', label: t('library.filter.grade_general', 'Hóa Chung') },
+    { id: '8', label: t('library.filter.grade_8', 'Lớp 8') },
+    { id: '9', label: t('library.filter.grade_9', 'Lớp 9') },
+    { id: '10', label: t('library.filter.grade_10', 'Lớp 10') },
+    { id: '11', label: t('library.filter.grade_11', 'Lớp 11') },
+    { id: '12', label: t('library.filter.grade_12', 'Lớp 12') },
+  ];
+
+  const types = [
+    { id: '', label: t('library.filter.all_types', 'Tất cả loại') },
+    { id: 'bai_giang', label: t('library.filter.type_lecture', 'Bài giảng') },
+    { id: 'de_thi', label: t('library.filter.type_exam', 'Đề thi') },
+    { id: 'de_on', label: t('library.filter.type_review', 'Đề ôn') },
+    { id: 'anh', label: t('library.filter.type_image', 'Ảnh minh họa') },
+  ];
 
   return (
     <div className="min-h-screen bg-[oklch(0.98_0.02_135)] pt-28 pb-20 px-4 sm:px-6 lg:px-8 selection:bg-viet-green selection:text-white">
@@ -64,21 +110,53 @@ const Library = () => {
           </motion.div>
         </header>
 
-        {/* Categories Bar */}
-        <div className="flex overflow-x-auto gap-3 pb-8 no-scrollbar scroll-smooth">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setCategory(cat.id)}
-              className={`whitespace-nowrap px-6 py-3 rounded-full font-black text-xs uppercase tracking-widest transition-all ${
-                category === cat.id
-                  ? 'btn-tactile-green'
-                  : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
+        {/* Filter Panel */}
+        <div className="bg-white border-2 border-duo-border rounded-[2rem] p-6 mb-8 shadow-sm flex flex-col gap-4">
+          {/* Grade Selector */}
+          <div className="flex flex-col md:flex-row md:items-center gap-3">
+            <span className="text-[11px] font-black text-viet-text-light uppercase tracking-widest min-w-[100px] select-none">
+              {t('library.filter.by_grade', 'Khối lớp')}:
+            </span>
+            <div className="flex overflow-x-auto gap-2 pb-1 md:pb-0 no-scrollbar scroll-smooth">
+              {grades.map((g) => (
+                <button
+                  key={g.id}
+                  onClick={() => setSelectedGrade(g.id)}
+                  className={`whitespace-nowrap px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-widest transition-all ${
+                    selectedGrade === g.id
+                      ? 'btn-tactile-green text-white'
+                      : 'bg-slate-50 text-[#1a1a1a] border-2 border-slate-200 border-b-4 hover:bg-slate-100 hover:scale-105 active:scale-95'
+                  }`}
+                >
+                  {g.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="h-[1px] bg-slate-100 w-full" />
+
+          {/* Type Selector */}
+          <div className="flex flex-col md:flex-row md:items-center gap-3">
+            <span className="text-[11px] font-black text-viet-text-light uppercase tracking-widest min-w-[100px] select-none">
+              {t('library.filter.by_type', 'Loại tài liệu')}:
+            </span>
+            <div className="flex overflow-x-auto gap-2 pb-1 md:pb-0 no-scrollbar scroll-smooth">
+              {types.map((tp) => (
+                <button
+                  key={tp.id}
+                  onClick={() => setSelectedType(tp.id)}
+                  className={`whitespace-nowrap px-5 py-2.5 rounded-full font-black text-xs uppercase tracking-widest transition-all ${
+                    selectedType === tp.id
+                      ? 'btn-tactile-green text-white'
+                      : 'bg-slate-50 text-[#1a1a1a] border-2 border-slate-200 border-b-4 hover:bg-slate-100 hover:scale-105 active:scale-95'
+                  }`}
+                >
+                  {tp.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {loading ? (
@@ -138,7 +216,7 @@ const Library = () => {
               <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-2 border-dashed border-duo-border">
                 <PackageOpen size={56} className="mx-auto mb-4 text-viet-text-light/30" aria-hidden="true" />
                 <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>
-                <button onClick={() => {setCategory(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
+                <button onClick={() => {setSelectedGrade(''); setSelectedType(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
               </div>
             )}
           </div>
