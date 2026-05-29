@@ -99,10 +99,9 @@ const AssignmentManager = () => {
     const handleAnalyzeFile = async (file) => {
         console.log('Analyzing file:', file.name, 'Type:', file.type, 'Size:', file.size, 'bytes');
         
-        // Validate file size - a real Word doc should be at least 1KB
         if (file.size < 1000) {
-            alert(`File "${file.name}" quá nhỏ (${file.size} bytes). Đây có thể không phải file Word/PDF hợp lệ. Vui lòng kiểm tra lại file trên máy tính.`);
-            setParsedQuestions([{ question: '', options: ['', '', '', ''], correct_index: 0 }]);
+            alert(`File "${file.name}" quá nhỏ (${file.size} bytes). Đây có thể không phải file Word hợp lệ.`);
+            setParsedQuestions([{ id: 'q1', type: 'multiple_choice', part: 1, content: '', options: {A: '', B: '', C: '', D: ''}, correct_answer: '' }]);
             setShowQuestionsReview(true);
             return;
         }
@@ -113,7 +112,7 @@ const AssignmentManager = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('/api/analyze/analyze-file', {
+            const res = await fetch('/api/classes/parse-exam-file', {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` },
                 body: formData
@@ -121,26 +120,22 @@ const AssignmentManager = () => {
 
             if (res.ok) {
                 const data = await res.json();
-                if (data.questions && data.questions.length > 0) {
-                    setParsedQuestions(data.questions);
+                if (data && data.length > 0) {
+                    setParsedQuestions(data);
                     setShowQuestionsReview(true);
                 } else {
                     alert('Hệ thống không tự động nhận diện được câu hỏi từ file này. Bạn có thể nhập câu hỏi thủ công bên dưới.');
-                    setParsedQuestions([{ question: '', options: ['', '', '', ''], correct_index: 0 }]);
+                    setParsedQuestions([{ id: 'q1', type: 'multiple_choice', part: 1, content: '', options: {A: '', B: '', C: '', D: ''}, correct_answer: '' }]);
                     setShowQuestionsReview(true);
                 }
             } else {
                 const errorData = await res.json().catch(() => ({ message: 'Lỗi không xác định từ máy chủ' }));
                 console.error('Analysis API Error:', errorData);
-                if (errorData.debug) {
-                    console.error('Debug info:', errorData.debug);
-                }
-                // Fall back to manual entry instead of just showing error
                 const useManual = window.confirm(
-                    `${errorData.message || 'Máy chủ gặp sự cố khi đọc file.'}\n\nBạn có muốn nhập câu hỏi thủ công không?`
+                    `${errorData.message || errorData.error || 'Máy chủ gặp sự cố khi đọc file.'}\n\nBạn có muốn nhập câu hỏi thủ công không?`
                 );
                 if (useManual) {
-                    setParsedQuestions([{ question: '', options: ['', '', '', ''], correct_index: 0 }]);
+                    setParsedQuestions([{ id: 'q1', type: 'multiple_choice', part: 1, content: '', options: {A: '', B: '', C: '', D: ''}, correct_answer: '' }]);
                     setShowQuestionsReview(true);
                 }
             }
@@ -465,23 +460,22 @@ const AssignmentManager = () => {
                                         </button>
                                     </div>
                                     
-                                    {/* Questions Review Section */}
+                                                                        {/* Questions Review Section */}
                                     {showQuestionsReview && (
                                         <div className="mt-8 pt-8 border-t-4 border-viet-green/20 space-y-6">
                                             <div className="flex items-center justify-between bg-emerald-50 p-4 rounded-2xl border border-viet-green/20">
                                                 <div>
                                                    <h3 className="text-sm font-black text-viet-text uppercase tracking-widest">📋 DANH SÁCH CÂU HỎI ({parsedQuestions.length})</h3>
-                                                   <p className="text-[10px] font-bold text-viet-green uppercase mt-1">Học sinh sẽ làm trực tuyến trên danh sách này</p>
+                                                   <p className="text-[10px] font-bold text-viet-green uppercase mt-1">Format 2025: Trắc nghiệm, Đúng/Sai, Trả lời ngắn</p>
                                                 </div>
                                                 <div className="flex gap-2">
-                                                    <button type="button" onClick={() => setParsedQuestions([...parsedQuestions, { type: 'multiple_choice', question: '', options: ['', '', '', ''], correct_index: 0 }])} className="text-[10px] font-black bg-viet-green text-white uppercase px-3 py-2 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-viet-green/20">+ Trắc nghiệm</button>
-                                                    <button type="button" onClick={() => setParsedQuestions([...parsedQuestions, { type: 'essay', question: '', options: [], correct_index: null, sample_answer: '' }])} className="text-[10px] font-black bg-blue-500 text-white uppercase px-3 py-2 rounded-xl hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/20">+ Tự luận</button>
+                                                    <button type="button" onClick={() => setParsedQuestions([...parsedQuestions, { id: 'q'+Date.now(), type: 'multiple_choice', part: 1, content: 'Câu hỏi mới', options: {A: '', B: '', C: '', D: ''}, correct_answer: '' }])} className="text-[10px] font-black bg-viet-green text-white uppercase px-3 py-2 rounded-xl hover:bg-emerald-600 transition-all shadow-lg shadow-viet-green/20">+ Thêm câu hỏi</button>
                                                 </div>
                                             </div>
                                             
                                             <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                                                 {parsedQuestions.map((q, qIdx) => (
-                                                    <div key={qIdx} className={`p-5 rounded-2xl border relative group ${q.type === 'essay' ? 'bg-blue-50/50 border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
+                                                    <div key={q.id || qIdx} className="p-5 rounded-2xl border relative group bg-slate-50 border-slate-200">
                                                         <button 
                                                             type="button" 
                                                             onClick={() => setParsedQuestions(parsedQuestions.filter((_, i) => i !== qIdx))}
@@ -490,85 +484,128 @@ const AssignmentManager = () => {
                                                         
                                                         <div className="space-y-4">
                                                             <div className="flex items-center gap-3">
-                                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Câu {qIdx + 1}</span>
+                                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                                                                    PHẦN {q.part || 1} - CÂU {qIdx + 1}
+                                                                </span>
                                                                 <select 
                                                                     value={q.type || 'multiple_choice'}
                                                                     onChange={(e) => {
                                                                         const newQ = [...parsedQuestions];
-                                                                        const newType = e.target.value;
-                                                                        newQ[qIdx].type = newType;
-                                                                        if (newType === 'essay') {
-                                                                            newQ[qIdx].options = [];
-                                                                            newQ[qIdx].correct_index = null;
-                                                                            newQ[qIdx].sample_answer = newQ[qIdx].sample_answer || '';
+                                                                        newQ[qIdx].type = e.target.value;
+                                                                        if (e.target.value === 'multiple_choice') {
+                                                                            newQ[qIdx].options = {A:'', B:'', C:'', D:''};
+                                                                            newQ[qIdx].correct_answer = '';
+                                                                        } else if (e.target.value === 'true_false') {
+                                                                            newQ[qIdx].options = {a:'', b:'', c:'', d:''};
+                                                                            newQ[qIdx].correct_answer = {a:'', b:'', c:'', d:''};
                                                                         } else {
-                                                                            newQ[qIdx].options = newQ[qIdx].options?.length >= 2 ? newQ[qIdx].options : ['', '', '', ''];
-                                                                            newQ[qIdx].correct_index = 0;
+                                                                            newQ[qIdx].correct_answer = '';
                                                                         }
                                                                         setParsedQuestions(newQ);
                                                                     }}
                                                                     className="text-[9px] font-black uppercase tracking-widest bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none"
                                                                 >
                                                                     <option value="multiple_choice">🔘 Trắc nghiệm</option>
-                                                                    <option value="essay">📝 Tự luận</option>
+                                                                    <option value="true_false">☑️ Đúng / Sai</option>
+                                                                    <option value="short_answer">📝 Trả lời ngắn</option>
                                                                 </select>
                                                             </div>
                                                             <div>
                                                                 <textarea 
-                                                                    value={q.question}
+                                                                    value={q.content}
                                                                     onChange={(e) => {
                                                                         const newQ = [...parsedQuestions];
-                                                                        newQ[qIdx].question = e.target.value;
+                                                                        newQ[qIdx].content = e.target.value;
                                                                         setParsedQuestions(newQ);
                                                                     }}
                                                                     placeholder="Nhập nội dung câu hỏi..."
-                                                                    className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold font-VietEdu outline-none focus:border-viet-green"
+                                                                    className="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs font-bold outline-none focus:border-viet-green"
                                                                 />
                                                             </div>
                                                             
-                                                            {(q.type || 'multiple_choice') === 'multiple_choice' ? (
+                                                            {(q.type || 'multiple_choice') === 'multiple_choice' && (
                                                                 <div className="grid grid-cols-2 gap-3">
-                                                                    {(q.options || ['', '', '', '']).map((opt, oIdx) => (
-                                                                        <div key={oIdx} className="flex flex-col gap-1">
+                                                                    {['A', 'B', 'C', 'D'].map((key) => (
+                                                                        <div key={key} className="flex flex-col gap-1">
                                                                             <div className="flex items-center justify-between px-1">
-                                                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{String.fromCharCode(65 + oIdx)}.</span>
+                                                                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{key}.</span>
                                                                                 <input 
                                                                                     type="radio" 
                                                                                     name={`q-${qIdx}-correct`} 
-                                                                                    checked={q.correct_index === oIdx}
+                                                                                    checked={q.correct_answer === key}
                                                                                     onChange={() => {
                                                                                         const newQ = [...parsedQuestions];
-                                                                                        newQ[qIdx].correct_index = oIdx;
+                                                                                        newQ[qIdx].correct_answer = key;
                                                                                         setParsedQuestions(newQ);
                                                                                     }}
-                                                                                    className="w-3 h-3 accent-viet-green"
+                                                                                    className="w-3 h-3 accent-viet-green cursor-pointer"
                                                                                 />
                                                                             </div>
                                                                             <input 
-                                                                                value={opt}
+                                                                                value={q.options?.[key] || ''}
                                                                                 onChange={(e) => {
                                                                                     const newQ = [...parsedQuestions];
-                                                                                    newQ[qIdx].options[oIdx] = e.target.value;
+                                                                                    if (!newQ[qIdx].options) newQ[qIdx].options = {};
+                                                                                    newQ[qIdx].options[key] = e.target.value;
                                                                                     setParsedQuestions(newQ);
                                                                                 }}
-                                                                                placeholder={`Đáp án ${String.fromCharCode(65 + oIdx)}`}
-                                                                                className={`w-full bg-white border rounded-xl p-2.5 text-[11px] font-medium outline-none transition-all ${q.correct_index === oIdx ? 'border-viet-green bg-emerald-50/50' : 'border-slate-200 focus:border-viet-green'}`}
+                                                                                placeholder={`Đáp án ${key}`}
+                                                                                className={`w-full bg-white border rounded-xl p-2.5 text-[11px] font-medium outline-none transition-all ${q.correct_answer === key ? 'border-viet-green bg-emerald-50/50' : 'border-slate-200 focus:border-viet-green'}`}
                                                                             />
                                                                         </div>
                                                                     ))}
                                                                 </div>
-                                                            ) : (
+                                                            )}
+
+                                                            {q.type === 'true_false' && (
+                                                                <div className="grid grid-cols-1 gap-3">
+                                                                    {['a', 'b', 'c', 'd'].map((key) => (
+                                                                        <div key={key} className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                                                                            <span className="text-[11px] font-black text-slate-400 min-w-[20px]">{key})</span>
+                                                                            <input 
+                                                                                value={q.options?.[key] || ''}
+                                                                                onChange={(e) => {
+                                                                                    const newQ = [...parsedQuestions];
+                                                                                    if (!newQ[qIdx].options) newQ[qIdx].options = {};
+                                                                                    newQ[qIdx].options[key] = e.target.value;
+                                                                                    setParsedQuestions(newQ);
+                                                                                }}
+                                                                                placeholder={`Ý ${key}`}
+                                                                                className="flex-1 bg-white border border-slate-200 rounded-xl p-2.5 text-[11px] font-medium outline-none focus:border-viet-green"
+                                                                            />
+                                                                            <select
+                                                                                value={q.correct_answer?.[key] || ''}
+                                                                                onChange={(e) => {
+                                                                                    const newQ = [...parsedQuestions];
+                                                                                    if (!newQ[qIdx].correct_answer || typeof newQ[qIdx].correct_answer !== 'object') {
+                                                                                        newQ[qIdx].correct_answer = {a:'', b:'', c:'', d:''};
+                                                                                    }
+                                                                                    newQ[qIdx].correct_answer[key] = e.target.value;
+                                                                                    setParsedQuestions(newQ);
+                                                                                }}
+                                                                                className="bg-white border border-slate-200 rounded-xl p-2 text-xs font-bold outline-none min-w-[80px]"
+                                                                            >
+                                                                                <option value="">- Chọn -</option>
+                                                                                <option value="True">Đúng</option>
+                                                                                <option value="False">Sai</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+
+                                                            {q.type === 'short_answer' && (
                                                                 <div>
-                                                                    <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1 block">Đáp án mẫu (tùy chọn - dùng để tham khảo khi chấm bài)</span>
-                                                                    <textarea 
-                                                                        value={q.sample_answer || ''}
+                                                                    <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1 block">Đáp án</span>
+                                                                    <input 
+                                                                        value={q.correct_answer || ''}
                                                                         onChange={(e) => {
                                                                             const newQ = [...parsedQuestions];
-                                                                            newQ[qIdx].sample_answer = e.target.value;
+                                                                            newQ[qIdx].correct_answer = e.target.value;
                                                                             setParsedQuestions(newQ);
                                                                         }}
-                                                                        placeholder="Nhập đáp án mẫu để tham khảo khi chấm bài (không bắt buộc)..."
-                                                                        className="w-full bg-white border border-blue-200 rounded-xl p-3 text-xs font-medium outline-none focus:border-blue-400 min-h-[80px] resize-none"
+                                                                        placeholder="Nhập đáp án (thường là số)..."
+                                                                        className="w-full bg-white border border-blue-200 rounded-xl p-3 text-xs font-bold outline-none focus:border-blue-400"
                                                                     />
                                                                 </div>
                                                             )}
