@@ -16,6 +16,8 @@ const MaterialDetail = () => {
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(5);
   const [submitting, setSubmitting] = useState(false);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [replyContent, setReplyContent] = useState('');
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US');
@@ -69,6 +71,32 @@ const MaterialDetail = () => {
       console.error(t('material_detail.feedback.err_submit'), err);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleReplySubmit = async (e, feedbackId) => {
+    e.preventDefault();
+    if (!replyContent.trim()) return;
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`/api/materials/${id}/feedback/${feedbackId}/reply`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({ reply_content: replyContent })
+      });
+
+      if (res.ok) {
+        const updated = await res.json();
+        setFeedback(prev => prev.map(f => f.id === feedbackId ? { ...f, ...updated, reply_user: { username: user.username } } : f));
+        setReplyingTo(null);
+        setReplyContent('');
+      }
+    } catch (err) {
+      console.error(t('material_detail.feedback.err_submit'), err);
     }
   };
 
@@ -238,6 +266,45 @@ const MaterialDetail = () => {
                       <p className="text-viet-text text-sm font-medium pl-13 leading-relaxed">
                         {f.content}
                       </p>
+                      
+                      {f.reply_content && (
+                        <div className="mt-4 bg-viet-green/5 p-4 rounded-2xl border border-viet-green/20 ml-13">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-6 h-6 rounded-full bg-viet-green flex items-center justify-center font-black text-white text-[10px] uppercase">
+                              {(f.reply_user?.username || 'A').charAt(0)}
+                            </div>
+                            <div>
+                              <p className="font-bold text-viet-green text-xs uppercase">{f.reply_user?.username || 'Admin'} <span className="text-gray-400 font-medium ml-1 lowercase text-[10px]">(đã trả lời)</span></p>
+                            </div>
+                          </div>
+                          <p className="text-viet-text text-sm font-medium leading-relaxed pl-8">
+                            {f.reply_content}
+                          </p>
+                        </div>
+                      )}
+
+                      {isLoggedIn && (user.role === 'admin' || user.role === 'teacher') && !f.reply_content && (
+                        <div className="mt-3 ml-13">
+                          {replyingTo === f.id ? (
+                            <form onSubmit={(e) => handleReplySubmit(e, f.id)} className="space-y-3">
+                              <textarea 
+                                placeholder="Nhập nội dung trả lời..."
+                                className="w-full bg-white border border-viet-border rounded-xl p-3 min-h-[80px] outline-none focus:border-viet-green transition-all text-sm font-medium text-viet-text"
+                                value={replyContent}
+                                onChange={(e) => setReplyContent(e.target.value)}
+                              />
+                              <div className="flex gap-2 justify-end">
+                                <button type="button" onClick={() => setReplyingTo(null)} className="px-4 py-2 text-xs font-bold text-gray-500 hover:bg-gray-100 rounded-lg">Hủy</button>
+                                <button disabled={!replyContent.trim()} type="submit" className="px-4 py-2 text-xs font-bold bg-viet-green text-white rounded-lg disabled:opacity-50 hover:bg-viet-green-dark">Gửi</button>
+                              </div>
+                            </form>
+                          ) : (
+                            <button onClick={() => { setReplyingTo(f.id); setReplyContent(''); }} className="text-xs font-bold text-viet-green flex items-center gap-1 hover:underline">
+                              ↪ Trả lời
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </motion.div>
                   ))}
                 </AnimatePresence>
