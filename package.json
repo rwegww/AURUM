@@ -18,7 +18,8 @@
     "db:migrate:restructure": "node scripts/db/runRestructureMigration.js",
     "db:validate:restructure": "node scripts/db/validateRestructure.js",
     "migrate-lab": "node scripts/migrateLabData.js",
-    "upload-curriculum": "node scripts/uploadCurriculum.js"
+    "upload-curriculum": "node scripts/uploadCurriculum.js",
+    "import-chemistry-materials": "node scripts/importChemistryMaterials.js"
   },
   "dependencies": {
     "@dicebear/core": "^9.4.2",
