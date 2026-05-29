@@ -5,6 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Download, Eye, Folder, Reply, Star } from 'lucide-react';
 
+const viewedTimeline = {};
+
 const MaterialDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,10 +27,14 @@ const MaterialDetail = () => {
   };
 
   useEffect(() => {
+    const now = Date.now();
+    const shouldIncrement = !viewedTimeline[id] || (now - viewedTimeline[id] > 2000);
+    viewedTimeline[id] = now;
+
     const fetchData = async () => {
       try {
         const [matRes, feedRes] = await Promise.all([
-          fetch(`/api/materials/${id}`),
+          fetch(`/api/materials/${id}${shouldIncrement ? '' : '?increment=false'}`),
           fetch(`/api/materials/${id}/feedback`)
         ]);
         
@@ -44,7 +50,7 @@ const MaterialDetail = () => {
       }
     };
     fetchData();
-  }, [id, t]);
+  }, [id]);
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();

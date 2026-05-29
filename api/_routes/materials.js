@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
 
@@ -175,6 +175,7 @@ router.post('/', auth, async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    const { increment } = req.query;
 
     // Fetch material
     const { data, error } = await supabase
@@ -185,8 +186,10 @@ router.get('/:id', async (req, res) => {
 
     if (error) throw error;
 
-    // Increment view count (fire and forget)
-    supabase.rpc('increment_material_view', { material_id: id }).then();
+    // Increment view count (fire and forget) if not explicitly disabled
+    if (increment !== 'false') {
+      supabase.rpc('increment_material_view', { material_id: id }).then();
+    }
 
     res.json(normalizeMaterial(data));
   } catch (err) {
