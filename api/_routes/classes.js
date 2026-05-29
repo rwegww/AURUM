@@ -107,7 +107,11 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
     let mode = 'question';
 
     let answersObj = { part1: {}, part2: {}, part3: {} };
-    let numberQueue = [];
+    
+    let part1Numbers = [];
+    let part1Letters = [];
+    let part2Letters = [];
+    let part3Answers = [];
 
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
@@ -121,16 +125,39 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
             if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
-            const qMatch = line.match(/^(?:Câu\s*(\d+)|Bài\s*(\d+)|C(\d+))\s*[.:]?\s*(.*)/i);
-            if (qMatch || /^Câu\s*\d+/i.test(line)) { 
+            const qMatch = line.match(/^(?:Câu\s*|Bài\s*|C\s*)?(\d+)\b\s*[.:]?\s*(.*)/i);
+            
+            // To prevent matching arbitrary numbers like "1 lít", we ensure it starts with Câu/Bài/C 
+            // OR we use the previous logic but with \b
+            let isQuestionStart = false;
+            let pNum = null;
+            let contentStr = '';
+            
+            const qMatchStrict = line.match(/^(?:Câu|Bài|C)\s*(\d+)\b(?:\s*\(.*?\))?\s*[.:]?\s*(.*)/i);
+            if (qMatchStrict) {
+                isQuestionStart = true;
+                pNum = parseInt(qMatchStrict[1]);
+                contentStr = qMatchStrict[2];
+            } else if (/^Câu\s*\d+/i.test(line)) {
+                isQuestionStart = true;
+                const tempMatch = line.match(/^Câu\s*(\d+)\s*[.:]?\s*(.*)/i);
+                if (tempMatch) {
+                    pNum = parseInt(tempMatch[1]);
+                    contentStr = tempMatch[2];
+                } else {
+                    pNum = NaN;
+                    contentStr = line;
+                }
+            }
+
+            if (isQuestionStart) { 
                 if (currentQuestion) questions.push(currentQuestion);
                 qIndex++;
-                let parsedNum = parseInt(qMatch?.[1] || qMatch?.[2] || qMatch?.[3]);
-                if (isNaN(parsedNum)) {
+                if (isNaN(pNum) || pNum === null) {
                    partQIndices[currentPart]++;
-                   parsedNum = partQIndices[currentPart];
+                   pNum = partQIndices[currentPart];
                 } else {
-                   partQIndices[currentPart] = parsedNum;
+                   partQIndices[currentPart] = pNum;
                 }
 
                 let type = 'multiple_choice';
@@ -140,9 +167,9 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 currentQuestion = {
                     id: 'q_' + Date.now() + '_' + qIndex,
                     part: currentPart,
-                    partNum: parsedNum,
+                    partNum: pNum,
                     type: type,
-                    content: qMatch ? qMatch[4] : line.replace(/^Câu\s*\d+\s*[.:]?\s*/i, ''),
+                    content: contentStr,
                     options: type === 'multiple_choice' ? {A:'', B:'', C:'', D:''} : (type === 'true_false' ? {a:'', b:'', c:'', d:''} : null),
                     correct_answer: type === 'true_false' ? {a:'', b:'', c:'', d:''} : ''
                 };
@@ -178,54 +205,79 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 currentQuestion.content += line;
             }
         } else if (mode === 'answer') {
-            if (/PHẦN\s+I\b/i.test(line)) { currentPart = 1; numberQueue = []; }
-            else if (/PHẦN\s+II\b/i.test(line)) { currentPart = 2; numberQueue = []; }
-            else if (/PHẦN\s+III\b/i.test(line)) { currentPart = 3; numberQueue = []; }
+            if (/PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
+            else if (/PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
+            else if (/PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
             if (currentPart === 1) {
-                if (/^(\d+\s+)+\d+$/.test(line) || /^\d+$/.test(line)) {
-                    numberQueue = line.split(/\s+/).map(Number);
-                }
-                else if (/^([A-D]\s+)+[A-D]$/i.test(line) || /^[A-D]$/i.test(line)) {
-                    let letters = line.split(/\s+/).map(l => l.toUpperCase());
-                    if (numberQueue.length === letters.length) {
-                        for(let j=0; j<numberQueue.length; j++) {
-                            answersObj.part1[numberQueue[j]] = letters[j];
-                        }
-                    }
-                    numberQueue = [];
-                }
                 let inlineMatches = [...line.matchAll(/(?:Câu\s*)?(\d+)\s*[.:-]?\s*([A-D])/gi)];
-                for (let m of inlineMatches) {
-                    answersObj.part1[parseInt(m[1])] = m[2].toUpperCase();
+                if (inlineMatches.length > 0) {
+                    for (let m of inlineMatches) {
+                        answersObj.part1[parseInt(m[1])] = m[2].toUpperCase();
+                    }
+                    continue;
+                }
+                if (/^(\d+\s*)+$/.test(line)) {
+                    part1Numbers.push(...line.split(/\s+/).filter(Boolean).map(Number));
+                }
+                else if (/^([A-D]\s*)+$/i.test(line)) {
+                    part1Letters.push(...line.split(/\s+/).filter(Boolean).map(l => l.toUpperCase()));
                 }
             } else if (currentPart === 2) {
-                let chars = line.replace(/[^SDĐ]/gi, '');
-                if (chars.length >= 4) {
-                    let qNum = Object.keys(answersObj.part2).length + 1;
-                    for (let j=0; j<chars.length; j+=4) {
-                        let chunk = chars.substr(j, 4).toUpperCase();
-                        if (chunk.length === 4) {
-                            answersObj.part2[qNum] = {
-                                a: chunk[0] === 'D' || chunk[0] === 'Đ',
-                                b: chunk[1] === 'D' || chunk[1] === 'Đ',
-                                c: chunk[2] === 'D' || chunk[2] === 'Đ',
-                                d: chunk[3] === 'D' || chunk[3] === 'Đ'
-                            };
-                            qNum++;
-                        }
+                let m = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]?\s*([SDĐ\s,;]+)$/i);
+                if (m) {
+                    let qNum = parseInt(m[1]);
+                    let chars = m[2].replace(/[^SDĐ]/gi, '').toUpperCase();
+                    if (chars.length === 4) {
+                        answersObj.part2[qNum] = {
+                            a: chars[0] === 'D' || chars[0] === 'Đ',
+                            b: chars[1] === 'D' || chars[1] === 'Đ',
+                            c: chars[2] === 'D' || chars[2] === 'Đ',
+                            d: chars[3] === 'D' || chars[3] === 'Đ'
+                        };
                     }
+                    continue;
+                }
+                if (/^([SDĐ]\s*)+$/i.test(line.replace(/[,;]/g, ' '))) {
+                    part2Letters.push(...line.replace(/[,;]/g, ' ').split(/\s+/).filter(Boolean).map(l => l.toUpperCase()));
                 }
             } else if (currentPart === 3) {
-                let match = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]\s*(.*)$/i);
+                let match = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]\s*(-?\d+(?:[.,]\d+)?)$/i);
                 if (match) {
                     answersObj.part3[parseInt(match[1])] = match[2].trim();
+                    continue;
+                }
+                if (/^(-?\d+(?:[.,]\d+)?\s*)+$/.test(line)) {
+                    part3Answers.push(...line.split(/\s+/).filter(Boolean));
                 }
             }
         }
     }
     
     if (currentQuestion) questions.push(currentQuestion);
+
+    // ZIP part 1
+    let p1Len = Math.min(part1Numbers.length, part1Letters.length);
+    for (let i = 0; i < p1Len; i++) {
+        answersObj.part1[part1Numbers[i]] = part1Letters[i];
+    }
+
+    // ZIP part 2
+    let p2NumQs = Math.floor(part2Letters.length / 4);
+    for (let i = 0; i < p2NumQs; i++) {
+        let chunk = part2Letters.slice(i * 4, i * 4 + 4);
+        answersObj.part2[i + 1] = {
+            a: chunk[0] === 'D' || chunk[0] === 'Đ',
+            b: chunk[1] === 'D' || chunk[1] === 'Đ',
+            c: chunk[2] === 'D' || chunk[2] === 'Đ',
+            d: chunk[3] === 'D' || chunk[3] === 'Đ'
+        };
+    }
+
+    // ZIP part 3
+    for (let i = 0; i < part3Answers.length; i++) {
+        answersObj.part3[i + 1] = part3Answers[i];
+    }
 
     for (let q of questions) {
         if (q.part === 1 && answersObj.part1[q.partNum]) {
