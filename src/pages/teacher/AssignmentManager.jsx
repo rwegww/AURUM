@@ -700,7 +700,7 @@ const AssignmentManager = () => {
                                                                         
                                                                         {isMC ? (
                                                                             <div className="grid grid-cols-2 gap-2 pl-8">
-                                                                                {q.options.map((opt, oIdx) => {
+                                                                                {(Array.isArray(q.options) ? q.options : (q.options ? Object.values(q.options) : [])).map((opt, oIdx) => {
                                                                                     const isChosen = studentAnswer === oIdx;
                                                                                     const isCorrect = q.correct_index === oIdx;
                                                                                     let statusClass = 'bg-white border-slate-100 text-slate-400';

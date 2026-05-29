@@ -270,7 +270,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                   {/* ---- MULTIPLE CHOICE (Text) ---- */}
                   {(type === 'multiple-choice') && currentChallenge.options && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                       {currentChallenge.options.map((opt, i) => (
+                       {(Array.isArray(currentChallenge.options) ? currentChallenge.options : (currentChallenge.options ? Object.values(currentChallenge.options) : [])).map((opt, i) => (
                          <button
                            key={i}
                            disabled={isCorrect !== null}

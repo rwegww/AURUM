@@ -165,7 +165,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                      </h4>
 
                      <div className="grid grid-cols-1 gap-3">
-                        {questions[currentQuestion].options.map((option, idx) => (
+                        {(Array.isArray(questions[currentQuestion].options) ? questions[currentQuestion].options : (questions[currentQuestion].options ? Object.values(questions[currentQuestion].options) : [])).map((option, idx) => (
                            <button
                              key={idx}
                              onClick={() => handleAnswer(idx)}
