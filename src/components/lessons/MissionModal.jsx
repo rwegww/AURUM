@@ -189,7 +189,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                )}
 
                <h4 className="text-[16px] font-black text-viet-text mb-6 text-center italic leading-relaxed">
-                  {currentChallenge.question}
+                  {currentChallenge.question || currentChallenge.content}
                </h4>
 
                {/* ========= Challenge Type Renderers ========= */}

@@ -161,7 +161,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                      </div>
 
                      <h4 className="text-2xl font-black text-viet-text leading-tight uppercase italic">
-                        {questions[currentQuestion].question}
+                        {questions[currentQuestion].question || questions[currentQuestion].content}
                      </h4>
 
                      <div className="grid grid-cols-1 gap-3">

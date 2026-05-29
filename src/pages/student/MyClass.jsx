@@ -683,7 +683,7 @@ const MyClass = () => {
                       <span className="shrink-0 w-10 h-10 bg-viet-green text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-lg shadow-viet-green/20">
                         {qIdx + 1}
                       </span>
-                      <p className="text-xl font-bold text-viet-text leading-relaxed pt-1">{q.question}</p>
+                      <p className="text-xl font-bold text-viet-text leading-relaxed pt-1">{q.question || q.content}</p>
                     </div>
                     
                     <div className="flex-1 pl-14 space-y-4">
