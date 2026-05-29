@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
+import AssistantAvatar from '@/components/common/AssistantAvatar';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
+
 
 const FloatingWidget = () => {
   const { t } = useTranslation();
