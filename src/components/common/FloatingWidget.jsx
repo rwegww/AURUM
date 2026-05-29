@@ -206,13 +206,15 @@ const FloatingWidget = () => {
               setActiveTab('phan_hoi');
             }
           }}
-          className="fixed bottom-5 right-5 w-[56px] h-[56px] bg-white text-viet-green rounded-full shadow-[0_8px_32px_rgba(118,192,52,0.25)] flex items-center justify-center hover:scale-105 transition-all duration-300 z-50 cursor-pointer group border-2 border-viet-green/20 p-1"
+          className="fixed bottom-5 right-5 w-[52px] h-[52px] bg-viet-green text-white rounded-2xl shadow-[0_8px_24px_rgba(118,192,52,0.3)] flex items-center justify-center hover:scale-105 hover:bg-[#007042] transition-all duration-300 z-50 cursor-pointer group border border-white/20"
           aria-label={t('widget.tooltip')}
         >
           <span className="relative flex items-center justify-center">
-            <AssistantAvatar size={46} className="!bg-transparent !border-none !shadow-none" />
+            <svg className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
             {claimableCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-[9px] font-black flex items-center justify-center border-2 border-white animate-pulse">
+              <span className="absolute -top-2.5 -right-2.5 w-5 h-5 bg-red-500 rounded-full text-white text-[9px] font-black flex items-center justify-center border-2 border-white animate-pulse">
                 {claimableCount}
               </span>
             )}
