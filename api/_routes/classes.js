@@ -690,7 +690,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
         post_id: postId, 
         student_id, 
         status: 'submitted',
-        answers: Array.isArray(answers) ? answers : [],
+        answers: answers || {},
         score: null,
         feedback: null
       }], { onConflict: 'post_id,student_id' })
