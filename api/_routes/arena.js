@@ -229,7 +229,7 @@ router.get('/leaderboard', async (req, res) => {
   try {
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, username, arena_stats, arena_avatar')
+      .select('id, username, arena_stats, avatar_seed, streak_count, level')
       .not('arena_stats', 'is', null)
       .order('arena_stats->>points', { ascending: false })
       .limit(10);
@@ -244,8 +244,9 @@ router.get('/leaderboard', async (req, res) => {
         points: u.arena_stats?.points || 0,
         wins: u.arena_stats?.wins || 0,
         total: u.arena_stats?.total || 0,
-        avatarSeed: u.arena_avatar?.seed || u.username,
-        aura: u.arena_avatar?.aura || '#a855f7',
+        avatarSeed: u.avatar_seed || u.username,
+        streakCount: u.streak_count || 0,
+        level: u.level || 1,
       }));
 
     res.json({ success: true, leaderboard });
@@ -281,10 +282,14 @@ router.get('/my-battles', auth, async (req, res) => {
 // ─────────────────────────────────────────────────────────────────────────────
 router.patch('/save-avatar', auth, async (req, res) => {
   try {
-    const { seed, aura } = req.body;
+    const { seed } = req.body;
+    if (!seed || typeof seed !== 'string') {
+      return res.status(400).json({ success: false, message: 'Thiếu avatar seed' });
+    }
+
     const { error } = await supabase
       .from('users')
-      .update({ arena_avatar: { seed, aura } })
+      .update({ avatar_seed: seed })
       .eq('id', req.userId);
 
     if (error) throw error;
@@ -372,7 +377,7 @@ router.get('/rooms', async (req, res) => {
       .from('arena_rooms')
       .select(`
         *,
-        users:host_id (username, arena_avatar)
+        users:host_id (username, avatar_seed, streak_count, level)
       `)
       .eq('status', 'waiting')
       .order('created_at', { ascending: false });
@@ -382,7 +387,11 @@ router.get('/rooms', async (req, res) => {
     const formatted = (rooms || []).map(r => ({
       ...r,
       host_name: r.users?.username || 'Ẩn danh',
-      host_avatar: r.users?.arena_avatar || {},
+      host_avatar: {
+        seed: r.users?.avatar_seed || r.users?.username || 'Aurum',
+        streakCount: r.users?.streak_count || 0,
+        level: r.users?.level || 1,
+      },
     }));
 
     res.json({ success: true, rooms: formatted });

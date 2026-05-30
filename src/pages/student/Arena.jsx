@@ -1,183 +1,53 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import multiavatar from '@multiavatar/multiavatar/esm';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
+import {
+  Award,
+  BarChart3,
+  BookOpenCheck,
+  CheckCircle2,
+  ClipboardList,
+  Clock3,
+  DoorOpen,
+  FlaskConical,
+  Gamepad2,
+  History,
+  Loader2,
+  LogOut,
+  Play,
+  Plus,
+  RefreshCw,
+  Search,
+  Settings,
+  Shield,
+  Swords,
+  Trophy,
+  Users,
+  X,
+  Zap,
+} from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 import Avatar from '@/components/common/Avatar';
-import { stableRange } from '@/utils/stableRandom';
-import { Beaker } from 'lucide-react';
 
-// ─── AVATAR DATA ──────────────────────────────────────────────────────────────
-// Preset avatar seeds for quick selection
-const getAvatarPresets = (t) => [
-  { id: 1, seed: 'Chem Master',   label: t('arena.character.presets.chem_master') },
-  { id: 2, seed: 'Lab Explorer',  label: t('arena.character.presets.lab_wizard') },
-  { id: 3, seed: 'Science Hero',  label: t('arena.character.presets.science_hero') },
-  { id: 4, seed: 'Atom Breaker',  label: t('arena.character.presets.atom_breaker') },
-  { id: 5, seed: 'DNA Explorer',  label: t('arena.character.presets.dna_explorer') },
-  { id: 6, seed: 'Ion Storm',     label: t('arena.character.presets.ion_storm') },
-  { id: 7, seed: 'Thermo King',   label: t('arena.character.presets.thermo_king') },
-  { id: 8, seed: 'Crystal Lord',  label: t('arena.character.presets.crystal_lord') },
-  { id: 9, seed: 'Proton Rush',   label: t('arena.character.presets.proton_rush') },
-  { id: 10, seed: 'Quark Force',  label: t('arena.character.presets.quark_force') },
-  { id: 11, seed: 'Neutron Star', label: t('arena.character.presets.neutron_star') },
-  { id: 12, seed: 'Plasma Wave',  label: t('arena.character.presets.plasma_wave') },
+const MODE_CONFIG = {
+  solo: { maxPlayers: 2, icon: Swords, accent: 'text-viet-green', bg: 'bg-viet-green/10' },
+  '3vs3': { maxPlayers: 6, icon: Shield, accent: 'text-blue-600', bg: 'bg-blue-50' },
+  '5vs5': { maxPlayers: 10, icon: Users, accent: 'text-amber-600', bg: 'bg-amber-50' },
+  '1vs100': { maxPlayers: 100, icon: Trophy, accent: 'text-rose-600', bg: 'bg-rose-50' },
+};
+
+const MODE_KEYS = Object.keys(MODE_CONFIG);
+const DIFFICULTY_KEYS = ['easy', 'medium', 'hard', 'super'];
+
+const RANKS = [
+  { key: 'bronze', min: 0, color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200' },
+  { key: 'silver', min: 500, color: 'text-slate-600', bg: 'bg-slate-100', border: 'border-slate-200' },
+  { key: 'gold', min: 1500, color: 'text-amber-500', bg: 'bg-amber-100', border: 'border-amber-200' },
+  { key: 'diamond', min: 3000, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-200' },
+  { key: 'master', min: 6000, color: 'text-viet-green', bg: 'bg-viet-green/10', border: 'border-viet-green/30' },
 ];
 
-// Helper: generate multiavatar SVG and return as data URL
-const getSvgDataUrl = (seed) => {
-  const svgCode = multiavatar(seed || 'default');
-  const encoded = btoa(unescape(encodeURIComponent(svgCode)));
-  return `data:image/svg+xml;base64,${encoded}`;
-};
-
-const AURA_COLORS = [
-  '#8b5cf6', '#06b6d4', '#10b981', '#f59e0b',
-  '#ec4899', '#3b82f6', '#eab308', '#ef4444',
-];
-
-const FLOATING_PARTICLES = Array.from({ length: 25 }, (_, i) => ({
-  width: stableRange('arena-particle-width', i, 1, 4),
-  height: stableRange('arena-particle-height', i, 1, 4),
-  left: stableRange('arena-particle-left', i, 0, 100),
-  top: stableRange('arena-particle-top', i, 0, 100),
-  x: stableRange('arena-particle-x', i, -10, 10),
-  duration: stableRange('arena-particle-duration', i, 5, 10),
-  delay: stableRange('arena-particle-delay', i, 0, 5),
-}));
-
-const MODERN_STYLES = {
-  glass: "bg-white/80 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0,0,0,0.04)]",
-  card: "bg-white border border-black/[0.03] shadow-[0_4px_20px_rgba(0,0,0,0.02)]",
-  button: "transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
-  radius: "rounded-3xl",
-};
-
-const MODERN_COLORS = {
-  bg: 'oklch(0.99 0.005 100)',
-  card: 'rgba(255, 255, 255, 0.8)',
-  border: 'rgba(255, 255, 255, 0.4)',
-  accent: '#76c034',
-  text: '#1a1a1a',
-  textLight: '#666666',
-};
-
-const getRank = (t, pts = 0) => {
-  const RANKS = [
-    { name: t('arena.ranks.bronze'), min: 0,    color: '#cd7f32', glow: 'shadow-[0_0_20px_#cd7f3260]', icon: '🥉' },
-    { name: t('arena.ranks.silver'), min: 500,  color: '#c0c0c0', glow: 'shadow-[0_0_20px_#c0c0c060]', icon: '🥈' },
-    { name: t('arena.ranks.gold'),   min: 1500, color: '#ffd700', glow: 'shadow-[0_0_20px_#ffd70060]', icon: '🥇' },
-    { name: t('arena.ranks.diamond'),min: 3000, color: '#00e5ff', glow: 'shadow-[0_0_20px_#00e5ff60]', icon: '💎' },
-    { name: t('arena.ranks.master'), min: 6000, color: '#a855f7', glow: 'shadow-[0_0_20px_#a855f760]', icon: '👑' },
-  ];
-  return [...RANKS].reverse().find(r => pts >= r.min) || RANKS[0];
-};
-
-// ─── FLOATING PARTICLES ───────────────────────────────────────────────────────
-const Particles = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {FLOATING_PARTICLES.map((particle, i) => (
-      <motion.div
-        key={i}
-        className="absolute rounded-full"
-        style={{
-          width: particle.width,
-          height: particle.height,
-          background: AURA_COLORS[i % AURA_COLORS.length],
-          left: `${particle.left}%`,
-          top: `${particle.top}%`,
-          opacity: 0.1,
-        }}
-        animate={{ 
-          y: [0, -30, 0], 
-          x: [0, particle.x, 0],
-          opacity: [0.05, 0.15, 0.05] 
-        }}
-        transition={{ 
-          duration: particle.duration,
-          repeat: Infinity, 
-          ease: "linear",
-          delay: particle.delay
-        }}
-      />
-    ))}
-  </div>
-);
-
-// ─── CHARACTER PANEL ──────────────────────────────────────────────────────────
-const CharacterPanel = ({ user, avatarSeed, setAvatarSeed }) => {
-  const { t } = useTranslation();
-  const AVATAR_PRESETS = getAvatarPresets(t);
-  const displayName = user?.username || user?.full_name || t('common.guest', { defaultValue: 'Khách' });
-  const [showMore, setShowMore] = useState(false);
-
-  const currentSeed = avatarSeed || displayName;
-  const currentAvatarUrl = useMemo(() => getSvgDataUrl(currentSeed), [currentSeed]);
-  const visiblePresets = showMore ? AVATAR_PRESETS : AVATAR_PRESETS.slice(0, 8);
-
-  return (
-    <motion.div initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="flex flex-col gap-6">
-      <div className={`${MODERN_STYLES.glass} ${MODERN_STYLES.radius} p-8 group transition-all duration-500`}>
-        <div className="flex items-center justify-between mb-8">
-           <span className="text-[10px] font-bold uppercase tracking-[2px] text-viet-text/40">{t('arena.character.badge')}</span>
-           <div className="flex items-center gap-2">
-             <div className="w-2 h-2 rounded-full animate-pulse bg-viet-green" />
-             <span className="text-[10px] font-bold text-viet-text/20 uppercase tracking-widest">LIVE</span>
-           </div>
-        </div>
-
-        <div className="flex flex-col items-center mb-6">
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            className="w-40 h-40 rounded-3xl mb-6 shadow-[0_20px_50px_rgba(0,0,0,0.06)] relative overflow-hidden flex items-center justify-center bg-white p-4 border border-black/[0.03]"
-          >
-            <div className="absolute inset-0 opacity-5 bg-viet-green" />
-            <img src={currentAvatarUrl} alt={currentSeed} className="w-full h-full object-contain relative z-10" />
-          </motion.div>
-          <h3 className="text-2xl font-black text-viet-text tracking-tight">{displayName}</h3>
-          <p className="text-[12px] font-medium text-viet-text/40 uppercase tracking-widest mt-1">CHEMISTRY EXPLORER</p>
-        </div>
-
-        <div className="pt-6 border-t border-black/[0.03]">
-          <div className="flex items-center justify-between mb-3 px-1">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-viet-text/30">{t('arena.character.presets_label') || 'PHONG CÁCH'}</p>
-            <button onClick={() => setShowMore(!showMore)} className="text-[10px] font-bold text-viet-green/60 hover:text-viet-green transition-all">
-              {showMore ? t('common.less', { defaultValue: 'THU GỌN' }) : t('common.more', { defaultValue: 'XEM THÊM' })}
-            </button>
-          </div>
-          <div className="grid grid-cols-4 gap-3">
-            {visiblePresets.map((av) => (
-              <motion.button 
-                key={av.id} 
-                whileHover={{ scale: 1.1, y: -2 }} 
-                whileTap={{ scale: 0.9 }} 
-                onClick={() => setAvatarSeed(av.seed)} 
-                className={`aspect-square rounded-2xl overflow-hidden p-1.5 transition-all border-2 ${avatarSeed === av.seed ? 'border-viet-green bg-viet-green/5' : 'border-transparent bg-black/[0.02] hover:bg-black/[0.04]'}`}
-              >
-                <img src={getSvgDataUrl(av.seed)} alt={av.label} className="w-full h-full object-contain" />
-              </motion.button>
-            ))}
-          </div>
-        </div>
-      </div>
-      
-      <motion.button 
-        whileHover={{ scale: 1.02, backgroundColor: '#1a1a1a', color: '#fff' }} 
-        whileTap={{ scale: 0.98 }} 
-        onClick={() => { 
-          const randomPreset = AVATAR_PRESETS[Math.floor(Math.random() * AVATAR_PRESETS.length)]; 
-          setAvatarSeed(randomPreset.seed); 
-        }} 
-        className={`w-full py-5 ${MODERN_STYLES.radius} bg-white border border-black/[0.05] text-[11px] font-black uppercase tracking-widest text-viet-text shadow-sm transition-all flex items-center justify-center gap-3`}
-      >
-        <span>🎲</span> {t('arena.character.random_btn')}
-      </motion.button>
-    </motion.div>
-  );
-};
-
-
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
 const apiCall = async (url, options = {}) => {
   const token = localStorage.getItem('token');
   const res = await fetch(url, {
@@ -188,12 +58,28 @@ const apiCall = async (url, options = {}) => {
       ...options.headers,
     },
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Lỗi server');
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.message || 'Server error');
   return data;
 };
 
+const getStats = (user) => user?.arenaStats || { total: 0, wins: 0, losses: 0, points: 0 };
+
+const getRank = (points = 0) => {
+  const current = [...RANKS].reverse().find((rank) => points >= rank.min) || RANKS[0];
+  const next = RANKS.find((rank) => rank.min > points) || null;
+  return { current, next };
+};
+
+const getModeLabel = (t, mode) => (MODE_CONFIG[mode] ? t(`arena_modes.${mode}`) : mode || t('arena_modes.solo'));
+const getModeShortLabel = (t, mode) => (MODE_CONFIG[mode] ? t(`arena_modes.${mode}_short`) : getModeLabel(t, mode));
+const getDifficultyLabel = (t, difficulty) => {
+  if (difficulty === 'auto') return t('arena.ui.difficulty_auto');
+  return DIFFICULTY_KEYS.includes(difficulty) ? t(`arena.difficulties.${difficulty}`) : t('arena.ui.difficulty_auto');
+};
+
 const timeAgo = (t, iso) => {
+  if (!iso) return t('arena.stats.history_item.just_now');
   const diff = Date.now() - new Date(iso).getTime();
   const m = Math.floor(diff / 60000);
   if (m < 1) return t('arena.stats.history_item.just_now');
@@ -203,336 +89,436 @@ const timeAgo = (t, iso) => {
   return t('arena.stats.history_item.days_ago', { count: Math.floor(h / 24) });
 };
 
-// ─── STATS PANEL ─────────────────────────────────────────────────────────────
+const Panel = ({ children, className = '' }) => (
+  <section className={`bg-white border border-viet-border rounded-lg shadow-sm ${className}`}>
+    {children}
+  </section>
+);
+
+const IconButton = ({ children, className = '', ...props }) => (
+  <button
+    type="button"
+    className={`inline-flex items-center justify-center gap-2 rounded-lg font-black transition-all disabled:cursor-not-allowed disabled:opacity-50 ${className}`}
+    {...props}
+  >
+    {children}
+  </button>
+);
+
+const ProfilePanel = ({ user }) => {
+  const { t } = useTranslation();
+  const stats = getStats(user);
+  const avatarSeed = user?.avatarSeed || user?.username || 'Aurum';
+
+  return (
+    <Panel className="p-5">
+      <div className="flex items-center justify-between gap-3 border-b border-viet-border pb-4">
+        <div>
+          <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light/60">
+            {t('arena.ui.profile_panel_title')}
+          </p>
+          <h2 className="mt-1 truncate text-2xl font-black text-viet-text">{user?.username}</h2>
+        </div>
+        <Link
+          to="/settings"
+          className="flex h-10 w-10 items-center justify-center rounded-lg border border-viet-border text-viet-text-light transition-all hover:border-viet-green hover:text-viet-green"
+          title={t('arena.ui.edit_profile')}
+        >
+          <Settings className="h-4 w-4" />
+        </Link>
+      </div>
+
+      <div className="flex flex-col items-center py-6 text-center">
+        <Avatar
+          seed={avatarSeed}
+          size={132}
+          streakCount={user?.streakCount}
+          level={user?.level}
+        />
+        <div className="mt-4 inline-flex items-center gap-2 rounded-lg bg-viet-green/10 px-3 py-2 text-[11px] font-black uppercase tracking-widest text-viet-green">
+          <CheckCircle2 className="h-4 w-4" />
+          {t('arena.ui.avatar_synced')}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-lg border border-viet-border p-3">
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/50">{t('arena.ui.level_label')}</p>
+          <p className="mt-1 text-xl font-black text-viet-text">{user?.level || 1}</p>
+        </div>
+        <div className="rounded-lg border border-viet-border p-3">
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/50">{t('arena.ui.grade_label')}</p>
+          <p className="mt-1 text-xl font-black text-viet-text">{user?.grade || t('arena.ui.no_grade')}</p>
+        </div>
+        <div className="rounded-lg border border-viet-border p-3">
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/50">{t('arena.ui.streak_label')}</p>
+          <p className="mt-1 text-xl font-black text-orange-500">{user?.streakCount || 0}</p>
+        </div>
+        <div className="rounded-lg border border-viet-border p-3">
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/50">{t('arena.ui.points_label')}</p>
+          <p className="mt-1 text-xl font-black text-viet-green">{stats.points || 0}</p>
+        </div>
+      </div>
+    </Panel>
+  );
+};
+
+const RankSummary = ({ user }) => {
+  const { t } = useTranslation();
+  const stats = getStats(user);
+  const { current, next } = getRank(stats.points || 0);
+  const currentLabel = t(`arena.ranks.${current.key}`);
+  const nextPoints = next ? next.min - stats.points : 0;
+  const previousMin = current.min;
+  const nextMin = next?.min || current.min;
+  const rankProgress = next ? Math.min(((stats.points - previousMin) / (nextMin - previousMin)) * 100, 100) : 100;
+
+  return (
+    <div className={`rounded-lg border ${current.border} ${current.bg} p-4`}>
+      <div className="flex items-center gap-3">
+        <div className={`flex h-11 w-11 items-center justify-center rounded-lg bg-white ${current.color}`}>
+          <Award className="h-5 w-5" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/60">{t('arena.ui.current_rank')}</p>
+          <p className={`truncate text-lg font-black ${current.color}`}>{currentLabel}</p>
+        </div>
+      </div>
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-white">
+        <div className="h-full rounded-full bg-viet-green" style={{ width: `${rankProgress}%` }} />
+      </div>
+      <p className="mt-3 text-[11px] font-bold text-viet-text-light">
+        {next ? t('arena.ui.next_rank', { count: nextPoints }) : t('arena.ui.max_rank')}
+      </p>
+    </div>
+  );
+};
+
 const StatsPanel = ({ user }) => {
   const { t } = useTranslation();
   const [leaderboard, setLeaderboard] = useState([]);
   const [battles, setBattles] = useState([]);
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const stats = user?.arenaStats || { total: 0, wins: 0, losses: 0, points: 0 };
-  const rank = getRank(t, stats.points);
+  const stats = getStats(user);
   const winRate = stats.total > 0 ? Math.round((stats.wins / stats.total) * 100) : 0;
 
   useEffect(() => {
-    if (!user?.id) { setLoading(false); return; }
+    let active = true;
     const fetchData = async () => {
       setLoading(true);
       try {
         const lbData = await apiCall('/api/arena/leaderboard');
-        setLeaderboard(lbData.leaderboard || []);
-        const token = localStorage.getItem('token');
-        if (token) {
-          const battleData = await apiCall('/api/arena/my-battles');
+        const battleData = user?.id ? await apiCall('/api/arena/my-battles') : { battles: [] };
+        if (active) {
+          setLeaderboard(lbData.leaderboard || []);
           setBattles(battleData.battles || []);
         }
-      } catch (e) { console.warn('LB error:', e.message); } finally { setLoading(false); }
+      } catch (err) {
+        console.warn('Arena stats load error:', err.message);
+      } finally {
+        if (active) setLoading(false);
+      }
     };
+
     fetchData();
+    return () => {
+      active = false;
+    };
   }, [user?.id]);
 
-  const rows = [
-    { label: t('arena.stats.total_matches'), value: stats.total, color: 'text-viet-text' },
-    { label: t('arena.stats.wins'),         value: stats.wins,  color: 'text-emerald-600' },
-    { label: t('arena.stats.losses'),       value: stats.losses, color: 'text-red-500' },
-    { label: t('arena.stats.win_rate'),     value: `${winRate}%`, color: 'text-blue-600' },
-    { label: t('arena.stats.total_points'), value: stats.points, color: 'text-amber-500' },
+  const statRows = [
+    { label: t('arena.stats.total_matches'), value: stats.total || 0, icon: ClipboardList },
+    { label: t('arena.stats.wins'), value: stats.wins || 0, icon: Trophy },
+    { label: t('arena.stats.losses'), value: stats.losses || 0, icon: Shield },
+    { label: t('arena.stats.win_rate'), value: `${winRate}%`, icon: BarChart3 },
   ];
 
-  const RANK_COLORS = ['text-amber-500', 'text-slate-400', 'text-orange-600'];
-
   return (
-    <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.5, delay: 0.1 }} className="flex flex-col gap-6">
-      <div className={`${MODERN_STYLES.glass} ${MODERN_STYLES.radius} p-8`}>
-        <div className="flex items-center justify-between mb-8">
-           <span className="text-[10px] font-bold uppercase tracking-[2px] text-viet-text/40">{t('arena.stats.badge')}</span>
-           <span className="text-lg opacity-40">📊</span>
+    <div className="space-y-5">
+      <Panel className="p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-black text-viet-text">{t('arena.ui.stats_panel_title')}</h3>
+          <BarChart3 className="h-5 w-5 text-viet-green" />
         </div>
-
-        <div className="space-y-5 mb-10 px-1">
-          {rows.map(({ label, value, color }) => (
-            <div key={label} className="flex justify-between items-center group/stat">
-              <span className="text-viet-text/40 text-[12px] font-bold group-hover/stat:text-viet-text/60 transition-colors">{label}</span>
-              <span className={`font-black text-[13px] tracking-tight ${color}`}>{value}</span>
+        <div className="grid grid-cols-2 gap-3">
+          {statRows.map(({ label, value, icon }) => (
+            <div key={label} className="rounded-lg border border-viet-border p-3">
+              {React.createElement(icon, { className: 'mb-3 h-4 w-4 text-viet-text-light' })}
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light/50">{label}</p>
+              <p className="mt-1 text-xl font-black text-viet-text">{value}</p>
             </div>
           ))}
         </div>
-
-        <div className="rounded-2xl p-5 flex items-center gap-5 transition-all bg-black/[0.02] border border-black/[0.03] group hover:bg-white hover:shadow-xl hover:border-transparent transition-all duration-500">
-          <span className="text-4xl drop-shadow-xl group-hover:scale-110 transition-transform duration-500">{rank.icon}</span>
-          <div>
-            <p className="font-black text-lg text-viet-text leading-tight mb-1">{rank.name}</p>
-            <p className="text-viet-text/30 text-[9px] font-black uppercase tracking-widest">{t('arena.stats.rank_label')}</p>
-          </div>
+        <div className="mt-4">
+          <RankSummary user={user} />
         </div>
-      </div>
+      </Panel>
 
-      <motion.button 
-        whileHover={{ x: 4, backgroundColor: '#1a1a1a', color: '#fff' }} 
-        whileTap={{ scale: 0.98 }} 
-        onClick={() => setShowLeaderboard(v => !v)} 
-        className={`w-full py-5 ${MODERN_STYLES.radius} bg-white border border-black/[0.05] text-[11px] font-black uppercase tracking-widest text-viet-text shadow-sm transition-all flex items-center justify-between px-8`}
-      >
-        <span>🏆 {t('arena.stats.leaderboard_btn')}</span>
-        <span className="text-[14px] opacity-40">{showLeaderboard ? '−' : '+'}</span>
-      </motion.button>
-
-      <AnimatePresence>
-        {showLeaderboard && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }} 
-            animate={{ opacity: 1, height: 'auto' }} 
-            exit={{ opacity: 0, height: 0 }} 
-            className={`${MODERN_STYLES.glass} rounded-3xl overflow-hidden shadow-2xl`}
-          >
-            <div className="p-7">
-              <p className="text-[10px] font-black uppercase tracking-[3px] text-viet-green mb-6">🥇 {t('arena.stats.leaderboard_title')}</p>
-              {loading ? (
-                <div className="flex justify-center py-8">
-                  <div className="w-6 h-6 border-2 border-viet-green border-t-transparent rounded-full animate-spin" />
-                </div>
-              ) : leaderboard.length === 0 ? (
-                <p className="text-viet-text/30 text-[11px] text-center py-8 italic">{t('arena.stats.empty_leaderboard')}</p>
-              ) : (
-                <div className="space-y-3">
-                  {leaderboard.map((p, i) => (
-                    <div key={i} className="flex items-center gap-4 py-3 px-3 rounded-2xl hover:bg-white transition-all shadow-sm shadow-transparent hover:shadow-black/5">
-                      <span className={`w-5 text-center font-black text-[12px] ${RANK_COLORS[i] || 'text-viet-text/20'}`}>{i + 1}</span>
-                      <div className="w-10 h-10 rounded-xl flex-shrink-0 bg-white shadow-sm border border-black/[0.03] p-0.5">
-                        <Avatar seed={p.avatarSeed} size={36} streakCount={p.streakCount} level={p.level} className="w-full h-full" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-viet-text font-black text-[13px] truncate">{p.name}</p>
-                        <p className="text-viet-text/30 text-[10px] font-bold uppercase tracking-tighter">{p.wins} {t('arena.stats.wins')}</p>
-                      </div>
-                      <span className="font-black text-[13px] text-amber-500">{p.points}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className={`${MODERN_STYLES.glass} ${MODERN_STYLES.radius} p-8`}>
-        <p className="text-[10px] font-black uppercase tracking-[2px] text-viet-green mb-6">⚡ {t('arena.stats.history')}</p>
+      <Panel className="p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-black text-viet-text">{t('arena.ui.leaderboard_panel_title')}</h3>
+          <Trophy className="h-5 w-5 text-amber-500" />
+        </div>
         {loading ? (
-          <div className="flex justify-center py-6">
-            <div className="w-5 h-5 border-2 border-viet-green border-t-transparent rounded-full animate-spin" />
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-6 w-6 animate-spin text-viet-green" />
           </div>
-        ) : battles.length === 0 ? (
-          <p className="text-viet-text/30 text-[11px] text-center py-8 italic">{t('arena.stats.empty_history')}</p>
+        ) : leaderboard.length === 0 ? (
+          <p className="py-6 text-center text-sm font-bold text-viet-text-light/60">{t('arena.stats.empty_leaderboard')}</p>
         ) : (
-          <div className="space-y-4">
-            {battles.map((b, i) => (
-              <div key={i} className="flex items-center gap-4 group/history cursor-pointer">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-[12px] border transition-all ${b.result === 'win' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : b.result === 'lose' ? 'bg-red-50 border-red-100 text-red-500' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
-                  {b.result === 'win' ? 'W' : b.result === 'lose' ? 'L' : 'D'}
+          <div className="space-y-3">
+            {leaderboard.map((player) => (
+              <div key={`${player.rank}-${player.name}`} className="flex items-center gap-3 rounded-lg border border-viet-border p-3">
+                <span className="w-5 text-center text-sm font-black text-viet-text-light">{player.rank}</span>
+                <Avatar
+                  seed={player.avatarSeed || player.name}
+                  size={40}
+                  streakCount={player.streakCount}
+                  level={player.level}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-black text-viet-text">{player.name}</p>
+                  <p className="text-[11px] font-bold text-viet-text-light/60">{player.wins} {t('arena.stats.wins')}</p>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-viet-text font-bold text-[13px] truncate group-hover/history:text-viet-green transition-colors">{b.opponent_name}</p>
-                  <p className="text-viet-text/20 text-[10px] font-black uppercase tracking-tighter">{timeAgo(t, b.played_at)}</p>
-                </div>
-                <span className={`font-black text-[13px] ${b.pts_change > 0 ? 'text-emerald-600' : b.pts_change < 0 ? 'text-red-500' : 'text-viet-text/20'}`}>
-                  {b.pts_change > 0 ? '+' : ''}{b.pts_change}
-                </span>
+                <span className="text-sm font-black text-viet-green">{player.points}</span>
               </div>
             ))}
           </div>
         )}
-      </div>
-    </motion.div>
+      </Panel>
+
+      <Panel className="p-5">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-black text-viet-text">{t('arena.ui.recent_panel_title')}</h3>
+          <History className="h-5 w-5 text-blue-600" />
+        </div>
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="h-6 w-6 animate-spin text-viet-green" />
+          </div>
+        ) : battles.length === 0 ? (
+          <p className="py-6 text-center text-sm font-bold text-viet-text-light/60">{t('arena.stats.empty_history')}</p>
+        ) : (
+          <div className="space-y-3">
+            {battles.map((battle, index) => {
+              const isWin = battle.result === 'win';
+              const isLose = battle.result === 'lose';
+              return (
+                <div key={`${battle.played_at}-${index}`} className="flex items-center gap-3 rounded-lg border border-viet-border p-3">
+                  <div className={`flex h-9 w-9 items-center justify-center rounded-lg font-black ${isWin ? 'bg-viet-green/10 text-viet-green' : isLose ? 'bg-red-50 text-red-500' : 'bg-amber-50 text-amber-600'}`}>
+                    {isWin ? <Trophy className="h-4 w-4" /> : isLose ? <Shield className="h-4 w-4" /> : <Award className="h-4 w-4" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-black text-viet-text">{battle.opponent_name}</p>
+                    <p className="text-[11px] font-bold text-viet-text-light/60">{timeAgo(t, battle.played_at)}</p>
+                  </div>
+                  <span className={`text-sm font-black ${battle.pts_change > 0 ? 'text-viet-green' : battle.pts_change < 0 ? 'text-red-500' : 'text-viet-text-light'}`}>
+                    {battle.pts_change > 0 ? '+' : ''}{battle.pts_change}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Panel>
+    </div>
   );
 };
 
-
-// ─── CENTER ACTION PANEL ───────────────────────────────────────────────────────
-const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => {
+const ModeSelector = ({ value, onChange, disabled = false }) => {
   const { t } = useTranslation();
+
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {MODE_KEYS.map((mode) => {
+        const config = MODE_CONFIG[mode];
+        const Icon = config.icon;
+        const active = value === mode;
+        return (
+          <button
+            key={mode}
+            type="button"
+            disabled={disabled}
+            onClick={() => onChange(mode)}
+            className={`rounded-lg border p-3 text-left transition-all disabled:opacity-50 ${active ? 'border-viet-green bg-viet-green/10 shadow-sm' : 'border-viet-border bg-white hover:border-viet-green/40'}`}
+          >
+            <Icon className={`mb-3 h-5 w-5 ${active ? 'text-viet-green' : 'text-viet-text-light'}`} />
+            <p className="text-sm font-black text-viet-text">{getModeShortLabel(t, mode)}</p>
+            <p className="mt-1 text-[11px] font-bold text-viet-text-light/60">
+              {MODE_CONFIG[mode].maxPlayers} {t('arena.ui.player_count')}
+            </p>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => {
+  const { t, i18n } = useTranslation();
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [findMode, setFindMode] = useState('solo');
-  const [onlineCount, setOnlineCount] = useState(1248);
+  const [onlineCount, setOnlineCount] = useState(1);
 
   useEffect(() => {
+    let active = true;
     const fetchOnlineCount = async () => {
       try {
         const res = await fetch('/api/user/online-count');
         const data = await res.json();
-        if (data.count) setOnlineCount(data.count);
+        if (active && data.count) setOnlineCount(data.count);
       } catch (err) {
-        console.error('Failed to fetch online count:', err);
+        console.warn('Failed to fetch online count:', err.message);
       }
     };
-    
+
     fetchOnlineCount();
-    const interval = setInterval(fetchOnlineCount, 30000); 
-    return () => clearInterval(interval);
+    const interval = setInterval(fetchOnlineCount, 30000);
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
   }, []);
 
+  const handleJoin = () => {
+    const code = joinCode.trim();
+    if (code) onJoinRoom(code);
+  };
+
   return (
-    <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col items-center gap-10 py-4">
-      <div className="relative group">
-        <motion.div 
-          animate={{ y: [0, -8, 0] }} 
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className={`w-52 h-52 ${MODERN_STYLES.radius} flex items-center justify-center text-[84px] relative z-10 bg-white border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.06)] transition-all duration-500 group-hover:scale-105 group-hover:shadow-[0_50px_120px_rgba(0,0,0,0.08)]`}
-        >
-          <div className="absolute inset-6 rounded-[32px] opacity-10 animate-pulse bg-viet-green" />
-          <span className="relative z-10 drop-shadow-2xl grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500">⚔️</span>
-          
-          {/* Decorative glass elements */}
-          <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/40 backdrop-blur-md rounded-2xl border border-white/60 flex items-center justify-center text-lg shadow-sm">✨</div>
-          <div className="absolute -bottom-2 -left-6 w-10 h-10 bg-white/40 backdrop-blur-md rounded-xl border border-white/60 flex items-center justify-center shadow-sm"><Beaker className="w-5 h-5 text-slate-500" /></div>
-        </motion.div>
-        
-        {/* Modern decorative rings */}
-        <div className="absolute -inset-8 border border-black/[0.015] rounded-full pointer-events-none animate-[spin_40s_linear_infinite]" />
-        <div className="absolute -inset-16 border border-dashed border-black/[0.01] rounded-full pointer-events-none animate-[spin_60s_linear_infinite_reverse]" />
-        <div className="absolute inset-0 blur-[120px] opacity-[0.05] pointer-events-none bg-viet-green" />
-      </div>
+    <div className="space-y-5">
+      <section className="relative overflow-hidden rounded-lg border border-viet-border bg-white shadow-sm">
+        <img
+          src="/assets/images/home-viet-arena.png"
+          alt={t('arena.ui.arena_image_alt')}
+          className="h-56 w-full object-cover sm:h-64"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-[11px] font-black uppercase tracking-widest text-viet-green">
+            <Zap className="h-4 w-4" />
+            {t('arena.badge')}
+          </div>
+          <h1 className="max-w-2xl text-4xl font-black leading-tight text-white sm:text-5xl">
+            <Trans i18nKey="arena.title">
+              Chemistry <span className="text-viet-green">Arena</span>
+            </Trans>
+          </h1>
+          <p className="mt-2 max-w-xl text-sm font-bold text-white/80 sm:text-base">{t('arena.subtitle')}</p>
+        </div>
+      </section>
 
-      <div className="text-center space-y-4">
-        {/* Room Metadata Labels */}
-        <div className="flex items-center justify-center gap-10 mb-1 opacity-20 pointer-events-none">
-          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[4px]">
-            <span>⚙️</span> {t('arena_modes.all', { defaultValue: 'TỔNG HỢP' })}
+      <Panel className="p-5 sm:p-6">
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light/60">{t('arena.ui.quick_match')}</p>
+            <h2 className="mt-1 text-2xl font-black text-viet-text">{t('arena.actions.find_match')}</h2>
           </div>
-          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[4px]">
-            <span>📄</span> {t('arena_modes.questions', { defaultValue: '10 CÂU' })}
-          </div>
-          <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[4px]">
-            <span>⏱️</span> {t('arena_modes.time', { defaultValue: '30 GIÂY' })}
+          <div className="inline-flex items-center gap-2 rounded-lg border border-viet-border px-3 py-2 text-sm font-black text-viet-text">
+            <span className="h-2 w-2 rounded-full bg-viet-green" />
+            {onlineCount.toLocaleString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')} {t('arena.ui.online_students')}
           </div>
         </div>
 
-        <div className="inline-flex items-center gap-4 px-6 py-3 rounded-full bg-white border border-black/[0.05] shadow-[0_4px_20px_rgba(0,0,0,0.03)] mb-4 transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
-           <div className="flex items-center gap-3">
-             <span className="w-2.5 h-2.5 rounded-full bg-viet-green animate-pulse shadow-[0_0_10px_rgba(118,192,52,0.4)]" />
-             <span className="text-[13px] font-bold text-viet-text/50">
-               {onlineCount.toLocaleString('vi-VN')} {t('arena.online_students', { defaultValue: 'học sinh đang trực tuyến' })}
-             </span>
-           </div>
-           <div className="w-[1px] h-4 bg-black/[0.08]" />
-           <span className="text-[11px] font-black text-viet-text/30 uppercase tracking-[2px]">
-             {findMode === 'solo' ? '1 VS 1' : findMode} MODE
-           </span>
+        <div className="mb-5">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light/60">{t('arena.ui.choose_mode')}</p>
+            <div className="hidden items-center gap-3 text-[11px] font-black uppercase tracking-widest text-viet-text-light sm:flex">
+              <span className="inline-flex items-center gap-1"><BookOpenCheck className="h-3.5 w-3.5" />{t('arena.ui.question_count')}</span>
+              <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" />{t('arena.ui.time_limit')}</span>
+            </div>
+          </div>
+          <ModeSelector value={findMode} onChange={setFindMode} disabled={isSearching} />
         </div>
-        <h2 className="text-6xl font-black text-viet-text tracking-tighter leading-tight">
-          <Trans i18nKey="arena.title">
-            ARENA <span className="text-viet-green font-outline-2">ODYSSEY</span>
-          </Trans>
-        </h2>
-        <p className="text-viet-text/40 text-[11px] font-bold tracking-[8px] uppercase px-4 max-w-[400px] mx-auto">{t('arena.subtitle')}</p>
-      </div>
 
-      <div className="w-full max-w-[520px] space-y-5 mt-4">
-        <div className="flex flex-col md:flex-row items-stretch gap-4">
-          <motion.button 
-            whileHover={{ scale: 1.02, y: -2 }} 
-            whileTap={{ scale: 0.98 }} 
-            onClick={() => onFindMatch(findMode)} 
-            className={`flex-[2.5] py-5.5 rounded-2xl font-black text-white text-[15px] uppercase tracking-[3px] flex items-center justify-center gap-4 transition-all shadow-2xl ${isSearching ? 'bg-red-500 shadow-red-500/20' : 'bg-viet-green shadow-emerald-500/20 hover:brightness-105'}`}
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
+          <IconButton
+            onClick={() => onFindMatch(findMode)}
+            className={`min-h-12 px-5 text-sm uppercase tracking-widest text-white ${isSearching ? 'bg-red-500 hover:bg-red-600' : 'bg-viet-green hover:brightness-105'}`}
           >
-            {isSearching ? <><motion.span animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="text-xl">⟳</motion.span> {t('arena.actions.cancel_find')}</> : <><span className="text-xl">⚡</span> {t('arena.actions.find_match')}</>}
-          </motion.button>
-          
-          <div className="flex-1 relative group">
-            <select 
-              value={findMode} 
-              onChange={(e) => setFindMode(e.target.value)} 
-              disabled={isSearching} 
-              className="w-full h-full py-5.5 px-6 rounded-2xl font-black text-viet-text text-[11px] uppercase tracking-widest outline-none border border-black/[0.05] bg-white hover:bg-black hover:text-white transition-all appearance-none cursor-pointer disabled:opacity-50 text-center shadow-sm"
+            {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
+            {isSearching ? t('arena.actions.cancel_find') : t('arena.actions.find_match')}
+          </IconButton>
+          <IconButton
+            onClick={onCreateRoom}
+            className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-viet-green hover:text-viet-green"
+          >
+            <Plus className="h-5 w-5" />
+            {t('arena.actions.create_room')}
+          </IconButton>
+        </div>
+      </Panel>
+
+      <Panel className="p-5 sm:p-6">
+        <div className="grid gap-3 md:grid-cols-2">
+          <IconButton
+            onClick={() => setShowJoinInput((value) => !value)}
+            className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-blue-400 hover:text-blue-600"
+          >
+            <DoorOpen className="h-5 w-5" />
+            {t('arena.actions.join_pin')}
+          </IconButton>
+          <IconButton
+            onClick={onOpenBrowser}
+            className="min-h-12 bg-blue-600 px-5 text-sm uppercase tracking-widest text-white hover:bg-blue-700"
+          >
+            <Gamepad2 className="h-5 w-5" />
+            {t('arena.ui.open_room_browser')}
+          </IconButton>
+        </div>
+
+        <AnimatePresence>
+          {showJoinInput && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              className="mt-4 grid gap-3 rounded-lg border border-viet-border bg-slate-50 p-4 sm:grid-cols-[minmax(0,1fr)_auto]"
             >
-              <option value="solo">{t('arena_modes.solo_short')}</option>
-              <option value="3vs3">{t('arena_modes.3vs3_short')}</option>
-              <option value="5vs5">{t('arena_modes.5vs5_short')}</option>
-              <option value="1vs100">{t('arena_modes.br_short')}</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <motion.button 
-            whileHover={{ y: -3, backgroundColor: '#f9f9f9' }} 
-            whileTap={{ scale: 0.98 }} 
-            onClick={onCreateRoom} 
-            className="py-5 rounded-2xl font-bold text-viet-text text-[13px] uppercase tracking-widest flex items-center justify-center gap-3 bg-white border border-black/[0.05] shadow-sm transition-all"
-          >
-            <span className="text-xl">🏟️</span> {t('arena.actions.create_room')}
-          </motion.button>
-
-          <AnimatePresence mode="wait">
-            {!showJoinInput ? (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-4">
-                <motion.button 
-                  whileHover={{ y: -3, backgroundColor: '#f9f9f9' }} 
-                  whileTap={{ scale: 0.98 }} 
-                  onClick={() => setShowJoinInput(true)} 
-                  className="flex-1 py-5 rounded-2xl font-bold text-viet-text text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 bg-white border border-black/[0.05] shadow-sm transition-all"
-                >
-                  <span>🚪</span> {t('arena.actions.join_pin')}
-                </motion.button>
-                <motion.button 
-                  whileHover={{ y: -3, scale: 1.02 }} 
-                  whileTap={{ scale: 0.98 }} 
-                  onClick={onOpenBrowser} 
-                  className="flex-1 py-5 rounded-2xl font-bold text-white text-[12px] uppercase tracking-widest flex items-center justify-center gap-3 bg-blue-600 shadow-blue-500/20 hover:brightness-110 transition-all"
-                >
-                  <span>🌐</span> {t('arena.actions.lobby')}
-                </motion.button>
-              </motion.div>
-            ) : (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }} 
-                animate={{ opacity: 1, scale: 1 }} 
-                exit={{ opacity: 0, scale: 0.95 }} 
-                className={`col-span-full space-y-4 p-8 bg-white border border-black/[0.05] ${MODERN_STYLES.radius} shadow-[0_32px_64px_rgba(0,0,0,0.1)]`}
-              >
-                <input 
-                  type="text" 
-                  value={joinCode} 
-                  onChange={(e) => setJoinCode(e.target.value.toUpperCase())} 
-                  placeholder={t('arena.actions.pin_placeholder')} 
-                  autoFocus 
-                  className="w-full py-5 px-6 rounded-2xl font-black text-viet-text text-center text-3xl placeholder-viet-text/10 outline-none border-b-2 border-transparent focus:border-viet-green transition-all bg-black/[0.02]" 
-                  style={{ letterSpacing: '0.4em' }} 
-                  onKeyDown={(e) => { if (e.key === 'Enter' && joinCode.trim()) onJoinRoom(joinCode.trim()); }} 
+              <div>
+                <label htmlFor="arena-pin" className="mb-2 block text-[11px] font-black uppercase tracking-widest text-viet-text-light">
+                  {t('arena.ui.join_code_title')}
+                </label>
+                <input
+                  id="arena-pin"
+                  type="text"
+                  value={joinCode}
+                  onChange={(event) => setJoinCode(event.target.value.toUpperCase())}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') handleJoin();
+                  }}
+                  placeholder={t('arena.actions.pin_placeholder')}
+                  className="w-full rounded-lg border border-viet-border bg-white px-4 py-3 text-center text-xl font-black tracking-[0.4em] text-viet-text outline-none transition-all focus:border-viet-green"
                 />
-                <div className="flex gap-4">
-                  <button onClick={() => setShowJoinInput(false)} className="flex-1 py-4.5 rounded-xl font-black text-viet-text/30 text-[11px] uppercase tracking-widest hover:bg-red-50 hover:text-red-500 transition-all">{t('arena.actions.close')}</button>
-                  <motion.button 
-                    whileHover={{ scale: 1.02 }} 
-                    whileTap={{ scale: 0.97 }} 
-                    onClick={() => joinCode.trim() && onJoinRoom(joinCode.trim())} 
-                    disabled={!joinCode.trim()} 
-                    className="flex-[2] py-4.5 rounded-xl font-black text-white text-[12px] uppercase tracking-widest disabled:opacity-40 transition-all bg-viet-text shadow-xl shadow-black/10"
-                  >
-                    {t('arena.actions.enter')}
-                  </motion.button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </motion.div>
+              </div>
+              <div className="flex items-end gap-2">
+                <IconButton
+                  onClick={() => setShowJoinInput(false)}
+                  className="h-12 border border-viet-border bg-white px-4 text-viet-text-light hover:text-red-500"
+                >
+                  <X className="h-5 w-5" />
+                </IconButton>
+                <IconButton
+                  onClick={handleJoin}
+                  disabled={!joinCode.trim()}
+                  className="h-12 bg-viet-text px-5 text-sm uppercase tracking-widest text-white hover:bg-viet-green"
+                >
+                  <Play className="h-5 w-5" />
+                  {t('arena.actions.enter')}
+                </IconButton>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Panel>
+    </div>
   );
 };
 
-
-// ─── CREATE ROOM MODAL ────────────────────────────────────────────────────────
 const CreateRoomModal = ({ isOpen, onClose, user, onConfirm }) => {
   const { t } = useTranslation();
   const isTeacherOrAdmin = user?.role === 'teacher' || user?.role === 'admin';
-  const difficulties = [
-    { id: 'easy',   label: t('arena.difficulties.easy'),   color: '#10b981' },
-    { id: 'medium', label: t('arena.difficulties.medium'), color: '#f59e0b' },
-    { id: 'hard',   label: t('arena.difficulties.hard'),   color: '#ef4444' },
-    { id: 'super',  label: t('arena.difficulties.super'),  color: '#8b5cf6' },
-  ];
   const [formData, setFormData] = useState({
     name: '',
     mode: 'solo',
@@ -543,82 +529,93 @@ const CreateRoomModal = ({ isOpen, onClose, user, onConfirm }) => {
 
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/5 backdrop-blur-2xl" onClick={onClose}>
-        <motion.div initial={{ opacity: 0, y: 40, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 20, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-md bg-white/90 backdrop-blur-3xl rounded-[60px] p-10 relative border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.1)]">
-          <button onClick={onClose} className="absolute top-8 right-8 w-12 h-12 rounded-2xl flex items-center justify-center text-viet-text-light/20 hover:text-red-500 hover:bg-red-50 transition-all font-black text-xl">✕</button>
-          
-          <div className="flex flex-col items-center text-center mb-10">
-            <div className="w-20 h-20 rounded-[32px] flex items-center justify-center text-4xl mb-6 bg-viet-green/10 text-viet-green shadow-xl shadow-emerald-500/10">🏟️</div>
-            <h2 className="text-3xl font-black text-viet-text uppercase tracking-tight">
-              <Trans i18nKey="arena.create_room.title">
-                MỞ SẢNH <span className="text-viet-green">THI ĐẤU</span>
-              </Trans>
-            </h2>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[140] flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
+          onClick={(event) => event.stopPropagation()}
+          className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-5 shadow-2xl sm:p-6"
+        >
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-widest text-viet-green">{t('arena.ui.create_room_subtitle')}</p>
+              <h2 className="mt-1 text-3xl font-black text-viet-text">
+                <Trans i18nKey="arena.create_room.title">
+                  Create <span className="text-viet-green">Room</span>
+                </Trans>
+              </h2>
+            </div>
+            <IconButton onClick={onClose} className="h-10 w-10 border border-viet-border text-viet-text-light hover:text-red-500">
+              <X className="h-5 w-5" />
+            </IconButton>
           </div>
 
-          <div className="space-y-8">
-            <div className="space-y-3">
-              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 px-1">{t('arena.create_room.name_label')}</label>
-              <input 
-                type="text" 
-                value={formData.name} 
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
-                placeholder={t('arena.create_room.name_placeholder')} 
-                className="w-full py-4 px-6 rounded-2xl font-bold text-viet-text placeholder-viet-text/20 outline-none border border-black/[0.05] focus:border-viet-green transition-all bg-black/[0.02] focus:bg-white" 
+          <div className="space-y-5">
+            <div>
+              <label className="mb-2 block text-[11px] font-black uppercase tracking-widest text-viet-text-light">
+                {t('arena.create_room.name_label')}
+              </label>
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(event) => setFormData({ ...formData, name: event.target.value })}
+                placeholder={t('arena.create_room.name_placeholder')}
+                className="w-full rounded-lg border border-viet-border px-4 py-3 font-bold text-viet-text outline-none transition-all focus:border-viet-green"
               />
             </div>
 
-            <div className="space-y-3">
-              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 px-1">{t('arena.create_room.mode_label')}</label>
-              <select 
-                value={formData.mode} 
-                onChange={(e) => setFormData({ ...formData, mode: e.target.value })} 
-                className="w-full py-4 px-6 rounded-2xl font-bold text-viet-text outline-none border border-black/[0.05] focus:border-viet-green transition-all bg-black/[0.02] appearance-none cursor-pointer"
-              >
-                <option value="solo">{t('arena_modes.solo')}</option>
-                <option value="3vs3">{t('arena_modes.3vs3')}</option>
-                <option value="5vs5">{t('arena_modes.5vs5')}</option>
-                <option value="1vs100">{t('arena_modes.1vs100')}</option>
-              </select>
+            <div>
+              <p className="mb-3 text-[11px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.create_room.mode_label')}</p>
+              <ModeSelector value={formData.mode} onChange={(mode) => setFormData({ ...formData, mode })} />
             </div>
 
-            <div className="space-y-4">
-              <label className="block text-[10px] font-black uppercase tracking-[3px] text-viet-text-light/40 px-1">
-                {t('arena.create_room.difficulty_label')}
-                {isTeacherOrAdmin && <span className="ml-3 bg-viet-green/10 text-viet-green px-2 py-0.5 rounded-lg text-[9px] font-black border border-viet-green/20">{t('arena.create_room.admin_badge')}</span>}
-              </label>
+            <div>
+              <div className="mb-3 flex items-center gap-3">
+                <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.create_room.difficulty_label')}</p>
+                {isTeacherOrAdmin && (
+                  <span className="rounded-lg bg-viet-green/10 px-2 py-1 text-[10px] font-black uppercase tracking-widest text-viet-green">
+                    {t('arena.create_room.admin_badge')}
+                  </span>
+                )}
+              </div>
               {isTeacherOrAdmin ? (
-                <div className="grid grid-cols-2 gap-3">
-                  {difficulties.map((d) => (
-                    <button 
-                      key={d.id} 
-                      onClick={() => setFormData({ ...formData, difficulty: d.id })} 
-                      className={`py-4 rounded-2xl font-black text-[12px] transition-all border-2 ${formData.difficulty === d.id ? 'bg-white shadow-xl scale-[1.02]' : 'bg-black/[0.02] border-transparent opacity-50 hover:opacity-80'}`}
-                      style={{ borderColor: formData.difficulty === d.id ? d.color : 'transparent', color: formData.difficulty === d.id ? d.color : 'inherit' }}
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {DIFFICULTY_KEYS.map((difficulty) => (
+                    <button
+                      type="button"
+                      key={difficulty}
+                      onClick={() => setFormData({ ...formData, difficulty })}
+                      className={`rounded-lg border px-3 py-4 text-left transition-all ${formData.difficulty === difficulty ? 'border-viet-green bg-viet-green/10' : 'border-viet-border bg-white hover:border-viet-green/40'}`}
                     >
-                      {d.label}
+                      <p className="text-sm font-black text-viet-text">{getDifficultyLabel(t, difficulty)}</p>
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="w-full py-4 px-6 rounded-2xl flex items-center justify-between bg-black/[0.02] border border-black/[0.03]">
-                  <span className="font-bold text-viet-text-light/40 flex items-center gap-3 text-[13px]">
-                    <span>🎓</span> {t('arena.create_room.auto_grade', { grade: user?.grade || '8' })}
+                <div className="flex items-center justify-between rounded-lg border border-viet-border bg-slate-50 px-4 py-3">
+                  <span className="font-black text-viet-text">
+                    {t('arena.create_room.auto_grade', { grade: user?.grade || '8' })}
                   </span>
-                  <span className="text-viet-text-light/20">🔒</span>
+                  <Shield className="h-5 w-5 text-viet-text-light" />
                 </div>
               )}
             </div>
 
-            <motion.button 
-              whileHover={{ scale: 1.02 }} 
-              whileTap={{ scale: 0.98 }} 
-              onClick={() => onConfirm(formData)} 
-              disabled={!formData.name} 
-              className="w-full py-5 rounded-[28px] font-black text-white text-base uppercase tracking-widest disabled:opacity-40 transition-all bg-viet-green shadow-xl shadow-emerald-500/20 mt-4 hover:brightness-110"
+            <IconButton
+              onClick={() => onConfirm(formData)}
+              disabled={!formData.name.trim()}
+              className="min-h-12 w-full bg-viet-green px-5 text-sm uppercase tracking-widest text-white hover:brightness-105"
             >
+              <Plus className="h-5 w-5" />
               {t('arena.create_room.submit_btn')}
-            </motion.button>
+            </IconButton>
           </div>
         </motion.div>
       </motion.div>
@@ -626,90 +623,122 @@ const CreateRoomModal = ({ isOpen, onClose, user, onConfirm }) => {
   );
 };
 
-// ─── ROOM BROWSER MODAL ───────────────────────────────────────────────────────
 const RoomBrowserModal = ({ isOpen, onClose, onJoin }) => {
   const { t } = useTranslation();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     setLoading(true);
     try {
       const data = await apiCall('/api/arena/rooms');
-      if (data.success) setRooms(data.rooms);
-    } catch (e) {
-      console.error('Room browser error:', e.message);
+      setRooms(data.rooms || []);
+    } catch (err) {
+      console.error('Room browser error:', err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isOpen) fetchRooms();
-  }, [isOpen]);
+  }, [fetchRooms, isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/5 backdrop-blur-2xl" onClick={onClose}>
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} onClick={(e) => e.stopPropagation()} className="w-full max-w-2xl bg-white/90 backdrop-blur-3xl rounded-[60px] p-10 relative border border-black/[0.03] shadow-[0_40px_100px_rgba(0,0,0,0.1)] max-h-[85vh] flex flex-col">
-          <button onClick={onClose} className="absolute top-8 right-8 w-12 h-12 rounded-2xl flex items-center justify-center text-viet-text-light/20 hover:text-red-500 hover:bg-red-50 transition-all font-black text-xl">✕</button>
-          
-          <div className="flex items-center justify-between mb-10 pr-12">
-            <h2 className="text-3xl font-black text-viet-text uppercase tracking-tight pr-4">
-              <Trans i18nKey="arena.browser.title">
-                SẢNH CHỜ <span className="text-viet-green">TRỰC TUYẾN</span>
-              </Trans>
-            </h2>
-            <button onClick={fetchRooms} className="flex-shrink-0 px-5 py-2.5 rounded-2xl bg-black text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-lg">⟳ {t('arena.browser.refresh')}</button>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[140] flex items-center justify-center bg-black/30 p-4 backdrop-blur-sm"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 16 }}
+          onClick={(event) => event.stopPropagation()}
+          className="flex max-h-[90vh] w-full max-w-4xl flex-col rounded-lg bg-white p-5 shadow-2xl sm:p-6"
+        >
+          <div className="mb-5 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-black text-viet-text">
+                <Trans i18nKey="arena.browser.title">
+                  Online <span className="text-viet-green">Rooms</span>
+                </Trans>
+              </h2>
+              <p className="mt-1 text-sm font-bold text-viet-text-light">{t('arena.ui.room_browser_subtitle')}</p>
+            </div>
+            <div className="flex gap-2">
+              <IconButton onClick={fetchRooms} className="h-10 border border-viet-border px-3 text-viet-text hover:border-viet-green hover:text-viet-green">
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">{t('arena.browser.refresh')}</span>
+              </IconButton>
+              <IconButton onClick={onClose} className="h-10 w-10 border border-viet-border text-viet-text-light hover:text-red-500">
+                <X className="h-5 w-5" />
+              </IconButton>
+            </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar space-y-4">
+          <div className="min-h-[280px] flex-1 overflow-y-auto pr-1">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-24 gap-6">
-                <div className="w-12 h-12 border-4 border-viet-green border-t-transparent rounded-full animate-spin" />
-                <p className="text-viet-text-light/30 font-black uppercase tracking-[4px] text-[10px]">{t('arena.browser.scanning')}</p>
+              <div className="flex h-64 flex-col items-center justify-center gap-4 text-viet-text-light">
+                <Loader2 className="h-8 w-8 animate-spin text-viet-green" />
+                <p className="text-sm font-black uppercase tracking-widest">{t('arena.browser.scanning')}</p>
               </div>
             ) : rooms.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-24 text-center">
-                <span className="text-7xl mb-6 opacity-10">🏜️</span>
-                <p className="text-viet-text font-black text-xl mb-2">{t('arena.browser.empty_title')}</p>
-                <p className="text-viet-text-light/40 text-[12px] font-medium max-w-[280px] mx-auto leading-relaxed">{t('arena.browser.empty_desc')}</p>
+              <div className="flex h-64 flex-col items-center justify-center text-center">
+                <Gamepad2 className="mb-4 h-12 w-12 text-viet-text-light/30" />
+                <h3 className="text-xl font-black text-viet-text">{t('arena.browser.empty_title')}</h3>
+                <p className="mt-2 max-w-sm text-sm font-bold text-viet-text-light/70">{t('arena.browser.empty_desc')}</p>
               </div>
             ) : (
-              rooms.map((room) => (
-                <div key={room.id} className="bg-white border border-black/[0.03] rounded-[32px] p-6 flex items-center gap-6 hover:shadow-xl hover:border-viet-green/20 transition-all group">
-                  <div className="w-20 h-20 rounded-3xl bg-black/[0.02] overflow-visible flex-shrink-0 relative group-hover:scale-105 transition-all flex items-center justify-center">
-                    <Avatar seed={room.host_avatar?.seed || 'host'} size={64} streakCount={room.host_avatar?.streakCount} level={room.host_avatar?.level} className="w-full h-full" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-viet-text font-black text-lg truncate leading-tight">{room.name}</h3>
-                      <span className="px-2.5 py-1 rounded-xl bg-black/[0.03] text-[9px] font-black text-viet-text-light/40 uppercase tracking-widest">#{room.id}</span>
+              <div className="space-y-3">
+                {rooms.map((room) => {
+                  const isFull = room.current_players >= room.max_players;
+                  return (
+                    <div key={room.id} className="grid gap-4 rounded-lg border border-viet-border p-4 transition-all hover:border-viet-green/40 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center">
+                      <Avatar
+                        seed={room.host_avatar?.seed || room.host_name || 'Aurum'}
+                        size={56}
+                        streakCount={room.host_avatar?.streakCount}
+                        level={room.host_avatar?.level}
+                      />
+                      <div className="min-w-0">
+                        <div className="mb-2 flex flex-wrap items-center gap-2">
+                          <h3 className="truncate text-lg font-black text-viet-text">{room.name}</h3>
+                          <span className="rounded-lg bg-slate-100 px-2 py-1 text-[10px] font-black uppercase tracking-widest text-viet-text-light">
+                            {t('arena.ui.room_id', { id: room.id })}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-x-4 gap-y-2 text-[12px] font-black uppercase tracking-widest text-viet-text-light">
+                          <span>{t('arena.ui.host_label')}: {room.host_name}</span>
+                          <span>{getModeLabel(t, room.mode)}</span>
+                          <span>{getDifficultyLabel(t, room.difficulty)}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between gap-4 md:justify-end">
+                        <div className="text-right">
+                          <p className="text-lg font-black text-viet-text">
+                            <span className="text-viet-green">{room.current_players}</span>/{room.max_players}
+                          </p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.ui.player_count')}</p>
+                        </div>
+                        <IconButton
+                          onClick={() => onJoin(room.id)}
+                          disabled={isFull}
+                          className="h-11 bg-viet-text px-4 text-xs uppercase tracking-widest text-white hover:bg-viet-green"
+                        >
+                          <Play className="h-4 w-4" />
+                          {isFull ? t('arena.ui.full_room') : t('arena.browser.enter_btn')}
+                        </IconButton>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap items-center gap-5 text-[10px] font-bold text-viet-text-light/30 uppercase tracking-widest">
-                      <span className="flex items-center gap-2">👤 {room.host_name}</span>
-                      <span className="flex items-center gap-2">🎮 {room.mode}</span>
-                      <span className="flex items-center gap-2">🎯 {room.difficulty}</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end gap-3">
-                    <div className="text-[14px] font-black text-viet-text">
-                      <span className="text-viet-green">{room.current_players}</span><span className="text-black/10 mx-0.5">/</span>{room.max_players}
-                    </div>
-                    <motion.button 
-                      whileHover={{ scale: 1.05 }} 
-                      whileTap={{ scale: 0.95 }} 
-                      onClick={() => onJoin(room.id)} 
-                      disabled={room.current_players >= room.max_players} 
-                      className="px-8 py-3 rounded-2xl font-black text-white text-[11px] uppercase tracking-widest bg-viet-text hover:bg-viet-green transition-all disabled:opacity-20 shadow-lg shadow-black/10"
-                    >
-                      {t('arena.browser.enter_btn')}
-                    </motion.button>
-                  </div>
-                </div>
-              ))
+                  );
+                })}
+              </div>
             )}
           </div>
         </motion.div>
@@ -718,8 +747,6 @@ const RoomBrowserModal = ({ isOpen, onClose, onJoin }) => {
   );
 };
 
-
-// ─── PLAYER ROOM ──────────────────────────────────────────────────────────────
 const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const { t, i18n } = useTranslation();
   const [currentQIndex, setCurrentQIndex] = useState(0);
@@ -740,8 +767,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
 
   useEffect(() => {
     if (!isWaiting) return;
-    const modeMap = { solo: 2, '3vs3': 6, '5vs5': 10, '1vs100': 100 };
-    const expectedMax = room.max_players || modeMap[room.mode] || 2;
+    const expectedMax = room.max_players || MODE_CONFIG[room.mode]?.maxPlayers || 2;
     const interval = setInterval(async () => {
       try {
         const data = await apiCall(`/api/arena/room/${room.id}`);
@@ -750,477 +776,401 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
           if (data.room.current_players >= expectedMax) setIsWaiting(false);
         }
       } catch (err) {
-        // Keep polling; transient room lookups can fail while waiting for players.
+        console.warn('Room polling error:', err.message);
       }
     }, 3000);
     return () => clearInterval(interval);
-  }, [isWaiting, room.id, room.mode, room.max_players]);
+  }, [isWaiting, room.id, room.max_players, room.mode]);
 
   useEffect(() => {
-    const fetchQ = async () => {
+    const fetchQuestions = async () => {
       setLoadingQ(true);
       try {
         const data = await apiCall(`/api/arena/questions/${room.difficulty || 'easy'}`);
-        if (data.success && data.questions.length > 0) setQuestions(data.questions);
-      } catch (e) {
-        // Leave loading state clean; the room can be retried by leaving and rejoining.
-      } finally { setLoadingQ(false); }
+        if (data.success) setQuestions(data.questions || []);
+      } catch (err) {
+        console.warn('Question load error:', err.message);
+      } finally {
+        setLoadingQ(false);
+      }
     };
-    fetchQ();
+    fetchQuestions();
   }, [room.difficulty]);
 
   const currentQ = questions[currentQIndex];
+  const timerPct = (timeLeft / 30) * 100;
+  const expectedMax = room.max_players || MODE_CONFIG[room.mode]?.maxPlayers || 2;
+  const canStart = currentPlayers >= expectedMax;
 
-  const handleAnswer = useCallback((i) => {
-    if (answered !== null || !currentQ) return;
-    setAnswered(i);
+  const handleAnswer = useCallback((index) => {
+    if (answered !== null || !currentQ || gameOver) return;
+    setAnswered(index);
+
     const remainingTime = timeLeftRef.current;
-    const isCorrect = i === currentQ.correct;
+    const isCorrect = index === currentQ.correct;
+    const gained = isCorrect ? Math.max(100, remainingTime * 10) : 0;
+    const finalScore = score + gained;
+
     if (isCorrect) {
       correctCountRef.current += 1;
-      setScore(s => s + Math.max(100, remainingTime * 10));
+      setScore(finalScore);
     }
+
     setTimeout(() => {
-      const nextIdx = currentQIndex + 1;
-      if (nextIdx < questions.length) {
-        setCurrentQIndex(nextIdx);
+      const nextIndex = currentQIndex + 1;
+      if (nextIndex < questions.length) {
+        setCurrentQIndex(nextIndex);
         setTimeLeft(30);
         setAnswered(null);
       } else {
         const result = correctCountRef.current >= Math.ceil(questions.length / 2) ? 'win' : 'lose';
         setGameOver(true);
-        onMatchEnd?.({ result, score: score + (isCorrect ? Math.max(100, remainingTime * 10) : 0), room_id: room.id });
+        onMatchEnd?.({ result, score: finalScore, room_id: room.id });
       }
-    }, 1500);
-  }, [answered, currentQ, currentQIndex, onMatchEnd, questions.length, room.id, score]);
+    }, 1200);
+  }, [answered, currentQ, currentQIndex, gameOver, onMatchEnd, questions.length, room.id, score]);
 
   useEffect(() => {
     if (isWaiting || answered !== null || gameOver || questions.length === 0 || loadingQ) return;
     const timer = setInterval(() => {
-      setTimeLeft(p => {
-        if (p <= 1) { clearInterval(timer); handleAnswer(-1); return 0; }
-        return p - 1;
+      setTimeLeft((previous) => {
+        if (previous <= 1) {
+          clearInterval(timer);
+          handleAnswer(-1);
+          return 0;
+        }
+        return previous - 1;
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, [answered, currentQIndex, gameOver, handleAnswer, isWaiting, loadingQ, questions.length]);
-
-  const timerPct = (timeLeft / 30) * 100;
+  }, [answered, gameOver, handleAnswer, isWaiting, loadingQ, questions.length]);
 
   if (loadingQ) {
     return (
-      <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center p-8">
-        <motion.div 
-          animate={{ rotate: 360 }} 
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} 
-          className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mb-6"
-        />
-        <p className="text-blue-400 font-black uppercase tracking-[4px] text-[12px] animate-pulse">{t('arena.room.loading')}</p>
+      <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-slate-950 p-6 text-white">
+        <Loader2 className="mb-5 h-10 w-10 animate-spin text-viet-green" />
+        <p className="text-sm font-black uppercase tracking-widest text-white/70">{t('arena.room.loading')}</p>
       </div>
     );
   }
 
   if (questions.length === 0) {
     return (
-      <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center p-8 text-center text-white">
-        <span className="text-8xl mb-8 filter drop-shadow-[0_0_30px_rgba(59,130,246,0.3)]">🏜️</span>
-        <h2 className="text-2xl font-black mb-4 uppercase tracking-[5px]">TRẬN ĐẤU KHÔNG SẴN SÀNG</h2>
-        <button onClick={onLeave} className="px-12 py-5 rounded-full font-black bg-blue-600 hover:bg-blue-500 transition-all uppercase text-[12px] tracking-widest shadow-2xl">{t('arena.room.back_btn')}</button>
+      <div className="fixed inset-0 z-[120] flex flex-col items-center justify-center bg-slate-950 p-6 text-center text-white">
+        <FlaskConical className="mb-5 h-14 w-14 text-viet-green" />
+        <h2 className="text-2xl font-black">{t('arena.ui.battle_unavailable_title')}</h2>
+        <p className="mt-3 max-w-md text-sm font-bold text-white/60">{t('arena.ui.battle_unavailable_desc')}</p>
+        <IconButton onClick={onLeave} className="mt-8 bg-viet-green px-6 py-3 text-sm uppercase tracking-widest text-white">
+          <LogOut className="h-5 w-5" />
+          {t('arena.room.back_btn')}
+        </IconButton>
       </div>
     );
   }
 
   if (isWaiting) {
     return (
-      <div className="fixed inset-0 z-[100] bg-[#0a0a0a] flex flex-col items-center justify-center p-8 relative font-inter overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none" />
-        <Particles />
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="w-full max-w-lg bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[50px] p-12 relative z-10 text-center shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-blue-600/30 blur-[80px] rounded-full pointer-events-none" />
-          
-          <h2 className="text-3xl font-black text-white uppercase tracking-[8px] mb-8 font-sora">{t('arena.room.waiting.title')}</h2>
-          <div className="text-[6.5rem] font-black text-blue-400 tracking-[20px] py-10 rounded-[40px] bg-black/40 border border-white/5 mb-10 leading-none shadow-inner select-all">
-            {room.id}
+      <div className="fixed inset-0 z-[120] flex items-center justify-center bg-[#f8faf7] p-4">
+        <Panel className="w-full max-w-2xl p-5 text-center sm:p-8">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+            <Users className="h-7 w-7" />
           </div>
-          
-          <div className="flex justify-center items-center gap-10 mb-12">
-            <div className="text-center">
-              <p className="text-[10px] font-black text-blue-400/40 uppercase tracking-widest mb-2 font-sora">PHÂN LOẠI</p>
-              <p className="text-white font-black uppercase text-[13px] tracking-[2px]">{room.mode || '1 VS 1'}</p>
+          <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.title')}</p>
+          <h2 className="mt-2 text-4xl font-black tracking-widest text-viet-text sm:text-6xl">{room.id}</h2>
+          <p className="mt-3 text-sm font-bold text-viet-text-light">{t('arena.ui.waiting_share')}</p>
+
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-lg border border-viet-border p-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.mode')}</p>
+              <p className="mt-2 font-black text-viet-text">{getModeLabel(t, room.mode)}</p>
             </div>
-            <div className="w-px h-12 bg-white/10" />
-            <div className="text-center">
-              <p className="text-[10px] font-black text-blue-400/40 uppercase tracking-widest mb-2 font-sora">CẤP ĐỘ</p>
-              <p className="text-orange-500 font-black uppercase text-[13px] tracking-[2px]">
-                {room.difficulty === 'hard' ? t('arena.difficulties.hard') : room.difficulty === 'medium' ? t('arena.difficulties.medium') : t('arena.difficulties.easy')}
-              </p>
+            <div className="rounded-lg border border-viet-border p-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.difficulty')}</p>
+              <p className="mt-2 font-black text-viet-text">{getDifficultyLabel(t, room.difficulty)}</p>
+            </div>
+            <div className="rounded-lg border border-viet-border p-4">
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.players')}</p>
+              <p className="mt-2 font-black text-viet-text">{currentPlayers}/{expectedMax}</p>
             </div>
           </div>
 
-          <div className="mb-12 text-left px-4">
-             <div className="flex justify-between items-center mb-4">
-               <p className="text-blue-400/40 font-black uppercase tracking-widest text-[10px] font-sora">
-                 NGƯỜI CHƠI SẴN SÀNG: <span className="text-white ml-2">{currentPlayers}/{room.max_players || 2}</span>
-               </p>
-             </div>
-             <div className="w-full bg-black/40 border border-white/5 rounded-full h-4 overflow-hidden relative p-1 shadow-inner">
-               <motion.div 
-                 className="absolute inset-y-1 left-1 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full" 
-                 initial={{ width: 0 }} 
-                 animate={{ width: `calc(${(currentPlayers / (room.max_players || 2)) * 100}% - 8px)` }} 
-               />
-             </div>
+          <div className="mt-8">
+            <div className="mb-2 flex justify-between text-[11px] font-black uppercase tracking-widest text-viet-text-light">
+              <span>{t('arena.ui.ready_count')}</span>
+              <span>{Math.round((currentPlayers / expectedMax) * 100)}%</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+              <div className="h-full rounded-full bg-viet-green" style={{ width: `${Math.min((currentPlayers / expectedMax) * 100, 100)}%` }} />
+            </div>
           </div>
 
-          <div className="flex gap-5">
-            <button onClick={onLeave} className="flex-1 py-5 rounded-[24px] font-black text-white/50 border border-white/10 hover:bg-white/5 transition-all uppercase text-[12px] tracking-widest">{t('arena.room.waiting.exit_btn')}</button>
-            <motion.button 
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => setIsWaiting(false)} 
-              disabled={currentPlayers < (room.max_players || 2)} 
-              className="flex-1 py-5 rounded-[24px] font-black text-white uppercase text-[12px] tracking-[3px] transition-all bg-blue-600 shadow-[0_20px_40px_rgba(37,99,235,0.3)] disabled:opacity-20 disabled:grayscale"
+          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+            <IconButton onClick={onLeave} className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text-light hover:text-red-500">
+              <LogOut className="h-5 w-5" />
+              {t('arena.room.waiting.exit_btn')}
+            </IconButton>
+            <IconButton
+              onClick={() => setIsWaiting(false)}
+              disabled={!canStart}
+              className="min-h-12 bg-viet-green px-5 text-sm uppercase tracking-widest text-white hover:brightness-105"
             >
-              {t('arena.room.waiting.start_btn')}
-            </motion.button>
+              <Play className="h-5 w-5" />
+              {canStart ? t('arena.room.waiting.start_btn') : t('arena.ui.start_locked')}
+            </IconButton>
           </div>
-        </motion.div>
+        </Panel>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-[60] bg-[#0a0a0a] flex flex-col items-center px-6 py-8 relative font-inter overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-blue-900/10 via-transparent to-transparent pointer-events-none" />
-      <Particles />
+    <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-950 p-4 text-white sm:p-6">
+      <div className="mx-auto flex min-h-full max-w-6xl flex-col">
+        <header className="mb-6 grid gap-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
+          <div className="flex items-center gap-3">
+            <IconButton onClick={onLeave} className="h-11 w-11 border border-white/10 bg-white/5 text-white/70 hover:text-red-300">
+              <X className="h-5 w-5" />
+            </IconButton>
+            <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3">
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">{t('arena.ui.progress_label')}</p>
+              <p className="font-black">{t('arena.room.battle.question', { current: currentQIndex + 1, total: questions.length })}</p>
+            </div>
+          </div>
 
-      {/* PREMIUM HUD HEADER */}
-      <div className="w-full max-w-7xl flex justify-between items-center mb-12 relative z-10">
-        <div className="flex items-center gap-4">
-          <motion.button 
-            whileHover={{ scale: 1.1, rotate: 90 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={onLeave} 
-            className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all shadow-xl"
+          <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+            <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
+              <span>{t('arena.room.battle.time')}</span>
+              <span className={timeLeft <= 5 ? 'text-red-300' : 'text-viet-green'}>{timeLeft}s</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-white/10">
+              <motion.div
+                className={`h-full rounded-full ${timeLeft <= 5 ? 'bg-red-400' : 'bg-viet-green'}`}
+                animate={{ width: `${timerPct}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-3 lg:justify-end">
+            <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-right">
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/40">{t('arena.room.battle.score')}</p>
+              <p className="text-xl font-black text-white">{score}</p>
+            </div>
+            <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 p-2">
+              <div className="hidden text-right sm:block">
+                <p className="max-w-[120px] truncate text-sm font-black">{user?.username}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">{t('arena.ui.avatar_synced')}</p>
+              </div>
+              <Avatar
+                seed={user?.avatarSeed || user?.username || 'Aurum'}
+                size={44}
+                streakCount={user?.streakCount}
+                level={user?.level}
+              />
+            </div>
+            <div className="hidden rounded-lg border border-white/10 bg-white/5 p-1 lg:flex">
+              {['vi', 'en'].map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => i18n.changeLanguage(lang)}
+                  className={`rounded-md px-3 py-2 text-[10px] font-black uppercase ${i18n.language.startsWith(lang) ? 'bg-viet-green text-white' : 'text-white/40 hover:text-white'}`}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
+          </div>
+        </header>
+
+        <main className="flex flex-1 flex-col justify-center gap-5">
+          <motion.section
+            key={currentQIndex}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-lg border border-white/10 bg-white p-5 text-viet-text shadow-2xl sm:p-8"
           >
-            <span className="text-xl">✕</span>
-          </motion.button>
-          
-          <div className="flex items-center gap-2 bg-white/5 backdrop-blur-3xl border border-white/10 px-6 py-3 rounded-3xl shadow-2xl">
-            <div className="flex flex-col">
-               <span className="text-[10px] font-black text-blue-400/50 uppercase tracking-[2px] mb-0.5 font-sora">TIẾN TRÌNH</span>
-               <div className="flex items-center gap-3">
-                  <span className="text-[14px] font-black text-white uppercase tracking-widest">{t('arena.room.battle.question', { current: currentQIndex + 1, total: questions.length })}</span>
-                  <div className="w-px h-5 bg-white/10" />
-                  <span className="text-[14px] font-black text-blue-400 uppercase tracking-[2px]">{room.mode}</span>
-               </div>
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <span className="rounded-lg bg-viet-green/10 px-3 py-2 text-[11px] font-black uppercase tracking-widest text-viet-green">
+                {getDifficultyLabel(t, currentQ.difficulty || room.difficulty)}
+              </span>
+              <span className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">
+                {getModeLabel(t, room.mode)}
+              </span>
             </div>
-          </div>
-        </div>
+            <h2 className="text-2xl font-black leading-snug sm:text-3xl">{currentQ.question}</h2>
+          </motion.section>
 
-        <div className="flex items-center gap-4">
-          {/* Language Switcher HUD */}
-          <div className="hidden lg:flex items-center gap-1 bg-white/5 backdrop-blur-3xl border border-white/10 p-1.5 rounded-2xl">
-            {['VI', 'EN'].map((lang) => (
-              <button
-                key={lang}
-                onClick={() => i18n.changeLanguage(lang.toLowerCase())}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${i18n.language.toUpperCase() === lang ? 'bg-blue-600 text-white shadow-lg' : 'text-white/30 hover:text-white/60'}`}
-              >
-                {lang}
-              </button>
-            ))}
-          </div>
+          <section className="grid gap-3 md:grid-cols-2">
+            {(currentQ.options || []).map((option, index) => {
+              const isCorrect = index === currentQ.correct;
+              const isChosen = answered === index;
+              let stateClass = 'border-white/10 bg-white/5 text-white hover:border-viet-green hover:bg-white/10';
+              if (answered !== null && isCorrect) stateClass = 'border-viet-green bg-viet-green text-white';
+              else if (answered !== null && isChosen) stateClass = 'border-red-400 bg-red-500 text-white';
+              else if (answered !== null) stateClass = 'border-white/5 bg-white/5 text-white/30';
 
-          <div className="bg-white/5 backdrop-blur-3xl border border-white/10 px-8 py-3 rounded-3xl shadow-2xl flex flex-col items-end">
-            <span className="text-[10px] font-black text-blue-400/50 uppercase tracking-[2px] mb-0.5 font-sora">{t('arena.room.battle.score')}</span>
-            <span className="text-[22px] font-black text-white leading-none font-sora animate-pulse">{score}</span>
-          </div>
-
-          {/* User Profile HUD */}
-          <div className="flex items-center gap-4 bg-white/5 backdrop-blur-3xl border border-white/10 pl-5 pr-3 py-1.5 rounded-[32px] shadow-2xl group cursor-pointer hover:bg-white/10 transition-all">
-             <div className="flex flex-col items-end">
-                <span className="text-[11px] font-black text-white uppercase tracking-widest truncate max-w-[120px]">{user?.username}</span>
-                <span className="text-[8px] font-bold text-blue-400 uppercase tracking-widest">TOP PLAYER</span>
-             </div>
-             <div className="w-10 h-10 rounded-2xl overflow-hidden border border-white/20 bg-white/10 shadow-lg group-hover:scale-105 transition-all">
-                <img src={getSvgDataUrl(user?.avatarSeed || user?.username)} className="w-full h-full object-cover scale-125 translate-y-0.5" alt="profile" />
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full max-w-5xl flex-1 flex flex-col gap-10 relative z-10 pt-10">
-        {/* QUESTION CARD */}
-        <motion.div 
-          key={currentQIndex} 
-          initial={{ y: 30, opacity: 0 }} 
-          animate={{ y: 0, opacity: 1 }} 
-          className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[60px] p-16 text-center relative shadow-[0_64px_96px_-32px_rgba(0,0,0,0.8)] min-h-[320px] flex flex-col justify-center overflow-hidden"
-        >
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-10 py-3 rounded-b-[30px] shadow-lg shadow-blue-600/30 z-20">
-            <div className="flex items-center gap-4">
-              <span className="text-[11px] font-black uppercase tracking-[4px] opacity-60 font-sora">{t('arena.room.battle.time')}</span>
-              <span className={`text-[20px] font-black font-sora w-12 text-center ${timeLeft <= 5 ? 'text-red-400 animate-bounce' : ''}`}>{timeLeft}S</span>
-            </div>
-          </div>
-          
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pointer-events-none select-none">
-             <span className="text-[200px] font-black text-white flex items-center justify-center h-full">?</span>
-          </div>
-
-          <p className="text-3xl md:text-4xl font-black text-white leading-tight mt-8 font-sora relative z-10 px-4">{currentQ.question}</p>
-          
-          <div className="absolute bottom-0 left-0 w-full h-2 bg-white/5 overflow-hidden">
-            <motion.div 
-              className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_20px_rgba(37,99,235,0.6)]" 
-              initial={{ width: '100%' }} 
-              animate={{ width: `${timerPct}%` }} 
-              transition={{ duration: 1, ease: 'linear' }}
-            />
-          </div>
-        </motion.div>
-
-        {/* OPTIONS GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {(currentQ.options || []).map((opt, i) => {
-            let stateStyle = "bg-white/5 border-white/5 text-white/80 hover:bg-white/10 hover:border-white/20";
-            let iconColor = "bg-white/10 text-white/50";
-            
-            if (answered !== null) {
-              if (i === currentQ.correct) {
-                stateStyle = "bg-blue-600 text-white border-blue-400 shadow-[0_0_40px_rgba(37,99,235,0.4)] z-10 scale-[1.02]";
-                iconColor = "bg-white/20 text-white";
-              }
-              else if (answered === i) {
-                stateStyle = "bg-red-500/80 text-white border-red-400 opacity-100 z-10";
-                iconColor = "bg-white/20 text-white";
-              }
-              else {
-                stateStyle = "opacity-20 grayscale bg-white/5 border-white/10 text-white/30";
-                iconColor = "bg-white/5 text-transparent";
-              }
-            }
-
-            return (
-              <motion.button 
-                key={i} 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={answered === null ? { scale: 1.03, y: -4, x: i % 2 === 0 ? -2 : 2 } : {}} 
-                whileTap={answered === null ? { scale: 0.97 } : {}} 
-                onClick={() => handleAnswer(i)} 
-                disabled={answered !== null} 
-                className={`p-8 rounded-[40px] border-2 text-left flex items-center gap-6 transition-all shadow-2xl group ${stateStyle}`}
-              >
-                <div className={`w-16 h-16 rounded-[24px] flex items-center justify-center font-black text-xl flex-shrink-0 transition-all ${iconColor}`}>
-                  {String.fromCharCode(65 + i)}
-                </div>
-                <span className="text-[17px] md:text-[19px] font-extrabold flex-1 leading-snug font-sora">{opt}</span>
-                {answered !== null && i === currentQ.correct && (
-                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="text-3xl">✓</motion.div>
-                )}
-              </motion.button>
-            );
-          })}
-        </div>
+              return (
+                <motion.button
+                  key={`${currentQ.id || currentQIndex}-${index}`}
+                  type="button"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={answered === null ? { y: -2 } : {}}
+                  onClick={() => handleAnswer(index)}
+                  disabled={answered !== null}
+                  className={`min-h-[92px] rounded-lg border p-4 text-left transition-all ${stateClass}`}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 text-sm font-black">
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    <span className="text-base font-black leading-snug">{option}</span>
+                    {answered !== null && isCorrect && <CheckCircle2 className="ml-auto h-5 w-5 shrink-0" />}
+                  </div>
+                </motion.button>
+              );
+            })}
+          </section>
+        </main>
       </div>
     </div>
   );
 };
 
-
-// ─── MODERATOR DASHBOARD ──────────────────────────────────────────────────────
 const ModeratorDashboard = ({ room, onLeave }) => {
   const { t } = useTranslation();
-  const leaderboardData = [
-    { name: 'Minh Tuấn (K10)', pts: 4850, color: '#76c034' },
-    { name: 'Hải Đăng', pts: 4120, color: '#3b82f6' },
-    { name: 'Lan Anh Pro', pts: 3900, color: '#f59e0b' },
-  ];
+  const currentPlayers = room.current_players || 1;
+  const maxPlayers = room.max_players || MODE_CONFIG[room.mode]?.maxPlayers || 2;
 
   return (
-    <div className="min-h-screen bg-viet-bg flex flex-col items-center justify-center p-8 font-inter">
-      <Particles />
-      <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="w-full max-w-2xl bg-white border border-viet-border rounded-[40px] p-10 relative z-10 shadow-xl shadow-black/5">
-        <div className="text-center mb-8">
-          <p className="text-viet-text-light/40 font-black uppercase tracking-[4px] text-[10px] mb-3">
-            <Trans i18nKey="arena.moderator.instruction">
-              THAM GIA TẠI <span className="text-viet-green">AURUM-APPS.COM</span> VỚI MÃ PIN:
-            </Trans>
-          </p>
-          <div className="inline-block px-10 py-6 rounded-[24px] bg-viet-bg border border-viet-border">
-            <span className="text-7xl font-black text-viet-text tracking-[16px] select-all">{room.id}</span>
-          </div>
-        </div>
-        <div className="flex items-center justify-between mb-6">
-          <h3 className="text-viet-text font-black uppercase tracking-wider text-[13px] flex items-center gap-2 font-sora">
-            🏆 {t('arena.moderator.leaderboard_title')}
-          </h3>
-          <div className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[9px] font-black uppercase tracking-widest border border-emerald-100 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> {t('arena.moderator.live_badge')}
-          </div>
-        </div>
-        <div className="space-y-4 mb-10 min-h-[200px]">
-          {leaderboardData.map((p, i) => (
-            <div key={i} className="flex items-center gap-4">
-              <span className="w-8 text-center font-black text-viet-text-light/20 text-xl">{i + 1}</span>
-              <div className="flex-1 h-14 rounded-2xl bg-viet-bg border border-viet-border relative overflow-hidden">
-                <motion.div className="absolute inset-y-0 left-0" style={{ background: `${p.color}20` }} initial={{ width: 0 }} animate={{ width: `${(p.pts / 5000) * 100}%` }} transition={{ duration: 1.5, type: 'spring', damping: 15 }} />
-                <div className="absolute inset-0 flex items-center justify-between px-6">
-                  <span className="text-viet-text font-black text-[14px] z-10">{p.name}</span>
-                  <span className="font-black text-base z-10" style={{ color: p.color }}>{p.pts}</span>
-                </div>
-              </div>
+    <div className="min-h-screen bg-[#f8faf7] px-4 pt-[120px] pb-12">
+      <div className="mx-auto max-w-4xl">
+        <Panel className="p-5 sm:p-8">
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-widest text-viet-green">{t('arena.ui.moderator_title')}</p>
+              <h1 className="mt-2 text-3xl font-black text-viet-text">{room.name || t('arena.moderator.leaderboard_title')}</h1>
+              <p className="mt-2 text-sm font-bold text-viet-text-light">{t('arena.ui.moderator_subtitle')}</p>
             </div>
-          ))}
-        </div>
-        <div className="pt-8 border-t border-viet-border flex justify-between items-center">
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-viet-bg border border-viet-border text-[10px] font-black text-viet-text-light/40 uppercase tracking-widest">
-            🖥️ {t('arena.moderator.server_status')}
+            <IconButton onClick={onLeave} className="h-11 border border-viet-border px-4 text-sm uppercase tracking-widest text-red-500 hover:bg-red-50">
+              <LogOut className="h-5 w-5" />
+              {t('arena.moderator.close_btn')}
+            </IconButton>
           </div>
-          <button onClick={onLeave} className="px-6 py-2.5 rounded-2xl font-black text-red-500 text-[11px] uppercase tracking-widest hover:bg-red-50 transition-all border border-transparent hover:border-red-100">{t('arena.moderator.close_btn')}</button>
-        </div>
-      </motion.div>
-    </div>
-  );
-};
 
+          <div className="rounded-lg border border-viet-border bg-slate-50 p-5 text-center">
+            <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">
+              <Trans i18nKey="arena.moderator.instruction">
+                Join with <span className="text-viet-green">PIN</span>
+              </Trans>
+            </p>
+            <p className="mt-4 text-5xl font-black tracking-[0.25em] text-viet-text sm:text-7xl">{room.id}</p>
+          </div>
 
-// ─── LOBBY ────────────────────────────────────────────────────────────────────
-const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => {
-  const { t } = useTranslation();
-  const AVATAR_PRESETS = getAvatarPresets(t);
-  const [avatarSeed, setAvatarSeed] = useState(
-    user?.arenaAvatar?.seed || AVATAR_PRESETS[0].seed
-  );
-  const saveTimerRef = useRef(null);
+          <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-lg border border-viet-border p-4">
+              <Gamepad2 className="mb-3 h-5 w-5 text-blue-600" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.mode')}</p>
+              <p className="mt-2 font-black text-viet-text">{getModeLabel(t, room.mode)}</p>
+            </div>
+            <div className="rounded-lg border border-viet-border p-4">
+              <FlaskConical className="mb-3 h-5 w-5 text-viet-green" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.difficulty')}</p>
+              <p className="mt-2 font-black text-viet-text">{getDifficultyLabel(t, room.difficulty)}</p>
+            </div>
+            <div className="rounded-lg border border-viet-border p-4">
+              <Users className="mb-3 h-5 w-5 text-amber-600" />
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.players')}</p>
+              <p className="mt-2 font-black text-viet-text">{currentPlayers}/{maxPlayers}</p>
+            </div>
+          </div>
 
-  // Auto-save avatar to DB with 1.5s debounce
-  useEffect(() => {
-    if (!user?.id) return;
-    clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = setTimeout(() => {
-      apiCall('/api/arena/save-avatar', {
-        method: 'PATCH',
-        body: JSON.stringify({ seed: avatarSeed }),
-      }).catch(() => {}); // silent fail
-    }, 1500);
-    return () => clearTimeout(saveTimerRef.current);
-  }, [avatarSeed, user?.id]);
-
-  return (
-    <div className="min-h-screen pt-[120px] bg-[#fdfdfd] relative overflow-hidden font-inter selection:bg-viet-green selection:text-white">
-      {/* Refined modern background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,oklch(0.98_0.01_135)_0%,transparent_100%)]" />
-      <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.03] pointer-events-none bg-viet-green" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[140px] opacity-[0.03] pointer-events-none bg-viet-green" />
-      
-      <Particles />
-
-      <div className="relative z-10 max-w-[1440px] mx-auto px-8 lg:px-12 py-12 grid grid-cols-1 lg:grid-cols-[340px_1fr_340px] gap-8 xl:gap-14 items-start">
-        {/* Left: Character */}
-        <CharacterPanel
-          user={user}
-          avatarSeed={avatarSeed}
-          setAvatarSeed={setAvatarSeed}
-        />
-
-        {/* Center: Actions */}
-        <ActionCenter
-          onFindMatch={onFindMatch}
-          isSearching={isSearching}
-          onCreateRoom={onCreateRoom}
-          onJoinRoom={onJoinRoom}
-          onOpenBrowser={onOpenBrowser}
-        />
-
-        {/* Right: Stats */}
-        <StatsPanel user={user} />
+          <div className="mt-6 rounded-lg border border-viet-border p-4">
+            <div className="mb-3 flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-viet-text-light">
+              <span>{t('arena.ui.participant_status')}</span>
+              <span>{currentPlayers >= maxPlayers ? t('arena.ui.room_ready') : t('arena.ui.room_waiting')}</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+              <div className="h-full rounded-full bg-viet-green" style={{ width: `${Math.min((currentPlayers / maxPlayers) * 100, 100)}%` }} />
+            </div>
+          </div>
+        </Panel>
       </div>
-      
-      <style dangerouslySetInnerHTML={{ __html: `
-        @keyframes bounce-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-bounce-slow {
-          animation: bounce-slow 4s ease-in-out infinite;
-        }
-      `}} />
     </div>
   );
 };
 
-
-// ─── MATCH RESULT SCREEN ──────────────────────────────────────────────────────
 const MatchResultScreen = ({ result, score, ptsChange, onClose }) => {
   const { t } = useTranslation();
   const isWin = result === 'win';
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-white/40 backdrop-blur-3xl">
-      <div className="w-full max-w-sm text-center">
-        <motion.div 
-          initial={{ scale: 0, rotate: -20 }} 
-          animate={{ scale: 1, rotate: 0 }} 
-          transition={{ type: 'spring', damping: 12, delay: 0.1 }} 
-          className="text-[140px] mb-8 leading-none select-none drop-shadow-[0_20px_50px_rgba(0,0,0,0.1)]"
-        >
-          {isWin ? '🏆' : '🕯️'}
-        </motion.div>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[150] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 16 }}
+        className="w-full max-w-md rounded-lg bg-white p-6 text-center shadow-2xl"
+      >
+        <div className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-lg ${isWin ? 'bg-viet-green/10 text-viet-green' : 'bg-amber-50 text-amber-600'}`}>
+          {isWin ? <Trophy className="h-8 w-8" /> : <RefreshCw className="h-8 w-8" />}
+        </div>
+        <h2 className="text-3xl font-black text-viet-text">{isWin ? t('arena.result.win') : t('arena.result.lose')}</h2>
+        <p className="mt-2 text-sm font-bold text-viet-text-light">{isWin ? t('arena.result.win_desc') : t('arena.result.lose_desc')}</p>
 
-        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }} className="space-y-2 mb-10">
-          <h2 className="text-5xl font-black uppercase tracking-tighter" style={{ color: isWin ? '#10b981' : '#1a1a1a' }}>
-            {isWin ? t('arena.result.win') : t('arena.result.lose')}
-          </h2>
-          <p className="text-viet-text-light/40 text-[10px] font-black uppercase tracking-[6px]">{isWin ? t('arena.result.win_desc') : t('arena.result.lose_desc')}</p>
-        </motion.div>
-
-        <motion.div 
-          initial={{ y: 20, opacity: 0 }} 
-          animate={{ y: 0, opacity: 1 }} 
-          transition={{ delay: 0.5 }} 
-          className="bg-white/50 backdrop-blur-xl rounded-[40px] p-10 border border-black/[0.03] flex items-center justify-center gap-12 mb-12 shadow-[0_20px_60px_rgba(0,0,0,0.05)]"
-        >
-          <div className="text-center">
-            <p className="text-viet-text-light/30 text-[9px] font-black uppercase tracking-widest mb-3">{t('arena.result.score')}</p>
-            <p className="text-4xl font-black text-viet-text tracking-tight">{score}</p>
+        <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="rounded-lg border border-viet-border p-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.result.score')}</p>
+            <p className="mt-2 text-2xl font-black text-viet-text">{score}</p>
           </div>
-          <div className="w-px h-16 bg-black/[0.05]" />
-          <div className="text-center">
-            <p className="text-viet-text-light/30 text-[9px] font-black uppercase tracking-widest mb-3">{t('arena.result.rank')}</p>
-            <p className={`text-4xl font-black tracking-tight ${ptsChange >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+          <div className="rounded-lg border border-viet-border p-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.ui.points_change')}</p>
+            <p className={`mt-2 text-2xl font-black ${ptsChange >= 0 ? 'text-viet-green' : 'text-red-500'}`}>
               {ptsChange > 0 ? '+' : ''}{ptsChange}
             </p>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.button 
-          initial={{ y: 20, opacity: 0 }} 
-          animate={{ y: 0, opacity: 1 }} 
-          transition={{ delay: 0.6 }} 
-          whileHover={{ scale: 1.05 }} 
-          whileTap={{ scale: 0.95 }} 
-          onClick={onClose} 
-          className="w-full py-6 rounded-[32px] font-black text-white text-[15px] uppercase tracking-[4px] bg-black shadow-2xl shadow-black/20 transition-all hover:bg-viet-green hover:shadow-emerald-500/30"
-        >
+        <IconButton onClick={onClose} className="mt-6 min-h-12 w-full bg-viet-green px-5 text-sm uppercase tracking-widest text-white hover:brightness-105">
+          <Play className="h-5 w-5" />
           {t('arena.result.continue_btn')}
-        </motion.button>
-      </div>
+        </IconButton>
+      </motion.div>
     </motion.div>
   );
 };
 
+const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => (
+  <div className="min-h-screen bg-[#f8faf7] pt-[112px] pb-12">
+    <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(26,26,26,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(26,26,26,0.035)_1px,transparent_1px)] bg-[size:48px_48px]" />
+    <div className="relative mx-auto grid max-w-[1380px] grid-cols-1 gap-5 px-4 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)_340px] lg:px-8">
+      <ProfilePanel user={user} />
+      <ActionCenter
+        onFindMatch={onFindMatch}
+        isSearching={isSearching}
+        onCreateRoom={onCreateRoom}
+        onJoinRoom={onJoinRoom}
+        onOpenBrowser={onOpenBrowser}
+      />
+      <StatsPanel user={user} />
+    </div>
+  </div>
+);
 
-// ─── MAIN PAGE ────────────────────────────────────────────────────────────────
 const Arena = () => {
   const { user, refreshUser } = useAuth();
   const { t } = useTranslation();
   const [activeRoom, setActiveRoom] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isBrowserOpen, setIsBrowserOpen] = useState(false);
-  const [matchResult, setMatchResult] = useState(null); // { result, score, ptsChange }
+  const [matchResult, setMatchResult] = useState(null);
   const [isSearchingMatch, setIsSearchingMatch] = useState(false);
   const searchInterval = useRef(null);
 
@@ -1230,11 +1180,9 @@ const Arena = () => {
     };
   }, []);
 
-  // ── Create room via API
   const handleCreateRoom = async (formData) => {
     try {
-      const modeMap = { solo: 2, '3vs3': 6, '5vs5': 10, '1vs100': 100 };
-      const max_players = modeMap[formData.mode] || 2;
+      const max_players = MODE_CONFIG[formData.mode]?.maxPlayers || 2;
       const data = await apiCall('/api/arena/create', {
         method: 'POST',
         body: JSON.stringify({
@@ -1245,25 +1193,24 @@ const Arena = () => {
         }),
       });
       const isModerator = user?.role === 'admin' || user?.role === 'teacher';
-      setActiveRoom({ ...data.room, asModerator: isModerator });
+      setActiveRoom({ ...data.room, max_players, asModerator: isModerator });
       setIsCreateModalOpen(false);
-    } catch (e) {
-      // Fallback: local room (no DB) for non-logged-in users
-      console.warn('Không thể tạo phòng qua API:', e.message);
+    } catch (err) {
+      console.warn('Không thể tạo phòng qua API:', err.message);
       const isModerator = user?.role === 'admin' || user?.role === 'teacher';
       setActiveRoom({
         ...formData,
         id: Math.floor(Math.random() * 900000 + 100000).toString(),
+        current_players: 1,
+        max_players: MODE_CONFIG[formData.mode]?.maxPlayers || 2,
         asModerator: isModerator,
       });
       setIsCreateModalOpen(false);
     }
   };
 
-  // ── Smart Find Match (Polling until someone creates a room)
   const handleFindMatch = (modeParam) => {
     if (isSearchingMatch) {
-      // Hủy tìm
       clearInterval(searchInterval.current);
       searchInterval.current = null;
       setIsSearchingMatch(false);
@@ -1274,10 +1221,9 @@ const Arena = () => {
 
     const checkMatch = async () => {
       try {
-        const payload = modeParam ? { mode: modeParam } : {};
-        const data = await apiCall('/api/arena/find-match', { 
+        const data = await apiCall('/api/arena/find-match', {
           method: 'POST',
-          body: JSON.stringify(payload)
+          body: JSON.stringify(modeParam ? { mode: modeParam } : {}),
         });
         if (data.found) {
           setIsSearchingMatch(false);
@@ -1292,13 +1238,10 @@ const Arena = () => {
       }
     };
 
-    // Kiểm tra ngay lần đầu
     checkMatch();
-    // Sau đó lặp lại mỗi 3 giây
     searchInterval.current = setInterval(checkMatch, 3000);
   };
 
-  // ── Join room via API (validates PIN)
   const handleJoinRoom = async (code) => {
     try {
       const data = await apiCall('/api/arena/join', {
@@ -1307,65 +1250,50 @@ const Arena = () => {
       });
       setActiveRoom({ ...data.room, asModerator: false });
       setIsBrowserOpen(false);
-    } catch (e) {
-      alert(e.message || t('arena.room.join_error', { defaultValue: 'Không thể tham gia phòng này' }));
+    } catch (err) {
+      alert(err.message || t('arena.room.join_error'));
     }
   };
 
-
-  // ── Rời phòng (Active cleanup)
-  const handleLeaveRoom = async () => {
+  const handleLeaveRoom = useCallback(async () => {
     if (!activeRoom) return;
     const roomId = activeRoom.id;
-    setActiveRoom(null); // Clear state immediately
+    setActiveRoom(null);
     try {
       await apiCall('/api/arena/leave', {
         method: 'POST',
-        body: JSON.stringify({ room_id: roomId })
+        body: JSON.stringify({ room_id: roomId }),
       });
-      console.log(`[ARENA] Đã rời phòng: ${roomId}`);
-    } catch (e) {
-      // 404 = phòng đã được xóa rồi (bình thường sau khi kết thúc trận)
-      if (!e.message?.includes('không tồn tại') && !e.message?.includes('404')) {
-        console.warn('Lỗi khi rời phòng:', e.message);
+    } catch (err) {
+      if (!err.message?.includes('không tồn tại') && !err.message?.includes('404')) {
+        console.warn('Lỗi khi rời phòng:', err.message);
       }
     }
-  };
+  }, [activeRoom]);
 
-  // ── Lifecycle: Emergency cleanup on tab close
   useEffect(() => {
     const handleUnload = () => {
-      if (activeRoom) {
-        // Use navigator.sendBeacon for reliable delivery on unload
-        const token = localStorage.getItem('token');
-        const url = `${window.location.protocol}//${window.location.host}/api/arena/leave`;
-        const data = JSON.stringify({ room_id: activeRoom.id });
-        
-        // Note: fetch with keepalive is also an option, but sendBeacon is more classic
-        // However, we need headers for auth, which sendBeacon doesn't support well
-        // We'll use fetch with keepalive if possible
-        fetch(url, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: data,
-          keepalive: true
-        });
-      }
+      if (!activeRoom) return;
+      const token = localStorage.getItem('token');
+      const url = `${window.location.protocol}//${window.location.host}/api/arena/leave`;
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ room_id: activeRoom.id }),
+        keepalive: true,
+      });
     };
 
     window.addEventListener('beforeunload', handleUnload);
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, [activeRoom]);
 
-  // ── Match finished → save result to DB
   const handleMatchEnd = async ({ result, score, room_id }) => {
     try {
-      // If we joined a room, the host_name is our opponent
-      const opponentName = activeRoom?.host_name || t('arena.result.opponent_default', { defaultValue: 'Đối thủ' });
-      
+      const opponentName = activeRoom?.host_name || t('arena.result.opponent_default');
       const data = await apiCall('/api/arena/match-result', {
         method: 'POST',
         body: JSON.stringify({
@@ -1376,21 +1304,14 @@ const Arena = () => {
         }),
       });
       setMatchResult({ result, score, ptsChange: data.ptsChange || 0 });
-      await refreshUser(); // sync profile stats
-    } catch (e) {
-      console.warn('Match save error:', e.message);
+      await refreshUser();
+    } catch (err) {
+      console.warn('Match save error:', err.message);
       setMatchResult({ result, score, ptsChange: 0 });
     }
-    // Sau khi kết thúc trận, thực hiện rời phòng để giảm count/xóa phòng
     await handleLeaveRoom();
   };
 
-  // ── Match result shown → close
-  const handleCloseResult = () => {
-    setMatchResult(null);
-  };
-
-  // If in battle, show battle UI full-screen
   if (activeRoom) {
     if (activeRoom.asModerator) {
       return <ModeratorDashboard room={activeRoom} onLeave={handleLeaveRoom} />;
@@ -1400,20 +1321,18 @@ const Arena = () => {
 
   return (
     <>
-      {/* Match result overlay */}
       <AnimatePresence>
         {matchResult && (
           <MatchResultScreen
             result={matchResult.result}
             score={matchResult.score}
             ptsChange={matchResult.ptsChange}
-            onClose={handleCloseResult}
+            onClose={() => setMatchResult(null)}
           />
         )}
       </AnimatePresence>
 
       <ArenaLobby
-        key={user?.id || 'guest'}
         user={user}
         onFindMatch={handleFindMatch}
         isSearching={isSearchingMatch}
