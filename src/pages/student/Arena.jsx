@@ -71,8 +71,18 @@ const getRank = (points = 0) => {
   return { current, next };
 };
 
+const SHORT_MODE_KEYS = {
+  solo: 'solo_short',
+  '3vs3': '3vs3_short',
+  '5vs5': '5vs5_short',
+  '1vs100': 'br_short',
+};
+
 const getModeLabel = (t, mode) => (MODE_CONFIG[mode] ? t(`arena_modes.${mode}`) : mode || t('arena_modes.solo'));
-const getModeShortLabel = (t, mode) => (MODE_CONFIG[mode] ? t(`arena_modes.${mode}_short`) : getModeLabel(t, mode));
+const getModeShortLabel = (t, mode) => {
+  const shortKey = SHORT_MODE_KEYS[mode];
+  return shortKey ? t(`arena_modes.${shortKey}`) : getModeLabel(t, mode);
+};
 const getDifficultyLabel = (t, difficulty) => {
   if (difficulty === 'auto') return t('arena.ui.difficulty_auto');
   return DIFFICULTY_KEYS.includes(difficulty) ? t(`arena.difficulties.${difficulty}`) : t('arena.ui.difficulty_auto');
@@ -354,7 +364,7 @@ const ModeSelector = ({ value, onChange, disabled = false }) => {
   );
 };
 
-const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => {
+const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser, onPractice }) => {
   const { t, i18n } = useTranslation();
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
@@ -440,13 +450,22 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
             {isSearching ? <Loader2 className="h-5 w-5 animate-spin" /> : <Search className="h-5 w-5" />}
             {isSearching ? t('arena.actions.cancel_find') : t('arena.actions.find_match')}
           </IconButton>
-          <IconButton
-            onClick={onCreateRoom}
-            className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-viet-green hover:text-viet-green"
-          >
-            <Plus className="h-5 w-5" />
-            {t('arena.actions.create_room')}
-          </IconButton>
+          <div className="grid grid-cols-2 gap-3 sm:flex">
+            <IconButton
+              onClick={onCreateRoom}
+              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-viet-green hover:text-viet-green"
+            >
+              <Plus className="h-5 w-5" />
+              {t('arena.actions.create_room')}
+            </IconButton>
+            <IconButton
+              onClick={onPractice}
+              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text hover:border-purple-400 hover:text-purple-600"
+            >
+              <FlaskConical className="h-5 w-5" />
+              {t('arena.actions.practice_room')}
+            </IconButton>
+          </div>
         </div>
       </Panel>
 
@@ -756,7 +775,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const [questions, setQuestions] = useState([]);
   const [loadingQ, setLoadingQ] = useState(true);
   const [gameOver, setGameOver] = useState(false);
-  const [isWaiting, setIsWaiting] = useState(true);
+  const [isWaiting, setIsWaiting] = useState(!room.isPractice);
   const [currentPlayers, setCurrentPlayers] = useState(room.current_players || 1);
   const correctCountRef = useRef(0);
   const timeLeftRef = useRef(30);
@@ -766,7 +785,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
   }, [timeLeft]);
 
   useEffect(() => {
-    if (!isWaiting) return;
+    if (!isWaiting || room.isPractice) return;
     const expectedMax = room.max_players || MODE_CONFIG[room.mode]?.maxPlayers || 2;
     const interval = setInterval(async () => {
       try {
@@ -780,7 +799,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
       }
     }, 3000);
     return () => clearInterval(interval);
-  }, [isWaiting, room.id, room.max_players, room.mode]);
+  }, [isWaiting, room.id, room.max_players, room.mode, room.isPractice]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -825,7 +844,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
       } else {
         const result = correctCountRef.current >= Math.ceil(questions.length / 2) ? 'win' : 'lose';
         setGameOver(true);
-        onMatchEnd?.({ result, score: finalScore, room_id: room.id });
+        onMatchEnd?.({ result, score: finalScore, room_id: room.id, isPractice: room.isPractice });
       }
     }, 1200);
   }, [answered, currentQ, currentQIndex, gameOver, onMatchEnd, questions.length, room.id, score]);
@@ -1147,7 +1166,7 @@ const MatchResultScreen = ({ result, score, ptsChange, onClose }) => {
   );
 };
 
-const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser }) => (
+const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser, onPractice }) => (
   <div className="min-h-screen bg-[#f8faf7] pt-[112px] pb-12">
     <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(26,26,26,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(26,26,26,0.035)_1px,transparent_1px)] bg-[size:48px_48px]" />
     <div className="relative mx-auto grid max-w-[1380px] grid-cols-1 gap-5 px-4 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)_340px] lg:px-8">
@@ -1158,6 +1177,7 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
         onCreateRoom={onCreateRoom}
         onJoinRoom={onJoinRoom}
         onOpenBrowser={onOpenBrowser}
+        onPractice={onPractice}
       />
       <StatsPanel user={user} />
     </div>
@@ -1173,6 +1193,19 @@ const Arena = () => {
   const [matchResult, setMatchResult] = useState(null);
   const [isSearchingMatch, setIsSearchingMatch] = useState(false);
   const searchInterval = useRef(null);
+
+  const handlePractice = () => {
+    setActiveRoom({
+      id: 'practice-room',
+      name: t('arena.practice.title'),
+      mode: 'solo',
+      difficulty: 'easy',
+      current_players: 1,
+      max_players: 1,
+      isPractice: true,
+      asModerator: false
+    });
+  };
 
   useEffect(() => {
     return () => {
@@ -1291,7 +1324,12 @@ const Arena = () => {
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, [activeRoom]);
 
-  const handleMatchEnd = async ({ result, score, room_id }) => {
+  const handleMatchEnd = async ({ result, score, room_id, isPractice }) => {
+    if (isPractice) {
+      setMatchResult({ result, score, ptsChange: 0, isPractice: true });
+      setActiveRoom(null);
+      return;
+    }
     try {
       const opponentName = activeRoom?.host_name || t('arena.result.opponent_default');
       const data = await apiCall('/api/arena/match-result', {
@@ -1339,6 +1377,7 @@ const Arena = () => {
         onCreateRoom={() => setIsCreateModalOpen(true)}
         onJoinRoom={handleJoinRoom}
         onOpenBrowser={() => setIsBrowserOpen(true)}
+        onPractice={handlePractice}
       />
 
       <AnimatePresence>
