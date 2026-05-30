@@ -1,4 +1,4 @@
-﻿import './env.js';
+import './env.js';
 import express from 'express';
 import cors from 'cors';
 
@@ -14,6 +14,7 @@ import labRouter from './_routes/lab.js';
 import missionsRouter from './_routes/missions.js';
 import classesRouter from './_routes/classes.js';
 import discussionsRouter from './_routes/discussions.js';
+
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use('/api/lab', labRouter);
 app.use('/api/missions', missionsRouter);
 app.use('/api/classes', classesRouter);
 app.use('/api/discussions', discussionsRouter);
+
 
 // Analyze route — lazy-loaded per-request to prevent Vercel cold-start crash
 // (pdf-parse, word-extractor, multer are heavy native modules that may fail on serverless)
