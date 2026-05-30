@@ -20,11 +20,17 @@ async function seed() {
       arenaQuestions[difficulty].forEach((question) => {
         questionsToSeed.push({
           difficulty: difficulty === 'auto' ? 'easy' : difficulty,
-          grade_level: 8,
+          grade_level: question.gradeLevel || 8,
           question: question.question,
-          options: question.options,
-          correct_option_index: question.correct,
-          points: question.points || 10
+          options: question.options || [],
+          correct_option_index: question.correct ?? null,
+          game_type: question.gameType || 'calculation',
+          payload: question.payload || {},
+          answer: question.answer || {},
+          points: question.points || 100,
+          time_limit_seconds: question.timeLimitSeconds || 45,
+          explanation: question.explanation || null,
+          is_active: question.isActive ?? true,
         });
       });
     });

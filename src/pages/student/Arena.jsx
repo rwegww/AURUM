@@ -29,6 +29,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '@/components/common/Avatar';
+import ArenaBattleRoom from '@/components/arena/ArenaBattleRoom';
 
 const MODE_CONFIG = {
   solo: { maxPlayers: 2, icon: Swords, accent: 'text-viet-green', bg: 'bg-viet-green/10' },
@@ -1194,17 +1195,22 @@ const Arena = () => {
   const [isSearchingMatch, setIsSearchingMatch] = useState(false);
   const searchInterval = useRef(null);
 
-  const handlePractice = () => {
-    setActiveRoom({
-      id: 'practice-room',
-      name: t('arena.practice.title'),
-      mode: 'solo',
-      difficulty: 'easy',
-      current_players: 1,
-      max_players: 1,
-      isPractice: true,
-      asModerator: false
-    });
+  const handlePractice = async () => {
+    try {
+      const data = await apiCall('/api/arena/create', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: t('arena.practice.title'),
+          mode: 'solo',
+          difficulty: 'auto',
+          max_players: 1,
+          is_practice: true,
+        }),
+      });
+      setActiveRoom({ ...data.room, isPractice: true, asModerator: false });
+    } catch (err) {
+      alert(err.message || 'Không thể tạo phòng luyện tập Arena.');
+    }
   };
 
   useEffect(() => {
@@ -1225,20 +1231,12 @@ const Arena = () => {
           max_players,
         }),
       });
-      const isModerator = user?.role === 'admin' || user?.role === 'teacher';
-      setActiveRoom({ ...data.room, max_players, asModerator: isModerator });
+      setActiveRoom({ ...data.room, max_players, asModerator: false });
       setIsCreateModalOpen(false);
     } catch (err) {
       console.warn('Không thể tạo phòng qua API:', err.message);
-      const isModerator = user?.role === 'admin' || user?.role === 'teacher';
-      setActiveRoom({
-        ...formData,
-        id: Math.floor(Math.random() * 900000 + 100000).toString(),
-        current_players: 1,
-        max_players: MODE_CONFIG[formData.mode]?.maxPlayers || 2,
-        asModerator: isModerator,
-      });
-      setIsCreateModalOpen(false);
+      alert(err.message || 'Không thể tạo phòng Arena.');
+      return;
     }
   };
 
@@ -1324,7 +1322,14 @@ const Arena = () => {
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, [activeRoom]);
 
-  const handleMatchEnd = async ({ result, score, room_id, isPractice }) => {
+  const handleMatchEnd = async ({ result, score, room_id, isPractice, serverFinalized }) => {
+    if (serverFinalized) {
+      setMatchResult({ result, score, ptsChange: 0, isPractice });
+      setActiveRoom(null);
+      if (!isPractice) await refreshUser();
+      return;
+    }
+
     if (isPractice) {
       setMatchResult({ result, score, ptsChange: 0, isPractice: true });
       setActiveRoom(null);
@@ -1354,7 +1359,7 @@ const Arena = () => {
     if (activeRoom.asModerator) {
       return <ModeratorDashboard room={activeRoom} onLeave={handleLeaveRoom} />;
     }
-    return <PlayerRoom user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
+    return <ArenaBattleRoom user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
   }
 
   return (
