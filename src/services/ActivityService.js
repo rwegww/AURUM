@@ -14,8 +14,12 @@ class ActivityService {
   async log(activity) {
     try {
       const supabase = await getSupabase();
-      const { data: { session } } = await supabase.auth.getSession();
-      const activeUserId = session?.user?.id;
+      
+      let activeUserId = localStorage.getItem('userId');
+      if (!activeUserId) {
+        const { data: { session } } = await supabase.auth.getSession();
+        activeUserId = session?.user?.id;
+      }
 
       const newActivity = {
         ...activity,
@@ -61,8 +65,12 @@ class ActivityService {
   async getHistory() {
     try {
       const supabase = await getSupabase();
-      const { data: { session } } = await supabase.auth.getSession();
-      const activeUserId = session?.user?.id;
+      
+      let activeUserId = localStorage.getItem('userId');
+      if (!activeUserId) {
+        const { data: { session } } = await supabase.auth.getSession();
+        activeUserId = session?.user?.id;
+      }
 
       if (activeUserId) {
         const { data, error } = await supabase
@@ -110,8 +118,11 @@ class ActivityService {
       localStorage.removeItem(HISTORY_KEY);
 
       const supabase = await getSupabase();
-      const { data: { session } } = await supabase.auth.getSession();
-      const activeUserId = session?.user?.id;
+      let activeUserId = localStorage.getItem('userId');
+      if (!activeUserId) {
+        const { data: { session } } = await supabase.auth.getSession();
+        activeUserId = session?.user?.id;
+      }
 
       if (activeUserId) {
         await supabase
