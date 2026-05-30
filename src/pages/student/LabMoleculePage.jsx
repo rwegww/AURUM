@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import MoleculeViewer from '@/components/lab/MoleculeViewer';
+import { Microscope } from 'lucide-react';
 
 const LabMoleculePage = () => {
   return (
@@ -25,7 +26,9 @@ const LabMoleculePage = () => {
             animate={{ opacity: 1, x: 0 }}
             className="bg-white p-4 rounded-2xl border-2 border-viet-border flex items-center gap-4 shadow-sm"
           >
-            <div className="w-12 h-12 bg-viet-green/10 rounded-xl flex items-center justify-center text-2xl">🔬</div>
+            <div className="w-12 h-12 bg-viet-green/10 rounded-xl flex items-center justify-center text-2xl">
+              <Microscope className="w-6 h-6 text-viet-green" />
+            </div>
             <div>
               <p className="text-xs font-black text-viet-text-light uppercase tracking-widest">Trực quan</p>
               <p className="text-base font-black text-viet-text">Cấu trúc không gian</p>
