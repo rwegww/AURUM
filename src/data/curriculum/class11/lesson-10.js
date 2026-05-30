@@ -30,7 +30,7 @@ export const bai10 = {
       "type": "infoBox",
       "content": {
         "title": "Mạng Lưới Vạn Hóa của Khung Carbon",
-        "content": "Thành Phần Khai Mở Bảng Thần Chú: \nÔng Hoàng Bá Chủ Tuyệt đối **C (Carbon)** là bắt buộc hiện diện khung xương. Phó Tướng Hợp tác Mọi ngõ ngách **H (Hydrogen)** kìm kẹp vỏ bọc. Nhóm Tham Tán Điểm Chức Biến Dịch gồm **O, N, Halogen (Cl, Br), S, P** gắn vào thân gốc tạo nên đủ Hệ Loại Rượu, Acid, Amino bốc vị.",
+        "content": "Thành Phần Khai Mở Bảng Công Thức: \nÔng Hoàng Bá Chủ Tuyệt đối **C (Carbon)** là bắt buộc hiện diện khung xương. Phó Tướng Hợp tác Mọi ngõ ngách **H (Hydrogen)** kìm kẹp vỏ bọc. Nhóm Tham Tán Điểm Chức Biến Dịch gồm **O, N, Halogen (Cl, Br), S, P** gắn vào thân gốc tạo nên đủ Hệ Loại Rượu, Acid, Amino bốc vị.",
         "color": "blue"
       }
     },

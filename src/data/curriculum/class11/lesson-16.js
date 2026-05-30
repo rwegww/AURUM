@@ -79,8 +79,8 @@ export const bai16 = {
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "Nhân Bản Trùng Hợp Vô Cực Nốt Sần Liên Kết Đôi",
-        "content": "Liên kết Đôi (Alkene C=C) Tồn tại 1 Phép Thuật Thượng Xưng Của Cảnh Cấp Nhang Nhựa: **TRÙNG HỢP PLASTIC**. \nDưới Xúc Tác Ép Áp Lực Nhiệt Hầm Khổng Lồ, Hàng tỷ Triệu Triệu Tách Tách Mắt Xích Ethene ($CH_2=CH_2$) Tự Đuổi Nhau Xé Khớp Pi Tay Cầm Nắm Nối Vụn Nối Đuôi Đan Rập tạo Biển Nhựa Nhẽo POLYETHYLENE ($(-CH_2-CH_2-)_n$) Siêu màng Tui Rác Dẻo Rải Băng Keo Vỏ. Bản chất Vạn Nhựa đều sinh Ra Từ Kiểu Buộc Tay Này.",
+        "title": "Phản Ứng Trùng Hợp Qua Liên Kết Đôi",
+        "content": "Liên kết đôi trong alkene (C=C) có thể tham gia **phản ứng trùng hợp** để tạo polymer. Ví dụ, nhiều phân tử ethene ($CH_2=CH_2$) nối tiếp nhau tạo thành polyethylene ($(-CH_2-CH_2-)_n$), vật liệu quen thuộc trong túi nhựa, màng bọc và nhiều sản phẩm đời sống.",
         "color": "orange"
       }
     }

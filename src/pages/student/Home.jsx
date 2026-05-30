@@ -283,22 +283,6 @@ const Home = () => {
         bgClass="bg-white"
       />
 
-      {/* 4. Hành trình — image left */}
-      <FeatureRow
-        badge={t('home.features.map.badge')}
-        badgeColor="text-amber-500"
-        title={t('home.features.map.title')}
-        titleHighlight={t('home.features.map.highlight')}
-        highlightColor="text-amber-500"
-        description={t('home.features.map.desc')}
-        buttonText={t('home.features.map.link')}
-        buttonUrl="/classroom"
-        buttonIcon={<Map size={16} />}
-        imageSrc="/assets/images/home-viet-map.png"
-        imageAlt={t('home.features.map.image_alt')}
-        imageRight={false}
-        bgClass="bg-[#f4faef]"
-      />
 
       {/* 5. Bài giảng tương tác — image right */}
       <FeatureRow

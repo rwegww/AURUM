@@ -1,24 +1,24 @@
 {
   "nav": {
-    "journey": "BẢN ĐỒ PHÁP THUẬT",
-    "vault": "KHO TÀNG CỔ VẬT",
-    "arena": "ĐẤU TRƯỜNG PHÙ THỦY",
-    "lectures": "CẨM NĂNG MA PHÁP",
-    "classroom": "ĐẠI SẢNH ĐƯỜNG",
-    "my_class": "NHÀ CỦA TÔI",
-    "periodic_table": "BẢNG NGUYÊN TỐ CỔ ĐẠI",
-    "library": "THƯ VIỆN HOGWARTS",
-    "lab": "LÒ GIẢ KIM",
+    "journey": "LỘ TRÌNH HỌC TẬP",
+    "vault": "KHO HUY HIỆU",
+    "arena": "ĐẤU TRƯỜNG HÓA HỌC",
+    "lectures": "HỌC LIỆU HÓA HỌC",
+    "classroom": "KHÔNG GIAN HỌC TẬP",
+    "my_class": "LỚP CỦA TÔI",
+    "periodic_table": "BẢNG NGUYÊN TỐ",
+    "library": "THƯ VIỆN AURUM",
+    "lab": "PHÒNG LAB ẢO",
     "arena_link": "ĐẤU TRƯỜNG",
-    "missions": "NHIỆM VỤ PHÙ THỦY",
-    "knowledge_map": "BẢN ĐỒ ĐẠO TẶC",
-    "calculator": "VẠC TÍNH TOÁN",
-    "support": "CÚ ĐƯA THƯ HỖ TRỢ",
-    "profile": "Hồ sơ Phù thủy",
-    "logout": "Rời Học viện",
-    "login": "Nhập học",
-    "login_now": "Nhập học ngay",
-    "feedback": "Hòm thư góp ý Pháp thuật"
+    "missions": "NHIỆM VỤ HỌC TẬP",
+    "knowledge_map": "BẢN ĐỒ TRI THỨC",
+    "calculator": "MÁY TÍNH HÓA HỌC",
+    "support": "KÊNH HỖ TRỢ",
+    "profile": "Hồ sơ học viên",
+    "logout": "Đăng xuất",
+    "login": "Đăng nhập",
+    "login_now": "Đăng nhập ngay",
+    "feedback": "Góp ý Aurum"
   },
   "home": {
     "hero_title": "HÀNH TRÌNH HÓA HỌC",
@@ -178,100 +178,100 @@
     }
   },
   "classroom": {
-    "title": "Bắt đầu hành trình <1/><2> Giả kim thuật</2> của bạn",
-    "subtitle": "Mỗi cấp độ học là một mật cảnh học tập mới đầy bí ẩn và thử thách thú vị, dẫn dắt bạn khám phá thế giới ma pháp tự nhiên nhất.",
-    "enter_class": "Vào Đại Sảnh Đường",
+    "title": "Bắt đầu hành trình <1/><2> Hóa học</2> của bạn",
+    "subtitle": "Mỗi cấp độ học là một chặng khám phá mới, giúp bạn đi từ kiến thức nền đến ứng dụng Hóa học trong đời sống.",
+    "enter_class": "Vào không gian học tập",
     "knowledge_tree": {
-      "academic_map": "Bản đồ Pháp thuật",
-      "title": "Cây Pháp Thuật Giả Kim Tổng Hợp",
-      "subtitle": "Hệ thống hóa toàn bộ kiến thức ma pháp từ cơ bản đến nâng cao.",
-      "instruction": "Bấm vào từng bài học để bắt đầu hành trình tu luyện!",
-      "updating": "Đang truyền tống cổ thư bài học...",
+      "academic_map": "Bản đồ tri thức",
+      "title": "Cây kiến thức Hóa học tổng hợp",
+      "subtitle": "Hệ thống hóa toàn bộ kiến thức từ cơ bản đến nâng cao.",
+      "instruction": "Bấm vào từng bài học để bắt đầu luyện tập.",
+      "updating": "Đang tải học liệu bài học...",
       "go_journey": "Mở lộ trình Nhà Lớp {{grade}}"
     },
     "grades": {
       "8": {
-        "title": "Phù Thủy Tập Sự Lớp 8",
-        "desc": "Khởi đầu con đường giả kim, học cách nhận biết các thảo dược và nguyên liệu ma pháp cơ bản."
+        "title": "Khởi Động Hóa Học Lớp 8",
+        "desc": "Làm quen với chất, dụng cụ thí nghiệm và những hiện tượng Hóa học đầu tiên."
       },
       "9": {
-        "title": "Nhà Pha Chế Độc Dược Lớp 9",
-        "desc": "Bắt đầu nhóm lửa vạc ma thuật, pha chế các liều thuốc cơ bản và quan sát sự biến đổi linh lực."
+        "title": "Quan Sát Phản Ứng Lớp 9",
+        "desc": "Tìm hiểu phản ứng, dung dịch và sự biến đổi của chất qua thí nghiệm an toàn."
       },
       "10": {
-        "title": "Kiến Trúc Sư Ma Pháp Lớp 10",
-        "desc": "Nghiên cứu sâu về các liên kết nguyên tử cổ xưa, giải mã cấu trúc của linh lực vũ trụ."
+        "title": "Cấu Trúc Nguyên Tử Lớp 10",
+        "desc": "Nghiên cứu nguyên tử, liên kết, bảng tuần hoàn và quy luật nền tảng của Hóa học."
       },
       "11": {
-        "title": "Mê Cung Hữu Cơ Lớp 11",
-        "desc": "Khám phá các đại phân tử hữu cơ carbon phức tạp - nguồn gốc của mọi loài sinh vật ma thuật."
+        "title": "Hóa Hữu Cơ Lớp 11",
+        "desc": "Khám phá mạch carbon, nhóm chức và những hợp chất gắn với đời sống."
       },
       "12": {
-        "title": "Bậc Thầy Dung Hợp Lớp 12",
-        "desc": "Chinh phục đỉnh cao giả kim thuật, làm chủ các phản ứng điện hóa và định mệnh kiến tạo thế giới ma pháp mới."
+        "title": "Hóa Học Ứng Dụng Lớp 12",
+        "desc": "Chinh phục điện hóa, polymer, kim loại và các ứng dụng thực tiễn trước kỳ thi quan trọng."
       }
     }
   },
   "lectures": {
-    "title": "Thư viện <1>Cổ thư Pháp thuật</1>",
-    "subtitle": "Tra cứu lý thuyết và thần chú ma pháp theo khối lớp",
-    "search_placeholder": "Tìm kiếm cổ thư...",
+    "title": "Thư viện <1>Học liệu Hóa học</1>",
+    "subtitle": "Tra cứu lý thuyết, video và bài ôn tập theo khối lớp",
+    "search_placeholder": "Tìm kiếm học liệu...",
     "grade_filter": "Lớp {{grade}}",
-    "loading": "Đang giải ấn truyền tin...",
-    "no_results": "Không tìm thấy cuộn giấy da nào khớp với thần chú",
-    "clear_filters": "Xóa bùa chú lọc",
+    "loading": "Đang tải học liệu...",
+    "no_results": "Không tìm thấy tài liệu phù hợp",
+    "clear_filters": "Xóa bộ lọc",
     "metadata": {
-      "video": "1 Ảnh chiếu ma pháp",
+      "video": "1 video bài giảng",
       "theory": "Chú giải"
     }
   },
   "about": {
     "mission_badge": "Tuyên ngôn Aurum",
-    "title": "Khơi nguồn linh lực <1/><2> Giả kim thuật</2> cho thế hệ trẻ",
-    "description": "Aurum không chỉ là một ngôi trường phép thuật ảo, mà là một hành trình phiêu lưu khám phá thế giới vi mô của các liên kết và phản ứng ma pháp. Chúng tôi tin rằng thần chú chỉ thực sự linh nghiệm khi được thực hành bằng đũa phép.",
+    "title": "Khơi nguồn đam mê <1/><2> Hóa học</2> cho thế hệ trẻ",
+    "description": "Aurum là hành trình học tập tương tác giúp học sinh khám phá thế giới vi mô của nguyên tử, liên kết và phản ứng. Chúng tôi tin Hóa học trở nên dễ hiểu nhất khi được quan sát và thực hành an toàn.",
     "pillars": {
       "safety": {
-        "title": "Lò luyện tuyệt mật an toàn",
-        "desc": "Vạc ảo 3D giúp các phù thủy tập sự thực hành pha chế các độc dược nguy hiểm mà không sợ nổ tung học viện."
+        "title": "Phòng thực hành tuyệt mật an toàn",
+        "desc": "Thiết bị ảo 3D giúp các học viên tập sự thực hành pha chế các hóa chất nguy hiểm mà không sợ nổ tung học viện."
       },
       "gamification": {
         "title": "Tu luyện thăng cấp",
-        "desc": "Hệ thống vinh danh tích lũy điểm nhà, cúp phù thủy giúp việc tu luyện trở nên cuốn hút."
+        "desc": "Hệ thống vinh danh tích lũy điểm học tập, huy hiệu học tập giúp việc luyện tập trở nên cuốn hút."
       },
       "visualization": {
-        "title": "Khai nhãn ma pháp",
-        "desc": "Mọi liên kết phân tử vô hình đều được tái hiện bằng hình ảnh 3D ma pháp sống động."
+        "title": "Quan sát hóa học",
+        "desc": "Mọi liên kết phân tử vô hình đều được tái hiện bằng hình ảnh 3D hóa học sống động."
       }
     },
     "team_section": {
-      "title": "Ban giám hiệu từ Học viện Aurum",
-      "description": "Chúng tôi quy tụ những Giáo sư độc dược kỳ cựu và các nhà luyện kim tài năng. Với tâm niệm \"Pháp thuật hóa giáo dục là tương lai\", chúng tôi không ngừng cải tiến các công thức độc dược và lò pha chế ma pháp.",
+      "title": "Ban giám hiệu từ Aurum",
+      "description": "Chúng tôi quy tụ những Giáo viên hóa chất kỳ cựu và các nhà luyện kim tài năng. Với tâm niệm \"Hóa học hóa giáo dục là tương lai\", chúng tôi không ngừng cải tiến các công thức hóa chất và phòng thực hành hóa học.",
       "achievements": [
-        "Hơn 1.000 cổ thư bài học chất lượng cao",
-        "Công nghệ mô phỏng vạc ma pháp 3D đỉnh cao",
-        "Cộng đồng phù thủy hơn 50.000 thành viên"
+        "Hơn 1.000 tài liệu bài học chất lượng cao",
+        "Công nghệ mô phỏng thiết bị hóa học 3D đỉnh cao",
+        "Cộng đồng học viên hơn 50.000 thành viên"
       ]
     }
   },
   "contact": {
-    "badge": "Gửi thư cú cho chúng tôi",
-    "title": "Kết nối với <1/> Hội đồng Pháp sư Sáng lập",
-    "description": "Chúng tôi luôn sẵn lòng lắng nghe ý kiến đóng góp, báo cáo lỗi từ các bạn. Hãy gửi thư cú hoặc dùng các kênh liên lạc chính thức dưới đây.",
+    "badge": "Gửi tin nhắn cho chúng tôi",
+    "title": "Kết nối với <1/> đội ngũ Aurum",
+    "description": "Chúng tôi luôn sẵn lòng lắng nghe góp ý, báo cáo lỗi và đề xuất hợp tác từ bạn. Hãy dùng các kênh liên lạc chính thức dưới đây.",
     "info": {
-      "hotline": "Đường dây cú nhanh",
+      "hotline": "Đường dây tin nhắn nhanh",
       "address": "Địa điểm văn phòng Hẻm Xéo",
       "google_maps": "Xem trên bản đồ đạo tặc →"
     },
     "form": {
-      "title": "Soạn thư cú",
-      "name_label": "Danh xưng phù thủy",
+      "title": "Soạn thư tin nhắn",
+      "name_label": "Danh xưng học viên",
       "name_placeholder": "Nhập danh tính của bạn...",
-      "email_label": "Email cú liên hệ",
+      "email_label": "Email tin nhắn liên hệ",
       "email_placeholder": "vi_rut_phap_thuat@example.com",
-      "message_label": "Nội dung thư cú",
+      "message_label": "Nội dung thư tin nhắn",
       "message_placeholder": "Bạn muốn truyền đạt điều gì đến Hội đồng...",
-      "submit": "Phóng thư cú đi",
-      "success": "Cú đã cất cánh thành công! ✓"
+      "submit": "Phóng thư tin nhắn đi",
+      "success": "tin nhắn đã cất cánh thành công! ✓"
     }
   },
   "terms": {
@@ -290,7 +290,7 @@
       },
       "intellectual": {
         "title": "3. Quyền sở hữu trí tuệ",
-        "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Học viện Hóa học Aurum hoặc các bên cấp phép.",
+        "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Aurum Hóa học Aurum hoặc các bên cấp phép.",
         "p2": "Mọi hành vi sao chép, phân phối hoặc thương mại hóa nội dung mà không có sự đồng ý bằng văn bản của chúng tôi đều bị nghiêm cấm và có thể bị truy cứu trách nhiệm pháp lý."
       },
       "privacy": {
@@ -308,39 +308,39 @@
   },
   "profile": {
     "not_logged_in": "Chưa ghi danh học viện",
-    "login_to_view": "Đăng nhập để xem hồ sơ phù thủy",
-    "member_role": "Phù thủy tập sự",
-    "member_since": "Học viên ưu tú của Học viện Ma pháp Aurum.<1/>Đã nhập học từ {{date}}",
-    "online_status": "Đang ở Đại Sảnh Đường",
+    "login_to_view": "Đăng nhập để xem hồ sơ học viên",
+    "member_role": "Học viên tập sự",
+    "member_since": "Học viên ưu tú của Aurum Hóa học Aurum.<1/>Đã nhập học từ {{date}}",
+    "online_status": "Đang ở Không Gian Học Tập",
     "change_avatar": "Biến hình nhân vật ngẫu nhiên",
     "save_changes": "Lưu ấn ký thay đổi",
     "stats": {
       "xp": "Pháp lực (XP)",
-      "level_title": "Cấp bậc Pháp sư",
-      "chemicals": "Độc dược đã mở",
-      "arena_points": "Điểm nhà tích lũy"
+      "level_title": "Cấp bậc chuyên gia",
+      "chemicals": "Hóa chất đã mở",
+      "arena_points": "điểm học tập tích lũy"
     },
     "collection": {
-      "title": "Bộ sưu tập Độc dược & Cổ vật",
+      "title": "Bộ sưu tập Hóa chất & Huy hiệu",
       "unlocked_count": "Đã mở khóa: {{current}}/{{total}}",
       "status": "Đã thu thập",
-      "empty": "Hòm đồ rỗng tuếch! Hãy pha chế độc dược hoặc thu thập cổ vật ngay!",
-      "go_to_lab": "Đến lò Giả kim →"
+      "empty": "Bộ sưu tập rỗng tuếch! Hãy pha chế hóa chất hoặc thu thập huy hiệu ngay!",
+      "go_to_lab": "Đến phòng Hóa học →"
     },
     "study_plan": {
-      "title": "Kế hoạch tu luyện",
-      "subtitle": "Thiết lập mục tiêu hàng ngày để tích lũy linh lực",
-      "time_label": "Giờ tu luyện dự kiến",
+      "title": "Kế hoạch luyện tập",
+      "subtitle": "Thiết lập mục tiêu hàng ngày để tích lũy điểm học tập",
+      "time_label": "Giờ luyện tập dự kiến",
       "target_label": "Mục tiêu bài học/ngày",
-      "reminders_label": "Cú thư nhắc nhở",
+      "reminders_label": "tin nhắn thư nhắc nhở",
       "save_btn": "Khắc ghi kế hoạch",
       "saving": "Đang khắc ghi...",
-      "success": "Đã cập nhật kế hoạch tu luyện!",
-      "reminder_msg": "🔔 Đã đến giờ tu luyện phép thuật rồi! Hôm nay bạn chưa hoàn thành mục tiêu nào. Hãy rút đũa phép ra và luyện tập ngay!",
-      "email_reminders": "Cú đưa thư nhắc nhở",
-      "calendar_reminders": "Lên lịch tu luyện",
+      "success": "Đã cập nhật kế hoạch luyện tập!",
+      "reminder_msg": "🔔 Đã đến giờ học rồi! Hôm nay bạn chưa hoàn thành mục tiêu nào. Hãy mở bài học và luyện tập ngay.",
+      "email_reminders": "tin nhắn đưa thư nhắc nhở",
+      "calendar_reminders": "Lên lịch luyện tập",
       "calendar": {
-        "title": "Lịch tu luyện cá nhân",
+        "title": "Lịch luyện tập cá nhân",
         "prev_month": "Trăng trước",
         "next_month": "Trăng sau",
         "weekday_sun": "CN",
@@ -350,18 +350,18 @@
         "weekday_thu": "T5",
         "weekday_fri": "T6",
         "weekday_sat": "T7",
-        "schedule_modal_title": "Chi tiết ngày tu luyện",
-        "schedule_modal_desc": "Điều chỉnh thời gian và mục tiêu học pháp thuật cho ngày này.",
-        "input_title_label": "Nội dung/Ghi chú ma pháp",
-        "input_title_placeholder": "VD: Luyện thần chú, pha chế dược thảo...",
+        "schedule_modal_title": "Chi tiết ngày luyện tập",
+        "schedule_modal_desc": "Điều chỉnh thời gian và mục tiêu học hóa học cho ngày này.",
+        "input_title_label": "Nội dung/Ghi chú hóa học",
+        "input_title_placeholder": "VD: Luyện công thức, pha chế dược thảo...",
         "input_time_label": "Giờ tùy chỉnh",
         "input_target_label": "Số bài học",
         "status_completed": "Đã hoàn thành mục tiêu",
-        "btn_save": "Lưu lịch tu luyện",
+        "btn_save": "Lưu lịch luyện tập",
         "btn_delete": "Xóa lịch",
         "btn_cancel": "Hủy bỏ",
-        "upcoming_title": "Lịch tu luyện sắp tới",
-        "upcoming_empty": "Chưa có lịch tu luyện nào được lên kế hoạch trong tháng này. Hãy chọn bất kỳ ngày nào trên lịch để lập lịch tu luyện của riêng bạn!",
+        "upcoming_title": "Lịch luyện tập sắp tới",
+        "upcoming_empty": "Chưa có lịch luyện tập nào được lên kế hoạch trong tháng này. Hãy chọn bất kỳ ngày nào trên lịch để lập lịch luyện tập của riêng bạn!",
         "item_target": "{{count}} bài học",
         "item_time": "Vào lúc {{time}}"
       }
@@ -374,18 +374,18 @@
       "win_rate": "Tỉ lệ thắng",
       "challenge_now": "Quyết đấu ngay →"
     },
-    "history_title": "Nhật ký tu luyện",
-    "history_empty": "Nhật ký của bạn trống không. Hãy thực hiện ma pháp đầu tiên!",
+    "history_title": "Nhật ký luyện tập",
+    "history_empty": "Nhật ký của bạn trống không. Hãy thực hiện hóa học đầu tiên!",
     "history_clear": "Xóa nhật ký",
     "history_time_ago": "Lúc"
   },
   "missions": {
     "badge": "Văn phòng Thần Sáng",
-    "title": "Nhiệm Vụ <1>Phù Thủy</1>",
-    "subtitle": "Hoàn thành các thử thách ma pháp để thăng cấp và nhận cổ vật giá trị.",
+    "title": "Nhiệm Vụ <1>Học Viên</1>",
+    "subtitle": "Hoàn thành các thử thách học tập để tăng cấp và nhận huy hiệu giá trị.",
     "current_level": "Cấp độ pháp lực",
     "level_val": "Cấp {{level}}",
-    "total_xp": "Tổng linh lực",
+    "total_xp": "Tổng điểm học tập",
     "reset_in": "Làm mới sau: <1>{{time}}</1>",
     "tabs": {
       "daily": "Hàng ngày",
@@ -397,63 +397,63 @@
       "completed": "Hoàn thành",
       "in_progress": "Đang thực hiện",
       "reward": "Thưởng",
-      "claim_btn": "Nhận linh lực ⚡",
+      "claim_btn": "Nhận điểm học tập ⚡",
       "claiming": "Đang nhận...",
       "not_reached": "Chưa đạt"
     },
-    "empty": "Hội đồng Pháp sư chưa giao nhiệm vụ mới cho ngày hôm nay."
+    "empty": "đội ngũ Aurum chưa giao nhiệm vụ mới cho ngày hôm nay."
   },
   "journey": {
-    "badge": "Lộ trình tu luyện Lớp {{grade}}",
+    "badge": "Lộ trình luyện tập Lớp {{grade}}",
     "themes": {
       "8": {
         "title": "Hành Trình Khởi Đầu",
-        "subtitle": "Làm chủ các nguyên tố ma pháp cơ bản"
+        "subtitle": "Làm chủ các nguyên tố hóa học cơ bản"
       },
       "9": {
         "title": "Bí Thuật Chuyển Hóa",
-        "subtitle": "Bí thuật phản ứng ma pháp"
+        "subtitle": "Bí thuật phản ứng hóa học"
       },
       "10": {
-        "title": "Kiến Trúc Sư Ma Pháp",
-        "subtitle": "Xây dựng thế giới linh lực"
+        "title": "Kiến Trúc Sư Hóa Học",
+        "subtitle": "Xây dựng thế giới điểm học tập"
       }
     },
     "test_banner": {
       "bg_text": "KIỂM TRA",
       "badge": "Hành Trình Vượt Cấp",
-      "title": "Khai Mở Linh Lực Lớp {{grade}}",
-      "description": "Chào mừng Pháp sư tài ba! Thử thách bản thân với bài kiểm tra học vượt để mở khóa chương trình Lớp {{grade}} ngay lập tức.",
+      "title": "Mở Điểm Học Tập Lớp {{grade}}",
+      "description": "Chào mừng chuyên gia tài ba! Thử thách bản thân với bài kiểm tra học vượt để mở khóa chương trình Lớp {{grade}} ngay lập tức.",
       "button": "Bắt đầu quyết đấu ➔"
     },
     "stage": {
       "label": "Giai đoạn {{order}}",
       "mission": "Nhiệm vụ ➔",
-      "locked_desc": "Mật cảnh này vẫn còn bị phong ấn...",
-      "default_desc": "Hãy chuẩn bị tâm thế để khai mở bí mật ma pháp này."
+      "locked_desc": "Chặng học này vẫn còn bị chưa mở...",
+      "default_desc": "Hãy chuẩn bị tâm thế để mở bí mật hóa học này."
     },
     "milestone": {
       "book_badge": "MỚI",
       "book_label": "Cẩm nang",
-      "title": "Sổ Tay Ma Pháp",
+      "title": "Sổ Tay Hóa Học",
       "subtitle": "Khám phá bản đồ Infographic tổng hợp Lớp {{grade}}"
     }
   },
   "arena": {
-    "badge": "Học Viện Pháp Thuật",
-    "title": "ĐẤU TRƯỜNG <1>MA PHÁP</1>",
-    "subtitle": "Quyết đấu & chinh phục linh lực",
-    "online_count": "{{count}} phù thủy đang trực tuyến",
+    "badge": "Aurum Hóa Học",
+    "title": "ĐẤU TRƯỜNG <1>HÓA HỌC</1>",
+    "subtitle": "Thi đấu & chinh phục kiến thức",
+    "online_count": "{{count}} học viên đang trực tuyến",
     "character": {
-      "badge": "Nhân vật phù thủy",
-      "name_label": "Tên phù thủy:",
-      "aura_label": "Màu linh khí:",
+      "badge": "Nhân vật học viên",
+      "name_label": "Tên học viên:",
+      "aura_label": "Màu màu đại diện:",
       "random_btn": "Biến đổi dung mạo",
       "expand": "↓ Thêm kiểu ({{count}} kiểu)",
       "collapse": "↑ Thu gọn",
       "presets": {
-        "chem_master": "Độc Dược Sư",
-        "lab_wizard": "Nhà Giả Kim",
+        "chem_master": "Hóa Chất Sư",
+        "lab_wizard": "Nhà Thực Hành",
         "science_hero": "Thần Sáng",
         "atom_breaker": "Pháp Sư Nguyên Tố",
         "dna_explorer": "Huyết Linh Sư",
@@ -468,17 +468,17 @@
     },
     "stats": {
       "badge": "Pháp lực của bạn",
-      "rank_label": "Hạng phù thủy",
+      "rank_label": "Hạng học viên",
       "total_matches": "Tổng trận quyết đấu",
       "wins": "Thắng",
       "losses": "Bại",
       "win_rate": "Tỷ lệ thắng",
-      "total_points": "Điểm nhà tích lũy",
+      "total_points": "điểm học tập tích lũy",
       "history": "Nhật ký quyết đấu",
       "empty_history": "Chưa thực hiện trận đấu nào gần đây",
-      "leaderboard_btn": "Bảng xếp hạng đại sảnh",
-      "leaderboard_title": "Bảng vàng Đại Sảnh Đường",
-      "empty_leaderboard": "Đại sảnh đường chưa ghi nhận huyền thoại nào",
+      "leaderboard_btn": "Bảng xếp hạng không gian học tập",
+      "leaderboard_title": "Bảng vàng Không Gian Học Tập",
+      "empty_leaderboard": "không gian học tập chưa ghi nhận huyền thoại nào",
       "history_item": {
         "just_now": "Vừa xong",
         "minutes_ago": "{{count}} phút trước",
@@ -488,7 +488,7 @@
     },
     "ranks": {
       "bronze": "Tập Sự",
-      "silver": "Phù Thủy",
+      "silver": "Học Viên",
       "gold": "Pháp Sư",
       "diamond": "Thần Sáng",
       "master": "Đại Pháp Sư"
@@ -498,12 +498,12 @@
       "cancel_find": "Hủy Quyết Đấu",
       "create_room": "Tạo Sảnh Quyết Đấu",
       "join_pin": "Nhập mã PIN sảnh",
-      "lobby": "Đại sảnh chờ",
+      "lobby": "không gian học tập chờ",
       "pin_placeholder": "MÃ PHÒNG PHÉP",
       "close": "Đóng cổng",
       "enter": "Vào Phòng →",
       "footer_info": {
-        "summary": "Tổng hợp chú ngữ",
+        "summary": "Tổng hợp công thức",
         "questions": "10 Câu",
         "time": "30 Giây"
       }
@@ -511,7 +511,7 @@
     "create_room": {
       "title": "MỞ SẢNH <1>QUYẾT ĐẤU</1>",
       "name_label": "Tên Sảnh Đấu",
-      "name_placeholder": "VD: Thử thách độc dược Lớp 8...",
+      "name_placeholder": "VD: Thử thách hóa chất Lớp 8...",
       "mode_label": "Thể Thức Quyết Đấu",
       "difficulty_label": "Cuộn Sách Câu Hỏi",
       "admin_badge": "ĐẠI PHÁP SƯ TRƯỞNG",
@@ -520,7 +520,7 @@
     },
     "browser": {
       "title": "CỔNG DỊCH CHUYỂN <1>TRỰC TUYẾN</1>",
-      "refresh": "Khai nhãn quét phòng",
+      "refresh": "Quan sát quét phòng",
       "scanning": "Đang định vị sảnh đấu...",
       "empty_title": "Chưa có sảnh đấu nào!",
       "empty_desc": "Hãy tự mở sảnh quyết đấu đầu tiên",
@@ -533,19 +533,19 @@
         "title": "ĐẠI SẢNH CHỜ",
         "mode": "Thể thức",
         "difficulty": "Cấp bậc",
-        "players": "Phù thủy",
+        "players": "Học viên",
         "exit_btn": "Rời phòng",
         "start_btn": "Vào trận ngay"
       },
       "battle": {
-        "question": "Chú ngữ {{current}}/{{total}}",
-        "score": "Linh lực điểm",
+        "question": "Công thức {{current}}/{{total}}",
+        "score": "Điểm học tập điểm",
         "time": "THỜI GIAN",
         "status": {
           "label": "Tình trạng",
           "claimed": "Đã thu nhận",
           "completed": "Hoàn thành",
-          "in_progress": "Đang tu luyện"
+          "in_progress": "Đang luyện tập"
         }
       }
     },
@@ -553,29 +553,29 @@
       "instruction": "THAM GIA TẠI <1>AURUM-APPS.COM</1> VỚI MẬT KHẨU PIN:",
       "leaderboard_title": "BẢNG PHONG THẦN THỜI GIAN THỰC",
       "live_badge": "Trực tiếp",
-      "server_status": "Vòng Ma Pháp Đang Chạy",
+      "server_status": "Vòng Hóa Học Đang Chạy",
       "close_btn": "Đóng Đấu Trường ✕"
     },
     "result": {
       "win": "XUẤT SẮC!",
       "lose": "HẸN GẶP LẠI",
-      "win_desc": "Bạn đã chinh phục đấu trường ma pháp",
-      "lose_desc": "Hãy tu luyện thêm để phục thù",
+      "win_desc": "Bạn đã chinh phục đấu trường hóa học",
+      "lose_desc": "Hãy luyện tập thêm để phục thù",
       "score": "Điểm số",
       "rank": "Xếp hạng",
       "continue_btn": "Tiếp tục nào →"
     },
     "difficulties": {
       "easy": "Dễ (Tập sự)",
-      "medium": "Vừa (Phù thủy)",
+      "medium": "Vừa (Học viên)",
       "hard": "Khó (Thần Sáng)",
       "super": "Tối Thượng"
     }
   },
   "common": {
     "grade": "Nhà Lớp {{grade}}",
-    "lesson": "Cổ thư {{order}}",
-    "lesson_count": "Cổ thư",
+    "lesson": "Học liệu {{order}}",
+    "lesson_count": "Học liệu",
     "loading": "Đang tải...",
     "back": "Quay lại",
     "continue": "Tiếp tục",
@@ -588,11 +588,11 @@
       "code_placeholder": "Mã Nhà",
       "join_btn": "VÀO",
       "grade_label": "Lớp {{grade}}",
-      "teacher_prefix": "Giáo sư:"
+      "teacher_prefix": "Giáo viên:"
     },
     "empty": {
       "title": "Chưa thuộc Nhà nào",
-      "desc": "Bạn chưa gia nhập bất kỳ Nhà nào của học viện. Vui lòng nhập mã lớp học do Giáo sư cung cấp để bắt đầu.",
+      "desc": "Bạn chưa gia nhập bất kỳ Nhà nào của học viện. Vui lòng nhập mã lớp học do Giáo viên cung cấp để bắt đầu.",
       "placeholder": "Nhập mã Nhà (VD: XYZ1A2)",
       "submit": "Gia nhập ngay"
     },
@@ -601,47 +601,47 @@
     },
     "feed": {
       "title": "Bảng tin của Nhà",
-      "empty": "Chưa có thông báo hoặc mật thư nào từ Giáo sư.",
+      "empty": "Chưa có thông báo hoặc mật thư nào từ Giáo viên.",
       "author_you": "Bạn",
       "private_badge": "🔒 MẬT THƯ RIÊNG",
-      "sent_to_teacher": "Đã gửi Giáo sư",
-      "type_video": "ẢNH CHIẾU MA PHÁP",
-      "type_assignment": "THỬ THÁCH PHÁP THUẬT",
+      "sent_to_teacher": "Đã gửi Giáo viên",
+      "type_video": "ẢNH CHIẾU HÓA HỌC",
+      "type_assignment": "THỬ THÁCH HÓA HỌC",
       "type_announcement": "THÔNG BÁO TỪ HỌC VIỆN",
       "deadline": "Hạn nộp thử thách",
       "assignment": {
         "completed": "✓ Đã hoàn thành thử thách",
         "online_label": "Trực tuyến",
-        "result_label": "Điểm pháp thuật của bạn:",
+        "result_label": "Điểm hóa học của bạn:",
         "start_online": "🚀 Làm bài trực tuyến ({{count}} câu)",
         "confirm_btn": "Xác nhận đã hoàn thành thử thách",
         "file_PDF": "Mở Cuộn thư PDF",
         "file_Word": "Mở Cuộn thư Word",
         "file_Excel": "Mở Cuộn thư Excel",
-        "file_Link": "Mở liên kết phép thuật",
-        "file_Default": "Xem cổ thư",
-        "file_Placeholder": "Dán đường dẫn phép thuật"
+        "file_Link": "Mở liên kết hóa học",
+        "file_Default": "Xem tài liệu",
+        "file_Placeholder": "Dán đường dẫn hóa học"
       }
     },
     "schedules": {
       "title": "Lịch học tập sắp tới",
       "empty": "Không có lịch học nào",
-      "join_meet": "Tham gia Đại sảnh học"
+      "join_meet": "Tham gia không gian học tập học"
     },
     "support": {
-      "title": "Cần hỗ trợ phép thuật?",
-      "desc": "Gửi thư cú riêng cho Giáo sư để được giải đáp thắc mắc.",
+      "title": "Cần hỗ trợ hóa học?",
+      "desc": "Gửi thư tin nhắn riêng cho Giáo viên để được giải đáp thắc mắc.",
       "btn": "Gửi mật thư riêng"
     },
     "message_modal": {
-      "title": "Nhắn tin cho Giáo sư",
+      "title": "Nhắn tin cho Giáo viên",
       "class_prefix": "Nhà:",
       "placeholder": "Nhập nội dung thắc mắc hoặc câu hỏi của bạn...",
-      "sending": "Cú đang bay...",
-      "send_btn": "Gửi thư cú ➔"
+      "sending": "tin nhắn đang bay...",
+      "send_btn": "Gửi thư tin nhắn ➔"
     },
     "viewer": {
-      "from": "Của giáo sư",
+      "from": "Của giáo viên",
       "deadline": "Hạn nộp:",
       "no_deadline": "Không giới hạn",
       "download": "Thu nhận cuộn sách",
@@ -649,28 +649,28 @@
       "tab_fallback": "Mở trong tab mới nếu lỗi giải ấn"
     },
     "quiz": {
-      "badge": "THỬ THÁCH PHÉP THUẬT",
+      "badge": "THỬ THÁCH HÓA HỌC",
       "progress": "Tiến độ:",
       "count_done": "{{done}} / {{total}} CHÚ NGỮ ĐÃ GIẢI",
       "submitting": "Đang nộp thư...",
-      "submit_btn": "Nộp bài cho Giáo sư ➔",
-      "essay_placeholder": "Nhập câu trả lời tự luận pháp thuật vào đây...",
-      "essay_badge": "Phần Tự Luận Ma Pháp",
-      "score_msg": "Phần trắc nghiệm: {{score}}/10 điểm.\nPhần tự luận sẽ được Giáo sư chấm riêng.",
-      "success_msg": "Đã nộp thành công! Giáo sư sẽ chấm điểm ma pháp cho bạn."
+      "submit_btn": "Nộp bài cho Giáo viên ➔",
+      "essay_placeholder": "Nhập câu trả lời tự luận hóa học vào đây...",
+      "essay_badge": "Phần Tự Luận Hóa Học",
+      "score_msg": "Phần trắc nghiệm: {{score}}/10 điểm.\nPhần tự luận sẽ được Giáo viên chấm riêng.",
+      "success_msg": "Đã nộp thành công! Giáo viên sẽ chấm điểm hóa học cho bạn."
     }
   },
   "periodic_table": {
     "title_main": "Bảng tuần",
     "title_sub": " hoàn",
-    "title_highlight": " nguyên tố ma pháp",
+    "title_highlight": " nguyên tố hóa học",
     "database_label": "Cơ sở dữ liệu Cổ đại",
-    "system_desc": "Hệ thống tra cứu nguyên tử ma pháp đa chiều",
+    "system_desc": "Hệ thống tra cứu nguyên tử đa chiều",
     "categories_title": "Phân loại dòng khí",
-    "tech_manual": "Cổ thư thư viện v1.0",
+    "tech_manual": "Học liệu thư viện v1.0",
     "quick_guide": {
-      "title": "Khai nhãn nhanh",
-      "desc": "Nhấn vào từng ô để khai mở cấu trúc ma pháp 3D"
+      "title": "Quan sát nhanh",
+      "desc": "Nhấn vào từng ô để mở cấu trúc hóa học 3D"
     },
     "legend": {
       "high_boiling": "Điểm sôi cực hạn",
@@ -678,32 +678,32 @@
     },
     "categories": {
       "all": "Tất cả",
-      "diatomic-nonmetal": "Phi kim đối ma pháp",
+      "diatomic-nonmetal": "Phi kim đối hóa học",
       "noble-gas": "Khí tinh khiết",
       "alkali-metal": "Kim loại linh động",
-      "alkaline-earth-metal": "Kim loại kiềm thổ ma pháp",
-      "metalloid": "Á ma pháp nguyên",
-      "polyatomic-nonmetal": "Phi kim đa ma pháp",
+      "alkaline-earth-metal": "Kim loại kiềm thổ hóa học",
+      "metalloid": "Á hóa học nguyên",
+      "polyatomic-nonmetal": "Phi kim đa hóa học",
       "post-transition-metal": "Kim loại chuyển hóa chậm",
-      "transition-metal": "Kim loại ma pháp chuyển tiếp",
+      "transition-metal": "Kim loại hóa học chuyển tiếp",
       "lanthanide": "Họ Lanthan cổ xưa",
       "actinide": "Họ Actini huyền bí"
     },
     "modal": {
-      "atomic_no": "Số hiệu ma pháp",
+      "atomic_no": "Số hiệu hóa học",
       "mass_wt": "Trọng lượng nguyên tố",
-      "category_label": "Thuộc tính linh lực:",
+      "category_label": "Thuộc tính điểm học tập:",
       "tabs": {
-        "overview": "📊 Tổng quan linh lực",
+        "overview": "📊 Tổng quan điểm học tập",
         "discover": "🌟 Nguồn gốc phát hiện"
       },
-      "bohr_config": "Cấu hình vòng Bohr linh lực",
-      "brief_intro": "Tóm lược cổ thư",
+      "bohr_config": "Cấu hình vòng Bohr điểm học tập",
+      "brief_intro": "Tóm lược tài liệu",
       "properties": {
         "state": "Trạng thái vật chất",
         "meltingPoint": "Nhiệt độ nóng chảy",
         "boilingPoint": "Nhiệt độ bay hơi",
-        "density": "Khối lượng linh thạch",
+        "density": "Khối lượng mẫu chất",
         "electronConfig": "Cấu hình dòng chảy linh lượng"
       },
       "discovery": {
@@ -719,89 +719,89 @@
         "updating": "Bản ghi đang được giải ấn..."
       },
       "applications": {
-        "badge": "Ứng dụng ma pháp",
-        "updating": "Đang giải ấn ứng dụng ma pháp..."
+        "badge": "Ứng dụng hóa học",
+        "updating": "Đang giải ấn ứng dụng hóa học..."
       },
       "wiki_btn": "Xem chi tiết tại Thư viện Chung"
     }
   },
   "chem_lab": {
     "header": {
-      "badge": "Lò pha chế độc dược ảo",
+      "badge": "Phòng thí nghiệm ảo",
       "title_1": "Khám phá thế giới",
-      "title_2": "Giả kim thuật",
+      "title_2": "Hóa học",
       "title_3": "kỳ diệu",
-      "desc": "Lựa chọn vạc pha chế và lò giả kim để bắt đầu con đường ma pháp của bạn."
+      "desc": "Lựa chọn mô-đun học tập để bắt đầu thực hành Hóa học an toàn."
     },
     "modules": {
       "reaction": {
-        "label": "Lò luyện độc dược",
-        "desc": "Kết hợp các nguyên tố ma thuật và quan sát các phản ứng độc dược trực quan."
+        "label": "Phòng thực hành hóa chất",
+        "desc": "Kết hợp các chất và quan sát phản ứng trực quan."
       },
       "balance": {
-        "label": "Cân bằng chú ngữ",
-        "desc": "Rèn luyện kỹ năng cân bằng các dòng chảy chú ngữ với hàng nghìn bài tập."
+        "label": "Cân bằng công thức",
+        "desc": "Rèn luyện kỹ năng cân bằng các dòng chảy công thức với hàng nghìn bài tập."
       },
       "molecule": {
-        "label": "Mô hình linh thạch",
-        "desc": "Xem cấu trúc không gian 3D của các phân tử và liên kết linh lực."
+        "label": "Mô hình mẫu chất",
+        "desc": "Xem cấu trúc không gian 3D của các phân tử và liên kết điểm học tập."
       },
       "solver": {
-        "label": "Gợi ý chú ngữ",
-        "desc": "Truy tìm chú ngữ cân bằng chính xác từ kho sách cổ."
+        "label": "Gợi ý công thức",
+        "desc": "Truy tìm công thức cân bằng chính xác từ kho sách cổ."
       },
       "calculator": {
-        "label": "Vạc tính toán ma pháp",
-        "desc": "Tính toán khối lượng nguyên tố, nồng độ linh dịch và công thức vạn năng."
+        "label": "Máy tính Hóa học hóa học",
+        "desc": "Tính toán khối lượng nguyên tố, nồng độ dung dịch và công thức vạn năng."
       },
-      "start_btn": "Khai lò ngay"
+      "start_btn": "Khai phòng ngay"
     },
     "stats": {
-      "chemicals": "Độc dược đã pha chế",
-      "reactions": "Phản ứng ma pháp khám phá",
-      "creativity": "Linh khí sáng tạo"
+      "chemicals": "Hóa chất đã pha chế",
+      "reactions": "Phản ứng hóa học khám phá",
+      "creativity": "Màu đại diện sáng tạo"
     }
   },
   "material_detail": {
     "back_btn": "Quay lại thư viện",
-    "not_found": "Cổ thư không tồn tại",
-    "views": "phù thủy đã xem",
+    "not_found": "Học liệu không tồn tại",
+    "views": "học viên đã xem",
     "downloads": "lượt sao chép",
     "unsupported_format": "Định dạng #{{type}} không hỗ trợ đọc trực tiếp",
-    "download_to_view": "Sao chép cuộn thư về để đọc",
+    "download_to_view": "Sao chép tài liệu về để đọc",
     "no_desc": "Không có chú giải cho tài liệu này.",
-    "download_btn": "Sao chép cổ thư (FREE)",
+    "download_btn": "Sao chép tài liệu (FREE)",
     "feedback": {
       "title_main": "Bàn luận",
-      "title_highlight": "Đại sảnh",
-      "placeholder": "Viết cảm nghĩ của bạn vào cuộn giấy da này...",
+      "title_highlight": "không gian học tập",
+      "placeholder": "Viết cảm nghĩ của bạn vào tài liệu này...",
       "submit_btn": "Gửi bình luận",
-      "submitting_btn": "Cú đang chuyển...",
+      "submitting_btn": "tin nhắn đang chuyển...",
       "login_required": "Vui lòng nhập học để tham gia thảo luận",
       "login_link": "Đến trang nhập học",
-      "no_feedback": "Chưa có cuộc thảo luận nào. Hãy là phù thủy đầu tiên!",
+      "no_feedback": "Chưa có cuộc thảo luận nào. Hãy là học viên đầu tiên!",
       "alert_login": "Vui lòng đăng nhập để gửi thảo luận!",
       "err_fetch": "Lỗi tải bản ghi thảo luận",
       "err_submit": "Lỗi gửi thảo luận",
-      "default_user": "Phù thủy tập sự"
+      "default_user": "Học viên tập sự"
     },
     "sidebar": {
-      "file_info": "Thông tin cuộn thư",
+      "file_info": "Thông tin tài liệu",
       "format": "Ấn bản",
       "posted_date": "Ngày khắc chú",
-      "size": "Dung lượng cuộn thư",
-      "disclaimer": "Tất cả cổ thư ma pháp tại Aurum đều được cung cấp miễn phí nhằm hỗ trợ tu luyện linh lực. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của Hội đồng Pháp sư."
+      "size": "Dung lượng tài liệu",
+      "disclaimer": "Tất cả tài liệu hóa học tại Aurum đều được cung cấp miễn phí nhằm hỗ trợ luyện tập điểm học tập. Nghiêm cấm mọi hành vi thương mại hóa nếu không có sự đồng ý của đội ngũ Aurum."
     }
   },
   "library": {
-    "title": "Thư viện <1>Cổ thư Pháp thuật</1>",
-    "subtitle": "Kho tàng tri thức ma pháp đa dạng với Infographic ma thuật, Bản đồ tư duy chú ngữ và hơn thế nữa.",
-    "search_placeholder": "Tìm kiếm cổ thư...",
-    "loading": "Đang dịch chuyển cổ thư...",
+    "title": "Thư viện <1>Học liệu Hóa học</1>",
+    "subtitle": "Kho tàng tri thức đa dạng với infographic, bản đồ tư duy, bài tập và tài liệu ôn luyện.",
+    "search_placeholder": "Tìm kiếm tài liệu...",
+    "loading": "Đang dịch chuyển tài liệu...",
     "categories": {
-      "all": "Tất cả cổ thư",
-      "infographic_11": "MA PHÁP HỌC LỚP 11",
-      "infographic_12": "MA PHÁP HỌC LỚP 12",
+      "all": "Tất cả tài liệu",
+      "infographic_11": "HÓA HỌC HỌC LỚP 11",
+      "infographic_12": "HÓA HỌC HỌC LỚP 12",
       "mindmap_10": "SĐTD CHÚ NGỮ LỚP 10",
       "mindmap_11": "SĐTD CHÚ NGỮ LỚP 11",
       "mindmap_12": "SĐTD CHÚ NGỮ LỚP 12",
@@ -810,34 +810,34 @@
       "comic_11": "HỌC PHÁP QUA TRANH LỚP 11",
       "comic_12": "HỌC PHÁP QUA TRANH LỚP 12",
       "worksheet_9": "CUỘN THƯ TU LUYỆN LỚP 9",
-      "mindmap_6": "SĐTD MA PHÁP LỚP 6"
+      "mindmap_6": "SĐTD HÓA HỌC LỚP 6"
     },
     "card": {
-      "view_details": "Xem cổ thư",
+      "view_details": "Xem tài liệu",
       "default_category": "Cuộn thư"
     },
     "empty": {
-      "title": "Không tìm thấy cuộn thư ma pháp phù hợp",
-      "clear_btn": "Hủy bùa chú lọc và thử lại"
+      "title": "Không tìm thấy tài liệu hóa học phù hợp",
+      "clear_btn": "Hủy bộ lọc lọc và thử lại"
     }
   },
   "lessons": {
     "header": {
-      "title_journey": "Bản Đồ Đạo Tặc",
-      "title_library": "Thư Viện Cổ Thư",
-      "subtitle_explore": "Tu Luyện",
+      "title_journey": "Bản Đồ Tri Thức",
+      "title_library": "Thư Viện Học Liệu",
+      "subtitle_explore": "Luyện Tập",
       "subtitle_materials": "Sách Phép",
       "desc_logged_in": "Hoàn thành các chương truyện để trở thành bậc thầy giả kim thuật thực thụ.",
-      "desc_guest": "Hành trình chinh phục ma pháp từ cơ bản đến chuyên sâu dành cho phù thủy tập sự lớp 8 - 12."
+      "desc_guest": "Hành trình học Hóa học từ cơ bản đến chuyên sâu dành cho học viên lớp 8 - 12."
     },
     "grade_labels": {
       "label": "Lớp {{grade}}"
     },
     "status": {
-      "loading": "Đang mở cuộn sách phép...",
-      "empty_title_logged_in": "Vui lòng chọn mật cảnh trên bản đồ để bắt đầu hành trình",
-      "empty_title_guest": "Vui lòng chọn nhà lớp học để hiển thị bài học ma pháp",
-      "empty_desc": "Khám phá thế giới ma pháp nhiệm màu ngay bây giờ",
+      "loading": "Đang mở cuộn tài liệu...",
+      "empty_title_logged_in": "Vui lòng chọn chặng học trên bản đồ để bắt đầu hành trình",
+      "empty_title_guest": "Vui lòng chọn nhà lớp học để hiển thị bài học hóa học",
+      "empty_desc": "Khám phá thế giới hóa học nhiệm màu ngay bây giờ",
       "err_fetch": "Lỗi triệu hồi bài học"
     },
     "card": {
@@ -846,28 +846,28 @@
     "story_parts": {
       "8": {
         "title": "Phần 1",
-        "name": "Sự Khởi Đầu Thức Tỉnh Linh Lực",
-        "story": "Bước vào thế giới độc dược nguyên sơ, nơi vạn vật bắt đầu. Nhiệm vụ của bạn là hiểu được bản chất nguyên tử ma pháp và làm chủ ngôn ngữ vô hình của Giả kim thuật."
+        "name": "Sự Khởi Đầu Thức Tỉnh Điểm Học Tập",
+        "story": "Bước vào thế giới chất và nguyên tử, nơi mọi kiến thức Hóa học bắt đầu. Nhiệm vụ của bạn là hiểu bản chất vật chất và ngôn ngữ công thức."
       },
       "9": {
         "title": "Phần 2",
-        "name": "Hành Trình Chuyển Hóa Linh Lực",
-        "story": "Những phản ứng bùng nổ trong vạc phép và các chất biến đổi không ngừng. Mở khóa bí mật của phản ứng ma thuật và nắm bắt sức mạnh từ sự tương tác giữa các nguyên tố cổ xưa."
+        "name": "Hành Trình Chuyển Hóa Điểm Học Tập",
+        "story": "Những phản ứng và hiện tượng biến đổi chất mở ra quy luật tương tác giữa các nguyên tố."
       },
       "10": {
         "title": "Phần 3",
-        "name": "Bước Nhảy Vĩ Mô Pháp Thuật",
-        "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn cổ đại. Bạn sẽ phải làm quen với sự cân bằng linh năng, nhiệt lượng và động lượng chi phối vũ trụ ma pháp."
+        "name": "Bước Nhảy Vĩ Mô Hóa Học",
+        "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ làm quen với cân bằng, nhiệt lượng và động lượng trong Hóa học."
       },
       "11": {
         "title": "Phần 4",
         "name": "Ma Trận Hữu Cơ Huyền Bí",
-        "story": "Lạc vào mê cung của các nguyên tố carbon ma thuật. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên sinh vật ma thuật."
+        "story": "Lạc vào mê cung của các nguyên tố carbon hóa học. Nơi đây, sự sống hình thành từ những mạch phức tạp và bí ẩn. Bạn phải tìm ra quy luật kiến tạo nên sinh vật hóa học."
       },
       "12": {
         "title": "Phần 5",
         "name": "Chạm Đỉnh Tiến Hóa Tối Thượng",
-        "story": "Ranh giới cuối cùng của các bậc thầy giả kim tối thượng. Vượt qua những thử thách điện hóa cổ xưa, khám phá polyme ma pháp và hoàn thành định mệnh sáng tạo vũ trụ mới."
+        "story": "Chặng cuối của Hóa học phổ thông. Vượt qua điện hóa, polymer và vật liệu để sẵn sàng cho những ứng dụng thực tế."
       }
     }
   },
