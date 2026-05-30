@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Award, Trophy } from 'lucide-react';
 import Avatar from '@/components/common/Avatar';
 import { stableRange } from '@/utils/stableRandom';
 
@@ -66,15 +67,15 @@ const FloatingIsland = ({ rank, user, delay }) => {
           </div>
         </motion.div>
         
-        {/* Badge / Rank Crown */}
+        {/* Badge / Rank Marker */}
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
           {isFirst ? (
              <motion.div
                animate={{ rotate: [0, 5, -5, 0] }}
                transition={{ duration: 2, repeat: Infinity }}
-               className="text-5xl filter drop-shadow-lg"
+               className="w-14 h-14 rounded-full bg-amber-400 text-white border-4 border-white shadow-xl flex items-center justify-center"
              >
-               👑
+               <Trophy size={28} className="fill-current" />
              </motion.div>
           ) : (
              <div className="w-10 h-10 rounded-full bg-white shadow-xl flex items-center justify-center border-2 border-viet-border">
@@ -199,7 +200,7 @@ const LeaderboardSection = () => {
             whileInView={{ opacity: 1, scale: 1 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 border border-viet-green text-viet-green rounded-full text-[11px] font-black uppercase tracking-[3px] mb-6 shadow-sm"
           >
-            <span className="text-lg">⚔️</span> {t('home.leaderboard.badge')}
+            <Award size={18} /> {t('home.leaderboard.badge')}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
