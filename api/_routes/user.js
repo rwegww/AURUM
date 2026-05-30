@@ -407,6 +407,56 @@ router.post('/progress', auth, async (req, res) => {
   }
 });
 
+// Activity Logging Routes
+router.post('/activities', auth, async (req, res) => {
+  try {
+    const { action_type, description, metadata } = req.body;
+    const { error } = await supabase
+      .from('user_activities')
+      .insert([{
+        user_id: req.user.id,
+        action_type,
+        description,
+        metadata
+      }]);
+    
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get('/activities', auth, async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('user_activities')
+      .select('*')
+      .eq('user_id', req.user.id)
+      .order('created_at', { ascending: false })
+      .limit(50);
+      
+    if (error) throw error;
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete('/activities', auth, async (req, res) => {
+  try {
+    const { error } = await supabase
+      .from('user_activities')
+      .delete()
+      .eq('user_id', req.user.id);
+      
+    if (error) throw error;
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Heartbeat (Activity Tracking & Streak)
 router.post('/heartbeat', auth, async (req, res) => {
   try {

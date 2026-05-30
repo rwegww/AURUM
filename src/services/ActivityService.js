@@ -13,31 +13,47 @@ class ActivityService {
    */
   async log(activity) {
     try {
-      const supabase = await getSupabase();
-      
-      let activeUserId = localStorage.getItem('userId');
-      if (!activeUserId) {
-        const { data: { session } } = await supabase.auth.getSession();
-        activeUserId = session?.user?.id;
-      }
-
       const newActivity = {
         ...activity,
         id: Date.now().toString(),
         timestamp: new Date().toISOString()
       };
 
-      // 2. Save to LocalStorage (Immediate feedback/offline)
+      // 1. Save to LocalStorage (Immediate feedback/offline)
       const localHistory = this.getLocalHistory();
       const updatedLocal = [newActivity, ...localHistory].slice(0, MAX_HISTORY_ITEMS);
       localStorage.setItem(HISTORY_KEY, JSON.stringify(updatedLocal));
 
-      // 3. Save to Database (if logged in)
-      if (activeUserId) {
-        const { error } = await supabase
-          .from('user_activities')
-          .insert([{
-            user_id: activeUserId,
+      // 2. Save to Database (if logged in)
+      const token = localStorage.getItem('token');
+      const authType = localStorage.getItem('authType');
+      
+      if (token && authType === 'custom') {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/user/activities`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            action_type: activity.type,
+            description: activity.description,
+            metadata: {
+              label: activity.label,
+              icon: activity.icon,
+              link: activity.link
+            }
+          })
+        });
+        if (!res.ok) {
+           console.warn('DB Log Error: Failed to save activity to backend');
+        }
+      } else if (authType === 'supabase') {
+        const supabase = await getSupabase();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.id) {
+          const { error } = await supabase.from('user_activities').insert([{
+            user_id: session.user.id,
             action_type: activity.type,
             description: activity.description,
             metadata: {
@@ -46,9 +62,7 @@ class ActivityService {
               link: activity.link
             }
           }]);
-        
-        if (error && error.code !== '42501') {
-           console.warn('DB Log Error:', error.message);
+          if (error && error.code !== '42501') console.warn('DB Log Error:', error.message);
         }
       }
       
@@ -64,24 +78,17 @@ class ActivityService {
    */
   async getHistory() {
     try {
-      const supabase = await getSupabase();
-      
-      let activeUserId = localStorage.getItem('userId');
-      if (!activeUserId) {
-        const { data: { session } } = await supabase.auth.getSession();
-        activeUserId = session?.user?.id;
-      }
+      const token = localStorage.getItem('token');
+      const authType = localStorage.getItem('authType');
 
-      if (activeUserId) {
-        const { data, error } = await supabase
-          .from('user_activities')
-          .select('*')
-          .eq('user_id', activeUserId)
-          .order('created_at', { ascending: false })
-          .limit(MAX_HISTORY_ITEMS);
-
-        if (!error && data) {
-          // Transform DB format to app format
+      if (token && authType === 'custom') {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/user/activities`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
           return data.map(item => ({
             id: item.id,
             timestamp: item.created_at,
@@ -91,6 +98,29 @@ class ActivityService {
             icon: item.metadata?.icon || item.icon || '',
             link: item.metadata?.link || item.link || ''
           }));
+        }
+      } else if (authType === 'supabase') {
+        const supabase = await getSupabase();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.id) {
+          const { data, error } = await supabase
+            .from('user_activities')
+            .select('*')
+            .eq('user_id', session.user.id)
+            .order('created_at', { ascending: false })
+            .limit(MAX_HISTORY_ITEMS);
+
+          if (!error && data) {
+            return data.map(item => ({
+              id: item.id,
+              timestamp: item.created_at,
+              type: item.action_type || item.type,
+              label: item.metadata?.label || item.label || '',
+              description: item.description,
+              icon: item.metadata?.icon || item.icon || '',
+              link: item.metadata?.link || item.link || ''
+            }));
+          }
         }
       }
       
@@ -117,18 +147,22 @@ class ActivityService {
     try {
       localStorage.removeItem(HISTORY_KEY);
 
-      const supabase = await getSupabase();
-      let activeUserId = localStorage.getItem('userId');
-      if (!activeUserId) {
-        const { data: { session } } = await supabase.auth.getSession();
-        activeUserId = session?.user?.id;
-      }
+      const token = localStorage.getItem('token');
+      const authType = localStorage.getItem('authType');
 
-      if (activeUserId) {
-        await supabase
-          .from('user_activities')
-          .delete()
-          .eq('user_id', activeUserId);
+      if (token && authType === 'custom') {
+        await fetch(`${import.meta.env.VITE_API_URL || '/api'}/user/activities`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } else if (authType === 'supabase') {
+        const supabase = await getSupabase();
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user?.id) {
+          await supabase.from('user_activities').delete().eq('user_id', session.user.id);
+        }
       }
 
       window.dispatchEvent(new CustomEvent('aurum_activity_cleared'));
