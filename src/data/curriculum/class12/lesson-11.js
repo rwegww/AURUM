@@ -86,9 +86,9 @@ export const bai11 = {
     {
       "id": "v1",
       "title": "Ôn tập chương 3: Hợp chất chứa nitrogen",
-      "url": "https://www.youtube.com/watch?v=F3zZ5L_Zf2g",
-      "thumbnail": "https://img.youtube.com/vi/F3zZ5L_Zf2g/0.jpg",
-      "description": "Tổng kết kiến thức trọng tâm and giải bài tập ôn tập chương 3 (VietJack)."
+      "url": "https://www.youtube.com/watch?v=Foi6GiPxwfc",
+      "thumbnail": "https://img.youtube.com/vi/Foi6GiPxwfc/0.jpg",
+      "description": "Tổng kết kiến thức trọng tâm and giải bài tập ôn tập chương 3 (Tech12h)."
     }
   ],
   "practiceModules": [],

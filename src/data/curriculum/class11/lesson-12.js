@@ -111,8 +111,8 @@ export const bai12 = {
     {
       "id": "v1",
       "title": "Bài giảng: Công thức phân tử hợp chất hữu cơ",
-      "url": "https://www.youtube.com/watch?v=9W7vc3yGMfo",
-      "thumbnail": "https://img.youtube.com/vi/9W7vc3yGMfo/0.jpg",
+      "url": "https://www.youtube.com/watch?v=GbGGVDoUOF8",
+      "thumbnail": "https://img.youtube.com/vi/GbGGVDoUOF8/0.jpg",
       "description": "Cách xác định công thức đơn giản nhất and công thức phân tử dựa trên kết quả phân tích nguyên tố (VietJack)."
     }
   ],

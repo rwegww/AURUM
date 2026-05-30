@@ -107,8 +107,8 @@ export const bai26 = {
     {
       "id": "v1",
       "title": "Ôn tập Học kì 2: Hóa học 11",
-      "url": "https://www.youtube.com/watch?v=Cq_Z05W5_7Y",
-      "thumbnail": "https://img.youtube.com/vi/Cq_Z05W5_7Y/0.jpg",
+      "url": "https://www.youtube.com/watch?v=jaamQgvoy1Q",
+      "thumbnail": "https://img.youtube.com/vi/jaamQgvoy1Q/0.jpg",
       "description": "Video tổng hợp kiến thức trọng tâm and giải đề thi mẫu học kì 2 (VietJack)."
     }
   ],

@@ -131,8 +131,8 @@ export const bai11 = {
     {
       "id": "v1",
       "title": "Bài giảng: Phương pháp tách biệt and tinh chế hợp chất hữu cơ",
-      "url": "https://www.youtube.com/watch?v=GbGGVDoUOF8",
-      "thumbnail": "https://img.youtube.com/vi/GbGGVDoUOF8/0.jpg",
+      "url": "https://www.youtube.com/watch?v=fQcDkujbfrI",
+      "thumbnail": "https://img.youtube.com/vi/fQcDkujbfrI/0.jpg",
       "description": "Các phương pháp chưng cất, chiết, kết tinh and sắc ký cột trong thực hành hóa hữu cơ (VietJack)."
     }
   ],

@@ -185,8 +185,8 @@ export const bai6 = {
     {
       "id": "v1",
       "title": "Bài giảng: Tính toán theo phương trình hóa học",
-      "url": "https://www.youtube.com/watch?v=vNfWn6qXWsk",
-      "thumbnail": "https://img.youtube.com/vi/vNfWn6qXWsk/0.jpg",
+      "url": "https://www.youtube.com/watch?v=lP_9Zu1K-Q0",
+      "thumbnail": "https://img.youtube.com/vi/lP_9Zu1K-Q0/0.jpg",
       "description": "Cách giải các bài toán hóa học dựa trên phương trình và tỉ lệ số mol (VietJack)."
     }
   ],

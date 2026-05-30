@@ -93,8 +93,8 @@ export const bai12 = {
     {
       "id": "v1",
       "title": "Bài giảng: Đại cương về Polymer",
-      "url": "https://www.youtube.com/watch?v=R9Z8-2vK-XQ",
-      "thumbnail": "https://img.youtube.com/vi/R9Z8-2vK-XQ/0.jpg",
+      "url": "https://www.youtube.com/watch?v=vqvsMYOylZ4",
+      "thumbnail": "https://img.youtube.com/vi/vqvsMYOylZ4/0.jpg",
       "description": "Khái niệm, phân loại, cấu tạo and các phương pháp điều chế polymer (VietJack)."
     }
   ],
