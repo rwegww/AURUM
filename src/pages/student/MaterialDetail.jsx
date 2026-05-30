@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeft, Download, Eye, Folder, Reply, Star } from 'lucide-react';
 
 const MaterialDetail = () => {
   const { id } = useParams();
@@ -123,7 +124,7 @@ const MaterialDetail = () => {
           onClick={() => navigate('/library')}
           className="flex items-center gap-2 text-viet-text-light font-black uppercase text-xs mb-8 hover:text-viet-green transition-colors"
         >
-          ← {t('material_detail.back_btn')}
+          <ArrowLeft size={16} aria-hidden="true" /> {t('material_detail.back_btn')}
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -140,8 +141,8 @@ const MaterialDetail = () => {
                     {material.category}
                   </span>
                   <div className="flex gap-4 text-xs font-bold text-viet-text-light uppercase tracking-tighter">
-                    <span>👁️ {material.view_count} {t('material_detail.views')}</span>
-                    <span>⬇️ {material.download_count} {t('material_detail.downloads')}</span>
+                    <span className="flex items-center gap-1"><Eye size={13} aria-hidden="true" /> {material.view_count} {t('material_detail.views')}</span>
+                    <span className="flex items-center gap-1"><Download size={13} aria-hidden="true" /> {material.download_count} {t('material_detail.downloads')}</span>
                   </div>
                 </div>
                 <h1 className="text-3xl font-black text-viet-text italic uppercase leading-tight">
@@ -162,7 +163,7 @@ const MaterialDetail = () => {
                 )}
                 {!isImage && !isPdf && (
                   <div className="text-center p-12">
-                    <span className="text-6xl mb-4 block">📁</span>
+                    <Folder size={56} className="mx-auto mb-4 text-viet-text-light/40" aria-hidden="true" />
                     <p className="text-viet-text-light font-bold">
                       {t('material_detail.unsupported_format', { type: material.file_type })}
                     </p>
@@ -214,7 +215,7 @@ const MaterialDetail = () => {
                         onClick={() => setRating(star)}
                         className={`text-2xl transition-all ${rating >= star ? 'scale-110 grayscale-0' : 'grayscale opacity-30 scale-90'}`}
                       >
-                        {star <= 2 ? '⭐' : star <= 4 ? '🌟' : '🔥'}
+                        <Star size={26} fill={rating >= star ? 'currentColor' : 'none'} aria-hidden="true" />
                       </button>
                     ))}
                   </div>
@@ -300,7 +301,7 @@ const MaterialDetail = () => {
                             </form>
                           ) : (
                             <button onClick={() => { setReplyingTo(f.id); setReplyContent(''); }} className="text-xs font-bold text-viet-green flex items-center gap-1 hover:underline">
-                              ↪ Trả lời
+                              <Reply size={13} aria-hidden="true" /> Trả lời
                             </button>
                           )}
                         </div>

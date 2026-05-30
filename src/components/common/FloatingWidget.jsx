@@ -264,7 +264,7 @@ const FloatingWidget = () => {
                   : 'text-viet-text-light hover:text-viet-text'
                 }`}
               >
-                📅 {t('nav.missions')}
+                {t('nav.missions')}
                 {claimableCount > 0 && (
                   <span className="ml-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[9px] font-black rounded-full leading-none">
                     {claimableCount}
@@ -346,7 +346,7 @@ const FloatingWidget = () => {
                       {/* Inner tabs (Daily / Achievement) */}
                       <div className="flex gap-2">
                         {[
-                          { id: 'daily', label: t('missions.tabs.daily'), icon: '📅' },
+                          { id: 'daily', label: t('missions.tabs.daily'), icon: '' },
                           { id: 'achievement', label: t('missions.tabs.achievement'), icon: '🏆' }
                         ].map(subTab => (
                           <button

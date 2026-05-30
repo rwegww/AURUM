@@ -479,7 +479,7 @@ const MyClass = () => {
           <div className="lg:col-span-3 space-y-6">
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span>📅</span> {t('my_class.schedules.title')}
+                {t('my_class.schedules.title')}
                </h3>
                
                <div className="space-y-3">

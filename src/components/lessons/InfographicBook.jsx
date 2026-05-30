@@ -197,7 +197,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
 
           <div className="mb-6 text-center relative z-10 flex flex-col items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 text-white animate-pulse">
-              📖
+              Book
             </div>
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest animate-pulse">
               Nhấn góc phải để lật sách

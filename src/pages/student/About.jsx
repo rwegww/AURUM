@@ -20,7 +20,7 @@ const About = () => {
     { 
       title: t('about.pillars.visualization.title'), 
       desc: t('about.pillars.visualization.desc'),
-      icon: "👁️"
+      icon: "View"
     }
   ];
 

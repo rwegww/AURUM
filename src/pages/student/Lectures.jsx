@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
+import { BookOpen, Play, Search, Video } from 'lucide-react';
 
 const Lectures = () => {
   const { t } = useTranslation();
@@ -56,7 +57,7 @@ const Lectures = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
              />
-             <span className="text-xl">🔍</span>
+             <Search size={18} className="text-viet-text-light" aria-hidden="true" />
           </div>
         </header>
 
@@ -95,7 +96,7 @@ const Lectures = () => {
                       {t('common.lesson', { order: lesson.order || lesson.lessonId.split('_').pop() })}
                    </span>
                    <div className="w-8 h-8 rounded-full bg-viet-green/10 flex items-center justify-center text-viet-green text-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                      ▶
+                      <Play size={14} fill="currentColor" aria-hidden="true" />
                    </div>
                 </div>
                 
@@ -108,8 +109,8 @@ const Lectures = () => {
                 </p>
 
                 <div className="flex items-center gap-4 text-[10px] font-bold text-viet-text-light/60 uppercase">
-                   <span className="flex items-center gap-1">🎥 {t('lectures.metadata.video')}</span>
-                   <span className="flex items-center gap-1">📖 {t('lectures.metadata.theory')}</span>
+                   <span className="flex items-center gap-1"><Video size={12} aria-hidden="true" /> {t('lectures.metadata.video')}</span>
+                   <span className="flex items-center gap-1"><BookOpen size={12} aria-hidden="true" /> {t('lectures.metadata.theory')}</span>
                 </div>
               </Link>
             ))}
