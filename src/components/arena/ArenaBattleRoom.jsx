@@ -144,9 +144,9 @@ const CalculationExperimentModel = ({ payload = {} }) => {
                 <div className="absolute bottom-8 left-16 h-28 w-20 rounded-t-full border-2 border-blue-200/70 bg-blue-200/10" />
                 <div className="absolute bottom-10 left-20 h-20 w-12 rounded-t-full bg-viet-green/30" />
                 <div className="absolute bottom-4 right-8 flex gap-1">
-                  <span className="h-3 w-3 rounded-full bg-blue-200/80" />
-                  <span className="mt-4 h-2 w-2 rounded-full bg-blue-200/70" />
-                  <span className="mt-1 h-4 w-4 rounded-full bg-blue-200/60" />
+                  <span className="h-3 w-3 animate-bounce rounded-full bg-blue-200/80" style={{ animationDelay: '0ms' }} />
+                  <span className="mt-4 h-2 w-2 animate-bounce rounded-full bg-blue-200/70" style={{ animationDelay: '150ms' }} />
+                  <span className="mt-1 h-4 w-4 animate-bounce rounded-full bg-blue-200/60" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -159,9 +159,9 @@ const CalculationExperimentModel = ({ payload = {} }) => {
                 <div className="absolute left-24 top-20 h-10 w-10 rounded-t-full bg-orange-400/80" />
                 <div className="absolute left-28 top-14 h-14 w-5 rounded-t-full bg-red-400/80" />
                 <div className="absolute right-4 top-6 flex gap-1">
-                  <span className="h-3 w-3 rounded-full bg-sky-200/80" />
-                  <span className="mt-5 h-2 w-2 rounded-full bg-sky-200/70" />
-                  <span className="mt-2 h-4 w-4 rounded-full bg-sky-200/60" />
+                  <span className="h-3 w-3 animate-bounce rounded-full bg-sky-200/80" style={{ animationDelay: '0ms' }} />
+                  <span className="mt-5 h-2 w-2 animate-bounce rounded-full bg-sky-200/70" style={{ animationDelay: '150ms' }} />
+                  <span className="mt-2 h-4 w-4 animate-bounce rounded-full bg-sky-200/60" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>
@@ -172,9 +172,9 @@ const CalculationExperimentModel = ({ payload = {} }) => {
               <div>
                 <FlaskConical className="mx-auto h-20 w-20 text-viet-green" />
                 <div className="mt-3 flex justify-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-red-300" />
-                  <span className="h-3 w-3 rounded-full bg-blue-300" />
-                  <span className="h-3 w-3 rounded-full bg-viet-green" />
+                  <span className="h-3 w-3 animate-bounce rounded-full bg-red-300" style={{ animationDelay: '0ms' }} />
+                  <span className="h-3 w-3 animate-bounce rounded-full bg-blue-300" style={{ animationDelay: '150ms' }} />
+                  <span className="h-3 w-3 animate-bounce rounded-full bg-viet-green" style={{ animationDelay: '300ms' }} />
                 </div>
               </div>
             </div>

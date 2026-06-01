@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS public.users (
   level integer NOT NULL DEFAULT 1,
   avatar_seed text,
   arena_stats jsonb NOT NULL DEFAULT '{"total":0,"wins":0,"losses":0,"points":0}'::jsonb,
-  arena_avatar jsonb NOT NULL DEFAULT '{"seed":"Chem Master","aura":"#a855f7"}'::jsonb,
   active_minutes integer NOT NULL DEFAULT 0,
   last_active_at timestamp with time zone NOT NULL DEFAULT now(),
   is_locked boolean NOT NULL DEFAULT false,
