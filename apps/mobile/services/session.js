@@ -13,7 +13,8 @@ const isSecureStoreAvailable = async () => {
 export const sessionKeys = {
   token: "aurum.token",
   sessionId: "aurum.sessionId",
-  userId: "aurum.userId"
+  userId: "aurum.userId",
+  authType: "aurum.authType"
 };
 
 export const sessionStore = {
@@ -45,4 +46,3 @@ export const createSessionId = () => {
   const random = Math.random().toString(36).slice(2);
   return `mobile-${Date.now().toString(36)}-${random}`;
 };
-

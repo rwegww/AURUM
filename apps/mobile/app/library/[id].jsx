@@ -26,12 +26,16 @@ export default function MaterialDetailScreen() {
   const [rating, setRating] = React.useState("5");
   const [submitting, setSubmitting] = React.useState(false);
   const materialId = Array.isArray(id) ? id[0] : id;
+  const viewedMaterialRef = React.useRef(null);
 
   const resource = useApiResource(async () => {
+    if (!materialId) return { material: null, phan_hoi: [] };
+    const shouldIncrementView = viewedMaterialRef.current !== materialId;
     const [material, phan_hoi] = await Promise.all([
-      libraryApi.detail(materialId),
+      libraryApi.detail(materialId, { increment: shouldIncrementView }),
       libraryApi.phan_hoi(materialId).catch(() => [])
     ]);
+    if (shouldIncrementView) viewedMaterialRef.current = materialId;
     return { material, phan_hoi };
   }, [materialId]);
 
@@ -51,6 +55,8 @@ export default function MaterialDetailScreen() {
     const canOpen = await Linking.canOpenURL(material.file_url);
     if (canOpen) {
       await Linking.openURL(material.file_url);
+    } else {
+      Alert.alert("Không mở được tài liệu", "Đường dẫn tài liệu không được thiết bị hỗ trợ.");
     }
   };
 
@@ -134,7 +140,7 @@ export default function MaterialDetailScreen() {
         {phan_hoi.length > 0 ? phan_hoi.map((item) => (
           <Card key={item.id} style={styles.phan_hoiCard}>
             <View style={styles.phan_hoiTop}>
-              <Text style={styles.phan_hoiUser}>{item.nguoi_dung?.username || "Học sinh"}</Text>
+              <Text style={styles.phan_hoiUser}>{(item.users || item.nguoi_dung || item.user)?.username || "Học sinh"}</Text>
               <Pill label={`${item.rating || 5}/5`} color={colors.green} icon="star-outline" />
             </View>
             <Text style={styles.phan_hoiText}>{item.content}</Text>

@@ -13,8 +13,8 @@ router.get('/', auth, async (req, res) => {
     const data = await Mission.getUserMissions(req.user.id);
     res.status(200).json(data);
   } catch (error) {
-    console.error('❌ Error fetching nhiem_vu:', error);
-    res.status(500).json({ message: 'Error fetching nhiem_vu', error: error.message });
+    console.error('Lỗi tải nhiệm vụ:', error);
+    res.status(500).json({ message: 'Không thể tải nhiệm vụ lúc này.', error: error.message });
   }
 });
 
@@ -22,16 +22,16 @@ router.get('/', auth, async (req, res) => {
 router.post('/claim', auth, async (req, res) => {
   try {
     const { missionId } = req.body;
-    if (!missionId) return res.status(400).json({ message: 'Mission ID required' });
+    if (!missionId) return res.status(400).json({ message: 'Thiếu nhiệm vụ cần nhận thưởng.' });
 
     const result = await Mission.claimReward(req.user.id, missionId);
     res.status(200).json({ 
       success: true, 
-      message: 'Reward claimed!', 
+      message: 'Đã nhận thưởng nhiệm vụ.', 
       ...result 
     });
   } catch (error) {
-    console.error('❌ Error claiming mission:', error);
+    console.error('Lỗi nhận thưởng nhiệm vụ:', error);
     res.status(400).json({ message: error.message });
   }
 });

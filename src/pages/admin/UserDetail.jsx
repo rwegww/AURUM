@@ -123,7 +123,7 @@ const UserDetail = () => {
                                 transition={{ delay: i * 0.05 }}
                                 className="flex items-center gap-3 p-4 bg-viet-bg/20 rounded-2xl border border-viet-border/50 hover:bg-white transition-all group"
                               >
-                                 <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[10px] group-hover:bg-viet-green group-hover:text-white transition-colors duration-300">âœ…</div>
+                                 <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[10px] group-hover:bg-viet-green group-hover:text-white transition-colors duration-300">✅</div>
                                  <span className="text-xs font-bold text-viet-text">{lessonId}</span>
                               </motion.div>
                             ))

@@ -15,8 +15,8 @@ export default defineConfig({
     },
   },
   build: {
-    // The remaining large chunk is the isolated 3D lab runtime, not app-shell code.
-    chunkSizeWarningLimit: 950,
+    // The largest chunk is the isolated React Three Fiber event runtime, not app-shell code.
+    chunkSizeWarningLimit: 1100,
     modulePreload: {
       resolveDependencies(_url, deps) {
         return deps.filter(dep => ![
@@ -32,6 +32,9 @@ export default defineConfig({
           const normalizedId = id.replaceAll('\\', '/');
           if (normalizedId.includes('node_modules')) {
             // Keep heavy 3D libraries separate without producing one giant chunk
+            if (normalizedId.includes('@react-three/fiber/dist/events')) {
+              return 'vendor-3d-events';
+            }
             if (normalizedId.includes('@react-three/fiber')) {
               return 'vendor-3d-fiber';
             }

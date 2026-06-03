@@ -1,6 +1,12 @@
 import React from "react";
 import { authApi, ApiError } from "../services/api";
 import { createSessionId, sessionKeys, sessionStore } from "../services/session";
+import {
+  clearSupabaseSession,
+  getSupabaseAccessToken,
+  startGoogleOAuth,
+  supabase
+} from "../services/supabase";
 
 const AuthContext = React.createContext(null);
 
@@ -12,9 +18,10 @@ export const useAuth = () => {
   return context;
 };
 
-const persistSession = async ({ token, sessionId, user }) => {
+const persistSession = async ({ token, sessionId, user, authType = "custom" }) => {
   await sessionStore.set(sessionKeys.token, token);
   await sessionStore.set(sessionKeys.sessionId, sessionId);
+  await sessionStore.set(sessionKeys.authType, authType);
   if (user?.id) {
     await sessionStore.set(sessionKeys.userId, user.id);
   }
@@ -24,7 +31,8 @@ const clearSession = async () => {
   await Promise.all([
     sessionStore.remove(sessionKeys.token),
     sessionStore.remove(sessionKeys.sessionId),
-    sessionStore.remove(sessionKeys.userId)
+    sessionStore.remove(sessionKeys.userId),
+    sessionStore.remove(sessionKeys.authType)
   ]);
 };
 
@@ -39,11 +47,15 @@ export const AuthProvider = ({ children }) => {
   const isLoggedIn = Boolean(token && user);
 
   const logout = React.useCallback(async () => {
-    await clearSession();
+    await Promise.all([
+      clearSession(),
+      clearSupabaseSession().catch(() => null)
+    ]);
     if (!mountedRef.current) return;
     setUser(null);
     setToken(null);
     setSessionId(null);
+    setAuthError(null);
   }, []);
 
   const refreshProfile = React.useCallback(async (nextToken = token, nextSessionId = sessionId) => {
@@ -63,11 +75,11 @@ export const AuthProvider = ({ children }) => {
     }
   }, [logout, sessionId, token]);
 
-  const finishAuth = React.useCallback(async (result) => {
+  const finishAuth = React.useCallback(async (result, authType = "custom") => {
     const nextToken = result.token;
     const nextSessionId = createSessionId();
     const profile = await authApi.profile(nextToken, nextSessionId);
-    await persistSession({ token: nextToken, sessionId: nextSessionId, user: profile });
+    await persistSession({ token: nextToken, sessionId: nextSessionId, user: profile, authType });
     if (!mountedRef.current) return profile;
     setToken(nextToken);
     setSessionId(nextSessionId);
@@ -83,6 +95,45 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (error) {
       const message = error.message || "Không thể đăng nhập";
+      if (mountedRef.current) setAuthError(message);
+      return { success: false, message };
+    }
+  }, [finishAuth]);
+
+  const loginWithGoogle = React.useCallback(async () => {
+    try {
+      const session = await startGoogleOAuth();
+      if (!session?.access_token) {
+        throw new Error("Google không trả về phiên đăng nhập hợp lệ");
+      }
+      await finishAuth({ token: session.access_token }, "supabase");
+      return { success: true };
+    } catch (error) {
+      const message = error.message || "Không thể đăng nhập bằng Google";
+      if (mountedRef.current) setAuthError(message);
+      return { success: false, message };
+    }
+  }, [finishAuth]);
+
+  const requestEmailOtp = React.useCallback(async (email) => {
+    try {
+      const result = await authApi.requestEmailOtp(email.trim());
+      if (mountedRef.current) setAuthError(null);
+      return { success: true, ...result };
+    } catch (error) {
+      const message = error.message || "Không thể gửi mã OTP";
+      if (mountedRef.current) setAuthError(message);
+      return { success: false, message };
+    }
+  }, []);
+
+  const verifyEmailOtp = React.useCallback(async (email, otp) => {
+    try {
+      const result = await authApi.verifyEmailOtp(email.trim(), otp.trim());
+      await finishAuth(result);
+      return { success: true };
+    } catch (error) {
+      const message = error.message || "Không thể xác thực mã OTP";
       if (mountedRef.current) setAuthError(message);
       return { success: false, message };
     }
@@ -120,9 +171,10 @@ export const AuthProvider = ({ children }) => {
     mountedRef.current = true;
     const bootstrap = async () => {
       try {
-        const [savedToken, savedSessionId] = await Promise.all([
+        const [savedToken, savedSessionId, savedAuthType] = await Promise.all([
           sessionStore.get(sessionKeys.token),
-          sessionStore.get(sessionKeys.sessionId)
+          sessionStore.get(sessionKeys.sessionId),
+          sessionStore.get(sessionKeys.authType)
         ]);
 
         if (!savedToken) {
@@ -130,15 +182,29 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
+        let activeToken = savedToken;
+        if (savedAuthType === "supabase") {
+          activeToken = await getSupabaseAccessToken();
+          if (!activeToken) throw new Error("Phiên Google đã hết hạn");
+        }
+
         const nextSessionId = savedSessionId || createSessionId();
-        const profile = await authApi.profile(savedToken, nextSessionId);
-        await persistSession({ token: savedToken, sessionId: nextSessionId, user: profile });
+        const profile = await authApi.profile(activeToken, nextSessionId);
+        await persistSession({
+          token: activeToken,
+          sessionId: nextSessionId,
+          user: profile,
+          authType: savedAuthType || "custom"
+        });
         if (!mountedRef.current) return;
-        setToken(savedToken);
+        setToken(activeToken);
         setSessionId(nextSessionId);
         setUser(profile);
       } catch (error) {
-        await clearSession();
+        await Promise.all([
+          clearSession(),
+          clearSupabaseSession().catch(() => null)
+        ]);
         if (mountedRef.current) {
           setAuthError(error.message);
           setUser(null);
@@ -153,6 +219,24 @@ export const AuthProvider = ({ children }) => {
     bootstrap();
     return () => {
       mountedRef.current = false;
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const {
+      data: { subscription }
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (!session?.access_token || !mountedRef.current) return;
+
+      const authType = await sessionStore.get(sessionKeys.authType);
+      if (authType !== "supabase") return;
+
+      await sessionStore.set(sessionKeys.token, session.access_token);
+      if (mountedRef.current) setToken(session.access_token);
+    });
+
+    return () => {
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -195,6 +279,9 @@ export const AuthProvider = ({ children }) => {
     authError,
     setAuthError,
     login,
+    loginWithGoogle,
+    requestEmailOtp,
+    verifyEmailOtp,
     register,
     logout,
     refreshProfile,
@@ -207,6 +294,9 @@ export const AuthProvider = ({ children }) => {
     isLoggedIn,
     authError,
     login,
+    loginWithGoogle,
+    requestEmailOtp,
+    verifyEmailOtp,
     register,
     logout,
     refreshProfile,

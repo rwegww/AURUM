@@ -7,12 +7,34 @@ module.exports = {
     orientation: "portrait",
     userInterfaceStyle: "light",
     newArchEnabled: true,
-    plugins: ["expo-router", "expo-secure-store"],
+    android: {
+      package: "vn.aurumchemistry.app"
+    },
+    ios: {
+      bundleIdentifier: "vn.aurumchemistry.app"
+    },
+    plugins: [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-web-browser",
+        {
+          experimentalLauncherActivity: false
+        }
+      ]
+    ],
     experiments: {
       typedRoutes: false
     },
     extra: {
-      apiBaseUrl: process.env.EXPO_PUBLIC_API_URL || "http://127.0.0.1:5000"
+      apiBaseUrl: process.env.EXPO_PUBLIC_API_URL,
+      supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
+      supabasePublishableKey:
+        process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+        process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+      ...(process.env.EXPO_PUBLIC_GOOGLE_OAUTH_REDIRECT_URL
+        ? { googleOAuthRedirectTo: process.env.EXPO_PUBLIC_GOOGLE_OAUTH_REDIRECT_URL }
+        : {})
     }
   }
 };

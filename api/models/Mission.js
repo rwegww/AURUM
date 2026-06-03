@@ -1,5 +1,22 @@
 import { supabase } from '../lib/supabase.js';
 
+const VIETNAM_TIME_ZONE = 'Asia/Ho_Chi_Minh';
+const vietnamDateFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: VIETNAM_TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+const getVietnamDateKey = (date) => {
+  const parts = Object.fromEntries(
+    vietnamDateFormatter.formatToParts(date)
+      .filter(part => part.type !== 'literal')
+      .map(part => [part.type, part.value])
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+};
+
 const mapMissionRow = (mission) => mission ? ({
   ...mission,
   title: mission.tieu_de ?? mission.title,
@@ -34,7 +51,7 @@ export const Mission = {
   // Helper to check and reset daily nhiem_vu
   async checkAndResetDailies(userId) {
     const now = new Date();
-    const todayStr = now.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    const todayStr = getVietnamDateKey(now);
 
     // 1. Get all daily nhiem_vu for the user
     const { data: userMissions, error: umError } = await supabase
@@ -48,7 +65,7 @@ export const Mission = {
     const resetPromises = userMissions
       .filter(um => {
         const lastReset = new Date(um.dat_lai_cuoi_luc);
-        const lastResetStr = lastReset.toISOString().split('T')[0];
+        const lastResetStr = getVietnamDateKey(lastReset);
         return lastResetStr !== todayStr;
       })
       .map(um => {
