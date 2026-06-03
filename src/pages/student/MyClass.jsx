@@ -117,7 +117,7 @@ const MyClass = () => {
     }
   };
 
-  const handleCompleteAssignment = async (postId, answers = null, score = null) => {
+  const handleCompleteAssignment = async (postId, answers = null) => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/classes/assignments/${postId}/submit`, {
@@ -126,14 +126,15 @@ const MyClass = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}` 
         },
-        body: JSON.stringify({ answers, score })
+        body: JSON.stringify({ answers: answers || {} })
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         const currentClass = selectedClass;
         if (currentClass) selectClass(currentClass);
         setActiveQuiz(null);
+        return data;
       } else {
-        const data = await res.json();
         throw new Error(data.error || 'Nộp bài thất bại!');
       }
     } catch (err) {
@@ -143,28 +144,18 @@ const MyClass = () => {
     }
   };
 
-  const calculateScore = (questions, answers) => {
-    const mcQuestions = questions.filter(q => (q.type || 'multiple_choice') === 'multiple_choice');
-    if (mcQuestions.length === 0) return null; // All essay — needs manual grading
-    
-    let correctCount = 0;
-    questions.forEach((q, idx) => {
-      if ((q.type || 'multiple_choice') === 'multiple_choice') {
-        if (answers[idx] === q.correct_index) correctCount++;
-      }
-    });
-    return Math.round((correctCount / mcQuestions.length) * 10);
-  };
-
   const handleSubmitQuiz = async () => {
+    if (!activeQuiz || getAnsweredQuestionCount(activeQuiz.questions) < activeQuiz.questions.length) return;
+
     setIsSubmittingQuiz(true);
-    const score = calculateScore(activeQuiz.questions, quizAnswers);
-    const hasEssay = activeQuiz.questions.some(q => q.type === 'essay' || q.type === 'short_answer');
     try {
-      await handleCompleteAssignment(activeQuiz.id, quizAnswers, score);
-      if (hasEssay && score !== null) {
-        alert(t('my_class.quiz.score_msg', { score }));
-      } else if (hasEssay) {
+      const submitted = await handleCompleteAssignment(activeQuiz.id, quizAnswers);
+      const autoGrade = submitted?.auto_grade;
+      if (autoGrade?.score !== null && autoGrade?.score !== undefined && autoGrade?.needsManualReview) {
+        alert(`Đã nộp bài. Phần tự động chấm được ${autoGrade.score}/10 (${autoGrade.correct}/${autoGrade.total} câu); giáo viên sẽ xem các câu còn lại.`);
+      } else if (autoGrade?.score !== null && autoGrade?.score !== undefined) {
+        alert(t('my_class.quiz.score_msg', { score: autoGrade.score }));
+      } else {
         alert(t('my_class.quiz.success_msg'));
       }
     } catch (err) {
@@ -192,6 +183,32 @@ const MyClass = () => {
     if (lowerUrl.startsWith('http')) return t('my_class.feed.assignment.file_Link');
     return t('my_class.feed.assignment.file_Placeholder');
   };
+
+  const formatActiveTime = (minutes) => {
+    const totalMinutes = Number(minutes) || 0;
+    if (totalMinutes <= 0) return 'Chưa có hoạt động';
+
+    const hours = Math.floor(totalMinutes / 60);
+    const remainingMinutes = totalMinutes % 60;
+    if (hours && remainingMinutes) return `${hours} giờ ${remainingMinutes} phút`;
+    if (hours) return `${hours} giờ`;
+    return `${remainingMinutes} phút`;
+  };
+
+  const isQuestionAnswered = (question, index) => {
+    const answer = quizAnswers[index];
+    const type = question?.type || 'multiple_choice';
+
+    if (type === 'multiple_choice') return answer !== undefined && answer !== null;
+    if (type === 'true_false') {
+      const optionKeys = Object.keys(question.options || {});
+      return optionKeys.length > 0 && optionKeys.every((key) => typeof answer?.[key] === 'boolean');
+    }
+
+    return typeof answer === 'string' ? answer.trim().length > 0 : Boolean(answer);
+  };
+
+  const getAnsweredQuestionCount = (questions = []) => questions.filter(isQuestionAnswered).length;
 
   const getEmbedUrl = (url) => {
     if (!url) return '';
@@ -235,26 +252,28 @@ const MyClass = () => {
     setSending(true);
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/classes/${selectedClass.id}/posts`, {
+      const res = await fetch(`/api/classes/${selectedClass.id}/messages`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          type: 'announcement',
           content: privateMessage,
-          hoc_sinh_nhan_id: selectedClass.giao_vien_id,
         })
       });
 
-      if (res.ok) {
-        setPrivateMessage('');
-        setIsMessageModalOpen(false);
-        selectClass(selectedClass);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.error || data.message || 'Gửi tin nhắn thất bại');
       }
+
+      setPrivateMessage('');
+      setIsMessageModalOpen(false);
+      selectClass(selectedClass);
     } catch (err) {
       console.error(err);
+      alert(err.message);
     } finally {
       setSending(false);
     }
@@ -432,7 +451,7 @@ const MyClass = () => {
                           {post.is_completed ? (
                             <div className="flex flex-col gap-2">
                                 <div className="w-full py-4 bg-emerald-50 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
-                                  <span>âœ“</span> {t('my_class.feed.assignment.completed')}
+                                  <span>✓</span> {t('my_class.feed.assignment.completed')}
                                 </div>
                                 {post.user_submission?.score !== null && post.user_submission?.score !== undefined && (
                                    <div className="flex items-center justify-between p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-sm">
@@ -523,7 +542,7 @@ const MyClass = () => {
                         <div className="flex flex-col">
                            <span className="text-xs font-bold text-viet-text leading-tight">{m.username}</span>
                            <span className="text-[9px] font-bold text-viet-text-light/50 uppercase">
-                             {m.active_minutes ? `${Math.floor(m.active_minutes / 60)}h ${m.active_minutes % 60}m` : '0m active'}
+                             {formatActiveTime(m.active_minutes)}
                            </span>
                         </div>
                      </div>
@@ -561,7 +580,7 @@ const MyClass = () => {
                              <h3 className="text-lg font-black text-viet-text uppercase tracking-tight">{t('my_class.message_modal.title')}</h3>
                              <p className="text-[10px] font-bold text-viet-green uppercase tracking-widest">{t('my_class.message_modal.class_prefix')} {selectedClass.name}</p>
                           </div>
-                          <button onClick={() => setIsMessageModalOpen(false)} className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-viet-text-light transition-colors">âœ•</button>
+                          <button onClick={() => setIsMessageModalOpen(false)} className="w-8 h-8 rounded-full hover:bg-white flex items-center justify-center text-viet-text-light transition-colors">×</button>
                        </div>
                        <form onSubmit={handleSendToTeacher} className="p-6 space-y-4">
                           <textarea 
@@ -623,7 +642,7 @@ const MyClass = () => {
                      <button 
                         onClick={() => setViewingAssignment(null)} 
                         className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-200 flex items-center justify-center text-viet-text-light hover:text-red-500 hover:border-red-100 transition-all font-black text-xl shadow-sm"
-                     >âœ•</button>
+                     >×</button>
                   </div>
                </div>
                
@@ -683,7 +702,7 @@ const MyClass = () => {
                    <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/10 px-3 py-1 rounded-full mb-2 inline-block">{t('my_class.quiz.badge')}</span>
                    <h3 className="text-2xl font-black text-viet-text uppercase tracking-tight">{activeQuiz.content}</h3>
                 </div>
-                <button onClick={() => setActiveQuiz(null)} className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center text-viet-text-light hover:text-red-500 transition-all font-black text-xl shadow-sm">âœ•</button>
+                <button onClick={() => setActiveQuiz(null)} className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center text-viet-text-light hover:text-red-500 transition-all font-black text-xl shadow-sm">×</button>
               </div>
 
               <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
@@ -773,13 +792,13 @@ const MyClass = () => {
               <div className="p-8 bg-slate-50 border-t border-viet-border flex items-center justify-between shrink-0">
                 <div className="flex flex-col">
                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('my_class.quiz.progress')}</span>
-                   <span className="text-sm font-black text-viet-text uppercase">{t('my_class.quiz.count_done', { done: Object.keys(quizAnswers).length, total: activeQuiz.questions.length })}</span>
+                   <span className="text-sm font-black text-viet-text uppercase">{t('my_class.quiz.count_done', { done: getAnsweredQuestionCount(activeQuiz.questions), total: activeQuiz.questions.length })}</span>
                 </div>
                 <button 
                   onClick={handleSubmitQuiz}
-                  disabled={isSubmittingQuiz || Object.keys(quizAnswers).length < activeQuiz.questions.length}
+                  disabled={isSubmittingQuiz || getAnsweredQuestionCount(activeQuiz.questions) < activeQuiz.questions.length}
                   className={`px-12 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl ${
-                    Object.keys(quizAnswers).length < activeQuiz.questions.length
+                    getAnsweredQuestionCount(activeQuiz.questions) < activeQuiz.questions.length
                     ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
                     : 'bg-viet-green text-white hover:scale-[1.05] shadow-viet-green/20 active:scale-[0.98]'
                   }`}

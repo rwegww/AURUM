@@ -10,6 +10,7 @@ const MAX_TEXT_LENGTH = {
   description: 1200,
   fileUrl: 2048,
   fileType: 24,
+  feedback: 1500,
 };
 
 const ALLOWED_FILE_TYPES = new Set([
@@ -184,7 +185,10 @@ router.get('/:id', async (req, res) => {
       .eq('id', id)
       .single();
 
-    if (error) throw error;
+    if (error && error.code !== 'PGRST116') throw error;
+    if (!data) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
+    }
 
     // Increment view count (fire and forget) if not explicitly disabled
     if (increment !== 'false') {
@@ -193,7 +197,7 @@ router.get('/:id', async (req, res) => {
 
     res.json(normalizeMaterial(data));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi tải chi tiết tài liệu', error: err.message });
+    res.status(500).json({ message: 'Không thể tải chi tiết tài liệu.', error: err.message });
   }
 });
 
@@ -208,7 +212,10 @@ router.post('/:id/download', async (req, res) => {
       .eq('id', id)
       .single();
 
-    if (fetchError) throw fetchError;
+    if (fetchError && fetchError.code !== 'PGRST116') throw fetchError;
+    if (!material) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
+    }
 
     const nextCount = Number(material?.luot_tai || 0) + 1;
     const { data, error } = await supabase
@@ -221,7 +228,7 @@ router.post('/:id/download', async (req, res) => {
     if (error) throw error;
     res.json({ download_count: data.luot_tai });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi cập nhật lượt tải tài liệu', error: err.message });
+    res.status(500).json({ message: 'Không thể cập nhật lượt tải tài liệu.', error: err.message });
   }
 });
 
@@ -230,10 +237,26 @@ router.post('/:id/feedback', auth, async (req, res) => {
   try {
     const { id: hoc_lieu_id } = req.params;
     const { content, rating } = req.body;
+    const trimmedContent = normalizeText(content);
 
     const normalizedRating = Number(rating);
-    if (!content || !Number.isFinite(normalizedRating) || normalizedRating < 1 || normalizedRating > 5) {
-      return res.status(400).json({ message: 'Thiếu nội dung hoặc đánh giá' });
+    if (!trimmedContent || !Number.isFinite(normalizedRating) || normalizedRating < 1 || normalizedRating > 5) {
+      return res.status(400).json({ message: 'Vui lòng nhập nội dung phản hồi và chọn đánh giá từ 1 đến 5 sao.' });
+    }
+
+    if (trimmedContent.length > MAX_TEXT_LENGTH.feedback) {
+      return res.status(400).json({ message: `Phản hồi tối đa ${MAX_TEXT_LENGTH.feedback} ký tự.` });
+    }
+
+    const { data: material, error: materialError } = await supabase
+      .from('hoc_lieu')
+      .select('id')
+      .eq('id', hoc_lieu_id)
+      .single();
+
+    if (materialError && materialError.code !== 'PGRST116') throw materialError;
+    if (!material) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
     }
 
     const { data, error } = await supabase
@@ -241,7 +264,7 @@ router.post('/:id/feedback', auth, async (req, res) => {
       .insert([{
         hoc_lieu_id,
         nguoi_dung_id: req.user.id,
-        noi_dung: content,
+        noi_dung: trimmedContent,
         danh_gia: normalizedRating
       }])
       .select();
@@ -298,7 +321,7 @@ router.get('/:id/feedback', async (req, res) => {
     return res.json(phan_hois.map(normalizeMaterialFeedback));
   } catch (err) {
     console.error('Lỗi tải phản hồi:', err);
-    res.status(500).json({ message: 'Lỗi tải phản hồi', error: err.message });
+    res.status(500).json({ message: 'Không thể tải phản hồi lúc này.', error: err.message });
   }
 });
 
@@ -307,19 +330,24 @@ router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
   try {
     const { feedbackId } = req.params;
     const { reply_content } = req.body;
+    const trimmedReply = normalizeText(reply_content);
 
     if (req.user.role !== 'admin' && req.user.role !== 'teacher') {
       return res.status(403).json({ message: 'Chỉ admin hoặc giáo viên mới có quyền trả lời.' });
     }
 
-    if (!reply_content) {
-      return res.status(400).json({ message: 'Thiếu nội dung trả lời.' });
+    if (!trimmedReply) {
+      return res.status(400).json({ message: 'Vui lòng nhập nội dung trả lời.' });
+    }
+
+    if (trimmedReply.length > MAX_TEXT_LENGTH.feedback) {
+      return res.status(400).json({ message: `Câu trả lời tối đa ${MAX_TEXT_LENGTH.feedback} ký tự.` });
     }
 
     const { data, error } = await supabase
       .from('phan_hoi_hoc_lieu')
       .update({
-        noi_dung_tra_loi: reply_content,
+        noi_dung_tra_loi: trimmedReply,
         nguoi_tra_loi_id: req.user.id,
         tra_loi_luc: new Date().toISOString()
       })
@@ -327,9 +355,10 @@ router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
       .select();
 
     if (error) throw error;
+    if (!data?.[0]) return res.status(404).json({ message: 'Không tìm thấy phản hồi này.' });
     res.json(normalizeMaterialFeedback(data[0]));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi gửi phản hồi', error: err.message });
+    res.status(500).json({ message: 'Không thể gửi câu trả lời lúc này.', error: err.message });
   }
 });
 

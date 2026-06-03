@@ -1,10 +1,27 @@
 import Constants from "expo-constants";
+import { Platform } from "react-native";
+
+const getExpoDevHost = () => {
+  const hostUri =
+    Constants.expoConfig?.hostUri ||
+    Constants.manifest?.debuggerHost ||
+    Constants.manifest2?.extra?.expoClient?.hostUri;
+  const host = typeof hostUri === "string" ? hostUri.split(":")[0] : "";
+  return host && host !== "localhost" && host !== "127.0.0.1" ? host : "";
+};
+
+const getDefaultApiUrl = () => {
+  const devHost = getExpoDevHost();
+  if (devHost) return `http://${devHost}:5000`;
+  if (Platform.OS === "android") return "http://10.0.2.2:5000";
+  return "http://127.0.0.1:5000";
+};
 
 const configuredApiUrl =
   Constants.expoConfig?.extra?.apiBaseUrl ||
   Constants.manifest?.extra?.apiBaseUrl ||
   process.env.EXPO_PUBLIC_API_URL ||
-  "http://127.0.0.1:5000";
+  getDefaultApiUrl();
 
 export const API_BASE_URL = configuredApiUrl.replace(/\/$/, "");
 
@@ -89,6 +106,20 @@ export const authApi = {
       method: "POST",
       auth: false,
       body: { username, password, email, role: "student", grade }
+    }),
+
+  requestEmailOtp: (email) =>
+    apiRequest("/api/auth/request-otp", {
+      method: "POST",
+      auth: false,
+      body: { email }
+    }),
+
+  verifyEmailOtp: (email, otp) =>
+    apiRequest("/api/auth/verify-otp", {
+      method: "POST",
+      auth: false,
+      body: { email, otp }
     }),
 
   profile: (token, sessionId) =>
@@ -216,7 +247,11 @@ export const libraryApi = {
       auth: false,
       query: { category, search }
     }),
-  detail: (id) => apiRequest(`/api/materials/${id}`, { auth: false }),
+  detail: (id, { increment } = {}) =>
+    apiRequest(`/api/materials/${id}`, {
+      auth: false,
+      query: { increment: increment === false ? "false" : undefined }
+    }),
   phan_hoi: (id) => apiRequest(`/api/materials/${id}/feedback`, { auth: false }),
   postFeedback: (token, id, body) =>
     apiRequest(`/api/materials/${id}/feedback`, {

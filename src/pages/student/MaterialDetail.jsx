@@ -16,6 +16,7 @@ const MaterialDetail = () => {
   const [material, setMaterial] = useState(null);
   const [phan_hoi, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(5);
   const [submitting, setSubmitting] = useState(false);
@@ -38,19 +39,23 @@ const MaterialDetail = () => {
           fetch(`/api/materials/${id}/feedback`)
         ]);
         
-        const matData = await matRes.json();
-        const feedData = await feedRes.json();
+        const matData = await matRes.json().catch(() => ({}));
+        if (!matRes.ok) throw new Error(matData.message || t('material_detail.not_found'));
+
+        const feedData = feedRes.ok ? await feedRes.json().catch(() => []) : [];
         
         setMaterial(matData);
         setFeedback(Array.isArray(feedData) ? feedData : []);
       } catch (err) {
         console.error(t('material_detail.phan_hoi.err_fetch'), err);
+        setLoadError(err.message || t('material_detail.not_found'));
+        setMaterial(null);
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, t]);
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
@@ -59,23 +64,34 @@ const MaterialDetail = () => {
 
     setSubmitting(true);
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert(t('material_detail.phan_hoi.alert_login'));
+        return;
+      }
+
       const res = await fetch(`/api/materials/${id}/feedback`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
-          content: newComment,
-          rating,
-          userId: user.id
+          content: newComment.trim(),
+          rating
         })
       });
 
-      if (res.ok) {
-        const added = await res.json();
-        setFeedback([{ ...added, nguoi_dung: { username: user.username } }, ...phan_hoi]);
-        setNewComment('');
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.message || t('material_detail.phan_hoi.err_submit'));
       }
+
+      setFeedback([{ ...data, nguoi_dung: { username: user.username } }, ...phan_hoi]);
+      setNewComment('');
     } catch (err) {
       console.error(t('material_detail.phan_hoi.err_submit'), err);
+      alert(err.message);
     } finally {
       setSubmitting(false);
     }
@@ -96,14 +112,15 @@ const MaterialDetail = () => {
         body: JSON.stringify({ reply_content: replyContent })
       });
 
-      if (res.ok) {
-        const updated = await res.json();
-        setFeedback(prev => prev.map(f => f.id === feedbackId ? { ...f, ...updated, reply_user: { username: user.username } } : f));
-        setReplyingTo(null);
-        setReplyContent('');
-      }
+      const updated = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(updated.message || t('material_detail.phan_hoi.err_submit'));
+
+      setFeedback(prev => prev.map(f => f.id === feedbackId ? { ...f, ...updated, reply_user: { username: user.username } } : f));
+      setReplyingTo(null);
+      setReplyContent('');
     } catch (err) {
       console.error(t('material_detail.phan_hoi.err_submit'), err);
+      alert(err.message || t('material_detail.phan_hoi.err_submit'));
     }
   };
 
@@ -115,7 +132,7 @@ const MaterialDetail = () => {
 
   if (!material) return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-viet-bg">
-      <h2 className="text-2xl font-black text-viet-text mb-4">{t('material_detail.not_found')}</h2>
+      <h2 className="text-2xl font-black text-viet-text mb-4">{loadError || t('material_detail.not_found')}</h2>
       <button onClick={() => navigate('/library')} className="bg-viet-green text-white px-8 py-3 rounded-xl font-bold">{t('material_detail.back_btn')}</button>
     </div>
   );
@@ -257,10 +274,10 @@ const MaterialDetail = () => {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-viet-green/10 flex items-center justify-center font-black text-viet-green text-sm uppercase">
-                            {(f.nguoi_dung?.username || t('material_detail.phan_hoi.default_user')).charAt(0)}
+                            {((f.nguoi_dung || f.users)?.username || t('material_detail.phan_hoi.default_user')).charAt(0)}
                           </div>
                           <div>
-                            <p className="font-black text-viet-text text-sm uppercase leading-none">{f.nguoi_dung?.username || t('material_detail.phan_hoi.default_user')}</p>
+                            <p className="font-black text-viet-text text-sm uppercase leading-none">{(f.nguoi_dung || f.users)?.username || t('material_detail.phan_hoi.default_user')}</p>
                             <p className="text-[10px] font-bold text-viet-text-light mt-1">
                               {formatDate(f.created_at)}
                             </p>

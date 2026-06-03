@@ -22,7 +22,7 @@ import { useApiResource } from "../../hooks/useApiResource";
 
 const roomStatusLabel = (status) => {
   if (status === "waiting") return "Đang chờ";
-  if (status === "active") return "Đang đấu";
+  if (status === "active" || status === "playing") return "Đang đấu";
   if (status === "finished") return "Đã kết thúc";
   return "Chưa rõ trạng thái";
 };
@@ -83,12 +83,14 @@ export default function ArenaTab() {
   };
 
   const joinRoom = async (id = roomCode) => {
-    if (!id.trim()) return;
+    const normalizedRoomId = String(id ?? "").trim();
+    if (!normalizedRoomId || joining) return;
     setJoining(true);
     try {
-      const joined = await arenaApi.joinRoom(token, id.trim());
-      const state = await arenaApi.roomState(token, joined.room.id);
+      const joined = await arenaApi.joinRoom(token, normalizedRoomId);
+      const state = await arenaApi.roomState(token, joined.room?.id || normalizedRoomId);
       setActiveState(state.state);
+      setRoomCode("");
       await arenaResource.reload();
     } catch (error) {
       Alert.alert("Không tham gia được", error.message);
@@ -148,6 +150,7 @@ export default function ArenaTab() {
             icon="enter-outline"
             onPress={() => joinRoom()}
             color={colors.green}
+            disabled={joining}
             style={styles.joinButton}
           />
         </View>
@@ -199,7 +202,7 @@ export default function ArenaTab() {
               title={room.name || `Phòng ${room.id}`}
               subtitle={`${room.host_name || "Chủ phòng"} · ${room.current_players || 0}/${room.max_players || 2} người`}
               color={colors.green}
-              right={<GhostButton label="Vào" icon="enter-outline" onPress={() => joinRoom(room.id)} color={colors.green} style={styles.rowButton} />}
+              right={<GhostButton label="Vào" icon="enter-outline" onPress={() => joinRoom(room.id)} color={colors.green} disabled={joining} style={styles.rowButton} />}
             />
           ))}
         </View>

@@ -10,6 +10,16 @@ import InfographicBook from '@/components/lessons/InfographicBook';
 import PlacementTestModal, { AVAILABLE_PLACEMENT_TEST_GRADES } from '@/components/lessons/PlacementTestModal';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { stableRange } from '@/utils/stableRandom';
+
+const FLOATING_BUBBLES = Array.from({ length: 15 }, (_, index) => ({
+  width: stableRange('grade-bubble-width', index, 15, 45),
+  height: stableRange('grade-bubble-height', index, 15, 45),
+  left: stableRange('grade-bubble-left', index, 5, 95),
+  animationDelay: stableRange('grade-bubble-delay', index, 0, 8),
+  animationDuration: stableRange('grade-bubble-duration', index, 8, 18),
+  opacity: stableRange('grade-bubble-opacity', index, 0.3, 0.8),
+}));
 
 // Expanded Class Themes for a spectacular look
 const CLASS_THEMES = {
@@ -190,18 +200,18 @@ const GradeJourney = () => {
 
       {/* Floating chemistry bubbles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {[...Array(15)].map((_, i) => (
+        {FLOATING_BUBBLES.map((bubble, i) => (
           <div 
             key={i}
             className="absolute rounded-full bg-white/40 border border-slate-200/50 shadow-inner animate-[floatUp_8s_ease-in-out_infinite]"
             style={{
-              width: `${Math.random() * 30 + 15}px`,
-              height: `${Math.random() * 30 + 15}px`,
-              left: `${Math.random() * 90 + 5}%`,
+              width: `${bubble.width}px`,
+              height: `${bubble.height}px`,
+              left: `${bubble.left}%`,
               bottom: `-50px`,
-              animationDelay: `${Math.random() * 8}s`,
-              animationDuration: `${Math.random() * 10 + 8}s`,
-              opacity: Math.random() * 0.5 + 0.3
+              animationDelay: `${bubble.animationDelay}s`,
+              animationDuration: `${bubble.animationDuration}s`,
+              opacity: bubble.opacity
             }}
           />
         ))}

@@ -219,7 +219,7 @@ const LessonManager = () => {
                       <button 
                         onClick={() => handleEdit(lesson.lessonId)}
                         className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-all"
-                      >âœŽ</button>
+                      >✎</button>
                       <button 
                         onClick={() => handleDelete(lesson.lessonId)}
                         className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-all"
@@ -262,7 +262,7 @@ const LessonManager = () => {
                      <button 
                        onClick={() => { setEditingLesson(null); setIsCreating(false); }}
                        className="w-10 h-10 rounded-full bg-white border border-viet-border flex items-center justify-center text-viet-text hover:bg-red-50 hover:text-red-500 transition-all"
-                     >âœ•</button>
+                     >×</button>
                   </div>
 
                   <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
