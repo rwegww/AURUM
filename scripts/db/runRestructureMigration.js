@@ -18,9 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..', '..');
 const MIGRATION_PATHS = [
-  path.join(ROOT, 'supabase', '20260525_restructure_schema.sql'),
-  path.join(ROOT, 'supabase', 'migrations', '20260603154143_standardize_schema_names.sql'),
-  path.join(ROOT, 'supabase', 'migrations', '20260604030000_vietnamese_business_schema_names.sql')
+  path.join(ROOT, 'supabase', 'schema.sql')
 ];
 
 const allCurriculumLessons = [

@@ -135,7 +135,7 @@ def add_title(doc: Document) -> None:
     subtitle = doc.add_paragraph()
     subtitle.paragraph_format.space_after = Pt(12)
     run = subtitle.add_run(
-        "Tài liệu phân tích dựa trên worktree hiện tại: React/Vite frontend, Express API, Supabase, Netlify serverless và các migration SQL."
+        "Tài liệu phân tích dựa trên worktree hiện tại: React/Vite frontend, Express API, Supabase, Netlify serverless và schema SQL hợp nhất."
     )
     run.font.size = Pt(10)
     run.font.color.rgb = RGBColor(85, 85, 85)

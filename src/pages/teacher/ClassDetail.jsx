@@ -16,14 +16,12 @@ const ClassDetail = () => {
   const fetchClassData = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      
-      // Get class info. Since we don't have a GET /api/classes/:id endpoint, 
-      // we can just fetch all lop and filter, or I should just rely on posts for now.
-      const classRes = await fetch('/api/classes', { headers: { 'Authorization': `Bearer ${token}` }});
+
+      const classRes = await fetch(`/api/classes/${id}`, { headers: { 'Authorization': `Bearer ${token}` }});
       if (classRes.ok) {
-        const lop = await classRes.json();
-        const currentClass = lop.find(c => c.id === id);
-        setCls(currentClass);
+        setCls(await classRes.json());
+      } else {
+        setCls(null);
       }
 
       // Get posts

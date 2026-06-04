@@ -611,6 +611,30 @@ router.post('/join', auth, async (req, res) => {
   }
 });
 
+// Get one class by id for teachers, admins, or joined students.
+router.get('/:id', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!(await ensureClassAccess(id, req.user, res))) return;
+
+    const { data, error } = await supabase
+      .from('lop')
+      .select('*, teacher:giao_vien_id(username), student_count:thanh_vien_lop(count)')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return res.status(404).json({ error: 'Khong tim thay lop hoc' });
+
+    res.json({
+      ...normalizeClass(data),
+      student_count: data.student_count?.[0]?.count || 0
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get class members (Students)
 router.get('/:id/members', auth, async (req, res) => {
   try {
