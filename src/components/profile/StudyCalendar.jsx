@@ -105,7 +105,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
   const handleCellClick = (dayObj) => {
     const key = dayObj.dateKey;
     if (key < todayKey) {
-      alert(t('profile.study_plan.calendar.err_past_date', 'Báº¡n chá»‰ cÃ³ thá»ƒ lÃªn lá»‹ch há»c cho hÃ´m nay hoáº·c cÃ¡c ngÃ y trong tÆ°Æ¡ng lai!'));
+      alert(t('profile.study_plan.calendar.err_past_date', 'Bạn chỉ có thể lên lịch học cho hôm nay hoặc các ngày trong tương lai!'));
       return;
     }
     setSelectedDay(dayObj);
@@ -189,10 +189,10 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
         <div>
           <h3 className="text-2xl font-black text-viet-text flex items-center gap-2">
             <CalendarRange className="w-6 h-6 text-viet-green shrink-0" />
-            {t('profile.study_plan.calendar.title', 'Lá»‹ch há»c táº­p cÃ¡ nhÃ¢n')}
+            {t('profile.study_plan.calendar.title', 'Lịch học tập cá nhân')}
           </h3>
           <p className="text-viet-text-light/60 font-medium text-sm mt-1">
-            Click vÃ o ngÃ y báº¥t ká»³ Ä‘á»ƒ lÃªn lá»‹ch hoáº·c ghi chÃº buá»•i há»c.
+            Click vào ngày bất kỳ để lên lịch hoặc ghi chú buổi học.
           </p>
         </div>
 
@@ -201,9 +201,9 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
           <button
             onClick={prevMonth}
             className="w-10 h-10 rounded-xl bg-white border border-viet-border hover:bg-slate-50 text-viet-text flex items-center justify-center font-bold shadow-sm transition-all active:scale-95"
-            title={t('profile.study_plan.calendar.prev_month', 'ThÃ¡ng trÆ°á»›c')}
+            title={t('profile.study_plan.calendar.prev_month', 'Tháng trước')}
           >
-            â†
+            ←
           </button>
           <span className="px-5 py-2 rounded-xl bg-viet-text text-white font-black text-sm min-w-[140px] text-center uppercase tracking-wide">
             {currentDate.toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { month: 'long', year: 'numeric' })}
@@ -211,9 +211,9 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
           <button
             onClick={nextMonth}
             className="w-10 h-10 rounded-xl bg-white border border-viet-border hover:bg-slate-50 text-viet-text flex items-center justify-center font-bold shadow-sm transition-all active:scale-95"
-            title={t('profile.study_plan.calendar.next_month', 'ThÃ¡ng sau')}
+            title={t('profile.study_plan.calendar.next_month', 'Tháng sau')}
           >
-            â†’
+            →
           </button>
         </div>
       </div>
@@ -284,7 +284,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="w-5 h-5 flex items-center justify-center" 
-                      title="HoÃ n thÃ nh há»c táº­p"
+                      title="Hoàn thành học tập"
                     >
                       <Flame size={14} className="text-emerald-500 fill-emerald-500" />
                     </motion.div>
@@ -294,7 +294,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="w-5 h-5 rounded-lg bg-blue-500 text-white flex items-center justify-center"
-                      title={session.title || "Lá»‹ch há»c tÃ¹y chá»‰nh"}
+                      title={session.title || "Lịch học tùy chỉnh"}
                     >
                       <Clock size={10} />
                     </motion.div>
@@ -316,7 +316,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
       {/* Upcoming custom schedules list */}
       <div className="mt-8">
         <h4 className="text-[13px] font-black text-viet-text uppercase tracking-widest mb-4 pl-2">
-          {t('profile.study_plan.calendar.upcoming_title', 'Lá»‹ch há»c tÃ¹y chá»‰nh sáº¯p tá»›i')}
+          {t('profile.study_plan.calendar.upcoming_title', 'Lịch học tùy chỉnh sắp tới')}
         </h4>
         
         {currentMonthSchedules.length > 0 ? (
@@ -345,10 +345,10 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                     </div>
                     <div>
                       <h5 className="font-bold text-[15px] text-viet-text">
-                        {value.title || `BÃ¡o thá»©c há»c táº­p ${value.time}`}
+                        {value.title || `Báo thức học tập ${value.time}`}
                       </h5>
                       <p className="text-[12px] text-viet-text-light/60 font-medium">
-                        {t('profile.study_plan.calendar.item_time', { time: value.time })} â€¢ {t('profile.study_plan.calendar.item_target', { count: value.target })}
+                        {t('profile.study_plan.calendar.item_time', { time: value.time })} • {t('profile.study_plan.calendar.item_target', { count: value.target })}
                       </p>
                     </div>
                   </div>
@@ -361,7 +361,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
           </div>
         ) : (
           <div className="p-8 text-center bg-white rounded-3xl border border-viet-border border-dashed text-viet-text-light/50 font-medium text-sm">
-            {t('profile.study_plan.calendar.upcoming_empty', 'ChÆ°a cÃ³ lá»‹ch há»c tÃ¹y chá»‰nh nÃ o Ä‘Æ°á»£c lÃªn káº¿ hoáº¡ch trong thÃ¡ng nÃ y. HÃ£y click vÃ o báº¥t ká»³ ngÃ y nÃ o trÃªn lá»‹ch Ä‘á»ƒ lÃªn lá»‹ch há»c cá»§a riÃªng báº¡n!')}
+            {t('profile.study_plan.calendar.upcoming_empty', 'Chưa có lịch học tùy chỉnh nào được lên kế hoạch trong tháng này. Hãy click vào bất kỳ ngày nào trên lịch để lên lịch học của riêng bạn!')}
           </div>
         )}
       </div>
@@ -384,7 +384,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
               </button>
 
               <h3 className="text-2xl font-black text-viet-text mb-2">
-                {t('profile.study_plan.calendar.schedule_modal_title', 'Chi tiáº¿t ngÃ y há»c')}
+                {t('profile.study_plan.calendar.schedule_modal_title', 'Chi tiết ngày học')}
               </h3>
               <p className="text-sm font-bold text-viet-green uppercase tracking-wider mb-6">
                 {selectedDay.date.toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -394,13 +394,13 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                 {/* Title Form Field */}
                 <div className="space-y-2">
                   <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-1">
-                    {t('profile.study_plan.calendar.input_title_label', 'Ná»™i dung/Ghi chÃº')}
+                    {t('profile.study_plan.calendar.input_title_label', 'Nội dung/Ghi chú')}
                   </label>
                   <input
                     type="text"
                     value={sessionForm.title}
                     onChange={(e) => setSessionForm({ ...sessionForm, title: e.target.value })}
-                    placeholder={t('profile.study_plan.calendar.input_title_placeholder', 'VD: Ã”n táº­p chÆ°Æ¡ng 1, thá»±c hÃ nh pháº£n á»©ng...')}
+                    placeholder={t('profile.study_plan.calendar.input_title_placeholder', 'VD: Ôn tập chương 1, thực hành phản ứng...')}
                     className="w-full h-14 bg-slate-50 border border-viet-border rounded-xl px-4 font-bold text-sm focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
                   />
                 </div>
@@ -409,7 +409,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-1">
-                      {t('profile.study_plan.calendar.input_time_label', 'Giá» há»c tÃ¹y chá»‰nh')}
+                      {t('profile.study_plan.calendar.input_time_label', 'Giờ học tùy chỉnh')}
                     </label>
                     <input
                       type="time"
@@ -421,7 +421,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                   
                   <div className="space-y-2">
                     <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-1">
-                      {t('profile.study_plan.calendar.input_target_label', 'Sá»‘ lÆ°á»£ng bÃ i há»c')}
+                      {t('profile.study_plan.calendar.input_target_label', 'Số lượng bài học')}
                     </label>
                     <select
                       value={sessionForm.target}
@@ -429,7 +429,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                       className="w-full h-14 bg-slate-50 border border-viet-border rounded-xl px-4 font-black text-sm focus:border-viet-green focus:ring-4 focus:ring-viet-green/10 outline-none transition-all"
                     >
                       {[1, 2, 3, 5].map(n => (
-                        <option key={n} value={n}>{n} bÃ i</option>
+                        <option key={n} value={n}>{n} bài</option>
                       ))}
                     </select>
                   </div>
@@ -445,7 +445,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                   }`}
                 >
                   <span className="font-black text-sm flex items-center gap-1.5">
-                    <Flame size={16} className="text-emerald-500 fill-emerald-500 shrink-0" /> {t('profile.study_plan.calendar.status_completed', 'ÄÃ£ hoÃ n thÃ nh má»¥c tiÃªu')}
+                    <Flame size={16} className="text-emerald-500 fill-emerald-500 shrink-0" /> {t('profile.study_plan.calendar.status_completed', 'Đã hoàn thành mục tiêu')}
                   </span>
                   <div className={`w-8 h-5 rounded-full relative transition-colors ${sessionForm.completed ? 'bg-emerald-500' : 'bg-slate-300'}`}>
                     <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${sessionForm.completed ? 'right-0.5' : 'left-0.5'}`} />
@@ -459,7 +459,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                   onClick={handleSaveSession}
                   className="w-full py-4 bg-viet-green text-white font-black rounded-2xl border-b-4 border-emerald-700 active:border-b-0 active:translate-y-[4px] uppercase tracking-wider text-sm transition-all"
                 >
-                  {t('profile.study_plan.calendar.btn_save', 'LÆ°u lá»‹ch há»c')}
+                  {t('profile.study_plan.calendar.btn_save', 'Lưu lịch học')}
                 </button>
                 
                 {customSessions[selectedDay.dateKey] && (
@@ -467,7 +467,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                     onClick={handleDeleteSession}
                     className="w-full py-3 bg-red-50 text-red-500 font-bold rounded-2xl hover:bg-red-100 transition-colors uppercase tracking-wider text-xs"
                   >
-                    {t('profile.study_plan.calendar.btn_delete', 'XÃ³a lá»‹ch')}
+                    {t('profile.study_plan.calendar.btn_delete', 'Xóa lịch')}
                   </button>
                 )}
 
@@ -475,7 +475,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                   onClick={() => setModalOpen(false)}
                   className="w-full py-3 text-viet-text-light hover:text-viet-text font-bold rounded-2xl transition-colors uppercase tracking-wider text-xs"
                 >
-                  {t('profile.study_plan.calendar.btn_cancel', 'Há»§y bá»')}
+                  {t('profile.study_plan.calendar.btn_cancel', 'Hủy bỏ')}
                 </button>
               </div>
             </motion.div>

@@ -39,10 +39,10 @@ const apiCall = async (url, options = {}) => {
 };
 
 const GAME_META = {
-  calculation: { label: 'TÃ­nh toÃ¡n', icon: Calculator, tone: 'text-blue-300', bg: 'bg-blue-500/15' },
-  balancing: { label: 'CÃ¢n báº±ng', icon: FlaskConical, tone: 'text-viet-green', bg: 'bg-viet-green/15' },
-  atom_match: { label: 'GhÃ©p nguyÃªn tá»­', icon: Atom, tone: 'text-amber-300', bg: 'bg-amber-500/15' },
-  electron_match: { label: 'GhÃ©p electron', icon: Atom, tone: 'text-fuchsia-300', bg: 'bg-fuchsia-500/15' },
+  calculation: { label: 'Tính toán', icon: Calculator, tone: 'text-blue-300', bg: 'bg-blue-500/15' },
+  balancing: { label: 'Cân bằng', icon: FlaskConical, tone: 'text-viet-green', bg: 'bg-viet-green/15' },
+  atom_match: { label: 'Ghép nguyên tử', icon: Atom, tone: 'text-amber-300', bg: 'bg-amber-500/15' },
+  electron_match: { label: 'Ghép electron', icon: Atom, tone: 'text-fuchsia-300', bg: 'bg-fuchsia-500/15' },
 };
 
 const parseNumber = (value) => Number(String(value).replace(',', '.'));
@@ -72,7 +72,7 @@ const sideAtomCounts = (formulas, coefficients) => {
   return total;
 };
 
-const SubmitButton = ({ disabled, submitting, onClick, label = 'Ná»™p Ä‘Ã¡p Ã¡n' }) => (
+const SubmitButton = ({ disabled, submitting, onClick, label = 'Nộp đáp án' }) => (
   <button
     type="button"
     disabled={disabled || submitting}
@@ -98,19 +98,19 @@ const symbolFromLabel = (label = '') => {
 };
 
 const calculationStages = (payload = {}) => {
-  const targetLabel = payload.target?.label || 'káº¿t quáº£';
+  const targetLabel = payload.target?.label || 'kết quả';
   const givenLabels = (payload.given || []).map((item) => item.label || '');
   const gasLabel = givenLabels.find((label) => /^V\(/.test(label));
   const formula = String(payload.formula || '');
 
   if (gasLabel && formula.includes('22')) {
     return [
-      { title: `TÃ­nh n(${symbolFromLabel(gasLabel)})`, caption: 'Giai Ä‘oáº¡n 1/2' },
-      { title: `TÃ­nh ${targetLabel}`, caption: 'Giai Ä‘oáº¡n 2/2' },
+      { title: `Tính n(${symbolFromLabel(gasLabel)})`, caption: 'Giai đoạn 1/2' },
+      { title: `Tính ${targetLabel}`, caption: 'Giai đoạn 2/2' },
     ];
   }
 
-  return [{ title: `TÃ­nh ${targetLabel}`, caption: 'Giai Ä‘oáº¡n 1' }];
+  return [{ title: `Tính ${targetLabel}`, caption: 'Giai đoạn 1' }];
 };
 
 const CalculationFormulaModel = ({ payload = {}, value, setValue, disabled, submitting, canSubmit, onSubmit }) => {
@@ -128,8 +128,8 @@ const CalculationFormulaModel = ({ payload = {}, value, setValue, disabled, subm
       </div>
 
       <div className="rounded-lg border border-dashed border-viet-green/40 bg-viet-green/5 p-4">
-        <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">CÃ´ng thá»©c gá»£i Ã½</p>
-        <p className="mt-2 text-xl font-black text-viet-text">{payload.formula || 'Chá»n cÃ´ng thá»©c phÃ¹ há»£p rá»“i tÃ­nh káº¿t quáº£'}</p>
+        <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Công thức gợi ý</p>
+        <p className="mt-2 text-xl font-black text-viet-text">{payload.formula || 'Chọn công thức phù hợp rồi tính kết quả'}</p>
       </div>
 
       <div data-arena-model="experiment-controls" className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4">
@@ -139,7 +139,7 @@ const CalculationFormulaModel = ({ payload = {}, value, setValue, disabled, subm
               <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">{stage.caption}</p>
               <p className="mt-1 text-sm font-black text-viet-text">{stage.title}</p>
               {index === 0 && stages.length > 1 && (
-                <p className="mt-2 text-[11px] font-bold text-viet-text-light">V mol Ä‘ktc = 22,4 L/mol</p>
+                <p className="mt-2 text-[11px] font-bold text-viet-text-light">V mol đktc = 22,4 L/mol</p>
               )}
             </div>
           ))}
@@ -147,14 +147,14 @@ const CalculationFormulaModel = ({ payload = {}, value, setValue, disabled, subm
 
         {stages.length > 1 && (
           <button type="button" className="mt-3 rounded-lg border border-viet-green/30 bg-white px-4 py-2 text-[10px] font-black uppercase tracking-widest text-viet-green">
-            Sang giai Ä‘oáº¡n 2
+            Sang giai đoạn 2
           </button>
         )}
       </div>
 
       <label className="mt-5 block">
         <span className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">
-          {payload.target?.label || 'Káº¿t quáº£'} {payload.target?.unit ? `(${payload.target.unit})` : ''}
+          {payload.target?.label || 'Kết quả'} {payload.target?.unit ? `(${payload.target.unit})` : ''}
         </span>
         <input
           type="number"
@@ -183,20 +183,20 @@ const CalculationExperimentModel = ({ payload = {} }) => {
   const given = payload.given || [];
   const visualMeta = {
     scale: {
-      title: 'CÃ¢n Ä‘iá»‡n tá»­',
-      hint: 'ÄÆ°a khá»‘i lÆ°á»£ng vÃ  khá»‘i lÆ°á»£ng mol vÃ o cÃ´ng thá»©c.',
+      title: 'Cân điện tử',
+      hint: 'Đưa khối lượng và khối lượng mol vào công thức.',
     },
     gas: {
-      title: 'Thu khÃ­ á»Ÿ nÆ°á»›c',
-      hint: 'Äá»•i thá»ƒ tÃ­ch khÃ­ sang mol báº±ng 22,4 lÃ­t/mol.',
+      title: 'Thu khí ở nước',
+      hint: 'Đổi thể tích khí sang mol bằng 22,4 lít/mol.',
     },
     flask: {
-      title: 'BÃ¬nh pháº£n á»©ng',
-      hint: 'DÃ¹ng tá»‰ lá»‡ phÆ°Æ¡ng trÃ¬nh Ä‘á»ƒ suy ra cháº¥t cáº§n tÃ­nh.',
+      title: 'Bình phản ứng',
+      hint: 'Dùng tỉ lệ phương trình để suy ra chất cần tính.',
     },
     'heated-tube': {
-      title: 'á»ng nghiá»‡m nung',
-      hint: 'Nhiá»‡t phÃ¢n sinh khÃ­ rá»“i Ä‘á»•i mol sang thá»ƒ tÃ­ch.',
+      title: 'Ống nghiệm nung',
+      hint: 'Nhiệt phân sinh khí rồi đổi mol sang thể tích.',
     },
   };
   const meta = visualMeta[visual] || visualMeta.flask;
@@ -208,7 +208,7 @@ const CalculationExperimentModel = ({ payload = {} }) => {
           <Calculator className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">MÃ´ hÃ¬nh thÃ­ nghiá»‡m</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Mô hình thí nghiệm</p>
           <p className="font-black text-lg">{meta.title}</p>
         </div>
       </div>
@@ -221,7 +221,7 @@ const CalculationExperimentModel = ({ payload = {} }) => {
                 <div className="absolute left-1/2 top-8 h-20 w-2 -translate-x-1/2 rounded-full bg-white/30" />
                 <div className="absolute left-1/2 top-5 h-2 w-44 -translate-x-1/2 rounded-full bg-viet-green" />
                 <div className="absolute left-5 top-10 h-12 w-20 rounded-b-full border-2 border-blue-200/70 bg-blue-300/10 text-center text-[11px] font-black text-blue-100">
-                  Máº«u cÃ¢n
+                  Mẫu cân
                 </div>
                 <div className="absolute right-5 top-10 h-12 w-20 rounded-b-full border-2 border-amber-200/70 bg-amber-300/10 text-center text-[11px] font-black text-amber-100">
                   M
@@ -276,7 +276,7 @@ const CalculationExperimentModel = ({ payload = {} }) => {
         </div>
 
         <div className="mt-5 rounded-xl border border-viet-green/30 bg-viet-green/10 p-4">
-          <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">CÃ´ng thá»©c tÆ°Æ¡ng á»©ng</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Công thức tương ứng</p>
           <p className="mt-1 text-sm font-black text-viet-text">{payload.formula || meta.hint}</p>
           <p className="mt-2 text-xs font-bold text-viet-text-light">{meta.hint}</p>
         </div>
@@ -306,8 +306,8 @@ const BalancingScaleModel = ({ reactantCounts = {}, productCounts = {}, elements
     <div data-arena-model="balancing-scale" className="flex flex-col rounded-3xl border border-slate-200 bg-white p-5 text-viet-text shadow-sm">
       <div className="mb-6 flex items-center justify-between gap-3">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">CÃ¡i cÃ¢n cÃ¢n báº±ng</p>
-          <p className="mt-1 text-lg font-black text-viet-text">{isBalanced ? 'Hai váº¿ Ä‘Ã£ báº±ng nhau' : 'Chá»‰nh há»‡ sá»‘ Ä‘á»ƒ cÃ¢n báº±ng'}</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Cái cân cân bằng</p>
+          <p className="mt-1 text-lg font-black text-viet-text">{isBalanced ? 'Hai vế đã bằng nhau' : 'Chỉnh hệ số để cân bằng'}</p>
         </div>
         <div className={`rounded-xl px-4 py-2 font-mono text-sm font-black shadow-sm ${isBalanced ? 'bg-viet-green/10 text-viet-green ring-1 ring-viet-green/30' : 'bg-slate-100 text-slate-500 ring-1 ring-slate-200'}`}>
           {leftTotal} / {rightTotal}
@@ -324,13 +324,13 @@ const BalancingScaleModel = ({ reactantCounts = {}, productCounts = {}, elements
         >
           <div className="absolute -left-6 top-3 w-32" style={{ transform: `rotate(${-tilt}deg)`, transition: 'transform 500ms ease-out' }}>
             <div className="relative overflow-hidden rounded-b-[40px] border-2 border-emerald-200 bg-emerald-50 px-3 py-6 text-center shadow-md">
-              <p className="relative text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Váº¿ trÃ¡i</p>
+              <p className="relative text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Vế trái</p>
               <p className="relative mt-2 font-mono text-4xl font-black text-emerald-500">{leftTotal}</p>
             </div>
           </div>
           <div className="absolute -right-6 top-3 w-32" style={{ transform: `rotate(${-tilt}deg)`, transition: 'transform 500ms ease-out' }}>
             <div className="relative overflow-hidden rounded-b-[40px] border-2 border-amber-200 bg-amber-50 px-3 py-6 text-center shadow-md">
-              <p className="relative text-[10px] font-black uppercase tracking-[0.2em] text-amber-600">Váº¿ pháº£i</p>
+              <p className="relative text-[10px] font-black uppercase tracking-[0.2em] text-amber-600">Vế phải</p>
               <p className="relative mt-2 font-mono text-4xl font-black text-amber-500">{rightTotal}</p>
             </div>
           </div>
@@ -457,9 +457,9 @@ const BalancingGame = ({ task, onSubmit, submitting, disabled }) => {
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-viet-border shadow-sm">
           <div className="grid grid-cols-3 bg-slate-50 px-5 py-4 text-[11px] font-black uppercase tracking-widest text-viet-text-light">
-            <span>NguyÃªn tá»‘</span>
-            <span className="text-center">Váº¿ trÃ¡i</span>
-            <span className="text-center">Váº¿ pháº£i</span>
+            <span>Nguyên tố</span>
+            <span className="text-center">Vế trái</span>
+            <span className="text-center">Vế phải</span>
           </div>
           {elements.map((element) => {
             const ok = reactantCounts[element] === productCounts[element];
@@ -476,7 +476,7 @@ const BalancingGame = ({ task, onSubmit, submitting, disabled }) => {
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className={`inline-flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-black shadow-sm ${isBalanced ? 'bg-viet-green/10 text-viet-green ring-1 ring-viet-green/30' : 'bg-amber-50 text-amber-600 ring-1 ring-amber-500/20'}`}>
             {isBalanced ? <CheckCircle2 className="h-5 w-5" /> : <RefreshCw className="h-5 w-5" />}
-            {isBalanced ? 'CÃ¡c nguyÃªn tá»‘ Ä‘Ã£ cÃ¢n báº±ng' : 'Theo dÃµi bá»™ Ä‘áº¿m nguyÃªn tá»­'}
+            {isBalanced ? 'Các nguyên tố đã cân bằng' : 'Theo dõi bộ đếm nguyên tử'}
           </div>
           <SubmitButton
             disabled={disabled}
@@ -524,11 +524,11 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
         <div data-arena-model="atom-drag-drop" className="rounded-lg border border-viet-border bg-slate-50 p-4">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">KÃ©o tháº£ nguyÃªn tá»­</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Kéo thả nguyên tử</p>
               <p className="text-xl font-black text-viet-text">{payload.formula || 'Molecule'}</p>
             </div>
             <span className="rounded-lg bg-white px-3 py-2 text-xs font-black text-viet-text-light">
-              {filledCount}/{slots.length} vá»‹ trÃ­
+              {filledCount}/{slots.length} vị trí
             </span>
           </div>
 
@@ -564,8 +564,8 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
 
         <div className="mt-5 rounded-lg border border-dashed border-viet-green/40 bg-viet-green/5 p-4">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Khung phÃ¢n tá»­</p>
-            <p className="text-xs font-bold text-viet-text-light">KÃ©o tháº» vÃ o tá»«ng Ã´ hoáº·c chá»n tháº» rá»“i báº¥m Ã´</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Khung phân tử</p>
+            <p className="text-xs font-bold text-viet-text-light">Kéo thẻ vào từng ô hoặc chọn thẻ rồi bấm ô</p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {slots.map((slot) => (
@@ -609,8 +609,8 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
                     {placements[slot.id] || '+'}
                   </span>
                   <div>
-                    <p className="text-sm font-black text-viet-text">{placements[slot.id] || 'Äang trá»‘ng'}</p>
-                    <p className="mt-1 text-xs font-bold text-viet-text-light">{slot.hint || 'Tháº£ nguyÃªn tá»­ vÃ o Ä‘Ã¢y'}</p>
+                    <p className="text-sm font-black text-viet-text">{placements[slot.id] || 'Đang trống'}</p>
+                    <p className="mt-1 text-xs font-bold text-viet-text-light">{slot.hint || 'Thả nguyên tử vào đây'}</p>
                   </div>
                 </div>
               </div>
@@ -628,7 +628,7 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
       </div>
 
       <div className="rounded-2xl border border-slate-200 bg-white p-6 text-viet-text shadow-sm">
-        <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Tráº¡ng thÃ¡i phÃ¢n tá»­</p>
+        <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Trạng thái phân tử</p>
         <p className="mt-2 text-3xl font-black text-viet-green">{payload.formula || 'Molecule'}</p>
         <div className="mt-5 grid min-h-[240px] place-items-center rounded-2xl border border-viet-border bg-slate-50 p-4">
           <div className="flex max-w-[260px] flex-wrap justify-center gap-3">
@@ -647,7 +647,7 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
           </div>
         </div>
         <div className="mt-5 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-bold text-blue-700">
-          ÄÃ£ ghÃ©p {filledCount}/{slots.length} vá»‹ trÃ­. ÄÃ¡p Ã¡n chá»‰ Ä‘Æ°á»£c cháº¥m á»Ÿ backend.
+          Đã ghép {filledCount}/{slots.length} vị trí. Đáp án chỉ được chấm ở backend.
         </div>
       </div>
     </div>
@@ -679,7 +679,7 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
       <div className="rounded-lg border border-slate-200 bg-white p-5 text-viet-text">
         <div className="mb-5 rounded-lg border border-viet-border bg-slate-50 p-4">
-          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">NguyÃªn tá»­</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Nguyên tử</p>
           <p className="mt-1 text-3xl font-black text-viet-text">{payload.symbol} <span className="text-base text-viet-text-light">Z = {target}</span></p>
           <p className="mt-2 text-sm font-bold text-viet-text-light">{payload.modelHint}</p>
         </div>
@@ -688,8 +688,8 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
           {labels.map((label, index) => (
             <div key={label} className="flex items-center justify-between rounded-lg border border-viet-border p-3">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Lá»›p {label}</p>
-                <p className="text-sm font-bold text-viet-text-light">Tá»‘i Ä‘a {capacity(index)} electron</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Lớp {label}</p>
+                <p className="text-sm font-bold text-viet-text-light">Tối đa {capacity(index)} electron</p>
               </div>
               <div className="flex items-center gap-3">
                 <button
@@ -716,7 +716,7 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
 
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className={`rounded-lg px-3 py-2 text-sm font-black ${canSubmit ? 'bg-viet-green/10 text-viet-green' : 'bg-amber-50 text-amber-600'}`}>
-            Tá»•ng electron: {total}/{target}
+            Tổng electron: {total}/{target}
           </div>
           <SubmitButton
             disabled={!canSubmit || disabled}
@@ -738,7 +738,7 @@ const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-viet-text shadow-sm">
         <Loader2 className="mx-auto mb-4 h-8 w-8 animate-spin text-viet-green" />
-        <span className="font-black">Äang táº£i nhiá»‡m vá»¥...</span>
+        <span className="font-black">Đang tải nhiệm vụ...</span>
       </div>
     );
   }
@@ -757,7 +757,7 @@ const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
       return (
         <div className="rounded-lg border border-white/10 bg-white p-8 text-center text-viet-text">
           <XCircle className="mx-auto mb-3 h-8 w-8 text-red-500" />
-          ChÆ°a cÃ³ renderer cho mini game nÃ y.
+          Chưa có renderer cho mini game này.
         </div>
       );
   }
@@ -767,7 +767,7 @@ const Scoreboard = ({ players, currentUserId }) => (
   <div className="flex w-full items-center gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white p-3 hide-scrollbar shadow-sm">
     <div className="flex shrink-0 items-center gap-2 border-r border-slate-200 pr-4">
       <Trophy className="h-4 w-4 text-amber-400" />
-      <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Báº£ng Ä‘iá»ƒm</span>
+      <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Bảng điểm</span>
     </div>
     <div className="flex gap-3">
       {[...players].sort((a, b) => (b.score || 0) - (a.score || 0)).map((player, index) => (
@@ -799,9 +799,9 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
       <div className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-8">
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <p className="text-[11px] font-black uppercase tracking-widest text-viet-green">PhÃ²ng Arena PK</p>
-              <h1 className="mt-2 text-4xl font-black">{room.name || `PhÃ²ng ${room.id}`}</h1>
-              <p className="mt-2 text-sm font-bold text-viet-text-light">MÃ£ phÃ²ng: <span className="text-viet-text">{room.id}</span></p>
+              <p className="text-[11px] font-black uppercase tracking-widest text-viet-green">Phòng Arena PK</p>
+              <h1 className="mt-2 text-4xl font-black">{room.name || `Phòng ${room.id}`}</h1>
+              <p className="mt-2 text-sm font-bold text-viet-text-light">Mã phòng: <span className="text-viet-text">{room.id}</span></p>
             </div>
             <button
               type="button"
@@ -809,21 +809,21 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
               className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 text-sm font-black uppercase tracking-widest text-red-500 transition hover:border-red-200 hover:bg-red-50"
             >
               <LogOut className="h-5 w-5" />
-              Rá»i phÃ²ng
+              Rời phòng
             </button>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Cháº¿ Ä‘á»™</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Chế độ</p>
               <p className="mt-2 text-xl font-black">{room.mode || 'solo'}</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Äá»™ khÃ³</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Độ khó</p>
               <p className="mt-2 text-xl font-black">{room.difficulty || 'auto'}</p>
             </div>
             <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">NgÆ°á»i chÆ¡i</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Người chơi</p>
               <p className="mt-2 text-xl font-black">{players.length}/{room.max_players || 1}</p>
             </div>
           </div>
@@ -842,7 +842,7 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
 
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm font-bold text-viet-text-light">
-              {isHost ? 'Chá»§ phÃ²ng cÃ³ thá»ƒ báº¯t Ä‘áº§u khi Ä‘á»§ ngÆ°á»i.' : 'Äá»£i chá»§ phÃ²ng báº¯t Ä‘áº§u tráº­n.'}
+              {isHost ? 'Chủ phòng có thể bắt đầu khi đủ người.' : 'Đợi chủ phòng bắt đầu trận.'}
             </p>
             <button
               type="button"
@@ -851,7 +851,7 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-viet-green px-6 text-sm font-black uppercase tracking-widest text-white shadow-sm transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {starting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5 fill-current" />}
-              Báº¯t Ä‘áº§u
+              Bắt đầu
             </button>
           </div>
         </div>
@@ -874,11 +874,11 @@ const FinishedRoom = ({ state, user, onContinue }) => {
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-viet-green/15 text-viet-green">
             <Trophy className="h-8 w-8" />
           </div>
-          <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">Tráº­n Ä‘Ã£ káº¿t thÃºc</p>
+          <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">Trận đã kết thúc</p>
           <h1 className="mt-2 text-4xl font-black">
-            {result === 'win' ? 'Báº¡n tháº¯ng' : result === 'lose' ? 'Báº¡n thua' : 'HÃ²a Ä‘iá»ƒm'}
+            {result === 'win' ? 'Bạn thắng' : result === 'lose' ? 'Bạn thua' : 'Hòa điểm'}
           </h1>
-          <p className="mt-2 text-sm font-bold text-viet-text-light">Äiá»ƒm cá»§a báº¡n: {current?.score || 0}</p>
+          <p className="mt-2 text-sm font-bold text-viet-text-light">Điểm của bạn: {current?.score || 0}</p>
 
           <div className="mt-6 space-y-3 text-left">
             {players.map((player, index) => (
@@ -887,7 +887,7 @@ const FinishedRoom = ({ state, user, onContinue }) => {
                 <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={44} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-black">{player.username}</p>
-                  <p className="text-xs font-bold text-viet-text-light">{player.correct_count || 0} cÃ¢u Ä‘Ãºng</p>
+                  <p className="text-xs font-bold text-viet-text-light">{player.correct_count || 0} câu đúng</p>
                 </div>
                 <span className="font-black text-viet-green">{player.score || 0}</span>
               </div>
@@ -900,7 +900,7 @@ const FinishedRoom = ({ state, user, onContinue }) => {
             className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-viet-green px-5 text-sm font-black uppercase tracking-widest text-white transition hover:brightness-105"
           >
             <Play className="h-5 w-5" />
-            Tiáº¿p tá»¥c
+            Tiếp tục
           </button>
         </div>
       </div>
@@ -1034,7 +1034,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       });
       setFeedback({
         type: data.isCorrect ? 'success' : 'error',
-        message: data.isCorrect ? `ChÃ­nh xÃ¡c +${data.scoreAwarded}` : 'ChÆ°a Ä‘Ãºng, chá» háº¿t lÆ°á»£t Ä‘á»ƒ xem Ä‘Ã¡p Ã¡n.',
+        message: data.isCorrect ? `Chính xác +${data.scoreAwarded}` : 'Chưa đúng, chờ hết lượt để xem đáp án.',
       });
       if (data.state) setState(data.state);
     } catch (error) {
@@ -1064,7 +1064,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       <div className="fixed inset-0 z-[120] grid place-items-center bg-slate-950 text-white">
         <div className="text-center">
           <Loader2 className="mx-auto mb-4 h-10 w-10 animate-spin text-viet-green" />
-          <p className="font-black">Äang táº£i phÃ²ng Arena...</p>
+          <p className="font-black">Đang tải phòng Arena...</p>
         </div>
       </div>
     );
@@ -1075,8 +1075,8 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       <div className="fixed inset-0 z-[120] grid place-items-center bg-slate-950 p-4 text-white">
         <div className="max-w-md rounded-lg border border-white/10 bg-white/5 p-6 text-center">
           <XCircle className="mx-auto mb-4 h-10 w-10 text-red-300" />
-          <p className="font-black">KhÃ´ng táº£i Ä‘Æ°á»£c phÃ²ng Arena.</p>
-          <button type="button" onClick={onLeave} className="mt-5 rounded-lg bg-viet-green px-5 py-3 font-black text-white">Quay láº¡i</button>
+          <p className="font-black">Không tải được phòng Arena.</p>
+          <button type="button" onClick={onLeave} className="mt-5 rounded-lg bg-viet-green px-5 py-3 font-black text-white">Quay lại</button>
         </div>
       </div>
     );
@@ -1115,14 +1115,14 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
               <LogOut className="h-5 w-5" />
             </button>
             <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Tiáº¿n Ä‘á»™</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Tiến độ</p>
               <p className="font-black">Round {(currentRoom?.current_round_index || 0) + 1}/{totalRounds}</p>
             </div>
           </div>
 
           <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
             <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-viet-text-light">
-              <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> Thá»i gian</span>
+              <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> Thời gian</span>
               <span className={timeLeft <= 5 ? 'text-red-500' : 'text-viet-green'}>{timeLeft}s</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-slate-100">
@@ -1139,7 +1139,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
 
           <div className="flex items-center justify-between gap-3 lg:justify-end">
             <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-right shadow-sm">
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Äiá»ƒm</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Điểm</p>
               <p className="text-xl font-black text-viet-text">{currentPlayer?.score || 0}</p>
             </div>
             <Avatar
@@ -1174,7 +1174,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
 
             {hasAnswered && (
               <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-black text-amber-700 shadow-sm">
-                Báº¡n Ä‘Ã£ ná»™p round nÃ y. Äang chá» ngÆ°á»i chÆ¡i khÃ¡c hoáº·c háº¿t giá».
+                Bạn đã nộp round này. Đang chờ người chơi khác hoặc hết giờ.
               </div>
             )}
 

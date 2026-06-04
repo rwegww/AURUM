@@ -50,13 +50,13 @@ app.use('/api/missions', missionsRouter);
 app.use('/api/classes', classesRouter);
 app.use('/api/discussions', discussionsRouter);
 
-// Analyze route â€” lazy-loaded per-request to prevent Vercel cold-start crash
+// Analyze route — lazy-loaded per-request to prevent Vercel cold-start crash
 // (pdf-parse, word-extractor, multer are heavy native modules that may fail on serverless)
 let _analyzeRouter = null;
 let _analyzeLoadError = null;
 app.use('/api/analyze', async (req, res, next) => {
   if (_analyzeLoadError) {
-    return res.status(503).json({ message: 'Dá»‹ch vá»¥ phÃ¢n tÃ­ch tÃ i liá»‡u táº¡m thá»i khÃ´ng kháº£ dá»¥ng.', error: _analyzeLoadError });
+    return res.status(503).json({ message: 'Dịch vụ phân tích tài liệu tạm thời không khả dụng.', error: _analyzeLoadError });
   }
   if (!_analyzeRouter) {
     try {
@@ -65,8 +65,8 @@ app.use('/api/analyze', async (req, res, next) => {
       console.log('âœ… Analyze router lazy-loaded on first request.');
     } catch (err) {
       _analyzeLoadError = err.message;
-      console.error('âš ï¸ Analyze router failed to load:', err.message);
-      return res.status(503).json({ message: 'Dá»‹ch vá»¥ phÃ¢n tÃ­ch tÃ i liá»‡u táº¡m thá»i khÃ´ng kháº£ dá»¥ng.', error: err.message });
+      console.error('⚠️ Analyze router failed to load:', err.message);
+      return res.status(503).json({ message: 'Dịch vụ phân tích tài liệu tạm thời không khả dụng.', error: err.message });
     }
   }
   return _analyzeRouter(req, res, next);
@@ -117,7 +117,7 @@ app.use((err, req, res, next) => {
 
 // Global Error Handler
 app.use((err, req, res, _next) => {
-  console.error('âŒ Server Error:', err);
+  console.error('❌ Server Error:', err);
   const showDetails = process.env.NODE_ENV !== 'production';
   res.status(500).json({ 
     message: 'Internal Server Error', 
@@ -134,11 +134,11 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
   const HOST = process.env.API_HOST || '127.0.0.1';
   app.listen(PORT, HOST, () => {
-    console.log(`ðŸš€ Aurum API running on http://${HOST}:${PORT}`);
-    console.log(`ðŸ”— Health Check: http://${HOST}:${PORT}/api/health`);
+    console.log(`🚀 Aurum API running on http://${HOST}:${PORT}`);
+    console.log(`🔗 Health Check: http://${HOST}:${PORT}/api/health`);
     
     // Local Cron Simulation (runs every 60 seconds to dispatch reminders automatically)
-    console.log('â° Local Cron Simulation started (checks every 60 seconds).');
+    console.log('⏰ Local Cron Simulation started (checks every 60 seconds).');
     setInterval(async () => {
       try {
         const response = await fetch(`http://127.0.0.1:${PORT}/api/user/cron-send-reminders`);

@@ -4,29 +4,29 @@
   "lessonId": 3,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 3: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­",
-  "chapter": "ChÆ°Æ¡ng 1: Pháº£n á»©ng hÃ³a há»c",
+  "title": "Bài 3: Mol và tỉ khối chất khí",
+  "chapter": "Chương 1: Phản ứng hóa học",
   "order": 3,
   "isPremium": false,
-  "description": "KhÃ¡i niá»‡m mol, sá»‘ Avogadro, khá»‘i lÆ°á»£ng mol, thá»ƒ tÃ­ch mol cháº¥t khÃ­ vÃ  tá»‰ khá»‘i Ä‘á»ƒ so sÃ¡nh cÃ¡c cháº¥t khÃ­.",
+  "description": "Khái niệm mol, số Avogadro, khối lượng mol, thể tích mol chất khí và tỉ khối để so sánh các chất khí.",
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Mol lÃ  má»™t khÃ¡i niá»‡m trá»«u tÆ°á»£ng. HÃ£y chá»n hÃ¬nh áº£nh tÆ°á»£ng trÆ°ng cho '1 mol' nguyÃªn tá»­ sáº¯t!",
+      "narrative": "Mol là một khái niệm trừu tượng. Hãy chọn hình ảnh tượng trưng cho '1 mol' nguyên tử sắt!",
       "images": [
         "/assets/images/lab-equipment/beaker.png",
         "/assets/images/lab-equipment/test-tube.png",
         "/assets/images/lab-equipment/erlenmeyer-flask.png",
         "/assets/images/lab-equipment/graduated-cylinder.png"
       ],
-      "question": "Mol lÃ  lÆ°á»£ng cháº¥t chá»©a 6,022 x 10^23 háº¡t vi háº¡t. ÄÃ¢u lÃ  dá»¥ng cá»¥ Ä‘á»±ng hÃ³a cháº¥t nÃ y?",
+      "question": "Mol là lượng chất chứa 6,022 x 10^23 hạt vi hạt. Đâu là dụng cụ đựng hóa chất này?",
       "correctAnswer": 0,
-      "targetType": "khÃ¡i niá»‡m",
-      "source": "ÄÆ¡n vá»‹ Ä‘o lÆ°á»ng"
+      "targetType": "khái niệm",
+      "source": "Đơn vị đo lường"
     },
     {
       "type": "multiple-choice",
-      "narrative": "TÃ­nh toÃ¡n nhanh: HÃ£y tÃ­nh khá»‘i lÆ°á»£ng cá»§a 0,5 mol khÃ­ Oxy (O2). Cho O=16.",
+      "narrative": "Tính toán nhanh: Hãy tính khối lượng của 0,5 mol khí Oxy (O2). Cho O=16.",
       "options": [
         "16 gam",
         "32 gam",
@@ -34,45 +34,45 @@
         "64 gam"
       ],
       "correctAnswer": 0,
-      "question": "CÃ´ng thá»©c tÃ­nh: m = n x M. ÄÃ¡p Ã¡n lÃ  bao nhiÃªu?",
-      "source": "TÃ­nh toÃ¡n hÃ³a há»c"
+      "question": "Công thức tính: m = n x M. Đáp án là bao nhiêu?",
+      "source": "Tính toán hóa học"
     },
     {
       "type": "matching",
-      "narrative": "Äiá»u kiá»‡n Ä‘o lÆ°á»ng ráº¥t quan trá»ng. HÃ£y ná»‘i cÃ¡c thÃ´ng sá»‘ vá»›i Ä‘iá»u kiá»‡n Ä‘o Ä‘Ãºng.",
+      "narrative": "Điều kiện đo lường rất quan trọng. Hãy nối các thông số với điều kiện đo đúng.",
       "leftItems": [
-        { "id": "c1", "label": "Äiá»u kiá»‡n chuáº©n (STP)" },
-        { "id": "c2", "label": "Nhiá»‡t Ä‘á»™ phÃ²ng (25Â°C, 1 bar)" },
-        { "id": "c3", "label": "Khá»‘i lÆ°á»£ng mol (M)" }
+        { "id": "c1", "label": "Điều kiện chuẩn (STP)" },
+        { "id": "c2", "label": "Nhiệt độ phòng (25°C, 1 bar)" },
+        { "id": "c3", "label": "Khối lượng mol (M)" }
       ],
       "items": [
         { "id": "c3", "label": "gam/mol" },
-        { "id": "c1", "label": "22,4 lÃ­t (Legacy)" },
-        { "id": "c2", "label": "24,79 lÃ­t (KNTT)" }
+        { "id": "c1", "label": "22,4 lít (Legacy)" },
+        { "id": "c2", "label": "24,79 lít (KNTT)" }
       ],
       "correctOrder": ["c1", "c2", "c3"],
-      "question": "Káº¿t ná»‘i cÃ¡c Ä‘Æ¡n vá»‹/thÃ´ng sá»‘ vá»›i khÃ¡i niá»‡m tÆ°Æ¡ng á»©ng.",
-      "source": "SÃ¡ch giÃ¡o khoa"
+      "question": "Kết nối các đơn vị/thông số với khái niệm tương ứng.",
+      "source": "Sách giáo khoa"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Tá»‰ khá»‘i cá»§a khÃ­ A Ä‘á»‘i vá»›i khÃ­ B Ä‘Æ°á»£c tÃ­nh báº±ng cÃ´ng thá»©c: d = MA / MB. Náº¿u A lÃ  Hydro (H2=2) vÃ  B lÃ  KhÃ´ng khÃ­ (29).",
-      "placeholder": "Náº·ng hÆ¡n hay Nháº¹ hÆ¡n?",
-      "correctAnswer": "Nháº¹ hÆ¡n",
-      "question": "KhÃ­ Hydro Ä‘á»‘i vá»›i khÃ´ng khÃ­ lÃ  náº·ng hÆ¡n hay nháº¹ hÆ¡n?",
-      "source": "Tá»‰ khá»‘i cháº¥t khÃ­"
+      "narrative": "Tỉ khối của khí A đối với khí B được tính bằng công thức: d = MA / MB. Nếu A là Hydro (H2=2) và B là Không khí (29).",
+      "placeholder": "Nặng hơn hay Nhẹ hơn?",
+      "correctAnswer": "Nhẹ hơn",
+      "question": "Khí Hydro đối với không khí là nặng hơn hay nhẹ hơn?",
+      "source": "Tỉ khối chất khí"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thá»­ thÃ¡ch cuá»‘i: HÃ£y sáº¯p xáº¿p cÃ¡c bÆ°á»›c Ä‘á»ƒ tÃ­nh sá»‘ mol tá»« khá»‘i lÆ°á»£ng cho trÆ°á»›c.",
+      "narrative": "Thử thách cuối: Hãy sắp xếp các bước để tính số mol từ khối lượng cho trước.",
       "items": [
-        { "id": "step1", "label": "XÃ¡c Ä‘á»‹nh khá»‘i lÆ°á»£ng mol M cá»§a cháº¥t" },
-        { "id": "step2", "label": "Láº¥y khá»‘i lÆ°á»£ng m chia cho M" },
-        { "id": "step3", "label": "Ghi Ä‘Ã¡p Ã¡n vá»›i Ä‘Æ¡n vá»‹ lÃ  mol" }
+        { "id": "step1", "label": "Xác định khối lượng mol M của chất" },
+        { "id": "step2", "label": "Lấy khối lượng m chia cho M" },
+        { "id": "step3", "label": "Ghi đáp án với đơn vị là mol" }
       ],
       "correctOrder": ["step1", "step2", "step3"],
-      "question": "TrÃ¬nh tá»± tÃ­nh sá»‘ mol tá»« khá»‘i lÆ°á»£ng.",
-      "source": "Ká»¹ nÄƒng tÃ­nh toÃ¡n"
+      "question": "Trình tự tính số mol từ khối lượng.",
+      "source": "Kỹ năng tính toán"
     }
   ],
   "theoryModules": [
@@ -80,7 +80,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡i niá»‡m vá» Mol vÃ  Sá»‘ Avogadro",
+        "text": "1. Khái niệm về Mol và Số Avogadro",
         "level": "h2"
       }
     },
@@ -88,15 +88,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "VÃ¬ nguyÃªn tá»­ vÃ  phÃ¢n tá»­ cÃ³ kÃ­ch thÆ°á»›c cá»±c ká»³ nhá» bÃ© (cá»¡ $10^{-10}$ m), chÃºng ta khÃ´ng thá»ƒ cÃ¢n hay Ä‘áº¿m tá»«ng háº¡t riÃªng láº» báº±ng cÃ¡c dá»¥ng cá»¥ thÃ´ng thÆ°á»ng. Thay vÃ o Ä‘Ã³, cÃ¡c nhÃ  khoa há»c sá»­ dá»¥ng Ä‘Æ¡n vá»‹ **Mol** â€” má»™t Ä‘Æ¡n vá»‹ Ä‘o lÆ°á»£ng cháº¥t trong há»‡ SI â€” Ä‘á»ƒ gom cÃ¡c háº¡t vi mÃ´ thÃ nh má»™t nhÃ³m lá»›n cÃ³ thá»ƒ Ä‘o Ä‘áº¿m Ä‘Æ°á»£c."
+        "text": "Vì nguyên tử và phân tử có kích thước cực kỳ nhỏ bé (cỡ $10^{-10}$ m), chúng ta không thể cân hay đếm từng hạt riêng lẻ bằng các dụng cụ thông thường. Thay vào đó, các nhà khoa học sử dụng đơn vị **Mol** — một đơn vị đo lượng chất trong hệ SI — để gom các hạt vi mô thành một nhóm lớn có thể đo đếm được."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Äá»‹nh nghÄ©a chÃ­nh thá»©c",
-        "content": "**Mol** lÃ  lÆ°á»£ng cháº¥t cÃ³ chá»©a $6,022 \\times 10^{23}$ háº¡t vi mÃ´ (nguyÃªn tá»­, phÃ¢n tá»­, hoáº·c ion) cá»§a cháº¥t Ä‘Ã³.\\nCon sá»‘ $6,022 \\times 10^{23}$ Ä‘Æ°á»£c gá»i lÃ  **sá»‘ Avogadro**, kÃ½ hiá»‡u lÃ  $N_A$, Ä‘áº·t theo tÃªn nhÃ  bÃ¡c há»c ngÆ°á»i Ã Amedeo Avogadro.\\n\\n**Ã nghÄ©a thá»±c táº¿**: Náº¿u ta Ä‘áº¿m 1 triá»‡u háº¡t má»—i giÃ¢y, pháº£i máº¥t hÆ¡n 19 triá»‡u tá»· nÄƒm má»›i Ä‘áº¿m háº¿t 1 mol háº¡t! Äiá»u nÃ y cho tháº¥y sá»‘ Avogadro lá»›n Ä‘áº¿n má»©c nÃ o.",
+        "title": "Định nghĩa chính thức",
+        "content": "**Mol** là lượng chất có chứa $6,022 \\times 10^{23}$ hạt vi mô (nguyên tử, phân tử, hoặc ion) của chất đó.\\nCon số $6,022 \\times 10^{23}$ được gọi là **số Avogadro**, ký hiệu là $N_A$, đặt theo tên nhà bác học người Ý Amedeo Avogadro.\\n\\n**Ý nghĩa thực tế**: Nếu ta đếm 1 triệu hạt mỗi giây, phải mất hơn 19 triệu tỷ năm mới đếm hết 1 mol hạt! Điều này cho thấy số Avogadro lớn đến mức nào.",
         "color": "blue"
       }
     },
@@ -104,7 +104,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Khá»‘i lÆ°á»£ng mol ($M$)",
+        "text": "2. Khối lượng mol ($M$)",
         "level": "h2"
       }
     },
@@ -112,7 +112,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Khá»‘i lÆ°á»£ng mol cá»§a má»™t cháº¥t lÃ  khá»‘i lÆ°á»£ng tÃ­nh báº±ng gam cá»§a **1 mol** cháº¥t Ä‘Ã³, cÃ³ Ä‘Æ¡n vá»‹ lÃ  **g/mol**. Äiá»u Ä‘áº·c biá»‡t lÃ  trá»‹ sá»‘ cá»§a khá»‘i lÆ°á»£ng mol ($M$) báº±ng Ä‘Ãºng trá»‹ sá»‘ cá»§a nguyÃªn tá»­ khá»‘i hoáº·c phÃ¢n tá»­ khá»‘i (tÃ­nh báº±ng Ä‘vC)."
+        "text": "Khối lượng mol của một chất là khối lượng tính bằng gam của **1 mol** chất đó, có đơn vị là **g/mol**. Điều đặc biệt là trị số của khối lượng mol ($M$) bằng đúng trị số của nguyên tử khối hoặc phân tử khối (tính bằng đvC)."
       }
     },
     {
@@ -121,9 +121,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**VÃ­ dá»¥ 1**: NguyÃªn tá»­ khá»‘i cá»§a Carbon lÃ  12 Ä‘vC â†’ $M_C = 12$ g/mol. NghÄ©a lÃ  1 mol nguyÃªn tá»­ Carbon náº·ng 12 gam.",
-          "**VÃ­ dá»¥ 2**: PhÃ¢n tá»­ khá»‘i cá»§a nÆ°á»›c $H_2O$ = $2 \\times 1 + 16 = 18$ Ä‘vC â†’ $M_{H_2O} = 18$ g/mol.",
-          "**VÃ­ dá»¥ 3**: PhÃ¢n tá»­ khá»‘i cá»§a $H_2SO_4$ = $2 \\times 1 + 32 + 4 \\times 16 = 98$ Ä‘vC â†’ $M_{H_2SO_4} = 98$ g/mol."
+          "**Ví dụ 1**: Nguyên tử khối của Carbon là 12 đvC → $M_C = 12$ g/mol. Nghĩa là 1 mol nguyên tử Carbon nặng 12 gam.",
+          "**Ví dụ 2**: Phân tử khối của nước $H_2O$ = $2 \\times 1 + 16 = 18$ đvC → $M_{H_2O} = 18$ g/mol.",
+          "**Ví dụ 3**: Phân tử khối của $H_2SO_4$ = $2 \\times 1 + 32 + 4 \\times 16 = 98$ đvC → $M_{H_2SO_4} = 98$ g/mol."
         ]
       }
     },
@@ -131,7 +131,7 @@
       "id": "mod7",
       "type": "heading",
       "content": {
-        "text": "3. Thá»ƒ tÃ­ch mol cháº¥t khÃ­",
+        "text": "3. Thể tích mol chất khí",
         "level": "h2"
       }
     },
@@ -139,15 +139,15 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "á»ž cÃ¹ng Ä‘iá»u kiá»‡n nhiá»‡t Ä‘á»™ vÃ  Ã¡p suáº¥t, **1 mol cá»§a báº¥t ká»³ cháº¥t khÃ­ nÃ o** cÅ©ng chiáº¿m nhá»¯ng thá»ƒ tÃ­ch báº±ng nhau, báº¥t ká»ƒ cháº¥t khÃ­ Ä‘Ã³ lÃ  gÃ¬. ÄÃ¢y lÃ  tÃ­nh cháº¥t riÃªng cá»§a cháº¥t khÃ­ mÃ  cháº¥t ráº¯n vÃ  cháº¥t lá»ng khÃ´ng cÃ³."
+        "text": "Ở cùng điều kiện nhiệt độ và áp suất, **1 mol của bất kỳ chất khí nào** cũng chiếm những thể tích bằng nhau, bất kể chất khí đó là gì. Đây là tính chất riêng của chất khí mà chất rắn và chất lỏng không có."
       }
     },
     {
       "id": "mod9",
       "type": "infoBox",
       "content": {
-        "title": "GiÃ¡ trá»‹ thá»ƒ tÃ­ch mol á»Ÿ cÃ¡c Ä‘iá»u kiá»‡n",
-        "content": "- á»ž **Ä‘iá»u kiá»‡n tiÃªu chuáº©n (STP)** ($0^\\circ C$ vÃ  1 atm): $V_{mol} = 22,4$ lÃ­t.\\n- á»ž **Ä‘iá»u kiá»‡n chuáº©n** ($25^\\circ C$ vÃ  1 bar): $V_{mol} = 24,79$ lÃ­t.\\n\\n**LÆ°u Ã½ quan trá»ng**: ChÆ°Æ¡ng trÃ¬nh SGK Káº¿t ná»‘i tri thá»©c sá»­ dá»¥ng Ä‘iá»u kiá»‡n chuáº©n $25^\\circ C$, 1 bar â†’ dÃ¹ng $24,79$ lÃ­t/mol.",
+        "title": "Giá trị thể tích mol ở các điều kiện",
+        "content": "- Ở **điều kiện tiêu chuẩn (STP)** ($0^\\circ C$ và 1 atm): $V_{mol} = 22,4$ lít.\\n- Ở **điều kiện chuẩn** ($25^\\circ C$ và 1 bar): $V_{mol} = 24,79$ lít.\\n\\n**Lưu ý quan trọng**: Chương trình SGK Kết nối tri thức sử dụng điều kiện chuẩn $25^\\circ C$, 1 bar → dùng $24,79$ lít/mol.",
         "color": "green"
       }
     },
@@ -155,7 +155,7 @@
       "id": "mod10",
       "type": "heading",
       "content": {
-        "text": "4. CÃ´ng thá»©c chuyá»ƒn Ä‘á»•i giá»¯a cÃ¡c Ä‘áº¡i lÆ°á»£ng",
+        "text": "4. Công thức chuyển đổi giữa các đại lượng",
         "level": "h2"
       }
     },
@@ -163,7 +163,7 @@
       "id": "mod11",
       "type": "paragraph",
       "content": {
-        "text": "Trong bÃ i táº­p, chÃºng ta thÆ°á»ng pháº£i chuyá»ƒn Ä‘á»•i qua láº¡i giá»¯a **sá»‘ mol ($n$)**, **khá»‘i lÆ°á»£ng ($m$)**, **thá»ƒ tÃ­ch khÃ­ ($V$)** vÃ  **sá»‘ háº¡t ($A$)**. CÃ¡c cÃ´ng thá»©c quan trá»ng:"
+        "text": "Trong bài tập, chúng ta thường phải chuyển đổi qua lại giữa **số mol ($n$)**, **khối lượng ($m$)**, **thể tích khí ($V$)** và **số hạt ($A$)**. Các công thức quan trọng:"
       }
     },
     {
@@ -172,12 +172,12 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Tá»« khá»‘i lÆ°á»£ng sang sá»‘ mol**: $n = \\frac{m}{M}$ (vá»›i $m$ lÃ  khá»‘i lÆ°á»£ng tÃ­nh báº±ng gam, $M$ lÃ  khá»‘i lÆ°á»£ng mol).",
-          "**Tá»« sá»‘ mol sang khá»‘i lÆ°á»£ng**: $m = n \\times M$.",
-          "**Tá»« thá»ƒ tÃ­ch khÃ­ sang sá»‘ mol** (á»Ÿ Ä‘kc): $n = \\frac{V}{24,79}$.",
-          "**Tá»« sá»‘ mol sang thá»ƒ tÃ­ch khÃ­** (á»Ÿ Ä‘kc): $V = n \\times 24,79$ (lÃ­t).",
-          "**Tá»« sá»‘ háº¡t sang sá»‘ mol**: $n = \\frac{A}{N_A} = \\frac{A}{6,022 \\times 10^{23}}$.",
-          "**Tá»« sá»‘ mol sang sá»‘ háº¡t**: $A = n \\times N_A$."
+          "**Từ khối lượng sang số mol**: $n = \\frac{m}{M}$ (với $m$ là khối lượng tính bằng gam, $M$ là khối lượng mol).",
+          "**Từ số mol sang khối lượng**: $m = n \\times M$.",
+          "**Từ thể tích khí sang số mol** (ở đkc): $n = \\frac{V}{24,79}$.",
+          "**Từ số mol sang thể tích khí** (ở đkc): $V = n \\times 24,79$ (lít).",
+          "**Từ số hạt sang số mol**: $n = \\frac{A}{N_A} = \\frac{A}{6,022 \\times 10^{23}}$.",
+          "**Từ số mol sang số hạt**: $A = n \\times N_A$."
         ]
       }
     },
@@ -185,7 +185,7 @@
       "id": "mod13",
       "type": "heading",
       "content": {
-        "text": "5. Tá»‰ khá»‘i cá»§a cháº¥t khÃ­",
+        "text": "5. Tỉ khối của chất khí",
         "level": "h2"
       }
     },
@@ -193,15 +193,15 @@
       "id": "mod14",
       "type": "paragraph",
       "content": {
-        "text": "Tá»‰ khá»‘i cho biáº¿t khÃ­ nÃ y náº·ng hay nháº¹ hÆ¡n khÃ­ khÃ¡c bao nhiÃªu láº§n. ÄÃ¢y lÃ  Ä‘áº¡i lÆ°á»£ng giÃºp ta so sÃ¡nh Ä‘á»™ náº·ng nháº¹ giá»¯a cÃ¡c cháº¥t khÃ­ mÃ  khÃ´ng cáº§n cÃ¢n Ä‘o trá»±c tiáº¿p."
+        "text": "Tỉ khối cho biết khí này nặng hay nhẹ hơn khí khác bao nhiêu lần. Đây là đại lượng giúp ta so sánh độ nặng nhẹ giữa các chất khí mà không cần cân đo trực tiếp."
       }
     },
     {
       "id": "mod15",
       "type": "infoBox",
       "content": {
-        "title": "CÃ´ng thá»©c tá»‰ khá»‘i",
-        "content": "**a) Tá»‰ khá»‘i cá»§a khÃ­ A so vá»›i khÃ­ B:**\\n$$d_{A/B} = \\frac{M_A}{M_B}$$\\n\\n**b) Tá»‰ khá»‘i cá»§a khÃ­ A so vá»›i khÃ´ng khÃ­:**\\n$$d_{A/kk} = \\frac{M_A}{29}$$\\n(vÃ¬ $M_{kk} \\approx 29$ g/mol)\\n\\n- Náº¿u $d > 1$: KhÃ­ A **náº·ng hÆ¡n** khÃ­ B (hoáº·c khÃ´ng khÃ­).\\n- Náº¿u $d < 1$: KhÃ­ A **nháº¹ hÆ¡n** khÃ­ B (hoáº·c khÃ´ng khÃ­).\\n- Náº¿u $d = 1$: Hai khÃ­ **náº·ng báº±ng nhau**.",
+        "title": "Công thức tỉ khối",
+        "content": "**a) Tỉ khối của khí A so với khí B:**\\n$$d_{A/B} = \\frac{M_A}{M_B}$$\\n\\n**b) Tỉ khối của khí A so với không khí:**\\n$$d_{A/kk} = \\frac{M_A}{29}$$\\n(vì $M_{kk} \\approx 29$ g/mol)\\n\\n- Nếu $d > 1$: Khí A **nặng hơn** khí B (hoặc không khí).\\n- Nếu $d < 1$: Khí A **nhẹ hơn** khí B (hoặc không khí).\\n- Nếu $d = 1$: Hai khí **nặng bằng nhau**.",
         "color": "blue"
       }
     },
@@ -209,7 +209,7 @@
       "id": "mod16",
       "type": "heading",
       "content": {
-        "text": "6. VÃ­ dá»¥ minh há»a",
+        "text": "6. Ví dụ minh họa",
         "level": "h2"
       }
     },
@@ -219,9 +219,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**VÃ­ dá»¥ 1**: TÃ­nh khá»‘i lÆ°á»£ng cá»§a 0,5 mol $Fe_2O_3$.\\n  *Giáº£i*: $M_{Fe_2O_3} = 2 \\times 56 + 3 \\times 16 = 160$ g/mol. Váº­y $m = n \\times M = 0,5 \\times 160 = 80$ gam.",
-          "**VÃ­ dá»¥ 2**: TÃ­nh thá»ƒ tÃ­ch á»Ÿ Ä‘kc cá»§a 0,25 mol khÃ­ $CO_2$.\\n  *Giáº£i*: $V = n \\times 24,79 = 0,25 \\times 24,79 = 6,1975$ lÃ­t.",
-          "**VÃ­ dá»¥ 3**: KhÃ­ $SO_2$ náº·ng hÆ¡n hay nháº¹ hÆ¡n khÃ´ng khÃ­?\\n  *Giáº£i*: $M_{SO_2} = 32 + 2 \\times 16 = 64$ g/mol. $d_{SO_2/kk} = \\frac{64}{29} \\approx 2,21 > 1$. Váº­y khÃ­ $SO_2$ **náº·ng hÆ¡n khÃ´ng khÃ­** khoáº£ng 2,2 láº§n. ÄÃ¢y lÃ  lÃ½ do $SO_2$ tÃ­ch tá»¥ á»Ÿ nhá»¯ng vÃ¹ng trÅ©ng gáº§n nÃºi lá»­a vÃ  gÃ¢y nguy hiá»ƒm."
+          "**Ví dụ 1**: Tính khối lượng của 0,5 mol $Fe_2O_3$.\\n  *Giải*: $M_{Fe_2O_3} = 2 \\times 56 + 3 \\times 16 = 160$ g/mol. Vậy $m = n \\times M = 0,5 \\times 160 = 80$ gam.",
+          "**Ví dụ 2**: Tính thể tích ở đkc của 0,25 mol khí $CO_2$.\\n  *Giải*: $V = n \\times 24,79 = 0,25 \\times 24,79 = 6,1975$ lít.",
+          "**Ví dụ 3**: Khí $SO_2$ nặng hơn hay nhẹ hơn không khí?\\n  *Giải*: $M_{SO_2} = 32 + 2 \\times 16 = 64$ g/mol. $d_{SO_2/kk} = \\frac{64}{29} \\approx 2,21 > 1$. Vậy khí $SO_2$ **nặng hơn không khí** khoảng 2,2 lần. Đây là lý do $SO_2$ tích tụ ở những vùng trũng gần núi lửa và gây nguy hiểm."
         ]
       }
     },
@@ -229,8 +229,8 @@
       "id": "mod18",
       "type": "warningBox",
       "content": {
-        "title": "á»¨ng dá»¥ng thá»±c táº¿ cá»§a tá»‰ khá»‘i",
-        "content": "- KhÃ­ $H_2$ ($d = 2/29 \\approx 0,069$) nháº¹ hÆ¡n khÃ´ng khÃ­ nhiá»u láº§n â†’ DÃ¹ng bÆ¡m bÃ³ng bay (nhÆ°ng dá»… chÃ¡y ná»• nÃªn nay thay báº±ng $He$).\\n- KhÃ­ $CO_2$ ($d = 44/29 \\approx 1,52$) náº·ng hÆ¡n khÃ´ng khÃ­ â†’ TÃ­ch tá»¥ á»Ÿ Ä‘Ã¡y giáº¿ng sÃ¢u, háº§m má» gÃ¢y ngáº¡t thá»Ÿ. TrÆ°á»›c khi xuá»‘ng giáº¿ng cáº§n thá»­ báº±ng cÃ¡ch tháº£ ngá»n Ä‘Ã¨n xuá»‘ng trÆ°á»›c.\\n- KhÃ­ gas ($C_3H_8$, $d = 44/29 \\approx 1,52$) náº·ng hÆ¡n khÃ´ng khÃ­ â†’ Khi rÃ² rá»‰ sáº½ chÃ¬m xuá»‘ng sÃ n nhÃ , ráº¥t nguy hiá»ƒm vÃ¬ dá»… gÃ¢y ná»•.",
+        "title": "Ứng dụng thực tế của tỉ khối",
+        "content": "- Khí $H_2$ ($d = 2/29 \\approx 0,069$) nhẹ hơn không khí nhiều lần → Dùng bơm bóng bay (nhưng dễ cháy nổ nên nay thay bằng $He$).\\n- Khí $CO_2$ ($d = 44/29 \\approx 1,52$) nặng hơn không khí → Tích tụ ở đáy giếng sâu, hầm mỏ gây ngạt thở. Trước khi xuống giếng cần thử bằng cách thả ngọn đèn xuống trước.\\n- Khí gas ($C_3H_8$, $d = 44/29 \\approx 1,52$) nặng hơn không khí → Khi rò rỉ sẽ chìm xuống sàn nhà, rất nguy hiểm vì dễ gây nổ.",
         "color": "orange"
       }
     }
@@ -239,10 +239,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Mol vÃ  tá»‰ khá»‘i cháº¥t khÃ­",
+      "title": "Bài giảng: Mol và tỉ khối chất khí",
       "url": "https://www.youtube.com/watch?v=YRSDdiEHsWU",
       "thumbnail": "https://img.youtube.com/vi/YRSDdiEHsWU/0.jpg",
-      "description": "Äá»‹nh nghÄ©a Mol, khá»‘i lÆ°á»£ng mol, thá»ƒ tÃ­ch mol vÃ  cÃ¡ch tÃ­nh tá»‰ khá»‘i cháº¥t khÃ­ (VietJack)."
+      "description": "Định nghĩa Mol, khối lượng mol, thể tích mol và cách tính tỉ khối chất khí (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -252,46 +252,46 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Khá»‘i lÆ°á»£ng mol ($M$) cá»§a khÃ­ Oxygen ($O_2$) lÃ  bao nhiÃªu?",
+        "question": "Khối lượng mol ($M$) của khí Oxygen ($O_2$) là bao nhiêu?",
         "options": [
           "16 g/mol",
           "32 g/mol",
           "8 g/mol",
-          "32 Ä‘vC"
+          "32 đvC"
         ],
         "correctAnswer": 1,
-        "explanation": "$16 \\times 2 = 32$. ÄÆ¡n vá»‹ cá»§a khá»‘i lÆ°á»£ng mol lÃ  g/mol.",
+        "explanation": "$16 \\times 2 = 32$. Đơn vị của khối lượng mol là g/mol.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Thá»ƒ tÃ­ch cá»§a 1 mol cháº¥t khÃ­ báº¥t ká»³ á»Ÿ Ä‘iá»u kiá»‡n chuáº©n ($25^\\circ C, 1 bar$) lÃ :",
+        "question": "Thể tích của 1 mol chất khí bất kỳ ở điều kiện chuẩn ($25^\\circ C, 1 bar$) là:",
         "options": [
-          "22,4 lÃ­t",
-          "24,79 lÃ­t",
-          "11,2 lÃ­t",
-          "1 lÃ­t"
+          "22,4 lít",
+          "24,79 lít",
+          "11,2 lít",
+          "1 lít"
         ],
         "correctAnswer": 1,
-        "explanation": "Theo chuáº©n IUPAC má»›i (25Â°C, 1 bar), thá»ƒ tÃ­ch mol lÃ  24,79 lÃ­t.",
+        "explanation": "Theo chuẩn IUPAC mới (25°C, 1 bar), thể tích mol là 24,79 lít.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Sá»‘ Avogadro ($N_A$) cÃ³ giÃ¡ trá»‹ xáº¥p xá»‰ lÃ :",
+        "question": "Số Avogadro ($N_A$) có giá trị xấp xỉ là:",
         "options": [
           "$6,022 \\times 10^{23}$",
           "$6,022 \\times 10^{22}$",
-          "$100$ háº¡t",
-          "$1$ tá»· háº¡t"
+          "$100$ hạt",
+          "$1$ tỷ hạt"
         ],
         "correctAnswer": 0,
-        "explanation": "ÄÃ¢y lÃ  háº±ng sá»‘ Ä‘áº¡i diá»‡n cho sá»‘ háº¡t trong 1 mol cháº¥t.",
+        "explanation": "Đây là hằng số đại diện cho số hạt trong 1 mol chất.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "KhÃ­ nÃ o sau Ä‘Ã¢y nháº¹ hÆ¡n khÃ´ng khÃ­?",
+        "question": "Khí nào sau đây nhẹ hơn không khí?",
         "options": [
           "$O_2$",
           "$CO_2$",
@@ -304,15 +304,15 @@
       },
       {
         "type": "multiple-choice",
-        "question": "á»ž cÃ¹ng Ä‘iá»u kiá»‡n nhiá»‡t Ä‘á»™ vÃ  Ã¡p suáº¥t, 1 mol khÃ­ $CO_2$ and 1 mol khÃ­ $H_2$ cÃ³ Ä‘iá»ƒm gÃ¬ chung?",
+        "question": "Ở cùng điều kiện nhiệt độ và áp suất, 1 mol khí $CO_2$ and 1 mol khí $H_2$ có điểm gì chung?",
         "options": [
-          "CÃ¹ng khá»‘i lÆ°á»£ng",
-          "CÃ¹ng thá»ƒ tÃ­ch",
-          "CÃ¹ng sá»‘ nguyÃªn tá»­",
-          "CÃ¹ng khá»‘i lÆ°á»£ng riÃªng"
+          "Cùng khối lượng",
+          "Cùng thể tích",
+          "Cùng số nguyên tử",
+          "Cùng khối lượng riêng"
         ],
         "correctAnswer": 1,
-        "explanation": "CÃ¡c cháº¥t khÃ­ khÃ¡c nhau cÃ³ cÃ¹ng sá»‘ mol thÃ¬ chiáº¿m thá»ƒ tÃ­ch báº±ng nhau á»Ÿ cÃ¹ng Ä‘iá»u kiá»‡n.",
+        "explanation": "Các chất khí khác nhau có cùng số mol thì chiếm thể tích bằng nhau ở cùng điều kiện.",
         "points": 10
       }
     ],

@@ -31,12 +31,12 @@ describe('arena mini game renderers', () => {
     expect(html).toContain('data-arena-model="formula-calculator"');
     expect(html).toContain('data-arena-model="calculation-experiment"');
     expect(html).toContain('data-arena-model="experiment-controls"');
-    expect(html).toContain('CÃ¢n Ä‘iá»‡n tá»­');
-    expect(html).toContain('Máº«u cÃ¢n');
+    expect(html).toContain('Cân điện tử');
+    expect(html).toContain('Mẫu cân');
     expect(html).toContain('M(H2O)');
-    expect(html).toContain('Giai Ä‘oáº¡n 1');
-    expect(html).not.toContain('ThÃ´ng sá»‘ cá»‘ Ä‘á»‹nh');
-    expect(html).not.toContain('Nháº­p káº¿t quáº£');
+    expect(html).toContain('Giai đoạn 1');
+    expect(html).not.toContain('Thông số cố định');
+    expect(html).not.toContain('Nhập kết quả');
   });
 
   it('builds a formula model from legacy calculation payloads', () => {
@@ -54,17 +54,17 @@ describe('arena mini game renderers', () => {
       },
     });
 
-    expect(html).toContain('Thu khÃ­ á»Ÿ nÆ°á»›c');
+    expect(html).toContain('Thu khí ở nước');
     expect(html).toContain('n = V / 22,4; m = n.M');
-    expect(html).toContain('TÃ­nh n(H2)');
-    expect(html).toContain('TÃ­nh m(Zn)');
+    expect(html).toContain('Tính n(H2)');
+    expect(html).toContain('Tính m(Zn)');
     expect(html).toContain('data-arena-model="experiment-controls"');
-    expect(html).toContain('V mol Ä‘ktc');
-    expect(html).toContain('Giai Ä‘oáº¡n 1/2');
-    expect(html).toContain('Sang giai Ä‘oáº¡n 2');
-    expect(html).not.toContain('Ãp dá»¥ng');
-    expect(html).not.toContain('ThÃ´ng sá»‘ cá»‘ Ä‘á»‹nh');
-    expect(html).not.toContain('ChÆ°a cÃ³ mÃ´ hÃ¬nh cÃ´ng thá»©c cho cÃ¢u nÃ y.');
+    expect(html).toContain('V mol đktc');
+    expect(html).toContain('Giai đoạn 1/2');
+    expect(html).toContain('Sang giai đoạn 2');
+    expect(html).not.toContain('Áp dụng');
+    expect(html).not.toContain('Thông số cố định');
+    expect(html).not.toContain('Chưa có mô hình công thức cho câu này.');
   });
 
   it('renders the balancing mini game controls', () => {
@@ -88,7 +88,7 @@ describe('arena mini game renderers', () => {
       gameType: 'atom_match',
       payload: {
         formula: 'H2O',
-        slots: [{ id: 'center', label: 'TÃ¢m' }],
+        slots: [{ id: 'center', label: 'Tâm' }],
         choices: [{ symbol: 'O', name: 'Oxi' }],
       },
     });
@@ -109,7 +109,7 @@ describe('arena mini game renderers', () => {
       },
     });
 
-    expect(html).toContain('Lá»›p K');
+    expect(html).toContain('Lớp K');
     expect(html).toContain('Z = 8');
   });
 });

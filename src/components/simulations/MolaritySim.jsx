@@ -1,14 +1,14 @@
 ﻿import React, { useState, useMemo } from 'react';
 import { stableRange } from '@/utils/stableRandom';
 
-// Dá»¯ liá»‡u hÃ³a há»c chuáº©n - Cháº¥t tan vÃ  mÃ u sáº¯c
+// Dữ liệu hóa học chuẩn - Chất tan và màu sắc
 const SOLUTES = [
-  { name: 'CuSOâ‚„', label: 'Äá»“ng(II) sunfat', M: 249.68, color: [0, 100, 220], maxConc: 1.38 },
-  { name: 'KMnOâ‚„', label: 'Kali pemanganat', M: 158.03, color: [148, 0, 148], maxConc: 0.41 },
+  { name: 'CuSO₄', label: 'Đồng(II) sunfat', M: 249.68, color: [0, 100, 220], maxConc: 1.38 },
+  { name: 'KMnO₄', label: 'Kali pemanganat', M: 158.03, color: [148, 0, 148], maxConc: 0.41 },
   { name: 'NaCl', label: 'Natri clorua', M: 58.44, color: [180, 180, 180], maxConc: 5.4 },
-  { name: 'Kâ‚‚CrOâ‚„', label: 'Kali cromat', M: 194.19, color: [220, 180, 0], maxConc: 3.4 },
-  { name: 'CoClâ‚‚', label: 'Cobalt(II) clorua', M: 129.84, color: [200, 50, 80], maxConc: 4.35 },
-  { name: 'FeClâ‚ƒ', label: 'Sáº¯t(III) clorua', M: 162.2, color: [180, 120, 0], maxConc: 5.7 },
+  { name: 'K₂CrO₄', label: 'Kali cromat', M: 194.19, color: [220, 180, 0], maxConc: 3.4 },
+  { name: 'CoCl₂', label: 'Cobalt(II) clorua', M: 129.84, color: [200, 50, 80], maxConc: 4.35 },
+  { name: 'FeCl₃', label: 'Sắt(III) clorua', M: 162.2, color: [180, 120, 0], maxConc: 5.7 },
 ];
 
 const MolaritySim = () => {
@@ -23,11 +23,11 @@ const MolaritySim = () => {
   const isSaturated = concentration > solute.maxConc;
   const effectiveConc = Math.min(concentration, solute.maxConc);
 
-  // TÃ­nh opacity dá»±a trÃªn ná»“ng Ä‘á»™ (0 â†’ trong suá»‘t, maxConc â†’ Ä‘áº­m)
+  // Tính opacity dựa trên nồng độ (0 → trong suốt, maxConc → đậm)
   const opacity = Math.min(effectiveConc / solute.maxConc, 1) * 0.85;
   const solutionColor = `rgba(${solute.color[0]}, ${solute.color[1]}, ${solute.color[2]}, ${opacity})`;
 
-  // TÃ­nh chiá»u cao dung dá»‹ch theo thá»ƒ tÃ­ch (max 200px cho 1000mL)
+  // Tính chiều cao dung dịch theo thể tích (max 200px cho 1000mL)
   const liquidHeight = Math.min((volume / 1000) * 200, 200);
   const precipitates = useMemo(() => {
     return Array.from({ length: 8 }, (_, i) => ({
@@ -88,7 +88,7 @@ const MolaritySim = () => {
       <div className="space-y-5">
         {/* Solute Selector */}
         <div>
-          <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] block mb-2">Cháº¥t tan</label>
+          <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] block mb-2">Chất tan</label>
           <div className="grid grid-cols-3 gap-2">
             {SOLUTES.map((s, i) => (
               <button key={s.name} onClick={() => setSoluteIdx(i)}
@@ -105,7 +105,7 @@ const MolaritySim = () => {
         {/* Mass Slider */}
         <div>
           <div className="flex justify-between mb-1">
-            <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Khá»‘i lÆ°á»£ng cháº¥t tan</label>
+            <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Khối lượng chất tan</label>
             <span className="text-[13px] font-black text-viet-text">{mass.toFixed(1)} g</span>
           </div>
           <input type="range" min="0" max="200" step="0.5" value={mass} onChange={e => setMass(parseFloat(e.target.value))}
@@ -116,7 +116,7 @@ const MolaritySim = () => {
         {/* Volume Slider */}
         <div>
           <div className="flex justify-between mb-1">
-            <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Thá»ƒ tÃ­ch dung dá»‹ch</label>
+            <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Thể tích dung dịch</label>
             <span className="text-[13px] font-black text-viet-text">{volume} mL</span>
           </div>
           <input type="range" min="100" max="1000" step="10" value={volume} onChange={e => setVolume(parseInt(e.target.value))}
@@ -127,23 +127,23 @@ const MolaritySim = () => {
 
       {/* Results */}
       <div className="bg-viet-bg rounded-2xl p-5 space-y-3">
-        <h4 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Káº¿t quáº£ tÃ­nh toÃ¡n</h4>
+        <h4 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Kết quả tính toán</h4>
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-white rounded-xl p-3">
-            <div className="text-[9px] font-bold text-viet-text-light uppercase">Khá»‘i lÆ°á»£ng mol (M)</div>
+            <div className="text-[9px] font-bold text-viet-text-light uppercase">Khối lượng mol (M)</div>
             <div className="text-[16px] font-black text-viet-text">{solute.M} <span className="text-[10px] text-viet-text-light">g/mol</span></div>
           </div>
           <div className="bg-white rounded-xl p-3">
-            <div className="text-[9px] font-bold text-viet-text-light uppercase">Sá»‘ mol (n = m/M)</div>
+            <div className="text-[9px] font-bold text-viet-text-light uppercase">Số mol (n = m/M)</div>
             <div className="text-[16px] font-black text-viet-green">{mol.toFixed(4)} <span className="text-[10px] text-viet-text-light">mol</span></div>
           </div>
           <div className="bg-white rounded-xl p-3 col-span-2">
-            <div className="text-[9px] font-bold text-viet-text-light uppercase">Ná»“ng Ä‘á»™ mol (Câ‚˜ = n/V)</div>
+            <div className="text-[9px] font-bold text-viet-text-light uppercase">Nồng độ mol (Cₘ = n/V)</div>
             <div className={`text-[22px] font-black ${isSaturated ? 'text-red-500' : 'text-viet-green'}`}>
               {concentration.toFixed(4)} <span className="text-[10px] text-viet-text-light">mol/L</span>
             </div>
             {isSaturated && (
-              <div className="text-[10px] font-bold text-red-500 mt-1">âš ï¸ BÃ£o hÃ²a! Ná»“ng Ä‘á»™ bÃ£o hÃ²a: {solute.maxConc} M â€” Cháº¥t tan dÆ° sáº½ láº¯ng xuá»‘ng Ä‘Ã¡y.</div>
+              <div className="text-[10px] font-bold text-red-500 mt-1">⚠️ Bão hòa! Nồng độ bão hòa: {solute.maxConc} M — Chất tan dư sẽ lắng xuống đáy.</div>
             )}
           </div>
         </div>

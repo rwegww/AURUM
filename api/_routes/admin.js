@@ -36,7 +36,7 @@ router.get('/stats', adminGuard, async (req, res) => {
       feedbackDistribution
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i láº¥y thá»‘ng kÃª', error: err.message });
+    res.status(500).json({ message: 'Lỗi lấy thống kê', error: err.message });
   }
 });
 
@@ -64,7 +64,7 @@ router.get('/users', adminGuard, async (req, res) => {
       bi_khoa: undefined
     })));
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i láº¥y danh sÃ¡ch ngÆ°á»i dÃ¹ng', error: err.message });
+    res.status(500).json({ message: 'Lỗi lấy danh sách người dùng', error: err.message });
   }
 });
 
@@ -75,9 +75,9 @@ router.patch('/users/:id/lock', adminGuard, async (req, res) => {
     const { isLocked } = req.body;
     
     const updatedUser = await User.toggleLock(id, isLocked);
-    res.json({ message: isLocked ? 'ÄÃ£ khÃ³a tÃ i khoáº£n' : 'ÄÃ£ má»Ÿ khÃ³a tÃ i khoáº£n', user: updatedUser });
+    res.json({ message: isLocked ? 'Đã khóa tài khoản' : 'Đã mở khóa tài khoản', user: updatedUser });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i thay Ä‘á»•i tráº¡ng thÃ¡i tÃ i khoáº£n', error: err.message });
+    res.status(500).json({ message: 'Lỗi thay đổi trạng thái tài khoản', error: err.message });
   }
 });
 
@@ -85,10 +85,10 @@ router.patch('/users/:id/lock', adminGuard, async (req, res) => {
 router.get('/users/:id', adminGuard, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'KhÃ´ng tÃ¬m tháº¥y há»c sinh' });
+    if (!user) return res.status(404).json({ message: 'Không tìm thấy học sinh' });
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i láº¥y thÃ´ng tin há»c sinh', error: err.message });
+    res.status(500).json({ message: 'Lỗi lấy thông tin học sinh', error: err.message });
   }
 });
 
@@ -98,7 +98,7 @@ router.get('/feedback', adminGuard, async (req, res) => {
     const phan_hois = await Feedback.findAll();
     res.json(phan_hois);
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i láº¥y pháº£n há»“i', error: err.message });
+    res.status(500).json({ message: 'Lỗi lấy phản hồi', error: err.message });
   }
 });
 
@@ -136,7 +136,7 @@ router.post('/feedback/submit', async (req, res) => {
       }
     }
 
-    if (!message) return res.status(400).json({ message: 'Vui lÃ²ng nháº­p ná»™i dung' });
+    if (!message) return res.status(400).json({ message: 'Vui lòng nhập nội dung' });
 
     await Feedback.create({
       userId,
@@ -145,9 +145,9 @@ router.post('/feedback/submit', async (req, res) => {
       type,
       imageUrl
     });
-    res.status(201).json({ message: 'Gá»­i pháº£n há»“i thÃ nh cÃ´ng!' });
+    res.status(201).json({ message: 'Gửi phản hồi thành công!' });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i gá»­i pháº£n há»“i', error: err.message });
+    res.status(500).json({ message: 'Lỗi gửi phản hồi', error: err.message });
   }
 });
 
@@ -155,12 +155,12 @@ router.post('/feedback/submit', async (req, res) => {
 router.patch('/feedback/:id', adminGuard, async (req, res) => {
   try {
     const phan_hoi = await Feedback.findById(req.params.id);
-    if (!phan_hoi) return res.status(404).json({ message: 'KhÃ´ng tÃ¬m tháº¥y pháº£n há»“i' });
+    if (!phan_hoi) return res.status(404).json({ message: 'Không tìm thấy phản hồi' });
 
     await Feedback.updateStatus(req.params.id, 'resolved');
-    res.json({ message: 'ÄÃ£ giáº£i quyáº¿t pháº£n há»“i' });
+    res.json({ message: 'Đã giải quyết phản hồi' });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i cáº­p nháº­t pháº£n há»“i', error: err.message });
+    res.status(500).json({ message: 'Lỗi cập nhật phản hồi', error: err.message });
   }
 });
 
@@ -168,13 +168,13 @@ router.patch('/feedback/:id', adminGuard, async (req, res) => {
 router.patch('/feedback/:id/approve', adminGuard, async (req, res) => {
   try {
     const phan_hoi = await Feedback.findById(req.params.id);
-    if (!phan_hoi) return res.status(404).json({ message: 'KhÃ´ng tÃ¬m tháº¥y pháº£n há»“i' });
-    if (phan_hoi.type !== 'praise') return res.status(400).json({ message: 'Chá»‰ cÃ³ thá»ƒ duyá»‡t lá»i khen ngá»£i' });
+    if (!phan_hoi) return res.status(404).json({ message: 'Không tìm thấy phản hồi' });
+    if (phan_hoi.type !== 'praise') return res.status(400).json({ message: 'Chỉ có thể duyệt lời khen ngợi' });
 
     await Feedback.approve(req.params.id);
-    res.json({ message: 'ÄÃ£ duyá»‡t lá»i khen ngá»£i' });
+    res.json({ message: 'Đã duyệt lời khen ngợi' });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i duyá»‡t lá»i khen', error: err.message });
+    res.status(500).json({ message: 'Lỗi duyệt lời khen', error: err.message });
   }
 });
 
@@ -188,7 +188,7 @@ router.post('/lessons', adminGuard, async (req, res) => {
     const lesson = await Lesson.create(req.body);
     res.status(201).json(lesson);
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i táº¡o bÃ i há»c', error: err.message });
+    res.status(500).json({ message: 'Lỗi tạo bài học', error: err.message });
   }
 });
 
@@ -198,7 +198,7 @@ router.put('/lessons/:id', adminGuard, async (req, res) => {
     const lesson = await Lesson.update(req.params.id, req.body);
     res.json(lesson);
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i cáº­p nháº­t bÃ i há»c', error: err.message });
+    res.status(500).json({ message: 'Lỗi cập nhật bài học', error: err.message });
   }
 });
 
@@ -206,18 +206,18 @@ router.put('/lessons/:id', adminGuard, async (req, res) => {
 router.delete('/lessons/:id', adminGuard, async (req, res) => {
   try {
     await Lesson.delete(req.params.id);
-    res.json({ message: 'ÄÃ£ xÃ³a bÃ i há»c thÃ nh cÃ´ng' });
+    res.json({ message: 'Đã xóa bài học thành công' });
   } catch (err) {
-    res.status(500).json({ message: 'Lá»—i server' });
+    res.status(500).json({ message: 'Lỗi server' });
   }
 });
 
-// Duyá»‡t yÃªu cáº§u giÃ¡o viÃªn
+// Duyệt yêu cầu giáo viên
 router.post('/teacher-requests/:id/approve', adminGuard, async (req, res) => {
   try {
     const phan_hoi = await Feedback.findById(req.params.id);
     if (!phan_hoi || phan_hoi.type !== 'teacher_registration') {
-      return res.status(404).json({ message: 'YÃªu cáº§u khÃ´ng tá»“n táº¡i' });
+      return res.status(404).json({ message: 'Yêu cầu không tồn tại' });
     }
 
     const { email, hashedPassword } = JSON.parse(phan_hoi.message);
@@ -244,19 +244,19 @@ router.post('/teacher-requests/:id/approve', adminGuard, async (req, res) => {
     // Send email
     await sendTeacherApprovalEmail(email, phan_hoi.username, magicToken);
 
-    res.json({ message: 'ÄÃ£ duyá»‡t yÃªu cáº§u vÃ  gá»­i email thÃ nh cÃ´ng' });
+    res.json({ message: 'Đã duyệt yêu cầu và gửi email thành công' });
   } catch (err) {
-    console.error('Lá»—i duyá»‡t giÃ¡o viÃªn:', err);
-    res.status(500).json({ message: 'Lá»—i server' });
+    console.error('Lỗi duyệt giáo viên:', err);
+    res.status(500).json({ message: 'Lỗi server' });
   }
 });
 
-// Tá»« chá»‘i yÃªu cáº§u giÃ¡o viÃªn
+// Từ chối yêu cầu giáo viên
 router.post('/teacher-requests/:id/reject', adminGuard, async (req, res) => {
   try {
     const phan_hoi = await Feedback.findById(req.params.id);
     if (!phan_hoi || phan_hoi.type !== 'teacher_registration') {
-      return res.status(404).json({ message: 'YÃªu cáº§u khÃ´ng tá»“n táº¡i' });
+      return res.status(404).json({ message: 'Yêu cầu không tồn tại' });
     }
 
     const { email } = JSON.parse(phan_hoi.message);
@@ -265,12 +265,12 @@ router.post('/teacher-requests/:id/reject', adminGuard, async (req, res) => {
     await Feedback.updateStatus(phan_hoi.id, 'rejected');
 
     // Send email
-    await sendTeacherRejectionEmail(email, phan_hoi.username, 'TÃ i liá»‡u minh chá»©ng cá»§a báº¡n cÃ³ thá»ƒ khÃ´ng há»£p lá»‡ hoáº·c khÃ´ng rÃµ rÃ ng.');
+    await sendTeacherRejectionEmail(email, phan_hoi.username, 'Tài liệu minh chứng của bạn có thể không hợp lệ hoặc không rõ ràng.');
 
-    res.json({ message: 'ÄÃ£ tá»« chá»‘i yÃªu cáº§u vÃ  gá»­i email thÃ nh cÃ´ng' });
+    res.json({ message: 'Đã từ chối yêu cầu và gửi email thành công' });
   } catch (err) {
-    console.error('Lá»—i tá»« chá»‘i giÃ¡o viÃªn:', err);
-    res.status(500).json({ message: 'Lá»—i server' });
+    console.error('Lỗi từ chối giáo viên:', err);
+    res.status(500).json({ message: 'Lỗi server' });
   }
 });
 

@@ -21,26 +21,26 @@ import { arenaApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
 const roomStatusLabel = (status) => {
-  if (status === "waiting") return "Äang chá»";
-  if (status === "active") return "Äang Ä‘áº¥u";
-  if (status === "finished") return "ÄÃ£ káº¿t thÃºc";
-  return "ChÆ°a rÃµ tráº¡ng thÃ¡i";
+  if (status === "waiting") return "Đang chờ";
+  if (status === "active") return "Đang đấu";
+  if (status === "finished") return "Đã kết thúc";
+  return "Chưa rõ trạng thái";
 };
 
 const battleResultLabel = (result) => {
-  if (result === "win") return "Tháº¯ng";
+  if (result === "win") return "Thắng";
   if (result === "lose") return "Thua";
-  if (result === "draw") return "HÃ²a";
-  return "ÄÃ£ Ä‘áº¥u";
+  if (result === "draw") return "Hòa";
+  return "Đã đấu";
 };
 
 const questionTypeLabel = (type) => {
-  if (type === "calculation") return "TÃ­nh toÃ¡n";
-  if (type === "balancing") return "CÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh";
-  if (type === "atom_match") return "GhÃ©p nguyÃªn tá»­";
-  if (type === "electron_match") return "Cáº¥u hÃ¬nh electron";
-  if (type === "multiple_choice") return "Tráº¯c nghiá»‡m";
-  return "CÃ¢u há»i";
+  if (type === "calculation") return "Tính toán";
+  if (type === "balancing") return "Cân bằng phương trình";
+  if (type === "atom_match") return "Ghép nguyên tử";
+  if (type === "electron_match") return "Cấu hình electron";
+  if (type === "multiple_choice") return "Trắc nghiệm";
+  return "Câu hỏi";
 };
 
 export default function ArenaTab() {
@@ -67,7 +67,7 @@ export default function ArenaTab() {
     setCreating(true);
     try {
       const created = await arenaApi.createRoom(token, {
-        name: `${user?.username || "AURUM"} luyá»‡n táº­p`,
+        name: `${user?.username || "AURUM"} luyện tập`,
         mode: "solo",
         difficulty: "auto",
         max_players: 1,
@@ -76,7 +76,7 @@ export default function ArenaTab() {
       const started = await arenaApi.startRoom(token, created.room.id);
       setActiveState(started.state);
     } catch (error) {
-      Alert.alert("KhÃ´ng táº¡o Ä‘Æ°á»£c phÃ²ng", error.message);
+      Alert.alert("Không tạo được phòng", error.message);
     } finally {
       setCreating(false);
     }
@@ -91,14 +91,14 @@ export default function ArenaTab() {
       setActiveState(state.state);
       await arenaResource.reload();
     } catch (error) {
-      Alert.alert("KhÃ´ng tham gia Ä‘Æ°á»£c", error.message);
+      Alert.alert("Không tham gia được", error.message);
     } finally {
       setJoining(false);
     }
   };
 
   if (arenaResource.loading && !arenaResource.data) {
-    return <LoadingState label="Äang táº£i Ä‘áº¥u trÆ°á»ng..." />;
+    return <LoadingState label="Đang tải đấu trường..." />;
   }
 
   const leaderboard = arenaResource.data?.leaderboard || [];
@@ -109,10 +109,10 @@ export default function ArenaTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Äáº¥u trÆ°á»ng"
-        title="Äáº¥u trÆ°á»ng hÃ³a há»c"
-        subtitle="Táº¡o phÃ²ng luyá»‡n táº­p, tham gia phÃ²ng chá» vÃ  theo dÃµi Ä‘iá»ƒm Ä‘áº¥u trÆ°á»ng."
-        right={<Pill label={`${stats.points || 0} Ä‘iá»ƒm`} icon="trophy-outline" color={colors.green} />}
+        eyebrow="Đấu trường"
+        title="Đấu trường hóa học"
+        subtitle="Tạo phòng luyện tập, tham gia phòng chờ và theo dõi điểm đấu trường."
+        right={<Pill label={`${stats.points || 0} điểm`} icon="trophy-outline" color={colors.green} />}
       />
 
       {arenaResource.error ? (
@@ -120,15 +120,15 @@ export default function ArenaTab() {
       ) : null}
 
       <View style={styles.metricRow}>
-        <Metric label="Tráº­n" value={stats.total || 0} icon="game-controller-outline" color={colors.green} />
-        <Metric label="Tháº¯ng" value={stats.wins || 0} icon="medal-outline" color={colors.green} />
+        <Metric label="Trận" value={stats.total || 0} icon="game-controller-outline" color={colors.green} />
+        <Metric label="Thắng" value={stats.wins || 0} icon="medal-outline" color={colors.green} />
         <Metric label="Thua" value={stats.losses || 0} icon="trending-down-outline" color={colors.red} />
       </View>
 
       <Card accent={colors.green} style={styles.roomCard}>
-        <Text style={styles.cardTitle}>PhÃ²ng Ä‘áº¥u</Text>
+        <Text style={styles.cardTitle}>Phòng đấu</Text>
         <PrimaryButton
-          label={creating ? "Äang táº¡o..." : "Luyá»‡n táº­p nhanh"}
+          label={creating ? "Đang tạo..." : "Luyện tập nhanh"}
           icon="flash-outline"
           color={colors.green}
           onPress={createPractice}
@@ -137,14 +137,14 @@ export default function ArenaTab() {
         <View style={styles.joinRow}>
           <TextField
             icon="keypad-outline"
-            placeholder="MÃ£ phÃ²ng"
+            placeholder="Mã phòng"
             value={roomCode}
             onChangeText={setRoomCode}
             autoCapitalize="characters"
             style={styles.joinInput}
           />
           <GhostButton
-            label={joining ? "..." : "VÃ o"}
+            label={joining ? "..." : "Vào"}
             icon="enter-outline"
             onPress={() => joinRoom()}
             color={colors.green}
@@ -155,13 +155,13 @@ export default function ArenaTab() {
 
       {activeState ? (
         <>
-          <SectionTitle title="PhÃ²ng Ä‘ang má»Ÿ" />
+          <SectionTitle title="Phòng đang mở" />
           <Card accent={colors.green} style={styles.activeCard}>
             <View style={styles.activeTop}>
               <View>
-                <Text style={styles.activeTitle}>{activeState.room?.name || `PhÃ²ng ${activeState.room?.id}`}</Text>
+                <Text style={styles.activeTitle}>{activeState.room?.name || `Phòng ${activeState.room?.id}`}</Text>
                 <Text style={styles.activeMeta}>
-                  VÃ²ng {(activeState.room?.current_round_index || 0) + 1}/{activeState.room?.total_rounds || 10} Â· {roomStatusLabel(activeState.room?.status)}
+                  Vòng {(activeState.room?.current_round_index || 0) + 1}/{activeState.room?.total_rounds || 10} · {roomStatusLabel(activeState.room?.status)}
                 </Text>
               </View>
               <Pill label={activeState.room?.id} color={colors.green} />
@@ -172,7 +172,7 @@ export default function ArenaTab() {
                 <Text style={styles.questionText}>{activeState.currentQuestion.question}</Text>
               </View>
             ) : (
-              <Text style={styles.waitingText}>PhÃ²ng Ä‘ang chá» báº¯t Ä‘áº§u hoáº·c chÆ°a cÃ³ cÃ¢u há»i hiá»‡n táº¡i.</Text>
+              <Text style={styles.waitingText}>Phòng đang chờ bắt đầu hoặc chưa có câu hỏi hiện tại.</Text>
             )}
             <View style={styles.stack}>
               {(activeState.players || []).map((player) => (
@@ -180,7 +180,7 @@ export default function ArenaTab() {
                   key={player.nguoi_dung_id}
                   icon="person-outline"
                   title={player.username}
-                  subtitle={`${player.score || 0} Ä‘iá»ƒm Â· ${player.correct_count || 0} cÃ¢u Ä‘Ãºng`}
+                  subtitle={`${player.score || 0} điểm · ${player.correct_count || 0} câu đúng`}
                   color={colors.green}
                 />
               ))}
@@ -189,38 +189,38 @@ export default function ArenaTab() {
         </>
       ) : null}
 
-      <SectionTitle title="PhÃ²ng chá»" actionLabel="Táº£i láº¡i" onAction={arenaResource.reload} />
+      <SectionTitle title="Phòng chờ" actionLabel="Tải lại" onAction={arenaResource.reload} />
       {rooms.length > 0 ? (
         <View style={styles.stack}>
           {rooms.slice(0, 5).map((room) => (
             <ListRow
               key={room.id}
               icon="people-outline"
-              title={room.name || `PhÃ²ng ${room.id}`}
-              subtitle={`${room.host_name || "Chá»§ phÃ²ng"} Â· ${room.current_players || 0}/${room.max_players || 2} ngÆ°á»i`}
+              title={room.name || `Phòng ${room.id}`}
+              subtitle={`${room.host_name || "Chủ phòng"} · ${room.current_players || 0}/${room.max_players || 2} người`}
               color={colors.green}
-              right={<GhostButton label="VÃ o" icon="enter-outline" onPress={() => joinRoom(room.id)} color={colors.green} style={styles.rowButton} />}
+              right={<GhostButton label="Vào" icon="enter-outline" onPress={() => joinRoom(room.id)} color={colors.green} style={styles.rowButton} />}
             />
           ))}
         </View>
       ) : (
-        <EmptyState icon="people-outline" title="ChÆ°a cÃ³ phÃ²ng chá»" subtitle="Táº¡o phÃ²ng luyá»‡n táº­p hoáº·c quay láº¡i sau Ä‘á»ƒ tÃ¬m Ä‘á»‘i thá»§." />
+        <EmptyState icon="people-outline" title="Chưa có phòng chờ" subtitle="Tạo phòng luyện tập hoặc quay lại sau để tìm đối thủ." />
       )}
 
-      <SectionTitle title="Xáº¿p háº¡ng Ä‘áº¥u trÆ°á»ng" />
+      <SectionTitle title="Xếp hạng đấu trường" />
       <View style={styles.stack}>
         {leaderboard.slice(0, 5).map((item) => (
           <ListRow
             key={`${item.rank}-${item.name}`}
             icon={item.rank === 1 ? "medal-outline" : "trophy-outline"}
             title={`${item.rank}. ${item.name}`}
-            subtitle={`${item.points} Ä‘iá»ƒm Â· ${item.wins}/${item.total} tráº­n tháº¯ng`}
+            subtitle={`${item.points} điểm · ${item.wins}/${item.total} trận thắng`}
             color={item.rank === 1 ? colors.green : colors.green}
           />
         ))}
       </View>
 
-      <SectionTitle title="Tráº­n gáº§n Ä‘Ã¢y" />
+      <SectionTitle title="Trận gần đây" />
       {battles.length > 0 ? (
         <View style={styles.stack}>
           {battles.map((battle) => {
@@ -229,15 +229,15 @@ export default function ArenaTab() {
               <ListRow
                 key={battle.id}
                 icon={battle.result === "win" ? "arrow-up-circle-outline" : "remove-circle-outline"}
-                title={battle.opponent_name || "Äáº¥u trÆ°á»ng"}
-                subtitle={`${battleResultLabel(battle.result)} Â· ${battle.score || 0} Ä‘iá»ƒm Â· ${pointsDelta} Ä‘iá»ƒm xáº¿p háº¡ng`}
+                title={battle.opponent_name || "Đấu trường"}
+                subtitle={`${battleResultLabel(battle.result)} · ${battle.score || 0} điểm · ${pointsDelta} điểm xếp hạng`}
                 color={battle.result === "win" ? colors.green : colors.red}
               />
             );
           })}
         </View>
       ) : (
-        <EmptyState icon="time-outline" title="ChÆ°a cÃ³ lá»‹ch sá»­ tráº­n" subtitle="Káº¿t quáº£ sáº½ xuáº¥t hiá»‡n sau khi báº¡n hoÃ n thÃ nh tráº­n Ä‘áº¥u trÆ°á»ng." />
+        <EmptyState icon="time-outline" title="Chưa có lịch sử trận" subtitle="Kết quả sẽ xuất hiện sau khi bạn hoàn thành trận đấu trường." />
       )}
     </Screen>
   );

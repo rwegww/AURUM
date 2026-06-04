@@ -8,7 +8,7 @@ const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('âŒ Missing Supabase credentials.');
+  console.error('❌ Missing Supabase credentials.');
   process.exit(1);
 }
 
@@ -88,16 +88,16 @@ function addQuestion(reactants, products, category, grade, max = 10) {
   }
 }
 
-console.log('ðŸ—ï¸ Building massive 10,000 rows database...');
+console.log('🏗️ Building massive 10,000 rows database...');
 
 // 1. SIMPLEST REACTIONS (Fundamental)
-console.log('  â†’ Generating fundamental reactions...');
-addQuestion(['H2', 'O2'], ['H2O'], 'HÃ³a há»£p', 8);
-addQuestion(['Na', 'Cl2'], ['NaCl'], 'HÃ³a há»£p', 8);
-addQuestion(['Fe', 'S'], ['FeS'], 'HÃ³a há»£p', 8);
-addQuestion(['C', 'O2'], ['CO2'], 'HÃ³a há»£p', 8);
-addQuestion(['P', 'O2'], ['P2O5'], 'HÃ³a há»£p', 8);
-addQuestion(['S', 'O2'], ['SO2'], 'HÃ³a há»£p', 8);
+console.log('  → Generating fundamental reactions...');
+addQuestion(['H2', 'O2'], ['H2O'], 'Hóa hợp', 8);
+addQuestion(['Na', 'Cl2'], ['NaCl'], 'Hóa hợp', 8);
+addQuestion(['Fe', 'S'], ['FeS'], 'Hóa hợp', 8);
+addQuestion(['C', 'O2'], ['CO2'], 'Hóa hợp', 8);
+addQuestion(['P', 'O2'], ['P2O5'], 'Hóa hợp', 8);
+addQuestion(['S', 'O2'], ['SO2'], 'Hóa hợp', 8);
 
 // 2. Metal + Non-metal (Extensive)
 metals.forEach(m => {
@@ -106,7 +106,7 @@ metals.forEach(m => {
         if (nm === 'O2') p = m.v === 1 ? `${m.s}2O` : (m.v === 2 ? `${m.s}O` : (m.v === 3 ? `${m.s}2O3` : `${m.s}O2`));
         else if (nm === 'Cl2') p = `${m.s}Cl${m.v > 1 ? m.v : ''}`;
         else if (nm === 'S') p = m.v === 2 ? `${m.s}S` : (m.v === 1 ? `${m.s}2S` : `${m.s}2S3`);
-        if (p) addQuestion([m.s, nm], [p], 'HÃ³a há»£p', 8, 10);
+        if (p) addQuestion([m.s, nm], [p], 'Hóa hợp', 8, 10);
     });
 });
 
@@ -115,19 +115,19 @@ metals.forEach(m => {
     acids.forEach(a => {
         if (['Cu', 'Ag', 'Au', 'Pt', 'Hg'].includes(m.s)) return;
         const salt = salts.find(s => s.metal === m.s && s.ion === a.ion);
-        if (salt) addQuestion([m.s, a.f], [salt.f, 'H2'], 'Tháº¿', 8, 10);
+        if (salt) addQuestion([m.s, a.f], [salt.f, 'H2'], 'Thế', 8, 10);
     });
 });
 
 // 4. Double Displacement (Salt + Salt / Salt + Base / Salt + Acid)
-console.log('  â†’ Generating double displacement (Salt combinations)...');
+console.log('  → Generating double displacement (Salt combinations)...');
 for (let i = 0; i < Math.min(salts.length, 300); i++) {
     for (let j = 0; j < Math.min(salts.length, 300); j++) {
         const s1 = salts[i]; const s2 = salts[j];
         if (s1.metal === s2.metal || s1.ion === s2.ion) continue;
         const p1 = salts.find(s => s.metal === s1.metal && s.ion === s2.ion);
         const p2 = salts.find(s => s.metal === s2.metal && s.ion === s1.ion);
-        if (p1 && p2) addQuestion([s1.f, s2.f], [p1.f, p2.f], 'Trao Ä‘á»•i muá»‘i', 9, 8);
+        if (p1 && p2) addQuestion([s1.f, s2.f], [p1.f, p2.f], 'Trao đổi muối', 9, 8);
         if (questions.length > 7000) break;
     }
     if (questions.length > 7000) break;
@@ -139,7 +139,7 @@ salts.slice(0, 100).forEach(s => {
         if (s.metal === b.metal) return;
         const p1 = bases.find(base => base.metal === s.metal);
         const p2 = salts.find(salt => salt.metal === b.metal && salt.ion === s.ion);
-        if (p1 && p2) addQuestion([s.f, b.f], [p1.f, p2.f], 'Muá»‘i + BazÆ¡', 9, 8);
+        if (p1 && p2) addQuestion([s.f, b.f], [p1.f, p2.f], 'Muối + Bazơ', 9, 8);
     });
 });
 
@@ -148,45 +148,45 @@ salts.slice(0, 100).forEach(s => {
     acids.slice(0, 10).forEach(a => {
         const p1 = acids.find(acid => acid.ion === s.ion);
         const p2 = salts.find(salt => salt.metal === s.metal && salt.ion === a.ion);
-        if (p1 && p2) addQuestion([s.f, a.f], [p1.f, p2.f], 'Muá»‘i + Axit', 9, 8);
+        if (p1 && p2) addQuestion([s.f, a.f], [p1.f, p2.f], 'Muối + Axit', 9, 8);
     });
 });
 
 // 5. Organic Combustion (EXTENSIVE C1-C100)
-console.log('  â†’ Generating massive organic combustion (C1-C100)...');
+console.log('  → Generating massive organic combustion (C1-C100)...');
 for (let n = 1; n <= 100; n++) {
-    addQuestion([`C${n}H${2*n+2}`, 'O2'], ['CO2', 'H2O'], 'ChÃ¡y Alkan', 11, 20);
+    addQuestion([`C${n}H${2*n+2}`, 'O2'], ['CO2', 'H2O'], 'Cháy Alkan', 11, 20);
     if (n > 1) {
-        addQuestion([`C${n}H${2*n}`, 'O2'], ['CO2', 'H2O'], 'ChÃ¡y Alken', 11, 20);
-        addQuestion([`C${n}H${2*n-2}`, 'O2'], ['CO2', 'H2O'], 'ChÃ¡y Alkyn', 11, 20);
+        addQuestion([`C${n}H${2*n}`, 'O2'], ['CO2', 'H2O'], 'Cháy Alken', 11, 20);
+        addQuestion([`C${n}H${2*n-2}`, 'O2'], ['CO2', 'H2O'], 'Cháy Alkyn', 11, 20);
     }
-    addQuestion([`C${n}H${2*n+1}OH`, 'O2'], ['CO2', 'H2O'], 'ChÃ¡y RÆ°á»£u', 11, 20);
+    addQuestion([`C${n}H${2*n+1}OH`, 'O2'], ['CO2', 'H2O'], 'Cháy Rượu', 11, 20);
     // Add Carboxylic Acids
-    addQuestion([`C${n}H${2*n+1}COOH`, 'O2'], ['CO2', 'H2O'], 'ChÃ¡y Axit há»¯u cÆ¡', 11, 20);
+    addQuestion([`C${n}H${2*n+1}COOH`, 'O2'], ['CO2', 'H2O'], 'Cháy Axit hữu cơ', 11, 20);
 }
 
 // 5b. Haloalkane Combustion (Just to pump numbers with diversity)
 for (let n = 1; n <= 20; n++) {
-    addQuestion([`C${n}H${2*n+1}Cl`, 'O2'], ['CO2', 'H2O', 'HCl'], 'ChÃ¡y dáº«n xuáº¥t Clo', 11, 20);
+    addQuestion([`C${n}H${2*n+1}Cl`, 'O2'], ['CO2', 'H2O', 'HCl'], 'Cháy dẫn xuất Clo', 11, 20);
 }
 
 // 6. SPECIAL REACTIONS & REDOX
-console.log('  â†’ Adding special redox and decomposition...');
-addQuestion(['KMnO4'], ['K2MnO4', 'MnO2', 'O2'], 'PhÃ¢n há»§y', 10, 10);
-addQuestion(['KMnO4', 'HCl'], ['KCl', 'MnCl2', 'Cl2', 'H2O'], 'Oxi hÃ³a khá»­', 10, 25);
-addQuestion(['KClO3'], ['KCl', 'O2'], 'PhÃ¢n há»§y', 10, 10);
-addQuestion(['NH4NO3'], ['N2O', 'H2O'], 'PhÃ¢n há»§y', 10, 10);
-addQuestion(['Al', 'Fe2O3'], ['Al2O3', 'Fe'], 'Nhiá»‡t nhÃ´m', 10, 10);
-addQuestion(['Fe', 'CuSO4'], ['FeSO4', 'Cu'], 'Tháº¿', 9, 5);
+console.log('  → Adding special redox and decomposition...');
+addQuestion(['KMnO4'], ['K2MnO4', 'MnO2', 'O2'], 'Phân hủy', 10, 10);
+addQuestion(['KMnO4', 'HCl'], ['KCl', 'MnCl2', 'Cl2', 'H2O'], 'Oxi hóa khử', 10, 25);
+addQuestion(['KClO3'], ['KCl', 'O2'], 'Phân hủy', 10, 10);
+addQuestion(['NH4NO3'], ['N2O', 'H2O'], 'Phân hủy', 10, 10);
+addQuestion(['Al', 'Fe2O3'], ['Al2O3', 'Fe'], 'Nhiệt nhôm', 10, 10);
+addQuestion(['Fe', 'CuSO4'], ['FeSO4', 'Cu'], 'Thế', 9, 5);
 
 console.log(`âœ… Total Generated: ${questions.length} unique questions.`);
 
 async function seed() {
-    console.log('ðŸ§¹ Clearing old questions to ensure fresh data...');
+    console.log('🧹 Clearing old questions to ensure fresh data...');
     const { error: clearError } = await supabase.from('cau_hoi_can').delete().neq('chuoi_phuong_trinh', 'CLEAR_ALL');
-    if (clearError) console.error('  âš ï¸ Clear Warning:', clearError.message);
+    if (clearError) console.error('  ⚠️ Clear Warning:', clearError.message);
 
-    console.log('ðŸš€ Seeding 10,000 rows to Supabase in chunks of 1000...');
+    console.log('🚀 Seeding 10,000 rows to Supabase in chunks of 1000...');
     
     const chunkSize = 1000;
     for (let i = 0; i < questions.length; i += chunkSize) {
@@ -195,22 +195,22 @@ async function seed() {
             
             // Basic mapping logic
             if (q.khoi_id === 8) {
-                if (q.danh_muc === 'HÃ³a há»£p' || q.danh_muc === 'PhÃ¢n há»§y') bai_hoc_id = 'hoa8_kntt_bai12';
-                else if (q.danh_muc === 'Tháº¿') bai_hoc_id = 'hoa8_kntt_bai11';
+                if (q.danh_muc === 'Hóa hợp' || q.danh_muc === 'Phân hủy') bai_hoc_id = 'hoa8_kntt_bai12';
+                else if (q.danh_muc === 'Thế') bai_hoc_id = 'hoa8_kntt_bai11';
                 else bai_hoc_id = 'hoa8_kntt_bai1';
             } else if (q.khoi_id === 9) {
-                if (q.danh_muc === 'Trung hÃ²a') bai_hoc_id = 'hoa9_kntt_bai2';
-                else if (q.danh_muc === 'Trao Ä‘á»•i muá»‘i') bai_hoc_id = 'hoa9_kntt_bai3';
+                if (q.danh_muc === 'Trung hòa') bai_hoc_id = 'hoa9_kntt_bai2';
+                else if (q.danh_muc === 'Trao đổi muối') bai_hoc_id = 'hoa9_kntt_bai3';
                 else bai_hoc_id = 'hoa9_kntt_bai1';
             } else if (q.khoi_id === 10) {
-                if (q.danh_muc === 'Oxi hÃ³a khá»­') bai_hoc_id = 'hoa10_kntt_bai15';
+                if (q.danh_muc === 'Oxi hóa khử') bai_hoc_id = 'hoa10_kntt_bai15';
                 else if (q.danh_muc === 'Halogen') bai_hoc_id = 'hoa10_kntt_bai21';
                 else bai_hoc_id = 'hoa10_kntt_bai1';
             } else if (q.khoi_id === 11) {
-                if (q.danh_muc === 'ChÃ¡y Alkan') bai_hoc_id = 'hoa11_kntt_bai15';
-                else if (q.danh_muc === 'ChÃ¡y Alken' || q.danh_muc === 'ChÃ¡y Alkyn') bai_hoc_id = 'hoa11_kntt_bai16';
-                else if (q.danh_muc === 'ChÃ¡y RÆ°á»£u') bai_hoc_id = 'hoa11_kntt_bai20';
-                else if (q.danh_muc === 'ChÃ¡y Axit há»¯u cÆ¡') bai_hoc_id = 'hoa11_kntt_bai24';
+                if (q.danh_muc === 'Cháy Alkan') bai_hoc_id = 'hoa11_kntt_bai15';
+                else if (q.danh_muc === 'Cháy Alken' || q.danh_muc === 'Cháy Alkyn') bai_hoc_id = 'hoa11_kntt_bai16';
+                else if (q.danh_muc === 'Cháy Rượu') bai_hoc_id = 'hoa11_kntt_bai20';
+                else if (q.danh_muc === 'Cháy Axit hữu cơ') bai_hoc_id = 'hoa11_kntt_bai24';
                 else bai_hoc_id = 'hoa11_kntt_bai10';
             }
 
@@ -221,13 +221,13 @@ async function seed() {
             };
         });
         
-        console.log(`  â†’ Uploading chunk ${i / chunkSize + 1}/${Math.ceil(questions.length/chunkSize)}...`);
+        console.log(`  → Uploading chunk ${i / chunkSize + 1}/${Math.ceil(questions.length/chunkSize)}...`);
         const { error } = await supabase.from('cau_hoi_can').insert(chunk);
         
-        if (error) console.error('  âŒ Upload Error:', error.message);
+        if (error) console.error('  ❌ Upload Error:', error.message);
     }
     
-    console.log('ðŸŽ‰ MISSION ACCOMPLISHED: 10,000+ Rows Database with Lesson IDs is LIVE!');
+    console.log('🎉 MISSION ACCOMPLISHED: 10,000+ Rows Database with Lesson IDs is LIVE!');
 }
 
 seed();

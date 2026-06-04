@@ -19,7 +19,7 @@ export default function LoginScreen() {
 
   const submit = async () => {
     if (!username.trim() || !password) {
-      setAuthError("Vui lÃ²ng nháº­p tÃ i khoáº£n vÃ  máº­t kháº©u");
+      setAuthError("Vui lòng nhập tài khoản và mật khẩu");
       return;
     }
     setSubmitting(true);
@@ -45,19 +45,19 @@ export default function LoginScreen() {
         </View>
 
         <Card style={styles.formCard}>
-          <Text style={styles.formTitle}>ÄÄƒng nháº­p</Text>
-          <Text style={styles.formSubtitle}>Má»Ÿ láº¡i lá»™ trÃ¬nh há»c, cÃ´ng cá»¥ há»— trá»£ vÃ  Ä‘áº¥u trÆ°á»ng cá»§a báº¡n.</Text>
+          <Text style={styles.formTitle}>Đăng nhập</Text>
+          <Text style={styles.formSubtitle}>Mở lại lộ trình học, công cụ hỗ trợ và đấu trường của bạn.</Text>
 
           <TextField
             icon="person-outline"
-            placeholder="TÃªn Ä‘Äƒng nháº­p hoáº·c thÆ° Ä‘iá»‡n tá»­"
+            placeholder="Tên đăng nhập hoặc thư điện tử"
             value={username}
             onChangeText={setUsername}
             returnKeyType="next"
           />
           <TextField
             icon="lock-closed-outline"
-            placeholder="Máº­t kháº©u"
+            placeholder="Mật khẩu"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -68,13 +68,13 @@ export default function LoginScreen() {
           {authError ? <Text style={styles.errorText}>{authError}</Text> : null}
 
           <PrimaryButton
-            label={submitting ? "Äang Ä‘Äƒng nháº­p..." : "ÄÄƒng nháº­p"}
+            label={submitting ? "Đang đăng nhập..." : "Đăng nhập"}
             icon="log-in-outline"
             onPress={submit}
             disabled={submitting}
           />
           <Link href="/register" asChild>
-            <GhostButton label="Táº¡o tÃ i khoáº£n há»c sinh" icon="person-add-outline" />
+            <GhostButton label="Tạo tài khoản học sinh" icon="person-add-outline" />
           </Link>
         </Card>
       </Screen>

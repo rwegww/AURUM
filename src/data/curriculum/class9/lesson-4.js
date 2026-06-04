@@ -3,19 +3,19 @@
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 6,
-  "chapterName": "ChÆ°Æ¡ng 6: Kim loáº¡i",
+  "chapterName": "Chương 6: Kim loại",
   "lessonId": 4,
-  "title": "BÃ i 4: PhÃ¢n biá»‡t Phi kim vÃ  Kim loáº¡i",
-  "description": "So sÃ¡nh Ä‘á»‘i láº­p vá» tÃ­nh cháº¥t váº­t lÃ­, hÃ³a há»c vÃ  vai trÃ² khÃ¡c biá»‡t cá»§a hai nhÃ³m nguyÃªn tá»‘ nÃ y.",
+  "title": "Bài 4: Phân biệt Phi kim và Kim loại",
+  "description": "So sánh đối lập về tính chất vật lí, hóa học và vai trò khác biệt của hai nhóm nguyên tố này.",
   "level": "Intermediate",
   "order": 4,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Kim loáº¡i vs Phi kim: Cuá»™c chiáº¿n Ä‘á»‘i láº­p",
+      "title": "Kim loại vs Phi kim: Cuộc chiến đối lập",
       "url": "https://www.youtube.com/watch?v=gE4NM5EODII",
       "thumbnail": "https://img.youtube.com/vi/gE4NM5EODII/0.jpg",
-      "description": "Táº¡i sao kim loáº¡i sÃ¡ng bÃ³ng cÃ²n phi kim láº¡i Ä‘a dáº¡ng mÃ u sáº¯c?"
+      "description": "Tại sao kim loại sáng bóng còn phi kim lại đa dạng màu sắc?"
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Sá»± KhÃ¡c Biá»‡t Váº­t LÃ­",
+        "text": "1. Sự Khác Biệt Vật Lí",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong khi kim loáº¡i chiáº¿m pháº§n lá»›n báº£ng tuáº§n hoÃ n, phi kim chá»‰ lÃ  má»™t nhÃ³m nhá» nhÆ°ng Ä‘Ã³ng vai trÃ² cá»±c ká»³ quan trá»ng Ä‘á»‘i vá»›i sá»± sá»‘ng."
+        "text": "Trong khi kim loại chiếm phần lớn bảng tuần hoàn, phi kim chỉ là một nhóm nhỏ nhưng đóng vai trò cực kỳ quan trọng đối với sự sống."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Báº£ng So SÃ¡nh 'VÃ ng - Than'",
-        "content": "- **Kim loáº¡i:** CÃ³ Ã¡nh kim, dáº«n Ä‘iá»‡n vÃ  nhiá»‡t tá»‘t, tÃ­nh dáº»o (cÃ³ thá»ƒ rÃ¨n, dÃ¡t má»ng).\n- **Phi kim:** KhÃ´ng cÃ³ Ã¡nh kim, khÃ´ng dáº«n Ä‘iá»‡n (trá»« than chÃ¬), giÃ²n á»Ÿ tráº¡ng thÃ¡i ráº¯n, hoáº·c tá»“n táº¡i á»Ÿ dáº¡ng khÃ­ ($O_2, Cl_2, N_2$).",
+        "title": "Bảng So Sánh 'Vàng - Than'",
+        "content": "- **Kim loại:** Có ánh kim, dẫn điện và nhiệt tốt, tính dẻo (có thể rèn, dát mỏng).\n- **Phi kim:** Không có ánh kim, không dẫn điện (trừ than chì), giòn ở trạng thái rắn, hoặc tồn tại ở dạng khí ($O_2, Cl_2, N_2$).",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Báº£n Cháº¥t HÃ³a Há»c Äá»‘i Nghá»‹ch",
+        "text": "2. Bản Chất Hóa Học Đối Nghịch",
         "level": "h2"
       }
     },
@@ -57,9 +57,9 @@
       "type": "list",
       "content": {
         "items": [
-          "**Kim loáº¡i lÃ  cháº¥t KHá»¬:** CÃ³ xu hÆ°á»›ng 'cho' electron trong pháº£n á»©ng hÃ³a há»c.",
-          "**Phi kim lÃ  cháº¥t OXI HÃ“A:** CÃ³ xu hÆ°á»›ng 'nháº­n' electron Ä‘á»ƒ Ä‘áº¡t cáº¥u hÃ¬nh bá»n vá»¯ng.",
-          "**Oxide:** Kim loáº¡i táº¡o Oxide Base (thÆ°á»ng lÃ  cháº¥t ráº¯n), phi kim táº¡o Oxide Acid (thÆ°á»ng lÃ  khÃ­ hoáº·c lá»ng)."
+          "**Kim loại là chất KHỬ:** Có xu hướng 'cho' electron trong phản ứng hóa học.",
+          "**Phi kim là chất OXI HÓA:** Có xu hướng 'nhận' electron để đạt cấu hình bền vững.",
+          "**Oxide:** Kim loại tạo Oxide Base (thường là chất rắn), phi kim tạo Oxide Acid (thường là khí hoặc lỏng)."
         ]
       }
     },
@@ -67,8 +67,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "TrÆ°á»ng há»£p ngoáº¡i lá»‡",
-        "content": "Tuy lÃ  phi kim, nhÆ°ng **Carbon** á»Ÿ dáº¡ng **Than chÃ¬** láº¡i lÃ  má»™t cao thá»§ dáº«n Ä‘iá»‡n (dÃ¹ng lÃ m Ä‘iá»‡n cá»±c trong pin). CÃ²n **Thá»§y ngÃ¢n (Hg)** tuy lÃ  kim loáº¡i nhÆ°ng láº¡i lÃ  cháº¥t lá»ng á»Ÿ nhiá»‡t Ä‘á»™ thÆ°á»ng!",
+        "title": "Trường hợp ngoại lệ",
+        "content": "Tuy là phi kim, nhưng **Carbon** ở dạng **Than chì** lại là một cao thủ dẫn điện (dùng làm điện cực trong pin). Còn **Thủy ngân (Hg)** tuy là kim loại nhưng lại là chất lỏng ở nhiệt độ thường!",
         "color": "orange"
       }
     }
@@ -76,103 +76,103 @@
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Phi kim cÃ³ mÃ u sáº¯c cá»±c ká»³ báº¯t máº¯t, khÃ´ng chá»‰ Ä‘Æ¡n Ä‘iá»‡u nhÆ° Ã¡nh kim báº¡c hay vÃ ng. ÄÃ¢u lÃ  LÆ°u huá»³nh ($S$) - káº» táº¡o nÃªn mÃ¹i trá»©ng thá»‘i Ä‘áº·c trÆ°ng?",
+      "narrative": "Phi kim có màu sắc cực kỳ bắt mắt, không chỉ đơn điệu như ánh kim bạc hay vàng. Đâu là Lưu huỳnh ($S$) - kẻ tạo nên mùi trứng thối đặc trưng?",
       "images": [
         "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ khá»‘i phi kim LÆ°u huá»³nh cÃ³ mÃ u vÃ ng chanh nháº¡t?",
+      "question": "Hình ảnh nào mô tả khối phi kim Lưu huỳnh có màu vàng chanh nhạt?",
       "correctAnswer": 0,
-      "targetType": "nháº­n biáº¿t",
-      "source": "TÃ­nh cháº¥t váº­t lÃ½"
+      "targetType": "nhận biết",
+      "source": "Tính chất vật lý"
     },
     {
       "type": "matching",
-      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i Ä‘áº·c tÃ­nh cho hai 'phe' Ä‘á»‘i láº­p nÃ y trong tháº¿ giá»›i hÃ³a há»c.",
+      "narrative": "Hãy giúp tôi phân loại đặc tính cho hai 'phe' đối lập này trong thế giới hóa học.",
       "leftItems": [
-        { "id": "pk1", "label": "Kim loáº¡i" },
+        { "id": "pk1", "label": "Kim loại" },
         { "id": "pk2", "label": "Phi kim" },
-        { "id": "pk3", "label": "Than chÃ¬" }
+        { "id": "pk3", "label": "Than chì" }
       ],
       "items": [
-        { "id": "pk1", "label": "Dáº«n Ä‘iá»‡n máº¡nh, cÃ³ tÃ­nh dáº»o" },
-        { "id": "pk2", "label": "CÃ¡ch Ä‘iá»‡n, giÃ²n hoáº·c á»Ÿ dáº¡ng khÃ­" },
-        { "id": "pk3", "label": "Phi kim duy nháº¥t dáº«n Ä‘iá»‡n Ä‘Æ°á»£c" }
+        { "id": "pk1", "label": "Dẫn điện mạnh, có tính dẻo" },
+        { "id": "pk2", "label": "Cách điện, giòn hoặc ở dạng khí" },
+        { "id": "pk3", "label": "Phi kim duy nhất dẫn điện được" }
       ],
       "correctOrder": ["pk1", "pk2", "pk3"],
-      "question": "Káº¿t ná»‘i Ä‘á»‘i tÆ°á»£ng vá»›i 'nhÃ¢n dáº¡ng' váº­t lÃ­ tÆ°Æ¡ng á»©ng.",
-      "source": "PhÃ¢n loáº¡i váº­t cháº¥t"
+      "question": "Kết nối đối tượng với 'nhân dạng' vật lí tương ứng.",
+      "source": "Phân loại vật chất"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Cuá»™c rÆ°á»£t Ä‘uá»•i Electron: Náº¿u kim loáº¡i lÃ  káº» 'hÃ o phÃ³ng' chuyÃªn cho electron, thÃ¬ phi kim Ä‘Ã³ng vai trÃ² gÃ¬?",
+      "narrative": "Cuộc rượt đuổi Electron: Nếu kim loại là kẻ 'hào phóng' chuyên cho electron, thì phi kim đóng vai trò gì?",
       "options": [
-        "Káº» 'tham lam' chuyÃªn nháº­n electron (Oxy hÃ³a)",
-        "Káº» 'trung gian' khÃ´ng pháº£n á»©ng",
-        "Káº» 'cá»©u rá»—i' cho thÃªm electron",
-        "Chá»‰ lÃ  cháº¥t xÃºc tÃ¡c"
+        "Kẻ 'tham lam' chuyên nhận electron (Oxy hóa)",
+        "Kẻ 'trung gian' không phản ứng",
+        "Kẻ 'cứu rỗi' cho thêm electron",
+        "Chỉ là chất xúc tác"
       ],
       "correctAnswer": 0,
-      "question": "Vai trÃ² hÃ³a há»c phá»• biáº¿n nháº¥t cá»§a cÃ¡c phi kim lÃ  gÃ¬?",
-      "source": "Báº£n cháº¥t electron"
+      "question": "Vai trò hóa học phổ biến nhất của các phi kim là gì?",
+      "source": "Bản chất electron"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "NhÃ³m kim loáº¡i khi káº¿t há»£p vá»›i Oxy táº¡o ra Oxide Base, cÃ²n háº§u háº¿t phi kim khi chÃ¡y trong Oxy sáº½ táº¡o ra Oxide ...",
-      "placeholder": "Nháº­p loáº¡i Oxide...",
+      "narrative": "Nhóm kim loại khi kết hợp với Oxy tạo ra Oxide Base, còn hầu hết phi kim khi cháy trong Oxy sẽ tạo ra Oxide ...",
+      "placeholder": "Nhập loại Oxide...",
       "correctAnswer": "Axit",
-      "question": "Há»£p cháº¥t giá»¯a phi kim vÃ  Oxy thÆ°á»ng Ä‘Æ°á»£c gá»i lÃ  gÃ¬?",
-      "source": "HÃ³a tÃ­nh"
+      "question": "Hợp chất giữa phi kim và Oxy thường được gọi là gì?",
+      "source": "Hóa tính"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thá»­ thÃ¡ch tráº¡ng thÃ¡i: HÃ£y sáº¯p xáº¿p cÃ¡c phi kim sau theo tráº¡ng thÃ¡i tá»“n táº¡i tá»± nhiÃªn tá»« Ráº¯n Ä‘áº¿n KhÃ­.",
+      "narrative": "Thử thách trạng thái: Hãy sắp xếp các phi kim sau theo trạng thái tồn tại tự nhiên từ Rắn đến Khí.",
       "items": [
-        { "id": "s1", "label": "Carbon (C) - Ráº¯n" },
-        { "id": "s2", "label": "Bromine (Br2) - Lá»ng" },
-        { "id": "s3", "label": "Oxy (O2) - KhÃ­" }
+        { "id": "s1", "label": "Carbon (C) - Rắn" },
+        { "id": "s2", "label": "Bromine (Br2) - Lỏng" },
+        { "id": "s3", "label": "Oxy (O2) - Khí" }
       ],
       "correctOrder": ["s1", "s2", "s3"],
-      "question": "Sáº¯p xáº¿p theo thá»© tá»± Ráº¯n - Lá»ng - KhÃ­.",
-      "source": "Tráº¡ng thÃ¡i tá»± nhiÃªn"
+      "question": "Sắp xếp theo thứ tự Rắn - Lỏng - Khí.",
+      "source": "Trạng thái tự nhiên"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Phi kim nÃ o dáº«n Ä‘Æ°á»£c Ä‘iá»‡n?",
-        "options": ["Sáº¯t", "Than chÃ¬", "LÆ°u huá»³nh", "Oxy"],
+        "question": "Phi kim nào dẫn được điện?",
+        "options": ["Sắt", "Than chì", "Lưu huỳnh", "Oxy"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tráº¡ng thÃ¡i cá»§a khÃ­ Clo ($Cl_2$) lÃ :",
-        "options": ["Ráº¯n", "Lá»ng", "KhÃ­, mÃ u vÃ ng lá»¥c", "KhÃ´ng mÃ u"],
+        "question": "Trạng thái của khí Clo ($Cl_2$) là:",
+        "options": ["Rắn", "Lỏng", "Khí, màu vàng lục", "Không màu"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Oxide nÃ o sau Ä‘Ã¢y lÃ  Oxide Axit?",
+        "question": "Oxide nào sau đây là Oxide Axit?",
         "options": ["$Na_2O$", "$CaO$", "$CO_2$", "$CuO$"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "TÃ­nh cháº¥t váº­t lÃ½ nÃ o KHÃ”NG pháº£i cá»§a phi kim?",
-        "options": ["GiÃ²n", "KhÃ´ng Ã¡nh kim", "Dáº«n nhiá»‡t ráº¥t tá»‘t", "ThÆ°á»ng cÃ¡ch Ä‘iá»‡n"],
+        "question": "Tính chất vật lý nào KHÔNG phải của phi kim?",
+        "options": ["Giòn", "Không ánh kim", "Dẫn nhiệt rất tốt", "Thường cách điện"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Oxy ($O_2$) Ä‘Ã³ng vai trÃ² lÃ  cháº¥t gÃ¬ trong pháº£n á»©ng chÃ¡y?",
-        "options": ["Cháº¥t khá»­", "Cháº¥t oxy hÃ³a", "Cháº¥t xÃºc tÃ¡c", "Cháº¥t khÃ­ khÃ´ng mÃ u"],
+        "question": "Oxy ($O_2$) đóng vai trò là chất gì trong phản ứng cháy?",
+        "options": ["Chất khử", "Chất oxy hóa", "Chất xúc tác", "Chất khí không màu"],
         "correctAnswer": 1,
         "points": 10
       }

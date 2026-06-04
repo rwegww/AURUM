@@ -180,9 +180,9 @@ beforeEach(() => {
 });
 
 const validMaterialPayload = {
-  title: 'Phiáº¿u luyá»‡n táº­p cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh',
-  description: 'BÃ i luyá»‡n táº­p ngáº¯n cho há»c sinh.',
-  category: 'PHT HÃ“A 9',
+  title: 'Phiếu luyện tập cân bằng phương trình',
+  description: 'Bài luyện tập ngắn cho học sinh.',
+  category: 'PHT HÓA 9',
   file_url: 'https://example.com/material.pdf',
   file_type: 'pdf',
 };

@@ -4,17 +4,17 @@
   "lessonId": 5,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 5: Cáº¥u táº¡o cá»§a báº£ng tuáº§n hoÃ n",
-  "chapter": "ChÆ°Æ¡ng 2: Báº£ng tuáº§n hoÃ n cÃ¡c nguyÃªn tá»‘ hÃ³a há»c",
+  "title": "Bài 5: Cấu tạo của bảng tuần hoàn",
+  "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học",
   "order": 5,
   "isPremium": false,
-  "description": "NguyÃªn táº¯c sáº¯p xáº¿p, Ã´ nguyÃªn tá»‘, chu kÃ¬ and nhÃ³m.",
+  "description": "Nguyên tắc sắp xếp, ô nguyên tố, chu kì and nhóm.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. NguyÃªn táº¯c sáº¯p xáº¿p cÃ¡c nguyÃªn tá»‘ hÃ³a há»c",
+        "text": "1. Nguyên tắc sắp xếp các nguyên tố hóa học",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Báº£ng tuáº§n hoÃ n cÃ¡c nguyÃªn tá»‘ hÃ³a há»c hiá»‡n Ä‘áº¡i Ä‘Æ°á»£c xÃ¢y dá»±ng dá»±a trÃªn 3 nguyÃªn táº¯c cá»‘t lÃµi:\n1. CÃ¡c nguyÃªn tá»‘ Ä‘Æ°á»£c sáº¯p xáº¿p theo chiá»u **tÄƒng dáº§n cá»§a Ä‘iá»‡n tÃ­ch háº¡t nhÃ¢n** ($Z$).\n2. CÃ¡c nguyÃªn tá»‘ cÃ³ cÃ¹ng **sá»‘ lá»›p electron** Ä‘Æ°á»£c xáº¿p vÃ o cÃ¹ng má»™t hÃ ng (Chu kÃ¬).\n3. CÃ¡c nguyÃªn tá»‘ cÃ³ cÃ¹ng **sá»‘ electron hÃ³a trá»‹** (cÃ³ cáº¥u hÃ¬nh electron tÆ°Æ¡ng tá»± nhau) Ä‘Æ°á»£c xáº¿p vÃ o cÃ¹ng má»™t cá»™t (NhÃ³m)."
+        "text": "Bảng tuần hoàn các nguyên tố hóa học hiện đại được xây dựng dựa trên 3 nguyên tắc cốt lõi:\n1. Các nguyên tố được sắp xếp theo chiều **tăng dần của điện tích hạt nhân** ($Z$).\n2. Các nguyên tố có cùng **số lớp electron** được xếp vào cùng một hàng (Chu kì).\n3. Các nguyên tố có cùng **số electron hóa trị** (có cấu hình electron tương tự nhau) được xếp vào cùng một cột (Nhóm)."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Cáº¥u trÃºc báº£ng tuáº§n hoÃ n: Ã”, Chu kÃ¬ and NhÃ³m",
+        "text": "2. Cấu trúc bảng tuần hoàn: Ô, Chu kì and Nhóm",
         "level": "h2"
       }
     },
@@ -37,15 +37,15 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "- **Ã” nguyÃªn tá»‘**: Cung cáº¥p cÃ¡c thÃ´ng tin cÆ¡ báº£n vá» má»™t nguyÃªn tá»‘ (Sá»‘ hiá»‡u nguyÃªn tá»­ $Z$, kÃ­ hiá»‡u, tÃªn nguyÃªn tá»‘, Ä‘á»™ Ã¢m Ä‘iá»‡n, cáº¥u hÃ¬nh electron, nguyÃªn tá»­ khá»‘i trung bÃ¬nh).\n- **Chu kÃ¬**: LÃ  dÃ£y cÃ¡c nguyÃªn tá»‘ cÃ³ cÃ¹ng sá»‘ lá»›p electron. Sá»‘ thá»© tá»± chu kÃ¬ = Sá»‘ lá»›p electron. Báº£ng tuáº§n hoÃ n cÃ³ 7 chu kÃ¬ (3 chu kÃ¬ nhá» and 4 chu kÃ¬ lá»›n).\n- **NhÃ³m**: LÃ  táº­p há»£p cÃ¡c nguyÃªn tá»‘ cÃ³ cáº¥u hÃ¬nh electron tÆ°Æ¡ng tá»± nhau, do Ä‘Ã³ cÃ³ tÃ­nh cháº¥t hÃ³a há»c tÆ°Æ¡ng tá»± nhau.\n  + **NhÃ³m A**: Gá»“m cÃ¡c nguyÃªn tá»‘ s and p. Sá»‘ thá»© tá»± nhÃ³m A = Sá»‘ electron lá»›p ngoÃ i cÃ¹ng.\n  + **NhÃ³m B**: Gá»“m cÃ¡c nguyÃªn tá»‘ d and f (kim loáº¡i chuyá»ƒn tiáº¿p)."
+        "text": "- **Ô nguyên tố**: Cung cấp các thông tin cơ bản về một nguyên tố (Số hiệu nguyên tử $Z$, kí hiệu, tên nguyên tố, độ âm điện, cấu hình electron, nguyên tử khối trung bình).\n- **Chu kì**: Là dãy các nguyên tố có cùng số lớp electron. Số thứ tự chu kì = Số lớp electron. Bảng tuần hoàn có 7 chu kì (3 chu kì nhỏ and 4 chu kì lớn).\n- **Nhóm**: Là tập hợp các nguyên tố có cấu hình electron tương tự nhau, do đó có tính chất hóa học tương tự nhau.\n  + **Nhóm A**: Gồm các nguyên tố s and p. Số thứ tự nhóm A = Số electron lớp ngoài cùng.\n  + **Nhóm B**: Gồm các nguyên tố d and f (kim loại chuyển tiếp)."
       }
     },
     {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "XÃ¡c Ä‘á»‹nh vá»‹ trÃ­ nguyÃªn tá»‘ tá»« cáº¥u hÃ¬nh electron",
-        "content": "Äá»ƒ xÃ¡c Ä‘á»‹nh tá»a Ä‘á»™ cá»§a má»™t nguyÃªn tá»‘ trong báº£ng tuáº§n hoÃ n:\n1. **Sá»‘ thá»© tá»± Ã´** = Tá»•ng sá»‘ electron ($Z$).\n2. **Sá»‘ thá»© tá»± chu kÃ¬** = Sá»‘ lá»›p electron.\n3. **Sá»‘ thá»© tá»± nhÃ³m**: \n   - Náº¿u electron cuá»‘i cÃ¹ng Ä‘iá»n vÃ o phÃ¢n lá»›p s hoáº·c p $\\rightarrow$ NhÃ³m A.\n   - Náº¿u electron cuá»‘i cÃ¹ng Ä‘iá»n vÃ o phÃ¢n lá»›p d hoáº·c f $\\rightarrow$ NhÃ³m B.",
+        "title": "Xác định vị trí nguyên tố từ cấu hình electron",
+        "content": "Để xác định tọa độ của một nguyên tố trong bảng tuần hoàn:\n1. **Số thứ tự ô** = Tổng số electron ($Z$).\n2. **Số thứ tự chu kì** = Số lớp electron.\n3. **Số thứ tự nhóm**: \n   - Nếu electron cuối cùng điền vào phân lớp s hoặc p $\\rightarrow$ Nhóm A.\n   - Nếu electron cuối cùng điền vào phân lớp d hoặc f $\\rightarrow$ Nhóm B.",
         "color": "blue"
       }
     },
@@ -53,8 +53,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "PhÃ¢n chia khá»‘i nguyÃªn tá»‘ (Blocks)",
-        "content": "Dá»±a trÃªn phÃ¢n lá»›p electron Ä‘ang Ä‘iá»n dá»Ÿ dang, cÃ¡c nguyÃªn tá»‘ Ä‘Æ°á»£c chia thÃ nh 4 khá»‘i: Khá»‘i s (NhÃ³m IA, IIA), khá»‘i p (IIIA Ä‘áº¿n VIIIA), khá»‘i d (CÃ¡c nhÃ³m B) and khá»‘i f (Lanthanides, Actinides).",
+        "title": "Phân chia khối nguyên tố (Blocks)",
+        "content": "Dựa trên phân lớp electron đang điền dở dang, các nguyên tố được chia thành 4 khối: Khối s (Nhóm IA, IIA), khối p (IIIA đến VIIIA), khối d (Các nhóm B) and khối f (Lanthanides, Actinides).",
         "color": "orange"
       }
     }
@@ -63,10 +63,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Cáº¥u táº¡o cá»§a báº£ng tuáº§n hoÃ n",
+      "title": "Bài giảng: Cấu tạo của bảng tuần hoàn",
       "url": "https://www.youtube.com/watch?v=ZFj67NxAwRM",
       "thumbnail": "https://img.youtube.com/vi/ZFj67NxAwRM/0.jpg",
-      "description": "NguyÃªn táº¯c sáº¯p xáº¿p and cáº¥u trÃºc cÃ¡c Ã´, chu kÃ¬, nhÃ³m trong báº£ng tuáº§n hoÃ n (VietJack)."
+      "description": "Nguyên tắc sắp xếp and cấu trúc các ô, chu kì, nhóm trong bảng tuần hoàn (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -76,43 +76,43 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Ã” nguyÃªn tá»‘ cho biáº¿t thÃ´ng tin gÃ¬?",
+        "question": "Ô nguyên tố cho biết thông tin gì?",
         "options": [
-          "Sá»‘ hiá»‡u nguyÃªn tá»­, KÃ½ hiá»‡u, TÃªn, Khá»‘i lÆ°á»£ng",
-          "Sá»‘ neutron",
-          "Sá»‘ lá»›p electron",
-          "Vá»‹ trÃ­ trong phÃ²ng thÃ­ nghiá»‡m"
+          "Số hiệu nguyên tử, Ký hiệu, Tên, Khối lượng",
+          "Số neutron",
+          "Số lớp electron",
+          "Vị trí trong phòng thí nghiệm"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "NhÃ³m B trong báº£ng tuáº§n hoÃ n chá»©a cÃ¡c nguyÃªn tá»‘:",
+        "question": "Nhóm B trong bảng tuần hoàn chứa các nguyên tố:",
         "options": [
-          "Kim loáº¡i chuyá»ƒn tiáº¿p",
+          "Kim loại chuyển tiếp",
           "Phi kim",
-          "KhÃ­ hiáº¿m",
-          "Kim loáº¡i kiá»m"
+          "Khí hiếm",
+          "Kim loại kiềm"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "NguyÃªn tá»‘ phi kim thÆ°á»ng náº±m á»Ÿ phÃ­a nÃ o cá»§a báº£ng tuáº§n hoÃ n?",
+        "question": "Nguyên tố phi kim thường nằm ở phía nào của bảng tuần hoàn?",
         "options": [
-          "PhÃ­a trÃªn bÃªn pháº£i",
-          "PhÃ­a dÆ°á»›i bÃªn trÃ¡i",
-          "ChÃ­nh giá»¯a",
-          "HÃ ng cuá»‘i cÃ¹ng"
+          "Phía trên bên phải",
+          "Phía dưới bên trái",
+          "Chính giữa",
+          "Hàng cuối cùng"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "KhÃ­ hiáº¿m náº±m á»Ÿ nhÃ³m nÃ o?",
+        "question": "Khí hiếm nằm ở nhóm nào?",
         "options": [
           "VIIIA",
           "IA",
@@ -124,7 +124,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "NguyÃªn tá»‘ nÃ o sau Ä‘Ã¢y lÃ  kim loáº¡i kiá»m (nhÃ³m IA)?",
+        "question": "Nguyên tố nào sau đây là kim loại kiềm (nhóm IA)?",
         "options": [
           "$Na$",
           "$Mg$",

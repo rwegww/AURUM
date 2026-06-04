@@ -14,7 +14,7 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 
 const teacherOrAdmin = async (req, res, next) => {
   try {
     const authHeader = req.header('Authorization');
-    if (!authHeader) return res.status(401).json({ message: 'KhÃ´ng tÃ¬m tháº¥y mÃ£ xÃ¡c thá»±c' });
+    if (!authHeader) return res.status(401).json({ message: 'Không tìm thấy mã xác thực' });
 
     const token = authHeader.replace('Bearer ', '');
     const { data } = await supabase.auth.getUser(token);
@@ -26,19 +26,19 @@ const teacherOrAdmin = async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             userId = decoded.id;
         } catch (_err) {
-            return res.status(401).json({ message: 'MÃ£ xÃ¡c thá»±c khÃ´ng há»£p lá»‡' });
+            return res.status(401).json({ message: 'Mã xác thực không hợp lệ' });
         }
     }
 
     const user = await User.findById(userId);
     if (!user || (user.role !== 'admin' && user.role !== 'teacher')) {
-      return res.status(403).json({ message: 'Quyá»n truy cáº­p bá»‹ tá»« chá»‘i' });
+      return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
     }
 
     req.user = user;
     next();
   } catch (e) {
-    res.status(500).json({ message: 'Lá»—i xÃ¡c thá»±c há»‡ thá»‘ng', error: e.message });
+    res.status(500).json({ message: 'Lỗi xác thực hệ thống', error: e.message });
   }
 };
 
@@ -46,7 +46,7 @@ router.post('/analyze-file', teacherOrAdmin, upload.single('file'), async (req, 
   try {
     console.log('--- Analyzing File (Dynamic Load) ---');
     if (!req.file) {
-      return res.status(400).json({ message: 'KhÃ´ng cÃ³ tá»‡p nÃ o Ä‘Æ°á»£c nháº­n' });
+      return res.status(400).json({ message: 'Không có tệp nào được nhận' });
     }
 
     let text = '';
@@ -70,14 +70,14 @@ router.post('/analyze-file', teacherOrAdmin, upload.single('file'), async (req, 
     }
 
     if (!text || text.trim().length === 0) {
-      return res.status(400).json({ message: 'KhÃ´ng thá»ƒ trÃ­ch xuáº¥t ná»™i dung tá»« tá»‡p nÃ y.' });
+      return res.status(400).json({ message: 'Không thể trích xuất nội dung từ tệp này.' });
     }
 
     const questions = parseQuestions(text);
     res.json({ success: true, questions });
   } catch (err) {
     console.error('CRITICAL File Analysis Error:', err);
-    res.status(500).json({ message: 'Lá»—i phÃ¢n tÃ­ch tá»‡p há»‡ thá»‘ng', error: err.message });
+    res.status(500).json({ message: 'Lỗi phân tích tệp hệ thống', error: err.message });
   }
 });
 
@@ -86,7 +86,7 @@ function parseQuestions(text) {
   const normalizedText = text.replace(/\r\n/g, '\n').replace(/\n+/g, '\n');
   
   // Split by common question markers OR section headers
-  const rawBlocks = normalizedText.split(/(?=(?:CÃ¢u|BÃ i|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-]\s+|(?:PHáº¦N|Pháº§n)\s*(?:I|II|III|IV|V|1|2|3)[:.-]?)/gi);
+  const rawBlocks = normalizedText.split(/(?=(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-]\s+|(?:PHẦN|Phần)\s*(?:I|II|III|IV|V|1|2|3)[:.-]?)/gi);
   
   let currentSectionMode = 'multiple_choice';
 
@@ -95,10 +95,10 @@ function parseQuestions(text) {
     if (!block) continue;
 
     // Detect Section Headers
-    const headerRegex = /^(?:(?:PHáº¦N|Pháº§n)\s*(?:I|II|III|IV|V|1|2|3)?[:.-]?\s*)?(?:TRáº®C NGHIá»†M|Tá»° LUáº¬N|Tráº¯c nghiá»‡m|Tá»± luáº­n)/i;
+    const headerRegex = /^(?:(?:PHẦN|Phần)\s*(?:I|II|III|IV|V|1|2|3)?[:.-]?\s*)?(?:TRẮC NGHIỆM|TỰ LUẬN|Trắc nghiệm|Tự luận)/i;
     if (headerRegex.test(block)) {
-        if (/Tá»° LUáº¬N|Tá»± luáº­n/i.test(block)) currentSectionMode = 'essay';
-        else if (/TRáº®C NGHIá»†M|Tráº¯c nghiá»‡m/i.test(block)) currentSectionMode = 'multiple_choice';
+        if (/TỰ LUẬN|Tự luận/i.test(block)) currentSectionMode = 'essay';
+        else if (/TRẮC NGHIỆM|Trắc nghiệm/i.test(block)) currentSectionMode = 'multiple_choice';
         
         const headerMatch = block.match(headerRegex)[0];
         const remaining = block.substring(headerMatch.length).trim();
@@ -106,17 +106,17 @@ function parseQuestions(text) {
         block = remaining;
     }
 
-    const hasExplicitMarker = /^(?:(?:CÃ¢u|BÃ i|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-])/i.test(block);
+    const hasExplicitMarker = /^(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-])/i.test(block);
 
     // Extract options
     const options = [];
-    const optionMatches = block.matchAll(/([A-D])[.:)]\s*([\s\S]*?)(?=\s*[A-D][.:)]|(?:(?:CÃ¢u|BÃ i|C|Question|Q)\s*\d+[:.-]?)|$)/gi);
+    const optionMatches = block.matchAll(/([A-D])[.:)]\s*([\s\S]*?)(?=\s*[A-D][.:)]|(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?)|$)/gi);
     for (const m of optionMatches) {
         options.push(m[2].trim());
     }
 
     // Extract text
-    const questionMatch = block.match(/^(?:(?:CÃ¢u|BÃ i|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-])\s*([\s\S]*?)(?=\s*[A-D][.:)]|$)/i);
+    const questionMatch = block.match(/^(?:(?:Câu|Bài|C|Question|Q)\s*\d+[:.-]?|\b\d+[:.-])\s*([\s\S]*?)(?=\s*[A-D][.:)]|$)/i);
     let questionText = '';
     if (questionMatch) {
         questionText = questionMatch[1].trim();
@@ -153,7 +153,7 @@ function parseQuestions(text) {
   }
 
   // Answer Keys
-  const answerKeyMarkers = ['ÄÃP ÃN', 'MÃƒ Äá»€', 'ANSWER KEY'];
+  const answerKeyMarkers = ['ĐÁP ÁN', 'MÃ ĐỀ', 'ANSWER KEY'];
   let keyText = '';
   for (const marker of answerKeyMarkers) {
       const match = normalizedText.match(new RegExp(`${marker}[\\s\\S]*`, 'i'));

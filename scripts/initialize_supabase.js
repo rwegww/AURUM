@@ -2,13 +2,13 @@
 import User from '../api/models/User.js';
 
 async function initialize() {
-  console.log('ðŸš€ Initializing Supabase System Data...');
+  console.log('🚀 Initializing Supabase System Data...');
 
   try {
     // 1. Create Grade Levels if missing
     const grades = [8, 9, 10, 11, 12];
     for (const g of grades) {
-      await supabase.from('khoi').upsert({ id: g, ten: `Khá»‘i ${g}` });
+      await supabase.from('khoi').upsert({ id: g, ten: `Khối ${g}` });
     }
     console.log('âœ… Grade levels initialized.');
 
@@ -36,15 +36,15 @@ async function initialize() {
           await User.create(u);
           console.log(`âœ… Created ${u.role} account: ${u.username}`);
         } else {
-          console.log(`â„¹ï¸ Account ${u.username} already exists.`);
+          console.log(`ℹ️ Account ${u.username} already exists.`);
         }
       } catch (err) {
-        console.error(`âŒ Failed to create ${u.username}:`, err.message);
+        console.error(`❌ Failed to create ${u.username}:`, err.message);
       }
     }
 
   } catch (err) {
-    console.error('ðŸ’¥ Initialization failed:', err.message);
+    console.error('💥 Initialization failed:', err.message);
   }
 }
 

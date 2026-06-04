@@ -114,7 +114,7 @@ const TeacherLibrary = () => {
     try {
       const res = await fetch('/api/materials');
       const data = await res.json().catch(() => []);
-      if (!res.ok) throw new Error(data.message || 'KhÃ´ng thá»ƒ táº£i danh sÃ¡ch thÆ° viá»‡n');
+      if (!res.ok) throw new Error(data.message || 'Không thể tải danh sách thư viện');
       setMaterials(Array.isArray(data) ? data : []);
     } catch (err) {
       setListError(err.message);
@@ -129,10 +129,10 @@ const TeacherLibrary = () => {
   }, [fetchMaterials]);
 
   const validateFile = (file) => {
-    if (!file) return 'Vui lÃ²ng chá»n tá»‡p há»c liá»‡u';
+    if (!file) return 'Vui lòng chọn tệp học liệu';
     const fileType = getFileType(file);
-    if (!ACCEPTED_FILE_TYPES.has(fileType)) return 'Äá»‹nh dáº¡ng tá»‡p khÃ´ng Ä‘Æ°á»£c há»— trá»£';
-    if (file.size > MAX_FILE_SIZE) return 'Tá»‡p há»c liá»‡u tá»‘i Ä‘a 20MB';
+    if (!ACCEPTED_FILE_TYPES.has(fileType)) return 'Định dạng tệp không được hỗ trợ';
+    if (file.size > MAX_FILE_SIZE) return 'Tệp học liệu tối đa 20MB';
     return '';
   };
 
@@ -142,12 +142,12 @@ const TeacherLibrary = () => {
     const description = form.description.trim();
     const fileError = validateFile(selectedFile);
 
-    if (!isTeacher) nextErrors.permission = 'Chá»‰ giÃ¡o viÃªn má»›i Ä‘Æ°á»£c upload há»c liá»‡u';
-    if (!title) nextErrors.title = 'Vui lÃ²ng nháº­p tiÃªu Ä‘á»';
-    else if (title.length > 160) nextErrors.title = 'TiÃªu Ä‘á» tá»‘i Ä‘a 160 kÃ½ tá»±';
-    if (!categoryValue) nextErrors.category = 'Vui lÃ²ng chá»n hoáº·c nháº­p danh má»¥c';
-    else if (categoryValue.length > 120) nextErrors.category = 'Danh má»¥c tá»‘i Ä‘a 120 kÃ½ tá»±';
-    if (description.length > 1200) nextErrors.description = 'MÃ´ táº£ tá»‘i Ä‘a 1200 kÃ½ tá»±';
+    if (!isTeacher) nextErrors.permission = 'Chỉ giáo viên mới được upload học liệu';
+    if (!title) nextErrors.title = 'Vui lòng nhập tiêu đề';
+    else if (title.length > 160) nextErrors.title = 'Tiêu đề tối đa 160 ký tự';
+    if (!categoryValue) nextErrors.category = 'Vui lòng chọn hoặc nhập danh mục';
+    else if (categoryValue.length > 120) nextErrors.category = 'Danh mục tối đa 120 ký tự';
+    if (description.length > 1200) nextErrors.description = 'Mô tả tối đa 1200 ký tự';
     if (fileError) nextErrors.file = fileError;
 
     return nextErrors;
@@ -219,11 +219,11 @@ const TeacherLibrary = () => {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         if (data.errors) setFieldErrors(data.errors);
-        throw new Error(data.message || 'KhÃ´ng thá»ƒ lÆ°u há»c liá»‡u');
+        throw new Error(data.message || 'Không thể lưu học liệu');
       }
 
       setMaterials((prev) => [data, ...prev.filter((item) => item.id !== data.id)]);
-      setSuccessMessage('ÄÃ£ thÃªm há»c liá»‡u vÃ o thÆ° viá»‡n');
+      setSuccessMessage('Đã thêm học liệu vào thư viện');
       resetForm();
     } catch (err) {
       setSubmitError(err.message);
@@ -240,8 +240,8 @@ const TeacherLibrary = () => {
           <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-500 flex items-center justify-center mb-5">
             <AlertCircle size={28} aria-hidden="true" />
           </div>
-          <h1 className="text-2xl font-black text-viet-text uppercase tracking-tight mb-2">KhÃ´ng cÃ³ quyá»n upload</h1>
-          <p className="text-sm font-bold text-viet-text-light">Chá»©c nÄƒng nÃ y chá»‰ dÃ nh cho tÃ i khoáº£n giÃ¡o viÃªn.</p>
+          <h1 className="text-2xl font-black text-viet-text uppercase tracking-tight mb-2">Không có quyền upload</h1>
+          <p className="text-sm font-bold text-viet-text-light">Chức năng này chỉ dành cho tài khoản giáo viên.</p>
         </div>
       </div>
     );
@@ -256,8 +256,8 @@ const TeacherLibrary = () => {
               <BookOpen size={28} aria-hidden="true" />
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-black text-viet-text tracking-tight uppercase">ThÆ° viá»‡n há»c liá»‡u</h1>
-              <p className="text-sm font-bold text-viet-text-light mt-1">Quáº£n lÃ½ há»c liá»‡u má»›i Ä‘Äƒng trong thÆ° viá»‡n chung.</p>
+              <h1 className="text-3xl md:text-4xl font-black text-viet-text tracking-tight uppercase">Thư viện học liệu</h1>
+              <p className="text-sm font-bold text-viet-text-light mt-1">Quản lý học liệu mới đăng trong thư viện chung.</p>
             </div>
           </div>
           <Link
@@ -265,7 +265,7 @@ const TeacherLibrary = () => {
             className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-viet-border bg-white text-viet-text font-black text-xs uppercase tracking-widest hover:border-viet-green hover:text-viet-green transition-all"
           >
             <ExternalLink size={16} aria-hidden="true" />
-            Má»Ÿ thÆ° viá»‡n
+            Mở thư viện
           </Link>
         </header>
 
@@ -277,8 +277,8 @@ const TeacherLibrary = () => {
           >
             <div className="flex items-center justify-between gap-4 mb-7">
               <div>
-                <h2 className="text-xl font-black text-viet-text uppercase tracking-tight">Upload bÃ i má»›i</h2>
-                <p className="text-xs font-bold text-viet-text-light mt-1">TÃ i liá»‡u, áº£nh, bÃ i táº­p hoáº·c slide.</p>
+                <h2 className="text-xl font-black text-viet-text uppercase tracking-tight">Upload bài mới</h2>
+                <p className="text-xs font-bold text-viet-text-light mt-1">Tài liệu, ảnh, bài tập hoặc slide.</p>
               </div>
               <div className="w-11 h-11 rounded-2xl bg-viet-green/10 text-viet-green flex items-center justify-center">
                 <UploadCloud size={22} aria-hidden="true" />
@@ -288,7 +288,7 @@ const TeacherLibrary = () => {
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="block text-[10px] font-black text-viet-text-light uppercase tracking-[2px] mb-2 px-1" htmlFor="material-title">
-                  TiÃªu Ä‘á»
+                  Tiêu đề
                 </label>
                 <input
                   id="material-title"
@@ -296,7 +296,7 @@ const TeacherLibrary = () => {
                   value={form.title}
                   onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))}
                   className="w-full h-[52px] px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-viet-green focus:bg-white transition-all text-sm font-bold"
-                  placeholder="VÃ­ dá»¥: Phiáº¿u luyá»‡n táº­p cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh"
+                  placeholder="Ví dụ: Phiếu luyện tập cân bằng phương trình"
                   disabled={isBusy}
                 />
                 {fieldErrors.title && <p className="mt-2 text-xs font-bold text-red-500">{fieldErrors.title}</p>}
@@ -305,7 +305,7 @@ const TeacherLibrary = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] font-black text-viet-text-light uppercase tracking-[2px] mb-2 px-1" htmlFor="material-category">
-                    Danh má»¥c
+                    Danh mục
                   </label>
                   <select
                     id="material-category"
@@ -314,18 +314,18 @@ const TeacherLibrary = () => {
                     className="w-full h-[52px] px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-viet-green focus:bg-white transition-all text-sm font-bold"
                     disabled={isBusy}
                   >
-                    <option value="">Chá»n danh má»¥c</option>
+                    <option value="">Chọn danh mục</option>
                     {MATERIAL_CATEGORIES.map((category) => (
                       <option key={category.id} value={category.id}>{category.label}</option>
                     ))}
-                    <option value={CUSTOM_CATEGORY_VALUE}>Danh má»¥c khÃ¡c</option>
+                    <option value={CUSTOM_CATEGORY_VALUE}>Danh mục khác</option>
                   </select>
                 </div>
 
                 {form.category === CUSTOM_CATEGORY_VALUE && (
                   <div>
                     <label className="block text-[10px] font-black text-viet-text-light uppercase tracking-[2px] mb-2 px-1" htmlFor="material-custom-category">
-                      TÃªn danh má»¥c
+                      Tên danh mục
                     </label>
                     <input
                       id="material-custom-category"
@@ -333,7 +333,7 @@ const TeacherLibrary = () => {
                       value={form.customCategory}
                       onChange={(event) => setForm((prev) => ({ ...prev, customCategory: event.target.value }))}
                       className="w-full h-[52px] px-4 py-3 bg-slate-50 border-2 border-slate-100 rounded-2xl outline-none focus:border-viet-green focus:bg-white transition-all text-sm font-bold"
-                      placeholder="VÃ­ dá»¥: BÃ€I Táº¬P HÃ“A 10"
+                      placeholder="Ví dụ: BÀI TẬP HÓA 10"
                       disabled={isBusy}
                     />
                   </div>
@@ -343,21 +343,21 @@ const TeacherLibrary = () => {
 
               <div>
                 <label className="block text-[10px] font-black text-viet-text-light uppercase tracking-[2px] mb-2 px-1" htmlFor="material-description">
-                  MÃ´ táº£
+                  Mô tả
                 </label>
                 <textarea
                   id="material-description"
                   value={form.description}
                   onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
                   className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-3xl outline-none focus:border-viet-green focus:bg-white transition-all text-sm font-medium min-h-[130px] resize-none"
-                  placeholder="Ná»™i dung ngáº¯n vá» bÃ i há»c hoáº·c tÃ i liá»‡u"
+                  placeholder="Nội dung ngắn về bài học hoặc tài liệu"
                   disabled={isBusy}
                 />
                 {fieldErrors.description && <p className="mt-2 text-xs font-bold text-red-500">{fieldErrors.description}</p>}
               </div>
 
               <div>
-                <span className="block text-[10px] font-black text-viet-text-light uppercase tracking-[2px] mb-2 px-1">Tá»‡p há»c liá»‡u</span>
+                <span className="block text-[10px] font-black text-viet-text-light uppercase tracking-[2px] mb-2 px-1">Tệp học liệu</span>
                 <label
                   className={`flex min-h-[130px] cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed p-6 text-center transition-all ${
                     selectedFile
@@ -381,7 +381,7 @@ const TeacherLibrary = () => {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-black text-viet-text truncate">{selectedFile.name}</p>
                         <p className="text-[10px] font-bold text-viet-text-light uppercase tracking-widest mt-1">
-                          {getFileType(selectedFile).toUpperCase()} Â· {formatFileSize(selectedFile.size)}
+                          {getFileType(selectedFile).toUpperCase()} · {formatFileSize(selectedFile.size)}
                         </p>
                       </div>
                       <button
@@ -391,7 +391,7 @@ const TeacherLibrary = () => {
                           clearSelectedFile();
                         }}
                         className="w-9 h-9 rounded-xl bg-white border border-viet-border text-slate-400 hover:text-red-500 hover:border-red-200 flex items-center justify-center transition-all shrink-0"
-                        aria-label="XÃ³a tá»‡p Ä‘Ã£ chá»n"
+                        aria-label="Xóa tệp đã chọn"
                       >
                         <X size={18} aria-hidden="true" />
                       </button>
@@ -399,9 +399,9 @@ const TeacherLibrary = () => {
                   ) : (
                     <>
                       <UploadCloud size={34} className="text-viet-green mb-3" aria-hidden="true" />
-                      <span className="text-sm font-black text-viet-text">Chá»n tá»‡p há»c liá»‡u</span>
+                      <span className="text-sm font-black text-viet-text">Chọn tệp học liệu</span>
                       <span className="text-[10px] font-bold text-viet-text-light uppercase tracking-widest mt-2">
-                        PDF, DOCX, PPTX, áº£nh, video hoáº·c ZIP
+                        PDF, DOCX, PPTX, ảnh, video hoặc ZIP
                       </span>
                     </>
                   )}
@@ -425,7 +425,7 @@ const TeacherLibrary = () => {
                   disabled={isBusy}
                   className="sm:w-36 h-[52px] rounded-2xl bg-slate-100 text-viet-text font-black text-xs uppercase tracking-widest hover:bg-slate-200 disabled:opacity-50 transition-all"
                 >
-                  XÃ³a form
+                  Xóa form
                 </button>
                 <button
                   type="submit"
@@ -433,7 +433,7 @@ const TeacherLibrary = () => {
                   className="flex-1 h-[52px] rounded-2xl bg-viet-green text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-viet-green/20 hover:bg-emerald-600 disabled:bg-slate-300 disabled:shadow-none disabled:cursor-not-allowed transition-all inline-flex items-center justify-center gap-2"
                 >
                   {isBusy ? <Loader2 size={17} className="animate-spin" aria-hidden="true" /> : <UploadCloud size={17} aria-hidden="true" />}
-                  {isUploading ? 'Äang táº£i tá»‡p' : isSubmitting ? 'Äang lÆ°u' : 'ÄÄƒng vÃ o thÆ° viá»‡n'}
+                  {isUploading ? 'Đang tải tệp' : isSubmitting ? 'Đang lưu' : 'Đăng vào thư viện'}
                 </button>
               </div>
             </form>
@@ -442,8 +442,8 @@ const TeacherLibrary = () => {
           <section className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
               <div>
-                <h2 className="text-xl font-black text-viet-text uppercase tracking-tight">Há»c liá»‡u má»›i nháº¥t</h2>
-                <p className="text-xs font-bold text-viet-text-light mt-1">{hoc_lieu.length} má»¥c trong thÆ° viá»‡n</p>
+                <h2 className="text-xl font-black text-viet-text uppercase tracking-tight">Học liệu mới nhất</h2>
+                <p className="text-xs font-bold text-viet-text-light mt-1">{hoc_lieu.length} mục trong thư viện</p>
               </div>
               <button
                 type="button"
@@ -452,7 +452,7 @@ const TeacherLibrary = () => {
                 className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white border border-viet-border text-viet-text font-black text-xs uppercase tracking-widest hover:border-viet-green hover:text-viet-green disabled:opacity-50 transition-all"
               >
                 {listLoading ? <Loader2 size={15} className="animate-spin" aria-hidden="true" /> : <BookOpen size={15} aria-hidden="true" />}
-                Táº£i láº¡i
+                Tải lại
               </button>
             </div>
 
@@ -466,12 +466,12 @@ const TeacherLibrary = () => {
             {listLoading ? (
               <div className="py-24 rounded-[32px] border-2 border-dashed border-slate-200 bg-white/60 flex flex-col items-center justify-center">
                 <Loader2 size={32} className="animate-spin text-viet-green mb-3" aria-hidden="true" />
-                <p className="text-xs font-black text-viet-text-light uppercase tracking-widest">Äang táº£i thÆ° viá»‡n</p>
+                <p className="text-xs font-black text-viet-text-light uppercase tracking-widest">Đang tải thư viện</p>
               </div>
             ) : hoc_lieu.length === 0 ? (
               <div className="py-24 rounded-[32px] border-2 border-dashed border-slate-200 bg-white/60 text-center">
                 <BookOpen size={44} className="mx-auto mb-4 text-slate-300" aria-hidden="true" />
-                <p className="text-sm font-black text-viet-text-light uppercase tracking-widest">ChÆ°a cÃ³ há»c liá»‡u</p>
+                <p className="text-sm font-black text-viet-text-light uppercase tracking-widest">Chưa có học liệu</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -494,17 +494,17 @@ const TeacherLibrary = () => {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-[9px] font-black text-viet-green uppercase tracking-widest truncate">
-                            {material.category || 'Há»ŒC LIá»†U'}
+                            {material.category || 'HỌC LIỆU'}
                           </span>
                           {material.nguoi_tao_id === user?.id && (
                             <span className="shrink-0 text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-widest">
-                              Cá»§a tÃ´i
+                              Của tôi
                             </span>
                           )}
                         </div>
                         <h3 className="font-black text-viet-text text-sm leading-snug line-clamp-2">{material.title}</h3>
                         <p className="text-[11px] font-bold text-viet-text-light mt-2 line-clamp-2">
-                          {material.description || 'KhÃ´ng cÃ³ mÃ´ táº£'}
+                          {material.description || 'Không có mô tả'}
                         </p>
                       </div>
                     </div>

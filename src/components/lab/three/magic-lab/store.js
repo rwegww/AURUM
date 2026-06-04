@@ -4,7 +4,7 @@
 let idCounter = Date.now();
 const generateId = () => ++idCounter;
 
-const createDefaultBeaker = (id, message = "Cá»‘c thÃ­ nghiá»‡m má»›i") => ({
+const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   id,
   contents: [],
   droppedSolids: [],
@@ -28,7 +28,7 @@ const useLabStore = create((set, get) => ({
   unlockedFormulas: [], // What the user can see/use
 
   // --- Beakers State ---
-  beakers: [createDefaultBeaker(generateId(), "Má»i báº¯t Ä‘áº§u thÃ­ nghiá»‡m")],
+  beakers: [createDefaultBeaker(generateId(), "Mời bắt đầu thí nghiệm")],
   activeBeakerIndex: 0,
 
   // --- Animation/UI State ---
@@ -60,10 +60,10 @@ const useLabStore = create((set, get) => ({
         const newHeatTime = beaker.heatTime + 1;
         updatedBeaker.heatTime = newHeatTime;
 
-        // Overheat logic: vá»¡ cá»‘c sau 15 bÆ°á»›c (30 giÃ¢y)
+        // Overheat logic: vỡ cốc sau 15 bước (30 giây)
         if (newHeatTime >= 15) {
           updatedBeaker = {
-            ...createDefaultBeaker(beaker.id, "ðŸ’¥ Cá»C Bá»Š QUÃ NHIá»†T VÃ€ ÄÃƒ Vá» !"),
+            ...createDefaultBeaker(beaker.id, "💥 CỐC BỊ QUÁ NHIỆT VÀ ĐÃ VỠ!"),
             isHeating: false,
             activeFlame: true,
             activeSmoke: true,
@@ -75,13 +75,13 @@ const useLabStore = create((set, get) => ({
             set(s => {
               const bks = [...s.beakers];
               const b = bks[beakerIdx];
-              if (b && b.reactionMessage.includes("Cá»C Bá»Š QUÃ NHIá»†T")) {
+              if (b && b.reactionMessage.includes("CỐC BỊ QUÁ NHIỆT")) {
                 bks[beakerIdx] = {
                   ...b,
                   activeFlame: false,
                   activeSmoke: false,
                   shake: false,
-                  reactionMessage: "Cá»‘c thÃ­ nghiá»‡m má»›i (Ä‘Ã£ thay cá»‘c khÃ¡c)"
+                  reactionMessage: "Cốc thí nghiệm mới (đã thay cốc khác)"
                 };
               }
               return { beakers: bks };
@@ -89,7 +89,7 @@ const useLabStore = create((set, get) => ({
           }, 3500);
         } else {
           if (newHeatTime >= 10) {
-            updatedBeaker.reactionMessage = "âš ï¸ Cáº£nh bÃ¡o: Cá»‘c Ä‘ang quÃ¡ nhiá»‡t!";
+            updatedBeaker.reactionMessage = "⚠️ Cảnh báo: Cốc đang quá nhiệt!";
           }
 
           // Evaporation logic if beaker has liquids
@@ -104,7 +104,7 @@ const useLabStore = create((set, get) => ({
             if (newVol <= 0) {
               // Liquid is fully evaporated, filter out all non-solids
               updatedBeaker.contents = beaker.contents.filter(c => c.state === 'solid');
-              updatedBeaker.reactionMessage = "Dung dá»‹ch Ä‘Ã£ bay hÆ¡i hoÃ n toÃ n.";
+              updatedBeaker.reactionMessage = "Dung dịch đã bay hơi hoàn toàn.";
               updatedBeaker.activeSmoke = false;
             }
           }
@@ -155,7 +155,7 @@ const useLabStore = create((set, get) => ({
   addBeaker: () => {
     set(state => {
       if (state.beakers.length >= 4) return {}; 
-      const newBeaker = createDefaultBeaker(generateId(), `Cá»‘c thÃ­ nghiá»‡m ${state.beakers.length + 1}`);
+      const newBeaker = createDefaultBeaker(generateId(), `Cốc thí nghiệm ${state.beakers.length + 1}`);
       return { beakers: [...state.beakers, newBeaker] };
     });
   },
@@ -242,7 +242,7 @@ const useLabStore = create((set, get) => ({
         if (chemical.state === 'gas') {
           updatedBeaker.activeBubbles = true;
           updatedBeaker.activeSmoke = true;
-          updatedBeaker.reactionMessage = `Sá»¥c khÃ­ ${chemical.formula} vÃ o cá»‘c.`;
+          updatedBeaker.reactionMessage = `Sục khí ${chemical.formula} vào cốc.`;
           
           setTimeout(() => {
             set(s => {
@@ -251,7 +251,7 @@ const useLabStore = create((set, get) => ({
                 bks[idx].activeBubbles = false;
                 bks[idx].activeSmoke = false;
                 bks[idx].contents = bks[idx].contents.filter(c => c.id !== newId);
-                bks[idx].reactionMessage = `KhÃ­ ${chemical.formula} Ä‘Ã£ bay thoÃ¡t háº¿t.`;
+                bks[idx].reactionMessage = `Khí ${chemical.formula} đã bay thoát hết.`;
               }
               return { beakers: bks };
             });
@@ -297,8 +297,8 @@ const useLabStore = create((set, get) => ({
 
     // Heuristics for visual effects based on reaction animation string or product types
     const animation = reaction.animation || '';
-    const isExplosion = animation === 'explosion' || reaction.name?.toLowerCase().includes('ná»•');
-    const hasGas = processedContents.some(c => c.state === 'gas') || reaction.name?.toLowerCase().includes('khÃ­');
+    const isExplosion = animation === 'explosion' || reaction.name?.toLowerCase().includes('nổ');
+    const hasGas = processedContents.some(c => c.state === 'gas') || reaction.name?.toLowerCase().includes('khí');
     
     const intensity = isExplosion ? 'high' : (hasGas ? 'medium' : 'low');
     const smokeColor = animation === 'smoke_purple' ? '#a855f7' : '#ffffff';
@@ -346,7 +346,7 @@ const useLabStore = create((set, get) => ({
     return {
       contents: processedContents,
       droppedSolids: newSolids,
-      reactionMessage: reaction.name || "Pháº£n á»©ng Ä‘Ã£ xáº£y ra!",
+      reactionMessage: reaction.name || "Phản ứng đã xảy ra!",
       activeBubbles: hasGas,
       activeFlame: isExplosion,
       activeSmoke: hasGas || isExplosion,
@@ -365,7 +365,7 @@ const useLabStore = create((set, get) => ({
   clearBeaker: () => set(state => {
     const idx = state.activeBeakerIndex;
     const newBeakers = [...state.beakers];
-    newBeakers[idx] = createDefaultBeaker(generateId(), "ÄÃ£ lÃ m sáº¡ch dá»¥ng cá»¥.");
+    newBeakers[idx] = createDefaultBeaker(generateId(), "Đã làm sạch dụng cụ.");
     return { beakers: newBeakers, isPouringFormula: null };
   }),
 }));

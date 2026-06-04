@@ -3,18 +3,18 @@
   "classId": 12,
   "lessonId": 29,
   "programId": "ketnoi",
-  "title": "BÃ i 29. Má»™t sá»‘ tÃ­nh cháº¥t vÃ  á»©ng dá»¥ng cá»§a phá»©c cháº¥t",
-  "chapter": "ChÆ°Æ¡ng 8. SÆ¡ lÆ°á»£c vá» kim loáº¡i chuyá»ƒn tiáº¿p vÃ  phá»©c cháº¥t",
+  "title": "Bài 29. Một số tính chất và ứng dụng của phức chất",
+  "chapter": "Chương 8. Sơ lược về kim loại chuyển tiếp và phức chất",
   "order": 29,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "CÃ¡c tÃ­nh cháº¥t tiÃªu biá»ƒu cá»§a phá»©c cháº¥t nhÆ° mÃ u sáº¯c, Ä‘á»™ bá»n vÃ  á»©ng dá»¥ng quan trá»ng trong y sinh, hÃ³a phÃ¢n tÃ­ch.",
+  "description": "Các tính chất tiêu biểu của phức chất như màu sắc, độ bền và ứng dụng quan trọng trong y sinh, hóa phân tích.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. TÃ­nh cháº¥t MÃ u sáº¯c cá»§a Phá»©c cháº¥t",
+        "text": "1. Tính chất Màu sắc của Phức chất",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Äa sá»‘ cÃ¡c phá»©c cháº¥t cá»§a kim loáº¡i chuyá»ƒn tiáº¿p Ä‘á»u cÃ³ mÃ u sáº¯c rá»±c rá»¡ vÃ  Ä‘áº·c trÆ°ng. MÃ u sáº¯c nÃ y sinh ra do sá»± háº¥p thá»¥ nÄƒng lÆ°á»£ng Ã¡nh sÃ¡ng cá»§a cÃ¡c electron d khi chÃºng chuyá»ƒn má»©c nÄƒng lÆ°á»£ng giá»¯a cÃ¡c orbital d Ä‘Ã£ bá»‹ tÃ¡ch má»©c bá»Ÿi cÃ¡c phá»‘i tá»­. VÃ­ dá»¥:"
+        "text": "Đa số các phức chất của kim loại chuyển tiếp đều có màu sắc rực rỡ và đặc trưng. Màu sắc này sinh ra do sự hấp thụ năng lượng ánh sáng của các electron d khi chúng chuyển mức năng lượng giữa các orbital d đã bị tách mức bởi các phối tử. Ví dụ:"
       }
     },
     {
@@ -31,8 +31,8 @@
       "content": {
         "type": "bullet",
         "items": [
-          "Phá»©c $[Cu(H_2O)_6]^{2+}$ cÃ³ mÃ u xanh lam nháº¡t.",
-          "Phá»©c $[Cu(NH_3)_4(H_2O)_2]^{2+}$ cÃ³ mÃ u xanh tháº«m Ä‘áº·c trÆ°ng."
+          "Phức $[Cu(H_2O)_6]^{2+}$ có màu xanh lam nhạt.",
+          "Phức $[Cu(NH_3)_4(H_2O)_2]^{2+}$ có màu xanh thẫm đặc trưng."
         ]
       }
     },
@@ -40,7 +40,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Äá»™ bá»n cá»§a Phá»©c cháº¥t vÃ  Pháº£n á»©ng Tháº¿ Phá»‘i tá»­",
+        "text": "2. Độ bền của Phức chất và Phản ứng Thế Phối tử",
         "level": "h2"
       }
     },
@@ -48,8 +48,8 @@
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Háº±ng sá»‘ bá»n (Stability Constant)",
-        "content": "Kháº£ nÄƒng tá»“n táº¡i cá»§a phá»©c cháº¥t trong dung dá»‹ch Ä‘Æ°á»£c Ä‘áº·c trÆ°ng bá»Ÿi háº±ng sá»‘ bá»n ($\\beta$ hay $K_{st}$). GiÃ¡ trá»‹ $\\beta$ cÃ ng lá»›n, phá»©c cháº¥t cÃ ng bá»n. Trong dung dá»‹ch, phá»‘i tá»­ yáº¿u cÃ³ thá»ƒ bá»‹ tháº¿ bá»Ÿi phá»‘i tá»­ máº¡nh hÆ¡n táº¡o thÃ nh phá»©c cháº¥t bá»n hÆ¡n.\\nVÃ­ dá»¥: $[Ag(NH_3)_2]^+ + 2CN^- \\rightarrow [Ag(CN)_2]^- + 2NH_3$ (Phá»©c cyanide cá»§a báº¡c bá»n hÆ¡n phá»©c ammine).",
+        "title": "Hằng số bền (Stability Constant)",
+        "content": "Khả năng tồn tại của phức chất trong dung dịch được đặc trưng bởi hằng số bền ($\\beta$ hay $K_{st}$). Giá trị $\\beta$ càng lớn, phức chất càng bền. Trong dung dịch, phối tử yếu có thể bị thế bởi phối tử mạnh hơn tạo thành phức chất bền hơn.\\nVí dụ: $[Ag(NH_3)_2]^+ + 2CN^- \\rightarrow [Ag(CN)_2]^- + 2NH_3$ (Phức cyanide của bạc bền hơn phức ammine).",
         "color": "blue"
       }
     },
@@ -57,7 +57,7 @@
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Vai trÃ² vÃ  á»¨ng dá»¥ng cá»§a Phá»©c cháº¥t",
+        "text": "3. Vai trò và Ứng dụng của Phức chất",
         "level": "h2"
       }
     },
@@ -65,15 +65,15 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "**Trong tá»± nhiÃªn**: Há»£p pháº§n quan trá»ng cá»§a cÃ¡c há»£p cháº¥t sinh há»c nhÆ° Hemoglobin (chá»©a phá»©c sáº¯t giÃºp váº­n chuyá»ƒn oxy), Cháº¥t diá»‡p lá»¥c (phá»©c magnesium tham gia quang há»£p).\\n\\n**Trong Y há»c vÃ  Äá»i sá»‘ng**: Phá»©c cháº¥t dÃ¹ng lÃ m thuá»‘c chá»¯a bá»‡nh (nhÆ° Cisplatin trá»‹ ung thÆ°), lÃ m cháº¥t chuáº©n Ä‘á»™ trong hÃ³a phÃ¢n tÃ­ch (EDTA dÃ¹ng xÃ¡c Ä‘á»‹nh Ä‘á»™ cá»©ng cá»§a nÆ°á»›c) hoáº·c dÃ¹ng Ä‘á»ƒ tÃ¡ch chiáº¿t kim loáº¡i quÃ½."
+        "text": "**Trong tự nhiên**: Hợp phần quan trọng của các hợp chất sinh học như Hemoglobin (chứa phức sắt giúp vận chuyển oxy), Chất diệp lục (phức magnesium tham gia quang hợp).\\n\\n**Trong Y học và Đời sống**: Phức chất dùng làm thuốc chữa bệnh (như Cisplatin trị ung thư), làm chất chuẩn độ trong hóa phân tích (EDTA dùng xác định độ cứng của nước) hoặc dùng để tách chiết kim loại quý."
       }
     },
     {
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "á»¨ng dá»¥ng cá»§a EDTA trong Y táº¿",
-        "content": "EDTA lÃ  phá»‘i tá»­ Ä‘a cÃ ng (polydentate) cÃ³ kháº£ nÄƒng táº¡o phá»©c bá»n vá»›i nhiá»u ion kim loáº¡i Ä‘á»™c. Trong Ä‘iá»u trá»‹ ngá»™ Ä‘á»™c kim loáº¡i náº·ng (nhÆ° chÃ¬, thá»§y ngÃ¢n), EDTA Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ 'nhá»‘t' cÃ¡c ion nÃ y vÃ o cáº¥u trÃºc phá»©c bá»n vÃ  Ä‘Ã o tháº£i chÃºng ra khá»i cÆ¡ thá»ƒ qua Ä‘Æ°á»ng bÃ i tiáº¿t.",
+        "title": "Ứng dụng của EDTA trong Y tế",
+        "content": "EDTA là phối tử đa càng (polydentate) có khả năng tạo phức bền với nhiều ion kim loại độc. Trong điều trị ngộ độc kim loại nặng (như chì, thủy ngân), EDTA được dùng để 'nhốt' các ion này vào cấu trúc phức bền và đào thải chúng ra khỏi cơ thể qua đường bài tiết.",
         "color": "orange"
       }
     }
@@ -81,36 +81,36 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Cháº¥t nÃ o sau Ä‘Ã¢y lÃ  má»™t phá»©c cháº¥t cÃ³ á»©ng dá»¥ng quan trá»ng trong viá»‡c Ä‘iá»u trá»‹ ung thÆ°?",
+      "question": "Chất nào sau đây là một phức chất có ứng dụng quan trọng trong việc điều trị ung thư?",
       "options": [
         "Hemoglobin.",
         "Cisplatin.",
         "EDTA.",
-        "Diá»‡p lá»¥c."
+        "Diệp lục."
       ],
       "correctAnswer": 1,
-      "explanation": "Cisplatin $[Pt(NH_3)_2Cl_2]$ lÃ  má»™t phá»©c cháº¥t cá»§a platin cÃ³ kháº£ nÄƒng liÃªn káº¿t with DNA cá»§a táº¿ bÃ o ung thÆ°, ngÄƒn cáº£n sá»± nhÃ¢n Ä‘Ã´i and lÃ m táº¿ bÃ o u bá»‹ tiÃªu diá»‡t."
+      "explanation": "Cisplatin $[Pt(NH_3)_2Cl_2]$ là một phức chất của platin có khả năng liên kết with DNA của tế bào ung thư, ngăn cản sự nhân đôi and làm tế bào u bị tiêu diệt."
     },
     {
       "id": "q2",
-      "question": "Sá»± hÃ¬nh thÃ nh mÃ u sáº¯c cá»§a cÃ¡c ion kim loáº¡i chuyá»ƒn tiáº¿p trong dung dá»‹ch chá»§ yáº¿u liÃªn quan Ä‘áº¿n phÃ¢n lá»›p nÃ o?",
+      "question": "Sự hình thành màu sắc của các ion kim loại chuyển tiếp trong dung dịch chủ yếu liên quan đến phân lớp nào?",
       "options": [
-        "PhÃ¢n lá»›p s.",
-        "PhÃ¢n lá»›p p.",
-        "PhÃ¢n lá»›p d.",
-        "PhÃ¢n lá»›p f."
+        "Phân lớp s.",
+        "Phân lớp p.",
+        "Phân lớp d.",
+        "Phân lớp f."
       ],
       "correctAnswer": 2,
-      "explanation": "MÃ u sáº¯c cá»§a cÃ¡c há»£p cháº¥t kim loáº¡i chuyá»ƒn tiáº¿p sinh ra do cÃ¡c bÆ°á»›c chuyá»ƒn má»©c nÄƒng lÆ°á»£ng cá»§a electron trong phÃ¢n lá»›p d (d-d transitions) dÆ°á»›i tÃ¡c dá»¥ng cá»§a trÆ°á»ng phá»‘i tá»­ xung quanh."
+      "explanation": "Màu sắc của các hợp chất kim loại chuyển tiếp sinh ra do các bước chuyển mức năng lượng của electron trong phân lớp d (d-d transitions) dưới tác dụng của trường phối tử xung quanh."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Má»™t sá»‘ tÃ­nh cháº¥t vÃ  á»©ng dá»¥ng cá»§a phá»©c cháº¥t",
+      "title": "Bài giảng: Một số tính chất và ứng dụng của phức chất",
       "url": "https://www.youtube.com/watch?v=4HEUoyFpquA",
       "thumbnail": "https://img.youtube.com/vi/4HEUoyFpquA/0.jpg",
-      "description": "Giáº£i thÃ­ch háº±ng sá»‘ bá»n and á»©ng dá»¥ng cá»§a phá»©c cháº¥t trong Ä‘á»i sá»‘ng, y há»c and hÃ³a phÃ¢n tÃ­ch (VietJack)."
+      "description": "Giải thích hằng số bền and ứng dụng của phức chất trong đời sống, y học and hóa phân tích (VietJack)."
     }
   ],
   "practiceModules": [],

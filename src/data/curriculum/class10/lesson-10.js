@@ -4,17 +4,17 @@
   "lessonId": 10,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 10: Quy táº¯c octet",
-  "chapter": "ChÆ°Æ¡ng 3: LiÃªn káº¿t hÃ³a há»c",
+  "title": "Bài 10: Quy tắc octet",
+  "chapter": "Chương 3: Liên kết hóa học",
   "order": 10,
   "isPremium": false,
-  "description": "LÃ½ do vÃ¬ sao cÃ¡c nguyÃªn tá»­ liÃªn káº¿t vá»›i nhau.",
+  "description": "Lý do vì sao các nguyên tử liên kết với nhau.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Ná»™i dung quy táº¯c Octet (Quy táº¯c bÃ¡t tá»­)",
+        "text": "1. Nội dung quy tắc Octet (Quy tắc bát tử)",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong quÃ¡ trÃ¬nh hÃ¬nh thÃ nh liÃªn káº¿t hÃ³a há»c, nguyÃªn tá»­ cá»§a cÃ¡c nguyÃªn tá»‘ NhÃ³m A cÃ³ xu hÆ°á»›ng nhÆ°á»ng, nháº­n hoáº·c gÃ³p chung electron lá»›p ngoÃ i cÃ¹ng Ä‘á»ƒ Ä‘áº¡t Ä‘Æ°á»£c cáº¥u hÃ¬nh electron bá»n vá»¯ng cá»§a khÃ­ hiáº¿m gáº§n nháº¥t vá»›i **8 electron** (hoáº·c 2 electron Ä‘á»‘i vá»›i trÆ°á»ng há»£p cá»§a Helium).\n\nÄÃ¢y lÃ  Ä‘á»™ng lá»±c chÃ­nh thÃºc Ä‘áº©y cÃ¡c pháº£n á»©ng hÃ³a há»c xáº£y ra, giÃºp cÃ¡c nguyÃªn tá»­ chuyá»ƒn tá»« tráº¡ng thÃ¡i nÄƒng lÆ°á»£ng cao, kÃ©m bá»n sang tráº¡ng thÃ¡i nÄƒng lÆ°á»£ng tháº¥p hÆ¡n and bá»n vá»¯ng hÆ¡n trong cÃ¡c phÃ¢n tá»­ hoáº·c tinh thá»ƒ."
+        "text": "Trong quá trình hình thành liên kết hóa học, nguyên tử của các nguyên tố Nhóm A có xu hướng nhường, nhận hoặc góp chung electron lớp ngoài cùng để đạt được cấu hình electron bền vững của khí hiếm gần nhất với **8 electron** (hoặc 2 electron đối với trường hợp của Helium).\n\nĐây là động lực chính thúc đẩy các phản ứng hóa học xảy ra, giúp các nguyên tử chuyển từ trạng thái năng lượng cao, kém bền sang trạng thái năng lượng thấp hơn and bền vững hơn trong các phân tử hoặc tinh thể."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "CÆ¡ cháº¿ Ä‘áº¡t cáº¥u hÃ¬nh Octet",
-        "content": "NguyÃªn tá»­ cÃ³ thá»ƒ Ä‘áº¡t Ä‘Æ°á»£c cáº¥u hÃ¬nh bá»n vá»¯ng thÃ´ng qua 2 con Ä‘Æ°á»ng chÃ­nh:\n1. **Sá»± nhÆ°á»ng hoáº·c nháº­n electron**: HÃ¬nh thÃ nh cÃ¡c ion trÃ¡i dáº¥u (LiÃªn káº¿t ion). ThÆ°á»ng xáº£y ra giá»¯a kim loáº¡i Ä‘iá»ƒn hÃ¬nh and phi kim Ä‘iá»ƒn hÃ¬nh.\n2. **Sá»± gÃ³p chung electron**: HÃ¬nh thÃ nh cÃ¡c cáº·p electron chung giá»¯a hai nguyÃªn tá»­ (LiÃªn káº¿t cá»™ng hÃ³a trá»‹). ThÆ°á»ng xáº£y ra giá»¯a cÃ¡c phi kim vá»›i nhau.",
+        "title": "Cơ chế đạt cấu hình Octet",
+        "content": "Nguyên tử có thể đạt được cấu hình bền vững thông qua 2 con đường chính:\n1. **Sự nhường hoặc nhận electron**: Hình thành các ion trái dấu (Liên kết ion). Thường xảy ra giữa kim loại điển hình and phi kim điển hình.\n2. **Sự góp chung electron**: Hình thành các cặp electron chung giữa hai nguyên tử (Liên kết cộng hóa trị). Thường xảy ra giữa các phi kim với nhau.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. VÃ­ dá»¥ vá» sá»± Ã¡p dá»¥ng quy táº¯c Octet",
+        "text": "2. Ví dụ về sự áp dụng quy tắc Octet",
         "level": "h2"
       }
     },
@@ -48,8 +48,8 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**NguyÃªn tá»­ Sodium ($Na$)**: CÃ³ cáº¥u hÃ¬nh $[Ne] 3s^1$. Äá»ƒ Ä‘áº¡t octet, $Na$ dá»… dÃ ng nhÆ°á»ng $1e$ á»Ÿ lá»›p ngoÃ i cÃ¹ng Ä‘á»ƒ trá»Ÿ thÃ nh ion $Na^+$, cÃ³ cáº¥u hÃ¬nh electron cá»§a khÃ­ hiáº¿m Neon.",
-          "**NguyÃªn tá»­ Oxygen ($O$)**: CÃ³ cáº¥u hÃ¬nh $1s^2 2s^2 2p^4$. Äá»ƒ Ä‘áº¡t octet, $O$ cáº§n nháº­n thÃªm $2e$ Ä‘á»ƒ trá»Ÿ thÃ nh ion $O^{2-}$, Ä‘áº¡t cáº¥u hÃ¬nh bá»n vá»¯ng cá»§a Neon."
+          "**Nguyên tử Sodium ($Na$)**: Có cấu hình $[Ne] 3s^1$. Để đạt octet, $Na$ dễ dàng nhường $1e$ ở lớp ngoài cùng để trở thành ion $Na^+$, có cấu hình electron của khí hiếm Neon.",
+          "**Nguyên tử Oxygen ($O$)**: Có cấu hình $1s^2 2s^2 2p^4$. Để đạt octet, $O$ cần nhận thêm $2e$ để trở thành ion $O^{2-}$, đạt cấu hình bền vững của Neon."
         ]
       }
     },
@@ -57,8 +57,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "LÆ°u Ã½ vá» pháº¡m vi Ã¡p dá»¥ng",
-        "content": "Máº·c dÃ¹ quy táº¯c Octet giáº£i thÃ­ch ráº¥t tá»‘t cho háº§u háº¿t cÃ¡c há»£p cháº¥t cá»§a nguyÃªn tá»‘ nhÃ³m A, nhÆ°ng nÃ³ váº«n cÃ³ má»™t sá»‘ ngoáº¡i lá»‡ nhÆ° cÃ¡c há»£p cháº¥t cÃ³ sá»‘ electron láº» ($NO, NO_2$), há»£p cháº¥t thiáº¿u octet ($BF_3, BeCl_2$) hoáº·c cÃ¡c nguyÃªn tá»‘ cÃ³ lá»›p vá» ngoÃ i cÃ¹ng má»Ÿ rá»™ng ($PCl_5, SF_6$).",
+        "title": "Lưu ý về phạm vi áp dụng",
+        "content": "Mặc dù quy tắc Octet giải thích rất tốt cho hầu hết các hợp chất của nguyên tố nhóm A, nhưng nó vẫn có một số ngoại lệ như các hợp chất có số electron lẻ ($NO, NO_2$), hợp chất thiếu octet ($BF_3, BeCl_2$) hoặc các nguyên tố có lớp vỏ ngoài cùng mở rộng ($PCl_5, SF_6$).",
         "color": "orange"
       }
     }
@@ -67,10 +67,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Quy táº¯c octet",
+      "title": "Bài giảng: Quy tắc octet",
       "url": "https://www.youtube.com/watch?v=l7T-GgisrxE",
       "thumbnail": "https://img.youtube.com/vi/l7T-GgisrxE/0.jpg",
-      "description": "Giáº£i thÃ­ch vÃ¬ sao cÃ¡c nguyÃªn tá»­ liÃªn káº¿t vá»›i nhau Ä‘á»ƒ Ä‘áº¡t cáº¥u hÃ¬nh 8 electron bá»n vá»¯ng (VietJack)."
+      "description": "Giải thích vì sao các nguyên tử liên kết với nhau để đạt cấu hình 8 electron bền vững (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -80,31 +80,31 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Quy táº¯c Octet pháº£n Ã¡nh xu hÆ°á»›ng Ä‘áº¡t cáº¥u hÃ¬nh electron cá»§a:",
+        "question": "Quy tắc Octet phản ánh xu hướng đạt cấu hình electron của:",
         "options": [
-          "KhÃ­ hiáº¿m",
-          "Kim loáº¡i máº¡nh",
-          "Phi kim máº¡nh",
-          "Báº¥t ká»³ cháº¥t nÃ o"
+          "Khí hiếm",
+          "Kim loại mạnh",
+          "Phi kim mạnh",
+          "Bất kỳ chất nào"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "NguyÃªn tá»­ Cl ($Z=17$) cÃ³ cáº¥u hÃ¬nh e: [Ne]$3s^2 3p^5$. Äá»ƒ Ä‘áº¡t Octet, Cl cÃ³ xu hÆ°á»›ng:",
+        "question": "Nguyên tử Cl ($Z=17$) có cấu hình e: [Ne]$3s^2 3p^5$. Để đạt Octet, Cl có xu hướng:",
         "options": [
-          "Nháº­n thÃªm 1 e",
-          "NhÆ°á»ng 7 e",
-          "NhÆ°á»ng 1 e",
-          "Nháº­n thÃªm 3 e"
+          "Nhận thêm 1 e",
+          "Nhường 7 e",
+          "Nhường 1 e",
+          "Nhận thêm 3 e"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Ion $Na^+$ Ä‘Æ°á»£c hÃ¬nh thÃ nh khi nguyÃªn tá»­ Na nhÆ°á»ng Ä‘i bao nhiÃªu electron?",
+        "question": "Ion $Na^+$ được hình thành khi nguyên tử Na nhường đi bao nhiêu electron?",
         "options": [
           "1",
           "2",
@@ -116,19 +116,19 @@
       },
       {
         "type": "multiple-choice",
-        "question": "PhÃ¡t biá»ƒu nÃ o Ä‘Ãºng vá» quy táº¯c bÃ¡t tá»­?",
+        "question": "Phát biểu nào đúng về quy tắc bát tử?",
         "options": [
-          "NguyÃªn tá»­ xu hÆ°á»›ng Ä‘áº¡t 8 electron á»Ÿ lá»›p ngoÃ i cÃ¹ng",
-          "NguyÃªn tá»­ xu hÆ°á»›ng cÃ³ 8 proton",
-          "NguyÃªn tá»­ muá»‘n cÃ³ 8 lá»›p electron",
-          "Chá»‰ Ã¡p dá»¥ng cho khÃ­ hiáº¿m"
+          "Nguyên tử xu hướng đạt 8 electron ở lớp ngoài cùng",
+          "Nguyên tử xu hướng có 8 proton",
+          "Nguyên tử muốn có 8 lớp electron",
+          "Chỉ áp dụng cho khí hiếm"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Cáº¥u hÃ¬nh e cá»§a ion $Mg^{2+}$ ($Z=12$) lÃ :",
+        "question": "Cấu hình e của ion $Mg^{2+}$ ($Z=12$) là:",
         "options": [
           "$1s^2 2s^2 2p^6$",
           "$1s^2 2s^2 2p^6 3s^2$",
@@ -136,7 +136,7 @@
           "$1s^2 2s^2 2p^6 3s^1$"
         ],
         "correctAnswer": 0,
-        "explanation": "Mg nhÆ°á»ng 2e á»Ÿ lá»›p 3 Ä‘á»ƒ cÃ²n lá»›p 2 bá»n vá»¯ng.",
+        "explanation": "Mg nhường 2e ở lớp 3 để còn lớp 2 bền vững.",
         "points": 10
       }
     ],

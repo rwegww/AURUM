@@ -3,19 +3,19 @@
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 9,
-  "chapterName": "ChÆ°Æ¡ng 9: Lipid, Carbohydrate, Protein, Polymer",
+  "chapterName": "Chương 9: Lipid, Carbohydrate, Protein, Polymer",
   "lessonId": 12,
-  "title": "BÃ i 12: Carbohydrate. Glucose vÃ  Saccharose",
-  "description": "TÃ¬m hiá»ƒu vá» nguá»“n nÄƒng lÆ°á»£ng ngá»t ngÃ o: Glucose (Ä‘Æ°á»ng Ä‘Æ¡n) vÃ  Saccharose (Ä‘Æ°á»ng Ä‘Ã´i) cÃ¹ng nhá»¯ng pháº£n á»©ng trÃ¡ng báº¡c ká»³ diá»‡u.",
+  "title": "Bài 12: Carbohydrate. Glucose và Saccharose",
+  "description": "Tìm hiểu về nguồn năng lượng ngọt ngào: Glucose (đường đơn) và Saccharose (đường đôi) cùng những phản ứng tráng bạc kỳ diệu.",
   "level": "Intermediate",
   "order": 12,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Carbohydrate: Tá»« NÄƒng lÆ°á»£ng Ä‘áº¿n Cáº¥u trÃºc",
+      "title": "Carbohydrate: Từ Năng lượng đến Cấu trúc",
       "url": "https://www.youtube.com/watch?v=SE-NunBYxhA",
       "thumbnail": "https://img.youtube.com/vi/SE-NunBYxhA/0.jpg",
-      "description": "Táº¡i sao Glucose láº¡i Ä‘Æ°á»£c gá»i lÃ  'Ä‘Æ°á»ng nho'?"
+      "description": "Tại sao Glucose lại được gọi là 'đường nho'?"
     }
   ],
   "practiceModules": [],
@@ -32,15 +32,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Glucose lÃ  cháº¥t káº¿t tinh khÃ´ng mÃ u, vá»‹ ngá»t, dá»… tan trong nÆ°á»›c. NÃ³ cÃ³ nhiá»u trong cÃ¡c loáº¡i quáº£ chÃ­n (Ä‘áº·c biá»‡t lÃ  nho) vÃ  trong mÃ¡u ngÆ°á»i vá»›i ná»“ng Ä‘á»™ á»•n Ä‘á»‹nh khoáº£ng 0,1%."
+        "text": "Glucose là chất kết tinh không màu, vị ngọt, dễ tan trong nước. Nó có nhiều trong các loại quả chín (đặc biệt là nho) và trong máu người với nồng độ ổn định khoảng 0,1%."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "TÃ­nh cháº¥t hÃ³a há»c cá»§a Glucose",
-        "content": "**Pháº£n á»©ng trÃ¡ng báº¡c:** TÃ¡c dá»¥ng vá»›i dung dá»‹ch $AgNO_3/NH_3$ táº¡o lá»›p báº¡c sÃ¡ng bÃ³ng. **Pháº£n á»©ng lÃªn men:** Táº¡o ra rÆ°á»£u etylic vÃ  $CO_2$.",
+        "title": "Tính chất hóa học của Glucose",
+        "content": "**Phản ứng tráng bạc:** Tác dụng với dung dịch $AgNO_3/NH_3$ tạo lớp bạc sáng bóng. **Phản ứng lên men:** Tạo ra rượu etylic và $CO_2$.",
         "color": "blue"
       }
     },
@@ -57,9 +57,9 @@
       "type": "list",
       "content": {
         "items": [
-          "**Nguá»“n gá»‘c:** CÃ³ nhiá»u trong cÃ¢y mÃ­a, cá»§ cáº£i Ä‘Æ°á»ng, hoa thá»‘t ná»‘t. ThÆ°á»ng Ä‘Æ°á»£c gá»i lÃ  Ä‘Æ°á»ng kÃ­nh.",
-          "**Pháº£n á»©ng Thá»§y phÃ¢n:** Khi Ä‘un nÃ³ng trong mÃ´i trÆ°á»ng axit hoáº·c nhá» enzyme, Saccharose bá»‹ tÃ¡ch thÃ nh Glucose vÃ  Fructose.",
-          "**á»¨ng dá»¥ng:** LÃ m thá»±c pháº©m, pha cháº¿ thuá»‘c, nguyÃªn liá»‡u sáº£n xuáº¥t bÃ¡nh káº¹o."
+          "**Nguồn gốc:** Có nhiều trong cây mía, củ cải đường, hoa thốt nốt. Thường được gọi là đường kính.",
+          "**Phản ứng Thủy phân:** Khi đun nóng trong môi trường axit hoặc nhờ enzyme, Saccharose bị tách thành Glucose và Fructose.",
+          "**Ứng dụng:** Làm thực phẩm, pha chế thuốc, nguyên liệu sản xuất bánh kẹo."
         ]
       }
     },
@@ -67,8 +67,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Sá»± khÃ¡c biá»‡t then chá»‘t",
-        "content": "KhÃ¡c vá»›i Glucose, Saccharose **khÃ´ng** cÃ³ pháº£n á»©ng trÃ¡ng báº¡c. NÃ³ chá»‰ cÃ³ pháº£n á»©ng nÃ y sau khi Ä‘Ã£ thá»±c hiá»‡n pháº£n á»©ng thá»§y phÃ¢n.",
+        "title": "Sự khác biệt then chốt",
+        "content": "Khác với Glucose, Saccharose **không** có phản ứng tráng bạc. Nó chỉ có phản ứng này sau khi đã thực hiện phản ứng thủy phân.",
         "color": "orange"
       }
     }
@@ -76,59 +76,59 @@
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Glucose Ä‘Æ°á»£c tÃ¬m tháº¥y ráº¥t nhiá»u trong cÃ¡c loáº¡i trÃ¡i cÃ¢y chÃ­n má»ng tá»± nhiÃªn. ÄÃ¢u lÃ  loáº¡i quáº£ chá»©a hÃ m lÆ°á»£ng Glucose cao nháº¥t, thÆ°á»ng Ä‘Æ°á»£c dÃ¹ng Ä‘á»ƒ gá»i tÃªn lÃ³ng cho loáº¡i Ä‘Æ°á»ng nÃ y?",
+      "narrative": "Glucose được tìm thấy rất nhiều trong các loại trái cây chín mọng tự nhiên. Đâu là loại quả chứa hàm lượng Glucose cao nhất, thường được dùng để gọi tên lóng cho loại đường này?",
       "images": [
         "https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ nhá»¯ng chÃ¹m nho chÃ­n â€” nguá»“n Glucose dá»“i dÃ o trong tá»± nhiÃªn?",
+      "question": "Hình ảnh nào mô tả những chùm nho chín — nguồn Glucose dồi dào trong tự nhiên?",
       "correctAnswer": 0,
-      "targetType": "nháº­n biáº¿t",
-      "source": "Nguá»“n gá»‘c Carbohydrate"
+      "targetType": "nhận biết",
+      "source": "Nguồn gốc Carbohydrate"
     },
     {
       "type": "matching",
-      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i Ä‘áº·c tÃ­nh cá»§a Glucose vÃ  Saccharose.",
+      "narrative": "Hãy giúp tôi phân loại đặc tính của Glucose và Saccharose.",
       "leftItems": [
         { "id": "ca1", "label": "Glucose" },
         { "id": "ca2", "label": "Saccharose" },
         { "id": "ca3", "label": "Chung" }
       ],
       "items": [
-        { "id": "ca1", "label": "Tham gia pháº£n á»©ng trÃ¡ng báº¡c trá»±c tiáº¿p" },
-        { "id": "ca2", "label": "Bá»‹ thá»§y phÃ¢n thÃ nh hai Ä‘Æ¡n vá»‹ Ä‘Æ°á»ng" },
-        { "id": "ca3", "label": "CÃ³ cÃ´ng thá»©c chung dáº¡ng $C_n(H_2O)_m$" }
+        { "id": "ca1", "label": "Tham gia phản ứng tráng bạc trực tiếp" },
+        { "id": "ca2", "label": "Bị thủy phân thành hai đơn vị đường" },
+        { "id": "ca3", "label": "Có công thức chung dạng $C_n(H_2O)_m$" }
       ],
       "correctOrder": ["ca1", "ca2", "ca3"],
-      "question": "Káº¿t ná»‘i loáº¡i Ä‘Æ°á»ng vá»›i Ä‘áº·c trÆ°ng hÃ³a há»c tÆ°Æ¡ng á»©ng.",
-      "source": "PhÃ¢n loáº¡i hÃ³a há»c"
+      "question": "Kết nối loại đường với đặc trưng hóa học tương ứng.",
+      "source": "Phân loại hóa học"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Khi má»™t ngÆ°á»i bá»‹ suy nhÆ°á»£c cÆ¡ thá»ƒ hoáº·c háº¡ Ä‘Æ°á»ng huyáº¿t, bÃ¡c sÄ© thÆ°á»ng chá»‰ Ä‘á»‹nh tiÃªm truyá»n tÄ©nh máº¡ch dung dá»‹ch nÃ o sau Ä‘Ã¢y Ä‘á»ƒ cung cáº¥p nÄƒng lÆ°á»£ng tá»©c thá»i?",
+      "narrative": "Khi một người bị suy nhược cơ thể hoặc hạ đường huyết, bác sĩ thường chỉ định tiêm truyền tĩnh mạch dung dịch nào sau đây để cung cấp năng lượng tức thời?",
       "options": [
-        "Dung dá»‹ch Glucose 5%",
-        "Dung dá»‹ch Saccharose",
-        "Dung dá»‹ch Axit axetic",
-        "RÆ°á»£u vang tráº¯ng"
+        "Dung dịch Glucose 5%",
+        "Dung dịch Saccharose",
+        "Dung dịch Axit axetic",
+        "Rượu vang trắng"
       ],
       "correctAnswer": 0,
-      "question": "Loáº¡i Ä‘Æ°á»ng nÃ o Ä‘Æ°á»£c dÃ¹ng lÃ m thuá»‘c tÄƒng lá»±c trá»±c tiáº¿p trong y táº¿?",
-      "source": "Y há»c Ä‘á»i sá»‘ng"
+      "question": "Loại đường nào được dùng làm thuốc tăng lực trực tiếp trong y tế?",
+      "source": "Y học đời sống"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Trong mÃ´i trÆ°á»ng axit, Saccharose bá»‹ thá»§y phÃ¢n táº¡o ra Glucose vÃ  má»™t loáº¡i Ä‘Æ°á»ng Ä‘Æ¡n khÃ¡c cÃ³ tÃªn lÃ  ...",
-      "placeholder": "Nháº­p tÃªn Ä‘Æ°á»ng (vÃ­ dá»¥: Fructose)...",
+      "narrative": "Trong môi trường axit, Saccharose bị thủy phân tạo ra Glucose và một loại đường đơn khác có tên là ...",
+      "placeholder": "Nhập tên đường (ví dụ: Fructose)...",
       "correctAnswer": "Fructose",
-      "question": "Sáº£n pháº©m Ä‘á»“ng hÃ nh vá»›i Glucose khi thá»§y phÃ¢n Saccharose lÃ  gÃ¬?",
-      "source": "Pháº£n á»©ng thá»§y phÃ¢n"
+      "question": "Sản phẩm đồng hành với Glucose khi thủy phân Saccharose là gì?",
+      "source": "Phản ứng thủy phân"
     },
     {
       "type": "drag-drop",
-      "narrative": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng lÃªn men rÆ°á»£u tá»« tinh bá»™t/Ä‘Æ°á»ng.",
+      "narrative": "Sắp xếp phương trình phản ứng lên men rượu từ tinh bột/đường.",
       "items": [
         { "id": "s1", "label": "$C_6H_{12}O_6$" },
         { "id": "s2", "label": "\\xrightarrow{enzyme}" },
@@ -137,44 +137,44 @@
         { "id": "s5", "label": "$2CO_2 \\uparrow$" }
       ],
       "correctOrder": ["s1", "s2", "s3", "s4", "s5"],
-      "question": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh lÃªn men rÆ°á»£u chuáº©n.",
-      "source": "á»¨ng dá»¥ng sinh hÃ³a"
+      "question": "Sắp xếp phương trình lên men rượu chuẩn.",
+      "source": "Ứng dụng sinh hóa"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Há»£p cháº¥t nÃ o sau Ä‘Ã¢y cÃ³ pháº£n á»©ng trÃ¡ng gÆ°Æ¡ng (trÃ¡ng báº¡c)?",
-        "options": ["Glucose", "Saccharose", "Tinh bá»™t", "Xenlulozo"],
+        "question": "Hợp chất nào sau đây có phản ứng tráng gương (tráng bạc)?",
+        "options": ["Glucose", "Saccharose", "Tinh bột", "Xenlulozo"],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "SaccarozÆ¡ lÃ  thÃ nh pháº§n chÃ­nh cá»§a loáº¡i Ä‘Æ°á»ng nÃ o dÆ°á»›i Ä‘Ã¢y?",
-        "options": ["ÄÆ°á»ng nho", "ÄÆ°á»ng mÃ­a", "ÄÆ°á»ng máº¡ch nha", "ÄÆ°á»ng sá»¯a"],
+        "question": "Saccarozơ là thành phần chính của loại đường nào dưới đây?",
+        "options": ["Đường nho", "Đường mía", "Đường mạch nha", "Đường sữa"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Ná»“ng Ä‘á»™ Glucose trong mÃ¡u ngÆ°á»i bÃ¬nh thÆ°á»ng khoáº£ng bao nhiÃªu?",
+        "question": "Nồng độ Glucose trong máu người bình thường khoảng bao nhiêu?",
         "options": ["10%", "1%", "0,1%", "5%"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Sáº£n pháº©m cá»§a pháº£n á»©ng thá»§y phÃ¢n SaccarozÆ¡ gá»“m:",
-        "options": ["Chá»‰ Glucose", "Chá»‰ Fructose", "Glucose vÃ  Fructose", "Glucose vÃ  Galactose"],
+        "question": "Sản phẩm của phản ứng thủy phân Saccarozơ gồm:",
+        "options": ["Chỉ Glucose", "Chỉ Fructose", "Glucose và Fructose", "Glucose và Galactose"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Táº¡i sao ngÆ°á»i bá»‹ bá»‡nh tiá»ƒu Ä‘Æ°á»ng nÃªn háº¡n cháº¿ Äƒn tinh bá»™t vÃ  Ä‘Æ°á»ng?",
-        "options": ["VÃ¬ gÃ¢y bÃ©o phÃ¬", "VÃ¬ lÃ m tÄƒng lÆ°á»£ng Glucose trong mÃ¡u", "VÃ¬ gÃ¢y sÃ¢u rÄƒng", "VÃ¬ lÃ m háº¡ huyáº¿t Ã¡p"],
+        "question": "Tại sao người bị bệnh tiểu đường nên hạn chế ăn tinh bột và đường?",
+        "options": ["Vì gây béo phì", "Vì làm tăng lượng Glucose trong máu", "Vì gây sâu răng", "Vì làm hạ huyết áp"],
         "correctAnswer": 1,
         "points": 10
       }

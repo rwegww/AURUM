@@ -30,10 +30,10 @@ const DiscussionBoard = ({ lessonId }) => {
         setComments(data);
       } else {
         setComments([]);
-        console.error('Dá»¯ liá»‡u bÃ¬nh luáº­n khÃ´ng há»£p lá»‡:', data);
+        console.error('Dữ liệu bình luận không hợp lệ:', data);
       }
     } catch (err) {
-      console.error('Lá»—i táº£i bÃ¬nh luáº­n:', err);
+      console.error('Lỗi tải bình luận:', err);
       setComments([]);
     } finally {
       setLoading(false);
@@ -50,7 +50,7 @@ const DiscussionBoard = ({ lessonId }) => {
       const data = await res.json();
       setNoteContent(data.content || '');
     } catch (err) {
-      console.error('Lá»—i táº£i ghi chÃº:', err);
+      console.error('Lỗi tải ghi chú:', err);
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ const DiscussionBoard = ({ lessonId }) => {
         body: JSON.stringify({ lessonId, content: noteContent })
       });
     } catch (err) {
-      console.error('Lá»—i lÆ°u ghi chÃº:', err);
+      console.error('Lỗi lưu ghi chú:', err);
     } finally {
       setSavingNote(false);
     }
@@ -105,7 +105,7 @@ const DiscussionBoard = ({ lessonId }) => {
         fetchComments();
       }
     } catch (err) {
-      console.error('Lá»—i gá»­i bÃ¬nh luáº­n:', err);
+      console.error('Lỗi gửi bình luận:', err);
     }
   };
 
@@ -119,7 +119,7 @@ const DiscussionBoard = ({ lessonId }) => {
       });
       fetchComments();
     } catch (err) {
-      console.error('Lá»—i thÃ­ch bÃ¬nh luáº­n:', err);
+      console.error('Lỗi thích bình luận:', err);
     }
   };
 
@@ -136,7 +136,7 @@ const DiscussionBoard = ({ lessonId }) => {
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
           </svg>
-          Ghi chÃº
+          Ghi chú
         </button>
         <button
           onClick={() => setActiveTab('qna')}
@@ -147,7 +147,7 @@ const DiscussionBoard = ({ lessonId }) => {
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
           </svg>
-          Há»i Ä‘Ã¡p
+          Hỏi đáp
         </button>
       </div>
 
@@ -160,11 +160,11 @@ const DiscussionBoard = ({ lessonId }) => {
             exit={{ opacity: 0, y: -10 }}
           >
             <div className="viet-card p-6 border-[#fff9ec] bg-[#fdfcfb] relative">
-              {loading && <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-[32px]">Äang táº£i...</div>}
+              {loading && <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] flex items-center justify-center z-10 rounded-[32px]">Đang tải...</div>}
               <textarea
                 value={noteContent}
                 onChange={(e) => setNoteContent(e.target.value)}
-                placeholder="Ghi láº¡i cÃ¡c kiáº¿n thá»©c quan trá»ng cá»§a báº¡n á»Ÿ Ä‘Ã¢y..."
+                placeholder="Ghi lại các kiến thức quan trọng của bạn ở đây..."
                 className="w-full h-40 bg-transparent border-none outline-none text-[15px] text-viet-text placeholder:text-[#b4bac2] resize-none leading-relaxed italic"
               />
               <div className="flex justify-end mt-4">
@@ -173,7 +173,7 @@ const DiscussionBoard = ({ lessonId }) => {
                   disabled={savingNote || !isLoggedIn}
                   className="px-6 py-2.5 bg-viet-green text-white rounded-xl text-[13px] font-bold shadow-lg shadow-viet-green/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                 >
-                  {savingNote ? 'Äang lÆ°u...' : 'LÆ°u ghi chÃº'}
+                  {savingNote ? 'Đang lưu...' : 'Lưu ghi chú'}
                 </button>
               </div>
             </div>
@@ -189,8 +189,8 @@ const DiscussionBoard = ({ lessonId }) => {
             <div className="viet-card p-4 border-[#fff9ec] bg-[#fdfcfb] mb-6">
               {replyTo && (
                 <div className="flex items-center justify-between px-4 py-2 bg-viet-green/5 rounded-t-xl mb-2 border-l-2 border-viet-green">
-                  <span className="text-[11px] font-bold text-viet-green">Äang tráº£ lá»i {replyTo.user?.username}:</span>
-                  <button onClick={() => setReplyTo(null)} className="text-[11px] font-bold text-red-500">Há»§y</button>
+                  <span className="text-[11px] font-bold text-viet-green">Đang trả lời {replyTo.user?.username}:</span>
+                  <button onClick={() => setReplyTo(null)} className="text-[11px] font-bold text-red-500">Hủy</button>
                 </div>
               )}
               <div className="flex bg-[#fffbf0] border border-[#f0ede4] rounded-full px-5 py-3 items-center gap-3">
@@ -199,7 +199,7 @@ const DiscussionBoard = ({ lessonId }) => {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && postComment()}
-                  placeholder={isLoggedIn ? "Nháº­p bÃ¬nh luáº­n ..." : "ÄÄƒng nháº­p Ä‘á»ƒ bÃ¬nh luáº­n"}
+                  placeholder={isLoggedIn ? "Nhập bình luận ..." : "Đăng nhập để bình luận"}
                   disabled={!isLoggedIn}
                   className="flex-1 bg-transparent border-none outline-none text-[14px] text-viet-text placeholder:text-[#b4bac2]"
                 />
@@ -221,7 +221,7 @@ const DiscussionBoard = ({ lessonId }) => {
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-2 px-2">
                  <span className="text-[12px] font-bold text-viet-text-light uppercase tracking-widest">
-                   {comments.length} BÃ¬nh luáº­n
+                   {comments.length} Bình luận
                  </span>
               </div>
               
@@ -234,11 +234,11 @@ const DiscussionBoard = ({ lessonId }) => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h4 className="text-[14px] font-bold text-viet-text">{comment.user?.username || 'Chiáº¿n binh HÃ³a há»c'}</h4>
-                          <span className="text-[11px] text-viet-text-light font-medium">â€¢ {new Date(comment.created_at).toLocaleDateString('vi-VN')}</span>
+                          <h4 className="text-[14px] font-bold text-viet-text">{comment.user?.username || 'Chiến binh Hóa học'}</h4>
+                          <span className="text-[11px] text-viet-text-light font-medium">• {new Date(comment.created_at).toLocaleDateString('vi-VN')}</span>
                         </div>
                         <p className="text-[11px] text-viet-text-light font-medium mb-3 opacity-60">
-                          {comment.user?.role === 'student' ? 'Há»c sinh' : comment.user?.role === 'teacher' ? 'GiÃ¡o viÃªn' : 'ThÃ nh viÃªn'}
+                          {comment.user?.role === 'student' ? 'Học sinh' : comment.user?.role === 'teacher' ? 'Giáo viên' : 'Thành viên'}
                         </p>
                         
                         <div className="bg-white border border-[#f0ede4] rounded-2xl p-4 text-[14px] text-viet-text mb-3 shadow-sm leading-relaxed">
@@ -263,7 +263,7 @@ const DiscussionBoard = ({ lessonId }) => {
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                                 </svg>
-                                Tráº£ lá»i
+                                Trả lời
                              </button>
                           </div>
                         </div>
@@ -280,7 +280,7 @@ const DiscussionBoard = ({ lessonId }) => {
                            <svg className={`w-3 h-3 transition-transform ${expandedComments.includes(comment.id) ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                              <path d="M19 9l-7 7-7-7" />
                            </svg>
-                           {comments.filter(r => r.parent_id === comment.id).length} pháº£n há»“i
+                           {comments.filter(r => r.parent_id === comment.id).length} phản hồi
                         </button>
                       </div>
                     )}
@@ -299,8 +299,8 @@ const DiscussionBoard = ({ lessonId }) => {
                        </div>
                        <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h4 className="text-[13px] font-bold text-viet-text">{reply.user?.username || 'Chiáº¿n binh HÃ³a há»c'}</h4>
-                            <span className="text-[10px] text-viet-text-light font-medium">â€¢ {new Date(reply.created_at).toLocaleDateString('vi-VN')}</span>
+                            <h4 className="text-[13px] font-bold text-viet-text">{reply.user?.username || 'Chiến binh Hóa học'}</h4>
+                            <span className="text-[10px] text-viet-text-light font-medium">• {new Date(reply.created_at).toLocaleDateString('vi-VN')}</span>
                           </div>
                           <p className="text-[13px] text-viet-text-light">{reply.content}</p>
                        </div>
@@ -311,7 +311,7 @@ const DiscussionBoard = ({ lessonId }) => {
 
               {comments.length === 0 && !loading && (
                 <div className="text-center py-12 text-viet-text-light/40 italic text-[14px]">
-                  ChÆ°a cÃ³ bÃ¬nh luáº­n nÃ o. HÃ£y lÃ  ngÆ°á»i Ä‘áº§u tiÃªn Ä‘áº·t cÃ¢u há»i!
+                  Chưa có bình luận nào. Hãy là người đầu tiên đặt câu hỏi!
                 </div>
               )}
             </div>

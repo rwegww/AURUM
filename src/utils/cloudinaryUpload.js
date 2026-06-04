@@ -12,7 +12,7 @@ export async function uploadToCloudinary(file, folder = 'chemistry-odyssey/publi
 
   if (!cloudName || !uploadPreset) {
     throw new Error(
-      'Thiáº¿u cáº¥u hÃ¬nh Cloudinary. Vui lÃ²ng thÃªm VITE_CLOUDINARY_CLOUD_NAME vÃ  VITE_CLOUDINARY_UPLOAD_PRESET vÃ o biáº¿n mÃ´i trÆ°á»ng.'
+      'Thiếu cấu hình Cloudinary. Vui lòng thêm VITE_CLOUDINARY_CLOUD_NAME và VITE_CLOUDINARY_UPLOAD_PRESET vào biến môi trường.'
     );
   }
 

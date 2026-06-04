@@ -38,9 +38,9 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
       "/assets/images/lab-equipment/graduated-cylinder.png",
       "/assets/images/lab-equipment/erlenmeyer-flask.png"
     ],
-    question: t('mission_modal.image_selection.fallback_question', { defaultValue: "ÄÃ¢u lÃ  hÃ¬nh áº£nh mÃ´ táº£ Ä‘Ãºng nháº¥t vá» 'Cá»‘c thá»§y tinh' (Beaker)?" }),
+    question: t('mission_modal.image_selection.fallback_question', { defaultValue: "Đâu là hình ảnh mô tả đúng nhất về 'Cốc thủy tinh' (Beaker)?" }),
     correctAnswer: 0,
-    targetType: t('mission_modal.labels.target_type_fallback', { defaultValue: "dá»¥ng cá»¥" }),
+    targetType: t('mission_modal.labels.target_type_fallback', { defaultValue: "dụng cụ" }),
     source: t('mission_modal.source_fallback')
   }), [t]);
   const currentChallenge = challenges[currentStep] || fallbackChallenge;
@@ -111,7 +111,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
     'fill-in-the-blank': t('mission_modal.labels.fill-in-the-blank'),
     'drag-drop': t('mission_modal.labels.drag-drop'),
     'matching': t('mission_modal.labels.matching'),
-    'lab-task': t('mission_modal.labels.lab-task', { defaultValue: 'Chuáº©n bá»‹ thÃ­ nghiá»‡m' })
+    'lab-task': t('mission_modal.labels.lab-task', { defaultValue: 'Chuẩn bị thí nghiệm' })
   };
 
   return (
@@ -183,7 +183,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute bottom-3 right-3 bg-black/50 text-white text-[10px] px-2 py-1 rounded-full backdrop-blur-sm font-mono">
-                       {currentChallenge.source || "TÆ° liá»‡u"}
+                       {currentChallenge.source || "Tư liệu"}
                     </div>
                  </div>
                )}
@@ -246,7 +246,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                                   animate={{ scale: 1 }} 
                                   className="absolute inset-0 bg-red-500/20 flex items-center justify-center"
                                 >
-                                  <span className="text-5xl">âŒ</span>
+                                  <span className="text-5xl">❌</span>
                                 </motion.div>
                               )}
                            </button>
@@ -395,8 +395,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M2 12h20"/></svg>
                              </div>
                              <div>
-                                <h4 className="font-bold text-viet-text">Nhiá»‡m vá»¥ Lab</h4>
-                                <p className="text-[10px] text-viet-text-light font-bold uppercase">XÃ¡c nháº­n báº¡n Ä‘Ã£ chuáº©n bá»‹ sáºµn sÃ ng</p>
+                                <h4 className="font-bold text-viet-text">Nhiệm vụ Lab</h4>
+                                <p className="text-[10px] text-viet-text-light font-bold uppercase">Xác nhận bạn đã chuẩn bị sẵn sàng</p>
                              </div>
                           </div>
                           <div className="flex items-center gap-4 py-3 px-4 bg-indigo-50/50 rounded-xl border border-indigo-100/50">
@@ -411,7 +411,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                          disabled={isCorrect !== null}
                          className="w-full py-4 bg-indigo-500 text-white rounded-2xl font-black text-[12px] uppercase tracking-widest hover:brightness-110 shadow-lg"
                        >
-                         HoÃ n thÃ nh bÆ°á»›c nÃ y
+                         Hoàn thành bước này
                        </button>
                     </div>
                   )}

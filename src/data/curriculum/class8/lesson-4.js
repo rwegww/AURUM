@@ -4,29 +4,29 @@
   "lessonId": 4,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 4: Dung dá»‹ch vÃ  Ná»“ng Ä‘á»™",
-  "chapter": "ChÆ°Æ¡ng 1: Pháº£n á»©ng hÃ³a há»c",
+  "title": "Bài 4: Dung dịch và Nồng độ",
+  "chapter": "Chương 1: Phản ứng hóa học",
   "order": 4,
   "isPremium": false,
-  "description": "KhÃ¡i niá»‡m dung dá»‹ch, Ä‘á»™ tan, ná»“ng Ä‘á»™ pháº§n trÄƒm, ná»“ng Ä‘á»™ mol vÃ  cÃ¡ch pha cháº¿ dung dá»‹ch.",
+  "description": "Khái niệm dung dịch, độ tan, nồng độ phần trăm, nồng độ mol và cách pha chế dung dịch.",
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Dung dá»‹ch lÃ  má»™t há»—n há»£p Ä‘á»“ng nháº¥t. HÃ£y chá»n hÃ¬nh áº£nh cá»§a 'NÆ°á»›c muá»‘i sinh lÃ½'!",
+      "narrative": "Dung dịch là một hỗn hợp đồng nhất. Hãy chọn hình ảnh của 'Nước muối sinh lý'!",
       "images": [
         "/assets/images/lab-equipment/saline-solution.png",
         "/assets/images/lab-equipment/muddy-water.png",
         "/assets/images/lab-equipment/oil-water-emulsion.png",
         "/assets/images/lab-equipment/beaker.png"
       ],
-      "question": "ÄÃ¢u lÃ  há»‡ dung dá»‹ch (há»—n há»£p Ä‘á»“ng nháº¥t) giá»¯a cháº¥t tan vÃ  dung mÃ´i?",
+      "question": "Đâu là hệ dung dịch (hỗn hợp đồng nhất) giữa chất tan và dung môi?",
       "correctAnswer": 0,
-      "targetType": "há»—n há»£p",
-      "source": "Quan sÃ¡t thá»±c tiá»…n"
+      "targetType": "hỗn hợp",
+      "source": "Quan sát thực tiễn"
     },
     {
       "type": "multiple-choice",
-      "narrative": "TÃ­nh toÃ¡n ná»“ng Ä‘á»™ pháº§n trÄƒm: HÃ²a tan 10 gam muá»‘i vÃ o 90 gam nÆ°á»›c. Ná»“ng Ä‘á»™ % lÃ  bao nhiÃªu?",
+      "narrative": "Tính toán nồng độ phần trăm: Hòa tan 10 gam muối vào 90 gam nước. Nồng độ % là bao nhiêu?",
       "options": [
         "10%",
         "9%",
@@ -34,45 +34,45 @@
         "100%"
       ],
       "correctAnswer": 0,
-      "question": "CÃ´ng thá»©c: C% = (mct / mdd) x 100%. ÄÃ¡p Ã¡n chÃ­nh xÃ¡c lÃ ?",
-      "source": "ToÃ¡n hÃ³a há»c"
+      "question": "Công thức: C% = (mct / mdd) x 100%. Đáp án chính xác là?",
+      "source": "Toán hóa học"
     },
     {
       "type": "matching",
-      "narrative": "HÃ£y phÃ¢n biá»‡t cÃ¡c loáº¡i ná»“ng Ä‘á»™ dung dá»‹ch khÃ¡c nhau.",
+      "narrative": "Hãy phân biệt các loại nồng độ dung dịch khác nhau.",
       "leftItems": [
-        { "id": "n1", "label": "Ná»“ng Ä‘á»™ pháº§n trÄƒm (C%)" },
-        { "id": "n2", "label": "Ná»“ng Ä‘á»™ mol (CM)" },
-        { "id": "n3", "label": "Äá»™ tan (S)" }
+        { "id": "n1", "label": "Nồng độ phần trăm (C%)" },
+        { "id": "n2", "label": "Nồng độ mol (CM)" },
+        { "id": "n3", "label": "Độ tan (S)" }
       ],
       "items": [
-        { "id": "n3", "label": "Sá»‘ gam cháº¥t tan trong 100g nÆ°á»›c" },
-        { "id": "n1", "label": "Sá»‘ gam cháº¥t tan trong 100g dung dá»‹ch" },
-        { "id": "n2", "label": "Sá»‘ mol cháº¥t tan trong 1 lÃ­t dung dá»‹ch" }
+        { "id": "n3", "label": "Số gam chất tan trong 100g nước" },
+        { "id": "n1", "label": "Số gam chất tan trong 100g dung dịch" },
+        { "id": "n2", "label": "Số mol chất tan trong 1 lít dung dịch" }
       ],
       "correctOrder": ["n1", "n2", "n3"],
-      "question": "Ná»‘i khÃ¡i niá»‡m vá»›i Ä‘Æ¡n vá»‹ hoáº·c Ä‘á»‹nh nghÄ©a Ä‘Ãºng.",
-      "source": "Kiáº¿n thá»©c trá»ng tÃ¢m"
+      "question": "Nối khái niệm với đơn vị hoặc định nghĩa đúng.",
+      "source": "Kiến thức trọng tâm"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Khi hÃ²a tan dáº§u Äƒn vÃ o nÆ°á»›c vÃ  láº¯c máº¡nh, ta thu Ä‘Æ°á»£c má»™t há»—n há»£p khÃ´ng Ä‘á»“ng nháº¥t gá»i lÃ  gÃ¬?",
-      "placeholder": "NhÅ© tÆ°Æ¡ng hay Huyá»n phÃ¹?",
-      "correctAnswer": "NhÅ© tÆ°Æ¡ng",
-      "question": "Há»‡ gá»“m cÃ¡c háº¡t cháº¥t lá»ng phÃ¢n tÃ¡n trong cháº¥t lá»ng khÃ¡c Ä‘Æ°á»£c gá»i lÃ  gÃ¬?",
-      "source": "PhÃ¢n loáº¡i há»—n há»£p"
+      "narrative": "Khi hòa tan dầu ăn vào nước và lắc mạnh, ta thu được một hỗn hợp không đồng nhất gọi là gì?",
+      "placeholder": "Nhũ tương hay Huyền phù?",
+      "correctAnswer": "Nhũ tương",
+      "question": "Hệ gồm các hạt chất lỏng phân tán trong chất lỏng khác được gọi là gì?",
+      "source": "Phân loại hỗn hợp"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thá»­ thÃ¡ch chuáº©n bá»‹ dung dá»‹ch: HÃ£y sáº¯p xáº¿p thá»© tá»± pha cháº¿ nÆ°á»›c Ä‘Æ°á»ng.",
+      "narrative": "Thử thách chuẩn bị dung dịch: Hãy sắp xếp thứ tự pha chế nước đường.",
       "items": [
-        { "id": "p1", "label": "CÃ¢n má»™t lÆ°á»£ng Ä‘Æ°á»ng nháº¥t Ä‘á»‹nh" },
-        { "id": "p2", "label": "Äong má»™t lÆ°á»£ng nÆ°á»›c chÃ­nh xÃ¡c" },
-        { "id": "p3", "label": "Cho Ä‘Æ°á»ng vÃ o nÆ°á»›c vÃ  khuáº¥y Ä‘á»u" }
+        { "id": "p1", "label": "Cân một lượng đường nhất định" },
+        { "id": "p2", "label": "Đong một lượng nước chính xác" },
+        { "id": "p3", "label": "Cho đường vào nước và khuấy đều" }
       ],
       "correctOrder": ["p1", "p2", "p3"],
-      "question": "CÃ¡c bÆ°á»›c pha cháº¿ dung dá»‹ch cÆ¡ báº£n.",
-      "source": "Ká»¹ nÄƒng thá»±c hÃ nh"
+      "question": "Các bước pha chế dung dịch cơ bản.",
+      "source": "Kỹ năng thực hành"
     }
   ],
   "theoryModules": [
@@ -80,7 +80,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. KhÃ¡i niá»‡m vá» Dung dá»‹ch",
+        "text": "1. Khái niệm về Dung dịch",
         "level": "h2"
       }
     },
@@ -88,15 +88,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong Ä‘á»i sá»‘ng hÃ ng ngÃ y, chÃºng ta gáº·p ráº¥t nhiá»u dung dá»‹ch: nÆ°á»›c muá»‘i, nÆ°á»›c Ä‘Æ°á»ng, nÆ°á»›c chanh, thuá»‘c tiÃªm... Hiá»ƒu rÃµ báº£n cháº¥t cá»§a dung dá»‹ch giÃºp ta pha cháº¿ chÃ­nh xÃ¡c vÃ  an toÃ n."
+        "text": "Trong đời sống hàng ngày, chúng ta gặp rất nhiều dung dịch: nước muối, nước đường, nước chanh, thuốc tiêm... Hiểu rõ bản chất của dung dịch giúp ta pha chế chính xác và an toàn."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Äá»‹nh nghÄ©a vÃ  thÃ nh pháº§n",
-        "content": "**Dung dá»‹ch** lÃ  há»—n há»£p **Ä‘á»“ng nháº¥t** cá»§a cháº¥t tan vÃ  dung mÃ´i.\\n- **Dung mÃ´i**: LÃ  cháº¥t cÃ³ kháº£ nÄƒng hÃ²a tan cháº¥t khÃ¡c (thÆ°á»ng lÃ  nÆ°á»›c).\\n- **Cháº¥t tan**: LÃ  cháº¥t bá»‹ hÃ²a tan trong dung mÃ´i.\\n\\n**VÃ­ dá»¥**: Khi hÃ²a tan muá»‘i Äƒn ($NaCl$) vÃ o nÆ°á»›c â†’ NÆ°á»›c lÃ  dung mÃ´i, muá»‘i Äƒn lÃ  cháº¥t tan, nÆ°á»›c muá»‘i lÃ  dung dá»‹ch.\\n\\n**Äáº·c Ä‘iá»ƒm quan trá»ng**: Dung dá»‹ch cÃ³ thÃ nh pháº§n Ä‘á»“ng nháº¥t á»Ÿ má»i vá»‹ trÃ­, khÃ´ng phÃ¢n lá»›p, khÃ´ng láº¯ng Ä‘á»ng (khÃ¡c vá»›i huyá»n phÃ¹ vÃ  nhÅ© tÆ°Æ¡ng).",
+        "title": "Định nghĩa và thành phần",
+        "content": "**Dung dịch** là hỗn hợp **đồng nhất** của chất tan và dung môi.\\n- **Dung môi**: Là chất có khả năng hòa tan chất khác (thường là nước).\\n- **Chất tan**: Là chất bị hòa tan trong dung môi.\\n\\n**Ví dụ**: Khi hòa tan muối ăn ($NaCl$) vào nước → Nước là dung môi, muối ăn là chất tan, nước muối là dung dịch.\\n\\n**Đặc điểm quan trọng**: Dung dịch có thành phần đồng nhất ở mọi vị trí, không phân lớp, không lắng đọng (khác với huyền phù và nhũ tương).",
         "color": "blue"
       }
     },
@@ -104,7 +104,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Äá»™ tan ($S$) vÃ  Dung dá»‹ch bÃ£o hÃ²a",
+        "text": "2. Độ tan ($S$) và Dung dịch bão hòa",
         "level": "h2"
       }
     },
@@ -112,7 +112,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "KhÃ´ng pháº£i lÃºc nÃ o chÃºng ta cÅ©ng cÃ³ thá»ƒ hÃ²a tan thÃªm cháº¥t tan vÃ o dung dá»‹ch. Má»—i cháº¥t cÃ³ má»™t giá»›i háº¡n hÃ²a tan nháº¥t Ä‘á»‹nh phá»¥ thuá»™c vÃ o nhiá»‡t Ä‘á»™."
+        "text": "Không phải lúc nào chúng ta cũng có thể hòa tan thêm chất tan vào dung dịch. Mỗi chất có một giới hạn hòa tan nhất định phụ thuộc vào nhiệt độ."
       }
     },
     {
@@ -121,10 +121,10 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Äá»™ tan ($S$)**: LÃ  sá»‘ gam cháº¥t Ä‘Ã³ hÃ²a tan trong **100 gam dung mÃ´i** Ä‘á»ƒ táº¡o thÃ nh dung dá»‹ch bÃ£o hÃ²a á»Ÿ má»™t nhiá»‡t Ä‘á»™ xÃ¡c Ä‘á»‹nh. CÃ´ng thá»©c: $$S = \\frac{m_{ct}}{m_{dm}} \\times 100$$",
-          "**Dung dá»‹ch bÃ£o hÃ²a**: LÃ  dung dá»‹ch **khÃ´ng thá»ƒ hÃ²a tan thÃªm** cháº¥t tan á»Ÿ nhiá»‡t Ä‘á»™ Ä‘Ã³. Náº¿u thÃªm cháº¥t tan sáº½ láº¯ng Ä‘á»ng á»Ÿ Ä‘Ã¡y.",
-          "**Dung dá»‹ch chÆ°a bÃ£o hÃ²a**: LÃ  dung dá»‹ch váº«n cÃ³ thá»ƒ hÃ²a tan thÃªm cháº¥t tan.",
-          "**VÃ­ dá»¥**: á»ž $25^\\circ C$, Ä‘á»™ tan cá»§a $NaCl$ lÃ  36 g/100g nÆ°á»›c. NghÄ©a lÃ  cá»© 100g nÆ°á»›c chá»‰ hÃ²a tan tá»‘i Ä‘a 36g muá»‘i Äƒn."
+          "**Độ tan ($S$)**: Là số gam chất đó hòa tan trong **100 gam dung môi** để tạo thành dung dịch bão hòa ở một nhiệt độ xác định. Công thức: $$S = \\frac{m_{ct}}{m_{dm}} \\times 100$$",
+          "**Dung dịch bão hòa**: Là dung dịch **không thể hòa tan thêm** chất tan ở nhiệt độ đó. Nếu thêm chất tan sẽ lắng đọng ở đáy.",
+          "**Dung dịch chưa bão hòa**: Là dung dịch vẫn có thể hòa tan thêm chất tan.",
+          "**Ví dụ**: Ở $25^\\circ C$, độ tan của $NaCl$ là 36 g/100g nước. Nghĩa là cứ 100g nước chỉ hòa tan tối đa 36g muối ăn."
         ]
       }
     },
@@ -132,8 +132,8 @@
       "id": "mod7",
       "type": "infoBox",
       "content": {
-        "title": "CÃ¡c yáº¿u tá»‘ áº£nh hÆ°á»Ÿng Ä‘áº¿n Ä‘á»™ tan",
-        "content": "- **Nhiá»‡t Ä‘á»™**: Äa sá»‘ cháº¥t ráº¯n cÃ³ Ä‘á»™ tan tÄƒng khi nhiá»‡t Ä‘á»™ tÄƒng (vÃ­ dá»¥: Ä‘Æ°á»ng tan nhanh hÆ¡n trong nÆ°á»›c nÃ³ng). Tuy nhiÃªn, khÃ­ láº¡i tan **Ã­t hÆ¡n** khi nhiá»‡t Ä‘á»™ tÄƒng (vÃ­ dá»¥: nÆ°á»›c nÃ³ng cÃ³ Ã­t khÃ­ $O_2$ hÆ¡n nÆ°á»›c láº¡nh).\\n- **Báº£n cháº¥t cháº¥t tan vÃ  dung mÃ´i**: Muá»‘i $NaCl$ tan tá»‘t trong nÆ°á»›c nhÆ°ng khÃ´ng tan trong xÄƒng. NgÆ°á»£c láº¡i, dáº§u má»¡ tan trong xÄƒng nhÆ°ng khÃ´ng tan trong nÆ°á»›c.\\n- **Ãp suáº¥t** (Ä‘á»‘i vá»›i cháº¥t khÃ­): TÄƒng Ã¡p suáº¥t â†’ khÃ­ tan nhiá»u hÆ¡n. ÄÃ¢y lÃ  lÃ½ do nÆ°á»›c cÃ³ gas bá»‘c bá»t khi má»Ÿ náº¯p chai.",
+        "title": "Các yếu tố ảnh hưởng đến độ tan",
+        "content": "- **Nhiệt độ**: Đa số chất rắn có độ tan tăng khi nhiệt độ tăng (ví dụ: đường tan nhanh hơn trong nước nóng). Tuy nhiên, khí lại tan **ít hơn** khi nhiệt độ tăng (ví dụ: nước nóng có ít khí $O_2$ hơn nước lạnh).\\n- **Bản chất chất tan và dung môi**: Muối $NaCl$ tan tốt trong nước nhưng không tan trong xăng. Ngược lại, dầu mỡ tan trong xăng nhưng không tan trong nước.\\n- **Áp suất** (đối với chất khí): Tăng áp suất → khí tan nhiều hơn. Đây là lý do nước có gas bốc bọt khi mở nắp chai.",
         "color": "green"
       }
     },
@@ -141,7 +141,7 @@
       "id": "mod8",
       "type": "heading",
       "content": {
-        "text": "3. Ná»“ng Ä‘á»™ pháº§n trÄƒm ($C\\%$)",
+        "text": "3. Nồng độ phần trăm ($C\\%$)",
         "level": "h2"
       }
     },
@@ -149,15 +149,15 @@
       "id": "mod9",
       "type": "paragraph",
       "content": {
-        "text": "Ná»“ng Ä‘á»™ pháº§n trÄƒm cho biáº¿t **sá»‘ gam cháº¥t tan** cÃ³ trong **100 gam dung dá»‹ch**. ÄÃ¢y lÃ  cÃ¡ch biá»ƒu thá»‹ ná»“ng Ä‘á»™ phá»• biáº¿n nháº¥t trong Ä‘á»i sá»‘ng."
+        "text": "Nồng độ phần trăm cho biết **số gam chất tan** có trong **100 gam dung dịch**. Đây là cách biểu thị nồng độ phổ biến nhất trong đời sống."
       }
     },
     {
       "id": "mod10",
       "type": "infoBox",
       "content": {
-        "title": "CÃ´ng thá»©c $C\\%$ vÃ  cÃ¡c biáº¿n Ä‘á»•i",
-        "content": "$$C\\% = \\frac{m_{ct}}{m_{dd}} \\times 100\\%$$\\n\\nCÃ¡c cÃ´ng thá»©c suy ra:\\n- $m_{ct} = \\frac{C\\% \\times m_{dd}}{100}$\\n- $m_{dd} = \\frac{m_{ct} \\times 100}{C\\%}$\\n\\n**LÆ°u Ã½ quan trá»ng**: $m_{dd} = m_{ct} + m_{dm}$ (khá»‘i lÆ°á»£ng dung dá»‹ch = khá»‘i lÆ°á»£ng cháº¥t tan + khá»‘i lÆ°á»£ng dung mÃ´i).\\n\\n**VÃ­ dá»¥**: HÃ²a tan 10g $NaCl$ vÃ o 90g nÆ°á»›c. $C\\% = \\frac{10}{10+90} \\times 100 = 10\\%$.",
+        "title": "Công thức $C\\%$ và các biến đổi",
+        "content": "$$C\\% = \\frac{m_{ct}}{m_{dd}} \\times 100\\%$$\\n\\nCác công thức suy ra:\\n- $m_{ct} = \\frac{C\\% \\times m_{dd}}{100}$\\n- $m_{dd} = \\frac{m_{ct} \\times 100}{C\\%}$\\n\\n**Lưu ý quan trọng**: $m_{dd} = m_{ct} + m_{dm}$ (khối lượng dung dịch = khối lượng chất tan + khối lượng dung môi).\\n\\n**Ví dụ**: Hòa tan 10g $NaCl$ vào 90g nước. $C\\% = \\frac{10}{10+90} \\times 100 = 10\\%$.",
         "color": "blue"
       }
     },
@@ -165,7 +165,7 @@
       "id": "mod11",
       "type": "heading",
       "content": {
-        "text": "4. Ná»“ng Ä‘á»™ mol ($C_M$)",
+        "text": "4. Nồng độ mol ($C_M$)",
         "level": "h2"
       }
     },
@@ -173,15 +173,15 @@
       "id": "mod12",
       "type": "paragraph",
       "content": {
-        "text": "Ná»“ng Ä‘á»™ Mol ($C_M$) cho biáº¿t sá»‘ mol cháº¥t tan cÃ³ trong 1 lÃ­t dung dá»‹ch. ÄÃ¢y lÃ  Ä‘Æ¡n vá»‹ cá»±c ká»³ quan trá»ng trong thá»±c hÃ nh hÃ³a há»c. \\n\\n**CÃ´ng thá»©c**: $$C_M = \\frac{n}{V}$$\\nTrong Ä‘Ã³:\\n- $n$: Sá»‘ mol cháº¥t tan (mol)\\n- $V$: Thá»ƒ tÃ­ch dung dá»‹ch (**lÃ­t**)\\n\\n**VÃ­ dá»¥**: HÃ²a tan 4g $NaOH$ ($M=40$) vÃ o nÆ°á»›c Ä‘á»ƒ Ä‘Æ°á»£c 200ml dung dá»‹ch. \\n- $n_{NaOH} = 0,1$ mol\\n- $V = 0,2$ lÃ­t\\n- $C_M = 0,1 / 0,2 = 0,5$ M."
+        "text": "Nồng độ Mol ($C_M$) cho biết số mol chất tan có trong 1 lít dung dịch. Đây là đơn vị cực kỳ quan trọng trong thực hành hóa học. \\n\\n**Công thức**: $$C_M = \\frac{n}{V}$$\\nTrong đó:\\n- $n$: Số mol chất tan (mol)\\n- $V$: Thể tích dung dịch (**lít**)\\n\\n**Ví dụ**: Hòa tan 4g $NaOH$ ($M=40$) vào nước để được 200ml dung dịch. \\n- $n_{NaOH} = 0,1$ mol\\n- $V = 0,2$ lít\\n- $C_M = 0,1 / 0,2 = 0,5$ M."
       }
     },
     {
       "id": "mod13",
       "type": "infoBox",
       "content": {
-        "title": "CÃ´ng thá»©c $C_M$ vÃ  cÃ¡c biáº¿n Ä‘á»•i",
-        "content": "$$C_M = \\frac{n}{V}$$\\nTrong Ä‘Ã³: $n$ lÃ  sá»‘ mol cháº¥t tan, $V$ lÃ  thá»ƒ tÃ­ch dung dá»‹ch tÃ­nh báº±ng **lÃ­t**.\\n\\nCÃ¡c cÃ´ng thá»©c suy ra:\\n- $n = C_M \\times V$\\n- $V = \\frac{n}{C_M}$\\n\\n**VÃ­ dá»¥**: HÃ²a tan 0,1 mol $NaOH$ vÃ o nÆ°á»›c Ä‘Æ°á»£c 500 ml dung dá»‹ch.\\n$C_M = \\frac{0,1}{0,5} = 0,2$ M (hoáº·c 0,2 mol/l).",
+        "title": "Công thức $C_M$ và các biến đổi",
+        "content": "$$C_M = \\frac{n}{V}$$\\nTrong đó: $n$ là số mol chất tan, $V$ là thể tích dung dịch tính bằng **lít**.\\n\\nCác công thức suy ra:\\n- $n = C_M \\times V$\\n- $V = \\frac{n}{C_M}$\\n\\n**Ví dụ**: Hòa tan 0,1 mol $NaOH$ vào nước được 500 ml dung dịch.\\n$C_M = \\frac{0,1}{0,5} = 0,2$ M (hoặc 0,2 mol/l).",
         "color": "blue"
       }
     },
@@ -189,7 +189,7 @@
       "id": "mod14",
       "type": "heading",
       "content": {
-        "text": "5. Má»‘i liÃªn há»‡ giá»¯a $C\\%$ vÃ  $C_M$",
+        "text": "5. Mối liên hệ giữa $C\\%$ và $C_M$",
         "level": "h2"
       }
     },
@@ -197,14 +197,14 @@
       "id": "mod15",
       "type": "paragraph",
       "content": {
-        "text": "CÃ´ng thá»©c chuyá»ƒn Ä‘á»•i nhanh giá»¯a hai loáº¡i ná»“ng Ä‘á»™:\\n\\n$$C_M = \\frac{10 \\times D \\times C\\%}{M}$$\\n\\nTrong Ä‘Ã³: $D$ lÃ  khá»‘i lÆ°á»£ng riÃªng cá»§a dung dá»‹ch (g/ml), $M$ lÃ  khá»‘i lÆ°á»£ng mol cháº¥t tan (g/mol)."
+        "text": "Công thức chuyển đổi nhanh giữa hai loại nồng độ:\\n\\n$$C_M = \\frac{10 \\times D \\times C\\%}{M}$$\\n\\nTrong đó: $D$ là khối lượng riêng của dung dịch (g/ml), $M$ là khối lượng mol chất tan (g/mol)."
       }
     },
     {
       "id": "mod16",
       "type": "heading",
       "content": {
-        "text": "6. VÃ­ dá»¥ minh há»a",
+        "text": "6. Ví dụ minh họa",
         "level": "h2"
       }
     },
@@ -214,9 +214,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**VÃ­ dá»¥ 1**: HÃ²a tan 20g Ä‘Æ°á»ng vÃ o 180g nÆ°á»›c. TÃ­nh $C\\%$.\\n  *Giáº£i*: $m_{dd} = 20 + 180 = 200$g. $C\\% = \\frac{20}{200} \\times 100 = 10\\%$.",
-          "**VÃ­ dá»¥ 2**: TÃ­nh khá»‘i lÆ°á»£ng $NaCl$ cáº§n Ä‘á»ƒ pha 200g dung dá»‹ch $NaCl$ $15\\%$.\\n  *Giáº£i*: $m_{ct} = \\frac{15 \\times 200}{100} = 30$g $NaCl$. Cáº§n hÃ²a tan 30g muá»‘i vÃ o $200 - 30 = 170$g nÆ°á»›c.",
-          "**VÃ­ dá»¥ 3**: TÃ­nh $C_M$ cá»§a dung dá»‹ch chá»©a 4g $NaOH$ ($M=40$) trong 500ml dung dá»‹ch.\\n  *Giáº£i*: $n = \\frac{4}{40} = 0,1$ mol. $V = 0,5$ lÃ­t. $C_M = \\frac{0,1}{0,5} = 0,2$M."
+          "**Ví dụ 1**: Hòa tan 20g đường vào 180g nước. Tính $C\\%$.\\n  *Giải*: $m_{dd} = 20 + 180 = 200$g. $C\\% = \\frac{20}{200} \\times 100 = 10\\%$.",
+          "**Ví dụ 2**: Tính khối lượng $NaCl$ cần để pha 200g dung dịch $NaCl$ $15\\%$.\\n  *Giải*: $m_{ct} = \\frac{15 \\times 200}{100} = 30$g $NaCl$. Cần hòa tan 30g muối vào $200 - 30 = 170$g nước.",
+          "**Ví dụ 3**: Tính $C_M$ của dung dịch chứa 4g $NaOH$ ($M=40$) trong 500ml dung dịch.\\n  *Giải*: $n = \\frac{4}{40} = 0,1$ mol. $V = 0,5$ lít. $C_M = \\frac{0,1}{0,5} = 0,2$M."
         ]
       }
     },
@@ -224,8 +224,8 @@
       "id": "mod18",
       "type": "warningBox",
       "content": {
-        "title": "á»¨ng dá»¥ng thá»±c táº¿",
-        "content": "- **Y táº¿**: NÆ°á»›c muá»‘i sinh lÃ½ cÃ³ ná»“ng Ä‘á»™ $NaCl$ $0,9\\%$. Pha quÃ¡ Ä‘áº·c sáº½ gÃ¢y xÃ³t, pha quÃ¡ loÃ£ng sáº½ khÃ´ng hiá»‡u quáº£.\\n- **NÃ´ng nghiá»‡p**: Pha thuá»‘c trá»« sÃ¢u pháº£i Ä‘Ãºng ná»“ng Ä‘á»™ hÆ°á»›ng dáº«n. QuÃ¡ Ä‘áº·c sáº½ chÃ¡y lÃ¡ cÃ¢y, quÃ¡ loÃ£ng sáº½ khÃ´ng diá»‡t Ä‘Æ°á»£c sÃ¢u bá»‡nh.\\n- **Pha cháº¿ Ä‘á»“ uá»‘ng**: Dung dá»‹ch nÆ°á»›c Ä‘Æ°á»ng trong sáº£n xuáº¥t nÆ°á»›c giáº£i khÃ¡t thÆ°á»ng cÃ³ $C\\%$ khoáº£ng $10-12\\%$.",
+        "title": "Ứng dụng thực tế",
+        "content": "- **Y tế**: Nước muối sinh lý có nồng độ $NaCl$ $0,9\\%$. Pha quá đặc sẽ gây xót, pha quá loãng sẽ không hiệu quả.\\n- **Nông nghiệp**: Pha thuốc trừ sâu phải đúng nồng độ hướng dẫn. Quá đặc sẽ cháy lá cây, quá loãng sẽ không diệt được sâu bệnh.\\n- **Pha chế đồ uống**: Dung dịch nước đường trong sản xuất nước giải khát thường có $C\\%$ khoảng $10-12\\%$.",
         "color": "orange"
       }
     }
@@ -234,10 +234,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Dung dá»‹ch vÃ  ná»“ng Ä‘á»™",
+      "title": "Bài giảng: Dung dịch và nồng độ",
       "url": "https://www.youtube.com/watch?v=QeL8uqPndyA",
       "thumbnail": "https://img.youtube.com/vi/QeL8uqPndyA/0.jpg",
-      "description": "KhÃ¡i niá»‡m dung dá»‹ch, cháº¥t tan, dung mÃ´i vÃ  cÃ¡c cÃ´ng thá»©c tÃ­nh ná»“ng Ä‘á»™ C%, CM (VietJack)."
+      "description": "Khái niệm dung dịch, chất tan, dung môi và các công thức tính nồng độ C%, CM (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -247,20 +247,20 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Má»™t mol cháº¥t chá»©a bao nhiÃªu háº¡t vi tá»­?",
+        "question": "Một mol chất chứa bao nhiêu hạt vi tử?",
         "options": [
           "$6,022 \\times 10^{23}$",
           "$6,022 \\times 10^{22}$",
-          "$100$ háº¡t",
-          "$1$ tá»· háº¡t"
+          "$100$ hạt",
+          "$1$ tỷ hạt"
         ],
         "correctAnswer": 0,
-        "explanation": "Sá»‘ avogadro.",
+        "explanation": "Số avogadro.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Khá»‘i lÆ°á»£ng mol cá»§a khÃ­ Oxi ($O_2$) lÃ  bao nhiÃªu? (Biáº¿t $O = 16$)",
+        "question": "Khối lượng mol của khí Oxi ($O_2$) là bao nhiêu? (Biết $O = 16$)",
         "options": [
           "16 g/mol",
           "32 g/mol",
@@ -273,20 +273,20 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Thá»ƒ tÃ­ch cá»§a 1 mol cháº¥t khÃ­ báº¥t ká»³ á»Ÿ Ä‘iá»u kiá»‡n chuáº©n ($25^oC, 1 bar$) lÃ :",
+        "question": "Thể tích của 1 mol chất khí bất kỳ ở điều kiện chuẩn ($25^oC, 1 bar$) là:",
         "options": [
-          "22,4 lÃ­t",
-          "24,79 lÃ­t",
-          "11,2 lÃ­t",
-          "1 lÃ­t"
+          "22,4 lít",
+          "24,79 lít",
+          "11,2 lít",
+          "1 lít"
         ],
         "correctAnswer": 1,
-        "explanation": "Chuáº©n má»›i IUPAC lÃ  24,79 lÃ­t.",
+        "explanation": "Chuẩn mới IUPAC là 24,79 lít.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tá»‰ khá»‘i cá»§a khÃ­ Metan ($CH_4$) so vá»›i khÃ­ Hidro ($H_2$) lÃ : ($C=12, H=1$)",
+        "question": "Tỉ khối của khí Metan ($CH_4$) so với khí Hidro ($H_2$) là: ($C=12, H=1$)",
         "options": [
           "16",
           "8",
@@ -299,7 +299,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "0,5 mol nÆ°á»›c ($H_2O$) cÃ³ khá»‘i lÆ°á»£ng lÃ  bao nhiÃªu gam? ($H=1, O=16$)",
+        "question": "0,5 mol nước ($H_2O$) có khối lượng là bao nhiêu gam? ($H=1, O=16$)",
         "options": [
           "18g",
           "9g",

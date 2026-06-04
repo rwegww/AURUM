@@ -43,7 +43,7 @@ const Terms = () => {
              animate={{ opacity: 1, y: 0 }}
              className="inline-block px-4 py-1.5 bg-viet-green/10 text-viet-green rounded-full text-[11px] font-black uppercase tracking-widest mb-6"
            >
-             Cáº­p nháº­t láº§n cuá»‘i: 23/04/2026
+             Cập nhật lần cuối: 23/04/2026
            </motion.div>
            <motion.h1 
              initial={{ opacity: 0, scale: 0.9 }}
@@ -51,11 +51,11 @@ const Terms = () => {
              className="text-5xl md:text-7xl font-black text-viet-text mb-6 tracking-tighter"
            >
              <Trans i18nKey="terms.title">
-               Äiá»u khoáº£n &<br/><span className="text-viet-green">ChÃ­nh sÃ¡ch</span> Báº£o máº­t
+               Điều khoản &<br/><span className="text-viet-green">Chính sách</span> Bảo mật
              </Trans>
            </motion.h1>
            <p className="text-viet-text-light font-medium text-lg max-w-2xl mx-auto opacity-70">
-             ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i Aurum Chemistry Odyssey. Vui lÃ²ng Ä‘á»c ká»¹ cÃ¡c Ä‘iá»u khoáº£n dÆ°á»›i Ä‘Ã¢y Ä‘á»ƒ hiá»ƒu quyá»n vÃ  nghÄ©a vá»¥ cá»§a báº¡n khi sá»­ dá»¥ng ná»n táº£ng cá»§a chÃºng tÃ´i.
+             Chào mừng bạn đến với Aurum Chemistry Odyssey. Vui lòng đọc kỹ các điều khoản dưới đây để hiểu quyền và nghĩa vụ của bạn khi sử dụng nền tảng của chúng tôi.
            </p>
         </header>
 
@@ -122,7 +122,7 @@ const Terms = () => {
                    contact: <a href="/contact" className="text-viet-green hover:underline" /> 
                  }}
                >
-                 Vui lÃ²ng <contact>LiÃªn há»‡ vá»›i chÃºng tÃ´i</contact> náº¿u báº¡n cÃ³ tháº¯c máº¯c.
+                 Vui lòng <contact>Liên hệ với chúng tôi</contact> nếu bạn có thắc mắc.
                </Trans>
              </div>
           </motion.div>

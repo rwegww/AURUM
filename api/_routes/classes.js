@@ -88,7 +88,7 @@ const normalizeSchedule = (schedule) => schedule ? ({
 
 const requireTeacherOrAdmin = (req, res) => {
   if (!canManageClasses(req.user)) {
-    res.status(403).json({ error: 'Chá»‰ giÃ¡o viÃªn má»›i cÃ³ quyá»n thá»±c hiá»‡n thao tÃ¡c nÃ y' });
+    res.status(403).json({ error: 'Chỉ giáo viên mới có quyền thực hiện thao tác này' });
     return false;
   }
   return true;
@@ -102,12 +102,12 @@ const ensureClassOwner = async (classId, user, res) => {
     .maybeSingle();
 
   if (error || !classData) {
-    res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y lá»›p há»c' });
+    res.status(404).json({ error: 'Không tìm thấy lớp học' });
     return null;
   }
 
   if (user.role !== 'admin' && classData.giao_vien_id !== user.id) {
-    res.status(403).json({ error: 'Báº¡n khÃ´ng cÃ³ quyá»n quáº£n lÃ½ lá»›p há»c nÃ y' });
+    res.status(403).json({ error: 'Bạn không có quyền quản lý lớp học này' });
     return null;
   }
 
@@ -162,7 +162,7 @@ const ensureClassAccess = async (classId, user, res) => {
 router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
-    if (!req.file) return res.status(400).json({ error: 'KhÃ´ng tÃ¬m tháº¥y tá»‡p' });
+    if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
 
     let text = '';
     if (req.file.mimetype === 'application/pdf') {
@@ -183,7 +183,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
     let mode = 'question';
 
     let answersObj = { part1: {}, part2: {}, part3: {} };
-    
     let part1Numbers = [];
     let part1Letters = [];
     let part2Letters = [];
@@ -192,31 +191,29 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i];
 
-        if (/^(--+)?\s*Háº¾T\s*(--+)?$/i.test(line) || /^ÄÃP ÃN/i.test(line) || /^HÆ¯á»šNG DáºªN GIáº¢I/i.test(line)) {
+        if (/^(--+)?\s*HẾT\s*(--+)?$/i.test(line) || /^ĐÁP ÁN/i.test(line) || /^HƯỚNG DẪN GIẢI/i.test(line)) {
             mode = 'answer';
         }
 
         if (mode === 'question') {
-            if (/^PHáº¦N\s+I\b/i.test(line)) { currentPart = 1; continue; }
-            if (/^PHáº¦N\s+II\b/i.test(line)) { currentPart = 2; continue; }
-            if (/^PHáº¦N\s+III\b/i.test(line)) { currentPart = 3; continue; }
+            if (/^PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
+            if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
+            if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
-            const qMatch = line.match(/^(?:CÃ¢u\s*|BÃ i\s*|C\s*)?(\d+)\b\s*[.:]?\s*(.*)/i);
-            
-            // To prevent matching arbitrary numbers like "1 lÃ­t", we ensure it starts with CÃ¢u/BÃ i/C 
+            const qMatch = line.match(/^(?:Câu\s*|Bài\s*|C\s*)?(\d+)\b\s*[.:]?\s*(.*)/i);
+            // To prevent matching arbitrary numbers like "1 lít", we ensure it starts with Câu/Bài/C
             // OR we use the previous logic but with \b
             let isQuestionStart = false;
             let pNum = null;
             let contentStr = '';
-            
-            const qMatchStrict = line.match(/^(?:CÃ¢u|BÃ i|C)\s*(\d+)\b(?:\s*\(.*?\))?\s*[.:]?\s*(.*)/i);
+            const qMatchStrict = line.match(/^(?:Câu|Bài|C)\s*(\d+)\b(?:\s*\(.*?\))?\s*[.:]?\s*(.*)/i);
             if (qMatchStrict) {
                 isQuestionStart = true;
                 pNum = parseInt(qMatchStrict[1]);
                 contentStr = qMatchStrict[2];
-            } else if (/^CÃ¢u\s*\d+/i.test(line)) {
+            } else if (/^Câu\s*\d+/i.test(line)) {
                 isQuestionStart = true;
-                const tempMatch = line.match(/^CÃ¢u\s*(\d+)\s*[.:]?\s*(.*)/i);
+                const tempMatch = line.match(/^Câu\s*(\d+)\s*[.:]?\s*(.*)/i);
                 if (tempMatch) {
                     pNum = parseInt(tempMatch[1]);
                     contentStr = tempMatch[2];
@@ -226,8 +223,7 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 }
             }
 
-            if (isQuestionStart) { 
-                if (currentQuestion) questions.push(currentQuestion);
+            if (isQuestionStart) {                if (currentQuestion) questions.push(currentQuestion);
                 qIndex++;
                 if (isNaN(pNum) || pNum === null) {
                    partQIndices[currentPart]++;
@@ -239,7 +235,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 let type = 'multiple_choice';
                 if (currentPart === 2) type = 'true_false';
                 if (currentPart === 3) type = 'short_answer';
-                
                 currentQuestion = {
                     id: 'q_' + Date.now() + '_' + qIndex,
                     part: currentPart,
@@ -264,7 +259,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                     }
                     if (hasMatch) continue;
                 }
-                
                 if (currentQuestion.type === 'true_false') {
                     const tfRegex = /(?:^|\s+)([a-d])\s*[.:)]\s*(.*?)(?=\s+[a-d]\s*[.:)]|$)/gi;
                     let match;
@@ -281,12 +275,12 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                 currentQuestion.content += line;
             }
         } else if (mode === 'answer') {
-            if (/PHáº¦N\s+I\b/i.test(line)) { currentPart = 1; continue; }
-            else if (/PHáº¦N\s+II\b/i.test(line)) { currentPart = 2; continue; }
-            else if (/PHáº¦N\s+III\b/i.test(line)) { currentPart = 3; continue; }
+            if (/PHẦN\s+I\b/i.test(line)) { currentPart = 1; continue; }
+            else if (/PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
+            else if (/PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
             if (currentPart === 1) {
-                let inlineMatches = [...line.matchAll(/(?:CÃ¢u\s*)?(\d+)\s*[.:-]?\s*([A-D])/gi)];
+                let inlineMatches = [...line.matchAll(/(?:Câu\s*)?(\d+)\s*[.:-]?\s*([A-D])/gi)];
                 if (inlineMatches.length > 0) {
                     for (let m of inlineMatches) {
                         answersObj.part1[parseInt(m[1])] = m[2].toUpperCase();
@@ -300,25 +294,25 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
                     part1Letters.push(...line.split(/\s+/).filter(Boolean).map(l => l.toUpperCase()));
                 }
             } else if (currentPart === 2) {
-                let m = line.match(/^(?:CÃ¢u\s*)?(\d+)\s*[.:-]?\s*([SDÄ\s,;]+)$/i);
+                let m = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]?\s*([SDĐ\s,;]+)$/i);
                 if (m) {
                     let qNum = parseInt(m[1]);
-                    let chars = m[2].replace(/[^SDÄ]/gi, '').toUpperCase();
+                    let chars = m[2].replace(/[^SDĐ]/gi, '').toUpperCase();
                     if (chars.length === 4) {
                         answersObj.part2[qNum] = {
-                            a: chars[0] === 'D' || chars[0] === 'Ä',
-                            b: chars[1] === 'D' || chars[1] === 'Ä',
-                            c: chars[2] === 'D' || chars[2] === 'Ä',
-                            d: chars[3] === 'D' || chars[3] === 'Ä'
+                            a: chars[0] === 'D' || chars[0] === 'Đ',
+                            b: chars[1] === 'D' || chars[1] === 'Đ',
+                            c: chars[2] === 'D' || chars[2] === 'Đ',
+                            d: chars[3] === 'D' || chars[3] === 'Đ'
                         };
                     }
                     continue;
                 }
-                if (/^([SDÄ]\s*)+$/i.test(line.replace(/[,;]/g, ' '))) {
+                if (/^([SDĐ]\s*)+$/i.test(line.replace(/[,;]/g, ' '))) {
                     part2Letters.push(...line.replace(/[,;]/g, ' ').split(/\s+/).filter(Boolean).map(l => l.toUpperCase()));
                 }
             } else if (currentPart === 3) {
-                let match = line.match(/^(?:CÃ¢u\s*)?(\d+)\s*[.:-]\s*(-?\d+(?:[.,]\d+)?)$/i);
+                let match = line.match(/^(?:Câu\s*)?(\d+)\s*[.:-]\s*(-?\d+(?:[.,]\d+)?)$/i);
                 if (match) {
                     answersObj.part3[parseInt(match[1])] = match[2].trim();
                     continue;
@@ -329,7 +323,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             }
         }
     }
-    
     if (currentQuestion) questions.push(currentQuestion);
 
     // ZIP part 1
@@ -343,10 +336,10 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
     for (let i = 0; i < p2NumQs; i++) {
         let chunk = part2Letters.slice(i * 4, i * 4 + 4);
         answersObj.part2[i + 1] = {
-            a: chunk[0] === 'D' || chunk[0] === 'Ä',
-            b: chunk[1] === 'D' || chunk[1] === 'Ä',
-            c: chunk[2] === 'D' || chunk[2] === 'Ä',
-            d: chunk[3] === 'D' || chunk[3] === 'Ä'
+            a: chunk[0] === 'D' || chunk[0] === 'Đ',
+            b: chunk[1] === 'D' || chunk[1] === 'Đ',
+            c: chunk[2] === 'D' || chunk[2] === 'Đ',
+            d: chunk[3] === 'D' || chunk[3] === 'Đ'
         };
     }
 
@@ -376,7 +369,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
 router.get('/', auth, async (req, res) => {
   try {
     const { role, id } = req.user;
-    
     // Select class properties and count members
     let query = supabase.from('lop')
       .select('*, teacher:giao_vien_id(username), student_count:thanh_vien_lop(count)');
@@ -395,7 +387,6 @@ router.get('/', auth, async (req, res) => {
 
     const { data, error } = await query;
     if (error) throw error;
-    
     // Format response to flatten student_count
     const formattedData = data.map(cls => ({
         ...normalizeClass(cls),
@@ -412,21 +403,17 @@ router.get('/', auth, async (req, res) => {
 router.get('/stats', auth, async (req, res) => {
   try {
     const userId = req.user.id;
-    
     // 1. Get joined lop
     const { data: members, error: memErr } = await supabase
       .from('thanh_vien_lop')
       .select('lop_id')
       .eq('hoc_sinh_id', userId);
-    
     if (memErr) throw memErr;
     const classIds = members.map(m => m.lop_id);
-    
     if (classIds.length === 0) return res.json({});
 
     // 2. For each class, count posts that the student can see
-    // This is a bit heavy for a single query if many lop, 
-    // but for now we fetch recent posts count.
+    // This is a bit heavy for a single query if many lop,    // but for now we fetch recent posts count.
     const { data: posts, error: postErr } = await supabase
       .from('bai_dang_lop')
       .select('lop_id, created_at')
@@ -456,7 +443,7 @@ router.get('/teacher-summary', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-       return res.status(403).json({ error: 'Chá»‰ dÃ nh cho giÃ¡o viÃªn' });
+       return res.status(403).json({ error: 'Chỉ dành cho giáo viên' });
     }
 
     // 1. Get all class IDs for this teacher
@@ -515,7 +502,6 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-    
     // Extract text from DOCX
     const result = await mammoth.extractRawText({ buffer: req.file.buffer });
     const text = result.value;
@@ -527,14 +513,14 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
-      if (line.startsWith('Pháº§n I.')) { currentPart = 1; continue; }
-      if (line.startsWith('Pháº§n II.')) { currentPart = 2; continue; }
-      if (line.startsWith('Pháº§n III.')) { currentPart = 3; continue; }
-      if (line.includes('------ Háº¾T ------') || line.startsWith('ÄÃP ÃN')) { break; }
+      if (line.startsWith('Phần I.')) { currentPart = 1; continue; }
+      if (line.startsWith('Phần II.')) { currentPart = 2; continue; }
+      if (line.startsWith('Phần III.')) { currentPart = 3; continue; }
+      if (line.includes('------ HẾT ------') || line.startsWith('ĐÁP ÁN')) { break; }
 
       if (!currentPart) continue;
 
-      if (line.startsWith('CÃ¢u ')) {
+      if (line.startsWith('Câu ')) {
         if (currentQuestion) questions.push(currentQuestion);
         currentQuestion = {
           id: 'q' + (questions.length + 1),
@@ -592,20 +578,19 @@ router.post('/join', auth, async (req, res) => {
       .eq('ma_lop', code)
       .single();
 
-    if (classErr || !classData) return res.status(404).json({ error: 'MÃ£ lá»›p khÃ´ng há»£p lá»‡' });
+    if (classErr || !classData) return res.status(404).json({ error: 'Mã lớp không hợp lệ' });
 
     const { error: joinErr } = await supabase
       .from('thanh_vien_lop')
       .insert([{ lop_id: classData.id, hoc_sinh_id }]);
 
     if (joinErr) {
-        if (joinErr.code === '23505') return res.status(400).json({ error: 'Báº¡n Ä‘Ã£ tham gia lá»›p nÃ y rá»“i' });
+        if (joinErr.code === '23505') return res.status(400).json({ error: 'Bạn đã tham gia lớp này rồi' });
         throw joinErr;
     }
-    
 
 
-    res.json({ message: 'Tham gia lá»›p thÃ nh cÃ´ng', lop_id: classData.id });
+    res.json({ message: 'Tham gia lớp thành công', lop_id: classData.id });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -647,7 +632,6 @@ router.get('/:id/members', auth, async (req, res) => {
       .eq('lop_id', id);
 
     if (error) throw error;
-    
     const formatted = data.map(m => ({
       ...m.student,
       last_active_at: m.student?.hoat_dong_cuoi_luc,
@@ -656,7 +640,6 @@ router.get('/:id/members', auth, async (req, res) => {
       hoat_dong_cuoi_luc: undefined,
       phut_hoat_dong: undefined
     }));
-    
     res.json(formatted);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -695,7 +678,6 @@ router.get('/:id/posts', auth, async (req, res) => {
         .from('bai_nop')
         .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien')
         .eq('hoc_sinh_id', req.user.id);
-      
       if (subErr) console.error('Submissions fetch error:', subErr);
 
       const submissionMap = {};
@@ -846,15 +828,13 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
     if (!requireTeacherOrAdmin(req, res)) return;
 
     const { postId } = req.params;
-    
     // Get assignment info to get lop_id
     const { data: post } = await supabase.from('bai_dang_lop').select('lop_id').eq('id', postId).single();
     if (post && !(await ensureClassOwner(post.lop_id, req.user, res))) return;
-    if (!post) return res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y bÃ i táº­p' });
+    if (!post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
 
     // Get all class members
     const { data: members } = await supabase.from('thanh_vien_lop').select('student:hoc_sinh_id(id, username)').eq('lop_id', post.lop_id);
-    
     // Get submissions
     const { data: submissions } = await supabase.from('bai_nop').select('*').eq('bai_dang_id', postId);
 
@@ -894,7 +874,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
       .select('lop_id, type, hoc_sinh_nhan_id')
       .eq('id', postId)
       .single();
-    if (postError || !post) return res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y bÃ i táº­p' });
+    if (postError || !post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
     if (post.type !== 'assignment') {
       return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
     }
@@ -910,14 +890,11 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
       .maybeSingle();
 
     if (membershipError) throw membershipError;
-    if (!membership) return res.status(403).json({ error: 'Báº¡n chÆ°a tham gia lá»›p há»c nÃ y' });
+    if (!membership) return res.status(403).json({ error: 'Bạn chưa tham gia lớp học này' });
 
     const { data, error } = await supabase
       .from('bai_nop')
-      .upsert([{ 
-        bai_dang_id: postId, 
-        hoc_sinh_id, 
-        status: 'submitted',
+      .upsert([{        bai_dang_id: postId,        hoc_sinh_id,        status: 'submitted',
         cau_tra_loi: answers || {},
         diem: null,
         phan_hoi_giao_vien: null
@@ -943,7 +920,7 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
 
     // Check if user is teacher
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Chá»‰ giÃ¡o viÃªn má»›i cÃ³ quyá»n cháº¥m Ä‘iá»ƒm' });
+      return res.status(403).json({ error: 'Chỉ giáo viên mới có quyền chấm điểm' });
     }
 
     const { data: post, error: postError } = await supabase
@@ -976,21 +953,19 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
 router.delete('/assignments/:postId', auth, async (req, res) => {
   try {
     const { postId } = req.params;
-    
     // Check if user is the author or teacher of the class
     const { data: post } = await supabase.from('bai_dang_lop').select('tac_gia_id, lop_id').eq('id', postId).single();
-    if (!post) return res.status(404).json({ error: 'KhÃ´ng tÃ¬m tháº¥y bÃ i táº­p' });
+    if (!post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
 
     const ownsClass = req.user.role === 'admin' || !!(await ensureClassOwner(post.lop_id, req.user, res));
     if (res.headersSent) return;
     if (post.tac_gia_id !== req.user.id && !ownsClass) {
-      return res.status(403).json({ error: 'Báº¡n khÃ´ng cÃ³ quyá»n xÃ³a bÃ i táº­p nÃ y' });
+      return res.status(403).json({ error: 'Bạn không có quyền xóa bài tập này' });
     }
 
     const { error } = await supabase.from('bai_dang_lop').delete().eq('id', postId);
     if (error) throw error;
-    
-    res.json({ message: 'ÄÃ£ xÃ³a bÃ i táº­p' });
+    res.json({ message: 'Đã xóa bài tập' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1001,7 +976,7 @@ router.get('/teacher/notifications', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      return res.status(403).json({ error: 'Chá»‰ dÃ nh cho giÃ¡o viÃªn vÃ  quáº£n trá»‹ viÃªn' });
+      return res.status(403).json({ error: 'Chỉ dành cho giáo viên và quản trị viên' });
     }
 
     // 1. Get all class IDs for this teacher
@@ -1073,8 +1048,8 @@ router.get('/teacher/notifications', auth, async (req, res) => {
         return {
           id: `sub-${s.bai_dang_id}-${s.hoc_sinh_id}-${new Date(s.nop_luc).getTime()}`,
           type: 'submission',
-          title: 'Há»c sinh ná»™p bÃ i táº­p',
-          message: `Há»c sinh ${s.student?.username || 'Há»c sinh'} Ä‘Ã£ ná»™p bÃ i táº­p: "${assign?.noi_dung?.substring(0, 30) || 'BÃ i táº­p'}${assign?.noi_dung?.length > 30 ? '...' : ''}"`,
+          title: 'Học sinh nộp bài tập',
+          message: `Học sinh ${s.student?.username || 'Học sinh'} đã nộp bài tập: "${assign?.noi_dung?.substring(0, 30) || 'Bài tập'}${assign?.noi_dung?.length > 30 ? '...' : ''}"`,
           timestamp: s.nop_luc,
           link: '/teacher/assignments'
         };
@@ -1103,8 +1078,8 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       notifications.push({
         id: `join-${m.lop_id}-${m.hoc_sinh_id}-${new Date(m.tham_gia_luc).getTime()}`,
         type: 'student_join',
-        title: 'Há»c sinh má»›i tham gia lá»›p',
-        message: `Há»c sinh ${m.student?.username || 'Há»c sinh'} Ä‘Ã£ tham gia lá»›p "${classMap[m.lop_id]}"`,
+        title: 'Học sinh mới tham gia lớp',
+        message: `Học sinh ${m.student?.username || 'Học sinh'} đã tham gia lớp "${classMap[m.lop_id]}"`,
         timestamp: m.tham_gia_luc,
         link: `/teacher/lop/${m.lop_id}`
       });
@@ -1115,8 +1090,8 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       notifications.push({
         id: `msg-${p.id}`,
         type: 'message',
-        title: 'Tin nháº¯n má»›i tá»« há»c sinh',
-        message: `${p.author?.username || 'Há»c sinh'} ("${classMap[p.lop_id]}"): "${p.noi_dung?.substring(0, 50)}${p.noi_dung?.length > 50 ? '...' : ''}"`,
+        title: 'Tin nhắn mới từ học sinh',
+        message: `${p.author?.username || 'Học sinh'} ("${classMap[p.lop_id]}"): "${p.noi_dung?.substring(0, 50)}${p.noi_dung?.length > 50 ? '...' : ''}"`,
         timestamp: p.created_at,
         link: `/teacher/lop/${p.lop_id}`
       });
@@ -1130,8 +1105,8 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       notifications.push({
         id: `due-${d.id}`,
         type: 'due_soon',
-        title: 'BÃ i táº­p sáº¯p háº¿t háº¡n',
-        message: `BÃ i táº­p "${d.noi_dung?.substring(0, 30)}${d.noi_dung?.length > 30 ? '...' : ''}" lá»›p "${classMap[d.lop_id]}" sáº¯p Ä‘áº¿n háº¡n ná»™p`,
+        title: 'Bài tập sắp hết hạn',
+        message: `Bài tập "${d.noi_dung?.substring(0, 30)}${d.noi_dung?.length > 30 ? '...' : ''}" lớp "${classMap[d.lop_id]}" sắp đến hạn nộp`,
         timestamp: d.han_nop,
         link: '/teacher/assignments'
       });

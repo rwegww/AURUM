@@ -3,19 +3,19 @@
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 10,
-  "chapterName": "ChÆ°Æ¡ng 10: Khai thÃ¡c tÃ i nguyÃªn tá»« vá» TrÃ¡i Äáº¥t",
+  "chapterName": "Chương 10: Khai thác tài nguyên từ vỏ Trái Đất",
   "lessonId": 18,
-  "title": "BÃ i 18: NhiÃªn liá»‡u hÃ³a tháº¡ch, Chu trÃ¬nh Carbon vÃ  Sá»± áº¥m lÃªn toÃ n cáº§u",
-  "description": "Hiá»ƒu vá» cá»™i nguá»“n cá»§a nÄƒng lÆ°á»£ng hÃ³a tháº¡ch vÃ  tÃ¡c Ä‘á»™ng cá»§a khÃ­ tháº£i carbon Ä‘áº¿n 'sá»©c khá»e' cá»§a hÃ nh tinh xanh.",
+  "title": "Bài 18: Nhiên liệu hóa thạch, Chu trình Carbon và Sự ấm lên toàn cầu",
+  "description": "Hiểu về cội nguồn của năng lượng hóa thạch và tác động của khí thải carbon đến 'sức khỏe' của hành tinh xanh.",
   "level": "Intermediate",
   "order": 18,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Biáº¿n Ä‘á»•i khÃ­ háº­u: ThÃ¡ch thá»©c cá»§a nhÃ¢n loáº¡i",
+      "title": "Biến đổi khí hậu: Thách thức của nhân loại",
       "url": "https://www.youtube.com/watch?v=if0iI-N8VFo",
       "thumbnail": "https://img.youtube.com/vi/if0iI-N8VFo/0.jpg",
-      "description": "Táº¡i sao TrÃ¡i Ä‘áº¥t láº¡i nÃ³ng lÃªn vÃ  chÃºng ta cÃ³ thá»ƒ lÃ m gÃ¬ Ä‘á»ƒ ngÄƒn cháº·n?"
+      "description": "Tại sao Trái đất lại nóng lên và chúng ta có thể làm gì để ngăn chặn?"
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. NhiÃªn liá»‡u hÃ³a tháº¡ch",
+        "text": "1. Nhiên liệu hóa thạch",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "NhiÃªn liá»‡u hÃ³a tháº¡ch (than Ä‘Ã¡, dáº§u má», khÃ­ thiÃªn nhiÃªn) Ä‘Æ°á»£c hÃ¬nh thÃ nh tá»« xÃ¡c sinh váº­t bá»‹ chÃ´n vÃ¹i dÆ°á»›i lÃ²ng Ä‘áº¥t hÃ ng triá»‡u nÄƒm. ÄÃ¢y lÃ  nguá»“n nÄƒng lÆ°á»£ng chÃ­nh cá»§a tháº¿ giá»›i hiá»‡n nay nhÆ°ng Ä‘ang dáº§n cáº¡n kiá»‡t."
+        "text": "Nhiên liệu hóa thạch (than đá, dầu mỏ, khí thiên nhiên) được hình thành từ xác sinh vật bị chôn vùi dưới lòng đất hàng triệu năm. Đây là nguồn năng lượng chính của thế giới hiện nay nhưng đang dần cạn kiệt."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Chu trÃ¬nh Carbon",
-        "content": "Carbon luÃ¢n chuyá»ƒn liÃªn tá»¥c giá»¯a khÃ­ quyá»ƒn, Ä‘áº¡i dÆ°Æ¡ng, sinh váº­t vÃ  Ä‘áº¥t Ä‘Ã¡. Sá»± máº¥t cÃ¢n báº±ng do con ngÆ°á»i Ä‘á»‘t quÃ¡ nhiá»u nhiÃªn liá»‡u hÃ³a tháº¡ch khiáº¿n lÆ°á»£ng $CO_2$ trong khÃ´ng khÃ­ tÄƒng vá»t.",
+        "title": "Chu trình Carbon",
+        "content": "Carbon luân chuyển liên tục giữa khí quyển, đại dương, sinh vật và đất đá. Sự mất cân bằng do con người đốt quá nhiều nhiên liệu hóa thạch khiến lượng $CO_2$ trong không khí tăng vọt.",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Sá»± áº¥m lÃªn toÃ n cáº§u",
+        "text": "2. Sự ấm lên toàn cầu",
         "level": "h2"
       }
     },
@@ -57,9 +57,9 @@
       "type": "list",
       "content": {
         "items": [
-          "**Hiá»‡u á»©ng nhÃ  kÃ­nh:** KhÃ­ $CO_2, CH_4$ giá»¯ láº¡i nhiá»‡t lÆ°á»£ng cá»§a Máº·t trá»i trong khÃ­ quyá»ƒn, lÃ m TrÃ¡i Ä‘áº¥t nÃ³ng lÃªn.",
-          "**Háº­u quáº£:** BÄƒng tan á»Ÿ hai cá»±c, nÆ°á»›c biá»ƒn dÃ¢ng, thiÃªn tai cá»±c Ä‘oan vÃ  máº¥t Ä‘a dáº¡ng sinh há»c.",
-          "**Giáº£i phÃ¡p:** Sá»­ dá»¥ng nÄƒng lÆ°á»£ng tÃ¡i táº¡o (giÃ³, máº·t trá»i), trá»“ng rá»«ng vÃ  tiáº¿t kiá»‡m nÄƒng lÆ°á»£ng."
+          "**Hiệu ứng nhà kính:** Khí $CO_2, CH_4$ giữ lại nhiệt lượng của Mặt trời trong khí quyển, làm Trái đất nóng lên.",
+          "**Hậu quả:** Băng tan ở hai cực, nước biển dâng, thiên tai cực đoan và mất đa dạng sinh học.",
+          "**Giải pháp:** Sử dụng năng lượng tái tạo (gió, mặt trời), trồng rừng và tiết kiệm năng lượng."
         ]
       }
     },
@@ -67,8 +67,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "HÃ nh Ä‘á»™ng ngay",
-        "content": "Má»—i táº¥n than Ä‘á»‘t chÃ¡y tháº£i ra trung bÃ¬nh 2-3 táº¥n khÃ­ $CO_2$. HÃ£y thay Ä‘á»•i thÃ³i quen sá»­ dá»¥ng nÄƒng lÆ°á»£ng Ä‘á»ƒ báº£o vá»‡ tÆ°Æ¡ng lai cá»§a chÃ­nh mÃ¬nh.",
+        "title": "Hành động ngay",
+        "content": "Mỗi tấn than đốt cháy thải ra trung bình 2-3 tấn khí $CO_2$. Hãy thay đổi thói quen sử dụng năng lượng để bảo vệ tương lai của chính mình.",
         "color": "red"
       }
     }
@@ -76,105 +76,105 @@
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Biáº¿n Ä‘á»•i khÃ­ háº­u Ä‘ang Ä‘á»ƒ láº¡i nhá»¯ng váº¿t sáº¹o rÃµ rá»‡t trÃªn hÃ nh tinh. ÄÃ¢u lÃ  hÃ¬nh áº£nh minh há»a cho háº­u quáº£ nghiÃªm trá»ng nháº¥t cá»§a sá»± áº¥m lÃªn toÃ n cáº§u táº¡i cÃ¡c vÃ¹ng cá»±c?",
+      "narrative": "Biến đổi khí hậu đang để lại những vết sẹo rõ rệt trên hành tinh. Đâu là hình ảnh minh họa cho hậu quả nghiêm trọng nhất của sự ấm lên toàn cầu tại các vùng cực?",
       "images": [
         "https://images.unsplash.com/photo-1502481851512-e9e2529bbbf9?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1542224566-6e85f2e6772f?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ hiá»‡n tÆ°á»£ng bÄƒng tan khiáº¿n cÃ¡c loÃ i sinh váº­t máº¥t mÃ´i trÆ°á»ng sá»‘ng?",
+      "question": "Hình ảnh nào mô tả hiện tượng băng tan khiến các loài sinh vật mất môi trường sống?",
       "correctAnswer": 0,
-      "targetType": "nháº­n biáº¿t",
-      "source": "Biáº¿n Ä‘á»•i khÃ­ háº­u"
+      "targetType": "nhận biết",
+      "source": "Biến đổi khí hậu"
     },
     {
       "type": "matching",
-      "narrative": "HÃ£y giÃºp tÃ´i káº¿t ná»‘i cÃ¡c loáº¡i khÃ­ tháº£i vá»›i nguá»“n phÃ¡t sinh chÃ­nh cá»§a chÃºng.",
+      "narrative": "Hãy giúp tôi kết nối các loại khí thải với nguồn phát sinh chính của chúng.",
       "leftItems": [
-        { "id": "ca1", "label": "Äá»‘t than, xÄƒng dáº§u" },
-        { "id": "ca2", "label": "ChÄƒn nuÃ´i gia sÃºc, rÃ¡c tháº£i" },
-        { "id": "ca3", "label": "Phun sÆ¡n, mÃ¡y láº¡nh cÅ©" }
+        { "id": "ca1", "label": "Đốt than, xăng dầu" },
+        { "id": "ca2", "label": "Chăn nuôi gia súc, rác thải" },
+        { "id": "ca3", "label": "Phun sơn, máy lạnh cũ" }
       ],
       "items": [
-        { "id": "ca1", "label": "KhÃ­ Carbon dioxide ($CO_2$)" },
-        { "id": "ca2", "label": "KhÃ­ Methane ($CH_4$)" },
-        { "id": "ca3", "label": "KhÃ­ CFC (gÃ¢y thá»§ng táº§ng ozone)" }
+        { "id": "ca1", "label": "Khí Carbon dioxide ($CO_2$)" },
+        { "id": "ca2", "label": "Khí Methane ($CH_4$)" },
+        { "id": "ca3", "label": "Khí CFC (gây thủng tầng ozone)" }
       ],
       "correctOrder": ["ca1", "ca2", "ca3"],
-      "question": "Ná»‘i nguá»“n tháº£i vá»›i loáº¡i khÃ­ gÃ¢y hiá»‡u á»©ng nhÃ  kÃ­nh.",
-      "source": "MÃ´i trÆ°á»ng há»c"
+      "question": "Nối nguồn thải với loại khí gây hiệu ứng nhà kính.",
+      "source": "Môi trường học"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Táº¡i sao viá»‡c trá»“ng nhiá»u cÃ¢y xanh láº¡i Ä‘Æ°á»£c coi lÃ  phÆ°Æ¡ng phÃ¡p hiá»‡u quáº£ Ä‘á»ƒ giáº£m thiá»ƒu sá»± áº¥m lÃªn toÃ n cáº§u?",
+      "narrative": "Tại sao việc trồng nhiều cây xanh lại được coi là phương pháp hiệu quả để giảm thiểu sự ấm lên toàn cầu?",
       "options": [
-        "VÃ¬ cÃ¢y xanh háº¥p thá»¥ khÃ­ $CO_2$ thÃ´ng qua quÃ¡ trÃ¬nh quang há»£p",
-        "VÃ¬ cÃ¢y xanh tá»a ra nhiá»‡t Ä‘á»™ láº¡nh lÃ m Ä‘Ã³ng bÄƒng $CO_2$",
-        "VÃ¬ cÃ¢y xanh ngÄƒn cáº£n Ã¡nh náº¯ng Máº·t trá»i chiáº¿u xuá»‘ng Ä‘áº¥t",
-        "VÃ¬ cÃ¢y xanh lÃ m cho con ngÆ°á»i cáº£m tháº¥y mÃ¡t máº» hÆ¡n"
+        "Vì cây xanh hấp thụ khí $CO_2$ thông qua quá trình quang hợp",
+        "Vì cây xanh tỏa ra nhiệt độ lạnh làm đóng băng $CO_2$",
+        "Vì cây xanh ngăn cản ánh nắng Mặt trời chiếu xuống đất",
+        "Vì cây xanh làm cho con người cảm thấy mát mẻ hơn"
       ],
       "correctAnswer": 0,
-      "question": "Vai trÃ² cá»§a thá»±c váº­t trong chu trÃ¬nh carbon lÃ  gÃ¬?",
-      "source": "Kiáº¿n thá»©c sinh hÃ³a"
+      "question": "Vai trò của thực vật trong chu trình carbon là gì?",
+      "source": "Kiến thức sinh hóa"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Hiá»‡n tÆ°á»£ng cÃ¡c cháº¥t khÃ­ trong khÃ­ quyá»ƒn giá»¯ láº¡i nhiá»‡t cá»§a Máº·t trá»i khiáº¿n bá» máº·t TrÃ¡i Ä‘áº¥t nÃ³ng lÃªn Ä‘Æ°á»£c gá»i lÃ  ...",
-      "placeholder": "Nháº­p thuáº­t ngá»¯...",
-      "correctAnswer": "Hiá»‡u á»©ng nhÃ  kÃ­nh",
-      "question": "TÃªn gá»i cá»§a hiá»‡n tÆ°á»£ng gÃ¢y áº¥m lÃªn toÃ n cáº§u lÃ  gÃ¬?",
-      "source": "KhÃ­ quyá»ƒn há»c"
+      "narrative": "Hiện tượng các chất khí trong khí quyển giữ lại nhiệt của Mặt trời khiến bề mặt Trái đất nóng lên được gọi là ...",
+      "placeholder": "Nhập thuật ngữ...",
+      "correctAnswer": "Hiệu ứng nhà kính",
+      "question": "Tên gọi của hiện tượng gây ấm lên toàn cầu là gì?",
+      "source": "Khí quyển học"
     },
     {
       "type": "drag-drop",
-      "narrative": "Sáº¯p xáº¿p chuá»—i tÃ¡c Ä‘á»™ng tiÃªu cá»±c cá»§a viá»‡c Ä‘á»‘t nhiÃªn liá»‡u hÃ³a tháº¡ch tá»« nguá»“n gá»‘c Ä‘áº¿n háº­u quáº£.",
+      "narrative": "Sắp xếp chuỗi tác động tiêu cực của việc đốt nhiên liệu hóa thạch từ nguồn gốc đến hậu quả.",
       "items": [
-        { "id": "d1", "label": "Äá»‘t than/XÄƒng dáº§u" },
-        { "id": "d2", "label": "â†’ TÄƒng ná»“ng Ä‘á»™ $CO_2$" },
-        { "id": "d3", "label": "Hiá»‡u á»©ng nhÃ  kÃ­nh" },
-        { "id": "d4", "label": "â†’ TrÃ¡i Ä‘áº¥t nÃ³ng lÃªn" },
-        { "id": "d5", "label": "NÆ°á»›c biá»ƒn dÃ¢ng & ThiÃªn tai" }
+        { "id": "d1", "label": "Đốt than/Xăng dầu" },
+        { "id": "d2", "label": "→ Tăng nồng độ $CO_2$" },
+        { "id": "d3", "label": "Hiệu ứng nhà kính" },
+        { "id": "d4", "label": "→ Trái đất nóng lên" },
+        { "id": "d5", "label": "Nước biển dâng & Thiên tai" }
       ],
       "correctOrder": ["d1", "d2", "d3", "d4", "d5"],
-      "question": "Chuá»—i háº­u quáº£ cá»§a viá»‡c láº¡m dá»¥ng nhiÃªn liá»‡u hÃ³a tháº¡ch.",
-      "source": "Logistics mÃ´i trÆ°á»ng"
+      "question": "Chuỗi hậu quả của việc lạm dụng nhiên liệu hóa thạch.",
+      "source": "Logistics môi trường"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "NhiÃªn liá»‡u nÃ o sau Ä‘Ã¢y lÃ  nhiÃªn liá»‡u hÃ³a tháº¡ch?",
-        "options": ["Cá»§i khÃ´", "Than Ä‘Ã¡", "NÄƒng lÆ°á»£ng giÃ³", "Biogas"],
+        "question": "Nhiên liệu nào sau đây là nhiên liệu hóa thạch?",
+        "options": ["Củi khô", "Than đá", "Năng lượng gió", "Biogas"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "KhÃ­ chÃ­nh gÃ¢y ra hiá»‡u á»©ng nhÃ  kÃ­nh lÃ  gÃ¬?",
+        "question": "Khí chính gây ra hiệu ứng nhà kính là gì?",
         "options": ["Oxygen", "Nitrogen", "Carbon dioxide ($CO_2$)", "Helium"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Háº­u quáº£ trá»±c tiáº¿p nháº¥t cá»§a viá»‡c bÄƒng á»Ÿ hai cá»±c tan cháº£y lÃ  gÃ¬?",
-        "options": ["MÆ°a axit", "Thá»§ng táº§ng ozone", "NÆ°á»›c biá»ƒn dÃ¢ng cao", "SÃ³ng tháº§n"],
+        "question": "Hậu quả trực tiếp nhất của việc băng ở hai cực tan chảy là gì?",
+        "options": ["Mưa axit", "Thủng tầng ozone", "Nước biển dâng cao", "Sóng thần"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Giáº£i phÃ¡p nÃ o lÃ  'nÄƒng lÆ°á»£ng sáº¡ch' bá»n vá»¯ng cho tÆ°Æ¡ng lai?",
-        "options": ["Cháº¡y mÃ¡y phÃ¡t báº±ng dáº§u", "DÃ¹ng than tá»• ong", "Sá»­ dá»¥ng nÄƒng lÆ°á»£ng máº·t trá»i", "Äá»‘t rÃ¡c tháº£i nhá»±a"],
+        "question": "Giải pháp nào là 'năng lượng sạch' bền vững cho tương lai?",
+        "options": ["Chạy máy phát bằng dầu", "Dùng than tổ ong", "Sử dụng năng lượng mặt trời", "Đốt rác thải nhựa"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "TÃ¡i cháº¿ rÃ¡c tháº£i giÃºp báº£o vá»‡ mÃ´i trÆ°á»ng nhÆ° tháº¿ nÃ o?",
-        "options": ["Giáº£m tiÃªu thá»¥ tÃ i nguyÃªn", "LÃ m cho rÃ¡c biáº¿n máº¥t", "TÄƒng lÆ°á»£ng rÃ¡c", "KhÃ´ng cÃ³ tÃ¡c dá»¥ng gÃ¬"],
+        "question": "Tái chế rác thải giúp bảo vệ môi trường như thế nào?",
+        "options": ["Giảm tiêu thụ tài nguyên", "Làm cho rác biến mất", "Tăng lượng rác", "Không có tác dụng gì"],
         "correctAnswer": 0,
         "points": 10
       }

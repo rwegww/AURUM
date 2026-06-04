@@ -3,18 +3,18 @@
   "classId": 12,
   "lessonId": 18,
   "programId": "ketnoi",
-  "title": "BÃ i 18. Cáº¥u táº¡o vÃ  liÃªn káº¿t trong tinh thá»ƒ kim loáº¡i",
-  "chapter": "ChÆ°Æ¡ng 6. Äáº¡i cÆ°Æ¡ng vá» kim loáº¡i",
+  "title": "Bài 18. Cấu tạo và liên kết trong tinh thể kim loại",
+  "chapter": "Chương 6. Đại cương về kim loại",
   "order": 18,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Cáº¥u trÃºc nguyÃªn tá»­, máº¡ng tinh thá»ƒ vÃ  báº£n cháº¥t liÃªn káº¿t kim loáº¡i thÃ´ng qua mÃ´ hÃ¬nh 'biá»ƒn electron' tá»± do.",
+  "description": "Cấu trúc nguyên tử, mạng tinh thể và bản chất liên kết kim loại thông qua mô hình 'biển electron' tự do.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Vá»‹ trÃ­ vÃ  Cáº¥u táº¡o nguyÃªn tá»­ Kim loáº¡i",
+        "text": "1. Vị trí và Cấu tạo nguyên tử Kim loại",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong báº£ng tuáº§n hoÃ n, cÃ¡c nguyÃªn tá»‘ kim loáº¡i chiáº¿m Ä‘a sá»‘ (hÆ¡n 80%), bao gá»“m cÃ¡c nhÃ³m IA (trá»« H), IIA, IIIA (trá»« B), cÃ¡c nhÃ³m B (tá»« IB Ä‘áº¿n VIIIB), há» lanthanide vÃ  actinide. Vá» cáº¥u táº¡o nguyÃªn tá»­, háº§u háº¿t cÃ¡c kim loáº¡i cÃ³ Ã­t electron á»Ÿ lá»›p ngoÃ i cÃ¹ng (1, 2 hoáº·c 3e). Do bÃ¡n kÃ­nh nguyÃªn tá»­ thÆ°á»ng lá»›n vÃ  sá»‘ electron lá»›p ngoÃ i cÃ¹ng Ã­t, cÃ¡c nguyÃªn tá»­ kim loáº¡i dá»… nhÆ°á»ng electron Ä‘á»ƒ Ä‘áº¡t cáº¥u hÃ¬nh electron bá»n vá»¯ng cá»§a khÃ­ hiáº¿m, thá»ƒ hiá»‡n **tÃ­nh khá»­** Ä‘áº·c trÆ°ng: $M \\rightarrow M^{n+} + ne$."
+        "text": "Trong bảng tuần hoàn, các nguyên tố kim loại chiếm đa số (hơn 80%), bao gồm các nhóm IA (trừ H), IIA, IIIA (trừ B), các nhóm B (từ IB đến VIIIB), họ lanthanide và actinide. Về cấu tạo nguyên tử, hầu hết các kim loại có ít electron ở lớp ngoài cùng (1, 2 hoặc 3e). Do bán kính nguyên tử thường lớn và số electron lớp ngoài cùng ít, các nguyên tử kim loại dễ nhường electron để đạt cấu hình electron bền vững của khí hiếm, thể hiện **tính khử** đặc trưng: $M \\rightarrow M^{n+} + ne$."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Máº¡ng tinh thá»ƒ kim loáº¡i",
+        "text": "2. Mạng tinh thể kim loại",
         "level": "h2"
       }
     },
@@ -37,7 +37,7 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "á»ž tráº¡ng thÃ¡i ráº¯n (trá»« thá»§y ngÃ¢n), cÃ¡c kim loáº¡i cÃ³ cáº¥u táº¡o máº¡ng tinh thá»ƒ. Trong Ä‘Ã³, cÃ¡c ion dÆ°Æ¡ng kim loáº¡i náº±m á»Ÿ cÃ¡c nÃºt máº¡ng, cÃ²n cÃ¡c electron hÃ³a trá»‹ liÃªn káº¿t lá»ng láº»o vá»›i háº¡t nhÃ¢n di chuyá»ƒn tá»± do trong toÃ n bá»™ máº¡ng lÆ°á»›i tinh thá»ƒ."
+        "text": "Ở trạng thái rắn (trừ thủy ngân), các kim loại có cấu tạo mạng tinh thể. Trong đó, các ion dương kim loại nằm ở các nút mạng, còn các electron hóa trị liên kết lỏng lẻo với hạt nhân di chuyển tự do trong toàn bộ mạng lưới tinh thể."
       }
     },
     {
@@ -46,9 +46,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Máº¡ng láº­p phÆ°Æ¡ng tÃ¢m khá»‘i (bcc):** NguyÃªn tá»­/ion náº±m á»Ÿ cÃ¡c Ä‘á»‰nh vÃ  tÃ¢m cá»§a hÃ¬nh láº­p phÆ°Æ¡ng. Äá»™ rá»—ng lá»›n (Ä‘á»™ Ä‘áº·c khÃ­t 68%). VÃ­ dá»¥: Li, Na, K, V, Cr..",
-          "**Máº¡ng láº­p phÆ°Æ¡ng tÃ¢m diá»‡n (fcc):** NguyÃªn tá»­/ion náº±m á»Ÿ cÃ¡c Ä‘á»‰nh vÃ  tÃ¢m cÃ¡c máº·t cá»§a hÃ¬nh láº­p phÆ°Æ¡ng. Äá»™ Ä‘áº·c khÃ­t cao (74%). VÃ­ dá»¥: Cu, Ag, Au, Al, Ni.",
-          "**Máº¡ng lá»¥c phÆ°Æ¡ng xáº¿p cháº·t (hcp):** CÃ¡c nguyÃªn tá»­/ion xáº¿p khÃ­t nhau theo cáº¥u trÃºc lá»¥c giÃ¡c. Äá»™ Ä‘áº·c khÃ­t cao (74%). VÃ­ dá»¥: Mg, Zn, Be."
+          "**Mạng lập phương tâm khối (bcc):** Nguyên tử/ion nằm ở các đỉnh và tâm của hình lập phương. Độ rỗng lớn (độ đặc khít 68%). Ví dụ: Li, Na, K, V, Cr..",
+          "**Mạng lập phương tâm diện (fcc):** Nguyên tử/ion nằm ở các đỉnh và tâm các mặt của hình lập phương. Độ đặc khít cao (74%). Ví dụ: Cu, Ag, Au, Al, Ni.",
+          "**Mạng lục phương xếp chặt (hcp):** Các nguyên tử/ion xếp khít nhau theo cấu trúc lục giác. Độ đặc khít cao (74%). Ví dụ: Mg, Zn, Be."
         ]
       }
     },
@@ -56,7 +56,7 @@
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. LiÃªn káº¿t kim loáº¡i",
+        "text": "3. Liên kết kim loại",
         "level": "h2"
       }
     },
@@ -64,8 +64,8 @@
       "id": "mod7",
       "type": "infoBox",
       "content": {
-        "title": "MÃ´ hÃ¬nh Biá»ƒn Electron tá»± do",
-        "content": "LiÃªn káº¿t kim loáº¡i lÃ  loáº¡i liÃªn káº¿t Ä‘Æ°á»£c hÃ¬nh thÃ nh giá»¯a cÃ¡c nguyÃªn tá»­ vÃ  ion kim loáº¡i trong máº¡ng tinh thá»ƒ nhá» sá»± tham gia cá»§a cÃ¡c electron tá»± do. CÃ¡c electron nÃ y khÃ´ng thuá»™c vá» riÃªng má»™t háº¡t nhÃ¢n nÃ o mÃ  di chuyá»ƒn kháº¯p máº¡ng lÆ°á»›i, táº¡o thÃ nh má»™t 'biá»ƒn electron' gáº¯n káº¿t cÃ¡c ion dÆ°Æ¡ng láº¡i vá»›i nhau. ÄÃ¢y lÃ  nguyÃªn nhÃ¢n chÃ­nh táº¡o nÃªn cÃ¡c tÃ­nh cháº¥t váº­t lÃ­ chung cá»§a kim loáº¡i nhÆ° tÃ­nh dáº«n Ä‘iá»‡n, dáº«n nhiá»‡t, tÃ­nh dáº»o vÃ  Ã¡nh kim.",
+        "title": "Mô hình Biển Electron tự do",
+        "content": "Liên kết kim loại là loại liên kết được hình thành giữa các nguyên tử và ion kim loại trong mạng tinh thể nhờ sự tham gia của các electron tự do. Các electron này không thuộc về riêng một hạt nhân nào mà di chuyển khắp mạng lưới, tạo thành một 'biển electron' gắn kết các ion dương lại với nhau. Đây là nguyên nhân chính tạo nên các tính chất vật lí chung của kim loại như tính dẫn điện, dẫn nhiệt, tính dẻo và ánh kim.",
         "color": "blue"
       }
     },
@@ -73,8 +73,8 @@
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "PhÃ¢n biá»‡t cÃ¡c loáº¡i liÃªn káº¿t",
-        "content": "- **LiÃªn káº¿t ion**: Lá»±c hÃºt tÄ©nh Ä‘iá»‡n giá»¯a cÃ¡c ion mang Ä‘iá»‡n tÃ­ch trÃ¡i dáº¥u (thÆ°á»ng lÃ  kim loáº¡i Ä‘iá»ƒn hÃ¬nh vÃ  phi kim Ä‘iá»ƒn hÃ¬nh).\n- **LiÃªn káº¿t cá»™ng hÃ³a trá»‹**: HÃ¬nh thÃ nh báº±ng cÃ¡c cáº·p electron dÃ¹ng chung giá»¯a hai nguyÃªn tá»­ phi kim.\n- **LiÃªn káº¿t kim loáº¡i**: HÃ¬nh thÃ nh nhá» cÃ¡c electron tá»± do dÃ¹ng chung cho toÃ n bá»™ máº¡ng tinh thá»ƒ kim loáº¡i.",
+        "title": "Phân biệt các loại liên kết",
+        "content": "- **Liên kết ion**: Lực hút tĩnh điện giữa các ion mang điện tích trái dấu (thường là kim loại điển hình và phi kim điển hình).\n- **Liên kết cộng hóa trị**: Hình thành bằng các cặp electron dùng chung giữa hai nguyên tử phi kim.\n- **Liên kết kim loại**: Hình thành nhờ các electron tự do dùng chung cho toàn bộ mạng tinh thể kim loại.",
         "color": "orange"
       }
     }
@@ -82,19 +82,19 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "LiÃªn káº¿t kim loáº¡i cÃ³ báº£n cháº¥t lÃ  gÃ¬?",
+      "question": "Liên kết kim loại có bản chất là gì?",
       "options": [
-        "Lá»±c hÃºt tÄ©nh Ä‘iá»‡n giá»¯a cation kim loáº¡i vÃ  anion phi kim.",
-        "Sá»± dÃ¹ng chung má»™t cáº·p electron duy nháº¥t giá»¯a hai nguyÃªn tá»­.",
-        "Lá»±c hÃºt giá»¯a cÃ¡c ion dÆ°Æ¡ng kim loáº¡i vÃ  cÃ¡c electron tá»± do trong máº¡ng tinh thá»ƒ.",
-        "Lá»±c liÃªn káº¿t giá»¯a cÃ¡c phÃ¢n tá»­ kim loáº¡i riÃªng biá»‡t."
+        "Lực hút tĩnh điện giữa cation kim loại và anion phi kim.",
+        "Sự dùng chung một cặp electron duy nhất giữa hai nguyên tử.",
+        "Lực hút giữa các ion dương kim loại và các electron tự do trong mạng tinh thể.",
+        "Lực liên kết giữa các phân tử kim loại riêng biệt."
       ],
       "correctAnswer": 2,
-      "explanation": "LiÃªn káº¿t kim loáº¡i hÃ¬nh thÃ nh do lá»±c hÃºt tÄ©nh Ä‘iá»‡n giá»¯a cÃ¡c cation kim loáº¡i á»Ÿ nÃºt máº¡ng vÃ  cÃ¡c electron tá»± do di chuyá»ƒn xuyÃªn suá»‘t máº¡ng tinh thá»ƒ Ä‘Ã³."
+      "explanation": "Liên kết kim loại hình thành do lực hút tĩnh điện giữa các cation kim loại ở nút mạng và các electron tự do di chuyển xuyên suốt mạng tinh thể đó."
     },
     {
       "id": "q2",
-      "question": "Kim loáº¡i nÃ o sau Ä‘Ã¢y cÃ³ cáº¥u trÃºc máº¡ng tinh thá»ƒ láº­p phÆ°Æ¡ng tÃ¢m khá»‘i?",
+      "question": "Kim loại nào sau đây có cấu trúc mạng tinh thể lập phương tâm khối?",
       "options": [
         "Sodium (Na).",
         "Copper (Cu).",
@@ -102,16 +102,16 @@
         "Zinc (Zn)."
       ],
       "correctAnswer": 0,
-      "explanation": "CÃ¡c kim loáº¡i kiá»m (nhÆ° Li, Na, K) cÃ³ cáº¥u trÃºc máº¡ng láº­p phÆ°Æ¡ng tÃ¢m khá»‘i vá»›i Ä‘á»™ Ä‘áº·c khÃ­t tÆ°Æ¡ng Ä‘á»‘i tháº¥p (68%)."
+      "explanation": "Các kim loại kiềm (như Li, Na, K) có cấu trúc mạng lập phương tâm khối với độ đặc khít tương đối thấp (68%)."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Cáº¥u táº¡o nguyÃªn tá»­ vÃ  liÃªn káº¿t kim loáº¡i",
+      "title": "Bài giảng: Cấu tạo nguyên tử và liên kết kim loại",
       "url": "https://www.youtube.com/watch?v=dTWdi85PTpk",
       "thumbnail": "https://img.youtube.com/vi/dTWdi85PTpk/0.jpg",
-      "description": "TÃ¬m hiá»ƒu cáº¥u táº¡o tinh thá»ƒ kim loáº¡i vÃ  báº£n cháº¥t cá»§a liÃªn káº¿t kim loáº¡i (mÃ´ hÃ¬nh biá»ƒn electron) (VietJack)."
+      "description": "Tìm hiểu cấu tạo tinh thể kim loại và bản chất của liên kết kim loại (mô hình biển electron) (VietJack)."
     }
   ],
   "practiceModules": [],

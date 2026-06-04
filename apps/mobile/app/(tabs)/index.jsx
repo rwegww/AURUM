@@ -22,10 +22,10 @@ import { classApi, learningApi, publicApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
 const moduleCards = [
-  { title: "Lá»™ trÃ¬nh", subtitle: "BÃ i há»c theo khá»‘i 8-12", icon: "map-outline", color: colors.green, href: "/journey" },
-  { title: "CÃ´ng cá»¥", subtitle: "Gá»£i Ã½ cÃ´ng thá»©c, mÃ¡y tÃ­nh hÃ³a há»c", icon: "construct-outline", color: colors.green, href: "/lab" },
-  { title: "Äáº¥u trÆ°á»ng", subtitle: "Äáº¥u nhanh báº±ng cÃ¢u há»i hÃ³a", icon: "trophy-outline", color: colors.green, href: "/arena" },
-  { title: "TÃ i liá»‡u", subtitle: "ThÆ° viá»‡n há»c liá»‡u", icon: "library-outline", color: colors.green, href: "/library" }
+  { title: "Lộ trình", subtitle: "Bài học theo khối 8-12", icon: "map-outline", color: colors.green, href: "/journey" },
+  { title: "Công cụ", subtitle: "Gợi ý công thức, máy tính hóa học", icon: "construct-outline", color: colors.green, href: "/lab" },
+  { title: "Đấu trường", subtitle: "Đấu nhanh bằng câu hỏi hóa", icon: "trophy-outline", color: colors.green, href: "/arena" },
+  { title: "Tài liệu", subtitle: "Thư viện học liệu", icon: "library-outline", color: colors.green, href: "/library" }
 ];
 
 const xpProgress = (xp = 0) => {
@@ -54,7 +54,7 @@ export default function HomeTab() {
   };
 
   if (dashboard.loading && !dashboard.data) {
-    return <LoadingState label="Äang má»Ÿ báº£ng Ä‘iá»u khiá»ƒn..." />;
+    return <LoadingState label="Đang mở bảng điều khiển..." />;
   }
 
   const lop = dashboard.data?.lop || [];
@@ -65,36 +65,36 @@ export default function HomeTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="á»¨ng dá»¥ng AURUM"
-        title={`ChÃ o ${user?.username || "báº¡n"}`}
-        subtitle="Táº­p trung vÃ o bÃ i tiáº¿p theo, giá»¯ chuá»—i há»c vÃ  má»Ÿ khÃ³a thÃªm pháº£n á»©ng."
-        right={<Pill icon="flame-outline" label={`${user?.streakCount || 0} ngÃ y`} color={colors.green} />}
+        eyebrow="Ứng dụng AURUM"
+        title={`Chào ${user?.username || "bạn"}`}
+        subtitle="Tập trung vào bài tiếp theo, giữ chuỗi học và mở khóa thêm phản ứng."
+        right={<Pill icon="flame-outline" label={`${user?.streakCount || 0} ngày`} color={colors.green} />}
       />
 
       <Card accent={colors.green} style={styles.heroCard}>
         <View style={styles.heroTop}>
           <View style={styles.levelBadge}>
             <Text style={styles.levelNumber}>{user?.level || 1}</Text>
-            <Text style={styles.levelLabel}>Cáº¥p</Text>
+            <Text style={styles.levelLabel}>Cấp</Text>
           </View>
           <View style={styles.heroCopy}>
-            <Text style={styles.heroTitle}>Tiáº¿n trÃ¬nh hÃ´m nay</Text>
+            <Text style={styles.heroTitle}>Tiến trình hôm nay</Text>
             <Text style={styles.heroSubtitle}>
               {user?.todayLessonCompleted
-                ? "Báº¡n Ä‘Ã£ hoÃ n thÃ nh má»¥c tiÃªu bÃ i há»c trong ngÃ y."
-                : "HoÃ n thÃ nh má»™t cháº·ng há»c Ä‘á»ƒ nháº­n Ä‘iá»ƒm kinh nghiá»‡m vÃ  giá»¯ nhá»‹p há»c."}
+                ? "Bạn đã hoàn thành mục tiêu bài học trong ngày."
+                : "Hoàn thành một chặng học để nhận điểm kinh nghiệm và giữ nhịp học."}
             </Text>
           </View>
         </View>
         <ProgressBar value={xpProgress(user?.xp)} color={colors.green} />
         <View style={styles.metricRow}>
-          <Metric label="Kinh nghiá»‡m" value={user?.xp || 0} icon="flash-outline" color={colors.green} />
-          <Metric label="Trá»±c tuyáº¿n" value={`${user?.todayOnlineMinutes || 0}p`} icon="time-outline" color={colors.green} />
-          <Metric label="Äáº¥u trÆ°á»ng" value={user?.arenaStats?.points || 0} icon="trophy-outline" color={colors.green} />
+          <Metric label="Kinh nghiệm" value={user?.xp || 0} icon="flash-outline" color={colors.green} />
+          <Metric label="Trực tuyến" value={`${user?.todayOnlineMinutes || 0}p`} icon="time-outline" color={colors.green} />
+          <Metric label="Đấu trường" value={user?.arenaStats?.points || 0} icon="trophy-outline" color={colors.green} />
         </View>
       </Card>
 
-      <SectionTitle title="Äi nhanh" />
+      <SectionTitle title="Đi nhanh" />
       <View style={styles.moduleGrid}>
         {moduleCards.map((item) => (
           <Pressable
@@ -114,7 +114,7 @@ export default function HomeTab() {
         ))}
       </View>
 
-      <SectionTitle title="Nhiá»‡m vá»¥" actionLabel="Táº£i láº¡i" onAction={dashboard.reload} />
+      <SectionTitle title="Nhiệm vụ" actionLabel="Tải lại" onAction={dashboard.reload} />
       {dashboard.error ? (
         <ErrorState message={dashboard.error.message} onRetry={dashboard.reload} />
       ) : activeMissions.length > 0 ? (
@@ -127,19 +127,19 @@ export default function HomeTab() {
               <Card key={mission.id} style={styles.missionCard}>
                 <View style={styles.missionTop}>
                   <View style={styles.missionText}>
-                    <Text style={styles.missionTitle}>{mission.title || mission.name || "Nhiá»‡m vá»¥"}</Text>
+                    <Text style={styles.missionTitle}>{mission.title || mission.name || "Nhiệm vụ"}</Text>
                     <Text style={styles.missionDesc} numberOfLines={2}>
-                      {mission.description || "HoÃ n thÃ nh má»¥c tiÃªu Ä‘á»ƒ nháº­n Ä‘iá»ƒm kinh nghiá»‡m."}
+                      {mission.description || "Hoàn thành mục tiêu để nhận điểm kinh nghiệm."}
                     </Text>
                   </View>
-                  <Pill label={`+${mission.xp_reward || mission.xpReward || 0} Ä‘iá»ƒm`} color={colors.green} />
+                  <Pill label={`+${mission.xp_reward || mission.xpReward || 0} điểm`} color={colors.green} />
                 </View>
                 <ProgressBar value={current / target} color={completed ? colors.green : colors.green} />
                 <View style={styles.missionBottom}>
                   <Text style={styles.progressText}>{Math.min(current, target)}/{target}</Text>
                   {completed ? (
                     <PrimaryButton
-                      label={claimingId === mission.id ? "Äang nháº­n" : "Nháº­n thÆ°á»Ÿng"}
+                      label={claimingId === mission.id ? "Đang nhận" : "Nhận thưởng"}
                       icon="gift-outline"
                       onPress={() => claimMission(mission.id)}
                       disabled={claimingId === mission.id}
@@ -152,10 +152,10 @@ export default function HomeTab() {
           })}
         </View>
       ) : (
-        <EmptyState title="KhÃ´ng cÃ³ nhiá»‡m vá»¥ má»›i" subtitle="Khi hoÃ n thÃ nh bÃ i há»c, cÃ´ng cá»¥ há»— trá»£ hoáº·c Ä‘áº¥u trÆ°á»ng, nhiá»‡m vá»¥ sáº½ cáº­p nháº­t táº¡i Ä‘Ã¢y." />
+        <EmptyState title="Không có nhiệm vụ mới" subtitle="Khi hoàn thành bài học, công cụ hỗ trợ hoặc đấu trường, nhiệm vụ sẽ cập nhật tại đây." />
       )}
 
-      <SectionTitle title="Lá»›p cá»§a tÃ´i" actionLabel="Má»Ÿ" onAction={() => router.push("/profile")} />
+      <SectionTitle title="Lớp của tôi" actionLabel="Mở" onAction={() => router.push("/profile")} />
       {lop.length > 0 ? (
         <View style={styles.stack}>
           {lop.slice(0, 2).map((item) => (
@@ -163,7 +163,7 @@ export default function HomeTab() {
               key={item.id}
               icon="people-outline"
               title={item.name}
-              subtitle={`Khá»‘i ${item.khoi_id || item.gradeLevelId || item.gradeLevel || "?"} Â· ${item.student_count || 0} há»c sinh`}
+              subtitle={`Khối ${item.khoi_id || item.gradeLevelId || item.gradeLevel || "?"} · ${item.student_count || 0} học sinh`}
               onPress={() => router.push(`/classroom/${item.id}`)}
               color={colors.green}
             />
@@ -172,19 +172,19 @@ export default function HomeTab() {
       ) : (
         <EmptyState
           icon="people-outline"
-          title="ChÆ°a tham gia lá»›p"
-          subtitle="Báº¡n cÃ³ thá»ƒ nháº­p mÃ£ lá»›p á»Ÿ mÃ n Há»“ sÆ¡ Ä‘á»ƒ theo dÃµi bÃ i táº­p giÃ¡o viÃªn giao."
+          title="Chưa tham gia lớp"
+          subtitle="Bạn có thể nhập mã lớp ở màn Hồ sơ để theo dõi bài tập giáo viên giao."
         />
       )}
 
-      <SectionTitle title="Báº£ng xáº¿p háº¡ng kinh nghiá»‡m" />
+      <SectionTitle title="Bảng xếp hạng kinh nghiệm" />
       <View style={styles.stack}>
         {leaderboard.slice(0, 5).map((student, index) => (
           <ListRow
             key={`${student.username}-${index}`}
             icon={index === 0 ? "medal-outline" : "person-outline"}
             title={`${index + 1}. ${student.username}`}
-            subtitle={`Cáº¥p ${student.level || 1} Â· ${student.xp || 0} Ä‘iá»ƒm`}
+            subtitle={`Cấp ${student.level || 1} · ${student.xp || 0} điểm`}
             color={index === 0 ? colors.green : colors.green}
           />
         ))}

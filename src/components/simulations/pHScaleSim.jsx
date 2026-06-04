@@ -1,36 +1,36 @@
 ﻿import React, { useState } from 'react';
 
-// Dá»¯ liá»‡u pH chuáº©n cá»§a cÃ¡c cháº¥t phá»• biáº¿n (25Â°C)
+// Dữ liệu pH chuẩn của các chất phổ biến (25°C)
 const SUBSTANCES = [
-  { name: 'HCl 1M', pH: 0, color: '#ff1a1a', category: 'Axit máº¡nh' },
-  { name: 'Axit dáº¡ dÃ y', pH: 1.5, color: '#ff4d4d', category: 'Axit máº¡nh' },
-  { name: 'NÆ°á»›c chanh', pH: 2.3, color: '#ff6b35', category: 'Axit yáº¿u' },
-  { name: 'Giáº¥m (CHâ‚ƒCOOH)', pH: 2.9, color: '#ff8c42', category: 'Axit yáº¿u' },
-  { name: 'NÆ°á»›c cam', pH: 3.5, color: '#ffaa33', category: 'Axit yáº¿u' },
-  { name: 'CÃ  phÃª Ä‘en', pH: 5.0, color: '#c4a035', category: 'Axit yáº¿u' },
-  { name: 'Sá»¯a tÆ°Æ¡i', pH: 6.5, color: '#a8b834', category: 'Gáº§n trung tÃ­nh' },
-  { name: 'NÆ°á»›c cáº¥t (Hâ‚‚O)', pH: 7.0, color: '#76c034', category: 'Trung tÃ­nh' },
-  { name: 'MÃ¡u ngÆ°á»i', pH: 7.4, color: '#34b876', category: 'BazÆ¡ yáº¿u' },
-  { name: 'NÆ°á»›c biá»ƒn', pH: 8.1, color: '#34a4b8', category: 'BazÆ¡ yáº¿u' },
-  { name: 'XÃ  phÃ²ng', pH: 10.0, color: '#3478b8', category: 'BazÆ¡ yáº¿u' },
-  { name: 'Amoniac (NHâ‚ƒ)', pH: 11.6, color: '#4834b8', category: 'BazÆ¡' },
-  { name: 'NÆ°á»›c javel (NaClO)', pH: 12.5, color: '#6b34b8', category: 'BazÆ¡ máº¡nh' },
-  { name: 'NaOH 1M', pH: 14.0, color: '#9b34b8', category: 'BazÆ¡ máº¡nh' },
+  { name: 'HCl 1M', pH: 0, color: '#ff1a1a', category: 'Axit mạnh' },
+  { name: 'Axit dạ dày', pH: 1.5, color: '#ff4d4d', category: 'Axit mạnh' },
+  { name: 'Nước chanh', pH: 2.3, color: '#ff6b35', category: 'Axit yếu' },
+  { name: 'Giấm (CH₃COOH)', pH: 2.9, color: '#ff8c42', category: 'Axit yếu' },
+  { name: 'Nước cam', pH: 3.5, color: '#ffaa33', category: 'Axit yếu' },
+  { name: 'Cà phê đen', pH: 5.0, color: '#c4a035', category: 'Axit yếu' },
+  { name: 'Sữa tươi', pH: 6.5, color: '#a8b834', category: 'Gần trung tính' },
+  { name: 'Nước cất (H₂O)', pH: 7.0, color: '#76c034', category: 'Trung tính' },
+  { name: 'Máu người', pH: 7.4, color: '#34b876', category: 'Bazơ yếu' },
+  { name: 'Nước biển', pH: 8.1, color: '#34a4b8', category: 'Bazơ yếu' },
+  { name: 'Xà phòng', pH: 10.0, color: '#3478b8', category: 'Bazơ yếu' },
+  { name: 'Amoniac (NH₃)', pH: 11.6, color: '#4834b8', category: 'Bazơ' },
+  { name: 'Nước javel (NaClO)', pH: 12.5, color: '#6b34b8', category: 'Bazơ mạnh' },
+  { name: 'NaOH 1M', pH: 14.0, color: '#9b34b8', category: 'Bazơ mạnh' },
 ];
 
 const PHScaleSim = () => {
-  const [selectedIdx, setSelectedIdx] = useState(7); // NÆ°á»›c cáº¥t máº·c Ä‘á»‹nh
+  const [selectedIdx, setSelectedIdx] = useState(7); // Nước cất mặc định
   const substance = SUBSTANCES[selectedIdx];
   const hConc = Math.pow(10, -substance.pH);
   const ohConc = Math.pow(10, -(14 - substance.pH));
   const pOH = 14 - substance.pH;
 
   const getAcidityLabel = (pH) => {
-    if (pH < 3) return 'Axit máº¡nh';
+    if (pH < 3) return 'Axit mạnh';
     if (pH < 7) return 'Axit';
-    if (pH === 7) return 'Trung tÃ­nh';
-    if (pH < 11) return 'BazÆ¡';
-    return 'BazÆ¡ máº¡nh';
+    if (pH === 7) return 'Trung tính';
+    if (pH < 11) return 'Bazơ';
+    return 'Bazơ mạnh';
   };
 
   return (
@@ -52,8 +52,8 @@ const PHScaleSim = () => {
         {/* Scale labels */}
         <div className="flex justify-between text-[9px] font-black text-[#b4bac2] uppercase">
           <span>0 (Axit)</span>
-          <span>7 (Trung tÃ­nh)</span>
-          <span>14 (BazÆ¡)</span>
+          <span>7 (Trung tính)</span>
+          <span>14 (Bazơ)</span>
         </div>
       </div>
 
@@ -71,7 +71,7 @@ const PHScaleSim = () => {
 
       {/* Substance Selector */}
       <div>
-        <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] block mb-2">Chá»n cháº¥t</label>
+        <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] block mb-2">Chọn chất</label>
         <div className="grid grid-cols-2 gap-1.5 max-h-[200px] overflow-y-auto pr-1">
           {SUBSTANCES.map((s, i) => (
             <button key={s.name} onClick={() => setSelectedIdx(i)}
@@ -88,7 +88,7 @@ const PHScaleSim = () => {
 
       {/* Results */}
       <div className="bg-viet-bg rounded-2xl p-5 space-y-3">
-        <h4 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">ThÃ´ng sá»‘ hÃ³a há»c</h4>
+        <h4 className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px]">Thông số hóa học</h4>
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-white rounded-xl p-3">
             <div className="text-[9px] font-bold text-viet-text-light uppercase">pH</div>
@@ -99,11 +99,11 @@ const PHScaleSim = () => {
             <div className="text-[22px] font-black text-viet-text">{pOH.toFixed(1)}</div>
           </div>
           <div className="bg-white rounded-xl p-3">
-            <div className="text-[9px] font-bold text-viet-text-light uppercase">[Hâº] = 10â»áµ–á´´</div>
+            <div className="text-[9px] font-bold text-viet-text-light uppercase">[H⁺] = 10⁻ᵖᴴ</div>
             <div className="text-[14px] font-black text-viet-green">{hConc.toExponential(2)} <span className="text-[9px]">mol/L</span></div>
           </div>
           <div className="bg-white rounded-xl p-3">
-            <div className="text-[9px] font-bold text-viet-text-light uppercase">[OHâ»] = 10â»áµ–á´¼á´´</div>
+            <div className="text-[9px] font-bold text-viet-text-light uppercase">[OH⁻] = 10⁻ᵖᴼᴴ</div>
             <div className="text-[14px] font-black text-viet-text">{ohConc.toExponential(2)} <span className="text-[9px]">mol/L</span></div>
           </div>
         </div>

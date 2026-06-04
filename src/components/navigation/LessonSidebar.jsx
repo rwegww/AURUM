@@ -12,7 +12,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
   const sections = useMemo(() => {
     const groups = {};
     bai_hoc.forEach((lesson, index) => {
-      const chapter = lesson.chapter || "ChÆ°Æ¡ng khÃ¡c";
+      const chapter = lesson.chapter || "Chương khác";
       if (!groups[chapter]) {
         groups[chapter] = {
           name: chapter,
@@ -45,10 +45,10 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
       {/* Top Header / Context */}
       <div className="p-6 pb-4 border-b border-viet-border bg-viet-bg/20">
         <Link to="/bai_hoc" className="flex items-center gap-2 text-viet-green text-[10px] font-black uppercase tracking-widest mb-4 hover:underline">
-          <span>â†</span> {t('lesson_page.back_btn')}
+          <span>←</span> {t('lesson_page.back_btn')}
         </Link>
         
-        <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-2 block">Lá»™ trÃ¬nh há»c táº­p</label>
+        <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-2 block">Lộ trình học tập</label>
         <div className="relative">
           <select 
             value={grade}
@@ -56,7 +56,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
             className="w-full h-[48px] bg-white border-2 border-viet-border rounded-2xl px-5 text-[14px] font-bold text-viet-text appearance-none cursor-pointer outline-none focus:border-viet-green focus:ring-4 focus:ring-viet-green/5 transition-all"
           >
             {[8, 9, 10, 11, 12].map(g => (
-              <option key={g} value={g}>HÃ³a há»c Lá»›p {g}</option>
+              <option key={g} value={g}>Hóa học Lớp {g}</option>
             ))}
           </select>
           <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-viet-green">
@@ -70,7 +70,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
 
       <div className="flex-1 p-4 pt-6">
         <div className="mb-4 px-2">
-          <h3 className="text-[11px] font-black text-[#3f3e3e] uppercase tracking-[2px] opacity-40">Cáº¥u trÃºc chÆ°Æ¡ng trÃ¬nh</h3>
+          <h3 className="text-[11px] font-black text-[#3f3e3e] uppercase tracking-[2px] opacity-40">Cấu trúc chương trình</h3>
         </div>
 
         {/* Sections and Modules */}
@@ -139,12 +139,12 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
                                 <h5 className={`text-[12px] font-extrabold leading-[1.4] transition-colors ${
                                   isActive ? 'text-viet-text' : 'text-viet-text-light group-hover:text-viet-text'
                                 }`}>
-                                  {lesson.title.replace(`BÃ i ${lesson.globalIndex}: `, '').replace(`BÃ i ${lesson.lessonId}: `, '').replace(`BÃ i ${lesson.order}: `, '')}
+                                  {lesson.title.replace(`Bài ${lesson.globalIndex}: `, '').replace(`Bài ${lesson.lessonId}: `, '').replace(`Bài ${lesson.order}: `, '')}
                                 </h5>
                                 
                                 {isActive && (
                                   <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-[9px] font-black uppercase tracking-wider text-viet-green">Äang há»c</span>
+                                    <span className="text-[9px] font-black uppercase tracking-wider text-viet-green">Đang học</span>
                                     <motion.div 
                                       animate={{ scale: [1, 1.2, 1] }} 
                                       transition={{ repeat: Infinity, duration: 2 }}
@@ -181,7 +181,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
           </div>
           <input
             type="text"
-            placeholder="TÃ¬m bÃ i há»c..."
+            placeholder="Tìm bài học..."
             className="w-full h-[44px] bg-white border-2 border-viet-border rounded-xl pl-12 pr-4 text-[12px] font-bold text-viet-text focus:border-viet-green focus:ring-4 focus:ring-viet-green/5 outline-none transition-all placeholder:text-[#b4bac2]"
           />
         </div>

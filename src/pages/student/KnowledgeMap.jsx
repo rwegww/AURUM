@@ -9,11 +9,11 @@ import InfographicBook from '@/components/lessons/InfographicBook';
 
 // Grade theme colors
 const GRADE_THEME = {
-  8: { color: '#16a34a', light: '#f0fdf4', border: '#bbf7d0', label: 'Lá»›p 8' },
-  9: { color: '#f97316', light: '#fff7ed', border: '#fed7aa', label: 'Lá»›p 9' },
-  10: { color: '#3b82f6', light: '#eff6ff', border: '#bfdbfe', label: 'Lá»›p 10' },
-  11: { color: '#8b5cf6', light: '#f5f3ff', border: '#ddd6fe', label: 'Lá»›p 11' },
-  12: { color: '#ec4899', light: '#fdf2f8', border: '#fbcfe8', label: 'Lá»›p 12' },
+  8: { color: '#16a34a', light: '#f0fdf4', border: '#bbf7d0', label: 'Lớp 8' },
+  9: { color: '#f97316', light: '#fff7ed', border: '#fed7aa', label: 'Lớp 9' },
+  10: { color: '#3b82f6', light: '#eff6ff', border: '#bfdbfe', label: 'Lớp 10' },
+  11: { color: '#8b5cf6', light: '#f5f3ff', border: '#ddd6fe', label: 'Lớp 11' },
+  12: { color: '#ec4899', light: '#fdf2f8', border: '#fbcfe8', label: 'Lớp 12' },
 };
 
 const KnowledgeMap = () => {
@@ -26,7 +26,7 @@ const KnowledgeMap = () => {
 
   const unlockedLessons = user?.unlockedLessons || [];
 
-  // Build tree: Grade â†’ Lesson â†’ Knowledge Topics
+  // Build tree: Grade → Lesson → Knowledge Topics
   const mindMapTree = useMemo(() => {
     const lessonToTopics = {};
     Object.entries(CORE_KNOWLEDGE_LESSONS).forEach(([topicId, bai_hoc]) => {
@@ -89,11 +89,11 @@ const KnowledgeMap = () => {
             className="inline-flex items-center gap-2 text-slate-400 hover:text-viet-green font-bold text-sm mb-4 transition-colors group"
           >
             <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            QUAY Láº I Lá»šP Há»ŒC
+            QUAY LẠI LỚP HỌC
           </Link>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <h1 className="font-rubik text-3xl md:text-4xl font-black text-[#1a1a1a] mb-2 tracking-tight uppercase leading-tight">
-              SÆ¡ Äá»“ TÆ° Duy <span className="text-viet-green">HÃ³a Há»c</span>
+              Sơ Đồ Tư Duy <span className="text-viet-green">Hóa Học</span>
             </h1>
 
             {/* Overall progress */}
@@ -107,7 +107,7 @@ const KnowledgeMap = () => {
                 />
               </div>
               <span className="text-xs font-black text-slate-600 whitespace-nowrap">
-                {completedTopics}/{totalTopics} chá»§ Ä‘á»
+                {completedTopics}/{totalTopics} chủ đề
               </span>
             </div>
           </motion.div>
@@ -124,7 +124,7 @@ const KnowledgeMap = () => {
               className="shrink-0 relative z-10"
             >
               <div className="px-8 py-5 bg-viet-green text-white rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-lg shadow-viet-green/20 border-b-[6px] border-emerald-700 select-none">
-                HÃ³a Há»c
+                Hóa Học
               </div>
             </motion.div>
 
@@ -193,7 +193,7 @@ const KnowledgeMap = () => {
                           </h2>
                           <div className="flex items-center gap-1.5">
                             <span className="text-[11px] font-bold text-slate-400">
-                              {progress.done}/{progress.total} bÃ i
+                              {progress.done}/{progress.total} bài
                             </span>
                             {isGradeComplete && <CheckCircle2 size={12} className="text-viet-green" />}
                           </div>
@@ -227,7 +227,7 @@ const KnowledgeMap = () => {
 
                               const lessonDone = isLessonDone(lesson.lessonId);
                               const isLessonExpanded = expandedLesson === lesson.lessonId;
-                              const shortTitle = lesson.title.replace(/^BÃ i \d+: /, '');
+                              const shortTitle = lesson.title.replace(/^Bài \d+: /, '');
 
                               return (
                                 <div key={lesson.lessonId} className="flex flex-row items-center relative">
@@ -278,7 +278,7 @@ const KnowledgeMap = () => {
                                           {shortTitle}
                                         </p>
                                         <p className="text-[10px] font-bold text-slate-400 mt-0.5">
-                                          {lesson.topics.length} kiáº¿n thá»©c cá»‘t lÃµi
+                                          {lesson.topics.length} kiến thức cốt lõi
                                         </p>
                                       </div>
                                       <ChevronRight
@@ -374,7 +374,7 @@ const KnowledgeMap = () => {
                                                   onClick={() => navigate(`/bai_hoc/${lesson.classId}/${lesson.lessonId}`)}
                                                   className="text-[11px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-500 hover:text-viet-green transition-all shadow-sm"
                                                 >
-                                                  Xem láº¡i bÃ i há»c â†’
+                                                  Xem lại bài học →
                                                 </motion.button>
 
                                                 <motion.button

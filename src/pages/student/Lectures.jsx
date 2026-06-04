@@ -21,7 +21,7 @@ const Lectures = () => {
       const data = await res.json();
       setLessons(data);
     } catch (err) {
-      console.error('Lá»—i táº£i bÃ i giáº£ng:', err);
+      console.error('Lỗi tải bài giảng:', err);
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ const Lectures = () => {
           <div>
             <h1 className="text-[32px] font-black text-viet-text uppercase tracking-tight italic mb-2">
               <Trans i18nKey="lectures.title">
-                ThÆ° viá»‡n <span className="text-viet-green">BÃ i giáº£ng</span>
+                Thư viện <span className="text-viet-green">Bài giảng</span>
               </Trans>
             </h1>
             <p className="text-viet-text-light font-bold">{t('lectures.subtitle')}</p>

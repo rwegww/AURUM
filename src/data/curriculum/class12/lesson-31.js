@@ -3,18 +3,18 @@
   "classId": 12,
   "lessonId": 31,
   "programId": "ketnoi",
-  "title": "BÃ i 31. Kiá»ƒm tra tá»•ng há»£p - Ã”n thi Tá»‘t nghiá»‡p THPT",
-  "chapter": "Pháº§n ÄÃ¡nh giÃ¡ & Ã”n luyá»‡n",
+  "title": "Bài 31. Kiểm tra tổng hợp - Ôn thi Tốt nghiệp THPT",
+  "chapter": "Phần Đánh giá & Ôn luyện",
   "order": 31,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tá»•ng Ã´n kiáº¿n thá»©c trá»ng tÃ¢m chÆ°Æ¡ng trÃ¬nh HÃ³a há»c lá»›p 12. Chuáº©n bá»‹ cho kÃ¬ thi Tá»‘t nghiá»‡p THPT Quá»‘c gia.",
+  "description": "Tổng ôn kiến thức trọng tâm chương trình Hóa học lớp 12. Chuẩn bị cho kì thi Tốt nghiệp THPT Quốc gia.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Trá»ng tÃ¢m HÃ³a há»c VÃ´ cÆ¡ lá»›p 12",
+        "text": "1. Trọng tâm Hóa học Vô cơ lớp 12",
         "level": "h2"
       }
     },
@@ -24,9 +24,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Äáº¡i cÆ°Æ¡ng kim loáº¡i:** Cáº¥u táº¡o máº¡ng tinh thá»ƒ, tÃ­nh cháº¥t váº­t lÃ­ chung, dÃ£y Ä‘iá»‡n hÃ³a vÃ  cÃ¡c phÆ°Æ¡ng phÃ¡p Ä‘iá»u cháº¿ kim loáº¡i (nhiá»‡t luyá»‡n, thá»§y luyá»‡n, Ä‘iá»‡n phÃ¢n).",
-          "**Kim loáº¡i nhÃ³m IA, IIA vÃ  Al:** Äáº·c Ä‘iá»ƒm pháº£n á»©ng vá»›i nÆ°á»›c, oxygen vÃ  acid. PhÆ°Æ¡ng phÃ¡p Ä‘iá»u cháº¿ báº±ng Ä‘iá»‡n phÃ¢n nÃ³ng cháº£y. Xá»­ lÃ½ nÆ°á»›c cá»©ng táº¡m thá»i vÃ  vÄ©nh cá»­u.",
-          "**Kim loáº¡i chuyá»ƒn tiáº¿p (Fe, Cr):** TÃ­nh cháº¥t hÃ³a há»c cá»§a sáº¯t vÃ  chromium, cÃ¡c tráº¡ng thÃ¡i oxi hÃ³a phá»• biáº¿n. Hiá»‡n tÆ°á»£ng thá»¥ Ä‘á»™ng hÃ³a trong acid Ä‘áº·c nguá»™i. SÆ¡ lÆ°á»£c vá» phá»©c cháº¥t cá»§a kim loáº¡i chuyá»ƒn tiáº¿p."
+          "**Đại cương kim loại:** Cấu tạo mạng tinh thể, tính chất vật lí chung, dãy điện hóa và các phương pháp điều chế kim loại (nhiệt luyện, thủy luyện, điện phân).",
+          "**Kim loại nhóm IA, IIA và Al:** Đặc điểm phản ứng với nước, oxygen và acid. Phương pháp điều chế bằng điện phân nóng chảy. Xử lý nước cứng tạm thời và vĩnh cửu.",
+          "**Kim loại chuyển tiếp (Fe, Cr):** Tính chất hóa học của sắt và chromium, các trạng thái oxi hóa phổ biến. Hiện tượng thụ động hóa trong acid đặc nguội. Sơ lược về phức chất của kim loại chuyển tiếp."
         ]
       }
     },
@@ -34,7 +34,7 @@
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Trá»ng tÃ¢m HÃ³a há»c Há»¯u cÆ¡ lá»›p 12",
+        "text": "2. Trọng tâm Hóa học Hữu cơ lớp 12",
         "level": "h2"
       }
     },
@@ -44,10 +44,10 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Esters - Lipids:** Pháº£n á»©ng thá»§y phÃ¢n trong mÃ´i trÆ°á»ng acid (thuáº­n nghá»‹ch) vÃ  mÃ´i trÆ°á»ng kiá»m (xÃ  phÃ²ng hÃ³a). TÃ­nh cháº¥t váº­t lÃ­ vÃ  á»©ng dá»¥ng cá»§a cháº¥t bÃ©o.",
-          "**Carbohydrates:** PhÃ¢n loáº¡i vÃ  tÃ­nh cháº¥t cá»§a glucose, fructose, saccharose, tinh bá»™t vÃ  cellulose. Pháº£n á»©ng trÃ¡ng báº¡c, pháº£n á»©ng vá»›i $Cu(OH)_2$, pháº£n á»©ng mÃ u cá»§a há»“ tinh bá»™t.",
-          "**Amines, Amino Acids vÃ  Proteins:** Cáº¥u táº¡o, tÃ­nh cháº¥t lÆ°á»¡ng tÃ­nh cá»§a amino acid. LiÃªn káº¿t peptide vÃ  cáº¥u trÃºc cá»§a protein. Pháº£n á»©ng mÃ u biuret.",
-          "**Polymers:** KhÃ¡i niá»‡m, phÃ¢n loáº¡i theo nguá»“n gá»‘c vÃ  cáº¥u trÃºc. PhÃ¢n biá»‡t pháº£n á»©ng trÃ¹ng há»£p vÃ  trÃ¹ng ngÆ°ng. CÃ¡c loáº¡i váº­t liá»‡u polymer: nhá»±a, cao su, tÆ¡ vÃ  váº­t liá»‡u composite."
+          "**Esters - Lipids:** Phản ứng thủy phân trong môi trường acid (thuận nghịch) và môi trường kiềm (xà phòng hóa). Tính chất vật lí và ứng dụng của chất béo.",
+          "**Carbohydrates:** Phân loại và tính chất của glucose, fructose, saccharose, tinh bột và cellulose. Phản ứng tráng bạc, phản ứng với $Cu(OH)_2$, phản ứng màu của hồ tinh bột.",
+          "**Amines, Amino Acids và Proteins:** Cấu tạo, tính chất lưỡng tính của amino acid. Liên kết peptide và cấu trúc của protein. Phản ứng màu biuret.",
+          "**Polymers:** Khái niệm, phân loại theo nguồn gốc và cấu trúc. Phân biệt phản ứng trùng hợp và trùng ngưng. Các loại vật liệu polymer: nhựa, cao su, tơ và vật liệu composite."
         ]
       }
     }
@@ -55,7 +55,7 @@
   "quizzes": [
     {
       "id": "q_test1",
-      "question": "Há»£p cháº¥t nÃ o sau Ä‘Ã¢y cÃ³ mÃ¹i chuá»‘i chÃ­n Ä‘áº·c trÆ°ng?",
+      "question": "Hợp chất nào sau đây có mùi chuối chín đặc trưng?",
       "options": [
         "Isoamyl acetate.",
         "Ethyl acetate.",
@@ -63,11 +63,11 @@
         "Methyl salicylate."
       ],
       "correctAnswer": 0,
-      "explanation": "Isoamyl acetate lÃ  má»™t ester cÃ³ mÃ¹i chuá»‘i chÃ­n, thÆ°á»ng Ä‘Æ°á»£c dÃ¹ng lÃ m hÆ°Æ¡ng liá»‡u thá»±c pháº©m."
+      "explanation": "Isoamyl acetate là một ester có mùi chuối chín, thường được dùng làm hương liệu thực phẩm."
     },
     {
       "id": "q_test2",
-      "question": "Trong Ä‘iá»u kiá»‡n thÃ­ch há»£p, glucose tham gia pháº£n á»©ng trÃ¡ng báº¡c táº¡o ra sáº£n pháº©m nÃ o sau Ä‘Ã¢y?",
+      "question": "Trong điều kiện thích hợp, glucose tham gia phản ứng tráng bạc tạo ra sản phẩm nào sau đây?",
       "options": [
         "Sorbitol.",
         "Gluconic acid (Ammonium gluconate).",
@@ -75,11 +75,11 @@
         "Ethanol."
       ],
       "correctAnswer": 1,
-      "explanation": "Trong pháº£n á»©ng trÃ¡ng báº¡c ($AgNO_3/NH_3$), nhÃ³m aldehyde cá»§a glucose bá»‹ oxi hÃ³a thÃ nh nhÃ³m carboxyl, táº¡o ra ammonium gluconate and káº¿t tá»§a báº¡c ($Ag$)."
+      "explanation": "Trong phản ứng tráng bạc ($AgNO_3/NH_3$), nhóm aldehyde của glucose bị oxi hóa thành nhóm carboxyl, tạo ra ammonium gluconate and kết tủa bạc ($Ag$)."
     },
     {
       "id": "q_test3",
-      "question": "Kim loáº¡i nÃ o sau Ä‘Ã¢y bá»‹ thá»¥ Ä‘á»™ng hÃ³a trong dung dá»‹ch $HNO_3$ Ä‘áº·c, nguá»™i?",
+      "question": "Kim loại nào sau đây bị thụ động hóa trong dung dịch $HNO_3$ đặc, nguội?",
       "options": [
         "Cu.",
         "Fe.",
@@ -87,40 +87,40 @@
         "Zn."
       ],
       "correctAnswer": 1,
-      "explanation": "Al, Fe and Cr lÃ  ba kim loáº¡i bá»‹ thá»¥ Ä‘á»™ng hÃ³a (táº¡o lá»›p mÃ ng oxide báº£o vá»‡ bá»n vá»¯ng) khi tiáº¿p xÃºc with cÃ¡c acid oxi hÃ³a máº¡nh ($HNO_3, H_2SO_4$) á»Ÿ tráº¡ng thÃ¡i Ä‘áº·c, nguá»™i."
+      "explanation": "Al, Fe and Cr là ba kim loại bị thụ động hóa (tạo lớp màng oxide bảo vệ bền vững) khi tiếp xúc with các acid oxi hóa mạnh ($HNO_3, H_2SO_4$) ở trạng thái đặc, nguội."
     },
     {
       "id": "q_test4",
-      "question": "Pháº£n á»©ng thá»§y phÃ¢n cháº¥t bÃ©o trong dung dá»‹ch NaOH Ä‘Æ°á»£c gá»i lÃ  pháº£n á»©ng:",
+      "question": "Phản ứng thủy phân chất béo trong dung dịch NaOH được gọi là phản ứng:",
       "options": [
-        "Ester hÃ³a.",
-        "XÃ  phÃ²ng hÃ³a.",
-        "TrÃ¹ng há»£p.",
-        "TrÃ¹ng ngÆ°ng."
+        "Ester hóa.",
+        "Xà phòng hóa.",
+        "Trùng hợp.",
+        "Trùng ngưng."
       ],
       "correctAnswer": 1,
-      "explanation": "Pháº£n á»©ng thá»§y phÃ¢n ester hoáº·c cháº¥t bÃ©o trong mÃ´i trÆ°á»ng kiá»m táº¡o muá»‘i (xÃ  phÃ²ng) and alcohol (glycerol) Ä‘Æ°á»£c gá»i lÃ  pháº£n á»©ng xÃ  phÃ²ng hÃ³a."
+      "explanation": "Phản ứng thủy phân ester hoặc chất béo trong môi trường kiềm tạo muối (xà phòng) and alcohol (glycerol) được gọi là phản ứng xà phòng hóa."
     },
     {
       "id": "q_test5",
-      "question": "Polymer nÃ o sau Ä‘Ã¢y Ä‘Æ°á»£c Ä‘iá»u cháº¿ báº±ng pháº£n á»©ng trÃ¹ng há»£p?",
+      "question": "Polymer nào sau đây được điều chế bằng phản ứng trùng hợp?",
       "options": [
-        "TÆ¡ nilon-6,6.",
-        "TÆ¡ nitron.",
-        "TÆ¡ lapsan.",
+        "Tơ nilon-6,6.",
+        "Tơ nitron.",
+        "Tơ lapsan.",
         "Poly(ethylene terephthalate)."
       ],
       "correctAnswer": 1,
-      "explanation": "TÆ¡ nitron (polyacrylonitrile) Ä‘Æ°á»£c Ä‘iá»u cháº¿ báº±ng cÃ¡ch trÃ¹ng há»£p acrylonitrile. CÃ¡c loáº¡i tÆ¡ nilon-6,6 and lapsan Ä‘á»u Ä‘Æ°á»£c Ä‘iá»u cháº¿ báº±ng pháº£n á»©ng trÃ¹ng ngÆ°ng."
+      "explanation": "Tơ nitron (polyacrylonitrile) được điều chế bằng cách trùng hợp acrylonitrile. Các loại tơ nilon-6,6 and lapsan đều được điều chế bằng phản ứng trùng ngưng."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Tá»•ng Ã´n kiáº¿n thá»©c trá»ng tÃ¢m thi THPT Quá»‘c Gia",
+      "title": "Tổng ôn kiến thức trọng tâm thi THPT Quốc Gia",
       "url": "https://www.youtube.com/watch?v=y9VcYDPug_g",
       "thumbnail": "https://img.youtube.com/vi/y9VcYDPug_g/0.jpg",
-      "description": "Video tá»•ng há»£p cÃ¡c dáº¡ng bÃ i táº­p and lÃ½ thuyáº¿t hay xuáº¥t hiá»‡n trong Ä‘á» thi Tá»‘t nghiá»‡p THPT (VietJack)."
+      "description": "Video tổng hợp các dạng bài tập and lý thuyết hay xuất hiện trong đề thi Tốt nghiệp THPT (VietJack)."
     }
   ],
   "practiceModules": [],

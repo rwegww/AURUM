@@ -4,76 +4,76 @@
   "lessonId": 1,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "BÃ i 1: Sá»­ dá»¥ng má»™t sá»‘ hÃ³a cháº¥t, thiáº¿t bá»‹ cÆ¡ báº£n trong phÃ²ng thÃ­ nghiá»‡m",
-  "chapter": "ChÆ°Æ¡ng má»Ÿ Ä‘áº§u",
+  "title": "Bài 1: Sử dụng một số hóa chất, thiết bị cơ bản trong phòng thí nghiệm",
+  "chapter": "Chương mở đầu",
   "order": 1,
   "isPremium": false,
-  "description": "Há»c sinh nháº­n biáº¿t hÃ³a cháº¥t, dá»¥ng cá»¥ vÃ  thiáº¿t bá»‹ Ä‘o cÆ¡ báº£n; thá»±c hÃ nh Ä‘Ãºng quy táº¯c an toÃ n theo Ä‘á»‹nh hÆ°á»›ng SGK Káº¿t ná»‘i tri thá»©c.",
+  "description": "Học sinh nhận biết hóa chất, dụng cụ và thiết bị đo cơ bản; thực hành đúng quy tắc an toàn theo định hướng SGK Kết nối tri thức.",
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i phÃ²ng thÃ­ nghiá»‡m! HÃ£y tÃ¬m 'BÃ¬nh tam giÃ¡c' (Erlenmeyer flask) Ä‘á»ƒ báº¯t Ä‘áº§u.",
+      "narrative": "Chào mừng bạn đến với phòng thí nghiệm! Hãy tìm 'Bình tam giác' (Erlenmeyer flask) để bắt đầu.",
       "images": [
         "/assets/images/lab-equipment/erlenmeyer-flask.png",
         "/assets/images/lab-equipment/beaker.png",
         "/assets/images/lab-equipment/test-tube.png",
         "/assets/images/lab-equipment/graduated-cylinder.png"
       ],
-      "question": "Dá»¥ng cá»¥ nÃ o cÃ³ hÃ¬nh dáº¡ng Ä‘áº·c trÆ°ng giÃºp háº¡n cháº¿ rÆ¡i vÃ£i hÃ³a cháº¥t khi láº¯c?",
+      "question": "Dụng cụ nào có hình dạng đặc trưng giúp hạn chế rơi vãi hóa chất khi lắc?",
       "correctAnswer": 0,
-      "targetType": "dá»¥ng cá»¥",
-      "source": "PhÃ²ng thÃ­ nghiá»‡m áº£o"
+      "targetType": "dụng cụ",
+      "source": "Phòng thí nghiệm ảo"
     },
     {
       "type": "matching",
-      "narrative": "Tuyá»‡t vá»i! BÃ¢y giá» hÃ£y giÃºp tÃ´i káº¿t ná»‘i cÃ¡c dá»¥ng cá»¥ vá»›i Ä‘Ãºng cÃ´ng dá»¥ng cá»§a chÃºng nhÃ©.",
+      "narrative": "Tuyệt vời! Bây giờ hãy giúp tôi kết nối các dụng cụ với đúng công dụng của chúng nhé.",
       "leftItems": [
-        { "id": "b1", "label": "á»ng Ä‘ong" },
-        { "id": "b2", "label": "Phá»…u lá»c" },
-        { "id": "b3", "label": "ÄÃ¨n cá»“n" }
+        { "id": "b1", "label": "Ống đong" },
+        { "id": "b2", "label": "Phễu lọc" },
+        { "id": "b3", "label": "Đèn cồn" }
       ],
       "items": [
-        { "id": "b2", "label": "TÃ¡ch cháº¥t ráº¯n khá»i cháº¥t lá»ng" },
-        { "id": "b3", "label": "Cung cáº¥p nguá»“n nhiá»‡t" },
-        { "id": "b1", "label": "Äo thá»ƒ tÃ­ch cháº¥t lá»ng" }
+        { "id": "b2", "label": "Tách chất rắn khỏi chất lỏng" },
+        { "id": "b3", "label": "Cung cấp nguồn nhiệt" },
+        { "id": "b1", "label": "Đo thể tích chất lỏng" }
       ],
       "correctOrder": ["b1", "b2", "b3"],
-      "question": "HÃ£y sáº¯p xáº¿p Cá»™t B sao cho tÆ°Æ¡ng á»©ng vá»›i cÃ´ng dá»¥ng á»Ÿ Cá»™t A.",
-      "source": "SÃ¡ch giÃ¡o khoa KNTT"
+      "question": "Hãy sắp xếp Cột B sao cho tương ứng với công dụng ở Cột A.",
+      "source": "Sách giáo khoa KNTT"
     },
     {
       "type": "multiple-choice",
-      "narrative": "An toÃ n lÃ  trÃªn háº¿t! Báº¡n sáº½ lÃ m gÃ¬ náº¿u vÃ´ tÃ¬nh Ä‘á»ƒ hÃ³a cháº¥t dÃ­nh vÃ o tay?",
+      "narrative": "An toàn là trên hết! Bạn sẽ làm gì nếu vô tình để hóa chất dính vào tay?",
       "options": [
-        "Rá»­a ngay dÆ°á»›i vÃ²i nÆ°á»›c sáº¡ch nhiá»u láº§n",
-        "DÃ¹ng khÄƒn khÃ´ lau tháº­t máº¡nh",
-        "Äá»• thÃªm má»™t loáº¡i hÃ³a cháº¥t khÃ¡c Ä‘á»ƒ trung hÃ²a",
-        "Thá»•i máº¡nh cho khÃ´"
+        "Rửa ngay dưới vòi nước sạch nhiều lần",
+        "Dùng khăn khô lau thật mạnh",
+        "Đổ thêm một loại hóa chất khác để trung hòa",
+        "Thổi mạnh cho khô"
       ],
       "correctAnswer": 0,
-      "question": "HÃ nh Ä‘á»™ng sÆ¡ cá»©u Ä‘áº§u tiÃªn vÃ  quan trá»ng nháº¥t khi bá»‹ dÃ­nh hÃ³a cháº¥t lÃ  gÃ¬?",
-      "source": "Ná»™i quy an toÃ n"
+      "question": "Hành động sơ cứu đầu tiên và quan trọng nhất khi bị dính hóa chất là gì?",
+      "source": "Nội quy an toàn"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Gáº§n xong rá»“i! HÃ£y Ä‘iá»n tÃªn dá»¥ng cá»¥ nÃ y nhÃ©.",
+      "narrative": "Gần xong rồi! Hãy điền tên dụng cụ này nhé.",
       "image": "/assets/images/lab-equipment/test-tube.png",
-      "placeholder": "Nháº­p tÃªn dá»¥ng cá»¥...",
-      "correctAnswer": "á»ng nghiá»‡m",
-      "question": "Dá»¥ng cá»¥ thá»§y tinh nhá», hÃ¬nh trá»¥, dÃ¹ng Ä‘á»ƒ thá»±c hiá»‡n cÃ¡c pháº£n á»©ng lÆ°á»£ng nhá» lÃ  gÃ¬?",
-      "source": "Danh má»¥c dá»¥ng cá»¥"
+      "placeholder": "Nhập tên dụng cụ...",
+      "correctAnswer": "Ống nghiệm",
+      "question": "Dụng cụ thủy tinh nhỏ, hình trụ, dùng để thực hiện các phản ứng lượng nhỏ là gì?",
+      "source": "Danh mục dụng cụ"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thá»­ thÃ¡ch cuá»‘i cÃ¹ng: Sáº¯p xáº¿p quy trÃ¬nh láº¥y hÃ³a cháº¥t lá»ng tá»« chai báº±ng á»‘ng hÃºt nhá» giá»t.",
+      "narrative": "Thử thách cuối cùng: Sắp xếp quy trình lấy hóa chất lỏng từ chai bằng ống hút nhỏ giọt.",
       "items": [
-        { "id": "step1", "label": "BÃ³p Ä‘áº§u cao su Ä‘á»ƒ Ä‘áº©y khÃ´ng khÃ­ ra" },
-        { "id": "step2", "label": "NhÃºng Ä‘áº§u á»‘ng vÃ o cháº¥t lá»ng" },
-        { "id": "step3", "label": "Tháº£ tay tá»« tá»« Ä‘á»ƒ cháº¥t lá»ng Ä‘i lÃªn" }
+        { "id": "step1", "label": "Bóp đầu cao su để đẩy không khí ra" },
+        { "id": "step2", "label": "Nhúng đầu ống vào chất lỏng" },
+        { "id": "step3", "label": "Thả tay từ từ để chất lỏng đi lên" }
       ],
       "correctOrder": ["step1", "step2", "step3"],
-      "question": "HÃ£y sáº¯p xáº¿p thá»© tá»± cÃ¡c bÆ°á»›c thao tÃ¡c Ä‘Ãºng.",
-      "source": "Ká»¹ nÄƒng thá»±c hÃ nh"
+      "question": "Hãy sắp xếp thứ tự các bước thao tác đúng.",
+      "source": "Kỹ năng thực hành"
     }
   ],
   "theoryModules": [
@@ -81,7 +81,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Má»™t sá»‘ dá»¥ng cá»¥ thÃ­ nghiá»‡m thÃ´ng dá»¥ng",
+        "text": "1. Một số dụng cụ thí nghiệm thông dụng",
         "level": "h2"
       }
     },
@@ -89,7 +89,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "PhÃ²ng thÃ­ nghiá»‡m hÃ³a há»c lÃ  nÆ¡i chá»©a nhiá»u loáº¡i dá»¥ng cá»¥ chuyÃªn dá»¥ng, má»—i loáº¡i cÃ³ chá»©c nÄƒng riÃªng biá»‡t giÃºp há»c sinh thá»±c hiá»‡n cÃ¡c phÃ©p Ä‘o vÃ  pháº£n á»©ng má»™t cÃ¡ch chÃ­nh xÃ¡c. Viá»‡c hiá»ƒu rÃµ cáº¥u táº¡o vÃ  cÃ¡ch sá»­ dá»¥ng cÃ¡c dá»¥ng cá»¥ nÃ y lÃ  bÆ°á»›c Ä‘áº§u tiÃªn Ä‘á»ƒ trá»Ÿ thÃ nh má»™t nhÃ  khoa há»c chuyÃªn nghiá»‡p."
+        "text": "Phòng thí nghiệm hóa học là nơi chứa nhiều loại dụng cụ chuyên dụng, mỗi loại có chức năng riêng biệt giúp học sinh thực hiện các phép đo và phản ứng một cách chính xác. Việc hiểu rõ cấu tạo và cách sử dụng các dụng cụ này là bước đầu tiên để trở thành một nhà khoa học chuyên nghiệp."
       }
     },
     {
@@ -98,12 +98,12 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**á»ng nghiá»‡m (Test tube)**: DÃ¹ng Ä‘á»ƒ chá»©a hÃ³a cháº¥t lá»ng hoáº·c ráº¯n vá»›i lÆ°á»£ng nhá». Khi Ä‘un nÃ³ng, cáº§n káº¹p á»Ÿ 1/3 thÃ¢n á»‘ng tá»« miá»‡ng xuá»‘ng, nghiÃªng 45Â° vÃ  khÃ´ng hÆ°á»›ng miá»‡ng á»‘ng vá» phÃ­a ngÆ°á»i khÃ¡c.",
-          "**á»ng Ä‘ong (Graduated Cylinder)**: DÃ¹ng Ä‘á»ƒ Ä‘o thá»ƒ tÃ­ch cháº¥t lá»ng. Cáº§n chá»n á»‘ng Ä‘ong cÃ³ dung tÃ­ch gáº§n vá»›i thá»ƒ tÃ­ch cáº§n Ä‘o Ä‘á»ƒ giáº£m sai sá»‘. Äá»c káº¿t quáº£ á»Ÿ má»©c ngang táº§m máº¯t táº¡i Ä‘iá»ƒm tháº¥p nháº¥t cá»§a bá» máº·t khum.",
-          "**BÃ¬nh tam giÃ¡c (Erlenmeyer flask)**: ÄÃ¡y rá»™ng, cá»• háº¹p, lÃ½ tÆ°á»Ÿng cho cÃ¡c thÃ­ nghiá»‡m cáº§n láº¯c hoáº·c khuáº¥y trá»™n máº¡nh mÃ  khÃ´ng lÃ m báº¯n hÃ³a cháº¥t.",
-          "**Cá»‘c thá»§y tinh (Beaker)**: DÃ¹ng Ä‘á»ƒ Ä‘á»±ng, pha trá»™n hoáº·c Ä‘un nÃ³ng. Váº¡ch chia Ä‘á»™ trÃªn cá»‘c chá»‰ mang tÃ­nh cháº¥t tham kháº£o, khÃ´ng dÃ¹ng Ä‘á»ƒ Ä‘o thá»ƒ tÃ­ch chÃ­nh xÃ¡c. Náº¿u cáº§n Ä‘o chÃ­nh xÃ¡c, hÃ£y dÃ¹ng á»‘ng Ä‘ong hoáº·c pipet thay vÃ¬ cá»‘c thá»§y tinh.",
-          "**Phá»…u (Funnel)**: DÃ¹ng Ä‘á»ƒ rÃ³t cháº¥t lá»ng vÃ o bÃ¬nh cÃ³ cá»• háº¹p hoáº·c káº¿t há»£p vá»›i giáº¥y lá»c Ä‘á»ƒ tÃ¡ch cháº¥t ráº¯n khá»i cháº¥t lá»ng.",
-          "**ÄÅ©a thá»§y tinh**: DÃ¹ng Ä‘á»ƒ khuáº¥y hoáº·c dáº«n dÃ²ng cháº¥t lá»ng khi rÃ³t."
+          "**Ống nghiệm (Test tube)**: Dùng để chứa hóa chất lỏng hoặc rắn với lượng nhỏ. Khi đun nóng, cần kẹp ở 1/3 thân ống từ miệng xuống, nghiêng 45° và không hướng miệng ống về phía người khác.",
+          "**Ống đong (Graduated Cylinder)**: Dùng để đo thể tích chất lỏng. Cần chọn ống đong có dung tích gần với thể tích cần đo để giảm sai số. Đọc kết quả ở mức ngang tầm mắt tại điểm thấp nhất của bề mặt khum.",
+          "**Bình tam giác (Erlenmeyer flask)**: Đáy rộng, cổ hẹp, lý tưởng cho các thí nghiệm cần lắc hoặc khuấy trộn mạnh mà không làm bắn hóa chất.",
+          "**Cốc thủy tinh (Beaker)**: Dùng để đựng, pha trộn hoặc đun nóng. Vạch chia độ trên cốc chỉ mang tính chất tham khảo, không dùng để đo thể tích chính xác. Nếu cần đo chính xác, hãy dùng ống đong hoặc pipet thay vì cốc thủy tinh.",
+          "**Phễu (Funnel)**: Dùng để rót chất lỏng vào bình có cổ hẹp hoặc kết hợp với giấy lọc để tách chất rắn khỏi chất lỏng.",
+          "**Đũa thủy tinh**: Dùng để khuấy hoặc dẫn dòng chất lỏng khi rót."
         ]
       }
     },
@@ -111,7 +111,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Quy táº¯c an toÃ n trong phÃ²ng thÃ­ nghiá»‡m",
+        "text": "2. Quy tắc an toàn trong phòng thí nghiệm",
         "level": "h2"
       }
     },
@@ -119,8 +119,8 @@
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Cáº¥m thá»­, náº¿m vÃ  ngá»­i trá»±c tiáº¿p hÃ³a cháº¥t",
-        "content": "- **Tuyá»‡t Ä‘á»‘i khÃ´ng náº¿m**: Nhiá»u hÃ³a cháº¥t cÃ³ Ä‘á»™c tÃ­nh cá»±c máº¡nh hoáº·c tÃ­nh Äƒn mÃ²n cao, cÃ³ thá»ƒ gÃ¢y nguy hiá»ƒm tÃ­nh máº¡ng ngay láº­p tá»©c.\n- **CÃ¡ch nháº­n biáº¿t mÃ¹i an toÃ n**: Äáº·t lá» hÃ³a cháº¥t cÃ¡ch mÅ©i khoáº£ng 20-30cm, dÃ¹ng bÃ n tay pháº©y nháº¹ khÃ´ng khÃ­ tá»« miá»‡ng lá» hÆ°á»›ng vá» phÃ­a mÅ©i.\n- **Sá»­ dá»¥ng Ä‘á»“ báº£o há»™**: LuÃ´n Ä‘eo kÃ­nh báº£o há»™, Ã¡o blouse vÃ  gÄƒng tay khi tiáº¿p xÃºc vá»›i hÃ³a cháº¥t Ä‘á»™c háº¡i.",
+        "title": "Cấm thử, nếm và ngửi trực tiếp hóa chất",
+        "content": "- **Tuyệt đối không nếm**: Nhiều hóa chất có độc tính cực mạnh hoặc tính ăn mòn cao, có thể gây nguy hiểm tính mạng ngay lập tức.\n- **Cách nhận biết mùi an toàn**: Đặt lọ hóa chất cách mũi khoảng 20-30cm, dùng bàn tay phẩy nhẹ không khí từ miệng lọ hướng về phía mũi.\n- **Sử dụng đồ bảo hộ**: Luôn đeo kính bảo hộ, áo blouse và găng tay khi tiếp xúc với hóa chất độc hại.",
         "color": "blue"
       }
     },
@@ -128,8 +128,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Quy táº¯c pha loÃ£ng Acid Sunfuric ($H_2SO_4$) Ä‘áº·c",
-        "content": "ÄÃ¢y lÃ  thao tÃ¡c cá»±c ká»³ nguy hiá»ƒm náº¿u lÃ m sai. Äá»ƒ Ä‘áº£m báº£o an toÃ n, báº¡n pháº£i tuÃ¢n thá»§ tuyá»‡t Ä‘á»‘i quy táº¯c: **RÃ“T Tá»ª Tá»ª ACID VÃ€O NÆ¯á»šC** vÃ  khuáº¥y nháº¹. **TUYá»†T Äá»I KHÃ”NG** lÃ m ngÆ°á»£c láº¡i (rÃ³t nÆ°á»›c vÃ o acid Ä‘áº·c) vÃ¬ nÆ°á»›c sáº½ sÃ´i Ä‘á»™t ngá»™t vÃ  lÃ m báº¯n acid ra ngoÃ i, gÃ¢y bá»ng nghiÃªm trá»ng.",
+        "title": "Quy tắc pha loãng Acid Sunfuric ($H_2SO_4$) đặc",
+        "content": "Đây là thao tác cực kỳ nguy hiểm nếu làm sai. Để đảm bảo an toàn, bạn phải tuân thủ tuyệt đối quy tắc: **RÓT TỪ TỪ ACID VÀO NƯỚC** và khuấy nhẹ. **TUYỆT ĐỐI KHÔNG** làm ngược lại (rót nước vào acid đặc) vì nước sẽ sôi đột ngột và làm bắn acid ra ngoài, gây bỏng nghiêm trọng.",
         "color": "orange"
       }
     },
@@ -137,7 +137,7 @@
       "id": "mod7",
       "type": "heading",
       "content": {
-        "text": "3. CÃ¡ch sá»­ dá»¥ng thiáº¿t bá»‹ Ä‘o cÆ¡ báº£n",
+        "text": "3. Cách sử dụng thiết bị đo cơ bản",
         "level": "h2"
       }
     },
@@ -145,7 +145,7 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Sá»­ dá»¥ng Ä‘Ãºng thiáº¿t bá»‹ Ä‘o giÃºp Ä‘áº£m báº£o tÃ­nh chÃ­nh xÃ¡c cá»§a thá»±c nghiá»‡m:"
+        "text": "Sử dụng đúng thiết bị đo giúp đảm bảo tính chính xác của thực nghiệm:"
       }
     },
     {
@@ -154,9 +154,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**CÃ¢n Ä‘iá»‡n tá»­**: Äáº·t cÃ¢n trÃªn bá» máº·t pháº³ng, Ä‘Æ°a cÃ¢n vá» má»©c 0 (áº¥n nÃºt Tare/Zero) trÆ°á»›c khi Ä‘áº·t váº­t cáº§n cÃ¢n. NÃªn dÃ¹ng giáº¥y cÃ¢n hoáº·c cá»‘c thá»§y tinh Ä‘á»ƒ Ä‘á»±ng hÃ³a cháº¥t khi cÃ¢n.",
-          "**Nhiá»‡t káº¿**: DÃ¹ng Ä‘á»ƒ Ä‘o nhiá»‡t Ä‘á»™ mÃ´i trÆ°á»ng pháº£n á»©ng. Khi Ä‘o nhiá»‡t Ä‘á»™ cháº¥t lá»ng, khÃ´ng Ä‘á»ƒ báº§u nhiá»‡t káº¿ cháº¡m vÃ o Ä‘Ã¡y hoáº·c thÃ nh cá»‘c Ä‘ang Ä‘un nÃ³ng.",
-          "**Giáº¥y chá»‰ thá»‹ pH**: DÃ¹ng Ä‘á»ƒ xÃ¡c Ä‘á»‹nh nhanh tÃ­nh acid hoáº·c base cá»§a dung dá»‹ch qua sá»± thay Ä‘á»•i mÃ u sáº¯c khi so sÃ¡nh vá»›i báº£ng mÃ u chuáº©n."
+          "**Cân điện tử**: Đặt cân trên bề mặt phẳng, đưa cân về mức 0 (ấn nút Tare/Zero) trước khi đặt vật cần cân. Nên dùng giấy cân hoặc cốc thủy tinh để đựng hóa chất khi cân.",
+          "**Nhiệt kế**: Dùng để đo nhiệt độ môi trường phản ứng. Khi đo nhiệt độ chất lỏng, không để bầu nhiệt kế chạm vào đáy hoặc thành cốc đang đun nóng.",
+          "**Giấy chỉ thị pH**: Dùng để xác định nhanh tính acid hoặc base của dung dịch qua sự thay đổi màu sắc khi so sánh với bảng màu chuẩn."
         ]
       }
     }
@@ -165,10 +165,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "BÃ i giáº£ng: Sá»­ dá»¥ng má»™t sá»‘ hÃ³a cháº¥t, thiáº¿t bá»‹ cÆ¡ báº£n trong phÃ²ng thÃ­ nghiá»‡m",
+      "title": "Bài giảng: Sử dụng một số hóa chất, thiết bị cơ bản trong phòng thí nghiệm",
       "url": "https://www.youtube.com/watch?v=YUc8QjD2wdk",
       "thumbnail": "https://img.youtube.com/vi/YUc8QjD2wdk/0.jpg",
-      "description": "HÆ°á»›ng dáº«n an toÃ n vÃ  cÃ¡ch sá»­ dá»¥ng cÃ¡c dá»¥ng cá»¥ thÃ­ nghiá»‡m hÃ³a há»c cÆ¡ báº£n (VietJack)."
+      "description": "Hướng dẫn an toàn và cách sử dụng các dụng cụ thí nghiệm hóa học cơ bản (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -178,80 +178,80 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Khi hÃ²a tan axit sunfuric Ä‘áº·c ($H_2SO_4$) vÃ o nÆ°á»›c, thao tÃ¡c nÃ o sau Ä‘Ã¢y lÃ  an toÃ n?",
+        "question": "Khi hòa tan axit sunfuric đặc ($H_2SO_4$) vào nước, thao tác nào sau đây là an toàn?",
         "options": [
-          "Äá»• nhanh nÆ°á»›c vÃ o axit Ä‘áº·c",
-          "RÃ³t tá»« tá»« axit vÃ o nÆ°á»›c vÃ  khuáº¥y nháº¹",
-          "Äá»• cáº£ hai cÃ¹ng lÃºc vÃ o nhau",
-          "Äun nÃ³ng axit rá»“i má»›i Ä‘á»• nÆ°á»›c vÃ o"
+          "Đổ nhanh nước vào axit đặc",
+          "Rót từ từ axit vào nước và khuấy nhẹ",
+          "Đổ cả hai cùng lúc vào nhau",
+          "Đun nóng axit rồi mới đổ nước vào"
         ],
         "correctAnswer": 1,
-        "explanation": "RÃ³t axit vÃ o nÆ°á»›c giÃºp nhiá»‡t tá»a ra Ä‘Æ°á»£c nÆ°á»›c háº¥p thá»¥, trÃ¡nh gÃ¢y báº¯n axit gÃ¢y bá»ng.",
+        "explanation": "Rót axit vào nước giúp nhiệt tỏa ra được nước hấp thụ, tránh gây bắn axit gây bỏng.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Äá»ƒ Ä‘o thá»ƒ tÃ­ch cháº¥t lá»ng má»™t cÃ¡ch chÃ­nh xÃ¡c nháº¥t, ta nÃªn dÃ¹ng dá»¥ng cá»¥ nÃ o?",
+        "question": "Để đo thể tích chất lỏng một cách chính xác nhất, ta nên dùng dụng cụ nào?",
         "options": [
-          "Má» cá»‘c (Beaker)",
-          "BÃ¬nh tam giÃ¡c (Erlenmeyer)",
-          "á»ng Ä‘ong cÃ³ chia váº¡ch (Cylinder)",
-          "á»ng nghiá»‡m (Test tube)"
+          "Mỏ cốc (Beaker)",
+          "Bình tam giác (Erlenmeyer)",
+          "Ống đong có chia vạch (Cylinder)",
+          "Ống nghiệm (Test tube)"
         ],
         "correctAnswer": 2,
-        "explanation": "á»ng Ä‘ong cÃ³ chia váº¡ch giÃºp quan sÃ¡t thá»ƒ tÃ­ch chÃ­nh xÃ¡c hÆ¡n.",
+        "explanation": "Ống đong có chia vạch giúp quan sát thể tích chính xác hơn.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "CÃ¡ch ngá»­i hÃ³a cháº¥t an toÃ n lÃ :",
+        "question": "Cách ngửi hóa chất an toàn là:",
         "options": [
-          "KÃª mÅ©i sÃ¡t vÃ o miá»‡ng lá» vÃ  hÃ­t tháº­t sÃ¢u",
-          "DÃ¹ng tay pháº©y nháº¹ hÆ¡i hÃ³a cháº¥t tá»« miá»‡ng lá» vÃ o mÅ©i",
-          "Äun nÃ³ng hÃ³a cháº¥t Ä‘á»ƒ mÃ¹i bay lÃªn máº¡nh hÆ¡n",
-          "Nhá» báº¡n khÃ¡c ngá»­i trÆ°á»›c"
+          "Kê mũi sát vào miệng lọ và hít thật sâu",
+          "Dùng tay phẩy nhẹ hơi hóa chất từ miệng lọ vào mũi",
+          "Đun nóng hóa chất để mùi bay lên mạnh hơn",
+          "Nhờ bạn khác ngửi trước"
         ],
         "correctAnswer": 1,
-        "explanation": "Pháº©y tay giÃºp loÃ£ng ná»“ng Ä‘á»™ khÃ­ hÃ³a cháº¥t, trÃ¡nh gÃ¢y sá»‘c hoáº·c ngá»™ Ä‘á»™c trá»±c tiáº¿p.",
+        "explanation": "Phẩy tay giúp loãng nồng độ khí hóa chất, tránh gây sốc hoặc ngộ độc trực tiếp.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Náº¿u cháº³ng may bá»‹ axit dÃ­nh vÃ o tay, viá»‡c Ä‘áº§u tiÃªn cáº§n lÃ m lÃ :",
+        "question": "Nếu chẳng may bị axit dính vào tay, việc đầu tiên cần làm là:",
         "options": [
-          "BÃ´i kem Ä‘Ã¡nh rÄƒng",
-          "Rá»­a ngay dÆ°á»›i vÃ²i nÆ°á»›c sáº¡ch nhiá»u láº§n",
-          "DÃ¹ng khÄƒn khÃ´ lau tháº­t máº¡nh",
-          "Äá»• dung dá»‹ch xÃºt (NaOH) Ä‘áº­m Ä‘áº·c lÃªn Ä‘á»ƒ trung hÃ²a"
+          "Bôi kem đánh răng",
+          "Rửa ngay dưới vòi nước sạch nhiều lần",
+          "Dùng khăn khô lau thật mạnh",
+          "Đổ dung dịch xút (NaOH) đậm đặc lên để trung hòa"
         ],
         "correctAnswer": 1,
-        "explanation": "Rá»­a nÆ°á»›c sáº¡ch lÃ  cÃ¡ch nhanh nháº¥t Ä‘á»ƒ lÃ m loÃ£ng vÃ  loáº¡i bá» axit khá»i da.",
+        "explanation": "Rửa nước sạch là cách nhanh nhất để làm loãng và loại bỏ axit khỏi da.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "KÃ½ hiá»‡u 'Cháº¥t dá»… chÃ¡y' trÃªn nhÃ£n hÃ³a cháº¥t thÆ°á»ng cÃ³ hÃ¬nh gÃ¬?",
+        "question": "Ký hiệu 'Chất dễ cháy' trên nhãn hóa chất thường có hình gì?",
         "options": [
-          "HÃ¬nh ngá»n lá»­a",
-          "HÃ¬nh Ä‘áº§u lÃ¢u xÆ°Æ¡ng chÃ©o",
-          "HÃ¬nh dáº¥u x",
-          "HÃ¬nh chiáº¿c quáº¡t"
+          "Hình ngọn lửa",
+          "Hình đầu lâu xương chéo",
+          "Hình dấu x",
+          "Hình chiếc quạt"
         ],
         "correctAnswer": 0,
-        "explanation": "HÃ¬nh ngá»n lá»­a cáº£nh bÃ¡o hÃ³a cháº¥t dá»… báº¯t chÃ¡y, cáº§n trÃ¡nh xa nguá»“n nhiá»‡t.",
+        "explanation": "Hình ngọn lửa cảnh báo hóa chất dễ bắt cháy, cần tránh xa nguồn nhiệt.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Dá»¥ng cá»¥ dÃ¹ng Ä‘á»ƒ láº¥y hÃ³a cháº¥t dáº¡ng bá»™t (ráº¯n) lÃ :",
+        "question": "Dụng cụ dùng để lấy hóa chất dạng bột (rắn) là:",
         "options": [
-          "á»ng hÃºt nhá» giá»t",
-          "ThÃ¬a (muá»—ng) thá»§y tinh hoáº·c kim loáº¡i",
-          "Káº¹p gá»—",
-          "ÄÅ©a thá»§y tinh"
+          "Ống hút nhỏ giọt",
+          "Thìa (muỗng) thủy tinh hoặc kim loại",
+          "Kẹp gỗ",
+          "Đũa thủy tinh"
         ],
         "correctAnswer": 1,
-        "explanation": "ThÃ¬a giÃºp láº¥y lÆ°á»£ng nhá» hÃ³a cháº¥t ráº¯n mÃ  khÃ´ng lÃ m báº©n tay.",
+        "explanation": "Thìa giúp lấy lượng nhỏ hóa chất rắn mà không làm bẩn tay.",
         "points": 10
       }
     ],

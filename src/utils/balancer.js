@@ -1,16 +1,16 @@
 ﻿/**
- * Thuáº­t toÃ¡n cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh hÃ³a há»c
- * PhÃ¢n tÃ­ch cÃ´ng thá»©c â†’ XÃ¢y dá»±ng ma tráº­n nguyÃªn tá»‘ â†’ Giáº£i há»‡ phÆ°Æ¡ng trÃ¬nh
+ * Thuật toán cân bằng phương trình hóa học
+ * Phân tích công thức → Xây dựng ma trận nguyên tố → Giải hệ phương trình
  */
 
-// Parse chemical formula like "Fe2O3" â†’ { Fe: 2, O: 3 }
+// Parse chemical formula like "Fe2O3" → { Fe: 2, O: 3 }
 export function parseFormula(formula) {
   // Helper to handle cleaning and normalization
   const clean = (f) => f
-    .replace(/â‚€/g, '0').replace(/â‚/g, '1').replace(/â‚‚/g, '2')
-    .replace(/â‚ƒ/g, '3').replace(/â‚„/g, '4').replace(/â‚…/g, '5')
-    .replace(/â‚†/g, '6').replace(/â‚‡/g, '7').replace(/â‚ˆ/g, '8').replace(/â‚‰/g, '9')
-    .replace(/[â†‘â†“]/g, '')
+    .replace(/₀/g, '0').replace(/₁/g, '1').replace(/₂/g, '2')
+    .replace(/₃/g, '3').replace(/₄/g, '4').replace(/₅/g, '5')
+    .replace(/₆/g, '6').replace(/₇/g, '7').replace(/₈/g, '8').replace(/₉/g, '9')
+    .replace(/[↑↓]/g, '')
     .trim();
 
   function parse(f) {
@@ -56,7 +56,7 @@ export function parseFormula(formula) {
 
 // Balance a simple equation using brute force
 // Input: reactants = ["H2", "O2"], products = ["H2O"]
-// Output: { balanced: true, coefficients: [2, 1, 2], equation: "2Hâ‚‚ + Oâ‚‚ â†’ 2Hâ‚‚O" }
+// Output: { balanced: true, coefficients: [2, 1, 2], equation: "2H₂ + O₂ → 2H₂O" }
 export function balanceEquation(reactantFormulas, productFormulas, customMax = 10) {
   const allFormulas = [...reactantFormulas, ...productFormulas];
   const n = allFormulas.length;
@@ -123,7 +123,7 @@ export function balanceEquation(reactantFormulas, productFormulas, customMax = 1
     return {
       balanced: true,
       coefficients: simplified,
-      equation: `${reactantStr} â†’ ${productStr}`
+      equation: `${reactantStr} → ${productStr}`
     };
   }
   
@@ -135,50 +135,50 @@ export const balancingExercises = [
   {
     id: "ex_01",
     difficulty: "easy",
-    reactants: ["Hâ‚‚", "Oâ‚‚"],
-    products: ["Hâ‚‚O"],
+    reactants: ["H₂", "O₂"],
+    products: ["H₂O"],
     answer: [2, 1, 2],
-    hint: "Äáº¿m sá»‘ nguyÃªn tá»­ H vÃ  O á»Ÿ hai váº¿"
+    hint: "Đếm số nguyên tử H và O ở hai vế"
   },
   {
     id: "ex_02",
     difficulty: "easy",
-    reactants: ["Fe", "Oâ‚‚"],
-    products: ["Feâ‚‚Oâ‚ƒ"],
+    reactants: ["Fe", "O₂"],
+    products: ["Fe₂O₃"],
     answer: [4, 3, 2],
-    hint: "CÃ¢n báº±ng Fe trÆ°á»›c, sau Ä‘Ã³ O"
+    hint: "Cân bằng Fe trước, sau đó O"
   },
   {
     id: "ex_03",
     difficulty: "medium",
     reactants: ["Al", "HCl"],
-    products: ["AlClâ‚ƒ", "Hâ‚‚"],
+    products: ["AlCl₃", "H₂"],
     answer: [2, 6, 2, 3],
-    hint: "CÃ¢n báº±ng Cl trÆ°á»›c, rá»“i Al, cuá»‘i cÃ¹ng H"
+    hint: "Cân bằng Cl trước, rồi Al, cuối cùng H"
   },
   {
     id: "ex_04",
     difficulty: "medium",
-    reactants: ["CHâ‚„", "Oâ‚‚"],
-    products: ["COâ‚‚", "Hâ‚‚O"],
+    reactants: ["CH₄", "O₂"],
+    products: ["CO₂", "H₂O"],
     answer: [1, 2, 1, 2],
-    hint: "CÃ¢n báº±ng C, rá»“i H, cuá»‘i cÃ¹ng lÃ  O"
+    hint: "Cân bằng C, rồi H, cuối cùng là O"
   },
   {
     id: "ex_05",
     difficulty: "hard",
-    reactants: ["Câ‚‚Hâ‚…OH", "Oâ‚‚"],
-    products: ["COâ‚‚", "Hâ‚‚O"],
+    reactants: ["C₂H₅OH", "O₂"],
+    products: ["CO₂", "H₂O"],
     answer: [1, 3, 2, 3],
-    hint: "ÄÃ¢y lÃ  pháº£n á»©ng chÃ¡y rÆ°á»£u. CÃ¢n báº±ng C â†’ H â†’ O"
+    hint: "Đây là phản ứng cháy rượu. Cân bằng C → H → O"
   },
   {
     id: "ex_06",
     difficulty: "easy",
-    reactants: ["Na", "Hâ‚‚O"],
-    products: ["NaOH", "Hâ‚‚"],
+    reactants: ["Na", "H₂O"],
+    products: ["NaOH", "H₂"],
     answer: [2, 2, 2, 1],
-    hint: "CÃ¢n báº±ng Na trÆ°á»›c, rá»“i H"
+    hint: "Cân bằng Na trước, rồi H"
   },
 ];
 
