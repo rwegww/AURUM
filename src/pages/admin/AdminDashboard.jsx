@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -12,7 +12,7 @@ const CustomTooltip = ({ active, payload, label }) => {
         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{label}</p>
         <p className="text-base font-black text-white flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: payload[0].fill || payload[0].payload.color || '#10b981' }} />
-          {payload[0].value} <span className="text-xs font-bold text-slate-400">học sinh</span>
+          {payload[0].value} <span className="text-xs font-bold text-slate-400">há»c sinh</span>
         </p>
       </div>
     );
@@ -28,7 +28,7 @@ const PieTooltip = ({ active, payload }) => {
         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{data.name}</p>
         <p className="text-base font-black text-white flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: data.color || '#3b82f6' }} />
-          {data.value} <span className="text-xs font-bold text-slate-400">phản hồi</span>
+          {data.value} <span className="text-xs font-bold text-slate-400">pháº£n há»“i</span>
         </p>
       </div>
     );
@@ -38,7 +38,7 @@ const PieTooltip = ({ active, payload }) => {
 
 const AdminDashboard = () => {
   const { user } = useAuth();
-  const [stats, setStats] = useState({ lessons: 0, users: 0, uploads: 0 });
+  const [stats, setStats] = useState({ bai_hoc: 0, nguoi_dung: 0, uploads: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
         setStats(data);
         setLoading(false);
       } catch (err) {
-        console.error('Lỗi tải thống kê:', err);
+        console.error('Lá»—i táº£i thá»‘ng kÃª:', err);
         setLoading(false);
       }
     };
@@ -66,9 +66,9 @@ const AdminDashboard = () => {
   }
 
   const statCards = [
-    { title: "Bài Học", value: stats.totalLessons, icon: "📚", color: "bg-blue-50 text-blue-600", link: "/admin/lessons" },
-    { title: "Học Sinh", value: stats.totalUsers, icon: "👤", color: "bg-green-50 text-green-600", link: "/admin/users" },
-    { title: "Phản Hồi", value: stats.unreadFeedback, icon: "💬", color: "bg-orange-50 text-orange-600", link: "/admin/feedback" },
+    { title: "BÃ i Há»c", value: stats.totalLessons, icon: "ðŸ“š", color: "bg-blue-50 text-blue-600", link: "/admin/bai_hoc" },
+    { title: "Há»c Sinh", value: stats.totalUsers, icon: "ðŸ‘¤", color: "bg-green-50 text-green-600", link: "/admin/nguoi_dung" },
+    { title: "Pháº£n Há»“i", value: stats.unreadFeedback, icon: "ðŸ’¬", color: "bg-orange-50 text-orange-600", link: "/admin/feedback" },
 
   ];
 
@@ -83,13 +83,13 @@ const AdminDashboard = () => {
         <header className="mb-12">
           <div className="flex items-center gap-3 mb-2">
             <span className="px-3 py-1 bg-red-100 text-red-600 text-[10px] font-bold rounded-full uppercase tracking-wider">
-              Bảng Điều Khiển
+              Báº£ng Äiá»u Khiá»ƒn
             </span>
           </div>
           <h1 className="text-4xl font-bold text-viet-text tracking-tight">
-            Xin chào, <span className="text-viet-green">{user?.username}</span> 👋
+            Xin chÃ o, <span className="text-viet-green">{user?.username}</span> ðŸ‘‹
           </h1>
-          <p className="text-viet-text-light mt-2 font-medium">Hệ thống quản trị Aurum.</p>
+          <p className="text-viet-text-light mt-2 font-medium">Há»‡ thá»‘ng quáº£n trá»‹ Aurum.</p>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -110,7 +110,7 @@ const AdminDashboard = () => {
                 to={card.link}
                 className="mt-4 flex items-center gap-2 text-xs font-bold text-viet-green hover:underline"
               >
-                Chi tiết ➔
+                Chi tiáº¿t âž”
               </Link>
             </motion.div>
           ))}
@@ -119,22 +119,22 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
             <section className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
-              <h2 className="text-xl font-bold text-viet-text mb-6">Thao tác nhanh</h2>
+              <h2 className="text-xl font-bold text-viet-text mb-6">Thao tÃ¡c nhanh</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <button onClick={() => alert('Chức năng Thêm bài học mới đang được hoàn thiện!')} className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">➕</div>
-                  <span className="text-sm font-bold text-viet-text">Thêm bài học</span>
+                <button onClick={() => alert('Chá»©c nÄƒng ThÃªm bÃ i há»c má»›i Ä‘ang Ä‘Æ°á»£c hoÃ n thiá»‡n!')} className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all">
+                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">âž•</div>
+                  <span className="text-sm font-bold text-viet-text">ThÃªm bÃ i há»c</span>
                 </button>
                 <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">
                   <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl"><Mail className="w-6 h-6 text-slate-500" /></div>
-                  <span className="text-sm font-bold text-viet-text">Gửi thông báo</span>
+                  <span className="text-sm font-bold text-viet-text">Gá»­i thÃ´ng bÃ¡o</span>
                 </div>
               </div>
             </section>
 
             <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
-                <h3 className="text-lg font-bold text-viet-text mb-6">Phân bổ khối lớp</h3>
+                <h3 className="text-lg font-bold text-viet-text mb-6">PhÃ¢n bá»• khá»‘i lá»›p</h3>
                 {stats.gradeDistribution && stats.gradeDistribution.length > 0 ? (
                   <div className="h-48 mt-4">
                     <ResponsiveContainer width="100%" height="100%">
@@ -154,19 +154,19 @@ const AdminDashboard = () => {
                 ) : (
                   <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
                     <Layers className="w-8 h-8 mb-2 opacity-20" />
-                    <p className="text-sm font-medium">Chưa có dữ liệu khối lớp</p>
+                    <p className="text-sm font-medium">ChÆ°a cÃ³ dá»¯ liá»‡u khá»‘i lá»›p</p>
                   </div>
                 )}
               </motion.div>
 
               <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
-                <h2 className="text-lg font-bold text-viet-text mb-6">Tỷ lệ phản hồi</h2>
+                <h2 className="text-lg font-bold text-viet-text mb-6">Tá»· lá»‡ pháº£n há»“i</h2>
                 <div className="h-48">
-                  {stats.feedbackDistribution && stats.feedbackDistribution.some(d => d.value > 0) ? (
+                  {stats.phan_hoiDistribution && stats.phan_hoiDistribution.some(d => d.value > 0) ? (
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
-                          data={stats.feedbackDistribution}
+                          data={stats.phan_hoiDistribution}
                           cx="50%"
                           cy="50%"
                           innerRadius={40}
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
                           paddingAngle={5}
                           dataKey="value"
                         >
-                          {stats.feedbackDistribution.map((entry, index) => (
+                          {stats.phan_hoiDistribution.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
                   ) : (
                     <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
                       <Users className="w-8 h-8 mb-2 opacity-20" />
-                      <p className="text-sm font-medium">Chưa có phản hồi nào</p>
+                      <p className="text-sm font-medium">ChÆ°a cÃ³ pháº£n há»“i nÃ o</p>
                     </div>
                   )}
                 </div>
@@ -196,7 +196,7 @@ const AdminDashboard = () => {
               <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
                 <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-amber-500" />
-                  Học sinh Xuất sắc (Top XP)
+                  Há»c sinh Xuáº¥t sáº¯c (Top XP)
                 </h3>
                 <div className="space-y-3">
                   {stats.topXP && stats.topXP.length > 0 ? stats.topXP.map((student, idx) => (
@@ -207,7 +207,7 @@ const AdminDashboard = () => {
                         </div>
                         <div>
                           <p className="text-sm font-bold text-slate-800">{student.name}</p>
-                          <p className="text-xs text-slate-500 font-medium">Cấp độ {student.level}</p>
+                          <p className="text-xs text-slate-500 font-medium">Cáº¥p Ä‘á»™ {student.level}</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -215,14 +215,14 @@ const AdminDashboard = () => {
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">XP</p>
                       </div>
                     </div>
-                  )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
+                  )) : <p className="text-sm text-slate-400 text-center py-4">ChÆ°a cÃ³ dá»¯ liá»‡u</p>}
                 </div>
               </motion.div>
 
               <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
                 <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-orange-500" />
-                  Học sinh Tích cực (Top Streak)
+                  Há»c sinh TÃ­ch cá»±c (Top Streak)
                 </h3>
                 <div className="space-y-3">
                   {stats.topStreak && stats.topStreak.length > 0 ? stats.topStreak.map((student, idx) => (
@@ -240,26 +240,26 @@ const AdminDashboard = () => {
                         <Zap className="w-3 h-3 text-orange-500" />
                       </div>
                     </div>
-                  )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
+                  )) : <p className="text-sm text-slate-400 text-center py-4">ChÆ°a cÃ³ dá»¯ liá»‡u</p>}
                 </div>
               </motion.div>
             </div>
           </div>
 
           <aside className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
-             <h2 className="text-xl font-bold text-viet-text mb-6">Trạng thái hệ thống</h2>
+             <h2 className="text-xl font-bold text-viet-text mb-6">Tráº¡ng thÃ¡i há»‡ thá»‘ng</h2>
              <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">Trạng thái API</span>
-                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ĐANG HOẠT ĐỘNG</span>
+                   <span className="text-sm font-bold text-viet-text-light">Tráº¡ng thÃ¡i API</span>
+                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ÄANG HOáº T Äá»˜NG</span>
                 </div>
                 <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">Độ trễ DB</span>
+                   <span className="text-sm font-bold text-viet-text-light">Äá»™ trá»… DB</span>
                    <span className="text-sm font-black text-viet-text">~42ms</span>
                 </div>
                 <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">Dịch vụ Media</span>
-                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ĐÃ KẾT NỐI</span>
+                   <span className="text-sm font-bold text-viet-text-light">Dá»‹ch vá»¥ Media</span>
+                   <span className="px-2 py-1 bg-green-100 text-green-600 text-[10px] font-bold rounded-md">ÄÃƒ Káº¾T Ná»I</span>
                 </div>
              </div>
           </aside>
@@ -270,3 +270,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

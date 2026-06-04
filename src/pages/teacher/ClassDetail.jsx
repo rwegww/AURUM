@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -10,7 +10,7 @@ const ClassDetail = () => {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  const [newPost, setNewPost] = useState({ content: '', type: 'announcement', media_url: '', deadline: '', target_student_id: '' });
+  const [newPost, setNewPost] = useState({ content: '', type: 'announcement', media_url: '', deadline: '', hoc_sinh_nhan_id: '' });
   const [newSchedule, setNewSchedule] = useState({ title: '', start_time: '', meet_url: '' });
 
   const fetchClassData = useCallback(async () => {
@@ -18,11 +18,11 @@ const ClassDetail = () => {
       const token = localStorage.getItem('token');
       
       // Get class info. Since we don't have a GET /api/classes/:id endpoint, 
-      // we can just fetch all classes and filter, or I should just rely on posts for now.
+      // we can just fetch all lop and filter, or I should just rely on posts for now.
       const classRes = await fetch('/api/classes', { headers: { 'Authorization': `Bearer ${token}` }});
       if (classRes.ok) {
-        const classes = await classRes.json();
-        const currentClass = classes.find(c => c.id === id);
+        const lop = await classRes.json();
+        const currentClass = lop.find(c => c.id === id);
         setCls(currentClass);
       }
 
@@ -59,10 +59,10 @@ const ClassDetail = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ ...newPost, target_student_id: newPost.target_student_id || null })
+        body: JSON.stringify({ ...newPost, hoc_sinh_nhan_id: newPost.hoc_sinh_nhan_id || null })
       });
       if (res.ok) {
-        setNewPost({ content: '', type: 'announcement', media_url: '', deadline: '', target_student_id: '' });
+        setNewPost({ content: '', type: 'announcement', media_url: '', deadline: '', hoc_sinh_nhan_id: '' });
         fetchClassData(); // Refresh
       }
     } catch (err) {
@@ -92,7 +92,7 @@ const ClassDetail = () => {
   };
 
   const startPrivateMessage = (studentId) => {
-    setNewPost(prev => ({ ...prev, target_student_id: studentId, type: 'announcement' }));
+    setNewPost(prev => ({ ...prev, hoc_sinh_nhan_id: studentId, type: 'announcement' }));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -101,32 +101,32 @@ const ClassDetail = () => {
   }
 
   if (!cls) {
-    return <div className="p-8">Không tìm thấy thông tin lớp học.</div>;
+    return <div className="p-8">KhÃ´ng tÃ¬m tháº¥y thÃ´ng tin lá»›p há»c.</div>;
   }
 
   return (
     <div className="p-8 pb-24">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         <header className="lg:col-span-12 mb-6">
-           <Link to="/teacher/classes" className="text-viet-green font-bold text-xs hover:underline mb-2 inline-block">← QUAY LẠI DANH SÁCH LỚP</Link>
+           <Link to="/teacher/lop" className="text-viet-green font-bold text-xs hover:underline mb-2 inline-block">â† QUAY Láº I DANH SÃCH Lá»šP</Link>
            <div className="bg-white p-8 rounded-[32px] border border-viet-border flex items-center justify-between shadow-sm">
               <div>
                  <h1 className="text-3xl font-black text-viet-text uppercase tracking-tight">{cls.name}</h1>
-                 <p className="text-viet-text-light font-medium">Khối {cls.grade_level} • Mã tham gia: <strong className="text-viet-green bg-viet-green/10 px-2 py-1 rounded select-all">{cls.code}</strong></p>
+                 <p className="text-viet-text-light font-medium">Khá»‘i {cls.khoi_id || cls.gradeLevelId} â€¢ MÃ£ tham gia: <strong className="text-viet-green bg-viet-green/10 px-2 py-1 rounded select-all">{cls.code}</strong></p>
               </div>
            </div>
         </header>
 
-        {/* Nội dung chính (Bảng tin) */}
+        {/* Ná»™i dung chÃ­nh (Báº£ng tin) */}
         <div className="lg:col-span-8 space-y-6">
            <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
-             <h2 className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Tạo bài đăng mới</h2>
+             <h2 className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Táº¡o bÃ i Ä‘Äƒng má»›i</h2>
              <form onSubmit={handleCreatePost} className="space-y-4">
                 <textarea 
                   value={newPost.content}
                   onChange={e => setNewPost({...newPost, content: e.target.value})}
                   className="w-full h-24 p-4 rounded-xl border border-viet-border bg-slate-50 outline-none focus:border-viet-green focus:bg-white transition-colors text-sm font-medium resize-none"
-                  placeholder="Chia sẻ bài giảng, thông báo hoặc bài tập với lớp..."
+                  placeholder="Chia sáº» bÃ i giáº£ng, thÃ´ng bÃ¡o hoáº·c bÃ i táº­p vá»›i lá»›p..."
                   required
                 />
                 
@@ -136,18 +136,18 @@ const ClassDetail = () => {
                      onChange={e => setNewPost({...newPost, type: e.target.value})}
                      className="h-10 px-4 rounded-xl border border-viet-border outline-none text-xs font-bold uppercase tracking-wider text-viet-text"
                    >
-                      <option value="announcement">📢 Chung</option>
-                      <option value="video">📺 Video bài giảng</option>
-                      <option value="assignment">📝 Bài tập</option>
+                      <option value="announcement">ðŸ“¢ Chung</option>
+                      <option value="video">ðŸ“º Video bÃ i giáº£ng</option>
+                      <option value="assignment">ðŸ“ BÃ i táº­p</option>
                    </select>
                    <select 
-                     value={newPost.target_student_id}
-                     onChange={e => setNewPost({...newPost, target_student_id: e.target.value})}
+                     value={newPost.hoc_sinh_nhan_id}
+                     onChange={e => setNewPost({...newPost, hoc_sinh_nhan_id: e.target.value})}
                      className="h-10 px-4 rounded-xl border border-viet-border outline-none text-xs font-bold uppercase tracking-wider text-viet-text"
                    >
-                      <option value="">👥 Cả lớp</option>
+                      <option value="">ðŸ‘¥ Cáº£ lá»›p</option>
                       {members.map(m => (
-                        <option key={m.id} value={m.id}>👤 {m.username}</option>
+                        <option key={m.id} value={m.id}>ðŸ‘¤ {m.username}</option>
                       ))}
                    </select>
 
@@ -172,14 +172,14 @@ const ClassDetail = () => {
 
                 <div className="flex justify-end">
                    <button type="submit" className="px-6 py-2 bg-viet-green text-white font-black uppercase text-xs tracking-widest rounded-xl hover:bg-emerald-600 transition-colors shadow-lg shadow-viet-green/20">
-                     Đăng bài
+                     ÄÄƒng bÃ i
                    </button>
                 </div>
              </form>
            </div>
 
            <div className="space-y-4">
-              <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">Lịch sử bài đăng</h2>
+              <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">Lá»‹ch sá»­ bÃ i Ä‘Äƒng</h2>
               {posts.map(post => (
                 <motion.div 
                   key={post.id}
@@ -192,14 +192,14 @@ const ClassDetail = () => {
                           <img src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${post.author?.username}`} alt="Avatar" className="w-full h-full object-cover" />
                        </div>
                        <div>
-                          <p className="text-sm font-black text-viet-text">{post.author?.username || 'Giáo viên'}</p>
+                          <p className="text-sm font-black text-viet-text">{post.author?.username || 'GiÃ¡o viÃªn'}</p>
                           <p className="text-[10px] font-bold text-viet-text-light uppercase">{new Date(post.created_at).toLocaleString()}</p>
                        </div>
                       <div className="ml-auto flex items-center gap-2">
-                         {post.target && <span className="px-2 py-1 bg-purple-50 text-purple-600 font-black text-[10px] rounded-lg tracking-widest uppercase">Gửi riêng: {post.target.username}</span>}
+                         {post.target && <span className="px-2 py-1 bg-purple-50 text-purple-600 font-black text-[10px] rounded-lg tracking-widest uppercase">Gá»­i riÃªng: {post.target.username}</span>}
                          {post.type === 'video' && <span className="px-2 py-1 bg-red-50 text-red-500 font-black text-[10px] rounded-lg tracking-widest uppercase">VIDEO</span>}
-                         {post.type === 'assignment' && <span className="px-2 py-1 bg-blue-50 text-blue-500 font-black text-[10px] rounded-lg tracking-widest uppercase">BÀI TẬP</span>}
-                         {post.type === 'announcement' && <span className="px-2 py-1 bg-orange-50 text-orange-500 font-black text-[10px] rounded-lg tracking-widest uppercase">TIN NHẮN</span>}
+                         {post.type === 'assignment' && <span className="px-2 py-1 bg-blue-50 text-blue-500 font-black text-[10px] rounded-lg tracking-widest uppercase">BÃ€I Táº¬P</span>}
+                         {post.type === 'announcement' && <span className="px-2 py-1 bg-orange-50 text-orange-500 font-black text-[10px] rounded-lg tracking-widest uppercase">TIN NHáº®N</span>}
                       </div>
                    </div>
                    
@@ -219,7 +219,7 @@ const ClassDetail = () => {
 
                    {post.deadline && (
                       <div className="mt-2 py-2 px-4 bg-red-50 border border-red-100 rounded-xl flex items-center justify-between">
-                         <span className="text-red-500 text-[11px] font-black uppercase tracking-widest">Hạn nộp</span>
+                         <span className="text-red-500 text-[11px] font-black uppercase tracking-widest">Háº¡n ná»™p</span>
                          <span className="text-red-600 font-bold text-sm bg-white px-2 py-1 rounded border border-red-100">{new Date(post.deadline).toLocaleString()}</span>
                       </div>
                    )}
@@ -228,14 +228,14 @@ const ClassDetail = () => {
            </div>
         </div>
 
-        {/* Sidebar Quản lý */}
+        {/* Sidebar Quáº£n lÃ½ */}
         <div className="lg:col-span-4 space-y-6">
            <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
-             <h3 className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Lên lịch học</h3>
+             <h3 className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">LÃªn lá»‹ch há»c</h3>
              <form onSubmit={handleCreateSchedule} className="space-y-3 mb-6">
                 <input 
                   type="text" 
-                  placeholder="Tiêu đề buổi học..." 
+                  placeholder="TiÃªu Ä‘á» buá»•i há»c..." 
                   value={newSchedule.title}
                   onChange={e => setNewSchedule({...newSchedule, title: e.target.value})}
                   className="w-full h-10 px-4 rounded-xl border border-viet-border outline-none text-xs"
@@ -256,12 +256,12 @@ const ClassDetail = () => {
                   className="w-full h-10 px-4 rounded-xl border border-viet-border outline-none text-xs"
                 />
                 <button type="submit" className="w-full py-2 bg-viet-text text-white font-black uppercase text-[10px] tracking-widest rounded-xl hover:bg-black transition-colors">
-                  Tạo lịch
+                  Táº¡o lá»‹ch
                 </button>
              </form>
 
              <div className="space-y-3 border-t border-viet-border pt-4">
-                <h4 className="text-xs font-black text-viet-text-light uppercase tracking-widest">Lịch học sắp tới</h4>
+                <h4 className="text-xs font-black text-viet-text-light uppercase tracking-widest">Lá»‹ch há»c sáº¯p tá»›i</h4>
                 {schedules.map(sch => (
                   <div key={sch.id} className="p-3 border border-viet-border rounded-xl">
                     <p className="text-xs font-black text-viet-text min-w-0 truncate">{sch.title}</p>
@@ -272,10 +272,10 @@ const ClassDetail = () => {
            </div>
 
            <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
-             <h3 className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Danh sách học viên ({members.length})</h3>
+             <h3 className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Danh sÃ¡ch há»c viÃªn ({members.length})</h3>
              <div className="space-y-3">
                 {members.length === 0 ? (
-                  <p className="text-xs text-viet-text-light font-medium italic">Chưa có học sinh tham gia</p>
+                  <p className="text-xs text-viet-text-light font-medium italic">ChÆ°a cÃ³ há»c sinh tham gia</p>
                 ) : (
                    members.map(m => {
                      const isOnline = m.isOnline;
@@ -291,16 +291,16 @@ const ClassDetail = () => {
                            <div className="flex flex-col">
                              <span className="text-xs font-bold text-viet-text">{m.username}</span>
                              <span className="text-[9px] font-bold text-viet-text-light/50 uppercase">
-                               {m.active_minutes ? `${Math.floor(m.active_minutes / 60)}h ${m.active_minutes % 60}m active` : 'Chưa có hoạt động'}
+                               {m.active_minutes ? `${Math.floor(m.active_minutes / 60)}h ${m.active_minutes % 60}m active` : 'ChÆ°a cÃ³ hoáº¡t Ä‘á»™ng'}
                              </span>
                            </div>
                          </div>
                          <button 
                            onClick={() => startPrivateMessage(m.id)}
                            className="w-8 h-8 rounded-lg bg-white border border-viet-border flex items-center justify-center text-xs opacity-0 group-hover/member:opacity-100 transition-all hover:bg-viet-green hover:text-white hover:border-viet-green shadow-sm"
-                           title="Nhắn tin riêng"
+                           title="Nháº¯n tin riÃªng"
                          >
-                           💬
+                           ðŸ’¬
                          </button>
                        </div>
                      );
@@ -316,3 +316,4 @@ const ClassDetail = () => {
 };
 
 export default ClassDetail;
+

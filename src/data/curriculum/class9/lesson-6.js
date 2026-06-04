@@ -1,21 +1,21 @@
-export const bai6 = {
+﻿export const bai6 = {
   "id": "hoa9_kntt_bai6",
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 7,
-  "chapterName": "Chương 7: Hydrocarbon và nhiên liệu",
+  "chapterName": "ChÆ°Æ¡ng 7: Hydrocarbon vÃ  nhiÃªn liá»‡u",
   "lessonId": 6,
-  "title": "Bài 6: Alkane",
-  "description": "Khám phá cấu trúc, tính chất vật lí và hóa học đặc trưng của nhóm Hydrocarbon NO - những 'viên gạch' đầu tiên của hóa hữu cơ.",
+  "title": "BÃ i 6: Alkane",
+  "description": "KhÃ¡m phÃ¡ cáº¥u trÃºc, tÃ­nh cháº¥t váº­t lÃ­ vÃ  hÃ³a há»c Ä‘áº·c trÆ°ng cá»§a nhÃ³m Hydrocarbon NO - nhá»¯ng 'viÃªn gáº¡ch' Ä‘áº§u tiÃªn cá»§a hÃ³a há»¯u cÆ¡.",
   "level": "Intermediate",
   "order": 6,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Alkane: Gia đình Hydrocarbon NO",
+      "title": "Alkane: Gia Ä‘Ã¬nh Hydrocarbon NO",
       "url": "https://www.youtube.com/watch?v=thDcSdqDd38",
       "thumbnail": "https://img.youtube.com/vi/thDcSdqDd38/0.jpg",
-      "description": "Tại sao Methane lại được gọi là 'khí bùn ao'?"
+      "description": "Táº¡i sao Methane láº¡i Ä‘Æ°á»£c gá»i lÃ  'khÃ­ bÃ¹n ao'?"
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@ export const bai6 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Alkane là gì?",
+        "text": "1. Alkane lÃ  gÃ¬?",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@ export const bai6 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Alkane là những Hydrocarbon mạch hở mà trong phân tử chỉ có các liên kết đơn. Công thức tổng quát là $C_nH_{2n+2}$ ($n \\ge 1$)."
+        "text": "Alkane lÃ  nhá»¯ng Hydrocarbon máº¡ch há»Ÿ mÃ  trong phÃ¢n tá»­ chá»‰ cÃ³ cÃ¡c liÃªn káº¿t Ä‘Æ¡n. CÃ´ng thá»©c tá»•ng quÃ¡t lÃ  $C_nH_{2n+2}$ ($n \\ge 1$)."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Methane ($CH_4$) - Thủ lĩnh Alkane",
-        "content": "Là chất khí không màu, không mùi, nhẹ hơn không khí ($d \\approx 0.55$). Methane là thành phần chính trong khí thiên nhiên, khí mỏ dầu và khí bùn ao.",
+        "title": "Methane ($CH_4$) - Thá»§ lÄ©nh Alkane",
+        "content": "LÃ  cháº¥t khÃ­ khÃ´ng mÃ u, khÃ´ng mÃ¹i, nháº¹ hÆ¡n khÃ´ng khÃ­ ($d \\approx 0.55$). Methane lÃ  thÃ nh pháº§n chÃ­nh trong khÃ­ thiÃªn nhiÃªn, khÃ­ má» dáº§u vÃ  khÃ­ bÃ¹n ao.",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@ export const bai6 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Tính chất hóa học đặc trưng",
+        "text": "2. TÃ­nh cháº¥t hÃ³a há»c Ä‘áº·c trÆ°ng",
         "level": "h2"
       }
     },
@@ -57,8 +57,8 @@ export const bai6 = {
       "type": "list",
       "content": {
         "items": [
-          "**Phản ứng Cháy:** Tỏa nhiều nhiệt, tạo thành $CO_2$ và $H_2O$. Phương trình: $CH_4 + 2O_2 \\xrightarrow{t^o} CO_2 + 2H_2O$.",
-          "**Phản ứng Thế (Đặc trưng):** Khi có ánh sáng, một nguyên tử Clo sẽ thế vào chỗ của một nguyên tử Hidro. Ví dụ: $CH_4 + Cl_2 \\xrightarrow{as} CH_3Cl + HCl$."
+          "**Pháº£n á»©ng ChÃ¡y:** Tá»a nhiá»u nhiá»‡t, táº¡o thÃ nh $CO_2$ vÃ  $H_2O$. PhÆ°Æ¡ng trÃ¬nh: $CH_4 + 2O_2 \\xrightarrow{t^o} CO_2 + 2H_2O$.",
+          "**Pháº£n á»©ng Tháº¿ (Äáº·c trÆ°ng):** Khi cÃ³ Ã¡nh sÃ¡ng, má»™t nguyÃªn tá»­ Clo sáº½ tháº¿ vÃ o chá»— cá»§a má»™t nguyÃªn tá»­ Hidro. VÃ­ dá»¥: $CH_4 + Cl_2 \\xrightarrow{as} CH_3Cl + HCl$."
         ]
       }
     },
@@ -66,8 +66,8 @@ export const bai6 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Nguy hiểm cháy nổ",
-        "content": "Hỗn hợp Methane và Oxy theo tỷ lệ thể tích 1:2 là hỗn hợp nổ cực mạnh. Đây là nguyên nhân chính gây ra các vụ nổ mỏ than thảm khốc.",
+        "title": "Nguy hiá»ƒm chÃ¡y ná»•",
+        "content": "Há»—n há»£p Methane vÃ  Oxy theo tá»· lá»‡ thá»ƒ tÃ­ch 1:2 lÃ  há»—n há»£p ná»• cá»±c máº¡nh. ÄÃ¢y lÃ  nguyÃªn nhÃ¢n chÃ­nh gÃ¢y ra cÃ¡c vá»¥ ná»• má» than tháº£m khá»‘c.",
         "color": "red"
       }
     }
@@ -75,59 +75,59 @@ export const bai6 = {
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Methane thường xuất hiện ở những nơi giàu chất hữu cơ phân hủy thiếu oxy. Bạn có biết hình ảnh nào bên dưới mô tả nguồn gốc tự nhiên của 'khí bùn ao' không?",
+      "narrative": "Methane thÆ°á»ng xuáº¥t hiá»‡n á»Ÿ nhá»¯ng nÆ¡i giÃ u cháº¥t há»¯u cÆ¡ phÃ¢n há»§y thiáº¿u oxy. Báº¡n cÃ³ biáº¿t hÃ¬nh áº£nh nÃ o bÃªn dÆ°á»›i mÃ´ táº£ nguá»“n gá»‘c tá»± nhiÃªn cá»§a 'khÃ­ bÃ¹n ao' khÃ´ng?",
       "images": [
         "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1595113316349-9fa4ee24f884?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "Hình ảnh nào mô tả khu vực đầm lầy — nơi sản sinh ra lượng lớn Methane tự nhiên?",
+      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ khu vá»±c Ä‘áº§m láº§y â€” nÆ¡i sáº£n sinh ra lÆ°á»£ng lá»›n Methane tá»± nhiÃªn?",
       "correctAnswer": 0,
-      "targetType": "nhận biết",
-      "source": "Trạng thái tự nhiên"
+      "targetType": "nháº­n biáº¿t",
+      "source": "Tráº¡ng thÃ¡i tá»± nhiÃªn"
     },
     {
       "type": "matching",
-      "narrative": "Hãy giúp tôi phân loại đặc điểm của Methane ($CH_4$) - thủ lĩnh của gia tộc Alkane.",
+      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i Ä‘áº·c Ä‘iá»ƒm cá»§a Methane ($CH_4$) - thá»§ lÄ©nh cá»§a gia tá»™c Alkane.",
       "leftItems": [
-        { "id": "me1", "label": "Cấu tạo" },
-        { "id": "me2", "label": "Vật lí" },
-        { "id": "me3", "label": "Hóa học" }
+        { "id": "me1", "label": "Cáº¥u táº¡o" },
+        { "id": "me2", "label": "Váº­t lÃ­" },
+        { "id": "me3", "label": "HÃ³a há»c" }
       ],
       "items": [
-        { "id": "me1", "label": "Chỉ có liên kết đơn C-H" },
-        { "id": "me2", "label": "Nhẹ hơn không khí, không màu" },
-        { "id": "me3", "label": "Phản ứng thế đặc trưng với Clo" }
+        { "id": "me1", "label": "Chá»‰ cÃ³ liÃªn káº¿t Ä‘Æ¡n C-H" },
+        { "id": "me2", "label": "Nháº¹ hÆ¡n khÃ´ng khÃ­, khÃ´ng mÃ u" },
+        { "id": "me3", "label": "Pháº£n á»©ng tháº¿ Ä‘áº·c trÆ°ng vá»›i Clo" }
       ],
       "correctOrder": ["me1", "me2", "me3"],
-      "question": "Kết nối đối tượng với thuộc tính tương ứng của Methane.",
-      "source": "Tổng hợp kiến thức"
+      "question": "Káº¿t ná»‘i Ä‘á»‘i tÆ°á»£ng vá»›i thuá»™c tÃ­nh tÆ°Æ¡ng á»©ng cá»§a Methane.",
+      "source": "Tá»•ng há»£p kiáº¿n thá»©c"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Trong cuộc chiến thay đổi 'nhân sự', Methane mời Chlorine vào thay thế vị trí của Hydrogen. Điều kiện tiên quyết để phản ứng này xảy ra là gì?",
+      "narrative": "Trong cuá»™c chiáº¿n thay Ä‘á»•i 'nhÃ¢n sá»±', Methane má»i Chlorine vÃ o thay tháº¿ vá»‹ trÃ­ cá»§a Hydrogen. Äiá»u kiá»‡n tiÃªn quyáº¿t Ä‘á»ƒ pháº£n á»©ng nÃ y xáº£y ra lÃ  gÃ¬?",
       "options": [
-        "Ánh sáng mặt trời (hoặc ánh sáng khuếch tán)",
-        "Nhiệt độ cực thấp",
-        "Chất xúc tác là Sắt",
-        "Dòng điện cao thế"
+        "Ãnh sÃ¡ng máº·t trá»i (hoáº·c Ã¡nh sÃ¡ng khuáº¿ch tÃ¡n)",
+        "Nhiá»‡t Ä‘á»™ cá»±c tháº¥p",
+        "Cháº¥t xÃºc tÃ¡c lÃ  Sáº¯t",
+        "DÃ²ng Ä‘iá»‡n cao tháº¿"
       ],
       "correctAnswer": 0,
-      "question": "Điều kiện cần thiết cho phản ứng thế của Alkane với Clo là gì?",
-      "source": "Điều kiện phản ứng"
+      "question": "Äiá»u kiá»‡n cáº§n thiáº¿t cho pháº£n á»©ng tháº¿ cá»§a Alkane vá»›i Clo lÃ  gÃ¬?",
+      "source": "Äiá»u kiá»‡n pháº£n á»©ng"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Hỗn hợp nổ nguy hiểm nhất của Methane và Oxy xảy ra khi tỷ lệ số phân tử Methane : Oxy là 1 : ...",
-      "placeholder": "Nhập con số...",
+      "narrative": "Há»—n há»£p ná»• nguy hiá»ƒm nháº¥t cá»§a Methane vÃ  Oxy xáº£y ra khi tá»· lá»‡ sá»‘ phÃ¢n tá»­ Methane : Oxy lÃ  1 : ...",
+      "placeholder": "Nháº­p con sá»‘...",
       "correctAnswer": "2",
-      "question": "Tỷ lệ thể tích của Oxy trong hỗn hợp nổ mạnh nhất với Methane là bao nhiêu?",
-      "source": "An toàn cháy nổ"
+      "question": "Tá»· lá»‡ thá»ƒ tÃ­ch cá»§a Oxy trong há»—n há»£p ná»• máº¡nh nháº¥t vá»›i Methane lÃ  bao nhiÃªu?",
+      "source": "An toÃ n chÃ¡y ná»•"
     },
     {
       "type": "drag-drop",
-      "narrative": "Thử thách cân bằng: Hãy sắp xếp các mảnh ghép để hoàn thiện phương trình phản ứng cháy của Methane.",
+      "narrative": "Thá»­ thÃ¡ch cÃ¢n báº±ng: HÃ£y sáº¯p xáº¿p cÃ¡c máº£nh ghÃ©p Ä‘á»ƒ hoÃ n thiá»‡n phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng chÃ¡y cá»§a Methane.",
       "items": [
         { "id": "r1", "label": "$CH_4$" },
         { "id": "r2", "label": "+" },
@@ -136,44 +136,44 @@ export const bai6 = {
         { "id": "r5", "label": "$CO_2 + 2H_2O$" }
       ],
       "correctOrder": ["r1", "r2", "r3", "r4", "r5"],
-      "question": "Sắp xếp phương trình phản ứng đúng trình tự.",
-      "source": "Phương trình hóa học"
+      "question": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh pháº£n á»©ng Ä‘Ãºng trÃ¬nh tá»±.",
+      "source": "PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Công thức tổng quát của dãy đồng đẳng Alkane là gì?",
+        "question": "CÃ´ng thá»©c tá»•ng quÃ¡t cá»§a dÃ£y Ä‘á»“ng Ä‘áº³ng Alkane lÃ  gÃ¬?",
         "options": ["$C_nH_{2n}$", "$C_nH_{2n+2}$", "$C_nH_{2n-2}$", "$C_nH_{2n+1}$"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Trong các chất sau, chất nào có phản ứng thế với Clo?",
+        "question": "Trong cÃ¡c cháº¥t sau, cháº¥t nÃ o cÃ³ pháº£n á»©ng tháº¿ vá»›i Clo?",
         "options": ["$CO_2$", "$CH_4$", "$NaCl$", "$O_2$"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Phát biểu nào sau đây SAI về Methane?",
-        "options": ["Là chất khí", "Nặng hơn không khí", "Tan ít trong nước", "Dễ cháy"],
+        "question": "PhÃ¡t biá»ƒu nÃ o sau Ä‘Ã¢y SAI vá» Methane?",
+        "options": ["LÃ  cháº¥t khÃ­", "Náº·ng hÆ¡n khÃ´ng khÃ­", "Tan Ã­t trong nÆ°á»›c", "Dá»… chÃ¡y"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Khi đốt cháy Alkane, sản phẩm thu được bao gồm:",
-        "options": ["$C$ và $H_2$", "$CO_2$ và $H_2O$", "$CO$ và $H_2$", "$C$ và $H_2O$"],
+        "question": "Khi Ä‘á»‘t chÃ¡y Alkane, sáº£n pháº©m thu Ä‘Æ°á»£c bao gá»“m:",
+        "options": ["$C$ vÃ  $H_2$", "$CO_2$ vÃ  $H_2O$", "$CO$ vÃ  $H_2$", "$C$ vÃ  $H_2O$"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tên gọi khác của Methane trong đời sống là:",
-        "options": ["Khí Oxy", "Khí Bùn ao", "Khí Cười", "Khí Carbonic"],
+        "question": "TÃªn gá»i khÃ¡c cá»§a Methane trong Ä‘á»i sá»‘ng lÃ :",
+        "options": ["KhÃ­ Oxy", "KhÃ­ BÃ¹n ao", "KhÃ­ CÆ°á»i", "KhÃ­ Carbonic"],
         "correctAnswer": 1,
         "points": 10
       }
@@ -182,3 +182,4 @@ export const bai6 = {
     "advanced": []
   }
 };
+

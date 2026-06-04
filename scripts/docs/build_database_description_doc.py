@@ -281,8 +281,8 @@ def column_note(table: str, column: str) -> str:
         ("users", "current_session_id"): "Chống đăng nhập song song theo phiên hiện hành.",
         ("users", "study_plan"): "Cấu hình mục tiêu học/ngày và nhắc học.",
         ("users", "arena_stats"): "Thống kê thắng/thua/XP arena.",
-        ("user_progress", "item_type"): "Phân loại lesson, chemical, balancing hoặc progress item khác.",
-        ("user_progress", "metadata"): "Chứa stars, progress, unlock flags hoặc dữ liệu phụ theo item_type.",
+        ("user_progress", "progress_type"): "Phân loại lesson, chemical, balancing hoặc progress item khác.",
+        ("user_progress", "progress_payload"): "Chứa stars, progress, unlock flags hoặc dữ liệu phụ theo progress_type.",
         ("class_posts", "target_student_ids"): "Giới hạn bài đăng/bài tập cho nhóm học sinh cụ thể.",
         ("class_posts", "questions"): "Câu hỏi trích từ file bài tập hoặc nhập thủ công.",
         ("materials", "view_count"): "Được tăng qua RPC increment_material_view.",
@@ -360,7 +360,7 @@ def build() -> None:
     for item in [
         "Frontend/API sử dụng Supabase là nguồn dữ liệu chính; Google login đi qua Supabase OAuth.",
         "Backend dùng service role cho nhiều route Express, vì vậy RLS chủ yếu bảo vệ truy cập trực tiếp từ client/PostgREST.",
-        "Các bảng user_unlocked_lessons và user_unlocked_chemicals vẫn còn fallback trong User model cũ nhưng không xuất hiện trong schema live public; nguồn tiến độ hiện hành là user_progress.",
+        "Cac bang user_unlocked_lessons va user_unlocked_chemicals chi con la legacy history; nguon tien do runtime hien hanh la user_progress.",
         "Khi cần cập nhật schema, đối chiếu ba nguồn: full_clean_schema.sql, OpenAPI live của Supabase và danh sách .from()/rpc() trong code runtime.",
     ]:
         p = doc.add_paragraph(style="List Bullet")

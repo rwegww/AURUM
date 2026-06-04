@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
@@ -47,7 +47,7 @@ const MediaUploader = ({ onUploadSuccess, type = 'image' }) => {
           {uploading ? (
             <div className="flex flex-col items-center">
               <div className="w-8 h-8 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mb-2"></div>
-              <p className="text-sm font-bold text-viet-green">Đang tải lên Cloudinary...</p>
+              <p className="text-sm font-bold text-viet-green">Äang táº£i lÃªn Cloudinary...</p>
             </div>
           ) : (
             <div className="flex flex-col items-center">
@@ -56,8 +56,8 @@ const MediaUploader = ({ onUploadSuccess, type = 'image' }) => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                 </svg>
               </div>
-              <p className="text-sm font-bold text-viet-text">Chọn tệp hoặc kéo thả vào đây</p>
-              <p className="text-xs text-viet-text-light mt-1">PNG, JPG, WEBP hoặc MP4 (Max 10MB)</p>
+              <p className="text-sm font-bold text-viet-text">Chá»n tá»‡p hoáº·c kÃ©o tháº£ vÃ o Ä‘Ã¢y</p>
+              <p className="text-xs text-viet-text-light mt-1">PNG, JPG, WEBP hoáº·c MP4 (Max 10MB)</p>
             </div>
           )}
         </label>
@@ -91,3 +91,4 @@ const MediaUploader = ({ onUploadSuccess, type = 'image' }) => {
 };
 
 export default MediaUploader;
+

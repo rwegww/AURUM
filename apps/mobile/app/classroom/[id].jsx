@@ -88,12 +88,12 @@ export default function ClassroomDetailScreen() {
   const classId = Array.isArray(id) ? id[0] : id;
 
   const resource = useApiResource(async () => {
-    const [classes, posts, schedules] = await Promise.all([
+    const [lop, posts, schedules] = await Promise.all([
       classApi.list(token).catch(() => []),
       classApi.posts(token, classId).catch(() => []),
       classApi.schedules(token, classId).catch(() => [])
     ]);
-    const currentClass = classes.find(c => c.id === classId);
+    const currentClass = lop.find(c => c.id === classId);
     return { currentClass, posts, schedules };
   }, [classId, token]);
 

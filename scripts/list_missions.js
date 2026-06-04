@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 async function listMissions() {
-  const { data, error } = await supabase.from('missions').select('*');
+  const { data, error } = await supabase.from('nhiem_vu').select('*');
   if (error) {
     console.error('Error:', error);
     return;

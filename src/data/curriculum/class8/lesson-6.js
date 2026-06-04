@@ -1,37 +1,37 @@
-export const bai6 = {
+﻿export const bai6 = {
   "id": "hoa8_kntt_bai6",
   "classId": 8,
   "lessonId": 6,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 6: Tính toán theo phương trình hóa học",
-  "chapter": "Chương 1: Phản ứng hóa học",
+  "title": "BÃ i 6: TÃ­nh toÃ¡n theo phÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
+  "chapter": "ChÆ°Æ¡ng 1: Pháº£n á»©ng hÃ³a há»c",
   "order": 6,
   "isPremium": false,
-  "description": "Các bước tính khối lượng, thể tích chất tham gia và sản phẩm; xác định chất dư; hiệu suất phản ứng.",
+  "description": "CÃ¡c bÆ°á»›c tÃ­nh khá»‘i lÆ°á»£ng, thá»ƒ tÃ­ch cháº¥t tham gia vÃ  sáº£n pháº©m; xÃ¡c Ä‘á»‹nh cháº¥t dÆ°; hiá»‡u suáº¥t pháº£n á»©ng.",
   "challenges": [
     {
       "type": "matching",
-      "narrative": "Rất chính xác! Bây giờ, hãy giúp tôi sắp xếp quy trình 4 bước chuẩn để giải mọi bài toán hóa học nhé.",
+      "narrative": "Ráº¥t chÃ­nh xÃ¡c! BÃ¢y giá», hÃ£y giÃºp tÃ´i sáº¯p xáº¿p quy trÃ¬nh 4 bÆ°á»›c chuáº©n Ä‘á»ƒ giáº£i má»i bÃ i toÃ¡n hÃ³a há»c nhÃ©.",
       "leftItems": [
-        { "id": "s1", "label": "Bước 1" },
-        { "id": "s2", "label": "Bước 2" },
-        { "id": "s3", "label": "Bước 3" },
-        { "id": "s4", "label": "Bước 4" }
+        { "id": "s1", "label": "BÆ°á»›c 1" },
+        { "id": "s2", "label": "BÆ°á»›c 2" },
+        { "id": "s3", "label": "BÆ°á»›c 3" },
+        { "id": "s4", "label": "BÆ°á»›c 4" }
       ],
       "items": [
-        { "id": "s3", "label": "Lập tỉ lệ mol từ PTHH để tìm chất cần tính" },
-        { "id": "s1", "label": "Tính số mol các chất đã biết từ đề bài" },
-        { "id": "s4", "label": "Chuyển số mol tìm được sang khối lượng/thể tích" },
-        { "id": "s2", "label": "Viết và cân bằng phương trình hóa học" }
+        { "id": "s3", "label": "Láº­p tá»‰ lá»‡ mol tá»« PTHH Ä‘á»ƒ tÃ¬m cháº¥t cáº§n tÃ­nh" },
+        { "id": "s1", "label": "TÃ­nh sá»‘ mol cÃ¡c cháº¥t Ä‘Ã£ biáº¿t tá»« Ä‘á» bÃ i" },
+        { "id": "s4", "label": "Chuyá»ƒn sá»‘ mol tÃ¬m Ä‘Æ°á»£c sang khá»‘i lÆ°á»£ng/thá»ƒ tÃ­ch" },
+        { "id": "s2", "label": "Viáº¿t vÃ  cÃ¢n báº±ng phÆ°Æ¡ng trÃ¬nh hÃ³a há»c" }
       ],
       "correctOrder": ["s1", "s2", "s3", "s4"],
-      "question": "Hãy sắp xếp các bước theo đúng trình tự giải bài tập.",
-      "source": "Kỹ năng giải bài"
+      "question": "HÃ£y sáº¯p xáº¿p cÃ¡c bÆ°á»›c theo Ä‘Ãºng trÃ¬nh tá»± giáº£i bÃ i táº­p.",
+      "source": "Ká»¹ nÄƒng giáº£i bÃ i"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Để tính toán thành công, bạn có nhớ công thức 'vàng' để chuyển đổi từ khối lượng sang số mol không?",
+      "narrative": "Äá»ƒ tÃ­nh toÃ¡n thÃ nh cÃ´ng, báº¡n cÃ³ nhá»› cÃ´ng thá»©c 'vÃ ng' Ä‘á»ƒ chuyá»ƒn Ä‘á»•i tá»« khá»‘i lÆ°á»£ng sang sá»‘ mol khÃ´ng?",
       "options": [
         "n = m / M",
         "n = m * M",
@@ -39,29 +39,29 @@ export const bai6 = {
         "n = V / 24.79"
       ],
       "correctAnswer": 0,
-      "question": "Công thức nào là chìa khóa để chuyển đổi từ gam sang mol?",
-      "source": "Công thức cơ bản"
+      "question": "CÃ´ng thá»©c nÃ o lÃ  chÃ¬a khÃ³a Ä‘á»ƒ chuyá»ƒn Ä‘á»•i tá»« gam sang mol?",
+      "source": "CÃ´ng thá»©c cÆ¡ báº£n"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Trong thực tế, đôi khi chúng ta không thu được 100% sản phẩm do thất thoát. Ta gọi đó là 'Hiệu suất'. Ký hiệu của nó là gì?",
-      "placeholder": "Nhập ký hiệu (ví dụ: H)...",
+      "narrative": "Trong thá»±c táº¿, Ä‘Ã´i khi chÃºng ta khÃ´ng thu Ä‘Æ°á»£c 100% sáº£n pháº©m do tháº¥t thoÃ¡t. Ta gá»i Ä‘Ã³ lÃ  'Hiá»‡u suáº¥t'. KÃ½ hiá»‡u cá»§a nÃ³ lÃ  gÃ¬?",
+      "placeholder": "Nháº­p kÃ½ hiá»‡u (vÃ­ dá»¥: H)...",
       "correctAnswer": "H",
-      "question": "Ký hiệu thường dùng để chỉ hiệu suất phản ứng là chữ cái nào?",
-      "source": "Lý thuyết hiệu suất"
+      "question": "KÃ½ hiá»‡u thÆ°á»ng dÃ¹ng Ä‘á»ƒ chá»‰ hiá»‡u suáº¥t pháº£n á»©ng lÃ  chá»¯ cÃ¡i nÃ o?",
+      "source": "LÃ½ thuyáº¿t hiá»‡u suáº¥t"
     },
     {
       "type": "drag-drop",
-      "narrative": "Cuối cùng, hãy lắp ráp công thức tính Hiệu suất (H%) để báo cáo cho quản lý phòng thí nghiệm nhé!",
+      "narrative": "Cuá»‘i cÃ¹ng, hÃ£y láº¯p rÃ¡p cÃ´ng thá»©c tÃ­nh Hiá»‡u suáº¥t (H%) Ä‘á»ƒ bÃ¡o cÃ¡o cho quáº£n lÃ½ phÃ²ng thÃ­ nghiá»‡m nhÃ©!",
       "items": [
-        { "id": "h1", "label": "Lượng thực tế" },
+        { "id": "h1", "label": "LÆ°á»£ng thá»±c táº¿" },
         { "id": "h2", "label": "/" },
-        { "id": "h3", "label": "Lượng lý thuyết" },
+        { "id": "h3", "label": "LÆ°á»£ng lÃ½ thuyáº¿t" },
         { "id": "h4", "label": "x 100%" }
       ],
       "correctOrder": ["h1", "h2", "h3", "h4"],
-      "question": "Hãy hoàn thành công thức: H% = (Lượng thực tế / Lượng lý thuyết) * 100%",
-      "source": "Công thức hiệu suất"
+      "question": "HÃ£y hoÃ n thÃ nh cÃ´ng thá»©c: H% = (LÆ°á»£ng thá»±c táº¿ / LÆ°á»£ng lÃ½ thuyáº¿t) * 100%",
+      "source": "CÃ´ng thá»©c hiá»‡u suáº¥t"
     }
   ],
   "theoryModules": [
@@ -69,7 +69,7 @@ export const bai6 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Quy trình 4 bước tính toán theo PTHH",
+        "text": "1. Quy trÃ¬nh 4 bÆ°á»›c tÃ­nh toÃ¡n theo PTHH",
         "level": "h2"
       }
     },
@@ -77,7 +77,7 @@ export const bai6 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Để giải bài toán hóa học theo phương trình, chúng ta cần tuân thủ quy trình 4 bước hệ thống. Đây là kỹ năng quan trọng nhất mà học sinh lớp 8 cần nắm vững."
+        "text": "Äá»ƒ giáº£i bÃ i toÃ¡n hÃ³a há»c theo phÆ°Æ¡ng trÃ¬nh, chÃºng ta cáº§n tuÃ¢n thá»§ quy trÃ¬nh 4 bÆ°á»›c há»‡ thá»‘ng. ÄÃ¢y lÃ  ká»¹ nÄƒng quan trá»ng nháº¥t mÃ  há»c sinh lá»›p 8 cáº§n náº¯m vá»¯ng."
       }
     },
     {
@@ -86,10 +86,10 @@ export const bai6 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Bước 1 — Tính số mol**: Chuyển đổi các đại lượng đã cho (khối lượng, thể tích khí, số hạt) sang **số mol** ($n$).\\n  - Từ khối lượng: $n = m/M$\\n  - Từ thể tích khí (đkc): $n = V/24,79$",
-          "**Bước 2 — Viết và cân bằng PTHH**: Viết phương trình hóa học, cân bằng chính xác số nguyên tử mỗi nguyên tố.",
-          "**Bước 3 — Lập tỉ lệ mol**: Dựa vào hệ số trong PTHH và số mol chất đã biết → tìm số mol chất cần tính bằng quy tắc tam suất (nhân chéo chia đối).",
-          "**Bước 4 — Chuyển đổi kết quả**: Đổi số mol vừa tìm sang đại lượng đề yêu cầu: $m = n \\times M$ hoặc $V = n \\times 24,79$ lít."
+          "**BÆ°á»›c 1 â€” TÃ­nh sá»‘ mol**: Chuyá»ƒn Ä‘á»•i cÃ¡c Ä‘áº¡i lÆ°á»£ng Ä‘Ã£ cho (khá»‘i lÆ°á»£ng, thá»ƒ tÃ­ch khÃ­, sá»‘ háº¡t) sang **sá»‘ mol** ($n$).\\n  - Tá»« khá»‘i lÆ°á»£ng: $n = m/M$\\n  - Tá»« thá»ƒ tÃ­ch khÃ­ (Ä‘kc): $n = V/24,79$",
+          "**BÆ°á»›c 2 â€” Viáº¿t vÃ  cÃ¢n báº±ng PTHH**: Viáº¿t phÆ°Æ¡ng trÃ¬nh hÃ³a há»c, cÃ¢n báº±ng chÃ­nh xÃ¡c sá»‘ nguyÃªn tá»­ má»—i nguyÃªn tá»‘.",
+          "**BÆ°á»›c 3 â€” Láº­p tá»‰ lá»‡ mol**: Dá»±a vÃ o há»‡ sá»‘ trong PTHH vÃ  sá»‘ mol cháº¥t Ä‘Ã£ biáº¿t â†’ tÃ¬m sá»‘ mol cháº¥t cáº§n tÃ­nh báº±ng quy táº¯c tam suáº¥t (nhÃ¢n chÃ©o chia Ä‘á»‘i).",
+          "**BÆ°á»›c 4 â€” Chuyá»ƒn Ä‘á»•i káº¿t quáº£**: Äá»•i sá»‘ mol vá»«a tÃ¬m sang Ä‘áº¡i lÆ°á»£ng Ä‘á» yÃªu cáº§u: $m = n \\times M$ hoáº·c $V = n \\times 24,79$ lÃ­t."
         ]
       }
     },
@@ -97,7 +97,7 @@ export const bai6 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Ví dụ minh họa: Bài toán tính khối lượng",
+        "text": "2. VÃ­ dá»¥ minh há»a: BÃ i toÃ¡n tÃ­nh khá»‘i lÆ°á»£ng",
         "level": "h2"
       }
     },
@@ -105,8 +105,8 @@ export const bai6 = {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Ví dụ: Đốt cháy sắt trong khí Oxi",
-        "content": "**Đề bài**: Đốt cháy hoàn toàn 11,2g Fe trong khí $O_2$. Tính khối lượng oxit sắt từ ($Fe_3O_4$) tạo thành.\\n\\n**Giải chi tiết**:\\n1. **Tính số mol Fe**: $n_{Fe} = \\frac{11,2}{56} = 0,2$ mol.\\n2. **PTHH**: $3Fe + 2O_2 \\xrightarrow{t^\\circ} Fe_3O_4$.\\n3. **Lập tỉ lệ**: Theo PTHH, 3 mol Fe tạo ra 1 mol $Fe_3O_4$. \\n   Vậy 0,2 mol Fe tạo ra: $n_{Fe_3O_4} = \\frac{0,2 \\times 1}{3} = \\frac{1}{15} \\approx 0,0667$ mol.\\n4. **Tính khối lượng**: $m_{Fe_3O_4} = 0,0667 \\times 232 \\approx 15,47$g.\\n\\n**Đáp số**: 15,47 gam $Fe_3O_4$.",
+        "title": "VÃ­ dá»¥: Äá»‘t chÃ¡y sáº¯t trong khÃ­ Oxi",
+        "content": "**Äá» bÃ i**: Äá»‘t chÃ¡y hoÃ n toÃ n 11,2g Fe trong khÃ­ $O_2$. TÃ­nh khá»‘i lÆ°á»£ng oxit sáº¯t tá»« ($Fe_3O_4$) táº¡o thÃ nh.\\n\\n**Giáº£i chi tiáº¿t**:\\n1. **TÃ­nh sá»‘ mol Fe**: $n_{Fe} = \\frac{11,2}{56} = 0,2$ mol.\\n2. **PTHH**: $3Fe + 2O_2 \\xrightarrow{t^\\circ} Fe_3O_4$.\\n3. **Láº­p tá»‰ lá»‡**: Theo PTHH, 3 mol Fe táº¡o ra 1 mol $Fe_3O_4$. \\n   Váº­y 0,2 mol Fe táº¡o ra: $n_{Fe_3O_4} = \\frac{0,2 \\times 1}{3} = \\frac{1}{15} \\approx 0,0667$ mol.\\n4. **TÃ­nh khá»‘i lÆ°á»£ng**: $m_{Fe_3O_4} = 0,0667 \\times 232 \\approx 15,47$g.\\n\\n**ÄÃ¡p sá»‘**: 15,47 gam $Fe_3O_4$.",
         "color": "blue"
       }
     },
@@ -114,7 +114,7 @@ export const bai6 = {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Bài toán có chất dư",
+        "text": "3. BÃ i toÃ¡n cÃ³ cháº¥t dÆ°",
         "level": "h2"
       }
     },
@@ -122,7 +122,7 @@ export const bai6 = {
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "Khi đề bài cho biết lượng của **cả hai chất phản ứng**, cần xác định chất nào hết trước (chất thiếu) và chất nào còn dư. Sản phẩm được tính theo lượng **chất hết** (chất thiếu)."
+        "text": "Khi Ä‘á» bÃ i cho biáº¿t lÆ°á»£ng cá»§a **cáº£ hai cháº¥t pháº£n á»©ng**, cáº§n xÃ¡c Ä‘á»‹nh cháº¥t nÃ o háº¿t trÆ°á»›c (cháº¥t thiáº¿u) vÃ  cháº¥t nÃ o cÃ²n dÆ°. Sáº£n pháº©m Ä‘Æ°á»£c tÃ­nh theo lÆ°á»£ng **cháº¥t háº¿t** (cháº¥t thiáº¿u)."
       }
     },
     {
@@ -131,9 +131,9 @@ export const bai6 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Cách xác định chất dư**: Tính số mol mỗi chất phản ứng ($n_A, n_B$), sau đó lấy số mol chia cho hệ số tương ứng ($a, b$) trong PTHH. \\n  - Nếu $\\frac{n_A}{a} < \\frac{n_B}{b} \\Rightarrow$ A hết, B dư. Tính theo A.\\n  - Nếu $\\frac{n_A}{a} > \\frac{n_B}{b} \\Rightarrow$ B hết, A dư. Tính theo B.",
-          "**Mẹo nhỏ**: Luôn viết dòng 'Ban đầu - Phản ứng - Sau phản ứng' để dễ dàng theo dõi lượng chất còn lại sau thí nghiệm.",
-          "**Ví dụ**: Cho 6,5g Zn tác dụng với 200ml dung dịch $HCl$ 1M. Tính thể tích khí $H_2$ thu được (đkc).\\n  $n_{Zn} = 0,1$ mol. $n_{HCl} = 0,2$ mol.\\n  PTHH: $Zn + 2HCl \\rightarrow ZnCl_2 + H_2$. \\n  Tỉ số: $\\frac{0,1}{1} = \\frac{0,2}{2} = 0,1$. Hai chất phản ứng vừa đủ.\\n  $n_{H_2} = n_{Zn} = 0,1$ mol $\\Rightarrow V = 2,479$ lít."
+          "**CÃ¡ch xÃ¡c Ä‘á»‹nh cháº¥t dÆ°**: TÃ­nh sá»‘ mol má»—i cháº¥t pháº£n á»©ng ($n_A, n_B$), sau Ä‘Ã³ láº¥y sá»‘ mol chia cho há»‡ sá»‘ tÆ°Æ¡ng á»©ng ($a, b$) trong PTHH. \\n  - Náº¿u $\\frac{n_A}{a} < \\frac{n_B}{b} \\Rightarrow$ A háº¿t, B dÆ°. TÃ­nh theo A.\\n  - Náº¿u $\\frac{n_A}{a} > \\frac{n_B}{b} \\Rightarrow$ B háº¿t, A dÆ°. TÃ­nh theo B.",
+          "**Máº¹o nhá»**: LuÃ´n viáº¿t dÃ²ng 'Ban Ä‘áº§u - Pháº£n á»©ng - Sau pháº£n á»©ng' Ä‘á»ƒ dá»… dÃ ng theo dÃµi lÆ°á»£ng cháº¥t cÃ²n láº¡i sau thÃ­ nghiá»‡m.",
+          "**VÃ­ dá»¥**: Cho 6,5g Zn tÃ¡c dá»¥ng vá»›i 200ml dung dá»‹ch $HCl$ 1M. TÃ­nh thá»ƒ tÃ­ch khÃ­ $H_2$ thu Ä‘Æ°á»£c (Ä‘kc).\\n  $n_{Zn} = 0,1$ mol. $n_{HCl} = 0,2$ mol.\\n  PTHH: $Zn + 2HCl \\rightarrow ZnCl_2 + H_2$. \\n  Tá»‰ sá»‘: $\\frac{0,1}{1} = \\frac{0,2}{2} = 0,1$. Hai cháº¥t pháº£n á»©ng vá»«a Ä‘á»§.\\n  $n_{H_2} = n_{Zn} = 0,1$ mol $\\Rightarrow V = 2,479$ lÃ­t."
         ]
       }
     },
@@ -141,7 +141,7 @@ export const bai6 = {
       "id": "mod9",
       "type": "heading",
       "content": {
-        "text": "4. Hiệu suất phản ứng ($H\\%$)",
+        "text": "4. Hiá»‡u suáº¥t pháº£n á»©ng ($H\\%$)",
         "level": "h2"
       }
     },
@@ -149,15 +149,15 @@ export const bai6 = {
       "id": "mod10",
       "type": "paragraph",
       "content": {
-        "text": "Trong thực tế, lượng sản phẩm thu được thường **ít hơn** lượng tính toán lý thuyết vì nhiều nguyên nhân: hóa chất không tinh khiết 100%, một phần bị thất thoát khi thao tác, hoặc phản ứng không xảy ra hoàn toàn."
+        "text": "Trong thá»±c táº¿, lÆ°á»£ng sáº£n pháº©m thu Ä‘Æ°á»£c thÆ°á»ng **Ã­t hÆ¡n** lÆ°á»£ng tÃ­nh toÃ¡n lÃ½ thuyáº¿t vÃ¬ nhiá»u nguyÃªn nhÃ¢n: hÃ³a cháº¥t khÃ´ng tinh khiáº¿t 100%, má»™t pháº§n bá»‹ tháº¥t thoÃ¡t khi thao tÃ¡c, hoáº·c pháº£n á»©ng khÃ´ng xáº£y ra hoÃ n toÃ n."
       }
     },
     {
       "id": "mod11",
       "type": "infoBox",
       "content": {
-        "title": "Công thức tính hiệu suất",
-        "content": "$$H\\% = \\frac{m_{tt}}{m_{lt}} \\times 100\\%$$\\nTrong đó:\\n- $m_{tt}$ (Khối lượng thực tế): Lượng sản phẩm cân được sau khi làm thí nghiệm.\\n- $m_{lt}$ (Khối lượng lý thuyết): Lượng sản phẩm tính toán được dựa trên phương trình.\\n\\n**Lưu ý quan trọng**: Hiệu suất luôn nhỏ hơn hoặc cùng lắm là bằng $100\\%$. Nếu bạn tính ra $>100\\%$, hãy kiểm tra lại các phép tính hoặc độ tinh khiết của hóa chất!",
+        "title": "CÃ´ng thá»©c tÃ­nh hiá»‡u suáº¥t",
+        "content": "$$H\\% = \\frac{m_{tt}}{m_{lt}} \\times 100\\%$$\\nTrong Ä‘Ã³:\\n- $m_{tt}$ (Khá»‘i lÆ°á»£ng thá»±c táº¿): LÆ°á»£ng sáº£n pháº©m cÃ¢n Ä‘Æ°á»£c sau khi lÃ m thÃ­ nghiá»‡m.\\n- $m_{lt}$ (Khá»‘i lÆ°á»£ng lÃ½ thuyáº¿t): LÆ°á»£ng sáº£n pháº©m tÃ­nh toÃ¡n Ä‘Æ°á»£c dá»±a trÃªn phÆ°Æ¡ng trÃ¬nh.\\n\\n**LÆ°u Ã½ quan trá»ng**: Hiá»‡u suáº¥t luÃ´n nhá» hÆ¡n hoáº·c cÃ¹ng láº¯m lÃ  báº±ng $100\\%$. Náº¿u báº¡n tÃ­nh ra $>100\\%$, hÃ£y kiá»ƒm tra láº¡i cÃ¡c phÃ©p tÃ­nh hoáº·c Ä‘á»™ tinh khiáº¿t cá»§a hÃ³a cháº¥t!",
         "color": "blue"
       }
     },
@@ -165,8 +165,8 @@ export const bai6 = {
       "id": "mod12",
       "type": "infoBox",
       "content": {
-        "title": "Ví dụ: Tính hiệu suất nung đá vôi",
-        "content": "**Đề bài**: Nung 10g $CaCO_3$, thực tế thu được 4,48g $CaO$. Tính hiệu suất.\\n\\n**Giải**:\\n- PTHH: $CaCO_3 \\xrightarrow{t^\\circ} CaO + CO_2$.\\n- $n_{CaCO_3} = 10/100 = 0,1$ mol → theo lý thuyết: $n_{CaO} = 0,1$ mol → $m_{lt} = 0,1 \\times 56 = 5,6$g.\\n- $H\\% = \\frac{4,48}{5,6} \\times 100 = 80\\%$.\\n\\nVậy hiệu suất phản ứng nung vôi là **80%**.",
+        "title": "VÃ­ dá»¥: TÃ­nh hiá»‡u suáº¥t nung Ä‘Ã¡ vÃ´i",
+        "content": "**Äá» bÃ i**: Nung 10g $CaCO_3$, thá»±c táº¿ thu Ä‘Æ°á»£c 4,48g $CaO$. TÃ­nh hiá»‡u suáº¥t.\\n\\n**Giáº£i**:\\n- PTHH: $CaCO_3 \\xrightarrow{t^\\circ} CaO + CO_2$.\\n- $n_{CaCO_3} = 10/100 = 0,1$ mol â†’ theo lÃ½ thuyáº¿t: $n_{CaO} = 0,1$ mol â†’ $m_{lt} = 0,1 \\times 56 = 5,6$g.\\n- $H\\% = \\frac{4,48}{5,6} \\times 100 = 80\\%$.\\n\\nVáº­y hiá»‡u suáº¥t pháº£n á»©ng nung vÃ´i lÃ  **80%**.",
         "color": "green"
       }
     },
@@ -174,8 +174,8 @@ export const bai6 = {
       "id": "mod13",
       "type": "warningBox",
       "content": {
-        "title": "Mẹo giải bài tập nhanh",
-        "content": "- Luôn bắt đầu từ **\"tìm n\"** (số mol). Đây là cầu nối giữa đề bài và phương trình.\\n- Ghi nhớ: Khối lượng mol ($M$) của một số chất thường gặp: $H_2=2$, $O_2=32$, $N_2=28$, $CO_2=44$, $H_2O=18$, $NaCl=58,5$, $CaCO_3=100$, $Fe=56$, $Al=27$.\\n- Luôn ghi đơn vị sau mỗi phép tính để tránh nhầm lẫn.",
+        "title": "Máº¹o giáº£i bÃ i táº­p nhanh",
+        "content": "- LuÃ´n báº¯t Ä‘áº§u tá»« **\"tÃ¬m n\"** (sá»‘ mol). ÄÃ¢y lÃ  cáº§u ná»‘i giá»¯a Ä‘á» bÃ i vÃ  phÆ°Æ¡ng trÃ¬nh.\\n- Ghi nhá»›: Khá»‘i lÆ°á»£ng mol ($M$) cá»§a má»™t sá»‘ cháº¥t thÆ°á»ng gáº·p: $H_2=2$, $O_2=32$, $N_2=28$, $CO_2=44$, $H_2O=18$, $NaCl=58,5$, $CaCO_3=100$, $Fe=56$, $Al=27$.\\n- LuÃ´n ghi Ä‘Æ¡n vá»‹ sau má»—i phÃ©p tÃ­nh Ä‘á»ƒ trÃ¡nh nháº§m láº«n.",
         "color": "orange"
       }
     }
@@ -184,10 +184,10 @@ export const bai6 = {
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Tính toán theo phương trình hóa học",
+      "title": "BÃ i giáº£ng: TÃ­nh toÃ¡n theo phÆ°Æ¡ng trÃ¬nh hÃ³a há»c",
       "url": "https://www.youtube.com/watch?v=lP_9Zu1K-Q0",
       "thumbnail": "https://img.youtube.com/vi/lP_9Zu1K-Q0/0.jpg",
-      "description": "Cách giải các bài toán hóa học dựa trên phương trình và tỉ lệ số mol (VietJack)."
+      "description": "CÃ¡ch giáº£i cÃ¡c bÃ i toÃ¡n hÃ³a há»c dá»±a trÃªn phÆ°Æ¡ng trÃ¬nh vÃ  tá»‰ lá»‡ sá»‘ mol (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -197,7 +197,7 @@ export const bai6 = {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Để tính khối lượng chất tham gia khi biết số mol, ta dùng công thức nào?",
+        "question": "Äá»ƒ tÃ­nh khá»‘i lÆ°á»£ng cháº¥t tham gia khi biáº¿t sá»‘ mol, ta dÃ¹ng cÃ´ng thá»©c nÃ o?",
         "options": [
           "$m = n \\times M$",
           "$m = n / M$",
@@ -205,12 +205,12 @@ export const bai6 = {
           "$m = C\\% / 100$"
         ],
         "correctAnswer": 0,
-        "explanation": "Khối lượng (m) bằng số mol (n) nhân khối lượng mol (M).",
+        "explanation": "Khá»‘i lÆ°á»£ng (m) báº±ng sá»‘ mol (n) nhÃ¢n khá»‘i lÆ°á»£ng mol (M).",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Cho phản ứng: $CaCO_3 \\xrightarrow{t^\\circ} CaO + CO_2$. Để thu được 0,1 mol $CaO$, cần nung bao nhiêu mol $CaCO_3$?",
+        "question": "Cho pháº£n á»©ng: $CaCO_3 \\xrightarrow{t^\\circ} CaO + CO_2$. Äá»ƒ thu Ä‘Æ°á»£c 0,1 mol $CaO$, cáº§n nung bao nhiÃªu mol $CaCO_3$?",
         "options": [
           "0,1 mol",
           "0,2 mol",
@@ -218,12 +218,12 @@ export const bai6 = {
           "1 mol"
         ],
         "correctAnswer": 0,
-        "explanation": "Theo phương trình, tỉ lệ mol là 1:1.",
+        "explanation": "Theo phÆ°Æ¡ng trÃ¬nh, tá»‰ lá»‡ mol lÃ  1:1.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Hiệu suất phản ứng ($H$) được tính bằng công thức nào?",
+        "question": "Hiá»‡u suáº¥t pháº£n á»©ng ($H$) Ä‘Æ°á»£c tÃ­nh báº±ng cÃ´ng thá»©c nÃ o?",
         "options": [
           "$H = (m_{tt} / m_{lt}) \\times 100\\%$",
           "$H = (m_{lt} / m_{tt}) \\times 100\\%$",
@@ -231,12 +231,12 @@ export const bai6 = {
           "$H = m_{tt} \\times m_{lt} / 100$"
         ],
         "correctAnswer": 0,
-        "explanation": "Hiệu suất = (Thực tế / Lý thuyết) x 100%.",
+        "explanation": "Hiá»‡u suáº¥t = (Thá»±c táº¿ / LÃ½ thuyáº¿t) x 100%.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Nung 10g đá vôi, thực tế thu được 4,48g vôi sống. Biết lý thuyết là 5,6g. Hiệu suất là:",
+        "question": "Nung 10g Ä‘Ã¡ vÃ´i, thá»±c táº¿ thu Ä‘Æ°á»£c 4,48g vÃ´i sá»‘ng. Biáº¿t lÃ½ thuyáº¿t lÃ  5,6g. Hiá»‡u suáº¥t lÃ :",
         "options": [
           "80%",
           "70%",
@@ -249,15 +249,15 @@ export const bai6 = {
       },
       {
         "type": "multiple-choice",
-        "question": "Trong bài toán chất dư, lượng sản phẩm được tính theo:",
+        "question": "Trong bÃ i toÃ¡n cháº¥t dÆ°, lÆ°á»£ng sáº£n pháº©m Ä‘Æ°á»£c tÃ­nh theo:",
         "options": [
-          "Chất phản ứng hết (chất thiếu)",
-          "Chất phản ứng còn dư",
-          "Cả hai chất",
-          "Tùy ý chất nào cũng được"
+          "Cháº¥t pháº£n á»©ng háº¿t (cháº¥t thiáº¿u)",
+          "Cháº¥t pháº£n á»©ng cÃ²n dÆ°",
+          "Cáº£ hai cháº¥t",
+          "TÃ¹y Ã½ cháº¥t nÃ o cÅ©ng Ä‘Æ°á»£c"
         ],
         "correctAnswer": 0,
-        "explanation": "Sản phẩm ngừng tạo ra khi có ít nhất một chất tham gia bị dùng hết.",
+        "explanation": "Sáº£n pháº©m ngá»«ng táº¡o ra khi cÃ³ Ã­t nháº¥t má»™t cháº¥t tham gia bá»‹ dÃ¹ng háº¿t.",
         "points": 10
       }
     ],
@@ -266,3 +266,4 @@ export const bai6 = {
   },
   "realWorldApplications": []
 };
+

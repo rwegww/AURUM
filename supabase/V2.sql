@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS public.users (
   id text PRIMARY KEY,
   username text NOT NULL UNIQUE,
   email text UNIQUE,
-  password text,
+  password_hash text,
   role text NOT NULL DEFAULT 'student',
   xp integer NOT NULL DEFAULT 0,
   level integer NOT NULL DEFAULT 1,
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS public.grade_levels (
 
 CREATE TABLE IF NOT EXISTS public.lessons (
   id text PRIMARY KEY,
-  class_id integer NOT NULL REFERENCES public.grade_levels(id) ON DELETE CASCADE,
+  grade_level_id integer NOT NULL REFERENCES public.grade_levels(id) ON DELETE CASCADE,
   program_id text NOT NULL DEFAULT 'ketnoi',
   title text NOT NULL,
   chapter text,
@@ -100,13 +100,13 @@ CREATE TABLE IF NOT EXISTS public.lessons (
 
 CREATE TABLE IF NOT EXISTS public.user_progress (
   user_id text NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
-  item_type text NOT NULL,
-  item_id text NOT NULL,
-  progress_data jsonb NOT NULL DEFAULT '{}'::jsonb,
+  progress_type text NOT NULL,
+  target_id text NOT NULL,
+  progress_payload jsonb NOT NULL DEFAULT '{}'::jsonb,
   unlocked_at timestamp with time zone NOT NULL DEFAULT now(),
   updated_at timestamp with time zone NOT NULL DEFAULT now(),
-  PRIMARY KEY (user_id, item_type, item_id),
-  CONSTRAINT user_progress_item_type_check CHECK (item_type IN ('lesson', 'chemical', 'achievement', 'balancing'))
+  PRIMARY KEY (user_id, progress_type, target_id),
+  CONSTRAINT user_progress_progress_type_check CHECK (progress_type IN ('lesson', 'chemical', 'achievement', 'balancing'))
 );
 
 CREATE TABLE IF NOT EXISTS public.feedback (
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS public.lab_chemicals (
   name text NOT NULL,
   state text,
   color text,
-  type text,
+  category text,
   is_starter boolean NOT NULL DEFAULT false,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT lab_chemicals_state_check CHECK (state IS NULL OR state IN ('solid', 'liquid', 'gas'))
@@ -146,7 +146,7 @@ CREATE TABLE IF NOT EXISTS public.lab_reactions (
   equation text NOT NULL,
   reactants jsonb NOT NULL,
   products jsonb NOT NULL,
-  grade_level integer REFERENCES public.grade_levels(id) ON DELETE CASCADE,
+  grade_level_id integer REFERENCES public.grade_levels(id) ON DELETE CASCADE,
   category text,
   conditions text,
   observation text,
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS public.balancing_questions (
   answer jsonb NOT NULL,
   difficulty text,
   category text,
-  grade_level integer DEFAULT 8 REFERENCES public.grade_levels(id),
+  grade_level_id integer DEFAULT 8 REFERENCES public.grade_levels(id),
   equation_string text,
   node_id integer NOT NULL,
   lesson_id text REFERENCES public.lessons(id),
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS public.balancing_questions (
 
 CREATE TABLE IF NOT EXISTS public.arena_questions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  grade_level integer NOT NULL DEFAULT 8 REFERENCES public.grade_levels(id) ON DELETE CASCADE,
+  grade_level_id integer NOT NULL DEFAULT 8 REFERENCES public.grade_levels(id) ON DELETE CASCADE,
   difficulty text NOT NULL DEFAULT 'easy',
   question text NOT NULL,
   options jsonb NOT NULL DEFAULT '[]'::jsonb,
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS public.arena_match_history (
   opponent_name text,
   result text,
   score integer NOT NULL DEFAULT 0,
-  pts_change integer NOT NULL DEFAULT 0,
+  points_delta integer NOT NULL DEFAULT 0,
   played_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT arena_match_history_result_check CHECK (result IS NULL OR result IN ('win', 'lose', 'draw'))
 );
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS public.arena_match_history (
 CREATE TABLE IF NOT EXISTS public.classes (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
-  grade_level integer NOT NULL REFERENCES public.grade_levels(id) ON DELETE CASCADE,
+  grade_level_id integer NOT NULL REFERENCES public.grade_levels(id) ON DELETE CASCADE,
   teacher_id text REFERENCES public.users(id) ON DELETE CASCADE,
   description text,
   code text NOT NULL UNIQUE,
@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS public.class_assignment_submissions (
   student_id text REFERENCES public.users(id) ON DELETE CASCADE,
   status text NOT NULL DEFAULT 'submitted',
   score numeric,
-  feedback text,
+  teacher_feedback text,
   answers jsonb NOT NULL DEFAULT '[]'::jsonb,
   submitted_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT class_assignment_submissions_status_check CHECK (status IN ('submitted', 'graded')),
@@ -275,6 +275,7 @@ CREATE TABLE IF NOT EXISTS public.materials (
   file_url text NOT NULL,
   file_type text,
   category text,
+  created_by_user_id text REFERENCES public.users(id) ON DELETE SET NULL,
   view_count integer NOT NULL DEFAULT 0,
   download_count integer NOT NULL DEFAULT 0,
   created_at timestamp with time zone NOT NULL DEFAULT now()
@@ -543,20 +544,20 @@ $$;
 CREATE INDEX IF NOT EXISTS idx_users_active_minutes ON public.users (active_minutes DESC);
 CREATE INDEX IF NOT EXISTS idx_users_last_active_at ON public.users (last_active_at DESC);
 CREATE INDEX IF NOT EXISTS idx_users_role ON public.users (role);
-CREATE INDEX IF NOT EXISTS idx_lessons_class_order ON public.lessons (class_id, "order");
+CREATE INDEX IF NOT EXISTS idx_lessons_grade_level_order ON public.lessons (grade_level_id, "order");
 CREATE INDEX IF NOT EXISTS idx_lessons_program ON public.lessons (program_id);
-CREATE INDEX IF NOT EXISTS idx_user_progress_user_type ON public.user_progress (user_id, item_type);
-CREATE INDEX IF NOT EXISTS idx_user_progress_item ON public.user_progress (item_type, item_id);
+CREATE INDEX IF NOT EXISTS idx_user_progress_user_progress_type ON public.user_progress (user_id, progress_type);
+CREATE INDEX IF NOT EXISTS idx_user_progress_target ON public.user_progress (progress_type, target_id);
 CREATE INDEX IF NOT EXISTS idx_feedback_status ON public.feedback (status);
 CREATE INDEX IF NOT EXISTS idx_feedback_type ON public.feedback (type);
-CREATE INDEX IF NOT EXISTS idx_lab_reactions_grade_level ON public.lab_reactions (grade_level);
-CREATE INDEX IF NOT EXISTS idx_balancing_questions_grade_level ON public.balancing_questions (grade_level);
-CREATE INDEX IF NOT EXISTS idx_arena_questions_grade_level ON public.arena_questions (grade_level);
+CREATE INDEX IF NOT EXISTS idx_lab_reactions_grade_level_id ON public.lab_reactions (grade_level_id);
+CREATE INDEX IF NOT EXISTS idx_balancing_questions_grade_level_id ON public.balancing_questions (grade_level_id);
+CREATE INDEX IF NOT EXISTS idx_arena_questions_grade_level_id ON public.arena_questions (grade_level_id);
 CREATE INDEX IF NOT EXISTS idx_arena_rooms_host_id ON public.arena_rooms (host_id);
 CREATE INDEX IF NOT EXISTS idx_arena_match_history_user_id ON public.arena_match_history (user_id);
 CREATE INDEX IF NOT EXISTS idx_arena_match_history_room_id ON public.arena_match_history (room_id);
 CREATE INDEX IF NOT EXISTS idx_classes_teacher_id ON public.classes (teacher_id);
-CREATE INDEX IF NOT EXISTS idx_classes_grade_level ON public.classes (grade_level);
+CREATE INDEX IF NOT EXISTS idx_classes_grade_level_id ON public.classes (grade_level_id);
 CREATE INDEX IF NOT EXISTS idx_class_members_student_id ON public.class_members (student_id);
 CREATE INDEX IF NOT EXISTS idx_class_posts_class_id ON public.class_posts (class_id);
 CREATE INDEX IF NOT EXISTS idx_class_posts_author_id ON public.class_posts (author_id);
@@ -564,6 +565,7 @@ CREATE INDEX IF NOT EXISTS idx_class_posts_target_student_id ON public.class_pos
 CREATE INDEX IF NOT EXISTS idx_class_assignment_submissions_post_id ON public.class_assignment_submissions (post_id);
 CREATE INDEX IF NOT EXISTS idx_class_assignment_submissions_student_id ON public.class_assignment_submissions (student_id);
 CREATE INDEX IF NOT EXISTS idx_class_schedules_class_id ON public.class_schedules (class_id);
+CREATE INDEX IF NOT EXISTS idx_materials_created_by_user_id ON public.materials (created_by_user_id);
 CREATE INDEX IF NOT EXISTS idx_material_feedback_material_id ON public.material_feedback (material_id);
 CREATE INDEX IF NOT EXISTS idx_material_feedback_user_id ON public.material_feedback (user_id);
 CREATE INDEX IF NOT EXISTS idx_missions_action_type ON public.missions (action_type);

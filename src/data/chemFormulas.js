@@ -1,24 +1,24 @@
-/**
- * Cơ sở dữ liệu công thức Hóa học - Sắp xếp theo NHÓM tính chất
- * Mỗi công thức bao gồm: tên, ký hiệu, các biến, hàm tính toán, và mô tả
+﻿/**
+ * CÆ¡ sá»Ÿ dá»¯ liá»‡u cÃ´ng thá»©c HÃ³a há»c - Sáº¯p xáº¿p theo NHÃ“M tÃ­nh cháº¥t
+ * Má»—i cÃ´ng thá»©c bao gá»“m: tÃªn, kÃ½ hiá»‡u, cÃ¡c biáº¿n, hÃ m tÃ­nh toÃ¡n, vÃ  mÃ´ táº£
  */
 
 export const CHEM_FORMULAS = {
   basic: {
-    label: 'Số mol & Khối lượng',
-    icon: '⚖️',
+    label: 'Sá»‘ mol & Khá»‘i lÆ°á»£ng',
+    icon: 'âš–ï¸',
     categories: [
       {
-        name: 'Công thức tính số mol',
+        name: 'CÃ´ng thá»©c tÃ­nh sá»‘ mol',
         formulas: [
           {
             id: 'mol_mass',
-            name: 'Tính mol từ khối lượng',
+            name: 'TÃ­nh mol tá»« khá»‘i lÆ°á»£ng',
             formula: 'n = m / M',
             variables: [
-              { key: 'n', label: 'Số mol (mol)', unit: 'mol' },
-              { key: 'm', label: 'Khối lượng chất (g)', unit: 'g' },
-              { key: 'M', label: 'Khối lượng mol (g/mol)', unit: 'g/mol' },
+              { key: 'n', label: 'Sá»‘ mol (mol)', unit: 'mol' },
+              { key: 'm', label: 'Khá»‘i lÆ°á»£ng cháº¥t (g)', unit: 'g' },
+              { key: 'M', label: 'Khá»‘i lÆ°á»£ng mol (g/mol)', unit: 'g/mol' },
             ],
             solve: (vars) => {
               if (vars.m !== null && vars.M !== null) return { n: vars.m / vars.M };
@@ -29,11 +29,11 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'mol_volume',
-            name: 'Tính mol từ thể tích khí (đktc)',
+            name: 'TÃ­nh mol tá»« thá»ƒ tÃ­ch khÃ­ (Ä‘ktc)',
             formula: 'n = V / 22,4',
             variables: [
-              { key: 'n', label: 'Số mol (mol)', unit: 'mol' },
-              { key: 'V', label: 'Thể tích khí (lít)', unit: 'L' },
+              { key: 'n', label: 'Sá»‘ mol (mol)', unit: 'mol' },
+              { key: 'V', label: 'Thá»ƒ tÃ­ch khÃ­ (lÃ­t)', unit: 'L' },
             ],
             solve: (vars) => {
               if (vars.V !== null) return { n: vars.V / 22.4 };
@@ -43,11 +43,11 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'mol_particles',
-            name: 'Tính mol từ số hạt',
-            formula: 'n = N / Nₐ',
+            name: 'TÃ­nh mol tá»« sá»‘ háº¡t',
+            formula: 'n = N / Nâ‚',
             variables: [
-              { key: 'n', label: 'Số mol (mol)', unit: 'mol' },
-              { key: 'N', label: 'Số hạt', unit: 'hạt' },
+              { key: 'n', label: 'Sá»‘ mol (mol)', unit: 'mol' },
+              { key: 'N', label: 'Sá»‘ háº¡t', unit: 'háº¡t' },
             ],
             solve: (vars) => {
               const Na = 6.022e23;
@@ -59,16 +59,16 @@ export const CHEM_FORMULAS = {
         ],
       },
       {
-        name: 'Công thức tính khối lượng',
+        name: 'CÃ´ng thá»©c tÃ­nh khá»‘i lÆ°á»£ng',
         formulas: [
           {
             id: 'mass_from_mol',
-            name: 'Khối lượng chất',
-            formula: 'm = n × M',
+            name: 'Khá»‘i lÆ°á»£ng cháº¥t',
+            formula: 'm = n Ã— M',
             variables: [
-              { key: 'm', label: 'Khối lượng (g)', unit: 'g' },
-              { key: 'n', label: 'Số mol (mol)', unit: 'mol' },
-              { key: 'M', label: 'Khối lượng mol (g/mol)', unit: 'g/mol' },
+              { key: 'm', label: 'Khá»‘i lÆ°á»£ng (g)', unit: 'g' },
+              { key: 'n', label: 'Sá»‘ mol (mol)', unit: 'mol' },
+              { key: 'M', label: 'Khá»‘i lÆ°á»£ng mol (g/mol)', unit: 'g/mol' },
             ],
             solve: (vars) => {
               if (vars.n !== null && vars.M !== null) return { m: vars.n * vars.M };
@@ -82,20 +82,20 @@ export const CHEM_FORMULAS = {
     ],
   },
   concentration: {
-    label: 'Dung dịch & Nồng độ',
-    icon: '🧪',
+    label: 'Dung dá»‹ch & Ná»“ng Ä‘á»™',
+    icon: 'ðŸ§ª',
     categories: [
       {
-        name: 'Nồng độ dung dịch',
+        name: 'Ná»“ng Ä‘á»™ dung dá»‹ch',
         formulas: [
           {
             id: 'concentration_percent',
-            name: 'Nồng độ phần trăm',
-            formula: 'C% = (mct / mdd) × 100%',
+            name: 'Ná»“ng Ä‘á»™ pháº§n trÄƒm',
+            formula: 'C% = (mct / mdd) Ã— 100%',
             variables: [
-              { key: 'C', label: 'Nồng độ phần trăm (%)', unit: '%' },
-              { key: 'mct', label: 'Khối lượng chất tan (g)', unit: 'g' },
-              { key: 'mdd', label: 'Khối lượng dung dịch (g)', unit: 'g' },
+              { key: 'C', label: 'Ná»“ng Ä‘á»™ pháº§n trÄƒm (%)', unit: '%' },
+              { key: 'mct', label: 'Khá»‘i lÆ°á»£ng cháº¥t tan (g)', unit: 'g' },
+              { key: 'mdd', label: 'Khá»‘i lÆ°á»£ng dung dá»‹ch (g)', unit: 'g' },
             ],
             solve: (vars) => {
               if (vars.mct !== null && vars.mdd !== null) return { C: (vars.mct / vars.mdd) * 100 };
@@ -106,12 +106,12 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'concentration_mol',
-            name: 'Nồng độ mol',
-            formula: 'Cₘ = n / V',
+            name: 'Ná»“ng Ä‘á»™ mol',
+            formula: 'Câ‚˜ = n / V',
             variables: [
-              { key: 'Cm', label: 'Nồng độ mol (M)', unit: 'M' },
-              { key: 'n', label: 'Số mol chất tan (mol)', unit: 'mol' },
-              { key: 'V', label: 'Thể tích dung dịch (lít)', unit: 'L' },
+              { key: 'Cm', label: 'Ná»“ng Ä‘á»™ mol (M)', unit: 'M' },
+              { key: 'n', label: 'Sá»‘ mol cháº¥t tan (mol)', unit: 'mol' },
+              { key: 'V', label: 'Thá»ƒ tÃ­ch dung dá»‹ch (lÃ­t)', unit: 'L' },
             ],
             solve: (vars) => {
               if (vars.n !== null && vars.V !== null) return { Cm: vars.n / vars.V };
@@ -122,12 +122,12 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'mass_solution',
-            name: 'Khối lượng dung dịch',
+            name: 'Khá»‘i lÆ°á»£ng dung dá»‹ch',
             formula: 'mdd = mct + mdm',
             variables: [
-              { key: 'mdd', label: 'Khối lượng dung dịch (g)', unit: 'g' },
-              { key: 'mct', label: 'Khối lượng chất tan (g)', unit: 'g' },
-              { key: 'mdm', label: 'Khối lượng dung môi (g)', unit: 'g' },
+              { key: 'mdd', label: 'Khá»‘i lÆ°á»£ng dung dá»‹ch (g)', unit: 'g' },
+              { key: 'mct', label: 'Khá»‘i lÆ°á»£ng cháº¥t tan (g)', unit: 'g' },
+              { key: 'mdm', label: 'Khá»‘i lÆ°á»£ng dung mÃ´i (g)', unit: 'g' },
             ],
             solve: (vars) => {
               if (vars.mct !== null && vars.mdm !== null) return { mdd: vars.mct + vars.mdm };
@@ -139,17 +139,17 @@ export const CHEM_FORMULAS = {
         ],
       },
       {
-        name: 'Pha loãng dung dịch',
+        name: 'Pha loÃ£ng dung dá»‹ch',
         formulas: [
           {
             id: 'dilution',
-            name: 'Pha loãng dung dịch',
-            formula: 'C₁V₁ = C₂V₂',
+            name: 'Pha loÃ£ng dung dá»‹ch',
+            formula: 'Câ‚Vâ‚ = Câ‚‚Vâ‚‚',
             variables: [
-              { key: 'C1', label: 'Nồng độ ban đầu (M)', unit: 'M' },
-              { key: 'V1', label: 'Thể tích ban đầu (mL)', unit: 'mL' },
-              { key: 'C2', label: 'Nồng độ sau pha loãng (M)', unit: 'M' },
-              { key: 'V2', label: 'Thể tích sau pha loãng (mL)', unit: 'mL' },
+              { key: 'C1', label: 'Ná»“ng Ä‘á»™ ban Ä‘áº§u (M)', unit: 'M' },
+              { key: 'V1', label: 'Thá»ƒ tÃ­ch ban Ä‘áº§u (mL)', unit: 'mL' },
+              { key: 'C2', label: 'Ná»“ng Ä‘á»™ sau pha loÃ£ng (M)', unit: 'M' },
+              { key: 'V2', label: 'Thá»ƒ tÃ­ch sau pha loÃ£ng (mL)', unit: 'mL' },
             ],
             solve: (vars) => {
               if (vars.C1 !== null && vars.V1 !== null && vars.V2 !== null) return { C2: (vars.C1 * vars.V1) / vars.V2 };
@@ -164,19 +164,19 @@ export const CHEM_FORMULAS = {
     ],
   },
   gases: {
-    label: 'Chất khí & Trạng thái',
-    icon: '🌬️',
+    label: 'Cháº¥t khÃ­ & Tráº¡ng thÃ¡i',
+    icon: 'ðŸŒ¬ï¸',
     categories: [
       {
-        name: 'Thể tích & Áp suất',
+        name: 'Thá»ƒ tÃ­ch & Ãp suáº¥t',
         formulas: [
           {
             id: 'volume_gas',
-            name: 'Thể tích khí ở đktc',
-            formula: 'V = n × 22,4',
+            name: 'Thá»ƒ tÃ­ch khÃ­ á»Ÿ Ä‘ktc',
+            formula: 'V = n Ã— 22,4',
             variables: [
-              { key: 'V', label: 'Thể tích (lít)', unit: 'L' },
-              { key: 'n', label: 'Số mol (mol)', unit: 'mol' },
+              { key: 'V', label: 'Thá»ƒ tÃ­ch (lÃ­t)', unit: 'L' },
+              { key: 'n', label: 'Sá»‘ mol (mol)', unit: 'mol' },
             ],
             solve: (vars) => {
               if (vars.n !== null) return { V: vars.n * 22.4 };
@@ -186,13 +186,13 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'ideal_gas',
-            name: 'Phương trình trạng thái khí (PV=nRT)',
+            name: 'PhÆ°Æ¡ng trÃ¬nh tráº¡ng thÃ¡i khÃ­ (PV=nRT)',
             formula: 'PV = nRT',
             variables: [
-              { key: 'P', label: 'Áp suất (atm)', unit: 'atm' },
-              { key: 'V', label: 'Thể tích (lít)', unit: 'L' },
-              { key: 'n', label: 'Số mol (mol)', unit: 'mol' },
-              { key: 'T', label: 'Nhiệt độ (K)', unit: 'K' },
+              { key: 'P', label: 'Ãp suáº¥t (atm)', unit: 'atm' },
+              { key: 'V', label: 'Thá»ƒ tÃ­ch (lÃ­t)', unit: 'L' },
+              { key: 'n', label: 'Sá»‘ mol (mol)', unit: 'mol' },
+              { key: 'T', label: 'Nhiá»‡t Ä‘á»™ (K)', unit: 'K' },
             ],
             solve: (vars) => {
               const R = 0.0821;
@@ -206,16 +206,16 @@ export const CHEM_FORMULAS = {
         ],
       },
       {
-        name: 'Tỉ khối khí',
+        name: 'Tá»‰ khá»‘i khÃ­',
         formulas: [
           {
             id: 'density_ratio_b',
-            name: 'Tỉ khối khí A so với khí B',
+            name: 'Tá»‰ khá»‘i khÃ­ A so vá»›i khÃ­ B',
             formula: 'dA/B = MA / MB',
             variables: [
-              { key: 'd', label: 'Tỉ khối', unit: '' },
-              { key: 'MA', label: 'Khối lượng mol khí A (g/mol)', unit: 'g/mol' },
-              { key: 'MB', label: 'Khối lượng mol khí B (g/mol)', unit: 'g/mol' },
+              { key: 'd', label: 'Tá»‰ khá»‘i', unit: '' },
+              { key: 'MA', label: 'Khá»‘i lÆ°á»£ng mol khÃ­ A (g/mol)', unit: 'g/mol' },
+              { key: 'MB', label: 'Khá»‘i lÆ°á»£ng mol khÃ­ B (g/mol)', unit: 'g/mol' },
             ],
             solve: (vars) => {
               if (vars.MA !== null && vars.MB !== null) return { d: vars.MA / vars.MB };
@@ -226,11 +226,11 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'density_ratio_air',
-            name: 'Tỉ khối so với không khí',
+            name: 'Tá»‰ khá»‘i so vá»›i khÃ´ng khÃ­',
             formula: 'dA/kk = MA / 29',
             variables: [
-              { key: 'd', label: 'Tỉ khối so với không khí', unit: '' },
-              { key: 'MA', label: 'Khối lượng mol khí A (g/mol)', unit: 'g/mol' },
+              { key: 'd', label: 'Tá»‰ khá»‘i so vá»›i khÃ´ng khÃ­', unit: '' },
+              { key: 'MA', label: 'Khá»‘i lÆ°á»£ng mol khÃ­ A (g/mol)', unit: 'g/mol' },
             ],
             solve: (vars) => {
               if (vars.MA !== null) return { d: vars.MA / 29 };
@@ -243,20 +243,20 @@ export const CHEM_FORMULAS = {
     ],
   },
   reaction: {
-    label: 'Phản ứng & Hiệu suất',
-    icon: '⚡',
+    label: 'Pháº£n á»©ng & Hiá»‡u suáº¥t',
+    icon: 'âš¡',
     categories: [
       {
-        name: 'Hiệu suất & Tốc độ',
+        name: 'Hiá»‡u suáº¥t & Tá»‘c Ä‘á»™',
         formulas: [
           {
             id: 'yield',
-            name: 'Hiệu suất phản ứng',
-            formula: 'H% = (thực tế / lý thuyết) × 100%',
+            name: 'Hiá»‡u suáº¥t pháº£n á»©ng',
+            formula: 'H% = (thá»±c táº¿ / lÃ½ thuyáº¿t) Ã— 100%',
             variables: [
-              { key: 'H', label: 'Hiệu suất (%)', unit: '%' },
-              { key: 'actual', label: 'Lượng thực tế', unit: '' },
-              { key: 'theory', label: 'Lượng lý thuyết', unit: '' },
+              { key: 'H', label: 'Hiá»‡u suáº¥t (%)', unit: '%' },
+              { key: 'actual', label: 'LÆ°á»£ng thá»±c táº¿', unit: '' },
+              { key: 'theory', label: 'LÆ°á»£ng lÃ½ thuyáº¿t', unit: '' },
             ],
             solve: (vars) => {
               if (vars.actual !== null && vars.theory !== null) return { H: (vars.actual / vars.theory) * 100 };
@@ -267,12 +267,12 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'reaction_rate',
-            name: 'Tốc độ phản ứng trung bình',
-            formula: 'v = ΔC / Δt',
+            name: 'Tá»‘c Ä‘á»™ pháº£n á»©ng trung bÃ¬nh',
+            formula: 'v = Î”C / Î”t',
             variables: [
-              { key: 'v', label: 'Tốc độ phản ứng (mol/L·s)', unit: 'mol/L·s' },
-              { key: 'dC', label: 'Độ biến thiên nồng độ (mol/L)', unit: 'mol/L' },
-              { key: 'dt', label: 'Độ biến thiên thời gian (s)', unit: 's' },
+              { key: 'v', label: 'Tá»‘c Ä‘á»™ pháº£n á»©ng (mol/LÂ·s)', unit: 'mol/LÂ·s' },
+              { key: 'dC', label: 'Äá»™ biáº¿n thiÃªn ná»“ng Ä‘á»™ (mol/L)', unit: 'mol/L' },
+              { key: 'dt', label: 'Äá»™ biáº¿n thiÃªn thá»i gian (s)', unit: 's' },
             ],
             solve: (vars) => {
               if (vars.dC !== null && vars.dt !== null) return { v: Math.abs(vars.dC / vars.dt) };
@@ -286,19 +286,19 @@ export const CHEM_FORMULAS = {
     ],
   },
   advanced: {
-    label: 'pH & Điện hóa',
-    icon: '⚛️',
+    label: 'pH & Äiá»‡n hÃ³a',
+    icon: 'âš›ï¸',
     categories: [
       {
-        name: 'pH & Cân bằng',
+        name: 'pH & CÃ¢n báº±ng',
         formulas: [
           {
             id: 'ph',
-            name: 'Tính pH',
-            formula: 'pH = -log[H⁺]',
+            name: 'TÃ­nh pH',
+            formula: 'pH = -log[Hâº]',
             variables: [
-              { key: 'pH', label: 'Giá trị pH', unit: '' },
-              { key: 'H', label: 'Nồng độ H⁺ (mol/L)', unit: 'mol/L' },
+              { key: 'pH', label: 'GiÃ¡ trá»‹ pH', unit: '' },
+              { key: 'H', label: 'Ná»“ng Ä‘á»™ Hâº (mol/L)', unit: 'mol/L' },
             ],
             solve: (vars) => {
               if (vars.H !== null && vars.H > 0) return { pH: -Math.log10(vars.H) };
@@ -308,12 +308,12 @@ export const CHEM_FORMULAS = {
           },
           {
             id: 'equilibrium_kc',
-            name: 'Hằng số cân bằng Kc (A ⇌ B)',
+            name: 'Háº±ng sá»‘ cÃ¢n báº±ng Kc (A â‡Œ B)',
             formula: 'Kc = [B] / [A]',
             variables: [
-              { key: 'Kc', label: 'Hằng số cân bằng Kc', unit: '' },
-              { key: 'B', label: 'Nồng độ sản phẩm [B] (mol/L)', unit: 'mol/L' },
-              { key: 'A', label: 'Nồng độ chất phản ứng [A] (mol/L)', unit: 'mol/L' },
+              { key: 'Kc', label: 'Háº±ng sá»‘ cÃ¢n báº±ng Kc', unit: '' },
+              { key: 'B', label: 'Ná»“ng Ä‘á»™ sáº£n pháº©m [B] (mol/L)', unit: 'mol/L' },
+              { key: 'A', label: 'Ná»“ng Ä‘á»™ cháº¥t pháº£n á»©ng [A] (mol/L)', unit: 'mol/L' },
             ],
             solve: (vars) => {
               if (vars.B !== null && vars.A !== null) return { Kc: vars.B / vars.A };
@@ -325,18 +325,18 @@ export const CHEM_FORMULAS = {
         ],
       },
       {
-        name: 'Điện phân',
+        name: 'Äiá»‡n phÃ¢n',
         formulas: [
           {
             id: 'faraday',
-            name: 'Định luật Faraday',
-            formula: 'm = (A × I × t) / (n × F)',
+            name: 'Äá»‹nh luáº­t Faraday',
+            formula: 'm = (A Ã— I Ã— t) / (n Ã— F)',
             variables: [
-              { key: 'm', label: 'Khối lượng chất (g)', unit: 'g' },
-              { key: 'A', label: 'Khối lượng mol nguyên tử (g/mol)', unit: 'g/mol' },
-              { key: 'I', label: 'Cường độ dòng điện (A)', unit: 'A' },
-              { key: 't', label: 'Thời gian (s)', unit: 's' },
-              { key: 'n', label: 'Số electron trao đổi', unit: '' },
+              { key: 'm', label: 'Khá»‘i lÆ°á»£ng cháº¥t (g)', unit: 'g' },
+              { key: 'A', label: 'Khá»‘i lÆ°á»£ng mol nguyÃªn tá»­ (g/mol)', unit: 'g/mol' },
+              { key: 'I', label: 'CÆ°á»ng Ä‘á»™ dÃ²ng Ä‘iá»‡n (A)', unit: 'A' },
+              { key: 't', label: 'Thá»i gian (s)', unit: 's' },
+              { key: 'n', label: 'Sá»‘ electron trao Ä‘á»•i', unit: '' },
             ],
             solve: (vars) => {
               const F = 96500;
@@ -355,26 +355,27 @@ export const CHEM_FORMULAS = {
   },
 };
 
-/** Công thức nhanh hay dùng nhất - hiển thị mặc định */
+/** CÃ´ng thá»©c nhanh hay dÃ¹ng nháº¥t - hiá»ƒn thá»‹ máº·c Ä‘á»‹nh */
 export const QUICK_FORMULAS = [
-  { id: 'mol_mass', label: 'n = m/M', desc: 'Tính mol từ khối lượng' },
-  { id: 'mol_volume', label: 'n = V/22,4', desc: 'Tính mol từ thể tích khí đktc' },
-  { id: 'mass_from_mol', label: 'm = n × M', desc: 'Tính khối lượng chất' },
-  { id: 'volume_gas', label: 'V = n × 22,4', desc: 'Thể tích khí ở đktc' },
-  { id: 'concentration_percent', label: 'C% = mct/mdd × 100', desc: 'Nồng độ phần trăm' },
-  { id: 'concentration_mol', label: 'Cₘ = n/V', desc: 'Nồng độ mol' },
-  { id: 'mol_particles', label: 'N = n × Nₐ', desc: 'Số hạt' },
-  { id: 'yield', label: 'H% = thực tế/lý thuyết × 100', desc: 'Hiệu suất phản ứng' },
+  { id: 'mol_mass', label: 'n = m/M', desc: 'TÃ­nh mol tá»« khá»‘i lÆ°á»£ng' },
+  { id: 'mol_volume', label: 'n = V/22,4', desc: 'TÃ­nh mol tá»« thá»ƒ tÃ­ch khÃ­ Ä‘ktc' },
+  { id: 'mass_from_mol', label: 'm = n Ã— M', desc: 'TÃ­nh khá»‘i lÆ°á»£ng cháº¥t' },
+  { id: 'volume_gas', label: 'V = n Ã— 22,4', desc: 'Thá»ƒ tÃ­ch khÃ­ á»Ÿ Ä‘ktc' },
+  { id: 'concentration_percent', label: 'C% = mct/mdd Ã— 100', desc: 'Ná»“ng Ä‘á»™ pháº§n trÄƒm' },
+  { id: 'concentration_mol', label: 'Câ‚˜ = n/V', desc: 'Ná»“ng Ä‘á»™ mol' },
+  { id: 'mol_particles', label: 'N = n Ã— Nâ‚', desc: 'Sá»‘ háº¡t' },
+  { id: 'yield', label: 'H% = thá»±c táº¿/lÃ½ thuyáº¿t Ã— 100', desc: 'Hiá»‡u suáº¥t pháº£n á»©ng' },
 ];
 
-/** Đổi đơn vị thường gặp */
+/** Äá»•i Ä‘Æ¡n vá»‹ thÆ°á»ng gáº·p */
 export const UNIT_CONVERSIONS = [
   { from: '1 L', to: '1000 mL' },
   { from: '1 mL', to: '0,001 L' },
   { from: '1 kg', to: '1000 g' },
   { from: '1 g', to: '1000 mg' },
-  { from: 'T (K)', to: 't°C + 273' },
-  { from: 'Nₐ', to: '6,022 × 10²³' },
-  { from: 'R', to: '0,0821 L·atm/(mol·K)' },
+  { from: 'T (K)', to: 'tÂ°C + 273' },
+  { from: 'Nâ‚', to: '6,022 Ã— 10Â²Â³' },
+  { from: 'R', to: '0,0821 LÂ·atm/(molÂ·K)' },
   { from: 'F', to: '96500 C/mol' },
 ];
+

@@ -28,15 +28,15 @@ export default function MaterialDetailScreen() {
   const materialId = Array.isArray(id) ? id[0] : id;
 
   const resource = useApiResource(async () => {
-    const [material, feedback] = await Promise.all([
+    const [material, phan_hoi] = await Promise.all([
       libraryApi.detail(materialId),
-      libraryApi.feedback(materialId).catch(() => [])
+      libraryApi.phan_hoi(materialId).catch(() => [])
     ]);
-    return { material, feedback };
+    return { material, phan_hoi };
   }, [materialId]);
 
   const material = resource.data?.material;
-  const feedback = resource.data?.feedback || [];
+  const phan_hoi = resource.data?.phan_hoi || [];
 
   const fileTypeLabel = (type) => {
     if (!type) return "Tệp";
@@ -106,7 +106,7 @@ export default function MaterialDetailScreen() {
       </Card>
 
       <SectionTitle title="Gửi đánh giá" />
-      <Card style={styles.feedbackForm}>
+      <Card style={styles.phan_hoiForm}>
         <TextField
           icon="chatbubble-outline"
           placeholder="Nhận xét của bạn"
@@ -131,13 +131,13 @@ export default function MaterialDetailScreen() {
 
       <SectionTitle title="Phản hồi gần đây" />
       <View style={styles.stack}>
-        {feedback.length > 0 ? feedback.map((item) => (
-          <Card key={item.id} style={styles.feedbackCard}>
-            <View style={styles.feedbackTop}>
-              <Text style={styles.feedbackUser}>{item.users?.username || "Học sinh"}</Text>
+        {phan_hoi.length > 0 ? phan_hoi.map((item) => (
+          <Card key={item.id} style={styles.phan_hoiCard}>
+            <View style={styles.phan_hoiTop}>
+              <Text style={styles.phan_hoiUser}>{item.nguoi_dung?.username || "Học sinh"}</Text>
               <Pill label={`${item.rating || 5}/5`} color={colors.green} icon="star-outline" />
             </View>
-            <Text style={styles.feedbackText}>{item.content}</Text>
+            <Text style={styles.phan_hoiText}>{item.content}</Text>
             {item.reply_content ? (
               <View style={styles.replyBox}>
                 <Text style={styles.replyTitle}>Phản hồi giáo viên</Text>
@@ -147,7 +147,7 @@ export default function MaterialDetailScreen() {
           </Card>
         )) : (
           <Card>
-            <Text style={styles.feedbackText}>Chưa có phản hồi cho tài liệu này.</Text>
+            <Text style={styles.phan_hoiText}>Chưa có phản hồi cho tài liệu này.</Text>
           </Card>
         )}
       </View>
@@ -178,26 +178,26 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontWeight: "600"
   },
-  feedbackForm: {
+  phan_hoiForm: {
     gap: spacing.md
   },
   stack: {
     gap: spacing.sm
   },
-  feedbackCard: {
+  phan_hoiCard: {
     gap: spacing.sm
   },
-  feedbackTop: {
+  phan_hoiTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     gap: spacing.md
   },
-  feedbackUser: {
+  phan_hoiUser: {
     color: colors.ink,
     fontSize: 15,
     fontWeight: "900"
   },
-  feedbackText: {
+  phan_hoiText: {
     color: colors.muted,
     fontSize: 14,
     lineHeight: 21,

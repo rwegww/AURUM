@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -36,7 +36,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
         setNotifications(data);
       }
     } catch (err) {
-      console.error('Lỗi tải thông báo:', err);
+      console.error('Lá»—i táº£i thÃ´ng bÃ¡o:', err);
     }
   }, []);
 
@@ -86,11 +86,11 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
   const getNotificationIcon = (type) => {
     switch (type) {
-      case 'student_join': return '🏫';
-      case 'message': return '💬';
-      case 'submission': return '📝';
-      case 'due_soon': return '⏳';
-      default: return '🔔';
+      case 'student_join': return 'ðŸ«';
+      case 'message': return 'ðŸ’¬';
+      case 'submission': return 'ðŸ“';
+      case 'due_soon': return 'â³';
+      default: return 'ðŸ””';
     }
   };
 
@@ -105,8 +105,8 @@ const ManagementSidebar = ({ menuItems, title }) => {
       const diffMin = Math.floor(diffSec / 60);
       const diffHr = Math.floor(diffMin / 60);
       const diffDay = Math.floor(diffHr / 24);
-      if (diffHr < 24) return `Còn ${diffHr} giờ`;
-      return `Còn ${diffDay} ngày`;
+      if (diffHr < 24) return `CÃ²n ${diffHr} giá»`;
+      return `CÃ²n ${diffDay} ngÃ y`;
     }
 
     const diffSec = Math.floor(diffMs / 1000);
@@ -114,10 +114,10 @@ const ManagementSidebar = ({ menuItems, title }) => {
     const diffHr = Math.floor(diffMin / 60);
     const diffDay = Math.floor(diffHr / 24);
 
-    if (diffSec < 60) return 'Vừa xong';
-    if (diffMin < 60) return `${diffMin} phút trước`;
-    if (diffHr < 24) return `${diffHr} giờ trước`;
-    if (diffDay === 1) return 'Hôm qua';
+    if (diffSec < 60) return 'Vá»«a xong';
+    if (diffMin < 60) return `${diffMin} phÃºt trÆ°á»›c`;
+    if (diffHr < 24) return `${diffHr} giá» trÆ°á»›c`;
+    if (diffDay === 1) return 'HÃ´m qua';
     return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
   };
 
@@ -149,7 +149,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
             <div className="overflow-hidden">
               <p className="text-sm font-bold text-viet-text leading-none mb-1 truncate">{user?.username}</p>
               <p className="text-[11px] text-viet-green font-bold capitalize">
-                {user?.role === 'admin' ? 'Quản trị viên' : user?.role === 'teacher' ? 'Giáo viên' : user?.role}
+                {user?.role === 'admin' ? 'Quáº£n trá»‹ viÃªn' : user?.role === 'teacher' ? 'GiÃ¡o viÃªn' : user?.role}
               </p>
             </div>
           </div>
@@ -187,20 +187,20 @@ const ManagementSidebar = ({ menuItems, title }) => {
             className="absolute left-64 top-20 ml-2 w-80 bg-white/90 backdrop-blur-md border border-viet-border rounded-3xl shadow-xl z-50 flex flex-col max-h-[500px] overflow-hidden"
           >
             <div className="p-4 border-b border-viet-border flex justify-between items-center bg-slate-50/50">
-              <span className="text-xs font-black text-viet-text uppercase tracking-wider">Thông báo</span>
+              <span className="text-xs font-black text-viet-text uppercase tracking-wider">ThÃ´ng bÃ¡o</span>
               <button 
                 onClick={markAllAsRead}
                 className="text-[10px] font-bold text-viet-green hover:underline uppercase"
               >
-                Đánh dấu đã đọc
+                ÄÃ¡nh dáº¥u Ä‘Ã£ Ä‘á»c
               </button>
             </div>
 
             <div className="flex-1 overflow-y-auto divide-y divide-slate-100 custom-scrollbar">
               {notifications.length === 0 ? (
                 <div className="py-12 text-center text-slate-400">
-                  <span className="text-2xl block mb-2">🔔</span>
-                  <p className="text-xs font-medium">Chưa có thông báo nào</p>
+                  <span className="text-2xl block mb-2">ðŸ””</span>
+                  <p className="text-xs font-medium">ChÆ°a cÃ³ thÃ´ng bÃ¡o nÃ o</p>
                 </div>
               ) : (
                 notifications.map((notif) => {
@@ -235,7 +235,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
                         <button
                           onClick={(e) => toggleReadStatus(e, notif.id)}
                           className="shrink-0 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-all self-center ml-1"
-                          title={isUnread ? "Đánh dấu là đã đọc" : "Đánh dấu là chưa đọc"}
+                          title={isUnread ? "ÄÃ¡nh dáº¥u lÃ  Ä‘Ã£ Ä‘á»c" : "ÄÃ¡nh dáº¥u lÃ  chÆ°a Ä‘á»c"}
                         >
                           <div className={`w-2.5 h-2.5 rounded-full transition-all ${
                             isUnread 
@@ -288,7 +288,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
           onClick={logout}
           className="flex items-center justify-center w-full gap-2 px-4 py-3 rounded-xl text-red-500 font-bold text-[13px] hover:bg-red-50 transition-all active:scale-95"
         >
-          <LogOut size={18} /> Đăng xuất
+          <LogOut size={18} /> ÄÄƒng xuáº¥t
         </button>
       </div>
     </div>
@@ -296,3 +296,4 @@ const ManagementSidebar = ({ menuItems, title }) => {
 };
 
 export default ManagementSidebar;
+

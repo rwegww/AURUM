@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Redirect, Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LoadingState } from "../../components/ui/Primitives";
@@ -36,23 +36,23 @@ export default function TabsLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={{ title: "Nhà", tabBarIcon: tabIcon("home-outline") }}
+        options={{ title: "NhÃ ", tabBarIcon: tabIcon("home-outline") }}
       />
       <Tabs.Screen
         name="journey"
-        options={{ title: "Lộ trình", tabBarIcon: tabIcon("map-outline") }}
+        options={{ title: "Lá»™ trÃ¬nh", tabBarIcon: tabIcon("map-outline") }}
       />
       <Tabs.Screen
         name="classroom"
-        options={{ title: "Lớp học", tabBarIcon: tabIcon("school-outline") }}
+        options={{ title: "Lá»›p há»c", tabBarIcon: tabIcon("school-outline") }}
       />
       <Tabs.Screen
         name="arena"
-        options={{ title: "Đấu trường", tabBarIcon: tabIcon("trophy-outline") }}
+        options={{ title: "Äáº¥u trÆ°á»ng", tabBarIcon: tabIcon("trophy-outline") }}
       />
       <Tabs.Screen
         name="more"
-        options={{ title: "Thêm", tabBarIcon: tabIcon("grid-outline") }}
+        options={{ title: "ThÃªm", tabBarIcon: tabIcon("grid-outline") }}
       />
       <Tabs.Screen
         name="lab"
@@ -69,3 +69,4 @@ export default function TabsLayout() {
     </Tabs>
   );
 }
+

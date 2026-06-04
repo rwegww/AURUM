@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { elements } from '@/data/elements';
 import { chemicals as labChemicals } from '@/data/reactions/chemicals';
@@ -11,11 +11,11 @@ const UniversalFormulaSim = ({ formula }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedElement, setSelectedElement] = useState(null);
   
-  // Xác định biến đích (biến kết quả)
+  // XÃ¡c Ä‘á»‹nh biáº¿n Ä‘Ã­ch (biáº¿n káº¿t quáº£)
   const [targetVarKey, setTargetVarKey] = useState(formula.variables[0].key);
   
-  // Giá trị đầu vào mặc định
-  // Giá trị đầu vào mặc định hợp lý cho từng loại biến
+  // GiÃ¡ trá»‹ Ä‘áº§u vÃ o máº·c Ä‘á»‹nh
+  // GiÃ¡ trá»‹ Ä‘áº§u vÃ o máº·c Ä‘á»‹nh há»£p lÃ½ cho tá»«ng loáº¡i biáº¿n
   const [inputs, setInputs] = useState(() => {
     const defaultVals = {};
     formula.variables.forEach(v => {
@@ -28,14 +28,14 @@ const UniversalFormulaSim = ({ formula }) => {
       else if (v.key === 'N') defaultVals[v.key] = 3.01e23;
       else if (v.key === 'P') defaultVals[v.key] = 1;
       else if (v.key === 'T') defaultVals[v.key] = 298; // 25C
-      else if (v.key === 'd' || v.key === 'dA/B' || v.key === 'dA/kk' || v.key === 'dA/H₂') defaultVals[v.key] = 1.2;
+      else if (v.key === 'd' || v.key === 'dA/B' || v.key === 'dA/kk' || v.key === 'dA/Hâ‚‚') defaultVals[v.key] = 1.2;
       else if (v.key === 'H%') defaultVals[v.key] = 80;
       else defaultVals[v.key] = 10;
     });
     return defaultVals;
   });
 
-  // Xác định khoảng (range) cho các thanh trượt
+  // XÃ¡c Ä‘á»‹nh khoáº£ng (range) cho cÃ¡c thanh trÆ°á»£t
   const getVarRange = (key) => {
     if (key === 'm' || key === 'mct' || key === 'mdd') return { min: 0.1, max: 200, step: 0.1 };
     if (key === 'M' || key === 'MA' || key === 'MB') return { min: 1, max: 250, step: 1 };
@@ -50,18 +50,18 @@ const UniversalFormulaSim = ({ formula }) => {
     return { min: 0.1, max: 100, step: 0.1 };
   };
 
-  // Kết quả tính toán
+  // Káº¿t quáº£ tÃ­nh toÃ¡n
   const [result, setResult] = useState({});
 
-  // Cập nhật giá trị
+  // Cáº­p nháº­t giÃ¡ trá»‹
   const handleInputChange = (key, val) => {
     setInputs(prev => ({ ...prev, [key]: parseFloat(val) || 0 }));
   };
 
-  // Tự động tính toán khi input hoặc công thức thay đổi
+  // Tá»± Ä‘á»™ng tÃ­nh toÃ¡n khi input hoáº·c cÃ´ng thá»©c thay Ä‘á»•i
   useEffect(() => {
     const varsToSolve = { ...inputs };
-    varsToSolve[targetVarKey] = null; // Biến đích cần tính
+    varsToSolve[targetVarKey] = null; // Biáº¿n Ä‘Ã­ch cáº§n tÃ­nh
     
     const solved = formula.solve(varsToSolve);
     if (solved) {
@@ -69,16 +69,16 @@ const UniversalFormulaSim = ({ formula }) => {
     }
   }, [inputs, targetVarKey, formula]);
 
-  // Đổi công thức thì reset target
+  // Äá»•i cÃ´ng thá»©c thÃ¬ reset target
   useEffect(() => {
     setTargetVarKey(formula.variables[0].key);
   }, [formula]);
 
-  // Tiện ích tính khối lượng mol tự động từ công thức (H₂O, C₂H₅OH...)
+  // Tiá»‡n Ã­ch tÃ­nh khá»‘i lÆ°á»£ng mol tá»± Ä‘á»™ng tá»« cÃ´ng thá»©c (Hâ‚‚O, Câ‚‚Hâ‚…OH...)
   const calculateMolarMass = (formulaStr) => {
     if (!formulaStr) return 0;
-    // Chuyển subscript thành số thường
-    const standard = formulaStr.replace(/[₀-₉]/g, m => "0123456789"["₀₁₂₃₄₅₆₇₈₉".indexOf(m)]);
+    // Chuyá»ƒn subscript thÃ nh sá»‘ thÆ°á»ng
+    const standard = formulaStr.replace(/[\u2080-\u2089]/g, (m) => String(m.charCodeAt(0) - 0x2080));
     const regex = /([A-Z][a-z]?)([0-9]*)/g;
     let mass = 0;
     let match;
@@ -91,24 +91,24 @@ const UniversalFormulaSim = ({ formula }) => {
     return mass.toFixed(2);
   };
 
-  // Tạo kho dữ liệu tổng hợp (Đơn chất + Hợp chất + Lab Chemicals)
+  // Táº¡o kho dá»¯ liá»‡u tá»•ng há»£p (ÄÆ¡n cháº¥t + Há»£p cháº¥t + Lab Chemicals)
   const unifiedDatabase = useMemo(() => {
     const db = [];
     const addedSymbols = new Set();
 
-    // 1. Ưu tiên nạp từ Lab Chemicals (Chứa đầy đủ tên và khối lượng mol chuẩn)
+    // 1. Æ¯u tiÃªn náº¡p tá»« Lab Chemicals (Chá»©a Ä‘áº§y Ä‘á»§ tÃªn vÃ  khá»‘i lÆ°á»£ng mol chuáº©n)
     labChemicals.forEach(c => {
       db.push({ 
         symbol: c.formula, 
         name: c.name, 
         weight: c.molarMass, 
-        category: c.category || 'hợp-chất', 
+        category: c.category || 'há»£p-cháº¥t', 
         isCompound: c.formula.length > 2 || /[0-9]/.test(c.formula) 
       });
       addedSymbols.add(c.formula);
     });
 
-    // 2. Thêm các nguyên tố từ Bảng tuần hoàn nếu chưa có
+    // 2. ThÃªm cÃ¡c nguyÃªn tá»‘ tá»« Báº£ng tuáº§n hoÃ n náº¿u chÆ°a cÃ³
     elements.forEach(e => {
       if (!addedSymbols.has(e.symbol)) {
         db.push({ symbol: e.symbol, name: e.name, weight: e.weight, category: e.category, isCompound: false });
@@ -116,18 +116,18 @@ const UniversalFormulaSim = ({ formula }) => {
       }
     });
 
-    // 3. Thêm hợp chất từ labInventory
+    // 3. ThÃªm há»£p cháº¥t tá»« labInventory
     craftableItems.forEach(c => {
       if (!addedSymbols.has(c.formula)) {
-        db.push({ symbol: c.formula, name: c.name, weight: calculateMolarMass(c.formula), category: 'hợp-chất', isCompound: true });
+        db.push({ symbol: c.formula, name: c.name, weight: calculateMolarMass(c.formula), category: 'há»£p-cháº¥t', isCompound: true });
         addedSymbols.add(c.formula);
       }
     });
 
-    // 4. Thêm phân tử từ molecules
+    // 4. ThÃªm phÃ¢n tá»­ tá»« molecules
     molecules.forEach(m => {
       if (!addedSymbols.has(m.formula)) {
-        db.push({ symbol: m.formula, name: m.name, weight: calculateMolarMass(m.formula), category: 'hợp-chất', isCompound: true });
+        db.push({ symbol: m.formula, name: m.name, weight: calculateMolarMass(m.formula), category: 'há»£p-cháº¥t', isCompound: true });
         addedSymbols.add(m.formula);
       }
     });
@@ -135,32 +135,32 @@ const UniversalFormulaSim = ({ formula }) => {
     return db;
   }, []);
 
-  // Bảng tuần hoàn & Hợp chất auto-fill
+  // Báº£ng tuáº§n hoÃ n & Há»£p cháº¥t auto-fill
   const filteredElements = useMemo(() => {
     if (!searchTerm) return [];
     const term = searchTerm.toLowerCase();
     
-    // Tìm trong database có sẵn
+    // TÃ¬m trong database cÃ³ sáºµn
     const results = unifiedDatabase.filter(e => 
       e.symbol.toLowerCase().includes(term) || 
       e.name.toLowerCase().includes(term)
     ).slice(0, 5);
 
-    // Tính năng AI: Tự động phân tích và tính toán phân tử khối cho mọi công thức người dùng gõ
-    // (Bao gồm cả các chất KHÔNG CÓ trong hệ thống như HCl, NaOH, HNO3...)
+    // TÃ­nh nÄƒng AI: Tá»± Ä‘á»™ng phÃ¢n tÃ­ch vÃ  tÃ­nh toÃ¡n phÃ¢n tá»­ khá»‘i cho má»i cÃ´ng thá»©c ngÆ°á»i dÃ¹ng gÃµ
+    // (Bao gá»“m cáº£ cÃ¡c cháº¥t KHÃ”NG CÃ“ trong há»‡ thá»‘ng nhÆ° HCl, NaOH, HNO3...)
     const calculatedMass = parseFloat(calculateMolarMass(searchTerm));
     
-    // Nếu gõ ra được công thức hợp lệ (Khối lượng > 0 và bắt đầu bằng chữ In hoa)
-    if (calculatedMass > 0 && /^[A-Z][A-Za-z0-9₀-₉]*$/.test(searchTerm)) {
-      // Tránh trùng lặp nếu đã có trong db
+    // Náº¿u gÃµ ra Ä‘Æ°á»£c cÃ´ng thá»©c há»£p lá»‡ (Khá»‘i lÆ°á»£ng > 0 vÃ  báº¯t Ä‘áº§u báº±ng chá»¯ In hoa)
+    if (calculatedMass > 0 && /^[A-Z][A-Za-z0-9\u2080-\u2089]*$/.test(searchTerm)) {
+      // TrÃ¡nh trÃ¹ng láº·p náº¿u Ä‘Ã£ cÃ³ trong db
       if (!results.find(r => r.symbol.toLowerCase() === term)) {
-        // Tự động chuyển số thường thành số nhỏ (subscript) cho đẹp mắt
-        const formattedSymbol = searchTerm.replace(/[0-9]/g, m => "₀₁₂₃₄₅₆₇₈₉"[m]);
+        // Tá»± Ä‘á»™ng chuyá»ƒn sá»‘ thÆ°á»ng thÃ nh sá»‘ nhá» (subscript) cho Ä‘áº¹p máº¯t
+        const formattedSymbol = searchTerm.replace(/[0-9]/g, (m) => String.fromCharCode(0x2080 + Number(m)));
         results.unshift({
           symbol: formattedSymbol,
-          name: 'Hợp chất AI tự phân tích',
+          name: 'Há»£p cháº¥t AI tá»± phÃ¢n tÃ­ch',
           weight: calculatedMass,
-          category: 'hợp-chất',
+          category: 'há»£p-cháº¥t',
           isCompound: true
         });
       }
@@ -184,15 +184,15 @@ const UniversalFormulaSim = ({ formula }) => {
   const isParticleSim = varKeys.includes('N');
   const isGasSim = varKeys.includes('P') || varKeys.includes('T') || varKeys.includes('d') || varKeys.includes('dA/kk'); 
   const isBeakerSim = !isParticleSim && !isGasSim && (varKeys.includes('C') || varKeys.includes('Cm') || varKeys.includes('C%') || varKeys.includes('V')); 
-  const isScaleSim = !isParticleSim && !isGasSim && !isBeakerSim; // Còn lại mặc định là cái cân
+  const isScaleSim = !isParticleSim && !isGasSim && !isBeakerSim; // CÃ²n láº¡i máº·c Ä‘á»‹nh lÃ  cÃ¡i cÃ¢n
 
-  // Màu mô phỏng
+  // MÃ u mÃ´ phá»ng
   const simColorHex = selectedElement 
     ? (selectedElement.category.includes('metal') && !selectedElement.category.includes('nonmetal') ? '#A0AAB5' : 
        selectedElement.category.includes('gas') ? '#87CEEB' : '#9b59b6')
-    : '#9b59b6'; // Tím KMnO4 mặc định
+    : '#9b59b6'; // TÃ­m KMnO4 máº·c Ä‘á»‹nh
 
-  // Helper chuyển HEX sang RGB
+  // Helper chuyá»ƒn HEX sang RGB
   const hexToRgb = (hex) => {
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '155, 89, 182';
@@ -200,15 +200,15 @@ const UniversalFormulaSim = ({ formula }) => {
   const simColorRgb = hexToRgb(simColorHex);
   const formulaSeed = formula?.key || formula?.name || formula?.title || 'formula';
 
-  // === Tính toán các biến trực quan cho Beaker ===
+  // === TÃ­nh toÃ¡n cÃ¡c biáº¿n trá»±c quan cho Beaker ===
   const currentVol = inputs.V ?? inputs.mdd ?? result.V ?? result.mdd ?? 1; 
-  const maxVol = 2; // Tối đa 2L
+  const maxVol = 2; // Tá»‘i Ä‘a 2L
   const liquidHeightPercent = Math.min((currentVol / maxVol) * 100, 100);
   
   const currentConc = inputs.Cm ?? inputs['C%'] ?? result.Cm ?? result['C%'] ?? inputs.n ?? result.n ?? 1;
-  const maxConc = 5; // Nồng độ tối đa hiển thị
+  const maxConc = 5; // Ná»“ng Ä‘á»™ tá»‘i Ä‘a hiá»ƒn thá»‹
   const concentrationOpacity = Math.min(currentConc / maxConc, 1);
-  const isSaturated = currentConc > 3.5; // Giả lập bão hòa nếu nồng độ quá cao
+  const isSaturated = currentConc > 3.5; // Giáº£ láº­p bÃ£o hÃ²a náº¿u ná»“ng Ä‘á»™ quÃ¡ cao
 
   const saturatedParticles = useMemo(() => {
     return Array.from({ length: 30 }, (_, i) => ({
@@ -256,16 +256,16 @@ const UniversalFormulaSim = ({ formula }) => {
   return (
     <div className="space-y-6">
       
-      {/* 1. MÔ PHỎNG TƯƠNG TÁC (Visual Area) */}
+      {/* 1. MÃ” PHá»ŽNG TÆ¯Æ NG TÃC (Visual Area) */}
       <div className="viet-card p-6 bg-[#f8f9fa] border-2 border-[#e9ecef] shadow-inner relative overflow-hidden flex flex-col md:flex-row gap-8 justify-center items-center min-h-[400px]">
         
-        {/* === CỘT TRÁI: SLIDER ĐIỀU KHIỂN (Vertical Sliders) === */}
+        {/* === Cá»˜T TRÃI: SLIDER ÄIá»€U KHIá»‚N (Vertical Sliders) === */}
         <div className="flex gap-8 items-end h-[250px]">
           {formula.variables.filter(v => v.key !== targetVarKey).map(v => {
             const val = inputs[v.key];
             const range = getVarRange(v.key);
             
-            // Xử lý hiển thị slider an toàn
+            // Xá»­ lÃ½ hiá»ƒn thá»‹ slider an toÃ n
             const percent = Math.min(Math.max((val - range.min) / (range.max - range.min) * 100, 0), 100);
             
             return (
@@ -302,31 +302,31 @@ const UniversalFormulaSim = ({ formula }) => {
           })}
         </div>
 
-        {/* === GIỮA: VISUAL CONTAINER (Beaker/Scale) === */}
+        {/* === GIá»®A: VISUAL CONTAINER (Beaker/Scale) === */}
         <div className="relative flex flex-col items-center">
           
-          {/* VISUAL: BEAKER (Dung dịch) */}
+          {/* VISUAL: BEAKER (Dung dá»‹ch) */}
           {isBeakerSim && (
             <div className="relative">
-              {/* Vỏ cốc */}
+              {/* Vá» cá»‘c */}
               <svg width="240" height="280" viewBox="0 0 240 280" className="drop-shadow-xl z-10 relative">
-                {/* Miệng cốc */}
+                {/* Miá»‡ng cá»‘c */}
                 <path d="M 10 30 Q 120 50 230 30 L 220 260 Q 120 280 20 260 Z" fill="rgba(255,255,255,0.4)" stroke="#ccc" strokeWidth="4" />
                 <path d="M 10 30 Q 120 10 230 30" fill="none" stroke="#ccc" strokeWidth="4" />
-                <path d="M 10 30 Q -10 10 10 -10" fill="none" stroke="#ccc" strokeWidth="4" /> {/* Mỏ cốc */}
+                <path d="M 10 30 Q -10 10 10 -10" fill="none" stroke="#ccc" strokeWidth="4" /> {/* Má» cá»‘c */}
                 
-                {/* Vạch chia thể tích */}
+                {/* Váº¡ch chia thá»ƒ tÃ­ch */}
                 <line x1="30" y1="80" x2="50" y2="80" stroke="#999" strokeWidth="2" />
                 <text x="60" y="85" fill="#666" fontSize="14" fontWeight="bold">1 L</text>
                 <line x1="25" y1="110" x2="40" y2="110" stroke="#999" strokeWidth="1" />
                 <line x1="25" y1="140" x2="40" y2="140" stroke="#999" strokeWidth="1" />
                 <line x1="20" y1="170" x2="45" y2="170" stroke="#999" strokeWidth="2" />
-                <text x="55" y="175" fill="#666" fontSize="12" fontWeight="bold">½ L</text>
+                <text x="55" y="175" fill="#666" fontSize="12" fontWeight="bold">Â½ L</text>
                 <line x1="18" y1="200" x2="35" y2="200" stroke="#999" strokeWidth="1" />
                 <line x1="15" y1="230" x2="35" y2="230" stroke="#999" strokeWidth="1" />
               </svg>
 
-              {/* Chất lỏng bên trong */}
+              {/* Cháº¥t lá»ng bÃªn trong */}
               <motion.div 
                 className="absolute bottom-[20px] left-[20px] right-[20px] rounded-b-[40px] z-0 overflow-hidden"
                 style={{ 
@@ -337,14 +337,14 @@ const UniversalFormulaSim = ({ formula }) => {
                 animate={{ height: `${liquidHeightPercent * 2.4}px` }}
                 transition={{ type: "spring", stiffness: 60 }}
               >
-                {/* Mặt thoáng chất lỏng */}
+                {/* Máº·t thoÃ¡ng cháº¥t lá»ng */}
                 <div className="absolute top-0 w-full h-[15px] rounded-[50%] bg-white/20" />
                 
-                {/* Hạt kết tủa bão hòa */}
+                {/* Háº¡t káº¿t tá»§a bÃ£o hÃ²a */}
                 {isSaturated && (
                   <>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/80 px-3 py-1 rounded-md text-[14px] font-black text-red-600 shadow-md border border-red-200">
-                      Bão hoà!
+                      BÃ£o hoÃ !
                     </div>
                     {saturatedParticles.map((particle, i) => (
                       <div key={i} className="absolute bottom-2 w-2 h-2 bg-black rounded-sm rotate-45"
@@ -354,18 +354,18 @@ const UniversalFormulaSim = ({ formula }) => {
                 )}
               </motion.div>
 
-              {/* Nhãn dán */}
+              {/* NhÃ£n dÃ¡n */}
               <div className="absolute top-[80px] left-1/2 -translate-x-1/2 bg-white/90 border border-gray-300 px-6 py-3 rounded-lg shadow-sm z-20 font-black text-[20px]">
-                {selectedElement?.symbol || 'KMnO₄'}
+                {selectedElement?.symbol || 'KMnOâ‚„'}
               </div>
             </div>
           )}
 
-          {/* VISUAL: Khí/Áp suất/Nhiệt độ */}
+          {/* VISUAL: KhÃ­/Ãp suáº¥t/Nhiá»‡t Ä‘á»™ */}
           {!isBeakerSim && isGasSim && (
             <div className="relative w-[200px] h-[240px] border-[6px] border-gray-700 rounded-t-full rounded-b-xl overflow-hidden bg-gradient-to-b from-gray-100 to-gray-300 shadow-inner">
               <div className="absolute top-4 left-1/2 -translate-x-1/2 text-center">
-                <div className="text-[12px] font-black text-gray-500 uppercase">Bình Khí</div>
+                <div className="text-[12px] font-black text-gray-500 uppercase">BÃ¬nh KhÃ­</div>
                 <div className="text-[28px] font-black text-gray-800">{selectedElement?.symbol || 'Gas'}</div>
               </div>
               <motion.div 
@@ -386,13 +386,13 @@ const UniversalFormulaSim = ({ formula }) => {
             </div>
           )}
 
-          {/* VISUAL: Hạt vi mô (Kính hiển vi) */}
+          {/* VISUAL: Háº¡t vi mÃ´ (KÃ­nh hiá»ƒn vi) */}
           {isParticleSim && (
             <div className="relative w-[240px] h-[240px] rounded-full border-[8px] border-gray-800 bg-gray-900 overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-              {/* Ánh sáng đèn kính hiển vi */}
+              {/* Ãnh sÃ¡ng Ä‘Ã¨n kÃ­nh hiá»ƒn vi */}
               <div className="absolute inset-0 bg-radial-gradient from-white/10 to-transparent pointer-events-none" />
               <div className="absolute top-4 left-1/2 -translate-x-1/2 text-center z-20 bg-black/40 px-3 py-1 rounded-full border border-white/10">
-                <div className="text-[14px] font-black text-amber-400">{(inputs.N || result.N || 0).toExponential(3)} hạt</div>
+                <div className="text-[14px] font-black text-amber-400">{(inputs.N || result.N || 0).toExponential(3)} háº¡t</div>
               </div>
               {/* Particles */}
               {microParticles.map((particle, i) => (
@@ -413,7 +413,7 @@ const UniversalFormulaSim = ({ formula }) => {
             </div>
           )}
 
-          {/* VISUAL: Cân điện tử (Mặc định cho khối lượng) */}
+          {/* VISUAL: CÃ¢n Ä‘iá»‡n tá»­ (Máº·c Ä‘á»‹nh cho khá»‘i lÆ°á»£ng) */}
           {isScaleSim && (
             <div className="flex flex-col items-center">
               <motion.div 
@@ -432,14 +432,14 @@ const UniversalFormulaSim = ({ formula }) => {
           )}
         </div>
 
-        {/* === CỘT PHẢI: METER ĐO KẾT QUẢ TƯƠNG TÁC === */}
+        {/* === Cá»˜T PHáº¢I: METER ÄO Káº¾T QUáº¢ TÆ¯Æ NG TÃC === */}
         <div className="flex flex-col items-center h-[280px] relative w-32">
           <div className="text-[12px] font-black text-viet-text text-center w-full mb-2 leading-tight">
             {formula.variables.find(v => v.key === targetVarKey)?.label.split('(')[0].trim()}
             <div className="text-[10px] font-bold text-viet-text-light">({formula.variables.find(v => v.key === targetVarKey)?.unit})</div>
           </div>
           
-          {/* Cột đo Nồng độ / Kết quả */}
+          {/* Cá»™t Ä‘o Ná»“ng Ä‘á»™ / Káº¿t quáº£ */}
           <div className="w-8 h-[200px] border-2 border-gray-400 bg-gray-200 relative">
             <motion.div 
               className="absolute bottom-0 w-full"
@@ -447,7 +447,7 @@ const UniversalFormulaSim = ({ formula }) => {
               animate={{ height: `${Math.min(Math.max((result[targetVarKey] || 0) / getVarRange(targetVarKey).max * 100, 0), 100)}%` }}
               transition={{ type: "spring", stiffness: 80 }}
             />
-            {/* Mũi tên chỉ thị kết quả */}
+            {/* MÅ©i tÃªn chá»‰ thá»‹ káº¿t quáº£ */}
             <motion.div 
               className="absolute -right-10 flex items-center pointer-events-none"
               animate={{ bottom: `${Math.min(Math.max((result[targetVarKey] || 0) / getVarRange(targetVarKey).max * 100, 0), 100)}%`, marginBottom: '-10px' }}
@@ -465,12 +465,12 @@ const UniversalFormulaSim = ({ formula }) => {
 
       </div>
 
-      {/* 2. CHỌN BIẾN ĐÍCH & CHẤT TỪ BẢNG TUẦN HOÀN */}
+      {/* 2. CHá»ŒN BIáº¾N ÄÃCH & CHáº¤T Tá»ª Báº¢NG TUáº¦N HOÃ€N */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        {/* Khung Chọn Biến Cần Tính */}
+        {/* Khung Chá»n Biáº¿n Cáº§n TÃ­nh */}
         <div className="viet-card p-5 border-2 border-blue-200 bg-blue-50/50">
-          <h3 className="text-[12px] font-black text-blue-800 uppercase tracking-[2px] mb-3">🎯 Chọn Đại Lượng Cần Tính</h3>
+          <h3 className="text-[12px] font-black text-blue-800 uppercase tracking-[2px] mb-3">ðŸŽ¯ Chá»n Äáº¡i LÆ°á»£ng Cáº§n TÃ­nh</h3>
           <div className="flex flex-wrap gap-3">
             {formula.variables.map(v => (
               <label key={v.key} className={`cursor-pointer flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all ${targetVarKey === v.key ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-blue-200 text-blue-800 hover:border-blue-400'}`}>
@@ -486,21 +486,21 @@ const UniversalFormulaSim = ({ formula }) => {
             ))}
           </div>
           <div className="mt-4 text-[11px] text-blue-700 font-medium">
-            💡 Kéo các thanh trượt ở trên để thay đổi thông số, đại lượng <strong className="font-black">[{targetVarKey}]</strong> sẽ tự động tính toán.
+            ðŸ’¡ KÃ©o cÃ¡c thanh trÆ°á»£t á»Ÿ trÃªn Ä‘á»ƒ thay Ä‘á»•i thÃ´ng sá»‘, Ä‘áº¡i lÆ°á»£ng <strong className="font-black">[{targetVarKey}]</strong> sáº½ tá»± Ä‘á»™ng tÃ­nh toÃ¡n.
           </div>
         </div>
 
-        {/* Khung Chọn Chất (Bảng Tuần Hoàn) */}
+        {/* Khung Chá»n Cháº¥t (Báº£ng Tuáº§n HoÃ n) */}
         <div className="viet-card p-5 border-2 border-amber-200 bg-amber-50/50">
           <h3 className="text-[12px] font-black text-amber-800 uppercase tracking-[2px] mb-3 flex items-center gap-2">
-            <span>⚛️</span> Nạp chất từ Lab Chemicals
+            <span>âš›ï¸</span> Náº¡p cháº¥t tá»« Lab Chemicals
           </h3>
           <div className="relative">
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => { setSearchTerm(e.target.value); setShowDropdown(true); }}
-              placeholder="Gõ tên chất (VD: Nước, H₂O, Fe, NaCl...)"
+              placeholder="GÃµ tÃªn cháº¥t (VD: NÆ°á»›c, Hâ‚‚O, Fe, NaCl...)"
               className="w-full h-[48px] rounded-xl px-4 border-2 border-amber-300 focus:border-amber-500 outline-none text-[14px] font-bold bg-white"
             />
             {showDropdown && filteredElements.length > 0 && (
@@ -531,7 +531,7 @@ const UniversalFormulaSim = ({ formula }) => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-[9px] font-bold text-gray-500 uppercase">{selectedElement.isCompound ? 'Phân tử khối' : 'Khối lượng mol'}</div>
+                <div className="text-[9px] font-bold text-gray-500 uppercase">{selectedElement.isCompound ? 'PhÃ¢n tá»­ khá»‘i' : 'Khá»‘i lÆ°á»£ng mol'}</div>
                 <div className="text-[14px] font-black text-amber-600">{selectedElement.weight}</div>
               </div>
             </div>
@@ -545,3 +545,4 @@ const UniversalFormulaSim = ({ formula }) => {
 };
 
 export default UniversalFormulaSim;
+

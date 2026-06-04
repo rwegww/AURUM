@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import {
@@ -31,28 +31,28 @@ export default function JourneyTab() {
   const defaultGrade = String(user?.studyPlan?.grade || "10");
   const [grade, setGrade] = React.useState(grades.includes(defaultGrade) ? defaultGrade : "10");
 
-  const lessonsResource = useApiResource(
-    () => learningApi.lessons({ classId: Number(grade) }),
+  const bai_hocResource = useApiResource(
+    () => learningApi.bai_hoc({ classId: Number(grade) }),
     [grade]
   );
 
-  const lessons = lessonsResource.data || [];
-  const completedCount = lessons.filter((lesson) => getLessonStars(user, lesson.id).completedLevels >= 3).length;
-  const overall = lessons.length ? completedCount / lessons.length : 0;
+  const bai_hoc = bai_hocResource.data || [];
+  const completedCount = bai_hoc.filter((lesson) => getLessonStars(user, lesson.id).completedLevels >= 3).length;
+  const overall = bai_hoc.length ? completedCount / bai_hoc.length : 0;
 
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Lộ trình"
-        title="Lộ trình hóa học"
-        subtitle="Theo dõi bài học từ khối 8 đến 12 và ghi nhận tiến độ từng chặng."
+        eyebrow="Lá»™ trÃ¬nh"
+        title="Lá»™ trÃ¬nh hÃ³a há»c"
+        subtitle="Theo dÃµi bÃ i há»c tá»« khá»‘i 8 Ä‘áº¿n 12 vÃ  ghi nháº­n tiáº¿n Ä‘á»™ tá»«ng cháº·ng."
       />
 
       <Card accent={colors.green} style={styles.summary}>
         <View style={styles.summaryTop}>
           <View>
-            <Text style={styles.summaryTitle}>Khối {grade}</Text>
-            <Text style={styles.summarySubtitle}>{completedCount}/{lessons.length || 0} bài đã hoàn thành đủ 3 chặng</Text>
+            <Text style={styles.summaryTitle}>Khá»‘i {grade}</Text>
+            <Text style={styles.summarySubtitle}>{completedCount}/{bai_hoc.length || 0} bÃ i Ä‘Ã£ hoÃ n thÃ nh Ä‘á»§ 3 cháº·ng</Text>
           </View>
           <Text style={styles.summaryPercent}>{Math.round(overall * 100)}%</Text>
         </View>
@@ -74,17 +74,17 @@ export default function JourneyTab() {
         })}
       </View>
 
-      <SectionTitle title={`Bài học khối ${grade}`} actionLabel="Tải lại" onAction={lessonsResource.reload} />
+      <SectionTitle title={`BÃ i há»c khá»‘i ${grade}`} actionLabel="Táº£i láº¡i" onAction={bai_hocResource.reload} />
 
-      {lessonsResource.loading && !lessonsResource.data ? (
-        <LoadingState label="Đang tải bài học..." />
-      ) : lessonsResource.error ? (
-        <ErrorState message={lessonsResource.error.message} onRetry={lessonsResource.reload} />
-      ) : lessons.length === 0 ? (
-        <EmptyState title="Chưa có bài học" subtitle="Hệ thống chưa có dữ liệu cho khối này." />
+      {bai_hocResource.loading && !bai_hocResource.data ? (
+        <LoadingState label="Äang táº£i bÃ i há»c..." />
+      ) : bai_hocResource.error ? (
+        <ErrorState message={bai_hocResource.error.message} onRetry={bai_hocResource.reload} />
+      ) : bai_hoc.length === 0 ? (
+        <EmptyState title="ChÆ°a cÃ³ bÃ i há»c" subtitle="Há»‡ thá»‘ng chÆ°a cÃ³ dá»¯ liá»‡u cho khá»‘i nÃ y." />
       ) : (
         <View style={styles.lessonStack}>
-          {lessons.map((lesson, index) => {
+          {bai_hoc.map((lesson, index) => {
             const starData = getLessonStars(user, lesson.id);
             return (
               <Pressable
@@ -98,7 +98,7 @@ export default function JourneyTab() {
                 <View style={styles.lessonContent}>
                   <Text style={styles.lessonTitle} numberOfLines={2}>{lesson.title}</Text>
                   <Text style={styles.lessonMeta} numberOfLines={1}>
-                    {lesson.chapter || "Chương học"} · {starData.total}/9 sao
+                    {lesson.chapter || "ChÆ°Æ¡ng há»c"} Â· {starData.total}/9 sao
                   </Text>
                   <ProgressBar value={starData.completedLevels / 3} color={starData.completedLevels >= 3 ? colors.green : colors.green} />
                 </View>
@@ -206,4 +206,5 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   }
 });
+
 

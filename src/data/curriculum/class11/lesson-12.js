@@ -1,20 +1,20 @@
-export const bai12 = {
+﻿export const bai12 = {
   "id": "hoa11_kntt_bai12",
   "classId": 11,
   "lessonId": 12,
   "programId": "ketnoi",
-  "title": "Bài 12. Công thức phân tử hợp chất hữu cơ",
-  "chapter": "Chương 3. Đại cương về hóa học hữu cơ",
+  "title": "BÃ i 12. CÃ´ng thá»©c phÃ¢n tá»­ há»£p cháº¥t há»¯u cÆ¡",
+  "chapter": "ChÆ°Æ¡ng 3. Äáº¡i cÆ°Æ¡ng vá» hÃ³a há»c há»¯u cÆ¡",
   "order": 12,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Các loại công thức biểu diễn hợp chất hữu cơ. Cách xác định công thức phân tử từ phần trăm khối lượng hoặc dữ kiện đốt cháy.",
+  "description": "CÃ¡c loáº¡i cÃ´ng thá»©c biá»ƒu diá»…n há»£p cháº¥t há»¯u cÆ¡. CÃ¡ch xÃ¡c Ä‘á»‹nh cÃ´ng thá»©c phÃ¢n tá»­ tá»« pháº§n trÄƒm khá»‘i lÆ°á»£ng hoáº·c dá»¯ kiá»‡n Ä‘á»‘t chÃ¡y.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Công thức phân tử and Công thức đơn giản nhất",
+        "text": "1. CÃ´ng thá»©c phÃ¢n tá»­ and CÃ´ng thá»©c Ä‘Æ¡n giáº£n nháº¥t",
         "level": "h2"
       }
     },
@@ -24,10 +24,10 @@ export const bai12 = {
       "content": {
         "type": "bullet",
         "items": [
-          "Giải mãi bản đồ cấu tạo, Hữu cơ dùng ba loại biển báo công thức:",
-          "1. **Công thức Tổng Quát (CTTQ):** Lấy chữ X Y Z làm mốc chỉ tỉ lệ chùm (Ví dụ $C_xH_yO_z$) để lập hệ phương trình khối lượng.",
-          "2. **Công thức Đơn Giản Nhất (CTĐGN):** Là phép CHIA TỐI GIẢN CHÓT LỌT Tỉ Lệ số lựơng nguyên tử C:H:O xuống còn phân số bần cùng cực tiểu. (Ví dụ Chùm Nho $C_6H_{12}O_6$ chia đứt cho 6 ra CTĐGN là $CH_2O$). Không thể hiện đúng bản thân chất.",
-          "3. **Công thức Phân Tử (CTPT):** Kính chiếu yêu phản ánh ĐÚNG THẬT 100% Số Nguyên Tử Thực Hiện Diện trói buộc 1 phân tử (M). Cách tính duy nhất là lấy $(CTĐGN) \\times n$ lần."
+          "Giáº£i mÃ£i báº£n Ä‘á»“ cáº¥u táº¡o, Há»¯u cÆ¡ dÃ¹ng ba loáº¡i biá»ƒn bÃ¡o cÃ´ng thá»©c:",
+          "1. **CÃ´ng thá»©c Tá»•ng QuÃ¡t (CTTQ):** Láº¥y chá»¯ X Y Z lÃ m má»‘c chá»‰ tá»‰ lá»‡ chÃ¹m (VÃ­ dá»¥ $C_xH_yO_z$) Ä‘á»ƒ láº­p há»‡ phÆ°Æ¡ng trÃ¬nh khá»‘i lÆ°á»£ng.",
+          "2. **CÃ´ng thá»©c ÄÆ¡n Giáº£n Nháº¥t (CTÄGN):** LÃ  phÃ©p CHIA Tá»I GIáº¢N CHÃ“T Lá»ŒT Tá»‰ Lá»‡ sá»‘ lá»±Æ¡ng nguyÃªn tá»­ C:H:O xuá»‘ng cÃ²n phÃ¢n sá»‘ báº§n cÃ¹ng cá»±c tiá»ƒu. (VÃ­ dá»¥ ChÃ¹m Nho $C_6H_{12}O_6$ chia Ä‘á»©t cho 6 ra CTÄGN lÃ  $CH_2O$). KhÃ´ng thá»ƒ hiá»‡n Ä‘Ãºng báº£n thÃ¢n cháº¥t.",
+          "3. **CÃ´ng thá»©c PhÃ¢n Tá»­ (CTPT):** KÃ­nh chiáº¿u yÃªu pháº£n Ã¡nh ÄÃšNG THáº¬T 100% Sá»‘ NguyÃªn Tá»­ Thá»±c Hiá»‡n Diá»‡n trÃ³i buá»™c 1 phÃ¢n tá»­ (M). CÃ¡ch tÃ­nh duy nháº¥t lÃ  láº¥y $(CTÄGN) \\times n$ láº§n."
         ]
       }
     },
@@ -35,8 +35,8 @@ export const bai12 = {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Vũ Khí Kết Nối Lập Công Thức",
-        "content": "Để lập Công thức Đơn giản nhất, ta thiết lập hàng ngang Phân số Số Mol (n): $x : y : z = \\frac{m_C}{12} : \\frac{m_H}{1} : \\frac{m_O}{16} = \\frac{\\%C}{12} : \\frac{\\%H}{1} : \\frac{\\%O}{16}$. Ra các phân chia lẻ $\\rightarrow$ Đưa về Tỉ lệ nguyên bé nhất.\nHệ Nới Rộng CTPT: $(CTĐGN)_n = M_{thực\\ tế}$. Giải nhẩm ra hệ số Mệnh $n$ rồi nhân lòi n vô công thức con để phình phập lồi ra chất Thực.",
+        "title": "VÅ© KhÃ­ Káº¿t Ná»‘i Láº­p CÃ´ng Thá»©c",
+        "content": "Äá»ƒ láº­p CÃ´ng thá»©c ÄÆ¡n giáº£n nháº¥t, ta thiáº¿t láº­p hÃ ng ngang PhÃ¢n sá»‘ Sá»‘ Mol (n): $x : y : z = \\frac{m_C}{12} : \\frac{m_H}{1} : \\frac{m_O}{16} = \\frac{\\%C}{12} : \\frac{\\%H}{1} : \\frac{\\%O}{16}$. Ra cÃ¡c phÃ¢n chia láº» $\\rightarrow$ ÄÆ°a vá» Tá»‰ lá»‡ nguyÃªn bÃ© nháº¥t.\nHá»‡ Ná»›i Rá»™ng CTPT: $(CTÄGN)_n = M_{thá»±c\\ táº¿}$. Giáº£i nháº©m ra há»‡ sá»‘ Má»‡nh $n$ rá»“i nhÃ¢n lÃ²i n vÃ´ cÃ´ng thá»©c con Ä‘á»ƒ phÃ¬nh pháº­p lá»“i ra cháº¥t Thá»±c.",
         "color": "blue"
       }
     },
@@ -44,7 +44,7 @@ export const bai12 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Phân tích nguyên tố and Lập công thức",
+        "text": "2. PhÃ¢n tÃ­ch nguyÃªn tá»‘ and Láº­p cÃ´ng thá»©c",
         "level": "h2"
       }
     },
@@ -52,22 +52,22 @@ export const bai12 = {
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Kĩ Thuật Dựng Lại Chân Dung Hữu Cơ Qua Lò Thiêu Đốt Cháy (Phân tích nguyên tố). Do 100% Carbon rã hết thành CO2, 100% Hydrogen vắt tụi rớt thành H2O mồ hôi. Nên ta Phản Truy quy chiếu thu bắt ngược lại."
+        "text": "KÄ© Thuáº­t Dá»±ng Láº¡i ChÃ¢n Dung Há»¯u CÆ¡ Qua LÃ² ThiÃªu Äá»‘t ChÃ¡y (PhÃ¢n tÃ­ch nguyÃªn tá»‘). Do 100% Carbon rÃ£ háº¿t thÃ nh CO2, 100% Hydrogen váº¯t tá»¥i rá»›t thÃ nh H2O má»“ hÃ´i. NÃªn ta Pháº£n Truy quy chiáº¿u thu báº¯t ngÆ°á»£c láº¡i."
       }
     },
     {
       "id": "mod6",
       "type": "paragraph",
       "content": {
-        "text": "Công cụ hút thu dội lò luyện đơn: Chất cháy đẩy khói xả qua hai ống chốt. \n- Bình số (1) nhét Cục Hóa chất Nóng Hút Nước cực dại ($H_2SO_4$ đặc, Hoặc Khối $P_2O_5$, $CaCl_2$ rắn khô khan). Cân nặng bình (1) tăng rướn lên tột độ CHÍNH LÀ TRỌNG LƯỢNG Nước ($m_{H_2O}$) kẹt khóc trong bình.\n- Khí khô gầy bay qua Bình số (2) chứa Nước Vôi Trong $Ca(OH)_2$ chực sẵn. Cân nặng lên vọt hay vữa tủa trắng nổi lềnh CHÍNH LÀ KHÍ Carbon dioxid ($CO_2$) lọt lưới (Suy ra Mol C)."
+        "text": "CÃ´ng cá»¥ hÃºt thu dá»™i lÃ² luyá»‡n Ä‘Æ¡n: Cháº¥t chÃ¡y Ä‘áº©y khÃ³i xáº£ qua hai á»‘ng chá»‘t. \n- BÃ¬nh sá»‘ (1) nhÃ©t Cá»¥c HÃ³a cháº¥t NÃ³ng HÃºt NÆ°á»›c cá»±c dáº¡i ($H_2SO_4$ Ä‘áº·c, Hoáº·c Khá»‘i $P_2O_5$, $CaCl_2$ ráº¯n khÃ´ khan). CÃ¢n náº·ng bÃ¬nh (1) tÄƒng rÆ°á»›n lÃªn tá»™t Ä‘á»™ CHÃNH LÃ€ TRá»ŒNG LÆ¯á»¢NG NÆ°á»›c ($m_{H_2O}$) káº¹t khÃ³c trong bÃ¬nh.\n- KhÃ­ khÃ´ gáº§y bay qua BÃ¬nh sá»‘ (2) chá»©a NÆ°á»›c VÃ´i Trong $Ca(OH)_2$ chá»±c sáºµn. CÃ¢n náº·ng lÃªn vá»t hay vá»¯a tá»§a tráº¯ng ná»•i lá»nh CHÃNH LÃ€ KHÃ Carbon dioxid ($CO_2$) lá»t lÆ°á»›i (Suy ra Mol C)."
       }
     },
     {
       "id": "mod7",
       "type": "infoBox",
       "content": {
-        "title": "Định Mức Lưới Số Mol Nguồn Gốc Cháy",
-        "content": "Học sinh Cấm Chết Quy Tắc Số:\n[1] $n_C = n_{CO_2} = \\frac{m_{bình\\ 2\\ tăng}}{44}$. (Khối lượng $m_C = n_C \\times 12$).\n[2] $n_H = 2 \\times n_{H_2O} = 2 \\times \\frac{m_{bình\\ 1\\ tăng}}{18}$. (Khối lượng $m_H = n_H \\times 1$). Do 1 nước có 2 chữ H.\n[3] Suy ngược Mol Oxi ẩn thân mù mờ $O$: Phải Lấy Khối lượng Chất Hữu cơ ban đầu ném cháy ($m_X$) Trừ Gốc $m_C$ and Trừ Gốc $m_H$. Độ dư dôi hắt hơi đó chia 16 ra mol Oxy.",
+        "title": "Äá»‹nh Má»©c LÆ°á»›i Sá»‘ Mol Nguá»“n Gá»‘c ChÃ¡y",
+        "content": "Há»c sinh Cáº¥m Cháº¿t Quy Táº¯c Sá»‘:\n[1] $n_C = n_{CO_2} = \\frac{m_{bÃ¬nh\\ 2\\ tÄƒng}}{44}$. (Khá»‘i lÆ°á»£ng $m_C = n_C \\times 12$).\n[2] $n_H = 2 \\times n_{H_2O} = 2 \\times \\frac{m_{bÃ¬nh\\ 1\\ tÄƒng}}{18}$. (Khá»‘i lÆ°á»£ng $m_H = n_H \\times 1$). Do 1 nÆ°á»›c cÃ³ 2 chá»¯ H.\n[3] Suy ngÆ°á»£c Mol Oxi áº©n thÃ¢n mÃ¹ má» $O$: Pháº£i Láº¥y Khá»‘i lÆ°á»£ng Cháº¥t Há»¯u cÆ¡ ban Ä‘áº§u nÃ©m chÃ¡y ($m_X$) Trá»« Gá»‘c $m_C$ and Trá»« Gá»‘c $m_H$. Äá»™ dÆ° dÃ´i háº¯t hÆ¡i Ä‘Ã³ chia 16 ra mol Oxy.",
         "color": "green"
       }
     },
@@ -75,8 +75,8 @@ export const bai12 = {
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "Con Đường Tử Thần Đoạn Phân Số Lẻ",
-        "content": "Lỗi cấm kị khi chia tỉ lệ $x : y : z$. Lỡ chia ra C: 1 and H: 2.5 and O: 1. Việc làm tròn $2.5 \\rightarrow 3$ là Án Tử vĩnh viễn không điểm. Luật Hưởng Là phải nhân bội nhẩm 2 toàn hàng chéo lên cho ra cặp số Tròn Khít tối giản: Nhân 2 xộc $\\rightarrow 2 : 5 : 2$. Tương đương $C_2H_5O_2$.",
+        "title": "Con ÄÆ°á»ng Tá»­ Tháº§n Äoáº¡n PhÃ¢n Sá»‘ Láº»",
+        "content": "Lá»—i cáº¥m ká»‹ khi chia tá»‰ lá»‡ $x : y : z$. Lá»¡ chia ra C: 1 and H: 2.5 and O: 1. Viá»‡c lÃ m trÃ²n $2.5 \\rightarrow 3$ lÃ  Ãn Tá»­ vÄ©nh viá»…n khÃ´ng Ä‘iá»ƒm. Luáº­t HÆ°á»Ÿng LÃ  pháº£i nhÃ¢n bá»™i nháº©m 2 toÃ n hÃ ng chÃ©o lÃªn cho ra cáº·p sá»‘ TrÃ²n KhÃ­t tá»‘i giáº£n: NhÃ¢n 2 xá»™c $\\rightarrow 2 : 5 : 2$. TÆ°Æ¡ng Ä‘Æ°Æ¡ng $C_2H_5O_2$.",
         "color": "orange"
       }
     }
@@ -84,7 +84,7 @@ export const bai12 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Một hợp chất hữu cơ X (gồm C, H, O) có công thức đơn giản nhất là $CH_2O$. Biết Khối lượng mol là 60 g/mol. CTPT của X là:",
+      "question": "Má»™t há»£p cháº¥t há»¯u cÆ¡ X (gá»“m C, H, O) cÃ³ cÃ´ng thá»©c Ä‘Æ¡n giáº£n nháº¥t lÃ  $CH_2O$. Biáº¿t Khá»‘i lÆ°á»£ng mol lÃ  60 g/mol. CTPT cá»§a X lÃ :",
       "options": [
         "CH2O",
         "C2H4O2",
@@ -92,28 +92,28 @@ export const bai12 = {
         "C4H8O4"
       ],
       "correctAnswer": 1,
-      "explanation": "M của (CH2O)n là (12+2+16)n = 30n. Có M_thực = 60 => n = 2. CTPT là C2H4O2."
+      "explanation": "M cá»§a (CH2O)n lÃ  (12+2+16)n = 30n. CÃ³ M_thá»±c = 60 => n = 2. CTPT lÃ  C2H4O2."
     },
     {
       "id": "q2",
-      "question": "Khi đốt cháy một hợp chất X (gồm C, H) luôn thu được CO2 and H2O. Số mol H lấy từ sản phẩm cháy như thế nào?",
+      "question": "Khi Ä‘á»‘t chÃ¡y má»™t há»£p cháº¥t X (gá»“m C, H) luÃ´n thu Ä‘Æ°á»£c CO2 and H2O. Sá»‘ mol H láº¥y tá»« sáº£n pháº©m chÃ¡y nhÆ° tháº¿ nÃ o?",
       "options": [
-        "bằng số mol H2O",
-        "bằng một nửa số mol H2O",
-        "bằng hai lần số mol H2O",
-        "bằng khối lượng bình tăng"
+        "báº±ng sá»‘ mol H2O",
+        "báº±ng má»™t ná»­a sá»‘ mol H2O",
+        "báº±ng hai láº§n sá»‘ mol H2O",
+        "báº±ng khá»‘i lÆ°á»£ng bÃ¬nh tÄƒng"
       ],
       "correctAnswer": 2,
-      "explanation": "Dựa vào bảo toàn nguyên tố Hydrogen, $nH = 2 \\cdot nH_2O$."
+      "explanation": "Dá»±a vÃ o báº£o toÃ n nguyÃªn tá»‘ Hydrogen, $nH = 2 \\cdot nH_2O$."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Công thức phân tử hợp chất hữu cơ",
+      "title": "BÃ i giáº£ng: CÃ´ng thá»©c phÃ¢n tá»­ há»£p cháº¥t há»¯u cÆ¡",
       "url": "https://www.youtube.com/watch?v=GbGGVDoUOF8",
       "thumbnail": "https://img.youtube.com/vi/GbGGVDoUOF8/0.jpg",
-      "description": "Cách xác định công thức đơn giản nhất and công thức phân tử dựa trên kết quả phân tích nguyên tố (VietJack)."
+      "description": "CÃ¡ch xÃ¡c Ä‘á»‹nh cÃ´ng thá»©c Ä‘Æ¡n giáº£n nháº¥t and cÃ´ng thá»©c phÃ¢n tá»­ dá»±a trÃªn káº¿t quáº£ phÃ¢n tÃ­ch nguyÃªn tá»‘ (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -122,3 +122,4 @@ export const bai12 = {
   "game": null,
   "realWorldApplications": []
 };
+

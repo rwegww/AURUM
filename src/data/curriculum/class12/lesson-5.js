@@ -1,14 +1,14 @@
-export const bai5 = {
+﻿export const bai5 = {
   "id": "hoa12_kntt_bai5",
   "classId": 12,
   "lessonId": 5,
   "programId": "ketnoi",
-  "title": "Bài 5. Saccharose và maltose",
-  "chapter": "Chương 2. Carbohydrate",
+  "title": "BÃ i 5. Saccharose vÃ  maltose",
+  "chapter": "ChÆ°Æ¡ng 2. Carbohydrate",
   "order": 5,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Saccharose và nguyên lý phân tử Disaccharide. Phân biệt tính chất chức năng của Saccharose với đường Maltose.",
+  "description": "Saccharose vÃ  nguyÃªn lÃ½ phÃ¢n tá»­ Disaccharide. PhÃ¢n biá»‡t tÃ­nh cháº¥t chá»©c nÄƒng cá»§a Saccharose vá»›i Ä‘Æ°á»ng Maltose.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,7 +22,7 @@ export const bai5 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Saccharose ($C_{12}H_{22}O_{11}$), hay đường mía, là một disaccharide được cấu tạo từ một gốc $\\alpha$-glucose và một gốc $\\beta$-fructose liên kết với nhau qua nguyên tử oxygen giữa $C_1$ của glucose và $C_2$ của fructose (liên kết **$alpha, \\beta$-1,2-glycoside**). Do cả hai nhóm hemiacetal (nhóm -OH bán acetal) của hai đơn vị đã tham gia liên kết, phân tử saccharose không thể mở vòng để tạo nhóm chức aldehyde."
+        "text": "Saccharose ($C_{12}H_{22}O_{11}$), hay Ä‘Æ°á»ng mÃ­a, lÃ  má»™t disaccharide Ä‘Æ°á»£c cáº¥u táº¡o tá»« má»™t gá»‘c $\\alpha$-glucose vÃ  má»™t gá»‘c $\\beta$-fructose liÃªn káº¿t vá»›i nhau qua nguyÃªn tá»­ oxygen giá»¯a $C_1$ cá»§a glucose vÃ  $C_2$ cá»§a fructose (liÃªn káº¿t **$alpha, \\beta$-1,2-glycoside**). Do cáº£ hai nhÃ³m hemiacetal (nhÃ³m -OH bÃ¡n acetal) cá»§a hai Ä‘Æ¡n vá»‹ Ä‘Ã£ tham gia liÃªn káº¿t, phÃ¢n tá»­ saccharose khÃ´ng thá»ƒ má»Ÿ vÃ²ng Ä‘á»ƒ táº¡o nhÃ³m chá»©c aldehyde."
       }
     },
     {
@@ -31,9 +31,9 @@ export const bai5 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Tính chất không khử:** Saccharose không có nhóm aldehyde tự do nên KHÔNG tham gia phản ứng tráng bạc và KHÔNG làm mất màu nước bromine. Đây là điểm khác biệt quan trọng với glucose và fructose.",
-          "**Phản ứng hòa tan $Cu(OH)_2$:** Do phân tử có nhiều nhóm -OH kề nhau, saccharose hòa tan $Cu(OH)_2$ ở nhiệt độ thường tạo thành dung dịch xanh lam thẫm (phức đồng saccharate).",
-          "**Phản ứng thủy phân:** Dưới tác dụng của acid hoặc enzyme, saccharose thủy phân tạo thành hỗn hợp glucose và fructose với tỉ lệ mol 1:1. Hỗn hợp này được gọi là **đường nghịch đảo** vì nó làm thay đổi chiều quay cực của ánh sáng."
+          "**TÃ­nh cháº¥t khÃ´ng khá»­:** Saccharose khÃ´ng cÃ³ nhÃ³m aldehyde tá»± do nÃªn KHÃ”NG tham gia pháº£n á»©ng trÃ¡ng báº¡c vÃ  KHÃ”NG lÃ m máº¥t mÃ u nÆ°á»›c bromine. ÄÃ¢y lÃ  Ä‘iá»ƒm khÃ¡c biá»‡t quan trá»ng vá»›i glucose vÃ  fructose.",
+          "**Pháº£n á»©ng hÃ²a tan $Cu(OH)_2$:** Do phÃ¢n tá»­ cÃ³ nhiá»u nhÃ³m -OH ká» nhau, saccharose hÃ²a tan $Cu(OH)_2$ á»Ÿ nhiá»‡t Ä‘á»™ thÆ°á»ng táº¡o thÃ nh dung dá»‹ch xanh lam tháº«m (phá»©c Ä‘á»“ng saccharate).",
+          "**Pháº£n á»©ng thá»§y phÃ¢n:** DÆ°á»›i tÃ¡c dá»¥ng cá»§a acid hoáº·c enzyme, saccharose thá»§y phÃ¢n táº¡o thÃ nh há»—n há»£p glucose vÃ  fructose vá»›i tá»‰ lá»‡ mol 1:1. Há»—n há»£p nÃ y Ä‘Æ°á»£c gá»i lÃ  **Ä‘Æ°á»ng nghá»‹ch Ä‘áº£o** vÃ¬ nÃ³ lÃ m thay Ä‘á»•i chiá»u quay cá»±c cá»§a Ã¡nh sÃ¡ng."
         ]
       }
     },
@@ -49,15 +49,15 @@ export const bai5 = {
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Maltose (đường mạch nha) là disaccharide được cấu tạo từ hai gốc $\\alpha$-glucose liên kết with nhau qua nguyên tử oxygen giữa $C_1$ của gốc này and $C_4$ của gốc kia (liên kết **$alpha$-1,4-glycoside**). Khác with saccharose, trong phân tử maltose vẫn còn một nhóm hemiacetal tự do ở gốc glucose thứ hai. Do đó, trong dung dịch, gốc này có thể mở vòng tạo nhóm aldehyde."
+        "text": "Maltose (Ä‘Æ°á»ng máº¡ch nha) lÃ  disaccharide Ä‘Æ°á»£c cáº¥u táº¡o tá»« hai gá»‘c $\\alpha$-glucose liÃªn káº¿t with nhau qua nguyÃªn tá»­ oxygen giá»¯a $C_1$ cá»§a gá»‘c nÃ y and $C_4$ cá»§a gá»‘c kia (liÃªn káº¿t **$alpha$-1,4-glycoside**). KhÃ¡c with saccharose, trong phÃ¢n tá»­ maltose váº«n cÃ²n má»™t nhÃ³m hemiacetal tá»± do á»Ÿ gá»‘c glucose thá»© hai. Do Ä‘Ã³, trong dung dá»‹ch, gá»‘c nÃ y cÃ³ thá»ƒ má»Ÿ vÃ²ng táº¡o nhÃ³m aldehyde."
       }
     },
     {
       "id": "mod6",
       "type": "infoBox",
       "content": {
-        "title": "Tính khử của Maltose",
-        "content": "Nhờ khả năng mở vòng tạo nhóm -CHO, maltose có đầy đủ tính chất của một đường khử: Tham gia phản ứng tráng bạc, làm mất màu nước bromine and khử $Cu(OH)_2$ khi đun nóng tạo kết tủa đỏ gạch. Khi thủy phân hoàn toàn 1 mol maltose trong môi trường acid, ta thu được 2 mol glucose.",
+        "title": "TÃ­nh khá»­ cá»§a Maltose",
+        "content": "Nhá» kháº£ nÄƒng má»Ÿ vÃ²ng táº¡o nhÃ³m -CHO, maltose cÃ³ Ä‘áº§y Ä‘á»§ tÃ­nh cháº¥t cá»§a má»™t Ä‘Æ°á»ng khá»­: Tham gia pháº£n á»©ng trÃ¡ng báº¡c, lÃ m máº¥t mÃ u nÆ°á»›c bromine and khá»­ $Cu(OH)_2$ khi Ä‘un nÃ³ng táº¡o káº¿t tá»§a Ä‘á» gáº¡ch. Khi thá»§y phÃ¢n hoÃ n toÃ n 1 mol maltose trong mÃ´i trÆ°á»ng acid, ta thu Ä‘Æ°á»£c 2 mol glucose.",
         "color": "blue"
       }
     },
@@ -65,7 +65,7 @@ export const bai5 = {
       "id": "mod7",
       "type": "heading",
       "content": {
-        "text": "3. Ứng dụng thực tiễn",
+        "text": "3. á»¨ng dá»¥ng thá»±c tiá»…n",
         "level": "h2"
       }
     },
@@ -73,26 +73,26 @@ export const bai5 = {
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Saccharose là nguyên liệu quan trọng trong công nghiệp thực phẩm (sản xuất bánh kẹo, đồ uống) and dược phẩm. Maltose được sử dụng nhiều trong sản xuất bia, kẹo mạch nha and làm môi trường nuôi cấy vi sinh vật. Quá trình thủy phân các disaccharide này là bước then chốt trong quá trình tiêu hóa tinh bột and đường trong cơ thể con người để tạo năng lượng."
+        "text": "Saccharose lÃ  nguyÃªn liá»‡u quan trá»ng trong cÃ´ng nghiá»‡p thá»±c pháº©m (sáº£n xuáº¥t bÃ¡nh káº¹o, Ä‘á»“ uá»‘ng) and dÆ°á»£c pháº©m. Maltose Ä‘Æ°á»£c sá»­ dá»¥ng nhiá»u trong sáº£n xuáº¥t bia, káº¹o máº¡ch nha and lÃ m mÃ´i trÆ°á»ng nuÃ´i cáº¥y vi sinh váº­t. QuÃ¡ trÃ¬nh thá»§y phÃ¢n cÃ¡c disaccharide nÃ y lÃ  bÆ°á»›c then chá»‘t trong quÃ¡ trÃ¬nh tiÃªu hÃ³a tinh bá»™t and Ä‘Æ°á»ng trong cÆ¡ thá»ƒ con ngÆ°á»i Ä‘á»ƒ táº¡o nÄƒng lÆ°á»£ng."
       }
     }
   ],
   "quizzes": [
     {
       "id": "q1",
-      "question": "Saccharose and maltose đều có phản ứng nào sau đây?",
+      "question": "Saccharose and maltose Ä‘á»u cÃ³ pháº£n á»©ng nÃ o sau Ä‘Ã¢y?",
       "options": [
-        "Phản ứng tráng bạc with thuốc thử Tollens.",
-        "Phản ứng thủy phân trong môi trường acid.",
-        "Phản ứng làm mất màu nước bromine.",
-        "Phản ứng with $H_2$ (xúc tác $Ni, t^\\circ$)."
+        "Pháº£n á»©ng trÃ¡ng báº¡c with thuá»‘c thá»­ Tollens.",
+        "Pháº£n á»©ng thá»§y phÃ¢n trong mÃ´i trÆ°á»ng acid.",
+        "Pháº£n á»©ng lÃ m máº¥t mÃ u nÆ°á»›c bromine.",
+        "Pháº£n á»©ng with $H_2$ (xÃºc tÃ¡c $Ni, t^\\circ$)."
       ],
       "correctAnswer": 1,
-      "explanation": "Cả hai đều là disaccharide nên đều tham gia phản ứng thủy phân. Tuy nhiên, saccharose không có tính khử nên không tráng bạc hay làm mất màu nước bromine."
+      "explanation": "Cáº£ hai Ä‘á»u lÃ  disaccharide nÃªn Ä‘á»u tham gia pháº£n á»©ng thá»§y phÃ¢n. Tuy nhiÃªn, saccharose khÃ´ng cÃ³ tÃ­nh khá»­ nÃªn khÃ´ng trÃ¡ng báº¡c hay lÃ m máº¥t mÃ u nÆ°á»›c bromine."
     },
     {
       "id": "q2",
-      "question": "Thủy phân hoàn toàn 1 mol saccharose trong môi trường acid, sau đó lấy toàn bộ sản phẩm thực hiện phản ứng tráng bạc hoàn toàn. Số mol Ag tối đa thu được là bao nhiêu?",
+      "question": "Thá»§y phÃ¢n hoÃ n toÃ n 1 mol saccharose trong mÃ´i trÆ°á»ng acid, sau Ä‘Ã³ láº¥y toÃ n bá»™ sáº£n pháº©m thá»±c hiá»‡n pháº£n á»©ng trÃ¡ng báº¡c hoÃ n toÃ n. Sá»‘ mol Ag tá»‘i Ä‘a thu Ä‘Æ°á»£c lÃ  bao nhiÃªu?",
       "options": [
         "1 mol",
         "2 mol",
@@ -100,16 +100,16 @@ export const bai5 = {
         "4 mol"
       ],
       "correctAnswer": 3,
-      "explanation": "1 mol saccharose $\\rightarrow$ 1 mol glucose (tạo 2 mol Ag) + 1 mol fructose (tạo 2 mol Ag trong môi trường kiềm). Tổng cộng thu được 4 mol Ag."
+      "explanation": "1 mol saccharose $\\rightarrow$ 1 mol glucose (táº¡o 2 mol Ag) + 1 mol fructose (táº¡o 2 mol Ag trong mÃ´i trÆ°á»ng kiá»m). Tá»•ng cá»™ng thu Ä‘Æ°á»£c 4 mol Ag."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Saccharose and Maltose",
+      "title": "BÃ i giáº£ng: Saccharose and Maltose",
       "url": "https://www.youtube.com/watch?v=j0kc2JWReo0",
       "thumbnail": "https://img.youtube.com/vi/j0kc2JWReo0/0.jpg",
-      "description": "Cấu tạo and tính chất hóa học đặc trưng của đường mía (Saccharose) and Maltose (VietJack)."
+      "description": "Cáº¥u táº¡o and tÃ­nh cháº¥t hÃ³a há»c Ä‘áº·c trÆ°ng cá»§a Ä‘Æ°á»ng mÃ­a (Saccharose) and Maltose (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -118,3 +118,4 @@ export const bai5 = {
   "game": null,
   "realWorldApplications": []
 };
+

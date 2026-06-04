@@ -1,33 +1,33 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
+const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [expandedSections, setExpandedSections] = React.useState({});
 
-  // Group lessons by chapter
+  // Group bai_hoc by chapter
   const sections = useMemo(() => {
     const groups = {};
-    lessons.forEach((lesson, index) => {
-      const chapter = lesson.chapter || "Chương khác";
+    bai_hoc.forEach((lesson, index) => {
+      const chapter = lesson.chapter || "ChÆ°Æ¡ng khÃ¡c";
       if (!groups[chapter]) {
         groups[chapter] = {
           name: chapter,
-          lessons: [],
+          bai_hoc: [],
           startIndex: index + 1
         };
       }
-      groups[chapter].lessons.push({ ...lesson, globalIndex: index + 1 });
+      groups[chapter].bai_hoc.push({ ...lesson, globalIndex: index + 1 });
     });
     return Object.values(groups);
-  }, [lessons]);
+  }, [bai_hoc]);
 
   // Initial expand: show the section containing the current lesson
   React.useEffect(() => {
-    const currentSection = sections.find(s => s.lessons.some(l => l.lessonId === currentLessonId));
+    const currentSection = sections.find(s => s.bai_hoc.some(l => l.lessonId === currentLessonId));
     if (currentSection) {
       setExpandedSections(prev => ({ ...prev, [currentSection.name]: true }));
     } else if (sections.length > 0) {
@@ -44,19 +44,19 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
     <aside className="w-[320px] min-h-[calc(100vh-70px)] bg-white border-r border-viet-border absolute top-0 left-0 z-40 flex flex-col shadow-sm">
       {/* Top Header / Context */}
       <div className="p-6 pb-4 border-b border-viet-border bg-viet-bg/20">
-        <Link to="/lessons" className="flex items-center gap-2 text-viet-green text-[10px] font-black uppercase tracking-widest mb-4 hover:underline">
-          <span>←</span> {t('lesson_page.back_btn')}
+        <Link to="/bai_hoc" className="flex items-center gap-2 text-viet-green text-[10px] font-black uppercase tracking-widest mb-4 hover:underline">
+          <span>â†</span> {t('lesson_page.back_btn')}
         </Link>
         
-        <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-2 block">Lộ trình học tập</label>
+        <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-2 block">Lá»™ trÃ¬nh há»c táº­p</label>
         <div className="relative">
           <select 
             value={grade}
-            onChange={(e) => navigate(`/lessons/${e.target.value}`)}
+            onChange={(e) => navigate(`/bai_hoc/${e.target.value}`)}
             className="w-full h-[48px] bg-white border-2 border-viet-border rounded-2xl px-5 text-[14px] font-bold text-viet-text appearance-none cursor-pointer outline-none focus:border-viet-green focus:ring-4 focus:ring-viet-green/5 transition-all"
           >
             {[8, 9, 10, 11, 12].map(g => (
-              <option key={g} value={g}>Hóa học Lớp {g}</option>
+              <option key={g} value={g}>HÃ³a há»c Lá»›p {g}</option>
             ))}
           </select>
           <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-viet-green">
@@ -70,7 +70,7 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
 
       <div className="flex-1 p-4 pt-6">
         <div className="mb-4 px-2">
-          <h3 className="text-[11px] font-black text-[#3f3e3e] uppercase tracking-[2px] opacity-40">Cấu trúc chương trình</h3>
+          <h3 className="text-[11px] font-black text-[#3f3e3e] uppercase tracking-[2px] opacity-40">Cáº¥u trÃºc chÆ°Æ¡ng trÃ¬nh</h3>
         </div>
 
         {/* Sections and Modules */}
@@ -109,12 +109,12 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden space-y-1 p-2 pt-0"
                     >
-                      {section.lessons.map((lesson) => {
+                      {section.bai_hoc.map((lesson) => {
                         const isActive = lesson.lessonId === currentLessonId;
                         return (
                           <Link
                             key={lesson.lessonId}
-                            to={`/lessons/${grade}/${lesson.lessonId}`}
+                            to={`/bai_hoc/${grade}/${lesson.lessonId}`}
                             className={`group block p-3.5 rounded-[20px] transition-all border-2 relative overflow-hidden ${
                               isActive 
                                 ? 'bg-white border-viet-green shadow-xl shadow-viet-green/5' 
@@ -139,12 +139,12 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
                                 <h5 className={`text-[12px] font-extrabold leading-[1.4] transition-colors ${
                                   isActive ? 'text-viet-text' : 'text-viet-text-light group-hover:text-viet-text'
                                 }`}>
-                                  {lesson.title.replace(`Bài ${lesson.globalIndex}: `, '').replace(`Bài ${lesson.lessonId}: `, '').replace(`Bài ${lesson.order}: `, '')}
+                                  {lesson.title.replace(`BÃ i ${lesson.globalIndex}: `, '').replace(`BÃ i ${lesson.lessonId}: `, '').replace(`BÃ i ${lesson.order}: `, '')}
                                 </h5>
                                 
                                 {isActive && (
                                   <div className="flex items-center gap-2 mt-2">
-                                    <span className="text-[9px] font-black uppercase tracking-wider text-viet-green">Đang học</span>
+                                    <span className="text-[9px] font-black uppercase tracking-wider text-viet-green">Äang há»c</span>
                                     <motion.div 
                                       animate={{ scale: [1, 1.2, 1] }} 
                                       transition={{ repeat: Infinity, duration: 2 }}
@@ -181,7 +181,7 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
           </div>
           <input
             type="text"
-            placeholder="Tìm bài học..."
+            placeholder="TÃ¬m bÃ i há»c..."
             className="w-full h-[44px] bg-white border-2 border-viet-border rounded-xl pl-12 pr-4 text-[12px] font-bold text-viet-text focus:border-viet-green focus:ring-4 focus:ring-viet-green/5 outline-none transition-all placeholder:text-[#b4bac2]"
           />
         </div>
@@ -192,3 +192,4 @@ const LessonSidebar = ({ grade, lessons = [], currentLessonId }) => {
 };
 
 export default LessonSidebar;
+

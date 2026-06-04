@@ -111,7 +111,7 @@ export const authApi = {
 };
 
 export const learningApi = {
-  lessons: ({ classId, programId } = {}) =>
+  bai_hoc: ({ classId, programId } = {}) =>
     apiRequest("/api/lessons", {
       auth: false,
       query: { classId, programId }
@@ -134,7 +134,7 @@ export const learningApi = {
       body: { grade }
     }),
 
-  missions: (token) => apiRequest("/api/missions", { token }),
+  nhiem_vu: (token) => apiRequest("/api/missions", { token }),
 
   claimMission: (token, missionId) =>
     apiRequest("/api/missions/claim", {
@@ -198,7 +198,7 @@ export const arenaApi = {
     apiRequest("/api/arena/join", {
       method: "POST",
       token,
-      body: { room_id: roomId }
+      body: { phong_dau_id: roomId }
     }),
   startRoom: (token, roomId) =>
     apiRequest(`/api/arena/room/${roomId}/start`, {
@@ -217,7 +217,7 @@ export const libraryApi = {
       query: { category, search }
     }),
   detail: (id) => apiRequest(`/api/materials/${id}`, { auth: false }),
-  feedback: (id) => apiRequest(`/api/materials/${id}/feedback`, { auth: false }),
+  phan_hoi: (id) => apiRequest(`/api/materials/${id}/feedback`, { auth: false }),
   postFeedback: (token, id, body) =>
     apiRequest(`/api/materials/${id}/feedback`, {
       method: "POST",

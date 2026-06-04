@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import StoryIntro from '@/components/lessons/StoryIntro';
@@ -18,7 +18,7 @@ const StageStory = () => {
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lỗi tải cốt truyện:', err);
+        console.error('Lá»—i táº£i cá»‘t truyá»‡n:', err);
       } finally {
         setLoading(false);
       }
@@ -54,3 +54,4 @@ const StageStory = () => {
 };
 
 export default StageStory;
+

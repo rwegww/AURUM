@@ -767,7 +767,7 @@ Ngân hàng mini game.
 - `id`
 - `game_type`
 - `topic`
-- `grade_level`
+- `grade_level_id`
 - `difficulty`
 - `estimated_seconds`
 - `base_points`

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -62,7 +62,7 @@ const Profile = () => {
                     <Link 
                       to="/settings" 
                       className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-2xl transition-all flex items-center justify-center" 
-                      title="Cài đặt"
+                      title="CÃ i Ä‘áº·t"
                     >
                       <SettingsIcon className="w-4 h-4" />
                     </Link>
@@ -73,22 +73,22 @@ const Profile = () => {
                       values={{
                         date: user?.createdAt
                           ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
-                          : (i18n.language === 'vi' ? 'Sớm hơn' : 'Earlier')
+                          : (i18n.language === 'vi' ? 'Sá»›m hÆ¡n' : 'Earlier')
                       }}
                     >
-                      Thành viên ưu tú của Học viện Hóa học Aurum.<br />Đã đồng hành từ {user?.createdAt
+                      ThÃ nh viÃªn Æ°u tÃº cá»§a Há»c viá»‡n HÃ³a há»c Aurum.<br />ÄÃ£ Ä‘á»“ng hÃ nh tá»« {user?.createdAt
                         ? new Date(user.createdAt).toLocaleDateString(i18n.language === 'vi' ? 'vi-VN' : 'en-US')
-                        : (i18n.language === 'vi' ? 'Thời gian dài' : 'a long time')}
+                        : (i18n.language === 'vi' ? 'Thá»i gian dÃ i' : 'a long time')}
                     </Trans>
                   </p>
                 </div>
 
                 {/* Streak Callout */}
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-6 flex items-center gap-6 self-center md:self-auto min-w-[280px]">
-                  <div className="text-5xl animate-bounce">🔥</div>
+                  <div className="text-5xl animate-bounce">ðŸ”¥</div>
                   <div className="flex-1">
-                    <div className="text-3xl font-black text-white mb-1">{user.streakCount} Ngày</div>
-                    <div className="text-[11px] font-black text-orange-400 uppercase tracking-widest">Chuỗi hiện tại</div>
+                    <div className="text-3xl font-black text-white mb-1">{user.streakCount} NgÃ y</div>
+                    <div className="text-[11px] font-black text-orange-400 uppercase tracking-widest">Chuá»—i hiá»‡n táº¡i</div>
                     <div className="mt-3 w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.5)]"
@@ -231,3 +231,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

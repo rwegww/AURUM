@@ -11,7 +11,7 @@ export const useSoundStore = create((set) => ({
 
 /**
  * Custom hook for procedural audio effects in the 3D Chemistry Lab.
- * Uses Web Audio API to generate real-time feedback without audio files.
+ * Uses Web Audio API to generate real-time phan_hoi without audio files.
  */
 export const useSoundEffects = () => {
   const { enabled, volume } = useSoundStore();

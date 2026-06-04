@@ -11,22 +11,22 @@ const FloatingWidget = () => {
   
   // Widget open & expanded states
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState('missions'); // 'missions' | 'feedback'
+  const [activeTab, setActiveTab] = useState('nhiem_vu'); // 'nhiem_vu' | 'phan_hoi'
 
   // Missions states
-  const [missions, setMissions] = useState([]);
+  const [nhiem_vu, setMissions] = useState([]);
   const [loadingMissions, setLoadingMissions] = useState(false);
-  const [missionsActiveTab, setMissionsActiveTab] = useState('daily'); // 'daily' | 'achievement'
+  const [nhiem_vuActiveTab, setMissionsActiveTab] = useState('daily'); // 'daily' | 'achievement'
   const [claimingId, setClaimingId] = useState(null);
   const [timeLeft, setTimeLeft] = useState('');
   const [claimableCount, setClaimableCount] = useState(0);
 
   // Direct Feedback Form states
-  const [feedbackType, setFeedbackType] = useState('suggestion'); // 'suggestion' | 'bug' | 'praise'
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [phan_hoiType, setFeedbackType] = useState('suggestion'); // 'suggestion' | 'bug' | 'praise'
+  const [phan_hoiMessage, setFeedbackMessage] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [sendingFeedback, setSendingFeedback] = useState(false);
-  const [feedbackSuccess, setFeedbackSuccess] = useState(false);
+  const [phan_hoiSuccess, setFeedbackSuccess] = useState(false);
 
   // Interval for countdown and polling
   useEffect(() => {
@@ -49,23 +49,23 @@ const FloatingWidget = () => {
   useEffect(() => {
     const handleOpenMissions = () => {
       setIsExpanded(true);
-      setActiveTab('missions');
+      setActiveTab('nhiem_vu');
     };
     const handleOpenFeedback = () => {
       setIsExpanded(true);
-      setActiveTab('feedback');
+      setActiveTab('phan_hoi');
     };
 
-    window.addEventListener('aurum_open_missions', handleOpenMissions);
-    window.addEventListener('aurum_open_feedback', handleOpenFeedback);
+    window.addEventListener('aurum_open_nhiem_vu', handleOpenMissions);
+    window.addEventListener('aurum_open_phan_hoi', handleOpenFeedback);
 
     return () => {
-      window.removeEventListener('aurum_open_missions', handleOpenMissions);
-      window.removeEventListener('aurum_open_feedback', handleOpenFeedback);
+      window.removeEventListener('aurum_open_nhiem_vu', handleOpenMissions);
+      window.removeEventListener('aurum_open_phan_hoi', handleOpenFeedback);
     };
   }, []);
 
-  // Fetch missions if logged in
+  // Fetch nhiem_vu if logged in
   const fetchMissions = async () => {
     if (!isLoggedIn) return;
     setLoadingMissions(true);
@@ -83,7 +83,7 @@ const FloatingWidget = () => {
         setClaimableCount(count);
       }
     } catch (error) {
-      console.error('Failed to fetch missions:', error);
+      console.error('Failed to fetch nhiem_vu:', error);
     } finally {
       setLoadingMissions(false);
     }
@@ -92,7 +92,7 @@ const FloatingWidget = () => {
   useEffect(() => {
     if (isLoggedIn) {
       fetchMissions();
-      // Poll missions every 2 minutes
+      // Poll nhiem_vu every 2 minutes
       const interval = setInterval(fetchMissions, 120000);
       return () => clearInterval(interval);
     } else {
@@ -129,7 +129,7 @@ const FloatingWidget = () => {
 
   // Paste Screenshot Handler
   const handlePaste = (e) => {
-    if (activeTab !== 'feedback' || feedbackType !== 'bug') return;
+    if (activeTab !== 'phan_hoi' || phan_hoiType !== 'bug') return;
     const items = e.clipboardData?.items;
     if (!items) return;
     
@@ -148,7 +148,7 @@ const FloatingWidget = () => {
   // Submit Feedback Chat Message
   const handleSendFeedback = async (e) => {
     if (e) e.preventDefault();
-    if (!feedbackMessage.trim()) return;
+    if (!phan_hoiMessage.trim()) return;
 
     setSendingFeedback(true);
 
@@ -156,7 +156,7 @@ const FloatingWidget = () => {
       const token = localStorage.getItem('token');
       let imageUrl = null;
 
-      if (feedbackType === 'bug' && imageFile) {
+      if (phan_hoiType === 'bug' && imageFile) {
         const uploadData = await uploadToCloudinary(imageFile, 'chemistry-odyssey/bug-reports');
         imageUrl = uploadData.url;
       }
@@ -167,7 +167,7 @@ const FloatingWidget = () => {
           'Content-Type': 'application/json',
           'Authorization': token ? `Bearer ${token}` : ''
         },
-        body: JSON.stringify({ type: feedbackType, message: feedbackMessage, imageUrl })
+        body: JSON.stringify({ type: phan_hoiType, message: phan_hoiMessage, imageUrl })
       });
 
       if (res.ok) {
@@ -189,7 +189,7 @@ const FloatingWidget = () => {
     }
   };
 
-  const filteredMissions = missions.filter(m => m.type === missionsActiveTab);
+  const filteredMissions = nhiem_vu.filter(m => m.type === nhiem_vuActiveTab);
 
   return (
     <>
@@ -201,7 +201,7 @@ const FloatingWidget = () => {
           onClick={() => {
             setIsExpanded(true);
             if (!isLoggedIn) {
-              setActiveTab('feedback');
+              setActiveTab('phan_hoi');
             }
           }}
           className="fixed bottom-5 right-5 w-[52px] h-[52px] bg-viet-green text-white rounded-2xl shadow-[0_8px_24px_rgba(118,192,52,0.3)] flex items-center justify-center hover:scale-105 hover:bg-[#007042] transition-all duration-300 z-50 cursor-pointer group border border-white/20"
@@ -257,14 +257,14 @@ const FloatingWidget = () => {
             {/* TAB SELECTOR (SUB-HEADER) */}
             <div className="flex border-b border-[#e6e2d6] bg-viet-bg/30 p-1.5 gap-1.5 shrink-0">
               <button
-                onClick={() => setActiveTab('missions')}
+                onClick={() => setActiveTab('nhiem_vu')}
                 className={`flex-1 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                  activeTab === 'missions'
+                  activeTab === 'nhiem_vu'
                   ? 'bg-white text-viet-green shadow-sm border border-[#e6e2d6]'
                   : 'text-viet-text-light hover:text-viet-text'
                 }`}
               >
-                {t('nav.missions')}
+                {t('nav.nhiem_vu')}
                 {claimableCount > 0 && (
                   <span className="ml-1.5 px-1.5 py-0.5 bg-red-500 text-white text-[9px] font-black rounded-full leading-none">
                     {claimableCount}
@@ -272,14 +272,14 @@ const FloatingWidget = () => {
                 )}
               </button>
               <button
-                onClick={() => setActiveTab('feedback')}
+                onClick={() => setActiveTab('phan_hoi')}
                 className={`flex-1 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                  activeTab === 'feedback'
+                  activeTab === 'phan_hoi'
                   ? 'bg-white text-viet-green shadow-sm border border-[#e6e2d6]'
                   : 'text-viet-text-light hover:text-viet-text'
                 }`}
               >
-                💬 {t('nav.feedback')}
+                💬 {t('nav.phan_hoi')}
               </button>
             </div>
 
@@ -287,7 +287,7 @@ const FloatingWidget = () => {
             <div className="flex-1 overflow-y-auto p-4 bg-[#fffbf2]">
               
               {/* TAB 1: MISSIONS */}
-              {activeTab === 'missions' && (
+              {activeTab === 'nhiem_vu' && (
                 <div className="space-y-4">
                   {!isLoggedIn ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center px-4 space-y-4">
@@ -336,7 +336,7 @@ const FloatingWidget = () => {
                       </div>
 
                       {/* Daily countdown */}
-                      {missionsActiveTab === 'daily' && (
+                      {nhiem_vuActiveTab === 'daily' && (
                         <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold uppercase tracking-[2px] text-viet-text-light">
                           <span>⏳ {t('widget.reset_in')}</span>
                           <span className="text-viet-text font-black">{timeLeft}</span>
@@ -346,14 +346,14 @@ const FloatingWidget = () => {
                       {/* Inner tabs (Daily / Achievement) */}
                       <div className="flex gap-2">
                         {[
-                          { id: 'daily', label: t('missions.tabs.daily'), icon: '' },
-                          { id: 'achievement', label: t('missions.tabs.achievement'), icon: '🏆' }
+                          { id: 'daily', label: t('nhiem_vu.tabs.daily'), icon: '' },
+                          { id: 'achievement', label: t('nhiem_vu.tabs.achievement'), icon: '🏆' }
                         ].map(subTab => (
                           <button
                             key={subTab.id}
                             onClick={() => setMissionsActiveTab(subTab.id)}
                             className={`flex-1 py-2 rounded-xl font-bold text-[10px] uppercase tracking-wider border transition-all cursor-pointer ${
-                              missionsActiveTab === subTab.id
+                              nhiem_vuActiveTab === subTab.id
                               ? 'bg-viet-text border-viet-text text-white shadow-sm'
                               : 'bg-white border-[#e6e2d6] text-viet-text-light hover:border-viet-green/30'
                             }`}
@@ -395,7 +395,7 @@ const FloatingWidget = () => {
                                       {/* Micro Progress Bar */}
                                       <div className="relative">
                                         <div className="flex justify-between items-center text-[8px] font-black text-viet-text-light/50 tracking-wider mb-1">
-                                          <span>{mission.isClaimed ? t('missions.card.claimed') : mission.isCompleted ? t('missions.card.completed') : t('missions.card.in_progress')}</span>
+                                          <span>{mission.isClaimed ? t('nhiem_vu.card.claimed') : mission.isCompleted ? t('nhiem_vu.card.completed') : t('nhiem_vu.card.in_progress')}</span>
                                           <span>{mission.currentCount}/{mission.target_count}</span>
                                         </div>
                                         <div className="h-2 bg-viet-bg rounded-full border border-[#e6e2d6] overflow-hidden p-0.5">
@@ -443,7 +443,7 @@ const FloatingWidget = () => {
                       ) : (
                         <div className="bg-white border border-dashed border-[#e6e2d6] rounded-2xl py-12 text-center">
                           <span className="text-3xl mb-2 block">💤</span>
-                          <p className="text-xs font-bold text-viet-text-light">{t('widget.no_missions')}</p>
+                          <p className="text-xs font-bold text-viet-text-light">{t('widget.no_nhiem_vu')}</p>
                         </div>
                       )}
                     </>
@@ -452,9 +452,9 @@ const FloatingWidget = () => {
               )}
 
               {/* TAB 2: DIRECT FEEDBACK */}
-              {activeTab === 'feedback' && (
+              {activeTab === 'phan_hoi' && (
                 <div className="flex flex-col h-full min-h-[420px] justify-between">
-                  {feedbackSuccess ? (
+                  {phan_hoiSuccess ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
                       <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl animate-bounce">
                         ✓
@@ -479,14 +479,14 @@ const FloatingWidget = () => {
                       <div className="space-y-4">
                         {/* Task Selector: 3 separate buttons */}
                         <div>
-                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">{t('widget.feedback_type')}</label>
+                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">{t('widget.phan_hoi_type')}</label>
                           <div className="grid grid-cols-3 gap-2">
                             {[
                               { id: 'suggestion', label: t('widget.type_suggestion') },
                               { id: 'bug', label: t('widget.type_bug') },
                               { id: 'praise', label: t('widget.type_praise') }
                             ].map(type => {
-                              const isSelected = feedbackType === type.id;
+                              const isSelected = phan_hoiType === type.id;
                               let selectStyles = '';
                               if (isSelected) {
                                 if (type.id === 'suggestion') selectStyles = 'border-amber-500 text-amber-600 shadow-sm bg-amber-50/10';
@@ -515,25 +515,25 @@ const FloatingWidget = () => {
 
                         {/* Input Message Area */}
                         <div>
-                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">{t('widget.feedback_details')}</label>
+                          <label className="text-[10px] font-black text-viet-text-light/50 uppercase tracking-widest block mb-2">{t('widget.phan_hoi_details')}</label>
                           <textarea
                             required
                             rows="5"
                             placeholder={
-                              feedbackType === 'suggestion' 
+                              phan_hoiType === 'suggestion' 
                               ? t('widget.placeholder_suggestion') 
-                              : feedbackType === 'bug' 
+                              : phan_hoiType === 'bug' 
                               ? t('widget.placeholder_bug') 
                               : t('widget.placeholder_praise')
                             }
-                            value={feedbackMessage}
+                            value={phan_hoiMessage}
                             onChange={(e) => setFeedbackMessage(e.target.value)}
                             className="w-full p-4 rounded-xl border border-[#e6e2d6] bg-white text-xs font-semibold focus:outline-none focus:border-viet-green transition-all resize-none placeholder:text-viet-text-light/30"
                           />
                         </div>
 
                         {/* Attachment Area (Only for Bug report) */}
-                        {feedbackType === 'bug' && (
+                        {phan_hoiType === 'bug' && (
                           <div className="space-y-2 border border-dashed border-[#e6e2d6] rounded-xl p-3 bg-white">
                             <div className="flex items-center justify-between">
                               <label className="flex items-center gap-2 cursor-pointer bg-slate-50 border border-[#e6e2d6] hover:bg-slate-100 px-3 py-2 rounded-lg text-[9px] font-black uppercase text-slate-700 transition">
@@ -571,20 +571,20 @@ const FloatingWidget = () => {
                       {/* Submit Button */}
                       <button
                         type="submit"
-                        disabled={sendingFeedback || !feedbackMessage.trim()}
+                        disabled={sendingFeedback || !phan_hoiMessage.trim()}
                         className={`w-full py-3.5 text-xs font-black uppercase tracking-wider rounded-xl shadow-lg transition-all cursor-pointer disabled:opacity-50 ${
-                          feedbackType === 'suggestion' 
+                          phan_hoiType === 'suggestion' 
                           ? 'bg-amber-500 shadow-amber-500/20 hover:bg-amber-600 text-white' 
-                          : feedbackType === 'bug' 
+                          : phan_hoiType === 'bug' 
                           ? 'bg-red-500 shadow-red-500/20 hover:bg-red-600 text-white' 
                           : 'bg-pink-500 shadow-pink-500/20 hover:bg-pink-600 text-white'
                         }`}
                       >
                         {sendingFeedback 
                           ? t('widget.sending') 
-                          : feedbackType === 'suggestion' 
+                          : phan_hoiType === 'suggestion' 
                           ? t('widget.send_suggestion') 
-                          : feedbackType === 'bug' 
+                          : phan_hoiType === 'bug' 
                           ? t('widget.send_bug') 
                           : t('widget.send_praise')}
                       </button>

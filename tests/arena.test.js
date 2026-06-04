@@ -1,4 +1,4 @@
-import request from 'supertest';
+﻿import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -8,16 +8,16 @@ process.env.SUPABASE_JWT_SECRET = 'realtime-secret';
 
 const sessionId = 'session-1';
 
-const users = {
+const nguoi_dung = {
   student: { id: 'student', username: 'Student', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   opponent: { id: 'opponent', username: 'Opponent', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
 };
 
 const userModel = {
-  findById: vi.fn(async (id) => users[id] || null),
+  findById: vi.fn(async (id) => nguoi_dung[id] || null),
   findOne: vi.fn(async () => null),
   create: vi.fn(async (data) => ({ id: 'new-user', ...data, xp: 0, level: 1 })),
-  update: vi.fn(async (id, data) => ({ ...users[id], ...data })),
+  update: vi.fn(async (id, data) => ({ ...nguoi_dung[id], ...data })),
   countStudents: vi.fn(async () => 0),
   aggregateStats: vi.fn(async () => ({ totalXP: 0, avgLevel: 1, levelDistribution: {}, gradeDistribution: {}, topXP: [], topStreak: [] })),
 };
@@ -27,7 +27,7 @@ const lessonModel = {
   findById: vi.fn(async (id) => ({ id, lessonId: id })),
 };
 
-const feedbackModel = {
+const phan_hoiModel = {
   countUnread: vi.fn(async () => 0),
   getTypeDistribution: vi.fn(async () => ({})),
 };
@@ -46,68 +46,68 @@ const noteModel = {
 const questions = {
   calculation: {
     id: 'q-calc',
-    grade_level: 8,
-    difficulty: 'easy',
-    game_type: 'calculation',
-    question: '9 gam H2O bằng bao nhiêu mol?',
-    payload: { target: { label: 'n', unit: 'mol' } },
-    answer: { value: 0.5, tolerance: 0.01 },
-    points: 100,
-    time_limit_seconds: 45,
-    explanation: 'n = 9 / 18 = 0,5 mol',
-    is_active: true,
+    khoi_id: 8,
+    do_kho: 'easy',
+    loai_game: 'calculation',
+    cau_hoi: '9 gam H2O báº±ng bao nhiÃªu mol?',
+    noi_dung_game: { target: { label: 'n', unit: 'mol' } },
+    dap_an: { value: 0.5, tolerance: 0.01 },
+    diem: 100,
+    gioi_han_giay: 45,
+    giai_thich: 'n = 9 / 18 = 0,5 mol',
+    dang_hoat_dong: true,
   },
   balancing: {
     id: 'q-bal',
-    grade_level: 8,
-    difficulty: 'easy',
-    game_type: 'balancing',
-    question: 'Cân bằng H2 + O2 -> H2O',
-    payload: { equation: { reactants: ['H2', 'O2'], products: ['H2O'] } },
-    answer: { coefficients: [2, 1, 2] },
-    points: 100,
-    time_limit_seconds: 45,
-    explanation: '2H2 + O2 -> 2H2O',
-    is_active: true,
+    khoi_id: 8,
+    do_kho: 'easy',
+    loai_game: 'balancing',
+    cau_hoi: 'CÃ¢n báº±ng H2 + O2 -> H2O',
+    noi_dung_game: { equation: { reactants: ['H2', 'O2'], products: ['H2O'] } },
+    dap_an: { coefficients: [2, 1, 2] },
+    diem: 100,
+    gioi_han_giay: 45,
+    giai_thich: '2H2 + O2 -> 2H2O',
+    dang_hoat_dong: true,
   },
   atom_match: {
     id: 'q-atom',
-    grade_level: 8,
-    difficulty: 'easy',
-    game_type: 'atom_match',
-    question: 'Ghép H2O',
-    payload: { slots: [{ id: 'center' }, { id: 'left' }, { id: 'right' }] },
-    answer: { placements: { center: 'O', left: 'H', right: 'H' } },
-    points: 100,
-    time_limit_seconds: 45,
-    explanation: 'O ở trung tâm',
-    is_active: true,
+    khoi_id: 8,
+    do_kho: 'easy',
+    loai_game: 'atom_match',
+    cau_hoi: 'GhÃ©p H2O',
+    noi_dung_game: { slots: [{ id: 'center' }, { id: 'left' }, { id: 'right' }] },
+    dap_an: { placements: { center: 'O', left: 'H', right: 'H' } },
+    diem: 100,
+    gioi_han_giay: 45,
+    giai_thich: 'O á»Ÿ trung tÃ¢m',
+    dang_hoat_dong: true,
   },
   electron_match: {
     id: 'q-electron',
-    grade_level: 8,
-    difficulty: 'easy',
-    game_type: 'electron_match',
-    question: 'Electron của O',
-    payload: { symbol: 'O', atomicNumber: 8, shellLabels: ['K', 'L'] },
-    answer: { shells: [2, 6] },
-    points: 100,
-    time_limit_seconds: 45,
-    explanation: 'O: 2,6',
-    is_active: true,
+    khoi_id: 8,
+    do_kho: 'easy',
+    loai_game: 'electron_match',
+    cau_hoi: 'Electron cá»§a O',
+    noi_dung_game: { symbol: 'O', atomicNumber: 8, shellLabels: ['K', 'L'] },
+    dap_an: { shells: [2, 6] },
+    diem: 100,
+    gioi_han_giay: 45,
+    giai_thich: 'O: 2,6',
+    dang_hoat_dong: true,
   },
   legacy_default_calculation: {
     id: 'q-legacy',
-    grade_level: 8,
-    difficulty: 'easy',
-    game_type: 'calculation',
-    question: 'Ký hiệu hóa học của Oxi là gì?',
-    payload: {},
-    answer: {},
-    points: 10,
-    time_limit_seconds: 45,
-    explanation: null,
-    is_active: true,
+    khoi_id: 8,
+    do_kho: 'easy',
+    loai_game: 'calculation',
+    cau_hoi: 'KÃ½ hiá»‡u hÃ³a há»c cá»§a Oxi lÃ  gÃ¬?',
+    noi_dung_game: {},
+    dap_an: {},
+    diem: 10,
+    gioi_han_giay: 45,
+    giai_thich: null,
+    dang_hoat_dong: true,
   },
 };
 
@@ -119,7 +119,7 @@ const arenaState = {
   history: [],
 };
 
-const tokenFor = (id) => jwt.sign({ id, role: users[id].role, sessionId }, process.env.JWT_SECRET);
+const tokenFor = (id) => jwt.sign({ id, role: nguoi_dung[id].role, sessionId }, process.env.JWT_SECRET);
 
 const matchFilter = (ctx, column) => ctx.filters.find((filter) => filter.column === column)?.value;
 
@@ -129,27 +129,27 @@ const matchesFilters = (row, ctx) => ctx.filters.every((filter) => {
 });
 
 const listFor = (ctx) => {
-  if (ctx.table === 'arena_questions') {
+  if (ctx.table === 'cau_hoi_dau') {
     return Object.values(questions).filter((question) => matchesFilters(question, ctx));
   }
-  if (ctx.table === 'arena_rooms') {
+  if (ctx.table === 'phong_dau') {
     return arenaState.room && matchesFilters(arenaState.room, ctx) ? [arenaState.room] : [];
   }
-  if (ctx.table === 'arena_room_players') {
+  if (ctx.table === 'nguoi_choi') {
     return arenaState.players.filter((player) => matchesFilters(player, ctx));
   }
-  if (ctx.table === 'arena_round_answers') {
+  if (ctx.table === 'tra_loi_vong') {
     return arenaState.answers.filter((answer) => matchesFilters(answer, ctx));
   }
-  if (ctx.table === 'users') {
+  if (ctx.table === 'nguoi_dung') {
     const id = matchFilter(ctx, 'id');
-    return id && users[id] ? [{ id, arena_stats: { total: 0, wins: 0, losses: 0, points: 0 } }] : [];
+    return id && nguoi_dung[id] ? [{ id, thong_ke_dau: { total: 0, wins: 0, losses: 0, points: 0 } }] : [];
   }
   return [];
 };
 
 const applyWrite = (ctx) => {
-  if (ctx.table === 'arena_round_answers' && ctx.action === 'insert') {
+  if (ctx.table === 'tra_loi_vong' && ctx.action === 'insert') {
     const rows = Array.isArray(ctx.payload) ? ctx.payload : [ctx.payload];
     const inserted = rows.map((row, index) => ({ id: `answer-${arenaState.answers.length + index + 1}`, ...row }));
     arenaState.answers.push(...inserted);
@@ -157,27 +157,27 @@ const applyWrite = (ctx) => {
     return inserted;
   }
 
-  if (ctx.table === 'arena_rooms' && ctx.action === 'update') {
+  if (ctx.table === 'phong_dau' && ctx.action === 'update') {
     arenaState.room = { ...arenaState.room, ...ctx.payload };
     return [arenaState.room];
   }
 
-  if (ctx.table === 'arena_room_players' && ctx.action === 'update') {
+  if (ctx.table === 'nguoi_choi' && ctx.action === 'update') {
     arenaState.players = arenaState.players.map((player) => (
       matchesFilters(player, ctx) ? { ...player, ...ctx.payload } : player
     ));
     return arenaState.players.filter((player) => matchesFilters(player, ctx));
   }
 
-  if (ctx.table === 'arena_room_players' && ctx.action === 'upsert') {
+  if (ctx.table === 'nguoi_choi' && ctx.action === 'upsert') {
     const row = ctx.payload;
-    const index = arenaState.players.findIndex((player) => player.room_id === row.room_id && player.user_id === row.user_id);
+    const index = arenaState.players.findIndex((player) => player.phong_dau_id === row.phong_dau_id && player.nguoi_dung_id === row.nguoi_dung_id);
     if (index >= 0) arenaState.players[index] = { ...arenaState.players[index], ...row };
     else arenaState.players.push(row);
     return [row];
   }
 
-  if (ctx.table === 'arena_match_history' && ctx.action === 'insert') {
+  if (ctx.table === 'lich_su_dau' && ctx.action === 'insert') {
     const rows = Array.isArray(ctx.payload) ? ctx.payload : [ctx.payload];
     arenaState.history.push(...rows);
     return rows;
@@ -259,7 +259,7 @@ const supabase = {
 
 vi.mock('../api/models/User.js', () => ({ default: userModel }));
 vi.mock('../api/models/Lesson.js', () => ({ default: lessonModel }));
-vi.mock('../api/models/Feedback.js', () => ({ default: feedbackModel }));
+vi.mock('../api/models/Feedback.js', () => ({ default: phan_hoiModel }));
 vi.mock('../api/models/Discussion.js', () => ({ Discussion: discussionModel, Note: noteModel }));
 vi.mock('../api/models/Mission.js', () => ({ default: { updateProgress: vi.fn() } }));
 vi.mock('../api/lib/supabase.js', () => ({ supabase }));
@@ -274,24 +274,24 @@ const resetArenaState = (question = questions.calculation) => {
   arenaState.room = {
     id: 'room-1',
     name: 'Arena test',
-    host_id: 'student',
+    chu_phong_id: 'student',
     mode: 'solo',
-    difficulty: 'auto',
+    do_kho: 'auto',
     status: 'playing',
     max_players: 2,
     current_players: 2,
-    question_ids: [question.id],
-    current_round_index: 0,
-    round_started_at: new Date(Date.now() - 1000).toISOString(),
-    round_ends_at: new Date(Date.now() + 45000).toISOString(),
-    started_at: new Date().toISOString(),
-    finished_at: null,
-    winner_user_id: null,
-    is_practice: true,
+    danh_sach_cau_hoi_id: [question.id],
+    vong_hien_tai: 0,
+    vong_bat_dau_luc: new Date(Date.now() - 1000).toISOString(),
+    vong_ket_thuc_luc: new Date(Date.now() + 45000).toISOString(),
+    bat_dau_luc: new Date().toISOString(),
+    ket_thuc_luc: null,
+    nguoi_thang_id: null,
+    la_luyen_tap: true,
   };
   arenaState.players = [
-    { room_id: 'room-1', user_id: 'student', username: 'Student', avatar_seed: 'Student', score: 0, correct_count: 0, answered_rounds: [], status: 'playing' },
-    { room_id: 'room-1', user_id: 'opponent', username: 'Opponent', avatar_seed: 'Opponent', score: 0, correct_count: 0, answered_rounds: [], status: 'playing' },
+    { phong_dau_id: 'room-1', nguoi_dung_id: 'student', username: 'Student', avatar_seed: 'Student', score: 0, so_cau_dung: 0, vong_da_tra_loi: [], status: 'playing' },
+    { phong_dau_id: 'room-1', nguoi_dung_id: 'opponent', username: 'Opponent', avatar_seed: 'Opponent', score: 0, so_cau_dung: 0, vong_da_tra_loi: [], status: 'playing' },
   ];
   arenaState.answers = [];
   arenaState.insertedAnswers = [];
@@ -325,7 +325,7 @@ describe('arena mini game backend', () => {
     expect(res.body.state.currentQuestion).toMatchObject({
       id: 'q-calc',
       gameType: 'calculation',
-      question: questions.calculation.question,
+      question: questions.calculation.cau_hoi,
     });
     expect(res.body.state.currentQuestion.answer).toBeUndefined();
   });
@@ -344,7 +344,7 @@ describe('arena mini game backend', () => {
     arenaState.room.status = 'waiting';
     arenaState.room.current_players = 1;
     arenaState.room.max_players = 1;
-    arenaState.room.question_ids = [];
+    arenaState.room.danh_sach_cau_hoi_id = [];
     arenaState.players = [arenaState.players[0]];
 
     const res = await request(app)
@@ -355,7 +355,7 @@ describe('arena mini game backend', () => {
     expect(res.status).toBe(200);
     expect(res.body.state.room.status).toBe('playing');
     expect(res.body.state.currentQuestion.answer).toBeUndefined();
-    expect(arenaState.room.question_ids.length).toBeGreaterThan(0);
+    expect(arenaState.room.danh_sach_cau_hoi_id.length).toBeGreaterThan(0);
   });
 
   it.each([
@@ -375,9 +375,9 @@ describe('arena mini game backend', () => {
     expect(res.body.isCorrect).toBe(true);
     expect(res.body.scoreAwarded).toBeGreaterThan(0);
     expect(arenaState.insertedAnswers[0]).toMatchObject({
-      question_id: question.id,
-      user_id: 'student',
-      is_correct: true,
+      cau_hoi_id: question.id,
+      nguoi_dung_id: 'student',
+      dung: true,
     });
     expect(res.body.state.currentQuestion.answer).toBeUndefined();
   });
@@ -412,3 +412,5 @@ describe('arena mini game backend', () => {
     expect(res.body.message).toContain('Ch');
   });
 });
+
+

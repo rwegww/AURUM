@@ -1,20 +1,20 @@
-export const bai2 = {
+﻿export const bai2 = {
   "id": "hoa11_kntt_bai2",
   "classId": 11,
   "lessonId": 2,
   "programId": "ketnoi",
-  "title": "Bài 2. Cân bằng trong dung dịch nước",
-  "chapter": "Chương 1. Cân bằng hóa học",
+  "title": "BÃ i 2. CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c",
+  "chapter": "ChÆ°Æ¡ng 1. CÃ¢n báº±ng hÃ³a há»c",
   "order": 2,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Bản chất sự điện li của nước, pH, môi trường acid - base and cân bằng acid - base trong dung dịch.",
+  "description": "Báº£n cháº¥t sá»± Ä‘iá»‡n li cá»§a nÆ°á»›c, pH, mÃ´i trÆ°á»ng acid - base and cÃ¢n báº±ng acid - base trong dung dá»‹ch.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Sự điện li của nước & Tích số ion của nước",
+        "text": "1. Sá»± Ä‘iá»‡n li cá»§a nÆ°á»›c & TÃ­ch sá»‘ ion cá»§a nÆ°á»›c",
         "level": "h2"
       }
     },
@@ -22,15 +22,15 @@ export const bai2 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Nước uống hàng ngày không phải là một dung môi tĩnh lặng rỗng tuếch. Nước nguyên chất (Nước tinh khiết) cũng tự phân rã, tự điện li tuy ở một mức độ cực kì yếu ớt. Quá trình tự điện li của phân tử nước là một phản ứng thuận nghịch: **$H_2O \\rightleftharpoons H^+ + OH^-$**. Trên thực tế, ion $H^+$ trần trụi (Proton) quá nhỏ bé nên nó không đứng một mình mà bám ngay vào một phân tử nước khác kết thành ion Hydronium ($H_3O^+$). Tại 25°C, cú phân rã này nhỏ đến mức cứ khoảng 556 triệu phân tử nước mới có vỡ ra 1 phân tử, cho nên nồng độ của ion acid $[H^+]$ = nồng độ kiềm $[OH^-]$ = $1,0 \\times 10^{-7}$ mol/L."
+        "text": "NÆ°á»›c uá»‘ng hÃ ng ngÃ y khÃ´ng pháº£i lÃ  má»™t dung mÃ´i tÄ©nh láº·ng rá»—ng tuáº¿ch. NÆ°á»›c nguyÃªn cháº¥t (NÆ°á»›c tinh khiáº¿t) cÅ©ng tá»± phÃ¢n rÃ£, tá»± Ä‘iá»‡n li tuy á»Ÿ má»™t má»©c Ä‘á»™ cá»±c kÃ¬ yáº¿u á»›t. QuÃ¡ trÃ¬nh tá»± Ä‘iá»‡n li cá»§a phÃ¢n tá»­ nÆ°á»›c lÃ  má»™t pháº£n á»©ng thuáº­n nghá»‹ch: **$H_2O \\rightleftharpoons H^+ + OH^-$**. TrÃªn thá»±c táº¿, ion $H^+$ tráº§n trá»¥i (Proton) quÃ¡ nhá» bÃ© nÃªn nÃ³ khÃ´ng Ä‘á»©ng má»™t mÃ¬nh mÃ  bÃ¡m ngay vÃ o má»™t phÃ¢n tá»­ nÆ°á»›c khÃ¡c káº¿t thÃ nh ion Hydronium ($H_3O^+$). Táº¡i 25Â°C, cÃº phÃ¢n rÃ£ nÃ y nhá» Ä‘áº¿n má»©c cá»© khoáº£ng 556 triá»‡u phÃ¢n tá»­ nÆ°á»›c má»›i cÃ³ vá»¡ ra 1 phÃ¢n tá»­, cho nÃªn ná»“ng Ä‘á»™ cá»§a ion acid $[H^+]$ = ná»“ng Ä‘á»™ kiá»m $[OH^-]$ = $1,0 \\times 10^{-7}$ mol/L."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Tích số ion của Nước (Kw) - Định luật Vĩnh hằng",
-        "content": "Vì nồng độ Nước ($H_2O$) khổng lồ and coi như hằng số, người ta suy ra Tích số ion của nước $K_w = [H^+] \\cdot [OH^-]$. Đặc biệt tại nhiệt độ phòng 25°C, $K_w = (1,0 \\times 10^{-7}) \\times (1,0 \\times 10^{-7}) = 1,0 \\times 10^{-14}$. \nTuyệt kĩ làm toán: Giá trị $10^{-14}$ này bị KHÓA CỨNG ÁP DỤNG cho **bất cứ dung dịch loãng nào** (nước đường, giấm, xí muội, axit H2SO4) miễn là đang pha ở 25°C. Có [H+] lập tức suy ra [OH-] bằng phép chia.",
+        "title": "TÃ­ch sá»‘ ion cá»§a NÆ°á»›c (Kw) - Äá»‹nh luáº­t VÄ©nh háº±ng",
+        "content": "VÃ¬ ná»“ng Ä‘á»™ NÆ°á»›c ($H_2O$) khá»•ng lá»“ and coi nhÆ° háº±ng sá»‘, ngÆ°á»i ta suy ra TÃ­ch sá»‘ ion cá»§a nÆ°á»›c $K_w = [H^+] \\cdot [OH^-]$. Äáº·c biá»‡t táº¡i nhiá»‡t Ä‘á»™ phÃ²ng 25Â°C, $K_w = (1,0 \\times 10^{-7}) \\times (1,0 \\times 10^{-7}) = 1,0 \\times 10^{-14}$. \nTuyá»‡t kÄ© lÃ m toÃ¡n: GiÃ¡ trá»‹ $10^{-14}$ nÃ y bá»‹ KHÃ“A Cá»¨NG ÃP Dá»¤NG cho **báº¥t cá»© dung dá»‹ch loÃ£ng nÃ o** (nÆ°á»›c Ä‘Æ°á»ng, giáº¥m, xÃ­ muá»™i, axit H2SO4) miá»…n lÃ  Ä‘ang pha á»Ÿ 25Â°C. CÃ³ [H+] láº­p tá»©c suy ra [OH-] báº±ng phÃ©p chia.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@ export const bai2 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Khái niệm pH & Môi trường dung dịch",
+        "text": "2. KhÃ¡i niá»‡m pH & MÃ´i trÆ°á»ng dung dá»‹ch",
         "level": "h2"
       }
     },
@@ -46,15 +46,15 @@ export const bai2 = {
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Việc cồng kềnh ghi chép các nồng độ ngũ phân số $10^{-7}$, $10^{-3}$ quá bất tiện, nhà hóa học Sørensen đã tạo ra thanh đo **Chỉ số pH** (power of Hydrogen) lấy logarit cơ số 10 nồng độ H+. \n- **Môi trường Acid (Chua):** Có nhiều mầm $H^+$ trỗi dậy khiến $[H^+] > 10^{-7} M$ $\\rightarrow$ pH < 7.\n- **Môi trường Trung tính (Lành tính):** Tính âm dương cân bằng hoàn mĩ $[H^+] = [OH^-] = 10^{-7} M$ $\\rightarrow$ pH đúng bằng 7 (Ví dụ: nước cất, dung dịch muối ăn NaCl).\n- **Môi trường Base (Kiềm/Đắng nháp):** Lũ $OH^-$ đàn áp $H+$ khiến $[H^+] < 10^{-7} M$ $\\rightarrow$ pH đo đạc chạy vọt > 7."
+        "text": "Viá»‡c cá»“ng ká»nh ghi chÃ©p cÃ¡c ná»“ng Ä‘á»™ ngÅ© phÃ¢n sá»‘ $10^{-7}$, $10^{-3}$ quÃ¡ báº¥t tiá»‡n, nhÃ  hÃ³a há»c SÃ¸rensen Ä‘Ã£ táº¡o ra thanh Ä‘o **Chá»‰ sá»‘ pH** (power of Hydrogen) láº¥y logarit cÆ¡ sá»‘ 10 ná»“ng Ä‘á»™ H+. \n- **MÃ´i trÆ°á»ng Acid (Chua):** CÃ³ nhiá»u máº§m $H^+$ trá»—i dáº­y khiáº¿n $[H^+] > 10^{-7} M$ $\\rightarrow$ pH < 7.\n- **MÃ´i trÆ°á»ng Trung tÃ­nh (LÃ nh tÃ­nh):** TÃ­nh Ã¢m dÆ°Æ¡ng cÃ¢n báº±ng hoÃ n mÄ© $[H^+] = [OH^-] = 10^{-7} M$ $\\rightarrow$ pH Ä‘Ãºng báº±ng 7 (VÃ­ dá»¥: nÆ°á»›c cáº¥t, dung dá»‹ch muá»‘i Äƒn NaCl).\n- **MÃ´i trÆ°á»ng Base (Kiá»m/Äáº¯ng nhÃ¡p):** LÅ© $OH^-$ Ä‘Ã n Ã¡p $H+$ khiáº¿n $[H^+] < 10^{-7} M$ $\\rightarrow$ pH Ä‘o Ä‘áº¡c cháº¡y vá»t > 7."
       }
     },
     {
       "id": "mod6",
       "type": "infoBox",
       "content": {
-        "title": "Công thức giải nhanh pH",
-        "content": "1. Tính pH cực rát: $pH = -\\log_{10}[H^+]$\n2. Đại lượng song sinh: $pOH = -\\log_{10}[OH^-]$\n3. Mối liên kết sinh tử: Ở $25^\\circ C$, ta luôn luôn có phanh giới không thể phá vỡ: **$pH + pOH = 14$**.",
+        "title": "CÃ´ng thá»©c giáº£i nhanh pH",
+        "content": "1. TÃ­nh pH cá»±c rÃ¡t: $pH = -\\log_{10}[H^+]$\n2. Äáº¡i lÆ°á»£ng song sinh: $pOH = -\\log_{10}[OH^-]$\n3. Má»‘i liÃªn káº¿t sinh tá»­: á»ž $25^\\circ C$, ta luÃ´n luÃ´n cÃ³ phanh giá»›i khÃ´ng thá»ƒ phÃ¡ vá»¡: **$pH + pOH = 14$**.",
         "color": "green"
       }
     },
@@ -62,7 +62,7 @@ export const bai2 = {
       "id": "mod7",
       "type": "heading",
       "content": {
-        "text": "3. Thuyết Brønsted - Lowry về Acid - Base",
+        "text": "3. Thuyáº¿t BrÃ¸nsted - Lowry vá» Acid - Base",
         "level": "h2"
       }
     },
@@ -72,10 +72,10 @@ export const bai2 = {
       "content": {
         "type": "bullet",
         "items": [
-          "Quên đi Thuyết cổ điển Arrhenius lỗi thời, Thuyết vạn vật Brønsted-Lowry ra đời ôm trọn mọi hệ dung môi. \n**Định nghĩa Đỉnh cao:**",
-          "1. **Acid (Kẻ hào phóng):** Bất cứ phần tử nào (phân tử hay ion) có năng lực NHƯỜNG, ĐÁ VĂNG HẠT PROTON ($H^+$) sang chất khác. ($HCl \\rightarrow H^+ + Cl^-$)",
-          "2. **Base (Kẻ bòn mót):** Bất kì phần tử nào CHỤP LẤY, NHẬN LẤY Proton ($H^+$) từ môi trường. (Ammonia $NH_3 + H^+ \\rightarrow NH_4^+$ mập lên).",
-          "3. **Lưỡng tính (Amphoteric):** Kẻ vừa có khả năng nhả $H^+$, lại vừa có khả năng nhận cướp $H^+$ khi gặp đối thủ khó nhằn. (Nước $H_2O$, Ion $HCO_3^-$, Amino Acid Zwitterion)."
+          "QuÃªn Ä‘i Thuyáº¿t cá»• Ä‘iá»ƒn Arrhenius lá»—i thá»i, Thuyáº¿t váº¡n váº­t BrÃ¸nsted-Lowry ra Ä‘á»i Ã´m trá»n má»i há»‡ dung mÃ´i. \n**Äá»‹nh nghÄ©a Äá»‰nh cao:**",
+          "1. **Acid (Káº» hÃ o phÃ³ng):** Báº¥t cá»© pháº§n tá»­ nÃ o (phÃ¢n tá»­ hay ion) cÃ³ nÄƒng lá»±c NHÆ¯á»œNG, ÄÃ VÄ‚NG Háº T PROTON ($H^+$) sang cháº¥t khÃ¡c. ($HCl \\rightarrow H^+ + Cl^-$)",
+          "2. **Base (Káº» bÃ²n mÃ³t):** Báº¥t kÃ¬ pháº§n tá»­ nÃ o CHá»¤P Láº¤Y, NHáº¬N Láº¤Y Proton ($H^+$) tá»« mÃ´i trÆ°á»ng. (Ammonia $NH_3 + H^+ \\rightarrow NH_4^+$ máº­p lÃªn).",
+          "3. **LÆ°á»¡ng tÃ­nh (Amphoteric):** Káº» vá»«a cÃ³ kháº£ nÄƒng nháº£ $H^+$, láº¡i vá»«a cÃ³ kháº£ nÄƒng nháº­n cÆ°á»›p $H^+$ khi gáº·p Ä‘á»‘i thá»§ khÃ³ nháº±n. (NÆ°á»›c $H_2O$, Ion $HCO_3^-$, Amino Acid Zwitterion)."
         ]
       }
     },
@@ -83,15 +83,15 @@ export const bai2 = {
       "id": "mod9",
       "type": "paragraph",
       "content": {
-        "text": "Độ sâu của sự phân ly định đoạt sức mạnh: Các **Chất điện li MẠNH** (Acid mạnh $HCl, HNO_3, H_2SO_4$, Base kiềm kiềm thổ $NaOH, Ba(OH)_2$ and Hầu Hết Mọi Loại Muối tan) sẽ xả thân phân đôi 100% trong nước tạo dòng ion dẫn điện dữ dội (Mũi tên 1 chiều). Các **Chất điện li YẾU** ($CH_3COOH, HF, NH_3$...) thì keo kiệt, hòa 100 phân tử chỉ vỡ ra được 1-2 phân tử rỉ ion, quá trình đứt gãy phải dùng mũi tên Cân Bằng 2 Chiều thuận nghịch."
+        "text": "Äá»™ sÃ¢u cá»§a sá»± phÃ¢n ly Ä‘á»‹nh Ä‘oáº¡t sá»©c máº¡nh: CÃ¡c **Cháº¥t Ä‘iá»‡n li Máº NH** (Acid máº¡nh $HCl, HNO_3, H_2SO_4$, Base kiá»m kiá»m thá»• $NaOH, Ba(OH)_2$ and Háº§u Háº¿t Má»i Loáº¡i Muá»‘i tan) sáº½ xáº£ thÃ¢n phÃ¢n Ä‘Ã´i 100% trong nÆ°á»›c táº¡o dÃ²ng ion dáº«n Ä‘iá»‡n dá»¯ dá»™i (MÅ©i tÃªn 1 chiá»u). CÃ¡c **Cháº¥t Ä‘iá»‡n li Yáº¾U** ($CH_3COOH, HF, NH_3$...) thÃ¬ keo kiá»‡t, hÃ²a 100 phÃ¢n tá»­ chá»‰ vá»¡ ra Ä‘Æ°á»£c 1-2 phÃ¢n tá»­ rá»‰ ion, quÃ¡ trÃ¬nh Ä‘á»©t gÃ£y pháº£i dÃ¹ng mÅ©i tÃªn CÃ¢n Báº±ng 2 Chiá»u thuáº­n nghá»‹ch."
       }
     },
     {
       "id": "mod10",
       "type": "warningBox",
       "content": {
-        "title": "Sự Thủy phân của Muối - Bẻ gãy Cán Cân Dung Dịch",
-        "content": "Cú sốc lớn: Không phải Muối nào pha vào nước cũng Trung Tính (pH=7) như muối ăn NaCl. \nNếu muối kết tinh từ mầm Acid Mạnh đàn áp Base Yếu (VD muối Cục $NH_4Cl$, $FeCl_3$, $Al_2(SO_4)_3$) $\\Rightarrow$ Dung dịch đó sẽ chua hóa ngả PH \n< 7, làm quỳ tím đỏ.\nNgược lại, Muối sinh ra do Base Mạnh bao bọc mầm Acid Yếu (VD $Na_2CO_3, CH_3COONa, K_3PO_4$) $\\Rightarrow$ Ion gốc Yếu đó bòn rút lại phân li Nước để tái chiếm chua $H^+$, để dư kiềm $OH^-$ ra ngả dung dịch thành môi trường Kiềm Xanh (pH > 7). Hiện tượng ăn mòn tái tạo đó gọi là Phản ứng Thủy Phân tạo vị.",
+        "title": "Sá»± Thá»§y phÃ¢n cá»§a Muá»‘i - Báº» gÃ£y CÃ¡n CÃ¢n Dung Dá»‹ch",
+        "content": "CÃº sá»‘c lá»›n: KhÃ´ng pháº£i Muá»‘i nÃ o pha vÃ o nÆ°á»›c cÅ©ng Trung TÃ­nh (pH=7) nhÆ° muá»‘i Äƒn NaCl. \nNáº¿u muá»‘i káº¿t tinh tá»« máº§m Acid Máº¡nh Ä‘Ã n Ã¡p Base Yáº¿u (VD muá»‘i Cá»¥c $NH_4Cl$, $FeCl_3$, $Al_2(SO_4)_3$) $\\Rightarrow$ Dung dá»‹ch Ä‘Ã³ sáº½ chua hÃ³a ngáº£ PH \n< 7, lÃ m quá»³ tÃ­m Ä‘á».\nNgÆ°á»£c láº¡i, Muá»‘i sinh ra do Base Máº¡nh bao bá»c máº§m Acid Yáº¿u (VD $Na_2CO_3, CH_3COONa, K_3PO_4$) $\\Rightarrow$ Ion gá»‘c Yáº¿u Ä‘Ã³ bÃ²n rÃºt láº¡i phÃ¢n li NÆ°á»›c Ä‘á»ƒ tÃ¡i chiáº¿m chua $H^+$, Ä‘á»ƒ dÆ° kiá»m $OH^-$ ra ngáº£ dung dá»‹ch thÃ nh mÃ´i trÆ°á»ng Kiá»m Xanh (pH > 7). Hiá»‡n tÆ°á»£ng Äƒn mÃ²n tÃ¡i táº¡o Ä‘Ã³ gá»i lÃ  Pháº£n á»©ng Thá»§y PhÃ¢n táº¡o vá»‹.",
         "color": "orange"
       }
     }
@@ -99,36 +99,36 @@ export const bai2 = {
   "quizzes": [
     {
       "id": "q1",
-      "question": "Dung dịch X có [OH⁻] = 1,0 × 10⁻⁴ M. Ở 25°C, dung dịch X có môi trường:",
+      "question": "Dung dá»‹ch X cÃ³ [OHâ»] = 1,0 Ã— 10â»â´ M. á»ž 25Â°C, dung dá»‹ch X cÃ³ mÃ´i trÆ°á»ng:",
       "options": [
         "Acid",
         "Base",
-        "Trung tính",
-        "Lưỡng tính"
+        "Trung tÃ­nh",
+        "LÆ°á»¡ng tÃ­nh"
       ],
       "correctAnswer": 1,
-      "explanation": "[OH⁻] = 10⁻⁴ > 10⁻⁷, nên đây là môi trường base."
+      "explanation": "[OHâ»] = 10â»â´ > 10â»â·, nÃªn Ä‘Ã¢y lÃ  mÃ´i trÆ°á»ng base."
     },
     {
       "id": "q2",
-      "question": "Theo thuyết Brønsted – Lowry, NH₃ trong nước đóng vai trò là:",
+      "question": "Theo thuyáº¿t BrÃ¸nsted â€“ Lowry, NHâ‚ƒ trong nÆ°á»›c Ä‘Ã³ng vai trÃ² lÃ :",
       "options": [
         "Acid",
         "Base",
-        "Chất lưỡng tính",
-        "Cả acid and base"
+        "Cháº¥t lÆ°á»¡ng tÃ­nh",
+        "Cáº£ acid and base"
       ],
       "correctAnswer": 1,
-      "explanation": "NH₃ nhận H⁺ từ nước để tạo thành NH₄⁺ nên NH₃ là base."
+      "explanation": "NHâ‚ƒ nháº­n Hâº tá»« nÆ°á»›c Ä‘á»ƒ táº¡o thÃ nh NHâ‚„âº nÃªn NHâ‚ƒ lÃ  base."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Cân bằng trong dung dịch nước",
+      "title": "BÃ i giáº£ng: CÃ¢n báº±ng trong dung dá»‹ch nÆ°á»›c",
       "url": "https://www.youtube.com/watch?v=P4hEy0II9uE",
       "thumbnail": "https://img.youtube.com/vi/P4hEy0II9uE/0.jpg",
-      "description": "Sự điện li, khái niệm pH and ý nghĩa của pH trong thực tiễn (VietJack)."
+      "description": "Sá»± Ä‘iá»‡n li, khÃ¡i niá»‡m pH and Ã½ nghÄ©a cá»§a pH trong thá»±c tiá»…n (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -137,3 +137,4 @@ export const bai2 = {
   "game": null,
   "realWorldApplications": []
 };
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Migration Script: Upload 10,000 chemistry knowledge entries to Supabase
  * Table: ai_knowledge_base
  * 
@@ -33,14 +33,14 @@ async function loadDataset() {
     if (match) {
       const data = eval(match[1]);
       parts.push(...data);
-      console.log(`✅ Part ${i}: ${data.length} records loaded`);
+      console.log(`âœ… Part ${i}: ${data.length} records loaded`);
     }
   }
   return parts;
 }
 
 async function createTable() {
-  console.log('📦 Creating ai_knowledge_base table via RPC...');
+  console.log('ðŸ“¦ Creating ai_knowledge_base table via RPC...');
   
   // Try to create table using SQL via Supabase
   const { error } = await supabase.rpc('exec_sql', {
@@ -66,7 +66,7 @@ async function createTable() {
   });
   
   if (error) {
-    console.warn('⚠️ RPC not available. Please create the table manually in Supabase SQL Editor:');
+    console.warn('âš ï¸ RPC not available. Please create the table manually in Supabase SQL Editor:');
     console.log(`
 CREATE TABLE IF NOT EXISTS ai_knowledge_base (
   id TEXT PRIMARY KEY,
@@ -87,7 +87,7 @@ CREATE INDEX IF NOT EXISTS idx_kb_kind ON ai_knowledge_base(kind);
 CREATE INDEX IF NOT EXISTS idx_kb_category ON ai_knowledge_base(category);
     `);
   } else {
-    console.log('✅ Table created successfully');
+    console.log('âœ… Table created successfully');
   }
 }
 
@@ -116,25 +116,26 @@ async function uploadData(dataset) {
       .upsert(batch, { onConflict: 'id' });
 
     if (error) {
-      console.error(`❌ Batch ${i}-${i + batch.length}: ${error.message}`);
+      console.error(`âŒ Batch ${i}-${i + batch.length}: ${error.message}`);
       errors += batch.length;
     } else {
       uploaded += batch.length;
-      console.log(`📤 Uploaded ${uploaded}/${dataset.length} (${((uploaded / dataset.length) * 100).toFixed(1)}%)`);
+      console.log(`ðŸ“¤ Uploaded ${uploaded}/${dataset.length} (${((uploaded / dataset.length) * 100).toFixed(1)}%)`);
     }
   }
 
-  console.log(`\n🏁 Migration complete: ${uploaded} uploaded, ${errors} errors`);
+  console.log(`\nðŸ Migration complete: ${uploaded} uploaded, ${errors} errors`);
 }
 
 async function main() {
-  console.log('🚀 Starting Knowledge Base Migration...\n');
+  console.log('ðŸš€ Starting Knowledge Base Migration...\n');
   
   const dataset = await loadDataset();
-  console.log(`\n📊 Total records: ${dataset.length}\n`);
+  console.log(`\nðŸ“Š Total records: ${dataset.length}\n`);
   
   await createTable();
   await uploadData(dataset);
 }
 
 main().catch(console.error);
+

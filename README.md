@@ -1,786 +1,361 @@
-# AURUM - Phân tích hệ thống và Database
+# AURUM
+Nền tảng học tập Hóa học tương tác cho học sinh, giáo viên và quản trị viên.
+_Cập nhật: 04/06/2026_
 
-_Cập nhật: 02/06/2026_
+## 1. Tổng quan
+AURUM là web app học Hóa học được xây bằng React, Vite, Express và Supabase PostgreSQL.
+Hệ thống phục vụ ba nhóm người dùng chính: học sinh, giáo viên và quản trị viên.
+Học sinh học theo hành trình, làm quiz, nhận XP, giữ streak và tham gia đấu trường.
+Giáo viên quản lý lớp, bài đăng, bài tập, lịch học và học liệu.
+Quản trị viên quản lý người dùng, bài học, phản hồi và dữ liệu hệ thống.
+Database đã được chuẩn hóa sang tên bảng/cột tiếng Việt không dấu, snake_case.
+API public vẫn giữ nhiều endpoint tiếng Anh quen thuộc để giảm rủi ro phá frontend web/mobile.
 
-## 1. Tổng quan dự án
-
-**AURUM** là nền tảng học tập Hóa học tương tác dành cho học sinh, giáo viên và quản trị viên. Hệ thống hiện tại là một web app React SPA kết hợp backend Express chạy theo mô hình server/serverless, sử dụng Supabase PostgreSQL làm database trung tâm.
-
-Mục tiêu chính của hệ thống:
-
+## 2. Mục tiêu sản phẩm
 - Cung cấp lộ trình học Hóa học từ lớp 8 đến lớp 12.
-- Hỗ trợ học lý thuyết, video, quiz, thử thách và tiến trình gamification.
-- Cung cấp phòng lab ảo, công cụ cân bằng phương trình, phân tử 3D và bảng tuần hoàn.
-- Tổ chức lớp học cho giáo viên và học sinh: lớp, bài tập, lịch học, bài nộp, thảo luận.
-- Quản trị người dùng, bài học, phản hồi, yêu cầu đăng ký giáo viên.
-- Phân tích tài liệu bằng AI để hỗ trợ tạo nội dung/câu hỏi.
+- Tổ chức bài học thành nhiều stage: intro, story, challenge, quiz, reward.
+- Theo dõi tiến độ học, XP, level, streak và nhiệm vụ.
+- Cung cấp lab ảo, mô hình phân tử và cân bằng phương trình.
+- Cho phép tạo lớp, tham gia lớp, giao bài và chấm bài.
+- Cung cấp thư viện học liệu có upload, xem, phản hồi và trả lời.
+- Tổ chức đấu trường trả lời câu hỏi theo vòng.
+- Hỗ trợ phân tích tài liệu bằng AI.
 
-## 2. Tech stack
-
+## 3. Tech stack
 | Layer | Công nghệ | Vai trò |
 | --- | --- | --- |
-| Frontend | React 19, Vite 8, React Router 7 | SPA web client |
-| Styling | Tailwind CSS 4, CSS custom design system | Giao diện AURUM, card, layout, responsive |
-| Animation | Framer Motion | Animation, transition, gamification UI |
-| 3D/Visual | Three.js, React Three Fiber | Lab 3D, mô hình phân tử, hiệu ứng thí nghiệm |
-| State/Auth | React Context, localStorage, JWT | AuthContext và trạng thái người dùng |
-| i18n | i18next, react-i18next | Song ngữ VI/EN |
-| Backend | Express 4, serverless-http | REST API |
-| Database | Supabase PostgreSQL | Dữ liệu người dùng, bài học, lab, arena, classroom |
-| Auth | Custom JWT + Supabase OAuth fallback | Đăng nhập username/password, Google OAuth callback |
-| File/Media | Cloudinary, multer | Upload ảnh/tài liệu/video |
-| Email | Nodemailer | Duyệt giáo viên, reminder học tập/streak |
-| AI | OpenAI, pdf-parse, mammoth, word-extractor | Phân tích PDF/DOCX, sinh câu hỏi |
-| Tests | Vitest, Testing Library, Supertest | Unit/integration tests |
+| Frontend | React 19, Vite 8 | Web SPA |
+| Routing | React Router 7 | Route public, student, teacher, admin |
+| Styling | Tailwind CSS 4 | Giao diện responsive |
+| Motion | Framer Motion | Animation, transition |
+| 3D | Three.js, React Three Fiber | Lab 3D, mô hình phân tử |
+| Charts | Recharts | Dashboard và thống kê |
+| Backend | Express 4 | REST API |
+| Serverless | serverless-http | Deploy API dạng function |
+| Database | Supabase PostgreSQL | Dữ liệu nghiệp vụ |
+| Auth | JWT, bcryptjs, Supabase Auth fallback | Đăng nhập và phân quyền |
+| Upload | Cloudinary, multer | File, ảnh, video học liệu |
+| Email | Nodemailer | Email hệ thống |
+| AI | OpenAI, pdf-parse, mammoth | Phân tích tài liệu |
+| Test | Vitest, Testing Library, Supertest | Unit và integration test |
 
-## 3. Kiến trúc tổng thể
-
+## 4. Kiến trúc tổng thể
 ```mermaid
 graph TB
-  subgraph Client["Frontend - React/Vite"]
-    A["React Router pages"]
-    B["AuthContext"]
-    C["Student modules"]
-    D["Teacher modules"]
-    E["Admin modules"]
-    F["3D Lab / Arena UI"]
-  end
-
-  subgraph Api["Backend - Express API"]
-    G["api/index.js"]
-    H["JWT auth middleware"]
-    I["Route modules"]
-    J["Model wrappers"]
-    K["Mailer / AI / Upload services"]
-  end
-
-  subgraph Data["Infrastructure"]
-    L["Supabase PostgreSQL"]
-    M["Supabase Auth"]
-    N["Cloudinary"]
-    O["OpenAI"]
-    P["Vercel / Netlify"]
-  end
-
-  A --> G
-  B --> H
-  C --> I
-  D --> I
-  E --> I
-  F --> I
-  I --> J
-  J --> L
-  H --> L
-  H --> M
-  K --> N
-  K --> O
-  G --> P
+  Web["React Web App"] --> API["Express API"]
+  Mobile["Expo Mobile App"] --> API
+  API --> DB["Supabase PostgreSQL"]
+  API --> Auth["JWT / Supabase Auth"]
+  API --> Media["Cloudinary"]
+  API --> AI["OpenAI"]
+  API --> Mail["SMTP"]
 ```
+Frontend gọi backend qua `/api/*`.
+Backend xác thực token bằng middleware trong `api/_middleware/auth.js`.
+Backend dùng Supabase client trong `api/lib/supabase.js` để truy vấn database.
+Các model trong `api/models/` gom logic truy vấn dùng lại nhiều nơi.
+Một số response vẫn trả alias tiếng Anh như `title`, `score`, `class_id` để giữ contract.
 
-## 4. Cấu trúc thư mục chính
-
+## 5. Cấu trúc thư mục
 ```text
 AURUM/
 ├── api/
-│   ├── _middleware/        # JWT auth, role guard
-│   ├── _routes/            # auth, user, arena, classes, lessons, lab...
-│   ├── lib/                # Supabase client, mailer
-│   ├── models/             # User, Lesson, Mission, Feedback, Discussion
-│   ├── env.js              # Load env runtime
-│   └── index.js            # Express entrypoint
+│   ├── _middleware/       # Auth middleware và role guard
+│   ├── _routes/           # REST routes theo module
+│   ├── lib/               # Supabase client, mailer, helpers
+│   ├── models/            # Model wrappers cho Supabase
+│   ├── env.js             # Load biến môi trường
+│   └── index.js           # Express entrypoint
+├── apps/
+│   └── mobile/            # Mobile app dùng Expo
+├── docs/                  # Tài liệu thiết kế và ghi chú kỹ thuật
+├── public/                # Static assets
+├── scripts/               # Seed, migrate, backup, docs generator
 ├── src/
-│   ├── components/         # UI, auth, navigation, lab, arena, lessons
-│   ├── context/            # AuthContext
-│   ├── data/               # curriculum, elements, molecules, reactions
-│   ├── lib/                # Supabase browser client
-│   ├── locales/            # vi.json, en.json
-│   ├── pages/              # student, teacher, admin, auth pages
-│   ├── services/           # activity logging service
-│   ├── styles/             # global app CSS
-│   ├── App.jsx             # Route tree
-│   └── main.jsx            # React entrypoint
-├── public/                 # static assets, images, icons, curriculum media
-├── supabase/               # migration/schema SQL files
-├── scripts/                # seed, migrate, backup, docs, upload tools
-├── tests/                  # Vitest test suites
-├── package.json
-├── vite.config.js
-└── README1.md
+│   ├── components/        # UI components
+│   ├── constants/         # Hằng số frontend
+│   ├── context/           # AuthContext
+│   ├── data/              # Curriculum, lab, chemistry dataset
+│   ├── lib/               # Supabase browser client
+│   ├── locales/           # i18n resources
+│   ├── pages/             # Student, teacher, admin, auth pages
+│   ├── services/          # Frontend services
+│   └── utils/             # Helper utilities
+├── supabase/
+│   ├── migrations/        # Migration SQL
+│   └── V2.sql             # Snapshot/schema script
+└── tests/                 # Vitest suites
 ```
 
-Ghi chú trạng thái hiện tại: trong workspace đang đọc, không có thư mục `apps/mobile` hoặc `packages/shared`; hệ thống hiện tại là web/API app chính.
-
-## 5. Luồng frontend
-
-File route chính: `src/App.jsx`.
-
-### Nhóm trang public
-
-| Route | Trang | Mục đích |
+## 6. Frontend routes
+| Nhóm | Route | Mục đích |
 | --- | --- | --- |
-| `/` | Home | Landing/dashboard học tập |
-| `/about` | About | Giới thiệu |
-| `/contact` | Contact | Liên hệ |
-| `/terms` | Terms | Điều khoản |
-| `/lectures` | Lectures | Bài giảng |
-| `/lessons`, `/lessons/:grade`, `/lessons/:grade/:lessonId` | Lessons/LessonPage | Danh sách và chi tiết bài học |
-| `/login`, `/register`, `/auth/callback` | Auth pages | Đăng nhập, đăng ký, OAuth callback |
+| Public | `/` | Trang chủ |
+| Public | `/about` | Giới thiệu |
+| Public | `/contact` | Liên hệ |
+| Public | `/terms` | Điều khoản |
+| Public | `/lectures` | Bài giảng |
+| Auth | `/login` | Đăng nhập |
+| Auth | `/register` | Đăng ký |
+| Auth | `/auth/callback` | OAuth callback |
+| Student | `/bai_hoc` | Danh sách bài học |
+| Student | `/bai_hoc/:grade` | Bài học theo khối |
+| Student | `/bai_hoc/:grade/:lessonId` | Chi tiết bài học |
+| Student | `/classroom` | Chọn lớp/hành trình |
+| Student | `/my-class` | Lớp đã tham gia |
+| Student | `/classroom/:grade/journey` | Hành trình theo khối |
+| Student | `/classroom/:grade/journey/:lessonId/intro` | Stage giới thiệu |
+| Student | `/classroom/:grade/journey/:lessonId/story` | Stage câu chuyện |
+| Student | `/classroom/:grade/journey/:lessonId/challenge` | Stage thử thách |
+| Student | `/classroom/:grade/journey/:lessonId/quiz` | Stage quiz |
+| Student | `/classroom/:grade/journey/:lessonId/reward` | Stage phần thưởng |
+| Student | `/lab` | Lab hóa học |
+| Student | `/lab/simulator` | Mô phỏng lab |
+| Student | `/lab/balancer` | Cân bằng phương trình |
+| Student | `/lab/molecules` | Mô hình phân tử |
+| Student | `/lab/solver` | Công cụ giải bài |
+| Student | `/lab/discovery` | Sổ khám phá |
+| Student | `/arena` | Đấu trường |
+| Student | `/library` | Thư viện học liệu |
+| Student | `/library/:id` | Chi tiết học liệu |
+| Student | `/profile` | Hồ sơ |
+| Student | `/settings` | Cài đặt |
+| Student | `/knowledge-map` | Bản đồ kiến thức |
+| Student | `/calculator` | Máy tính hóa học |
+| Admin | `/admin` | Dashboard admin |
+| Admin | `/admin/journey` | Quản lý hành trình |
+| Admin | `/admin/journey/:lessonId` | Chi tiết hành trình |
+| Admin | `/admin/bai_hoc` | Quản lý bài học |
+| Admin | `/admin/nguoi_dung` | Quản lý người dùng |
+| Admin | `/admin/phan_hoi` | Quản lý phản hồi |
+| Teacher | `/teacher` | Dashboard giáo viên |
+| Teacher | `/teacher/lop` | Quản lý lớp |
+| Teacher | `/teacher/lop/:id` | Chi tiết lớp |
+| Teacher | `/teacher/assignments` | Quản lý bài tập |
+| Teacher | `/teacher/library` | Quản lý học liệu |
 
-### Nhóm trang Student cần đăng nhập
-
-| Route | Module |
-| --- | --- |
-| `/periodic-table` | Bảng tuần hoàn |
-| `/classroom` | Chọn lớp/lộ trình |
-| `/my-class` | Lớp học đã tham gia |
-| `/classroom/:grade/journey` | Journey theo lớp |
-| `/classroom/:grade/journey/:lessonId/intro` | Stage Intro |
-| `/classroom/:grade/journey/:lessonId/story` | Stage Story |
-| `/classroom/:grade/journey/:lessonId/challenge` | Stage Challenge |
-| `/classroom/:grade/journey/:lessonId/quiz` | Stage Quiz |
-| `/classroom/:grade/journey/:lessonId/reward` | Stage Reward |
-| `/lab`, `/lab/simulator`, `/lab/balancer`, `/lab/molecules`, `/lab/solver`, `/lab/discovery` | Lab tools |
-| `/arena` | Đấu trường |
-| `/library`, `/library/:id` | Thư viện tài liệu |
-| `/profile`, `/settings` | Hồ sơ và cài đặt |
-| `/knowledge-map`, `/calculator` | Bản đồ kiến thức, máy tính hóa học |
-
-### Nhóm trang Teacher
-
-| Route | Module |
-| --- | --- |
-| `/teacher` | Teacher dashboard |
-| `/teacher/classes` | Quản lý lớp |
-| `/teacher/classes/:id` | Chi tiết lớp |
-| `/teacher/assignments` | Quản lý bài tập |
-
-### Nhóm trang Admin
-
-| Route | Module |
-| --- | --- |
-| `/admin` | Admin dashboard |
-| `/admin/journey` | Quản lý journey |
-| `/admin/journey/:lessonId` | Chi tiết journey |
-| `/admin/lessons` | Quản lý bài học |
-| `/admin/users` | Quản lý người dùng |
-| `/admin/users/:id` | Chi tiết người dùng |
-| `/admin/feedback` | Quản lý phản hồi/yêu cầu giáo viên |
-
-## 6. Backend API
-
-Entry point: `api/index.js`.
-
-Backend mount các route dưới prefix `/api`:
-
-| Prefix | File | Trách nhiệm |
+## 7. Backend API
+| Prefix | File | Vai trò |
 | --- | --- | --- |
-| `/api/auth` | `api/_routes/auth.js` | Register, login, magic login, teacher registration request |
-| `/api/user` | `api/_routes/user.js` | Profile, heartbeat, progress, streak, activities, leaderboard, reminders |
-| `/api/arena` | `api/_routes/arena.js` | Arena rooms, matchmaking, realtime token, answers, leaderboard |
-| `/api/admin` | `api/_routes/admin.js` | Stats, users, feedback, lessons, teacher approval/rejection |
-| `/api/lessons` | `api/_routes/lessons.js` | List lessons, lesson detail |
-| `/api/materials` | `api/_routes/materials.js` | Library materials, view count, feedback/reply |
-| `/api/elements` | `api/_routes/elements.js` | Periodic table data |
-| `/api/lab` | `api/_routes/lab.js` | Chemicals, reactions, balancing questions/progress, unlock chemicals |
-| `/api/missions` | `api/_routes/missions.js` | Mission list and claim reward |
-| `/api/classes` | `api/_routes/classes.js` | Classes, members, posts, schedules, assignments, exam parser |
-| `/api/discussions` | `api/_routes/discussions.js` | Lesson discussions/comments |
-| `/api/analyze` | `api/_routes/analyze_v3.js` | AI document analysis, lazy-loaded |
+| `/api/auth` | `api/_routes/auth.js` | Đăng ký, đăng nhập, OAuth, teacher request |
+| `/api/user` | `api/_routes/user.js` | Hồ sơ, tiến độ, streak, activity |
+| `/api/admin` | `api/_routes/admin.js` | Dashboard, user, feedback, lesson |
+| `/api/lessons` | `api/_routes/lessons.js` | Bài học |
+| `/api/materials` | `api/_routes/materials.js` | Học liệu và phản hồi học liệu |
+| `/api/classes` | `api/_routes/classes.js` | Lớp, thành viên, bài đăng, bài nộp |
+| `/api/lab` | `api/_routes/lab.js` | Hóa chất, phản ứng, câu hỏi cân bằng |
+| `/api/arena` | `api/_routes/arena.js` | Phòng đấu, người chơi, vòng đấu |
+| `/api/missions` | `api/_routes/missions.js` | Nhiệm vụ và nhận thưởng |
+| `/api/discussions` | `api/_routes/discussions.js` | Thảo luận bài học |
+| `/api/elements` | `api/_routes/elements.js` | Dữ liệu bảng tuần hoàn |
+| `/api/analyze` | `api/_routes/analyze_v3.js` | Phân tích tài liệu bằng AI |
 | `/api/health` | `api/index.js` | Health check |
+`/api/analyze` được lazy-load để tránh import sớm các package nặng.
+Route admin, teacher và classroom kiểm tra role hoặc owner trước khi ghi dữ liệu.
+Các hàm normalize trong backend giữ backward compatibility cho frontend.
 
-### Auth middleware
+## 8. Authentication
+Đăng nhập username/password dùng custom JWT.
+Password được hash bằng `bcryptjs`.
+JWT chứa `id`, `role` và `sessionId`.
+`current_session_id` trong `nguoi_dung` dùng để chặn đăng nhập song song.
+Nếu session trong JWT khác session trong DB, backend trả lỗi `DUAL_LOGIN`.
+Supabase Auth token được hỗ trợ như fallback cho OAuth.
+Role chính gồm `student`, `teacher` và `admin`.
 
-File: `api/_middleware/auth.js`.
+## 9. Quy tắc database
+Schema nghiệp vụ chính nằm trong `public`.
+Tên bảng nghiệp vụ dùng tiếng Việt không dấu, snake_case.
+Tên kỹ thuật phổ biến được giữ nguyên: `id`, `created_at`, `updated_at`, `status`, `type`, `role`, `email`, `username`, `file_url`, `media_url`, `url`.
+Bảng Supabase-managed trong `auth` và `storage` không đổi.
+Không tạo bảng/cột mới với tên mơ hồ như `data`, `info`, `item`, `value`.
+Không truy vấn trực tiếp bảng tiếng Anh cũ trong runtime code.
 
-Hệ thống hỗ trợ hai dạng token:
-
-- **Custom JWT**: backend tự phát token khi login/register. Payload có `id`, `role`, `sessionId`.
-- **Supabase Auth token**: fallback cho OAuth. Nếu user chưa tồn tại, backend có thể tạo student account từ metadata/email.
-
-Các điểm bảo mật chính:
-
-- Token đọc từ header `Authorization: Bearer <token>`.
-- Custom JWT bắt buộc có `sessionId`.
-- `current_session_id` trong bảng `users` dùng để chống đăng nhập đồng thời ở nhiều nơi.
-- User bị khóa (`is_locked`) sẽ bị từ chối truy cập.
-- `requireRole(...roles)` dùng cho admin/teacher guard.
-
-## 7. Tính năng theo module
-
-### 7.1. User, Auth, Profile
-
-- Đăng ký public chỉ cho role `student`.
-- Login bằng username hoặc email.
-- Teacher registration không tạo user ngay; ghi yêu cầu vào `feedback` với type `teacher_registration`.
-- Admin duyệt teacher request, tạo tài khoản teacher và gửi email magic login.
-- Profile API gom dữ liệu từ `users` và `user_progress`.
-- Heartbeat mỗi phút cập nhật `last_active_at`, `active_minutes`, `today_online_minutes`.
-- Streak tăng khi hoàn thành bài hoặc online đủ 10 phút/ngày.
-
-### 7.2. Lessons và Journey
-
-- Bài học lưu trong bảng `lessons`.
-- Backend map snake_case database sang camelCase frontend:
-  - `class_id` -> `classId`
-  - `program_id` -> `programId`
-  - `theory_modules` -> `theoryModules`
-  - `video_modules` -> `videoModules`
-  - `story_slides` -> `storySlides`
-  - `intro_video_url` -> `introVideoUrl`
-  - `is_premium` -> `isPremium`
-- Nội dung bài học dùng nhiều JSONB field: theory, video, quiz, story, challenge, game.
-- Journey student gồm Intro, Story, Challenge, Quiz, Reward.
-- Tiến độ lesson/chemical/balancing được chuẩn hóa vào `user_progress`.
-
-### 7.3. Gamification
-
-- XP và level nằm trong `users`.
-- Công thức level hiện dùng phổ biến trong backend: `level = floor(xp / 1000) + 1`.
-- `missions` định nghĩa nhiệm vụ; `user_missions` lưu tiến độ từng user.
-- Mission claim dùng RPC `claim_mission_reward`.
-- Daily missions được reset theo ngày trong model `Mission`.
-- Streak lấy từ `streak_count`, `last_streak_at`, `today_online_minutes`, `today_lesson_completed`.
-
-### 7.4. Lab
-
-- `lab_chemicals`: danh mục hóa chất.
-- `lab_reactions`: phản ứng hóa học, hiện tượng, độ nguy hiểm, điều kiện.
-- `balancing_questions`: hơn 10.000 phương trình/câu hỏi cân bằng.
-- API `/api/lab/balancing/search?q=` tìm phương trình đã cân bằng.
-- Lab frontend gồm simulator, balancer, molecule viewer, solver và 3D Magic Lab.
-
-### 7.5. Arena
-
-Arena đã chuyển sang mô hình realtime/minigame:
-
-- `arena_rooms`: phòng đấu.
-- `arena_room_players`: người chơi trong phòng, điểm, trạng thái.
-- `arena_questions`: câu hỏi minigame, gồm payload/answer JSONB.
-- `arena_round_answers`: câu trả lời từng vòng.
-- `arena_match_history`: lịch sử trận và biến động điểm.
-
-Game type hỗ trợ trong backend:
-
-- `calculation`
-- `balancing`
-- `atom_match`
-- `electron_match`
-
-Luồng Arena cơ bản:
-
-1. User tạo phòng hoặc tìm phòng.
-2. Người chơi join room.
-3. Host start room.
-4. Backend chọn bộ câu hỏi, mở từng round có `round_started_at` và `round_ends_at`.
-5. User submit answer.
-6. Backend chấm đúng/sai, tính score theo thời gian còn lại.
-7. Hết round hoặc đủ answer thì advance round.
-8. Kết thúc trận, cập nhật `arena_stats` và `arena_match_history`.
-
-### 7.6. Classroom
-
-Classroom phục vụ teacher/student:
-
-- Teacher/admin tạo lớp.
-- Student join lớp bằng `code`.
-- Teacher tạo post: announcement, assignment, video.
-- Assignment có thể gắn `questions` JSONB hoặc `media_url` trỏ đến lesson.
-- Student submit assignment.
-- Teacher chấm điểm/feedback.
-- Class schedules lưu lịch học/meet URL.
-- Teacher notification gom join mới, message, submission và bài gần deadline.
-
-### 7.7. Library và Feedback
-
-- `materials` lưu tài liệu.
-- Khi xem chi tiết material, backend gọi RPC `increment_material_view`.
-- User gửi feedback/rating cho material.
-- Teacher/admin có thể reply feedback.
-- `feedback` lưu góp ý hệ thống, bug, praise và teacher registration request.
-
-### 7.8. AI Document Analysis
-
-Route `/api/analyze` được lazy-load để tránh crash cold start serverless vì các thư viện nặng như `pdf-parse`, `word-extractor`, `multer`.
-
-Vai trò:
-
-- Upload PDF/DOCX.
-- Trích xuất nội dung.
-- Phân tích bằng OpenAI.
-- Sinh/chuẩn hóa câu hỏi học tập.
-
-## 8. Database Supabase
-
-Nguồn phân tích database:
-
-- Supabase public schema thực tế.
-- Migration history Supabase.
-- File migration local trong `supabase/`.
-- Model wrappers trong `api/models/`.
-
-### 8.1. Thống kê schema hiện tại
-
-- Schema chính: `public`.
-- Số bảng public đang đọc được: **25 bảng**.
-- Tất cả bảng public trong kết quả kiểm tra đều bật **RLS**.
-- Migration đã áp dụng: từ `create_full_schema` đến `restore_current_session_id_and_drop_arena_avatar_only`.
-
-Migration history đang có:
-
-| Version | Name |
-| --- | --- |
-| `20260514155943` | `create_full_schema` |
-| `20260519143910` | `drop_unused_tables` |
-| `20260519143917` | `drop_unused_user_columns` |
-| `20260519143924` | `add_unique_constraint_lesson_id` |
-| `20260519143935` | `add_missing_foreign_keys` |
-| `20260519143945` | `create_missing_tables` |
-| `20260519144338` | `restore_password_column` |
-| `20260519153642` | `add_study_plan_to_users` |
-| `20260519153645` | `fix_materials_author_id_fk` |
-| `20260526005811` | `security_stability_hardening_20260526` |
-| `20260526010334` | `policy_cleanup_20260526` |
-| `20260531003332` | `arena_realtime_minigames` |
-| `20260601215745` | `drop_unused_user_columns` |
-| `20260601215836` | `restore_current_session_id_and_drop_arena_avatar_only` |
-
-### 8.2. Bảng database chính
-
-| Bảng | Rows hiện tại | Vai trò |
-| --- | ---: | --- |
-| `grade_levels` | 5 | Danh mục khối lớp |
-| `users` | 13 | Tài khoản, role, XP, streak, auth/session |
-| `lessons` | 110 | Nội dung bài học, theory/video/quiz/story/challenge/game |
-| `user_progress` | 38 | Tiến độ lesson, chemical, achievement, balancing |
-| `missions` | 16 | Định nghĩa nhiệm vụ |
-| `user_missions` | 9 | Tiến độ nhiệm vụ theo user |
-| `lab_chemicals` | 180 | Danh mục hóa chất |
-| `lab_reactions` | 318 | Phản ứng hóa học |
-| `balancing_questions` | 10131 | Ngân hàng phương trình cân bằng |
-| `arena_questions` | 16 | Câu hỏi minigame Arena |
-| `arena_rooms` | 46 | Phòng Arena |
-| `arena_room_players` | 37 | Người chơi trong phòng Arena |
-| `arena_round_answers` | 47 | Câu trả lời từng vòng Arena |
-| `arena_match_history` | 0 | Lịch sử trận |
-| `classes` | 2 | Lớp học |
-| `class_members` | 5 | Thành viên lớp |
-| `class_posts` | 21 | Bài đăng, thông báo, bài tập, video |
-| `class_schedules` | 2 | Lịch học |
-| `class_assignment_submissions` | 4 | Bài nộp của học sinh |
-| `materials` | 68 | Tài liệu thư viện |
-| `material_feedback` | 3 | Feedback/rating tài liệu |
-| `feedback` | 24 | Feedback hệ thống, praise, teacher request |
-| `lesson_discussions` | 1 | Thảo luận bài học |
-| `user_notes` | 0 | Ghi chú cá nhân theo bài |
-| `user_activities` | 9 | Log hoạt động người dùng |
-
-### 8.3. Nhóm bảng User/Auth
-
-#### `users`
-
-| Cột quan trọng | Kiểu | Ghi chú |
+## 10. Mapping bảng chính
+| Bảng cũ | Bảng mới | Ý nghĩa |
 | --- | --- | --- |
-| `id` | text | Primary key, backend tạo UUID dạng text |
-| `username` | text | Unique |
-| `email` | text | Unique, nullable |
-| `password` | text | Hash bcrypt cho custom auth |
-| `role` | text | `student`, `teacher`, `admin` |
-| `xp`, `level` | integer | Gamification |
-| `arena_stats` | jsonb | `{total,wins,losses,points}` |
-| `avatar_seed` | text | Seed avatar |
-| `active_minutes` | integer | Tổng phút hoạt động |
-| `last_active_at` | timestamptz | Online tracking |
-| `is_locked` | boolean | Admin khóa tài khoản |
-| `streak_count`, `last_streak_at` | integer/timestamptz | Streak |
-| `today_online_minutes` | integer | Phút online trong ngày |
-| `today_lesson_completed` | boolean | Đã hoàn thành bài hôm nay |
-| `study_plan` | jsonb | Mục tiêu học tập |
-| `linked_accounts` | jsonb | Liên kết OAuth/provider |
-| `current_session_id` | text | Chống dual-login |
+| `users` | `nguoi_dung` | Tài khoản và hồ sơ |
+| `grade_levels` | `khoi` | Khối lớp |
+| `lessons` | `bai_hoc` | Bài học |
+| `lesson_discussions` | `thao_luan` | Thảo luận bài học |
+| `user_notes` | `ghi_chu` | Ghi chú cá nhân |
+| `user_progress` | `tien_do_nguoi_dung` | Tiến độ học |
+| `user_activities` | `hoat_dong_nguoi_dung` | Nhật ký hoạt động |
+| `missions` | `nhiem_vu` | Nhiệm vụ |
+| `user_missions` | `nhiem_vu_nguoi_dung` | Nhiệm vụ theo người dùng |
+| `materials` | `hoc_lieu` | Thư viện học liệu |
+| `material_feedback` | `phan_hoi_hoc_lieu` | Đánh giá học liệu |
+| `feedback` | `phan_hoi` | Góp ý hệ thống |
+| `classes` | `lop` | Lớp học |
+| `class_members` | `thanh_vien_lop` | Thành viên lớp |
+| `class_posts` | `bai_dang_lop` | Bài đăng lớp |
+| `class_schedules` | `lich_lop` | Lịch lớp |
+| `class_assignment_submissions` | `bai_nop` | Bài nộp |
+| `lab_chemicals` | `hoa_chat` | Hóa chất |
+| `lab_reactions` | `phan_ung` | Phản ứng |
+| `balancing_questions` | `cau_hoi_can` | Câu hỏi cân bằng |
+| `arena_questions` | `cau_hoi_dau` | Câu hỏi đấu trường |
+| `arena_rooms` | `phong_dau` | Phòng đấu |
+| `arena_room_players` | `nguoi_choi` | Người chơi trong phòng |
+| `arena_round_answers` | `tra_loi_vong` | Trả lời theo vòng |
+| `arena_match_history` | `lich_su_dau` | Lịch sử đấu |
 
-#### `user_progress`
-
-Primary key: `(user_id, item_type, item_id)`.
-
-| Cột | Ghi chú |
-| --- | --- |
-| `user_id` | FK đến `users.id` |
-| `item_type` | `lesson`, `chemical`, `achievement`, `balancing` |
-| `item_id` | ID item tương ứng |
-| `progress_data` | JSONB chi tiết tiến độ |
-| `unlocked_at`, `updated_at` | Mốc thời gian |
-
-Đây là bảng thay thế các bảng legacy như `user_unlocked_lessons`, `user_unlocked_chemicals`, và cột `users.balancing_progress`.
-
-### 8.4. Nhóm bảng Lesson/Journey
-
-#### `lessons`
-
-Primary key hiện tại: `(id, class_id, program_id)`.
-
-| Cột | Kiểu | Ghi chú |
+## 11. Mapping cột phổ biến
+| Cột cũ | Cột mới | Ghi chú |
 | --- | --- | --- |
-| `id` | text | ID bài học, unique |
-| `class_id` | bigint | Lớp 8-12 |
-| `program_id` | text | Chương trình học |
-| `title`, `chapter`, `description` | text | Metadata |
-| `order` | bigint | Thứ tự bài |
-| `theory_modules` | jsonb | Lý thuyết dạng block |
-| `video_modules` | jsonb | Video bài học |
-| `quizzes` | jsonb | Quiz nhúng |
-| `story_slides` | jsonb | Story stage |
-| `challenges` | jsonb | Challenge stage |
-| `game` | jsonb | Minigame/quiz theo cấp độ |
-| `intro_video_url` | text | Video intro |
-| `is_premium` | boolean | Premium flag |
+| `title` | `tieu_de` | Tiêu đề |
+| `description` | `mo_ta` | Mô tả |
+| `content` | `noi_dung` | Nội dung |
+| `name` | `ten` | Tên |
+| `grade_level_id` | `khoi_id` | Khối lớp |
+| `lesson_id` | `bai_hoc_id` | Bài học |
+| `class_id` | `lop_id` | Lớp học |
+| `teacher_id` | `giao_vien_id` | Giáo viên |
+| `student_id` | `hoc_sinh_id` | Học sinh |
+| `user_id` | `nguoi_dung_id` | Người dùng |
+| `mission_id` | `nhiem_vu_id` | Nhiệm vụ |
+| `material_id` | `hoc_lieu_id` | Học liệu |
+| `post_id` | `bai_dang_id` | Bài đăng |
+| `question_text` | `noi_dung_cau_hoi` | Câu hỏi |
+| `correct_answer` | `dap_an_dung` | Đáp án đúng |
+| `reactants` | `chat_tham_gia` | Chất tham gia |
+| `products` | `san_pham` | Sản phẩm |
+| `equation` | `phuong_trinh` | Phương trình |
+| `difficulty` | `do_kho` | Độ khó |
+| `score` | `diem` | Điểm |
+| `views` | `luot_xem` | Lượt xem |
+| `likes_count` | `luot_thich` | Lượt thích |
+| `is_practice` | `la_luyen_tap` | Phòng luyện tập |
 
-Các bảng liên quan:
+## 12. Quan hệ dữ liệu chính
+`nguoi_dung` liên kết với `tien_do_nguoi_dung`, `nhiem_vu_nguoi_dung`, `hoat_dong_nguoi_dung`, `ghi_chu` và `thao_luan`.
+`khoi` liên kết với `bai_hoc`, `lop`, `phan_ung`, `cau_hoi_can` và `cau_hoi_dau`.
+`bai_hoc` liên kết với `thao_luan`, `ghi_chu` và một phần dữ liệu `cau_hoi_can`.
+`lop` liên kết với `thanh_vien_lop`, `bai_dang_lop` và `lich_lop`.
+`bai_dang_lop` liên kết với `bai_nop`.
+`phong_dau` liên kết với `nguoi_choi`, `tra_loi_vong` và `lich_su_dau`.
+`hoc_lieu` liên kết với `phan_hoi_hoc_lieu`.
 
-- `lesson_discussions.lesson_id` -> `lessons.id`
-- `user_notes.lesson_id` -> `lessons.id`
-- `balancing_questions.lesson_id` -> `lessons.id`
+## 13. Các module chính
+`bai_hoc` lưu bài học, nội dung stage, quiz, challenge, story và game.
+`tien_do_nguoi_dung` lưu tiến độ học, mở khóa và payload học tập.
+`nhiem_vu` và `nhiem_vu_nguoi_dung` phục vụ gamification, XP và nhận thưởng.
+`lop`, `thanh_vien_lop`, `bai_dang_lop`, `bai_nop` và `lich_lop` phục vụ classroom.
+`hoc_lieu` và `phan_hoi_hoc_lieu` phục vụ thư viện học liệu.
+`hoa_chat`, `phan_ung` và `cau_hoi_can` phục vụ lab và cân bằng phương trình.
+`phong_dau`, `nguoi_choi`, `cau_hoi_dau`, `tra_loi_vong` và `lich_su_dau` phục vụ arena.
+Route `/api/analyze` hỗ trợ phân tích PDF/DOCX và gọi OpenAI.
 
-### 8.5. Nhóm bảng Lab
-
-#### `lab_chemicals`
-
-| Cột | Ghi chú |
-| --- | --- |
-| `id` | UUID |
-| `formula` | Công thức, unique |
-| `name` | Tên chất |
-| `state` | `solid`, `liquid`, `gas` |
-| `color`, `type` | Metadata hiển thị |
-| `is_starter` | Hóa chất mở sẵn |
-
-#### `lab_reactions`
-
-| Cột | Ghi chú |
-| --- | --- |
-| `id` | Text primary key |
-| `name`, `type`, `category` | Metadata |
-| `equation` | Phương trình |
-| `reactants`, `products` | JSONB |
-| `grade_level` | FK đến `grade_levels.id` |
-| `conditions`, `observation` | Điều kiện/hiện tượng |
-| `energy`, `animation` | Metadata mô phỏng |
-| `requires_heat` | Có cần nhiệt |
-| `danger_level`, `safety_warning` | An toàn phòng lab |
-
-#### `balancing_questions`
-
-| Cột | Ghi chú |
-| --- | --- |
-| `id` | bigint identity |
-| `reactants`, `products`, `answer` | JSONB |
-| `difficulty` | `easy`, `medium`, `hard` |
-| `category`, `grade_level` | Phân loại |
-| `equation_string` | Chuỗi phương trình để search |
-| `node_id` | Node trong skill tree |
-| `lesson_id` | FK optional đến `lessons.id` |
-
-### 8.6. Nhóm bảng Arena realtime
-
-```mermaid
-erDiagram
-  users ||--o{ arena_rooms : hosts
-  users ||--o{ arena_room_players : plays
-  users ||--o{ arena_round_answers : answers
-  arena_rooms ||--o{ arena_room_players : has
-  arena_rooms ||--o{ arena_round_answers : has
-  arena_rooms ||--o{ arena_match_history : records
-  arena_questions ||--o{ arena_round_answers : checks
-```
-
-| Bảng | Vai trò chính |
-| --- | --- |
-| `arena_questions` | Câu hỏi minigame, payload/answer JSONB, time limit |
-| `arena_rooms` | Phòng đấu, status, question_ids, round timing, winner |
-| `arena_room_players` | Điểm, số câu đúng, answered rounds, trạng thái người chơi |
-| `arena_round_answers` | Answer payload, đúng/sai, điểm vòng |
-| `arena_match_history` | Kết quả trận, đối thủ, pts change |
-
-Trạng thái phòng:
-
-- `waiting`
-- `playing`
-- `finished`
-
-Trạng thái player:
-
-- `joined`
-- `ready`
-- `playing`
-- `finished`
-- `left`
-
-### 8.7. Nhóm bảng Classroom
-
-```mermaid
-erDiagram
-  users ||--o{ classes : teaches
-  classes ||--o{ class_members : contains
-  users ||--o{ class_members : joins
-  classes ||--o{ class_posts : has
-  class_posts ||--o{ class_assignment_submissions : receives
-  users ||--o{ class_assignment_submissions : submits
-  classes ||--o{ class_schedules : schedules
-```
-
-| Bảng | Vai trò |
-| --- | --- |
-| `classes` | Lớp học, mã lớp, giáo viên, khối |
-| `class_members` | Mapping student vào class |
-| `class_posts` | Announcement, assignment, video |
-| `class_assignment_submissions` | Bài nộp, answers JSONB, score, feedback |
-| `class_schedules` | Lịch học, thời gian, meet URL |
-
-Quyền truy cập trong backend:
-
-- Teacher/admin có thể tạo/quản lý lớp.
-- Student chỉ xem lớp đã tham gia.
-- Teacher chỉ quản lý lớp của chính mình, trừ admin.
-- Student chỉ nộp bài nếu là thành viên lớp và bài được giao cho mình hoặc cả lớp.
-
-### 8.8. Nhóm bảng Material/Feedback/Social
-
-| Bảng | Vai trò |
-| --- | --- |
-| `materials` | Tài liệu thư viện, file URL, category, view/download count |
-| `material_feedback` | Đánh giá/rating tài liệu, reply từ teacher/admin |
-| `feedback` | Góp ý hệ thống, bug, praise, teacher_registration |
-| `lesson_discussions` | Comment bài học, parent comment, likes |
-| `user_notes` | Ghi chú cá nhân theo bài học |
-| `user_activities` | Log hoạt động học tập |
-
-RPC/functions liên quan:
-
-- `increment_material_view(material_id uuid)`
-- `increment_likes(row_id uuid)`
-- `claim_mission_reward(p_user_id, p_mission_id)`
-
-## 9. Quan hệ dữ liệu quan trọng
-
-| Quan hệ | Ý nghĩa |
-| --- | --- |
-| `users.id` -> `user_progress.user_id` | Tiến độ học tập/gamification theo user |
-| `users.id` -> `user_missions.user_id` | Nhiệm vụ theo user |
-| `missions.id` -> `user_missions.mission_id` | Định nghĩa nhiệm vụ |
-| `lessons.id` -> `lesson_discussions.lesson_id` | Thảo luận bài học |
-| `lessons.id` -> `user_notes.lesson_id` | Ghi chú bài học |
-| `lessons.id` -> `balancing_questions.lesson_id` | Câu hỏi cân bằng gắn bài học |
-| `grade_levels.id` -> `classes.grade_level` | Lớp thuộc khối |
-| `grade_levels.id` -> `lab_reactions.grade_level` | Phản ứng theo khối |
-| `grade_levels.id` -> `arena_questions.grade_level` | Câu hỏi arena theo khối |
-| `classes.id` -> `class_members.class_id` | Thành viên lớp |
-| `classes.id` -> `class_posts.class_id` | Bài đăng lớp |
-| `class_posts.id` -> `class_assignment_submissions.post_id` | Bài nộp cho assignment |
-| `arena_rooms.id` -> `arena_room_players.room_id` | Người chơi trong phòng |
-| `arena_rooms.id` -> `arena_round_answers.room_id` | Answer theo phòng |
-| `arena_questions.id` -> `arena_round_answers.question_id` | Chấm answer |
-
-## 10. Luồng nghiệp vụ chính
-
-### 10.1. Đăng ký student
-
-```mermaid
-sequenceDiagram
-  participant C as Client
-  participant A as /api/auth
-  participant U as User model
-  participant DB as Supabase
-
-  C->>A: POST /api/auth/register
-  A->>U: User.findOne(username/email)
-  U->>DB: select users
-  A->>U: User.create(student)
-  U->>DB: insert users + user_progress
-  A->>DB: update current_session_id
-  A-->>C: JWT + user
-```
-
-### 10.2. Login và chống dual-login
-
-1. Client gửi username/email + password.
-2. Backend kiểm tra user và bcrypt password.
-3. Backend sinh `sessionId`, lưu vào `users.current_session_id`.
-4. Backend ký JWT có `sessionId`.
-5. Mọi request sau đó auth middleware so JWT sessionId với DB.
-6. Nếu DB session khác JWT session, trả `DUAL_LOGIN`.
-
-### 10.3. Hoàn thành bài học/streak
-
-1. Student làm lesson/quiz/challenge.
-2. Client gọi `/api/user/lesson-segment`.
-3. Backend lưu sao/tiến độ vào `user_progress.progress_data`.
-4. Nếu hoàn thành level mới, cộng XP.
-5. Nếu hoàn thành level cuối, đánh dấu `today_lesson_completed`.
-6. Streak tăng nếu hôm nay chưa ghi streak.
-7. Study plan được đánh dấu `completed`.
-
-### 10.4. Heartbeat online
-
-1. Client gọi `/api/user/heartbeat` mỗi 60 giây.
-2. Backend tăng `today_online_minutes` và `active_minutes`.
-3. Nếu sang ngày mới, reset `today_lesson_completed` và `study_plan.completed`.
-4. Nếu online >= 10 phút và hôm nay chưa streak, tăng streak.
-
-### 10.5. Teacher tạo lớp và giao bài
-
-1. Teacher tạo class qua `/api/classes`.
-2. Student join bằng code qua `/api/classes/join`.
-3. Teacher tạo `class_posts` type `assignment`.
-4. Student submit vào `class_assignment_submissions`.
-5. Teacher chấm điểm/feedback.
-
-### 10.6. Arena realtime round
-
-1. User tạo phòng hoặc join room.
-2. Host start room.
-3. Backend chọn `arena_questions` hợp lệ theo payload/answer.
-4. Mỗi round có `round_started_at` và `round_ends_at`.
-5. User submit answer.
-6. Backend chấm đáp án, tính score theo điểm câu hỏi và time bonus.
-7. Hết round thì advance hoặc finish room.
-8. Backend cập nhật `arena_stats` và `arena_match_history`.
-
-## 11. Biến môi trường
-
-Không commit secrets vào repo. File `.env.local` cần tồn tại ở môi trường local/deploy.
-
+## 14. Biến môi trường
+Tạo `.env.local` cho môi trường local và không commit secret vào repository.
 | Biến | Vai trò |
 | --- | --- |
-| `SUPABASE_URL` hoặc `VITE_SUPABASE_URL` | Supabase project URL |
-| `SUPABASE_KEY` hoặc `SUPABASE_SERVICE_ROLE_KEY` | Key server-side cho backend |
-| `VITE_SUPABASE_ANON_KEY` | Public anon key cho frontend |
-| `JWT_SECRET` | Ký custom JWT |
-| `SUPABASE_JWT_SECRET` | Cấp realtime token cho Supabase Realtime |
-| `FRONTEND_URL`, `CORS_ORIGINS` | CORS allowlist |
-| `OPENAI_API_KEY` | AI document analysis |
-| `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Upload media |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Email |
-| `CRON_SECRET` | Bảo vệ endpoint cron trong production |
-| `LESSONS_TABLE` | Override bảng lessons nếu cần |
+| `SUPABASE_URL` | URL Supabase server-side |
+| `SUPABASE_KEY` | Key server-side |
+| `SUPABASE_SERVICE_ROLE_KEY` | Service role key nếu tách riêng |
+| `VITE_SUPABASE_URL` | URL Supabase cho frontend |
+| `VITE_SUPABASE_ANON_KEY` | Anon key cho frontend |
+| `JWT_SECRET` | Secret ký custom JWT |
+| `SUPABASE_JWT_SECRET` | Secret tạo realtime token |
+| `FRONTEND_URL` | URL frontend chính |
+| `CORS_ORIGINS` | Danh sách origin được phép |
+| `OPENAI_API_KEY` | OpenAI API key |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
+| `SMTP_HOST` | SMTP host |
+| `SMTP_PORT` | SMTP port |
+| `SMTP_USER` | SMTP user |
+| `SMTP_PASS` | SMTP password |
+| `CRON_SECRET` | Secret bảo vệ cron endpoints |
 
-## 12. Cài đặt và chạy local
-
-Yêu cầu:
-
-- Node.js 20.x
-- npm
-- Supabase project đã có schema/migrations
-- `.env.local` đã cấu hình đúng
-
+## 15. Cài đặt local
+Yêu cầu Node.js 20.x.
 ```bash
 npm install
-```
-
-Chạy frontend:
-
-```bash
 npm run dev
-```
-
-Chạy backend API:
-
-```bash
 npm run server
-```
-
-Build production:
-
-```bash
 npm run build
+npm run preview
 ```
+`npm run dev` chạy frontend.
+`npm run server` chạy backend local.
+`npm run build` kiểm tra build production.
+`npm run preview` xem thử bản build.
 
-Chạy test:
-
+## 16. Database scripts
 ```bash
-npm test
-```
-
-Các script database/seed:
-
-```bash
-npm run seed
 npm run db:backup
 npm run db:migrate:restructure
 npm run db:validate:restructure
+npm run seed
 npm run migrate-lab
 npm run upload-curriculum
 ```
+Chạy backup trước mọi migration lớn.
+Chạy validate schema sau khi apply migration.
+Không sửa database thủ công nếu thay đổi đó cần được deploy lại.
 
-## 13. Kiểm thử hiện có
+## 17. Migration quan trọng
+Các migration chuẩn hóa schema nằm trong `supabase/migrations/`.
+`20260604030000_vietnamese_business_schema_names.sql` đổi tên bảng và cột nghiệp vụ.
+`20260604035000_rename_remaining_constraint_index_names.sql` chuẩn hóa constraint và index còn sót.
+`20260604035500_rename_legacy_index_names.sql` đổi các index legacy còn dùng tên cũ.
+Các migration dùng rename thay vì drop/create để giữ dữ liệu.
 
-Thư mục `tests/` có các test chính:
+## 18. Kiểm thử
+```bash
+npm test
+npm run lint
+npm run lint -- --quiet
+npm run build
+```
+Bộ test hiện có: `tests/arena.test.js`, `tests/arenaFrontend.test.jsx`, `tests/security.test.js`.
+Lần xác minh gần nhất: test, build, lint quiet và validate restructure đều chạy thành công.
+Runtime code không còn query `.from(...)` vào các bảng nghiệp vụ tiếng Anh cũ.
 
-- `arena.test.js`: kiểm thử backend Arena/API.
-- `arenaFrontend.test.jsx`: kiểm thử renderer minigame Arena frontend.
-- `security.test.js`: kiểm thử bảo mật/API hardening.
+## 19. Quy ước code
+Không đổi tên API public nếu không cần thiết.
+Không truy vấn trực tiếp bảng tiếng Anh cũ.
+Khi cần alias cho frontend, normalize ở backend.
+Tên bảng/cột database nghiệp vụ dùng tiếng Việt không dấu.
+Tên field kỹ thuật có thể giữ tiếng Anh.
+Không sửa bảng Supabase-managed nếu không có lý do rõ ràng.
 
-Lưu ý khi chạy test:
+## 20. Quy ước commit
+Commit message dùng tiếng Việt và Conventional Commits.
+Các type hợp lệ: `feat`, `fix`, `refactor`, `style`, `docs`, `chore`, `test`.
+Ví dụ: `docs: cập nhật readme theo schema mới`.
 
-- Dùng PowerShell trên Windows có thể bị chặn `npm.ps1`; dùng `npm.cmd test`.
-- Một số test có thể phụ thuộc trạng thái frontend Arena renderer hiện tại.
+## 21. Checklist khi sửa database
+1. Đọc schema live trước khi sửa.
+2. Phân loại bảng nghiệp vụ và bảng kỹ thuật.
+3. Lập mapping tên cũ sang tên mới.
+4. Tạo backup trước migration.
+5. Viết migration dạng rename an toàn.
+6. Cập nhật foreign key, unique constraint và index.
+7. Cập nhật RLS policy, trigger, function và RPC.
+8. Cập nhật backend query và model.
+9. Cập nhật frontend state, form, seed, script và test.
+10. Chạy validate schema, test, lint, build và grep lại tên bảng cũ.
 
-## 14. Điểm mạnh kiến trúc
+## 22. Ghi chú vận hành
+Supabase Table Editor hiện nên hiển thị các bảng nghiệp vụ bằng tên tiếng Việt không dấu.
+Nếu còn bảng như `classes`, `lessons`, `feedback`, `materials` trong `public`, cần kiểm tra lại migration.
+Các script mới nên dùng bảng `nguoi_dung`, `bai_hoc`, `hoc_lieu`, `lop`, `phong_dau`.
+RLS policy, function và RPC cần được kiểm tra sau mỗi lần đổi schema.
+Không dùng `git reset --hard` để rollback dữ liệu hoặc code khi chưa có backup.
 
-- Tách frontend, backend route, model wrapper rõ ràng.
-- Database Supabase đã bật RLS toàn bộ bảng public đang kiểm tra.
-- JSONB được dùng hợp lý cho nội dung học tập biến đổi: theory modules, quiz, game, assignment answers.
-- Auth có cơ chế chống dual-login bằng `current_session_id`.
-- Arena realtime đã có schema round/player/answer đủ rõ để mở rộng.
-- Classroom có kiểm tra ownership/member access ở backend.
-- Analyze route được lazy-load để giảm rủi ro cold start/serverless crash.
-
-## 15. Rủi ro và nợ kỹ thuật
-
-| Nhóm | Rủi ro |
-| --- | --- |
-| Encoding | Một số file/README cũ đang hiển thị mojibake tiếng Việt; nên chuẩn hóa UTF-8 toàn repo khi có thời gian. |
-| Auth | Hệ thống dùng song song custom JWT và Supabase OAuth fallback; cần tài liệu hóa rõ token nào dùng cho frontend nào. |
-| Database | `lessons` có primary key composite `(id, class_id, program_id)` nhưng nhiều FK chỉ trỏ `lessons.id`; cần đảm bảo unique constraint `id` luôn tồn tại. |
-| User progress | Model vẫn có fallback cho bảng legacy; nếu production đã hoàn toàn migrate sang `user_progress`, có thể dọn code legacy sau. |
-| Classes route | Có logic parse exam file bị lặp trong `classes.js`; nên refactor thành service riêng. |
-| Arena | Frontend/backend Arena đang phức tạp, cần test ổn định cho legacy payload và new payload. |
-| Secrets | `.env.local` có thể chứa secret nhạy cảm; không được bundle vào frontend hoặc commit. |
-| RLS | README này xác nhận RLS bật, nhưng policy chi tiết cần audit riêng bằng Supabase advisors/policy review. |
-
-## 16. Roadmap đề xuất
-
-### Ưu tiên ngắn hạn
-
-- Chuẩn hóa encoding tiếng Việt trong README/docs/source comments.
-- Bổ sung tài liệu API contract cho `/api/user`, `/api/classes`, `/api/arena`.
-- Audit RLS policy theo từng role: anon, authenticated, service_role.
-- Refactor `classes.js` tách exam parser và assignment service.
-- Làm sạch code fallback legacy nếu database production đã ổn định.
-
-### Ưu tiên trung hạn
-
-- Chuẩn hóa schema lesson content và quiz/game payload.
-- Tách Arena engine thành module service có unit test riêng.
-- Thêm migration docs rõ: thứ tự chạy, rollback, dữ liệu seed.
-- Bổ sung dashboard database health: row counts, missing indexes, slow queries.
-- Viết E2E cho luồng student: login -> journey -> quiz -> reward -> streak.
-
-### Ưu tiên dài hạn
-
-- Mobile app hoặc PWA offline nếu cần.
-- Push notification thay email reminder cho học sinh.
-- AI content moderation cho material/feedback/discussion.
-- Analytics học tập theo lớp/khối/bài học.
-
-## 17. Tóm tắt nhanh cho developer mới
-
-1. Bắt đầu đọc `src/App.jsx` để hiểu route frontend.
-2. Đọc `api/index.js` để hiểu route backend.
-3. Đọc `api/_middleware/auth.js` để hiểu auth/session.
-4. Đọc `api/models/User.js`, `Lesson.js`, `Mission.js` để hiểu mapping database.
-5. Dùng Supabase table list để nắm schema thực tế, không chỉ dựa vào migration cũ.
-6. Khi sửa database, ưu tiên migration trong `supabase/` và kiểm tra RLS/policy.
-7. Khi thêm API mới, phải xác định role access và test 401/403/404.
+## 23. Tài liệu nhanh cho developer mới
+Bắt đầu từ `src/App.jsx` để hiểu route tree.
+Đọc `api/index.js` để hiểu API mount points.
+Đọc `api/_middleware/auth.js` để hiểu xác thực.
+Đọc `api/models/User.js`, `Lesson.js`, `Mission.js` để hiểu mapping database.
+Đọc `api/_routes/classes.js` nếu làm phần classroom.
+Đọc `api/_routes/arena.js` nếu làm phần đấu trường.
+Đọc `api/_routes/materials.js` nếu làm phần thư viện.
+Đọc `scripts/db/validateRestructure.js` khi kiểm tra schema.
+Đọc migration mới nhất trong `supabase/migrations/` trước khi sửa database.
 
 ---
-
-Tài liệu này được tạo từ trạng thái repo và Supabase schema thực tế tại thời điểm 02/06/2026.
+AURUM hiện dùng schema database đã chuẩn hóa theo nghiệp vụ, trong khi vẫn giữ API public đủ ổn định để giảm rủi ro khi triển khai.

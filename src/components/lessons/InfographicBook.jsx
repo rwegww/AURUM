@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import InfographicPage from './InfographicPage';
 import { useAuth } from '@/context/AuthContext';
@@ -9,45 +9,45 @@ const GRADE_COVERS = {
     gradient: 'from-[#143e18] via-[#0b270e] to-[#041205]',
     spine: 'bg-emerald-950 border-r border-emerald-800/30',
     accent: '#76c034',
-    title: 'SỔ TAY SINH TỒN HÓA HỌC 8',
-    subtitle: 'Nền Tảng Chất Và Nguyên Tử',
-    badge: 'LỚP 8'
+    title: 'Sá»” TAY SINH Tá»’N HÃ“A Há»ŒC 8',
+    subtitle: 'Ná»n Táº£ng Cháº¥t VÃ  NguyÃªn Tá»­',
+    badge: 'Lá»šP 8'
   },
   '9': {
     gradient: 'from-[#1e1b4b] via-[#111035] to-[#07061b]',
     spine: 'bg-indigo-950 border-r border-indigo-800/30',
     accent: '#6366f1',
-    title: 'SỔ TAY SINH TỒN HÓA HỌC 9',
-    subtitle: 'Hợp Chất Vô Cơ & Hữu Cơ',
-    badge: 'LỚP 9'
+    title: 'Sá»” TAY SINH Tá»’N HÃ“A Há»ŒC 9',
+    subtitle: 'Há»£p Cháº¥t VÃ´ CÆ¡ & Há»¯u CÆ¡',
+    badge: 'Lá»šP 9'
   },
   '10': {
     gradient: 'from-[#042f2e] via-[#021b1b] to-[#010c0c]',
     spine: 'bg-teal-950 border-r border-teal-800/30',
     accent: '#14b8a6',
-    title: 'CẨM NANG HÓA HỌC 10',
-    subtitle: 'Cấu Tạo Nguyên Tử & Liên Kết',
-    badge: 'LỚP 10'
+    title: 'Cáº¨M NANG HÃ“A Há»ŒC 10',
+    subtitle: 'Cáº¥u Táº¡o NguyÃªn Tá»­ & LiÃªn Káº¿t',
+    badge: 'Lá»šP 10'
   },
   '11': {
     gradient: 'from-[#4c0519] via-[#2c020d] to-[#120004]',
     spine: 'bg-rose-950 border-r border-rose-800/30',
     accent: '#f43f5e',
-    title: 'CẨM NANG HÓA HỌC 11',
-    subtitle: 'Cân Bằng Hóa Học & Hóa Hữu Cơ',
-    badge: 'LỚP 11'
+    title: 'Cáº¨M NANG HÃ“A Há»ŒC 11',
+    subtitle: 'CÃ¢n Báº±ng HÃ³a Há»c & HÃ³a Há»¯u CÆ¡',
+    badge: 'Lá»šP 11'
   },
   '12': {
     gradient: 'from-[#451a03] via-[#280f02] to-[#100500]',
     spine: 'bg-amber-950 border-r border-amber-800/30',
     accent: '#f59e0b',
-    title: 'CẨM NANG HÓA HỌC 12',
-    subtitle: 'Este, Lipit & Luyện Thi THPT',
-    badge: 'LỚP 12'
+    title: 'Cáº¨M NANG HÃ“A Há»ŒC 12',
+    subtitle: 'Este, Lipit & Luyá»‡n Thi THPT',
+    badge: 'Lá»šP 12'
   }
 };
 
-const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) => {
+const InfographicBook = ({ isOpen, onClose, bai_hoc, grade, unlockedLessons }) => {
   const { user } = useAuth();
   const [isMobile, setIsMobile] = useState(false);
   const [currentSpread, setCurrentSpread] = useState(0); // 0 = Cover, 1 = Pages 1-2, 2 = Pages 3-4, etc.
@@ -57,9 +57,9 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
   const coverTheme = GRADE_COVERS[grade] || GRADE_COVERS['8'];
   const bookPages = useMemo(() => [
     { type: 'cover' },
-    ...lessons.map(lesson => ({ type: 'lesson', data: lesson })),
+    ...bai_hoc.map(lesson => ({ type: 'lesson', data: lesson })),
     { type: 'back-cover' }
-  ], [lessons]);
+  ], [bai_hoc]);
   const totalSpreads = Math.ceil(bookPages.length / 2);
 
   // Check mobile viewport
@@ -176,7 +176,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
 
           {/* Holographic atom design */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] scale-[2] pointer-events-none">
-            <span className="text-[120px]">⚛️</span>
+            <span className="text-[120px]">âš›ï¸</span>
           </div>
 
           <div className="mt-8 text-center relative z-10">
@@ -200,7 +200,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
               Book
             </div>
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest animate-pulse">
-              Nhấn góc phải để lật sách
+              Nháº¥n gÃ³c pháº£i Ä‘á»ƒ láº­t sÃ¡ch
             </span>
           </div>
         </div>
@@ -233,7 +233,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
           </div>
 
           <div className="mb-4 text-center text-[10px] font-black text-slate-500 tracking-wider">
-            © 2026 AURUM EDU. All rights reserved.
+            Â© 2026 AURUM EDU. All rights reserved.
           </div>
         </div>
       );
@@ -277,10 +277,10 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
         <div className="absolute top-0 left-0 right-0 flex justify-between items-center px-4 md:px-0 -translate-y-16 pointer-events-none z-50">
            <div className="flex flex-col">
               <span className="text-[10px] font-black uppercase tracking-[4px]" style={{ color: coverTheme.accent }}>
-                SỔ TAY HÀNH TRÌNH
+                Sá»” TAY HÃ€NH TRÃŒNH
               </span>
               <h2 className="text-white text-xl md:text-2xl font-black font-sora italic uppercase">
-                survival handbook • grade {grade}
+                survival handbook â€¢ grade {grade}
               </h2>
            </div>
            <button 
@@ -516,7 +516,7 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
               ))}
            </div>
            <p className="text-white/40 text-[9px] font-bold uppercase tracking-widest">
-             Sử dụng phím mũi tên hoặc nhấn vào góc trang để lật cuốn sách
+             Sá»­ dá»¥ng phÃ­m mÅ©i tÃªn hoáº·c nháº¥n vÃ o gÃ³c trang Ä‘á»ƒ láº­t cuá»‘n sÃ¡ch
            </p>
         </div>
       </div>
@@ -569,3 +569,4 @@ const InfographicBook = ({ isOpen, onClose, lessons, grade, unlockedLessons }) =
 };
 
 export default InfographicBook;
+

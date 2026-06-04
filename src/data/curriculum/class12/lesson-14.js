@@ -1,20 +1,20 @@
-export const bai14 = {
+﻿export const bai14 = {
   "id": "hoa12_kntt_bai14",
   "classId": 12,
   "lessonId": 14,
   "programId": "ketnoi",
-  "title": "Bài 14. Ôn tập chương 4",
-  "chapter": "Chương 4. Polymer",
+  "title": "BÃ i 14. Ã”n táº­p chÆ°Æ¡ng 4",
+  "chapter": "ChÆ°Æ¡ng 4. Polymer",
   "order": 14,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Hệ thống hóa kiến thức về polymer: Cấu trúc, phương pháp điều chế và ứng dụng của các loại vật liệu polymer.",
+  "description": "Há»‡ thá»‘ng hÃ³a kiáº¿n thá»©c vá» polymer: Cáº¥u trÃºc, phÆ°Æ¡ng phÃ¡p Ä‘iá»u cháº¿ vÃ  á»©ng dá»¥ng cá»§a cÃ¡c loáº¡i váº­t liá»‡u polymer.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Phân biệt Phản ứng Trùng hợp và Trùng ngưng",
+        "text": "1. PhÃ¢n biá»‡t Pháº£n á»©ng TrÃ¹ng há»£p vÃ  TrÃ¹ng ngÆ°ng",
         "level": "h2"
       }
     },
@@ -24,8 +24,8 @@ export const bai14 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Phản ứng trùng hợp:** Kết hợp các monomer có liên kết bội ($C=C, C \\equiv C$) hoặc vòng kém bền thành polymer. Khối lượng phân tử polymer là bội số của monomer, không có sản phẩm phụ.",
-          "**Phản ứng trùng ngưng:** Kết hợp các monomer có ít nhất hai nhóm chức chức có khả năng phản ứng. Ngoài polymer, phản ứng còn giải phóng các phân tử nhỏ (thường là $H_2O$)."
+          "**Pháº£n á»©ng trÃ¹ng há»£p:** Káº¿t há»£p cÃ¡c monomer cÃ³ liÃªn káº¿t bá»™i ($C=C, C \\equiv C$) hoáº·c vÃ²ng kÃ©m bá»n thÃ nh polymer. Khá»‘i lÆ°á»£ng phÃ¢n tá»­ polymer lÃ  bá»™i sá»‘ cá»§a monomer, khÃ´ng cÃ³ sáº£n pháº©m phá»¥.",
+          "**Pháº£n á»©ng trÃ¹ng ngÆ°ng:** Káº¿t há»£p cÃ¡c monomer cÃ³ Ã­t nháº¥t hai nhÃ³m chá»©c chá»©c cÃ³ kháº£ nÄƒng pháº£n á»©ng. NgoÃ i polymer, pháº£n á»©ng cÃ²n giáº£i phÃ³ng cÃ¡c phÃ¢n tá»­ nhá» (thÆ°á»ng lÃ  $H_2O$)."
         ]
       }
     },
@@ -33,8 +33,8 @@ export const bai14 = {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Phân loại theo cấu trúc không gian",
-        "content": "- **Mạch không phân nhánh:** Hầu hết các loại polymer thông dụng như PE, PVC, nylon-6,6, tơ nitron, amylose.\n- **Mạch phân nhánh:** Amylopectin (trong tinh bột) và glycogen.\n- **Mạng lưới không gian:** Cao su lưu hóa và nhựa bakelite (nhựa chân de). Cấu trúc này giúp vật liệu bền vững, khó nóng chảy và khó hòa tan hơn.",
+        "title": "PhÃ¢n loáº¡i theo cáº¥u trÃºc khÃ´ng gian",
+        "content": "- **Máº¡ch khÃ´ng phÃ¢n nhÃ¡nh:** Háº§u háº¿t cÃ¡c loáº¡i polymer thÃ´ng dá»¥ng nhÆ° PE, PVC, nylon-6,6, tÆ¡ nitron, amylose.\n- **Máº¡ch phÃ¢n nhÃ¡nh:** Amylopectin (trong tinh bá»™t) vÃ  glycogen.\n- **Máº¡ng lÆ°á»›i khÃ´ng gian:** Cao su lÆ°u hÃ³a vÃ  nhá»±a bakelite (nhá»±a chÃ¢n de). Cáº¥u trÃºc nÃ y giÃºp váº­t liá»‡u bá»n vá»¯ng, khÃ³ nÃ³ng cháº£y vÃ  khÃ³ hÃ²a tan hÆ¡n.",
         "color": "blue"
       }
     },
@@ -42,7 +42,7 @@ export const bai14 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Phân loại theo nguồn gốc và Bản chất",
+        "text": "2. PhÃ¢n loáº¡i theo nguá»“n gá»‘c vÃ  Báº£n cháº¥t",
         "level": "h2"
       }
     },
@@ -50,43 +50,43 @@ export const bai14 = {
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Việc phân loại polymer dựa trên nguồn gốc là một nội dung quan trọng trong các kỳ thi:\n- **Polymer thiên nhiên:** Có sẵn trong tự nhiên (cellulose, tinh bột, tơ tằm, cao su thiên nhiên).\n- **Polymer bán tổng hợp (nhân tạo):** Được chế biến từ polymer thiên nhiên (tơ visco, tơ acetate).\n- **Polymer tổng hợp:** Do con người tổng hợp nên hoàn toàn từ các hóa chất đơn giản (PE, PVC, nylon-6,6, cao su buna)."
+        "text": "Viá»‡c phÃ¢n loáº¡i polymer dá»±a trÃªn nguá»“n gá»‘c lÃ  má»™t ná»™i dung quan trá»ng trong cÃ¡c ká»³ thi:\n- **Polymer thiÃªn nhiÃªn:** CÃ³ sáºµn trong tá»± nhiÃªn (cellulose, tinh bá»™t, tÆ¡ táº±m, cao su thiÃªn nhiÃªn).\n- **Polymer bÃ¡n tá»•ng há»£p (nhÃ¢n táº¡o):** ÄÆ°á»£c cháº¿ biáº¿n tá»« polymer thiÃªn nhiÃªn (tÆ¡ visco, tÆ¡ acetate).\n- **Polymer tá»•ng há»£p:** Do con ngÆ°á»i tá»•ng há»£p nÃªn hoÃ n toÃ n tá»« cÃ¡c hÃ³a cháº¥t Ä‘Æ¡n giáº£n (PE, PVC, nylon-6,6, cao su buna)."
       }
     }
   ],
   "quizzes": [
     {
       "id": "q1",
-      "question": "Polymer nào sau đây được điều chế bằng phản ứng trùng hợp?",
+      "question": "Polymer nÃ o sau Ä‘Ã¢y Ä‘Æ°á»£c Ä‘iá»u cháº¿ báº±ng pháº£n á»©ng trÃ¹ng há»£p?",
       "options": [
         "Poly(vinyl chloride).",
         "Nylon-6,6.",
-        "Tơ visco.",
+        "TÆ¡ visco.",
         "Cellulose acetate."
       ],
       "correctAnswer": 0,
-      "explanation": "PVC được điều chế bằng phản ứng trùng hợp vinyl chloride ($CH_2=CHCl$) do có chứa liên kết đôi trong phân tử."
+      "explanation": "PVC Ä‘Æ°á»£c Ä‘iá»u cháº¿ báº±ng pháº£n á»©ng trÃ¹ng há»£p vinyl chloride ($CH_2=CHCl$) do cÃ³ chá»©a liÃªn káº¿t Ä‘Ã´i trong phÃ¢n tá»­."
     },
     {
       "id": "q2",
-      "question": "Cặp polymer nào sau đây đều có cấu trúc mạch phân nhánh?",
+      "question": "Cáº·p polymer nÃ o sau Ä‘Ã¢y Ä‘á»u cÃ³ cáº¥u trÃºc máº¡ch phÃ¢n nhÃ¡nh?",
       "options": [
-        "Amylose và PE.",
-        "Amylopectin và glycogen.",
-        "Cao su lưu hóa và nhựa bakelite.",
-        "Nylon-6 và tơ nitron."
+        "Amylose vÃ  PE.",
+        "Amylopectin vÃ  glycogen.",
+        "Cao su lÆ°u hÃ³a vÃ  nhá»±a bakelite.",
+        "Nylon-6 vÃ  tÆ¡ nitron."
       ],
       "correctAnswer": 1,
-      "explanation": "Amylopectin và glycogen là hai ví dụ điển hình nhất về polymer có cấu trúc mạch phân nhánh trong chương trình hóa học phổ thông."
+      "explanation": "Amylopectin vÃ  glycogen lÃ  hai vÃ­ dá»¥ Ä‘iá»ƒn hÃ¬nh nháº¥t vá» polymer cÃ³ cáº¥u trÃºc máº¡ch phÃ¢n nhÃ¡nh trong chÆ°Æ¡ng trÃ¬nh hÃ³a há»c phá»• thÃ´ng."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Ôn tập chương 4: Polymer và vật liệu Polymer",
+      "title": "Ã”n táº­p chÆ°Æ¡ng 4: Polymer vÃ  váº­t liá»‡u Polymer",
       "url": "https://www.youtube.com/watch?v=7QBv-KQiXDI",
       "thumbnail": "https://img.youtube.com/vi/7QBv-KQiXDI/0.jpg",
-      "description": "Hệ thống hóa kiến thức chương 4 và giải bài tập củng cố về các loại vật liệu (Tech12h)."
+      "description": "Há»‡ thá»‘ng hÃ³a kiáº¿n thá»©c chÆ°Æ¡ng 4 vÃ  giáº£i bÃ i táº­p cá»§ng cá»‘ vá» cÃ¡c loáº¡i váº­t liá»‡u (Tech12h)."
     }
   ],
   "practiceModules": [],
@@ -95,3 +95,4 @@ export const bai14 = {
   "game": null,
   "realWorldApplications": []
 };
+

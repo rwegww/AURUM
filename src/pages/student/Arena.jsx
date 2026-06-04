@@ -312,6 +312,7 @@ const StatsPanel = ({ user }) => {
             {battles.map((battle, index) => {
               const isWin = battle.result === 'win';
               const isLose = battle.result === 'lose';
+              const pointsDelta = battle.diem_thay_doi ?? 0;
               return (
                 <div key={`${battle.played_at}-${index}`} className="flex items-center gap-3 rounded-lg border border-viet-border p-3">
                   <div className={`flex h-9 w-9 items-center justify-center rounded-lg font-black ${isWin ? 'bg-viet-green/10 text-viet-green' : isLose ? 'bg-red-50 text-red-500' : 'bg-amber-50 text-amber-600'}`}>
@@ -321,8 +322,8 @@ const StatsPanel = ({ user }) => {
                     <p className="truncate text-sm font-black text-viet-text">{battle.opponent_name}</p>
                     <p className="text-[11px] font-bold text-viet-text-light/60">{timeAgo(t, battle.played_at)}</p>
                   </div>
-                  <span className={`text-sm font-black ${battle.pts_change > 0 ? 'text-viet-green' : battle.pts_change < 0 ? 'text-red-500' : 'text-viet-text-light'}`}>
-                    {battle.pts_change > 0 ? '+' : ''}{battle.pts_change}
+                  <span className={`text-sm font-black ${pointsDelta > 0 ? 'text-viet-green' : pointsDelta < 0 ? 'text-red-500' : 'text-viet-text-light'}`}>
+                    {pointsDelta > 0 ? '+' : ''}{pointsDelta}
                   </span>
                 </div>
               );
@@ -728,7 +729,7 @@ const RoomBrowserModal = ({ isOpen, onClose, onJoin }) => {
                         <div className="mb-2 flex flex-wrap items-center gap-2">
                           <h3 className="truncate text-lg font-black text-viet-text">{room.name}</h3>
                           <span className="rounded-lg bg-slate-100 px-2 py-1 text-[10px] font-black uppercase tracking-widest text-viet-text-light">
-                            {t('arena.ui.room_id', { id: room.id })}
+                            {t('arena.ui.phong_dau_id', { id: room.id })}
                           </span>
                         </div>
                         <div className="flex flex-wrap gap-x-4 gap-y-2 text-[12px] font-black uppercase tracking-widest text-viet-text-light">
@@ -843,7 +844,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
       } else {
         const result = correctCountRef.current >= Math.ceil(questions.length / 2) ? 'win' : 'lose';
         setGameOver(true);
-        onMatchEnd?.({ result, score: finalScore, room_id: room.id, isPractice: room.isPractice });
+        onMatchEnd?.({ result, score: finalScore, phong_dau_id: room.id, isPractice: room.isPractice });
       }
     }, 1200);
   }, [answered, currentQ, currentQIndex, gameOver, onMatchEnd, questions.length, room.id, score]);
@@ -1275,7 +1276,7 @@ const Arena = () => {
     try {
       const data = await apiCall('/api/arena/join', {
         method: 'POST',
-        body: JSON.stringify({ room_id: code }),
+        body: JSON.stringify({ phong_dau_id: code }),
       });
       setActiveRoom({ ...data.room, asModerator: false });
       setIsBrowserOpen(false);
@@ -1291,7 +1292,7 @@ const Arena = () => {
     try {
       await apiCall('/api/arena/leave', {
         method: 'POST',
-        body: JSON.stringify({ room_id: roomId }),
+        body: JSON.stringify({ phong_dau_id: roomId }),
       });
     } catch (err) {
       if (!err.message?.includes('không tồn tại') && !err.message?.includes('404')) {
@@ -1311,7 +1312,7 @@ const Arena = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ room_id: activeRoom.id }),
+        body: JSON.stringify({ phong_dau_id: activeRoom.id }),
         keepalive: true,
       });
     };
@@ -1320,7 +1321,7 @@ const Arena = () => {
     return () => window.removeEventListener('beforeunload', handleUnload);
   }, [activeRoom]);
 
-  const handleMatchEnd = async ({ result, score, room_id, isPractice, serverFinalized }) => {
+  const handleMatchEnd = async ({ result, score, phong_dau_id, isPractice, serverFinalized }) => {
     if (serverFinalized) {
       setMatchResult({ result, score, ptsChange: 0, isPractice });
       setActiveRoom(null);
@@ -1338,7 +1339,7 @@ const Arena = () => {
       const data = await apiCall('/api/arena/match-result', {
         method: 'POST',
         body: JSON.stringify({
-          room_id,
+          phong_dau_id,
           result,
           score,
           opponent_name: opponentName,

@@ -1,21 +1,21 @@
-export const bai15 = {
+﻿export const bai15 = {
   "id": "hoa9_kntt_bai15",
   "classId": 9,
   "curriculumType": "ketnoi",
   "chapterId": 9,
-  "chapterName": "Chương 9: Lipid, Carbohydrate, Protein, Polymer",
+  "chapterName": "ChÆ°Æ¡ng 9: Lipid, Carbohydrate, Protein, Polymer",
   "lessonId": 15,
-  "title": "Bài 15: Polymer",
-  "description": "Thế giới của các hợp chất cao phân tử: Từ nhựa PE, PVC đến cao su và tơ sợi làm nên cuộc sống hiện đại.",
+  "title": "BÃ i 15: Polymer",
+  "description": "Tháº¿ giá»›i cá»§a cÃ¡c há»£p cháº¥t cao phÃ¢n tá»­: Tá»« nhá»±a PE, PVC Ä‘áº¿n cao su vÃ  tÆ¡ sá»£i lÃ m nÃªn cuá»™c sá»‘ng hiá»‡n Ä‘áº¡i.",
   "level": "Intermediate",
   "order": 15,
   "videoModules": [
     {
       "id": "v1",
-      "title": "Polymer: Kẻ khổng lồ trong thế giới vật liệu",
+      "title": "Polymer: Káº» khá»•ng lá»“ trong tháº¿ giá»›i váº­t liá»‡u",
       "url": "https://www.youtube.com/watch?v=8cb9IbaQWSo",
       "thumbnail": "https://img.youtube.com/vi/8cb9IbaQWSo/0.jpg",
-      "description": "Bạn có biết túi nilon chúng ta dùng hàng ngày được làm từ gì không?"
+      "description": "Báº¡n cÃ³ biáº¿t tÃºi nilon chÃºng ta dÃ¹ng hÃ ng ngÃ y Ä‘Æ°á»£c lÃ m tá»« gÃ¬ khÃ´ng?"
     }
   ],
   "practiceModules": [],
@@ -24,7 +24,7 @@ export const bai15 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm và Cấu tạo",
+        "text": "1. KhÃ¡i niá»‡m vÃ  Cáº¥u táº¡o",
         "level": "h2"
       }
     },
@@ -32,15 +32,15 @@ export const bai15 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Polymer là những hợp chất có phân tử khối rất lớn do nhiều đơn vị nhỏ (gọi là mắt xích hay monomer) liên kết với nhau tạo nên. Công thức tổng quát thường có dạng $(-M-)_n$."
+        "text": "Polymer lÃ  nhá»¯ng há»£p cháº¥t cÃ³ phÃ¢n tá»­ khá»‘i ráº¥t lá»›n do nhiá»u Ä‘Æ¡n vá»‹ nhá» (gá»i lÃ  máº¯t xÃ­ch hay monomer) liÃªn káº¿t vá»›i nhau táº¡o nÃªn. CÃ´ng thá»©c tá»•ng quÃ¡t thÆ°á»ng cÃ³ dáº¡ng $(-M-)_n$."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Phân loại Polymer",
-        "content": "**Polymer thiên nhiên:** Tinh bột, cellulose, protein, cao su thiên nhiên. **Polymer tổng hợp:** Nhựa PE, PVC, tơ nilon, cao su buna.",
+        "title": "PhÃ¢n loáº¡i Polymer",
+        "content": "**Polymer thiÃªn nhiÃªn:** Tinh bá»™t, cellulose, protein, cao su thiÃªn nhiÃªn. **Polymer tá»•ng há»£p:** Nhá»±a PE, PVC, tÆ¡ nilon, cao su buna.",
         "color": "blue"
       }
     },
@@ -48,7 +48,7 @@ export const bai15 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Vật liệu Polymer",
+        "text": "2. Váº­t liá»‡u Polymer",
         "level": "h2"
       }
     },
@@ -57,9 +57,9 @@ export const bai15 = {
       "type": "list",
       "content": {
         "items": [
-          "**Chất dẻo:** Các vật liệu polymer có tính dẻo (nhựa PE làm túi, PVC làm ống nước).",
-          "**Tơ:** Những vật liệu polymer hình sợi dài và mảnh (tơ tằm, tơ nilon).",
-          "**Cao su:** Vật liệu polymer có tính đàn hồi cao (cao su thiên nhiên, cao su tổng hợp)."
+          "**Cháº¥t dáº»o:** CÃ¡c váº­t liá»‡u polymer cÃ³ tÃ­nh dáº»o (nhá»±a PE lÃ m tÃºi, PVC lÃ m á»‘ng nÆ°á»›c).",
+          "**TÆ¡:** Nhá»¯ng váº­t liá»‡u polymer hÃ¬nh sá»£i dÃ i vÃ  máº£nh (tÆ¡ táº±m, tÆ¡ nilon).",
+          "**Cao su:** Váº­t liá»‡u polymer cÃ³ tÃ­nh Ä‘Ã n há»“i cao (cao su thiÃªn nhiÃªn, cao su tá»•ng há»£p)."
         ]
       }
     },
@@ -67,8 +67,8 @@ export const bai15 = {
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Vấn đề Môi trường",
-        "content": "Hầu hết polymer tổng hợp (nhựa) rất khó phân hủy trong tự nhiên, gây ra 'ô nhiễm trắng'. Hãy hạn chế sử dụng túi nilon và đồ nhựa dùng một lần!",
+        "title": "Váº¥n Ä‘á» MÃ´i trÆ°á»ng",
+        "content": "Háº§u háº¿t polymer tá»•ng há»£p (nhá»±a) ráº¥t khÃ³ phÃ¢n há»§y trong tá»± nhiÃªn, gÃ¢y ra 'Ã´ nhiá»…m tráº¯ng'. HÃ£y háº¡n cháº¿ sá»­ dá»¥ng tÃºi nilon vÃ  Ä‘á»“ nhá»±a dÃ¹ng má»™t láº§n!",
         "color": "red"
       }
     }
@@ -76,103 +76,103 @@ export const bai15 = {
   "challenges": [
     {
       "type": "image-selection",
-      "narrative": "Polymer tổng hợp (nhựa) bao quanh chúng ta trong cuộc sống hiện đại. Đâu là vật dụng điển hình được làm từ nhựa PE ($Polyethylene$) — loại nhựa được sản xuất nhiều nhất thế giới?",
+      "narrative": "Polymer tá»•ng há»£p (nhá»±a) bao quanh chÃºng ta trong cuá»™c sá»‘ng hiá»‡n Ä‘áº¡i. ÄÃ¢u lÃ  váº­t dá»¥ng Ä‘iá»ƒn hÃ¬nh Ä‘Æ°á»£c lÃ m tá»« nhá»±a PE ($Polyethylene$) â€” loáº¡i nhá»±a Ä‘Æ°á»£c sáº£n xuáº¥t nhiá»u nháº¥t tháº¿ giá»›i?",
       "images": [
         "https://images.unsplash.com/photo-1621459548400-33bc52920916?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=400&q=80",
         "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80"
       ],
-      "question": "Hình ảnh nào mô tả túi nilon hoặc màng bọc thực phẩm — những sản phẩm từ nhựa PE?",
+      "question": "HÃ¬nh áº£nh nÃ o mÃ´ táº£ tÃºi nilon hoáº·c mÃ ng bá»c thá»±c pháº©m â€” nhá»¯ng sáº£n pháº©m tá»« nhá»±a PE?",
       "correctAnswer": 0,
-      "targetType": "nhận biết",
-      "source": "Thực tế đời sống"
+      "targetType": "nháº­n biáº¿t",
+      "source": "Thá»±c táº¿ Ä‘á»i sá»‘ng"
     },
     {
       "type": "matching",
-      "narrative": "Hãy giúp tôi phân loại các loại vật liệu Polymer dựa trên đặc tính của chúng.",
+      "narrative": "HÃ£y giÃºp tÃ´i phÃ¢n loáº¡i cÃ¡c loáº¡i váº­t liá»‡u Polymer dá»±a trÃªn Ä‘áº·c tÃ­nh cá»§a chÃºng.",
       "leftItems": [
-        { "id": "po1", "label": "Nhựa PVC" },
-        { "id": "po2", "label": "Tơ nilon" },
+        { "id": "po1", "label": "Nhá»±a PVC" },
+        { "id": "po2", "label": "TÆ¡ nilon" },
         { "id": "po3", "label": "Cao su" }
       ],
       "items": [
-        { "id": "po1", "label": "Làm ống dẫn nước, vỏ dây điện" },
-        { "id": "po2", "label": "Dai, bền, dùng trong may mặc, lưới đánh cá" },
-        { "id": "po3", "label": "Có tính đàn hồi vượt trội" }
+        { "id": "po1", "label": "LÃ m á»‘ng dáº«n nÆ°á»›c, vá» dÃ¢y Ä‘iá»‡n" },
+        { "id": "po2", "label": "Dai, bá»n, dÃ¹ng trong may máº·c, lÆ°á»›i Ä‘Ã¡nh cÃ¡" },
+        { "id": "po3", "label": "CÃ³ tÃ­nh Ä‘Ã n há»“i vÆ°á»£t trá»™i" }
       ],
       "correctOrder": ["po1", "po2", "po3"],
-      "question": "Nối vật liệu polymer với ứng dụng đặc trưng.",
-      "source": "Ứng dụng vật liệu"
+      "question": "Ná»‘i váº­t liá»‡u polymer vá»›i á»©ng dá»¥ng Ä‘áº·c trÆ°ng.",
+      "source": "á»¨ng dá»¥ng váº­t liá»‡u"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Thuật ngữ 'Monomer' trong hóa học Polymer dùng để chỉ điều gì?",
+      "narrative": "Thuáº­t ngá»¯ 'Monomer' trong hÃ³a há»c Polymer dÃ¹ng Ä‘á»ƒ chá»‰ Ä‘iá»u gÃ¬?",
       "options": [
-        "Đơn vị nhỏ (mắt xích) dùng để tạo nên polymer",
-        "Một loại polymer có kích thước khổng lồ",
-        "Sản phẩm sau khi đốt cháy nhựa",
-        "Chất xúc tác để làm nhựa cứng hơn"
+        "ÄÆ¡n vá»‹ nhá» (máº¯t xÃ­ch) dÃ¹ng Ä‘á»ƒ táº¡o nÃªn polymer",
+        "Má»™t loáº¡i polymer cÃ³ kÃ­ch thÆ°á»›c khá»•ng lá»“",
+        "Sáº£n pháº©m sau khi Ä‘á»‘t chÃ¡y nhá»±a",
+        "Cháº¥t xÃºc tÃ¡c Ä‘á»ƒ lÃ m nhá»±a cá»©ng hÆ¡n"
       ],
       "correctAnswer": 0,
-      "question": "Monomer là gì trong cấu tạo polymer?",
-      "source": "Kiến thức lý thuyết"
+      "question": "Monomer lÃ  gÃ¬ trong cáº¥u táº¡o polymer?",
+      "source": "Kiáº¿n thá»©c lÃ½ thuyáº¿t"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Quá trình kết hợp nhiều phân tử nhỏ (monomer) giống nhau hay tương tự nhau thành phân tử rất lớn (polymer) được gọi là phản ứng ...",
-      "placeholder": "Nhập tên phản ứng...",
-      "correctAnswer": "Trùng hợp",
-      "question": "Tên phản ứng đặc trưng để tạo ra polymer là gì?",
-      "source": "Hóa học hữu cơ"
+      "narrative": "QuÃ¡ trÃ¬nh káº¿t há»£p nhiá»u phÃ¢n tá»­ nhá» (monomer) giá»‘ng nhau hay tÆ°Æ¡ng tá»± nhau thÃ nh phÃ¢n tá»­ ráº¥t lá»›n (polymer) Ä‘Æ°á»£c gá»i lÃ  pháº£n á»©ng ...",
+      "placeholder": "Nháº­p tÃªn pháº£n á»©ng...",
+      "correctAnswer": "TrÃ¹ng há»£p",
+      "question": "TÃªn pháº£n á»©ng Ä‘áº·c trÆ°ng Ä‘á»ƒ táº¡o ra polymer lÃ  gÃ¬?",
+      "source": "HÃ³a há»c há»¯u cÆ¡"
     },
     {
       "type": "drag-drop",
-      "narrative": "Sắp xếp phương trình trùng hợp tạo nhựa Polyethylene (PE) từ khí Ethylene.",
+      "narrative": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh trÃ¹ng há»£p táº¡o nhá»±a Polyethylene (PE) tá»« khÃ­ Ethylene.",
       "items": [
         { "id": "s1", "label": "$nCH_2=CH_2$" },
         { "id": "s2", "label": "\\xrightarrow{xt, t^o, p}" },
         { "id": "s3", "label": "$(-CH_2-CH_2-)_n$" }
       ],
       "correctOrder": ["s1", "s2", "s3"],
-      "question": "Sắp xếp phương trình trùng hợp PE đúng.",
-      "source": "Phương trình hóa học"
+      "question": "Sáº¯p xáº¿p phÆ°Æ¡ng trÃ¬nh trÃ¹ng há»£p PE Ä‘Ãºng.",
+      "source": "PhÆ°Æ¡ng trÃ¬nh hÃ³a há»c"
     }
   ],
   "game": {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Polymer nào sau đây là polymer thiên nhiên?",
-        "options": ["Nhựa PE", "Cellulose", "Tơ nilon", "Nhựa PVC"],
+        "question": "Polymer nÃ o sau Ä‘Ã¢y lÃ  polymer thiÃªn nhiÃªn?",
+        "options": ["Nhá»±a PE", "Cellulose", "TÆ¡ nilon", "Nhá»±a PVC"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Đặc tính quan trọng nhất của cao su là gì?",
-        "options": ["Tính dẻo", "Tính dẫn điện", "Tính đàn hồi", "Tính dễ tan"],
+        "question": "Äáº·c tÃ­nh quan trá»ng nháº¥t cá»§a cao su lÃ  gÃ¬?",
+        "options": ["TÃ­nh dáº»o", "TÃ­nh dáº«n Ä‘iá»‡n", "TÃ­nh Ä‘Ã n há»“i", "TÃ­nh dá»… tan"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Nhựa PVC được điều chế từ monomer nào sau đây?",
+        "question": "Nhá»±a PVC Ä‘Æ°á»£c Ä‘iá»u cháº¿ tá»« monomer nÃ o sau Ä‘Ã¢y?",
         "options": ["Ethylene", "Vinyl chloride", "Propylene", "Styrene"],
         "correctAnswer": 1,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tại sao rác thải nhựa lại gây ô nhiễm môi trường nghiêm trọng?",
-        "options": ["Vì nó có màu xấu", "Vì nó rất đắt tiền", "Vì nó rất khó phân hủy trong tự nhiên", "Vì nó tan quá nhanh trong nước"],
+        "question": "Táº¡i sao rÃ¡c tháº£i nhá»±a láº¡i gÃ¢y Ã´ nhiá»…m mÃ´i trÆ°á»ng nghiÃªm trá»ng?",
+        "options": ["VÃ¬ nÃ³ cÃ³ mÃ u xáº¥u", "VÃ¬ nÃ³ ráº¥t Ä‘áº¯t tiá»n", "VÃ¬ nÃ³ ráº¥t khÃ³ phÃ¢n há»§y trong tá»± nhiÃªn", "VÃ¬ nÃ³ tan quÃ¡ nhanh trong nÆ°á»›c"],
         "correctAnswer": 2,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tơ nilon-6,6 thuộc loại tơ nào?",
-        "options": ["Tơ thiên nhiên", "Tơ nhân tạo", "Tơ tổng hợp", "Tơ bán tổng hợp"],
+        "question": "TÆ¡ nilon-6,6 thuá»™c loáº¡i tÆ¡ nÃ o?",
+        "options": ["TÆ¡ thiÃªn nhiÃªn", "TÆ¡ nhÃ¢n táº¡o", "TÆ¡ tá»•ng há»£p", "TÆ¡ bÃ¡n tá»•ng há»£p"],
         "correctAnswer": 2,
         "points": 10
       }
@@ -181,3 +181,4 @@ export const bai15 = {
     "advanced": []
   }
 };
+

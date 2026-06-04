@@ -1,64 +1,64 @@
-export const bai8 = {
+﻿export const bai8 = {
   "id": "hoa8_kntt_bai8",
   "classId": 8,
   "lessonId": 8,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 8: acid",
-  "chapter": "Chương 2: Một số hợp chất thông dụng",
+  "title": "BÃ i 8: acid",
+  "chapter": "ChÆ°Æ¡ng 2: Má»™t sá»‘ há»£p cháº¥t thÃ´ng dá»¥ng",
   "order": 8,
   "isPremium": false,
-  "description": "Khái niệm acid, tính chất hóa học (quỳ tím, + kim loại, + base, + oxide base) and một số acid thông dụng trong đời sống.",
+  "description": "KhÃ¡i niá»‡m acid, tÃ­nh cháº¥t hÃ³a há»c (quá»³ tÃ­m, + kim loáº¡i, + base, + oxide base) and má»™t sá»‘ acid thÃ´ng dá»¥ng trong Ä‘á»i sá»‘ng.",
   "challenges": [
     {
       "type": "multiple-choice",
-      "narrative": "Pha loãng Acid Sunfuric ($H_2SO_4$) đặc là một thao tác cực kỳ nguy hiểm.",
+      "narrative": "Pha loÃ£ng Acid Sunfuric ($H_2SO_4$) Ä‘áº·c lÃ  má»™t thao tÃ¡c cá»±c ká»³ nguy hiá»ƒm.",
       "options": [
-        "Rót nhanh nước vào acid đặc",
-        "Rót từ từ nước vào acid đặc và khuấy",
-        "Rót từ từ acid đặc vào nước và khuấy nhẹ",
-        "Đổ cả hai cùng lúc vào một xô lớn"
+        "RÃ³t nhanh nÆ°á»›c vÃ o acid Ä‘áº·c",
+        "RÃ³t tá»« tá»« nÆ°á»›c vÃ o acid Ä‘áº·c vÃ  khuáº¥y",
+        "RÃ³t tá»« tá»« acid Ä‘áº·c vÃ o nÆ°á»›c vÃ  khuáº¥y nháº¹",
+        "Äá»• cáº£ hai cÃ¹ng lÃºc vÃ o má»™t xÃ´ lá»›n"
       ],
       "correctAnswer": 2,
-      "question": "Thao tác pha loãng acid đặc an toàn là gì?",
-      "source": "Quy tắc an toàn"
+      "question": "Thao tÃ¡c pha loÃ£ng acid Ä‘áº·c an toÃ n lÃ  gÃ¬?",
+      "source": "Quy táº¯c an toÃ n"
     },
     {
       "type": "matching",
-      "narrative": "Hãy nối các acid sau với ứng dụng thực tế của chúng.",
+      "narrative": "HÃ£y ná»‘i cÃ¡c acid sau vá»›i á»©ng dá»¥ng thá»±c táº¿ cá»§a chÃºng.",
       "leftItems": [
         { "id": "a1", "label": "Acid Clohydric (HCl)" },
         { "id": "a2", "label": "Acid Sunfuric (H2SO4)" },
         { "id": "a3", "label": "Acid Acetic (CH3COOH)" }
       ],
       "items": [
-        { "id": "a3", "label": "Thành phần của giấm ăn" },
-        { "id": "a1", "label": "Có trong dịch vị dạ dày" },
-        { "id": "a2", "label": "Sản xuất phân bón, ắc quy" }
+        { "id": "a3", "label": "ThÃ nh pháº§n cá»§a giáº¥m Äƒn" },
+        { "id": "a1", "label": "CÃ³ trong dá»‹ch vá»‹ dáº¡ dÃ y" },
+        { "id": "a2", "label": "Sáº£n xuáº¥t phÃ¢n bÃ³n, áº¯c quy" }
       ],
       "correctOrder": ["a1", "a2", "a3"],
-      "question": "Khớp các loại acid với vai trò của chúng.",
-      "source": "Acid trong đời sống"
+      "question": "Khá»›p cÃ¡c loáº¡i acid vá»›i vai trÃ² cá»§a chÃºng.",
+      "source": "Acid trong Ä‘á»i sá»‘ng"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Khi cho acid tác dụng with một kim loại như kẽm ($Zn$), ta thấy sủi bọt khí. Đó là khí gì?",
-      "placeholder": "Nhập tên khí (ví dụ: Hidro)...",
+      "narrative": "Khi cho acid tÃ¡c dá»¥ng with má»™t kim loáº¡i nhÆ° káº½m ($Zn$), ta tháº¥y sá»§i bá»t khÃ­. ÄÃ³ lÃ  khÃ­ gÃ¬?",
+      "placeholder": "Nháº­p tÃªn khÃ­ (vÃ­ dá»¥: Hidro)...",
       "correctAnswer": "Hidro",
-      "question": "Khí thoát ra khi kim loại (đứng trước H) phản ứng with acid loãng là gì?",
-      "source": "Tính chất hóa học"
+      "question": "KhÃ­ thoÃ¡t ra khi kim loáº¡i (Ä‘á»©ng trÆ°á»›c H) pháº£n á»©ng with acid loÃ£ng lÃ  gÃ¬?",
+      "source": "TÃ­nh cháº¥t hÃ³a há»c"
     },
     {
       "type": "drag-drop",
-      "narrative": "Hãy hoàn thành sơ đồ phản ứng trung hòa: Acid + Base $\\rightarrow$ ...",
+      "narrative": "HÃ£y hoÃ n thÃ nh sÆ¡ Ä‘á»“ pháº£n á»©ng trung hÃ²a: Acid + Base $\\rightarrow$ ...",
       "items": [
-        { "id": "p1", "label": "Muối" },
+        { "id": "p1", "label": "Muá»‘i" },
         { "id": "p2", "label": "+" },
-        { "id": "p3", "label": "Nước" }
+        { "id": "p3", "label": "NÆ°á»›c" }
       ],
       "correctOrder": ["p1", "p2", "p3"],
-      "question": "Sản phẩm của phản ứng trung hòa là gì?",
-      "source": "Phản ứng trung hòa"
+      "question": "Sáº£n pháº©m cá»§a pháº£n á»©ng trung hÃ²a lÃ  gÃ¬?",
+      "source": "Pháº£n á»©ng trung hÃ²a"
     }
   ],
   "theoryModules": [
@@ -66,7 +66,7 @@ export const bai8 = {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm về Acid",
+        "text": "1. KhÃ¡i niá»‡m vá» Acid",
         "level": "h2"
       }
     },
@@ -74,15 +74,15 @@ export const bai8 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Acid là những hợp chất mà phân tử gồm có một hay nhiều nguyên tử hydrogen liên kết with **gốc acid**. Khi tan trong nước, acid phân li tạo ra ion $H^+$ (hay $H_3O^+$) — chính ion này quyết định tính chất đặc trưng của acid."
+        "text": "Acid lÃ  nhá»¯ng há»£p cháº¥t mÃ  phÃ¢n tá»­ gá»“m cÃ³ má»™t hay nhiá»u nguyÃªn tá»­ hydrogen liÃªn káº¿t with **gá»‘c acid**. Khi tan trong nÆ°á»›c, acid phÃ¢n li táº¡o ra ion $H^+$ (hay $H_3O^+$) â€” chÃ­nh ion nÃ y quyáº¿t Ä‘á»‹nh tÃ­nh cháº¥t Ä‘áº·c trÆ°ng cá»§a acid."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Công thức chung và Cách gọi tên",
-        "content": "**Công thức chung**: $H_nA$ (with $n$ là hóa trị của gốc acid $A$).\\n\\n**Cách đọc tên**:\\n- Acid không có oxygen: Acid + tên phi kim + hydric. (Vd: $HCl$ — Acid clohydric).\\n- Acid có oxygen (nhiều O): Acid + tên phi kim + ic. (Vd: $H_2SO_4$ — Acid sunfuric).\\n- Acid có oxygen (ít O): Acid + tên phi kim + ous. (Vd: $H_2SO_3$ — Acid sunfurous).\\n\\n**Một số acid thông dụng**:\\n- $HCl$: Acid clohydric (có trong dạ dày)\\n- $H_2SO_4$: Acid sunfuric (vua của các acid)\\n- $HNO_3$: Acid nitric (dùng sản xuất phân bón)\\n- $CH_3COOH$: Acid acetic (giấm ăn, nồng độ 2-5%)",
+        "title": "CÃ´ng thá»©c chung vÃ  CÃ¡ch gá»i tÃªn",
+        "content": "**CÃ´ng thá»©c chung**: $H_nA$ (with $n$ lÃ  hÃ³a trá»‹ cá»§a gá»‘c acid $A$).\\n\\n**CÃ¡ch Ä‘á»c tÃªn**:\\n- Acid khÃ´ng cÃ³ oxygen: Acid + tÃªn phi kim + hydric. (Vd: $HCl$ â€” Acid clohydric).\\n- Acid cÃ³ oxygen (nhiá»u O): Acid + tÃªn phi kim + ic. (Vd: $H_2SO_4$ â€” Acid sunfuric).\\n- Acid cÃ³ oxygen (Ã­t O): Acid + tÃªn phi kim + ous. (Vd: $H_2SO_3$ â€” Acid sunfurous).\\n\\n**Má»™t sá»‘ acid thÃ´ng dá»¥ng**:\\n- $HCl$: Acid clohydric (cÃ³ trong dáº¡ dÃ y)\\n- $H_2SO_4$: Acid sunfuric (vua cá»§a cÃ¡c acid)\\n- $HNO_3$: Acid nitric (dÃ¹ng sáº£n xuáº¥t phÃ¢n bÃ³n)\\n- $CH_3COOH$: Acid acetic (giáº¥m Äƒn, ná»“ng Ä‘á»™ 2-5%)",
         "color": "blue"
       }
     },
@@ -90,7 +90,7 @@ export const bai8 = {
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Tính chất hóa học của Acid",
+        "text": "2. TÃ­nh cháº¥t hÃ³a há»c cá»§a Acid",
         "level": "h2"
       }
     },
@@ -100,11 +100,11 @@ export const bai8 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**a) Làm đổi màu chỉ thị**: Dung dịch acid làm **quỳ tím chuyển đỏ**. Đây là cách đơn giản nhất để nhận biết acid. (Phenolphthalein không đổi màu trong acid).",
-          "**b) Tác dụng with kim loại**: Acid loãng tác dụng with nhiều kim loại **đứng trước $H$** trong dãy hoạt động hóa học → tạo **muối + khí $H_2$**.\\n  *Ví dụ*: $Zn + 2HCl \\rightarrow ZnCl_2 + H_2 \\uparrow$\\n  *Lưu ý*: Kim loại đứng sau $H$ (Cu, Ag, Au) **không** phản ứng with acid loãng thông thường.",
-          "**c) Tác dụng with Base oxide**: Tạo **muối + nước**.\\n  *Ví dụ*: $CuO + 2HCl \\rightarrow CuCl_2 + H_2O$\\n  (Tán bột $CuO$ đen vào dung dịch $HCl$ → dung dịch chuyển sang **màu xanh lam** do tạo $CuCl_2$).",
-          "**d) Tác dụng with Base (Phản ứng trung hòa)**: Tạo **muối + nước**.\\n  *Ví dụ*: $NaOH + HCl \\rightarrow NaCl + H_2O$\\n  Đây là phản ứng có ý nghĩa rất quan trọng trong y tế (dùng thuốc kháng acid chữa đau dạ dày).",
-          "**e) Tác dụng with muối**: Tạo muối mới và acid mới (sẽ học kỹ ở bài Muối).\\n  *Ví dụ*: $BaCl_2 + H_2SO_4 \\rightarrow BaSO_4 \\downarrow + 2HCl$"
+          "**a) LÃ m Ä‘á»•i mÃ u chá»‰ thá»‹**: Dung dá»‹ch acid lÃ m **quá»³ tÃ­m chuyá»ƒn Ä‘á»**. ÄÃ¢y lÃ  cÃ¡ch Ä‘Æ¡n giáº£n nháº¥t Ä‘á»ƒ nháº­n biáº¿t acid. (Phenolphthalein khÃ´ng Ä‘á»•i mÃ u trong acid).",
+          "**b) TÃ¡c dá»¥ng with kim loáº¡i**: Acid loÃ£ng tÃ¡c dá»¥ng with nhiá»u kim loáº¡i **Ä‘á»©ng trÆ°á»›c $H$** trong dÃ£y hoáº¡t Ä‘á»™ng hÃ³a há»c â†’ táº¡o **muá»‘i + khÃ­ $H_2$**.\\n  *VÃ­ dá»¥*: $Zn + 2HCl \\rightarrow ZnCl_2 + H_2 \\uparrow$\\n  *LÆ°u Ã½*: Kim loáº¡i Ä‘á»©ng sau $H$ (Cu, Ag, Au) **khÃ´ng** pháº£n á»©ng with acid loÃ£ng thÃ´ng thÆ°á»ng.",
+          "**c) TÃ¡c dá»¥ng with Base oxide**: Táº¡o **muá»‘i + nÆ°á»›c**.\\n  *VÃ­ dá»¥*: $CuO + 2HCl \\rightarrow CuCl_2 + H_2O$\\n  (TÃ¡n bá»™t $CuO$ Ä‘en vÃ o dung dá»‹ch $HCl$ â†’ dung dá»‹ch chuyá»ƒn sang **mÃ u xanh lam** do táº¡o $CuCl_2$).",
+          "**d) TÃ¡c dá»¥ng with Base (Pháº£n á»©ng trung hÃ²a)**: Táº¡o **muá»‘i + nÆ°á»›c**.\\n  *VÃ­ dá»¥*: $NaOH + HCl \\rightarrow NaCl + H_2O$\\n  ÄÃ¢y lÃ  pháº£n á»©ng cÃ³ Ã½ nghÄ©a ráº¥t quan trá»ng trong y táº¿ (dÃ¹ng thuá»‘c khÃ¡ng acid chá»¯a Ä‘au dáº¡ dÃ y).",
+          "**e) TÃ¡c dá»¥ng with muá»‘i**: Táº¡o muá»‘i má»›i vÃ  acid má»›i (sáº½ há»c ká»¹ á»Ÿ bÃ i Muá»‘i).\\n  *VÃ­ dá»¥*: $BaCl_2 + H_2SO_4 \\rightarrow BaSO_4 \\downarrow + 2HCl$"
         ]
       }
     },
@@ -112,7 +112,7 @@ export const bai8 = {
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Dãy hoạt động hóa học của kim loại",
+        "text": "3. DÃ£y hoáº¡t Ä‘á»™ng hÃ³a há»c cá»§a kim loáº¡i",
         "level": "h2"
       }
     },
@@ -120,8 +120,8 @@ export const bai8 = {
       "id": "mod7",
       "type": "infoBox",
       "content": {
-        "title": "Thứ tự từ mạnh đến yếu",
-        "content": "$K > Na > Ca > Mg > Al > Zn > Fe > Ni > Sn > Pb > (H) > Cu > Hg > Ag > Pt > Au$\\n\\n- Kim loại đứng **trước $H$** → phản ứng được with acid loãng, giải phóng $H_2$.\\n- Kim loại đứng **sau $H$** → **không** phản ứng with acid loãng ($HCl$, $H_2SO_4$ loãng).\\n\\n**Mẹo nhớ**: *Khi Nào Cần May Áo Záp Sắt Nịt Sắn Phải (H¹) Cu Hà Ác Phạt Âu.*",
+        "title": "Thá»© tá»± tá»« máº¡nh Ä‘áº¿n yáº¿u",
+        "content": "$K > Na > Ca > Mg > Al > Zn > Fe > Ni > Sn > Pb > (H) > Cu > Hg > Ag > Pt > Au$\\n\\n- Kim loáº¡i Ä‘á»©ng **trÆ°á»›c $H$** â†’ pháº£n á»©ng Ä‘Æ°á»£c with acid loÃ£ng, giáº£i phÃ³ng $H_2$.\\n- Kim loáº¡i Ä‘á»©ng **sau $H$** â†’ **khÃ´ng** pháº£n á»©ng with acid loÃ£ng ($HCl$, $H_2SO_4$ loÃ£ng).\\n\\n**Máº¹o nhá»›**: *Khi NÃ o Cáº§n May Ão ZÃ¡p Sáº¯t Ná»‹t Sáº¯n Pháº£i (HÂ¹) Cu HÃ  Ãc Pháº¡t Ã‚u.*",
         "color": "green"
       }
     },
@@ -129,7 +129,7 @@ export const bai8 = {
       "id": "mod8",
       "type": "heading",
       "content": {
-        "text": "4. Acid Sunfuric đặc ($H_2SO_4$ đặc)",
+        "text": "4. Acid Sunfuric Ä‘áº·c ($H_2SO_4$ Ä‘áº·c)",
         "level": "h2"
       }
     },
@@ -137,7 +137,7 @@ export const bai8 = {
       "id": "mod9",
       "type": "paragraph",
       "content": {
-        "text": "$H_2SO_4$ đặc có những tính chất đặc biệt mà acid loãng không có, khiến nó trở thành một trong những hóa chất nguy hiểm nhất trong phòng thí nghiệm."
+        "text": "$H_2SO_4$ Ä‘áº·c cÃ³ nhá»¯ng tÃ­nh cháº¥t Ä‘áº·c biá»‡t mÃ  acid loÃ£ng khÃ´ng cÃ³, khiáº¿n nÃ³ trá»Ÿ thÃ nh má»™t trong nhá»¯ng hÃ³a cháº¥t nguy hiá»ƒm nháº¥t trong phÃ²ng thÃ­ nghiá»‡m."
       }
     },
     {
@@ -146,9 +146,9 @@ export const bai8 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Tính háo nước**: $H_2SO_4$ đặc hút nước mãnh liệt, có thể rút nước từ các hợp chất hữu cơ. Khi nhỏ lên đường ($C_{12}H_{22}O_{11}$), acid sẽ rút $H_2O$ ra, biến đường trắng thành cột carbon đen phồng lên (thí nghiệm 'rắn carbon').",
-          "**Tính oxy hóa mạnh**: $H_2SO_4$ đặc nóng có thể hòa tan cả kim loại Cu (đứng sau H): $Cu + 2H_2SO_4 (đặc, nóng) \\rightarrow CuSO_4 + SO_2 \\uparrow + 2H_2O$.",
-          "**Pha loãng acid đặc**: Luôn nhớ quy tắc: **rót acid vào nước**, khuấy nhẹ, TUYỆT ĐỐI KHÔNG rót nước vào acid đặc."
+          "**TÃ­nh hÃ¡o nÆ°á»›c**: $H_2SO_4$ Ä‘áº·c hÃºt nÆ°á»›c mÃ£nh liá»‡t, cÃ³ thá»ƒ rÃºt nÆ°á»›c tá»« cÃ¡c há»£p cháº¥t há»¯u cÆ¡. Khi nhá» lÃªn Ä‘Æ°á»ng ($C_{12}H_{22}O_{11}$), acid sáº½ rÃºt $H_2O$ ra, biáº¿n Ä‘Æ°á»ng tráº¯ng thÃ nh cá»™t carbon Ä‘en phá»“ng lÃªn (thÃ­ nghiá»‡m 'ráº¯n carbon').",
+          "**TÃ­nh oxy hÃ³a máº¡nh**: $H_2SO_4$ Ä‘áº·c nÃ³ng cÃ³ thá»ƒ hÃ²a tan cáº£ kim loáº¡i Cu (Ä‘á»©ng sau H): $Cu + 2H_2SO_4 (Ä‘áº·c, nÃ³ng) \\rightarrow CuSO_4 + SO_2 \\uparrow + 2H_2O$.",
+          "**Pha loÃ£ng acid Ä‘áº·c**: LuÃ´n nhá»› quy táº¯c: **rÃ³t acid vÃ o nÆ°á»›c**, khuáº¥y nháº¹, TUYá»†T Äá»I KHÃ”NG rÃ³t nÆ°á»›c vÃ o acid Ä‘áº·c."
         ]
       }
     },
@@ -156,7 +156,7 @@ export const bai8 = {
       "id": "mod11",
       "type": "heading",
       "content": {
-        "text": "5. Ứng dụng của Acid",
+        "text": "5. á»¨ng dá»¥ng cá»§a Acid",
         "level": "h2"
       }
     },
@@ -164,8 +164,8 @@ export const bai8 = {
       "id": "mod12",
       "type": "warningBox",
       "content": {
-        "title": "Acid trong đời sống và sản xuất",
-        "content": "- **$HCl$**: Có trong dịch vị dạ dày ($pH \\approx 1-2$), giúp tiêu hóa protein và tiêu diệt vi khuẩn. Trong công nghiệp dùng tẩy gỉ kim loại.\\n- **$H_2SO_4$**: Sản xuất phân bón (supephốtphat), chất tẩy rửa, ắc quy ô tô, tinh chế dầu mỏ. Được mệnh danh là 'máu của công nghiệp hóa chất'.\\n- **$CH_3COOH$**: Giấm ăn (nồng độ 2-5%), dùng trong chế biến thực phẩm, làm gia vị, ngâm dưa chua.\\n- **Acid citric** (trong chanh, cam): Tạo vị chua tự nhiên, dùng trong bảo quản thực phẩm.",
+        "title": "Acid trong Ä‘á»i sá»‘ng vÃ  sáº£n xuáº¥t",
+        "content": "- **$HCl$**: CÃ³ trong dá»‹ch vá»‹ dáº¡ dÃ y ($pH \\approx 1-2$), giÃºp tiÃªu hÃ³a protein vÃ  tiÃªu diá»‡t vi khuáº©n. Trong cÃ´ng nghiá»‡p dÃ¹ng táº©y gá»‰ kim loáº¡i.\\n- **$H_2SO_4$**: Sáº£n xuáº¥t phÃ¢n bÃ³n (supephá»‘tphat), cháº¥t táº©y rá»­a, áº¯c quy Ã´ tÃ´, tinh cháº¿ dáº§u má». ÄÆ°á»£c má»‡nh danh lÃ  'mÃ¡u cá»§a cÃ´ng nghiá»‡p hÃ³a cháº¥t'.\\n- **$CH_3COOH$**: Giáº¥m Äƒn (ná»“ng Ä‘á»™ 2-5%), dÃ¹ng trong cháº¿ biáº¿n thá»±c pháº©m, lÃ m gia vá»‹, ngÃ¢m dÆ°a chua.\\n- **Acid citric** (trong chanh, cam): Táº¡o vá»‹ chua tá»± nhiÃªn, dÃ¹ng trong báº£o quáº£n thá»±c pháº©m.",
         "color": "orange"
       }
     }
@@ -174,10 +174,10 @@ export const bai8 = {
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: acid",
+      "title": "BÃ i giáº£ng: acid",
       "url": "https://www.youtube.com/watch?v=QDVGQwxU8XA",
       "thumbnail": "https://img.youtube.com/vi/QDVGQwxU8XA/0.jpg",
-      "description": "Khái niệm, tên gọi và tính chất hóa học đặc trưng của Acid (VietJack)."
+      "description": "KhÃ¡i niá»‡m, tÃªn gá»i vÃ  tÃ­nh cháº¥t hÃ³a há»c Ä‘áº·c trÆ°ng cá»§a Acid (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -187,20 +187,20 @@ export const bai8 = {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Axit clohydric ($HCl$) làm quỳ tím chuyển sang màu gì?",
+        "question": "Axit clohydric ($HCl$) lÃ m quá»³ tÃ­m chuyá»ƒn sang mÃ u gÃ¬?",
         "options": [
           "Xanh",
-          "Đỏ",
-          "Vàng",
-          "Không đổi màu"
+          "Äá»",
+          "VÃ ng",
+          "KhÃ´ng Ä‘á»•i mÃ u"
         ],
         "correctAnswer": 1,
-        "explanation": "Axit làm quỳ tím hóa đỏ.",
+        "explanation": "Axit lÃ m quá»³ tÃ­m hÃ³a Ä‘á».",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Khi cho sắt ($Fe$) tác dụng with dung dịch $HCl$, khí nào sinh ra?",
+        "question": "Khi cho sáº¯t ($Fe$) tÃ¡c dá»¥ng with dung dá»‹ch $HCl$, khÃ­ nÃ o sinh ra?",
         "options": [
           "$O_2$",
           "$CO_2$",
@@ -208,38 +208,38 @@ export const bai8 = {
           "$Cl_2$"
         ],
         "correctAnswer": 2,
-        "explanation": "Giải phóng hidro.",
+        "explanation": "Giáº£i phÃ³ng hidro.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Axit sunfuric ($H_2SO_4$) đặc có tính chất đặc trưng nào sau đây?",
+        "question": "Axit sunfuric ($H_2SO_4$) Ä‘áº·c cÃ³ tÃ­nh cháº¥t Ä‘áº·c trÆ°ng nÃ o sau Ä‘Ã¢y?",
         "options": [
-          "Tính háo nước mạnh",
-          "Làm quỳ tím hóa xanh",
-          "Không tác dụng with kim loại",
-          "Mùi thơm"
+          "TÃ­nh hÃ¡o nÆ°á»›c máº¡nh",
+          "LÃ m quá»³ tÃ­m hÃ³a xanh",
+          "KhÃ´ng tÃ¡c dá»¥ng with kim loáº¡i",
+          "MÃ¹i thÆ¡m"
         ],
         "correctAnswer": 0,
-        "explanation": "Axit H2SO4 đặc hút nước cực mạnh từ chất hữu cơ.",
+        "explanation": "Axit H2SO4 Ä‘áº·c hÃºt nÆ°á»›c cá»±c máº¡nh tá»« cháº¥t há»¯u cÆ¡.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Phản ứng trung hòa là phản ứng giữa:",
+        "question": "Pháº£n á»©ng trung hÃ²a lÃ  pháº£n á»©ng giá»¯a:",
         "options": [
           "Axit and base",
-          "Muối and muối",
-          "Kim loại and Phi kim",
-          "Oxit and nước"
+          "Muá»‘i and muá»‘i",
+          "Kim loáº¡i and Phi kim",
+          "Oxit and nÆ°á»›c"
         ],
         "correctAnswer": 0,
-        "explanation": "Axit + Base $\\rightarrow$ Muối + Nước.",
+        "explanation": "Axit + Base $\\rightarrow$ Muá»‘i + NÆ°á»›c.",
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Chất nào sau đây không phải là axit?",
+        "question": "Cháº¥t nÃ o sau Ä‘Ã¢y khÃ´ng pháº£i lÃ  axit?",
         "options": [
           "$HNO_3$",
           "$H_2SO_4$",
@@ -247,7 +247,7 @@ export const bai8 = {
           "$CH_3COOH$"
         ],
         "correctAnswer": 2,
-        "explanation": "NaOH là base (kiềm).",
+        "explanation": "NaOH lÃ  base (kiá»m).",
         "points": 10
       }
     ],
@@ -256,3 +256,4 @@ export const bai8 = {
   },
   "realWorldApplications": []
 };
+

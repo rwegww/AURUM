@@ -251,10 +251,10 @@ def build() -> None:
     add_numbered(
         doc,
         [
-            "Học sinh chọn khối/lộ trình ở Classroom hoặc Grade Journey; frontend tải danh sách lessons theo class_id/program_id.",
+            "Học sinh chọn khối/lộ trình ở Classroom hoặc Grade Journey; frontend tải danh sách lessons theo grade_level_id/program_id.",
             "Học sinh đi qua các màn hình intro, story, challenge, quiz và reward của từng lesson.",
             "Khi hoàn thành từng cấp độ, frontend gọi /api/user/lesson-segment với lessonId, level và số sao.",
-            "Backend kiểm tra lesson tồn tại, cập nhật lessonStars trong user_progress item_type=balancing, cộng XP lần đầu cho mỗi level.",
+            "Backend kiểm tra lesson tồn tại, cập nhật lessonStars trong user_progress progress_type=balancing, cộng XP lần đầu cho mỗi level.",
             "Khi hoàn thành level3, hệ thống mở khóa lesson, đánh dấu hoàn thành mục tiêu ngày, cập nhật streak và studyPlan.completed.",
             "Nếu học sinh vượt placement test, /api/user/placement-pass ghi passedGrades và cộng 500 XP nếu là lần đầu.",
         ],
@@ -315,8 +315,8 @@ def build() -> None:
         [
             "Lab đọc danh sách hóa chất từ lab_chemicals và phản ứng từ lab_reactions.",
             "Balancing search và lookup theo nodeId đọc balancing_questions.",
-            "Tiến độ cân bằng được lưu vào user_progress item_type=balancing, item_id=current.",
-            "Mở khóa hóa chất ghi user_progress item_type=chemical; các màn hình lab dùng dữ liệu này để cá nhân hóa trải nghiệm.",
+            "Tiến độ cân bằng được lưu vào user_progress progress_type=balancing, target_id=current.",
+            "Mở khóa hóa chất ghi user_progress progress_type=chemical; các màn hình lab dùng dữ liệu này để cá nhân hóa trải nghiệm.",
             "Các mô phỏng frontend như density, gas law, molarity, pH scale và formula sim chủ yếu chạy client-side.",
         ],
     )
@@ -381,7 +381,7 @@ def build() -> None:
             "Route protected dùng middleware auth; teacher/admin routes kiểm tra role hoặc quyền sở hữu lớp.",
             "Student không được join lớp nếu role không phải student; không được nộp bài không thuộc lớp hoặc không được giao.",
             "Teacher không được quản lý lớp của teacher khác, trừ khi là admin.",
-            "Progress hiện ưu tiên user_progress; code vẫn có fallback legacy cho user_unlocked_* nhưng live schema sạch không expose các bảng đó.",
+            "Progress runtime su dung user_progress voi progress_type, target_id va progress_payload; cac bang user_unlocked_* chi con la legacy history.",
             "Backend service-role đảm nhiệm nhiều thao tác ghi; RLS vẫn giới hạn direct client access ở các bảng public.",
             "Session claim + current_session_id làm điểm kiểm soát chống dùng cùng tài khoản ở nhiều nơi.",
         ],

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Map, ChevronRight, ChevronLeft, Save, RefreshCcw, GripVertical, AlertTriangle } from 'lucide-react';
 
 const JourneyManager = () => {
-  const [lessons, setLessons] = useState([]);
+  const [bai_hoc, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedGrade, setSelectedGrade] = useState(8);
   const [saving, setSaving] = useState(false);
@@ -15,12 +15,12 @@ const JourneyManager = () => {
     try {
       const res = await fetch(`/api/lessons?classId=${grade}`);
       const data = await res.json();
-      // Ensure lessons are sorted by order
+      // Ensure bai_hoc are sorted by order
       const sortedData = [...data].sort((a, b) => (a.order || 0) - (b.order || 0));
       setLessons(sortedData);
       setHasChanges(false);
     } catch (err) {
-      console.error('Lỗi tải hành trình:', err);
+      console.error('Lá»—i táº£i hÃ nh trÃ¬nh:', err);
     } finally {
       setLoading(false);
     }
@@ -31,7 +31,7 @@ const JourneyManager = () => {
   }, [selectedGrade]);
 
   const moveItem = (index, direction) => {
-    const newLessons = [...lessons];
+    const newLessons = [...bai_hoc];
     const newIndex = index + direction;
     
     if (newIndex < 0 || newIndex >= newLessons.length) return;
@@ -55,8 +55,8 @@ const JourneyManager = () => {
     try {
       const token = localStorage.getItem('token');
       
-      // Update all lessons in parallel or sequence
-      const updatePromises = lessons.map(lesson => 
+      // Update all bai_hoc in parallel or sequence
+      const updatePromises = bai_hoc.map(lesson => 
         fetch(`/api/admin/lessons/${lesson.lessonId}`, {
           method: 'PUT',
           headers: { 
@@ -72,10 +72,10 @@ const JourneyManager = () => {
       
       await Promise.all(updatePromises);
       setHasChanges(false);
-      alert('Đã cập nhật thứ tự hành trình thành công!');
+      alert('ÄÃ£ cáº­p nháº­t thá»© tá»± hÃ nh trÃ¬nh thÃ nh cÃ´ng!');
     } catch (err) {
-      console.error('Lỗi lưu hành trình:', err);
-      alert('Có lỗi xảy ra khi lưu hành trình.');
+      console.error('Lá»—i lÆ°u hÃ nh trÃ¬nh:', err);
+      alert('CÃ³ lá»—i xáº£y ra khi lÆ°u hÃ nh trÃ¬nh.');
     } finally {
       setSaving(false);
     }
@@ -85,11 +85,11 @@ const JourneyManager = () => {
     <div className="p-8 max-w-6xl mx-auto">
       <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
+          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">â† Quay láº¡i Báº£ng Ä‘iá»u khiá»ƒn</Link>
           <h1 className="text-3xl font-bold text-viet-text tracking-tight flex items-center gap-3">
-            Quản lý <span className="text-viet-green">Hành trình</span> <Map className="text-viet-green" size={28} />
+            Quáº£n lÃ½ <span className="text-viet-green">HÃ nh trÃ¬nh</span> <Map className="text-viet-green" size={28} />
           </h1>
-          <p className="text-viet-text-light mt-1 font-medium italic">Sắp xếp lộ trình học tập cho học sinh theo từng khối lớp.</p>
+          <p className="text-viet-text-light mt-1 font-medium italic">Sáº¯p xáº¿p lá»™ trÃ¬nh há»c táº­p cho há»c sinh theo tá»«ng khá»‘i lá»›p.</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ const JourneyManager = () => {
                   selectedGrade === g ? 'bg-viet-green text-white shadow-md' : 'text-viet-text-light hover:bg-gray-50'
                 }`}
               >
-                Lớp {g}
+                Lá»›p {g}
               </button>
             ))}
           </div>
@@ -117,7 +117,7 @@ const JourneyManager = () => {
             }`}
           >
             {saving ? <RefreshCcw className="animate-spin" size={16} /> : <Save size={16} />}
-            Lưu thay đổi
+            LÆ°u thay Ä‘á»•i
           </button>
         </div>
       </header>
@@ -129,7 +129,7 @@ const JourneyManager = () => {
           className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-3 text-amber-700 text-sm font-medium"
         >
           <AlertTriangle size={18} />
-          Bạn có thay đổi chưa lưu. Hãy nhấn "Lưu thay đổi" để cập nhật thứ tự mới cho học sinh.
+          Báº¡n cÃ³ thay Ä‘á»•i chÆ°a lÆ°u. HÃ£y nháº¥n "LÆ°u thay Ä‘á»•i" Ä‘á»ƒ cáº­p nháº­t thá»© tá»± má»›i cho há»c sinh.
         </motion.div>
       )}
 
@@ -145,7 +145,7 @@ const JourneyManager = () => {
           <div className="absolute left-[52px] top-10 bottom-10 w-1 bg-slate-100 rounded-full" />
           
           <div className="space-y-4">
-            {lessons.map((lesson, index) => (
+            {bai_hoc.map((lesson, index) => (
               <motion.div
                 key={lesson.lessonId}
                 layout
@@ -170,7 +170,7 @@ const JourneyManager = () => {
                     <div>
                       <h3 className="font-bold text-viet-text leading-tight">{lesson.title}</h3>
                       <p className="text-[11px] text-viet-text-light font-medium mt-1 uppercase tracking-wider">
-                        {lesson.chapter || 'Nội dung cốt lõi'} • ID: {lesson.lessonId}
+                        {lesson.chapter || 'Ná»™i dung cá»‘t lÃµi'} â€¢ ID: {lesson.lessonId}
                       </p>
                     </div>
                   </div>
@@ -185,7 +185,7 @@ const JourneyManager = () => {
                     </button>
                     <button 
                       onClick={() => moveItem(index, 1)}
-                      disabled={index === lessons.length - 1}
+                      disabled={index === bai_hoc.length - 1}
                       className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 hover:text-viet-green disabled:opacity-30 disabled:hover:bg-transparent transition-all"
                     >
                       <ChevronRight size={20} className="rotate-90" />
@@ -197,7 +197,7 @@ const JourneyManager = () => {
                       to={`/admin/journey/${lesson.lessonId}`} 
                       className="px-4 py-2 rounded-xl text-[11px] font-black uppercase text-viet-green bg-viet-green/5 hover:bg-viet-green hover:text-white transition-all"
                     >
-                      Chi tiết
+                      Chi tiáº¿t
                     </Link>
                   </div>
                 </div>
@@ -205,13 +205,13 @@ const JourneyManager = () => {
             ))}
           </div>
 
-          {lessons.length === 0 && (
+          {bai_hoc.length === 0 && (
             <div className="text-center py-20 bg-white rounded-[40px] border border-dashed border-slate-200">
               <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
                 <Map size={32} />
               </div>
-              <p className="text-slate-400 font-bold">Chưa có bài học nào cho khối lớp này.</p>
-              <Link to="/admin/lessons" className="text-viet-green font-bold text-sm mt-2 block hover:underline">Tới trang Quản lý Học liệu →</Link>
+              <p className="text-slate-400 font-bold">ChÆ°a cÃ³ bÃ i há»c nÃ o cho khá»‘i lá»›p nÃ y.</p>
+              <Link to="/admin/bai_hoc" className="text-viet-green font-bold text-sm mt-2 block hover:underline">Tá»›i trang Quáº£n lÃ½ Há»c liá»‡u â†’</Link>
             </div>
           )}
         </div>
@@ -221,3 +221,5 @@ const JourneyManager = () => {
 };
 
 export default JourneyManager;
+
+

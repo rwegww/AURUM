@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import StageRewardModal from '@/components/lessons/StageRewardModal';
 
@@ -18,7 +18,7 @@ const StageReward = () => {
         const data = await res.json();
         setLesson(data);
       } catch (err) {
-        console.error('Lỗi tải phần thưởng:', err);
+        console.error('Lá»—i táº£i pháº§n thÆ°á»Ÿng:', err);
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,7 @@ const StageReward = () => {
     <div className="min-h-screen bg-[#fffbf0]">
       <StageRewardModal
         rewardSrc={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
-        lessonTitle={lesson?.title || "Phần thưởng chặng"}
+        lessonTitle={lesson?.title || "Pháº§n thÆ°á»Ÿng cháº·ng"}
         gameData={lesson?.game}
         onProceed={handleReturnToJourney}
       />
@@ -49,3 +49,4 @@ const StageReward = () => {
 };
 
 export default StageReward;
+

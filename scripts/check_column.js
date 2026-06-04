@@ -10,7 +10,7 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 
 async function checkColumn() {
   const { error } = await supabase
-    .from('users')
+    .from('nguoi_dung')
     .select('avatar_seed')
     .limit(1);
   

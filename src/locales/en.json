@@ -10,7 +10,7 @@
     "library": "AURUM LIBRARY",
     "lab": "VIRTUAL LAB",
     "arena_link": "ARENA",
-    "missions": "LEARNING MISSIONS",
+    "nhiem_vu": "LEARNING MISSIONS",
     "knowledge_map": "KNOWLEDGE MAP",
     "calculator": "CHEMISTRY CALCULATOR",
     "solver": "FORMULA SOLVER",
@@ -19,7 +19,7 @@
     "logout": "Log out",
     "login": "Log in",
     "login_now": "Log in now",
-    "feedback": "Aurum Feedback"
+    "phan_hoi": "Aurum Feedback"
   },
   "home": {
     "hero_title": "JOURNEY OF DISCOVERY",
@@ -35,8 +35,8 @@
       "students_label": "Vietnamese learners",
       "schools_count": "50+",
       "schools_label": "Partner classrooms",
-      "lessons_count": "1,000+",
-      "lessons_label": "Chemistry lessons"
+      "bai_hoc_count": "1,000+",
+      "bai_hoc_label": "Chemistry bai_hoc"
     },
     "features": {
       "journey": {
@@ -53,7 +53,7 @@
         "title": "Virtual chemistry lab",
         "highlight": "Try reactions safely",
         "desc": "Observe changes, mix solutions, and test ideas in a clear simulation environment.",
-        "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom lessons and encourage experimental thinking.",
+        "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom bai_hoc and encourage experimental thinking.",
         "link": "Enter the lab",
         "image_alt": "A safe chemistry lab in a Vietnamese classroom"
       },
@@ -69,7 +69,7 @@
       "library": {
         "title": "Chemistry reference hub",
         "highlight": "Accurate lookup",
-        "desc": "Study materials, the periodic table, and visual resources help learners review quickly.",
+        "desc": "Study hoc_lieu, the periodic table, and visual resources help learners review quickly.",
         "link": "Open library"
       },
       "map": {
@@ -80,12 +80,12 @@
         "link": "Start the journey",
         "image_alt": "A stylized map of Vietnam with chemistry learning stages"
       },
-      "lessons": {
+      "bai_hoc": {
         "badge": "Study Materials",
-        "title": "Visual lessons",
+        "title": "Visual bai_hoc",
         "highlight": "Clear and memorable",
         "desc": "Chemistry theory is presented with visuals, real-life examples, and short interactions.",
-        "link": "View lessons",
+        "link": "View bai_hoc",
         "image_alt": "A visual chemistry lesson in Vietnamese folk-art style"
       }
     },
@@ -133,7 +133,7 @@
         {
           "name": "Minh Anh",
           "role": "Grade 9 student",
-          "content": "The illustrated lessons make reactions easier to understand, so chemistry exercises feel less intimidating."
+          "content": "The illustrated bai_hoc make reactions easier to understand, so chemistry exercises feel less intimidating."
         },
         {
           "name": "Gia Bao",
@@ -187,7 +187,7 @@
       "title": "Complete Chemistry Knowledge Tree",
       "subtitle": "Systematize chemistry knowledge from basics to advanced topics.",
       "instruction": "Tap each lesson to start practicing.",
-      "updating": "Transporting lesson materials...",
+      "updating": "Transporting lesson hoc_lieu...",
       "go_journey": "Open House Grade {{grade}} path"
     },
     "grades": {
@@ -219,8 +219,8 @@
     "subtitle": "Look up chemistry theory and video questions by grade level",
     "search_placeholder": "Search librarys...",
     "grade_filter": "Grade {{grade}}",
-    "loading": "Decoding questions materials...",
-    "no_results": "No chemistry materials found matching the questions",
+    "loading": "Decoding questions hoc_lieu...",
+    "no_results": "No chemistry hoc_lieu found matching the questions",
     "clear_filters": "Dispel filters",
     "metadata": {
       "video": "1 Pensieve Clip",
@@ -258,7 +258,7 @@
   "contact": {
     "badge": "Send us a message",
     "title": "Contact the <1/> Founder Council",
-    "description": "We are always happy to receive feedback messages, error reports, or collaboration requests. Reach out to us through our official channels below.",
+    "description": "We are always happy to receive phan_hoi messages, error reports, or collaboration requests. Reach out to us through our official channels below.",
     "info": {
       "hotline": "Message Hotline",
       "address": "Diagon Alley Office",
@@ -384,7 +384,7 @@
     "history_clear": "Clear Log",
     "history_time_ago": "At"
   },
-  "missions": {
+  "nhiem_vu": {
     "badge": "Aurum Auror Office",
     "title": "Learners <1>Missions</1>",
     "subtitle": "Complete learning challenges to level up and earn valuable badges.",
@@ -406,7 +406,7 @@
       "claiming": "Claiming...",
       "not_reached": "Incomplete"
     },
-    "empty": "The Grand Council has no new missions for today."
+    "empty": "The Grand Council has no new nhiem_vu for today."
   },
   "journey": {
     "badge": "Grade {{grade}} Path",
@@ -476,7 +476,7 @@
       "room_browser_subtitle": "Choose a waiting room and join immediately.",
       "create_room_subtitle": "Room setup",
       "difficulty_auto": "Auto by grade",
-      "room_id": "Code {{id}}",
+      "phong_dau_id": "Code {{id}}",
       "host_label": "Host",
       "full_room": "Full",
       "waiting_share": "Share this code with classmates to start once the room is full.",
@@ -652,7 +652,7 @@
     },
     "feed": {
       "title": "House Feed",
-      "empty": "No announcements or chemistry materials from the Teacher yet.",
+      "empty": "No announcements or chemistry hoc_lieu from the Teacher yet.",
       "author_you": "You",
       "private_badge": "🔒 MESSAGE PRIVY MAIL",
       "sent_to_teacher": "Sent to Teacher",
@@ -1232,12 +1232,14 @@
     "back_btn": "Back to library",
     "not_found": "Material does not exist",
     "views": "learners read",
-    "downloads": "copied",
+    "downloads": "downloads",
     "unsupported_format": "Format #{{type}} does not support direct preview",
-    "download_to_view": "Copy material to view",
+    "download_to_view": "Download material to view",
     "no_desc": "No description available for this material.",
-    "download_btn": "Copy material (FREE)",
-    "feedback": {
+    "download_btn": "Download material (FREE)",
+    "downloading_btn": "Downloading...",
+    "download_error": "Automatic download failed. The material was opened in a new tab instead.",
+    "phan_hoi": {
       "title_main": "Great Hall",
       "title_highlight": "Discussion",
       "placeholder": "Leave your thoughts on this material...",
@@ -1245,8 +1247,8 @@
       "submitting_btn": "Message flying...",
       "login_required": "Please enroll to join the discussion",
       "login_link": "Go to enrollment page",
-      "no_feedback": "No comments yet. Be the first learners!",
-      "alert_login": "Please enroll to send feedback!",
+      "no_phan_hoi": "No comments yet. Be the first learners!",
+      "alert_login": "Please enroll to send phan_hoi!",
       "err_fetch": "Error loading material data",
       "err_submit": "Error sending message post",
       "default_user": "New Learners"
@@ -1256,14 +1258,14 @@
       "format": "Edition",
       "posted_date": "Seal Date",
       "size": "Material Size",
-      "disclaimer": "All chemistry materials at Aurum are provided free of charge to support chemistry training. All commercialization without author's consent is strictly prohibited."
+      "disclaimer": "All chemistry hoc_lieu at Aurum are provided free of charge to support chemistry training. All commercialization without author's consent is strictly prohibited."
     }
   },
   "library": {
     "title": "Chemistry <1>Resource Library</1>",
-    "subtitle": "A diverse repository with infographics, mind maps, worksheets, and review materials.",
-    "search_placeholder": "Search chemistry materials...",
-    "loading": "Loading materials...",
+    "subtitle": "A diverse repository with infographics, mind maps, worksheets, and review hoc_lieu.",
+    "search_placeholder": "Search chemistry hoc_lieu...",
+    "loading": "Loading hoc_lieu...",
     "categories": {
       "all": "All Materials",
       "infographic_11": "GRADE 11 CHEMISTRY SCROLL",
@@ -1283,16 +1285,16 @@
       "default_category": "Material"
     },
     "empty": {
-      "title": "No matching materials found",
+      "title": "No matching hoc_lieu found",
       "clear_btn": "Clear filters and try again"
     }
   },
-  "lessons": {
+  "bai_hoc": {
     "header": {
       "title_journey": "Marauder's Map",
       "title_library": "Resource Library",
       "subtitle_explore": "Tu Luyen",
-      "subtitle_materials": "Materials",
+      "subtitle_hoc_lieu": "Materials",
       "desc_logged_in": "Complete the storylines to become a true master chemistry.",
       "desc_guest": "A journey to conquer chemistry from basic to advanced for new learners from grade 8 to 12."
     },
@@ -1300,11 +1302,11 @@
       "label": "Grade {{grade}}"
     },
     "status": {
-      "loading": "Opening library materials...",
+      "loading": "Opening library hoc_lieu...",
       "empty_title_logged_in": "Please select a chamber to start your journey",
-      "empty_title_guest": "Please select a grade to show chemistry lessons",
+      "empty_title_guest": "Please select a grade to show chemistry bai_hoc",
       "empty_desc": "Explore the chemistry world of chemistry right now",
-      "err_fetch": "Error summoning lessons"
+      "err_fetch": "Error summoning bai_hoc"
     },
     "card": {
       "explore_btn": "EXPLORE CHAMBER"
@@ -1333,7 +1335,7 @@
       "12": {
         "title": "Part 5",
         "name": "Reaching Evolution Peak",
-        "story": "The final stage of high-school chemistry. Overcome electrochemistry, polymers, and materials to prepare for real applications."
+        "story": "The final stage of high-school chemistry. Overcome electrochemistry, polymers, and hoc_lieu to prepare for real applications."
       }
     }
   },
@@ -1425,7 +1427,7 @@
     "close": "Banish",
     "tooltip": "Patronus Charm",
     "login_required": "Enrollment Required",
-    "login_required_desc": "Please enroll in the Learning Hub to track and claim rewards from daily learners missions.",
+    "login_required_desc": "Please enroll in the Learning Hub to track and claim rewards from daily learners nhiem_vu.",
     "login_now": "Enroll Now",
     "level_prefix": "Mana Level",
     "streak": "Training Streak",
@@ -1434,9 +1436,9 @@
     "claim": "Claim",
     "claimed": "Claimed ✓",
     "locked": "Sealed",
-    "no_missions": "No learners missions available",
-    "feedback_type": "Chemistry Feedback:",
-    "feedback_details": "Material details:",
+    "no_nhiem_vu": "No learners nhiem_vu available",
+    "phan_hoi_type": "Chemistry Feedback:",
+    "phan_hoi_details": "Material details:",
     "type_suggestion": "💡 Chemistry Idea",
     "type_bug": "🐛 Pest Infestation (Bug)",
     "type_praise": "❤️ Praise Learning Hub",

@@ -1,20 +1,20 @@
-export const bai19 = {
+﻿export const bai19 = {
   "id": "hoa10_kntt_bai19",
   "classId": 10,
   "lessonId": 19,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 19: Tốc độ phản ứng",
-  "chapter": "Chương 6: Tốc độ phản ứng",
+  "title": "BÃ i 19: Tá»‘c Ä‘á»™ pháº£n á»©ng",
+  "chapter": "ChÆ°Æ¡ng 6: Tá»‘c Ä‘á»™ pháº£n á»©ng",
   "order": 19,
   "isPremium": false,
-  "description": "Tốc độ nhanh chậm and các yếu tố ảnh hưởng.",
+  "description": "Tá»‘c Ä‘á»™ nhanh cháº­m and cÃ¡c yáº¿u tá»‘ áº£nh hÆ°á»Ÿng.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm về tốc độ phản ứng",
+        "text": "1. KhÃ¡i niá»‡m vá» tá»‘c Ä‘á»™ pháº£n á»©ng",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@ export const bai19 = {
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Tốc độ phản ứng hóa học là đại lượng đặc trưng cho sự biến thiên nồng độ của một trong các chất phản ứng hoặc sản phẩm trong một đơn vị thời gian.\n\n**Tốc độ trung bình ($\\bar{v}$)** của phản ứng được tính bằng công thức: \n$$\\bar{v} = \\frac{1}{a} \\frac{|\\Delta C_A|}{\\Delta t}$$ \n(Trong đó $a$ là hệ số tỉ lượng của chất $A$, $\\Delta C_A$ là biến thiên nồng độ, and $\\Delta t$ là khoảng thời gian xảy ra biến thiên)."
+        "text": "Tá»‘c Ä‘á»™ pháº£n á»©ng hÃ³a há»c lÃ  Ä‘áº¡i lÆ°á»£ng Ä‘áº·c trÆ°ng cho sá»± biáº¿n thiÃªn ná»“ng Ä‘á»™ cá»§a má»™t trong cÃ¡c cháº¥t pháº£n á»©ng hoáº·c sáº£n pháº©m trong má»™t Ä‘Æ¡n vá»‹ thá»i gian.\n\n**Tá»‘c Ä‘á»™ trung bÃ¬nh ($\\bar{v}$)** cá»§a pháº£n á»©ng Ä‘Æ°á»£c tÃ­nh báº±ng cÃ´ng thá»©c: \n$$\\bar{v} = \\frac{1}{a} \\frac{|\\Delta C_A|}{\\Delta t}$$ \n(Trong Ä‘Ã³ $a$ lÃ  há»‡ sá»‘ tá»‰ lÆ°á»£ng cá»§a cháº¥t $A$, $\\Delta C_A$ lÃ  biáº¿n thiÃªn ná»“ng Ä‘á»™, and $\\Delta t$ lÃ  khoáº£ng thá»i gian xáº£y ra biáº¿n thiÃªn)."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Các yếu tố ảnh hưởng đến tốc độ phản ứng",
+        "text": "2. CÃ¡c yáº¿u tá»‘ áº£nh hÆ°á»Ÿng Ä‘áº¿n tá»‘c Ä‘á»™ pháº£n á»©ng",
         "level": "h2"
       }
     },
@@ -39,11 +39,11 @@ export const bai19 = {
       "content": {
         "type": "bullet",
         "items": [
-          "**Nồng độ**: Khi tăng nồng độ chất phản ứng, số va chạm hiệu quả giữa các phân tử tăng lên, dẫn đến tốc độ phản ứng tăng.",
-          "**Áp suất**: Đối với phản ứng có chất khí tham gia, việc tăng áp suất (giảm thể tích hệ) làm tăng nồng độ các chất khí, từ đó làm tăng tốc độ phản ứng.",
-          "**Nhiệt độ**: Tốc độ phản ứng thường tăng khi nhiệt độ tăng. Quy tắc Van't Hoff cho biết khi nhiệt độ tăng thêm $10^\\circ C$, tốc độ phản ứng tăng từ 2 đến 4 lần ($v_2 = v_1 \\cdot \\gamma^{\\frac{t_2-t_1}{10}}$).",
-          "**Diện tích bề mặt**: Đối với các phản ứng có chất rắn tham gia, việc chia nhỏ chất rắn (nghiền bột) làm tăng diện tích tiếp xúc, giúp các phân tử va chạm với nhau dễ dàng hơn, làm tăng tốc độ phản ứng.",
-          "**Chất xúc tác**: Là chất làm tăng tốc độ phản ứng nhưng không bị biến đổi về lượng and chất sau phản ứng. Xúc tác hoạt động bằng cách tạo ra một lộ trình phản ứng mới có năng lượng hoạt hóa ($E_a$) thấp hơn."
+          "**Ná»“ng Ä‘á»™**: Khi tÄƒng ná»“ng Ä‘á»™ cháº¥t pháº£n á»©ng, sá»‘ va cháº¡m hiá»‡u quáº£ giá»¯a cÃ¡c phÃ¢n tá»­ tÄƒng lÃªn, dáº«n Ä‘áº¿n tá»‘c Ä‘á»™ pháº£n á»©ng tÄƒng.",
+          "**Ãp suáº¥t**: Äá»‘i vá»›i pháº£n á»©ng cÃ³ cháº¥t khÃ­ tham gia, viá»‡c tÄƒng Ã¡p suáº¥t (giáº£m thá»ƒ tÃ­ch há»‡) lÃ m tÄƒng ná»“ng Ä‘á»™ cÃ¡c cháº¥t khÃ­, tá»« Ä‘Ã³ lÃ m tÄƒng tá»‘c Ä‘á»™ pháº£n á»©ng.",
+          "**Nhiá»‡t Ä‘á»™**: Tá»‘c Ä‘á»™ pháº£n á»©ng thÆ°á»ng tÄƒng khi nhiá»‡t Ä‘á»™ tÄƒng. Quy táº¯c Van't Hoff cho biáº¿t khi nhiá»‡t Ä‘á»™ tÄƒng thÃªm $10^\\circ C$, tá»‘c Ä‘á»™ pháº£n á»©ng tÄƒng tá»« 2 Ä‘áº¿n 4 láº§n ($v_2 = v_1 \\cdot \\gamma^{\\frac{t_2-t_1}{10}}$).",
+          "**Diá»‡n tÃ­ch bá» máº·t**: Äá»‘i vá»›i cÃ¡c pháº£n á»©ng cÃ³ cháº¥t ráº¯n tham gia, viá»‡c chia nhá» cháº¥t ráº¯n (nghiá»n bá»™t) lÃ m tÄƒng diá»‡n tÃ­ch tiáº¿p xÃºc, giÃºp cÃ¡c phÃ¢n tá»­ va cháº¡m vá»›i nhau dá»… dÃ ng hÆ¡n, lÃ m tÄƒng tá»‘c Ä‘á»™ pháº£n á»©ng.",
+          "**Cháº¥t xÃºc tÃ¡c**: LÃ  cháº¥t lÃ m tÄƒng tá»‘c Ä‘á»™ pháº£n á»©ng nhÆ°ng khÃ´ng bá»‹ biáº¿n Ä‘á»•i vá» lÆ°á»£ng and cháº¥t sau pháº£n á»©ng. XÃºc tÃ¡c hoáº¡t Ä‘á»™ng báº±ng cÃ¡ch táº¡o ra má»™t lá»™ trÃ¬nh pháº£n á»©ng má»›i cÃ³ nÄƒng lÆ°á»£ng hoáº¡t hÃ³a ($E_a$) tháº¥p hÆ¡n."
         ]
       }
     }
@@ -52,10 +52,10 @@ export const bai19 = {
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Tốc độ phản ứng",
+      "title": "BÃ i giáº£ng: Tá»‘c Ä‘á»™ pháº£n á»©ng",
       "url": "https://www.youtube.com/watch?v=Ml076ca2VHc",
       "thumbnail": "https://img.youtube.com/vi/Ml076ca2VHc/0.jpg",
-      "description": "Các yếu tố ảnh hưởng đến tốc độ phản ứng: nồng độ, áp suất, nhiệt độ, diện tích bề mặt (VietJack)."
+      "description": "CÃ¡c yáº¿u tá»‘ áº£nh hÆ°á»Ÿng Ä‘áº¿n tá»‘c Ä‘á»™ pháº£n á»©ng: ná»“ng Ä‘á»™, Ã¡p suáº¥t, nhiá»‡t Ä‘á»™, diá»‡n tÃ­ch bá» máº·t (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -65,43 +65,43 @@ export const bai19 = {
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Định nghĩa tốc độ phản ứng là độ biến thiên của đại lượng nào trong một đơn vị thời gian?",
+        "question": "Äá»‹nh nghÄ©a tá»‘c Ä‘á»™ pháº£n á»©ng lÃ  Ä‘á»™ biáº¿n thiÃªn cá»§a Ä‘áº¡i lÆ°á»£ng nÃ o trong má»™t Ä‘Æ¡n vá»‹ thá»i gian?",
         "options": [
-          "Nồng độ chất",
-          "Khối lượng bình",
-          "Màu sắc",
-          "Năng lượng"
+          "Ná»“ng Ä‘á»™ cháº¥t",
+          "Khá»‘i lÆ°á»£ng bÃ¬nh",
+          "MÃ u sáº¯c",
+          "NÄƒng lÆ°á»£ng"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Yếu tố nào KHÔNG ảnh hưởng trực tiếp đến tốc độ phản ứng?",
+        "question": "Yáº¿u tá»‘ nÃ o KHÃ”NG áº£nh hÆ°á»Ÿng trá»±c tiáº¿p Ä‘áº¿n tá»‘c Ä‘á»™ pháº£n á»©ng?",
         "options": [
-          "Nồng độ",
-          "Nhiệt độ",
-          "Chất xúc tác",
-          "Cấu tạo của bình chứa"
+          "Ná»“ng Ä‘á»™",
+          "Nhiá»‡t Ä‘á»™",
+          "Cháº¥t xÃºc tÃ¡c",
+          "Cáº¥u táº¡o cá»§a bÃ¬nh chá»©a"
         ],
         "correctAnswer": 3,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Biểu thức tốc độ tức thời của phản ứng $A + B \\rightarrow C$ là $v = k[A][B]$. Nếu nồng độ A tăng 2 lần, v tăng:",
+        "question": "Biá»ƒu thá»©c tá»‘c Ä‘á»™ tá»©c thá»i cá»§a pháº£n á»©ng $A + B \\rightarrow C$ lÃ  $v = k[A][B]$. Náº¿u ná»“ng Ä‘á»™ A tÄƒng 2 láº§n, v tÄƒng:",
         "options": [
-          "2 lần",
-          "4 lần",
-          "Không đổi",
-          "8 lần"
+          "2 láº§n",
+          "4 láº§n",
+          "KhÃ´ng Ä‘á»•i",
+          "8 láº§n"
         ],
         "correctAnswer": 0,
         "points": 10
       },
       {
         "type": "multiple-choice",
-        "question": "Tốc độ phản ứng trung bình được tính theo công thức:",
+        "question": "Tá»‘c Ä‘á»™ pháº£n á»©ng trung bÃ¬nh Ä‘Æ°á»£c tÃ­nh theo cÃ´ng thá»©c:",
         "options": [
           "$\\bar{v} = \\Delta C / \\Delta t$",
           "$v = k.C$",
@@ -113,12 +113,12 @@ export const bai19 = {
       },
       {
         "type": "multiple-choice",
-        "question": "Hằng số tốc độ k phụ thuộc vào:",
+        "question": "Háº±ng sá»‘ tá»‘c Ä‘á»™ k phá»¥ thuá»™c vÃ o:",
         "options": [
-          "Nhiệt độ and bản chất chất phản ứng",
-          "Nồng độ",
-          "Áp suất",
-          "Thể tích"
+          "Nhiá»‡t Ä‘á»™ and báº£n cháº¥t cháº¥t pháº£n á»©ng",
+          "Ná»“ng Ä‘á»™",
+          "Ãp suáº¥t",
+          "Thá»ƒ tÃ­ch"
         ],
         "correctAnswer": 0,
         "points": 10
@@ -129,3 +129,4 @@ export const bai19 = {
   },
   "realWorldApplications": []
 };
+

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
@@ -67,9 +67,9 @@ const Classroom = () => {
     },
     {
       grade: 'map',
-      age: t('classroom.knowledge_tree.academic_map', 'BẢN ĐỒ KIẾN THỨC'),
-      title: t('classroom.knowledge_tree.title', 'Cây Kiến Thức Tổng'),
-      desc: t('classroom.knowledge_tree.subtitle', 'Hệ thống hóa toàn bộ kiến thức hóa học từ lớp 8 đến 12'),
+      age: t('classroom.knowledge_tree.academic_map', 'Báº¢N Äá»’ KIáº¾N THá»¨C'),
+      title: t('classroom.knowledge_tree.title', 'CÃ¢y Kiáº¿n Thá»©c Tá»•ng'),
+      desc: t('classroom.knowledge_tree.subtitle', 'Há»‡ thá»‘ng hÃ³a toÃ n bá»™ kiáº¿n thá»©c hÃ³a há»c tá»« lá»›p 8 Ä‘áº¿n 12'),
       image: "/assets/images/classroom/grade10-viet.png",
       color: "bg-slate-600"
     }
@@ -81,7 +81,7 @@ const Classroom = () => {
         <header className="mb-16 text-center max-w-3xl mx-auto animate-fade-in">
           <h1 className="font-rubik text-4xl md:text-5xl font-black text-[#1a1a1a] mb-6 tracking-tight uppercase leading-tight">
             <Trans i18nKey="classroom.title">
-               Bắt đầu hành trình<br/><span className="text-viet-green">Hóa học</span> của bạn
+               Báº¯t Ä‘áº§u hÃ nh trÃ¬nh<br/><span className="text-viet-green">HÃ³a há»c</span> cá»§a báº¡n
             </Trans>
           </h1>
           <p className="text-[#1a1a1a]/70 text-lg font-bold">
@@ -145,7 +145,7 @@ const Classroom = () => {
                        : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
                      }`}
                    >
-                     {item.grade === 'map' ? 'Khám phá ngay' : t('classroom.enter_class')} <span className="text-lg">→</span>
+                     {item.grade === 'map' ? 'KhÃ¡m phÃ¡ ngay' : t('classroom.enter_class')} <span className="text-lg">â†’</span>
                    </button>
                 </div>
               </div>
@@ -158,4 +158,5 @@ const Classroom = () => {
 };
 
 export default Classroom;
+
 

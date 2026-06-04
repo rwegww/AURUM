@@ -1,28 +1,30 @@
-import { supabase } from '../api/lib/supabase.js';
+﻿import { supabase } from '../api/lib/supabase.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
 async function addStreakMissions() {
-  const missions = [
-    { title: 'Thắp lửa hôm nay', description: 'Online đủ 10 phút hoặc hoàn thành 1 bài học để thắp chuỗi.', action_type: 'streak_light', target_count: 1, xp_reward: 50, type: 'daily', icon: '🔥' },
-    { title: 'Giữ lửa (3 ngày)', description: 'Duy trì chuỗi học tập trong 3 ngày liên tiếp.', action_type: 'streak', target_count: 3, xp_reward: 300, type: 'achievement', icon: '🕯️' },
-    { title: 'Kiên trì (7 ngày)', description: 'Duy trì chuỗi học tập trong 7 ngày liên tiếp.', action_type: 'streak', target_count: 7, xp_reward: 700, type: 'achievement', icon: '🔥' },
-    { title: 'Bền bỉ (14 ngày)', description: 'Duy trì chuỗi học tập trong 14 ngày liên tiếp.', action_type: 'streak', target_count: 14, xp_reward: 1500, type: 'achievement', icon: '☄️' },
-    { title: 'Đam mê (30 ngày)', description: 'Duy trì chuỗi học tập trong 30 ngày liên tiếp.', action_type: 'streak', target_count: 30, xp_reward: 4000, type: 'achievement', icon: '☀️' },
-    { title: 'Bất diệt (90 ngày)', description: 'Duy trì chuỗi học tập trong 90 ngày liên tiếp.', action_type: 'streak', target_count: 90, xp_reward: 12000, type: 'achievement', icon: '👑' }
+  const nhiem_vu = [
+    { tieu_de: 'Tháº¯p lá»­a hÃ´m nay', mo_ta: 'Online Ä‘á»§ 10 phÃºt hoáº·c hoÃ n thÃ nh 1 bÃ i há»c Ä‘á»ƒ tháº¯p chuá»—i.', loai_hanh_dong: 'streak_light', so_luong_muc_tieu: 1, thuong_xp: 50, type: 'daily', bieu_tuong: 'ðŸ”¥' },
+    { tieu_de: 'Giá»¯ lá»­a (3 ngÃ y)', mo_ta: 'Duy trÃ¬ chuá»—i há»c táº­p trong 3 ngÃ y liÃªn tiáº¿p.', loai_hanh_dong: 'streak', so_luong_muc_tieu: 3, thuong_xp: 300, type: 'achievement', bieu_tuong: 'ðŸ•¯ï¸' },
+    { tieu_de: 'KiÃªn trÃ¬ (7 ngÃ y)', mo_ta: 'Duy trÃ¬ chuá»—i há»c táº­p trong 7 ngÃ y liÃªn tiáº¿p.', loai_hanh_dong: 'streak', so_luong_muc_tieu: 7, thuong_xp: 700, type: 'achievement', bieu_tuong: 'ðŸ”¥' },
+    { tieu_de: 'Bá»n bá»‰ (14 ngÃ y)', mo_ta: 'Duy trÃ¬ chuá»—i há»c táº­p trong 14 ngÃ y liÃªn tiáº¿p.', loai_hanh_dong: 'streak', so_luong_muc_tieu: 14, thuong_xp: 1500, type: 'achievement', bieu_tuong: 'â˜„ï¸' },
+    { tieu_de: 'Äam mÃª (30 ngÃ y)', mo_ta: 'Duy trÃ¬ chuá»—i há»c táº­p trong 30 ngÃ y liÃªn tiáº¿p.', loai_hanh_dong: 'streak', so_luong_muc_tieu: 30, thuong_xp: 4000, type: 'achievement', bieu_tuong: 'â˜€ï¸' },
+    { tieu_de: 'Báº¥t diá»‡t (90 ngÃ y)', mo_ta: 'Duy trÃ¬ chuá»—i há»c táº­p trong 90 ngÃ y liÃªn tiáº¿p.', loai_hanh_dong: 'streak', so_luong_muc_tieu: 90, thuong_xp: 12000, type: 'achievement', bieu_tuong: 'ðŸ‘‘' }
   ];
 
-  for (const m of missions) {
-    const { data: existing } = await supabase.from('missions').select('id').eq('title', m.title).maybeSingle();
+  for (const m of nhiem_vu) {
+    const { data: existing } = await supabase.from('nhiem_vu').select('id').eq('tieu_de', m.tieu_de).maybeSingle();
     if (existing) {
-      console.log(`Mission already exists: ${m.title}`);
+      console.log(`Mission already exists: ${m.tieu_de}`);
       continue;
     }
     
-    const { error } = await supabase.from('missions').insert(m);
-    if (error) console.error(`Error adding mission ${m.title}:`, error);
-    else console.log(`Mission added: ${m.title}`);
+    const { error } = await supabase.from('nhiem_vu').insert(m);
+    if (error) console.error(`Error adding mission ${m.tieu_de}:`, error);
+    else console.log(`Mission added: ${m.tieu_de}`);
   }
 }
 
 addStreakMissions();
+
+

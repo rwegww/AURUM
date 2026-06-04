@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
     // Check if user exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
+      return res.status(400).json({ message: 'TÃªn Ä‘Äƒng nháº­p Ä‘Ã£ tá»“n táº¡i' });
     }
 
     const existingEmail = await User.findOne({ email });
@@ -54,7 +54,7 @@ router.post('/register', async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi đăng ký', error: err.message });
+    res.status(500).json({ message: 'Lá»—i Ä‘Äƒng kÃ½', error: err.message });
   }
 });
 
@@ -64,27 +64,27 @@ router.post('/register-teacher', async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   
   try {
-    console.log('📝 [register-teacher] Request body keys:', Object.keys(req.body || {}));
+    console.log('ðŸ“ [register-teacher] Request body keys:', Object.keys(req.body || {}));
     const { username, password, email, proofImageUrl } = req.body;
     
     if (!username || !password || !email || !proofImageUrl) {
-      console.warn('⚠️ [register-teacher] Missing fields:', { username: !!username, password: !!password, email: !!email, proofImageUrl: !!proofImageUrl });
-      return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ thông tin và ảnh minh chứng' });
+      console.warn('âš ï¸ [register-teacher] Missing fields:', { username: !!username, password: !!password, email: !!email, proofImageUrl: !!proofImageUrl });
+      return res.status(400).json({ message: 'Vui lÃ²ng cung cáº¥p Ä‘áº§y Ä‘á»§ thÃ´ng tin vÃ  áº£nh minh chá»©ng' });
     }
     
     // Check if user exists
     const existingUser = await User.findOne({ username });
     if (existingUser) {
-      return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
+      return res.status(400).json({ message: 'TÃªn Ä‘Äƒng nháº­p Ä‘Ã£ tá»“n táº¡i' });
     }
 
     // Check if email exists
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      return res.status(400).json({ message: 'Email đã được sử dụng' });
+      return res.status(400).json({ message: 'Email Ä‘Ã£ Ä‘Æ°á»£c sá»­ dá»¥ng' });
     }
     
-    // Hash the password so we don't store it in plain text even in feedback
+    // Hash the password so we don't store it in plain text even in phan_hoi
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const messageContent = JSON.stringify({
@@ -92,7 +92,7 @@ router.post('/register-teacher', async (req, res) => {
       hashedPassword: hashedPassword
     });
 
-    // Create a special feedback entry to hold the request
+    // Create a special phan_hoi entry to hold the request
     await Feedback.create({
       userId: null,
       username: username,
@@ -102,11 +102,11 @@ router.post('/register-teacher', async (req, res) => {
       status: 'unread'
     });
 
-    console.log('✅ [register-teacher] Teacher registration request created for:', username);
-    return res.status(201).json({ message: 'Yêu cầu đăng ký đã được gửi. Vui lòng chờ Quản trị viên duyệt qua Email.' });
+    console.log('âœ… [register-teacher] Teacher registration request created for:', username);
+    return res.status(201).json({ message: 'YÃªu cáº§u Ä‘Äƒng kÃ½ Ä‘Ã£ Ä‘Æ°á»£c gá»­i. Vui lÃ²ng chá» Quáº£n trá»‹ viÃªn duyá»‡t qua Email.' });
   } catch (err) {
-    console.error('❌ [register-teacher] Error:', err.message, err.stack);
-    return res.status(500).json({ message: 'Lỗi server', error: err.message });
+    console.error('âŒ [register-teacher] Error:', err.message, err.stack);
+    return res.status(500).json({ message: 'Lá»—i server', error: err.message });
   }
 });
 
@@ -118,12 +118,12 @@ router.post('/magic-login', async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded.magicLogin) {
-      return res.status(400).json({ message: 'Token không hợp lệ cho tính năng này' });
+      return res.status(400).json({ message: 'Token khÃ´ng há»£p lá»‡ cho tÃ­nh nÄƒng nÃ y' });
     }
 
     const user = await User.findById(decoded.id);
     if (!user) {
-      return res.status(404).json({ message: 'Không tìm thấy người dùng' });
+      return res.status(404).json({ message: 'KhÃ´ng tÃ¬m tháº¥y ngÆ°á»i dÃ¹ng' });
     }
 
     const sessionId = crypto.randomUUID();
@@ -150,7 +150,7 @@ router.post('/magic-login', async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(401).json({ message: 'Link đăng nhập đã hết hạn hoặc không hợp lệ', error: err.message });
+    res.status(401).json({ message: 'Link Ä‘Äƒng nháº­p Ä‘Ã£ háº¿t háº¡n hoáº·c khÃ´ng há»£p lá»‡', error: err.message });
   }
 });
 
@@ -164,12 +164,12 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ username, email: username });
     
     if (!user) {
-      return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
+      return res.status(400).json({ message: 'ThÃ´ng tin Ä‘Äƒng nháº­p khÃ´ng chÃ­nh xÃ¡c' });
     }
 
     const isMatch = await User.comparePassword(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
+      return res.status(400).json({ message: 'ThÃ´ng tin Ä‘Äƒng nháº­p khÃ´ng chÃ­nh xÃ¡c' });
     }
 
     const sessionId = crypto.randomUUID();
@@ -196,8 +196,9 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi đăng nhập', error: err.message });
+    res.status(500).json({ message: 'Lá»—i Ä‘Äƒng nháº­p', error: err.message });
   }
 });
 
 export default router;
+

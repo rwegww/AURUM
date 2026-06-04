@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+﻿import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules, elementColors, elementRadii } from '../../data/molecules';
 import { useAuth } from '@/context/AuthContext';
@@ -6,8 +6,8 @@ import { Microscope } from 'lucide-react';
 
 const normalize = (f) => {
   if (!f) return "";
-  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
-  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
+  const subMap = { 'â‚€': '0', 'â‚': '1', 'â‚‚': '2', 'â‚ƒ': '3', 'â‚„': '4', 'â‚…': '5', 'â‚†': '6', 'â‚‡': '7', 'â‚ˆ': '8', 'â‚‰': '9' };
+  return f.toString().replace(/[â‚€â‚â‚‚â‚ƒâ‚„â‚…â‚†â‚‡â‚ˆâ‚‰]/g, (m) => subMap[m]).trim().toUpperCase();
 };
 
 const MoleculeViewer = () => {
@@ -67,8 +67,8 @@ const MoleculeViewer = () => {
     // Sub-function to generate a simple visual structure for unknown molecules
     const generateFallbackModel = (formula, name) => {
       let norm = formula.toString();
-      const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
-      norm = norm.replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]);
+      const subMap = { 'â‚€': '0', 'â‚': '1', 'â‚‚': '2', 'â‚ƒ': '3', 'â‚„': '4', 'â‚…': '5', 'â‚†': '6', 'â‚‡': '7', 'â‚ˆ': '8', 'â‚‰': '9' };
+      norm = norm.replace(/[â‚€â‚â‚‚â‚ƒâ‚„â‚…â‚†â‚‡â‚ˆâ‚‰]/g, (m) => subMap[m]);
       
       const parts = norm.match(/([A-Z][a-z]?)(\d*)/g) || [];
       let atoms = [];
@@ -104,7 +104,7 @@ const MoleculeViewer = () => {
         id: formula.toLowerCase(),
         name: name,
         formula: formula,
-        description: "Mô hình cấu trúc giả lập cơ bản.",
+        description: "MÃ´ hÃ¬nh cáº¥u trÃºc giáº£ láº­p cÆ¡ báº£n.",
         atoms,
         bonds
       };
@@ -120,8 +120,8 @@ const MoleculeViewer = () => {
         return {
           ...finalModel,
           name: chem.name, // Use name from API
-          category: chem.type || finalModel.category || 'Khác', // Use type from API as category
-          gradeLevel: chem.grade_level || finalModel.gradeLevel || 8
+          category: chem.category || chem.type || finalModel.category || 'KhÃ¡c',
+          gradeLevel: chem.khoi_id || finalModel.gradeLevel || 8
         };
       });
   }, [allChemicals, discoveredFormulas]);
@@ -333,16 +333,16 @@ const MoleculeViewer = () => {
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[600px] text-viet-text">
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-viet-green border-t-transparent rounded-full mb-6" />
-      <h2 className="text-xl font-black italic tracking-widest uppercase animate-pulse">Đang đồng bộ dữ liệu...</h2>
+      <h2 className="text-xl font-black italic tracking-widest uppercase animate-pulse">Äang Ä‘á»“ng bá»™ dá»¯ liá»‡u...</h2>
     </div>
   );
 
   if (synchronizedMolecules.length === 0) return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[600px] text-center p-8">
       <div className="flex justify-center mb-6"><Microscope className="w-16 h-16 text-viet-text" /></div>
-      <h2 className="text-2xl font-black text-viet-text italic uppercase mb-2">Thư viện đang trống</h2>
+      <h2 className="text-2xl font-black text-viet-text italic uppercase mb-2">ThÆ° viá»‡n Ä‘ang trá»‘ng</h2>
       <p className="text-viet-text-light font-bold max-w-md mx-auto">
-        Vào "Mô phỏng phản ứng" để khám phá thêm các chất mới. Mỗi chất bạn phát hiện sẽ xuất hiện tại đây dưới dạng mô hình 3D.
+        VÃ o "MÃ´ phá»ng pháº£n á»©ng" Ä‘á»ƒ khÃ¡m phÃ¡ thÃªm cÃ¡c cháº¥t má»›i. Má»—i cháº¥t báº¡n phÃ¡t hiá»‡n sáº½ xuáº¥t hiá»‡n táº¡i Ä‘Ã¢y dÆ°á»›i dáº¡ng mÃ´ hÃ¬nh 3D.
       </p>
     </div>
   );
@@ -352,7 +352,7 @@ const MoleculeViewer = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
         {/* Left Side: Molecule List */}
         <div className="bg-white rounded-[28px] border border-viet-border p-5 shadow-sm flex flex-col h-[700px]">
-          <h3 className="text-[12px] font-black text-viet-green uppercase tracking-widest mb-4">Thư viện phân tử 3D</h3>
+          <h3 className="text-[12px] font-black text-viet-green uppercase tracking-widest mb-4">ThÆ° viá»‡n phÃ¢n tá»­ 3D</h3>
           
           <div className="flex flex-wrap gap-1.5 mb-4">
             {categories.map(cat => (
@@ -363,7 +363,7 @@ const MoleculeViewer = () => {
                   filterCategory === cat ? 'bg-viet-green text-white shadow-md' : 'bg-[#f0f2f5] text-viet-text-light hover:bg-[#e2e8f0]'
                 }`}
               >
-                {cat === 'all' ? 'Tất cả' : cat}
+                {cat === 'all' ? 'Táº¥t cáº£' : cat}
               </button>
             ))}
           </div>
@@ -383,7 +383,7 @@ const MoleculeViewer = () => {
                     <p className="text-[11px] text-viet-text-light font-bold mt-0.5">{mol.name}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-[9px] font-black text-viet-text-light bg-gray-100 px-2 py-0.5 rounded-md uppercase">Lớp {mol.gradeLevel}</span>
+                    <span className="text-[9px] font-black text-viet-text-light bg-gray-100 px-2 py-0.5 rounded-md uppercase">Lá»›p {mol.gradeLevel}</span>
                   </div>
                 </div>
               </button>
@@ -405,20 +405,20 @@ const MoleculeViewer = () => {
                             viewMode === mode ? 'bg-white text-viet-green shadow-sm' : 'text-viet-text-light'
                         }`}
                     >
-                        {mode === 'ball-stick' ? 'Mô hình que' : 'Mô hình đặc'}
+                        {mode === 'ball-stick' ? 'MÃ´ hÃ¬nh que' : 'MÃ´ hÃ¬nh Ä‘áº·c'}
                     </button>
                 ))}
                </div>
-               <button onClick={() => setShowLabels(!showLabels)} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${showLabels ? 'bg-viet-green/10 border-viet-green/30 text-viet-green' : 'bg-white border-gray-200 text-viet-text-light'}`}>Hiện nhãn</button>
+               <button onClick={() => setShowLabels(!showLabels)} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${showLabels ? 'bg-viet-green/10 border-viet-green/30 text-viet-green' : 'bg-white border-gray-200 text-viet-text-light'}`}>Hiá»‡n nhÃ£n</button>
             </div>
 
             <div className="flex items-center gap-3">
                 <div className="flex items-center bg-[#f0f2f5] px-4 py-2 rounded-xl border border-gray-200">
-                    <button onClick={() => setZoom(z => Math.max(0.5, z - 0.2))} className="text-xl font-bold hover:text-viet-green transition-colors">−</button>
+                    <button onClick={() => setZoom(z => Math.max(0.5, z - 0.2))} className="text-xl font-bold hover:text-viet-green transition-colors">âˆ’</button>
                     <span className="text-[11px] font-bold w-12 text-center">{Math.round(zoom * 100)}%</span>
                     <button onClick={() => setZoom(z => Math.min(4, z + 0.2))} className="text-xl font-bold hover:text-viet-green transition-colors">+</button>
                 </div>
-                <button onClick={resetView} className="px-5 py-2 rounded-xl text-[10px] font-black text-viet-text-light border border-gray-200 bg-white hover:bg-gray-50 uppercase tracking-widest">Đặt lại góc nhìn</button>
+                <button onClick={resetView} className="px-5 py-2 rounded-xl text-[10px] font-black text-viet-text-light border border-gray-200 bg-white hover:bg-gray-50 uppercase tracking-widest">Äáº·t láº¡i gÃ³c nhÃ¬n</button>
             </div>
           </div>
 
@@ -443,19 +443,19 @@ const MoleculeViewer = () => {
             {/* Interaction Help */}
             <div className="absolute top-8 left-8 space-y-3">
                 <div className="bg-white rounded-2xl border border-viet-border p-4">
-                    <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-2">Góc quan sát</p>
+                    <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-2">GÃ³c quan sÃ¡t</p>
                     <div className="space-y-1">
                         <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full bg-viet-green" style={{ width: `${(rotation.y % (Math.PI * 2)) / (Math.PI * 2) * 100}%` }} />
                         </div>
-                        <p className="text-[9px] font-bold text-viet-text-light italic">Y-Axis: {Math.round(rotation.y * 180 / Math.PI)}°</p>
+                        <p className="text-[9px] font-bold text-viet-text-light italic">Y-Axis: {Math.round(rotation.y * 180 / Math.PI)}Â°</p>
                     </div>
                 </div>
             </div>
 
             <div className="absolute bottom-8 right-8 text-[10px] font-black text-viet-text-light/50 flex flex-col items-end gap-1 uppercase tracking-widest">
-                <span>Giữ chuột để xoay</span>
-                <span>Cuộn để thu phóng</span>
+                <span>Giá»¯ chuá»™t Ä‘á»ƒ xoay</span>
+                <span>Cuá»™n Ä‘á»ƒ thu phÃ³ng</span>
             </div>
           </div>
 
@@ -491,3 +491,4 @@ const MoleculeViewer = () => {
 };
 
 export default MoleculeViewer;
+

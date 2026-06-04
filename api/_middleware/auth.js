@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+﻿import { supabase } from '../lib/supabase.js';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
@@ -34,7 +34,7 @@ export const auth = async (req, res, next) => {
       const sbUser = data?.user;
 
       if (!sbUser || sbError) {
-        throw new Error('Xác thực thất bại');
+        throw new Error('XÃ¡c thá»±c tháº¥t báº¡i');
       }
 
       userId = sbUser.id;
@@ -50,7 +50,7 @@ export const auth = async (req, res, next) => {
       if (!user) {
         user = await User.create({
           id: userId,
-          username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
+          username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'MÃ´n Ä‘á»“ HÃ³a há»c',
           email: sbUser.email,
           password: 'supabase_oauth_no_password',
           role: 'student',
@@ -58,9 +58,9 @@ export const auth = async (req, res, next) => {
       }
     }
 
-    if (!user) throw new Error('Không tìm thấy thông tin người dùng');
+    if (!user) throw new Error('KhÃ´ng tÃ¬m tháº¥y thÃ´ng tin ngÆ°á»i dÃ¹ng');
     if (user.isLocked) {
-      throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
+      throw new Error('TÃ i khoáº£n cá»§a báº¡n Ä‘Ã£ bá»‹ khÃ³a. Vui lÃ²ng liÃªn há»‡ quáº£n trá»‹ viÃªn.');
     }
 
     req.user = user;
@@ -83,7 +83,8 @@ export const auth = async (req, res, next) => {
 
 export const requireRole = (...roles) => (req, res, next) => {
   if (!req.user || !roles.includes(req.user.role)) {
-    return res.status(403).json({ message: 'Quyền truy cập bị từ chối' });
+    return res.status(403).json({ message: 'Quyá»n truy cáº­p bá»‹ tá»« chá»‘i' });
   }
   return next();
 };
+

@@ -1,4 +1,4 @@
-import { CHEMISTRY_DATASET_PART_1 } from './chemistry_dataset_part1.js';
+﻿import { CHEMISTRY_DATASET_PART_1 } from './chemistry_dataset_part1.js';
 import { CHEMISTRY_DATASET_PART_2 } from './chemistry_dataset_part2.js';
 import { CHEMISTRY_DATASET_PART_3 } from './chemistry_dataset_part3.js';
 import { CHEMISTRY_DATASET_PART_4 } from './chemistry_dataset_part4.js';
@@ -25,9 +25,9 @@ export const CHEMISTRY_DATASET_META = {
     "tutor_support": 1232
   },
   "notes": [
-    "Dữ liệu mở rộng từ knowledge base gốc của người dùng.",
-    "Bao gồm câu hỏi chính quy, văn nói, không dấu, hỏi ngắn, hỏi ôn tập và chào hỏi cơ bản.",
-    "Có thêm ion, hóa trị, số oxi hóa và các mẫu từ chối nội dung nguy hiểm."
+    "Dá»¯ liá»‡u má»Ÿ rá»™ng tá»« knowledge base gá»‘c cá»§a ngÆ°á»i dÃ¹ng.",
+    "Bao gá»“m cÃ¢u há»i chÃ­nh quy, vÄƒn nÃ³i, khÃ´ng dáº¥u, há»i ngáº¯n, há»i Ã´n táº­p vÃ  chÃ o há»i cÆ¡ báº£n.",
+    "CÃ³ thÃªm ion, hÃ³a trá»‹, sá»‘ oxi hÃ³a vÃ  cÃ¡c máº«u tá»« chá»‘i ná»™i dung nguy hiá»ƒm."
   ]
 };
 
@@ -38,3 +38,4 @@ export const CHEMISTRY_DATASET = [
   ...CHEMISTRY_DATASET_PART_4,
   ...CHEMISTRY_DATASET_PART_5
 ];
+

@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
@@ -169,7 +169,7 @@ router.get('/leaderboard', async (req, res) => {
     }));
     res.json(topStudents);
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi tải bảng xếp hạng', error: err.message });
+    res.status(500).json({ message: 'Lá»—i táº£i báº£ng xáº¿p háº¡ng', error: err.message });
   }
 });
 
@@ -179,7 +179,7 @@ router.get('/public-praises', async (req, res) => {
     const praises = await Feedback.getApprovedPraises();
     res.json(praises);
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi tải lời khen ngợi', error: err.message });
+    res.status(500).json({ message: 'Lá»—i táº£i lá»i khen ngá»£i', error: err.message });
   }
 });
 
@@ -218,7 +218,7 @@ router.patch('/profile', auth, async (req, res) => {
     if (updateData.username) {
       const existingUser = await User.findOne({ username: updateData.username });
       if (existingUser && existingUser.id !== req.user.id) {
-        return res.status(400).json({ message: 'Tên đăng nhập đã tồn tại' });
+        return res.status(400).json({ message: 'TÃªn Ä‘Äƒng nháº­p Ä‘Ã£ tá»“n táº¡i' });
       }
     }
 
@@ -232,7 +232,7 @@ router.patch('/profile', auth, async (req, res) => {
     const updatedUser = await User.update(req.user.id, updateData);
     res.json(toProfileResponse(updatedUser));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi cập nhật thông tin', error: err.message });
+    res.status(500).json({ message: 'Lá»—i cáº­p nháº­t thÃ´ng tin', error: err.message });
   }
 });
 
@@ -331,24 +331,24 @@ router.post('/link-account', auth, async (req, res) => {
   try {
     const { provider, accountId, providerEmail } = req.body;
     if (!provider || !accountId) {
-      return res.status(400).json({ message: 'Thiếu thông tin liên kết' });
+      return res.status(400).json({ message: 'Thiáº¿u thÃ´ng tin liÃªn káº¿t' });
     }
     
     // Check if provider is supported
     if (provider !== 'google') {
-      return res.status(400).json({ message: 'Nhà cung cấp không được hỗ trợ' });
+      return res.status(400).json({ message: 'NhÃ  cung cáº¥p khÃ´ng Ä‘Æ°á»£c há»— trá»£' });
     }
 
     // Verify email matches if the user registered with an email
     if (req.user.email && req.user.email !== providerEmail) {
-      return res.status(400).json({ message: 'Email liên kết phải trùng khớp với email của tài khoản hiện tại' });
+      return res.status(400).json({ message: 'Email liÃªn káº¿t pháº£i trÃ¹ng khá»›p vá»›i email cá»§a tÃ i khoáº£n hiá»‡n táº¡i' });
     }
 
     // Check if another user already linked this account
     const filter = { googleId: accountId };
     const existingUser = await User.findOne(filter);
     if (existingUser && existingUser.id !== req.user.id) {
-      return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác' });
+      return res.status(400).json({ message: 'TÃ i khoáº£n nÃ y Ä‘Ã£ Ä‘Æ°á»£c liÃªn káº¿t vá»›i má»™t ngÆ°á»i dÃ¹ng khÃ¡c' });
     }
 
     const linkedAccounts = req.user.linkedAccounts || {};
@@ -356,9 +356,9 @@ router.post('/link-account', auth, async (req, res) => {
 
     await User.update(req.user.id, { linkedAccounts });
 
-    res.json({ message: `Đã liên kết tài khoản ${provider} thành công!`, linkedAccounts });
+    res.json({ message: `ÄÃ£ liÃªn káº¿t tÃ i khoáº£n ${provider} thÃ nh cÃ´ng!`, linkedAccounts });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi liên kết tài khoản', error: err.message });
+    res.status(500).json({ message: 'Lá»—i liÃªn káº¿t tÃ i khoáº£n', error: err.message });
   }
 });
 
@@ -408,7 +408,7 @@ router.post('/progress', auth, async (req, res) => {
       todayLessonCompleted: updatedUser.todayLessonCompleted
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi cập nhật tiến độ', error: err.message });
+    res.status(500).json({ message: 'Lá»—i cáº­p nháº­t tiáº¿n Ä‘á»™', error: err.message });
   }
 });
 
@@ -417,12 +417,12 @@ router.post('/activities', auth, async (req, res) => {
   try {
     const { action_type, description, metadata } = req.body;
     const { error } = await supabase
-      .from('user_activities')
+      .from('hoat_dong_nguoi_dung')
       .insert([{
-        user_id: req.user.id,
-        action_type,
-        description,
-        metadata
+        nguoi_dung_id: req.user.id,
+        loai_hanh_dong: action_type,
+        mo_ta: description,
+        thong_tin_bo_sung: metadata
       }]);
     
     if (error) throw error;
@@ -435,14 +435,22 @@ router.post('/activities', auth, async (req, res) => {
 router.get('/activities', auth, async (req, res) => {
   try {
     const { data, error } = await supabase
-      .from('user_activities')
+      .from('hoat_dong_nguoi_dung')
       .select('*')
-      .eq('user_id', req.user.id)
+      .eq('nguoi_dung_id', req.user.id)
       .order('created_at', { ascending: false })
       .limit(50);
       
     if (error) throw error;
-    res.json(data);
+    res.json((data || []).map((activity) => ({
+      ...activity,
+      action_type: activity.loai_hanh_dong ?? activity.action_type,
+      description: activity.mo_ta ?? activity.description,
+      metadata: activity.thong_tin_bo_sung ?? activity.metadata,
+      loai_hanh_dong: undefined,
+      mo_ta: undefined,
+      thong_tin_bo_sung: undefined
+    })));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -451,9 +459,9 @@ router.get('/activities', auth, async (req, res) => {
 router.delete('/activities', auth, async (req, res) => {
   try {
     const { error } = await supabase
-      .from('user_activities')
+      .from('hoat_dong_nguoi_dung')
       .delete()
-      .eq('user_id', req.user.id);
+      .eq('nguoi_dung_id', req.user.id);
       
     if (error) throw error;
     res.json({ success: true });
@@ -525,7 +533,7 @@ router.post('/streak/recover', auth, async (req, res) => {
     const cost = 100 + (streakToRestore * 20);
     
     if (currentXP < cost) {
-      return res.status(200).json({ success: false, message: `Bạn cần ${cost} XP để khôi phục chuỗi ${streakToRestore} ngày. Hiện tại bạn chỉ có ${currentXP} XP.` });
+      return res.status(200).json({ success: false, message: `Báº¡n cáº§n ${cost} XP Ä‘á»ƒ khÃ´i phá»¥c chuá»—i ${streakToRestore} ngÃ y. Hiá»‡n táº¡i báº¡n chá»‰ cÃ³ ${currentXP} XP.` });
     }
 
     const updatedUser = await User.update(req.user.id, {
@@ -535,12 +543,12 @@ router.post('/streak/recover', auth, async (req, res) => {
     });
 
     res.json({
-      message: 'Khôi phục chuỗi thành công!',
+      message: 'KhÃ´i phá»¥c chuá»—i thÃ nh cÃ´ng!',
       streakCount: updatedUser.streakCount,
       xp: updatedUser.xp
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi khôi phục chuỗi', error: err.message });
+    res.status(500).json({ message: 'Lá»—i khÃ´i phá»¥c chuá»—i', error: err.message });
   }
 });
 
@@ -553,11 +561,11 @@ router.post('/streak/reset', auth, async (req, res) => {
     });
 
     res.json({
-      message: 'Đã thiết lập lại chuỗi!',
+      message: 'ÄÃ£ thiáº¿t láº­p láº¡i chuá»—i!',
       streakCount: updatedUser.streakCount
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi thiết lập lại chuỗi', error: err.message });
+    res.status(500).json({ message: 'Lá»—i thiáº¿t láº­p láº¡i chuá»—i', error: err.message });
   }
 });
 
@@ -574,8 +582,8 @@ router.get('/cron-send-reminders', async (req, res) => {
     console.log('[Cron Reminders] Starting reminder check...');
 
     const { data: students, error } = await supabase
-      .from('users')
-      .select('id, username, email, study_plan, today_lesson_completed, streak_count')
+      .from('nguoi_dung')
+      .select('id, username, email, ke_hoach_hoc, da_hoan_thanh_bai_hom_nay, so_ngay_chuoi')
       .eq('role', 'student');
 
     if (error) {
@@ -599,7 +607,7 @@ router.get('/cron-send-reminders', async (req, res) => {
     console.log(`[Cron Reminders] Current Vietnam Time: ${todayKey} ${currentHHMM}`);
 
     for (const student of (students || [])) {
-      const plan = normalizeStudyPlan(student.study_plan);
+      const plan = normalizeStudyPlan(student.ke_hoach_hoc);
       let updatedPlan = { ...plan };
       let hasPlanUpdate = false;
 
@@ -619,12 +627,12 @@ router.get('/cron-send-reminders', async (req, res) => {
         continue;
       }
 
-      if (student.today_lesson_completed) {
+      if (student.da_hoan_thanh_bai_hom_nay) {
         skipped.completed += 1;
         continue;
       }
 
-      // Mặc định thời gian nhắc nhở là 12am (00:00) -> 0 phút của ngày
+      // Máº·c Ä‘á»‹nh thá»i gian nháº¯c nhá»Ÿ lÃ  12am (00:00) -> 0 phÃºt cá»§a ngÃ y
       const scheduledMinute = 0;
 
       const checkAt = new Date();
@@ -649,7 +657,7 @@ router.get('/cron-send-reminders', async (req, res) => {
             ? Math.max(0, sendAttemptMinute - scheduledMinute)
             : lateMinutes;
           const hourOffset = Math.max(0, Math.floor(lateMinutesAtSend / 60));
-          const streakCount = student.streak_count || 0;
+          const streakCount = student.so_ngay_chuoi || 0;
 
           let sendResult;
           if (streakCount > 0) {
@@ -709,4 +717,5 @@ router.get('/cron-send-reminders', async (req, res) => {
   }
 });
 export default router;
+
 

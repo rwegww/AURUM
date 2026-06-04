@@ -12,7 +12,7 @@ const MaterialDetail = () => {
   const { t, i18n } = useTranslation();
   
   const [material, setMaterial] = useState(null);
-  const [feedback, setFeedback] = useState([]);
+  const [phan_hoi, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const [rating, setRating] = useState(5);
@@ -38,7 +38,7 @@ const MaterialDetail = () => {
         setMaterial(matData);
         setFeedback(Array.isArray(feedData) ? feedData : []);
       } catch (err) {
-        console.error(t('material_detail.feedback.err_fetch'), err);
+        console.error(t('material_detail.phan_hoi.err_fetch'), err);
       } finally {
         setLoading(false);
       }
@@ -48,7 +48,7 @@ const MaterialDetail = () => {
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
-    if (!isLoggedIn) return alert(t('material_detail.feedback.alert_login'));
+    if (!isLoggedIn) return alert(t('material_detail.phan_hoi.alert_login'));
     if (!newComment.trim()) return;
 
     setSubmitting(true);
@@ -65,11 +65,11 @@ const MaterialDetail = () => {
 
       if (res.ok) {
         const added = await res.json();
-        setFeedback([{ ...added, users: { username: user.username } }, ...feedback]);
+        setFeedback([{ ...added, nguoi_dung: { username: user.username } }, ...phan_hoi]);
         setNewComment('');
       }
     } catch (err) {
-      console.error(t('material_detail.feedback.err_submit'), err);
+      console.error(t('material_detail.phan_hoi.err_submit'), err);
     } finally {
       setSubmitting(false);
     }
@@ -97,7 +97,7 @@ const MaterialDetail = () => {
         setReplyContent('');
       }
     } catch (err) {
-      console.error(t('material_detail.feedback.err_submit'), err);
+      console.error(t('material_detail.phan_hoi.err_submit'), err);
     }
   };
 
@@ -201,8 +201,8 @@ const MaterialDetail = () => {
                className="bg-white rounded-[40px] border-2 border-viet-border p-8"
             >
               <h3 className="text-2xl font-black text-viet-text uppercase italic mb-8 flex items-center gap-3">
-                {t('material_detail.feedback.title_main')} <span className="text-viet-green">{t('material_detail.feedback.title_highlight')}</span>
-                <span className="text-sm font-bold text-viet-text-light not-italic">({Array.isArray(feedback) ? feedback.length : 0})</span>
+                {t('material_detail.phan_hoi.title_main')} <span className="text-viet-green">{t('material_detail.phan_hoi.title_highlight')}</span>
+                <span className="text-sm font-bold text-viet-text-light not-italic">({Array.isArray(phan_hoi) ? phan_hoi.length : 0})</span>
               </h3>
 
               {isLoggedIn ? (
@@ -213,35 +213,35 @@ const MaterialDetail = () => {
                         key={star} 
                         type="button" 
                         onClick={() => setRating(star)}
-                        className={`text-2xl transition-all ${rating >= star ? 'scale-110 grayscale-0' : 'grayscale opacity-30 scale-90'}`}
+                        className={`text-2xl transition-all ${rating >= star ? 'text-yellow-400 scale-110 grayscale-0' : 'text-gray-300 grayscale opacity-50 scale-90 hover:scale-100 hover:text-yellow-400'}`}
                       >
                         <Star size={26} fill={rating >= star ? 'currentColor' : 'none'} aria-hidden="true" />
                       </button>
                     ))}
                   </div>
                   <textarea 
-                    placeholder={t('material_detail.feedback.placeholder')}
+                    placeholder={t('material_detail.phan_hoi.placeholder')}
                     className="w-full bg-viet-bg border-2 border-viet-border rounded-3xl p-6 min-h-[120px] outline-none focus:border-viet-green transition-all font-medium text-viet-text"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                   />
                   <button 
                     disabled={submitting || !newComment.trim()}
-                    className="bg-viet-text text-white px-10 py-4 rounded-2xl font-black uppercase text-sm disabled:opacity-50 hover:bg-viet-green transition-colors"
+                    className="bg-viet-green text-white px-10 py-4 rounded-2xl font-black uppercase text-sm shadow-lg shadow-viet-green/20 hover:scale-105 transition-all disabled:opacity-50 disabled:hover:scale-100"
                   >
-                    {submitting ? t('material_detail.feedback.submitting_btn') : t('material_detail.feedback.submit_btn')}
+                    {submitting ? t('material_detail.phan_hoi.submitting_btn') : t('material_detail.phan_hoi.submit_btn')}
                   </button>
                 </form>
               ) : (
                 <div className="bg-viet-bg rounded-3xl p-8 text-center mb-12">
-                   <p className="text-viet-text-light font-bold mb-4 text-sm">{t('material_detail.feedback.login_required')}</p>
-                   <Link to="/login" className="text-viet-green font-black uppercase text-xs border-b-2 border-viet-green pb-1 hover:text-viet-text hover:border-viet-text transition-all">{t('material_detail.feedback.login_link')}</Link>
+                   <p className="text-viet-text-light font-bold mb-4 text-sm">{t('material_detail.phan_hoi.login_required')}</p>
+                   <Link to="/login" className="text-viet-green font-black uppercase text-xs border-b-2 border-viet-green pb-1 hover:text-viet-text hover:border-viet-text transition-all">{t('material_detail.phan_hoi.login_link')}</Link>
                 </div>
               )}
 
               <div className="space-y-6">
                 <AnimatePresence>
-                  {Array.isArray(feedback) && feedback.map((f) => (
+                  {Array.isArray(phan_hoi) && phan_hoi.map((f) => (
                     <motion.div 
                       key={f.id}
                       initial={{ opacity: 0, y: 10 }}
@@ -251,10 +251,10 @@ const MaterialDetail = () => {
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-viet-green/10 flex items-center justify-center font-black text-viet-green text-sm uppercase">
-                            {(f.users?.username || t('material_detail.feedback.default_user')).charAt(0)}
+                            {(f.nguoi_dung?.username || t('material_detail.phan_hoi.default_user')).charAt(0)}
                           </div>
                           <div>
-                            <p className="font-black text-viet-text text-sm uppercase leading-none">{f.users?.username || t('material_detail.feedback.default_user')}</p>
+                            <p className="font-black text-viet-text text-sm uppercase leading-none">{f.nguoi_dung?.username || t('material_detail.phan_hoi.default_user')}</p>
                             <p className="text-[10px] font-bold text-viet-text-light mt-1">
                               {formatDate(f.created_at)}
                             </p>
@@ -309,8 +309,8 @@ const MaterialDetail = () => {
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                {(!Array.isArray(feedback) || feedback.length === 0) && (
-                  <p className="text-center py-10 text-viet-text-light/50 font-bold text-xs uppercase tracking-widest italic">{t('material_detail.feedback.no_feedback')}</p>
+                {(!Array.isArray(phan_hoi) || phan_hoi.length === 0) && (
+                  <p className="text-center py-10 text-viet-text-light/50 font-bold text-xs uppercase tracking-widest italic">{t('material_detail.phan_hoi.no_phan_hoi')}</p>
                 )}
               </div>
             </motion.section>
@@ -321,26 +321,26 @@ const MaterialDetail = () => {
             <motion.div 
                initial={{ opacity: 0, x: 20 }}
                animate={{ opacity: 1, x: 0 }}
-               className="bg-viet-text text-white rounded-[40px] p-8"
+               className="bg-white text-viet-text border-2 border-viet-border rounded-[40px] p-8 shadow-sm"
             >
                <h4 className="text-xs font-black uppercase tracking-widest text-viet-green mb-6">{t('material_detail.sidebar.file_info')}</h4>
                <ul className="space-y-4">
-                  <li className="flex justify-between border-b border-white/10 pb-4">
-                    <span className="text-[10px] font-bold uppercase opacity-60">{t('material_detail.sidebar.format')}</span>
+                  <li className="flex justify-between border-b border-viet-border/50 pb-4">
+                    <span className="text-[10px] font-bold uppercase text-viet-text-light">{t('material_detail.sidebar.format')}</span>
                     <span className="font-black uppercase text-xs">{material.file_type}</span>
                   </li>
-                  <li className="flex justify-between border-b border-white/10 pb-4">
-                    <span className="text-[10px] font-bold uppercase opacity-60">{t('material_detail.sidebar.posted_date')}</span>
+                  <li className="flex justify-between border-b border-viet-border/50 pb-4">
+                    <span className="text-[10px] font-bold uppercase text-viet-text-light">{t('material_detail.sidebar.posted_date')}</span>
                     <span className="font-black text-xs">{formatDate(material.created_at)}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span className="text-[10px] font-bold uppercase opacity-60">{t('material_detail.sidebar.size')}</span>
+                    <span className="text-[10px] font-bold uppercase text-viet-text-light">{t('material_detail.sidebar.size')}</span>
                     <span className="font-black text-xs">FREE</span>
                   </li>
                </ul>
 
-               <div className="mt-12 bg-white/5 rounded-3xl p-6 border border-white/10">
-                  <p className="text-[10px] font-bold leading-relaxed opacity-70 italic">
+               <div className="mt-12 bg-viet-bg rounded-3xl p-6 border border-viet-border/50">
+                  <p className="text-[10px] font-bold leading-relaxed text-viet-text-light italic">
                      "{t('material_detail.sidebar.disclaimer')}"
                   </p>
                </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -43,9 +43,9 @@ const Login = () => {
           else if (result.user?.role === 'teacher') navigate('/teacher');
           else navigate('/');
         } else {
-          setError(result.message || 'Link đăng nhập tự động không hợp lệ');
+          setError(result.message || 'Link Ä‘Äƒng nháº­p tá»± Ä‘á»™ng khÃ´ng há»£p lá»‡');
           setLoading(false);
-          // Xóa token khỏi url
+          // XÃ³a token khá»i url
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       });
@@ -83,7 +83,7 @@ const Login = () => {
         navigate('/');
       }
     } else {
-      setError(result.message || 'Sai email hoặc mật khẩu');
+      setError(result.message || 'Sai email hoáº·c máº­t kháº©u');
       setLoading(false);
     }
   };
@@ -110,7 +110,7 @@ const Login = () => {
       <AuthLayout>
         <div className="flex flex-col items-center justify-center min-h-[400px]">
           <div className="w-12 h-12 border-4 border-viet-green/30 border-t-viet-green rounded-full animate-spin mb-4"></div>
-          <p className="text-slate-500 font-medium animate-pulse">Đang xác thực thông tin...</p>
+          <p className="text-slate-500 font-medium animate-pulse">Äang xÃ¡c thá»±c thÃ´ng tin...</p>
         </div>
       </AuthLayout>
     );
@@ -127,14 +127,14 @@ const Login = () => {
         <header className="mb-8 text-center md:text-left md:mb-3">
            <div className="hidden md:flex items-center gap-2 mb-1 md:mb-2">
               <span className="text-[8px] md:text-[9px] font-black text-viet-green bg-viet-green/5 border border-viet-green/20 px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest">
-                Đã sẵn sàng học tập?
+                ÄÃ£ sáºµn sÃ ng há»c táº­p?
               </span>
            </div>
            <h2 className="text-[28px] md:text-[22px] font-bold md:font-black text-slate-800 md:text-viet-text tracking-tight md:uppercase font-sora md:italic">
-             Đăng nhập
+             ÄÄƒng nháº­p
            </h2>
            <p className="text-[14px] md:text-[12px] font-medium md:font-bold text-slate-500 md:text-viet-text-light mt-2 md:mt-1.5 tracking-tight leading-relaxed">
-             Chào mừng bạn quay trở lại! 👋
+             ChÃ o má»«ng báº¡n quay trá»Ÿ láº¡i! ðŸ‘‹
            </p>
         </header>
 
@@ -146,7 +146,7 @@ const Login = () => {
             animate={{ opacity: 1, height: 'auto' }}
             className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase ring-1 ring-red-100 flex items-center gap-2 shadow-sm"
           >
-             <span className="text-base">🚨</span> {displayError}
+             <span className="text-base">ðŸš¨</span> {displayError}
           </motion.div>
         )}
 
@@ -163,7 +163,7 @@ const Login = () => {
                   type="email" 
                   required
                   className="w-full h-12 md:h-11 pl-12 pr-6 rounded-xl md:rounded-2xl bg-[#fdf0e0] md:bg-slate-50 border border-[#f3e3d0] md:border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[15px] md:text-[14px] font-medium md:font-bold text-slate-800 md:text-viet-text placeholder:text-slate-400/50"
-                  placeholder="Nhập địa chỉ email"
+                  placeholder="Nháº­p Ä‘á»‹a chá»‰ email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -171,7 +171,7 @@ const Login = () => {
            </div>
 
            <div className="space-y-2 md:space-y-1.5">
-              <label className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Mật khẩu</label>
+              <label className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Máº­t kháº©u</label>
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-viet-green transition-colors">
                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,7 +182,7 @@ const Login = () => {
                   type={showPassword ? "text" : "password"} 
                   required
                   className="w-full h-12 md:h-11 pl-12 pr-12 rounded-xl md:rounded-2xl bg-[#fdf0e0] md:bg-slate-50 border border-[#f3e3d0] md:border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[15px] md:text-[14px] font-medium md:font-bold text-slate-800 md:text-viet-text placeholder:text-slate-400/50"
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -219,9 +219,9 @@ const Login = () => {
                        {rememberMe && <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                     </div>
                   </div>
-                  <span className="text-[13px] md:text-[10px] font-medium md:font-black text-slate-600 md:text-viet-text-light md:uppercase md:tracking-widest">Ghi nhớ đăng nhập</span>
+                  <span className="text-[13px] md:text-[10px] font-medium md:font-black text-slate-600 md:text-viet-text-light md:uppercase md:tracking-widest">Ghi nhá»› Ä‘Äƒng nháº­p</span>
               </label>
-              <Link to="/" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">Quên mật khẩu?</Link>
+              <Link to="/" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">QuÃªn máº­t kháº©u?</Link>
            </div>
 
            <button 
@@ -229,13 +229,13 @@ const Login = () => {
              disabled={loading}
              className="w-full h-12 md:h-11 bg-viet-green text-white text-[15px] md:text-[11px] font-bold md:font-black md:uppercase md:tracking-[2px] rounded-xl md:rounded-2xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 flex items-center justify-center gap-2 mt-2"
            >
-             {loading ? 'Đang xác thực...' : 'Đăng nhập'}
+             {loading ? 'Äang xÃ¡c thá»±c...' : 'ÄÄƒng nháº­p'}
            </button>
         </form>
 
         <div className="relative my-6 md:my-2.5 text-center">
            <div className="absolute inset-0 top-1/2 h-[1px] bg-slate-200" />
-           <span className="relative z-10 bg-white px-4 text-[13px] md:text-[9px] font-medium md:font-black text-slate-400 md:text-viet-text-light/40 md:uppercase md:tracking-[3px]">Hoặc đăng nhập bằng</span>
+           <span className="relative z-10 bg-white px-4 text-[13px] md:text-[9px] font-medium md:font-black text-slate-400 md:text-viet-text-light/40 md:uppercase md:tracking-[3px]">Hoáº·c Ä‘Äƒng nháº­p báº±ng</span>
         </div>
 
         <div className="flex flex-col gap-3 mb-6 md:mb-3">
@@ -253,9 +253,9 @@ const Login = () => {
 
 
         <div className="text-center text-[14px]">
-           <span className="text-slate-500 font-medium">Chưa có tài khoản? </span>
+           <span className="text-slate-500 font-medium">ChÆ°a cÃ³ tÃ i khoáº£n? </span>
            <Link to="/register" className="text-viet-green hover:underline font-bold">
-             Đăng ký ngay
+             ÄÄƒng kÃ½ ngay
            </Link>
         </div>
 
@@ -265,3 +265,4 @@ const Login = () => {
 };
 
 export default Login;
+

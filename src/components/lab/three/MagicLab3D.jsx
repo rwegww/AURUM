@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
+﻿import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import LabScene from './magic-lab/LabScene';
 import useLabStore from './magic-lab/store';
@@ -11,8 +11,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const normalize = (f) => {
   if (!f) return "";
-  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
-  return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
+  const subMap = { 'â‚€': '0', 'â‚': '1', 'â‚‚': '2', 'â‚ƒ': '3', 'â‚„': '4', 'â‚…': '5', 'â‚†': '6', 'â‚‡': '7', 'â‚ˆ': '8', 'â‚‰': '9' };
+  return f.toString().replace(/[â‚€â‚â‚‚â‚ƒâ‚„â‚…â‚†â‚‡â‚ˆâ‚‰]/g, (m) => subMap[m]).trim().toUpperCase();
 };
 
 const MagicLab3D = () => {
@@ -201,7 +201,7 @@ const MagicLab3D = () => {
   }, [dropToBeaker, playSound]);
 
   useEffect(() => {
-    const isDefaultMessage = activeBeaker.reactionMessage?.includes("Mời bắt đầu");
+    const isDefaultMessage = activeBeaker.reactionMessage?.includes("Má»i báº¯t Ä‘áº§u");
     if (activeBeaker.reactionMessage && !isDefaultMessage) {
       setIsMessageVisible(true);
       const timer = setTimeout(() => setIsMessageVisible(false), 5000);
@@ -226,7 +226,7 @@ const MagicLab3D = () => {
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] text-white rounded-3xl min-h-[600px]">
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mb-6" />
-      <h2 className="text-xl font-bold uppercase tracking-widest animate-pulse">Đang nạp dữ liệu Lab...</h2>
+      <h2 className="text-xl font-bold uppercase tracking-widest animate-pulse">Äang náº¡p dá»¯ liá»‡u Lab...</h2>
     </div>
   );
 
@@ -252,11 +252,11 @@ const MagicLab3D = () => {
         {newDiscovery && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-xl rounded-3xl">
              <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 text-center max-w-sm shadow-[0_0_50px_rgba(59,130,246,0.3)]">
-                <div className="text-5xl mb-6">✨</div>
-                <h2 className="text-2xl font-black text-white mb-2 uppercase italic">Phát hiện mới!</h2>
+                <div className="text-5xl mb-6">âœ¨</div>
+                <h2 className="text-2xl font-black text-white mb-2 uppercase italic">PhÃ¡t hiá»‡n má»›i!</h2>
                 <div className="text-4xl font-black text-blue-400 mb-2 drop-shadow-md">{newDiscovery.formula}</div>
                 <p className="text-white/60 mb-8 font-medium text-sm">{newDiscovery.name}</p>
-                <button onClick={() => setNewDiscovery(null)} className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl w-full font-bold uppercase tracking-widest transition-all">Tuyệt quá!</button>
+                <button onClick={() => setNewDiscovery(null)} className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl w-full font-bold uppercase tracking-widest transition-all">Tuyá»‡t quÃ¡!</button>
              </motion.div>
            </motion.div>
         )}
@@ -272,13 +272,13 @@ const MagicLab3D = () => {
               className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-              <span className="text-white/80 group-hover:text-white transition-colors">Sổ tay khám phá</span>
+              <span className="text-white/80 group-hover:text-white transition-colors">Sá»• tay khÃ¡m phÃ¡</span>
               <span className="ml-1 px-1.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-md text-[10px] font-black">{discoveredFormulas.length}</span>
             </button>
             <button 
               onClick={toggleFullscreen}
               className="w-12 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all text-blue-400 shadow-lg group"
-              title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
+              title={isFullscreen ? "ThoÃ¡t toÃ n mÃ n hÃ¬nh" : "ToÃ n mÃ n hÃ¬nh"}
             >
               {isFullscreen ? (
                 <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 3v5H3M21 8h-5V3M3 16h5v5M16 21v-5h5"/></svg>
@@ -289,7 +289,7 @@ const MagicLab3D = () => {
             <button 
               onClick={() => setShowLabSettings(true)}
               className="w-12 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all text-white/60 hover:text-white shadow-lg group"
-              title="Tùy chỉnh Lab"
+              title="TÃ¹y chá»‰nh Lab"
             >
                <svg className="w-5 h-5 group-hover:rotate-45 transition-transform duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
@@ -340,21 +340,21 @@ const MagicLab3D = () => {
                     ? 'bg-gradient-to-tr from-amber-600 to-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] border border-orange-400/30' 
                     : 'hover:bg-white/5 text-white/50 hover:text-white border border-transparent'
                 }`}
-                title="Đun nóng"
+                title="Äun nÃ³ng"
               >
                 <svg className={`w-5 h-5 ${activeBeaker.isHeating ? 'animate-bounce' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
               </button>
               <button 
                 onClick={handleClearBeaker}
                 className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-cyan-500/10 text-white/50 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all hover:scale-105 active:scale-95"
-                title="Làm mới cốc"
+                title="LÃ m má»›i cá»‘c"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               </button>
               <button 
                 onClick={addBeaker}
                 className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-emerald-500/10 text-white/50 hover:text-emerald-400 border border-transparent hover:border-emerald-500/20 transition-all hover:scale-105 active:scale-95"
-                title="Thêm cốc mới"
+                title="ThÃªm cá»‘c má»›i"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
               </button>
@@ -369,7 +369,7 @@ const MagicLab3D = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Tìm hóa chất..."
+                  placeholder="TÃ¬m hÃ³a cháº¥t..."
                   className="w-full bg-slate-950/40 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all placeholder:text-white/30"
                />
             </div>
@@ -473,7 +473,7 @@ const MagicLab3D = () => {
                   
                   {/* Heating Indicator badge */}
                   {b.isHeating && (
-                    <div className="absolute top-1 left-1 w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse shadow-[0_0_8px_#f97316] z-10" title="Đang đun nóng" />
+                    <div className="absolute top-1 left-1 w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse shadow-[0_0_8px_#f97316] z-10" title="Äang Ä‘un nÃ³ng" />
                   )}
 
                   <div className="w-8 h-10 relative overflow-hidden mb-1 flex items-end justify-center">
@@ -507,7 +507,7 @@ const MagicLab3D = () => {
                   <button 
                     onClick={(e) => { e.stopPropagation(); removeBeaker(idx); }}
                     className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform hover:scale-110 shadow-md"
-                    title="Xóa cốc"
+                    title="XÃ³a cá»‘c"
                   >
                     <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
                   </button>
@@ -530,7 +530,7 @@ const MagicLab3D = () => {
                className="relative bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-[32px] p-8 w-full max-w-md shadow-2xl"
              >
                 <div className="flex justify-between items-center mb-8">
-                  <h2 className="text-xl font-black uppercase italic">Tùy chỉnh Lab</h2>
+                  <h2 className="text-xl font-black uppercase italic">TÃ¹y chá»‰nh Lab</h2>
                   <button onClick={() => setShowLabSettings(false)} className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 transition-colors"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
                 </div>
 
@@ -540,7 +540,7 @@ const MagicLab3D = () => {
                   <div className="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div className="flex items-center gap-3">
                       {soundEnabled ? <svg className="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg> : <svg className="w-5 h-5 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>}
-                      <span className="text-sm font-bold">Hiệu ứng âm thanh</span>
+                      <span className="text-sm font-bold">Hiá»‡u á»©ng Ã¢m thanh</span>
                     </div>
                     <button 
                       onClick={toggleLabSound}
@@ -585,3 +585,4 @@ const MagicLab3D = () => {
 };
 
 export default MagicLab3D;
+

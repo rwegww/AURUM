@@ -92,11 +92,11 @@ const challenges = [
 
 async function updateChallenges() {
   try {
-    const lessons = await Lesson.find({ classId: 8 });
-    console.log(`Found ${lessons.length} grade 8 lessons.`);
+    const bai_hoc = await Lesson.find({ classId: 8 });
+    console.log(`Found ${bai_hoc.length} grade 8 bai_hoc.`);
 
-    for (let i = 0; i < Math.min(lessons.length, challenges.length); i += 1) {
-      const lesson = lessons[i];
+    for (let i = 0; i < Math.min(bai_hoc.length, challenges.length); i += 1) {
+      const lesson = bai_hoc[i];
       await Lesson.update(lesson.lessonId || lesson.id, {
         ...lesson,
         challenges: [challenges[i]]

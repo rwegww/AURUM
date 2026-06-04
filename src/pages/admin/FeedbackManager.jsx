@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 const FeedbackManager = () => {
-  const [feedbacks, setFeedbacks] = useState([]);
+  const [phan_hois, setFeedbacks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('feedbacks');
+  const [activeTab, setActiveTab] = useState('phan_hois');
 
   const fetchFeedbacks = async () => {
     try {
@@ -16,7 +16,7 @@ const FeedbackManager = () => {
       const data = await res.json();
       setFeedbacks(data);
     } catch (err) {
-      console.error('Lỗi tải phản hồi:', err);
+      console.error('Lá»—i táº£i pháº£n há»“i:', err);
     } finally {
       setLoading(false);
     }
@@ -37,7 +37,7 @@ const FeedbackManager = () => {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'resolved' } : f));
       }
     } catch (err) {
-      console.error('Lỗi cập nhật phản hồi:', err);
+      console.error('Lá»—i cáº­p nháº­t pháº£n há»“i:', err);
     }
   };
 
@@ -52,12 +52,12 @@ const FeedbackManager = () => {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, isApproved: true } : f));
       }
     } catch (err) {
-      console.error('Lỗi duyệt phản hồi:', err);
+      console.error('Lá»—i duyá»‡t pháº£n há»“i:', err);
     }
   };
 
   const handleTeacherApprove = async (id) => {
-    if (!window.confirm('Bạn có chắc chắn duyệt yêu cầu này?')) return;
+    if (!window.confirm('Báº¡n cÃ³ cháº¯c cháº¯n duyá»‡t yÃªu cáº§u nÃ y?')) return;
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/admin/teacher-requests/${id}/approve`, {
@@ -68,7 +68,7 @@ const FeedbackManager = () => {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'resolved' } : f));
       } else {
         const data = await res.json();
-        alert(data.message || 'Lỗi duyệt');
+        alert(data.message || 'Lá»—i duyá»‡t');
       }
     } catch (err) {
       console.error(err);
@@ -76,7 +76,7 @@ const FeedbackManager = () => {
   };
 
   const handleTeacherReject = async (id) => {
-    if (!window.confirm('Bạn có chắc chắn từ chối yêu cầu này?')) return;
+    if (!window.confirm('Báº¡n cÃ³ cháº¯c cháº¯n tá»« chá»‘i yÃªu cáº§u nÃ y?')) return;
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/admin/teacher-requests/${id}/reject`, {
@@ -87,7 +87,7 @@ const FeedbackManager = () => {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'rejected' } : f));
       } else {
         const data = await res.json();
-        alert(data.message || 'Lỗi từ chối');
+        alert(data.message || 'Lá»—i tá»« chá»‘i');
       }
     } catch (err) {
       console.error(err);
@@ -107,26 +107,26 @@ const FeedbackManager = () => {
     <div className="p-8 pb-12">
       <div className="max-w-6xl mx-auto">
         <header className="mb-12">
-          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
-          <h1 className="text-3xl font-bold text-viet-text tracking-tight">Hòm thư <span className="text-viet-green">Góp ý</span></h1>
-          <p className="text-viet-text-light mt-1 font-medium italic">Lắng nghe ý kiến của học sinh để cải thiện hệ thống.</p>
+          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">â† Quay láº¡i Báº£ng Ä‘iá»u khiá»ƒn</Link>
+          <h1 className="text-3xl font-bold text-viet-text tracking-tight">HÃ²m thÆ° <span className="text-viet-green">GÃ³p Ã½</span></h1>
+          <p className="text-viet-text-light mt-1 font-medium italic">Láº¯ng nghe Ã½ kiáº¿n cá»§a há»c sinh Ä‘á»ƒ cáº£i thiá»‡n há»‡ thá»‘ng.</p>
         </header>
 
         <div className="flex gap-4 mb-8">
           <button 
-            onClick={() => setActiveTab('feedbacks')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'feedbacks' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+            onClick={() => setActiveTab('phan_hois')}
+            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'phan_hois' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
           >
-            Phản hồi & Báo lỗi
+            Pháº£n há»“i & BÃ¡o lá»—i
           </button>
           <button 
             onClick={() => setActiveTab('teachers')}
             className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'teachers' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'} flex items-center gap-2`}
           >
-            Duyệt Giáo viên
-            {feedbacks.filter(f => f.type === 'teacher_registration' && f.status === 'unread').length > 0 && (
+            Duyá»‡t GiÃ¡o viÃªn
+            {phan_hois.filter(f => f.type === 'teacher_registration' && f.status === 'unread').length > 0 && (
               <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px]">
-                {feedbacks.filter(f => f.type === 'teacher_registration' && f.status === 'unread').length}
+                {phan_hois.filter(f => f.type === 'teacher_registration' && f.status === 'unread').length}
               </span>
             )}
           </button>
@@ -138,13 +138,13 @@ const FeedbackManager = () => {
            </div>
         ) : (
           <div className="space-y-6">
-            {feedbacks.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').length === 0 ? (
+            {phan_hois.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').length === 0 ? (
                <div className="bg-white rounded-[32px] border border-viet-border p-24 text-center">
-                  <span className="text-4xl mb-4 block">{activeTab === 'teachers' ? '🎓' : '📫'}</span>
-                  <p className="text-viet-text-light font-bold">{activeTab === 'teachers' ? 'Không có yêu cầu duyệt nào' : 'Hòm thư hiện đang trống'}</p>
+                  <span className="text-4xl mb-4 block">{activeTab === 'teachers' ? 'ðŸŽ“' : 'ðŸ“«'}</span>
+                  <p className="text-viet-text-light font-bold">{activeTab === 'teachers' ? 'KhÃ´ng cÃ³ yÃªu cáº§u duyá»‡t nÃ o' : 'HÃ²m thÆ° hiá»‡n Ä‘ang trá»‘ng'}</p>
                </div>
             ) : (
-              feedbacks.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').map((f, i) => (
+              phan_hois.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').map((f, i) => (
                 <motion.div
                   key={f.id}
                   initial={{ opacity: 0, y: 20 }}
@@ -160,22 +160,22 @@ const FeedbackManager = () => {
                           {f.username?.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-viet-text">{f.username === 'Anonymous' ? 'Ẩn danh' : f.username}</p>
+                          <p className="text-sm font-bold text-viet-text">{f.username === 'Anonymous' ? 'áº¨n danh' : f.username}</p>
                           <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">{new Date(f.createdAt).toLocaleString('vi-VN')}</p>
                         </div>
                      </div>
                       <div className="flex items-center gap-3">
                         <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider ring-1 ${getTypeStyle(f.type)}`}>
-                           {f.type === 'suggestion' ? 'Góp ý' : f.type === 'bug' ? 'Báo lỗi' : f.type === 'praise' ? 'Khen ngợi' : f.type === 'teacher_registration' ? 'Yêu cầu GV' : f.type}
+                           {f.type === 'suggestion' ? 'GÃ³p Ã½' : f.type === 'bug' ? 'BÃ¡o lá»—i' : f.type === 'praise' ? 'Khen ngá»£i' : f.type === 'teacher_registration' ? 'YÃªu cáº§u GV' : f.type}
                         </span>
                         {f.type !== 'teacher_registration' && (
                           f.status === 'unread' ? (
                              <button 
                                onClick={() => handleResolve(f.id)}
                                className="px-4 py-1.5 bg-viet-green text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
-                             >Hoàn thành</button>
+                             >HoÃ n thÃ nh</button>
                           ) : (
-                             <span className="px-2.5 py-1 bg-gray-100 text-gray-400 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ XỬ LÝ</span>
+                             <span className="px-2.5 py-1 bg-gray-100 text-gray-400 text-[10px] font-black italic rounded-lg tracking-wider">ÄÃƒ Xá»¬ LÃ</span>
                           )
                         )}
                         {f.type === 'teacher_registration' && (
@@ -184,16 +184,16 @@ const FeedbackManager = () => {
                               <button 
                                 onClick={() => handleTeacherApprove(f.id)}
                                 className="px-4 py-1.5 bg-green-500 text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
-                              >Duyệt</button>
+                              >Duyá»‡t</button>
                               <button 
                                 onClick={() => handleTeacherReject(f.id)}
                                 className="px-4 py-1.5 bg-red-500 text-white text-[10px] font-black rounded-lg uppercase tracking-tight hover:scale-105 transition-all"
-                              >Từ chối</button>
+                              >Tá»« chá»‘i</button>
                             </div>
                           ) : f.status === 'resolved' ? (
-                             <span className="px-2.5 py-1 bg-green-100 text-green-600 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ DUYỆT</span>
+                             <span className="px-2.5 py-1 bg-green-100 text-green-600 text-[10px] font-black italic rounded-lg tracking-wider">ÄÃƒ DUYá»†T</span>
                           ) : (
-                             <span className="px-2.5 py-1 bg-red-100 text-red-600 text-[10px] font-black italic rounded-lg tracking-wider">ĐÃ TỪ CHỐI</span>
+                             <span className="px-2.5 py-1 bg-red-100 text-red-600 text-[10px] font-black italic rounded-lg tracking-wider">ÄÃƒ Tá»ª CHá»I</span>
                           )
                         )}
                      </div>
@@ -201,9 +201,9 @@ const FeedbackManager = () => {
                   <div className="pl-[52px]">
                      {f.type === 'teacher_registration' ? (
                        <div className="bg-viet-bg/30 p-6 rounded-2xl border border-viet-green/5 mb-4">
-                         <h4 className="text-sm font-bold mb-2">Thông tin đăng ký:</h4>
+                         <h4 className="text-sm font-bold mb-2">ThÃ´ng tin Ä‘Äƒng kÃ½:</h4>
                          <ul className="text-sm space-y-1">
-                           <li><b>Tên đăng nhập:</b> {f.username}</li>
+                           <li><b>TÃªn Ä‘Äƒng nháº­p:</b> {f.username}</li>
                            <li><b>Email:</b> {JSON.parse(f.message).email || 'N/A'}</li>
                          </ul>
                        </div>
@@ -215,21 +215,21 @@ const FeedbackManager = () => {
                      
                      {f.imageUrl && (
                        <div className="mt-4">
-                         <img src={f.imageUrl} alt="Đính kèm báo lỗi" className="max-w-md w-full rounded-2xl border border-viet-border object-contain max-h-[300px]" />
+                         <img src={f.imageUrl} alt="ÄÃ­nh kÃ¨m bÃ¡o lá»—i" className="max-w-md w-full rounded-2xl border border-viet-border object-contain max-h-[300px]" />
                        </div>
                      )}
                      {f.type === 'praise' && (
                        <div className="mt-4 flex justify-end">
                          {f.isApproved ? (
                            <span className="px-3 py-1.5 bg-green-100 text-green-700 text-xs font-bold rounded-xl flex items-center gap-2">
-                             ✓ Đang hiển thị trang chủ
+                             âœ“ Äang hiá»ƒn thá»‹ trang chá»§
                            </span>
                          ) : (
                            <button 
                              onClick={() => handleApprove(f.id)}
                              className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition shadow-md"
                            >
-                             ⭐ Duyệt hiển thị trang chủ
+                             â­ Duyá»‡t hiá»ƒn thá»‹ trang chá»§
                            </button>
                          )}
                        </div>
@@ -246,3 +246,4 @@ const FeedbackManager = () => {
 };
 
 export default FeedbackManager;
+

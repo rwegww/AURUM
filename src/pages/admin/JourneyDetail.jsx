@@ -22,7 +22,7 @@ const JourneyDetail = () => {
       const res = await fetch(`/api/lessons/${lessonId}`);
       const data = await res.json();
       
-      // Khởi tạo cấu trúc 3 mức độ nếu chưa có hoặc là mảng phẳng
+      // Khá»Ÿi táº¡o cáº¥u trÃºc 3 má»©c Ä‘á»™ náº¿u chÆ°a cÃ³ hoáº·c lÃ  máº£ng pháº³ng
       if (!data.quizzes || Array.isArray(data.quizzes)) {
         const oldQuizzes = Array.isArray(data.quizzes) ? data.quizzes : [];
         data.quizzes = {
@@ -31,7 +31,7 @@ const JourneyDetail = () => {
           level3: oldQuizzes.filter(q => q.level === 'hard').slice(0, 10)
         };
         
-        // Đảm bảo các mảng tồn tại
+        // Äáº£m báº£o cÃ¡c máº£ng tá»“n táº¡i
         ['level1', 'level2', 'level3'].forEach(lvl => {
           if (!data.quizzes[lvl]) data.quizzes[lvl] = [];
         });
@@ -49,7 +49,7 @@ const JourneyDetail = () => {
 
       setLesson(data);
     } catch (err) {
-      console.error('Lỗi tải chi tiết bài học:', err);
+      console.error('Lá»—i táº£i chi tiáº¿t bÃ i há»c:', err);
     } finally {
       setLoading(false);
     }
@@ -73,12 +73,12 @@ const JourneyDetail = () => {
       });
       
       if (res.ok) {
-        alert('Đã cập nhật chi tiết hành trình thành công!');
+        alert('ÄÃ£ cáº­p nháº­t chi tiáº¿t hÃ nh trÃ¬nh thÃ nh cÃ´ng!');
       } else {
-        alert('Lỗi khi lưu dữ liệu.');
+        alert('Lá»—i khi lÆ°u dá»¯ liá»‡u.');
       }
     } catch (err) {
-      console.error('Lỗi lưu:', err);
+      console.error('Lá»—i lÆ°u:', err);
     } finally {
       setSaving(false);
     }
@@ -101,12 +101,12 @@ const JourneyDetail = () => {
             onClick={() => navigate('/admin/journey')}
             className="text-viet-green font-bold text-xs mb-2 flex items-center gap-1 hover:underline"
           >
-            <ChevronLeft size={14} /> Quay lại Quản lý hành trình
+            <ChevronLeft size={14} /> Quay láº¡i Quáº£n lÃ½ hÃ nh trÃ¬nh
           </button>
           <h1 className="text-3xl font-bold text-viet-text tracking-tight flex items-center gap-3">
-            Thiết kế <span className="text-viet-green">Chặng đường</span> <Zap className="text-viet-green" size={28} />
+            Thiáº¿t káº¿ <span className="text-viet-green">Cháº·ng Ä‘Æ°á»ng</span> <Zap className="text-viet-green" size={28} />
           </h1>
-          <p className="text-viet-text-light mt-1 font-medium italic">Tùy chỉnh video, câu hỏi và phần thưởng cho bài học: <span className="text-viet-green font-bold">{lesson.title}</span></p>
+          <p className="text-viet-text-light mt-1 font-medium italic">TÃ¹y chá»‰nh video, cÃ¢u há»i vÃ  pháº§n thÆ°á»Ÿng cho bÃ i há»c: <span className="text-viet-green font-bold">{lesson.title}</span></p>
         </div>
 
         <button 
@@ -115,7 +115,7 @@ const JourneyDetail = () => {
           className="flex items-center gap-2 px-8 py-3 bg-viet-green text-white rounded-2xl text-sm font-bold shadow-lg shadow-viet-green/20 hover:scale-105 transition-all disabled:opacity-50"
         >
           {saving ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save size={18} />}
-          Lưu toàn bộ thay đổi
+          LÆ°u toÃ n bá»™ thay Ä‘á»•i
         </button>
       </header>
 
@@ -125,9 +125,9 @@ const JourneyDetail = () => {
         {/* Sidebar Tabs */}
         <aside className="space-y-2">
           {[
-            { id: 'video', label: 'Video bài giảng', icon: BookOpen, color: 'text-amber-500', bg: 'bg-amber-50' },
-            { id: 'quiz', label: 'Câu hỏi trắc nghiệm', icon: ClipboardList, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-            { id: 'game', label: 'Thưởng & Tính điểm', icon: Gamepad2, color: 'text-rose-500', bg: 'bg-rose-50' },
+            { id: 'video', label: 'Video bÃ i giáº£ng', icon: BookOpen, color: 'text-amber-500', bg: 'bg-amber-50' },
+            { id: 'quiz', label: 'CÃ¢u há»i tráº¯c nghiá»‡m', icon: ClipboardList, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+            { id: 'game', label: 'ThÆ°á»Ÿng & TÃ­nh Ä‘iá»ƒm', icon: Gamepad2, color: 'text-rose-500', bg: 'bg-rose-50' },
           ].map(tab => (
             <button
               key={tab.id}
@@ -158,19 +158,19 @@ const JourneyDetail = () => {
               >
                 <div className="mb-8">
                    <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                     <BookOpen className="text-amber-500" /> Video bài giảng
+                     <BookOpen className="text-amber-500" /> Video bÃ i giáº£ng
                    </h3>
-                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cung cấp URL video từ Cloudinary để học sinh xem phần giới thiệu</p>
+                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cung cáº¥p URL video tá»« Cloudinary Ä‘á»ƒ há»c sinh xem pháº§n giá»›i thiá»‡u</p>
                 </div>
 
                 <div className="space-y-6">
                    <div className="p-6 rounded-2xl border border-slate-100 bg-slate-50/30 space-y-4">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Link video bài giảng (Cloudinary URL)</label>
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Link video bÃ i giáº£ng (Cloudinary URL)</label>
                       <input 
                         type="text" 
                         value={lesson.introVideoUrl || ''}
                         onChange={(e) => setLesson({...lesson, introVideoUrl: e.target.value})}
-                        placeholder="Dán link video .mp4 từ Cloudinary..."
+                        placeholder="DÃ¡n link video .mp4 tá»« Cloudinary..."
                         className="w-full bg-white px-4 py-3 rounded-xl border border-slate-200 text-sm font-mono focus:border-amber-400 outline-none"
                       />
                       {lesson.introVideoUrl && (
@@ -185,7 +185,7 @@ const JourneyDetail = () => {
                       {!lesson.introVideoUrl && (
                         <div className="aspect-video rounded-xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 gap-3">
                            <Layers size={48} className="opacity-20" />
-                           <p className="text-xs font-medium">Chưa có video được thiết lập</p>
+                           <p className="text-xs font-medium">ChÆ°a cÃ³ video Ä‘Æ°á»£c thiáº¿t láº­p</p>
                         </div>
                       )}
                    </div>
@@ -204,18 +204,18 @@ const JourneyDetail = () => {
                 <div className="flex items-center justify-between mb-8">
                    <div>
                       <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                        <ClipboardList className="text-emerald-500" /> Hệ thống Câu hỏi 3 Cấp độ
+                        <ClipboardList className="text-emerald-500" /> Há»‡ thá»‘ng CÃ¢u há»i 3 Cáº¥p Ä‘á»™
                       </h3>
-                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Mỗi chặng gồm 3 đoạn (Học - Hiểu - Ôn tập), mỗi đoạn 10 câu</p>
+                      <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Má»—i cháº·ng gá»“m 3 Ä‘oáº¡n (Há»c - Hiá»ƒu - Ã”n táº­p), má»—i Ä‘oáº¡n 10 cÃ¢u</p>
                    </div>
                 </div>
 
                 {/* Quiz Level Selector */}
                 <div className="flex p-1.5 bg-slate-100 rounded-2xl mb-8 gap-1">
                   {[
-                    { id: 'level1', label: 'Đoạn 1: Học (Dễ)', icon: '⭐' },
-                    { id: 'level2', label: 'Đoạn 2: Hiểu (Vừa)', icon: '⭐⭐' },
-                    { id: 'level3', label: 'Đoạn 3: Ôn tập (Khó)', icon: '⭐⭐⭐' },
+                    { id: 'level1', label: 'Äoáº¡n 1: Há»c (Dá»…)', icon: 'â­' },
+                    { id: 'level2', label: 'Äoáº¡n 2: Hiá»ƒu (Vá»«a)', icon: 'â­â­' },
+                    { id: 'level3', label: 'Äoáº¡n 3: Ã”n táº­p (KhÃ³)', icon: 'â­â­â­' },
                   ].map(lvl => (
                     <button
                       key={lvl.id}
@@ -234,7 +234,7 @@ const JourneyDetail = () => {
 
                 <div className="flex items-center justify-between mb-6">
                    <h4 className="text-sm font-bold text-slate-700">
-                     Danh sách câu hỏi ({lesson.quizzes[activeQuizLevel]?.length || 0}/10)
+                     Danh sÃ¡ch cÃ¢u há»i ({lesson.quizzes[activeQuizLevel]?.length || 0}/10)
                    </h4>
                    <button 
                      onClick={() => {
@@ -242,20 +242,20 @@ const JourneyDetail = () => {
                        if (!newQuizzes[activeQuizLevel]) newQuizzes[activeQuizLevel] = [];
                        
                        if (newQuizzes[activeQuizLevel].length >= 10) {
-                         alert('Mỗi đoạn tối đa 10 câu hỏi!');
+                         alert('Má»—i Ä‘oáº¡n tá»‘i Ä‘a 10 cÃ¢u há»i!');
                          return;
                        }
 
                        newQuizzes[activeQuizLevel].push({ 
-                         question: 'Câu hỏi mới...', 
-                         options: ['Đáp án A', 'Đáp án B', 'Đáp án C', 'Đáp án D'],
+                         question: 'CÃ¢u há»i má»›i...', 
+                         options: ['ÄÃ¡p Ã¡n A', 'ÄÃ¡p Ã¡n B', 'ÄÃ¡p Ã¡n C', 'ÄÃ¡p Ã¡n D'],
                          answer: 0
                        });
                        setLesson({...lesson, quizzes: newQuizzes});
                      }}
                      className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl text-xs font-bold hover:scale-105 transition-all"
                    >
-                     <Plus size={16} /> Thêm Câu hỏi
+                     <Plus size={16} /> ThÃªm CÃ¢u há»i
                    </button>
                 </div>
 
@@ -263,7 +263,7 @@ const JourneyDetail = () => {
                   {(lesson.quizzes[activeQuizLevel] || []).map((q, idx) => (
                     <div key={idx} className="p-6 rounded-[24px] border border-slate-100 bg-slate-50/50 space-y-4">
                        <div className="flex items-center justify-between">
-                         <span className="text-[11px] font-black text-emerald-600 uppercase">Câu hỏi {idx + 1}</span>
+                         <span className="text-[11px] font-black text-emerald-600 uppercase">CÃ¢u há»i {idx + 1}</span>
                          <button 
                            onClick={() => {
                              const newQuizzes = { ...lesson.quizzes };
@@ -318,7 +318,7 @@ const JourneyDetail = () => {
                   
                   {(!lesson.quizzes[activeQuizLevel] || lesson.quizzes[activeQuizLevel].length === 0) && (
                     <div className="text-center py-12 border-2 border-dashed border-slate-100 rounded-[24px] text-slate-400 font-medium italic">
-                      Chưa có câu hỏi nào cho mức độ này.
+                      ChÆ°a cÃ³ cÃ¢u há»i nÃ o cho má»©c Ä‘á»™ nÃ y.
                     </div>
                   )}
                 </div>
@@ -335,19 +335,19 @@ const JourneyDetail = () => {
               >
                 <div className="mb-8">
                    <h3 className="text-xl font-bold text-viet-text flex items-center gap-2">
-                     <Gamepad2 className="text-rose-500" /> Thưởng & Tính điểm
+                     <Gamepad2 className="text-rose-500" /> ThÆ°á»Ÿng & TÃ­nh Ä‘iá»ƒm
                    </h3>
-                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cấu hình XP và Đá Aurum mà học sinh nhận được khi hoàn thành chặng</p>
+                   <p className="text-xs text-viet-text-light font-medium mt-1 uppercase tracking-wider">Cáº¥u hÃ¬nh XP vÃ  ÄÃ¡ Aurum mÃ  há»c sinh nháº­n Ä‘Æ°á»£c khi hoÃ n thÃ nh cháº·ng</p>
                 </div>
 
                 <div className="space-y-8">
                    <div className="p-8 rounded-[40px] bg-rose-50 border border-rose-100 space-y-8">
                       <h4 className="font-bold text-rose-700 flex items-center gap-2">
-                        <Zap size={20} /> Thiết lập Phần thưởng (Rewards)
+                        <Zap size={20} /> Thiáº¿t láº­p Pháº§n thÆ°á»Ÿng (Rewards)
                       </h4>
                       <div className="grid grid-cols-2 gap-8">
                         <div className="bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
-                          <label className="text-xs font-black text-slate-400 uppercase mb-3 block text-center tracking-widest">XP Thưởng (Kinh nghiệm)</label>
+                          <label className="text-xs font-black text-slate-400 uppercase mb-3 block text-center tracking-widest">XP ThÆ°á»Ÿng (Kinh nghiá»‡m)</label>
                           <input 
                             type="number" 
                             value={lesson.game?.rewardXp || 100}
@@ -356,7 +356,7 @@ const JourneyDetail = () => {
                           />
                         </div>
                         <div className="bg-white p-6 rounded-3xl border border-rose-100 shadow-sm">
-                          <label className="text-xs font-black text-slate-400 uppercase mb-3 block text-center tracking-widest">Đá Aurum (Tiền tệ)</label>
+                          <label className="text-xs font-black text-slate-400 uppercase mb-3 block text-center tracking-widest">ÄÃ¡ Aurum (Tiá»n tá»‡)</label>
                           <input 
                             type="number" 
                             value={lesson.game?.rewardGem || 5}
@@ -368,11 +368,11 @@ const JourneyDetail = () => {
 
                       <div className="bg-white/50 backdrop-blur-sm p-6 rounded-3xl border border-rose-200 flex items-center gap-6">
                          <div className="w-16 h-16 bg-rose-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-rose-200">
-                            ⭐
+                            â­
                          </div>
                          <div className="flex-1">
-                            <h5 className="font-bold text-rose-900 text-sm">Cách tính điểm hoàn thành</h5>
-                            <p className="text-xs text-rose-700/60 font-medium">Học sinh sẽ nhận đủ số điểm trên khi hoàn thành video và trả lời đúng các câu hỏi trắc nghiệm.</p>
+                            <h5 className="font-bold text-rose-900 text-sm">CÃ¡ch tÃ­nh Ä‘iá»ƒm hoÃ n thÃ nh</h5>
+                            <p className="text-xs text-rose-700/60 font-medium">Há»c sinh sáº½ nháº­n Ä‘á»§ sá»‘ Ä‘iá»ƒm trÃªn khi hoÃ n thÃ nh video vÃ  tráº£ lá»i Ä‘Ãºng cÃ¡c cÃ¢u há»i tráº¯c nghiá»‡m.</p>
                          </div>
                       </div>
                    </div>
@@ -391,7 +391,7 @@ const JourneyDetail = () => {
          <div className="w-px h-8 bg-slate-200" />
          <div className="flex items-center gap-2 text-viet-green">
             <CheckCircle2 size={16} />
-            <span className="text-xs font-bold">Dữ liệu tối giản</span>
+            <span className="text-xs font-bold">Dá»¯ liá»‡u tá»‘i giáº£n</span>
          </div>
       </div>
     </div>
@@ -399,3 +399,5 @@ const JourneyDetail = () => {
 };
 
 export default JourneyDetail;
+
+
