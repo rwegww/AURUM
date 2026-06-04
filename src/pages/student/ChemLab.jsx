@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { activityService } from '@/services/ActivityService';
-import { Beaker, Scale, Microscope } from 'lucide-react';
+import { Beaker, BookOpenCheck, Hammer, Microscope, Scale, Search } from 'lucide-react';
 
 // --- Animations ---
 const containerVariants = {
@@ -36,9 +36,17 @@ const ChemLab = () => {
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-blue-600'
     },
     { 
-      id: 'balance', 
+      id: 'solver', 
+      label: 'Cân bằng tự do', 
+      icon: <Search className="w-8 h-8 text-amber-500" />, 
+      desc: 'Nhập hai vế phương trình, hệ thống tự tính hệ số và kiểm toán từng nguyên tố.',
+      path: '/lab/solver',
+      colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
+    },
+    { 
+      id: 'balance-practice', 
       label: t('chem_lab.modules.balance.label'), 
-      icon: <Scale className="w-8 h-8 text-amber-500" />, 
+      icon: <Scale className="w-8 h-8 text-orange-500" />, 
       desc: t('chem_lab.modules.balance.desc'),
       path: '/lab/balancer',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
@@ -50,6 +58,22 @@ const ChemLab = () => {
       desc: t('chem_lab.modules.molecule.desc'),
       path: '/lab/molecules',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-emerald-500'
+    },
+    {
+      id: 'discovery',
+      label: 'Sổ khám phá',
+      icon: <BookOpenCheck className="w-8 h-8 text-indigo-500" />,
+      desc: 'Theo dõi chất đã mở khóa và dùng nguyên liệu kiến thức để chế tạo vật phẩm mới.',
+      path: '/lab/discovery',
+      colorClass: 'bg-[#1a1a1a] text-white hover:bg-indigo-500'
+    },
+    {
+      id: 'craft',
+      label: 'Xưởng chế tạo',
+      icon: <Hammer className="w-8 h-8 text-rose-500" />,
+      desc: 'Biến điểm học tập và nguyên liệu thành các hợp chất có thể dùng trong phòng lab.',
+      path: '/lab/crafting',
+      colorClass: 'bg-[#1a1a1a] text-white hover:bg-rose-500'
     },
   ];
 
@@ -82,7 +106,7 @@ const ChemLab = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"
         >
           {labModules.map((module) => (
             <motion.div key={module.id} variants={itemVariants} className="flex flex-col h-full">
@@ -92,7 +116,7 @@ const ChemLab = () => {
                   type: 'lab',
                   label: `Phòng Lab: ${module.label}`,
                   description: `Đã truy cập mô-đun ${module.label}`,
-                  icon: module.icon,
+                  icon: module.id,
                   link: module.path
                 })}
                 className="card-tactile group relative flex flex-col h-full hover:translate-y-1 transition-all duration-200 overflow-hidden"

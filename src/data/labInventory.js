@@ -1,9 +1,6 @@
-﻿// Hệ thống Game hóa Phòng Lab
-// Nguyên liệu = kiến thức từ bài học/quiz
-// Vật phẩm = chất hóa học có thể "chế tạo"
+import { parseFormula } from '../utils/balancer.js';
 
 export const ingredients = [
-  // Nguyên liệu cơ bản (mở khóa từ quiz lớp 8)
   { id: "ing_h", name: "Tinh chất Hydro", icon: "💧", formula: "H", requiredQuiz: "hoa8_kntt_bai1", gradeLevel: 8 },
   { id: "ing_o", name: "Tinh chất Oxy", icon: "🌬️", formula: "O", requiredQuiz: "hoa8_kntt_bai2", gradeLevel: 8 },
   { id: "ing_fe", name: "Bột Sắt nguyên chất", icon: "⚙️", formula: "Fe", requiredQuiz: "hoa8_kntt_bai3", gradeLevel: 8 },
@@ -118,6 +115,14 @@ export const initialInventory = ingredients.map(ing => ({
   amount: ing.gradeLevel === 8 ? 5 : 0 // Give some starting hoc_lieu for grade 8
 }));
 
+export const lessonIngredientRewardsByGrade = {
+  8: ["ing_h", "ing_o", "ing_fe", "ing_na", "ing_cl", "ing_c"],
+  9: ["ing_s", "ing_ca", "ing_fe", "ing_o", "ing_c", "ing_na"],
+  10: ["ing_n", "ing_f", "ing_br", "ing_i", "ing_he", "ing_ne", "ing_ar"],
+  11: ["ing_ag", "ing_si", "ing_c", "ing_n", "ing_o"],
+  12: ["ing_au", "ing_be", "ing_ba", "ing_ca", "ing_cl"],
+};
+
 export const recipes = [
   { ingredients: ["ing_h", "ing_h", "ing_o"], productId: "craft_h2o", productName: "Nước (H₂O)" },
   { ingredients: ["ing_na", "ing_cl"], productId: "craft_nacl", productName: "Muối ăn (NaCl)" },
@@ -133,4 +138,224 @@ export const getLevelFromXP = (xp) => {
   return { level: 5, title: "Giáo sư Hóa học", nextLevelXP: 2000 };
 };
 
+export const getIngredientAmountMap = (inventory) => {
+  const normalized = normalizeInventory(inventory);
+  return Object.fromEntries(normalized.ingredients.map((item) => [item.id, item.amount]));
+};
 
+export const getRecipeRequirementCounts = (item) => {
+  const counts = {};
+  (item?.ingredients || []).forEach((ingredientId) => {
+    counts[ingredientId] = (counts[ingredientId] || 0) + 1;
+  });
+  return counts;
+};
+
+export const createInitialInventory = () => ({
+  ingredients: initialInventory.map(({ id, amount }) => ({ id, amount })),
+  craftedItems: [],
+});
+
+export const normalizeInventory = (inventory) => {
+  const baseAmounts = Object.fromEntries(initialInventory.map((item) => [item.id, item.amount || 0]));
+  const sourceIngredients = inventory?.ingredients;
+
+  if (Array.isArray(sourceIngredients)) {
+    sourceIngredients.forEach((item) => {
+      if (typeof item === "string") {
+        baseAmounts[item] = (baseAmounts[item] || 0) + 1;
+      } else if (item?.id) {
+        baseAmounts[item.id] = Math.max(0, Number.parseInt(item.amount ?? 0, 10) || 0);
+      }
+    });
+  } else if (sourceIngredients && typeof sourceIngredients === "object") {
+    Object.entries(sourceIngredients).forEach(([id, amount]) => {
+      baseAmounts[id] = Math.max(0, Number.parseInt(amount, 10) || 0);
+    });
+  }
+
+  const craftedItems = Array.isArray(inventory?.craftedItems)
+    ? inventory.craftedItems.map((item) => (typeof item === "string" ? item : item?.id)).filter(Boolean)
+    : [];
+
+  return {
+    ingredients: ingredients.map((ingredient) => ({
+      ...ingredient,
+      amount: baseAmounts[ingredient.id] || 0,
+    })),
+    craftedItems: Array.from(new Set(craftedItems)),
+  };
+};
+
+export const canCraftItem = (item, inventory) => {
+  const normalized = normalizeInventory(inventory);
+  const amounts = getIngredientAmountMap(normalized);
+  const requirements = getRecipeRequirementCounts(item);
+  const missingIngredients = Object.entries(requirements)
+    .filter(([ingredientId, amount]) => (amounts[ingredientId] || 0) < amount)
+    .map(([ingredientId, amount]) => ({
+      ingredientId,
+      required: amount,
+      available: amounts[ingredientId] || 0,
+    }));
+
+  return {
+    canCraft: missingIngredients.length === 0 && !normalized.craftedItems.includes(item.id),
+    alreadyCrafted: normalized.craftedItems.includes(item.id),
+    missingIngredients,
+  };
+};
+
+export const craftItemInInventory = (itemId, inventory, customCraftableItems = null) => {
+  const pool = customCraftableItems || craftableItems;
+  const item = pool.find((candidate) => candidate.id === itemId);
+  if (!item) throw new Error("Không tìm thấy vật phẩm cần chế tạo.");
+
+  const normalized = normalizeInventory(inventory);
+  const status = canCraftItem(item, normalized);
+  if (status.alreadyCrafted) throw new Error("Vật phẩm này đã được chế tạo.");
+  if (!status.canCraft) throw new Error("Chưa đủ nguyên liệu kiến thức để chế tạo.");
+
+  const amounts = getIngredientAmountMap(normalized);
+  Object.entries(getRecipeRequirementCounts(item)).forEach(([ingredientId, amount]) => {
+    amounts[ingredientId] = Math.max(0, (amounts[ingredientId] || 0) - amount);
+  });
+
+  return {
+    inventory: normalizeInventory({
+      ingredients: Object.entries(amounts).map(([id, amount]) => ({ id, amount })),
+      craftedItems: [...normalized.craftedItems, item.id],
+    }),
+    item,
+  };
+};
+
+export const getLessonIngredientRewards = ({ lesson = {}, lessonId, level = "level1", stars = 1 }) => {
+  const grade = Number.parseInt(lesson.gradeLevelId ?? lesson.classId ?? lesson.khoi_id, 10);
+  const rewardPool = lessonIngredientRewardsByGrade[grade] || lessonIngredientRewardsByGrade[8];
+  const rawOrder = Number.parseInt(lesson.order ?? lesson.thu_tu ?? lessonId, 10);
+  const orderIndex = Number.isFinite(rawOrder) ? Math.max(0, rawOrder - 1) : 0;
+  const primaryIngredientId = rewardPool[orderIndex % rewardPool.length];
+  const levelBaseAmount = level === "level3" ? 3 : level === "level2" ? 2 : 1;
+  const starBonus = Math.max(0, Math.min(3, Number.parseInt(stars, 10) || 1) - 1);
+
+  return [{
+    ingredientId: primaryIngredientId,
+    amount: levelBaseAmount + starBonus,
+    source: `lesson:${lessonId}:${level}`,
+  }];
+};
+
+export const grantIngredientsToInventory = (inventory, rewards = []) => {
+  const normalized = normalizeInventory(inventory);
+  const amounts = getIngredientAmountMap(normalized);
+
+  rewards.forEach(({ ingredientId, amount }) => {
+    if (!ingredientId) return;
+    amounts[ingredientId] = (amounts[ingredientId] || 0) + Math.max(1, Number.parseInt(amount, 10) || 1);
+  });
+
+  return normalizeInventory({
+    ingredients: Object.entries(amounts).map(([id, amount]) => ({ id, amount })),
+    craftedItems: normalized.craftedItems,
+  });
+};
+
+const ingredientMap = {
+  'H': 'ing_h',
+  'O': 'ing_o',
+  'FE': 'ing_fe',
+  'NA': 'ing_na',
+  'CL': 'ing_cl',
+  'C': 'ing_c',
+  'S': 'ing_s',
+  'N': 'ing_n',
+  'CA': 'ing_ca',
+  'AG': 'ing_ag',
+  'AU': 'ing_au',
+  'F': 'ing_f',
+  'BR': 'ing_br',
+  'I': 'ing_i',
+  'HE': 'ing_he',
+  'NE': 'ing_ne',
+  'AR': 'ing_ar',
+  'SI': 'ing_si',
+  'BE': 'ing_be',
+  'BA': 'ing_ba'
+};
+
+const getRarity = (ingredientCount) => {
+  if (ingredientCount <= 2) return 'common';
+  if (ingredientCount <= 4) return 'uncommon';
+  if (ingredientCount <= 6) return 'rare';
+  return 'legendary';
+};
+
+const toCompareKey = (formula) => {
+  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subMap[match] || match).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+};
+
+export const generateCraftableItems = (chemicalsList) => {
+  const items = [];
+  const generatedKeys = new Set();
+  
+  (chemicalsList || []).forEach(c => {
+    if (c.la_chat_khoi_dau || c.is_starter || c.isStarter) return;
+    
+    try {
+      const formula = c.cong_thuc || c.formula;
+      if (!formula) return;
+      
+      const parsed = parseFormula(formula);
+      const recipeIngredients = [];
+      let canBuildRecipe = true;
+      
+      Object.entries(parsed).forEach(([element, count]) => {
+        const ingId = ingredientMap[element.toUpperCase()];
+        if (!ingId) {
+          canBuildRecipe = false;
+        } else {
+          for (let i = 0; i < count; i++) {
+            recipeIngredients.push(ingId);
+          }
+        }
+      });
+      
+      if (!canBuildRecipe || recipeIngredients.length === 0) return;
+      
+      const compKey = toCompareKey(formula);
+      if (generatedKeys.has(compKey)) return;
+      generatedKeys.add(compKey);
+      
+      const rarity = getRarity(recipeIngredients.length);
+      const xpReward = recipeIngredients.length * 30;
+      const cleanFormulaId = compKey.toLowerCase();
+      
+      items.push({
+        id: `craft_${cleanFormulaId}`,
+        name: c.ten || c.name,
+        formula: formula,
+        icon: c.trang_thai_vat_chat === 'gas' ? '💨' : (c.trang_thai_vat_chat === 'liquid' ? '💧' : '🧪'),
+        category: c.danh_muc || 'Hợp chất',
+        rarity: rarity,
+        description: `Hợp chất hóa học cấu tạo từ các nguyên tố thành phần.`,
+        ingredients: recipeIngredients,
+        xpReward: xpReward,
+        unlockMessage: `Bạn đã chế tạo thành công ${c.ten || c.name} (${formula})!`
+      });
+    } catch (e) {
+      console.warn(`[Crafting] Could not generate recipe for formula: ${c.cong_thuc || c.formula}`, e.message);
+    }
+  });
+  
+  craftableItems.forEach(item => {
+    const compKey = toCompareKey(item.formula);
+    if (!generatedKeys.has(compKey)) {
+      generatedKeys.add(compKey);
+      items.push(item);
+    }
+  });
+
+  return items;
+};

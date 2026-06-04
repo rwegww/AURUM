@@ -34,8 +34,10 @@ const MaterialDetail = () => {
 
     const fetchData = async () => {
       try {
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
         const [matRes, feedRes] = await Promise.all([
-          fetch(`/api/materials/${id}${shouldIncrement ? '' : '?increment=false'}`),
+          fetch(`/api/materials/${id}${shouldIncrement ? '' : '?increment=false'}`, { headers }),
           fetch(`/api/materials/${id}/feedback`)
         ]);
         
