@@ -72,9 +72,6 @@ const ElementSphere = ({ symbol, size = 'md' }) => {
   );
 };
 
-  );
-};
-
 const MoleculeModel = ({ formula, size = 'md' }) => {
   const formulaUpper = String(formula || '').toUpperCase();
   
