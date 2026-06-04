@@ -295,7 +295,7 @@ const Home = () => {
         buttonText={t('home.features.bai_hoc.link')}
         buttonUrl="/classroom"
         buttonIcon={<BookOpen size={16} />}
-        imageSrc="/assets/images/home-viet-bai_hoc.png"
+        imageSrc="/assets/images/home-viet-lessons.png"
         imageAlt={t('home.features.bai_hoc.image_alt')}
         imageRight={true}
         bgClass="bg-white"
