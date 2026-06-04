@@ -1,6 +1,80 @@
 import { supabase } from '../lib/supabase.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { normalizeInventory, craftableItems, grantIngredientsToInventory } from '../../src/data/labInventory.js';
+import { craftingTasks } from '../../src/data/craftingTasks.js';
+
+const toNormalFormula = (formula) => {
+  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subMap[match] || match).replace(/\s+/g, '').toUpperCase();
+};
+
+const syncUserProgressData = (unlockedChemicalsArray, inventoryObject) => {
+  let unlocked = Array.isArray(unlockedChemicalsArray) 
+    ? [...unlockedChemicalsArray] 
+    : [];
+
+  const inventory = normalizeInventory(inventoryObject);
+  const crafted = Array.isArray(inventory.craftedItems) 
+    ? [...inventory.craftedItems] 
+    : [];
+
+  let changed = false;
+
+  const normToCraftable = {};
+  craftableItems.forEach(item => {
+    const norm = toNormalFormula(item.formula);
+    normToCraftable[norm] = item;
+  });
+
+  // Step A: Sync from unlockedChemicals to inventory.craftedItems
+  unlocked.forEach(formula => {
+    const norm = toNormalFormula(formula);
+    const item = normToCraftable[norm];
+    if (item && !crafted.includes(item.id)) {
+      crafted.push(item.id);
+      changed = true;
+    }
+  });
+
+  // Step B: Sync from inventory.craftedItems to unlockedChemicals
+  crafted.forEach(craftId => {
+    const item = craftableItems.find(c => c.id === craftId);
+    if (item) {
+      const targetFormula = item.formula;
+      const normTarget = toNormalFormula(targetFormula);
+      const hasFormula = unlocked.some(f => toNormalFormula(f) === normTarget);
+      if (!hasFormula) {
+        unlocked.push(targetFormula);
+        changed = true;
+      }
+    }
+  });
+
+  // Step C: Normalize formulas in unlocked to match craftableItems exactly (subscripts)
+  unlocked = unlocked.map(formula => {
+    const norm = toNormalFormula(formula);
+    const item = normToCraftable[norm];
+    if (item && formula !== item.formula) {
+      changed = true;
+      return item.formula;
+    }
+    return formula;
+  });
+
+  const uniqueUnlocked = Array.from(new Set(unlocked));
+  if (uniqueUnlocked.length !== unlocked.length) {
+    changed = true;
+  }
+
+  inventory.craftedItems = crafted;
+
+  return {
+    unlockedChemicals: uniqueUnlocked,
+    inventory,
+    changed
+  };
+};
 
 const defaultBalancingProgress = {
   completedNodeIds: [],
@@ -47,14 +121,73 @@ const normalizeBalancingProgress = (progress) => {
   };
 };
 
+const ALL_INGREDIENTS = [
+  "ing_h", "ing_o", "ing_fe", "ing_na", "ing_cl", "ing_c", "ing_s", "ing_n", "ing_ca", 
+  "ing_ag", "ing_au", "ing_f", "ing_br", "ing_i", "ing_he", "ing_ne", "ing_ar", "ing_si", "ing_be", "ing_ba"
+];
+
+const generateRandomRewards = (difficulty) => {
+  const rewards = [];
+  const numTypes = difficulty === 'hard' ? 3 + Math.floor(Math.random() * 2) : 
+                   difficulty === 'medium' ? 2 + Math.floor(Math.random() * 2) : 
+                   1 + Math.floor(Math.random() * 2);
+  
+  const selectedIngs = [];
+  const availableIngs = [...ALL_INGREDIENTS];
+  
+  for (let i = 0; i < numTypes; i++) {
+    if (availableIngs.length === 0) break;
+    const idx = Math.floor(Math.random() * availableIngs.length);
+    selectedIngs.push(availableIngs.splice(idx, 1)[0]);
+  }
+  
+  selectedIngs.forEach(ingId => {
+    const minAmt = difficulty === 'hard' ? 2 : difficulty === 'medium' ? 2 : 1;
+    const maxAmt = difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2;
+    const amount = minAmt + Math.floor(Math.random() * (maxAmt - minAmt + 1));
+    rewards.push({ ingredientId: ingId, amount });
+  });
+  
+  return rewards;
+};
+
+const normalizeCraftingTasks = (payload) => {
+  const base = {
+    lastResetDate: "",
+    tasks: {
+      task_video_1: { progress: 0, claimed: false, history: [], rewards: [] },
+      task_library_1: { progress: 0, claimed: false, history: [], rewards: [] },
+      task_library_2: { progress: 0, claimed: false, history: [], rewards: [] },
+      task_library_3: { progress: 0, claimed: false, history: [], rewards: [] },
+      task_lesson_1: { progress: 0, claimed: false, history: [], rewards: [] }
+    }
+  };
+  if (!payload || typeof payload !== 'object' || !payload.tasks) {
+    return base;
+  }
+  
+  base.lastResetDate = payload.lastResetDate || "";
+  Object.keys(base.tasks).forEach(taskId => {
+    const pTask = payload.tasks[taskId] || {};
+    base.tasks[taskId] = {
+      progress: typeof pTask.progress === 'number' ? pTask.progress : 0,
+      claimed: !!pTask.claimed,
+      history: Array.isArray(pTask.history) ? pTask.history : [],
+      rewards: Array.isArray(pTask.rewards) ? pTask.rewards : []
+    };
+  });
+  return base;
+};
+
+
 const attachUserProgress = async (user) => {
   try {
     const data = await fetchUserProgressRows(user.id);
 
-    user.unlocked_bai_hoc = (data || [])
+    const unlockedLessons = (data || [])
       .filter((item) => item.loai_tien_do === 'lesson')
       .map((item) => item.doi_tuong_id);
-    user.unlocked_chemicals = (data || [])
+    const unlockedChemicalsRaw = (data || [])
       .filter((item) => item.loai_tien_do === 'chemical')
       .map((item) => item.doi_tuong_id);
 
@@ -62,12 +195,127 @@ const attachUserProgress = async (user) => {
       (item) => item.loai_tien_do === 'balancing' && item.doi_tuong_id === 'current'
     );
     user.balancingProgressPayload = balancing?.noi_dung_tien_do || user.balancingProgressPayload;
+
+    const inventoryRecord = (data || []).find(
+      (item) => item.loai_tien_do === 'achievement' && item.doi_tuong_id === 'inventory'
+    );
+    const inventoryRaw = inventoryRecord?.noi_dung_tien_do || user.inventoryPayload || user.inventory;
+
+    const craftingTasksRecord = (data || []).find(
+      (item) => item.loai_tien_do === 'achievement' && item.doi_tuong_id === 'crafting_tasks'
+    );
+    
+    const VIETNAM_TIME_ZONE_DAILY = 'Asia/Ho_Chi_Minh';
+    const formatterDaily = new Intl.DateTimeFormat('en-US', {
+      timeZone: VIETNAM_TIME_ZONE_DAILY,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    const getVietnamTodayStr = () => {
+      const parts = Object.fromEntries(
+        formatterDaily.formatToParts(new Date())
+          .filter(part => part.type !== 'literal')
+          .map(part => [part.type, part.value])
+      );
+      return `${parts.year}-${parts.month}-${parts.day}`;
+    };
+    
+    const todayStr = getVietnamTodayStr();
+    let currentTasksPayload = normalizeCraftingTasks(craftingTasksRecord?.noi_dung_tien_do);
+    
+    if (!currentTasksPayload.lastResetDate || currentTasksPayload.lastResetDate !== todayStr) {
+      console.log(`[attachUserProgress] Resetting daily crafting tasks for user ${user.id}. Old reset date: ${currentTasksPayload.lastResetDate}, New: ${todayStr}`);
+      currentTasksPayload.lastResetDate = todayStr;
+      Object.keys(currentTasksPayload.tasks).forEach(taskId => {
+        const taskDef = craftingTasks.find(t => t.id === taskId);
+        currentTasksPayload.tasks[taskId] = {
+          progress: 0,
+          claimed: false,
+          history: [],
+          rewards: generateRandomRewards(taskDef ? taskDef.difficulty : 'easy')
+        };
+      });
+      
+      await upsertUserProgress([{
+        nguoi_dung_id: user.id,
+        loai_tien_do: 'achievement',
+        doi_tuong_id: 'crafting_tasks',
+        noi_dung_tien_do: currentTasksPayload
+      }]);
+    } else {
+      let tasksUpdated = false;
+      Object.keys(currentTasksPayload.tasks).forEach(taskId => {
+        const userTask = currentTasksPayload.tasks[taskId];
+        if (!userTask.rewards || userTask.rewards.length === 0) {
+          const taskDef = craftingTasks.find(t => t.id === taskId);
+          userTask.rewards = generateRandomRewards(taskDef ? taskDef.difficulty : 'easy');
+          tasksUpdated = true;
+        }
+      });
+      
+      if (tasksUpdated) {
+        await upsertUserProgress([{
+          nguoi_dung_id: user.id,
+          loai_tien_do: 'achievement',
+          doi_tuong_id: 'crafting_tasks',
+          noi_dung_tien_do: currentTasksPayload
+        }]);
+      }
+    }
+
+    user.craftingTasksPayload = currentTasksPayload;
+
+
+    // Run the synchronization!
+    const { unlockedChemicals, inventory, changed } = syncUserProgressData(unlockedChemicalsRaw, inventoryRaw);
+
+    // If data changed, update it in the database and also update the database rows
+    if (changed) {
+      console.log(`[attachUserProgress] Progress out of sync for user ${user.id}. Synchronizing...`);
+      const progressRows = [
+        ...unlockedChemicals.map((chemical) => ({
+          nguoi_dung_id: user.id,
+          loai_tien_do: 'chemical',
+          doi_tuong_id: chemical,
+          noi_dung_tien_do: {}
+        })),
+        {
+          nguoi_dung_id: user.id,
+          loai_tien_do: 'achievement',
+          doi_tuong_id: 'inventory',
+          noi_dung_tien_do: inventory
+        }
+      ];
+
+      // Delete out-of-sync formulas that were replaced or are redundant (e.g. ASCII instead of subscripts)
+      const oldFormulasSet = new Set(unlockedChemicalsRaw);
+      const newFormulasSet = new Set(unlockedChemicals);
+      const formulasToDelete = [...oldFormulasSet].filter(f => !newFormulasSet.has(f));
+      
+      if (formulasToDelete.length > 0) {
+        console.log(`[attachUserProgress] Deleting out-of-sync formulas: ${formulasToDelete.join(', ')}`);
+        await supabase
+          .from('tien_do_nguoi_dung')
+          .delete()
+          .eq('nguoi_dung_id', user.id)
+          .eq('loai_tien_do', 'chemical')
+          .in('doi_tuong_id', formulasToDelete);
+      }
+
+      await upsertUserProgress(progressRows);
+    }
+
+    user.unlocked_bai_hoc = unlockedLessons;
+    user.unlocked_chemicals = unlockedChemicals;
+    user.inventoryPayload = inventory;
     return user;
   } catch (error) {
     if (!isMissingDbObject(error)) throw error;
     console.warn('tien_do_nguoi_dung table or columns missing, returning base user.');
     user.unlocked_bai_hoc = [];
     user.unlocked_chemicals = [];
+    user.inventoryPayload = normalizeInventory(user.inventoryPayload || user.inventory);
   }
 
   return user;
@@ -127,6 +375,10 @@ const mapUser = (user) => {
     isLocked,
     balancingProgress: normalizeBalancingProgress(user.balancingProgressPayload || user.balancingProgress),
     balancingProgressPayload: undefined,
+    inventory: normalizeInventory(user.inventoryPayload || user.inventory),
+    inventoryPayload: undefined,
+    craftingTasks: user.craftingTasksPayload || normalizeCraftingTasks(null),
+    craftingTasksPayload: undefined,
     streakCount,
     lastStreakAt: user.chuoi_cuoi_luc || user.last_streak_at,
     todayOnlineMinutes,
@@ -227,6 +479,9 @@ export const User = {
     const initialLessons = userData.unlockedLessons || [];
     const initialChemicals = userData.unlockedChemicals || [];
     const initialBalancingProgress = { ...defaultBalancingProgress };
+
+    const { unlockedChemicals, inventory } = syncUserProgressData(initialChemicals, userData.inventory);
+
     const progressRows = [
       ...initialLessons.map((lessonId) => ({
         nguoi_dung_id: userId,
@@ -234,7 +489,7 @@ export const User = {
         doi_tuong_id: lessonId,
         noi_dung_tien_do: {}
       })),
-      ...initialChemicals.map((chemical) => ({
+      ...unlockedChemicals.map((chemical) => ({
         nguoi_dung_id: userId,
         loai_tien_do: 'chemical',
         doi_tuong_id: chemical,
@@ -245,6 +500,12 @@ export const User = {
         loai_tien_do: 'balancing',
         doi_tuong_id: 'current',
         noi_dung_tien_do: initialBalancingProgress
+      },
+      {
+        nguoi_dung_id: userId,
+        loai_tien_do: 'achievement',
+        doi_tuong_id: 'inventory',
+        noi_dung_tien_do: inventory
       }
     ];
 
@@ -252,7 +513,6 @@ export const User = {
 
     return this.findById(userId);
   },
-
   async update(id, updateData) {
     const pgUpdateData = { ...updateData };
     const directFieldMap = {
@@ -289,7 +549,9 @@ export const User = {
     }
 
     const balancingProgress = updateData.balancingProgress;
+    const inventory = updateData.inventory;
     delete pgUpdateData.balancingProgress;
+    delete pgUpdateData.inventory;
 
     if (updateData.linkedAccounts) {
       pgUpdateData.tai_khoan_lien_ket = updateData.linkedAccounts;
@@ -357,6 +619,15 @@ export const User = {
         loai_tien_do: 'balancing',
         doi_tuong_id: 'current',
         noi_dung_tien_do: balancingProgress
+      });
+    }
+
+    if (inventory) {
+      progressRows.push({
+        nguoi_dung_id: id,
+        loai_tien_do: 'achievement',
+        doi_tuong_id: 'inventory',
+        noi_dung_tien_do: normalizeInventory(inventory)
       });
     }
 
@@ -470,6 +741,140 @@ export const User = {
     
     if (error) throw error;
     return mapUser(data);
+  },
+
+  async incrementCraftingTaskProgress(userId, actionType, itemId) {
+    try {
+      const { data: record, error: fetchError } = await supabase
+        .from('tien_do_nguoi_dung')
+        .select('noi_dung_tien_do')
+        .eq('nguoi_dung_id', userId)
+        .eq('loai_tien_do', 'achievement')
+        .eq('doi_tuong_id', 'crafting_tasks')
+        .maybeSingle();
+
+      if (fetchError && !isMissingDbObject(fetchError)) throw fetchError;
+
+      const currentTasks = normalizeCraftingTasks(record?.noi_dung_tien_do);
+      let updated = false;
+
+      craftingTasks.forEach(taskDef => {
+        const userTask = currentTasks.tasks[taskDef.id];
+        if (userTask && !userTask.claimed && taskDef.actionType === actionType) {
+          if (itemId && !userTask.history.includes(itemId)) {
+            userTask.history.push(itemId);
+            userTask.progress = userTask.history.length;
+            updated = true;
+          } else if (!itemId) {
+            userTask.progress = Math.min(taskDef.target, userTask.progress + 1);
+            updated = true;
+          }
+        }
+      });
+
+      if (updated) {
+        await supabase
+          .from('tien_do_nguoi_dung')
+          .upsert({
+            nguoi_dung_id: userId,
+            loai_tien_do: 'achievement',
+            doi_tuong_id: 'crafting_tasks',
+            noi_dung_tien_do: currentTasks
+          }, { onConflict: 'nguoi_dung_id,loai_tien_do,doi_tuong_id' });
+      }
+
+      return currentTasks;
+    } catch (e) {
+      console.error('[incrementCraftingTaskProgress] Error:', e.message);
+      return null;
+    }
+  },
+
+  async claimCraftingTaskReward(userId, taskId) {
+    try {
+      const { data: taskRecord, error: fetchTaskError } = await supabase
+        .from('tien_do_nguoi_dung')
+        .select('noi_dung_tien_do')
+        .eq('nguoi_dung_id', userId)
+        .eq('loai_tien_do', 'achievement')
+        .eq('doi_tuong_id', 'crafting_tasks')
+        .maybeSingle();
+
+      if (fetchTaskError) throw fetchTaskError;
+
+      const currentTasks = normalizeCraftingTasks(taskRecord?.noi_dung_tien_do);
+      const userTask = currentTasks.tasks[taskId];
+      
+      const taskDef = craftingTasks.find(t => t.id === taskId);
+      if (!userTask || !taskDef) throw new Error("Không tìm thấy nhiệm vụ.");
+      if (userTask.progress < taskDef.target) throw new Error("Chưa hoàn thành mục tiêu nhiệm vụ.");
+
+      const { data: invRecord, error: fetchInvError } = await supabase
+        .from('tien_do_nguoi_dung')
+        .select('noi_dung_tien_do')
+        .eq('nguoi_dung_id', userId)
+        .eq('loai_tien_do', 'achievement')
+        .eq('doi_tuong_id', 'inventory')
+        .maybeSingle();
+
+      if (fetchInvError) throw fetchInvError;
+
+      const currentInventory = invRecord?.noi_dung_tien_do || {};
+      const rewardsToGrant = (userTask.rewards && userTask.rewards.length > 0)
+        ? userTask.rewards
+        : taskDef.rewards;
+
+      const updatedInventory = grantIngredientsToInventory(currentInventory, rewardsToGrant);
+
+      userTask.claimed = true; 
+
+      // Cộng thêm XP và Level
+      const { data: userRecord, error: fetchUserError } = await supabase
+        .from('nguoi_dung')
+        .select('diem_kinh_nghiem')
+        .eq('id', userId)
+        .single();
+      
+      if (fetchUserError) throw fetchUserError;
+      
+      const xpReward = taskDef.difficulty === 'hard' ? 150 : taskDef.difficulty === 'medium' ? 100 : 50;
+      const nextXp = (userRecord.diem_kinh_nghiem || 0) + xpReward;
+      const nextLevel = Math.floor(nextXp / 1000) + 1;
+      
+      await supabase
+        .from('nguoi_dung')
+        .update({ diem_kinh_nghiem: nextXp, cap_do: nextLevel })
+        .eq('id', userId);
+
+      await supabase
+        .from('tien_do_nguoi_dung')
+        .upsert([
+          {
+            nguoi_dung_id: userId,
+            loai_tien_do: 'achievement',
+            doi_tuong_id: 'crafting_tasks',
+            noi_dung_tien_do: currentTasks
+          },
+          {
+            nguoi_dung_id: userId,
+            loai_tien_do: 'achievement',
+            doi_tuong_id: 'inventory',
+            noi_dung_tien_do: updatedInventory
+          }
+        ], { onConflict: 'nguoi_dung_id,loai_tien_do,doi_tuong_id' });
+
+      return {
+        tasks: currentTasks,
+        inventory: updatedInventory,
+        rewards: rewardsToGrant,
+        xpGained: xpReward,
+        totalXP: nextXp,
+        newLevel: nextLevel
+      };
+    } catch (e) {
+      console.error('[claimCraftingTaskReward] Error:', e.message);
+      throw e;
+    }
   }
 };
 

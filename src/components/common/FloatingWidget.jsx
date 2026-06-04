@@ -9,7 +9,7 @@ import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 
 const FloatingWidget = () => {
   const { t } = useTranslation();
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, refreshUser } = useAuth();
   
   // Widget open & expanded states
   const [isExpanded, setIsExpanded] = useState(false);
@@ -119,7 +119,17 @@ const FloatingWidget = () => {
       if (res.ok) {
         const data = await res.json();
         if (data.success) {
+          if (data.rewards && data.rewards.length > 0) {
+            const rewardList = data.rewards.map(r => {
+              const symbol = r.ingredientId.replace('ing_', '').toUpperCase();
+              return `${r.amount}x ${symbol}`;
+            }).join(', ');
+            alert(`Nhận thành công nguyên tố thu thập: ${rewardList} và +${data.xpGained || 0} XP!`);
+          } else {
+            alert(`Nhận thành công +${data.xpGained || 0} XP!`);
+          }
           await fetchMissions();
+          await refreshUser?.();
         }
       }
     } catch (error) {

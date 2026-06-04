@@ -1,8 +1,11 @@
-﻿import express from 'express';
+import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
 import Mission from '../models/Mission.js';
 import { auth } from '../_middleware/auth.js';
+import { balanceEquation, balanceEquationText, normalizeFormula, parseSpeciesList } from '../../src/utils/balancer.js';
+import { craftableItems, craftItemInInventory, normalizeInventory, generateCraftableItems } from '../../src/data/labInventory.js';
+import { craftingTasks } from '../../src/data/craftingTasks.js';
 
 const router = express.Router();
 
@@ -121,6 +124,31 @@ router.get('/balancing/search', async (req, res) => {
   }
 });
 
+// POST /api/lab/balancing/solve - Balance a free-form equation
+router.post('/balancing/solve', async (req, res) => {
+  try {
+    const { equation, reactants, products } = req.body || {};
+    const result = equation
+      ? balanceEquationText(equation)
+      : balanceEquation(parseSpeciesList(reactants), parseSpeciesList(products));
+
+    if (!result.balanced) {
+      return res.status(422).json(result);
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('Lỗi cân bằng phương trình nhập tự do:', error);
+    res.status(500).json({
+      balanced: false,
+      coefficients: [],
+      equation: '',
+      message: 'Không thể cân bằng phương trình lúc này.',
+      error: error.message,
+    });
+  }
+});
+
 // GET /api/lab/balancing/progress - Get user's balancing progress
 router.get('/balancing/progress', auth, async (req, res) => {
   try {
@@ -221,6 +249,138 @@ router.post('/unlock', auth, async (req, res) => {
   } catch (error) {
     console.error('Lỗi mở khóa hóa chất:', error);
     res.status(500).json({ message: 'Không thể mở khóa hóa chất lúc này.', error: error.message });
+  }
+});
+
+// GET /api/lab/inventory - Get the knowledge ingredient inventory
+router.get('/inventory', auth, async (req, res) => {
+  try {
+    const { data: chemicals, error: chemError } = await supabase
+      .from('hoa_chat')
+      .select('*')
+      .order('cong_thuc', { ascending: true });
+
+    if (chemError) throw chemError;
+
+    const dynamicCraftableItems = generateCraftableItems(chemicals);
+
+    res.status(200).json({
+      inventory: normalizeInventory(req.user.inventory),
+      craftableItems: dynamicCraftableItems,
+      unlockedChemicals: req.user.unlockedChemicals || [],
+    });
+  } catch (error) {
+    console.error('Lỗi tải kho nguyên liệu:', error);
+    res.status(500).json({ message: 'Không thể tải kho nguyên liệu.', error: error.message });
+  }
+});
+
+// POST /api/lab/craft - Turn knowledge ingredients into a crafted chemical
+router.post('/craft', auth, async (req, res) => {
+  try {
+    const { itemId } = req.body || {};
+    if (!itemId) {
+      return res.status(400).json({ message: 'Thiếu vật phẩm cần chế tạo.' });
+    }
+
+    const { data: chemicals, error: chemError } = await supabase
+      .from('hoa_chat')
+      .select('*');
+
+    if (chemError) throw chemError;
+    const dynamicCraftableItems = generateCraftableItems(chemicals);
+
+    const { inventory, item } = craftItemInInventory(itemId, req.user.inventory, dynamicCraftableItems);
+    const unlockedChemicals = Array.isArray(req.user.unlockedChemicals)
+      ? [...req.user.unlockedChemicals]
+      : [];
+    const formulaToUnlock = item.formula;
+
+    if (formulaToUnlock && !unlockedChemicals.includes(formulaToUnlock)) {
+      unlockedChemicals.push(formulaToUnlock);
+    }
+
+    const nextXp = (req.user.xp || 0) + (item.xpReward || 0);
+    const updatedUser = await User.update(req.user.id, {
+      inventory,
+      unlockedChemicals,
+      xp: nextXp,
+      level: Math.floor(nextXp / 1000) + 1,
+    });
+
+    try {
+      await Mission.updateProgress(req.user.id, 'reaction', 1);
+    } catch (err) {
+      console.warn('⚠️ Failed to update craft mission progress:', err.message);
+    }
+
+    res.status(200).json({
+      success: true,
+      item,
+      inventory: updatedUser.inventory,
+      unlockedChemicals: updatedUser.unlockedChemicals || unlockedChemicals,
+      xp: updatedUser.xp,
+      level: updatedUser.level,
+      message: item.unlockMessage,
+    });
+  } catch (error) {
+    const status = error.message?.includes('đã được chế tạo') || error.message?.includes('Chưa đủ') ? 409 : 500;
+    console.error('Lỗi chế tạo vật phẩm:', error);
+    res.status(status).json({ success: false, message: error.message || 'Không thể chế tạo vật phẩm lúc này.' });
+  }
+});
+
+// GET /api/lab/crafting/tasks - Get crafting task progress for the current user
+router.get('/crafting/tasks', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Bạn chưa đăng nhập.' });
+    }
+    
+    const userTasks = req.user.craftingTasks || { tasks: {} };
+    
+    const tasksWithProgress = craftingTasks.map(task => {
+      const uTask = userTasks.tasks[task.id] || { progress: 0, claimed: false, history: [], rewards: [] };
+      return {
+        ...task,
+        progress: uTask.progress,
+        claimed: uTask.claimed,
+        history: uTask.history,
+        rewards: (uTask.rewards && uTask.rewards.length > 0) ? uTask.rewards : task.rewards
+      };
+    });
+
+    res.status(200).json(tasksWithProgress);
+  } catch (error) {
+    console.error('Lỗi lấy tiến độ nhiệm vụ chế tạo:', error);
+    res.status(500).json({ message: 'Không thể tải tiến độ nhiệm vụ chế tạo.', error: error.message });
+  }
+});
+
+// POST /api/lab/crafting/tasks/claim - Claim rewards for a completed task
+router.post('/crafting/tasks/claim', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Bạn chưa đăng nhập.' });
+    }
+
+    const { taskId } = req.body || {};
+    if (!taskId) {
+      return res.status(400).json({ message: 'Thiếu ID nhiệm vụ.' });
+    }
+
+    const result = await User.claimCraftingTaskReward(req.user.id, taskId);
+    
+    res.status(200).json({
+      success: true,
+      message: 'Nhận phần thưởng thành công!',
+      tasks: result.tasks.tasks, // send only tasks structure
+      inventory: result.inventory,
+      rewards: result.rewards
+    });
+  } catch (error) {
+    console.error('Lỗi nhận thưởng nhiệm vụ chế tạo:', error);
+    res.status(400).json({ message: error.message || 'Không thể nhận phần thưởng lúc này.' });
   }
 });
 
