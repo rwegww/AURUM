@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 // Common Components (Static - small & frequently used)
 import { AuthProvider } from '@/context/AuthContext'
 import Navbar from '@/components/navigation/Navbar'
+import FloatingWidget from '@/components/common/FloatingWidget'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
 
@@ -47,6 +48,7 @@ const LabBalancerPage = lazyWithRetry(() => import('@/pages/student/LabBalancerP
 const LabMoleculePage = lazyWithRetry(() => import('@/pages/student/LabMoleculePage'));
 const LabSolverPage = lazyWithRetry(() => import('@/pages/student/LabSolverPage'));
 const DiscoveryJournalPage = lazyWithRetry(() => import('@/pages/student/DiscoveryJournalPage'));
+const CraftingPage = lazyWithRetry(() => import('@/pages/student/CraftingPage'));
 const Arena = lazyWithRetry(() => import('@/pages/student/Arena'));
 const Library = lazyWithRetry(() => import('@/pages/student/Library'));
 const MaterialDetail = lazyWithRetry(() => import('@/pages/student/MaterialDetail'));
@@ -90,6 +92,16 @@ function AppContent() {
       window.location.replace('/login' + window.location.hash);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (location.state?.openMissions) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('aurum_open_nhiem_vu'));
+      }, 300);
+      // Clear location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
   const isImmersivePage = location.pathname.includes('/journey/') && (
@@ -135,13 +147,14 @@ function AppContent() {
           <Route path="/lab" element={<ProtectedRoute><ChemLab /></ProtectedRoute>} />
           <Route path="/lab/simulator" element={<ProtectedRoute><LabSimulatorPage /></ProtectedRoute>} />
           <Route path="/lab/discovery" element={<ProtectedRoute><DiscoveryJournalPage /></ProtectedRoute>} />
+          <Route path="/lab/crafting" element={<ProtectedRoute><CraftingPage /></ProtectedRoute>} />
           <Route path="/lab/balancer" element={<ProtectedRoute><LabBalancerPage /></ProtectedRoute>} />
           <Route path="/lab/molecules" element={<ProtectedRoute><LabMoleculePage /></ProtectedRoute>} />
           <Route path="/lab/solver" element={<ProtectedRoute><LabSolverPage /></ProtectedRoute>} />
           <Route path="/arena" element={<ProtectedRoute><Arena /></ProtectedRoute>} />
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
           <Route path="/library/:id" element={<ProtectedRoute><MaterialDetail /></ProtectedRoute>} />
-          <Route path="/nhiem_vu" element={<Navigate to="/" replace />} />
+          <Route path="/nhiem_vu" element={<Navigate to="/" replace state={{ openMissions: true }} />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
@@ -168,6 +181,9 @@ function AppContent() {
           </Route>
         </Routes>
       </Suspense>
+      
+      {/* Floating Global UI */}
+      {!isManagementPage && !isStandalonePage && <FloatingWidget />}
     </>
   );
 }

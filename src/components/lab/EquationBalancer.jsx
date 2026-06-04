@@ -1,6 +1,7 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
+import { Plus, Minus } from 'lucide-react';
 import EquationSkillTree from './EquationSkillTree';
 
 const EquationBalancer = () => {
@@ -215,9 +216,13 @@ const EquationStage = ({ nodeId, onBack, onComplete }) => {
                             {i > 0 && i !== currentQuestion.reactants.length && <span className="text-2xl font-bold text-gray-300">+</span>}
                             <div className="flex flex-col items-center gap-3">
                                 <div className="flex items-center gap-1">
-                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.max(1, next[i]-1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">âˆ’</button>
+                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.max(1, next[i]-1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 hover:bg-viet-green/5 flex items-center justify-center" aria-label="Decrease coefficient">
+                                        <Minus size={14} strokeWidth={3} className="text-viet-text" />
+                                    </button>
                                     <div className="w-12 h-12 rounded-xl bg-white border-2 border-viet-green/20 flex items-center justify-center text-xl font-black">{userCoeffs[i]}</div>
-                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.min(20, next[i]+1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 font-bold hover:bg-viet-green/5">+</button>
+                                    <button onClick={() => setUserCoeffs(p => { const next = [...p]; next[i] = Math.min(20, next[i]+1); return next; })} className="w-8 h-8 rounded-lg bg-white border border-gray-200 hover:bg-viet-green/5 flex items-center justify-center" aria-label="Increase coefficient">
+                                        <Plus size={14} strokeWidth={3} className="text-viet-text" />
+                                    </button>
                                 </div>
                                 <span className="text-2xl font-black text-viet-text">{f}</span>
                             </div>

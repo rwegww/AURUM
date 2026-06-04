@@ -71,6 +71,21 @@ const PeriodicTable = () => {
     return el.uses || [];
   };
 
+  const propertyLabels = {
+    state: 'Trạng thái',
+    meltingPoint: 'Nhiệt độ nóng chảy',
+    boilingPoint: 'Nhiệt độ sôi',
+    density: 'Khối lượng riêng',
+    electronegativity: 'Độ âm điện',
+    electronConfig: 'Cấu hình electron',
+  };
+
+  const formatPropertyValue = (key, value) => {
+    if (key.includes('Point')) return `${value}°C`;
+    if (key === 'electronegativity') return `${value} Pauling`;
+    return value;
+  };
+
   return (
     <div className="min-h-screen bg-[#fffcf5] pt-28 pb-12 shadow-[inset_0_0_100px_rgba(0,0,0,0.02)]">
       <div className="absolute inset-0 opacity-[0.05] pointer-events-none mix-blend-multiply"
@@ -289,15 +304,15 @@ const PeriodicTable = () => {
                           </div>
 
                           <div className="grid grid-cols-2 gap-2 md:gap-3">
-                            {['state', 'meltingPoint', 'boilingPoint', 'density', 'electronConfig'].map((key) => {
-                              if (!selectedElement[key]) return null;
+                            {['state', 'meltingPoint', 'boilingPoint', 'density', 'electronegativity', 'electronConfig'].map((key) => {
+                              if (selectedElement[key] === null || selectedElement[key] === undefined || selectedElement[key] === '') return null;
                               return (
                                 <div key={key} className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
                                   <p className="text-[7px] md:text-[8px] font-black text-viet-text-light uppercase tracking-widest mb-0.5">
-                                    {t(`periodic_table.modal.properties.${key}`)}
+                                    {t(`periodic_table.modal.properties.${key}`, { defaultValue: propertyLabels[key] })}
                                   </p>
                                   <p className="text-[12px] md:text-[14px] font-black text-viet-text">
-                                    {selectedElement[key]}{key.includes('Point') ? '°C' : ''}
+                                    {formatPropertyValue(key, selectedElement[key])}
                                   </p>
                                 </div>
                               );
@@ -391,6 +406,9 @@ const PeriodicTable = () => {
 
                           <button className="w-full py-2.5 md:py-3.5 bg-viet-text text-white rounded-xl md:rounded-2xl text-[9px] md:text-[11px] font-black uppercase tracking-widest hover:bg-viet-green transition-all shadow-lg shadow-black/5" onClick={() => window.open(`https://${i18n.language === 'vi' ? 'vi' : 'en'}.wikipedia.org/wiki/${selectedElement.symbol === 'H' ? (i18n.language === 'vi' ? 'Hiđrô' : 'Hydrogen') : selectedElement.name}`, '_blank')}>
                             {t('periodic_table.modal.wiki_btn')}
+                          </button>
+                          <button className="w-full py-2.5 md:py-3.5 bg-viet-green text-white rounded-xl md:rounded-2xl text-[9px] md:text-[11px] font-black uppercase tracking-widest hover:bg-viet-text transition-all shadow-lg shadow-black/5" onClick={() => window.open(selectedElement.videoUrl, '_blank')}>
+                            Video thực tế
                           </button>
                         </div>
                       </div>

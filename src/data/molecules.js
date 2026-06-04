@@ -210,6 +210,274 @@ export const molecules = [
       { from: 4, to: 10, type: "single" },
       { from: 5, to: 11, type: "single" }
     ]
+  },
+  {
+    id: "hcl",
+    name: "Hydro Clorua (HCl)",
+    formula: "HCl",
+    category: "Vô cơ",
+    description: "Phân tử phân cực mạnh; khi tan trong nước tạo axit clohidric.",
+    gradeLevel: 9,
+    atoms: [
+      { id: 0, element: "H", position: [-0.64, 0, 0] },
+      { id: 1, element: "Cl", position: [0.64, 0, 0] }
+    ],
+    bonds: [{ from: 0, to: 1, type: "single" }]
+  },
+  {
+    id: "cl2",
+    name: "Clo (Cl₂)",
+    formula: "Cl₂",
+    category: "Vô cơ",
+    description: "Khí halogen màu vàng lục, gồm hai nguyên tử clo liên kết cộng hóa trị đơn.",
+    gradeLevel: 10,
+    atoms: [
+      { id: 0, element: "Cl", position: [-0.99, 0, 0] },
+      { id: 1, element: "Cl", position: [0.99, 0, 0] }
+    ],
+    bonds: [{ from: 0, to: 1, type: "single" }]
+  },
+  {
+    id: "nacl",
+    name: "Natri Clorua (NaCl)",
+    formula: "NaCl",
+    category: "Muối",
+    description: "Mô hình cặp ion Na⁺ và Cl⁻ trong mạng tinh thể muối ăn.",
+    gradeLevel: 8,
+    atoms: [
+      { id: 0, element: "Na", position: [-0.9, 0, 0] },
+      { id: 1, element: "Cl", position: [0.9, 0, 0] }
+    ],
+    bonds: [{ from: 0, to: 1, type: "ionic" }]
+  },
+  {
+    id: "naoh",
+    name: "Natri Hidroxit (NaOH)",
+    formula: "NaOH",
+    category: "Bazơ",
+    description: "Bazơ mạnh gồm ion Na⁺ và nhóm hydroxide OH⁻.",
+    gradeLevel: 9,
+    atoms: [
+      { id: 0, element: "Na", position: [-1.35, 0, 0] },
+      { id: 1, element: "O", position: [0, 0, 0] },
+      { id: 2, element: "H", position: [0.92, 0.28, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "ionic" },
+      { from: 1, to: 2, type: "single" }
+    ]
+  },
+  {
+    id: "caco3",
+    name: "Canxi Cacbonat (CaCO₃)",
+    formula: "CaCO₃",
+    category: "Muối",
+    description: "Mô hình ion Ca²⁺ tương tác với nhóm carbonate CO₃²⁻ dạng tam giác phẳng.",
+    gradeLevel: 9,
+    atoms: [
+      { id: 0, element: "Ca", position: [-1.55, 0, 0.25] },
+      { id: 1, element: "C", position: [0, 0, 0] },
+      { id: 2, element: "O", position: [1.15, 0, 0] },
+      { id: 3, element: "O", position: [-0.58, 1.0, 0] },
+      { id: 4, element: "O", position: [-0.58, -1.0, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 3, type: "ionic" },
+      { from: 1, to: 2, type: "double" },
+      { from: 1, to: 3, type: "single" },
+      { from: 1, to: 4, type: "single" }
+    ]
+  },
+  {
+    id: "fe3o4",
+    name: "Oxit Sắt Từ (Fe₃O₄)",
+    formula: "Fe₃O₄",
+    category: "Oxit",
+    description: "Cụm mô phỏng đơn vị magnetite, nhấn mạnh mạng Fe-O thay vì một phân tử riêng lẻ.",
+    gradeLevel: 9,
+    atoms: [
+      { id: 0, element: "O", position: [0, 0, 0] },
+      { id: 1, element: "Fe", position: [1.15, 0, 0.55] },
+      { id: 2, element: "Fe", position: [-0.58, 1.0, -0.35] },
+      { id: 3, element: "Fe", position: [-0.58, -1.0, -0.35] },
+      { id: 4, element: "O", position: [0, 1.45, 0.8] },
+      { id: 5, element: "O", position: [-1.25, -0.72, 0.8] },
+      { id: 6, element: "O", position: [1.25, -0.72, -0.8] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "ionic" },
+      { from: 0, to: 2, type: "ionic" },
+      { from: 0, to: 3, type: "ionic" },
+      { from: 1, to: 4, type: "ionic" },
+      { from: 2, to: 5, type: "ionic" },
+      { from: 3, to: 6, type: "ionic" }
+    ]
+  },
+  {
+    id: "h2s",
+    name: "Hydro Sunfua (H₂S)",
+    formula: "H₂S",
+    category: "Vô cơ",
+    description: "Phân tử dạng góc, có mùi trứng thối đặc trưng.",
+    gradeLevel: 10,
+    atoms: [
+      { id: 0, element: "S", position: [0, 0, 0] },
+      { id: 1, element: "H", position: [0.92, 0.42, 0] },
+      { id: 2, element: "H", position: [-0.92, 0.42, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "single" },
+      { from: 0, to: 2, type: "single" }
+    ]
+  },
+  {
+    id: "so2",
+    name: "Lưu huỳnh Dioxit (SO₂)",
+    formula: "SO₂",
+    category: "Vô cơ",
+    description: "Phân tử dạng góc do cặp electron tự do trên lưu huỳnh.",
+    gradeLevel: 10,
+    atoms: [
+      { id: 0, element: "S", position: [0, 0, 0] },
+      { id: 1, element: "O", position: [1.22, 0.58, 0] },
+      { id: 2, element: "O", position: [-1.22, 0.58, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "double" },
+      { from: 0, to: 2, type: "double" }
+    ]
+  },
+  {
+    id: "o3",
+    name: "Ozon (O₃)",
+    formula: "O₃",
+    category: "Vô cơ",
+    description: "Dạng thù hình của oxy, có cấu trúc góc và liên kết cộng hưởng.",
+    gradeLevel: 10,
+    atoms: [
+      { id: 0, element: "O", position: [0, 0, 0] },
+      { id: 1, element: "O", position: [1.08, 0.55, 0] },
+      { id: 2, element: "O", position: [-1.08, 0.55, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "double" },
+      { from: 0, to: 2, type: "single" }
+    ]
+  },
+  {
+    id: "h2o2",
+    name: "Hydro Peroxit (H₂O₂)",
+    formula: "H₂O₂",
+    category: "Vô cơ",
+    description: "Phân tử có liên kết O-O; dung dịch quen thuộc là nước oxy già.",
+    gradeLevel: 10,
+    atoms: [
+      { id: 0, element: "O", position: [-0.72, 0, 0.2] },
+      { id: 1, element: "O", position: [0.72, 0, -0.2] },
+      { id: 2, element: "H", position: [-1.25, 0.78, 0.2] },
+      { id: 3, element: "H", position: [1.25, -0.78, -0.2] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "single" },
+      { from: 0, to: 2, type: "single" },
+      { from: 1, to: 3, type: "single" }
+    ]
+  },
+  {
+    id: "c2h6",
+    name: "Etan (C₂H₆)",
+    formula: "C₂H₆",
+    category: "Hữu cơ",
+    description: "Ankan đơn giản với liên kết đơn C-C và hình học gần tứ diện quanh mỗi carbon.",
+    gradeLevel: 11,
+    atoms: [
+      { id: 0, element: "C", position: [-0.77, 0, 0] },
+      { id: 1, element: "C", position: [0.77, 0, 0] },
+      { id: 2, element: "H", position: [-1.15, 0.92, 0.45] },
+      { id: 3, element: "H", position: [-1.15, -0.92, 0.45] },
+      { id: 4, element: "H", position: [-1.15, 0, -0.95] },
+      { id: 5, element: "H", position: [1.15, 0.92, -0.45] },
+      { id: 6, element: "H", position: [1.15, -0.92, -0.45] },
+      { id: 7, element: "H", position: [1.15, 0, 0.95] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "single" },
+      { from: 0, to: 2, type: "single" },
+      { from: 0, to: 3, type: "single" },
+      { from: 0, to: 4, type: "single" },
+      { from: 1, to: 5, type: "single" },
+      { from: 1, to: 6, type: "single" },
+      { from: 1, to: 7, type: "single" }
+    ]
+  },
+  {
+    id: "c2h4",
+    name: "Eten (C₂H₄)",
+    formula: "C₂H₄",
+    category: "Hữu cơ",
+    description: "Anken đơn giản nhất, phân tử phẳng với liên kết đôi C=C.",
+    gradeLevel: 11,
+    atoms: [
+      { id: 0, element: "C", position: [-0.67, 0, 0] },
+      { id: 1, element: "C", position: [0.67, 0, 0] },
+      { id: 2, element: "H", position: [-1.2, 0.9, 0] },
+      { id: 3, element: "H", position: [-1.2, -0.9, 0] },
+      { id: 4, element: "H", position: [1.2, 0.9, 0] },
+      { id: 5, element: "H", position: [1.2, -0.9, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "double" },
+      { from: 0, to: 2, type: "single" },
+      { from: 0, to: 3, type: "single" },
+      { from: 1, to: 4, type: "single" },
+      { from: 1, to: 5, type: "single" }
+    ]
+  },
+  {
+    id: "c2h2",
+    name: "Axetilen (C₂H₂)",
+    formula: "C₂H₂",
+    category: "Hữu cơ",
+    description: "Ankin đơn giản nhất, phân tử thẳng với liên kết ba C≡C.",
+    gradeLevel: 11,
+    atoms: [
+      { id: 0, element: "H", position: [-1.8, 0, 0] },
+      { id: 1, element: "C", position: [-0.6, 0, 0] },
+      { id: 2, element: "C", position: [0.6, 0, 0] },
+      { id: 3, element: "H", position: [1.8, 0, 0] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "single" },
+      { from: 1, to: 2, type: "triple" },
+      { from: 2, to: 3, type: "single" }
+    ]
+  },
+  {
+    id: "ch3cooh",
+    name: "Axit Axetic (CH₃COOH)",
+    formula: "CH₃COOH",
+    category: "Hữu cơ",
+    description: "Axit hữu cơ chính trong giấm, có nhóm chức carboxyl -COOH.",
+    gradeLevel: 11,
+    atoms: [
+      { id: 0, element: "C", position: [-0.85, 0, 0] },
+      { id: 1, element: "C", position: [0.55, 0, 0] },
+      { id: 2, element: "O", position: [1.2, 1.05, 0] },
+      { id: 3, element: "O", position: [1.25, -1.05, 0] },
+      { id: 4, element: "H", position: [1.95, -1.18, 0] },
+      { id: 5, element: "H", position: [-1.25, 0.95, 0.25] },
+      { id: 6, element: "H", position: [-1.25, -0.95, 0.25] },
+      { id: 7, element: "H", position: [-1.35, 0, -0.9] }
+    ],
+    bonds: [
+      { from: 0, to: 1, type: "single" },
+      { from: 1, to: 2, type: "double" },
+      { from: 1, to: 3, type: "single" },
+      { from: 3, to: 4, type: "single" },
+      { from: 0, to: 5, type: "single" },
+      { from: 0, to: 6, type: "single" },
+      { from: 0, to: 7, type: "single" }
+    ]
   }
 ];
 

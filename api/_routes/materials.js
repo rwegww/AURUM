@@ -1,6 +1,9 @@
 import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
+import User from '../models/User.js';
+import jwt from 'jsonwebtoken';
+
 
 const router = express.Router();
 
@@ -193,6 +196,30 @@ router.get('/:id', async (req, res) => {
     // Increment view count (fire and forget) if not explicitly disabled
     if (increment !== 'false') {
       supabase.rpc('increment_material_view', { material_id: id }).then();
+    }
+
+    // Try optional authentication to track crafting quest progress
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (token) {
+      try {
+        let userId;
+        const decoded = (() => {
+          try { return jwt.verify(token, process.env.JWT_SECRET); } catch { return null; }
+        })();
+
+        if (decoded && decoded.id) {
+          userId = decoded.id;
+        } else {
+          const { data: sbData } = await supabase.auth.getUser(token);
+          if (sbData?.user) userId = sbData.user.id;
+        }
+
+        if (userId) {
+          await User.incrementCraftingTaskProgress(userId, 'interact_library', id);
+        }
+      } catch (authErr) {
+        console.warn('⚠️ [Materials] Optional auth tracking failed:', authErr.message);
+      }
     }
 
     res.json(normalizeMaterial(data));

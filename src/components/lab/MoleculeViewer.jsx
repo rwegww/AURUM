@@ -1,8 +1,8 @@
-﻿import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules, elementColors, elementRadii } from '../../data/molecules';
 import { useAuth } from '@/context/AuthContext';
-import { Microscope } from 'lucide-react';
+import { Microscope, Plus, Minus } from 'lucide-react';
 
 const normalize = (f) => {
   if (!f) return "";
@@ -413,10 +413,14 @@ const MoleculeViewer = () => {
             </div>
 
             <div className="flex items-center gap-3">
-                <div className="flex items-center bg-[#f0f2f5] px-4 py-2 rounded-xl border border-gray-200">
-                    <button onClick={() => setZoom(z => Math.max(0.5, z - 0.2))} className="text-xl font-bold hover:text-viet-green transition-colors">âˆ’</button>
+                <div className="flex items-center bg-[#f0f2f5] px-4 py-2 rounded-xl border border-gray-200 gap-2">
+                    <button onClick={() => setZoom(z => Math.max(0.5, z - 0.2))} className="hover:text-viet-green transition-colors p-1 flex items-center justify-center" aria-label="Zoom out">
+                        <Minus size={14} strokeWidth={3} />
+                    </button>
                     <span className="text-[11px] font-bold w-12 text-center">{Math.round(zoom * 100)}%</span>
-                    <button onClick={() => setZoom(z => Math.min(4, z + 0.2))} className="text-xl font-bold hover:text-viet-green transition-colors">+</button>
+                    <button onClick={() => setZoom(z => Math.min(4, z + 0.2))} className="hover:text-viet-green transition-colors p-1 flex items-center justify-center" aria-label="Zoom in">
+                        <Plus size={14} strokeWidth={3} />
+                    </button>
                 </div>
                 <button onClick={resetView} className="px-5 py-2 rounded-xl text-[10px] font-black text-viet-text-light border border-gray-200 bg-white hover:bg-gray-50 uppercase tracking-widest">Đặt lại góc nhìn</button>
             </div>
