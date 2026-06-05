@@ -13,32 +13,32 @@ const PeriodicTable = () => {
   const [detailTab, setDetailTab] = useState('overview');
   const [imgError, setImgError] = useState(false);
 
+  const getSimplifiedCategory = (category) => {
+    if (['metal', 'alkali-metal', 'alkaline-earth-metal', 'transition-metal', 'post-transition-metal', 'lanthanide', 'actinide'].includes(category)) {
+      return 'metal';
+    }
+    if (['nonmetal', 'diatomic-nonmetal', 'polyatomic-nonmetal', 'metalloid'].includes(category)) {
+      return 'nonmetal';
+    }
+    if (['noble-gas', 'noble_gas'].includes(category)) {
+      return 'noble-gas';
+    }
+    return 'other';
+  };
+
   const categories = [
     { id: 'all', label: t('periodic_table.categories.all'), color: 'bg-viet-green' },
-    { id: 'diatomic-nonmetal', label: t('periodic_table.categories.diatomic-nonmetal'), color: 'bg-emerald-500/20' },
-    { id: 'noble-gas', label: t('periodic_table.categories.noble-gas'), color: 'bg-indigo-500/20' },
-    { id: 'alkali-metal', label: t('periodic_table.categories.alkali-metal'), color: 'bg-red-500/20' },
-    { id: 'alkaline-earth-metal', label: t('periodic_table.categories.alkaline-earth-metal'), color: 'bg-orange-500/20' },
-    { id: 'metalloid', label: t('periodic_table.categories.metalloid'), color: 'bg-teal-500/20' },
-    { id: 'polyatomic-nonmetal', label: t('periodic_table.categories.polyatomic-nonmetal'), color: 'bg-green-500/20' },
-    { id: 'post-transition-metal', label: t('periodic_table.categories.post-transition-metal'), color: 'bg-cyan-500/20' },
-    { id: 'transition-metal', label: t('periodic_table.categories.transition-metal'), color: 'bg-yellow-500/20' },
-    { id: 'lanthanide', label: t('periodic_table.categories.lanthanide'), color: 'bg-pink-500/20' },
-    { id: 'actinide', label: t('periodic_table.categories.actinide'), color: 'bg-purple-500/20' },
+    { id: 'metal', label: t('periodic_table.categories.metal'), color: 'bg-amber-500/20' },
+    { id: 'nonmetal', label: t('periodic_table.categories.nonmetal'), color: 'bg-emerald-500/20' },
+    { id: 'noble-gas', label: t('periodic_table.categories.noble-gas'), color: 'bg-purple-500/20' },
   ];
 
   const getCategoryColor = (category) => {
-    switch (category) {
-      case 'alkali-metal': return 'from-red-500/10 to-red-600/5 border-red-200 text-red-600';
-      case 'alkaline-earth-metal': return 'from-orange-500/10 to-orange-600/5 border-orange-200 text-orange-600';
-      case 'transition-metal': return 'from-yellow-500/10 to-yellow-600/5 border-yellow-200 text-yellow-600';
-      case 'post-transition-metal': return 'from-cyan-500/10 to-cyan-600/5 border-cyan-200 text-cyan-600';
-      case 'metalloid': return 'from-teal-500/10 to-teal-600/5 border-teal-200 text-teal-600';
-      case 'diatomic-nonmetal': return 'from-emerald-500/10 to-emerald-600/5 border-emerald-200 text-emerald-600';
-      case 'polyatomic-nonmetal': return 'from-green-500/10 to-green-600/5 border-green-200 text-green-600';
-      case 'noble-gas': return 'from-indigo-500/10 to-indigo-600/5 border-indigo-200 text-indigo-600';
-      case 'lanthanide': return 'from-pink-500/10 to-pink-600/5 border-pink-200 text-pink-600';
-      case 'actinide': return 'from-purple-500/10 to-purple-600/5 border-purple-200 text-purple-600';
+    const simpleCat = getSimplifiedCategory(category);
+    switch (simpleCat) {
+      case 'metal': return 'from-amber-500/10 to-amber-600/5 border-amber-200 text-amber-700';
+      case 'nonmetal': return 'from-emerald-500/10 to-emerald-600/5 border-emerald-200 text-emerald-700';
+      case 'noble-gas': return 'from-purple-500/10 to-purple-600/5 border-purple-200 text-purple-700';
       default: return 'from-slate-500/10 to-slate-600/5 border-slate-200 text-slate-600';
     }
   };
@@ -101,14 +101,10 @@ const PeriodicTable = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
               >
-                <span className="text-viet-green text-[8px] md:text-[9px] font-black uppercase tracking-[5px] mb-2 block">{t('periodic_table.database_label')}</span>
                 <h1 className="text-2xl md:text-3xl font-black text-viet-text leading-none italic uppercase tracking-tighter mb-3 md:mb-4">
                   {t('periodic_table.title_main')} <br className="hidden md:block" /> {t('periodic_table.title_sub')}
                   <span className="text-viet-green underline decoration-4 underline-offset-4 md:underline-offset-8">{t('periodic_table.title_highlight')}</span>
                 </h1>
-                <p className="text-viet-text-light text-[10px] md:text-[11px] font-bold leading-relaxed opacity-70 uppercase tracking-widest hidden sm:block">
-                  {t('periodic_table.system_desc')}
-                </p>
               </motion.div>
             </div>
 
@@ -150,7 +146,7 @@ const PeriodicTable = () => {
             <div className="relative flex-1 flex items-center justify-center overflow-x-auto custom-scrollbar overflow-y-hidden">
               <div className="grid grid-cols-18 gap-1 md:gap-1.5 min-w-[700px] lg:min-w-[900px] xl:min-w-[1000px] p-4 scale-[0.65] sm:scale-[0.73] lg:scale-[0.81] xl:scale-[0.85] 2xl:scale-[0.94] origin-center transition-all duration-500">
                 {elements.map((el) => {
-                  const isActive = filter === 'all' || el.category === filter;
+                  const isActive = filter === 'all' || getSimplifiedCategory(el.category) === filter;
                   const isHighlighted = hoveredElement && hoveredElement.number === el.number;
                   return (
                     <motion.div
@@ -188,17 +184,6 @@ const PeriodicTable = () => {
                 <div className="flex flex-col">
                   <span className="text-[8px] font-black text-viet-text/40 uppercase tracking-widest mb-1">{t('periodic_table.quick_guide.title')}</span>
                   <p className="text-[12px] font-bold text-viet-text italic">{t('periodic_table.quick_guide.desc')}</p>
-                </div>
-                <div className="h-8 w-[1px] bg-viet-border/30" />
-                <div className="flex gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-red-400" />
-                    <span className="text-[9px] font-black text-viet-text-light uppercase tracking-widest">{t('periodic_table.legend.high_boiling')}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-blue-400" />
-                    <span className="text-[9px] font-black text-viet-text-light uppercase tracking-widest">{t('periodic_table.legend.gas_state')}</span>
-                  </div>
                 </div>
               </div>
 
@@ -242,7 +227,7 @@ const PeriodicTable = () => {
                   <div>
                     <h2 className="text-2xl md:text-3xl font-black text-viet-text font-sora italic">{getElementName(selectedElement)}</h2>
                     <p className={`text-[9px] md:text-[11px] font-black uppercase tracking-[0.3em] mt-0.5 md:mt-1 ${getCategoryColor(selectedElement.category).split(' ')[3]}`}>
-                      {t('periodic_table.modal.category_label')} {t(`periodic_table.categories.${selectedElement.category}`)}
+                      {t('periodic_table.modal.category_label')} {t(`periodic_table.categories.${getSimplifiedCategory(selectedElement.category)}`)}
                     </p>
                   </div>
                   <div className="sm:ml-auto flex gap-2 md:gap-3">

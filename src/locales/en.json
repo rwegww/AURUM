@@ -715,9 +715,9 @@
     "title_main": "Ancient",
     "title_sub": " table",
     "title_highlight": " of chemistry elements",
-    "database_label": "Ancient Database",
-    "system_desc": "Multi-dimensional chemistry lookup system",
-    "categories_title": "Element Flows",
+    "database_label": "",
+    "system_desc": "",
+    "categories_title": "Element Classification",
     "tech_manual": "Library Catalog v1.0",
     "quick_guide": {
       "title": "Quick Lookup",
@@ -729,16 +729,9 @@
     },
     "categories": {
       "all": "All",
-      "diatomic-nonmetal": "Diatomic Nonmetal",
-      "noble-gas": "Pure Gas",
-      "alkali-metal": "Alkali Metal",
-      "alkaline-earth-metal": "Alkaline Earth Metal",
-      "metalloid": "Metalloid",
-      "polyatomic-nonmetal": "Polyatomic Nonmetal",
-      "post-transition-metal": "Post-transition Metal",
-      "transition-metal": "Transition Metal",
-      "lanthanide": "Lanthanide",
-      "actinide": "Actinide"
+      "metal": "Metals",
+      "nonmetal": "Nonmetals",
+      "noble-gas": "Noble gases"
     },
     "modal": {
       "atomic_no": "Atomic No.",

@@ -714,9 +714,9 @@
     "title_main": "Bảng tuần",
     "title_sub": " hoàn",
     "title_highlight": " nguyên tố hóa học",
-    "database_label": "Cơ sở dữ liệu Cổ đại",
-    "system_desc": "Hệ thống tra cứu nguyên tử đa chiều",
-    "categories_title": "Phân loại dòng khí",
+    "database_label": "",
+    "system_desc": "",
+    "categories_title": "Phân loại nguyên tố",
     "tech_manual": "Học liệu thư viện v1.0",
     "quick_guide": {
       "title": "Quan sát nhanh",
@@ -728,16 +728,9 @@
     },
     "categories": {
       "all": "Tất cả",
-      "diatomic-nonmetal": "Phi kim đối hóa học",
-      "noble-gas": "Khí tinh khiết",
-      "alkali-metal": "Kim loại linh động",
-      "alkaline-earth-metal": "Kim loại kiềm thổ hóa học",
-      "metalloid": "Á hóa học nguyên",
-      "polyatomic-nonmetal": "Phi kim đa hóa học",
-      "post-transition-metal": "Kim loại chuyển hóa chậm",
-      "transition-metal": "Kim loại hóa học chuyển tiếp",
-      "lanthanide": "Họ Lanthan cổ xưa",
-      "actinide": "Họ Actini huyền bí"
+      "metal": "Kim loại",
+      "nonmetal": "Phi kim",
+      "noble-gas": "Khí hiếm"
     },
     "modal": {
       "atomic_no": "Số hiệu hóa học",
