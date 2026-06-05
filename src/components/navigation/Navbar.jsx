@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '@/components/common/Avatar';
@@ -70,7 +70,7 @@ const Navbar = () => {
             {/* JOURNEY GROUP */}
             <div className="relative group/nav">
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
-                {t('nav.journey')} <span className="text-[10px] opacity-30">â–¼</span>
+                {t('nav.journey')} <span className="text-[10px] opacity-30">▼</span>
               </button>
               <div className="absolute top-[80%] left-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
@@ -92,7 +92,7 @@ const Navbar = () => {
             {/* VAULT GROUP */}
             <div className="relative group/nav">
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
-                {t('nav.vault')} <span className="text-[10px] opacity-30">â–¼</span>
+                {t('nav.vault')} <span className="text-[10px] opacity-30">▼</span>
               </button>
               <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
@@ -111,7 +111,7 @@ const Navbar = () => {
             {/* ARENA GROUP */}
             <div className="relative group/nav">
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
-                {t('nav.arena')} <span className="text-[10px] opacity-30">â–¼</span>
+                {t('nav.arena')} <span className="text-[10px] opacity-30">▼</span>
               </button>
               <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
@@ -127,7 +127,7 @@ const Navbar = () => {
             {/* SUPPORT GROUP */}
             <div className="relative group/nav">
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
-                {t('nav.support')} <span className="text-[10px] opacity-30">â–¼</span>
+                {t('nav.support')} <span className="text-[10px] opacity-30">▼</span>
               </button>
               <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
@@ -166,7 +166,7 @@ const Navbar = () => {
                 <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none block truncate max-w-[100px] select-none">
                   {user?.username}
                 </span>
-                <span className="text-[8px] text-white/70 select-none mr-1">â–¼</span>
+                <span className="text-[8px] text-white/70 select-none mr-1">▼</span>
               </Link>
 
               {/* Dropdown Menu */}
