@@ -49,7 +49,10 @@ export default function ProfileTab() {
   };
 
   const joinClass = async () => {
-    if (!joinCode.trim()) return;
+    if (!joinCode.trim()) {
+      Alert.alert("Thiếu mã lớp", "Vui lòng nhập mã lớp giáo viên đã gửi.");
+      return;
+    }
     setJoining(true);
     try {
       await classApi.join(token, joinCode.trim().toUpperCase());
@@ -124,8 +127,8 @@ export default function ProfileTab() {
 
         <View style={styles.switchRow}>
           <View style={styles.switchText}>
-            <Text style={styles.fieldLabel}>Nhắc học qua thư điện tử</Text>
-            <Text style={styles.cardSubtitle}>Hệ thống sẽ dùng thư điện tử trong hồ sơ để gửi nhắc học.</Text>
+            <Text style={styles.fieldLabel}>Nhắc học qua email</Text>
+            <Text style={styles.cardSubtitle}>AURUM sẽ dùng email trong hồ sơ để gửi nhắc học.</Text>
           </View>
           <Switch
             value={studyPlan.emailEnabled}
@@ -151,7 +154,7 @@ export default function ProfileTab() {
           icon="people-outline"
           color={colors.green}
           onPress={joinClass}
-          disabled={joining}
+          disabled={joining || !joinCode.trim()}
         />
       </Card>
 

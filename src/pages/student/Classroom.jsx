@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
@@ -25,6 +25,14 @@ const Classroom = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const classroomData = [
+    {
+      grade: 7,
+      age: t('common.grade', { grade: 7 }),
+      title: t('classroom.grades.7.title'),
+      desc: t('classroom.grades.7.desc'),
+      image: "/assets/images/classroom/grade8-viet.png",
+      color: "bg-cyan-500"
+    },
     {
       grade: 8,
       age: t('common.grade', { grade: 8 }),
@@ -139,11 +147,11 @@ const Classroom = () => {
                          navigate(`/classroom/${item.grade}/journey`);
                        }
                      }}
-                     className={`w-full py-4 rounded-[1rem] font-black text-[13px] uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
-                       item.grade === 8 || item.grade === 'map'
-                       ? 'btn-tactile-green' 
-                       : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
-                     }`}
+                      className={`w-full py-4 rounded-[1rem] font-black text-[13px] uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
+                        item.grade === 7 || item.grade === 8 || item.grade === 'map'
+                        ? 'btn-tactile-green' 
+                        : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
+                      }`}
                    >
                      {item.grade === 'map' ? 'Khám phá ngay' : t('classroom.enter_class')} <span className="text-lg">→</span>
                    </button>

@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -47,10 +47,16 @@ export default function HomeTab() {
   }, [token]);
 
   const claimMission = async (missionId) => {
+    if (claimingId) return;
     setClaimingId(missionId);
-    await learningApi.claimMission(token, missionId).catch(() => null);
-    await Promise.all([dashboard.reload(), refreshProfile()]);
-    setClaimingId(null);
+    try {
+      await learningApi.claimMission(token, missionId);
+      await Promise.all([dashboard.reload(), refreshProfile()]);
+    } catch (error) {
+      Alert.alert("Chưa nhận được thưởng", error.message || "Vui lòng thử lại sau.");
+    } finally {
+      setClaimingId(null);
+    }
   };
 
   if (dashboard.loading && !dashboard.data) {
@@ -142,7 +148,7 @@ export default function HomeTab() {
                       label={claimingId === mission.id ? "Đang nhận" : "Nhận thưởng"}
                       icon="gift-outline"
                       onPress={() => claimMission(mission.id)}
-                      disabled={claimingId === mission.id}
+                      disabled={Boolean(claimingId)}
                       style={styles.smallButton}
                     />
                   ) : null}

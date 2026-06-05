@@ -247,9 +247,10 @@ export const libraryApi = {
       auth: false,
       query: { category, search }
     }),
-  detail: (id, { increment } = {}) =>
+  detail: (id, { increment, token } = {}) =>
     apiRequest(`/api/materials/${id}`, {
-      auth: false,
+      auth: Boolean(token),
+      token,
       query: { increment: increment === false ? "false" : undefined }
     }),
   phan_hoi: (id) => apiRequest(`/api/materials/${id}/feedback`, { auth: false }),

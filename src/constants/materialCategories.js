@@ -1,5 +1,6 @@
 export const CHEMISTRY_GRADES = [
   { id: 'chung', label: 'CHUNG', i18nKey: 'chung' },
+  { id: '7', label: 'LỚP 7', i18nKey: '7' },
   { id: '8', label: 'LỚP 8', i18nKey: '8' },
   { id: '9', label: 'LỚP 9', i18nKey: '9' },
   { id: '10', label: 'LỚP 10', i18nKey: '10' },

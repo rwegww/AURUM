@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
 import { CORE_KNOWLEDGE_LESSONS } from '@/data/coreKnowledge';
@@ -9,6 +9,7 @@ import InfographicBook from '@/components/lessons/InfographicBook';
 
 // Grade theme colors
 const GRADE_THEME = {
+  7: { color: '#06b6d4', light: '#ecfeff', border: '#c5e0e5', label: 'Lớp 7' },
   8: { color: '#16a34a', light: '#f0fdf4', border: '#bbf7d0', label: 'Lớp 8' },
   9: { color: '#f97316', light: '#fff7ed', border: '#fed7aa', label: 'Lớp 9' },
   10: { color: '#3b82f6', light: '#eff6ff', border: '#bfdbfe', label: 'Lớp 10' },

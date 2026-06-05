@@ -43,8 +43,8 @@
         "badge": "Learning Path",
         "title": "Structured learning path",
         "highlight": "Travel the knowledge map",
-        "desc": "From grade 8 to grade 12, each stop opens a clear and memorable chemistry topic.",
-        "desc_long": "From grade 8 to grade 12, Aurum guides learners through atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
+        "desc": "From grade 7 to grade 12, each stop opens a clear and memorable chemistry topic.",
+        "desc_long": "From grade 7 to grade 12, Aurum guides learners through atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
         "link": "Explore the path",
         "image_alt": "A Vietnam-inspired chemistry knowledge map"
       },
@@ -191,6 +191,10 @@
       "go_journey": "Open House Grade {{grade}} path"
     },
     "grades": {
+      "7": {
+        "title": "Introductory Chemistry (Grade 7)",
+        "desc": "Learn about atoms, elements, chemical bonds, and basic chemical reactions."
+      },
       "8": {
         "title": "Chemistry Foundations (Grade 8)",
         "desc": "Get familiar with substances, lab tools, and the first observable chemistry phenomena."
@@ -411,6 +415,10 @@
   "journey": {
     "badge": "Grade {{grade}} Path",
     "themes": {
+      "7": {
+        "title": "Nature Explorer",
+        "subtitle": "Discover scientific methods and structure of matter"
+      },
       "8": {
         "title": "The Initial Journey",
         "subtitle": "Mastering basic elements"
@@ -422,6 +430,14 @@
       "10": {
         "title": "The Atomic Architect",
         "subtitle": "Building the microscopic world"
+      },
+      "11": {
+        "title": "The Organic World",
+        "subtitle": "Explore carbon chains and functional groups"
+      },
+      "12": {
+        "title": "Applied Science Mastery",
+        "subtitle": "Bridge chemical theories with practical innovations"
       }
     },
     "test_banner": {

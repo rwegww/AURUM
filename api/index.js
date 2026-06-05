@@ -131,7 +131,7 @@ app.use((err, req, res, _next) => {
 });
 
 
-// Consolidated Server Listener
+// Consolidated Server Listener (with host binding support)
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
   const HOST = process.env.API_HOST || '127.0.0.1';

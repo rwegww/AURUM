@@ -10,6 +10,13 @@ import {
 
 const AuthContext = React.createContext(null);
 
+const normalizeEmail = (email = "") => String(email).trim().toLowerCase();
+
+const normalizeLoginIdentifier = (value = "") => {
+  const trimmed = String(value).trim();
+  return trimmed.includes("@") ? trimmed.toLowerCase() : trimmed;
+};
+
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) {
@@ -90,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = React.useCallback(async (username, password) => {
     try {
-      const result = await authApi.login(username.trim(), password);
+      const result = await authApi.login(normalizeLoginIdentifier(username), password);
       await finishAuth(result);
       return { success: true };
     } catch (error) {
@@ -117,7 +124,7 @@ export const AuthProvider = ({ children }) => {
 
   const requestEmailOtp = React.useCallback(async (email) => {
     try {
-      const result = await authApi.requestEmailOtp(email.trim());
+      const result = await authApi.requestEmailOtp(normalizeEmail(email));
       if (mountedRef.current) setAuthError(null);
       return { success: true, ...result };
     } catch (error) {
@@ -129,7 +136,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyEmailOtp = React.useCallback(async (email, otp) => {
     try {
-      const result = await authApi.verifyEmailOtp(email.trim(), otp.trim());
+      const result = await authApi.verifyEmailOtp(normalizeEmail(email), otp.trim());
       await finishAuth(result);
       return { success: true };
     } catch (error) {
@@ -144,7 +151,7 @@ export const AuthProvider = ({ children }) => {
       const result = await authApi.register({
         username: username.trim(),
         password,
-        email: email.trim(),
+        email: normalizeEmail(email),
         grade
       });
       await finishAuth(result);
@@ -223,6 +230,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   React.useEffect(() => {
+    if (!supabase) return undefined;
+
     const {
       data: { subscription }
     } = supabase.auth.onAuthStateChange(async (_event, session) => {

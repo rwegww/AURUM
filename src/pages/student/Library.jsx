@@ -64,6 +64,7 @@ const Library = () => {
   const grades = [
     { id: '', label: t('library.filter.all_grades', 'Tất cả lớp') },
     { id: 'chung', label: t('library.filter.grade_general', 'Hóa Chung') },
+    { id: '7', label: t('library.filter.grade_7', 'Lớp 7') },
     { id: '8', label: t('library.filter.grade_8', 'Lớp 8') },
     { id: '9', label: t('library.filter.grade_9', 'Lớp 9') },
     { id: '10', label: t('library.filter.grade_10', 'Lớp 10') },

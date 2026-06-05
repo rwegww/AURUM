@@ -45,7 +45,7 @@ export default function EmailLoginScreen() {
     setStep("otp");
     setInfoMessage(
       result.previewUrl
-        ? "Mã OTP đã được gửi. Môi trường dev có Preview URL trong log server."
+        ? "Mã OTP đã được gửi. Khi chạy thử, bạn có thể mở email xem trước từ log máy chủ."
         : "Mã OTP đã được gửi nếu email này thuộc tài khoản AURUM."
     );
   };
@@ -100,7 +100,7 @@ export default function EmailLoginScreen() {
           {step === "email" ? (
             <TextField
               icon="mail-outline"
-              placeholder="Thư điện tử"
+              placeholder="Email"
               value={email}
               keyboardType="email-address"
               autoComplete="email"

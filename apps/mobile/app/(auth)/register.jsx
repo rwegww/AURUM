@@ -47,7 +47,7 @@ export default function RegisterScreen() {
       <Screen>
         <Card style={styles.formCard}>
           <Text style={styles.title}>Tạo tài khoản học sinh</Text>
-          <Text style={styles.subtitle}>Tài khoản mới sẽ được nối ngay với hồ sơ học tập, điểm kinh nghiệm và chuỗi học.</Text>
+          <Text style={styles.subtitle}>Tài khoản mới sẽ liên kết ngay với hồ sơ học tập, điểm kinh nghiệm và chuỗi học.</Text>
 
           <TextField
             icon="person-outline"
@@ -57,7 +57,7 @@ export default function RegisterScreen() {
           />
           <TextField
             icon="mail-outline"
-            placeholder="Thư điện tử"
+            placeholder="Email"
             value={email}
             keyboardType="email-address"
             onChangeText={setEmail}

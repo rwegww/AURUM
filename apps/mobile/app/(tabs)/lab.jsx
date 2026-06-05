@@ -267,7 +267,17 @@ export default function SupportToolsTab() {
     }
 
     const solved = selectedFormula.solve(vars);
-    setResult(solved ? { values: solved } : { error: "Tổ hợp dữ liệu này chưa đủ hoặc chưa được công thức hỗ trợ." });
+    if (!solved) {
+      setResult({ error: "Tổ hợp dữ liệu này chưa đủ hoặc chưa được công thức hỗ trợ." });
+      return;
+    }
+
+    const hasFiniteResult = Object.values(solved).every((value) => Number.isFinite(value));
+    setResult(
+      hasFiniteResult
+        ? { values: solved }
+        : { error: "Kết quả chưa hợp lệ. Hãy kiểm tra lại dữ kiện, nhất là các giá trị phải khác 0." }
+    );
   };
 
   const clearCalculator = () => {

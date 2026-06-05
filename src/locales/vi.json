@@ -43,8 +43,8 @@
         "badge": "Lộ Trình",
         "title": "Lộ trình học tập",
         "highlight": "Đi qua bản đồ tri thức",
-        "desc": "Từ lớp 8 đến lớp 12, mỗi chặng học mở ra một mảng kiến thức Hóa học gần gũi và có hệ thống.",
-        "desc_long": "Từ lớp 8 đến lớp 12, Aurum dẫn bạn đi qua các chủ đề Hóa học theo từng chặng rõ ràng: nguyên tử, phản ứng, dung dịch, hữu cơ và ứng dụng đời sống. Mỗi bài học gắn với hình ảnh Việt Nam để việc học dễ nhớ hơn.",
+        "desc": "Từ lớp 7 đến lớp 12, mỗi chặng học mở ra một mảng kiến thức Hóa học gần gũi và có hệ thống.",
+        "desc_long": "Từ lớp 7 đến lớp 12, Aurum dẫn bạn đi qua các chủ đề Hóa học theo từng chặng rõ ràng: nguyên tử, phản ứng, dung dịch, hữu cơ và ứng dụng đời sống. Mỗi bài học gắn với hình ảnh Việt Nam để việc học dễ nhớ hơn.",
         "link": "Khám phá lộ trình",
         "image_alt": "Bản đồ tri thức Hóa học phong cách Việt Nam"
       },
@@ -191,6 +191,10 @@
       "go_journey": "Mở lộ trình Nhà Lớp {{grade}}"
     },
     "grades": {
+      "7": {
+        "title": "Nhập Môn Hóa Học Lớp 7",
+        "desc": "Tìm hiểu về nguyên tử, nguyên tố, liên kết hóa học và phản ứng hóa học cơ bản."
+      },
       "8": {
         "title": "Khởi Động Hóa Học Lớp 8",
         "desc": "Làm quen với chất, dụng cụ thí nghiệm và những hiện tượng Hóa học đầu tiên."
@@ -407,6 +411,10 @@
   "journey": {
     "badge": "Lộ trình luyện tập Lớp {{grade}}",
     "themes": {
+      "7": {
+        "title": "Nhập Môn Tự Nhiên",
+        "subtitle": "Khám phá phương pháp khoa học và cấu tạo chất"
+      },
       "8": {
         "title": "Hành Trình Khởi Đầu",
         "subtitle": "Làm chủ các nguyên tố hóa học cơ bản"
@@ -418,6 +426,14 @@
       "10": {
         "title": "Kiến Trúc Sư Hóa Học",
         "subtitle": "Xây dựng thế giới điểm học tập"
+      },
+      "11": {
+        "title": "Thế Giới Hữu Cơ",
+        "subtitle": "Khám phá cấu trúc mạch carbon và nhóm chức"
+      },
+      "12": {
+        "title": "Chinh Phục Thực Tiễn",
+        "subtitle": "Ứng dụng hóa học vào đời sống và công nghệ"
       }
     },
     "test_banner": {

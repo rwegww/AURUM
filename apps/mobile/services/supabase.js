@@ -19,11 +19,23 @@ const supabasePublishableKey =
   process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabasePublishableKey) {
-  throw new Error(
-    "Missing Supabase mobile config. Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY."
-  );
-}
+const normalizedSupabaseUrl = typeof supabaseUrl === "string" ? supabaseUrl.trim() : "";
+const normalizedSupabaseKey = typeof supabasePublishableKey === "string" ? supabasePublishableKey.trim() : "";
+
+const getSupabaseConfigError = () => {
+  if (!normalizedSupabaseUrl || !normalizedSupabaseKey) {
+    return "Chưa cấu hình đăng nhập Google. Hãy đặt EXPO_PUBLIC_SUPABASE_URL và EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY.";
+  }
+
+  try {
+    new URL(normalizedSupabaseUrl);
+    return null;
+  } catch {
+    return "Đường dẫn Supabase chưa hợp lệ. Hãy kiểm tra lại EXPO_PUBLIC_SUPABASE_URL.";
+  }
+};
+
+export const supabaseConfigError = getSupabaseConfigError();
 
 const supabaseStorage = {
   getItem: (key) => sessionStore.get(key),
@@ -31,17 +43,19 @@ const supabaseStorage = {
   removeItem: (key) => sessionStore.remove(key)
 };
 
-export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
-  auth: {
-    storage: supabaseStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-    lock: processLock
-  }
-});
+export const supabase = supabaseConfigError
+  ? null
+  : createClient(normalizedSupabaseUrl, normalizedSupabaseKey, {
+      auth: {
+        storage: supabaseStorage,
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false,
+        lock: processLock
+      }
+    });
 
-if (process.env.EXPO_OS !== "web" && AppState?.addEventListener) {
+if (supabase && process.env.EXPO_OS !== "web" && AppState?.addEventListener) {
   AppState.addEventListener("change", (state) => {
     if (state === "active") {
       supabase.auth.startAutoRefresh();
@@ -75,10 +89,26 @@ const getAuthUrlRedirectTo = (authUrl) => {
   }
 };
 
+const requireSupabase = () => {
+  if (!supabase) {
+    throw new Error(supabaseConfigError || "Chưa thể khởi tạo đăng nhập Google.");
+  }
+  return supabase;
+};
+
+const getSupabaseHost = () => {
+  try {
+    return new URL(normalizedSupabaseUrl).host;
+  } catch {
+    return normalizedSupabaseUrl;
+  }
+};
+
 export const startGoogleOAuth = async () => {
+  const client = requireSupabase();
   const redirectTo = getGoogleOAuthRedirectTo();
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
+  const { data, error } = await client.auth.signInWithOAuth({
     provider: "google",
     options: {
       redirectTo,
@@ -97,7 +127,7 @@ export const startGoogleOAuth = async () => {
       appOwnership: Constants.appOwnership,
       redirectTo,
       authUrlRedirectTo: getAuthUrlRedirectTo(data.url),
-      supabaseHost: new URL(supabaseUrl).host
+      supabaseHost: getSupabaseHost()
     });
   }
 
@@ -112,7 +142,7 @@ export const startGoogleOAuth = async () => {
   const code = params.get("code");
 
   if (code) {
-    const { data: codeSession, error: codeError } = await supabase.auth.exchangeCodeForSession(code);
+    const { data: codeSession, error: codeError } = await client.auth.exchangeCodeForSession(code);
     if (codeError) throw codeError;
     if (!codeSession.session?.access_token) {
       throw new Error("Google không trả về phiên đăng nhập hợp lệ.");
@@ -127,7 +157,7 @@ export const startGoogleOAuth = async () => {
     throw new Error("Google không trả về token đăng nhập hợp lệ.");
   }
 
-  const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
+  const { data: sessionData, error: sessionError } = await client.auth.setSession({
     access_token: accessToken,
     refresh_token: refreshToken
   });
@@ -137,15 +167,17 @@ export const startGoogleOAuth = async () => {
 };
 
 export const getSupabaseAccessToken = async () => {
-  const { data, error } = await supabase.auth.getSession();
+  const client = requireSupabase();
+  const { data, error } = await client.auth.getSession();
   if (error) throw error;
   if (data.session?.access_token) return data.session.access_token;
 
-  const refreshed = await supabase.auth.refreshSession();
+  const refreshed = await client.auth.refreshSession();
   if (refreshed.error) throw refreshed.error;
   return refreshed.data.session?.access_token || null;
 };
 
 export const clearSupabaseSession = async () => {
+  if (!supabase) return;
   await supabase.auth.signOut();
 };

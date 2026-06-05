@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
@@ -9,7 +9,7 @@ const Lectures = () => {
   const [searchParams] = useSearchParams();
   const queryGrade = searchParams.get('grade');
   
-  const [selectedGrade, setSelectedGrade] = useState(queryGrade ? parseInt(queryGrade) : 8);
+  const [selectedGrade, setSelectedGrade] = useState(queryGrade ? parseInt(queryGrade) : 7);
   const [bai_hoc, setLessons] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -63,7 +63,7 @@ const Lectures = () => {
 
         {/* Grade Filter */}
         <div className="flex flex-wrap gap-3 mb-10">
-          {[8, 9, 10, 11, 12].map((grade) => (
+          {[7, 8, 9, 10, 11, 12].map((grade) => (
             <button
               key={grade}
               onClick={() => setSelectedGrade(grade)}

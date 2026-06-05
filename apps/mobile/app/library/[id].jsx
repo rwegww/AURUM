@@ -32,12 +32,12 @@ export default function MaterialDetailScreen() {
     if (!materialId) return { material: null, phan_hoi: [] };
     const shouldIncrementView = viewedMaterialRef.current !== materialId;
     const [material, phan_hoi] = await Promise.all([
-      libraryApi.detail(materialId, { increment: shouldIncrementView }),
+      libraryApi.detail(materialId, { increment: shouldIncrementView, token }),
       libraryApi.phan_hoi(materialId).catch(() => [])
     ]);
     if (shouldIncrementView) viewedMaterialRef.current = materialId;
     return { material, phan_hoi };
-  }, [materialId]);
+  }, [materialId, token]);
 
   const material = resource.data?.material;
   const phan_hoi = resource.data?.phan_hoi || [];
@@ -65,11 +65,16 @@ export default function MaterialDetailScreen() {
       Alert.alert("Thiếu nội dung", "Vui lòng nhập nhận xét ngắn.");
       return;
     }
+    const numericRating = Number(rating);
+    if (!Number.isFinite(numericRating) || numericRating < 1 || numericRating > 5) {
+      Alert.alert("Điểm chưa hợp lệ", "Vui lòng chọn điểm từ 1 đến 5.");
+      return;
+    }
     setSubmitting(true);
     try {
       await libraryApi.postFeedback(token, materialId, {
         content: content.trim(),
-        rating: Number(rating) || 5
+        rating: numericRating
       });
       setContent("");
       await resource.reload();
@@ -146,7 +151,7 @@ export default function MaterialDetailScreen() {
             <Text style={styles.phan_hoiText}>{item.content}</Text>
             {item.reply_content ? (
               <View style={styles.replyBox}>
-                <Text style={styles.replyTitle}>Phản hồi giáo viên</Text>
+                <Text style={styles.replyTitle}>Phản hồi từ giáo viên</Text>
                 <Text style={styles.replyText}>{item.reply_content}</Text>
               </View>
             ) : null}

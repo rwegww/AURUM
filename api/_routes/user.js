@@ -253,7 +253,7 @@ router.post('/lesson-segment', auth, async (req, res) => {
 
     const lesson = await Lesson.findById(lessonId);
     if (!lesson) {
-      return res.status(404).json({ message: 'Lesson not found' });
+      return res.status(404).json({ message: 'Không tìm thấy bài học.' });
     }
 
     const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
@@ -309,7 +309,7 @@ router.post('/lesson-segment', auth, async (req, res) => {
     const updatedUser = await User.update(req.user.id, updateFields);
     res.json({ success: true, user: toProfileResponse(updatedUser) });
   } catch (err) {
-    res.status(500).json({ message: 'Could not update lesson segment', error: err.message });
+    res.status(500).json({ message: 'Không thể lưu tiến độ bài học lúc này.', error: err.message });
   }
 });
 
@@ -339,7 +339,7 @@ router.post('/placement-pass', auth, async (req, res) => {
     const updatedUser = await User.update(req.user.id, updateFields);
     res.json({ success: true, user: toProfileResponse(updatedUser), xpGained: alreadyPassed ? 0 : 500 });
   } catch (err) {
-    res.status(500).json({ message: 'Could not save placement result', error: err.message });
+    res.status(500).json({ message: 'Không thể lưu kết quả kiểm tra lúc này.', error: err.message });
   }
 });
 

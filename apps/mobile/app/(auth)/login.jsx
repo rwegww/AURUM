@@ -48,11 +48,11 @@ export default function LoginScreen() {
 
         <Card style={styles.formCard}>
           <Text style={styles.formTitle}>Đăng nhập</Text>
-          <Text style={styles.formSubtitle}>Mở lại lộ trình học, công cụ hỗ trợ và đấu trường của bạn.</Text>
+          <Text style={styles.formSubtitle}>Tiếp tục lộ trình học, công cụ hỗ trợ và đấu trường của bạn.</Text>
 
           <TextField
             icon="person-outline"
-            placeholder="Tên đăng nhập hoặc thư điện tử"
+            placeholder="Tên đăng nhập hoặc email"
             value={username}
             onChangeText={setUsername}
             returnKeyType="next"
@@ -84,7 +84,7 @@ export default function LoginScreen() {
 
           <Link href="/email-login" asChild>
             <GhostButton
-              label="Đăng nhập bằng email OTP"
+              label="Đăng nhập bằng mã OTP"
               icon="mail-open-outline"
               disabled={submitting}
               color={colors.greenDark}

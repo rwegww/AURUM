@@ -47,7 +47,7 @@ export default function MoreTab() {
       <ScreenHeader
         eyebrow="Trình đơn"
         title="Thêm"
-        subtitle="Các mục phụ được gom lại để lớp học là trung tâm của ứng dụng."
+        subtitle="Lối tắt, hồ sơ và tài khoản của bạn ở cùng một nơi."
         right={<Pill label={`Cấp ${user?.level || 1}`} icon="sparkles-outline" color={colors.green} />}
       />
 

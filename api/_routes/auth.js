@@ -63,11 +63,11 @@ router.post('/register', async (req, res) => {
     const { username, password, email, role = 'student', grade } = req.body;
 
     if (role !== 'student') {
-      return res.status(403).json({ message: 'Public registration only supports student accounts' });
+      return res.status(403).json({ message: 'Đăng ký công khai chỉ dành cho tài khoản học sinh.' });
     }
 
     if (!username || !password || !email) {
-      return res.status(400).json({ message: 'Vui lòng nhập đủ tên đăng nhập và mật khẩu.' });
+      return res.status(400).json({ message: 'Vui lòng nhập đầy đủ tên đăng nhập, email và mật khẩu.' });
     }
     
     // Check if user exists
@@ -78,7 +78,7 @@ router.post('/register', async (req, res) => {
 
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      return res.status(400).json({ message: 'Email da duoc su dung' });
+      return res.status(400).json({ message: 'Email đã được sử dụng' });
     }
 
     const user = await User.create({ username, password, email, role: 'student', grade });

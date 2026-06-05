@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -23,6 +23,16 @@ const FLOATING_BUBBLES = Array.from({ length: 15 }, (_, index) => ({
 
 // Expanded Class Themes for a spectacular look
 const CLASS_THEMES = {
+  '7': {
+    titleKey: 'journey.themes.7.title',
+    subtitleKey: 'journey.themes.7.subtitle',
+    primary: 'rgb(6, 182, 212)',       // cyan-500 (#06b6d4)
+    primaryLight: 'rgba(6, 182, 212, 0.1)',
+    primaryGlow: 'rgba(6, 182, 212, 0.4)',
+    gradient: 'from-cyan-500 to-blue-600',
+    blobColor: 'bg-cyan-400',
+    doodleSymbol: '🧪'
+  },
   '8': {
     titleKey: 'journey.themes.8.title',
     subtitleKey: 'journey.themes.8.subtitle',
@@ -157,7 +167,7 @@ const GradeJourney = () => {
     </div>
   );
 
-  const isFirstLessonDefaultUnlocked = grade === '8';
+  const isFirstLessonDefaultUnlocked = grade === '7' || grade === '8';
   const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
 
   const bai_hocStatus = bai_hoc.map((lesson, index) => {

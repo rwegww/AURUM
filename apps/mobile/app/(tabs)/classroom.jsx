@@ -45,7 +45,10 @@ export default function ClassroomTab() {
   }, [token]);
 
   const joinClass = async () => {
-    if (!joinCode.trim()) return;
+    if (!joinCode.trim()) {
+      Alert.alert("Thiếu mã lớp", "Vui lòng nhập mã lớp giáo viên đã gửi.");
+      return;
+    }
     setJoining(true);
     try {
       await classApi.join(token, joinCode.trim().toUpperCase());
@@ -75,7 +78,7 @@ export default function ClassroomTab() {
       <ScreenHeader
         eyebrow="Lớp học"
         title="Lớp học"
-        subtitle="Trung tâm theo dõi lớp đã tham gia, bài giáo viên giao và lịch học."
+        subtitle="Theo dõi lớp đã tham gia, bài giáo viên giao và lịch học."
         color={colors.green}
         right={<Pill label={`${lop.length} lớp`} icon="school-outline" color={colors.green} />}
       />
@@ -87,7 +90,7 @@ export default function ClassroomTab() {
       <Card accent={colors.green} style={styles.summaryCard}>
         <View style={styles.summaryTop}>
           <View style={styles.summaryCopy}>
-            <Text style={styles.summaryTitle}>Lớp học là trung tâm</Text>
+            <Text style={styles.summaryTitle}>Tổng quan lớp học</Text>
             <Text style={styles.summaryText}>Ưu tiên xem thông báo, bài tập và lịch học trước khi mở các công cụ khác.</Text>
           </View>
           <View style={styles.summaryIcon}>
@@ -122,7 +125,7 @@ export default function ClassroomTab() {
             icon="enter-outline"
             color={colors.green}
             onPress={joinClass}
-            disabled={joining}
+            disabled={joining || !joinCode.trim()}
             style={styles.joinButton}
           />
         </View>
