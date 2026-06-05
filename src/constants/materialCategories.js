@@ -1,4 +1,4 @@
-const CHEMISTRY_GRADES = [
+export const CHEMISTRY_GRADES = [
   { id: 'chung', label: 'CHUNG', i18nKey: 'chung' },
   { id: '8', label: 'LỚP 8', i18nKey: '8' },
   { id: '9', label: 'LỚP 9', i18nKey: '9' },
@@ -7,7 +7,7 @@ const CHEMISTRY_GRADES = [
   { id: '12', label: 'LỚP 12', i18nKey: '12' },
 ];
 
-const CHEMISTRY_TYPES = [
+export const CHEMISTRY_TYPES = [
   { id: 'de_thi', label: 'ĐỀ THI' },
   { id: 'de_on', label: 'ĐỀ ÔN' },
   { id: 'anh', label: 'ẢNH' },
