@@ -8,13 +8,13 @@
   "order": 23,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Nhóm chức carbonyl. Phân biệt aldehyde with ketone thông qua các phản ứng đặc trưng như tráng bạc.",
+  "description": "Nhóm chức carbonyl. Phân biệt aldehyde với ketone thông qua các phản ứng đặc trưng như tráng bạc.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Phân loại",
+        "text": "1. Khái niệm và Phân loại",
         "level": "h2"
       }
     },
@@ -57,7 +57,7 @@
       "id": "mod6",
       "type": "heading",
       "content": {
-        "text": "3. Phản ứng Khử and Ứng dụng",
+        "text": "3. Phản ứng Khử và Ứng dụng",
         "level": "h2"
       }
     },
@@ -65,7 +65,7 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "Sàn Khấu Gọt Đảo Lùi Trùng Về Chốn Thú Ẩm Cội (Oxi Lấp Hydro Đồng Mê).\nNhai Cuồng Hydro: Bộ Cánh Điện Đôi C=O Là 1 Dây Lôi Giữa $\\sigma$ Trơ Mộc and Mảnh Quỷ $\\pi$ Trôi Chạy Nên Mỏng Y Tựa Cái Đôi Lưỡi Kiếm Alkene Không No Kẻ Yếu Thế. Đưa Qua Khoang Lửa Ni Giọt Nhiệt Ẩm Nó Đớp Xụt Nước Hydro ($H_2$ Nạy Mở Góc Liền Cổng Liên Kết Buộc Tội Tách Nhau Tạo Tay Thơm Gãy Trơ Lì).\n-> Lộ Diện Tróc Mầm Trả Về Mẹ Đẻ ALCOHOL Chứa (OH Mạng Mọng Viền Nước):\n$R-CHO + H_2 \\xrightarrow{Ni,t^\\circ} R-CH_2-OH (Aldehyde\\ Rớt\\ Xuồng\\ Lặp\\ Về\\ Chốn\\ Rượu\\ Cồn\\ Bậc\\ 1)$.\n$R-CO-R' + H_2 \\xrightarrow{Ni,t^\\circ} R-CH(OH)-R' (Ketone\\ Lùi\\ Gót\\ Chệch\\ Sập\\ Nhão\\ Về\\ Đĩa\\ Rượu\\ Bậc\\ 2\\ Kín\\ Thân)$."
+        "text": "Sàn Khấu Gọt Đảo Lùi Trùng Về Chốn Thú Ẩm Cội (Oxi Lấp Hydro Đồng Mê).\nNhai Cuồng Hydro: Bộ Cánh Điện Đôi C=O Là 1 Dây Lôi Giữa $\\sigma$ Trơ Mộc và Mảnh Quỷ $\\pi$ Trôi Chạy Nên Mỏng Y Tựa Cái Đôi Lưỡi Kiếm Alkene Không No Kẻ Yếu Thế. Đưa Qua Khoang Lửa Ni Giọt Nhiệt Ẩm Nó Đớp Xụt Nước Hydro ($H_2$ Nạy Mở Góc Liền Cổng Liên Kết Buộc Tội Tách Nhau Tạo Tay Thơm Gãy Trơ Lì).\n-> Lộ Diện Tróc Mầm Trả Về Mẹ Đẻ ALCOHOL Chứa (OH Mạng Mọng Viền Nước):\n$R-CHO + H_2 \\xrightarrow{Ni,t^\\circ} R-CH_2-OH (Aldehyde\\ Rớt\\ Xuồng\\ Lặp\\ Về\\ Chốn\\ Rượu\\ Cồn\\ Bậc\\ 1)$.\n$R-CO-R' + H_2 \\xrightarrow{Ni,t^\\circ} R-CH(OH)-R' (Ketone\\ Lùi\\ Gót\\ Chệch\\ Sập\\ Nhão\\ Về\\ Đĩa\\ Rượu\\ Bậc\\ 2\\ Kín\\ Thân)$."
       }
     },
     {
@@ -81,7 +81,7 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Để phân biệt 2 lọ mất nhãn đựng dung dịch chưng cất: Aldehyde axetic (Acetaldehyde) and axetone (Ketone), người ta dùng thuốc thử nào là CHUẨN XÁC nhất?",
+      "question": "Để phân biệt 2 lọ mất nhãn đựng dung dịch chưng cất: Aldehyde axetic (Acetaldehyde) và axetone (Ketone), người ta dùng thuốc thử nào là CHUẨN XÁC nhất?",
       "options": [
         "Natri kim loại (Na).",
         "Dung dịch AgNO3/NH3 phức.",
@@ -110,7 +110,7 @@
       "title": "Bài giảng: Hợp chất carbonyl",
       "url": "https://www.youtube.com/watch?v=Alh7zX0P8fo",
       "thumbnail": "https://img.youtube.com/vi/Alh7zX0P8fo/0.jpg",
-      "description": "Tìm hiểu về aldehyde and ketone, cấu tạo nhóm Carbonyl and các phản ứng tráng bạc (VietJack)."
+      "description": "Tìm hiểu về aldehyde và ketone, cấu tạo nhóm Carbonyl và các phản ứng tráng bạc (VietJack)."
     }
   ],
   "practiceModules": [],

@@ -72,7 +72,7 @@
       "options": [
         "Nước brom loãng.",
         "Dung dịch NaOH (môi trường cồn).",
-        "Chưng cất thủy phân with dung dịch NaOH (môi trường nước).",
+        "Chưng cất thủy phân với dung dịch NaOH (môi trường nước).",
         "Khí oxy phản ứng nhiệt."
       ],
       "correctAnswer": 2,
@@ -80,7 +80,7 @@
     },
     {
       "id": "q2",
-      "question": "Một hỗn hợp C6H5OH (Phenol) and C2H5OH (Etanol). Hóa chất nào sau đây phân biệt ngay Phenol?",
+      "question": "Một hỗn hợp C6H5OH (Phenol) và C2H5OH (Etanol). Hóa chất nào sau đây phân biệt ngay Phenol?",
       "options": [
         "Natri kim loại (Na).",
         "Chưng cất chân không.",
@@ -88,7 +88,7 @@
         "Môi trường acid nóng."
       ],
       "correctAnswer": 2,
-      "explanation": "Phenol tác dụng dễ dàng with dung dịch bromine để tạo kết tủa trắng, còn rượu (ancol) thì không."
+      "explanation": "Phenol tác dụng dễ dàng với dung dịch bromine để tạo kết tủa trắng, còn rượu (ancol) thì không."
     }
   ],
   "videoModules": [
@@ -97,7 +97,7 @@
       "title": "Ôn tập chương 5: Dẫn xuất halogen - Alcohol - Phenol",
       "url": "https://www.youtube.com/watch?v=Djoe4h8wqW0",
       "thumbnail": "https://img.youtube.com/vi/Djoe4h8wqW0/0.jpg",
-      "description": "Hệ thống hóa kiến thức and giải bài tập chương 5 về các dẫn xuất chứa oxygen (Loigiaihay)."
+      "description": "Hệ thống hóa kiến thức và giải bài tập chương 5 về các dẫn xuất chứa oxygen (Loigiaihay)."
     }
   ],
   "practiceModules": [],

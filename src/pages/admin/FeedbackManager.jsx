@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const FeedbackManager = () => {
   const [phan_hois, setFeedbacks] = useState([]);
@@ -33,11 +34,14 @@ const FeedbackManager = () => {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'resolved' } : f));
       }
     } catch (err) {
       console.error('Lỗi cập nhật phản hồi:', err);
+      alert(err.message || 'Lỗi cập nhật phản hồi');
     }
   };
 
@@ -48,11 +52,14 @@ const FeedbackManager = () => {
         method: 'PATCH',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, isApproved: true } : f));
       }
     } catch (err) {
       console.error('Lỗi duyệt phản hồi:', err);
+      alert(err.message || 'Lỗi duyệt phản hồi');
     }
   };
 
@@ -64,14 +71,14 @@ const FeedbackManager = () => {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'resolved' } : f));
-      } else {
-        const data = await res.json();
-        alert(data.message || 'Lỗi duyệt');
       }
     } catch (err) {
       console.error(err);
+      alert(err.message || 'Lỗi duyệt');
     }
   };
 
@@ -83,14 +90,14 @@ const FeedbackManager = () => {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, status: 'rejected' } : f));
-      } else {
-        const data = await res.json();
-        alert(data.message || 'Lỗi từ chối');
       }
     } catch (err) {
       console.error(err);
+      alert(err.message || 'Lỗi từ chối');
     }
   };
 

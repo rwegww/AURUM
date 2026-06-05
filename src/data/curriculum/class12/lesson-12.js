@@ -86,7 +86,7 @@
         "Phải là chất khí ở nhiệt độ thường."
       ],
       "correctAnswer": 2,
-      "explanation": "Phản ứng trùng hợp dựa trên sự bẻ gãy liên kết $\\pi$ trong liên kết bội hoặc sự mở vòng để nối các mắt xích with nhau."
+      "explanation": "Phản ứng trùng hợp dựa trên sự bẻ gãy liên kết $\\pi$ trong liên kết bội hoặc sự mở vòng để nối các mắt xích với nhau."
     }
   ],
   "videoModules": [
@@ -95,7 +95,7 @@
       "title": "Bài giảng: Đại cương về Polymer",
       "url": "https://www.youtube.com/watch?v=vqvsMYOylZ4",
       "thumbnail": "https://img.youtube.com/vi/vqvsMYOylZ4/0.jpg",
-      "description": "Khái niệm, phân loại, cấu tạo and các phương pháp điều chế polymer (VietJack)."
+      "description": "Khái niệm, phân loại, cấu tạo và các phương pháp điều chế polymer (VietJack)."
     }
   ],
   "practiceModules": [],

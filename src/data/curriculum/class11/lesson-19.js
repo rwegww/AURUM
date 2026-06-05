@@ -8,13 +8,13 @@
   "order": 19,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Khái niệm dẫn xuất halogen and các phản ứng đặc trưng: phản ứng thế nucleophile, tách HX.",
+  "description": "Khái niệm dẫn xuất halogen và các phản ứng đặc trưng: phản ứng thế nucleophile, tách HX.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Đặc điểm",
+        "text": "1. Khái niệm và Đặc điểm",
         "level": "h2"
       }
     },
@@ -30,7 +30,7 @@
       "type": "infoBox",
       "content": {
         "title": "Cú Đoạt Khống Cực Lõi (Kèo Khéo Hút Âm Về Rễ Đảo)",
-        "content": "Liên kết Chốt Canh Xó C-X (Carbon and Halogen Nhánh X). Halogen (Đặc Trưng F, Cl) Thuộc Bè Lũ Hút Điện Vô Cơ Nhất Cổ Thế Mạng Âm Tụ. Chúng Mở Miệng Liếm Trọn Kéo lệch Tụ Chóp Đám Mây Đôi Sợi Rẽ Về Phía Bản Khu. \nHậu Cảnh Sốc Ác: Halogen Múp Cục Lẻ Nửa Âm $\\delta^-$. Để Lại Cho Xương Carbon Cái Đáy Khuyết Tổ Lỗ Khoét Xơ Xác Điện Thiếu Thốn Còi Mép Dương Giả $\\delta^+$. \nCarbon Lúc Ấy Rát Thương Cực Xốp Tủy Yểu Kém, Mời Gửi Trực Cáo Vẫy Gọi Bọn Thợ Săn Nu Lũ Cầu Oxi (-OH, -CN..) Lướt Vô Phập Nhào Ăn Cặp Cặn Gắn Đuôi Thế. Hốc Đâm Toác Cửa Hữu Cơ Rẽ Hoán Cốt Mạch Sinh Nhánh.",
+        "content": "Liên kết Chốt Canh Xó C-X (Carbon và Halogen Nhánh X). Halogen (Đặc Trưng F, Cl) Thuộc Bè Lũ Hút Điện Vô Cơ Nhất Cổ Thế Mạng Âm Tụ. Chúng Mở Miệng Liếm Trọn Kéo lệch Tụ Chóp Đám Mây Đôi Sợi Rẽ Về Phía Bản Khu. \nHậu Cảnh Sốc Ác: Halogen Múp Cục Lẻ Nửa Âm $\\delta^-$. Để Lại Cho Xương Carbon Cái Đáy Khuyết Tổ Lỗ Khoét Xơ Xác Điện Thiếu Thốn Còi Mép Dương Giả $\\delta^+$. \nCarbon Lúc Ấy Rát Thương Cực Xốp Tủy Yểu Kém, Mời Gửi Trực Cáo Vẫy Gọi Bọn Thợ Săn Nu Lũ Cầu Oxi (-OH, -CN..) Lướt Vô Phập Nhào Ăn Cặp Cặn Gắn Đuôi Thế. Hốc Đâm Toác Cửa Hữu Cơ Rẽ Hoán Cốt Mạch Sinh Nhánh.",
         "color": "blue"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Tính chất Phản ứng thế Nucleophile (-OH) and Tách",
+        "text": "2. Tính chất Phản ứng thế Nucleophile (-OH) và Tách",
         "level": "h2"
       }
     },
@@ -50,7 +50,7 @@
         "items": [
           "2 Nhánh Ngõ Chiến Khu Chóp Lồng Lược Đối Nghịch Đoạt Chữ Tính:",
           "1. **Phản Ứng Đẩy Mông Lật Ghế Nucleophile (Khử Ngôi THẾ Gốc Tách)**:\nChâm Lò: Rót Xút Trơn Nước Xà Phòng Rặt (Kiềm Thủy Phân NaOH/ Ca(OH)2 LOÃNG NƯỚC). Vun Bể Nồi Ấm Soi Thoi Lạnh Nhịp Cạn 50 80 Độ.\nNu Kẻ Chiếm Đoạt là (-OH Kiềm). Nó Đâm Xiên Khoét Hạ Bệ Bứng Chóp Rứt Cổ Gai Halogen X Bỏ Tuột Vứt Nghĩa Vắng Đồng Bỏ Rọ Kềm Sinh Chút Muối. Chui Vô Chiếm Vị Lõi Khoảng Góc Chốt Vết Trượt Xả Ra Giống Lòi Lõm Sinh Ra Một Ông Hoàn Mới: **ALCOHOL (Nhóm RƯỢU Khê Cồn Lỏng Độc Sát) (-OH)**.\n$R-X + NaOH (AQUA) \\xrightarrow{t^\\circ đun} R-OH + NaCl$ Lọc Trong Khe Vét.",
-          "2. **Phản Ứng Rã Buộc Gãy Vỡ Hoang Đảo Kẽ TÁCH (Sảy Ruột Khóc Nuối Đao Chẻ)**:\nKích Hỏa Kiếp Nạn: Đun Sôi Chống Cồn Hữu Cơ Điên Dại Pha Kiềm Gắt Hạt Mù Cục Cáo (Đá Cồn Alcohol Trộn Trát Cục KOH Rắn Liếm Ruột).\nTại Môi Trường Độc Khí KOH Lùa Cồn Siêu Mặn Này Bóc Oxi Gắt. Nó Khôn Không Thèm Rơi Vô Mạng. Nó Kéo Đuôi Lựu Đạn Vuốt Giứt Đồng Loạt Hai Thằng Móng Gai Ở 2 Bên Carbon Hàng Xóm Đứng Kế (Giựt Đứt X Bọn Phải and Rứt H Bọn C Trái Mút).\nHậu Đãi Hoang Khốc: Khung Carbon Bị Gãy Răng 2 Rìa Mòn Trọc. Để Trụ Mạng Cụi, 2 Thằng C Đứng Cửa Khóc Tiễn Nhìn Trụ Lõm Tự Buộc Nén Keo Giằng Xiết Xắn Tay Khép Khép Nhau Nối Nối Thêm Sợi Nguồn \n$\rightarrow$ Kết Vết Sợi Đôi Gắn Buộc Bẻ Hoang Ra Hình Hài **ALKENE LIÊN KẾT ĐÔI MẢY Tròn** Bay Xác Cạn Dựng Lồng Hợp Mạch Sợi Bóc Đôi Khép Kín."
+          "2. **Phản Ứng Rã Buộc Gãy Vỡ Hoang Đảo Kẽ TÁCH (Sảy Ruột Khóc Nuối Đao Chẻ)**:\nKích Hỏa Kiếp Nạn: Đun Sôi Chống Cồn Hữu Cơ Điên Dại Pha Kiềm Gắt Hạt Mù Cục Cáo (Đá Cồn Alcohol Trộn Trát Cục KOH Rắn Liếm Ruột).\nTại Môi Trường Độc Khí KOH Lùa Cồn Siêu Mặn Này Bóc Oxi Gắt. Nó Khôn Không Thèm Rơi Vô Mạng. Nó Kéo Đuôi Lựu Đạn Vuốt Giứt Đồng Loạt Hai Thằng Móng Gai Ở 2 Bên Carbon Hàng Xóm Đứng Kế (Giựt Đứt X Bọn Phải và Rứt H Bọn C Trái Mút).\nHậu Đãi Hoang Khốc: Khung Carbon Bị Gãy Răng 2 Rìa Mòn Trọc. Để Trụ Mạng Cụi, 2 Thằng C Đứng Cửa Khóc Tiễn Nhìn Trụ Lõm Tự Buộc Nén Keo Giằng Xiết Xắn Tay Khép Khép Nhau Nối Nối Thêm Sợi Nguồn \n$\rightarrow$ Kết Vết Sợi Đôi Gắn Buộc Bẻ Hoang Ra Hình Hài **ALKENE LIÊN KẾT ĐÔI MẢY Tròn** Bay Xác Cạn Dựng Lồng Hợp Mạch Sợi Bóc Đôi Khép Kín."
         ]
       }
     },
@@ -76,17 +76,17 @@
       "id": "q1",
       "question": "Để điều chế Alcohol từ một Dẫn xuất halogen, điều kiện yêu cầu là:",
       "options": [
-        "Đun sôi dung dịch with kiềm alcohol.",
-        "Đun nóng nhẹ dung dịch with NaOH trong môi trường nước.",
+        "Đun sôi dung dịch với kiềm alcohol.",
+        "Đun nóng nhẹ dung dịch với NaOH trong môi trường nước.",
         "Phản ứng thế Bromine ở 20 C.",
         "Chỉ cần nước cất đun nóng."
       ],
       "correctAnswer": 1,
-      "explanation": "Phản ứng thế NaOH/H2O, đun nóng để tách nhóm -X ra and nhóm -OH gắn vào."
+      "explanation": "Phản ứng thế NaOH/H2O, đun nóng để tách nhóm -X ra và nhóm -OH gắn vào."
     },
     {
       "id": "q2",
-      "question": "Dẫn xuất CH3CH2Br khi tác dụng with kiềm mạnh (KOH) đun trong dung dịch Alcohol sẽ thu được sản phẩm hữu cơ gì?",
+      "question": "Dẫn xuất CH3CH2Br khi tác dụng với kiềm mạnh (KOH) đun trong dung dịch Alcohol sẽ thu được sản phẩm hữu cơ gì?",
       "options": [
         "CH3-CH2-OH (Ethanol)",
         "CH2=CH2 (Ethene)",
@@ -94,7 +94,7 @@
         "CH3-O-CH3 (Dimetyl ete)"
       ],
       "correctAnswer": 1,
-      "explanation": "Trong môi trường cồn, phản ứng ưu tiên sẽ là Phản ứng tách (Quy tắc Zaitsev) để tách ra HBr and hình thành liên kết liên hợp đôi Ethene."
+      "explanation": "Trong môi trường cồn, phản ứng ưu tiên sẽ là Phản ứng tách (Quy tắc Zaitsev) để tách ra HBr và hình thành liên kết liên hợp đôi Ethene."
     }
   ],
   "videoModules": [
@@ -103,7 +103,7 @@
       "title": "Bài giảng: Dẫn xuất halogen",
       "url": "https://www.youtube.com/watch?v=D34P6I7woT8",
       "thumbnail": "https://img.youtube.com/vi/D34P6I7woT8/0.jpg",
-      "description": "Khái niệm, tính chất hóa học tiêu biểu and ứng dụng của dẫn xuất halogen (VietJack)."
+      "description": "Khái niệm, tính chất hóa học tiêu biểu và ứng dụng của dẫn xuất halogen (VietJack)."
     }
   ],
   "practiceModules": [],

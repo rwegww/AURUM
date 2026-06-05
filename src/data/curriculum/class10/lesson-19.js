@@ -8,7 +8,7 @@
   "chapter": "Chương 6: Tốc độ phản ứng",
   "order": 19,
   "isPremium": false,
-  "description": "Tốc độ nhanh chậm and các yếu tố ảnh hưởng.",
+  "description": "Tốc độ nhanh chậm và các yếu tố ảnh hưởng.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Tốc độ phản ứng hóa học là đại lượng đặc trưng cho sự biến thiên nồng độ của một trong các chất phản ứng hoặc sản phẩm trong một đơn vị thời gian.\n\n**Tốc độ trung bình ($\\bar{v}$)** của phản ứng được tính bằng công thức: \n$$\\bar{v} = \\frac{1}{a} \\frac{|\\Delta C_A|}{\\Delta t}$$ \n(Trong đó $a$ là hệ số tỉ lượng của chất $A$, $\\Delta C_A$ là biến thiên nồng độ, and $\\Delta t$ là khoảng thời gian xảy ra biến thiên)."
+        "text": "Tốc độ phản ứng hóa học là đại lượng đặc trưng cho sự biến thiên nồng độ của một trong các chất phản ứng hoặc sản phẩm trong một đơn vị thời gian.\n\n**Tốc độ trung bình ($\\bar{v}$)** của phản ứng được tính bằng công thức: \n$$\\bar{v} = \\frac{1}{a} \\frac{|\\Delta C_A|}{\\Delta t}$$ \n(Trong đó $a$ là hệ số tỉ lượng của chất $A$, $\\Delta C_A$ là biến thiên nồng độ, và $\\Delta t$ là khoảng thời gian xảy ra biến thiên)."
       }
     },
     {
@@ -43,7 +43,7 @@
           "**Áp suất**: Đối với phản ứng có chất khí tham gia, việc tăng áp suất (giảm thể tích hệ) làm tăng nồng độ các chất khí, từ đó làm tăng tốc độ phản ứng.",
           "**Nhiệt độ**: Tốc độ phản ứng thường tăng khi nhiệt độ tăng. Quy tắc Van't Hoff cho biết khi nhiệt độ tăng thêm $10^\\circ C$, tốc độ phản ứng tăng từ 2 đến 4 lần ($v_2 = v_1 \\cdot \\gamma^{\\frac{t_2-t_1}{10}}$).",
           "**Diện tích bề mặt**: Đối với các phản ứng có chất rắn tham gia, việc chia nhỏ chất rắn (nghiền bột) làm tăng diện tích tiếp xúc, giúp các phân tử va chạm với nhau dễ dàng hơn, làm tăng tốc độ phản ứng.",
-          "**Chất xúc tác**: Là chất làm tăng tốc độ phản ứng nhưng không bị biến đổi về lượng and chất sau phản ứng. Xúc tác hoạt động bằng cách tạo ra một lộ trình phản ứng mới có năng lượng hoạt hóa ($E_a$) thấp hơn."
+          "**Chất xúc tác**: Là chất làm tăng tốc độ phản ứng nhưng không bị biến đổi về lượng và chất sau phản ứng. Xúc tác hoạt động bằng cách tạo ra một lộ trình phản ứng mới có năng lượng hoạt hóa ($E_a$) thấp hơn."
         ]
       }
     }
@@ -115,7 +115,7 @@
         "type": "multiple-choice",
         "question": "Hằng số tốc độ k phụ thuộc vào:",
         "options": [
-          "Nhiệt độ and bản chất chất phản ứng",
+          "Nhiệt độ và bản chất chất phản ứng",
           "Nồng độ",
           "Áp suất",
           "Thể tích"

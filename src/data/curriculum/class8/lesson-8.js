@@ -8,7 +8,7 @@
   "chapter": "Chương 2: Một số hợp chất thông dụng",
   "order": 8,
   "isPremium": false,
-  "description": "Khái niệm acid, tính chất hóa học (quỳ tím, + kim loại, + base, + oxide base) and một số acid thông dụng trong đời sống.",
+  "description": "Khái niệm acid, tính chất hóa học (quỳ tím, + kim loại, + base, + oxide base) và một số acid thông dụng trong đời sống.",
   "challenges": [
     {
       "type": "multiple-choice",
@@ -42,10 +42,10 @@
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Khi cho acid tác dụng with một kim loại như kẽm ($Zn$), ta thấy sủi bọt khí. Đó là khí gì?",
+      "narrative": "Khi cho acid tác dụng với một kim loại như kẽm ($Zn$), ta thấy sủi bọt khí. Đó là khí gì?",
       "placeholder": "Nhập tên khí (ví dụ: Hidro)...",
       "correctAnswer": "Hidro",
-      "question": "Khí thoát ra khi kim loại (đứng trước H) phản ứng with acid loãng là gì?",
+      "question": "Khí thoát ra khi kim loại (đứng trước H) phản ứng với acid loãng là gì?",
       "source": "Tính chất hóa học"
     },
     {
@@ -74,7 +74,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Acid là những hợp chất mà phân tử gồm có một hay nhiều nguyên tử hydrogen liên kết with **gốc acid**. Khi tan trong nước, acid phân li tạo ra ion $H^+$ (hay $H_3O^+$) — chính ion này quyết định tính chất đặc trưng của acid."
+        "text": "Acid là những hợp chất mà phân tử gồm có một hay nhiều nguyên tử hydrogen liên kết với **gốc acid**. Khi tan trong nước, acid phân li tạo ra ion $H^+$ (hay $H_3O^+$) — chính ion này quyết định tính chất đặc trưng của acid."
       }
     },
     {
@@ -82,7 +82,7 @@
       "type": "infoBox",
       "content": {
         "title": "Công thức chung và Cách gọi tên",
-        "content": "**Công thức chung**: $H_nA$ (with $n$ là hóa trị của gốc acid $A$).\\n\\n**Cách đọc tên**:\\n- Acid không có oxygen: Acid + tên phi kim + hydric. (Vd: $HCl$ — Acid clohydric).\\n- Acid có oxygen (nhiều O): Acid + tên phi kim + ic. (Vd: $H_2SO_4$ — Acid sunfuric).\\n- Acid có oxygen (ít O): Acid + tên phi kim + ous. (Vd: $H_2SO_3$ — Acid sunfurous).\\n\\n**Một số acid thông dụng**:\\n- $HCl$: Acid clohydric (có trong dạ dày)\\n- $H_2SO_4$: Acid sunfuric (vua của các acid)\\n- $HNO_3$: Acid nitric (dùng sản xuất phân bón)\\n- $CH_3COOH$: Acid acetic (giấm ăn, nồng độ 2-5%)",
+        "content": "**Công thức chung**: $H_nA$ (với $n$ là hóa trị của gốc acid $A$).\\n\\n**Cách đọc tên**:\\n- Acid không có oxygen: Acid + tên phi kim + hydric. (Vd: $HCl$ — Acid clohydric).\\n- Acid có oxygen (nhiều O): Acid + tên phi kim + ic. (Vd: $H_2SO_4$ — Acid sunfuric).\\n- Acid có oxygen (ít O): Acid + tên phi kim + ous. (Vd: $H_2SO_3$ — Acid sunfurous).\\n\\n**Một số acid thông dụng**:\\n- $HCl$: Acid clohydric (có trong dạ dày)\\n- $H_2SO_4$: Acid sunfuric (vua của các acid)\\n- $HNO_3$: Acid nitric (dùng sản xuất phân bón)\\n- $CH_3COOH$: Acid acetic (giấm ăn, nồng độ 2-5%)",
         "color": "blue"
       }
     },
@@ -101,10 +101,10 @@
         "type": "bullet",
         "items": [
           "**a) Làm đổi màu chỉ thị**: Dung dịch acid làm **quỳ tím chuyển đỏ**. Đây là cách đơn giản nhất để nhận biết acid. (Phenolphthalein không đổi màu trong acid).",
-          "**b) Tác dụng with kim loại**: Acid loãng tác dụng with nhiều kim loại **đứng trước $H$** trong dãy hoạt động hóa học → tạo **muối + khí $H_2$**.\\n  *Ví dụ*: $Zn + 2HCl \\rightarrow ZnCl_2 + H_2 \\uparrow$\\n  *Lưu ý*: Kim loại đứng sau $H$ (Cu, Ag, Au) **không** phản ứng with acid loãng thông thường.",
-          "**c) Tác dụng with Base oxide**: Tạo **muối + nước**.\\n  *Ví dụ*: $CuO + 2HCl \\rightarrow CuCl_2 + H_2O$\\n  (Tán bột $CuO$ đen vào dung dịch $HCl$ → dung dịch chuyển sang **màu xanh lam** do tạo $CuCl_2$).",
-          "**d) Tác dụng with Base (Phản ứng trung hòa)**: Tạo **muối + nước**.\\n  *Ví dụ*: $NaOH + HCl \\rightarrow NaCl + H_2O$\\n  Đây là phản ứng có ý nghĩa rất quan trọng trong y tế (dùng thuốc kháng acid chữa đau dạ dày).",
-          "**e) Tác dụng with muối**: Tạo muối mới và acid mới (sẽ học kỹ ở bài Muối).\\n  *Ví dụ*: $BaCl_2 + H_2SO_4 \\rightarrow BaSO_4 \\downarrow + 2HCl$"
+          "**b) Tác dụng với kim loại**: Acid loãng tác dụng với nhiều kim loại **đứng trước $H$** trong dãy hoạt động hóa học → tạo **muối + khí $H_2$**.\\n  *Ví dụ*: $Zn + 2HCl \\rightarrow ZnCl_2 + H_2 \\uparrow$\\n  *Lưu ý*: Kim loại đứng sau $H$ (Cu, Ag, Au) **không** phản ứng với acid loãng thông thường.",
+          "**c) Tác dụng với Base oxide**: Tạo **muối + nước**.\\n  *Ví dụ*: $CuO + 2HCl \\rightarrow CuCl_2 + H_2O$\\n  (Tán bột $CuO$ đen vào dung dịch $HCl$ → dung dịch chuyển sang **màu xanh lam** do tạo $CuCl_2$).",
+          "**d) Tác dụng với Base (Phản ứng trung hòa)**: Tạo **muối + nước**.\\n  *Ví dụ*: $NaOH + HCl \\rightarrow NaCl + H_2O$\\n  Đây là phản ứng có ý nghĩa rất quan trọng trong y tế (dùng thuốc kháng acid chữa đau dạ dày).",
+          "**e) Tác dụng với muối**: Tạo muối mới và acid mới (sẽ học kỹ ở bài Muối).\\n  *Ví dụ*: $BaCl_2 + H_2SO_4 \\rightarrow BaSO_4 \\downarrow + 2HCl$"
         ]
       }
     },
@@ -121,7 +121,7 @@
       "type": "infoBox",
       "content": {
         "title": "Thứ tự từ mạnh đến yếu",
-        "content": "$K > Na > Ca > Mg > Al > Zn > Fe > Ni > Sn > Pb > (H) > Cu > Hg > Ag > Pt > Au$\\n\\n- Kim loại đứng **trước $H$** → phản ứng được with acid loãng, giải phóng $H_2$.\\n- Kim loại đứng **sau $H$** → **không** phản ứng with acid loãng ($HCl$, $H_2SO_4$ loãng).\\n\\n**Mẹo nhớ**: *Khi Nào Cần May Áo Záp Sắt Nịt Sắn Phải (H¹) Cu Hà Ác Phạt Âu.*",
+        "content": "$K > Na > Ca > Mg > Al > Zn > Fe > Ni > Sn > Pb > (H) > Cu > Hg > Ag > Pt > Au$\\n\\n- Kim loại đứng **trước $H$** → phản ứng được với acid loãng, giải phóng $H_2$.\\n- Kim loại đứng **sau $H$** → **không** phản ứng với acid loãng ($HCl$, $H_2SO_4$ loãng).\\n\\n**Mẹo nhớ**: *Khi Nào Cần May Áo Záp Sắt Nịt Sắn Phải (H¹) Cu Hà Ác Phạt Âu.*",
         "color": "green"
       }
     },
@@ -200,7 +200,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Khi cho sắt ($Fe$) tác dụng with dung dịch $HCl$, khí nào sinh ra?",
+        "question": "Khi cho sắt ($Fe$) tác dụng với dung dịch $HCl$, khí nào sinh ra?",
         "options": [
           "$O_2$",
           "$CO_2$",
@@ -217,7 +217,7 @@
         "options": [
           "Tính háo nước mạnh",
           "Làm quỳ tím hóa xanh",
-          "Không tác dụng with kim loại",
+          "Không tác dụng với kim loại",
           "Mùi thơm"
         ],
         "correctAnswer": 0,
@@ -228,10 +228,10 @@
         "type": "multiple-choice",
         "question": "Phản ứng trung hòa là phản ứng giữa:",
         "options": [
-          "Axit and base",
-          "Muối and muối",
-          "Kim loại and Phi kim",
-          "Oxit and nước"
+          "Axit và base",
+          "Muối và muối",
+          "Kim loại và Phi kim",
+          "Oxit và nước"
         ],
         "correctAnswer": 0,
         "explanation": "Axit + Base $\\rightarrow$ Muối + Nước.",

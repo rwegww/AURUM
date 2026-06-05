@@ -8,13 +8,13 @@
   "order": 16,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Phân biệt alkene and alkyne, đặc trưng của liên kết bội qua các phản ứng cộng.",
+  "description": "Phân biệt alkene và alkyne, đặc trưng của liên kết bội qua các phản ứng cộng.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Công thức chung",
+        "text": "1. Khái niệm và Công thức chung",
         "level": "h2"
       }
     },
@@ -25,7 +25,7 @@
         "type": "bullet",
         "items": [
           "Bước chân vào thế giới của Sự Thiếu Hụt ($Hydrocarbon$ Không No). Đây là Lãnh địa của những phân tử mà Bộ Khung C-C chưa được Nhồi nhét Đầy Đủ nguyên tử H (Chưa Bão Hòa), Buộc các C phải tự Xoay Sở Nắm Chặt Tay Nhau bằng Liên Kết Bội (Liên kết Đôi C=C hoặc Bộ Ba C≡C) để giữ thăng bằng vững Mạch.",
-          "**Gia Tộc Alkene:** Đặc Thù Duy nhất là Cắm 1 Liên Kết Đôi C=C vào Lõi Mạch hở. Tổng Khung Bị rớt đi 2 hạt H so with Alkane. Công thức Đế Quan: $C_nH_{2n}$ (Sống từ 2C trở lên $n \\ge 2$). Ví dụ: Ethene ($CH_2=CH_2$).",
+          "**Gia Tộc Alkene:** Đặc Thù Duy nhất là Cắm 1 Liên Kết Đôi C=C vào Lõi Mạch hở. Tổng Khung Bị rớt đi 2 hạt H so với Alkane. Công thức Đế Quan: $C_nH_{2n}$ (Sống từ 2C trở lên $n \\ge 2$). Ví dụ: Ethene ($CH_2=CH_2$).",
           "**Gia Tộc Alkyne:** Mang Trong thân 1 Khối Vết Nứt Liên kết Ba C≡C siêu hút. Gắn mạch Hở. Rớt Mạng 4 hạt Hydro. Công Thức Chuẩn Hóa: $C_nH_{2n-2}$ ($n \\ge 2$). Ví dụ kinh điển Đèn Xì Hàn Cắt Kim Loại Acetylene ($CH \\equiv CH$)."
         ]
       }
@@ -43,7 +43,7 @@
       "type": "infoBox",
       "content": {
         "title": "Bản Chất Sức Mạnh Phản Ứng (Điểm mù Pi)",
-        "content": "Liên kết Bội chứa đựng Lực Lượng Núp Bóng Vô Dụng. 1 Lõi C=C gồm (1 Chốt $\\sigma$ Kim Cương Bất Dịch Mạng) and (1 Sợi Dây $\\pi$ Kéo Hờ Yếu Sinh Lí lủng lẳng bên trên). Dây Pi Rát dễ bị Kéo Cắt Búng Đứt Tung Tóa. \nVì thế, Phản Ứng ĐẶC TRƯNG MỌI THỜI ĐẠI của Không No Là: **PHẢN ỨNG CỘNG** (Bẻ Xích Pi, Mở Tay 2 C ra Nhét Bội Thực các Tác Nhân Lạ Vào Kín Mạch Trở Lại Thành Thằng No).",
+        "content": "Liên kết Bội chứa đựng Lực Lượng Núp Bóng Vô Dụng. 1 Lõi C=C gồm (1 Chốt $\\sigma$ Kim Cương Bất Dịch Mạng) và (1 Sợi Dây $\\pi$ Kéo Hờ Yếu Sinh Lí lủng lẳng bên trên). Dây Pi Rát dễ bị Kéo Cắt Búng Đứt Tung Tóa. \nVì thế, Phản Ứng ĐẶC TRƯNG MỌI THỜI ĐẠI của Không No Là: **PHẢN ỨNG CỘNG** (Bẻ Xích Pi, Mở Tay 2 C ra Nhét Bội Thực các Tác Nhân Lạ Vào Kín Mạch Trở Lại Thành Thằng No).",
         "color": "blue"
       }
     },
@@ -72,7 +72,7 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "Tuyệt Kĩ Nhận Diện Anh Em Nhà Liên Kết C≡C Ba.\nCác Alkyne Mang Liên Kết Ba Vắt Trọn Nép Ở Mép Cuối Cùng Rìa Mạng (Gọi là Alkyne-1 hay Đầu Mạch). Cấu trúc Rìa $R-C\\equiv C-H$. Nguyên Mũi $H$ Bìa Ngoài Cùng đó bị Liên Kết Ba Giằng Xé nên nó CỰC LINH ĐỘNG NHƯ CHÓI BUỘC. Nhỏ 1 Rải Nước Nhũ Bạc $AgNO_3/NH_3$ vớt qua. Ngay Lập Tức, Ion Bạc ($Ag^+$) Móc Trói Cắt Cổ Thằng H Dứt Văng Ra. Ag Chiếm Lấp Chỗ Cắm Phập Vô Tạo Cục Rắn **KẾT TỦA VÀNG NHẠT**. Dấu Hiệu Trắng Án Cô Lập 100% Phân Biệt Tội Phạm But-1-yne and But-2-yne."
+        "text": "Tuyệt Kĩ Nhận Diện Anh Em Nhà Liên Kết C≡C Ba.\nCác Alkyne Mang Liên Kết Ba Vắt Trọn Nép Ở Mép Cuối Cùng Rìa Mạng (Gọi là Alkyne-1 hay Đầu Mạch). Cấu trúc Rìa $R-C\\equiv C-H$. Nguyên Mũi $H$ Bìa Ngoài Cùng đó bị Liên Kết Ba Giằng Xé nên nó CỰC LINH ĐỘNG NHƯ CHÓI BUỘC. Nhỏ 1 Rải Nước Nhũ Bạc $AgNO_3/NH_3$ vớt qua. Ngay Lập Tức, Ion Bạc ($Ag^+$) Móc Trói Cắt Cổ Thằng H Dứt Văng Ra. Ag Chiếm Lấp Chỗ Cắm Phập Vô Tạo Cục Rắn **KẾT TỦA VÀNG NHẠT**. Dấu Hiệu Trắng Án Cô Lập 100% Phân Biệt Tội Phạm But-1-yne và But-2-yne."
       }
     },
     {
@@ -88,7 +88,7 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Chất nào sau đây tác dụng with dung dịch AgNO3/NH3 dư tạo kết tủa màu vàng nhạt?",
+      "question": "Chất nào sau đây tác dụng với dung dịch AgNO3/NH3 dư tạo kết tủa màu vàng nhạt?",
       "options": [
         "Propyne (CHâ‰¡C-CH3)",
         "Propene (CH2=CH-CH3)",
@@ -117,7 +117,7 @@
       "title": "Bài giảng: Hydrocarbon không no",
       "url": "https://www.youtube.com/watch?v=xHQjSYBMFLo",
       "thumbnail": "https://img.youtube.com/vi/xHQjSYBMFLo/0.jpg",
-      "description": "Tìm hiểu về alkene, alkyne and các phản ứng đặc trưng của liên kết bội (VietJack)."
+      "description": "Tìm hiểu về alkene, alkyne và các phản ứng đặc trưng của liên kết bội (VietJack)."
     }
   ],
   "practiceModules": [],

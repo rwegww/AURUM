@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const ClassDetail = () => {
   const { id } = useParams();
@@ -56,12 +57,15 @@ const ClassDetail = () => {
         },
         body: JSON.stringify({ ...newPost, hoc_sinh_nhan_id: newPost.hoc_sinh_nhan_id || null })
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setNewPost({ content: '', type: 'announcement', media_url: '', deadline: '', hoc_sinh_nhan_id: '' });
         fetchClassData(); // Refresh
       }
     } catch (err) {
       console.error(err);
+      alert(err.message || 'Không thể tạo bài đăng.');
     }
   };
 
@@ -76,12 +80,15 @@ const ClassDetail = () => {
         },
         body: JSON.stringify(newSchedule)
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setNewSchedule({ title: '', start_time: '', meet_url: '' });
         fetchClassData(); // Refresh
       }
     } catch (err) {
       console.error(err);
+      alert(err.message || 'Không thể tạo lịch học.');
     }
   };
 

@@ -98,16 +98,16 @@
         "Làm nguyên liệu trong công nghiệp giấy."
       ],
       "correctAnswer": 1,
-      "explanation": "Cellulose trinitrate là một hợp chất cực kỳ dễ cháy and có tính nổ mạnh, được dùng để sản xuất thuốc súng không khói."
+      "explanation": "Cellulose trinitrate là một hợp chất cực kỳ dễ cháy và có tính nổ mạnh, được dùng để sản xuất thuốc súng không khói."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Tinh bột and Cellulose",
+      "title": "Bài giảng: Tinh bột và Cellulose",
       "url": "https://www.youtube.com/watch?v=CvmsIMtekkc",
       "thumbnail": "https://img.youtube.com/vi/CvmsIMtekkc/0.jpg",
-      "description": "Tìm hiểu cấu tạo and tính chất hóa học của các Polysaccharide quan trọng: Tinh bột and Cellulose (VietJack)."
+      "description": "Tìm hiểu cấu tạo và tính chất hóa học của các Polysaccharide quan trọng: Tinh bột và Cellulose (VietJack)."
     }
   ],
   "practiceModules": [],

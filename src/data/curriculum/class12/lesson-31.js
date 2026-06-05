@@ -75,7 +75,7 @@
         "Ethanol."
       ],
       "correctAnswer": 1,
-      "explanation": "Trong phản ứng tráng bạc ($AgNO_3/NH_3$), nhóm aldehyde của glucose bị oxi hóa thành nhóm carboxyl, tạo ra ammonium gluconate and kết tủa bạc ($Ag$)."
+      "explanation": "Trong phản ứng tráng bạc ($AgNO_3/NH_3$), nhóm aldehyde của glucose bị oxi hóa thành nhóm carboxyl, tạo ra ammonium gluconate và kết tủa bạc ($Ag$)."
     },
     {
       "id": "q_test3",
@@ -87,7 +87,7 @@
         "Zn."
       ],
       "correctAnswer": 1,
-      "explanation": "Al, Fe and Cr là ba kim loại bị thụ động hóa (tạo lớp màng oxide bảo vệ bền vững) khi tiếp xúc with các acid oxi hóa mạnh ($HNO_3, H_2SO_4$) ở trạng thái đặc, nguội."
+      "explanation": "Al, Fe và Cr là ba kim loại bị thụ động hóa (tạo lớp màng oxide bảo vệ bền vững) khi tiếp xúc với các acid oxi hóa mạnh ($HNO_3, H_2SO_4$) ở trạng thái đặc, nguội."
     },
     {
       "id": "q_test4",
@@ -99,7 +99,7 @@
         "Trùng ngưng."
       ],
       "correctAnswer": 1,
-      "explanation": "Phản ứng thủy phân ester hoặc chất béo trong môi trường kiềm tạo muối (xà phòng) and alcohol (glycerol) được gọi là phản ứng xà phòng hóa."
+      "explanation": "Phản ứng thủy phân ester hoặc chất béo trong môi trường kiềm tạo muối (xà phòng) và alcohol (glycerol) được gọi là phản ứng xà phòng hóa."
     },
     {
       "id": "q_test5",
@@ -111,7 +111,7 @@
         "Poly(ethylene terephthalate)."
       ],
       "correctAnswer": 1,
-      "explanation": "Tơ nitron (polyacrylonitrile) được điều chế bằng cách trùng hợp acrylonitrile. Các loại tơ nilon-6,6 and lapsan đều được điều chế bằng phản ứng trùng ngưng."
+      "explanation": "Tơ nitron (polyacrylonitrile) được điều chế bằng cách trùng hợp acrylonitrile. Các loại tơ nilon-6,6 và lapsan đều được điều chế bằng phản ứng trùng ngưng."
     }
   ],
   "videoModules": [
@@ -120,7 +120,7 @@
       "title": "Tổng ôn kiến thức trọng tâm thi THPT Quốc Gia",
       "url": "https://www.youtube.com/watch?v=y9VcYDPug_g",
       "thumbnail": "https://img.youtube.com/vi/y9VcYDPug_g/0.jpg",
-      "description": "Video tổng hợp các dạng bài tập and lý thuyết hay xuất hiện trong đề thi Tốt nghiệp THPT (VietJack)."
+      "description": "Video tổng hợp các dạng bài tập và lý thuyết hay xuất hiện trong đề thi Tốt nghiệp THPT (VietJack)."
     }
   ],
   "practiceModules": [],

@@ -25,7 +25,7 @@
         "type": "bullet",
         "items": [
           "Cuộc hành trình Hóa Học 11 Khóa Chốt Năm Học. Bộ Não Người Học Cần Trang Bị 2 Trụ Cột Vạm Vỡ Khổng Lồ Chia Chia Non Nước:",
-          "**VÔ CƠ (Chương 1-2):** Đấu Trường Của Sự Định Lượng Nồng Độ pH Khó Nhai, Thuật Cân Bằng Hóa Học Trượt Dốc Le Chatelier, Màn Phân Li Tự Bứt Rễ Axit - Bazo - Muối. Sát Phạt Rực Mưa Đạn Nitric Axit ($HNO_3$) Nuốt Chửng Không Nhả Khí, and Bản Án Sulfur $SO_2$ Hóa Khói Thối Lưu Huỳnh Tàn Sát Sinh Linh Mưa Axit H2SO4 Đặc Háo Ép Nước Cạn.",
+          "**VÔ CƠ (Chương 1-2):** Đấu Trường Của Sự Định Lượng Nồng Độ pH Khó Nhai, Thuật Cân Bằng Hóa Học Trượt Dốc Le Chatelier, Màn Phân Li Tự Bứt Rễ Axit - Bazo - Muối. Sát Phạt Rực Mưa Đạn Nitric Axit ($HNO_3$) Nuốt Chửng Không Nhả Khí, và Bản Án Sulfur $SO_2$ Hóa Khói Thối Lưu Huỳnh Tàn Sát Sinh Linh Mưa Axit H2SO4 Đặc Háo Ép Nước Cạn.",
           "**ĐẠI CƯƠNG HỮU CƠ (Chương 3):** Thấu Lĩnh Đạo Gốc: Nắm Chắc Tuyệt Kĩ Chưng Cất Tách Chất, Ném Lò Đốt Lập Khung Phân Tử C : H : O... Vẽ Tay Bẻ Nhánh Đồng Phân Bứt Khớp Mạch Không Sai Lệch.",
           "**HYDROCARBON + DẪN XUẤT (Chương 4-6):** Các Ông Kẹ Thống Lĩnh Mọi Hóa Học Sự Sống: Alkane Lì Lợm Phản Cháy Ráp Thế Thế Khí Khắp Biển; Alkene Pi Yếu Loãng Lọc Bứt Cộng Tuôn Bồn Chảy. Vương Thần Benzene Không Dung Túng Brom Lỏng Khát Đốt; Trói Điểm Chót Alcohol Bứt Nước Ché Mắt. Phenol Sôi Kết Tủa Nhỏ Lòng, Formaldehyde Aldehyde Tráng Bạc Kiếm Xoay Tiền Khổng Lồ, Cho Đến Vị Vua Chốt Bảng Carboxylic Mệnh Tính Đôi Chua Acetic Giấm Gạo Nặng Quỳ Tím Khát."
         ]
@@ -52,11 +52,11 @@
         "NO3-"
       ],
       "correctAnswer": 2,
-      "explanation": "Ion NH4+ phản ứng with OH- từ NaOH sẽ tạo ra khí NH3 (Amonia) có mùi khai and làm quỳ tím ẩm hóa xanh. Đây là tính chất mấu chốt của Phân đạm vô cơ lớp 11."
+      "explanation": "Ion NH4+ phản ứng với OH- từ NaOH sẽ tạo ra khí NH3 (Amonia) có mùi khai và làm quỳ tím ẩm hóa xanh. Đây là tính chất mấu chốt của Phân đạm vô cơ lớp 11."
     },
     {
       "id": "q_test2",
-      "question": "Câu 2: Đốt cháy hoàn toàn một hydrocacbon X, thu được số mol phân tử H2O lớn hơn cực kì nhiều so with số mol khí CO2. Chất X lúc này phải được quy nạp thuộc dãy đồng đẳng nào?",
+      "question": "Câu 2: Đốt cháy hoàn toàn một hydrocacbon X, thu được số mol phân tử H2O lớn hơn cực kì nhiều so với số mol khí CO2. Chất X lúc này phải được quy nạp thuộc dãy đồng đẳng nào?",
       "options": [
         "Alkene (Olefin)",
         "Alkyne",
@@ -64,11 +64,11 @@
         "Arene (Thơm)"
       ],
       "correctAnswer": 2,
-      "explanation": "Công thức chung cháy Alkane CnH(2n+2): Khi đốt thu n mol CO2 and (n+1) mol H2O -> Suy ra nH2O > nCO2. Nếu alkene thì h2o = co2, alkyne/arene thì CO2 lớn hơn H2O."
+      "explanation": "Công thức chung cháy Alkane CnH(2n+2): Khi đốt thu n mol CO2 và (n+1) mol H2O -> Suy ra nH2O > nCO2. Nếu alkene thì h2o = co2, alkyne/arene thì CO2 lớn hơn H2O."
     },
     {
       "id": "q_test3",
-      "question": "Câu 3: Chất nào dưới đây có độ linh động and tính axit của nguyên tử H ở nhóm -OH là CAO NHẤT (dễ phản ứng mất H nhất)?",
+      "question": "Câu 3: Chất nào dưới đây có độ linh động và tính axit của nguyên tử H ở nhóm -OH là CAO NHẤT (dễ phản ứng mất H nhất)?",
       "options": [
         "C2H5OH (Ethanol)",
         "CH3COOH (Acetic acid)",
@@ -76,7 +76,7 @@
         "H2O (Nước cất)"
       ],
       "correctAnswer": 1,
-      "explanation": "Tính acid: Acetic Acid > Phenol > Nước > Alcohol. Acetic Acid (-COOH) có thể làm quỳ đỏ and tác dụng bazo do H quá linh động đứt liền thành H+."
+      "explanation": "Tính acid: Acetic Acid > Phenol > Nước > Alcohol. Acetic Acid (-COOH) có thể làm quỳ đỏ và tác dụng bazo do H quá linh động đứt liền thành H+."
     },
     {
       "id": "q_test4",
@@ -84,7 +84,7 @@
       "options": [
         "Tăng nhiệt độ nung.",
         "Giảm áp suất không trung.",
-        "Tăng áp suất hút and Giảm Nhiệt độ.",
+        "Tăng áp suất hút và Giảm Nhiệt độ.",
         "Thêm chất xúc tác V2O5."
       ],
       "correctAnswer": 2,
@@ -92,7 +92,7 @@
     },
     {
       "id": "q_test5",
-      "question": "Câu 5: Hợp chất Carbonyl là Formaldehyde (HCHO) tham gia phản ứng Tráng Bạc dung dịch AgNO3/NH3 dư with tỉ lệ tối đa số mol Ag thoát ra tạo thành mảng gương lấp lánh là bao nhiêu trên 1 mol aldehyde?",
+      "question": "Câu 5: Hợp chất Carbonyl là Formaldehyde (HCHO) tham gia phản ứng Tráng Bạc dung dịch AgNO3/NH3 dư với tỉ lệ tối đa số mol Ag thoát ra tạo thành mảng gương lấp lánh là bao nhiêu trên 1 mol aldehyde?",
       "options": [
         "1",
         "2",
@@ -109,7 +109,7 @@
       "title": "Ôn tập Học kì 2: Hóa học 11",
       "url": "https://www.youtube.com/watch?v=jaamQgvoy1Q",
       "thumbnail": "https://img.youtube.com/vi/jaamQgvoy1Q/0.jpg",
-      "description": "Video tổng hợp kiến thức trọng tâm and giải đề thi mẫu học kì 2 (VietJack)."
+      "description": "Video tổng hợp kiến thức trọng tâm và giải đề thi mẫu học kì 2 (VietJack)."
     }
   ],
   "practiceModules": [],

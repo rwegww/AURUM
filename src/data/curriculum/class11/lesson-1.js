@@ -8,13 +8,13 @@
   "order": 1,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Phân biệt phản ứng một chiều and phản ứng thuận nghịch. Tìm hiểu về sự chuyển dịch cân bằng and hằng số cân bằng.",
+  "description": "Phân biệt phản ứng một chiều và phản ứng thuận nghịch. Tìm hiểu về sự chuyển dịch cân bằng và hằng số cân bằng.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Phản ứng một chiều and phản ứng thuận nghịch",
+        "text": "1. Phản ứng một chiều và phản ứng thuận nghịch",
         "level": "h2"
       }
     },
@@ -29,7 +29,7 @@
       "id": "mod3",
       "type": "paragraph",
       "content": {
-        "text": "**Phản ứng thuận nghịch (Reversible Reaction):** Xảy ra khi trong cùng một bình phản ứng (cùng điều kiện t°, p), các chất sản phẩm vừa mới tạo thành lại lập tức tương tác với nhau để phân hủy hoặc tái tổng hợp ngược lại thành các chất tham gia ban đầu. Quá trình này diễn ra đồng thời theo 2 chiều ngược nhau (chiều Thuận and chiều Nghịch). Phương trình dùng mũi tên 2 chiều (\\(\\rightleftharpoons\\)). Phản ứng này không bao giờ đạt hiệu suất 100%, luôn còn dư chất tham gia."
+        "text": "**Phản ứng thuận nghịch (Reversible Reaction):** Xảy ra khi trong cùng một bình phản ứng (cùng điều kiện t°, p), các chất sản phẩm vừa mới tạo thành lại lập tức tương tác với nhau để phân hủy hoặc tái tổng hợp ngược lại thành các chất tham gia ban đầu. Quá trình này diễn ra đồng thời theo 2 chiều ngược nhau (chiều Thuận và chiều Nghịch). Phương trình dùng mũi tên 2 chiều (\\(\\rightleftharpoons\\)). Phản ứng này không bao giờ đạt hiệu suất 100%, luôn còn dư chất tham gia."
       }
     },
     {
@@ -44,7 +44,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "**Trạng thái cân bằng hóa học:** Khởi đầu phản ứng, tốc độ chiều thuận ($v_{thuận}$) cực lớn do nồng độ chất phản ứng dồi dào, trong khi tốc độ chiều nghịch ($v_{nghịch}$) bằng không. Theo thời gian, $v_{thuận}$ giảm dần and $v_{nghịch}$ tăng lên. Cho tới một thời điểm t, hai tốc độ này bằng nhau ($v_t = v_n$). Lúc này, hệ thống đạt \"Trạng thái cân bằng hóa học\". Đặc điểm là: Nồng độ, áp suất, màu sắc của mọi chất trong hệ lúc này trở nên BẤT BIẾN theo thời gian."
+        "text": "**Trạng thái cân bằng hóa học:** Khởi đầu phản ứng, tốc độ chiều thuận ($v_{thuận}$) cực lớn do nồng độ chất phản ứng dồi dào, trong khi tốc độ chiều nghịch ($v_{nghịch}$) bằng không. Theo thời gian, $v_{thuận}$ giảm dần và $v_{nghịch}$ tăng lên. Cho tới một thời điểm t, hai tốc độ này bằng nhau ($v_t = v_n$). Lúc này, hệ thống đạt \"Trạng thái cân bằng hóa học\". Đặc điểm là: Nồng độ, áp suất, màu sắc của mọi chất trong hệ lúc này trở nên BẤT BIẾN theo thời gian."
       }
     },
     {
@@ -52,7 +52,7 @@
       "type": "infoBox",
       "content": {
         "title": "Bản chất Động của Cân Bằng",
-        "content": "Cân bằng hóa học là một **Trạng thái Động**, không phải tĩnh. Nghĩa là tại thời điểm nồng độ không đổi, thực chất hàng tỷ phân tử chất phản ứng vẫn đang tiếp tục va chạm sinh ra sản phẩm, and lượng sản phẩm tương đương cũng đang phân hủy ngược lại bù trừ chính xác lượng mất đi. Hệ phải là **Hệ kín** (không rò rỉ khí hoặc khối lượng ra ngoài).",
+        "content": "Cân bằng hóa học là một **Trạng thái Động**, không phải tĩnh. Nghĩa là tại thời điểm nồng độ không đổi, thực chất hàng tỷ phân tử chất phản ứng vẫn đang tiếp tục va chạm sinh ra sản phẩm, và lượng sản phẩm tương đương cũng đang phân hủy ngược lại bù trừ chính xác lượng mất đi. Hệ phải là **Hệ kín** (không rò rỉ khí hoặc khối lượng ra ngoài).",
         "color": "blue"
       }
     },
@@ -68,7 +68,7 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Nhà bác học Guldberg and Waage đã khái quát hóa Định luật Tác dụng khối lượng. Ở trạng thái cân bằng của phản ứng thuận nghịch: $aA + bB \\rightleftharpoons cC + dD$. Thương số nồng độ đo ở thời điểm cân bằng của sản phẩm chia cho chất tham gia luôn đạt một giá trị hằng số không đổi, gọi là **Hằng số cân bằng $K_c$**."
+        "text": "Nhà bác học Guldberg và Waage đã khái quát hóa Định luật Tác dụng khối lượng. Ở trạng thái cân bằng của phản ứng thuận nghịch: $aA + bB \\rightleftharpoons cC + dD$. Thương số nồng độ đo ở thời điểm cân bằng của sản phẩm chia cho chất tham gia luôn đạt một giá trị hằng số không đổi, gọi là **Hằng số cân bằng $K_c$**."
       }
     },
     {
@@ -76,7 +76,7 @@
       "type": "infoBox",
       "content": {
         "title": "Thuộc tính cốt lõi của hằng số Kc",
-        "content": "Công thức: $K_c = \\frac{[C]^c \\cdot [D]^d}{[A]^a \\cdot [B]^b}$.\nLưu ý tử huyệt: Giá trị $K_c$ CHỈ PHỤ THUỘC duy nhất vào **Nhiệt độ**. Nếu không đổi nhiệt độ, dù bạn nén bình hay châm thêm chất thì $K_c$ dứt khoát không suy suyển. Khi viết biểu thức tính $K_c$, tuyệt đối BỎ QUA các chất ở trạng thái Rắn (Solid) do nồng độ của chúng mặc định bằng 1 hằng số.",
+        "content": "Công thức: $K_c = \\frac{[C]^c \\cdot [D]^d}{[A]^a \\cdot [B]^b}$.\n\nLưu ý: Ở một phản ứng xác định, giá trị $K_c$ chỉ phụ thuộc vào nhiệt độ. Nếu nhiệt độ không đổi, việc thay đổi nồng độ hay áp suất chỉ làm hệ chuyển dịch để thiết lập cân bằng mới, không làm đổi $K_c$. Khi viết biểu thức $K_c$, không đưa chất rắn tinh khiết vào biểu thức.",
         "color": "green"
       }
     },
@@ -92,7 +92,7 @@
       "id": "mod11",
       "type": "paragraph",
       "content": {
-        "text": "Mọi hệ tĩnh lặng đều chống lại sự xáo trộn. Nhà hóa học Pháp Le Chatelier đã phát biểu một nguyên lý chủ đạo chi phối Vũ trụ: **Nguyên lí chuyển dịch cân bằng Le Chatelier**: Khi một hệ cân bằng hóa học đang yên ổn bị tác động bởi sự biến đổi của Nồng độ, Áp suất, hoặc Nhiệt độ từ bên ngoài, hệ thống sẽ LẬP TỨC tự động phản kháng bằng cách chuyển dịch tốc độ phản ứng nghiêng sang cái chiều làm **GIẢM BỚT** hoặc **TRIỆT TIÊU** tác động đó."
+        "text": "**Nguyên lí chuyển dịch cân bằng Le Chatelier**: Khi một hệ cân bằng chịu tác động bởi sự thay đổi nồng độ, áp suất hoặc nhiệt độ, cân bằng sẽ chuyển dịch theo chiều làm giảm tác động của sự thay đổi đó."
       }
     },
     {
@@ -101,9 +101,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**1. Yếu tố Nồng độ:** Thêm chất A vào hệ $\\rightarrow$ Hệ vội vàng làm giảm chất A (phản ứng tự động trôi theo chiều tiêu thụ A). Hút bớt chất B $\\rightarrow$ Hệ dịch theo chiều sinh ra bù đắp chất B.",
-          "**2. Yếu tố Áp suất:** Chỉ đụng chạm tới hệ phản ứng chứa chất KHÍ. Tăng áp suất bình (nén nhỏ thể tích) $\\rightarrow$ Hệ phản kháng bằng cách chuyển dịch chạy về phía bên nào có TỔNG SỐ MOL KHÍ NHỎ HƠN (để làm tụt áp suất xuống).",
-          "**3. Yếu tố Nhiệt độ:** Tăng nhiệt độ nung bình $\\rightarrow$ Hệ hoảng loạn cần làm mát, nên nó dịch chuyển theo chiều phản ứng THU NHIỆT (ΔH > 0: hút bớt nhiệt nóng). Ngược lại, ném bình vào xô đá (giảm nhiệt) $\\rightarrow$ Hệ dịch theo chiều TỎA NHIỆT (ΔH < 0)."
+          "**1. Yếu tố nồng độ:** Khi tăng nồng độ một chất, cân bằng thường chuyển dịch theo chiều tiêu thụ chất đó. Khi giảm nồng độ một chất, cân bằng chuyển dịch theo chiều tạo thêm chất đó.",
+          "**2. Yếu tố áp suất:** Chỉ ảnh hưởng rõ đến hệ có chất khí. Khi tăng áp suất, cân bằng chuyển dịch về phía có tổng số mol khí nhỏ hơn; khi giảm áp suất, cân bằng chuyển dịch về phía có tổng số mol khí lớn hơn.",
+          "**3. Yếu tố nhiệt độ:** Khi tăng nhiệt độ, cân bằng chuyển dịch theo chiều thu nhiệt. Khi giảm nhiệt độ, cân bằng chuyển dịch theo chiều tỏa nhiệt."
         ]
       }
     },
@@ -111,8 +111,8 @@
       "id": "mod13",
       "type": "warningBox",
       "content": {
-        "title": "Cái bẫy Xúc tác and Phản ứng Cân Bằng Mol Khí",
-        "content": "Một khi phản ứng có tổng số mol khí 2 vế bằng nhau (Ví dụ $H_2 + I_2 \\rightleftharpoons 2HI$), việc nén hay xả áp suất vô tác dụng, cân bằng đứng im.\n**Chất xúc tác:** Hoàn toàn KHÔNG làm chuyển dịch cân bằng. Nó chỉ bơm tốc độ cả chiều thuận and nghịch lên cùng 1 bội số, giúp hệ Đạt Tới Cân Bằng Nhanh Hơn mà thôi.",
+        "title": "Cái bẫy Xúc tác và Phản ứng Cân Bằng Mol Khí",
+        "content": "Nếu phản ứng có tổng số mol khí ở hai vế bằng nhau, ví dụ $H_2 + I_2 \\rightleftharpoons 2HI$, thay đổi áp suất hầu như không làm cân bằng chuyển dịch.\n\n**Chất xúc tác:** Không làm chuyển dịch cân bằng. Chất xúc tác làm tăng tốc độ cả hai chiều, giúp hệ đạt cân bằng nhanh hơn.",
         "color": "orange"
       }
     }
@@ -149,7 +149,7 @@
       "title": "Bài giảng: Khái niệm về cân bằng hóa học",
       "url": "https://www.youtube.com/watch?v=2wD8sFFjddw",
       "thumbnail": "https://img.youtube.com/vi/2wD8sFFjddw/0.jpg",
-      "description": "Khái niệm về phản ứng thuận nghịch and trạng thái cân bằng hóa học (VietJack)."
+      "description": "Khái niệm về phản ứng thuận nghịch và trạng thái cân bằng hóa học (VietJack)."
     }
   ],
   "practiceModules": [],

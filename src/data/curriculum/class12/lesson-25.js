@@ -87,7 +87,7 @@
         "Nước cất."
       ],
       "correctAnswer": 1,
-      "explanation": "Ion $CO_3^{2-}$ từ $Na_2CO_3$ sẽ kết hợp with các ion $Ca^{2+}$ and $Mg^{2+}$ trong nước cứng tạo thành kết tủa $CaCO_3$ and $MgCO_3$, giúp loại bỏ độ cứng của nước."
+      "explanation": "Ion $CO_3^{2-}$ từ $Na_2CO_3$ sẽ kết hợp với các ion $Ca^{2+}$ và $Mg^{2+}$ trong nước cứng tạo thành kết tủa $CaCO_3$ và $MgCO_3$, giúp loại bỏ độ cứng của nước."
     },
     {
       "id": "q2",
@@ -99,7 +99,7 @@
         "CaO."
       ],
       "correctAnswer": 2,
-      "explanation": "Thạch cao nung ($CaSO_4 \\cdot 0,5H_2O$ hoặc $CaSO_4 \\cdot H_2O$) được tạo ra bằng cách nung thạch cao sống ở khoảng 160 độ C. Nó có khả năng kết dính khi nhào with nước nên dùng để bó bột and đúc tượng."
+      "explanation": "Thạch cao nung ($CaSO_4 \\cdot 0,5H_2O$ hoặc $CaSO_4 \\cdot H_2O$) được tạo ra bằng cách nung thạch cao sống ở khoảng 160 độ C. Nó có khả năng kết dính khi nhào với nước nên dùng để bó bột và đúc tượng."
     }
   ],
   "videoModules": [
@@ -108,7 +108,7 @@
       "title": "Bài giảng: Nguyên tố kim loại nhóm IIA",
       "url": "https://www.youtube.com/watch?v=_DxsxfhZWWA",
       "thumbnail": "https://img.youtube.com/vi/_DxsxfhZWWA/0.jpg",
-      "description": "Tìm hiểu nhóm kim loại Kiềm Thổ, hợp chất Canxi and hiện tượng Nước cứng (VietJack)."
+      "description": "Tìm hiểu nhóm kim loại Kiềm Thổ, hợp chất Canxi và hiện tượng Nước cứng (VietJack)."
     }
   ],
   "practiceModules": [],

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Map, ChevronRight, ChevronLeft, Save, RefreshCcw, GripVertical, AlertTriangle } from 'lucide-react';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const JourneyManager = () => {
   const [bai_hoc, setLessons] = useState([]);
@@ -70,9 +71,15 @@ const JourneyManager = () => {
         })
       );
       
-      await Promise.all(updatePromises);
+      const responses = await Promise.all(updatePromises);
+      const results = await Promise.all(responses.map(parseAdminMutationResponse));
+      const pendingCount = results.filter(result => result.pendingApproval).length;
       setHasChanges(false);
-      alert('Đã cập nhật thứ tự hành trình thành công!');
+      if (pendingCount > 0) {
+        alert(`Đã tạo ${pendingCount} yêu cầu duyệt. Cần quản trị viên còn lại xác nhận để cập nhật thứ tự hành trình.`);
+      } else {
+        alert('Đã cập nhật thứ tự hành trình thành công!');
+      }
     } catch (err) {
       console.error('Lỗi lưu hành trình:', err);
       alert('Có lỗi xảy ra khi lưu hành trình.');

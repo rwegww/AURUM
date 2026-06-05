@@ -89,7 +89,7 @@
         "Diệp lục."
       ],
       "correctAnswer": 1,
-      "explanation": "Cisplatin $[Pt(NH_3)_2Cl_2]$ là một phức chất của platin có khả năng liên kết with DNA của tế bào ung thư, ngăn cản sự nhân đôi and làm tế bào u bị tiêu diệt."
+      "explanation": "Cisplatin $[Pt(NH_3)_2Cl_2]$ là một phức chất của platin có khả năng liên kết với DNA của tế bào ung thư, ngăn cản sự nhân đôi và làm tế bào u bị tiêu diệt."
     },
     {
       "id": "q2",
@@ -110,7 +110,7 @@
       "title": "Bài giảng: Một số tính chất và ứng dụng của phức chất",
       "url": "https://www.youtube.com/watch?v=4HEUoyFpquA",
       "thumbnail": "https://img.youtube.com/vi/4HEUoyFpquA/0.jpg",
-      "description": "Giải thích hằng số bền and ứng dụng của phức chất trong đời sống, y học and hóa phân tích (VietJack)."
+      "description": "Giải thích hằng số bền và ứng dụng của phức chất trong đời sống, y học và hóa phân tích (VietJack)."
     }
   ],
   "practiceModules": [],

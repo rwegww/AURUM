@@ -8,13 +8,13 @@
   "chapter": "Chương 3: Liên kết hóa học",
   "order": 11,
   "isPremium": false,
-  "description": "Sự hình thành ion, lực hút tĩnh điện and đặc điểm của tinh thể ion.",
+  "description": "Sự hình thành ion, lực hút tĩnh điện và đặc điểm của tinh thể ion.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Sự tạo thành ion (Cation and Anion)",
+        "text": "1. Sự tạo thành ion (Cation và Anion)",
         "level": "h2"
       }
     },
@@ -37,15 +37,15 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "**Liên kết ion** là liên kết được hình thành bởi lực hút tĩnh điện giữa các ion mang điện tích trái dấu ($Cation$ and $Anion$). Loại liên kết này thường hình thành giữa các nguyên tố có độ âm điện khác biệt lớn (hiệu độ âm điện $\\Delta \\chi \\ge 1,7$), điển hình là giữa kim loại điển hình (nhóm IA, IIA) and phi kim điển hình (nhóm VIA, VIIA)."
+        "text": "**Liên kết ion** là liên kết được hình thành bởi lực hút tĩnh điện giữa các ion mang điện tích trái dấu ($Cation$ và $Anion$). Loại liên kết này thường hình thành giữa các nguyên tố có độ âm điện khác biệt lớn (hiệu độ âm điện $\\Delta \\chi \\ge 1,7$), điển hình là giữa kim loại điển hình (nhóm IA, IIA) và phi kim điển hình (nhóm VIA, VIIA)."
       }
     },
     {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Tinh thể ion and mạng lưới lập phương",
-        "content": "Trong điều kiện thường, các hợp chất ion tồn tại dưới dạng tinh thể. Ví dụ trong tinh thể muối ăn ($NaCl$), các ion $Na^+$ and $Cl^-$ được sắp xếp xen kẽ một cách tuần hoàn theo các nút mạng, tạo thành một khối lập phương bền vững nhờ lực hút tĩnh điện lan tỏa theo mọi hướng.",
+        "title": "Tinh thể ion và mạng lưới lập phương",
+        "content": "Trong điều kiện thường, các hợp chất ion tồn tại dưới dạng tinh thể. Ví dụ trong tinh thể muối ăn ($NaCl$), các ion $Na^+$ và $Cl^-$ được sắp xếp xen kẽ một cách tuần hoàn theo các nút mạng, tạo thành một khối lập phương bền vững nhờ lực hút tĩnh điện lan tỏa theo mọi hướng.",
         "color": "blue"
       }
     },
@@ -63,7 +63,7 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Trạng thái**: Thường là chất rắn, bền vững and khó bay hơi do lực hút tĩnh điện mạnh.",
+          "**Trạng thái**: Thường là chất rắn, bền vững và khó bay hơi do lực hút tĩnh điện mạnh.",
           "**Nhiệt độ nóng chảy/sôi**: Rất cao. Để phá vỡ mạng tinh thể ion cần cung cấp một lượng nhiệt năng lớn.",
           "**Tính tan**: Tan tốt trong các dung môi phân cực như nước.",
           "**Tính dẫn điện**: Ở trạng thái rắn chúng không dẫn điện, nhưng khi nóng chảy hoặc hòa tan trong nước, các ion tự do di chuyển giúp chúng dẫn điện tốt."
@@ -78,7 +78,7 @@
       "title": "Bài giảng: Liên kết ion",
       "url": "https://www.youtube.com/watch?v=icL76OZLQ-4",
       "thumbnail": "https://img.youtube.com/vi/icL76OZLQ-4/0.jpg",
-      "description": "Sự hình thành ion, liên kết ion and tính chất của hợp chất ion (VietJack)."
+      "description": "Sự hình thành ion, liên kết ion và tính chất của hợp chất ion (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -102,7 +102,7 @@
         "type": "multiple-choice",
         "question": "Hợp chất ion thường có đặc điểm vật lí nào?",
         "options": [
-          "Có nhiệt độ nóng chảy and nhiệt độ sôi cao",
+          "Có nhiệt độ nóng chảy và nhiệt độ sôi cao",
           "Dễ bay hơi",
           "Dẫn điện tốt ở trạng thái rắn",
           "Luôn có mùi thơm"

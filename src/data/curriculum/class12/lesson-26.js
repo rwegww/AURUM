@@ -65,7 +65,7 @@
         "NaCl."
       ],
       "correctAnswer": 1,
-      "explanation": "Ion $CO_3^{2-}$ từ $Na_2CO_3$ sẽ kết hợp with các ion $Ca^{2+}$ and $Mg^{2+}$ trong mọi loại nước cứng để tạo ra kết tủa carbonate, giúp loại bỏ độ cứng hiệu quả."
+      "explanation": "Ion $CO_3^{2-}$ từ $Na_2CO_3$ sẽ kết hợp với các ion $Ca^{2+}$ và $Mg^{2+}$ trong mọi loại nước cứng để tạo ra kết tủa carbonate, giúp loại bỏ độ cứng hiệu quả."
     },
     {
       "id": "q2",
@@ -86,7 +86,7 @@
       "title": "Ôn tập chương 7: Nguyên tố nhóm IA và IIA",
       "url": "https://www.youtube.com/watch?v=CfxMIsGiQrY",
       "thumbnail": "https://img.youtube.com/vi/CfxMIsGiQrY/0.jpg",
-      "description": "Tổng kết tính chất hóa học, phương pháp điều chế and ứng dụng của kim loại kiềm, kiềm thổ (Tech12h)."
+      "description": "Tổng kết tính chất hóa học, phương pháp điều chế và ứng dụng của kim loại kiềm, kiềm thổ (Tech12h)."
     }
   ],
   "practiceModules": [],

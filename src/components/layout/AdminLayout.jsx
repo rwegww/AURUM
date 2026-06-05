@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import ManagementLayout from './ManagementLayout';
-import { LayoutDashboard, BookOpen, Users, MessageSquare, Settings, Map } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Users, MessageSquare, Settings, Map, ShieldCheck } from 'lucide-react';
 
 const AdminLayout = () => {
   const adminMenu = [
@@ -9,6 +9,7 @@ const AdminLayout = () => {
     { label: 'Học liệu', path: '/admin/bai_hoc', icon: <BookOpen size={20} /> },
     { label: 'Người dùng', path: '/admin/nguoi_dung', icon: <Users size={20} /> },
     { label: 'Phản hồi', path: '/admin/feedback', icon: <MessageSquare size={20} /> },
+    { label: 'Duyệt thay đổi', path: '/admin/approvals', icon: <ShieldCheck size={20} /> },
     { label: 'Cài đặt (Sớm có)', path: '/admin/settings', icon: <Settings size={20} /> },
   ];
 

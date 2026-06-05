@@ -123,7 +123,7 @@
       "narrative": "Khi dẫn khí Ethylene vào dung dịch nước Brom màu da cam, ta sẽ thấy dung dịch dần dần bị ...",
       "placeholder": "Nhập hiện tượng...",
       "correctAnswer": "Mất màu",
-      "question": "Hiện tượng quan sát được khi Ethylene phản ứng with nước Brom là gì?",
+      "question": "Hiện tượng quan sát được khi Ethylene phản ứng với nước Brom là gì?",
       "source": "Thí nghiệm"
     },
     {

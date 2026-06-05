@@ -8,7 +8,7 @@
   "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học",
   "order": 9,
   "isPremium": false,
-  "description": "Tổng kết mảng kiến thức quy luật tuần hoàn and bảng HTTH.",
+  "description": "Tổng kết mảng kiến thức quy luật tuần hoàn và bảng HTTH.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -38,7 +38,7 @@
       "type": "infoBox",
       "content": {
         "title": "Tóm tắt xu hướng biến đổi (Trái $\\rightarrow$ Phải trong Chu kì)",
-        "content": "1. **Tăng dần**: Điện tích hạt nhân, Độ âm điện, Năng lượng ion hóa, Tính phi kim, Tính acid của oxide and hydroxide tương ứng.\n2. **Giảm dần**: Bán kính nguyên tử, Tính kim loại, Tính base của oxide and hydroxide tương ứng.",
+        "content": "1. **Tăng dần**: Điện tích hạt nhân, Độ âm điện, Năng lượng ion hóa, Tính phi kim, Tính acid của oxide và hydroxide tương ứng.\n2. **Giảm dần**: Bán kính nguyên tử, Tính kim loại, Tính base của oxide và hydroxide tương ứng.",
         "color": "blue"
       }
     },
@@ -54,7 +54,7 @@
       "type": "warningBox",
       "content": {
         "title": "Mẹo ghi nhớ nhanh",
-        "content": "Hãy lấy **Fluorine (F)** làm chuẩn cho tính phi kim mạnh nhất (góc trên bên phải) and **Francium (Fr)** làm chuẩn cho tính kim loại mạnh nhất (góc dưới bên trái). Các nguyên tố càng nằm gần F thì tính phi kim càng mạnh, càng gần Fr thì tính kim loại càng mạnh.",
+        "content": "Hãy lấy **Fluorine (F)** làm chuẩn cho tính phi kim mạnh nhất (góc trên bên phải) và **Francium (Fr)** làm chuẩn cho tính kim loại mạnh nhất (góc dưới bên trái). Các nguyên tố càng nằm gần F thì tính phi kim càng mạnh, càng gần Fr thì tính kim loại càng mạnh.",
         "color": "orange"
       }
     }
@@ -66,7 +66,7 @@
       "title": "Bài giảng: Ôn tập chương 2",
       "url": "https://www.youtube.com/watch?v=CC8ROS3QNAI",
       "thumbnail": "https://img.youtube.com/vi/CC8ROS3QNAI/0.jpg",
-      "description": "Tổng kết and giải đáp các thắc mắc về bảng tuần hoàn and quy luật tuần hoàn (VietJack)."
+      "description": "Tổng kết và giải đáp các thắc mắc về bảng tuần hoàn và quy luật tuần hoàn (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -126,7 +126,7 @@
         "type": "multiple-choice",
         "question": "Khi biết hiệu số điện tích hạt nhân, ta có thể suy ra:",
         "options": [
-          "Số hiệu nguyên tử and vị trí",
+          "Số hiệu nguyên tử và vị trí",
           "Màu sắc dung dịch",
           "Giá tiền của nguyên tố",
           "Nhiệt độ sôi"

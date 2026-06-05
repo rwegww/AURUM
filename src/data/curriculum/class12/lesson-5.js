@@ -49,7 +49,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Maltose (đường mạch nha) là disaccharide được cấu tạo từ hai gốc $\\alpha$-glucose liên kết with nhau qua nguyên tử oxygen giữa $C_1$ của gốc này and $C_4$ của gốc kia (liên kết **$alpha$-1,4-glycoside**). Khác with saccharose, trong phân tử maltose vẫn còn một nhóm hemiacetal tự do ở gốc glucose thứ hai. Do đó, trong dung dịch, gốc này có thể mở vòng tạo nhóm aldehyde."
+        "text": "Maltose (đường mạch nha) là disaccharide được cấu tạo từ hai gốc $\\alpha$-glucose liên kết với nhau qua nguyên tử oxygen giữa $C_1$ của gốc này và $C_4$ của gốc kia (liên kết **$alpha$-1,4-glycoside**). Khác với saccharose, trong phân tử maltose vẫn còn một nhóm hemiacetal tự do ở gốc glucose thứ hai. Do đó, trong dung dịch, gốc này có thể mở vòng tạo nhóm aldehyde."
       }
     },
     {
@@ -57,7 +57,7 @@
       "type": "infoBox",
       "content": {
         "title": "Tính khử của Maltose",
-        "content": "Nhờ khả năng mở vòng tạo nhóm -CHO, maltose có đầy đủ tính chất của một đường khử: Tham gia phản ứng tráng bạc, làm mất màu nước bromine and khử $Cu(OH)_2$ khi đun nóng tạo kết tủa đỏ gạch. Khi thủy phân hoàn toàn 1 mol maltose trong môi trường acid, ta thu được 2 mol glucose.",
+        "content": "Nhờ khả năng mở vòng tạo nhóm -CHO, maltose có đầy đủ tính chất của một đường khử: Tham gia phản ứng tráng bạc, làm mất màu nước bromine và khử $Cu(OH)_2$ khi đun nóng tạo kết tủa đỏ gạch. Khi thủy phân hoàn toàn 1 mol maltose trong môi trường acid, ta thu được 2 mol glucose.",
         "color": "blue"
       }
     },
@@ -73,19 +73,19 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Saccharose là nguyên liệu quan trọng trong công nghiệp thực phẩm (sản xuất bánh kẹo, đồ uống) and dược phẩm. Maltose được sử dụng nhiều trong sản xuất bia, kẹo mạch nha and làm môi trường nuôi cấy vi sinh vật. Quá trình thủy phân các disaccharide này là bước then chốt trong quá trình tiêu hóa tinh bột and đường trong cơ thể con người để tạo năng lượng."
+        "text": "Saccharose là nguyên liệu quan trọng trong công nghiệp thực phẩm (sản xuất bánh kẹo, đồ uống) và dược phẩm. Maltose được sử dụng nhiều trong sản xuất bia, kẹo mạch nha và làm môi trường nuôi cấy vi sinh vật. Quá trình thủy phân các disaccharide này là bước then chốt trong quá trình tiêu hóa tinh bột và đường trong cơ thể con người để tạo năng lượng."
       }
     }
   ],
   "quizzes": [
     {
       "id": "q1",
-      "question": "Saccharose and maltose đều có phản ứng nào sau đây?",
+      "question": "Saccharose và maltose đều có phản ứng nào sau đây?",
       "options": [
-        "Phản ứng tráng bạc with thuốc thử Tollens.",
+        "Phản ứng tráng bạc với thuốc thử Tollens.",
         "Phản ứng thủy phân trong môi trường acid.",
         "Phản ứng làm mất màu nước bromine.",
-        "Phản ứng with $H_2$ (xúc tác $Ni, t^\\circ$)."
+        "Phản ứng với $H_2$ (xúc tác $Ni, t^\\circ$)."
       ],
       "correctAnswer": 1,
       "explanation": "Cả hai đều là disaccharide nên đều tham gia phản ứng thủy phân. Tuy nhiên, saccharose không có tính khử nên không tráng bạc hay làm mất màu nước bromine."
@@ -106,10 +106,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Saccharose and Maltose",
+      "title": "Bài giảng: Saccharose và Maltose",
       "url": "https://www.youtube.com/watch?v=j0kc2JWReo0",
       "thumbnail": "https://img.youtube.com/vi/j0kc2JWReo0/0.jpg",
-      "description": "Cấu tạo and tính chất hóa học đặc trưng của đường mía (Saccharose) and Maltose (VietJack)."
+      "description": "Cấu tạo và tính chất hóa học đặc trưng của đường mía (Saccharose) và Maltose (VietJack)."
     }
   ],
   "practiceModules": [],

@@ -8,13 +8,13 @@
   "order": 20,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Cấu tạo, tính chất and các phản ứng đặc trưng của Alcohol (Oxi hoá không hoàn toàn, tách nước).",
+  "description": "Cấu tạo, tính chất và các phản ứng đặc trưng của Alcohol (Oxi hoá không hoàn toàn, tách nước).",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Bậc của Alcohol",
+        "text": "1. Khái niệm và Bậc của Alcohol",
         "level": "h2"
       }
     },
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Phản ứng with Kim loại kiềm",
+        "text": "2. Phản ứng với Kim loại kiềm",
         "level": "h2"
       }
     },
@@ -73,7 +73,7 @@
       "id": "mod8",
       "type": "heading",
       "content": {
-        "text": "4. Phản ứng Tách nước (Ester hoá nội phân tử and tách nối đôi)",
+        "text": "4. Phản ứng Tách nước (Ester hoá nội phân tử và tách nối đôi)",
         "level": "h2"
       }
     },
@@ -105,7 +105,7 @@
         "Ethene."
       ],
       "correctAnswer": 1,
-      "explanation": "Đun alcohol bậc hai with CuO sẽ bị oxi hóa thành hợp chất Ketone."
+      "explanation": "Đun alcohol bậc hai với CuO sẽ bị oxi hóa thành hợp chất Ketone."
     },
     {
       "id": "q2",
@@ -126,7 +126,7 @@
       "title": "Bài giảng: alcohol",
       "url": "https://www.youtube.com/watch?v=SLZ7Mbk2dcM",
       "thumbnail": "https://img.youtube.com/vi/SLZ7Mbk2dcM/0.jpg",
-      "description": "Tìm hiểu về alcohol, quy tắc gọi tên and các phản ứng quan trọng của nhóm -OH (VietJack)."
+      "description": "Tìm hiểu về alcohol, quy tắc gọi tên và các phản ứng quan trọng của nhóm -OH (VietJack)."
     }
   ],
   "practiceModules": [],

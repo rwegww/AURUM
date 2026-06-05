@@ -4,17 +4,17 @@
   "lessonId": 22,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 22: Hydrogen halide and Muối halide",
+  "title": "Bài 22: Hydrogen halide và Muối halide",
   "chapter": "Chương 7: Nguyên tố nhóm VIIA (Helogen)",
   "order": 22,
   "isPremium": false,
-  "description": "Hợp chất của halogen, dung dịch acid and phản ứng nhận biết.",
+  "description": "Hợp chất của halogen, dung dịch acid và phản ứng nhận biết.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Tính chất của các Hydrogen halide and acid tương ứng",
+        "text": "1. Tính chất của các Hydrogen halide và acid tương ứng",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Hydrogen halide ($HX$) is các hợp chất khí không màu, có mùi xộc and tan rất tốt trong nước tạo thành dung dịch acid hydrohalic.\\n- **Độ bền liên kết**: Giảm dần từ $HF$ đến $HI$ do bán kính nguyên tử halogen tăng dần, làm liên kết $H-X$ dài ra and yếu đi.\\n- **Tính acid**: Tăng dần theo dãy: **$HF < HCl < HBr < HI$**. Trong đó $HF$ là acid yếu, còn $HCl, HBr, HI$ là các acid mạnh."
+        "text": "Hydrogen halide ($HX$) is các hợp chất khí không màu, có mùi xộc và tan rất tốt trong nước tạo thành dung dịch acid hydrohalic.\\n- **Độ bền liên kết**: Giảm dần từ $HF$ đến $HI$ do bán kính nguyên tử halogen tăng dần, làm liên kết $H-X$ dài ra và yếu đi.\\n- **Tính acid**: Tăng dần theo dãy: **$HF < HCl < HBr < HI$**. Trong đó $HF$ là acid yếu, còn $HCl, HBr, HI$ là các acid mạnh."
       }
     },
     {
@@ -32,7 +32,7 @@
         "type": "bullet",
         "items": [
           "**Đặc điểm riêng của $HF$**: Dù là acid yếu, nhưng $HF$ có tính chất đặc biệt là ăn mòn thủy tinh ($SiO_2$), do đó nó không được đựng trong bình thủy tinh mà phải đựng trong bình nhựa chuyên dụng.\\n  $$SiO_2 + 4HF \\rightarrow SiF_4\\uparrow + 2H_2O$$",
-          "**Tính khử của các ion halide ($X^-$)**: Tính khử tăng dần từ $Cl^-$ đến $I^-$. Ví dụ, $HBr$ and $HI$ có thể khử được $H_2SO_4$ đặc, trong khi $HCl$ thì không."
+          "**Tính khử của các ion halide ($X^-$)**: Tính khử tăng dần từ $Cl^-$ đến $I^-$. Ví dụ, $HBr$ và $HI$ có thể khử được $H_2SO_4$ đặc, trong khi $HCl$ thì không."
         ]
       }
     },
@@ -58,10 +58,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Hydrogen halide and một số phản ứng của ion halide",
+      "title": "Bài giảng: Hydrogen halide và một số phản ứng của ion halide",
       "url": "https://www.youtube.com/watch?v=RZDVl7THNmY",
       "thumbnail": "https://img.youtube.com/vi/RZDVl7THNmY/0.jpg",
-      "description": "Tính chất acid của hydrogen halide and các phản ứng đặc trưng nhận biết ion halide (VietJack)."
+      "description": "Tính chất acid của hydrogen halide và các phản ứng đặc trưng nhận biết ion halide (VietJack)."
     }
   ],
   "practiceModules": [],

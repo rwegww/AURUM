@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Lock, Unlock, Eye, Search } from 'lucide-react';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const UserManager = () => {
   const [nguoi_dung, setUsers] = useState([]);
@@ -132,7 +133,9 @@ const UserManager = () => {
                                    },
                                    body: JSON.stringify({ isLocked: !u.is_locked })
                                  });
-                                 if (res.ok) fetchUsers();
+                                 const result = await parseAdminMutationResponse(res);
+                                 notifyAdminApprovalResult(result);
+                                 if (!result.pendingApproval) fetchUsers();
                                } catch (err) { console.error(err); }
                              }}
                              className={`px-3 py-1.5 flex items-center gap-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest border transition-all ${

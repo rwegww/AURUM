@@ -4,7 +4,7 @@
   "lessonId": 13,
   "programId": "ketnoi",
   "curriculumType": "ketnoi",
-  "title": "Bài 13: Liên kết hydrogen and Tương tác van der Waals",
+  "title": "Bài 13: Liên kết hydrogen và Tương tác van der Waals",
   "chapter": "Chương 3: Liên kết hóa học",
   "order": 13,
   "isPremium": false,
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Bên cạnh các liên kết hóa học (ion, cộng hóa trị) giữ các nguyên tử lại với nhau trong một phân tử, còn tồn tại các lực hút yếu hơn giữ các phân tử lại với nhau. Những tương tác này quyết định trạng thái tập hợp (rắn, lỏng, khí) and các tính chất vật lí như nhiệt độ nóng chảy, nhiệt độ sôi and độ tan của chất."
+        "text": "Bên cạnh các liên kết hóa học (ion, cộng hóa trị) giữ các nguyên tử lại với nhau trong một phân tử, còn tồn tại các lực hút yếu hơn giữ các phân tử lại với nhau. Những tương tác này quyết định trạng thái tập hợp (rắn, lỏng, khí) và các tính chất vật lí như nhiệt độ nóng chảy, nhiệt độ sôi và độ tan của chất."
       }
     },
     {
@@ -37,8 +37,8 @@
       "id": "mod4",
       "type": "infoBox",
       "content": {
-        "title": "Bản chất and điều kiện hình thành",
-        "content": "Liên kết hydrogen là một loại tương tác tĩnh điện yếu giữa nguyên tử $H$ đã liên kết cộng hóa trị với một nguyên tử có độ âm điện lớn (như $F, O, N$) với một nguyên tử có độ âm điện lớn khác (còn cặp electron hóa trị chưa tham gia liên kết).\\n\\n- **Kí hiệu**: Biểu diễn bằng các dấu chấm (....) nối giữa các phân tử.\\n- **Hệ quả**: Làm tăng đáng kể nhiệt độ sôi and nhiệt độ nóng chảy của chất. Ví dụ: Nước ($H_2O$) có nhiệt độ sôi cao bất thường ($100^\\circ C$) so với $H_2S$ ($-60^\\circ C$) do có hệ thống liên kết hydrogen liên phân tử bền vững.",
+        "title": "Bản chất và điều kiện hình thành",
+        "content": "Liên kết hydrogen là một loại tương tác tĩnh điện yếu giữa nguyên tử $H$ đã liên kết cộng hóa trị với một nguyên tử có độ âm điện lớn (như $F, O, N$) với một nguyên tử có độ âm điện lớn khác (còn cặp electron hóa trị chưa tham gia liên kết).\\n\\n- **Kí hiệu**: Biểu diễn bằng các dấu chấm (....) nối giữa các phân tử.\\n- **Hệ quả**: Làm tăng đáng kể nhiệt độ sôi và nhiệt độ nóng chảy của chất. Ví dụ: Nước ($H_2O$) có nhiệt độ sôi cao bất thường ($100^\\circ C$) so với $H_2S$ ($-60^\\circ C$) do có hệ thống liên kết hydrogen liên phân tử bền vững.",
         "color": "blue"
       }
     },
@@ -54,7 +54,7 @@
       "id": "mod6",
       "type": "paragraph",
       "content": {
-        "text": "Tương tác van der Waals là lực hút yếu giữa các phân tử, hình thành do sự xuất hiện của các lưỡng cực tạm thời hoặc vĩnh cửu.\\n\\n- **Đặc điểm**: Lực này yếu hơn liên kết hydrogen nhưng có mặt ở tất cả các phân tử.\\n- **Xu hướng**: Khi khối lượng phân tử and kích thước đám mây electron tăng lên, tương tác van der Waals sẽ mạnh dần. Điều này giải thích tại sao trong nhóm khí hiếm hoặc nhóm halogen, nhiệt độ sôi tăng dần từ trên xuống dưới."
+        "text": "Tương tác van der Waals là lực hút yếu giữa các phân tử, hình thành do sự xuất hiện của các lưỡng cực tạm thời hoặc vĩnh cửu.\\n\\n- **Đặc điểm**: Lực này yếu hơn liên kết hydrogen nhưng có mặt ở tất cả các phân tử.\\n- **Xu hướng**: Khi khối lượng phân tử và kích thước đám mây electron tăng lên, tương tác van der Waals sẽ mạnh dần. Điều này giải thích tại sao trong nhóm khí hiếm hoặc nhóm halogen, nhiệt độ sôi tăng dần từ trên xuống dưới."
       }
     }
   ],
@@ -62,7 +62,7 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Liên kết hydrogen and tương tác van der Waals",
+      "title": "Bài giảng: Liên kết hydrogen và tương tác van der Waals",
       "url": "https://www.youtube.com/watch?v=Zhz4_isWfRQ",
       "thumbnail": "https://img.youtube.com/vi/Zhz4_isWfRQ/0.jpg",
       "description": "Tìm hiểu về các loại lực liên kết yếu nhưng quan trọng giữa các phân tử (VietJack)."
@@ -75,7 +75,7 @@
     "basic": [
       {
         "type": "multiple-choice",
-        "question": "Liên kết hiđrô ($Hydrogen$ $bond$) được hình thành giữa nguyên tử H linh động and:",
+        "question": "Liên kết hiđrô ($Hydrogen$ $bond$) được hình thành giữa nguyên tử H linh động và:",
         "options": [
           "Nguyên tử có độ âm điện lớn (N, O, F) còn cặp e chưa sử dụng",
           "Kim loại mạnh",
@@ -125,7 +125,7 @@
         "type": "multiple-choice",
         "question": "Lực van der Waals làm tăng yếu tố nào của các khí hiếm từ trên xuống dưới?",
         "options": [
-          "Nhiệt độ nóng chảy and nhiệt độ sôi",
+          "Nhiệt độ nóng chảy và nhiệt độ sôi",
           "Độ cứng",
           "Màu sắc",
           "Số proton"

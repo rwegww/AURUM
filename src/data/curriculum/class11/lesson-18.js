@@ -103,7 +103,7 @@
       "title": "Ôn tập chương 4: Hydrocarbon",
       "url": "https://www.youtube.com/watch?v=kimJ4bKKmVU",
       "thumbnail": "https://img.youtube.com/vi/kimJ4bKKmVU/0.jpg",
-      "description": "Tổng kết mối quan hệ giữa các loại hydrocarbon and giải các bài tập rèn luyện (Tech12h)."
+      "description": "Tổng kết mối quan hệ giữa các loại hydrocarbon và giải các bài tập rèn luyện (Tech12h)."
     }
   ],
   "practiceModules": [],

@@ -93,7 +93,7 @@
       "title": "Ôn tập chương 8: Kim loại chuyển tiếp và Phức chất",
       "url": "https://www.youtube.com/watch?v=SmZkG22jbHY",
       "thumbnail": "https://img.youtube.com/vi/SmZkG22jbHY/0.jpg",
-      "description": "Tổng kết toàn bộ kiến thức về kim loại chuyển tiếp dãy 1 and hệ thống lý thuyết phức chất (Tech12h)."
+      "description": "Tổng kết toàn bộ kiến thức về kim loại chuyển tiếp dãy 1 và hệ thống lý thuyết phức chất (Tech12h)."
     }
   ],
   "practiceModules": [],

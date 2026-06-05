@@ -384,6 +384,26 @@ CREATE TABLE IF NOT EXISTS public.phan_hoi (
   CONSTRAINT phan_hoi_status_check CHECK (status IN ('unread', 'resolved', 'rejected'))
 );
 
+CREATE TABLE IF NOT EXISTS public.yeu_cau_duyet_admin (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  action_key text NOT NULL,
+  action_label text NOT NULL,
+  request_hash text NOT NULL,
+  requested_by text REFERENCES public.nguoi_dung(id) ON DELETE SET NULL,
+  approver_ids jsonb NOT NULL DEFAULT '[]'::jsonb,
+  payload jsonb NOT NULL DEFAULT '{}'::jsonb,
+  status text NOT NULL DEFAULT 'pending',
+  result jsonb NOT NULL DEFAULT '{}'::jsonb,
+  error text,
+  executed_by text REFERENCES public.nguoi_dung(id) ON DELETE SET NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  updated_at timestamp with time zone NOT NULL DEFAULT now(),
+  executed_at timestamp with time zone,
+  expires_at timestamp with time zone NOT NULL DEFAULT (now() + interval '7 days'),
+  CONSTRAINT yeu_cau_duyet_admin_approver_ids_check CHECK (jsonb_typeof(approver_ids) = 'array'),
+  CONSTRAINT yeu_cau_duyet_admin_status_check CHECK (status IN ('pending', 'executed', 'rejected', 'failed'))
+);
+
 CREATE TABLE IF NOT EXISTS public.hoa_chat (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   cong_thuc text NOT NULL UNIQUE,
@@ -932,6 +952,11 @@ CREATE INDEX IF NOT EXISTS idx_tien_do_nguoi_dung_loai_tien_do ON public.tien_do
 CREATE INDEX IF NOT EXISTS idx_tien_do_nguoi_dung_doi_tuong_id ON public.tien_do_nguoi_dung (loai_tien_do, doi_tuong_id);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_status ON public.phan_hoi (status);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_type ON public.phan_hoi (type);
+CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_status_created ON public.yeu_cau_duyet_admin (status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_requested_by ON public.yeu_cau_duyet_admin (requested_by);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_pending_hash
+  ON public.yeu_cau_duyet_admin (request_hash)
+  WHERE status = 'pending';
 CREATE INDEX IF NOT EXISTS idx_phan_ung_khoi_id ON public.phan_ung (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_cau_hoi_can_khoi_id ON public.cau_hoi_can (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_cau_hoi_dau_khoi_id ON public.cau_hoi_dau (khoi_id);
@@ -973,6 +998,7 @@ ALTER TABLE public.khoi ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.bai_hoc ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tien_do_nguoi_dung ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.phan_hoi ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.yeu_cau_duyet_admin ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.hoa_chat ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.phan_ung ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cau_hoi_can ENABLE ROW LEVEL SECURITY;
@@ -1260,6 +1286,42 @@ DROP POLICY IF EXISTS "Authenticated users can insert anonymous or own feedback"
 CREATE POLICY "Authenticated users can insert anonymous or own feedback"
   ON public.phan_hoi FOR INSERT
   WITH CHECK (nguoi_dung_id IS NULL OR nguoi_dung_id = (select auth.uid())::text);
+
+DROP POLICY IF EXISTS "Admins can read approval requests" ON public.yeu_cau_duyet_admin;
+CREATE POLICY "Admins can read approval requests"
+  ON public.yeu_cau_duyet_admin FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.nguoi_dung u
+      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
+    )
+  );
+
+DROP POLICY IF EXISTS "Admins can create approval requests" ON public.yeu_cau_duyet_admin;
+CREATE POLICY "Admins can create approval requests"
+  ON public.yeu_cau_duyet_admin FOR INSERT
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.nguoi_dung u
+      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
+    )
+  );
+
+DROP POLICY IF EXISTS "Admins can update approval requests" ON public.yeu_cau_duyet_admin;
+CREATE POLICY "Admins can update approval requests"
+  ON public.yeu_cau_duyet_admin FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1 FROM public.nguoi_dung u
+      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
+    )
+  )
+  WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM public.nguoi_dung u
+      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
+    )
+  );
 
 DROP POLICY IF EXISTS "Authenticated users can insert material feedback" ON public.phan_hoi_hoc_lieu;
 CREATE POLICY "Authenticated users can insert material feedback"

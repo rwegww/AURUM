@@ -8,13 +8,13 @@
   "chapter": "Chương 1: Cấu tạo nguyên tử",
   "order": 2,
   "isPremium": false,
-  "description": "Số hiệu nguyên tử, số khối, kí hiệu nguyên tử and nguyên tử đồng vị.",
+  "description": "Số hiệu nguyên tử, số khối, kí hiệu nguyên tử và nguyên tử đồng vị.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Nguyên tố hóa học and Số hiệu nguyên tử",
+        "text": "1. Nguyên tố hóa học và Số hiệu nguyên tử",
         "level": "h2"
       }
     },
@@ -22,14 +22,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Nguyên tố hóa học là tập hợp những nguyên tử có cùng **số đơn vị điện tích hạt nhân** (số proton). Những nguyên tử của cùng một nguyên tố hóa học sẽ có cùng số electron and do đó có tính chất hóa học tương tự nhau.\n\n**Số hiệu nguyên tử (Z)**: Là số đơn vị điện tích hạt nhân của một nguyên tố. Số hiệu nguyên tử cho biết số proton trong hạt nhân and số electron ở lớp vỏ nguyên tử ($Z = p = e$). Mỗi nguyên tố hóa học có một số hiệu nguyên tử duy nhất, được coi là \"số định danh\" của nguyên tố đó."
+        "text": "Nguyên tố hóa học là tập hợp những nguyên tử có cùng **số đơn vị điện tích hạt nhân** (số proton). Những nguyên tử của cùng một nguyên tố hóa học sẽ có cùng số electron và do đó có tính chất hóa học tương tự nhau.\n\n**Số hiệu nguyên tử (Z)**: Là số đơn vị điện tích hạt nhân của một nguyên tố. Số hiệu nguyên tử cho biết số proton trong hạt nhân và số electron ở lớp vỏ nguyên tử ($Z = p = e$). Mỗi nguyên tố hóa học có một số hiệu nguyên tử duy nhất, được coi là \"số định danh\" của nguyên tố đó."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Số khối and Kí hiệu nguyên tử",
+        "text": "2. Số khối và Kí hiệu nguyên tử",
         "level": "h2"
       }
     },
@@ -37,14 +37,14 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "**Số khối (A)** là tổng số hạt proton (Z) and tổng số hạt neutron (N) của hạt nhân đó: \n$$A = Z + N$$\n\n**Kí hiệu nguyên tử**: Để đặc trưng cho một nguyên tử, người ta quy ước ghi số hiệu nguyên tử Z ở phía dưới bên trái and số khối A ở phía trên bên trái của kí hiệu hóa học X:\n$${}^A_Z X$$\nVí dụ: ${}^{23}_{11}Na$ cho biết Sodium có $11$ proton, $11$ electron and $23 - 11 = 12$ neutron."
+        "text": "**Số khối (A)** là tổng số hạt proton (Z) và tổng số hạt neutron (N) của hạt nhân đó: \n$$A = Z + N$$\n\n**Kí hiệu nguyên tử**: Để đặc trưng cho một nguyên tử, người ta quy ước ghi số hiệu nguyên tử Z ở phía dưới bên trái và số khối A ở phía trên bên trái của kí hiệu hóa học X:\n$${}^A_Z X$$\nVí dụ: ${}^{23}_{11}Na$ cho biết Sodium có $11$ proton, $11$ electron và $23 - 11 = 12$ neutron."
       }
     },
     {
       "id": "mod5",
       "type": "heading",
       "content": {
-        "text": "3. Đồng vị and Nguyên tử khối trung bình",
+        "text": "3. Đồng vị và Nguyên tử khối trung bình",
         "level": "h2"
       }
     },
@@ -59,7 +59,7 @@
       "id": "mod7",
       "type": "warningBox",
       "content": {
-        "title": "Phân biệt Số hiệu and Số khối",
+        "title": "Phân biệt Số hiệu và Số khối",
         "content": "Hãy ghi nhớ: Số proton định nghĩa nguyên tố, còn số neutron quyết định đồng vị. Tính chất hóa học của các đồng vị gần như giống hệt nhau, nhưng tính chất vật lý (khối lượng, độ bền hạt nhân) có thể khác nhau.",
         "color": "orange"
       }
@@ -72,7 +72,7 @@
       "title": "Bài giảng: Nguyên tố hóa học",
       "url": "https://www.youtube.com/watch?v=MnvBN_7DD6g",
       "thumbnail": "https://img.youtube.com/vi/MnvBN_7DD6g/0.jpg",
-      "description": "Khái niệm nguyên tố, số hiệu nghiên tử, số khối and đồng vị (VietJack)."
+      "description": "Khái niệm nguyên tố, số hiệu nghiên tử, số khối và đồng vị (VietJack)."
     }
   ],
   "practiceModules": [],

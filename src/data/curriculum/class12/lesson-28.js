@@ -96,7 +96,7 @@
       "title": "Bài giảng: Sơ lược về phức chất",
       "url": "https://www.youtube.com/watch?v=UZkNY9PeYms",
       "thumbnail": "https://img.youtube.com/vi/UZkNY9PeYms/0.jpg",
-      "description": "Định nghĩa về phức chất, phối tử and cách xác định số phối trí trong các hệ phức phổ biến (VietJack)."
+      "description": "Định nghĩa về phức chất, phối tử và cách xác định số phối trí trong các hệ phức phổ biến (VietJack)."
     }
   ],
   "practiceModules": [],

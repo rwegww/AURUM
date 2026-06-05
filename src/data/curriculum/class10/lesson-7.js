@@ -8,13 +8,13 @@
   "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học",
   "order": 7,
   "isPremium": false,
-  "description": "Sự biến đổi tính acid - base của oxide and hydroxide theo chu kì.",
+  "description": "Sự biến đổi tính acid - base của oxide và hydroxide theo chu kì.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Xu hướng biến đổi tính Kim loại and Phi kim",
+        "text": "1. Xu hướng biến đổi tính Kim loại và Phi kim",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Tính kim loại (khả năng nhường electron) and tính phi kim (khả năng nhận electron) biến đổi một cách tuần hoàn theo sự thay đổi của cấu hình electron and bán kính nguyên tử:\n\n- **Trong một chu kì**: Từ trái sang phải, bán kính nguyên tử giảm and điện tích hạt nhân tăng làm khả năng giữ electron mạnh lên. Do đó, **tính kim loại giảm dần** and **tính phi kim tăng dần**.\n- **Trong một nhóm A**: Từ trên xuống dưới, bán kính nguyên tử tăng nhanh làm suy yếu lực hút của hạt nhân lên electron hóa trị. Vì vậy, **tính kim loại tăng dần** and **tính phi kim giảm dần**."
+        "text": "Tính kim loại (khả năng nhường electron) và tính phi kim (khả năng nhận electron) biến đổi một cách tuần hoàn theo sự thay đổi của cấu hình electron và bán kính nguyên tử:\n\n- **Trong một chu kì**: Từ trái sang phải, bán kính nguyên tử giảm và điện tích hạt nhân tăng làm khả năng giữ electron mạnh lên. Do đó, **tính kim loại giảm dần** và **tính phi kim tăng dần**.\n- **Trong một nhóm A**: Từ trên xuống dưới, bán kính nguyên tử tăng nhanh làm suy yếu lực hút của hạt nhân lên electron hóa trị. Vì vậy, **tính kim loại tăng dần** và **tính phi kim giảm dần**."
       }
     },
     {
@@ -37,7 +37,7 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "Xét các oxide cao nhất của các nguyên tố thuộc Chu kì 3: $Na_2O$, $MgO$, $Al_2O_3$, $SiO_2$, $P_2O_5$, $SO_3$, $Cl_2O_7$. Theo chiều tăng dần của điện tích hạt nhân:\n- **Tính Base giảm dần**: $Na_2O$ (Base mạnh) $\\rightarrow$ $MgO$ (Base trung bình).\n- **Xuất hiện tính Lưỡng tính**: $Al_2O_3$ (có thể phản ứng với cả acid and base mạnh).\n- **Tính Acid tăng dần**: $SiO_2$ (Acid rất yếu) $\\rightarrow$ $P_2O_5$ (Acid trung bình) $\\rightarrow$ $SO_3$ (Acid mạnh) $\\rightarrow$ $Cl_2O_7$ (Acid rất mạnh)."
+        "text": "Xét các oxide cao nhất của các nguyên tố thuộc Chu kì 3: $Na_2O$, $MgO$, $Al_2O_3$, $SiO_2$, $P_2O_5$, $SO_3$, $Cl_2O_7$. Theo chiều tăng dần của điện tích hạt nhân:\n- **Tính Base giảm dần**: $Na_2O$ (Base mạnh) $\\rightarrow$ $MgO$ (Base trung bình).\n- **Xuất hiện tính Lưỡng tính**: $Al_2O_3$ (có thể phản ứng với cả acid và base mạnh).\n- **Tính Acid tăng dần**: $SiO_2$ (Acid rất yếu) $\\rightarrow$ $P_2O_5$ (Acid trung bình) $\\rightarrow$ $SO_3$ (Acid mạnh) $\\rightarrow$ $Cl_2O_7$ (Acid rất mạnh)."
       }
     },
     {
@@ -60,7 +60,7 @@
       "type": "warningBox",
       "content": {
         "title": "Định luật tuần hoàn",
-        "content": "Tính chất của các nguyên tố and đơn chất, cũng như thành phần and tính chất của các hợp chất tạo nên từ các nguyên tố đó biến đổi tuần hoàn theo chiều tăng của điện tích hạt nhân nguyên tử.",
+        "content": "Tính chất của các nguyên tố và đơn chất, cũng như thành phần và tính chất của các hợp chất tạo nên từ các nguyên tố đó biến đổi tuần hoàn theo chiều tăng của điện tích hạt nhân nguyên tử.",
         "color": "orange"
       }
     }
@@ -72,7 +72,7 @@
       "title": "Bài giảng: Xu hướng biến đổi tính chất của hợp chất",
       "url": "https://www.youtube.com/watch?v=1v0kTZLSNog",
       "thumbnail": "https://img.youtube.com/vi/1v0kTZLSNog/0.jpg",
-      "description": "Sự biến đổi tính acid - base của các oxide and hydroxide (VietJack)."
+      "description": "Sự biến đổi tính acid - base của các oxide và hydroxide (VietJack)."
     }
   ],
   "practiceModules": [],

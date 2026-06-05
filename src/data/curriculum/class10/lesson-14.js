@@ -8,7 +8,7 @@
   "chapter": "Chương 3: Liên kết hóa học",
   "order": 14,
   "isPremium": false,
-  "description": "Tổng kết Liên kết ion, Cộng hóa trị, and quy tắc Octet.",
+  "description": "Tổng kết Liên kết ion, Cộng hóa trị, và quy tắc Octet.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,14 +22,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong chương này, chúng ta đã tìm hiểu về cách các nguyên tử liên kết với nhau để đạt được cấu hình electron bền vững theo quy tắc Octet:\n- **Liên kết ion**: Hình thành do lực hút tĩnh điện giữa cation kim loại and anion phi kim. Đặc trưng bởi sự nhường-nhận electron hoàn toàn.\n- **Liên kết cộng hóa trị**: Hình thành bằng việc góp chung các cặp electron. Bao gồm liên kết không phân cực (e dùng chung ở giữa) and phân cực (e lệch về phía nguyên tử độ âm điện lớn hơn).\n- **Tương tác yếu**: Liên kết hydrogen and tương tác van der Waals giữ các phân tử lại với nhau, ảnh hưởng trực tiếp đến trạng thái and nhiệt độ sôi của chất."
+        "text": "Trong chương này, chúng ta đã tìm hiểu về cách các nguyên tử liên kết với nhau để đạt được cấu hình electron bền vững theo quy tắc Octet:\n- **Liên kết ion**: Hình thành do lực hút tĩnh điện giữa cation kim loại và anion phi kim. Đặc trưng bởi sự nhường-nhận electron hoàn toàn.\n- **Liên kết cộng hóa trị**: Hình thành bằng việc góp chung các cặp electron. Bao gồm liên kết không phân cực (e dùng chung ở giữa) và phân cực (e lệch về phía nguyên tử độ âm điện lớn hơn).\n- **Tương tác yếu**: Liên kết hydrogen và tương tác van der Waals giữ các phân tử lại với nhau, ảnh hưởng trực tiếp đến trạng thái và nhiệt độ sôi của chất."
       }
     },
     {
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Phân biệt and nhận diện nhanh loại liên kết",
+        "text": "2. Phân biệt và nhận diện nhanh loại liên kết",
         "level": "h2"
       }
     },
@@ -47,7 +47,7 @@
       "type": "warningBox",
       "content": {
         "title": "Mối quan hệ Vị trí - Liên kết - Tính chất",
-        "content": "Loại liên kết quyết định tính chất vật lí: Hợp chất ion thường là chất rắn, khó nóng chảy. Hợp chất cộng hóa trị có thể là rắn, lỏng hoặc khí, thường có nhiệt độ sôi thấp hơn and tính dẫn điện kém hơn ở trạng thái nguyên chất.",
+        "content": "Loại liên kết quyết định tính chất vật lí: Hợp chất ion thường là chất rắn, khó nóng chảy. Hợp chất cộng hóa trị có thể là rắn, lỏng hoặc khí, thường có nhiệt độ sôi thấp hơn và tính dẫn điện kém hơn ở trạng thái nguyên chất.",
         "color": "orange"
       }
     }
@@ -59,7 +59,7 @@
       "title": "Bài giảng: Ôn tập chương 3",
       "url": "https://www.youtube.com/watch?v=DD1CDQaEslI",
       "thumbnail": "https://img.youtube.com/vi/DD1CDQaEslI/0.jpg",
-      "description": "Hệ thống hóa các loại liên kết hóa học: ion, cộng hóa trị and liên kết yếu (VietJack)."
+      "description": "Hệ thống hóa các loại liên kết hóa học: ion, cộng hóa trị và liên kết yếu (VietJack)."
     }
   ],
   "practiceModules": [],

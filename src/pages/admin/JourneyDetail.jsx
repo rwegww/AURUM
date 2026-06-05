@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {  ChevronLeft, Save, Plus, Trash2, Edit3, Image,  Gamepad2, ClipboardList, BookOpen, Layers, Zap,
   CheckCircle2, AlertCircle
 } from 'lucide-react';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const JourneyDetail = () => {
   const { lessonId } = useParams();
@@ -65,13 +66,14 @@ const JourneyDetail = () => {
           'Authorization': `Bearer ${token}`        },
         body: JSON.stringify(lesson)
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         alert('Đã cập nhật chi tiết hành trình thành công!');
-      } else {
-        alert('Lỗi khi lưu dữ liệu.');
       }
     } catch (err) {
       console.error('Lỗi lưu:', err);
+      alert(err.message || 'Lỗi khi lưu dữ liệu.');
     } finally {
       setSaving(false);
     }

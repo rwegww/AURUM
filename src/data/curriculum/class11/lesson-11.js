@@ -3,12 +3,12 @@
   "classId": 11,
   "lessonId": 11,
   "programId": "ketnoi",
-  "title": "Bài 11. Phương pháp tách biệt and tinh chế hợp chất hữu cơ",
+  "title": "Bài 11. Phương pháp tách biệt và tinh chế hợp chất hữu cơ",
   "chapter": "Chương 3. Đại cương về hóa học hữu cơ",
   "order": 11,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Nguyên tắc các phương pháp tách and tinh chế thông dụng: chiết, chưng cất, kết tinh and sắc kí.",
+  "description": "Nguyên tắc các phương pháp tách và tinh chế thông dụng: chiết, chưng cất, kết tinh và sắc kí.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong thiên nhiên, các hợp chất hữu cơ hiếm khi đứng đơn lẻ mà luôn pha trộn thành những mớ bòng bong hỗn hợp (tinh dầu gộp trong lá, diệp lục trộn bùn tế bào). Để lấy ra được chất Tinh Khiết, Hóa học hữu cơ sử dụng 4 tuyệt kĩ cơ bản dựa vào sự chênh lệch **TÍNH CHẤT VẬT LÍ** (Độ hòa tan, Nhiệt độ sôi, Độ hấp phụ). Phương pháp số 1: **Chiết (Extraction)**."
+        "text": "Trong tự nhiên, hợp chất hữu cơ thường tồn tại trong hỗn hợp. Để thu được chất tinh khiết, người ta dựa vào sự khác nhau về tính chất vật lí như độ tan, nhiệt độ sôi và khả năng hấp phụ. Một phương pháp quan trọng là **chiết (extraction)**."
       }
     },
     {
@@ -31,9 +31,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "Chiết là nghệ thuật đi mượn một \"Dung Môi Thần Tài\" để kéo rứt chất cần tìm ra khỏi hỗn hợp. Dựa vào nguyên lí: Chất tan khác nhau trong 2 dung môi Không Thể Trộn Lẫn.",
-          "**1. Chiết lỏng - lỏng (Dùng Phễu Chiết):** Tách chất hữu cơ từ dung dịch nước. Ví dụ cho tinh dầu lẫn nước vào Phễu thủy tinh có vòi. Đổ Ether (dung môi Hữu cơ hôi hắc) vào $\\rightarrow$ Lắc mạnh. Tinh dầu cực thèm Ether nên bỏ Nước bơi hết sạch lên lớp Eter nhẹ nổi bề mặt. Nước nặng chìm dưới rỗng tuếch. Mở khóa vòi xả bỏ Nước, ta thu được lớp Ether chứa tinh dầu.",
-          "**2. Chiết lỏng - rắn (Ngâm Rượu/Hầm):** Khai thác dược liệu. Ngâm rễ sâm cứng vào cồn Rượu (Dung môi lỏng). Cốt nhân sâm nhả tan vào rượu thành Rượu Thuốc."
+          "Chiết dựa trên sự phân bố khác nhau của chất tan trong hai dung môi không trộn lẫn hoặc giữa pha rắn và pha lỏng.",
+          "**1. Chiết lỏng - lỏng:** Dùng phễu chiết để tách chất hữu cơ ra khỏi dung dịch nước. Ví dụ, tinh dầu có thể tan tốt hơn trong dung môi hữu cơ như ether, tạo thành lớp riêng để tách ra.",
+          "**2. Chiết lỏng - rắn:** Dùng dung môi phù hợp để hòa tan hoạt chất từ mẫu rắn, ví dụ chiết hoạt chất từ dược liệu bằng ethanol."
         ]
       }
     },
@@ -49,7 +49,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Phương pháp 2: **Chưng cất (Distillation)**. Là màn tra tấn bằng Lửa để phân tách các Cặp Chất Lỏng Tan Lẫn Toàn Phần. Dựa trên ranh giới: **Nhiệt Độ Sôi Khác Biệt**. Chất nào có Nhiệt độ sôi Ảo Thấp hơn $\\rightarrow$ Nhẹ dạ bốc hơi bay lên trước. Băng qua ống sinh hàn (ống ruột gà ngâm lạnh) $\\rightarrow$ Khí ngưng tụ rót thành giọt lỏng rơi xuống bình hứng."
+        "text": "Phương pháp **chưng cất (distillation)** dùng để tách các chất lỏng tan lẫn vào nhau nhưng có nhiệt độ sôi khác nhau. Khi đun nóng hỗn hợp, chất có nhiệt độ sôi thấp hơn bay hơi trước, sau đó hơi được làm lạnh trong ống sinh hàn để ngưng tụ thành chất lỏng."
       }
     },
     {
@@ -57,7 +57,7 @@
       "type": "infoBox",
       "content": {
         "title": "Chưng cất Nấu Rượu Truyền Thống",
-        "content": "Ví dụ kinh điển đun hèm rượu (Hỗn hợp Cồn Ethyl Alcohol sôi 78°C trộn with Nước sôi 100°C). Khi đun nóng Tới 78 độ, nồi nấu chưa để nước kịp sôi thì toàn bộ bộ Cồn Hữu Cơ đã bốc hơi bay ào ạt trào lên mặt $\\rightarrow$ Dẫn ống qua thau nước lạnh ngưng tụ lại thành Tinh Chất Rượu Trong vắt.",
+        "content": "Trong chưng cất rượu, ethanol có nhiệt độ sôi khoảng 78°C, thấp hơn nước (100°C). Khi đun hỗn hợp, hơi giàu ethanol bay lên trước và được làm lạnh để ngưng tụ, giúp thu được phần rượu có nồng độ cao hơn.",
         "color": "blue"
       }
     },
@@ -73,7 +73,7 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Phương pháp 3: **Kết tinh (Crystallization)**. Áp dụng cho Chất Rắn. Dựa trên chân lí: Độ tan của Chất Rắn biến thiên cực độ theo Nhiệt độ (Nóng thì tan tốt, Lạnh thì đẩy văng ra). \nThực hành: Đun nóng hòa tan chất rắn lẫn tạp bẩn vào dung dịch sôi tơi tả $\\rightarrow$ Lọc cặn rác nóng $\\rightarrow$ Rót Nước ra để Nguội Chậm (Hoặc ủ ngâm đá). Do lạnh đột ngột, Chất Tinh Khiết sẽ tuôn trào tủa mọc thành những Tinh Thể Kim Cương Móng Cọp bắt mắt lóng lánh (Lọc ra tinh chế mía xốp thành Đường Phèn Trắng)."
+        "text": "Phương pháp **kết tinh (crystallization)** dùng để tinh chế chất rắn. Cơ sở của phương pháp là độ tan của chất rắn thường thay đổi theo nhiệt độ: tan nhiều hơn khi nóng và kết tinh khi dung dịch nguội. Quy trình cơ bản gồm hòa tan chất rắn trong dung môi nóng, lọc bỏ tạp chất không tan, sau đó để nguội từ từ để tinh thể chất tinh khiết tách ra."
       }
     },
     {
@@ -88,15 +88,15 @@
       "id": "mod10",
       "type": "paragraph",
       "content": {
-        "text": "Phương pháp 4 Đỉnh Cao: **Sắc kí (Chromatography)**. Vượt mọi ranh giới phân tách cả Lượng Mẫu Hiển Vi giọt xíu xiu. Trò chơi vượt chướng ngại vật giữa Pha Động (Dung môi lỏng/khí lùa chạy) mang theo Cà Mẫu rượt đuổi trượt trên Pha Tĩnh (Cột cát Gel tĩnh lặng). Chất nào bị Pha Tĩnh Giữ Lại Bám Ưa Hơn $\\rightarrow$ Bị kẹt chạy luẩn quẩn Rất Chậm Cụt Lùi sau and bị Tách rớt hẳn Lớp with thằng chạy nhanh. Dùng Sắc kí lớp Mỏng Tách màu Vi khuẩn, Giọt Lệ Máu."
+        "text": "**Sắc kí (chromatography)** dùng để tách các chất dựa trên sự phân bố khác nhau giữa pha động và pha tĩnh. Chất tương tác mạnh hơn với pha tĩnh di chuyển chậm hơn; chất tương tác yếu hơn di chuyển nhanh hơn. Nhờ sự khác biệt này, các thành phần trong hỗn hợp được tách thành các vệt hoặc phân đoạn riêng."
       }
     },
     {
       "id": "mod11",
       "type": "warningBox",
       "content": {
-        "title": "Báo Động Sinh Tử Lửa Trần Hữu Cơ",
-        "content": "Vì hóa chất hữu cơ (Ether, Xăng, Cồn, Chloroform) vô cùng tàn nhẫn khát lửa, Bốc Hơi Lẹ and Cháy Điên Cuồng thảm sát nổ. Toàn bộ các quá trình Chưng Cất đun nấu ở phòng Lab NGHIÊM CẤM 100% bật quẹt Mồi Lửa Đèn cồn rọi trực tiếp dưới đáy bình cầu (Nguy cơ bể bình Phụt Cháy Nhà). BẮT BUỘC dùng \"Bếp Điện Cách Thủy\" hay \"Bếp Trát Hạt Cát\" tản nhiệt êm ái.",
+        "title": "An toàn khi đun nóng dung môi hữu cơ",
+        "content": "Nhiều dung môi hữu cơ như ether, xăng, ethanol và chloroform dễ bay hơi hoặc dễ cháy. Khi chưng cất, không đun trực tiếp bằng ngọn lửa trần dưới bình cầu. Cần dùng bếp điện, bể cách thủy hoặc bể cát theo hướng dẫn an toàn phòng thí nghiệm.",
         "color": "orange"
       }
     }
@@ -104,7 +104,7 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Để tách hỗn hợp gồm Rượu ($C_2H_5OH$) and nước (nhiệt độ sôi gần 78°C and 100°C), phương pháp tối ưu là:",
+      "question": "Để tách hỗn hợp gồm Rượu ($C_2H_5OH$) và nước (nhiệt độ sôi gần 78°C và 100°C), phương pháp tối ưu là:",
       "options": [
         "Kết tinh.",
         "Chiết lỏng-lỏng bằng ete.",
@@ -112,7 +112,7 @@
         "Sắc kí giấy."
       ],
       "correctAnswer": 2,
-      "explanation": "Hai chất lỏng hòa tan vào nhau nhưng có nhiệt độ sôi khác biệt (78°C and 100°C) sẽ dùng chưng cất."
+      "explanation": "Hai chất lỏng hòa tan vào nhau nhưng có nhiệt độ sôi khác biệt (78°C và 100°C) sẽ dùng chưng cất."
     },
     {
       "id": "q2",
@@ -130,10 +130,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Phương pháp tách biệt and tinh chế hợp chất hữu cơ",
+      "title": "Bài giảng: Phương pháp tách biệt và tinh chế hợp chất hữu cơ",
       "url": "https://www.youtube.com/watch?v=fQcDkujbfrI",
       "thumbnail": "https://img.youtube.com/vi/fQcDkujbfrI/0.jpg",
-      "description": "Các phương pháp chưng cất, chiết, kết tinh and sắc ký cột trong thực hành hóa hữu cơ (VietJack)."
+      "description": "Các phương pháp chưng cất, chiết, kết tinh và sắc ký cột trong thực hành hóa hữu cơ (VietJack)."
     }
   ],
   "practiceModules": [],

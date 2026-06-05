@@ -121,7 +121,7 @@
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Hợp chất hữu cơ được chia thành hai nhóm: Hydrocarbon (chỉ có C and H) và ... của hydrocarbon (có thêm O, N, Cl...).",
+      "narrative": "Hợp chất hữu cơ được chia thành hai nhóm: Hydrocarbon (chỉ có C và H) và ... của hydrocarbon (có thêm O, N, Cl...).",
       "placeholder": "Nhập thuật ngữ...",
       "correctAnswer": "Dẫn xuất",
       "question": "Tên gọi của nhóm hợp chất chứa C, H và nguyên tố khác là gì?",

@@ -24,7 +24,7 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Tăng tốc độ phản ứng**: Sử dụng quạt thổi không khí vào lò than (tăng nồng độ $O_2$), chẻ nhỏ củi hoặc nghiền mịn quặng (tăng diện tích tiếp xúc), đun nấu thực phẩm ở nhiệt độ cao hoặc dùng nồi áp suất (tăng nhiệt độ and áp suất).",
+          "**Tăng tốc độ phản ứng**: Sử dụng quạt thổi không khí vào lò than (tăng nồng độ $O_2$), chẻ nhỏ củi hoặc nghiền mịn quặng (tăng diện tích tiếp xúc), đun nấu thực phẩm ở nhiệt độ cao hoặc dùng nồi áp suất (tăng nhiệt độ và áp suất).",
           "**Giảm tốc độ phản ứng**: Bảo quản thực phẩm trong tủ lạnh hoặc kho lạnh (giảm nhiệt độ làm chậm quá trình ôi thiu), sử dụng chất ức chế để chống ăn mòn kim loại, sơn phủ bề mặt để ngăn tiếp xúc với môi trường.",
           "**Sử dụng xúc tác**: Dùng các loại men trong sản xuất rượu, giấm, sữa chua; sử dụng các bộ chuyển đổi xúc tác trong ống xả ô tô để giảm thiểu khí thải độc hại."
         ]
@@ -43,7 +43,7 @@
       "type": "infoBox",
       "content": {
         "title": "Mối liên hệ giữa các chất trong phản ứng",
-        "content": "Đối với phản ứng tổng quát: $aA + bB \\rightarrow cC + dD$, tốc độ phản ứng trung bình có thể tính theo bất kỳ chất nào theo biểu thức:\\n$$\\bar{v} = -\\frac{1}{a} \\frac{\\Delta [A]}{\\Delta t} = -\\frac{1}{b} \\frac{\\Delta [B]}{\\Delta t} = \\frac{1}{c} \\frac{\\Delta [C]}{\\Delta t} = \\frac{1}{d} \\frac{\\Delta [D]}{\\Delta t}$$\\nLưu ý dấu âm (-) dành cho chất tham gia (nồng độ giảm) and dấu dương (+) dành cho sản phẩm (nồng độ tăng).",
+        "content": "Đối với phản ứng tổng quát: $aA + bB \\rightarrow cC + dD$, tốc độ phản ứng trung bình có thể tính theo bất kỳ chất nào theo biểu thức:\\n$$\\bar{v} = -\\frac{1}{a} \\frac{\\Delta [A]}{\\Delta t} = -\\frac{1}{b} \\frac{\\Delta [B]}{\\Delta t} = \\frac{1}{c} \\frac{\\Delta [C]}{\\Delta t} = \\frac{1}{d} \\frac{\\Delta [D]}{\\Delta t}$$\\nLưu ý dấu âm (-) dành cho chất tham gia (nồng độ giảm) và dấu dương (+) dành cho sản phẩm (nồng độ tăng).",
         "color": "blue"
       }
     }
@@ -55,7 +55,7 @@
       "title": "Bài giảng: Ôn tập chương 6",
       "url": "https://www.youtube.com/watch?v=LKnym_nPwrg",
       "thumbnail": "https://img.youtube.com/vi/LKnym_nPwrg/0.jpg",
-      "description": "Tổng hợp các quy tắc về tốc độ phản ứng and bài tập tính toán liên quan (VietJack)."
+      "description": "Tổng hợp các quy tắc về tốc độ phản ứng và bài tập tính toán liên quan (VietJack)."
     }
   ],
   "practiceModules": [],

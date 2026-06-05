@@ -8,11 +8,11 @@
   "chapter": "Chương 2: Một số hợp chất thông dụng",
   "order": 10,
   "isPremium": false,
-  "description": "Khái niệm oxide, phân loại (acid, base, lưỡng tính, trung tính), cách gọi tên and tính chất hóa học đặc trưng.",
+  "description": "Khái niệm oxide, phân loại (acid, base, lưỡng tính, trung tính), cách gọi tên và tính chất hóa học đặc trưng.",
   "challenges": [
     {
       "type": "matching",
-      "narrative": "Hãy nối công thức hóa học của các oxide with tên gọi đúng của chúng.",
+      "narrative": "Hãy nối công thức hóa học của các oxide với tên gọi đúng của chúng.",
       "leftItems": [
         { "id": "o1", "label": "SO2" },
         { "id": "o2", "label": "Fe2O3" },
@@ -24,12 +24,12 @@
         { "id": "o1", "label": "Sulfur dioxide" }
       ],
       "correctOrder": ["o1", "o2", "o3"],
-      "question": "Khớp công thức with tên gọi.",
+      "question": "Khớp công thức với tên gọi.",
       "source": "Danh pháp hóa học"
     },
     {
       "type": "multiple-choice",
-      "narrative": "Khi cho vôi sống ($CaO$) vào nước, phản ứng xảy ra rất mãnh liệt and tỏa nhiều nhiệt.",
+      "narrative": "Khi cho vôi sống ($CaO$) vào nước, phản ứng xảy ra rất mãnh liệt và tỏa nhiều nhiệt.",
       "options": [
         "Tạo ra dung dịch acid",
         "Tạo ra dung dịch base (kiềm)",
@@ -37,15 +37,15 @@
         "Tạo ra muối kết tủa"
       ],
       "correctAnswer": 1,
-      "question": "Sản phẩm của phản ứng giữa oxide base (như $CaO$) and nước là gì?",
+      "question": "Sản phẩm của phản ứng giữa oxide base (như $CaO$) và nước là gì?",
       "source": "Tính chất hóa học"
     },
     {
       "type": "fill-in-the-blank",
-      "narrative": "Có một loại oxide rất đặc biệt có thể tác dụng with cả dung dịch acid and dung dịch base. Chúng được gọi là oxide ...",
+      "narrative": "Có một loại oxide rất đặc biệt có thể tác dụng với cả dung dịch acid và dung dịch base. Chúng được gọi là oxide ...",
       "placeholder": "Nhập từ (ví dụ: Lưỡng tính)...",
       "correctAnswer": "Lưỡng tính",
-      "question": "Tên gọi của loại oxide có tính chất của cả acid and base là gì?",
+      "question": "Tên gọi của loại oxide có tính chất của cả acid và base là gì?",
       "source": "Phân loại nâng cao"
     },
     {
@@ -57,7 +57,7 @@
         { "id": "x3", "label": "Nước" }
       ],
       "correctOrder": ["x1", "x2", "x3"],
-      "question": "Sản phẩm của phản ứng giữa oxide acid and dung dịch base là gì?",
+      "question": "Sản phẩm của phản ứng giữa oxide acid và dung dịch base là gì?",
       "source": "Sơ đồ phản ứng"
     }
   ],
@@ -81,7 +81,7 @@
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Công thức chung and Cách gọi tên",
+        "title": "Công thức chung và Cách gọi tên",
         "content": "**Công thức chung**: $M_xO_y$ (M là nguyên tố hóa học, O là oxygen).\\n\\n**Cách gọi tên**:\\n- Oxide kim loại: Tên kim loại (kèm hóa trị nếu có nhiều hóa trị) + oxide.\\n  Vd: $FeO$ → Sắt(II) oxide, $Fe_2O_3$ → Sắt(III) oxide.\\n- Oxide phi kim: Dùng tiền tố (mono=1, di=2, tri=3, tetra=4, penta=5) + tên phi kim + tiền tố số O + oxide.\\n  Vd: $CO_2$ → Carbon dioxide, $SO_3$ → Sulfur trioxide, $P_2O_5$ → Diphosphorus pentoxide.",
         "color": "blue"
       }
@@ -100,10 +100,10 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Oxide base**: Thường là oxide của **kim loại**, tác dụng được with dung dịch acid tạo thành muối and nước. Ví dụ: $CaO, Na_2O, BaO, CuO, Fe_2O_3$.",
-          "**Oxide acid**: Thường là oxide của **phi kim**, tác dụng được with dung dịch base tạo thành muối and nước. Ví dụ: $CO_2, SO_2, SO_3, P_2O_5, N_2O_5$.",
-          "**Oxide lưỡng tính**: Tác dụng được with **cả acid lẫn base** để tạo muối and nước. Ví dụ: $Al_2O_3, ZnO$.",
-          "**Oxide trung tính** (Oxide không tạo muối): Không tác dụng with acid, base, nước ở điều kiện thường. Ví dụ: $CO, NO, N_2O$."
+          "**Oxide base**: Thường là oxide của **kim loại**, tác dụng được với dung dịch acid tạo thành muối và nước. Ví dụ: $CaO, Na_2O, BaO, CuO, Fe_2O_3$.",
+          "**Oxide acid**: Thường là oxide của **phi kim**, tác dụng được với dung dịch base tạo thành muối và nước. Ví dụ: $CO_2, SO_2, SO_3, P_2O_5, N_2O_5$.",
+          "**Oxide lưỡng tính**: Tác dụng được với **cả acid lẫn base** để tạo muối và nước. Ví dụ: $Al_2O_3, ZnO$.",
+          "**Oxide trung tính** (Oxide không tạo muối): Không tác dụng với acid, base, nước ở điều kiện thường. Ví dụ: $CO, NO, N_2O$."
         ]
       }
     },
@@ -121,9 +121,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Tác dụng with nước** (chỉ oxide base của kim loại kiềm and kiềm thổ): Tạo thành dung dịch base (kiềm).\\n  $Na_2O + H_2O \\rightarrow 2NaOH$\\n  $CaO + H_2O \\rightarrow Ca(OH)_2$ (phản ứng tôi vôi — tỏa nhiệt mạnh).",
-          "**Tác dụng with Acid**: Tạo thành muối + nước.\\n  $CuO + 2HCl \\rightarrow CuCl_2 + H_2O$ (bột đen $CuO$ tan ra, dung dịch chuyển xanh lam).",
-          "**Tác dụng with Oxide acid**: Tạo thành muối.\\n  $CaO + CO_2 \\rightarrow CaCO_3$ (vôi sống hấp thụ $CO_2$)."
+          "**Tác dụng với nước** (chỉ oxide base của kim loại kiềm và kiềm thổ): Tạo thành dung dịch base (kiềm).\\n  $Na_2O + H_2O \\rightarrow 2NaOH$\\n  $CaO + H_2O \\rightarrow Ca(OH)_2$ (phản ứng tôi vôi — tỏa nhiệt mạnh).",
+          "**Tác dụng với Acid**: Tạo thành muối + nước.\\n  $CuO + 2HCl \\rightarrow CuCl_2 + H_2O$ (bột đen $CuO$ tan ra, dung dịch chuyển xanh lam).",
+          "**Tác dụng với Oxide acid**: Tạo thành muối.\\n  $CaO + CO_2 \\rightarrow CaCO_3$ (vôi sống hấp thụ $CO_2$)."
         ]
       }
     },
@@ -141,9 +141,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Tác dụng with nước**: Tạo thành dung dịch acid.\\n  $SO_3 + H_2O \\rightarrow H_2SO_4$ (acid sunfuric).\\n  $CO_2 + H_2O \\rightleftharpoons H_2CO_3$ (acid cacbonic — không bền, phân hủy dễ dàng).",
-          "**Tác dụng with Base tan (Kiềm)**: Tạo thành muối + nước.\\n  $CO_2 + 2NaOH \\rightarrow Na_2CO_3 + H_2O$.",
-          "**Tác dụng with Oxide base**: Tạo thành muối (như đã nêu ở trên)."
+          "**Tác dụng với nước**: Tạo thành dung dịch acid.\\n  $SO_3 + H_2O \\rightarrow H_2SO_4$ (acid sunfuric).\\n  $CO_2 + H_2O \\rightleftharpoons H_2CO_3$ (acid cacbonic — không bền, phân hủy dễ dàng).",
+          "**Tác dụng với Base tan (Kiềm)**: Tạo thành muối + nước.\\n  $CO_2 + 2NaOH \\rightarrow Na_2CO_3 + H_2O$.",
+          "**Tác dụng với Oxide base**: Tạo thành muối (như đã nêu ở trên)."
         ]
       }
     },
@@ -178,7 +178,7 @@
       "type": "warningBox",
       "content": {
         "title": "Một số Oxide độc hại",
-        "content": "- **$CO$ (Carbon monoxide)**: Khí không màu, không mùi, **rất độc**. Nó liên kết chặt with hemoglobin trong máu (mạnh gấp 200 lần $O_2$), cản trở vận chuyển oxy → gây tử vong. Nguồn: Đốt than trong phòng kín, khí thải ô tô.\\n- **$SO_2$ (Sulfur dioxide)**: Khí gây kích thích đường hô hấp, mùi hắc khó chịu. Khi gặp hơi nước tạo mưa acid ($H_2SO_3$) phá hủy công trình and cây trồng.\\n- **$NO_2$ (Nitrogen dioxide)**: Khí màu nâu đỏ, độc, có trong khói xe and khói nhà máy.",
+        "content": "- **$CO$ (Carbon monoxide)**: Khí không màu, không mùi, **rất độc**. Nó liên kết chặt với hemoglobin trong máu (mạnh gấp 200 lần $O_2$), cản trở vận chuyển oxy → gây tử vong. Nguồn: Đốt than trong phòng kín, khí thải ô tô.\\n- **$SO_2$ (Sulfur dioxide)**: Khí gây kích thích đường hô hấp, mùi hắc khó chịu. Khi gặp hơi nước tạo mưa acid ($H_2SO_3$) phá hủy công trình và cây trồng.\\n- **$NO_2$ (Nitrogen dioxide)**: Khí màu nâu đỏ, độc, có trong khói xe và khói nhà máy.",
         "color": "red"
       }
     }
@@ -190,7 +190,7 @@
       "title": "Bài giảng: oxide",
       "url": "https://www.youtube.com/watch?v=l74_07GoaCk",
       "thumbnail": "https://img.youtube.com/vi/l74_07GoaCk/0.jpg",
-      "description": "Phân loại Oxide and các tính chất hóa học quan trọng của acid/base oxide (VietJack)."
+      "description": "Phân loại Oxide và các tính chất hóa học quan trọng của acid/base oxide (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -239,7 +239,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Phản ứng giữa oxit axit and oxit base tạo ra:",
+        "question": "Phản ứng giữa oxit axit và oxit base tạo ra:",
         "options": [
           "Axit",
           "Base",
@@ -260,7 +260,7 @@
           "$CaO$"
         ],
         "correctAnswer": 0,
-        "explanation": "Các oxit này kết hợp with nước mưa tạo axit mạnh.",
+        "explanation": "Các oxit này kết hợp với nước mưa tạo axit mạnh.",
         "points": 10
       }
     ],

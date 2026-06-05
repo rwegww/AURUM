@@ -8,13 +8,13 @@
   "order": 21,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Cấu tạo đặc thù của phenol, tính acid yếu, ảnh hưởng qua lại giữa nhóm –OH and vòng benzene.",
+  "description": "Cấu tạo đặc thù của phenol, tính acid yếu, ảnh hưởng qua lại giữa nhóm –OH và vòng benzene.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Đặc điểm cấu tạo",
+        "text": "1. Khái niệm và Đặc điểm cấu tạo",
         "level": "h2"
       }
     },
@@ -110,7 +110,7 @@
         "(3) < (1) < (2)"
       ],
       "correctAnswer": 0,
-      "explanation": "Rượu (ancol thông thường) có tính axit yếu nhất and không pứ được with NaOH, Phenol yếu hơn hệ carbonate acid (H2CO3) nhưng mạnh hơn Alcohol."
+      "explanation": "Rượu (ancol thông thường) có tính axit yếu nhất và không pứ được với NaOH, Phenol yếu hơn hệ carbonate acid (H2CO3) nhưng mạnh hơn Alcohol."
     }
   ],
   "videoModules": [
@@ -119,7 +119,7 @@
       "title": "Bài giảng: phenol",
       "url": "https://www.youtube.com/watch?v=Me6VJCC44ho",
       "thumbnail": "https://img.youtube.com/vi/Me6VJCC44ho/0.jpg",
-      "description": "Đặc điểm cấu tạo, tính chất hóa học and các phản ứng đặc trưng của phenol (VietJack)."
+      "description": "Đặc điểm cấu tạo, tính chất hóa học và các phản ứng đặc trưng của phenol (VietJack)."
     }
   ],
   "practiceModules": [],

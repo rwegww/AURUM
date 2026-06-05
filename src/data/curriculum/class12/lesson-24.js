@@ -97,7 +97,7 @@
         "NaCl."
       ],
       "correctAnswer": 2,
-      "explanation": "NaHCO3 có khả năng phản ứng with acid HCl trong dạ dày tạo ra NaCl, H2O and CO2, giúp làm giảm độ chua mà không gây hại cho niêm mạc dạ dày (ở liều lượng hợp lý)."
+      "explanation": "NaHCO3 có khả năng phản ứng với acid HCl trong dạ dày tạo ra NaCl, H2O và CO2, giúp làm giảm độ chua mà không gây hại cho niêm mạc dạ dày (ở liều lượng hợp lý)."
     }
   ],
   "videoModules": [
@@ -106,7 +106,7 @@
       "title": "Bài giảng: Nguyên tố kim loại nhóm IA",
       "url": "https://www.youtube.com/watch?v=wHfS-irc1-Y",
       "thumbnail": "https://img.youtube.com/vi/wHfS-irc1-Y/0.jpg",
-      "description": "Đặc điểm, tính chất vật lí and hóa học mãnh liệt của nhóm kim loại Kiềm (VietJack)."
+      "description": "Đặc điểm, tính chất vật lí và hóa học mãnh liệt của nhóm kim loại Kiềm (VietJack)."
     }
   ],
   "practiceModules": [],

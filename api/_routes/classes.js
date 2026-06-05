@@ -1,5 +1,6 @@
 ﻿import express from 'express';
 import { supabase } from '../lib/supabase.js';
+import AdminApproval from '../models/AdminApproval.js';
 import { auth } from '../_middleware/auth.js';
 import multer from 'multer';
 import mammoth from 'mammoth';
@@ -48,6 +49,32 @@ const parseExamUpload = (req, res, next) => {
 const router = express.Router();
 
 const canManageClasses = (user) => user?.role === 'teacher' || user?.role === 'admin';
+const canUseStudentClassFeatures = (user) => user?.role === 'student' || user?.role === 'admin';
+
+const sendPendingAdminApproval = (res, request, alreadyApproved = false) => res.status(202).json({
+  message: alreadyApproved
+    ? 'Yêu cầu này đang chờ quản trị viên còn lại xác nhận.'
+    : 'Đã tạo yêu cầu duyệt. Cần quản trị viên còn lại xác nhận để thực thi.',
+  requiresSecondAdminApproval: true,
+  approvalRequest: request,
+});
+
+const requestAdminApprovalOnly = async (req, res, actionKey, actionLabel, payload) => {
+  const requestHash = AdminApproval.createRequestHash(actionKey, payload);
+  const existing = await AdminApproval.findPendingByHash(requestHash);
+  if (existing) {
+    return sendPendingAdminApproval(res, existing, existing.approverIds.includes(req.user.id));
+  }
+
+  const state = await AdminApproval.createOrApprove({
+    actionKey,
+    actionLabel,
+    payload,
+    adminUser: req.user,
+  });
+
+  return sendPendingAdminApproval(res, state.request, state.alreadyApproved);
+};
 
 const normalizeClass = (classData) => {
   if (!classData) return classData;
@@ -610,6 +637,16 @@ router.post('/', auth, async (req, res) => {
     const { name, description } = req.body;
     const khoi_id = req.body.khoi_id ?? req.body.gradeLevelId;
     const giao_vien_id = req.user.id;
+
+    if (req.user.role === 'admin') {
+      return await requestAdminApprovalOnly(req, res, 'class.create', 'Tạo lớp học', {
+        name,
+        description,
+        khoi_id,
+        giao_vien_id,
+      });
+    }
+
     const code = Math.random().toString(36).substring(2, 8).toUpperCase();
 
     const { data, error } = await supabase
@@ -628,8 +665,8 @@ router.post('/', auth, async (req, res) => {
 // Join a class (Student)
 router.post('/join', auth, async (req, res) => {
   try {
-    if (req.user.role !== 'student') {
-      return res.status(403).json({ error: 'Chỉ học sinh mới có thể tham gia lớp học.' });
+    if (!canUseStudentClassFeatures(req.user)) {
+      return res.status(403).json({ error: 'Chỉ học sinh hoặc quản trị viên mới có thể tham gia lớp học.' });
     }
 
     const { code } = req.body;
@@ -736,7 +773,7 @@ router.get('/:id/posts', auth, async (req, res) => {
     if (!posts) posts = [];
 
     // For students, check if each assignment is completed
-    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+    if (canUseStudentClassFeatures(req.user)) {
       const { data: submissions, error: subErr } = await supabase
         .from('bai_nop')
         .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien')
@@ -778,8 +815,8 @@ router.get('/:id/posts', auth, async (req, res) => {
 router.post('/:id/messages', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    if (req.user.role !== 'student') {
-      return res.status(403).json({ error: 'Chỉ học sinh mới có thể gửi tin nhắn cho giáo viên.' });
+    if (!canUseStudentClassFeatures(req.user)) {
+      return res.status(403).json({ error: 'Chỉ học sinh hoặc quản trị viên mới có thể gửi tin nhắn cho giáo viên.' });
     }
 
     const classData = await ensureClassAccess(id, req.user, res);
@@ -837,6 +874,10 @@ router.post('/:id/posts', auth, async (req, res) => {
       cau_hoi: req.body.questions || []
     };
 
+    if (req.user.role === 'admin') {
+      return await requestAdminApprovalOnly(req, res, 'class.post.create', 'Tạo bài đăng lớp học', { insertData });
+    }
+
     const { data, error } = await supabase
       .from('bai_dang_lop')
       .insert([insertData])
@@ -877,10 +918,15 @@ router.post('/:id/schedules', auth, async (req, res) => {
     if (!(await ensureClassOwner(id, req.user, res))) return;
 
     const { title, start_time, end_time, meet_url } = req.body;
+    const insertData = { lop_id: id, tieu_de: title, bat_dau_luc: start_time, ket_thuc_luc: end_time, meet_url };
+
+    if (req.user.role === 'admin') {
+      return await requestAdminApprovalOnly(req, res, 'class.schedule.create', 'Tạo lịch lớp học', { insertData });
+    }
 
     const { data, error } = await supabase
       .from('lich_lop')
-      .insert([{ lop_id: id, tieu_de: title, bat_dau_luc: start_time, ket_thuc_luc: end_time, meet_url }])
+      .insert([insertData])
       .select()
       .single();
 
@@ -965,8 +1011,8 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 // Submit an assignment (Student)
 router.post('/assignments/:postId/submit', auth, async (req, res) => {
   try {
-    if (req.user.role !== 'student') {
-      return res.status(403).json({ error: 'Chỉ học sinh mới có thể nộp bài.' });
+    if (!canUseStudentClassFeatures(req.user)) {
+      return res.status(403).json({ error: 'Chỉ học sinh hoặc quản trị viên mới có thể nộp bài.' });
     }
 
     const { postId } = req.params;
@@ -1056,13 +1102,23 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
     }
     if (!(await ensureClassOwner(post.lop_id, req.user, res))) return;
 
+    const updateData = {
+      diem: Math.round(numericScore * 10) / 10,
+      phan_hoi_giao_vien: trimmedFeedback || null,
+      status: 'graded'
+    };
+
+    if (req.user.role === 'admin') {
+      return await requestAdminApprovalOnly(req, res, 'assignment.grade', 'Chấm bài tập', {
+        postId,
+        studentId,
+        updateData,
+      });
+    }
+
     const { data, error } = await supabase
       .from('bai_nop')
-      .update({
-        diem: Math.round(numericScore * 10) / 10,
-        phan_hoi_giao_vien: trimmedFeedback || null,
-        status: 'graded'
-      })
+      .update(updateData)
       .eq('bai_dang_id', postId)
       .eq('hoc_sinh_id', studentId)
       .select()
@@ -1087,6 +1143,10 @@ router.delete('/assignments/:postId', auth, async (req, res) => {
     if (res.headersSent) return;
     if (post.tac_gia_id !== req.user.id && !ownsClass) {
       return res.status(403).json({ error: 'Bạn không có quyền xóa bài tập này' });
+    }
+
+    if (req.user.role === 'admin') {
+      return await requestAdminApprovalOnly(req, res, 'assignment.delete', 'Xóa bài tập', { postId });
     }
 
     const { error } = await supabase.from('bai_dang_lop').delete().eq('id', postId);

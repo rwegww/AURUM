@@ -8,11 +8,11 @@
   "chapter": "Chương 2: Một số hợp chất thông dụng",
   "order": 9,
   "isPremium": false,
-  "description": "Khái niệm base, cách gọi tên, tính chất hóa học (chỉ thị, trung hòa, + oxide acid) and thang pH.",
+  "description": "Khái niệm base, cách gọi tên, tính chất hóa học (chỉ thị, trung hòa, + oxide acid) và thang pH.",
   "challenges": [
     {
       "type": "matching",
-      "narrative": "Hãy nối các base sau with độ tan của chúng trong nước.",
+      "narrative": "Hãy nối các base sau với độ tan của chúng trong nước.",
       "leftItems": [
         { "id": "b1", "label": "Natri hydroxide (NaOH)" },
         { "id": "b2", "label": "Đồng(II) hydroxide (Cu(OH)2)" },
@@ -29,7 +29,7 @@
     },
     {
       "type": "multiple-choice",
-      "narrative": "Base là những hợp chất có vị đắng and cảm giác nhờn như xà phòng. Để nhận biết chúng, ta dùng chỉ thị màu.",
+      "narrative": "Base là những hợp chất có vị đắng và cảm giác nhờn như xà phòng. Để nhận biết chúng, ta dùng chỉ thị màu.",
       "options": [
         "Làm quỳ tím hóa xanh",
         "Làm quỳ tím hóa đỏ",
@@ -74,14 +74,14 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Base là hợp chất mà phân tử gồm có một nguyên tử kim loại liên kết with một hay nhiều nhóm **hydroxide ($-OH$)**. Khi tan trong nước, base phân li tạo ra ion $OH^-$, chính ion này quyết định tính chất đặc trưng của base."
+        "text": "Base là hợp chất mà phân tử gồm có một nguyên tử kim loại liên kết với một hay nhiều nhóm **hydroxide ($-OH$)**. Khi tan trong nước, base phân li tạo ra ion $OH^-$, chính ion này quyết định tính chất đặc trưng của base."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Công thức, Tên gọi and Phân loại",
+        "title": "Công thức, Tên gọi và Phân loại",
         "content": "**Công thức chung**: $M(OH)_n$ ($M$ là kim loại, $n$ là hóa trị).\\n**Tên gọi**: Tên kim loại (kèm hóa trị nếu cần) + hydroxide.\\n\\n**Phân loại**:\\n1. **Base tan trong nước (Kiềm)**: $NaOH$ (natri hydroxide), $KOH$ (kali hydroxide), $Ba(OH)_2$ (bari hydroxide), $Ca(OH)_2$ (canxi hydroxide — vôi tôi, ít tan).\\n2. **Base không tan trong nước**: $Cu(OH)_2$ (đồng(II) hydroxide — màu xanh lam), $Fe(OH)_3$ (sắt(III) hydroxide — màu nâu đỏ), $Al(OH)_3$ (nhôm hydroxide — keo trắng).\\n\\n**Nhận biết**: Chỉ base tan (kiềm) mới có thể dùng chỉ thị để nhận biết.",
         "color": "blue"
       }
@@ -98,7 +98,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Base có những tính chất hóa học đặc trưng, chia thành hai nhóm: tính chất chung (của cả base tan and không tan) and tính chất riêng."
+        "text": "Base có những tính chất hóa học đặc trưng, chia thành hai nhóm: tính chất chung (của cả base tan và không tan) và tính chất riêng."
       }
     },
     {
@@ -107,10 +107,10 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**a) Đổi màu chỉ thị** (Chỉ base tan — kiềm):\\n  - Quỳ tím → **xanh**.\\n  - Phenolphthalein không màu → **hồng**.\\n  Đây là cách nhận biết base tan đơn giản and nhanh nhất.",
-          "**b) Tác dụng with Acid** (Phản ứng trung hòa — cả base tan and không tan):\\n  Base + Acid → Muối + Nước.\\n  *Ví dụ 1*: $NaOH + HCl \\rightarrow NaCl + H_2O$\\n  *Ví dụ 2*: $Cu(OH)_2 + 2HCl \\rightarrow CuCl_2 + 2H_2O$ (kết tủa xanh tan dần, dung dịch chuyển xanh lam).",
-          "**c) Tác dụng with Oxide acid** (Chỉ base tan):\\n  Base tan + Oxide acid → Muối + Nước.\\n  *Ví dụ*: $2NaOH + CO_2 \\rightarrow Na_2CO_3 + H_2O$ (Đây là lý do nước vôi bị đục khi thở $CO_2$ vào).",
-          "**d) Tác dụng with dung dịch Muối** (Chỉ base tan):\\n  *Ví dụ*: $2NaOH + CuSO_4 \\rightarrow Cu(OH)_2 \\downarrow + Na_2SO_4$ (kết tủa xanh lam xuất hiện).",
+          "**a) Đổi màu chỉ thị** (Chỉ base tan — kiềm):\\n  - Quỳ tím → **xanh**.\\n  - Phenolphthalein không màu → **hồng**.\\n  Đây là cách nhận biết base tan đơn giản và nhanh nhất.",
+          "**b) Tác dụng với Acid** (Phản ứng trung hòa — cả base tan và không tan):\\n  Base + Acid → Muối + Nước.\\n  *Ví dụ 1*: $NaOH + HCl \\rightarrow NaCl + H_2O$\\n  *Ví dụ 2*: $Cu(OH)_2 + 2HCl \\rightarrow CuCl_2 + 2H_2O$ (kết tủa xanh tan dần, dung dịch chuyển xanh lam).",
+          "**c) Tác dụng với Oxide acid** (Chỉ base tan):\\n  Base tan + Oxide acid → Muối + Nước.\\n  *Ví dụ*: $2NaOH + CO_2 \\rightarrow Na_2CO_3 + H_2O$ (Đây là lý do nước vôi bị đục khi thở $CO_2$ vào).",
+          "**d) Tác dụng với dung dịch Muối** (Chỉ base tan):\\n  *Ví dụ*: $2NaOH + CuSO_4 \\rightarrow Cu(OH)_2 \\downarrow + Na_2SO_4$ (kết tủa xanh lam xuất hiện).",
           "**e) Bị nhiệt phân hủy** (Chỉ base không tan):\\n  Khi nung nóng, base không tan bị phân hủy thành oxide base + nước.\\n  *Ví dụ*: $Cu(OH)_2 \\xrightarrow{t^\\circ} CuO + H_2O$ (chất rắn từ xanh lam chuyển thành đen)."
         ]
       }
@@ -128,7 +128,7 @@
       "type": "infoBox",
       "content": {
         "title": "$NaOH$ — Natri hydroxide (Xút ăn da)",
-        "content": "- Chất rắn trắng, hút ẩm mạnh, tan rất tốt trong nước and tỏa nhiệt.\\n- **Ứng dụng**: Sản xuất xà phòng, giấy, tơ nhân tạo, chế biến dầu mỏ, xử lý nước thải.\\n- **Cảnh báo**: Gây bỏng da nghiêm trọng khi tiếp xúc trực tiếp → phải đeo găng tay.",
+        "content": "- Chất rắn trắng, hút ẩm mạnh, tan rất tốt trong nước và tỏa nhiệt.\\n- **Ứng dụng**: Sản xuất xà phòng, giấy, tơ nhân tạo, chế biến dầu mỏ, xử lý nước thải.\\n- **Cảnh báo**: Gây bỏng da nghiêm trọng khi tiếp xúc trực tiếp → phải đeo găng tay.",
         "color": "blue"
       }
     },
@@ -160,7 +160,7 @@
       "id": "mod12",
       "type": "infoBox",
       "content": {
-        "title": "Giá trị pH and ý nghĩa",
+        "title": "Giá trị pH và ý nghĩa",
         "content": "Thang pH thường đi từ 0 đến 14:\\n- $pH = 7$: **Trung tính** (nước tinh khiết).\\n- $pH < 7$: **Môi trường acid**. pH càng nhỏ → acid càng mạnh.\\n- $pH > 7$: **Môi trường base (kiềm)**. pH càng lớn → base càng mạnh.\\n\\n**Ví dụ pH của một số chất quen thuộc**:\\n- Dịch vị dạ dày: $pH \\approx 1-2$\\n- Nước chanh: $pH \\approx 2-3$\\n- Giấm: $pH \\approx 3$\\n- Nước tinh khiết: $pH = 7$\\n- Máu người: $pH \\approx 7,35-7,45$\\n- Nước xà phòng: $pH \\approx 9-10$\\n- Nước tẩy (bleach): $pH \\approx 12-13$",
         "color": "blue"
       }
@@ -182,7 +182,7 @@
       "title": "Bài giảng: Base. Thang pH",
       "url": "https://www.youtube.com/watch?v=pzjncAQjAC0",
       "thumbnail": "https://img.youtube.com/vi/pzjncAQjAC0/0.jpg",
-      "description": "Khái niệm kiềm (base), thang pH and cách nhận biết môi trường acid/base (VietJack)."
+      "description": "Khái niệm kiềm (base), thang pH và cách nhận biết môi trường acid/base (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -209,11 +209,11 @@
         "options": [
           "Quỳ tím",
           "Phenolphthalein",
-          "Cả a and b",
+          "Cả a và b",
           "Không có"
         ],
         "correctAnswer": 2,
-        "explanation": "Hóa xanh (quỳ) and hóa hồng (phenolphthalein).",
+        "explanation": "Hóa xanh (quỳ) và hóa hồng (phenolphthalein).",
         "points": 10
       },
       {

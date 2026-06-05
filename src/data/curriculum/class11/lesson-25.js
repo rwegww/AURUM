@@ -8,7 +8,7 @@
   "order": 25,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tổng hợp mối quan hệ giữa Aldehyde, Ketone, Carboxylic acid and mảng liên hệ trước là Alcohol thông qua quá trình chuyển hóa nhóm chức.",
+  "description": "Tổng hợp mối quan hệ giữa Aldehyde, Ketone, Carboxylic acid và mảng liên hệ trước là Alcohol thông qua quá trình chuyển hóa nhóm chức.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -64,7 +64,7 @@
         "type": "bullet",
         "items": [
           "Bộ Phân Hóa Phả Đồ Xét Cặp Xác Thực Định Tính Phân Minh Các Thuốc Thử Nhận Lọ Nhựa Chức Vị Sạch:",
-          "1. Trò Tiết Đục Tách Chẻ Rã **PHENOL (Gốc Nối Rìa Thơm C6H5OH):** Hàng Mẫu Độc Nhất Vô Nhị Kèo Gây Báo Đổ Ngập Bọt **TỦA BẬC TRẮNG HÓA VẪN DÀY GẠT WITH NƯỚC BROM NÂU DỊCH Bromine**. Và Hòa Mảng Trống Không Trôi Ống Tàn Kiềm Xút NaOH Mù Nhòa.",
+          "1. Trò Tiết Đục Tách Chẻ Rã **PHENOL (Gốc Nối Rìa Thơm C6H5OH):** Hàng Mẫu Độc Nhất Vô Nhị Kèo Gây Báo Đổ Ngập Bọt **TỦA BẬC TRẮNG HÓA VẪN DÀY GẠT với NƯỚC BROM NÂU DỊCH Bromine**. Và Hòa Mảng Trống Không Trôi Ống Tàn Kiềm Xút NaOH Mù Nhòa.",
           "2. Trò Vi Cụ Bạt Tiếng Gục Khóc Tĩnh Ảm Đâm **ALCOHOL (Lỏng Rượu Bậc OH Trắng Ngà Đục C):** Đập Tan Biến Điện Lôi Gỉ Trắng Miếng Na Chọt Lỗ Xốc Xì Phụt Sủi Khoét Nước Mụt Khí Gái Bay. Xối Đỏ Dội Phọt $170^\\circ$ Lò Nóng Kiệt Sinh Bóng Phun Lũ Kép Cầu Khúc Trũng Alkene Pi. Bị Cọ Đen Đầu Đỏ Chót CuO Nhấn Bả Trượt Hóa Nước Chết Lủng Ẩm Mùi Thức Gương Mạc Aldehyde Liền.",
           "3. Trò Chuyên Cầm Ma Gương Kiếm Phản Tạp Tráng Màn Dạ Lọc **ALDEHYDE (Viền Cửa Chui Khớp Mạn Phút CHO):** Không Giải Thoát Bàn Mạng Ngoài Phản Kích Xộc Quyện Giải Trắc Kĩ Năng Ma Mỵ Giết Rửa Bình Đun Tủ Trắng Chép Ly Khối 2 Bạc Bóng Dạ Kính Gương (**Phản Chiếu Tráng Bạc Tollens Dung Dịch Mạng AgNO3 Lẫn Amoniac**). Toluene Vòng Hư Phenol Kể Cả Tẩy Bọt Cạn Rượu Góc Đều Chết Rụng Bỏ Xui Trơ Lá.",
           "4. Trò Rớt Sọt Quá Thâm Trơ Vô Cực Nết Chó Nuốt Rặng Lì **KETONE (Nhóm Lõi Trầm Rút Kéo Sống >C=O Vục Rãnh)**: Khinh Tạp Vạn Vật Đóng Oxi, Liệt Dạ Thờ Bạc Bỏ Tollens Lạc Vào Tĩnh Khống Bất Lưỡi Mạng Không Mào Tan Mất O Nước Brom, Phọt Vô Đất.",
@@ -77,7 +77,7 @@
       "type": "warningBox",
       "content": {
         "title": "Khoang Chốt Tận Tư Thế Não Điểm Nhận Biết Đột Phá Bảng Gốc Lỗi Giải Ảo Trượt Mạng Thi",
-        "content": "Đây Là Giao Cắt Ác Não Chỉ Mạng Thi Tốt Nghiệp QG. Nếu Bạn Đóng Lệnh Liệt Nhận Cửa Trái Kéo Vết Chức O-H O-C... Là Mất Trắng Ảo Thi Sai Chệch Nhóm Sơ Đồ Cục Diễn Đốt Vượt Tầm. Luôn Luôn Thuộc Đầu Ngón Tay Bản Tính Màu Trắng Tủ Phenol Brom -> Tráng Gương Bạc Formic and Phả Cửa Tổ Aldehyde Gắn Chức -> Axit Buộc Chua Quỳ Phản Dịch Na Bọt -> Rượu Vô Liệt Oxi Hóa Kép Thành Đồng Vũng CuO Khép Khí. Đóng Khung Não Tọa Chức Ảo Giải Điên Phá Mã Mạch Dịch.",
+        "content": "Đây Là Giao Cắt Ác Não Chỉ Mạng Thi Tốt Nghiệp QG. Nếu Bạn Đóng Lệnh Liệt Nhận Cửa Trái Kéo Vết Chức O-H O-C... Là Mất Trắng Ảo Thi Sai Chệch Nhóm Sơ Đồ Cục Diễn Đốt Vượt Tầm. Luôn Luôn Thuộc Đầu Ngón Tay Bản Tính Màu Trắng Tủ Phenol Brom -> Tráng Gương Bạc Formic và Phả Cửa Tổ Aldehyde Gắn Chức -> Axit Buộc Chua Quỳ Phản Dịch Na Bọt -> Rượu Vô Liệt Oxi Hóa Kép Thành Đồng Vũng CuO Khép Khí. Đóng Khung Não Tọa Chức Ảo Giải Điên Phá Mã Mạch Dịch.",
         "color": "orange"
       }
     }
@@ -85,15 +85,15 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Điều nào tạo thành chênh lệch lớn nhất khi phân biệt Formic acid (HCOOH) and Acetic acid (CH3COOH)?",
+      "question": "Điều nào tạo thành chênh lệch lớn nhất khi phân biệt Formic acid (HCOOH) và Acetic acid (CH3COOH)?",
       "options": [
         "Tính axit mạnh làm quỳ đỏ.",
-        "Phản ứng with Natri kim loại sinh H2.",
+        "Phản ứng với Natri kim loại sinh H2.",
         "Khả năng thực hiện phản ứng Tráng bạc (Tollens) có gốc nhóm CHO ẩn trong HCOOH.",
         "Phản ứng tạo Ester khi cho tác dụng Rượu ethylic."
       ],
       "correctAnswer": 2,
-      "explanation": "Formic acid rất đặc biệt (cấu tạo H-COOH, có dính H-C=O - gần giống nhóm aldehýt) có thể tham gia phản ứng Tráng gương with AgNO3."
+      "explanation": "Formic acid rất đặc biệt (cấu tạo H-COOH, có dính H-C=O - gần giống nhóm aldehýt) có thể tham gia phản ứng Tráng gương với AgNO3."
     },
     {
       "id": "q2",
@@ -105,7 +105,7 @@
         "Tráng bạc phản ứng Ag."
       ],
       "correctAnswer": 2,
-      "explanation": "Khử Aldehyde bằng khí hydro ($+H_2$) phản ứng xúc tác bột Niken with nhiệt lượng đun nóng để hoàn nguyên thành Rượu nhóm Alcohol."
+      "explanation": "Khử Aldehyde bằng khí hydro ($+H_2$) phản ứng xúc tác bột Niken với nhiệt lượng đun nóng để hoàn nguyên thành Rượu nhóm Alcohol."
     }
   ],
   "videoModules": [
@@ -114,7 +114,7 @@
       "title": "Ôn tập chương 6: Hợp chất carbonyl - Carboxylic acid",
       "url": "https://www.youtube.com/watch?v=ieHCHrarXq4",
       "thumbnail": "https://img.youtube.com/vi/ieHCHrarXq4/0.jpg",
-      "description": "Tổng kết toàn bộ kiến thức chương 6 and giải đề ôn tập củng cố (Loigiaihay)."
+      "description": "Tổng kết toàn bộ kiến thức chương 6 và giải đề ôn tập củng cố (Loigiaihay)."
     }
   ],
   "practiceModules": [],

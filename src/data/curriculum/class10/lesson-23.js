@@ -8,7 +8,7 @@
   "chapter": "Chương 7: Nguyên tố nhóm VIIA (Helogen)",
   "order": 23,
   "isPremium": false,
-  "description": "Luyện tập về Halogen and tính chất oxi hóa đặc biệt.",
+  "description": "Luyện tập về Halogen và tính chất oxi hóa đặc biệt.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong chương này, chúng ta đã nghiên cứu về nhóm phi kim hoạt động nhất trong bảng tuần hoàn. Cần lưu ý các quy luật biến đổi ngược chiều nhau giữa đơn chất and hợp chất acid:\\n1. **Tính oxi hóa của đơn chất**: Giảm dần từ **$F_2 > Cl_2 > Br_2 > I_2$**. Fluorine is phi kim mạnh nhất, có thể oxi hóa được hầu hết các chất."
+        "text": "Trong chương này, chúng ta đã nghiên cứu về nhóm phi kim hoạt động nhất trong bảng tuần hoàn. Cần lưu ý các quy luật biến đổi ngược chiều nhau giữa đơn chất và hợp chất acid:\\n1. **Tính oxi hóa của đơn chất**: Giảm dần từ **$F_2 > Cl_2 > Br_2 > I_2$**. Fluorine is phi kim mạnh nhất, có thể oxi hóa được hầu hết các chất."
       }
     },
     {
@@ -57,8 +57,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Ứng dụng and an toàn",
-        "content": "Các halogen and hợp chất của chúng có ứng dụng rộng rãi trong sát trùng ($Cl_2, Iodine$), sản xuất thuốc trừ sâu, and dược phẩm. Tuy nhiên, chúng đều là những chất độc hại, cần tuyệt đối tuân thủ quy tắc an toàn trong phòng thí nghiệm and công nghiệp.",
+        "title": "Ứng dụng và an toàn",
+        "content": "Các halogen và hợp chất của chúng có ứng dụng rộng rãi trong sát trùng ($Cl_2, Iodine$), sản xuất thuốc trừ sâu, và dược phẩm. Tuy nhiên, chúng đều là những chất độc hại, cần tuyệt đối tuân thủ quy tắc an toàn trong phòng thí nghiệm và công nghiệp.",
         "color": "orange"
       }
     }
@@ -70,7 +70,7 @@
       "title": "Bài giảng: Ôn tập chương 7",
       "url": "https://www.youtube.com/watch?v=Tmhkuq-g750",
       "thumbnail": "https://img.youtube.com/vi/Tmhkuq-g750/0.jpg",
-      "description": "Hệ thống hóa toàn bộ kiến thức về nhóm Halogen and hợp chất của chúng (VietJack)."
+      "description": "Hệ thống hóa toàn bộ kiến thức về nhóm Halogen và hợp chất của chúng (VietJack)."
     }
   ],
   "practiceModules": [],

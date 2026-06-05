@@ -8,13 +8,13 @@
   "chapter": "Chương 4: Phản ứng oxi hóa - khử",
   "order": 15,
   "isPremium": false,
-  "description": "Cách xác định số oxi hóa and bản chất phản ứng nhường, nhận electron.",
+  "description": "Cách xác định số oxi hóa và bản chất phản ứng nhường, nhận electron.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Số oxi hóa and quy tắc xác định",
+        "text": "1. Số oxi hóa và quy tắc xác định",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Số oxi hóa là một đại lượng giả định, đại diện cho điện tích của nguyên tử trong phân tử nếu giả định rằng các liên kết cộng hóa trị là liên kết ion hoàn toàn. Việc xác định đúng số oxi hóa là bước tiên quyết để nhận diện phản ứng oxi hóa - khử.\n\n**Các quy tắc cơ bản:**\n1. **Đơn chất**: Số oxi hóa bằng 0.\n2. **Trong hợp chất**: Hydrogen thường là $+1$, Oxygen là $-2$ (trừ các peroxide and hợp chất với fluorine).\n3. **Ion đơn nguyên tử**: Số oxi hóa bằng điện tích ion.\n4. **Tổng số oxi hóa**: Trong phân tử trung hòa bằng 0; trong ion đa nguyên tử bằng điện tích của ion đó."
+        "text": "Số oxi hóa là một đại lượng giả định, đại diện cho điện tích của nguyên tử trong phân tử nếu giả định rằng các liên kết cộng hóa trị là liên kết ion hoàn toàn. Việc xác định đúng số oxi hóa là bước tiên quyết để nhận diện phản ứng oxi hóa - khử.\n\n**Các quy tắc cơ bản:**\n1. **Đơn chất**: Số oxi hóa bằng 0.\n2. **Trong hợp chất**: Hydrogen thường là $+1$, Oxygen là $-2$ (trừ các peroxide và hợp chất với fluorine).\n3. **Ion đơn nguyên tử**: Số oxi hóa bằng điện tích ion.\n4. **Tổng số oxi hóa**: Trong phân tử trung hòa bằng 0; trong ion đa nguyên tử bằng điện tích của ion đó."
       }
     },
     {
@@ -47,7 +47,7 @@
       "type": "warningBox",
       "content": {
         "title": "Phương pháp thăng bằng electron",
-        "content": "Để cân bằng một phản ứng redox phức tạp, ta thực hiện: \n1. Xác định số oxi hóa biến thiên.\n2. Viết các quá trình oxi hóa and quá trình khử.\n3. Tìm hệ số sao cho **Tổng số electron nhường = Tổng số electron nhận**.\n4. Đưa hệ số vào phương trình and kiểm tra sự cân bằng nguyên tố (thường là kim loại -> phi kim -> hydrogen -> oxygen).",
+        "content": "Để cân bằng một phản ứng redox phức tạp, ta thực hiện: \n1. Xác định số oxi hóa biến thiên.\n2. Viết các quá trình oxi hóa và quá trình khử.\n3. Tìm hệ số sao cho **Tổng số electron nhường = Tổng số electron nhận**.\n4. Đưa hệ số vào phương trình và kiểm tra sự cân bằng nguyên tố (thường là kim loại -> phi kim -> hydrogen -> oxygen).",
         "color": "orange"
       }
     }
@@ -59,7 +59,7 @@
       "title": "Bài giảng: Phản ứng oxi hóa - khử",
       "url": "https://www.youtube.com/watch?v=HUUkv87RnSM",
       "thumbnail": "https://img.youtube.com/vi/HUUkv87RnSM/0.jpg",
-      "description": "Cách xác định số oxi hóa, khái niệm chất khử, chất oxi hóa and cân bằng phản ứng (VietJack)."
+      "description": "Cách xác định số oxi hóa, khái niệm chất khử, chất oxi hóa và cân bằng phản ứng (VietJack)."
     }
   ],
   "practiceModules": [],

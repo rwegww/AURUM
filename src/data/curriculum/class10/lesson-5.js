@@ -8,7 +8,7 @@
   "chapter": "Chương 2: Bảng tuần hoàn các nguyên tố hóa học",
   "order": 5,
   "isPremium": false,
-  "description": "Nguyên tắc sắp xếp, ô nguyên tố, chu kì and nhóm.",
+  "description": "Nguyên tắc sắp xếp, ô nguyên tố, chu kì và nhóm.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -29,7 +29,7 @@
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Cấu trúc bảng tuần hoàn: Ô, Chu kì and Nhóm",
+        "text": "2. Cấu trúc bảng tuần hoàn: Ô, Chu kì và Nhóm",
         "level": "h2"
       }
     },
@@ -37,7 +37,7 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "- **Ô nguyên tố**: Cung cấp các thông tin cơ bản về một nguyên tố (Số hiệu nguyên tử $Z$, kí hiệu, tên nguyên tố, độ âm điện, cấu hình electron, nguyên tử khối trung bình).\n- **Chu kì**: Là dãy các nguyên tố có cùng số lớp electron. Số thứ tự chu kì = Số lớp electron. Bảng tuần hoàn có 7 chu kì (3 chu kì nhỏ and 4 chu kì lớn).\n- **Nhóm**: Là tập hợp các nguyên tố có cấu hình electron tương tự nhau, do đó có tính chất hóa học tương tự nhau.\n  + **Nhóm A**: Gồm các nguyên tố s and p. Số thứ tự nhóm A = Số electron lớp ngoài cùng.\n  + **Nhóm B**: Gồm các nguyên tố d and f (kim loại chuyển tiếp)."
+        "text": "- **Ô nguyên tố**: Cung cấp các thông tin cơ bản về một nguyên tố (Số hiệu nguyên tử $Z$, kí hiệu, tên nguyên tố, độ âm điện, cấu hình electron, nguyên tử khối trung bình).\n- **Chu kì**: Là dãy các nguyên tố có cùng số lớp electron. Số thứ tự chu kì = Số lớp electron. Bảng tuần hoàn có 7 chu kì (3 chu kì nhỏ và 4 chu kì lớn).\n- **Nhóm**: Là tập hợp các nguyên tố có cấu hình electron tương tự nhau, do đó có tính chất hóa học tương tự nhau.\n  + **Nhóm A**: Gồm các nguyên tố s và p. Số thứ tự nhóm A = Số electron lớp ngoài cùng.\n  + **Nhóm B**: Gồm các nguyên tố d và f (kim loại chuyển tiếp)."
       }
     },
     {
@@ -54,7 +54,7 @@
       "type": "warningBox",
       "content": {
         "title": "Phân chia khối nguyên tố (Blocks)",
-        "content": "Dựa trên phân lớp electron đang điền dở dang, các nguyên tố được chia thành 4 khối: Khối s (Nhóm IA, IIA), khối p (IIIA đến VIIIA), khối d (Các nhóm B) and khối f (Lanthanides, Actinides).",
+        "content": "Dựa trên phân lớp electron đang điền dở dang, các nguyên tố được chia thành 4 khối: Khối s (Nhóm IA, IIA), khối p (IIIA đến VIIIA), khối d (Các nhóm B) và khối f (Lanthanides, Actinides).",
         "color": "orange"
       }
     }
@@ -66,7 +66,7 @@
       "title": "Bài giảng: Cấu tạo của bảng tuần hoàn",
       "url": "https://www.youtube.com/watch?v=ZFj67NxAwRM",
       "thumbnail": "https://img.youtube.com/vi/ZFj67NxAwRM/0.jpg",
-      "description": "Nguyên tắc sắp xếp and cấu trúc các ô, chu kì, nhóm trong bảng tuần hoàn (VietJack)."
+      "description": "Nguyên tắc sắp xếp và cấu trúc các ô, chu kì, nhóm trong bảng tuần hoàn (VietJack)."
     }
   ],
   "practiceModules": [],

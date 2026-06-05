@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Trong quá trình hình thành liên kết hóa học, nguyên tử của các nguyên tố Nhóm A có xu hướng nhường, nhận hoặc góp chung electron lớp ngoài cùng để đạt được cấu hình electron bền vững của khí hiếm gần nhất với **8 electron** (hoặc 2 electron đối với trường hợp của Helium).\n\nĐây là động lực chính thúc đẩy các phản ứng hóa học xảy ra, giúp các nguyên tử chuyển từ trạng thái năng lượng cao, kém bền sang trạng thái năng lượng thấp hơn and bền vững hơn trong các phân tử hoặc tinh thể."
+        "text": "Trong quá trình hình thành liên kết hóa học, nguyên tử của các nguyên tố Nhóm A có xu hướng nhường, nhận hoặc góp chung electron lớp ngoài cùng để đạt được cấu hình electron bền vững của khí hiếm gần nhất với **8 electron** (hoặc 2 electron đối với trường hợp của Helium).\n\nĐây là động lực chính thúc đẩy các phản ứng hóa học xảy ra, giúp các nguyên tử chuyển từ trạng thái năng lượng cao, kém bền sang trạng thái năng lượng thấp hơn và bền vững hơn trong các phân tử hoặc tinh thể."
       }
     },
     {
@@ -30,7 +30,7 @@
       "type": "infoBox",
       "content": {
         "title": "Cơ chế đạt cấu hình Octet",
-        "content": "Nguyên tử có thể đạt được cấu hình bền vững thông qua 2 con đường chính:\n1. **Sự nhường hoặc nhận electron**: Hình thành các ion trái dấu (Liên kết ion). Thường xảy ra giữa kim loại điển hình and phi kim điển hình.\n2. **Sự góp chung electron**: Hình thành các cặp electron chung giữa hai nguyên tử (Liên kết cộng hóa trị). Thường xảy ra giữa các phi kim với nhau.",
+        "content": "Nguyên tử có thể đạt được cấu hình bền vững thông qua 2 con đường chính:\n1. **Sự nhường hoặc nhận electron**: Hình thành các ion trái dấu (Liên kết ion). Thường xảy ra giữa kim loại điển hình và phi kim điển hình.\n2. **Sự góp chung electron**: Hình thành các cặp electron chung giữa hai nguyên tử (Liên kết cộng hóa trị). Thường xảy ra giữa các phi kim với nhau.",
         "color": "blue"
       }
     },

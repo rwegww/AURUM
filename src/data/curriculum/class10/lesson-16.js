@@ -8,7 +8,7 @@
   "chapter": "Chương 4: Phản ứng oxi hóa - khử",
   "order": 16,
   "isPremium": false,
-  "description": "Luyện tập cân bằng and xác định vai trò các chất trong phản ứng khử.",
+  "description": "Luyện tập cân bằng và xác định vai trò các chất trong phản ứng khử.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -30,7 +30,7 @@
       "type": "infoBox",
       "content": {
         "title": "Kĩ năng cân bằng phương trình phức tạp",
-        "content": "Đối với các phản ứng trong môi trường acid ($H^+$) hoặc base ($OH^-$), cần chú ý bảo toàn điện tích and bảo toàn nguyên tố hydrogen, oxygen ở bước cuối cùng. Việc xác định đúng tỉ lệ giữa chất oxi hóa and chất khử là chìa khóa để giải quyết các bài toán định lượng liên quan đến bảo toàn electron.",
+        "content": "Đối với các phản ứng trong môi trường acid ($H^+$) hoặc base ($OH^-$), cần chú ý bảo toàn điện tích và bảo toàn nguyên tố hydrogen, oxygen ở bước cuối cùng. Việc xác định đúng tỉ lệ giữa chất oxi hóa và chất khử là chìa khóa để giải quyết các bài toán định lượng liên quan đến bảo toàn electron.",
         "color": "blue"
       }
     },
@@ -46,7 +46,7 @@
       "id": "mod5",
       "type": "paragraph",
       "content": {
-        "text": "Phản ứng oxi hóa - khử tồn tại phổ biến xung quanh chúng ta:\n- **Trong đời sống**: Sự hô hấp của sinh vật, quá trình quang hợp của cây xanh, sự cháy của nhiên liệu cung cấp năng lượng.\n- **Trong công nghiệp**: Luyện kim (chiết xuất kim loại từ quặng), sản xuất hóa chất (phân bón, thuốc nổ), and hoạt động của các nguồn điện hóa học (pin, ắc quy).\n- **Mặt tiêu cực**: Sự ăn mòn kim loại gây hư hại các công trình xây dựng and máy móc."
+        "text": "Phản ứng oxi hóa - khử tồn tại phổ biến xung quanh chúng ta:\n- **Trong đời sống**: Sự hô hấp của sinh vật, quá trình quang hợp của cây xanh, sự cháy của nhiên liệu cung cấp năng lượng.\n- **Trong công nghiệp**: Luyện kim (chiết xuất kim loại từ quặng), sản xuất hóa chất (phân bón, thuốc nổ), và hoạt động của các nguồn điện hóa học (pin, ắc quy).\n- **Mặt tiêu cực**: Sự ăn mòn kim loại gây hư hại các công trình xây dựng và máy móc."
       }
     }
   ],
@@ -57,7 +57,7 @@
       "title": "Bài giảng: Ôn tập chương 4",
       "url": "https://www.youtube.com/watch?v=Bzy5osIoU3w",
       "thumbnail": "https://img.youtube.com/vi/Bzy5osIoU3w/0.jpg",
-      "description": "Tổng hợp kiến thức về phản ứng oxi hóa - khử and các dạng bài tập trọng tâm (VietJack)."
+      "description": "Tổng hợp kiến thức về phản ứng oxi hóa - khử và các dạng bài tập trọng tâm (VietJack)."
     }
   ],
   "practiceModules": [],

@@ -104,7 +104,7 @@
         "Sodium hydroxide ($NaOH$)"
       ],
       "correctAnswer": 2,
-      "explanation": "Aniline có nhóm $-NH_2$ liên kết trực tiếp with vòng benzene. Hiệu ứng hút electron của vòng thơm làm giảm mật độ electron trên nguyên tử nitrogen, khiến tính base của aniline rất yếu, không đủ làm đổi màu quỳ tím."
+      "explanation": "Aniline có nhóm $-NH_2$ liên kết trực tiếp với vòng benzene. Hiệu ứng hút electron của vòng thơm làm giảm mật độ electron trên nguyên tử nitrogen, khiến tính base của aniline rất yếu, không đủ làm đổi màu quỳ tím."
     },
     {
       "id": "q2",
@@ -116,7 +116,7 @@
         "Dung dịch $NaCl$."
       ],
       "correctAnswer": 2,
-      "explanation": "Aniline phản ứng with nước bromine tạo kết tủa trắng 2,4,6-tribromoaniline, đây là hiện tượng đặc trưng giúp nhận biết aniline dễ dàng."
+      "explanation": "Aniline phản ứng với nước bromine tạo kết tủa trắng 2,4,6-tribromoaniline, đây là hiện tượng đặc trưng giúp nhận biết aniline dễ dàng."
     }
   ],
   "videoModules": [
@@ -125,7 +125,7 @@
       "title": "Bài giảng: Amine",
       "url": "https://www.youtube.com/watch?v=5nPfKxoNEGE",
       "thumbnail": "https://img.youtube.com/vi/5nPfKxoNEGE/0.jpg",
-      "description": "Khái niệm, phân loại, danh pháp and các tính chất hóa học đặc trưng của Amine (VietJack)."
+      "description": "Khái niệm, phân loại, danh pháp và các tính chất hóa học đặc trưng của Amine (VietJack)."
     }
   ],
   "practiceModules": [],

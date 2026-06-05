@@ -88,7 +88,7 @@
     },
     {
       "type": "matching",
-      "narrative": "Tuyệt vời! Bây giờ hãy giúp tôi kết nối các tính chất vật lí của kim loại with nguyên nhân sâu xa từ cấu trúc mạng tinh thể nhé.",
+      "narrative": "Tuyệt vời! Bây giờ hãy giúp tôi kết nối các tính chất vật lí của kim loại với nguyên nhân sâu xa từ cấu trúc mạng tinh thể nhé.",
       "leftItems": [
         { "id": "p1", "label": "Tính dẻo" },
         { "id": "p2", "label": "Dẫn điện" },
@@ -100,7 +100,7 @@
         { "id": "p1", "label": "Các lớp nguyên tử trượt lên nhau nhưng vẫn kết dính" }
       ],
       "correctOrder": ["p1", "p2", "p3"],
-      "question": "Khớp tính chất with cơ sở khoa học.",
+      "question": "Khớp tính chất với cơ sở khoa học.",
       "source": "Bản chất kim loại"
     },
     {

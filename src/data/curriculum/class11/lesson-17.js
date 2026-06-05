@@ -8,13 +8,13 @@
   "order": 17,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Cấu tạo vòng thơm đặc trưng. Tính chất hóa học chủ yếu của benzene and các hydrocarbon thơm khác (phản ứng thế).",
+  "description": "Cấu tạo vòng thơm đặc trưng. Tính chất hóa học chủ yếu của benzene và các hydrocarbon thơm khác (phản ứng thế).",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and Cấu tạo",
+        "text": "1. Khái niệm và Cấu tạo",
         "level": "h2"
       }
     },
@@ -73,7 +73,7 @@
       "id": "mod8",
       "type": "paragraph",
       "content": {
-        "text": "Thuật Tiên Tri Định Hướng Rẽ Bàn Tay Trái – Phải (Dành Riêng Alkylbenzene Toluene $C_6H_5CH_3$). \nKhi Gốc Rễ Benzene đã bị chốt 1 Cấu Gốc Lạ nằm sẵn ở Tọa Khung Vị Đầu. Việc Nạp Thêm Thằng Khác Vô Chốt Lần 2 Không Thể Trở Lại Dễ Dãi Cắm Đầu.\nNếu Kẻ Ngồi Sẵn là NHÓM ĐẨY ELECTRON Rộng Cửa (Các Mạch Cắn Chồi Đẩy $-CH_3$, $-C_2H_5$, Gốc Cồn $-OH$, Gốc Mùi $-NH_2$): Lập Tức Nó Ép Bắn Đạo Quân Cắm Thế Mới Vào Buộc Chui Núp 2 Góc Tử Huyệt Lân Cận ortho (2, 6) and Hạ Bộ para (4). Đóng Kín Cổng Giữa Meta (3).\nNgược Dòng, Kẻ Ngồi Sẵn Mà Là QUỶ HÚT TỤT ELECTRON (-NO2, Gốc Rút -COOH, Vòi -CHO): Hệ Cửa Tiềm Năng Duy Nhất Không Khóa Chặt Vẫn Lả Phân Tỏa Meta (3). Bức Ép Kẻ Đón Ngã Vịn Chật."
+        "text": "Thuật Tiên Tri Định Hướng Rẽ Bàn Tay Trái – Phải (Dành Riêng Alkylbenzene Toluene $C_6H_5CH_3$). \nKhi Gốc Rễ Benzene đã bị chốt 1 Cấu Gốc Lạ nằm sẵn ở Tọa Khung Vị Đầu. Việc Nạp Thêm Thằng Khác Vô Chốt Lần 2 Không Thể Trở Lại Dễ Dãi Cắm Đầu.\nNếu Kẻ Ngồi Sẵn là NHÓM ĐẨY ELECTRON Rộng Cửa (Các Mạch Cắn Chồi Đẩy $-CH_3$, $-C_2H_5$, Gốc Cồn $-OH$, Gốc Mùi $-NH_2$): Lập Tức Nó Ép Bắn Đạo Quân Cắm Thế Mới Vào Buộc Chui Núp 2 Góc Tử Huyệt Lân Cận ortho (2, 6) và Hạ Bộ para (4). Đóng Kín Cổng Giữa Meta (3).\nNgược Dòng, Kẻ Ngồi Sẵn Mà Là QUỶ HÚT TỤT ELECTRON (-NO2, Gốc Rút -COOH, Vòi -CHO): Hệ Cửa Tiềm Năng Duy Nhất Không Khóa Chặt Vẫn Lả Phân Tỏa Meta (3). Bức Ép Kẻ Đón Ngã Vịn Chật."
       }
     },
     {
@@ -89,11 +89,11 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Câu nào ĐÚNG khi nói về khả năng phản ứng của Benzene so with Alkene with Bromine?",
+      "question": "Câu nào ĐÚNG khi nói về khả năng phản ứng của Benzene so với Alkene với Bromine?",
       "options": [
         "Benzene làm mất màu nhanh dung dịch brom hơn nhiều.",
-        "Cả Benzene and Alkene đều dễ dàng thực hiện phản ứng cộng dung dịch brom.",
-        "Benzene chỉ phản ứng cộng with brôm khi có ánh sáng mạnh, nếu không phải dùng brom nguyên chất có xúc tác Fe bột để thế.",
+        "Cả Benzene và Alkene đều dễ dàng thực hiện phản ứng cộng dung dịch brom.",
+        "Benzene chỉ phản ứng cộng với brôm khi có ánh sáng mạnh, nếu không phải dùng brom nguyên chất có xúc tác Fe bột để thế.",
         "Mọi hợp chất hydrocacbon vòng đều tác dụng y hệt."
       ],
       "correctAnswer": 2,
@@ -103,13 +103,13 @@
       "id": "q2",
       "question": "Sản phẩm chính của phản ứng Nitro hóa Toluene ($C_6H_5CH_3$) là tại vị trí nào trên vòng?",
       "options": [
-        "ortho and meta",
-        "ortho and para",
+        "ortho và meta",
+        "ortho và para",
         "meta duy nhất",
         "toàn vòng chia đều"
       ],
       "correctAnswer": 1,
-      "explanation": "Nhóm -CH3 là nhóm đẩy e, nên nó kích hoạt vòng ưu tiên phản ứng ở vị trí o- and p-."
+      "explanation": "Nhóm -CH3 là nhóm đẩy e, nên nó kích hoạt vòng ưu tiên phản ứng ở vị trí o- và p-."
     }
   ],
   "videoModules": [
@@ -118,7 +118,7 @@
       "title": "Bài giảng: Arene (Hydrocarbon thơm)",
       "url": "https://www.youtube.com/watch?v=E3ps3CJkGAc",
       "thumbnail": "https://img.youtube.com/vi/E3ps3CJkGAc/0.jpg",
-      "description": "Cấu tạo vòng benzene, tính chất hóa học của arene and ứng dụng trong công nghiệp (VietJack)."
+      "description": "Cấu tạo vòng benzene, tính chất hóa học của arene và ứng dụng trong công nghiệp (VietJack)."
     }
   ],
   "practiceModules": [],

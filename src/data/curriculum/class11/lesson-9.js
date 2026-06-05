@@ -8,7 +8,7 @@
   "order": 9,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tổng hợp hệ thống nitrogen – sulfur and các hợp chất quan trọng. Rèn luyện tư duy xác định tính oxi hóa and khử.",
+  "description": "Tổng hợp hệ thống nitrogen – sulfur và các hợp chất quan trọng. Rèn luyện tư duy xác định tính oxi hóa và khử.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -78,13 +78,13 @@
       "id": "q1",
       "question": "Ứng dụng sơ đồ biến đổi Nitrogen. Từ NH3, ta sản xuất ra NO bằng phản ứng nào?",
       "options": [
-        "Phân hủy with xúc tác.",
+        "Phân hủy với xúc tác.",
         "Oxi hóa bằng O2 có xúc tác Pt.",
         "Nhiệt phân trong không khí hở.",
-        "Cho tác dụng with nước."
+        "Cho tác dụng với nước."
       ],
       "correctAnswer": 1,
-      "explanation": "NH3 bị oxi hóa with O2 khi có xúc tác Pt, nhiệt độ (chứ không bị đốt cháy trong không khí thông thường) tạo thành NO."
+      "explanation": "NH3 bị oxi hóa với O2 khi có xúc tác Pt, nhiệt độ (chứ không bị đốt cháy trong không khí thông thường) tạo thành NO."
     },
     {
       "id": "q2",
@@ -93,7 +93,7 @@
         "Cu xúc tác.",
         "V2O5 xúc tác.",
         "Dùng nước hòa tan thẳng SO3 (hoặc H2SO4 hấp thụ SO3 tạo oleum).",
-        "Đun sôi with xúc tác rắn."
+        "Đun sôi với xúc tác rắn."
       ],
       "correctAnswer": 2,
       "explanation": "Hòa SO3 vào nước hoặc dùng H2SO4 hấp thụ sẽ ra acid sulfuric."
@@ -105,7 +105,7 @@
       "title": "Ôn tập chương 2: Nitrogen - Sulfur",
       "url": "https://www.youtube.com/watch?v=2fZmqTFR5Ps",
       "thumbnail": "https://img.youtube.com/vi/2fZmqTFR5Ps/0.jpg",
-      "description": "Tổng kết kiến thức trọng tâm chương 2 and giải bài tập tự luyện (Loigiaihay)."
+      "description": "Tổng kết kiến thức trọng tâm chương 2 và giải bài tập tự luyện (Loigiaihay)."
     }
   ],
   "practiceModules": [],

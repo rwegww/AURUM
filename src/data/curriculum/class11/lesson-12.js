@@ -14,7 +14,7 @@
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Công thức phân tử and Công thức đơn giản nhất",
+        "text": "1. Công thức phân tử và Công thức đơn giản nhất",
         "level": "h2"
       }
     },
@@ -44,7 +44,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Phân tích nguyên tố and Lập công thức",
+        "text": "2. Phân tích nguyên tố và Lập công thức",
         "level": "h2"
       }
     },
@@ -67,7 +67,7 @@
       "type": "infoBox",
       "content": {
         "title": "Định Mức Lưới Số Mol Nguồn Gốc Cháy",
-        "content": "Học sinh Cấm Chết Quy Tắc Số:\n[1] $n_C = n_{CO_2} = \\frac{m_{bình\\ 2\\ tăng}}{44}$. (Khối lượng $m_C = n_C \\times 12$).\n[2] $n_H = 2 \\times n_{H_2O} = 2 \\times \\frac{m_{bình\\ 1\\ tăng}}{18}$. (Khối lượng $m_H = n_H \\times 1$). Do 1 nước có 2 chữ H.\n[3] Suy ngược Mol Oxi ẩn thân mù mờ $O$: Phải Lấy Khối lượng Chất Hữu cơ ban đầu ném cháy ($m_X$) Trừ Gốc $m_C$ and Trừ Gốc $m_H$. Độ dư dôi hắt hơi đó chia 16 ra mol Oxy.",
+        "content": "Học sinh Cấm Chết Quy Tắc Số:\n[1] $n_C = n_{CO_2} = \\frac{m_{bình\\ 2\\ tăng}}{44}$. (Khối lượng $m_C = n_C \\times 12$).\n[2] $n_H = 2 \\times n_{H_2O} = 2 \\times \\frac{m_{bình\\ 1\\ tăng}}{18}$. (Khối lượng $m_H = n_H \\times 1$). Do 1 nước có 2 chữ H.\n[3] Suy ngược Mol Oxi ẩn thân mù mờ $O$: Phải Lấy Khối lượng Chất Hữu cơ ban đầu ném cháy ($m_X$) Trừ Gốc $m_C$ và Trừ Gốc $m_H$. Độ dư dôi hắt hơi đó chia 16 ra mol Oxy.",
         "color": "green"
       }
     },
@@ -76,7 +76,7 @@
       "type": "warningBox",
       "content": {
         "title": "Con Đường Tử Thần Đoạn Phân Số Lẻ",
-        "content": "Lỗi cấm kị khi chia tỉ lệ $x : y : z$. Lỡ chia ra C: 1 and H: 2.5 and O: 1. Việc làm tròn $2.5 \\rightarrow 3$ là Án Tử vĩnh viễn không điểm. Luật Hưởng Là phải nhân bội nhẩm 2 toàn hàng chéo lên cho ra cặp số Tròn Khít tối giản: Nhân 2 xộc $\\rightarrow 2 : 5 : 2$. Tương đương $C_2H_5O_2$.",
+        "content": "Lỗi cấm kị khi chia tỉ lệ $x : y : z$. Lỡ chia ra C: 1 và H: 2.5 và O: 1. Việc làm tròn $2.5 \\rightarrow 3$ là Án Tử vĩnh viễn không điểm. Luật Hưởng Là phải nhân bội nhẩm 2 toàn hàng chéo lên cho ra cặp số Tròn Khít tối giản: Nhân 2 xộc $\\rightarrow 2 : 5 : 2$. Tương đương $C_2H_5O_2$.",
         "color": "orange"
       }
     }
@@ -96,7 +96,7 @@
     },
     {
       "id": "q2",
-      "question": "Khi đốt cháy một hợp chất X (gồm C, H) luôn thu được CO2 and H2O. Số mol H lấy từ sản phẩm cháy như thế nào?",
+      "question": "Khi đốt cháy một hợp chất X (gồm C, H) luôn thu được CO2 và H2O. Số mol H lấy từ sản phẩm cháy như thế nào?",
       "options": [
         "bằng số mol H2O",
         "bằng một nửa số mol H2O",
@@ -113,7 +113,7 @@
       "title": "Bài giảng: Công thức phân tử hợp chất hữu cơ",
       "url": "https://www.youtube.com/watch?v=GbGGVDoUOF8",
       "thumbnail": "https://img.youtube.com/vi/GbGGVDoUOF8/0.jpg",
-      "description": "Cách xác định công thức đơn giản nhất and công thức phân tử dựa trên kết quả phân tích nguyên tố (VietJack)."
+      "description": "Cách xác định công thức đơn giản nhất và công thức phân tử dựa trên kết quả phân tích nguyên tố (VietJack)."
     }
   ],
   "practiceModules": [],

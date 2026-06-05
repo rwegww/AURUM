@@ -107,7 +107,7 @@
     },
     {
       "type": "multiple-choice",
-      "narrative": "Khi nấu ăn, bà nội thường cho một chút rượu và giấm vào món cá để khử mùi tanh and tạo hương thơm. Phản ứng nào đã xảy ra để tạo ra hương thơm đó?",
+      "narrative": "Khi nấu ăn, bà nội thường cho một chút rượu và giấm vào món cá để khử mùi tanh và tạo hương thơm. Phản ứng nào đã xảy ra để tạo ra hương thơm đó?",
       "options": [
         "Phản ứng Ester hóa",
         "Phản ứng trung hòa",

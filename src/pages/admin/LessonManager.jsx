@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import MediaUploader from '@/components/admin/MediaUploader';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const modulesToMarkdown = (modules) => {
   if (!modules || !modules.length) return '';
@@ -100,14 +101,14 @@ const LessonManager = () => {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setLessons(prev => prev.filter(l => l.lessonId !== lessonId));
-      } else {
-        const error = await res.json();
-        alert(`Lỗi: ${error.message}`);
       }
     } catch (err) {
       console.error('Lỗi xóa bài học:', err);
+      alert(`Lỗi: ${err.message}`);
     }
   };
 
@@ -146,21 +147,21 @@ const LessonManager = () => {
         body: JSON.stringify(payload)
       });
       
-      if (res.ok) {
-        const savedLesson = await res.json();
-        if (isCreating) {
-          setLessons(prev => [...prev, savedLesson]);
-        } else {
-          setLessons(prev => prev.map(l => l.lessonId === savedLesson.lessonId ? savedLesson : l));
-        }
-        setEditingLesson(null);
-        setIsCreating(false);
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (result.pendingApproval) return;
+
+      const savedLesson = result.data;
+      if (isCreating) {
+        setLessons(prev => [...prev, savedLesson]);
       } else {
-        const error = await res.json();
-        alert(`Lỗi: ${error.message}`);
+        setLessons(prev => prev.map(l => l.lessonId === savedLesson.lessonId ? savedLesson : l));
       }
+      setEditingLesson(null);
+      setIsCreating(false);
     } catch (err) {
       console.error('Lỗi lưu bài học:', err);
+      alert(`Lỗi: ${err.message}`);
     }
   };
 

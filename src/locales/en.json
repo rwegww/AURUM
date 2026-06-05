@@ -36,7 +36,7 @@
       "schools_count": "50+",
       "schools_label": "Partner classrooms",
       "bai_hoc_count": "1,000+",
-      "bai_hoc_label": "Chemistry bai_hoc"
+      "bai_hoc_label": "Chemistry lessons"
     },
     "features": {
       "journey": {
@@ -53,7 +53,7 @@
         "title": "Virtual chemistry lab",
         "highlight": "Try reactions safely",
         "desc": "Observe changes, mix solutions, and test ideas in a clear simulation environment.",
-        "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom bai_hoc and encourage experimental thinking.",
+        "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom lessons and encourage experimental thinking.",
         "link": "Enter the lab",
         "image_alt": "A safe chemistry lab in a Vietnamese classroom"
       },
@@ -69,7 +69,7 @@
       "library": {
         "title": "Chemistry reference hub",
         "highlight": "Accurate lookup",
-        "desc": "Study hoc_lieu, the periodic table, and visual resources help learners review quickly.",
+        "desc": "Study materials, the periodic table, and visual resources help learners review quickly.",
         "link": "Open library"
       },
       "map": {
@@ -82,10 +82,10 @@
       },
       "bai_hoc": {
         "badge": "Study Materials",
-        "title": "Visual bai_hoc",
+        "title": "Visual lessons",
         "highlight": "Clear and memorable",
         "desc": "Chemistry theory is presented with visuals, real-life examples, and short interactions.",
-        "link": "View bai_hoc",
+        "link": "View lessons",
         "image_alt": "A visual chemistry lesson in Vietnamese folk-art style"
       }
     },
@@ -133,7 +133,7 @@
         {
           "name": "Minh Anh",
           "role": "Grade 9 student",
-          "content": "The illustrated bai_hoc make reactions easier to understand, so chemistry exercises feel less intimidating."
+          "content": "The illustrated lessons make reactions easier to understand, so chemistry exercises feel less intimidating."
         },
         {
           "name": "Gia Bao",
@@ -181,14 +181,14 @@
   "classroom": {
     "title": "Start your <1/><2> Chemistry</2> journey",
     "subtitle": "Each grade is a new learning stage, guiding you from foundations to real chemistry applications.",
-    "enter_class": "Enter Great Hall",
+    "enter_class": "Enter learning space",
     "knowledge_tree": {
-      "academic_map": "Marauder's Map",
+      "academic_map": "Knowledge map",
       "title": "Complete Chemistry Knowledge Tree",
       "subtitle": "Systematize chemistry knowledge from basics to advanced topics.",
       "instruction": "Tap each lesson to start practicing.",
-      "updating": "Transporting lesson hoc_lieu...",
-      "go_journey": "Open House Grade {{grade}} path"
+      "updating": "Loading lesson materials...",
+      "go_journey": "Open Grade {{grade}} path"
     },
     "grades": {
       "7": {
@@ -220,63 +220,63 @@
   },
   "lectures": {
     "title": "Chemistry <1>Resource Library</1>",
-    "subtitle": "Look up chemistry theory and video questions by grade level",
-    "search_placeholder": "Search librarys...",
+    "subtitle": "Look up chemistry theory, videos, and review materials by grade level",
+    "search_placeholder": "Search resources...",
     "grade_filter": "Grade {{grade}}",
-    "loading": "Decoding questions hoc_lieu...",
-    "no_results": "No chemistry hoc_lieu found matching the questions",
-    "clear_filters": "Dispel filters",
+    "loading": "Loading resources...",
+    "no_results": "No matching chemistry resources found",
+    "clear_filters": "Clear filters",
     "metadata": {
-      "video": "1 Pensieve Clip",
-      "theory": "Library Notes"
+      "video": "1 lesson video",
+      "theory": "Notes"
     }
   },
   "about": {
-    "mission_badge": "Our Covenant",
+    "mission_badge": "Aurum mission",
     "title": "Igniting a passion for <1/><2> Chemistry</2> in young learners",
     "description": "Aurum is an interactive learning journey that helps students explore atoms, bonds, and reactions. Chemistry becomes easier to understand when it can be observed and practiced safely.",
     "pillars": {
       "safety": {
-        "title": "Safe Chemistry Making",
-        "desc": "3D virtual labs help students practice brewing dangerous chemical with zero risk of blowing up the classroom."
+        "title": "Safe virtual practice",
+        "desc": "3D simulations help students practice reactions and identify chemicals in a safe learning environment."
       },
       "gamification": {
-        "title": "Questions Ranks & Learning Badges",
-        "desc": "Integrated gamification system with learning points and learners ranks makes learning highly engaging."
+        "title": "Goal-based practice",
+        "desc": "Learning points, badges, and leaderboards help students stay motivated while they practice."
       },
       "visualization": {
-        "title": "Arcane Vision",
+        "title": "Molecular visualization",
         "desc": "All abstract chemical bonds and atomic structures are visualized in stunning interactive 3D."
       }
     },
     "team_section": {
-      "title": "Grand Council of Aurum Learning Hub",
-      "description": "We bring together passionate Chemistry Masters and professional software architects. With the mantra 'Digitalizing education is the key to the future', we constantly refine every formula and lab simulation.",
+      "title": "Aurum team",
+      "description": "We bring together chemistry teachers and education product developers. Aurum keeps improving lessons, simulations, and practice tools so students can learn chemistry more clearly.",
       "achievements": [
-        "Over 1,000 chemistry librarys",
-        "Top-tier 3D chemical brewing technology",
+        "Over 1,000 high-quality chemistry resources",
+        "Interactive 3D chemistry simulations",
         "Learning community of over 50,000 members"
       ]
     }
   },
   "contact": {
     "badge": "Send us a message",
-    "title": "Contact the <1/> Founder Council",
-    "description": "We are always happy to receive phan_hoi messages, error reports, or collaboration requests. Reach out to us through our official channels below.",
+    "title": "Contact the <1/> Aurum team",
+    "description": "We are always happy to receive feedback, error reports, or collaboration requests. Reach out through our official channels below.",
     "info": {
-      "hotline": "Message Hotline",
-      "address": "Diagon Alley Office",
-      "google_maps": "View on Marauder's Map →"
+      "hotline": "Support channel",
+      "address": "Aurum office",
+      "google_maps": "View on map →"
     },
     "form": {
-      "title": "Draft an Message Mail",
-      "name_label": "Your Learners Name",
+      "title": "Send a message",
+      "name_label": "Your name",
       "name_placeholder": "Enter your name...",
-      "email_label": "Message Mail address",
+      "email_label": "Email address",
       "email_placeholder": "chemical_learners@example.com",
-      "message_label": "Message Mail Content",
-      "message_placeholder": "What would you like to discuss with the council...",
-      "submit": "Release Message",
+      "message_label": "Message",
+      "message_placeholder": "What would you like to discuss with Aurum?",
+      "submit": "Send message",
       "success": "Message released successfully! ✓"
     }
   },
@@ -313,18 +313,18 @@
     "footer_question": "Have questions about the terms?<1/>Please <contact>Contact Us</contact>."
   },
   "profile": {
-    "not_logged_in": "Not enrolled in Learning Hub",
-    "login_to_view": "Login to view learners profile",
-    "member_role": "New Learners",
+    "not_logged_in": "Not signed in",
+    "login_to_view": "Log in to view your learner profile",
+    "member_role": "New learner",
     "member_since": "Learning member of Aurum.<1/>Part of the journey since {{date}}",
-    "online_status": "Present in Great Hall",
-    "change_avatar": "Transfigure Avatar",
-    "save_changes": "Seal Changes",
+    "online_status": "Active now",
+    "change_avatar": "Change avatar",
+    "save_changes": "Save changes",
     "stats": {
-      "xp": "Mana (XP)",
-      "level_title": "Learners Rank",
-      "chemicals": "Unlocked Chemistry",
-      "arena_points": "House Points",
+      "xp": "XP",
+      "level_title": "Learning level",
+      "chemicals": "Unlocked chemistry",
+      "arena_points": "Arena points",
       "losses": "Losses",
       "win_rate": "Win Rate",
       "challenge_now": "Challenge Now →"
@@ -333,25 +333,25 @@
       "title": "Chemistry & Badge Vault",
       "unlocked_count": "Unlocked: {{current}}/{{total}}",
       "status": "Collected",
-      "empty": "Your vault is empty! Start brewing chemical or collecting badges now!",
+      "empty": "Your collection is empty. Complete lessons or missions to unlock badges.",
       "go_to_lab": "Go to Chemistry Lab →"
     },
     "study_plan": {
       "title": "Training Plan",
-      "subtitle": "Set daily goals to maintain your mana building habit",
+      "subtitle": "Set daily goals to maintain your study habit",
       "time_label": "Planned Training Time",
-      "target_label": "Library Goal / Day",
+      "target_label": "Lesson goal / day",
       "reminders_label": "Training Reminders",
-      "save_btn": "Seal Plan",
-      "saving": "Sealing...",
+      "save_btn": "Save plan",
+      "saving": "Saving...",
       "success": "Training plan updated!",
       "reminder_msg": "🔔 It is time to study. You have not reached today’s goal yet. Open a lesson and keep practicing.",
-      "email_reminders": "Message Reminders",
+      "email_reminders": "Email reminders",
       "calendar_reminders": "Schedule Custom Training",
       "calendar": {
         "title": "Personal Training Calendar",
-        "prev_month": "Previous Moon",
-        "next_month": "Next Moon",
+        "prev_month": "Previous month",
+        "next_month": "Next month",
         "weekday_sun": "Sun",
         "weekday_mon": "Mon",
         "weekday_tue": "Tue",
@@ -362,7 +362,7 @@
         "schedule_modal_title": "Training Day Details",
         "schedule_modal_desc": "Adjust chemistry training time and library targets for this day.",
         "input_title_label": "Chemistry Notes",
-        "input_title_placeholder": "e.g., Brew chemical, practice questions...",
+        "input_title_placeholder": "e.g., practice equations, review questions...",
         "input_time_label": "Custom Training Time",
         "input_target_label": "Library Target Count",
         "status_completed": "Completed Goal",
@@ -371,12 +371,12 @@
         "btn_cancel": "Cancel",
         "upcoming_title": "Upcoming Custom Training",
         "upcoming_empty": "No custom training schedules planned for this moon. Click any calendar date to schedule your own session!",
-        "item_target": "{{count}} librarys",
+        "item_target": "{{count}} lessons",
         "item_time": "At {{time}}"
       }
     },
     "arena_stats": {
-      "title": "Challengeing Statistics",
+      "title": "Challenge statistics",
       "total_matches": "Total Challenges",
       "wins": "Wins",
       "losses": "Losses",
@@ -389,12 +389,12 @@
     "history_time_ago": "At"
   },
   "nhiem_vu": {
-    "badge": "Aurum Auror Office",
-    "title": "Learners <1>Missions</1>",
+    "badge": "Aurum mission center",
+    "title": "Learning <1>Missions</1>",
     "subtitle": "Complete learning challenges to level up and earn valuable badges.",
-    "current_level": "Current Learners Level",
+    "current_level": "Current level",
     "level_val": "Level {{level}}",
-    "total_xp": "Total Mana",
+    "total_xp": "Total XP",
     "reset_in": "Reset in: <1>{{time}}</1>",
     "tabs": {
       "daily": "Daily",
@@ -406,11 +406,11 @@
       "completed": "Completed",
       "in_progress": "In Progress",
       "reward": "Reward",
-      "claim_btn": "Claim Mana ⚡",
+      "claim_btn": "Claim reward ⚡",
       "claiming": "Claiming...",
       "not_reached": "Incomplete"
     },
-    "empty": "The Grand Council has no new nhiem_vu for today."
+    "empty": "There are no new missions for today."
   },
   "journey": {
     "badge": "Grade {{grade}} Path",
@@ -444,14 +444,14 @@
       "bg_text": "PLACEMENT TEST",
       "badge": "Fast-Track Journey",
       "title": "Unlock Grade {{grade}} Potential",
-      "description": "Welcome, great Chemist! Challenge yourself with a placement test to unlock the Grade {{grade}} program immediately without waiting.",
+      "description": "Take a placement test to unlock the Grade {{grade}} program when you are ready.",
       "button": "Start test ➔"
     },
     "stage": {
       "label": "Stage {{order}}",
       "mission": "Mission ➔",
-      "locked_desc": "This chapter is still a mystery to you...",
-      "default_desc": "Prepare yourself to unlock the secrets of this element."
+      "locked_desc": "This stage is still locked.",
+      "default_desc": "Complete the previous stages to continue this lesson."
     },
     "milestone": {
       "book_badge": "NEW",
@@ -509,35 +509,35 @@
       "room_waiting": "Waiting"
     },
     "character": {
-      "badge": "Your Learners Character",
-      "name_label": "Learners Name:",
-      "aura_label": "Mana Aura Color:",
-      "random_btn": "Transfigure Style",
+      "badge": "Your learner character",
+      "name_label": "Learner name:",
+      "aura_label": "Profile color:",
+      "random_btn": "Change style",
       "expand": "↓ More Styles ({{count}} styles)",
       "collapse": "↑ Collapse",
       "presets": {
         "chem_master": "Chemistry Master",
         "lab_wizard": "Lab Explorer",
-        "science_hero": "Auror",
-        "atom_breaker": "Elemental Mage",
-        "dna_explorer": "Blood Mage",
+        "science_hero": "Young Scientist",
+        "atom_breaker": "Element Researcher",
+        "dna_explorer": "DNA Explorer",
         "ion_storm": "Storm Scholar",
-        "thermo_king": "Pyromancer",
-        "crystal_lord": "Geomancer",
-        "proton_rush": "Lightbringer",
-        "quark_force": "Ancient Scholar",
-        "neutron_star": "Cosmic Learners",
-        "plasma_wave": "Aether Mage"
+        "thermo_king": "Thermochemistry Expert",
+        "crystal_lord": "Crystal Researcher",
+        "proton_rush": "Proton Expert",
+        "quark_force": "Particle Scholar",
+        "neutron_star": "Neutron Expert",
+        "plasma_wave": "Plasma Explorer"
       }
     },
     "stats": {
       "badge": "Your Stats",
-      "rank_label": "Learners Rank",
+      "rank_label": "Learner rank",
       "total_matches": "Total Challenges",
       "wins": "Wins",
       "losses": "Losses",
       "win_rate": "Win Rate",
-      "total_points": "House Points",
+      "total_points": "Total points",
       "history": "Challenge History",
       "empty_history": "No recent challenges",
       "leaderboard_btn": "Hall of Fame",
@@ -553,46 +553,46 @@
     "ranks": {
       "bronze": "New",
       "silver": "Scholar",
-      "gold": "Mage",
-      "diamond": "Auror",
-      "master": "Grand Archmage"
+      "gold": "Advanced",
+      "diamond": "Expert",
+      "master": "Master"
     },
     "actions": {
       "find_match": "Find Opponent",
       "cancel_find": "Cancel Challenge",
-      "create_room": "Create Challenge Lobby",
+      "create_room": "Create challenge room",
       "join_pin": "Enter PIN",
-      "lobby": "Waiting Great Hall",
+      "lobby": "Waiting lobby",
       "pin_placeholder": "ROOM PIN",
       "close": "Close",
       "enter": "Join Challenge →",
       "footer_info": {
-        "summary": "General Questions",
+        "summary": "Question set",
         "questions": "10 Qs",
         "time": "30s"
       }
     },
     "create_room": {
-      "title": "OPEN <1>DUELING LOBBY</1>",
-      "name_label": "Challengeing Room Name",
+      "title": "CREATE <1>CHALLENGE ROOM</1>",
+      "name_label": "Challenge room name",
       "name_placeholder": "Ex: Grade 8 Chemistry Challenge...",
-      "mode_label": "Challengeing Mode",
-      "difficulty_label": "Material Set",
-      "admin_badge": "GRAND ARCHMAGE",
-      "auto_grade": "Auto House Grade {{grade}}",
+      "mode_label": "Challenge mode",
+      "difficulty_label": "Question set",
+      "admin_badge": "MODERATOR",
+      "auto_grade": "Auto Grade {{grade}}",
       "submit_btn": "Create Challenge Now →"
     },
     "browser": {
-      "title": "ONLINE <1>GREAT HALL</1>",
-      "refresh": "Cast Scan Questions",
-      "scanning": "Scanning lobbies...",
-      "empty_title": "Empty Hall!",
-      "empty_desc": "Create the first Challengeing room to challenge",
+      "title": "ONLINE <1>CHALLENGE ROOMS</1>",
+      "refresh": "Refresh rooms",
+      "scanning": "Loading rooms...",
+      "empty_title": "No rooms yet",
+      "empty_desc": "Create the first challenge room",
       "enter_btn": "Enter →"
     },
     "room": {
       "join_error": "Unable to join this room",
-      "loading": "Transporting...",
+      "loading": "Loading...",
       "back_btn": "Back",
       "waiting": {
         "title": "WAITING LOBBY",
@@ -603,8 +603,8 @@
         "start_btn": "Start Now"
       },
       "battle": {
-        "question": "Questions {{current}}/{{total}}",
-        "score": "Mana Points",
+        "question": "Question {{current}}/{{total}}",
+        "score": "Points",
         "time": "TIME",
         "status": {
           "label": "Status",
@@ -616,7 +616,7 @@
     },
     "moderator": {
       "instruction": "JOIN AT <1>AURUM-APPS.COM</1> WITH PIN:",
-      "leaderboard_title": "REAL-TIME HALL OF FAME",
+      "leaderboard_title": "REAL-TIME LEADERBOARD",
       "live_badge": "Live",
       "server_status": "Chemistry Circuit Running",
       "close_btn": "Close Arena ✕"
@@ -626,7 +626,7 @@
       "win": "EXCELLENT!",
       "lose": "SEE YOU AGAIN",
       "win_desc": "You conquered the chemistry arena",
-      "lose_desc": "Practice questions more for revenge",
+      "lose_desc": "Practice more to improve your result",
       "score": "Score",
       "rank": "Rank",
       "continue_btn": "Continue →"
@@ -634,58 +634,58 @@
     "difficulties": {
       "easy": "Easy (New)",
       "medium": "Medium (Scholar)",
-      "hard": "Hard (Auror)",
+      "hard": "Hard (Expert)",
       "super": "Ultimate"
     }
   },
   "common": {
-    "grade": "House Grade {{grade}}",
-    "lesson": "Library {{order}}",
-    "lesson_count_one": "Library",
-    "lesson_count_other": "Librarys",
-    "loading": "Decoding...",
+    "grade": "Grade {{grade}}",
+    "lesson": "Lesson {{order}}",
+    "lesson_count_one": "Lesson",
+    "lesson_count_other": "Lessons",
+    "loading": "Loading...",
     "back": "Back",
     "continue": "Continue",
     "save": "Save"
   },
   "my_class": {
     "sidebar": {
-      "title": "Your Houses",
-      "join_other": "Join Another House",
-      "code_placeholder": "House Code",
+      "title": "Your classes",
+      "join_other": "Join another class",
+      "code_placeholder": "Class code",
       "join_btn": "JOIN",
       "grade_label": "Grade {{grade}}",
       "teacher_prefix": "Teacher:"
     },
     "empty": {
-      "title": "No Houses Yet",
-      "desc": "You haven't joined any Houses yet. Please enter the House code provided by your Teacher to start.",
-      "placeholder": "Enter House code (Ex: XYZ1A2)",
-      "submit": "Join House Now"
+      "title": "No classes yet",
+      "desc": "You have not joined any classes yet. Enter the class code provided by your teacher to start.",
+      "placeholder": "Enter class code (Ex: XYZ1A2)",
+      "submit": "Join class"
     },
     "header": {
       "badge": "GENERAL ACTIVITY"
     },
     "feed": {
-      "title": "House Feed",
-      "empty": "No announcements or chemistry hoc_lieu from the Teacher yet.",
+      "title": "Class feed",
+      "empty": "No announcements or chemistry materials from the teacher yet.",
       "author_you": "You",
-      "private_badge": "🔒 MESSAGE PRIVY MAIL",
+      "private_badge": "🔒 PRIVATE MESSAGE",
       "sent_to_teacher": "Sent to Teacher",
-      "type_video": "PENSEVE CLIP",
+      "type_video": "LESSON VIDEO",
       "type_assignment": "CHEMISTRY CHALLENGE",
-      "type_announcement": "ACADEMY BULLETIN",
+      "type_announcement": "CLASS ANNOUNCEMENT",
       "deadline": "Deadline",
       "assignment": {
         "completed": "✓ Challenge Completed",
         "online_label": "Online",
         "result_label": "Your Chemistry Score:",
-        "start_online": "🚀 Start Online Questions Quiz ({{count}} questions)",
+        "start_online": "🚀 Start online quiz ({{count}} questions)",
         "confirm_btn": "Confirm Challenge Completion",
         "file_PDF": "Open PDF Material",
         "file_Word": "Open Word Material",
         "file_Excel": "Open Excel Material",
-        "file_Link": "Open Chemistry Portal",
+        "file_Link": "Open link",
         "file_Default": "View Chemistry Material",
         "file_Placeholder": "Paste portal link"
       }
@@ -693,55 +693,55 @@
     "schedules": {
       "title": "Upcoming Schedules",
       "empty": "No upcoming schedules",
-      "join_meet": "Join Great Hall Class"
+      "join_meet": "Join class session"
     },
     "support": {
-      "title": "Need Questions Support?",
-      "desc": "Contact your Teacher privately through message mail for assignment help.",
-      "btn": "Send Message Mail"
+      "title": "Need support?",
+      "desc": "Contact your teacher privately for assignment help.",
+      "btn": "Send message"
     },
     "message_modal": {
-      "title": "Message Message to Teacher",
-      "class_prefix": "House:",
+      "title": "Message your teacher",
+      "class_prefix": "Class:",
       "placeholder": "Enter your questions or concerns here...",
-      "sending": "Message flying...",
-      "send_btn": "Send Message Mail ➔"
+      "sending": "Sending message...",
+      "send_btn": "Send message ➔"
     },
     "viewer": {
       "from": "By Teacher",
       "deadline": "Deadline:",
       "no_deadline": "No limit",
-      "download": "Retrieve Material",
-      "loading": "Decoding material...",
+      "download": "Download material",
+      "loading": "Loading material...",
       "tab_fallback": "Open in new tab if error occurs"
     },
     "quiz": {
-      "badge": "ONLINE QUESTIONS CHALLENGE",
+      "badge": "ONLINE QUIZ",
       "progress": "Progress:",
-      "count_done": "{{done}} / {{total}} QUESTIONS SOLVED",
-      "submitting": "Submitting message...",
+      "count_done": "{{done}} / {{total}} questions answered",
+      "submitting": "Submitting...",
       "submit_btn": "Submit Now ➔",
       "essay_placeholder": "Enter your essay answer here...",
-      "essay_badge": "Essay Questions Section",
+      "essay_badge": "Essay section",
       "score_msg": "Quiz section: {{score}}/10 points.\nEssay section will be graded separately by the Teacher.",
       "success_msg": "Challenge submitted successfully! The Teacher will grade your essay section."
     }
   },
   "periodic_table": {
-    "title_main": "Ancient",
+    "title_main": "Periodic",
     "title_sub": " table",
-    "title_highlight": " of chemistry elements",
+    "title_highlight": " of elements",
     "database_label": "",
     "system_desc": "",
     "categories_title": "Element Classification",
-    "tech_manual": "Library Catalog v1.0",
+    "tech_manual": "Element database v1.0",
     "quick_guide": {
       "title": "Quick Lookup",
       "desc": "Click elements to view 3D atomic chemistry simulations"
     },
     "legend": {
       "high_boiling": "Extreme Boiling Point",
-      "gas_state": "Ghostly State"
+      "gas_state": "Gas state"
     },
     "categories": {
       "all": "All",
@@ -755,7 +755,7 @@
       "category_label": "Category:",
       "tabs": {
         "overview": "📊 Overview",
-        "discover": "🌟 Discover"
+        "discover": "🌟 Discovery"
       },
       "bohr_config": "Bohr Shell Configuration",
       "brief_intro": "Brief Introduction",
@@ -1214,27 +1214,27 @@
         "desc": "Combine substances and observe visual reactions."
       },
       "balance": {
-        "label": "Questions Balancer",
+        "label": "Equation Balancer",
         "desc": "Train your equation balancing skills with thousands of exercises."
       },
       "molecule": {
-        "label": "Linh Thach Model",
+        "label": "Molecule Model",
         "desc": "View 3D molecular structures and chemical space."
       },
       "solver": {
-        "label": "Questions Finder",
-        "desc": "Search and look up balanced questions equations instantly from the database."
+        "label": "Formula Finder",
+        "desc": "Search and look up balanced chemical equations instantly from the database."
       },
       "calculator": {
         "label": "Calculating Lab",
         "desc": "Calculate atomic mass, chemical concentration, and universal formulas."
       },
-      "start_btn": "Ignite Lab"
+      "start_btn": "Start"
     },
     "stats": {
-      "chemicals": "Brewed Chemistry",
+      "chemicals": "Chemicals used",
       "reactions": "Discovered Reactions",
-      "creativity": "Creative Mana"
+      "creativity": "Creative score"
     }
   },
   "material_detail": {
@@ -1249,45 +1249,45 @@
     "downloading_btn": "Downloading...",
     "download_error": "Automatic download failed. The material was opened in a new tab instead.",
     "phan_hoi": {
-      "title_main": "Great Hall",
+      "title_main": "Discussion",
       "title_highlight": "Discussion",
       "placeholder": "Leave your thoughts on this material...",
       "submit_btn": "Send post",
-      "submitting_btn": "Message flying...",
-      "login_required": "Please enroll to join the discussion",
-      "login_link": "Go to enrollment page",
-      "no_phan_hoi": "No comments yet. Be the first learners!",
-      "alert_login": "Please enroll to send phan_hoi!",
+      "submitting_btn": "Sending comment...",
+      "login_required": "Please log in to join the discussion",
+      "login_link": "Go to login page",
+      "no_phan_hoi": "No comments yet. Be the first learner!",
+      "alert_login": "Please log in to send feedback!",
       "err_fetch": "Error loading material data",
       "err_submit": "Error sending message post",
-      "default_user": "New Learners"
+      "default_user": "New learner"
     },
     "sidebar": {
       "file_info": "Material Info",
       "format": "Edition",
-      "posted_date": "Seal Date",
+      "posted_date": "Posted date",
       "size": "Material Size",
-      "disclaimer": "All chemistry hoc_lieu at Aurum are provided free of charge to support chemistry training. All commercialization without author's consent is strictly prohibited."
+      "disclaimer": "All chemistry materials at Aurum are provided free of charge to support learning. Commercial use without the Aurum team's consent is strictly prohibited."
     }
   },
   "library": {
     "title": "Chemistry <1>Resource Library</1>",
-    "subtitle": "A diverse repository with infographics, mind maps, worksheets, and review hoc_lieu.",
-    "search_placeholder": "Search chemistry hoc_lieu...",
-    "loading": "Loading hoc_lieu...",
+    "subtitle": "A diverse repository with infographics, mind maps, worksheets, and review materials.",
+    "search_placeholder": "Search chemistry materials...",
+    "loading": "Loading materials...",
     "categories": {
       "all": "All Materials",
-      "infographic_11": "GRADE 11 CHEMISTRY SCROLL",
-      "infographic_12": "GRADE 12 CHEMISTRY SCROLL",
-      "mindmap_10": "GRADE 10 QUESTIONS MAP",
-      "mindmap_11": "GRADE 11 QUESTIONS MAP",
-      "mindmap_12": "GRADE 12 QUESTIONS MAP",
-      "worksheet_12": "GRADE 12 WORKSHEET SCROLL",
-      "comic_10": "GRADE 10 COMIC SCROLL",
-      "comic_11": "GRADE 11 COMIC SCROLL",
-      "comic_12": "GRADE 12 COMIC SCROLL",
-      "worksheet_9": "GRADE 9 WORKSHEET SCROLL",
-      "mindmap_6": "SCIENCE 6 QUESTIONS MAP",
+      "infographic_11": "GRADE 11 CHEMISTRY INFOGRAPHICS",
+      "infographic_12": "GRADE 12 CHEMISTRY INFOGRAPHICS",
+      "mindmap_10": "GRADE 10 MIND MAPS",
+      "mindmap_11": "GRADE 11 MIND MAPS",
+      "mindmap_12": "GRADE 12 MIND MAPS",
+      "worksheet_12": "GRADE 12 WORKSHEETS",
+      "comic_10": "GRADE 10 CHEMISTRY COMICS",
+      "comic_11": "GRADE 11 CHEMISTRY COMICS",
+      "comic_12": "GRADE 12 CHEMISTRY COMICS",
+      "worksheet_9": "GRADE 9 WORKSHEETS",
+      "mindmap_6": "SCIENCE 6 MIND MAPS",
       "hoa_chung_de_thi": "CHEMISTRY GENERAL - EXAMS",
       "hoa_chung_de_on": "CHEMISTRY GENERAL - REVIEW SETS",
       "hoa_chung_anh": "CHEMISTRY GENERAL - IMAGES",
@@ -1318,36 +1318,36 @@
       "default_category": "Material"
     },
     "empty": {
-      "title": "No matching hoc_lieu found",
+      "title": "No matching materials found",
       "clear_btn": "Clear filters and try again"
     }
   },
   "bai_hoc": {
     "header": {
-      "title_journey": "Marauder's Map",
+      "title_journey": "Knowledge Map",
       "title_library": "Resource Library",
-      "subtitle_explore": "Tu Luyen",
+      "subtitle_explore": "Practice",
       "subtitle_hoc_lieu": "Materials",
-      "desc_logged_in": "Complete the storylines to become a true master chemistry.",
+      "desc_logged_in": "Complete each learning stage to strengthen your chemistry knowledge.",
       "desc_guest": "A journey to conquer chemistry from basic to advanced for new learners from grade 8 to 12."
     },
     "grade_labels": {
       "label": "Grade {{grade}}"
     },
     "status": {
-      "loading": "Opening library hoc_lieu...",
-      "empty_title_logged_in": "Please select a chamber to start your journey",
-      "empty_title_guest": "Please select a grade to show chemistry bai_hoc",
-      "empty_desc": "Explore the chemistry world of chemistry right now",
-      "err_fetch": "Error summoning bai_hoc"
+      "loading": "Loading materials...",
+      "empty_title_logged_in": "Please select a learning stage to start your journey",
+      "empty_title_guest": "Please select a grade to show chemistry lessons",
+      "empty_desc": "Explore the world of chemistry now",
+      "err_fetch": "Error loading lessons"
     },
     "card": {
-      "explore_btn": "EXPLORE CHAMBER"
+      "explore_btn": "EXPLORE LESSON"
     },
     "story_parts": {
       "8": {
         "title": "Part 1",
-        "name": "The Awakening Beginning",
+        "name": "Starting With Matter and Atoms",
         "story": "Enter the world of substances and atoms, where chemistry begins. Your mission is to understand matter and the language of formulas."
       },
       "9": {
@@ -1357,86 +1357,86 @@
       },
       "10": {
         "title": "Part 3",
-        "name": "The Macro Leap",
+        "name": "Chemical Structure and Patterns",
         "story": "Go deeper into kinetics, equilibrium, and periodic structure while connecting concepts to real chemistry problems."
       },
       "11": {
         "title": "Part 4",
-        "name": "The Organic Matrix",
-        "story": "Lost in the labyrinth of Carbon atoms. Here, life forms from complex and mysterious circuits. You must find the rules that create all life."
+        "name": "The World of Organic Chemistry",
+        "story": "Explore carbon chains, functional groups, and organic compounds connected to everyday life. Learn how structure shapes chemical behavior."
       },
       "12": {
         "title": "Part 5",
-        "name": "Reaching Evolution Peak",
-        "story": "The final stage of high-school chemistry. Overcome electrochemistry, polymers, and hoc_lieu to prepare for real applications."
+        "name": "Modern Chemistry Applications",
+        "story": "The final stage of high-school chemistry. Study electrochemistry, polymers, and materials to prepare for real applications."
       }
     }
   },
   "lesson_page": {
-    "loading": "Summoning lesson...",
+    "loading": "Loading lesson...",
     "back_btn": "Back to list",
     "grade_label": "CHEMISTRY GRADE {{grade}}",
     "content_title": "Lesson Content",
     "video": {
-      "placeholder": "Pensieve clip not available",
+      "placeholder": "Lesson video is not available",
       "powered_by": "Chemistry link by"
     },
     "error": {
-      "fetch": "Error summoning lesson data"
+      "fetch": "Error loading lesson data"
     }
   },
   "mission_modal": {
     "labels": {
-      "multiple-choice": "Multiple Choice Questions",
-      "image-selection": "Chemistry Beast Recognition",
-      "fill-in-the-blank": "Fill in Ancient Rune",
+      "multiple-choice": "Multiple choice",
+      "image-selection": "Image recognition",
+      "fill-in-the-blank": "Fill in the blank",
       "drag-drop": "Sorting Flow",
-      "matching": "Matching Questions",
-      "mission": "Learners Mission",
+      "matching": "Matching",
+      "mission": "Learning mission",
       "goal": "Training Goal"
     },
     "narrative_fallback": "Use your knowledge to complete this challenge.",
     "source_fallback": "Reference Material",
     "image_selection": {
-      "confirm": "Confirm questions {{label}} ➔",
-      "label_prefix": "Questions "
+      "confirm": "Confirm choice {{label}} ➔",
+      "label_prefix": "Choice "
     },
     "fill_blank": {
-      "placeholder": "Type ancient rune...",
-      "confirm": "Cast Questions"
+      "placeholder": "Type your answer...",
+      "confirm": "Confirm answer"
     },
     "drag_drop": {
       "instruction": "Drag to reorder questions sequence correctly",
       "confirm": "Confirm Sequence ➔"
     },
     "matching": {
-      "instruction": "Questions Meanings (Drag & Drop)",
-      "col_a": "Questions",
+      "instruction": "Column B (drag and drop)",
+      "col_a": "Column A",
       "col_b": "Meaning",
-      "confirm": "Confirm Questions ➔"
+      "confirm": "Confirm matches ➔"
     },
     "footer": {
       "cancel": "Suspend Training",
-      "correct": "✨ Correct! Questions holds! {{status}}",
-      "wrong": "❌ Questions backfired, try again!",
-      "status_final": "Learners mission accomplished!",
-      "status_next": "Next chamber..."
+      "correct": "✨ Correct! {{status}}",
+      "wrong": "❌ Not quite. Try again!",
+      "status_final": "Mission completed!",
+      "status_next": "Next..."
     }
   },
   "stage_video": {
     "back_btn": "Back",
     "status": {
       "label": "Lab Status:",
-      "ready": "Mana Ready",
-      "analyzing": "Refining chemical..."
+      "ready": "Ready",
+      "analyzing": "Processing..."
     },
     "metadata": {
-      "source": "Source: Aurum Pensieve 01",
-      "format": "Format: Extracted Chemistry Memory"
+      "source": "Source: Aurum lesson feed 01",
+      "format": "Format: 1080p digital feed"
     },
     "action_btn": {
       "ready": "Accept Challenge",
-      "processing": "Refining Data..."
+      "processing": "Processing data..."
     },
     "hints": {
       "ready": "Data ready. Continue when you are prepared.",
@@ -1451,43 +1451,43 @@
     "solo_short": "1 VS 1",
     "3vs3_short": "3 VS 3",
     "5vs5_short": "5 VS 5",
-    "br_short": "Learners War"
+    "br_short": "Battle Royale"
   },
   "widget": {
-    "title": "Patronus Assistant",
-    "status_active": "Patronus active",
+    "title": "Aurum Assistant",
+    "status_active": "Assistant active",
     "minimize": "Dismiss",
-    "close": "Banish",
-    "tooltip": "Patronus Charm",
-    "login_required": "Enrollment Required",
-    "login_required_desc": "Please enroll in the Learning Hub to track and claim rewards from daily learners nhiem_vu.",
-    "login_now": "Enroll Now",
-    "level_prefix": "Mana Level",
+    "close": "Close",
+    "tooltip": "Aurum Assistant",
+    "login_required": "Login required",
+    "login_required_desc": "Please log in to track and claim rewards from daily missions.",
+    "login_now": "Log in now",
+    "level_prefix": "Level",
     "streak": "Training Streak",
     "reset_in": "Chemistry reset in:",
     "reward": "Badge Reward",
     "reward_elements": "Reward elements:",
     "claim": "Claim",
     "claimed": "Claimed ✓",
-    "locked": "Sealed",
+    "locked": "Locked",
     "no_nhiem_vu": "No learners nhiem_vu available",
-    "phan_hoi_type": "Chemistry Feedback:",
-    "phan_hoi_details": "Material details:",
-    "type_suggestion": "💡 Chemistry Idea",
-    "type_bug": "🐛 Pest Infestation (Bug)",
-    "type_praise": "❤️ Praise Learning Hub",
+    "phan_hoi_type": "Feedback type:",
+    "phan_hoi_details": "Details:",
+    "type_suggestion": "💡 Suggestion",
+    "type_bug": "🐛 Bug report",
+    "type_praise": "❤️ Praise",
     "placeholder_suggestion": "Describe your chemistry idea to help improve the lab...",
-    "placeholder_bug": "Describe the chemistry pest (bug) in detail (and press Ctrl+V to paste screenshot)...",
+    "placeholder_bug": "Describe the issue in detail (and press Ctrl+V to paste a screenshot if available)...",
     "placeholder_praise": "Share what you love about the Aurum of Chemistry...",
-    "attach_image": "📷 Attach Vision (Or Ctrl+V)",
+    "attach_image": "📷 Attach image (or Ctrl+V)",
     "remove": "Remove",
-    "attach_hint": "Support image file or press Ctrl+V to paste vision directly.",
-    "sending": "Message flying to Grand Council...",
-    "send_suggestion": "Send Idea Message ➔",
-    "send_bug": "Report Pest Message ➔",
-    "send_praise": "Send Praise Message ➔",
+    "attach_hint": "Upload an image file or press Ctrl+V to paste a screenshot directly.",
+    "sending": "Sending feedback...",
+    "send_suggestion": "Send suggestion ➔",
+    "send_bug": "Report issue ➔",
+    "send_praise": "Send praise ➔",
     "success_title": "Message Received!",
-    "success_desc": "Your message has been successfully delivered to the Aurum Grand Council.",
+    "success_desc": "Your feedback has been sent successfully to the Aurum admin team.",
     "send_another": "Send Another Message"
   }
 }

@@ -8,13 +8,13 @@
   "chapter": "Chương 1: Cấu tạo nguyên tử",
   "order": 3,
   "isPremium": false,
-  "description": "Sự phân bố electron theo lớp, phân lớp and nguyên tắc viết cấu hình electron.",
+  "description": "Sự phân bố electron theo lớp, phân lớp và nguyên tắc viết cấu hình electron.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Lớp and phân lớp electron",
+        "text": "1. Lớp và phân lớp electron",
         "level": "h2"
       }
     },
@@ -81,7 +81,7 @@
       "title": "Bài giảng: Cấu trúc lớp vỏ electron nguyên tử",
       "url": "https://www.youtube.com/watch?v=6zZqqyuwrOU",
       "thumbnail": "https://img.youtube.com/vi/6zZqqyuwrOU/0.jpg",
-      "description": "Sự phân bố electron vào các lớp, phân lớp and cách viết cấu hình electron (VietJack)."
+      "description": "Sự phân bố electron vào các lớp, phân lớp và cách viết cấu hình electron (VietJack)."
     }
   ],
   "practiceModules": [],

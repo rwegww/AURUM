@@ -3,12 +3,12 @@
   "classId": 11,
   "lessonId": 10,
   "programId": "ketnoi",
-  "title": "Bài 10. Hợp chất hữu cơ and hóa học hữu cơ",
+  "title": "Bài 10. Hợp chất hữu cơ và hóa học hữu cơ",
   "chapter": "Chương 3. Đại cương về hóa học hữu cơ",
   "order": 10,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Khái niệm Hóa học hữu cơ, đặc điểm chung của hợp chất hữu cơ and cách phân loại.",
+  "description": "Khái niệm Hóa học hữu cơ, đặc điểm chung của hợp chất hữu cơ và cách phân loại.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,15 +22,15 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Bước qua ranh giới Vô Cơ, Hóa học mở toang cánh cửa Vĩ Đại nhất Vũ trụ sinh học mang tên Hóa Học Hữu Cơ. Đây là Lãnh địa độc tôn nghiên cứu CÁC HỢP CHẤT CỦA NGUYÊN TỐ CARBON (Bộ Khung Sự Sống Của Hành Tinh). Từ Dầu Mỏ Nhớt Thô, Sợi Bông Quần Áo, Vỏ Gai Xưng Mộc, Dược Phẩm Thuốc Chống Đau, cho đến Cơ Nhục Máu màng gen Di Truyền, tất cả đều là các dải Khung Hữu Cơ Chứa Carbon.\nTuy vậy, xin loại bỏ nhầm lẫn vài mảnh vỡ của Carbon Vô Cơ (Khí CO, CO2, Muối sủi bọt Đá Voi CaCo3, tinh quặng Xyanua NaCN...)."
+        "text": "Hóa học hữu cơ là ngành nghiên cứu các hợp chất của carbon. Các hợp chất hữu cơ có mặt trong dầu mỏ, khí đốt, sợi tự nhiên, dược phẩm, thực phẩm và cơ thể sống. Một số hợp chất của carbon như CO, CO2, muối carbonate, muối cyanide thường được xếp vào nhóm hợp chất vô cơ."
       }
     },
     {
       "id": "mod3",
       "type": "infoBox",
       "content": {
-        "title": "Mạng Lưới Vạn Hóa của Khung Carbon",
-        "content": "Thành Phần Khai Mở Bảng Công Thức: \nÔng Hoàng Bá Chủ Tuyệt đối **C (Carbon)** là bắt buộc hiện diện khung xương. Phó Tướng Hợp tác Mọi ngõ ngách **H (Hydrogen)** kìm kẹp vỏ bọc. Nhóm Tham Tán Điểm Chức Biến Dịch gồm **O, N, Halogen (Cl, Br), S, P** gắn vào thân gốc tạo nên đủ Hệ Loại Rượu, Acid, Amino bốc vị.",
+        "title": "Thành phần thường gặp của hợp chất hữu cơ",
+        "content": "Hợp chất hữu cơ luôn chứa carbon và thường có hydrogen. Ngoài ra, nhiều hợp chất hữu cơ còn chứa oxygen, nitrogen, halogen, sulfur hoặc phosphorus. Sự có mặt của các nguyên tố này tạo nên nhiều nhóm chức khác nhau như alcohol, carboxylic acid, amine và ester.",
         "color": "blue"
       }
     },
@@ -48,12 +48,12 @@
       "content": {
         "type": "bullet",
         "items": [
-          "Đặc Tính Đồng Bộ - Thể Dáng Nhận Diện Hữu Cơ:",
-          "1. Liên Kết Lũng Bắt Cặp Cộng Hóa Trị: Không chơi trò chia rẽ Nhường Tách Ion hăm hở vô cơ. Carbon chèn dính với nhau rịt kẹp Đôi Electron Chung thành Dây Sợi Chằng Trị siêu bền Khung Cacbon.",
-          "2. Vật Lí Bay Hơi Mong Lanh: Đa số tản mác mây khói, Nóng Chảy Sôi cực Thấp bé (Cồn Alcohol bóp là bốc sát khuẩn tay, Xăng xe vút hơi trạm mĩ).",
-          "3. Khắc Tinh Với Nước - Đam Mê Dung Môi: Mỡ Ẩm Heo, Dầu Thô Nhớt KHÔNG tan rỉ chìm trong Nước mà nổi bềnh trương phềnh. Chúng chỉ tan trong Cồn Xăng Benzene, Dung Môi Tẩy.",
-          "4. Đặc Điểm Bùng Lửa Đen: Rất nhạy bắt mồi Cháy Sinh Nhiệt (Khí Đốt Thành Phố). Thường nướng cháy đen xém đứt than.",
-          "5. Tốc Đo Phản Ứng Trì Trệ Ục Ịch: Không Bòm nổ tan như pháo. Phản ứng Hóa Hữu Cơ rề rà, chậm lụt, dắt kẹp xúc tác nhiệt độ đun tăm and thường vỡ vụn lóc cóc ra Nhiều Sản Phẩm Phụ Mảng dính rể."
+          "Các hợp chất hữu cơ thường có một số đặc điểm chung:",
+          "1. Liên kết trong phân tử chủ yếu là liên kết cộng hóa trị.",
+          "2. Nhiệt độ nóng chảy và nhiệt độ sôi thường thấp hơn nhiều hợp chất ion.",
+          "3. Nhiều hợp chất hữu cơ ít tan trong nước nhưng tan trong dung môi hữu cơ như ethanol, ether hoặc benzene.",
+          "4. Nhiều hợp chất hữu cơ dễ cháy và khi cháy hoàn toàn thường tạo $CO_2$ và $H_2O$.",
+          "5. Phản ứng hữu cơ thường xảy ra chậm, cần điều kiện thích hợp và có thể tạo nhiều sản phẩm phụ."
         ]
       }
     },
@@ -69,15 +69,15 @@
       "id": "mod7",
       "type": "paragraph",
       "content": {
-        "text": "Để phân loài hàng Trăm Căn triệu Dãy Hữu Cơ dạo bước, Ngành Học chia nhánh Thành 2 Nhánh Cây Rèn Chính:\n**1. Tổ Kiếm Hydrocarbon (Kẻ Trọc Thân):** Đảo Dầu Mỏ nguyên dải. Trong ruột Toàn Vẹn CHỈ CÓ c and H (Đơn Giản Tinh Tuyến). (Ví dụ Khí Gas Nấu Ăn CH4, Ống Nhựa Ethylene C2H4, Vòng Benzene Hóa dầu Lắng).\n**2. Thế Giới Dẫn Xuất Hydrocarbon (Kẻ Nhồi Bom Chức Năng):** Gắn thọc thêm ngòi O, N, CL, vào thân tảng. Gây ra Khí Chức. (Ví Dụ Cồn Nhậu C2H5-OH chứa gốc OH Rượu. Hoặc Dấm Chua Ăn Cơm CH3-COOH chứa gốc chua rỗng Axit)."
+        "text": "Hợp chất hữu cơ thường được chia thành hai nhóm chính:\n\n**1. Hydrocarbon:** Chỉ chứa carbon và hydrogen, ví dụ methane ($CH_4$), ethylene ($C_2H_4$), benzene ($C_6H_6$).\n\n**2. Dẫn xuất hydrocarbon:** Ngoài carbon và hydrogen còn có nguyên tố khác như O, N, Cl, Br. Ví dụ ethanol ($C_2H_5OH$) chứa nhóm $-OH$, acetic acid ($CH_3COOH$) chứa nhóm $-COOH$."
       }
     },
     {
       "id": "mod8",
       "type": "warningBox",
       "content": {
-        "title": "Khí Thở Vượt Não Ranh Giới Chức Năng Nhóm Chức",
-        "content": "Khái niệm Cực Đại Học: Nhóm Chức Học Hữu Cơ. Toàn bộ Cái Khung Carbon Hydro dù bự hàng ngàn hạt C cũng chỉ là cái Cán Chổi mộc vô dụng. Cái Cục Nối Điểm Đuôi (Nhóm Chức) mới quyết định Năng Lực Pháp Thuật Của Hữu Cơ. Chứa gốc (-OH) là bốc hơi Mùi men cồn Nhậu Say. Chứa Gốc (-COOH) là cắn răng nhăn trán Vị Giấm Chua Axit cặn sỏi ngứa. Học Hữu cơ Chính là môn Ráp Chức Đổi Thuộc Tính Khớp Module.",
+        "title": "Vai trò của nhóm chức",
+        "content": "Nhóm chức là nguyên tử hoặc nhóm nguyên tử gây ra tính chất đặc trưng của một loại hợp chất hữu cơ. Ví dụ, nhóm $-OH$ đặc trưng cho alcohol, còn nhóm $-COOH$ đặc trưng cho carboxylic acid. Khi nhận biết được nhóm chức, học sinh có thể dự đoán nhiều tính chất và phản ứng cơ bản của hợp chất.",
         "color": "orange"
       }
     }
@@ -105,16 +105,16 @@
         "Tan vô hạn trong nước."
       ],
       "correctAnswer": 1,
-      "explanation": "Hợp chất hữu cơ có đặc điểm liên kết cộng hóa trị, nhiệt độ sôi thấp, phản ứng thường chậm and ít tan trong nước."
+      "explanation": "Hợp chất hữu cơ có đặc điểm liên kết cộng hóa trị, nhiệt độ sôi thấp, phản ứng thường chậm và ít tan trong nước."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Hợp chất hữu cơ and hóa học hữu cơ",
+      "title": "Bài giảng: Hợp chất hữu cơ và hóa học hữu cơ",
       "url": "https://www.youtube.com/watch?v=woTztyoYXiU",
       "thumbnail": "https://img.youtube.com/vi/woTztyoYXiU/0.jpg",
-      "description": "Giới thiệu về thế giới hợp chất hữu cơ and các nhóm chức phổ biến (VietJack)."
+      "description": "Giới thiệu về thế giới hợp chất hữu cơ và các nhóm chức phổ biến (VietJack)."
     }
   ],
   "practiceModules": [],

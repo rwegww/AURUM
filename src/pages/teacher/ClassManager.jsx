@@ -1,6 +1,7 @@
 ﻿import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const ClassManager = () => {
   const [lop, setClasses] = useState([]);
@@ -41,13 +42,16 @@ const ClassManager = () => {
         },
         body: JSON.stringify({ ...newClass, khoi_id: parseInt(newClass.khoi_id) })
       });
-      if (res.ok) {
+      const result = await parseAdminMutationResponse(res);
+      notifyAdminApprovalResult(result);
+      if (!result.pendingApproval) {
         setIsCreating(false);
         setNewClass({ name: '', khoi_id: '10', description: '' });
         fetchClasses();
       }
     } catch (err) {
       console.error(err);
+      alert(err.message || 'Không thể tạo lớp học.');
     }
   };
 

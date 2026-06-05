@@ -8,13 +8,13 @@
   "order": 15,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Cấu tạo, danh pháp, tính chất and ứng dụng của alkan. Nhận biết phản ứng đặc trưng là phản ứng thế and cracking.",
+  "description": "Cấu tạo, danh pháp, tính chất và ứng dụng của alkan. Nhận biết phản ứng đặc trưng là phản ứng thế và cracking.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Khái niệm and cấu tạo",
+        "text": "1. Khái niệm và cấu tạo",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Chương 4 Lộ Diện Trùm Đặc Vụ Vi Tiền Lẻ Cuối Cùng - Băng Nhóm HYDROCARBON. \nBang Hội mở màn là ALKANE (Hay dân gian quen Thét gọi Lão Làng Paraffin Nhám No Đầy). \n100% Phân tử Mập ú Không Có Viền Mảnh chỉ cắm Rễ toàn Liên Kết Đập Thẳng Đơn Cốt Lõi (Ký Hiệu Sigma $\\sigma$ siêu cấp bền dẻo Dai Bẻ Dứt Khoáng). Chúng Bịt Lỗ Lót Sạc kín toàn C and H Bão Hòa Nung Chảy Phân Tử (Không Còn Tay Dư Đón Nhận cộng chắp Xúc Tua nào Nữa)."
+        "text": "Chương 4 Lộ Diện Trùm Đặc Vụ Vi Tiền Lẻ Cuối Cùng - Băng Nhóm HYDROCARBON. \nBang Hội mở màn là ALKANE (Hay dân gian quen Thét gọi Lão Làng Paraffin Nhám No Đầy). \n100% Phân tử Mập ú Không Có Viền Mảnh chỉ cắm Rễ toàn Liên Kết Đập Thẳng Đơn Cốt Lõi (Ký Hiệu Sigma $\\sigma$ siêu cấp bền dẻo Dai Bẻ Dứt Khoáng). Chúng Bịt Lỗ Lót Sạc kín toàn C và H Bão Hòa Nung Chảy Phân Tử (Không Còn Tay Dư Đón Nhận cộng chắp Xúc Tua nào Nữa)."
       }
     },
     {
@@ -30,7 +30,7 @@
       "type": "infoBox",
       "content": {
         "title": "Đế Tôn Định Mệnh Tướng",
-        "content": "Công thức Đế Quan Cốt Lõi Phổ Quát Nhất Của Hệ Alkane: Lập Nền $(C_n H_{2n+2})$ (Với Điều kiện rễ mốc $n \\ge 1$).\nVí Cớ Mạng Nhện $\\sigma$ kết dính toàn diện chắc mịt, Alkane vô cùng Khinh Ghet and Bất Hợp Tác Phản Ứng with MỌI DUNG DỊCH (Axit, Kiem, Nhúng Thuốc Bromine, Nước Tẩy Nhạt Lòa KMnO4). Chúng Lầm lầm, Trơ lì lạnh cảm (Sự Trơ hóa học parafin).",
+        "content": "Công thức Đế Quan Cốt Lõi Phổ Quát Nhất Của Hệ Alkane: Lập Nền $(C_n H_{2n+2})$ (Với Điều kiện rễ mốc $n \\ge 1$).\nVí Cớ Mạng Nhện $\\sigma$ kết dính toàn diện chắc mịt, Alkane vô cùng Khinh Ghet và Bất Hợp Tác Phản Ứng với MỌI DUNG DỊCH (Axit, Kiem, Nhúng Thuốc Bromine, Nước Tẩy Nhạt Lòa KMnO4). Chúng Lầm lầm, Trơ lì lạnh cảm (Sự Trơ hóa học parafin).",
         "color": "blue"
       }
     },
@@ -100,11 +100,11 @@
         "Phản ứng trùng hợp phân tử lớn."
       ],
       "correctAnswer": 1,
-      "explanation": "Phản ứng thế with các halogen khi đun nóng hoặc chiếu sáng là phản ứng đặc trưng của alkane."
+      "explanation": "Phản ứng thế với các halogen khi đun nóng hoặc chiếu sáng là phản ứng đặc trưng của alkane."
     },
     {
       "id": "q2",
-      "question": "Một alkane X khi cháy tạo 0,2 mol CO2 and 0,3 mol H2O. Tên gọi (hay công thức) của Alkane đó là?",
+      "question": "Một alkane X khi cháy tạo 0,2 mol CO2 và 0,3 mol H2O. Tên gọi (hay công thức) của Alkane đó là?",
       "options": [
         "CH4 (Methane)",
         "C2H6 (Ethane)",
@@ -121,7 +121,7 @@
       "title": "Bài giảng: alkane",
       "url": "https://www.youtube.com/watch?v=CYH2FW4Fe0Q",
       "thumbnail": "https://img.youtube.com/vi/CYH2FW4Fe0Q/0.jpg",
-      "description": "Đặc điểm cấu tạo, tính chất vật lí, hóa học and ứng dụng của các hydrocarbon no (VietJack)."
+      "description": "Đặc điểm cấu tạo, tính chất vật lí, hóa học và ứng dụng của các hydrocarbon no (VietJack)."
     }
   ],
   "practiceModules": [],

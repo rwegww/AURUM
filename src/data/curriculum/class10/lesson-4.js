@@ -8,7 +8,7 @@
   "chapter": "Chương 1: Cấu tạo nguyên tử",
   "order": 4,
   "isPremium": false,
-  "description": "Luyện tập kỹ năng tính toán p, n, e, số khối and viết cấu hình electron.",
+  "description": "Luyện tập kỹ năng tính toán p, n, e, số khối và viết cấu hình electron.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Mỗi nguyên tử được đặc trưng bởi hai đại lượng quan trọng:\n- **Số hiệu nguyên tử (Z)**: Bằng số đơn vị điện tích hạt nhân, xác định vị trí của nguyên tố trong bảng tuần hoàn.\n- **Số khối (A)**: Tổng số hạt proton and neutron ($A = Z + N$).\n\n**Đồng vị**: Là những nguyên tử có cùng số proton nhưng khác nhau về số neutron, dẫn đến sự khác biệt về số khối. Khối lượng nguyên tử trung bình ($overline{A}$) được tính theo trọng số phần trăm của các đồng vị tự nhiên."
+        "text": "Mỗi nguyên tử được đặc trưng bởi hai đại lượng quan trọng:\n- **Số hiệu nguyên tử (Z)**: Bằng số đơn vị điện tích hạt nhân, xác định vị trí của nguyên tố trong bảng tuần hoàn.\n- **Số khối (A)**: Tổng số hạt proton và neutron ($A = Z + N$).\n\n**Đồng vị**: Là những nguyên tử có cùng số proton nhưng khác nhau về số neutron, dẫn đến sự khác biệt về số khối. Khối lượng nguyên tử trung bình ($overline{A}$) được tính theo trọng số phần trăm của các đồng vị tự nhiên."
       }
     },
     {
@@ -38,7 +38,7 @@
       "id": "mod4",
       "type": "heading",
       "content": {
-        "text": "2. Cấu trúc lớp vỏ and Cấu hình electron",
+        "text": "2. Cấu trúc lớp vỏ và Cấu hình electron",
         "level": "h2"
       }
     },
@@ -54,7 +54,7 @@
       "type": "warningBox",
       "content": {
         "title": "Các trường hợp cấu hình electron đặc biệt",
-        "content": "Cần lưu ý trạng thái **bán bão hòa** and **bão hòa** phân lớp d giúp nguyên tử bền vững hơn:\n- Chromium ($Z=24$): $[Ar] 3d^5 4s^1$ (thay vì $3d^4 4s^2$).\n- Copper ($Z=29$): $[Ar] 3d^{10} 4s^1$ (thay vì $3d^9 4s^2$).",
+        "content": "Cần lưu ý trạng thái **bán bão hòa** và **bão hòa** phân lớp d giúp nguyên tử bền vững hơn:\n- Chromium ($Z=24$): $[Ar] 3d^5 4s^1$ (thay vì $3d^4 4s^2$).\n- Copper ($Z=29$): $[Ar] 3d^{10} 4s^1$ (thay vì $3d^9 4s^2$).",
         "color": "orange"
       }
     }

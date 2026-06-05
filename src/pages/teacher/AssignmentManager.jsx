@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 import { ClipboardList, X } from 'lucide-react';
+import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const AssignmentManager = () => {
     const [assignments, setAssignments] = useState([]);
@@ -65,9 +66,12 @@ const AssignmentManager = () => {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            if (res.ok) fetchInitialData();
+            const result = await parseAdminMutationResponse(res);
+            notifyAdminApprovalResult(result);
+            if (!result.pendingApproval) fetchInitialData();
         } catch (err) {
             console.error(err);
+            alert(err.message || 'Không thể xóa bài tập.');
         }
     };
 
@@ -170,8 +174,9 @@ const AssignmentManager = () => {
                 })
             });
 
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.error || 'Không thể tạo bài tập lúc này.');
+            const result = await parseAdminMutationResponse(res);
+            notifyAdminApprovalResult(result);
+            if (result.pendingApproval) return;
 
             fetchInitialData();
             setIsModalOpen(false);
@@ -217,8 +222,9 @@ const AssignmentManager = () => {
                     phan_hoi: grading.phan_hoi
                 })
             });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) throw new Error(data.error || 'Không thể lưu kết quả chấm điểm.');
+            const result = await parseAdminMutationResponse(res);
+            notifyAdminApprovalResult(result);
+            if (result.pendingApproval) return;
 
             fetchSubmissions(viewingSubmissions.id);
             setGrading({ studentId: null, score: '', phan_hoi: '' });

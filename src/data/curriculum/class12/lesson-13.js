@@ -85,7 +85,7 @@
         "Tơ nilon-6."
       ],
       "correctAnswer": 2,
-      "explanation": "Tơ viscose and tơ cellulose acetate được chế biến hóa học từ polymer thiên nhiên (cellulose) nên được gọi là tơ bán tổng hợp."
+      "explanation": "Tơ viscose và tơ cellulose acetate được chế biến hóa học từ polymer thiên nhiên (cellulose) nên được gọi là tơ bán tổng hợp."
     }
   ],
   "videoModules": [
@@ -94,7 +94,7 @@
       "title": "Bài giảng: Vật liệu Polymer",
       "url": "https://www.youtube.com/watch?v=iYpVgMWlkg0",
       "thumbnail": "https://img.youtube.com/vi/iYpVgMWlkg0/0.jpg",
-      "description": "Tìm hiểu về chất dẻo, tơ sợi, cao su and keo dán (VietJack)."
+      "description": "Tìm hiểu về chất dẻo, tơ sợi, cao su và keo dán (VietJack)."
     }
   ],
   "practiceModules": [],

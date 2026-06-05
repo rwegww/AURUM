@@ -59,7 +59,7 @@
       "title": "Bài giảng: Ôn tập chương 5",
       "url": "https://www.youtube.com/watch?v=g8G07i_XGOk",
       "thumbnail": "https://img.youtube.com/vi/g8G07i_XGOk/0.jpg",
-      "description": "Hệ thống hóa kiến thức về năng lượng hóa học and các bài tập enthalpy (VietJack)."
+      "description": "Hệ thống hóa kiến thức về năng lượng hóa học và các bài tập enthalpy (VietJack)."
     }
   ],
   "practiceModules": [],
@@ -93,7 +93,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Công thức liên hệ nhiệt lượng and biến thiên Enthalpy là: $Q = -n \\Delta H$. Nếu $\\Delta H$ âm thì Q như thế nào?",
+        "question": "Công thức liên hệ nhiệt lượng và biến thiên Enthalpy là: $Q = -n \\Delta H$. Nếu $\\Delta H$ âm thì Q như thế nào?",
         "options": [
           "Dương (tỏa nhiệt)",
           "Âm",

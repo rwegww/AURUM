@@ -304,7 +304,7 @@
       },
       {
         "type": "multiple-choice",
-        "question": "Ở cùng điều kiện nhiệt độ và áp suất, 1 mol khí $CO_2$ and 1 mol khí $H_2$ có điểm gì chung?",
+        "question": "Ở cùng điều kiện nhiệt độ và áp suất, 1 mol khí $CO_2$ và 1 mol khí $H_2$ có điểm gì chung?",
         "options": [
           "Cùng khối lượng",
           "Cùng thể tích",

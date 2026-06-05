@@ -88,7 +88,7 @@
       "title": "Ôn tập chương 3: Hợp chất chứa nitrogen",
       "url": "https://www.youtube.com/watch?v=Foi6GiPxwfc",
       "thumbnail": "https://img.youtube.com/vi/Foi6GiPxwfc/0.jpg",
-      "description": "Tổng kết kiến thức trọng tâm and giải bài tập ôn tập chương 3 (Tech12h)."
+      "description": "Tổng kết kiến thức trọng tâm và giải bài tập ôn tập chương 3 (Tech12h)."
     }
   ],
   "practiceModules": [],

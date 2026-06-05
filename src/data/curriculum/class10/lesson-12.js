@@ -8,7 +8,7 @@
   "chapter": "Chương 3: Liên kết hóa học",
   "order": 12,
   "isPremium": false,
-  "description": "Sự dùng chung electron, phân cực and không phân cực.",
+  "description": "Sự dùng chung electron, phân cực và không phân cực.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -29,7 +29,7 @@
       "id": "mod3",
       "type": "heading",
       "content": {
-        "text": "2. Liên kết cộng hóa trị phân cực and không phân cực",
+        "text": "2. Liên kết cộng hóa trị phân cực và không phân cực",
         "level": "h2"
       }
     },
@@ -100,7 +100,7 @@
         "options": [
           "Hai nguyên tử giống nhau",
           "Hai nguyên tử có độ âm điện rất khác nhau",
-          "Kim loại and Phi kim",
+          "Kim loại và Phi kim",
           "Hai ion trái dấu"
         ],
         "correctAnswer": 0,
@@ -136,7 +136,7 @@
         "type": "multiple-choice",
         "question": "Mạng tinh thể nguyên tử (vd: Kim cương) có đặc điểm là:",
         "options": [
-          "Cực kỳ cứng and nhiệt độ nóng chảy rất cao",
+          "Cực kỳ cứng và nhiệt độ nóng chảy rất cao",
           "Dễ tan trong nước",
           "Dẫn điện tốt",
           "Mềm dẻo"

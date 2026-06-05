@@ -74,6 +74,7 @@ const UserDetail = lazyWithRetry(() => import('@/pages/admin/UserDetail'));
 const JourneyManager = lazyWithRetry(() => import('@/pages/admin/JourneyManager'));
 const JourneyDetail = lazyWithRetry(() => import('@/pages/admin/JourneyDetail'));
 const FeedbackManager = lazyWithRetry(() => import('@/pages/admin/FeedbackManager'));
+const ApprovalManager = lazyWithRetry(() => import('@/pages/admin/ApprovalManager'));
 
 // Lazy Loaded Teacher Modules
 const TeacherLayout = lazyWithRetry(() => import('@/components/layout/TeacherLayout'));
@@ -168,7 +169,9 @@ function AppContent() {
              <Route path="bai_hoc" element={<LessonManager />} />
              <Route path="nguoi_dung" element={<UserManager />} />
              <Route path="nguoi_dung/:id" element={<UserDetail />} />
+             <Route path="feedback" element={<FeedbackManager />} />
              <Route path="phan_hoi" element={<FeedbackManager />} />
+             <Route path="approvals" element={<ApprovalManager />} />
           </Route>
 
           {/* Protected Teacher Routes */}

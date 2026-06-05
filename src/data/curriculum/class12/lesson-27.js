@@ -81,7 +81,7 @@
         "Tính dẫn điện cao của các electron tự do."
       ],
       "correctAnswer": 0,
-      "explanation": "Trong các phức chất and hợp chất của kim loại chuyển tiếp, phân lớp d bị chia thành các mức năng lượng khác nhau. Electron hấp thụ ánh sáng nhìn thấy để chuyển giữa các mức này, tạo nên màu sắc đặc trưng."
+      "explanation": "Trong các phức chất và hợp chất của kim loại chuyển tiếp, phân lớp d bị chia thành các mức năng lượng khác nhau. Electron hấp thụ ánh sáng nhìn thấy để chuyển giữa các mức này, tạo nên màu sắc đặc trưng."
     },
     {
       "id": "q2",
@@ -102,7 +102,7 @@
       "title": "Bài giảng: Đại cương về kim loại chuyển tiếp dãy thứ nhất",
       "url": "https://www.youtube.com/watch?v=C9dQAxBpEgM",
       "thumbnail": "https://img.youtube.com/vi/C9dQAxBpEgM/0.jpg",
-      "description": "Khám phá cấu hình electron d đặc biệt and các trạng thái oxi hóa đa dạng của kim loại chuyển tiếp (VietJack)."
+      "description": "Khám phá cấu hình electron d đặc biệt và các trạng thái oxi hóa đa dạng của kim loại chuyển tiếp (VietJack)."
     }
   ],
   "practiceModules": [],

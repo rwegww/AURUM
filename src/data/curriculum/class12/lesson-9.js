@@ -86,7 +86,7 @@
     },
     {
       "id": "q2",
-      "question": "Chất nào sau đây KHÔNG tham gia phản ứng màu Biuret (tạo màu tím with $Cu(OH)_2/NaOH$)?",
+      "question": "Chất nào sau đây KHÔNG tham gia phản ứng màu Biuret (tạo màu tím với $Cu(OH)_2/NaOH$)?",
       "options": [
         "Lòng trắng trứng (Albumin).",
         "Dipeptide Gly-Ala.",
@@ -94,16 +94,16 @@
         "Polypeptide."
       ],
       "correctAnswer": 1,
-      "explanation": "Phản ứng màu Biuret chỉ xảy ra with các peptide có từ 2 liên kết peptide trở lên (tức là từ tripeptide trở lên). Dipeptide chỉ có 1 liên kết peptide nên không có phản ứng này."
+      "explanation": "Phản ứng màu Biuret chỉ xảy ra với các peptide có từ 2 liên kết peptide trở lên (tức là từ tripeptide trở lên). Dipeptide chỉ có 1 liên kết peptide nên không có phản ứng này."
     }
   ],
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Amino acid and Peptide",
+      "title": "Bài giảng: Amino acid và Peptide",
       "url": "https://www.youtube.com/watch?v=c1MyZSe2H3Y",
       "thumbnail": "https://img.youtube.com/vi/c1MyZSe2H3Y/0.jpg",
-      "description": "Cấu tạo, tính chất của amino acid and khái niệm về peptide (VietJack)."
+      "description": "Cấu tạo, tính chất của amino acid và khái niệm về peptide (VietJack)."
     }
   ],
   "practiceModules": [],

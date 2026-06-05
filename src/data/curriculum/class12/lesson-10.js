@@ -73,11 +73,11 @@
         "Màu tím."
       ],
       "correctAnswer": 2,
-      "explanation": "Protein phản ứng with $HNO_3$ tạo thành kết tủa màu vàng do phản ứng thế nhóm nitro vào nhân thơm của một số amino acid trong protein (như Tyrosine)."
+      "explanation": "Protein phản ứng với $HNO_3$ tạo thành kết tủa màu vàng do phản ứng thế nhóm nitro vào nhân thơm của một số amino acid trong protein (như Tyrosine)."
     },
     {
       "id": "q2",
-      "question": "Đặc điểm nào sau đây KHÔNG đúng with enzyme?",
+      "question": "Đặc điểm nào sau đây KHÔNG đúng với enzyme?",
       "options": [
         "Enzyme là chất xúc tác sinh học.",
         "Mỗi enzyme có thể xúc tác cho mọi loại phản ứng hóa học.",
@@ -91,10 +91,10 @@
   "videoModules": [
     {
       "id": "v1",
-      "title": "Bài giảng: Protein and Enzyme",
+      "title": "Bài giảng: Protein và Enzyme",
       "url": "https://www.youtube.com/watch?v=G3Yu1986BtA",
       "thumbnail": "https://img.youtube.com/vi/G3Yu1986BtA/0.jpg",
-      "description": "Cấu trúc, tính chất của protein and vai trò của enzyme trong cơ thể (VietJack)."
+      "description": "Cấu trúc, tính chất của protein và vai trò của enzyme trong cơ thể (VietJack)."
     }
   ],
   "practiceModules": [],

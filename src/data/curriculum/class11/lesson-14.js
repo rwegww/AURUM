@@ -8,7 +8,7 @@
   "order": 14,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Tổng hợp các nền tảng kiến thức bắt buộc trước khi chuyển sang các bài hydrocarbon and dẫn xuất hữu cơ chi tiết.",
+  "description": "Tổng hợp các nền tảng kiến thức bắt buộc trước khi chuyển sang các bài hydrocarbon và dẫn xuất hữu cơ chi tiết.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -28,7 +28,7 @@
           "Tường 1: Nắm bắt Hữu cơ là Nắm bắt Sự Sống Mạch Carbon. Chúng phân hóa Mép nhánh Liên Kết Cộng Hóa Trị Mỏ Neo yếu dễ cháy bén bay hơi (Tới mức ko dám lại gần Lửa Đèn). Luôn luân ra Các Hỗn Phẩm (Phụ Ẩn).",
           "Tường 2: Tuyệt kĩ Phân Lọc (Dùng Nắm bắt tính Lí Tốc): Khác Độ Tan Xài Chiết Cốc rỏ rỉ, Khác Nhiệt Độ Nấu Sôi dùng Đun Bình Lạnh Chưng Cất, Khác Điểm Mảng Tinh Lưới dùng Kết Tinh Lạnh Vữa Lọc Mía, Dính Đọng Thấm dùng Pha Chảy Trượt Sắc Kí Rẽ Màu.",
           "Tường 3: Định Lượng Mù Hắc Cháy CTPT. Quăng mìn Khối lượng mC mH vô công thức Tỉ lệ X Y bóc tách Lớp Vỏ Hằng Số $n$.",
-          "Tường 4: Cảnh Phân Cấu Trúc Thuyết Kẹp Kỷ. Đồng Đẳng (Anh em Phù Du chênh Nhau Nhúm Khối $CH_2$ Dài Lêu Nghêu). Đồng Phân (Đấu Tướng Trò Ráp Lego Cùng Cục Tổng $C_xH_y$, Trổ Muôn Hình Vạn Vẻ Xoay Lắp Nhánh and Dời Bến Chức)."
+          "Tường 4: Cảnh Phân Cấu Trúc Thuyết Kẹp Kỷ. Đồng Đẳng (Anh em Phù Du chênh Nhau Nhúm Khối $CH_2$ Dài Lêu Nghêu). Đồng Phân (Đấu Tướng Trò Ráp Lego Cùng Cục Tổng $C_xH_y$, Trổ Muôn Hình Vạn Vẻ Xoay Lắp Nhánh và Dời Bến Chức)."
         ]
       }
     },
@@ -44,7 +44,7 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "Tư duy bóc tách Một Khối Sinh Bài Tập Khó chưa từng thấy. Bạn sẽ luôn gặp những Đám mây Chất lạ hoắc (Ví Dụ X tác dụng with Na nhả khí X... Đốt Cháy A Phọt B...). Bản Năng Giải Pháp là Hệ Trình Bẻ Khóa Bốn Bước Trâu Bò Chọc Xuyên."
+        "text": "Tư duy bóc tách Một Khối Sinh Bài Tập Khó chưa từng thấy. Bạn sẽ luôn gặp những Đám mây Chất lạ hoắc (Ví Dụ X tác dụng với Na nhả khí X... Đốt Cháy A Phọt B...). Bản Năng Giải Pháp là Hệ Trình Bẻ Khóa Bốn Bước Trâu Bò Chọc Xuyên."
       }
     },
     {
@@ -61,7 +61,7 @@
       "type": "warningBox",
       "content": {
         "title": "Lời Cảnh Báo Thảm Sát Góc Nhìn Não Bộ",
-        "content": "Khi vẽ Đồng Phân, rất nhiều Mầm Cây rớt mạng vô Hư Ảo do Tật Xé Trực Quan. Có 2 Vạc Lỗi cần tránh: MỘT - Nối Chặt Liên kết Tay thừa Cacbon 5. Carbon (Hóa trị bằng Cứng 4). Nếu Đâm Trọt quá 4 gạch bao H xòe nhánh $\\rightarrow$ Cấu trúc bùng Nổ Sai. \nHAI - Sự Đối Xứng Trục Quỷ. Cùng 1 cái cây bút, rẽ Rẽ Trái Đâm Cành Nhánh and Nhấc ngược Cây bút Gập Đâm Cành Rẽ Phải Thực Chất 100% LÀ MỘT KHUNG THỂ DUY NHẤT LẬT MẶT. Chớ Có dại liệt kê đếm Bằng 2 Thằng Đồng Phân Khác nhau Mất Điểm Tức tưởi.",
+        "content": "Khi vẽ Đồng Phân, rất nhiều Mầm Cây rớt mạng vô Hư Ảo do Tật Xé Trực Quan. Có 2 Vạc Lỗi cần tránh: MỘT - Nối Chặt Liên kết Tay thừa Cacbon 5. Carbon (Hóa trị bằng Cứng 4). Nếu Đâm Trọt quá 4 gạch bao H xòe nhánh $\\rightarrow$ Cấu trúc bùng Nổ Sai. \nHAI - Sự Đối Xứng Trục Quỷ. Cùng 1 cái cây bút, rẽ Rẽ Trái Đâm Cành Nhánh và Nhấc ngược Cây bút Gập Đâm Cành Rẽ Phải Thực Chất 100% LÀ MỘT KHUNG THỂ DUY NHẤT LẬT MẶT. Chớ Có dại liệt kê đếm Bằng 2 Thằng Đồng Phân Khác nhau Mất Điểm Tức tưởi.",
         "color": "orange"
       }
     }
@@ -69,7 +69,7 @@
   "quizzes": [
     {
       "id": "q1",
-      "question": "Nếu một chất hữu cơ A có M=30 and % theo khối lượng của Cacbon, Hydro lần lượt là 80% and 20%. Công thức phân tử của nó là?",
+      "question": "Nếu một chất hữu cơ A có M=30 và % theo khối lượng của Cacbon, Hydro lần lượt là 80% và 20%. Công thức phân tử của nó là?",
       "options": [
         "C2H4",
         "C2H6",
@@ -85,7 +85,7 @@
       "options": [
         "Mạch cacbon mạch thẳng không phân nhánh.",
         "Halogen kết hợp cùng nhóm alkyl, OH, CHO, COO...",
-        "Tỉ lệ số mol cacbon so with hydro.",
+        "Tỉ lệ số mol cacbon so với hydro.",
         "Khối lượng mol phần nguyên tử."
       ],
       "correctAnswer": 1,
@@ -98,7 +98,7 @@
       "title": "Ôn tập chương 3: Đại cương về hóa học hữu cơ",
       "url": "https://www.youtube.com/watch?v=YvGbR2N2Ec0",
       "thumbnail": "https://img.youtube.com/vi/YvGbR2N2Ec0/0.jpg",
-      "description": "Tổng kết kiến thức về đặc điểm cấu tạo and phương pháp phân tích hợp chất hữu cơ (Tech12h)."
+      "description": "Tổng kết kiến thức về đặc điểm cấu tạo và phương pháp phân tích hợp chất hữu cơ (Tech12h)."
     }
   ],
   "practiceModules": [],

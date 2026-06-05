@@ -8,13 +8,13 @@
   "chapter": "Chương 7: Nguyên tố nhóm VIIA (Helogen)",
   "order": 21,
   "isPremium": false,
-  "description": "Vị trí, tính chất vật lí and tính oxi hóa đặc trưng của nhóm.",
+  "description": "Vị trí, tính chất vật lí và tính oxi hóa đặc trưng của nhóm.",
   "theoryModules": [
     {
       "id": "mod1",
       "type": "heading",
       "content": {
-        "text": "1. Vị trí and cấu hình electron của nhóm Halogen",
+        "text": "1. Vị trí và cấu hình electron của nhóm Halogen",
         "level": "h2"
       }
     },
@@ -22,7 +22,7 @@
       "id": "mod2",
       "type": "paragraph",
       "content": {
-        "text": "Nhóm Halogen bao gồm các nguyên tố thuộc nhóm VIIA trong bảng tuần hoàn: **Fluorine ($F$), Chlorine ($Cl$), Bromine ($Br$), Iodine ($I$)** and nguyên tố phóng xạ Astatine ($At$).\\n- **Cấu hình electron lớp ngoài cùng**: Đều có dạng **$ns^2 np^5$**, với 7 electron lớp ngoài cùng. Điều này khiến chúng cực kỳ kém bền and luôn có xu hướng nhận thêm 1 electron để đạt cấu hình octet bền vững của khí hiếm."
+        "text": "Nhóm Halogen bao gồm các nguyên tố thuộc nhóm VIIA trong bảng tuần hoàn: **Fluorine ($F$), Chlorine ($Cl$), Bromine ($Br$), Iodine ($I$)** và nguyên tố phóng xạ Astatine ($At$).\\n- **Cấu hình electron lớp ngoài cùng**: Đều có dạng **$ns^2 np^5$**, với 7 electron lớp ngoài cùng. Điều này khiến chúng cực kỳ kém bền và luôn có xu hướng nhận thêm 1 electron để đạt cấu hình octet bền vững của khí hiếm."
       }
     },
     {
@@ -31,7 +31,7 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Trạng thái and màu sắc (ở điều kiện chuẩn):**",
+          "**Trạng thái và màu sắc (ở điều kiện chuẩn):**",
           "- Fluorine ($F_2$): Chất khí, màu vàng lục nhạt, cực độc.",
           "- Chlorine ($Cl_2$): Chất khí, màu vàng lục, mùi hắc, độc.",
           "- Bromine ($Br_2$): Chất lỏng, màu đỏ nâu, dễ bay hơi, gây bỏng nặng.",
@@ -52,7 +52,7 @@
       "type": "infoBox",
       "content": {
         "title": "Xu hướng biến đổi tính oxi hóa",
-        "content": "Tính oxi hóa của các halogen **giảm dần** từ Fluorine đến Iodine do bán kính nguyên tử tăng dần, khả năng hút electron giảm xuống:\\n**$F_2 > Cl_2 > Br_2 > I_2$**.\\n\\nChúng có thể oxi hóa hầu hết các kim loại tạo thành muối halide and oxi hóa nhiều phi kim khác.",
+        "content": "Tính oxi hóa của các halogen **giảm dần** từ Fluorine đến Iodine do bán kính nguyên tử tăng dần, khả năng hút electron giảm xuống:\\n**$F_2 > Cl_2 > Br_2 > I_2$**.\\n\\nChúng có thể oxi hóa hầu hết các kim loại tạo thành muối halide và oxi hóa nhiều phi kim khác.",
         "color": "blue"
       }
     },
@@ -73,7 +73,7 @@
       "title": "Bài giảng: nhóm halogen",
       "url": "https://www.youtube.com/watch?v=VwXu4hm9s1U",
       "thumbnail": "https://img.youtube.com/vi/VwXu4hm9s1U/0.jpg",
-      "description": "Đặc điểm cấu tạo, tính chất vật lí and hóa học của các nguyên tố nhóm VIIA (VietJack)."
+      "description": "Đặc điểm cấu tạo, tính chất vật lí và hóa học của các nguyên tố nhóm VIIA (VietJack)."
     }
   ],
   "practiceModules": [],

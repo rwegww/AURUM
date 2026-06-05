@@ -8,7 +8,7 @@
   "order": 3,
   "isPremium": false,
   "thumbnail": "https://res.cloudinary.com/dpcorzgkm/image/upload/v1731464309/chemistry-learning/lesson/oip4e1k80i2e7x83r8h.webp",
-  "description": "Hệ thống hóa lại kiến thức về cân bằng hóa học and cân bằng acid - base trong dung dịch nước.",
+  "description": "Hệ thống hóa lại kiến thức về cân bằng hóa học và cân bằng acid - base trong dung dịch nước.",
   "theoryModules": [
     {
       "id": "mod1",
@@ -24,9 +24,9 @@
       "content": {
         "type": "bullet",
         "items": [
-          "**Vạn Vật Thuận Nghịch:** Phản ứng hóa học không chỉ là đường một chiều khống chế. Rất nhiều hệ thống tồn tại chiều thuận and chiều cản nghịch. Khi Tốc độ v thuận = Tốc độ v nghịch sẽ tự neo thiết lập Trạng Thái Cân Bằng Hóa học Bất Động Tĩnh Lặng.",
-          "**Hằng số K (Chỉ thờ phụng Nhiệt độ):** Thương số tĩnh nồng độ giữa (Sản phẩm chia Tham gia) tạo thành $K_c$. Nó là hằng số quyền lực, dùng để phán đoán phản ứng thiên về chiều nào. Để thay đổi KC tuyệt đối chỉ có 1 nút gạt Tăng Giảm Độ nóng t°C lò.",
-          "**Cán cân Le Chatelier (Chống Lại Kẻ Phá Nhoài):** Hệ phán ứng Cân bằng sẽ như 1 lò hơi khổng lồ, khi ta Tăng Áp/Nhiệt/Nồng (Tác động ngoại lai), Nó lập tức đẩy chuyển dịch làm Tiêu hao (Ngược hướng) cái lực đó. Và ngược lại."
+          "**Phản ứng thuận nghịch:** Nhiều phản ứng hóa học có thể xảy ra theo cả chiều thuận và chiều nghịch. Khi tốc độ phản ứng thuận bằng tốc độ phản ứng nghịch, hệ đạt trạng thái cân bằng hóa học.",
+          "**Hằng số cân bằng $K_c$:** $K_c$ được tính từ nồng độ cân bằng của sản phẩm và chất tham gia. Giá trị này cho biết phản ứng ưu tiên tạo sản phẩm hay giữ lại chất tham gia ở một nhiệt độ xác định.",
+          "**Nguyên lí Le Chatelier:** Khi một hệ cân bằng bị tác động bởi thay đổi nồng độ, áp suất hoặc nhiệt độ, cân bằng sẽ chuyển dịch theo chiều làm giảm tác động đó."
         ]
       }
     },
@@ -42,15 +42,15 @@
       "id": "mod4",
       "type": "paragraph",
       "content": {
-        "text": "Thế giới vô hình chia 2 nửa: Nhóm Quý Tộc phân ly Mạnh gồm (HCl, HNO3 mạnh, Nhóm Kiềm mạnh kiềm thổ NaOH, Muối hòa tan 100%) - Dẫn điện xé gió. Nhóm Yếu gục ngã (Axit Dấm Hữu cơ, Nhóm khí Khai Amonia) chỉ tan rỏ rọt cân bằng. Thuyết Brønsted-Lowry lên ngôi đè bẹp hệ truyền thống với câu thần chứ: \"Acid Nhả H+ Cho đi, Bazo Hút Nhận H+ Hớt Lại.\". Kéo theo cả thuyết Lưỡng Tính (Vừa cắn vừa Nhả theo đối thủ như $H_2O, HCO_3^-, Al(OH)_3$)."
+        "text": "Chất điện li mạnh như acid mạnh, base mạnh và nhiều muối tan phân li gần như hoàn toàn trong nước. Chất điện li yếu như acid acetic hoặc ammonia chỉ phân li một phần và thiết lập cân bằng điện li. Theo thuyết Brønsted-Lowry, acid là chất cho proton $H^+$, còn base là chất nhận proton $H^+$. Một số chất như $H_2O$, $HCO_3^-$ và $Al(OH)_3$ có thể thể hiện tính lưỡng tính."
       }
     },
     {
       "id": "mod5",
       "type": "infoBox",
       "content": {
-        "title": "Vũ Khí Tính Toán Toán Học Ion",
-        "content": "Ghi Khắc Dạ: Ở điều kiện phòng Lab 25°C. \nToán [1]: [H+] × [OH-] = Tích Số Nước vĩnh cửu = 1,0 × 10^(-14).\nToán [2]: Công thức Lô-ga-rít pH = -log([H+]). Tính vội pOH = -log([OH-]). \nToán [3]: Mệnh đề bù trừ tuyệt kĩ: pH + pOH = Trọn vẹn 14.\nMôi trường đếm pH < 7 là thế giới Chua Axit gặm mòn. pH > 7 là khoảng không Kiềm Bazo tẩy rửa xanh lét.",
+        "title": "Công thức cần nhớ về pH",
+        "content": "Ở 25°C, tích số ion của nước là $[H^+][OH^-] = 1,0 \\times 10^{-14}$.\n\n- $pH = -\\log[H^+]$.\n- $pOH = -\\log[OH^-]$.\n- $pH + pOH = 14$.\n\nDung dịch có $pH < 7$ là môi trường acid, $pH = 7$ là trung tính và $pH > 7$ là môi trường base.",
         "color": "blue"
       }
     },
@@ -58,8 +58,8 @@
       "id": "mod6",
       "type": "warningBox",
       "content": {
-        "title": "Bẫy Sai Khiếp Đảm Ở Kì Thi THPT",
-        "content": "Sai lầm 1: Đồng nhất Cân Bằng với Tốc Độ. Thêm CHẤT XÚC TÁC Platinum chỉ giúp dồn 1 phản ứng nhanh nổ tung sớm hơn, Không làm lượng Chất cuối cùng bị Chuyển Dịch. \nSai lầm 2: Các phản ứng Rắn hóa Tĩnh như Nung Đá vôi rắn $CaCO_3(Rắn) \\rightleftharpoons CaO (Rắn) + CO_2(Khí)$. Việc xả tống ép áp suất bình chỉ nén khí $CO_2$. Thêm Bớt đất đá nồng độ Chất Rắn KHÔNG LÀM DỊCH chuyển mảy may cân bằng.",
+        "title": "Lưu ý thường gặp trong bài tập",
+        "content": "Sai lầm 1: Nhầm vai trò của chất xúc tác. Chất xúc tác làm hệ đạt cân bằng nhanh hơn nhưng không làm chuyển dịch vị trí cân bằng.\n\nSai lầm 2: Tính sai ảnh hưởng của chất rắn. Trong cân bằng dị thể như $CaCO_3(r) \\rightleftharpoons CaO(r) + CO_2(k)$, lượng chất rắn không xuất hiện trong biểu thức hằng số cân bằng. Thay đổi lượng chất rắn tinh khiết không làm cân bằng chuyển dịch nếu các điều kiện khác không đổi.",
         "color": "orange"
       }
     }
@@ -96,7 +96,7 @@
       "title": "Ôn tập chương 1: Cân bằng hóa học",
       "url": "https://www.youtube.com/watch?v=dX9jQ27EBAc",
       "thumbnail": "https://img.youtube.com/vi/dX9jQ27EBAc/0.jpg",
-      "description": "Tổng kết toàn bộ kiến thức chương 1 and giải bài tập củng cố (VietJack)."
+      "description": "Tổng kết toàn bộ kiến thức chương 1 và giải bài tập củng cố (VietJack)."
     }
   ],
   "practiceModules": [],

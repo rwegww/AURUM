@@ -115,7 +115,7 @@
       "type": "infoBox",
       "content": {
         "title": "b) Nhiệt độ",
-        "content": "Khi **tăng nhiệt độ**, các phân tử chuyển động nhanh hơn, va chạm with nhau mạnh hơn và thường xuyên hơn → tốc độ phản ứng **tăng**.\\n\\n**Quy tắc kinh nghiệm (Van't Hoff)**: Khi nhiệt độ tăng thêm $10^\\circ C$, tốc độ phản ứng thường tăng gấp 2-4 lần.\\n\\n**Thí nghiệm**: Đặt hai cốc nước oxy già ($H_2O_2$): một cốc ở nhiệt độ phòng, một cốc đun nóng $50^\\circ C$. Cốc nóng phân hủy tạo bọt $O_2$ nhanh hơn nhiều.",
+        "content": "Khi **tăng nhiệt độ**, các phân tử chuyển động nhanh hơn, va chạm với nhau mạnh hơn và thường xuyên hơn → tốc độ phản ứng **tăng**.\\n\\n**Quy tắc kinh nghiệm (Van't Hoff)**: Khi nhiệt độ tăng thêm $10^\\circ C$, tốc độ phản ứng thường tăng gấp 2-4 lần.\\n\\n**Thí nghiệm**: Đặt hai cốc nước oxy già ($H_2O_2$): một cốc ở nhiệt độ phòng, một cốc đun nóng $50^\\circ C$. Cốc nóng phân hủy tạo bọt $O_2$ nhanh hơn nhiều.",
         "color": "blue"
       }
     },
