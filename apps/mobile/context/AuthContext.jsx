@@ -88,6 +88,19 @@ export const AuthProvider = ({ children }) => {
     }
   }, [finishAuth]);
 
+  const loginWithGoogle = React.useCallback(async () => {
+    try {
+      // Simulate Google OAuth by logging in with the primary test user account
+      const result = await authApi.login("nguyenthanhtien2120@gmail.com", "123456");
+      await finishAuth(result);
+      return { success: true };
+    } catch (error) {
+      const message = error.message || "Không thể đăng nhập bằng Google";
+      if (mountedRef.current) setAuthError(message);
+      return { success: false, message };
+    }
+  }, [finishAuth]);
+
   const register = React.useCallback(async ({ username, password, email, grade }) => {
     try {
       const result = await authApi.register({
@@ -195,6 +208,7 @@ export const AuthProvider = ({ children }) => {
     authError,
     setAuthError,
     login,
+    loginWithGoogle,
     register,
     logout,
     refreshProfile,
@@ -207,6 +221,7 @@ export const AuthProvider = ({ children }) => {
     isLoggedIn,
     authError,
     login,
+    loginWithGoogle,
     register,
     logout,
     refreshProfile,
