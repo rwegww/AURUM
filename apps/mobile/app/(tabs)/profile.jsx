@@ -16,7 +16,7 @@ import { useAuth } from "../../context/AuthContext";
 import { classApi } from "../../services/api";
 
 const targetOptions = [1, 2, 3, 5];
-const grades = ["8", "9", "10", "11", "12"];
+const grades = ["6", "7", "8", "9", "10", "11", "12"];
 
 const roleLabel = (role) => {
   if (role === "student") return "Học sinh";

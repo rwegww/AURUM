@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import { class6Data } from '../src/data/curriculum/class6.js';
+import { class7Data } from '../src/data/curriculum/class7.js';
 import { class8Data } from '../src/data/curriculum/class8.js';
 import { class9Data } from '../src/data/curriculum/class9.js';
 import { class10Data } from '../src/data/curriculum/class10.js';
@@ -9,6 +11,8 @@ import Lesson from '../api/models/Lesson.js';
 dotenv.config();
 
 const allData = [
+  ...class6Data.ketnoi,
+  ...class7Data.ketnoi,
   ...class8Data.ketnoi,
   ...class9Data.ketnoi,
   ...class10Data.ketnoi,

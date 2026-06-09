@@ -93,7 +93,7 @@ const LessonPage = () => {
   }
 
   // --- RENDERING LOGIC (Unified Light Theme) ---
-  const video = lesson.videoModules?.[0] || { url: '', title: lesson.title };
+  const video = lesson.videoModules?.find(module => module?.url) || null;
 
   return (
     <div className="min-h-screen bg-viet-bg pt-[70px]">
@@ -119,6 +119,7 @@ const LessonPage = () => {
             </h1>
           </div>
 
+          {video?.url && (
           <div className="viet-card mb-8 aspect-video relative group border-none shadow-xl shadow-viet-green/5">
              <div className="absolute top-0 left-0 w-full h-[60px] bg-white/90 backdrop-blur px-6 flex items-center gap-3 z-10 border-b border-viet-border rounded-t-[24px]">
                 <div className="w-8 h-8 rounded-full bg-viet-green flex items-center justify-center text-white shrink-0">
@@ -136,8 +137,7 @@ const LessonPage = () => {
                    <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
                 </div>
              </div>
-             {video.url ? (
-               video.url.match(/\.(mp4|webm|ogg)$/) ? (
+             {video.url.match(/\.(mp4|webm|ogg)$/) ? (
                  <video 
                     controls 
                     className="w-full h-full pt-[60px] rounded-b-[24px] bg-black"
@@ -151,13 +151,9 @@ const LessonPage = () => {
                     allowFullScreen
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   />
-               )
-             ) : (
-               <div className="w-full h-full pt-[60px] flex items-center justify-center bg-gray-100 text-gray-400 font-medium">
-                 {t('lesson_page.video.placeholder')}
-               </div>
              )}
           </div>
+          )}
 
 
 

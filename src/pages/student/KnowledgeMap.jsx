@@ -9,6 +9,7 @@ import InfographicBook from '@/components/lessons/InfographicBook';
 
 // Grade theme colors
 const GRADE_THEME = {
+  6: { color: '#0ea5e9', light: '#f0f9ff', border: '#bae6fd', label: 'Lớp 6' },
   7: { color: '#06b6d4', light: '#ecfeff', border: '#c5e0e5', label: 'Lớp 7' },
   8: { color: '#16a34a', light: '#f0fdf4', border: '#bbf7d0', label: 'Lớp 8' },
   9: { color: '#f97316', light: '#fff7ed', border: '#fed7aa', label: 'Lớp 9' },
@@ -63,7 +64,7 @@ const KnowledgeMap = () => {
     return gradeMap;
   }, []);
 
-  const grades = [8, 9, 10, 11, 12];
+  const grades = [6, 7, 8, 9, 10, 11, 12];
 
   const totalTopics = CHEMISTRY_KNOWLEDGE_BASE.length;
   const completedTopics = CHEMISTRY_KNOWLEDGE_BASE.filter(topic => {

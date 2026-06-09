@@ -9,6 +9,8 @@
 export const CORE_KNOWLEDGE_LESSONS = {
   // === ĐẠI CƯƠNG ===
   'atom-structure': [
+    { classId: 7, lessonId: 'hoa7_kntt_bai2', title: 'Bài 2: Nguyên tử' },
+    { classId: 7, lessonId: 'hoa7_kntt_bai3', title: 'Bài 3: Nguyên tố hóa học' },
     { classId: 10, lessonId: 'hoa10_kntt_bai1', title: 'Bài 1: Thành phần của nguyên tử' },
     { classId: 10, lessonId: 'hoa10_kntt_bai2', title: 'Bài 2: Nguyên tố hóa học' },
   ],
@@ -19,6 +21,7 @@ export const CORE_KNOWLEDGE_LESSONS = {
     { classId: 10, lessonId: 'hoa10_kntt_bai3', title: 'Bài 3: Cấu trúc lớp vỏ electron nguyên tử' },
   ],
   'periodic-law': [
+    { classId: 7, lessonId: 'hoa7_kntt_bai4', title: 'Bài 4: Sơ lược về bảng tuần hoàn các nguyên tố hóa học' },
     { classId: 10, lessonId: 'hoa10_kntt_bai5', title: 'Bài 5: Cấu tạo của bảng tuần hoàn' },
     { classId: 10, lessonId: 'hoa10_kntt_bai8', title: 'Bài 8: Định luật tuần hoàn and ý nghĩa' },
   ],
@@ -27,6 +30,7 @@ export const CORE_KNOWLEDGE_LESSONS = {
     { classId: 10, lessonId: 'hoa10_kntt_bai7', title: 'Bài 7: Xu hướng biến đổi tính chất của hợp chất' },
   ],
   'metals-nonmetals': [
+    { classId: 7, lessonId: 'hoa7_kntt_bai4', title: 'Bài 4: Sơ lược về bảng tuần hoàn các nguyên tố hóa học' },
     { classId: 9, lessonId: 'hoa9_kntt_bai4', title: 'Bài 4: Phân biệt Phi kim và Kim loại' },
     { classId: 9, lessonId: 'hoa9_kntt_bai16', title: 'Bài 16: Sơ lược về hóa học vỏ Trái Đất' },
     { classId: 10, lessonId: 'hoa10_kntt_bai6', title: 'Bài 6: Xu hướng biến đổi tính chất của nguyên tử' },
@@ -36,14 +40,18 @@ export const CORE_KNOWLEDGE_LESSONS = {
 
   // === LIÊN KẾT ===
   'chemical-bonding': [
+    { classId: 7, lessonId: 'hoa7_kntt_bai6', title: 'Bài 6: Giới thiệu về liên kết hóa học' },
+    { classId: 7, lessonId: 'hoa7_kntt_bai7', title: 'Bài 7: Hóa trị và công thức hóa học' },
     { classId: 10, lessonId: 'hoa10_kntt_bai10', title: 'Bài 10: Quy tắc octet' },
     { classId: 10, lessonId: 'hoa10_kntt_bai11', title: 'Bài 11: Liên kết ion' },
     { classId: 10, lessonId: 'hoa10_kntt_bai12', title: 'Bài 12: Liên kết cộng hóa trị' },
   ],
   'ionic-bond': [
+    { classId: 7, lessonId: 'hoa7_kntt_bai6', title: 'Bài 6: Giới thiệu về liên kết hóa học' },
     { classId: 10, lessonId: 'hoa10_kntt_bai11', title: 'Bài 11: Liên kết ion' },
   ],
   'covalent-bond': [
+    { classId: 7, lessonId: 'hoa7_kntt_bai6', title: 'Bài 6: Giới thiệu về liên kết hóa học' },
     { classId: 10, lessonId: 'hoa10_kntt_bai12', title: 'Bài 12: Liên kết cộng hóa trị' },
   ],
   'metallic-bond': [
@@ -313,9 +321,11 @@ export const CORE_KNOWLEDGE_LESSONS = {
 
   // === AN TOÀN ===
   'lab-safety': [
+    { classId: 6, lessonId: 'hoa6_kntt_bai2', title: 'Bài 2: An toàn trong phòng thực hành' },
     { classId: 8, lessonId: 'hoa8_kntt_bai1', title: 'Bài 1: Sử dụng hóa chất và thiết bị cơ bản' },
   ],
   'hazard-symbols': [
+    { classId: 6, lessonId: 'hoa6_kntt_bai2', title: 'Bài 2: An toàn trong phòng thực hành' },
     { classId: 8, lessonId: 'hoa8_kntt_bai1', title: 'Bài 1: Sử dụng hóa chất và thiết bị cơ bản' },
   ],
 };

@@ -4,6 +4,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import pg from 'pg';
+import { class6Data } from '../../src/data/curriculum/class6.js';
+import { class7Data } from '../../src/data/curriculum/class7.js';
 import { class8Data } from '../../src/data/curriculum/class8.js';
 import { class9Data } from '../../src/data/curriculum/class9.js';
 import { class10Data } from '../../src/data/curriculum/class10.js';
@@ -22,6 +24,8 @@ const MIGRATION_PATHS = [
 ];
 
 const allCurriculumLessons = [
+  ...class6Data.ketnoi,
+  ...class7Data.ketnoi,
   ...class8Data.ketnoi,
   ...class9Data.ketnoi,
   ...class10Data.ketnoi,

@@ -26,6 +26,14 @@ const Classroom = () => {
   const { t } = useTranslation();
   const classroomData = [
     {
+      grade: 6,
+      age: t('common.grade', { grade: 6 }),
+      title: t('classroom.grades.6.title'),
+      desc: t('classroom.grades.6.desc'),
+      image: "/assets/images/classroom/grade8-viet.png",
+      color: "bg-sky-500"
+    },
+    {
       grade: 7,
       age: t('common.grade', { grade: 7 }),
       title: t('classroom.grades.7.title'),
@@ -148,7 +156,7 @@ const Classroom = () => {
                        }
                      }}
                       className={`w-full py-4 rounded-[1rem] font-black text-[13px] uppercase tracking-widest transition-all duration-200 flex items-center justify-center gap-2 ${
-                        item.grade === 7 || item.grade === 8 || item.grade === 'map'
+                        item.grade === 6 || item.grade === 7 || item.grade === 8 || item.grade === 'map'
                         ? 'btn-tactile-green' 
                         : 'bg-white text-[#1a1a1a] border-2 border-duo-border border-b-4 hover:bg-gray-50'
                       }`}

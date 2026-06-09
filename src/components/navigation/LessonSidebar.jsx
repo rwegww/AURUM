@@ -55,7 +55,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
             onChange={(e) => navigate(`/bai_hoc/${e.target.value}`)}
             className="w-full h-[48px] bg-white border-2 border-viet-border rounded-2xl px-5 text-[14px] font-bold text-viet-text appearance-none cursor-pointer outline-none focus:border-viet-green focus:ring-4 focus:ring-viet-green/5 transition-all"
           >
-            {[8, 9, 10, 11, 12].map(g => (
+            {[6, 7, 8, 9, 10, 11, 12].map(g => (
               <option key={g} value={g}>Hóa học Lớp {g}</option>
             ))}
           </select>

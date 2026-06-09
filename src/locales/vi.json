@@ -43,8 +43,8 @@
         "badge": "Lộ Trình",
         "title": "Lộ trình học tập",
         "highlight": "Đi qua bản đồ tri thức",
-        "desc": "Từ lớp 7 đến lớp 12, mỗi chặng học mở ra một mảng kiến thức Hóa học gần gũi và có hệ thống.",
-        "desc_long": "Từ lớp 7 đến lớp 12, Aurum dẫn bạn đi qua các chủ đề Hóa học theo từng chặng rõ ràng: nguyên tử, phản ứng, dung dịch, hữu cơ và ứng dụng đời sống. Mỗi bài học gắn với hình ảnh Việt Nam để việc học dễ nhớ hơn.",
+        "desc": "Từ lớp 6 đến lớp 12, mỗi chặng học mở ra một mảng kiến thức Hóa học gần gũi và có hệ thống.",
+        "desc_long": "Từ lớp 6 đến lớp 12, Aurum dẫn bạn đi qua các chủ đề Hóa học theo từng chặng rõ ràng: chất quanh ta, nguyên tử, phản ứng, dung dịch, hữu cơ và ứng dụng đời sống. Mỗi bài học gắn với hình ảnh Việt Nam để việc học dễ nhớ hơn.",
         "link": "Khám phá lộ trình",
         "image_alt": "Bản đồ tri thức Hóa học phong cách Việt Nam"
       },
@@ -191,6 +191,10 @@
       "go_journey": "Mở lộ trình lớp {{grade}}"
     },
     "grades": {
+      "6": {
+        "title": "Nền Tảng Khoa Học Lớp 6",
+        "desc": "Xây nền về an toàn thực hành, đo lường, chất quanh ta, vật liệu và hỗn hợp."
+      },
       "7": {
         "title": "Nhập Môn Hóa Học Lớp 7",
         "desc": "Tìm hiểu về nguyên tử, nguyên tố, liên kết hóa học và phản ứng hóa học cơ bản."
@@ -411,6 +415,10 @@
   "journey": {
     "badge": "Lộ trình luyện tập Lớp {{grade}}",
     "themes": {
+      "6": {
+        "title": "Nền Tảng Chất Quanh Ta",
+        "subtitle": "Làm quen an toàn, đo lường, vật liệu và hỗn hợp"
+      },
       "7": {
         "title": "Nhập Môn Tự Nhiên",
         "subtitle": "Khám phá phương pháp khoa học và cấu tạo chất"
@@ -913,7 +921,7 @@
       "subtitle_explore": "Luyện Tập",
       "subtitle_hoc_lieu": "Học Liệu",
       "desc_logged_in": "Hoàn thành các chặng học để củng cố kiến thức Hóa học theo lộ trình.",
-      "desc_guest": "Hành trình học Hóa học từ cơ bản đến chuyên sâu dành cho học viên lớp 8 - 12."
+      "desc_guest": "Hành trình học Hóa học từ cơ bản đến chuyên sâu dành cho học viên lớp 6 - 12."
     },
     "grade_labels": {
       "label": "Lớp {{grade}}"
@@ -929,28 +937,38 @@
       "explore_btn": "KHÁM PHÁ BÀI HỌC"
     },
     "story_parts": {
-      "8": {
+      "6": {
         "title": "Phần 1",
+        "name": "Nền Tảng Khoa Học Và Chất Quanh Ta",
+        "story": "Bắt đầu từ an toàn thực hành, phép đo, vật liệu, nhiên liệu và hỗn hợp để xây nền học Hóa học vững chắc."
+      },
+      "7": {
+        "title": "Phần 2",
+        "name": "Nguyên Tử Và Ngôn Ngữ Hóa Học",
+        "story": "Khám phá nguyên tử, nguyên tố, phân tử, liên kết và công thức hóa học ở mức nhập môn."
+      },
+      "8": {
+        "title": "Phần 3",
         "name": "Khởi Đầu Với Chất Và Nguyên Tử",
         "story": "Bước vào thế giới chất và nguyên tử, nơi mọi kiến thức Hóa học bắt đầu. Nhiệm vụ của bạn là hiểu bản chất vật chất và ngôn ngữ công thức."
       },
       "9": {
-        "title": "Phần 2",
+        "title": "Phần 4",
         "name": "Hành Trình Chuyển Hóa Chất",
         "story": "Những phản ứng và hiện tượng biến đổi chất mở ra quy luật tương tác giữa các nguyên tố."
       },
       "10": {
-        "title": "Phần 3",
+        "title": "Phần 5",
         "name": "Cấu Trúc Và Quy Luật Hóa Học",
         "story": "Tiến sâu vào động lực học và cấu trúc bảng tuần hoàn. Bạn sẽ làm quen với cân bằng, nhiệt lượng và động lượng trong Hóa học."
       },
       "11": {
-        "title": "Phần 4",
+        "title": "Phần 6",
         "name": "Thế Giới Hóa Hữu Cơ",
         "story": "Khám phá mạch carbon, nhóm chức và các hợp chất hữu cơ gắn với đời sống. Bạn sẽ học cách nhận biết cấu trúc và quy luật phản ứng của chúng."
       },
       "12": {
-        "title": "Phần 5",
+        "title": "Phần 7",
         "name": "Ứng Dụng Hóa Học Hiện Đại",
         "story": "Chặng cuối của Hóa học phổ thông. Vượt qua điện hóa, polymer và vật liệu để sẵn sàng cho những ứng dụng thực tế."
       }

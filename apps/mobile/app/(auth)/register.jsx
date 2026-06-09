@@ -11,7 +11,7 @@ import {
 import { colors, radius, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 
-const grades = ["8", "9", "10", "11", "12"];
+const grades = ["6", "7", "8", "9", "10", "11", "12"];
 
 export default function RegisterScreen() {
   const { register, authError, setAuthError } = useAuth();

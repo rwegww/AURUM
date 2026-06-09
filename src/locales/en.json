@@ -43,8 +43,8 @@
         "badge": "Learning Path",
         "title": "Structured learning path",
         "highlight": "Travel the knowledge map",
-        "desc": "From grade 7 to grade 12, each stop opens a clear and memorable chemistry topic.",
-        "desc_long": "From grade 7 to grade 12, Aurum guides learners through atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
+        "desc": "From grade 6 to grade 12, each stop opens a clear and memorable chemistry topic.",
+        "desc_long": "From grade 6 to grade 12, Aurum guides learners through matter, atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
         "link": "Explore the path",
         "image_alt": "A Vietnam-inspired chemistry knowledge map"
       },
@@ -191,6 +191,10 @@
       "go_journey": "Open Grade {{grade}} path"
     },
     "grades": {
+      "6": {
+        "title": "Science Foundations (Grade 6)",
+        "desc": "Build foundations in lab safety, measurement, substances, materials, and mixtures."
+      },
       "7": {
         "title": "Introductory Chemistry (Grade 7)",
         "desc": "Learn about atoms, elements, chemical bonds, and basic chemical reactions."
@@ -415,6 +419,10 @@
   "journey": {
     "badge": "Grade {{grade}} Path",
     "themes": {
+      "6": {
+        "title": "Matter Around Us",
+        "subtitle": "Start with safety, measurement, materials, and mixtures"
+      },
       "7": {
         "title": "Nature Explorer",
         "subtitle": "Discover scientific methods and structure of matter"
@@ -1329,7 +1337,7 @@
       "subtitle_explore": "Practice",
       "subtitle_hoc_lieu": "Materials",
       "desc_logged_in": "Complete each learning stage to strengthen your chemistry knowledge.",
-      "desc_guest": "A journey to conquer chemistry from basic to advanced for new learners from grade 8 to 12."
+      "desc_guest": "A journey to conquer chemistry from basic to advanced for new learners from grade 6 to 12."
     },
     "grade_labels": {
       "label": "Grade {{grade}}"
@@ -1345,28 +1353,38 @@
       "explore_btn": "EXPLORE LESSON"
     },
     "story_parts": {
-      "8": {
+      "6": {
         "title": "Part 1",
+        "name": "Science and Matter Foundations",
+        "story": "Start with lab safety, measurement, materials, fuels, and mixtures to build a steady chemistry foundation."
+      },
+      "7": {
+        "title": "Part 2",
+        "name": "Atoms and the Language of Chemistry",
+        "story": "Explore atoms, elements, molecules, bonds, and chemical formulas at an introductory level."
+      },
+      "8": {
+        "title": "Part 3",
         "name": "Starting With Matter and Atoms",
         "story": "Enter the world of substances and atoms, where chemistry begins. Your mission is to understand matter and the language of formulas."
       },
       "9": {
-        "title": "Part 2",
+        "title": "Part 4",
         "name": "The Transformation Journey",
         "story": "Reactions and visible changes reveal how elements and compounds interact."
       },
       "10": {
-        "title": "Part 3",
+        "title": "Part 5",
         "name": "Chemical Structure and Patterns",
         "story": "Go deeper into kinetics, equilibrium, and periodic structure while connecting concepts to real chemistry problems."
       },
       "11": {
-        "title": "Part 4",
+        "title": "Part 6",
         "name": "The World of Organic Chemistry",
         "story": "Explore carbon chains, functional groups, and organic compounds connected to everyday life. Learn how structure shapes chemical behavior."
       },
       "12": {
-        "title": "Part 5",
+        "title": "Part 7",
         "name": "Modern Chemistry Applications",
         "story": "The final stage of high-school chemistry. Study electrochemistry, polymers, and materials to prepare for real applications."
       }

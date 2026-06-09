@@ -16,7 +16,7 @@ import { useAuth } from "../../context/AuthContext";
 import { learningApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
-const grades = ["8", "9", "10", "11", "12"];
+const grades = ["6", "7", "8", "9", "10", "11", "12"];
 
 const getLessonStars = (user, lessonId) => {
   const stars = user?.balancingProgress?.lessonStars?.[lessonId] || {};
@@ -45,7 +45,7 @@ export default function JourneyTab() {
       <ScreenHeader
         eyebrow="Lộ trình"
         title="Lộ trình hóa học"
-        subtitle="Theo dõi bài học từ khối 8 đến 12 và ghi nhận tiến độ từng chặng."
+        subtitle="Theo dõi bài học từ khối 6 đến 12 và ghi nhận tiến độ từng chặng."
       />
 
       <Card accent={colors.green} style={styles.summary}>

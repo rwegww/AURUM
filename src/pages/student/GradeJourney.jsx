@@ -23,6 +23,16 @@ const FLOATING_BUBBLES = Array.from({ length: 15 }, (_, index) => ({
 
 // Expanded Class Themes for a spectacular look
 const CLASS_THEMES = {
+  '6': {
+    titleKey: 'journey.themes.6.title',
+    subtitleKey: 'journey.themes.6.subtitle',
+    primary: 'rgb(14, 165, 233)',
+    primaryLight: 'rgba(14, 165, 233, 0.1)',
+    primaryGlow: 'rgba(14, 165, 233, 0.4)',
+    gradient: 'from-sky-500 to-cyan-600',
+    blobColor: 'bg-sky-400',
+    doodleSymbol: 'H2O'
+  },
   '7': {
     titleKey: 'journey.themes.7.title',
     subtitleKey: 'journey.themes.7.subtitle',
@@ -167,7 +177,7 @@ const GradeJourney = () => {
     </div>
   );
 
-  const isFirstLessonDefaultUnlocked = grade === '7' || grade === '8';
+  const isFirstLessonDefaultUnlocked = ['6', '7', '8'].includes(grade);
   const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
 
   const bai_hocStatus = bai_hoc.map((lesson, index) => {

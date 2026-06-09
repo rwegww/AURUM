@@ -74,7 +74,7 @@ const Lessons = () => {
 
         {/* Grade Selection - Unified VietEdu Style */}
         <div className="flex flex-wrap justify-center gap-4 mb-16 p-2 bg-white/50 backdrop-blur rounded-[30px] border border-viet-border max-w-fit mx-auto shadow-sm">
-          {[8, 9, 10, 11, 12].map((grade) => (
+          {[6, 7, 8, 9, 10, 11, 12].map((grade) => (
             <button
               key={grade}
               onClick={() => setSelectedGrade(grade)}

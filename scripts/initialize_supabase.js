@@ -6,7 +6,7 @@ async function initialize() {
 
   try {
     // 1. Create Grade Levels if missing
-    const grades = [8, 9, 10, 11, 12];
+    const grades = [6, 7, 8, 9, 10, 11, 12];
     for (const g of grades) {
       await supabase.from('khoi').upsert({ id: g, ten: `Khối ${g}` });
     }

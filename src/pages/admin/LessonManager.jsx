@@ -183,7 +183,7 @@ const LessonManager = () => {
               <span>➕</span> Thêm bài học
             </button>
             <div className="flex gap-2 p-1.5 bg-white rounded-2xl border border-viet-border shadow-sm">
-               {[null, 8, 9, 10, 11, 12].map(g => (
+               {[null, 6, 7, 8, 9, 10, 11, 12].map(g => (
                  <button 
                    key={g} 
                    onClick={() => setSelectedGrade(g)}
@@ -295,7 +295,7 @@ const LessonManager = () => {
                              onChange={(e) => setFormData({...formData, classId: parseInt(e.target.value)})}
                              className="w-full h-12 px-6 rounded-2xl border border-viet-border bg-viet-bg/20 focus:bg-white focus:border-viet-green transition-all outline-none font-bold"
                            >
-                              {[8, 9, 10, 11, 12].map(g => (
+                              {[6, 7, 8, 9, 10, 11, 12].map(g => (
                                 <option key={g} value={g}>Lớp {g}</option>
                               ))}
                            </select>

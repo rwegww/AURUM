@@ -101,7 +101,7 @@ const JourneyManager = () => {
 
         <div className="flex items-center gap-3">
           <div className="flex gap-1 p-1 bg-white rounded-2xl border border-viet-border shadow-sm">
-            {[8, 9, 10, 11, 12].map(g => (
+            {[6, 7, 8, 9, 10, 11, 12].map(g => (
               <button 
                 key={g} 
                 onClick={() => setSelectedGrade(g)}
