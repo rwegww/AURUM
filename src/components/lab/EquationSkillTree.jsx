@@ -35,7 +35,7 @@ const SkillNode = ({ node, index, isActive, isCompleted, onClick }) => {
         }}
       >
         {isCompleted ? (
-          <span className="text-2xl">âœ“</span>
+          <span className="text-2xl">✓</span>
         ) : (
           <span className="text-xl font-bold">{node.id}</span>
         )}

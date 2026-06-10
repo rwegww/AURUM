@@ -1,5 +1,5 @@
-﻿import React from "react";
-import { KeyboardAvoidingView, Platform, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, View, Image } from "react-native";
 import { Link, router } from "expo-router";
 import {
   Card,
@@ -37,9 +37,11 @@ export default function LoginScreen() {
     >
       <Screen style={styles.screen}>
         <View style={styles.brand}>
-          <View style={styles.logoMark}>
-            <Text style={styles.logoText}>Au</Text>
-          </View>
+          <Image 
+            source={require("../../assets/logo.png")} 
+            style={styles.logoImage} 
+            resizeMode="contain"
+          />
           <Text style={styles.brandTitle}>AURUM</Text>
           <Text style={styles.brandSubtitle}>Chemistry Currency</Text>
         </View>
@@ -73,6 +75,22 @@ export default function LoginScreen() {
             onPress={submit}
             disabled={submitting}
           />
+
+          <View style={styles.dividerContainer}>
+            <View style={styles.dividerLine} />
+            <Text style={styles.dividerText}>Hoặc</Text>
+            <View style={styles.dividerLine} />
+          </View>
+
+          <Link href="/email-login" asChild>
+            <GhostButton
+              label="Đăng nhập bằng email OTP"
+              icon="mail-open-outline"
+              disabled={submitting}
+              color={colors.greenDark}
+            />
+          </Link>
+
           <Link href="/register" asChild>
             <GhostButton label="Tạo tài khoản học sinh" icon="person-add-outline" />
           </Link>
@@ -92,19 +110,10 @@ const styles = StyleSheet.create({
     marginTop: spacing.xl,
     marginBottom: spacing.md
   },
-  logoMark: {
+  logoImage: {
     width: 82,
     height: 82,
-    borderRadius: 28,
-    backgroundColor: colors.green,
-    alignItems: "center",
-    justifyContent: "center",
     marginBottom: spacing.md
-  },
-  logoText: {
-    color: "#ffffff",
-    fontSize: 32,
-    fontWeight: "900"
   },
   brandTitle: {
     color: colors.ink,
@@ -133,6 +142,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontWeight: "600"
+  },
+  dividerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: spacing.sm,
+    gap: spacing.sm
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border
+  },
+  dividerText: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: 1
   },
   errorText: {
     color: colors.red,

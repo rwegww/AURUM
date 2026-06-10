@@ -765,7 +765,7 @@ BEGIN
     new.id::text,
     COALESCE(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'username', split_part(new.email, '@', 1)),
     new.email,
-    COALESCE(new.raw_user_meta_data->>'role', 'student')
+    'student'
   )
   ON CONFLICT (id) DO NOTHING;
   RETURN new;
@@ -1285,10 +1285,14 @@ CREATE POLICY "Users can delete own activities"
 REVOKE UPDATE ON TABLE public.nguoi_dung FROM anon, authenticated;
 GRANT UPDATE (avatar_seed, ke_hoach_hoc) ON TABLE public.nguoi_dung TO authenticated;
 
+REVOKE ALL ON FUNCTION public.handle_new_user() FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.increment_active_minutes(text) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_likes(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_material_view(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.claim_mission_reward(text, uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.join_arena_room(text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.sync_user_streak(text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.handle_new_user() TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_likes(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_material_view(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.claim_mission_reward(text, uuid) TO service_role;

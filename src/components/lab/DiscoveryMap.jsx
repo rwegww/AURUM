@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState, useEffect, useRef } from 'react';
+﻿import React, { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules } from '../../data/molecules';
 import { elements } from '../../data/elements';
@@ -406,7 +406,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-viet-green to-transparent opacity-50" />
                <div className="p-8 pb-4 flex flex-col items-center text-center relative shrink-0">
                   <button onClick={() => setSelectedId(null)} className="absolute top-6 left-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all border border-white/5">
-                     <span className="text-white/60 text-lg font-light">âœ•</span>
+                     <span className="text-white/60 text-lg font-light">×</span>
                   </button>
                   <div className="mt-4 mb-4 relative">
                      <motion.div 

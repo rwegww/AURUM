@@ -252,7 +252,7 @@ const MagicLab3D = () => {
         {newDiscovery && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-xl rounded-3xl">
              <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 text-center max-w-sm shadow-[0_0_50px_rgba(59,130,246,0.3)]">
-                <div className="text-5xl mb-6">âœ¨</div>
+                <div className="text-5xl mb-6">✨</div>
                 <h2 className="text-2xl font-black text-white mb-2 uppercase italic">Phát hiện mới!</h2>
                 <div className="text-4xl font-black text-blue-400 mb-2 drop-shadow-md">{newDiscovery.formula}</div>
                 <p className="text-white/60 mb-8 font-medium text-sm">{newDiscovery.name}</p>

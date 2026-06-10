@@ -63,22 +63,6 @@ const isAnswered = (question, answer) => {
   return typeof answer === "string" && answer.trim().length > 0;
 };
 
-const calculateScore = (questions, answers) => {
-  const multipleChoiceQuestions = questions.filter((q) => (q.type || "multiple_choice") === "multiple_choice");
-  if (multipleChoiceQuestions.length === 0) return null;
-
-  let correctCount = 0;
-  questions.forEach((question, index) => {
-    if ((question.type || "multiple_choice") !== "multiple_choice") return;
-    const expectedIndex = Number.isInteger(question.correct_index)
-      ? question.correct_index
-      : ["A", "B", "C", "D"].indexOf(String(question.correct_answer || "").toUpperCase());
-    if (expectedIndex >= 0 && answers[index] === expectedIndex) correctCount += 1;
-  });
-
-  return Math.round((correctCount / multipleChoiceQuestions.length) * 10);
-};
-
 export default function ClassroomDetailScreen() {
   const { id } = useLocalSearchParams();
   const { token } = useAuth();
@@ -93,7 +77,7 @@ export default function ClassroomDetailScreen() {
       classApi.posts(token, classId).catch(() => []),
       classApi.schedules(token, classId).catch(() => [])
     ]);
-    const currentClass = lop.find(c => c.id === classId);
+    const currentClass = lop.find((c) => String(c.id) === String(classId));
     return { currentClass, posts, schedules };
   }, [classId, token]);
 
@@ -110,12 +94,14 @@ export default function ClassroomDetailScreen() {
   const submitAssignment = async (post, payload = {}, showSuccess = true) => {
     setSubmittingPostId(post.id);
     try {
-      await classApi.submitAssignment(token, post.id, payload);
+      const submitted = await classApi.submitAssignment(token, post.id, payload);
       if (showSuccess) Alert.alert("Đã nộp bài", "Bài làm của bạn đã được ghi nhận.");
       closeAssignment();
       await resource.reload();
+      return submitted;
     } catch (error) {
       Alert.alert("Không nộp được", error.message);
+      return null;
     } finally {
       setSubmittingPostId(null);
     }
@@ -123,14 +109,14 @@ export default function ClassroomDetailScreen() {
 
   const submitQuiz = async () => {
     if (!activeAssignment) return;
-    const questions = activeAssignment.questions || [];
-    const score = calculateScore(questions, answers);
-    const hasWrittenAnswer = questions.some((q) => q.type === "short_answer" || q.type === "essay" || q.type === "true_false");
-    await submitAssignment(activeAssignment, { answers, score }, false);
-    if (hasWrittenAnswer && score !== null) {
-      Alert.alert("Đã gửi bài", `Phần trắc nghiệm: ${score}/10 điểm. Phần tự luận sẽ được giáo viên chấm riêng.`);
-    } else if (score !== null) {
-      Alert.alert("Đã gửi bài", `Điểm tự chấm: ${score}/10.`);
+    const submitted = await submitAssignment(activeAssignment, answers, false);
+    if (!submitted) return;
+
+    const autoGrade = submitted.auto_grade;
+    if (autoGrade?.score !== null && autoGrade?.score !== undefined && autoGrade?.needsManualReview) {
+      Alert.alert("Đã gửi bài", `Phần tự động chấm được ${autoGrade.score}/10 (${autoGrade.correct}/${autoGrade.total} câu). Giáo viên sẽ xem các câu còn lại.`);
+    } else if (autoGrade?.score !== null && autoGrade?.score !== undefined) {
+      Alert.alert("Đã gửi bài", `Điểm tự động: ${autoGrade.score}/10.`);
     } else {
       Alert.alert("Đã gửi bài", "Bài làm đã được gửi cho giáo viên chấm.");
     }
@@ -346,11 +332,8 @@ export default function ClassroomDetailScreen() {
                     icon="send-outline"
                     color={colors.green}
                     onPress={() => submitAssignment(post, {
-                      answers: {
-                        source: "mobile",
-                        submittedAt: new Date().toISOString()
-                      },
-                      score: null
+                      source: "mobile",
+                      submittedAt: new Date().toISOString()
                     })}
                     disabled={submittingPostId === post.id}
                   />

@@ -2,13 +2,13 @@ import React from "react";
 import {
   ActivityIndicator,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, radius, shadow, spacing } from "../../constants/theme";
 
@@ -81,17 +81,19 @@ export const PrimaryButton = ({
   </Pressable>
 );
 
-export const GhostButton = ({ label, icon, onPress, style, color = colors.ink }) => (
+export const GhostButton = ({ label, icon, onPress, style, color = colors.ink, disabled }) => (
   <Pressable
     onPress={onPress}
+    disabled={disabled}
     style={({ pressed }) => [
       styles.ghostButton,
-      pressed ? styles.ghostPressed : null,
+      pressed && !disabled ? styles.ghostPressed : null,
+      disabled ? styles.ghostDisabled : null,
       style
     ]}
   >
-    {icon ? <Ionicons name={icon} size={18} color={color} /> : null}
-    <Text style={[styles.ghostButtonText, { color }]} numberOfLines={1}>
+    {icon ? <Ionicons name={icon} size={18} color={disabled ? colors.muted : color} /> : null}
+    <Text style={[styles.ghostButtonText, { color: disabled ? colors.muted : color }]} numberOfLines={1}>
       {label}
     </Text>
   </Pressable>
@@ -304,6 +306,9 @@ const styles = StyleSheet.create({
   },
   ghostPressed: {
     backgroundColor: colors.surfaceAlt
+  },
+  ghostDisabled: {
+    opacity: 0.55
   },
   ghostButtonText: {
     fontSize: 13,

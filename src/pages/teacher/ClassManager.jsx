@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -9,11 +9,7 @@ const ClassManager = () => {
   const [newClass, setNewClass] = useState({ name: '', khoi_id: '10', description: '' });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchClasses();
-  }, []);
-
-  const fetchClasses = async () => {
+  const fetchClasses = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
       const res = await fetch('/api/classes', {
@@ -27,7 +23,11 @@ const ClassManager = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchClasses();
+  }, [fetchClasses]);
 
   const handleCreate = async (e) => {
     e.preventDefault();

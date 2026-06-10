@@ -56,6 +56,7 @@ const supabaseState = {
   lastInsertPayload: null,
   insertAttempted: false,
   updateAttempted: false,
+  insertedPost: null,
 };
 
 const matchFilter = (ctx, column) => ctx.filters.find((filter) => filter.column === column)?.value;
@@ -68,6 +69,11 @@ const resolveSingle = async (ctx) => {
 
   if (ctx.table === 'bai_dang_lop' && ctx.action === 'select') {
     return supabaseState.post ? { data: supabaseState.post, error: null } : { data: null, error: { message: 'not found' } };
+  }
+
+  if (ctx.table === 'bai_dang_lop' && ctx.action === 'insert') {
+    const row = Array.isArray(ctx.payload) ? ctx.payload[0] : ctx.payload;
+    return { data: supabaseState.insertedPost || { id: 'post-1', ...row }, error: null };
   }
 
   if (ctx.table === 'bai_nop' && ctx.action === 'upsert') {
@@ -177,6 +183,7 @@ beforeEach(() => {
   supabaseState.lastInsertPayload = null;
   supabaseState.insertAttempted = false;
   supabaseState.updateAttempted = false;
+  supabaseState.insertedPost = null;
 });
 
 const validMaterialPayload = {
@@ -279,6 +286,23 @@ describe('security acceptance matrix', () => {
     });
   });
 
+  it('serves balancing progress before the node wildcard route', async () => {
+    nguoi_dung.student.balancingProgress = {
+      completedNodeIds: [1, 2],
+      completedCount: 2,
+      passedGrades: [],
+      lessonStars: {},
+    };
+
+    const res = await request(app)
+      .get('/api/lab/balancing/progress')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toMatchObject({ completedNodeIds: [1, 2], completedCount: 2 });
+    expect(supabase.from).not.toHaveBeenCalledWith('cau_hoi_can');
+  });
+
   it('blocks non-members from class members', async () => {
     supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
 
@@ -339,22 +363,101 @@ describe('security acceptance matrix', () => {
     expect(blocked.status).toBe(403);
   });
 
-  it('ignores student-submitted score and always stores submitted status', async () => {
-    supabaseState.post = { id: 'post-1', lop_id: 'class-1', type: 'assignment', hoc_sinh_nhan_id: null };
+  it('allows joined students to send private messages to the class teacher', async () => {
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
     supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'student' };
-    supabaseState.upsertedSubmission = { bai_dang_id: 'post-1', hoc_sinh_id: 'student', status: 'submitted', diem: null, cau_tra_loi: ['A'] };
+    supabaseState.insertedPost = {
+      id: 'post-1',
+      lop_id: 'class-1',
+      tac_gia_id: 'student',
+      type: 'announcement',
+      noi_dung: 'Can thay co ho tro',
+      hoc_sinh_nhan_id: 'teacher',
+      cau_hoi: [],
+      author: { username: 'student' },
+      target: { username: 'teacher' },
+    };
+
+    const res = await request(app)
+      .post('/api/classes/class-1/messages')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ content: '  Can thay co ho tro  ' });
+
+    expect(res.status).toBe(201);
+    expect(supabaseState.lastInsertPayload[0]).toMatchObject({
+      lop_id: 'class-1',
+      tac_gia_id: 'student',
+      type: 'announcement',
+      noi_dung: 'Can thay co ho tro',
+      hoc_sinh_nhan_id: 'teacher',
+      cau_hoi: [],
+    });
+    expect(res.body).toMatchObject({
+      id: 'post-1',
+      class_id: 'class-1',
+      author_id: 'student',
+      target_student_id: 'teacher',
+      content: 'Can thay co ho tro',
+    });
+  });
+
+  it('fails closed for production cron reminders when CRON_SECRET is missing', async () => {
+    const previousNodeEnv = process.env.NODE_ENV;
+    const previousCronSecret = process.env.CRON_SECRET;
+    process.env.NODE_ENV = 'production';
+    delete process.env.CRON_SECRET;
+
+    try {
+      const res = await request(app).get('/api/user/cron-send-reminders');
+
+      expect(res.status).toBe(503);
+      expect(supabase.from).not.toHaveBeenCalledWith('nguoi_dung');
+    } finally {
+      process.env.NODE_ENV = previousNodeEnv;
+      if (previousCronSecret === undefined) {
+        delete process.env.CRON_SECRET;
+      } else {
+        process.env.CRON_SECRET = previousCronSecret;
+      }
+    }
+  });
+
+  it('computes automatic assignment score from stored questions instead of trusting the client', async () => {
+    supabaseState.post = {
+      id: 'post-1',
+      lop_id: 'class-1',
+      type: 'assignment',
+      hoc_sinh_nhan_id: null,
+      cau_hoi: [
+        { type: 'multiple_choice', options: { A: 'NaCl', B: 'H2O' }, correct_answer: 'A' },
+      ],
+    };
+    supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'student' };
+    supabaseState.upsertedSubmission = {
+      bai_dang_id: 'post-1',
+      hoc_sinh_id: 'student',
+      status: 'graded',
+      diem: 0,
+      cau_tra_loi: { 0: 1 },
+    };
 
     const res = await request(app)
       .post('/api/classes/assignments/post-1/submit')
       .set('Authorization', `Bearer ${tokenFor('student')}`)
-      .send({ answers: ['A'], score: 100, status: 'graded' });
+      .send({ answers: { 0: 1 }, score: 100, status: 'graded' });
 
     expect(res.status).toBe(200);
     expect(supabaseState.lastUpsertPayload[0]).toMatchObject({
-      status: 'submitted',
-      diem: null,
+      status: 'graded',
+      diem: 0,
       phan_hoi_giao_vien: null,
-      cau_tra_loi: ['A'],
+      cau_tra_loi: { 0: 1 },
+    });
+    expect(res.body.auto_grade).toMatchObject({
+      score: 0,
+      correct: 0,
+      total: 1,
+      needsManualReview: false,
     });
   });
 
@@ -365,7 +468,7 @@ describe('security acceptance matrix', () => {
     const res = await request(app)
       .post('/api/classes/assignments/post-1/grade/student')
       .set('Authorization', `Bearer ${tokenFor('otherTeacher')}`)
-      .send({ score: 100, phan_hoi: 'done' });
+      .send({ score: 8, phan_hoi: 'done' });
 
     expect(res.status).toBe(403);
     expect(supabaseState.updateAttempted).toBe(false);

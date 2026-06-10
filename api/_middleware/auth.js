@@ -5,7 +5,7 @@ import User from '../models/User.js';
 export const auth = async (req, res, next) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) throw new Error('Token missing');
+    if (!token) throw new Error('Thiếu phiên đăng nhập.');
 
     let userId;
     let user;
@@ -69,9 +69,9 @@ export const auth = async (req, res, next) => {
     next();
   } catch (error) {
     const message = error.message === 'DUAL_LOGIN'
-      ? 'Tai khoan da dang nhap o noi khac'
+      ? 'Tài khoản này đang đăng nhập ở nơi khác.'
       : error.message === 'INVALID_SESSION'
-        ? 'Phien dang nhap khong hop le'
+        ? 'Phiên đăng nhập không còn hợp lệ.'
         : error.message;
 
     res.status(401).json({

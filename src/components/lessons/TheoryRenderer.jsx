@@ -44,7 +44,7 @@ const TheoryRenderer = ({ modules }) => {
             const HeadingTag = content.level || 'h2';
             // Strip leading numbers like "1. ", "2. ", "II. "
             let headingText = formatContent(content.text);
-            headingText = headingText.replace(/^(?:\d+|[IVXLCDM]+)[\.\)]\s*/i, '');
+            headingText = headingText.replace(/^(?:\d+|[IVXLCDM]+)[.)]\s*/i, '');
             
             return (
               <HeadingTag 
