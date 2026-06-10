@@ -99,7 +99,7 @@ const Lessons = () => {
             <h2 className="text-3xl font-bold text-viet-green mb-4">
               {t(`bai_hoc.story_parts.${selectedGrade}.name`)}
             </h2>
-            <p className="text-viet-text-light text-lg italic leading-relaxed font-serif">
+            <p className="text-viet-text-light text-lg italic leading-relaxed">
               "{t(`bai_hoc.story_parts.${selectedGrade}.story`)}"
             </p>
           </motion.div>

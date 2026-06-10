@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { molecules } from '../../data/molecules';
 import { elements } from '../../data/elements';
@@ -246,13 +246,13 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
      const isDiscovered = normalizedDiscovered.has(normalize(formula));
      return (
         <div className="flex flex-col items-center gap-1">
-           <div className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 ${isProduct ? 'border-viet-green bg-viet-green/10' : (isDiscovered ? 'border-white/20 bg-white/5' : 'border-red-500/30 bg-red-500/10')}`}>
-              <span className={`font-black italic ${isProduct ? 'text-viet-green' : (isDiscovered ? 'text-white' : 'text-red-400')}`}>
+           <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${isProduct ? 'border-viet-green bg-viet-green/10' : (isDiscovered ? 'border-viet-border bg-white' : 'border-red-300 bg-red-50')}`}>
+              <span className={`font-black italic ${isProduct ? 'text-viet-green' : (isDiscovered ? 'text-viet-text' : 'text-red-500')}`}>
                  {coeff > 1 ? <span className="text-[10px] opacity-70 mr-0.5">{coeff}</span> : null}
                  {formula}
               </span>
            </div>
-           <span className="text-[9px] text-center font-bold text-white/50 w-16 truncate" title={name}>{name || formula}</span>
+           <span className="text-[9px] text-center font-bold text-viet-text-light w-16 truncate" title={name}>{name || formula}</span>
         </div>
      );
   };
@@ -267,16 +267,16 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
             onMouseEnter={() => setHoveredId(item.normalizedFormula)}
             onMouseLeave={() => setHoveredId(null)}
             onClick={() => setSelectedId(item.normalizedFormula)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border-2 transition-all duration-300 w-[180px] text-left relative overflow-hidden group ${
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-300 w-[180px] text-left relative overflow-hidden group ${
                 item.isDiscovered 
-                    ? 'bg-[#1a1c23] border-white/10 hover:border-white/30 shadow-lg' 
-                    : 'bg-[#1a1c23]/30 border-white/5 opacity-60 hover:opacity-100'
+                    ? 'bg-white border-viet-border hover:border-viet-green/30 shadow-sm hover:shadow-md' 
+                    : 'bg-white/40 border-viet-border border-dashed opacity-80 hover:opacity-100'
             }`}
             style={{
                 borderColor: isHighlighted ? theme.color : (selectedId === item.normalizedFormula ? theme.color : undefined),
                 opacity: isFaded ? 0.3 : 1,
                 transform: isHighlighted ? 'scale(1.05)' : 'scale(1)',
-                boxShadow: isHighlighted ? `0 0 20px ${theme.color}40` : undefined,
+                boxShadow: isHighlighted ? `0 0 20px ${theme.color}20` : undefined,
                 zIndex: isHighlighted ? 10 : 1
             }}
         >
@@ -285,23 +285,23 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
             )}
 
             <div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-white/10 relative overflow-hidden transition-colors"
-                style={{ backgroundColor: item.isDiscovered ? theme.color + '20' : '#00000040' }}
+                className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-viet-border relative overflow-hidden transition-colors"
+                style={{ backgroundColor: item.isDiscovered ? theme.color + '15' : 'rgba(0,0,0,0.04)' }}
             >
                 {item.isDiscovered && (
                     <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
                 )}
                 {item.isDiscovered ? (
-                    <span className="text-[11px] font-black italic text-white relative z-10">{item.formula}</span>
+                    <span className="text-[11px] font-black italic text-viet-text relative z-10">{item.formula}</span>
                 ) : (
-                    <Lock size={14} className="text-white/20 relative z-10" />
+                    <Lock size={14} className="text-viet-text-light opacity-50 relative z-10" />
                 )}
             </div>
             <div className="flex-1 min-w-0">
-                <p className={`text-[11px] font-bold leading-tight truncate ${item.isDiscovered ? 'text-white' : 'text-white/40'}`}>
+                <p className={`text-[11px] font-bold leading-tight truncate ${item.isDiscovered ? 'text-viet-text' : 'text-viet-text-light'}`}>
                     {item.isDiscovered ? item.name : 'Chất bí ẩn'}
                 </p>
-                <p className="text-[8px] font-black text-white/30 mt-0.5 uppercase tracking-widest">
+                <p className="text-[8px] font-black text-viet-text-light opacity-70 mt-0.5 uppercase tracking-widest">
                     {item.category || 'Vật chất'}
                 </p>
             </div>
@@ -310,9 +310,9 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
   };
 
   return (
-    <div className="w-full h-full bg-[#0a0c10] overflow-hidden relative flex flex-col font-sans text-white">
+    <div className="w-full h-full bg-transparent overflow-hidden relative flex flex-col font-sans text-viet-text">
       {/* Background Grid */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
+      <div className="absolute inset-0 opacity-[0.05] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
 
       {/* Main Map Area with Zoom & Pan */}
       <div className="flex-1 overflow-hidden relative" ref={containerRef}>
@@ -353,14 +353,14 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: tIdx * 0.1 }}
-                      className="z-20 bg-[#0a0c10]/90 backdrop-blur-md py-3 px-8 rounded-full border border-white/10 flex items-center justify-center gap-4 shadow-xl mb-4"
+                      className="z-20 bg-white/80 backdrop-blur-md py-3 px-8 rounded-full border border-viet-border flex items-center justify-center gap-4 shadow-sm mb-4"
                     >
-                       <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-white/5 border border-white/10" style={{ color: theme.color }}>
+                       <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-viet-bg border border-viet-border" style={{ color: theme.color }}>
                           {theme.icon}
                        </div>
                        <div className="flex flex-col">
-                           <h2 className="text-sm font-black uppercase tracking-widest text-white leading-none">{theme.label}</h2>
-                           <span className="text-[10px] font-bold text-white/40 mt-1">{items.length} chất</span>
+                           <h2 className="text-sm font-black uppercase tracking-widest text-viet-text leading-none">{theme.label}</h2>
+                           <span className="text-[10px] font-bold text-viet-text-light mt-1">{items.length} chất</span>
                        </div>
                     </motion.div>
 
@@ -395,30 +395,30 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
             <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                onClick={() => setSelectedId(null)}
-               className="absolute inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+               className="absolute inset-0 bg-viet-text/20 backdrop-blur-sm z-[100]"
             />
             <motion.div 
                initial={{ x: 600, opacity: 0 }} 
                animate={{ x: 0, opacity: 1 }} 
                exit={{ x: 600, opacity: 0 }}
-               className="absolute top-4 right-4 bottom-4 w-[550px] bg-[#1a1c23]/95 backdrop-blur-3xl border border-white/10 rounded-[40px] shadow-[0_40px_100px_rgba(0,0,0,0.8)] z-[101] overflow-hidden flex flex-col"
+               className="absolute top-4 right-4 bottom-4 w-[550px] bg-white/95 backdrop-blur-3xl border-l border-viet-border rounded-[40px] shadow-[-10px_0_40px_rgba(0,0,0,0.05)] z-[101] overflow-hidden flex flex-col"
             >
                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-viet-green to-transparent opacity-50" />
                <div className="p-8 pb-4 flex flex-col items-center text-center relative shrink-0">
-                  <button onClick={() => setSelectedId(null)} className="absolute top-6 left-6 w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all border border-white/5">
-                     <span className="text-white/60 text-lg font-light">×</span>
+                  <button onClick={() => setSelectedId(null)} className="absolute top-6 left-6 w-10 h-10 bg-viet-bg hover:bg-gray-100 rounded-xl flex items-center justify-center transition-all border border-viet-border">
+                     <span className="text-viet-text-light text-lg font-light">×</span>
                   </button>
                   <div className="mt-4 mb-4 relative">
                      <motion.div 
                         animate={{ rotate: [0, 360] }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                         className="absolute -inset-10 bg-viet-green/10 blur-3xl rounded-full pointer-events-none" 
                      />
-                     <h2 className="text-6xl font-black italic tracking-tighter text-white font-sora relative z-10 drop-shadow-2xl">
+                     <h2 className="text-6xl font-black italic tracking-tighter text-viet-text font-sora relative z-10 drop-shadow-md">
                         {selectedData.formula || selectedData.symbol}
                      </h2>
                   </div>
-                  <h3 className="text-2xl font-black text-white mb-2">{selectedData.isDiscovered ? selectedData.name : 'Vật chất bí ẩn'}</h3>
-                  <div className="px-5 py-1.5 bg-white/10 border border-white/10 text-white rounded-full text-[10px] font-black uppercase tracking-[3px]">
+                  <h3 className="text-2xl font-black text-viet-text mb-2">{selectedData.isDiscovered ? selectedData.name : 'Vật chất bí ẩn'}</h3>
+                  <div className="px-5 py-1.5 bg-viet-bg border border-viet-border text-viet-text-light rounded-full text-[10px] font-black uppercase tracking-[3px]">
                      {selectedData.category || 'Vật chất'}
                   </div>
                </div>
@@ -428,31 +428,31 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         <div className="w-8 h-8 rounded-xl bg-viet-green/20 flex items-center justify-center text-viet-green">
                            <Activity size={16} />
                         </div>
-                        <h4 className="text-[12px] font-black text-white/60 uppercase tracking-[3px]">Cây Tổng Hợp</h4>
+                        <h4 className="text-[12px] font-black text-viet-text-light uppercase tracking-[3px]">Cây Tổng Hợp</h4>
                      </div>
-                     <div className="bg-black/30 p-6 rounded-[24px] border border-white/5 flex flex-col gap-6">
+                     <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border flex flex-col gap-6">
                         {selectedData.is_starter || selectedData.isStarter ? (
                            <div className="text-center py-4">
-                              <p className="text-white/40 text-[13px] font-semibold italic">Nguyên liệu gốc. Trọng tâm trong vũ trụ vật chất.</p>
+                              <p className="text-viet-text-light opacity-70 text-[13px] font-semibold italic">Nguyên liệu gốc. Trọng tâm trong vũ trụ vật chất.</p>
                            </div>
                         ) : synthesisPathways.length > 0 ? (
                            synthesisPathways.map((pathway, pIdx) => (
                               <div key={pathway.id} className="flex flex-col gap-3">
-                                 <div className="flex items-center justify-between border-b border-white/5 pb-2 mb-2">
-                                    <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">Cách tổng hợp #{pIdx + 1}</span>
-                                    <span className="text-[10px] font-bold text-white/20 bg-white/5 px-2 py-0.5 rounded">{pathway.type || 'Phản ứng'}</span>
+                                 <div className="flex items-center justify-between border-b border-viet-border pb-2 mb-2">
+                                    <span className="text-[10px] font-black text-viet-text-light opacity-70 uppercase tracking-widest">Cách tổng hợp #{pIdx + 1}</span>
+                                    <span className="text-[10px] font-bold text-viet-text-light bg-gray-100 px-2 py-0.5 rounded">{pathway.type || 'Phản ứng'}</span>
                                  </div>
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
                                     <div className="flex items-center gap-2">
                                        {pathway.reactants.map((reactant, rIdx) => (
                                           <React.Fragment key={`r-${rIdx}`}>
-                                             {rIdx > 0 && <Plus size={14} className="text-white/30" />}
+                                             {rIdx > 0 && <Plus size={14} className="text-viet-text-light opacity-50" />}
                                              {renderPathwayNode(reactant.formula, reactant.coeff, reactant.name, false)}
                                           </React.Fragment>
                                        ))}
                                     </div>
                                     <div className="flex flex-col items-center justify-center mx-2">
-                                       <span className="text-[8px] text-white/30 font-bold mb-1">{pathway.conditions ? 'ĐK' : ''}</span>
+                                       <span className="text-[8px] text-viet-text-light opacity-70 font-bold mb-1">{pathway.conditions ? 'ĐK' : ''}</span>
                                        <ArrowRight size={20} className="text-viet-green opacity-70" />
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -460,7 +460,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                                           const isTarget = normalize(product.formula) === normalize(selectedData.formula);
                                           return (
                                              <React.Fragment key={`p-${prIdx}`}>
-                                                {prIdx > 0 && <Plus size={14} className="text-white/30" />}
+                                                {prIdx > 0 && <Plus size={14} className="text-viet-text-light opacity-50" />}
                                                 {renderPathwayNode(product.formula, product.coeff, product.name, isTarget)}
                                              </React.Fragment>
                                           );
@@ -468,42 +468,42 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                                     </div>
                                  </div>
                                  {pathway.conditions && (
-                                    <p className="text-[10px] text-white/40 italic text-center mt-2">ĐK: {pathway.conditions}</p>
+                                    <p className="text-[10px] text-viet-text-light opacity-70 italic text-center mt-2">ĐK: {pathway.conditions}</p>
                                  )}
                               </div>
                            ))
                         ) : (
                            <div className="text-center py-4">
-                              <p className="text-white/40 text-[13px] font-semibold italic">Chưa có công thức nào để tạo ra chất này trong dữ liệu.</p>
+                              <p className="text-viet-text-light opacity-70 text-[13px] font-semibold italic">Chưa có công thức nào để tạo ra chất này trong dữ liệu.</p>
                            </div>
                         )}
                      </div>
                   </div>
                   <div className="space-y-4">
                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-white/50"><Microscope size={16} /></div>
-                        <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[4px]">Tính chất & Mô tả</h4>
+                        <div className="w-8 h-8 rounded-xl bg-viet-bg flex items-center justify-center text-viet-text-light border border-viet-border"><Microscope size={16} /></div>
+                        <h4 className="text-[10px] font-black text-viet-text-light opacity-80 uppercase tracking-[4px]">Tính chất & Mô tả</h4>
                      </div>
-                     <div className="bg-white/5 p-6 rounded-[24px] border border-white/5">
-                        <p className="text-white/80 text-[14px] leading-relaxed font-medium italic">
+                     <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border">
+                        <p className="text-viet-text text-[14px] leading-relaxed font-medium italic">
                            {selectedData.isDiscovered ? (selectedData.description || 'Chưa có mô tả chi tiết cho vật chất này.') : 'Bạn chưa khám phá ra bí mật của vật chất này. Hãy thử kết hợp các nguyên tố trong phòng Lab!'}
                         </p>
                      </div>
                   </div>
                   <div className="flex flex-col gap-4">
-                     <div className="bg-white/5 p-6 rounded-[24px] border border-white/5 flex flex-col gap-2">
+                     <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border flex flex-col gap-2">
                         <span className="text-[8px] font-black text-viet-green uppercase tracking-[3px]">Khối lượng nguyên tử / phân tử</span>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-3xl font-black text-white italic">{calculateMolarMass(selectedData.formula || selectedData.symbol, elements)}</span>
-                           <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">u (amu)</span>
+                           <span className="text-3xl font-black text-viet-text italic">{calculateMolarMass(selectedData.formula || selectedData.symbol, elements)}</span>
+                           <span className="text-[10px] font-bold text-viet-text-light opacity-70 uppercase tracking-widest">u (amu)</span>
                         </div>
                      </div>
-                     <div className="bg-white/5 p-6 rounded-[24px] border border-white/5 space-y-3">
+                     <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border space-y-3">
                         <div className="flex items-center gap-2">
                            <div className="w-1.5 h-1.5 rounded-full bg-viet-green" />
-                           <span className="text-[8px] font-black text-white/50 uppercase tracking-[3px]">Ứng dụng trong đời sống</span>
+                           <span className="text-[8px] font-black text-viet-text-light opacity-80 uppercase tracking-[3px]">Ứng dụng trong đời sống</span>
                         </div>
-                        <p className="text-white/80 text-[13px] leading-relaxed font-semibold italic border-l-2 border-viet-green/30 pl-4">
+                        <p className="text-viet-text text-[13px] leading-relaxed font-semibold italic border-l-2 border-viet-green/30 pl-4">
                            {selectedData.isDiscovered ? getApplications(selectedData.formula || selectedData.symbol, selectedData.name, selectedData.category) : 'Khám phá chất này trong phòng Lab để tìm hiểu các ứng dụng thực tế phong phú!'}
                         </p>
                      </div>

@@ -441,7 +441,7 @@ const CraftingPage = () => {
             <div>
               <div className="inline-flex items-center gap-2 rounded-full bg-viet-green/10 border border-viet-green/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-viet-green mb-2">
                 <Hammer size={12} className="animate-pulse" />
-                Synthesis Laboratory
+                Phòng Lab Chế Tạo
               </div>
               <h1 className="text-3xl md:text-4xl font-black italic uppercase tracking-tight text-[#1a1a1a]">Cơ xưởng chế tạo</h1>
             </div>

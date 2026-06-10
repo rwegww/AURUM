@@ -173,6 +173,36 @@ export const bai2 = {
     {
       "type": "heading",
       "content": {
+        "text": "Hệ thống hóa kiến thức",
+        "level": "h2"
+      },
+      "id": "mod20_1"
+    },
+    {
+      "type": "markdown",
+      "content": {
+        "text": "| Mạch kiến thức | Cần hiểu đúng | Dấu hiệu nhận biết | Lưu ý khi học |\n| --- | --- | --- | --- |\n| Quy tắc chung | Chỉ làm thí nghiệm khi có hướng dẫn, không đùa nghịch và không tự ý thay đổi thao tác | Nhóm có phiếu hướng dẫn, dụng cụ được kiểm tra trước khi dùng | Ưu tiên phòng tránh rủi ro hơn xử lí khi đã xảy ra sự cố |\n| Nhãn cảnh báo | Kí hiệu trên nhãn cho biết nguy cơ như dễ cháy, ăn mòn, độc hoặc dễ vỡ | Trên chai lọ có biểu tượng và chữ cảnh báo | Không suy đoán chất không màu là an toàn |\n| Thao tác hóa chất | Không nếm, không ngửi trực tiếp, không trộn tùy ý và chỉ dùng lượng vừa đủ | Dùng thìa, ống nhỏ giọt hoặc kẹp theo yêu cầu | Luôn hướng miệng ống nghiệm ra xa người |\n| Xử lí sự cố | Bình tĩnh báo giáo viên, rửa bằng nước sạch khi hóa chất dính vào da hoặc mắt | Có vỡ dụng cụ, đổ hóa chất, bốc khói hoặc cháy nhỏ | Không tự nhặt mảnh vỡ bằng tay trần |"
+      },
+      "id": "mod20_2"
+    },
+    {
+      "type": "heading",
+      "content": {
+        "text": "Luyện tập theo 3 mức",
+        "level": "h2"
+      },
+      "id": "mod20_3"
+    },
+    {
+      "type": "markdown",
+      "content": {
+        "text": "| Mức | Việc cần làm | Sản phẩm học tập |\n| --- | --- | --- |\n| Nhận biết | Gạch chân các từ khóa của bài \"An toàn trong phòng thực hành\". | Danh sách 4-6 từ khóa chính |\n| Thông hiểu | Giải thích một hiện tượng bằng ít nhất hai ý trong bảng hệ thống hóa. | Đoạn giải thích 3-5 câu |\n| Vận dụng | Đọc nhãn dung dịch tẩy rửa trong gia đình để nhận biết cảnh báo ăn mòn hoặc kích ứng. | Một ví dụ thực tế kèm lí do khoa học |"
+      },
+      "id": "mod20_4"
+    },
+    {
+      "type": "heading",
+      "content": {
         "text": "Ví dụ minh họa có hướng dẫn",
         "level": "h2"
       },

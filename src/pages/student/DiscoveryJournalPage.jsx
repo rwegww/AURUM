@@ -100,13 +100,13 @@ const DiscoveryJournalPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0a0f] text-white">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-viet-bg text-viet-text">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          className="mb-6 h-16 w-16 rounded-full border-4 border-blue-500 border-t-transparent"
+          className="mb-6 h-16 w-16 rounded-full border-4 border-viet-green border-t-transparent"
         />
-        <h2 className="animate-pulse text-xl font-bold uppercase tracking-widest">Đang nạp sổ tay khám phá...</h2>
+        <h2 className="animate-pulse text-xl font-bold uppercase tracking-widest text-viet-text-light">Đang nạp sổ tay khám phá...</h2>
       </div>
     );
   }
@@ -114,32 +114,32 @@ const DiscoveryJournalPage = () => {
   const discoveryPercent = Math.round((discoveredFormulas.length / Math.max(1, dbChemicals.length)) * 100);
 
   return (
-    <div className="flex h-screen flex-col bg-[#0d0e12] font-sans text-white">
-      <div className="flex shrink-0 items-center justify-between border-b border-white/10 bg-black/40 p-6 md:p-8">
+    <div className="flex h-screen flex-col bg-viet-bg font-sans text-viet-text">
+      <div className="flex shrink-0 items-center justify-between border-b border-viet-border bg-white/80 backdrop-blur shadow-sm p-6 md:p-8 z-20 relative">
         <div className="flex items-center gap-12">
           <div>
-            <h2 className="text-2xl font-black uppercase italic tracking-tighter">Synthesis Nexus</h2>
-            <p className="mt-1 text-xs font-bold uppercase tracking-widest text-white/40">Sổ tay vật chất & phản ứng</p>
+            <h2 className="text-2xl font-black uppercase italic tracking-tighter text-viet-text">Từ Điển Vật Chất</h2>
+            <p className="mt-1 text-xs font-bold uppercase tracking-widest text-viet-text-light">Sổ tay vật chất & phản ứng</p>
           </div>
 
-          <div className="hidden items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-6 py-3 md:flex">
+          <div className="hidden items-center gap-4 rounded-2xl border border-viet-border bg-white px-6 py-3 shadow-sm md:flex">
             <div className="flex w-48 flex-col gap-1">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest text-white/60">Tiến độ thu thập</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Tiến độ thu thập</span>
                 <span className="text-[10px] font-black text-viet-green">{discoveryPercent}%</span>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full border border-white/5 bg-slate-900">
+              <div className="h-1.5 overflow-hidden rounded-full border border-viet-border bg-gray-100">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-blue-500 to-viet-green"
+                  className="h-full bg-gradient-to-r from-emerald-400 to-viet-green"
                   initial={{ width: 0 }}
                   animate={{ width: `${discoveryPercent}%` }}
                   transition={{ duration: 1, ease: 'easeOut' }}
                 />
               </div>
             </div>
-            <div className="flex flex-col items-end border-l border-white/10 pl-4">
-              <span className="text-xl font-black italic">
-                {discoveredFormulas.length} <span className="text-xs text-white/40 not-italic">/ {dbChemicals.length}</span>
+            <div className="flex flex-col items-end border-l border-viet-border pl-4">
+              <span className="text-xl font-black italic text-viet-text">
+                {discoveredFormulas.length} <span className="text-xs text-viet-text-light not-italic">/ {dbChemicals.length}</span>
               </span>
             </div>
           </div>
@@ -148,14 +148,14 @@ const DiscoveryJournalPage = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/lab/crafting')}
-            className="flex items-center justify-center gap-2 rounded-2xl border border-emerald-300/30 bg-emerald-500 px-5 py-3 text-xs font-black uppercase tracking-widest text-white shadow-lg transition-all hover:bg-emerald-400"
+            className="flex items-center justify-center gap-2 viet-btn-green shadow-lg hover:shadow-xl text-xs py-3 !px-5"
           >
             <Hammer size={16} />
             Chế tạo
           </button>
           <button
             onClick={handleClose}
-            className="flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest shadow-lg transition-all hover:bg-white/10"
+            className="flex items-center justify-center rounded-2xl border border-viet-border bg-white text-viet-text-light px-6 py-3 text-xs font-bold uppercase tracking-widest shadow-sm transition-all hover:bg-viet-bg hover:text-viet-text"
           >
             Đóng trang
           </button>
