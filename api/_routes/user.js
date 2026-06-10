@@ -60,13 +60,6 @@ const getVietnamHHMM = (date) => {
   return `${parts.hour}:${parts.minute}`;
 };
 
-const parseStudyTimeMinutes = (value) => {
-  if (typeof value !== 'string') return null;
-  const match = value.trim().match(/^([01]\d|2[0-3]):([0-5]\d)$/);
-  if (!match) return null;
-  return Number(match[1]) * 60 + Number(match[2]);
-};
-
 const normalizeStudyPlan = (incoming, existing = {}) => {
   const base = existing && typeof existing === 'object' && !Array.isArray(existing) ? existing : {};
   const patch = incoming && typeof incoming === 'object' && !Array.isArray(incoming) ? incoming : {};
@@ -131,12 +124,13 @@ const applyLessonStreak = (updateFields, user) => {
   plan.completed = true;
   updateFields.studyPlan = plan;
   
-  const today = new Date().toISOString().split('T')[0];
-  const lastStreak = user.lastStreakAt ? new Date(user.lastStreakAt).toISOString().split('T')[0] : null;
+  const now = new Date();
+  const today = getVietnamDateKey(now);
+  const lastStreak = user.lastStreakAt ? getVietnamDateKey(new Date(user.lastStreakAt)) : null;
 
   if (today !== lastStreak) {
     updateFields.streak_count = (user.streakCount || 0) + 1;
-    updateFields.last_streak_at = new Date().toISOString();
+    updateFields.last_streak_at = now.toISOString();
   }
 };
 
@@ -201,7 +195,7 @@ router.get('/profile', auth, async (req, res) => {
     res.json(toProfileResponse(req.user));
   } catch (err) {
     console.error('Error in /profile:', err);
-    res.status(500).json({ message: 'Internal Server Error', error: err.message });
+    res.status(500).json({ message: 'Không thể tải hồ sơ lúc này.', error: err.message });
   }
 });
 
@@ -247,12 +241,12 @@ router.post('/lesson-segment', auth, async (req, res) => {
   try {
     const { lessonId, level, stars } = req.body || {};
     if (!lessonId || !Object.prototype.hasOwnProperty.call(LESSON_LEVEL_XP, level)) {
-      return res.status(400).json({ message: 'Invalid lesson segment payload' });
+      return res.status(400).json({ message: 'Dữ liệu phần bài học không hợp lệ.' });
     }
 
     const normalizedStars = Number.parseInt(stars, 10);
     if (!Number.isFinite(normalizedStars) || normalizedStars < 1 || normalizedStars > 3) {
-      return res.status(400).json({ message: 'Invalid star count' });
+      return res.status(400).json({ message: 'Số sao không hợp lệ.' });
     }
 
     const lesson = await Lesson.findById(lessonId);
@@ -303,7 +297,7 @@ router.post('/placement-pass', auth, async (req, res) => {
   try {
     const grade = String(req.body?.grade || '');
     if (!PLACEMENT_GRADES.has(grade)) {
-      return res.status(400).json({ message: 'Invalid placement grade' });
+      return res.status(400).json({ message: 'Khối lớp kiểm tra không hợp lệ.' });
     }
 
     const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
@@ -329,7 +323,7 @@ router.post('/placement-pass', auth, async (req, res) => {
   }
 });
 
-// Update XP & Progress (legacy, shadowed by the deprecation handler above)
+// Link an OAuth provider to the current account.
 router.post('/link-account', auth, async (req, res) => {
   try {
     const { provider, accountId, providerEmail } = req.body;
@@ -362,56 +356,6 @@ router.post('/link-account', auth, async (req, res) => {
     res.json({ message: `Đã liên kết tài khoản ${provider} thành công!`, linkedAccounts });
   } catch (err) {
     res.status(500).json({ message: 'Lỗi liên kết tài khoản', error: err.message });
-  }
-});
-
-// Update XP & Progress
-router.post('/progress', auth, async (req, res) => {
-  try {
-    const { xpGain, unlockedLessonId, isLessonCompletion } = req.body;
-    let { xp, level, unlockedLessons } = req.user;
-    
-    if (xpGain) {
-      // Apply streak bonus if applicable
-      const streakBonus = Math.floor((req.user.streakCount || 0) / 7) * 5; // e.g., +5 XP for every 7 days of streak
-      xp += (xpGain + streakBonus);
-      level = Math.floor(xp / 1000) + 1;
-    }
-
-    const updateFields = { xp, level };
-
-    if (unlockedLessonId && !unlockedLessons.includes(unlockedLessonId)) {
-      unlockedLessons.push(unlockedLessonId);
-      updateFields.unlockedLessons = unlockedLessons;
-    }
-
-    if (isLessonCompletion) {
-      updateFields.today_lesson_completed = true;
-      const plan = normalizeStudyPlan(req.user.studyPlan);
-      plan.completed = true;
-      updateFields.studyPlan = plan;
-      
-      // Update streak if not already updated today
-      const today = new Date().toISOString().split('T')[0];
-      const lastStreak = req.user.lastStreakAt ? new Date(req.user.lastStreakAt).toISOString().split('T')[0] : null;
-      
-      if (today !== lastStreak) {
-        updateFields.streak_count = (req.user.streakCount || 0) + 1;
-        updateFields.last_streak_at = new Date().toISOString();
-      }
-    }
-
-    const updatedUser = await User.update(req.user.id, updateFields);
-    
-    res.json({
-      xp: updatedUser.xp,
-      level: updatedUser.level,
-      unlockedLessons: updatedUser.unlockedLessons,
-      streakCount: updatedUser.streakCount,
-      todayLessonCompleted: updatedUser.todayLessonCompleted
-    });
-  } catch (err) {
-    res.status(500).json({ message: 'Lỗi cập nhật tiến độ', error: err.message });
   }
 });
 
@@ -478,8 +422,8 @@ router.post('/heartbeat', auth, async (req, res) => {
   try {
     const userId = req.user.id;
     const now = new Date();
-    const today = now.toISOString().split('T')[0];
-    const lastActiveDate = req.user.lastActiveAt ? new Date(req.user.lastActiveAt).toISOString().split('T')[0] : null;
+    const today = getVietnamDateKey(now);
+    const lastActiveDate = req.user.lastActiveAt ? getVietnamDateKey(new Date(req.user.lastActiveAt)) : null;
     
     let onlineMinutes = req.user.todayOnlineMinutes || 0;
     
@@ -505,7 +449,7 @@ router.post('/heartbeat', auth, async (req, res) => {
     }
 
     // Check for streak maintenance (10 minutes online)
-    const lastStreakDate = req.user.lastStreakAt ? new Date(req.user.lastStreakAt).toISOString().split('T')[0] : null;
+    const lastStreakDate = req.user.lastStreakAt ? getVietnamDateKey(new Date(req.user.lastStreakAt)) : null;
     if (onlineMinutes >= 10 && today !== lastStreakDate) {
       updateFields.streak_count = (req.user.streakCount || 0) + 1;
       updateFields.last_streak_at = now.toISOString();
@@ -578,8 +522,15 @@ router.get('/cron-send-reminders', async (req, res) => {
     const authHeader = req.headers.authorization;
     const cronSecret = process.env.CRON_SECRET;
 
-    if (process.env.NODE_ENV === 'production' && cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      return res.status(401).json({ message: 'Khong co quyen truy cap endpoint nay.' });
+    if (process.env.NODE_ENV === 'production') {
+      if (!cronSecret) {
+        console.error('[Cron Reminders] CRON_SECRET is missing in production.');
+        return res.status(503).json({ message: 'Cron endpoint chưa được cấu hình bảo mật.' });
+      }
+
+      if (authHeader !== `Bearer ${cronSecret}`) {
+        return res.status(401).json({ message: 'Không có quyền truy cập endpoint này.' });
+      }
     }
 
     console.log('[Cron Reminders] Starting reminder check...');
@@ -596,7 +547,6 @@ router.get('/cron-send-reminders', async (req, res) => {
 
     const now = new Date();
     const todayKey = getVietnamDateKey(now);
-    const currentMinute = getVietnamMinuteOfDay(now);
     const currentHHMM = getVietnamHHMM(now);
     const results = [];
     const skipped = {
@@ -720,5 +670,3 @@ router.get('/cron-send-reminders', async (req, res) => {
   }
 });
 export default router;
-
-

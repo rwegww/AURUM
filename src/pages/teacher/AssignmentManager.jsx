@@ -1,7 +1,7 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, X } from 'lucide-react';
 
 const AssignmentManager = () => {
     const [assignments, setAssignments] = useState([]);
@@ -36,11 +36,7 @@ const AssignmentManager = () => {
         deadline: '',
     });
 
-    useEffect(() => {
-        fetchInitialData();
-    }, []);
-
-    const fetchInitialData = async () => {
+    const fetchInitialData = useCallback(async () => {
         try {
             const token = localStorage.getItem('token');
             const [aRes, cRes] = await Promise.all([
@@ -55,7 +51,11 @@ const AssignmentManager = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchInitialData();
+    }, [fetchInitialData]);
 
     const handleDeleteAssignment = async (id) => {
         if (!window.confirm('Bạn có chắc chắn muốn xóa bài tập này?')) return;
@@ -170,17 +170,19 @@ const AssignmentManager = () => {
                 })
             });
 
-            if (res.ok) {
-                fetchInitialData();
-                setIsModalOpen(false);
-                setShowQuestionsReview(false);
-                setNewAssignment({ lop_id: '', bai_hoc_id: '', content: '', deadline: '' });
-                setUploadedFile(null);
-                setParsedQuestions([]);
-                setUploadMethod('link');
-            }
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'Không thể tạo bài tập lúc này.');
+
+            fetchInitialData();
+            setIsModalOpen(false);
+            setShowQuestionsReview(false);
+            setNewAssignment({ lop_id: '', bai_hoc_id: '', content: '', deadline: '' });
+            setUploadedFile(null);
+            setParsedQuestions([]);
+            setUploadMethod('link');
         } catch (err) {
             console.error(err);
+            alert(err.message || 'Không thể tạo bài tập lúc này.');
         } finally {
             setIsSubmitting(false);
         }
@@ -215,13 +217,50 @@ const AssignmentManager = () => {
                     phan_hoi: grading.phan_hoi
                 })
             });
-            if (res.ok) {
-                fetchSubmissions(viewingSubmissions.id);
-                setGrading({ studentId: null, score: '', phan_hoi: '' });
-            }
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(data.error || 'Không thể lưu kết quả chấm điểm.');
+
+            fetchSubmissions(viewingSubmissions.id);
+            setGrading({ studentId: null, score: '', phan_hoi: '' });
         } catch (err) {
             console.error(err);
+            alert(err.message || 'Không thể lưu kết quả chấm điểm.');
         }
+    };
+
+    const getQuestionOptions = (question) => (
+        Array.isArray(question.options) ? question.options : (question.options ? Object.values(question.options) : [])
+    );
+
+    const getCorrectOptionIndex = (question) => {
+        if (Number.isInteger(question.correct_index)) return question.correct_index;
+
+        const correctAnswer = question.correct_answer;
+        if (typeof correctAnswer === 'number' && Number.isInteger(correctAnswer)) return correctAnswer;
+        if (typeof correctAnswer !== 'string') return null;
+
+        const trimmed = correctAnswer.trim();
+        const numericAnswer = Number(trimmed);
+        if (Number.isInteger(numericAnswer)) return numericAnswer;
+        if (/^[A-D]$/i.test(trimmed)) return trimmed.toUpperCase().charCodeAt(0) - 65;
+
+        const normalizedAnswer = trimmed.toLowerCase().replace(/\s+/g, ' ');
+        return getQuestionOptions(question).findIndex((option) => (
+            String(option).trim().toLowerCase().replace(/\s+/g, ' ') === normalizedAnswer
+        ));
+    };
+
+    const formatAnswer = (answer) => {
+        if (answer === null || answer === undefined || answer === '') return '(Chưa trả lời)';
+        if (typeof answer === 'object') {
+            const entries = Object.entries(answer);
+            if (!entries.some(([, value]) => typeof value === 'boolean')) return '(Chưa có đáp án mẫu)';
+            return entries
+                .filter(([, value]) => typeof value === 'boolean')
+                .map(([key, value]) => `${key.toUpperCase()}: ${value ? 'Đúng' : 'Sai'}`)
+                .join(', ');
+        }
+        return String(answer);
     };
 
     const filteredAssignments = assignments.filter(a => {
@@ -291,7 +330,7 @@ const AssignmentManager = () => {
                                     onClick={() => handleDeleteAssignment(assignment.id)}
                                     className="w-8 h-8 bg-red-50 text-red-500 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-sm"
                                     title="Xóa bài tập"
-                                >âœ•</button>
+                                ><X className="w-4 h-4" /></button>
                             </div>
 
                             <div className="flex justify-between items-start mb-6">
@@ -412,7 +451,7 @@ const AssignmentManager = () => {
                                                             <div className="flex items-center gap-2 text-blue-600">
                                                                 <span className="text-lg">📄</span>
                                                                 <span className="text-xs font-bold truncate max-w-[150px]">{uploadedFile.name}</span>
-                                                                <button type="button" onClick={() => setUploadedFile(null)} className="ml-2 text-slate-400 hover:text-red-500">âœ•</button>
+                                                                <button type="button" onClick={() => setUploadedFile(null)} className="ml-2 text-slate-400 hover:text-red-500"><X className="w-4 h-4" /></button>
                                                             </div>
                                                         ) : (
                                                             <div className="flex items-center gap-2 text-slate-400">
@@ -481,7 +520,7 @@ const AssignmentManager = () => {
                                                             type="button" 
                                                             onClick={() => setParsedQuestions(parsedQuestions.filter((_, i) => i !== qIdx))}
                                                             className="absolute top-2 right-2 w-6 h-6 bg-red-50 text-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
-                                                        >âœ•</button>
+                                                        ><X className="w-3 h-3" /></button>
                                                         
                                                         <div className="space-y-4">
                                                             <div className="flex items-center gap-3">
@@ -643,7 +682,7 @@ const AssignmentManager = () => {
                                     <button 
                                         onClick={() => setViewingSubmissions(null)} 
                                         className="w-12 h-12 flex items-center justify-center bg-slate-100 hover:bg-red-50 hover:text-red-500 rounded-2xl transition-all"
-                                    >âœ•</button>
+                                    ><X className="w-5 h-5" /></button>
                                 </div>
                                 
                                 <div className="flex-1 overflow-y-auto pr-4 custom-scrollbar lg:grid lg:grid-cols-2 lg:gap-8">
@@ -663,14 +702,14 @@ const AssignmentManager = () => {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                {sub.score && (
+                                                {sub.score !== null && sub.score !== undefined && (
                                                     <div className="bg-viet-green text-white w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg shadow-lg shadow-viet-green/20">
                                                         {sub.score}
                                                     </div>
                                                 )}
                                             </div>
 
-                                            {sub.submitted && !sub.score && grading.studentId !== sub.student.id && (
+                                            {sub.submitted && (sub.score === null || sub.score === undefined) && grading.studentId !== sub.student.id && (
                                                 <button 
                                                     onClick={() => setGrading({...grading, studentId: sub.student.id})}
                                                     className="w-full py-3 bg-white border-2 border-viet-green/30 text-viet-green font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-viet-green hover:text-white transition-all"
@@ -696,14 +735,14 @@ const AssignmentManager = () => {
                                                                             <span className="shrink-0 w-6 h-6 bg-slate-200 text-viet-text rounded-lg flex items-center justify-center text-[10px] font-black">
                                                                                 {qIdx + 1}
                                                                             </span>
-                                                                            <p className="text-[11px] font-bold text-viet-text leading-tight">{q.question}</p>
+                                                                            <p className="text-[11px] font-bold text-viet-text leading-tight">{q.question || q.content}</p>
                                                                         </div>
                                                                         
                                                                         {isMC ? (
                                                                             <div className="grid grid-cols-2 gap-2 pl-8">
-                                                                                {(Array.isArray(q.options) ? q.options : (q.options ? Object.values(q.options) : [])).map((opt, oIdx) => {
+                                                                                {getQuestionOptions(q).map((opt, oIdx) => {
                                                                                     const isChosen = studentAnswer === oIdx;
-                                                                                    const isCorrect = q.correct_index === oIdx;
+                                                                                    const isCorrect = getCorrectOptionIndex(q) === oIdx;
                                                                                     let statusClass = 'bg-white border-slate-100 text-slate-400';
                                                                                     if (isChosen && isCorrect) statusClass = 'bg-emerald-500 border-emerald-600 text-white';
                                                                                     else if (isChosen && !isCorrect) statusClass = 'bg-red-500 border-red-600 text-white';
@@ -721,14 +760,14 @@ const AssignmentManager = () => {
                                                                                 <div className="p-3 bg-white border-2 border-blue-100 rounded-xl">
                                                                                     <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest block mb-1">Câu trả lời của học sinh:</span>
                                                                                     <p className="text-[11px] font-medium text-viet-text italic whitespace-pre-wrap">
-                                                                                        {studentAnswer || '(Chưa trả lời)'}
+                                                                                        {formatAnswer(studentAnswer)}
                                                                                     </p>
                                                                                 </div>
-                                                                                {q.sample_answer && (
+                                                                                {(q.sample_answer || q.correct_answer) && (
                                                                                     <div className="p-3 bg-emerald-50/50 border border-emerald-100 rounded-xl">
                                                                                         <span className="text-[8px] font-black text-emerald-400 uppercase tracking-widest block mb-1">Đáp án mẫu tham khảo:</span>
                                                                                         <p className="text-[10px] font-medium text-emerald-800 whitespace-pre-wrap">
-                                                                                            {q.sample_answer}
+                                                                                            {formatAnswer(q.sample_answer || q.correct_answer)}
                                                                                         </p>
                                                                                     </div>
                                                                                 )}
@@ -775,9 +814,9 @@ const AssignmentManager = () => {
                                                 </div>
                                             )}
 
-                                            {sub.teacher_phan_hoi && (
+                                            {sub.teacher_feedback && (
                                                 <div className="mt-2 p-3 bg-white/50 rounded-xl border border-slate-100 text-[11px] font-bold text-viet-text-light italic">
-                                                    " {sub.teacher_phan_hoi} "
+                                                    " {sub.teacher_feedback} "
                                                 </div>
                                             )}
                                         </div>

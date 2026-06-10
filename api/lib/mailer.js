@@ -60,6 +60,23 @@ const sendMail = async ({ to, subject, html }) => {
 
 export default sendMail;
 
+export const sendLoginOtpEmail = async (toEmail, username, otp, ttlMinutes = 10) => sendMail({
+  to: toEmail,
+  subject: 'Mã đăng nhập AURUM',
+  html: `
+    <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; color: #1f2937;">
+      <h2 style="margin: 0 0 12px; color: #437d0c;">Học viện Hóa học Aurum</h2>
+      <p>Xin chào <strong>${username || 'bạn'}</strong>,</p>
+      <p>Mã xác thực đăng nhập của bạn là:</p>
+      <div style="margin: 24px 0; padding: 18px; text-align: center; border-radius: 14px; background: #f4faef; border: 1px solid #d9f2c9;">
+        <span style="font-size: 34px; letter-spacing: 8px; font-weight: 800; color: #1a1a1a;">${otp}</span>
+      </div>
+      <p style="margin: 0 0 8px;">Mã này có hiệu lực trong ${ttlMinutes} phút.</p>
+      <p style="margin: 0; color: #64748b; font-size: 13px;">Nếu bạn không yêu cầu đăng nhập, hãy bỏ qua email này.</p>
+    </div>
+  `,
+});
+
 export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData) => {
   const { dailyLessonTarget } = planData;
   return sendMail({
@@ -105,7 +122,7 @@ export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planDa
   let mainContent = '';
   let ctaText = 'Học một chút nào';
   let accentColor = '#059669'; // default green
-  let emoji = 'âœ¨';
+  let emoji = '✨';
 
   if (templateHourOffset === 0) {
     subject = '🌟 Khởi động ngày mới cùng Aurum nào! 🌟';
@@ -186,7 +203,7 @@ export const sendStreakReminderEmail = async (toEmail, username, streakCount, ho
     subject = `🔥 Nối dài chuỗi streak ${streakCount} ngày cùng Aurum! 🔥`;
     greetingMsg = 'Duy trì phong độ đỉnh cao của bạn!';
     mainContent = `Chào ngày mới! Chuỗi học tập liên tục của bạn đã đạt **${streakCount} ngày** rồi đó. Hãy dành ít phút học hôm nay để tiếp tục nối dài thành tích đáng nể này nhé!`;
-    emoji = 'âœ¨';
+    emoji = '✨';
   } else if (templateHourOffset === 1) {
     subject = `⚡ Giữ lửa chuỗi ${streakCount} ngày học tập của bạn! ⚡`;
     greetingMsg = 'Ngọn lửa của bạn vẫn đang cháy rực!';

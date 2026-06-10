@@ -12,19 +12,10 @@ import { colors, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 
 export default function LoginScreen() {
-  const { login, loginWithGoogle, authError, setAuthError } = useAuth();
+  const { login, authError, setAuthError } = useAuth();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
-
-  const handleGoogleLogin = async () => {
-    setSubmitting(true);
-    const result = await loginWithGoogle();
-    setSubmitting(false);
-    if (result.success) {
-      router.replace("/");
-    }
-  };
 
   const submit = async () => {
     if (!username.trim() || !password) {
@@ -87,17 +78,18 @@ export default function LoginScreen() {
 
           <View style={styles.dividerContainer}>
             <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>Hoặc đăng nhập bằng</Text>
+            <Text style={styles.dividerText}>Hoặc</Text>
             <View style={styles.dividerLine} />
           </View>
 
-          <GhostButton
-            label={submitting ? "Đang xử lý..." : "Google"}
-            icon="logo-google"
-            onPress={handleGoogleLogin}
-            disabled={submitting}
-            color="#db4437"
-          />
+          <Link href="/email-login" asChild>
+            <GhostButton
+              label="Đăng nhập bằng email OTP"
+              icon="mail-open-outline"
+              disabled={submitting}
+              color={colors.greenDark}
+            />
+          </Link>
 
           <Link href="/register" asChild>
             <GhostButton label="Tạo tài khoản học sinh" icon="person-add-outline" />

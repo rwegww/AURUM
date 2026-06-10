@@ -3,10 +3,12 @@ import ws from 'ws';
 import '../env.js';
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const supabaseKey =
+const serverSupabaseKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.SUPABASE_KEY ||
-  process.env.VITE_SUPABASE_ANON_KEY;
+  process.env.SUPABASE_KEY;
+const supabaseKey =
+  serverSupabaseKey ||
+  (process.env.NODE_ENV !== 'production' ? process.env.VITE_SUPABASE_ANON_KEY : null);
 
 const isValid = (url, key) => {
   if (!url || !key) return false;
@@ -29,6 +31,9 @@ if (!hasValidCredentials) {
   console.warn(`WARNING: ${message} Database calls will fail until env is configured.`);
 } else {
   console.log('Supabase client initialized successfully.');
+  if (!serverSupabaseKey) {
+    console.warn('WARNING: Server Supabase client is using the anon key outside production. Set SUPABASE_SERVICE_ROLE_KEY for parity.');
+  }
 }
 
 const notConfigured = () => {

@@ -64,7 +64,7 @@ app.use('/api/analyze', async (req, res, next) => {
     try {
       const mod = await import('./_routes/analyze_v3.js');
       _analyzeRouter = mod.default;
-      console.log('âœ… Analyze router lazy-loaded on first request.');
+      console.log('Analyze router loaded on first request.');
     } catch (err) {
       _analyzeLoadError = err.message;
       console.error('⚠️ Analyze router failed to load:', err.message);
@@ -87,7 +87,7 @@ app.get('/api/health', (req, res) => {
 // Diagnostic route for environment variables (Masked for security)
 app.get('/api/debug-env', (req, res) => {
   if (process.env.NODE_ENV === 'production') {
-    return res.status(404).json({ error: 'Endpoint not found' });
+  return res.status(404).json({ error: 'Không tìm thấy endpoint này.' });
   }
   const mask = (str) => str ? `${str.substring(0, 4)}...${str.substring(str.length - 4)}` : 'MISSING';
   res.json({
@@ -106,23 +106,23 @@ app.get('/api/debug-env', (req, res) => {
 // Fallback for non-existent API routes
 app.use('/api', (req, res) => {
   console.warn(`[404] Resource not found: ${req.originalUrl}`);
-  res.status(404).json({ error: 'Endpoint not found', path: req.originalUrl });
+  res.status(404).json({ error: 'Không tìm thấy endpoint này.', path: req.originalUrl });
 });
 
 // Body parser error handler (catches express.json() failures)
 app.use((err, req, res, next) => {
   if (err.type === 'entity.parse.failed' || err.status === 400) {
-    return res.status(400).json({ message: 'Invalid JSON body', error: err.message });
+    return res.status(400).json({ message: 'Dữ liệu JSON gửi lên không hợp lệ.', error: err.message });
   }
   next(err);
 });
 
 // Global Error Handler
 app.use((err, req, res, _next) => {
-  console.error('❌ Server Error:', err);
+  console.error('Server error:', err);
   const showDetails = process.env.NODE_ENV !== 'production';
   res.status(500).json({ 
-    message: 'Internal Server Error', 
+    message: 'Máy chủ đang gặp lỗi. Vui lòng thử lại sau.',
     ...(showDetails ? {
       error: err.message,
       type: err.type || err.constructor?.name

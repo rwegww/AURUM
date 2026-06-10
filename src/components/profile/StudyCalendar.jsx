@@ -380,7 +380,7 @@ const StudyCalendar = ({ planData, onPlanDataChange }) => {
                 onClick={() => setModalOpen(false)}
                 className="absolute right-6 top-6 w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center font-bold text-lg opacity-40 hover:opacity-100 transition-all"
               >
-                âœ•
+                ×
               </button>
 
               <h3 className="text-2xl font-black text-viet-text mb-2">

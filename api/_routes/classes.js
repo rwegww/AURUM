@@ -4,7 +4,46 @@ import { auth } from '../_middleware/auth.js';
 import multer from 'multer';
 import mammoth from 'mammoth';
 
-const upload = multer({ storage: multer.memoryStorage() });
+const MAX_EXAM_FILE_SIZE_BYTES = 20 * 1024 * 1024;
+const ALLOWED_EXAM_MIME_TYPES = new Set([
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+]);
+const ALLOWED_EXAM_EXTENSIONS = new Set(['.pdf', '.doc', '.docx']);
+
+const getFileExtension = (filename = '') => {
+  const dotIndex = filename.lastIndexOf('.');
+  return dotIndex >= 0 ? filename.slice(dotIndex).toLowerCase() : '';
+};
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: MAX_EXAM_FILE_SIZE_BYTES },
+  fileFilter: (_req, file, callback) => {
+    const extension = getFileExtension(file.originalname);
+    if (ALLOWED_EXAM_MIME_TYPES.has(file.mimetype) || ALLOWED_EXAM_EXTENSIONS.has(extension)) {
+      return callback(null, true);
+    }
+    return callback(new Error('UNSUPPORTED_EXAM_FILE_TYPE'));
+  },
+});
+
+const parseExamUpload = (req, res, next) => {
+  upload.single('file')(req, res, (err) => {
+    if (!err) return next();
+
+    if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ error: 'Tệp quá lớn. Giới hạn tối đa là 20MB.' });
+    }
+
+    if (err.message === 'UNSUPPORTED_EXAM_FILE_TYPE') {
+      return res.status(400).json({ error: 'Chỉ hỗ trợ tệp PDF, DOC hoặc DOCX.' });
+    }
+
+    return res.status(400).json({ error: 'Không thể tải tệp lên.', details: err.message });
+  });
+};
 
 const router = express.Router();
 
@@ -74,6 +113,97 @@ const normalizePost = (post) => post ? ({
   cau_hoi: undefined,
 }) : post;
 
+const normalizeTextAnswer = (value) => String(value ?? '')
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g, ' ');
+
+const getAnswerFromCollection = (answers, index) => {
+  if (!answers) return undefined;
+  return answers[index] ?? answers[String(index)];
+};
+
+const getCorrectMultipleChoiceIndex = (question) => {
+  if (Number.isInteger(question?.correct_index)) return question.correct_index;
+
+  const correctAnswer = question?.correct_answer ?? question?.answer ?? question?.dap_an;
+  if (typeof correctAnswer === 'number' && Number.isInteger(correctAnswer)) return correctAnswer;
+  if (typeof correctAnswer !== 'string') return null;
+
+  const trimmed = correctAnswer.trim();
+  const numericTrimmed = Number(trimmed);
+  if (Number.isInteger(numericTrimmed)) return numericTrimmed;
+  if (/^[A-D]$/i.test(trimmed)) return trimmed.toUpperCase().charCodeAt(0) - 65;
+
+  const options = Array.isArray(question.options)
+    ? question.options
+    : (question.options ? Object.values(question.options) : []);
+  const normalizedCorrect = normalizeTextAnswer(trimmed);
+  const optionIndex = options.findIndex((option) => normalizeTextAnswer(option) === normalizedCorrect);
+  return optionIndex >= 0 ? optionIndex : null;
+};
+
+const isTrueFalseComplete = (expected, actual) => {
+  if (!expected || typeof expected !== 'object' || !actual || typeof actual !== 'object') return false;
+  const expectedKeys = Object.keys(expected);
+  if (expectedKeys.length === 0) return false;
+  if (!expectedKeys.every((key) => typeof expected[key] === 'boolean')) return false;
+  return expectedKeys.every((key) => typeof actual[key] === 'boolean');
+};
+
+const isTrueFalseCorrect = (expected, actual) => (
+  isTrueFalseComplete(expected, actual)
+  && Object.keys(expected).every((key) => Boolean(actual[key]) === Boolean(expected[key]))
+);
+
+const computeAutoGrade = (questions = [], answers = {}) => {
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return { score: null, correct: 0, total: 0, needsManualReview: true };
+  }
+
+  let correct = 0;
+  let total = 0;
+  let needsManualReview = false;
+
+  questions.forEach((question, index) => {
+    const type = question?.type || 'multiple_choice';
+    const answer = getAnswerFromCollection(answers, index);
+
+    if (type === 'multiple_choice') {
+      const correctIndex = getCorrectMultipleChoiceIndex(question);
+      if (correctIndex === null) {
+        needsManualReview = true;
+        return;
+      }
+
+      total += 1;
+      if (Number(answer) === correctIndex) correct += 1;
+      return;
+    }
+
+    if (type === 'true_false') {
+      const expected = question.correct_answer ?? question.correct_answers;
+      if (!isTrueFalseComplete(expected, answer)) {
+        needsManualReview = true;
+        return;
+      }
+
+      total += 1;
+      if (isTrueFalseCorrect(expected, answer)) correct += 1;
+      return;
+    }
+
+    needsManualReview = true;
+  });
+
+  if (total === 0) {
+    return { score: null, correct: 0, total: 0, needsManualReview: true };
+  }
+
+  const score = Math.round((correct / total) * 100) / 10;
+  return { score, correct, total, needsManualReview };
+};
+
 const normalizeSchedule = (schedule) => schedule ? ({
   ...schedule,
   class_id: schedule.lop_id ?? schedule.class_id,
@@ -135,7 +265,7 @@ const ensureClassAccess = async (classId, user, res) => {
 
   if (error) throw error;
   if (!classData) {
-    res.status(404).json({ error: 'Khong tim thay lop hoc' });
+    res.status(404).json({ error: 'Không tìm thấy lớp học.' });
     return null;
   }
 
@@ -144,12 +274,12 @@ const ensureClassAccess = async (classId, user, res) => {
   }
 
   if (user.role === 'teacher') {
-    res.status(403).json({ error: 'Ban khong co quyen truy cap lop hoc nay' });
+    res.status(403).json({ error: 'Bạn không có quyền truy cập lớp học này.' });
     return null;
   }
 
   if (!(await isClassMember(classId, user.id))) {
-    res.status(403).json({ error: 'Ban chua tham gia lop hoc nay' });
+    res.status(403).json({ error: 'Bạn chưa tham gia lớp học này.' });
     return null;
   }
 
@@ -159,13 +289,13 @@ const ensureClassAccess = async (classId, user, res) => {
 
 
 // Parse exam files for 2025 format
-router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
+router.post('/parse-exam-file', auth, parseExamUpload, async (req, res) => {
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
     if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
 
     let text = '';
-    if (req.file.mimetype === 'application/pdf') {
+    if (req.file.mimetype === 'application/pdf' || getFileExtension(req.file.originalname) === '.pdf') {
         const pdf = (await import('pdf-parse')).default;
         const data = await pdf(req.file.buffer);
         text = data.text;
@@ -200,9 +330,7 @@ router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) =>
             if (/^PHẦN\s+II\b/i.test(line)) { currentPart = 2; continue; }
             if (/^PHẦN\s+III\b/i.test(line)) { currentPart = 3; continue; }
 
-            const qMatch = line.match(/^(?:Câu\s*|Bài\s*|C\s*)?(\d+)\b\s*[.:]?\s*(.*)/i);
-            // To prevent matching arbitrary numbers like "1 lít", we ensure it starts with Câu/Bài/C
-            // OR we use the previous logic but with \b
+            // Avoid treating arbitrary quantities like "1 lít" as question starts.
             let isQuestionStart = false;
             let pNum = null;
             let contentStr = '';
@@ -497,76 +625,11 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// Parse exam file (Format 2025)
-router.post('/parse-exam-file', auth, upload.single('file'), async (req, res) => {
-  try {
-    if (!requireTeacherOrAdmin(req, res)) return;
-    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-    // Extract text from DOCX
-    const result = await mammoth.extractRawText({ buffer: req.file.buffer });
-    const text = result.value;
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l);
-
-    const questions = [];
-    let currentPart = 0;
-    let currentQuestion = null;
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      if (line.startsWith('Phần I.')) { currentPart = 1; continue; }
-      if (line.startsWith('Phần II.')) { currentPart = 2; continue; }
-      if (line.startsWith('Phần III.')) { currentPart = 3; continue; }
-      if (line.includes('------ HẾT ------') || line.startsWith('ĐÁP ÁN')) { break; }
-
-      if (!currentPart) continue;
-
-      if (line.startsWith('Câu ')) {
-        if (currentQuestion) questions.push(currentQuestion);
-        currentQuestion = {
-          id: 'q' + (questions.length + 1),
-          part: currentPart,
-          type: currentPart === 1 ? 'multiple_choice' : currentPart === 2 ? 'true_false' : 'short_answer',
-          content: line,
-          options: currentPart !== 3 ? {} : undefined,
-          correct_answer: currentPart === 2 ? {a:'', b:'', c:'', d:''} : ''
-        };
-      } else if (currentQuestion) {
-        if (currentPart === 1) {
-          if (line.match(/^[A-D]\./)) {
-            const parts = line.split(/(?=[A-D]\.)/);
-            parts.forEach(p => {
-              const m = p.trim().match(/^([A-D])\.\s*(.*)/);
-              if (m) currentQuestion.options[m[1]] = m[2];
-            });
-          } else {
-            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
-          }
-        } else if (currentPart === 2) {
-          if (line.match(/^[a-d]\)/)) {
-            const m = line.match(/^([a-d])\)\s*(.*)/);
-            if (m) currentQuestion.options[m[1]] = m[2];
-          } else {
-            if (Object.keys(currentQuestion.options).length === 0) currentQuestion.content += '\n' + line;
-          }
-        } else if (currentPart === 3) {
-          currentQuestion.content += '\n' + line;
-        }
-      }
-    }
-    if (currentQuestion) questions.push(currentQuestion);
-
-    res.json(questions);
-  } catch (err) {
-    console.error('Error parsing exam file:', err);
-    res.status(500).json({ error: 'Failed to parse file', details: err.message });
-  }
-});
-
 // Join a class (Student)
 router.post('/join', auth, async (req, res) => {
   try {
     if (req.user.role !== 'student') {
-      return res.status(403).json({ error: 'Chi hoc sinh moi co the tham gia lop hoc' });
+      return res.status(403).json({ error: 'Chỉ học sinh mới có thể tham gia lớp học.' });
     }
 
     const { code } = req.body;
@@ -609,7 +672,7 @@ router.get('/:id', auth, async (req, res) => {
       .maybeSingle();
 
     if (error) throw error;
-    if (!data) return res.status(404).json({ error: 'Khong tim thay lop hoc' });
+    if (!data) return res.status(404).json({ error: 'Không tìm thấy lớp học.' });
 
     res.json({
       ...normalizeClass(data),
@@ -706,6 +769,47 @@ router.get('/:id/posts', auth, async (req, res) => {
     }));
 
     res.json(enhancedPosts.map(normalizePost));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Send a private student message to the class teacher.
+router.post('/:id/messages', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ error: 'Chỉ học sinh mới có thể gửi tin nhắn cho giáo viên.' });
+    }
+
+    const classData = await ensureClassAccess(id, req.user, res);
+    if (!classData) return;
+
+    const content = typeof req.body?.content === 'string' ? req.body.content.trim() : '';
+    if (!content) {
+      return res.status(400).json({ error: 'Vui lòng nhập nội dung tin nhắn.' });
+    }
+    if (content.length > 2000) {
+      return res.status(400).json({ error: 'Tin nhắn tối đa 2000 ký tự.' });
+    }
+
+    const { data, error } = await supabase
+      .from('bai_dang_lop')
+      .insert([{
+        lop_id: id,
+        tac_gia_id: req.user.id,
+        type: 'announcement',
+        noi_dung: content,
+        media_url: null,
+        han_nop: null,
+        hoc_sinh_nhan_id: classData.giao_vien_id,
+        cau_hoi: [],
+      }])
+      .select('*, author:tac_gia_id(username), target:hoc_sinh_nhan_id(username)')
+      .single();
+
+    if (error) throw error;
+    res.status(201).json(normalizePost(data));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -862,7 +966,7 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 router.post('/assignments/:postId/submit', auth, async (req, res) => {
   try {
     if (req.user.role !== 'student') {
-      return res.status(403).json({ error: 'Chi hoc sinh moi co the nop bai' });
+      return res.status(403).json({ error: 'Chỉ học sinh mới có thể nộp bài.' });
     }
 
     const { postId } = req.params;
@@ -871,15 +975,15 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
 
     const { data: post, error: postError } = await supabase
       .from('bai_dang_lop')
-      .select('lop_id, type, hoc_sinh_nhan_id')
+      .select('lop_id, type, hoc_sinh_nhan_id, cau_hoi')
       .eq('id', postId)
       .single();
     if (postError || !post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
     if (post.type !== 'assignment') {
-      return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
+      return res.status(400).json({ error: 'Bài đăng này không phải bài tập.' });
     }
     if (post.hoc_sinh_nhan_id && post.hoc_sinh_nhan_id !== hoc_sinh_id) {
-      return res.status(403).json({ error: 'Bai tap nay khong duoc giao cho ban' });
+      return res.status(403).json({ error: 'Bài tập này không được giao cho bạn.' });
     }
 
     const { data: membership, error: membershipError } = await supabase
@@ -892,11 +996,18 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
     if (membershipError) throw membershipError;
     if (!membership) return res.status(403).json({ error: 'Bạn chưa tham gia lớp học này' });
 
+    const safeAnswers = answers && typeof answers === 'object' ? answers : {};
+    const autoGrade = computeAutoGrade(post.cau_hoi, safeAnswers);
+    const hasFinalAutoScore = !autoGrade.needsManualReview && autoGrade.score !== null;
+
     const { data, error } = await supabase
       .from('bai_nop')
-      .upsert([{        bai_dang_id: postId,        hoc_sinh_id,        status: 'submitted',
-        cau_tra_loi: answers || {},
-        diem: null,
+      .upsert([{
+        bai_dang_id: postId,
+        hoc_sinh_id,
+        status: hasFinalAutoScore ? 'graded' : 'submitted',
+        cau_tra_loi: safeAnswers,
+        diem: hasFinalAutoScore ? autoGrade.score : null,
         phan_hoi_giao_vien: null
       }], { onConflict: 'bai_dang_id,hoc_sinh_id' })
       .select()
@@ -904,9 +1015,10 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
 
     if (error) throw error;
 
-
-
-    res.json(normalizeSubmission(data));
+    res.json({
+      ...normalizeSubmission(data),
+      auto_grade: autoGrade,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -923,20 +1035,34 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
       return res.status(403).json({ error: 'Chỉ giáo viên mới có quyền chấm điểm' });
     }
 
+    const numericScore = Number(score);
+    if (!Number.isFinite(numericScore) || numericScore < 0 || numericScore > 10) {
+      return res.status(400).json({ error: 'Điểm phải là một số từ 0 đến 10.' });
+    }
+
+    const trimmedFeedback = typeof phan_hoi === 'string' ? phan_hoi.trim() : '';
+    if (trimmedFeedback.length > 1500) {
+      return res.status(400).json({ error: 'Phản hồi không được vượt quá 1500 ký tự.' });
+    }
+
     const { data: post, error: postError } = await supabase
       .from('bai_dang_lop')
       .select('lop_id, type')
       .eq('id', postId)
       .single();
-    if (postError || !post) return res.status(404).json({ error: 'Khong tim thay bai tap' });
+    if (postError || !post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
     if (post.type !== 'assignment') {
-      return res.status(400).json({ error: 'Bai dang nay khong phai bai tap' });
+      return res.status(400).json({ error: 'Bài đăng này không phải bài tập.' });
     }
     if (!(await ensureClassOwner(post.lop_id, req.user, res))) return;
 
     const { data, error } = await supabase
       .from('bai_nop')
-      .update({ diem: score, phan_hoi_giao_vien: phan_hoi, status: 'graded' })
+      .update({
+        diem: Math.round(numericScore * 10) / 10,
+        phan_hoi_giao_vien: trimmedFeedback || null,
+        status: 'graded'
+      })
       .eq('bai_dang_id', postId)
       .eq('hoc_sinh_id', studentId)
       .select()

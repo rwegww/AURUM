@@ -79,8 +79,8 @@ router.get('/chemicals', async (req, res) => {
     if (error) throw error;
     res.status(200).json((data || []).map(normalizeChemical));
   } catch (error) {
-    console.error('❌ Error fetching chemicals:', error);
-    res.status(500).json({ message: 'Error fetching chemicals', error: error.message });
+    console.error('Lỗi tải danh sách hóa chất:', error);
+    res.status(500).json({ message: 'Không thể tải danh sách hóa chất.', error: error.message });
   }
 });
 
@@ -95,8 +95,8 @@ router.get('/reactions', async (req, res) => {
     if (error) throw error;
     res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('❌ Error fetching reactions:', error);
-    res.status(500).json({ message: 'Error fetching reactions', error: error.message });
+    console.error('Lỗi tải danh sách phản ứng:', error);
+    res.status(500).json({ message: 'Không thể tải danh sách phản ứng.', error: error.message });
   }
 });
 
@@ -116,8 +116,44 @@ router.get('/balancing/search', async (req, res) => {
     if (error) throw error;
     res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('❌ Error searching balancing equations:', error);
-    res.status(500).json({ message: 'Error searching equations' });
+    console.error('Lỗi tìm phương trình cân bằng:', error);
+    res.status(500).json({ message: 'Không thể tìm phương trình lúc này.' });
+  }
+});
+
+// GET /api/lab/balancing/progress - Get user's balancing progress
+router.get('/balancing/progress', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(200).json({ completedNodeIds: [], completedCount: 0 });
+    }
+    res.status(200).json(req.user.balancingProgress);
+  } catch (error) {
+    console.error('Lỗi tải tiến độ cân bằng phương trình:', error);
+    res.status(500).json({ message: 'Không thể tải tiến độ cân bằng phương trình.' });
+  }
+});
+
+// POST /api/lab/balancing/progress - Update user's balancing progress
+router.post('/balancing/progress', auth, async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(200).json({ message: 'Bạn đang học ở chế độ khách nên tiến độ chưa được lưu.' });
+    }
+
+    const { balancingProgress } = req.body;
+    if (!balancingProgress) {
+      return res.status(400).json({ message: 'Thiếu tiến độ cần lưu.' });
+    }
+
+    const updatedUser = await User.update(req.user.id, { 
+      balancingProgress 
+    });
+
+    res.status(200).json(updatedUser.balancingProgress);
+  } catch (error) {
+    console.error('Lỗi cập nhật tiến độ cân bằng phương trình:', error);
+    res.status(500).json({ message: 'Không thể lưu tiến độ cân bằng phương trình.' });
   }
 });
 
@@ -136,44 +172,8 @@ router.get('/balancing/:nodeId', async (req, res) => {
     // but we return whatever we have.
     res.status(200).json((data || []).map(normalizeLabRecord));
   } catch (error) {
-    console.error('❌ Error fetching balancing questions:', error);
-    res.status(500).json({ message: 'Error fetching questions', error: error.message });
-  }
-});
-
-// GET /api/lab/balancing/progress - Get user's balancing progress
-router.get('/balancing/progress', auth, async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(200).json({ completedNodeIds: [], completedCount: 0 });
-    }
-    res.status(200).json(req.user.balancingProgress);
-  } catch (error) {
-    console.error('❌ Error fetching balancing progress:', error);
-    res.status(500).json({ message: 'Error fetching progress' });
-  }
-});
-
-// POST /api/lab/balancing/progress - Update user's balancing progress
-router.post('/balancing/progress', auth, async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(200).json({ message: 'Guest mode, progress not saved' });
-    }
-
-    const { balancingProgress } = req.body;
-    if (!balancingProgress) {
-      return res.status(400).json({ message: 'balancingProgress missing' });
-    }
-
-    const updatedUser = await User.update(req.user.id, { 
-      balancingProgress 
-    });
-
-    res.status(200).json(updatedUser.balancingProgress);
-  } catch (error) {
-    console.error('❌ Error updating balancing progress:', error);
-    res.status(500).json({ message: 'Error updating progress' });
+    console.error('Lỗi tải câu hỏi cân bằng phương trình:', error);
+    res.status(500).json({ message: 'Không thể tải câu hỏi cân bằng phương trình.', error: error.message });
   }
 });
 
@@ -181,12 +181,12 @@ router.post('/balancing/progress', auth, async (req, res) => {
 router.post('/unlock', auth, async (req, res) => {
   try {
     if (!req.user) {
-      return res.status(200).json({ message: 'Guest mode, progress not saved to DB' });
+      return res.status(200).json({ message: 'Bạn đang học ở chế độ khách nên tiến độ chưa được lưu.' });
     }
 
     const { formula, formulas } = req.body;
     if (!formula && (!formulas || !Array.isArray(formulas))) {
-      return res.status(400).json({ message: 'Formula(s) missing' });
+      return res.status(400).json({ message: 'Thiếu công thức cần mở khóa.' });
     }
 
     const formulasToUnlock = formulas ? formulas : [formula];
@@ -219,8 +219,8 @@ router.post('/unlock', auth, async (req, res) => {
 
     res.status(200).json({ unlockedChemicals });
   } catch (error) {
-    console.error('❌ Error unlocking chemical:', error);
-    res.status(500).json({ message: 'Error unlocking chemical', error: error.message });
+    console.error('Lỗi mở khóa hóa chất:', error);
+    res.status(500).json({ message: 'Không thể mở khóa hóa chất lúc này.', error: error.message });
   }
 });
 

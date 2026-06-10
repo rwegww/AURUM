@@ -86,12 +86,12 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
         className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
       >
         <div className="w-full max-w-md bg-white rounded-[32px] p-8 text-center shadow-2xl">
-          <h2 className="text-2xl font-black text-viet-text mb-3 uppercase">Chua co bai test</h2>
+          <h2 className="text-2xl font-black text-viet-text mb-3 uppercase">Chưa có bài kiểm tra</h2>
           <p className="text-viet-text-light font-bold mb-6">
-            He thong chua co du lieu placement test cho lop {normalizedGrade}. Hay hoc theo lo trinh duoc mo khoa san.
+            Hệ thống chưa có bài kiểm tra đầu vào cho lớp {normalizedGrade}. Bạn có thể học theo lộ trình đang được mở sẵn.
           </p>
           <button onClick={onClose} className="viet-btn-green w-full py-4 text-lg">
-            Quay lai
+            Quay lại
           </button>
         </div>
       </motion.div>
