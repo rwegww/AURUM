@@ -164,6 +164,11 @@ const GradeJourney = () => {
     else if (lessonStars.level1 > 0 && lessonStars.level2 > 0 && lessonStars.level3 === 0) targetLevel = 'level3';
     else if (lessonStars.level1 > 0 && lessonStars.level2 > 0 && lessonStars.level3 > 0) targetLevel = 'level3';
 
+    if (targetLevel === 'level1') {
+      navigate(`/classroom/${grade}/journey/${lesson.lessonId}/intro?order=${index + 1}`);
+      return;
+    }
+
     navigate(`/classroom/${grade}/journey/${lesson.lessonId}/quiz?level=${targetLevel}&order=${index + 1}`);
   };
 
@@ -328,6 +333,17 @@ const GradeJourney = () => {
               const isLocked = !lesson.isUnlocked;
               const isCompleted = lesson.isCompleted;
               const lessonStars = lesson.stars;
+              const quizCount = lesson.quizzes && !Array.isArray(lesson.quizzes)
+                ? ['level1', 'level2', 'level3'].reduce((sum, level) => sum + (lesson.quizzes[level]?.length || 0), 0)
+                : 0;
+              const missionCount = Array.isArray(lesson.challenges) ? lesson.challenges.length : 0;
+              const nextStepLabel = lessonStars.level1 === 0
+                ? 'Briefing + nhiệm vụ'
+                : lessonStars.level2 === 0
+                  ? 'Luyện hiểu'
+                  : lessonStars.level3 === 0
+                    ? 'Ôn tập chốt bài'
+                    : 'Ôn lại bài học';
 
               return (
                 <motion.div
@@ -443,6 +459,23 @@ const GradeJourney = () => {
                       }`}>
                         {isLocked ? t('journey.stage.locked_desc') : (lesson.description || t('journey.stage.default_desc'))}
                       </p>
+
+                      {!isLocked && (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4">
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Tiếp theo</div>
+                            <div className="text-[11px] font-black text-slate-700 leading-tight mt-1">{nextStepLabel}</div>
+                          </div>
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2">
+                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Nhiệm vụ</div>
+                            <div className="text-[11px] font-black text-slate-700 leading-tight mt-1">{missionCount} bước</div>
+                          </div>
+                          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 col-span-2 md:col-span-1">
+                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400">Câu hỏi</div>
+                            <div className="text-[11px] font-black text-slate-700 leading-tight mt-1">{quizCount} câu</div>
+                          </div>
+                        </div>
+                      )}
 
                       {/* segment status trackers */}
                       {!isLocked && (

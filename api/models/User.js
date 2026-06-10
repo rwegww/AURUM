@@ -9,9 +9,30 @@ const toNormalFormula = (formula) => {
   return String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subMap[match] || match).replace(/\s+/g, '').toUpperCase();
 };
 
+const normalizeChemicalFormulaValue = (item) => {
+  if (typeof item === 'string' || typeof item === 'number') {
+    return String(item).trim();
+  }
+
+  if (!item || typeof item !== 'object') return '';
+
+  const value = item.chemical_formula
+    || item.cong_thuc
+    || item.formula
+    || item.doi_tuong_id
+    || item.target_id
+    || item.item_id;
+
+  if (value) return String(value).trim();
+
+  return typeof item.id === 'string' && !item.id.startsWith('ing_')
+    ? item.id.trim()
+    : '';
+};
+
 const syncUserProgressData = (unlockedChemicalsArray, inventoryObject) => {
   let unlocked = Array.isArray(unlockedChemicalsArray) 
-    ? [...unlockedChemicalsArray] 
+    ? unlockedChemicalsArray.map(normalizeChemicalFormulaValue).filter(Boolean)
     : [];
 
   const inventory = normalizeInventory(inventoryObject);
@@ -53,14 +74,20 @@ const syncUserProgressData = (unlockedChemicalsArray, inventoryObject) => {
 
   // Step C: Normalize formulas in unlocked to match craftableItems exactly (subscripts)
   unlocked = unlocked.map(formula => {
-    const norm = toNormalFormula(formula);
+    const normalizedFormula = normalizeChemicalFormulaValue(formula);
+    if (!normalizedFormula) {
+      changed = true;
+      return '';
+    }
+
+    const norm = toNormalFormula(normalizedFormula);
     const item = normToCraftable[norm];
-    if (item && formula !== item.formula) {
+    if (item && normalizedFormula !== item.formula) {
       changed = true;
       return item.formula;
     }
-    return formula;
-  });
+    return normalizedFormula;
+  }).filter(Boolean);
 
   const uniqueUnlocked = Array.from(new Set(unlocked));
   if (uniqueUnlocked.length !== unlocked.length) {
@@ -94,7 +121,12 @@ const isMissingDbObject = (error) =>
 const normalizeIdList = (items, objectKey) => {
   if (!Array.isArray(items)) return [];
   return items
-    .map((item) => (typeof item === 'string' ? item : item?.[objectKey] || item?.doi_tuong_id))
+    .map((item) => {
+      if (objectKey === 'chemical_formula') return normalizeChemicalFormulaValue(item);
+      if (typeof item === 'string' || typeof item === 'number') return String(item);
+      if (!item || typeof item !== 'object') return '';
+      return item?.[objectKey] || item?.doi_tuong_id || item?.lessonId || item?.lesson_id || item?.id;
+    })
     .filter(Boolean);
 };
 
@@ -355,10 +387,10 @@ const mapUser = (user) => {
     // Flatten normalized arrays if they exist in the joined record
     unlockedLessons: normalizeIdList(user.unlocked_bai_hoc, 'bai_hoc_id').length > 0
       ? normalizeIdList(user.unlocked_bai_hoc, 'bai_hoc_id')
-      : (user.unlockedLessons || []),
+      : normalizeIdList(user.unlockedLessons || [], 'bai_hoc_id'),
     unlockedChemicals: normalizeIdList(user.unlocked_chemicals, 'chemical_formula').length > 0
       ? normalizeIdList(user.unlocked_chemicals, 'chemical_formula')
-      : (user.unlockedChemicals || []),
+      : normalizeIdList(user.unlockedChemicals || [], 'chemical_formula'),
     avatarSeed: user.avatar_seed || user.username,
     arenaStats,
     arenaAvatar: { seed: 'Chem Master', aura: '#a855f7' },
@@ -605,7 +637,8 @@ export const User = {
     }
 
     if (junctionChemicals) {
-      progressRows.push(...junctionChemicals.map((chemical) => ({
+      const normalizedChemicals = junctionChemicals.map(normalizeChemicalFormulaValue).filter(Boolean);
+      progressRows.push(...normalizedChemicals.map((chemical) => ({
         nguoi_dung_id: id,
         loai_tien_do: 'chemical',
         doi_tuong_id: chemical,

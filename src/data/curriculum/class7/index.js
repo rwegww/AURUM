@@ -5,6 +5,7 @@ import { bai4 } from './lesson-4.js';
 import { bai5 } from './lesson-5.js';
 import { bai6 } from './lesson-6.js';
 import { bai7 } from './lesson-7.js';
+import { enhanceClass67Lesson } from '../class67Enhancements.js';
 
 export const class7Data = {
   "ketnoi": [
@@ -15,5 +16,5 @@ export const class7Data = {
     bai5,
     bai6,
     bai7
-  ]
+  ].map(enhanceClass67Lesson)
 };

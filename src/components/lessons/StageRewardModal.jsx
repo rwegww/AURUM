@@ -1,7 +1,12 @@
 ﻿import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { BookOpen } from 'lucide-react';
+import LessonSummaryFallback from './LessonSummaryFallback';
 
-const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
+const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson }) => {
+  const [failedRewardSrc, setFailedRewardSrc] = React.useState('');
+  const imageError = failedRewardSrc === rewardSrc;
+
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.classList.add('no-scroll');
@@ -67,17 +72,28 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
           transition={{ delay: 0.6, type: "spring" }}
           className="relative w-full max-w-2xl bg-white rounded-[40px] shadow-[0_30px_100px_rgba(0,0,0,0.1)] border border-viet-border overflow-hidden group mb-12"
         >
-           <img 
-             src={rewardSrc} 
-             alt="Book Page Reward" 
-             className="w-full h-auto object-contain"
-           />
-           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+           {!imageError ? (
+             <>
+               <img
+                 src={rewardSrc}
+                 alt="Book Page Reward"
+                 className="w-full h-auto object-contain"
+                 onError={() => setFailedRewardSrc(rewardSrc)}
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+             </>
+           ) : (
+             <div className="h-[520px]">
+               <LessonSummaryFallback lesson={lesson} compact />
+             </div>
+           )}
            
            {/* Decorative Elements */}
-           <div className="absolute top-8 left-8 w-12 h-12 bg-white/40 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-xl border border-white/30">
-            Book
-           </div>
+           {!imageError && (
+             <div className="absolute top-8 left-8 w-12 h-12 bg-white/40 backdrop-blur-md rounded-2xl flex items-center justify-center text-2xl shadow-xl border border-white/30">
+              <BookOpen size={24} className="text-viet-text" />
+             </div>
+           )}
         </motion.div>
 
         {/* Action Button */}
@@ -89,13 +105,13 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData }) => {
           className="group relative px-12 py-5 bg-viet-text text-white rounded-[24px] font-black text-[14px] uppercase tracking-[3px] hover:scale-105 active:scale-95 transition-all shadow-2xl hover:bg-viet-green"
         >
           <span className="relative z-10 flex items-center gap-3">
-            Bắt đầu bài học chính 🚀
+            Quay lại lộ trình
           </span>
           <div className="absolute inset-0 bg-viet-green rounded-[24px] blur-xl opacity-0 group-hover:opacity-40 transition-opacity" />
         </motion.button>
         
         <p className="mt-8 text-viet-text-light/40 text-[11px] font-black uppercase tracking-widest">
-          Phần thưởng này đã được lưu vào thư viện của bạn
+          {imageError ? 'Phiếu tổng kết tạm thời đã sẵn sàng trong sổ tay của bạn' : 'Phần thưởng này đã được lưu vào thư viện của bạn'}
         </p>
       </div>
     </motion.div>

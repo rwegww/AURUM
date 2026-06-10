@@ -5,6 +5,22 @@ import { useAuth } from '@/context/AuthContext';
 import { BookOpen, X, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const GRADE_COVERS = {
+  '6': {
+    gradient: 'from-[#082f49] via-[#0c4a6e] to-[#06202f]',
+    spine: 'bg-sky-950 border-r border-sky-800/30',
+    accent: '#38bdf8',
+    title: 'SỔ TAY KHOA HỌC LỚP 6',
+    subtitle: 'An toàn, đo lường, chất và hỗn hợp',
+    badge: 'LỚP 6'
+  },
+  '7': {
+    gradient: 'from-[#164e63] via-[#0f3460] to-[#071b2c]',
+    spine: 'bg-cyan-950 border-r border-cyan-800/30',
+    accent: '#22d3ee',
+    title: 'SỔ TAY KHOA HỌC LỚP 7',
+    subtitle: 'Nguyên tử, nguyên tố và công thức hóa học',
+    badge: 'LỚP 7'
+  },
   '8': {
     gradient: 'from-[#143e18] via-[#0b270e] to-[#041205]',
     spine: 'bg-emerald-950 border-r border-emerald-800/30',
@@ -197,7 +213,7 @@ const InfographicBook = ({ isOpen, onClose, bai_hoc, grade, unlockedLessons }) =
 
           <div className="mb-6 text-center relative z-10 flex flex-col items-center gap-2">
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 text-white animate-pulse">
-              Book
+              <BookOpen size={18} />
             </div>
             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest animate-pulse">
               Nhấn góc phải để lật sách

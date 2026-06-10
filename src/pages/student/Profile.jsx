@@ -20,6 +20,12 @@ const ProfileCard = ({ title, value, icon, color }) => (
   </motion.div>
 );
 
+const normalizeChemicalLabel = (item) => {
+  if (typeof item === 'string' || typeof item === 'number') return String(item).trim();
+  if (!item || typeof item !== 'object') return '';
+  return String(item.formula || item.chemical_formula || item.cong_thuc || item.doi_tuong_id || '').trim();
+};
+
 const Profile = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
@@ -34,6 +40,10 @@ const Profile = () => {
       </div>
     );
   }
+
+  const unlockedChemicals = (user.unlockedChemicals || [])
+    .map(normalizeChemicalLabel)
+    .filter(Boolean);
 
   return (
     <div className="min-h-screen bg-viet-bg pt-[180px] pb-24">
@@ -125,7 +135,7 @@ const Profile = () => {
           />
           <ProfileCard
             title={t('profile.stats.chemicals')}
-            value={user.unlockedChemicals?.length || 0}
+            value={unlockedChemicals.length}
             color="bg-blue-500"
             icon={
               <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -196,15 +206,15 @@ const Profile = () => {
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-black text-viet-text">{t('profile.collection.title')}</h3>
             <span className="px-4 py-1.5 bg-slate-100 rounded-full text-[12px] font-black text-viet-text-light uppercase tracking-widest">
-              {t('profile.collection.unlocked_count', { current: user.unlockedChemicals?.length || 0, total: 118 })}
+              {t('profile.collection.unlocked_count', { current: unlockedChemicals.length, total: 118 })}
             </span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-            {user.unlockedChemicals && user.unlockedChemicals.length > 0 ? (
-              user.unlockedChemicals.map((formula, i) => (
+            {unlockedChemicals.length > 0 ? (
+              unlockedChemicals.map((formula, i) => (
                 <motion.div
-                  key={i}
+                  key={`${formula}-${i}`}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.05 }}

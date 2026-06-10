@@ -17,6 +17,7 @@ const toPayload = (lesson) => ({
   order: lesson.order,
   description: lesson.description,
   theoryModules: lesson.theoryModules || [],
+  introVideoUrl: lesson.introVideoUrl || '',
   videoModules: lesson.videoModules || [],
   challenges: lesson.challenges || [],
   quizzes: lesson.quizzes || {},

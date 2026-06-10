@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import StageRewardModal from '@/components/lessons/StageRewardModal';
+import { getLessonInfographicUrl } from '@/utils/lessonAssets';
 
 const StageReward = () => {
   const { grade, lessonId } = useParams();
@@ -39,9 +40,10 @@ const StageReward = () => {
   return (
     <div className="min-h-screen bg-[#fffbf0]">
       <StageRewardModal
-        rewardSrc={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
+        rewardSrc={getLessonInfographicUrl(lesson, grade, order)}
         lessonTitle={lesson?.title || "Phần thưởng chặng"}
         gameData={lesson?.game}
+        lesson={lesson}
         onProceed={handleReturnToJourney}
       />
     </div>

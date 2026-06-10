@@ -4,6 +4,12 @@ import { motion } from 'framer-motion';
 import Avatar from '@/components/common/Avatar';
 import { FlaskConical, Beaker } from 'lucide-react';
 
+const normalizeChemicalLabel = (item) => {
+  if (typeof item === 'string' || typeof item === 'number') return String(item).trim();
+  if (!item || typeof item !== 'object') return '';
+  return String(item.formula || item.chemical_formula || item.cong_thuc || item.doi_tuong_id || '').trim();
+};
+
 const UserDetail = () => {
   const { id } = useParams();
   const [student, setStudent] = useState(null);
@@ -47,6 +53,10 @@ const UserDetail = () => {
       <Link to="/admin/nguoi_dung" className="px-6 py-2 bg-red-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest">Quay lại danh sách</Link>
     </div>
   );
+
+  const unlockedChemicals = (student.unlockedChemicals || [])
+    .map(normalizeChemicalLabel)
+    .filter(Boolean);
 
   return (
     <div className="p-8 pb-24">
@@ -143,9 +153,9 @@ const UserDetail = () => {
                     Kho Vật chất Khám phá
                  </h2>
                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {student.unlockedChemicals && student.unlockedChemicals.length > 0 ? (
-                      student.unlockedChemicals.map((chem, i) => (
-                        <div key={i} className="aspect-square bg-white rounded-2xl border border-viet-border/50 flex flex-col items-center justify-center p-3 hover:border-viet-green/30 hover:shadow-lg hover:shadow-viet-green/5 transition-all group">
+                    {unlockedChemicals.length > 0 ? (
+                      unlockedChemicals.map((chem, i) => (
+                        <div key={`${chem}-${i}`} className="aspect-square bg-white rounded-2xl border border-viet-border/50 flex flex-col items-center justify-center p-3 hover:border-viet-green/30 hover:shadow-lg hover:shadow-viet-green/5 transition-all group">
                            <div className="mb-2 flex justify-center group-hover:scale-110 transition-transform"><Beaker className="w-8 h-8 text-viet-green" /></div>
                            <span className="text-[10px] font-black text-viet-text uppercase tracking-widest text-center">{chem}</span>
                         </div>

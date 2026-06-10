@@ -1,0 +1,89 @@
+const parseUrl = (url) => {
+  if (!url || typeof url !== 'string') return null;
+
+  try {
+    return new URL(url);
+  } catch {
+    try {
+      return new URL(`https://${url}`);
+    } catch {
+      return null;
+    }
+  }
+};
+
+const normalizeHostname = (hostname) => hostname
+  .replace(/^www\./, '')
+  .replace(/^m\./, '');
+
+const getYouTubeId = (parsedUrl) => {
+  if (!parsedUrl) return '';
+
+  const hostname = normalizeHostname(parsedUrl.hostname);
+  const segments = parsedUrl.pathname.split('/').filter(Boolean);
+
+  if (hostname === 'youtu.be') return segments[0] || '';
+  if (!hostname.endsWith('youtube.com') && !hostname.endsWith('youtube-nocookie.com')) return '';
+
+  if (parsedUrl.pathname === '/watch') return parsedUrl.searchParams.get('v') || '';
+  if (['embed', 'shorts', 'live'].includes(segments[0])) return segments[1] || '';
+
+  return '';
+};
+
+const getVimeoId = (parsedUrl) => {
+  if (!parsedUrl) return '';
+
+  const hostname = normalizeHostname(parsedUrl.hostname);
+  if (!hostname.endsWith('vimeo.com')) return '';
+
+  const segments = parsedUrl.pathname.split('/').filter(Boolean);
+  if (hostname === 'player.vimeo.com' && segments[0] === 'video') return segments[1] || '';
+
+  return segments.find((segment) => /^\d+$/.test(segment)) || '';
+};
+
+const parseYouTubeTime = (value) => {
+  if (!value) return 0;
+  if (/^\d+$/.test(value)) return Number(value);
+
+  const match = value.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/i);
+  if (!match) return 0;
+
+  const [, hours = 0, minutes = 0, seconds = 0] = match;
+  return (Number(hours) * 3600) + (Number(minutes) * 60) + Number(seconds);
+};
+
+export const isFileVideo = (url = '') => {
+  const parsedUrl = parseUrl(url);
+  const pathname = parsedUrl?.pathname || url;
+  return /\.(mp4|webm|ogg)$/i.test(pathname);
+};
+
+export const isExternalEmbedVideo = (url = '') => {
+  const parsedUrl = parseUrl(url);
+  if (!parsedUrl) return false;
+
+  const hostname = normalizeHostname(parsedUrl.hostname);
+  return hostname === 'youtu.be'
+    || hostname.endsWith('youtube.com')
+    || hostname.endsWith('youtube-nocookie.com')
+    || hostname.endsWith('vimeo.com');
+};
+
+export const getVideoEmbedUrl = (url = '') => {
+  const parsedUrl = parseUrl(url);
+  if (!parsedUrl) return url;
+
+  const youtubeId = getYouTubeId(parsedUrl);
+  if (youtubeId) {
+    const start = parseYouTubeTime(parsedUrl.searchParams.get('start') || parsedUrl.searchParams.get('t'));
+    const query = start ? `?start=${start}` : '';
+    return `https://www.youtube.com/embed/${youtubeId}${query}`;
+  }
+
+  const vimeoId = getVimeoId(parsedUrl);
+  if (vimeoId) return `https://player.vimeo.com/video/${vimeoId}`;
+
+  return url;
+};

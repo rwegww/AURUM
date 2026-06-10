@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
@@ -41,7 +41,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
   }, []);
 
   useEffect(() => {
-    if (user?.role === 'teacher' || user?.role === 'admin') {
+    if (user?.role === 'teacher') {
       const timeout = setTimeout(fetchNotifications, 0);
       const interval = setInterval(fetchNotifications, 30000); // Poll every 30s
       return () => {
@@ -155,7 +155,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
           </div>
 
           {/* Notification Bell */}
-          {(user?.role === 'teacher' || user?.role === 'admin') && (
+          {user?.role === 'teacher' && (
             <div className="relative shrink-0">
               <button
                 onClick={toggleNotifications}
@@ -179,7 +179,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
       {/* Notification Flyout */}
       <AnimatePresence>
-        {isOpen && (user?.role === 'teacher' || user?.role === 'admin') && (
+        {isOpen && user?.role === 'teacher' && (
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}

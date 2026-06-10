@@ -1,12 +1,14 @@
 ﻿import React from 'react';
 import { motion } from 'framer-motion';
+import LessonSummaryFallback from './LessonSummaryFallback';
+import { getLessonInfographicUrl } from '@/utils/lessonAssets';
 
 const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'single' }) => {
-  const [imageError, setImageError] = React.useState(false);
+  const [failedImagePath, setFailedImagePath] = React.useState('');
+  const imagePath = getLessonInfographicUrl(lesson);
+  const imageError = failedImagePath === imagePath;
 
   if (!lesson) return null;
-
-  const imagePath = `/assets/curriculum/class${lesson.classId}/${lesson.classId}-${lesson.order}.png`;
 
   // Dynamic styles based on which side of the book spread this page is on
   let sideClasses = 'rounded-[32px] md:rounded-[40px] border border-viet-border/20 px-4 md:px-8';
@@ -46,13 +48,17 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'singl
                 src={imagePath} 
                 alt={lesson.title}
                 className="w-full h-full object-contain"
-                onError={() => setImageError(true)}
+                onError={() => setFailedImagePath(imagePath)}
                 loading="lazy"
               />
             </div>
           ) : (
-            <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
-              <p className="text-[12px] text-viet-text-light italic">Đang tổng hợp dữ liệu...</p>
+            <div className="flex-1 overflow-hidden rounded-2xl border-2 border-viet-border/20 bg-[#fcf8f0]">
+              <LessonSummaryFallback
+                lesson={lesson}
+                pageNumber={pageNumber}
+                compact={side !== 'single'}
+              />
             </div>
           )}
         </div>

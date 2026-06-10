@@ -8,31 +8,7 @@ import LessonSidebar from '@/components/navigation/LessonSidebar';
 import { activityService } from '@/services/ActivityService';
 import DiscussionBoard from '@/components/lessons/DiscussionBoard';
 import StoryIntro from '@/components/lessons/StoryIntro';
-
-const getEmbedUrl = (url) => {
-  if (!url) return '';
-  
-  // YouTube
-  if (url.includes('youtube.com') || url.includes('youtu.be')) {
-    let videoId = '';
-    if (url.includes('v=')) {
-      videoId = url.split('v=')[1]?.split('&')[0];
-    } else if (url.includes('youtu.be/')) {
-      videoId = url.split('youtu.be/')[1]?.split('?')[0];
-    } else if (url.includes('embed/')) {
-       return url;
-    }
-    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
-  }
-  
-  // Vimeo
-  if (url.includes('vimeo.com')) {
-    const videoId = url.split('/').pop();
-    return `https://player.vimeo.com/video/${videoId}`;
-  }
-
-  return url;
-};
+import { getVideoEmbedUrl, isFileVideo } from '@/utils/videoLinks';
 
 const LessonPage = () => {
   const { t } = useTranslation();
@@ -137,7 +113,7 @@ const LessonPage = () => {
                    <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
                 </div>
              </div>
-             {video.url.match(/\.(mp4|webm|ogg)$/) ? (
+             {isFileVideo(video.url) ? (
                  <video 
                     controls 
                     className="w-full h-full pt-[60px] rounded-b-[24px] bg-black"
@@ -146,7 +122,7 @@ const LessonPage = () => {
                ) : (
                  <iframe 
                     className="w-full h-full pt-[60px]"
-                    src={getEmbedUrl(video.url)} 
+                    src={getVideoEmbedUrl(video.url)} 
                     title={video.title}
                     allowFullScreen
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

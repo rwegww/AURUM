@@ -38,6 +38,7 @@ dist-ssr
 .claude/
 scratch/
 backups/
+anh/
 
 # Local Netlify folder
 .netlify

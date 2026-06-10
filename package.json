@@ -11,6 +11,7 @@
     "server": "node --watch api/index.js",
     "seed": "node scripts/seedData.js",
     "seed:class6-7": "node scripts/seedClass6And7Lessons.js",
+    "upload:class6-7-assets": "node scripts/uploadClass67CloudinaryAssets.js",
     "build": "vite build",
     "lint": "eslint .",
     "test": "vitest run",

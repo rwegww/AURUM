@@ -1,9 +1,9 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Trophy, Zap, Users, Layers, Mail } from 'lucide-react';
+import { Trophy, Zap, Users, Layers, Mail, Plus } from 'lucide-react';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -122,7 +122,7 @@ const AdminDashboard = () => {
               <h2 className="text-xl font-bold text-viet-text mb-6">Thao tác nhanh</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 <button onClick={() => alert('Chức năng Thêm bài học mới đang được hoàn thiện!')} className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">âž•</div>
+                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl"><Plus className="w-6 h-6 text-viet-green" /></div>
                   <span className="text-sm font-bold text-viet-text">Thêm bài học</span>
                 </button>
                 <div className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all opacity-50 cursor-not-allowed">

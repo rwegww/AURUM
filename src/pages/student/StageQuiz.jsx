@@ -3,6 +3,9 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import MissionModal from '@/components/lessons/MissionModal';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import LessonSummaryFallback from '@/components/lessons/LessonSummaryFallback';
+import { getLessonInfographicUrl } from '@/utils/lessonAssets';
+import { getVideoEmbedUrl, isExternalEmbedVideo } from '@/utils/videoLinks';
 
 const StageQuiz = () => {
   const { grade, lessonId } = useParams();
@@ -16,6 +19,7 @@ const StageQuiz = () => {
   const [showResult, setShowResult] = useState(false);
   const [lastResult, setLastResult] = useState(null);
   const [videoCompleted, setVideoCompleted] = useState(false);
+  const [failedRewardSrc, setFailedRewardSrc] = useState('');
   
   const order = searchParams.get('order') || '1';
 
@@ -93,10 +97,19 @@ const StageQuiz = () => {
   };
 
   const currentQuestions = getLevelData(currentLevel);
+  const introVideoUrl = lesson?.introVideoUrl || lesson?.videoModules?.find(module => module?.url)?.url || '';
+  const rewardSrc = getLessonInfographicUrl(lesson, grade, order);
+  const rewardImageError = failedRewardSrc === rewardSrc;
+  const getCurrentLevelLabel = () => {
+    if (currentLevel === 'level1') return introVideoUrl ? 'Đoạn 1: Video + Học' : 'Đoạn 1: Khởi động';
+    if (currentLevel === 'level2') return 'Đoạn 2: Hiểu';
+    return 'Đoạn 3: Ôn tập';
+  };
 
   // ========== LEVEL 1: XEM VIDEO BÀI GIẢNG ==========
-  if (currentLevel === 'level1' && !videoCompleted) {
-    const videoUrl = lesson?.introVideoUrl;
+  if (currentLevel === 'level1' && !videoCompleted && introVideoUrl) {
+    const videoUrl = introVideoUrl;
+    const isEmbedVideo = isExternalEmbedVideo(videoUrl);
     // ... existing video render logic ...
 
     return (
@@ -154,13 +167,23 @@ const StageQuiz = () => {
               {/* Video Player */}
               {videoUrl ? (
                 <div className="relative aspect-video bg-black rounded-2xl overflow-hidden shadow-lg border border-viet-border mb-4">
-                  <video
-                    src={videoUrl}
-                    controls
-                    className="w-full h-full"
-                    onEnded={handleVideoComplete}
-                    playsInline
-                  />
+                  {isEmbedVideo ? (
+                    <iframe
+                      src={getVideoEmbedUrl(videoUrl)}
+                      title={lesson?.title || 'Video bài giảng'}
+                      className="w-full h-full"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  ) : (
+                    <video
+                      src={videoUrl}
+                      controls
+                      className="w-full h-full"
+                      onEnded={handleVideoComplete}
+                      playsInline
+                    />
+                  )}
                 </div>
               ) : (
                 <div className="aspect-video bg-slate-50 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-slate-200 mb-4">
@@ -239,7 +262,7 @@ const StageQuiz = () => {
          <div className="pr-4 border-r border-slate-200">
             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đang làm</div>
             <div className="text-sm font-bold text-slate-700">
-               {currentLevel === 'level1' ? 'Đoạn 1: Video + Học' : (currentLevel === 'level2' ? 'Đoạn 2: Hiểu' : 'Đoạn 3: Ôn tập')}
+               {getCurrentLevelLabel()}
             </div>
          </div>
       </div>
@@ -296,25 +319,33 @@ const StageQuiz = () => {
                   Trang sổ tay mới
                 </div>
 
-                {/* Infographic image */}
-                <img 
-                  src={`/assets/curriculum/class${grade}/${grade}-${order}.png`}
-                  alt={`Infographic - ${lesson?.title || 'Phần thưởng'}`}
-                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
-                  onError={(e) => { e.target.style.display = 'none'; }}
-                />
+                {/* Infographic image or structured temporary page */}
+                {!rewardImageError ? (
+                  <img
+                    src={rewardSrc}
+                    alt={`Infographic - ${lesson?.title || 'Phần thưởng'}`}
+                    className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                    onError={() => setFailedRewardSrc(rewardSrc)}
+                  />
+                ) : (
+                  <div className="h-[420px]">
+                    <LessonSummaryFallback lesson={lesson} compact />
+                  </div>
+                )}
 
                 {/* Shimmer overlay on reveal */}
-                <motion.div 
-                  initial={{ x: '-100%' }}
-                  animate={{ x: '200%' }}
-                  transition={{ delay: 0.6, duration: 1, ease: "easeInOut" }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"
-                />
+                {!rewardImageError && (
+                  <motion.div
+                    initial={{ x: '-100%' }}
+                    animate={{ x: '200%' }}
+                    transition={{ delay: 0.6, duration: 1, ease: "easeInOut" }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"
+                  />
+                )}
               </motion.div>
 
               <p className="text-viet-text-light/40 text-[10px] font-black uppercase tracking-widest mb-6">
-                Trang infographic đã được lưu vào sổ tay hành trình
+                {rewardImageError ? 'Phiếu tổng kết tạm thời đã được lưu vào sổ tay hành trình' : 'Trang infographic đã được lưu vào sổ tay hành trình'}
               </p>
 
               <button 

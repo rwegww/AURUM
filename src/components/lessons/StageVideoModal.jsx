@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { getVideoEmbedUrl, isExternalEmbedVideo } from '@/utils/videoLinks';
 
 const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
   const { t } = useTranslation();
@@ -8,6 +9,9 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
+  const isEmbedVideo = isExternalEmbedVideo(videoSrc);
+  const embedVideoUrl = getVideoEmbedUrl(videoSrc);
+  const canContinue = isVideoEnded || isEmbedVideo;
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -35,6 +39,10 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const progressPercent = duration ? (currentTime / duration) * 100 : 0;
+  const metadataLabel = isEmbedVideo
+    ? 'YouTube'
+    : `${Math.floor(currentTime / 60)}:${Math.floor(currentTime % 60).toString().padStart(2, '0')} / ${Math.floor(duration / 60)}:${Math.floor(duration % 60).toString().padStart(2, '0')}`;
 
   // Update time as video plays
   const handleTimeUpdate = () => {
@@ -101,7 +109,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
 
         <div className="hidden md:flex items-center gap-2 py-1 px-3 bg-viet-green/5 rounded-full border border-viet-green/10 shrink-0">
            <span className="text-[8px] font-black text-viet-green/60 uppercase tracking-widest">{t('stage_video.status.label')}</span>
-           <span className="text-[9px] font-bold text-viet-text uppercase">{isVideoEnded ? t('stage_video.status.ready') : t('stage_video.status.analyzing')}</span>
+           <span className="text-[9px] font-bold text-viet-text uppercase">{canContinue ? t('stage_video.status.ready') : t('stage_video.status.analyzing')}</span>
         </div>
 
       </motion.div>
@@ -114,20 +122,30 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
            animate={{ scale: 1, opacity: 1 }}
            className="relative w-full aspect-video rounded-[32px] overflow-hidden bg-white shadow-[0_30px_70px_-15px_rgba(0,0,0,0.1)] border-[8px] border-white group"
          >
-            <video
-              ref={videoRef}
-              src={videoSrc}
-              autoPlay
-              className="w-full h-full object-cover"
-              onEnded={() => setIsVideoEnded(true)}
-              onClick={handlePlayPause}
-              onTimeUpdate={handleTimeUpdate}
-              onLoadedMetadata={handleLoadedMetadata}
-            />
+            {isEmbedVideo ? (
+              <iframe
+                src={embedVideoUrl}
+                title={lessonTitle}
+                className="w-full h-full"
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            ) : (
+              <video
+                ref={videoRef}
+                src={videoSrc}
+                autoPlay
+                className="w-full h-full object-cover"
+                onEnded={() => setIsVideoEnded(true)}
+                onClick={handlePlayPause}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+              />
+            )}
 
             {/* Play/Pause Indicator Overlay */}
             <AnimatePresence>
-              {!isPlaying && (
+              {!isEmbedVideo && !isPlaying && (
                 <motion.div 
                   initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[2px] cursor-pointer"
@@ -141,16 +159,19 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
             </AnimatePresence>
 
             {/* Custom Seek Bar / Progress Bar */}
+            {!isEmbedVideo && (
             <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-30" onClick={handleSeek}>
                 <div 
                   className="h-full bg-viet-green relative transition-all duration-100"
-                  style={{ width: `${(currentTime / duration) * 100}%` }}
+                  style={{ width: `${progressPercent}%` }}
                 >
                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-viet-green rounded-full shadow-md scale-0 group-hover:scale-100 transition-transform" />
                 </div>
             </div>
+            )}
 
             {/* Video Controls Decor */}
+            {!isEmbedVideo && (
             <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity z-30">
                <button 
                  onClick={toggleMute}
@@ -159,6 +180,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
                  <span className="text-lg">{isMuted ? '🔇' : '🔊'}</span>
                </button>
             </div>
+            )}
          </motion.div>
 
          {/* Technical Label Below Video */}
@@ -166,7 +188,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
             <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">{t('stage_video.metadata.source')}</span>
             <div className="w-20 h-[1px] bg-viet-text" />
             <span className="text-[10px] font-bold text-viet-green min-w-[80px]">
-               {Math.floor(currentTime / 60)}:{Math.floor(currentTime % 60).toString().padStart(2, '0')} / {Math.floor(duration / 60)}:{Math.floor(duration % 60).toString().padStart(2, '0')}
+               {metadataLabel}
             </span>
             <div className="w-20 h-[1px] bg-viet-text" />
             <span className="text-[8px] font-black text-viet-text uppercase tracking-[4px]">{t('stage_video.metadata.format')}</span>
@@ -180,34 +202,34 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
         className="flex flex-col items-center gap-3 z-20 shrink-0 mb-4"
       >
         <button 
-          onClick={isVideoEnded ? onComplete : null}
-          disabled={!isVideoEnded}
+          onClick={canContinue ? onComplete : undefined}
+          disabled={!canContinue}
           className={`group relative px-12 py-4 rounded-[24px] font-black text-[13px] uppercase tracking-[4px] transition-all duration-500 overflow-hidden flex items-center gap-3
-            ${isVideoEnded 
+            ${canContinue 
               ? 'bg-viet-green text-white shadow-[0_15px_40px_-8px_rgba(118,192,52,0.3)] hover:shadow-[0_25px_50px_-10px_rgba(118,192,52,0.5)] hover:-translate-y-1 active:scale-95 cursor-pointer' 
               : 'bg-white text-gray-300 border-2 border-gray-100 cursor-not-allowed opacity-80'}
           `}
         >
           {/* Animated Background for Enabled State */}
-          {isVideoEnded && (
+          {canContinue && (
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
           )}
 
           <span className="relative z-10 font-sora">
-            {isVideoEnded ? t('stage_video.action_btn.ready') : t('stage_video.action_btn.processing')}
+            {canContinue ? t('stage_video.action_btn.ready') : t('stage_video.action_btn.processing')}
           </span>
-          <span className={`relative z-10 text-xl transition-all duration-300 ${isVideoEnded ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`}>
-            {isVideoEnded ? '🚀' : '⏳'}
+          <span className={`relative z-10 text-xl transition-all duration-300 ${canContinue ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`}>
+            {canContinue ? '🚀' : '⏳'}
           </span>
         </button>
 
         <div className={`flex items-center gap-3 py-3 px-10 rounded-full border transition-all duration-700
-          ${isVideoEnded ? 'bg-viet-green/10 border-viet-green/20' : 'bg-gray-50 border-gray-100'}
+          ${canContinue ? 'bg-viet-green/10 border-viet-green/20' : 'bg-gray-50 border-gray-100'}
         `}>
            <p className={`text-[10px] font-black uppercase tracking-widest transition-colors
-             ${isVideoEnded ? 'text-viet-green' : 'text-gray-400'}
+             ${canContinue ? 'text-viet-green' : 'text-gray-400'}
            `}>
-             {isVideoEnded 
+             {canContinue 
                ? t('stage_video.hints.ready') 
                : t('stage_video.hints.processing')}
            </p>
