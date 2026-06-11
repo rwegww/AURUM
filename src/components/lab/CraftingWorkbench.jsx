@@ -72,6 +72,160 @@ const ElementSphere = ({ symbol, size = 'md' }) => {
   );
 };
 
+  );
+};
+
+const MoleculeModel = ({ formula, size = 'md' }) => {
+  const formulaUpper = String(formula || '').toUpperCase();
+  
+  const conf = {
+    sm: {
+      container: 'w-8 h-8',
+      center: 'w-4 h-4 text-[6px]',
+      sat: 'w-2.5 h-2.5 text-[4px]',
+      bondH: 'w-4 h-0.5',
+      bondV: 'w-4 h-0.5',
+      offsetH2O_X: 'translate-x-2.5',
+      offsetH2O_Y: 'translate-y-1.5',
+      offsetCO2: 'translate-x-3',
+      offsetNaCl: 'translate-x-1.5',
+      offsetNH3_X: 'translate-x-2.5',
+      offsetNH3_Y: 'translate-y-1.5',
+      offsetNH3_B: 'translate-y-2.5',
+      offsetFe_X: 'translate-x-1.5',
+      offsetFe_Y: 'translate-y-1',
+      offsetFe_O: 'translate-y-1.5',
+      offsetGen: 'translate-x-1'
+    },
+    md: {
+      container: 'w-12 h-12',
+      center: 'w-6 h-6 text-[8px]',
+      sat: 'w-4 h-4 text-[6px]',
+      bondH: 'w-6 h-0.5',
+      bondV: 'w-6 h-0.5',
+      offsetH2O_X: 'translate-x-4',
+      offsetH2O_Y: 'translate-y-2',
+      offsetCO2: 'translate-x-4.5',
+      offsetNaCl: 'translate-x-2',
+      offsetNH3_X: 'translate-x-4',
+      offsetNH3_Y: 'translate-y-2',
+      offsetNH3_B: 'translate-y-4',
+      offsetFe_X: 'translate-x-2',
+      offsetFe_Y: 'translate-y-1',
+      offsetFe_O: 'translate-y-2',
+      offsetGen: 'translate-x-1.5'
+    },
+    lg: {
+      container: 'w-24 h-24',
+      center: 'w-12 h-12 text-[14px]',
+      sat: 'w-8 h-8 text-[10px]',
+      bondH: 'w-12 h-1',
+      bondV: 'w-12 h-1',
+      offsetH2O_X: 'translate-x-8',
+      offsetH2O_Y: 'translate-y-4',
+      offsetCO2: 'translate-x-9',
+      offsetNaCl: 'translate-x-4',
+      offsetNH3_X: 'translate-x-8',
+      offsetNH3_Y: 'translate-y-4',
+      offsetNH3_B: 'translate-y-8',
+      offsetFe_X: 'translate-x-4',
+      offsetFe_Y: 'translate-y-2',
+      offsetFe_O: 'translate-y-4',
+      offsetGen: 'translate-x-3'
+    }
+  }[size] || {
+    container: 'w-12 h-12',
+    center: 'w-6 h-6 text-[8px]',
+    sat: 'w-4 h-4 text-[6px]',
+    bondH: 'w-6 h-0.5',
+    bondV: 'w-6 h-0.5',
+    offsetH2O_X: 'translate-x-4',
+    offsetH2O_Y: 'translate-y-2',
+    offsetCO2: 'translate-x-4.5',
+    offsetNaCl: 'translate-x-2',
+    offsetNH3_X: 'translate-x-4',
+    offsetNH3_Y: 'translate-y-2',
+    offsetNH3_B: 'translate-y-4',
+    offsetFe_X: 'translate-x-2',
+    offsetFe_Y: 'translate-y-1',
+    offsetFe_O: 'translate-y-2',
+    offsetGen: 'translate-x-1.5'
+  };
+
+  const styleH = { bg: 'radial-gradient(circle at 35% 35%, #38bdf8 10%, #0284c7 80%, #0369a1 100%)' };
+  const styleO = { bg: 'radial-gradient(circle at 35% 35%, #f87171 10%, #dc2626 80%, #991b1b 100%)' };
+  const styleC = { bg: 'radial-gradient(circle at 35% 35%, #6b7280 10%, #374151 80%, #111827 100%)' };
+  const styleNa = { bg: 'radial-gradient(circle at 35% 35%, #fb923c 10%, #ea580c 80%, #c2410c 100%)' };
+  const styleCl = { bg: 'radial-gradient(circle at 35% 35%, #4ade80 10%, #16a34a 80%, #15803d 100%)' };
+  const styleN = { bg: 'radial-gradient(circle at 35% 35%, #818cf8 10%, #4f46e5 80%, #3730a3 100%)' };
+  const styleFe = { bg: 'radial-gradient(circle at 35% 35%, #cbd5e1 10%, #64748b 80%, #475569 100%)' };
+
+  const commonClasses = "rounded-full flex items-center justify-center text-white shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)] border border-white/20 select-none shrink-0 font-black";
+
+  if (formulaUpper.includes('H') && formulaUpper.includes('O') && !formulaUpper.includes('C')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`absolute ${conf.bondH} bg-white/20 rotate-[30deg] -${conf.offsetH2O_X} -translate-y-1`} />
+        <div className={`absolute ${conf.bondH} bg-white/20 -rotate-[30deg] ${conf.offsetH2O_X} -translate-y-1`} />
+        <div className={`${commonClasses} ${conf.center} absolute`} style={{ background: styleO.bg }}>O</div>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetH2O_X} ${conf.offsetH2O_Y}`} style={{ background: styleH.bg }}>H</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetH2O_X} ${conf.offsetH2O_Y}`} style={{ background: styleH.bg }}>H</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('C') && formulaUpper.includes('O')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`absolute bg-white/20`} style={{ width: `calc(${conf.bondH} * 1.5)`, height: '2px' }} />
+        <div className={`${commonClasses} ${conf.center} absolute`} style={{ background: styleC.bg }}>C</div>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetCO2}`} style={{ background: styleO.bg }}>O</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetCO2}`} style={{ background: styleO.bg }}>O</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('NA') && formulaUpper.includes('CL')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`${commonClasses} ${conf.center} absolute -${conf.offsetNaCl}`} style={{ background: styleNa.bg }}>Na</div>
+        <div className={`${commonClasses} ${conf.center} absolute ${conf.offsetNaCl}`} style={{ background: styleCl.bg }}>Cl</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('N') && formulaUpper.includes('H')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`absolute ${conf.bondV} bg-white/20 rotate-[90deg] translate-y-1`} />
+        <div className={`absolute ${conf.bondH} bg-white/20 rotate-[30deg] -${conf.offsetNH3_X} -translate-y-1`} />
+        <div className={`absolute ${conf.bondH} bg-white/20 -rotate-[30deg] ${conf.offsetNH3_X} -translate-y-1`} />
+        <div className={`${commonClasses} ${conf.center} absolute`} style={{ background: styleN.bg }}>N</div>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetNH3_X} -${conf.offsetNH3_Y}`} style={{ background: styleH.bg }}>H</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetNH3_X} -${conf.offsetNH3_Y}`} style={{ background: styleH.bg }}>H</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetNH3_B}`} style={{ background: styleH.bg }}>H</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('FE')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetFe_X} -${conf.offsetFe_Y}`} style={{ background: styleFe.bg }}>Fe</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetFe_X} -${conf.offsetFe_Y}`} style={{ background: styleFe.bg }}>Fe</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetFe_O}`} style={{ background: styleO.bg }}>O</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${conf.container} flex items-center justify-center`}>
+      <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetGen}`} style={{ background: 'radial-gradient(circle at 35% 35%, #d8b4fe 10%, #a855f7 80%, #6b21a8 100%)' }}>M</div>
+      <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetGen}`} style={{ background: 'radial-gradient(circle at 35% 35%, #a7f3d0 10%, #22c55e 80%, #15803d 100%)' }}>X</div>
+    </div>
+  );
+};
+
 const CraftingWorkbench = ({ open, onClose, onCrafted }) => {
   const { isLoggedIn, user, refreshUser } = useAuth();
   const [inventory, setInventory] = useState(() => normalizeInventory(user?.inventory));
@@ -269,12 +423,12 @@ const CraftingWorkbench = ({ open, onClose, onCrafted }) => {
                       <div key={item.id} className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
                         <div className="mb-3 flex items-start justify-between gap-4">
                           <div className="flex min-w-0 items-start gap-3">
-                            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border bg-gradient-to-b from-white/10 to-white/[0.02] text-2xl shadow-inner transition-transform duration-300 hover:scale-110 ${
+                            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border bg-gradient-to-b from-white/10 to-white/[0.02] shadow-inner transition-transform duration-300 hover:scale-110 ${
                               item.rarity === 'legendary' ? 'border-amber-500/30 shadow-amber-500/5' :
                               item.rarity === 'rare' ? 'border-purple-500/30 shadow-purple-500/5' :
                               item.rarity === 'uncommon' ? 'border-blue-500/30 shadow-blue-500/5' : 'border-white/10'
                             }`}>
-                              {item.icon}
+                              <MoleculeModel formula={item.formula} size="md" />
                             </div>
                             <div className="min-w-0">
                               <div className="mb-1 flex flex-wrap items-center gap-2">
