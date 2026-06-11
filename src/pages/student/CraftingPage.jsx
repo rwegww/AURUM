@@ -15,7 +15,6 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import Footer from '@/components/common/Footer';
 import { 
   ingredients, 
   rarityConfig, 
@@ -839,7 +838,6 @@ const CraftingPage = () => {
         </AnimatePresence>
 
       </div>
-      <Footer />
     </div>
   );
 };
