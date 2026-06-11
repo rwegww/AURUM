@@ -2,8 +2,10 @@ import express from 'express';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
+import Mission from '../models/Mission.js';
 import { supabase } from '../lib/supabase.js';
 import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
+import { getLessonIngredientRewards, grantIngredientsToInventory } from '../../src/data/labInventory.js';
 
 const router = express.Router();
 
@@ -275,6 +277,9 @@ router.post('/lesson-segment', auth, async (req, res) => {
       const nextXp = (req.user.xp || 0) + LESSON_LEVEL_XP[level] + streakBonus;
       updateFields.xp = nextXp;
       updateFields.level = Math.floor(nextXp / 1000) + 1;
+
+      const labRewards = getLessonIngredientRewards({ lesson, lessonId, level, stars: normalizedStars });
+      updateFields.inventory = grantIngredientsToInventory(req.user.inventory, labRewards);
     }
 
     if (level === 'level3') {
@@ -284,6 +289,21 @@ router.post('/lesson-segment', auth, async (req, res) => {
         updateFields.unlockedLessons = unlockedLessons;
       }
       applyLessonStreak(updateFields, req.user);
+    }
+
+    if (level === 'level1') {
+      try {
+        await User.incrementCraftingTaskProgress(req.user.id, 'watch_video', lessonId);
+      } catch (err) {
+        console.warn('⚠️ Lỗi tăng tiến độ nhiệm vụ xem video bài giảng:', err.message);
+      }
+    } else if (level === 'level3') {
+      try {
+        await User.incrementCraftingTaskProgress(req.user.id, 'complete_lesson', lessonId);
+        await Mission.updateProgress(req.user.id, 'lesson_complete', 1);
+      } catch (err) {
+        console.warn('⚠️ Lỗi tăng tiến độ nhiệm vụ hoàn thành bài học:', err.message);
+      }
     }
 
     const updatedUser = await User.update(req.user.id, updateFields);

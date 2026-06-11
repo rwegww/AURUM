@@ -4,6 +4,11 @@
 let idCounter = Date.now();
 const generateId = () => ++idCounter;
 
+const normalizeFormula = (formula) => {
+  const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+  return String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subMap[match] || match).trim().toUpperCase();
+};
+
 const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   id,
   contents: [],
@@ -270,11 +275,13 @@ const useLabStore = create((set, get) => ({
 
   _findReaction: (formulas, isHeating) => {
     const { reactions } = get();
+    const normalizedFormulas = formulas.map(normalizeFormula).sort();
     return reactions.find(rx => {
-      const rxReactants = rx.reactants.map(r => r.formula);
-      if (rxReactants.length !== formulas.length) return false;
-      const match = formulas.every(f => rxReactants.includes(f));
-      if (rx.requires_heat && !isHeating) return false;
+      const rxReactants = rx.reactants.map(r => normalizeFormula(r.formula)).sort();
+      if (rxReactants.length !== normalizedFormulas.length) return false;
+      const match = normalizedFormulas.every((formula, index) => formula === rxReactants[index]);
+      const requiresHeat = Boolean(rx.requires_heat ?? rx.requiresHeat);
+      if (requiresHeat && !isHeating) return false;
       return match;
     });
   },

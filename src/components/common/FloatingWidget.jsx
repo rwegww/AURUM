@@ -5,6 +5,51 @@ import { useTranslation, Trans } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
 import AssistantAvatar from '@/components/common/AssistantAvatar';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
+import { ingredients } from '@/data/labInventory';
+
+const getElementStyle = (symbol) => {
+  const styles = {
+    H: { bg: 'radial-gradient(circle at 35% 35%, #38bdf8 10%, #0284c7 80%, #0369a1 100%)', shadow: 'shadow-blue-500/20' },
+    O: { bg: 'radial-gradient(circle at 35% 35%, #f87171 10%, #dc2626 80%, #991b1b 100%)', shadow: 'shadow-red-500/20' },
+    FE: { bg: 'radial-gradient(circle at 35% 35%, #cbd5e1 10%, #64748b 80%, #475569 100%)', shadow: 'shadow-slate-400/20' },
+    NA: { bg: 'radial-gradient(circle at 35% 35%, #fb923c 10%, #ea580c 80%, #c2410c 100%)', shadow: 'shadow-orange-500/20' },
+    CL: { bg: 'radial-gradient(circle at 35% 35%, #4ade80 10%, #16a34a 80%, #15803d 100%)', shadow: 'shadow-green-500/20' },
+    C: { bg: 'radial-gradient(circle at 35% 35%, #6b7280 10%, #374151 80%, #111827 100%)', shadow: 'shadow-gray-700/20' },
+    S: { bg: 'radial-gradient(circle at 35% 35%, #fde047 10%, #ca8a04 80%, #a16207 100%)', shadow: 'shadow-yellow-500/20' },
+    N: { bg: 'radial-gradient(circle at 35% 35%, #818cf8 10%, #4f46e5 80%, #3730a3 100%)', shadow: 'shadow-indigo-500/20' },
+    CA: { bg: 'radial-gradient(circle at 35% 35%, #f8fafc 10%, #cbd5e1 80%, #94a3b8 100%)', shadow: 'shadow-slate-300/20' },
+    AG: { bg: 'radial-gradient(circle at 35% 35%, #e2e8f0 10%, #94a3b8 80%, #64748b 100%)', shadow: 'shadow-slate-400/20' },
+    AU: { bg: 'radial-gradient(circle at 35% 35%, #fcd34d 10%, #d97706 80%, #b45309 100%)', shadow: 'shadow-amber-500/20' },
+    F: { bg: 'radial-gradient(circle at 35% 35%, #a7f3d0 10%, #10b981 80%, #047857 100%)', shadow: 'shadow-emerald-500/20' },
+    BR: { bg: 'radial-gradient(circle at 35% 35%, #b45309 10%, #78350f 80%, #451a03 100%)', shadow: 'shadow-amber-900/20' },
+    I: { bg: 'radial-gradient(circle at 35% 35%, #d8b4fe 10%, #8b5cf6 80%, #6d28d9 100%)', shadow: 'shadow-purple-500/20' },
+    HE: { bg: 'radial-gradient(circle at 35% 35%, #f472b6 10%, #db2777 80%, #9d174d 100%)', shadow: 'shadow-pink-500/20' },
+    NE: { bg: 'radial-gradient(circle at 35% 35%, #fda4af 10%, #f43f5e 80%, #be123c 100%)', shadow: 'shadow-rose-500/20' },
+    AR: { bg: 'radial-gradient(circle at 35% 35%, #67e8f9 10%, #06b6d4 80%, #0891b2 100%)', shadow: 'shadow-cyan-500/20' },
+    SI: { bg: 'radial-gradient(circle at 35% 35%, #94a3b8 10%, #475569 80%, #334155 100%)', shadow: 'shadow-slate-600/20' },
+    BE: { bg: 'radial-gradient(circle at 35% 35%, #bef264 10%, #84cc16 80%, #4d7c0f 100%)', shadow: 'shadow-lime-500/20' },
+    BA: { bg: 'radial-gradient(circle at 35% 35%, #a7f3d0 10%, #22c55e 80%, #15803d 100%)', shadow: 'shadow-green-600/20' }
+  };
+  return styles[symbol.toUpperCase()] || { bg: 'radial-gradient(circle at 35% 35%, #d8b4fe 10%, #a855f7 80%, #6b21a8 100%)', shadow: 'shadow-purple-500/20' };
+};
+
+const ElementSphere = ({ symbol, size = 'md' }) => {
+  const style = getElementStyle(symbol);
+  const sizeClasses = {
+    sm: 'w-5 h-5 text-[8px] font-black',
+    md: 'w-7 h-7 text-[10px] font-black',
+    lg: 'w-9 h-9 text-[12px] font-black'
+  };
+  return (
+    <span 
+      className={`${sizeClasses[size] || sizeClasses.md} rounded-full flex items-center justify-center text-white shadow-[inset_-1.5px_-1.5px_4px_rgba(0,0,0,0.5),0_2px_4px_rgba(0,0,0,0.3)] border border-white/20 ${style.shadow} shrink-0 select-none`}
+      style={{ background: style.bg }}
+    >
+      {symbol}
+    </span>
+  );
+};
+
 
 
 const FloatingWidget = () => {
@@ -405,6 +450,22 @@ const FloatingWidget = () => {
                                     <div className="flex-1 min-w-0">
                                       <h5 className="text-xs font-black text-viet-text uppercase tracking-tight italic truncate">{mission.title}</h5>
                                       <p className="text-[10px] font-semibold text-viet-text-light leading-tight mt-0.5 mb-2.5">{mission.description}</p>
+                                      
+                                      {mission.isCraftingTask && mission.rewards && mission.rewards.length > 0 && (
+                                        <div className="mt-2 mb-2.5 p-2 bg-slate-50 border border-slate-100 rounded-xl">
+                                          <p className="text-[8px] font-black text-viet-text-light/60 uppercase tracking-wider mb-1.5 flex items-center gap-1">
+                                            🎁 {t('widget.reward_elements')}
+                                          </p>
+                                          <div className="flex flex-wrap gap-1.5">
+                                            {mission.rewards.map((rew, idx) => (
+                                              <div key={idx} className="flex items-center gap-1 bg-white border border-[#e6e2d6] px-1.5 py-0.5 rounded-lg shadow-sm">
+                                                <ElementSphere symbol={rew.ingredientId.replace('ing_', '').toUpperCase()} size="sm" />
+                                                <span className="text-[9px] font-black text-viet-text">x{rew.amount}</span>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      )}
                                       
                                       {/* Micro Progress Bar */}
                                       <div className="relative">

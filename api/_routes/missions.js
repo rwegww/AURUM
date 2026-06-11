@@ -25,7 +25,7 @@ router.get('/', auth, async (req, res) => {
       return {
         id: task.id,
         title: task.title,
-        description: `${task.description} (Thưởng: ${rewardsText})`,
+        description: task.description,
         type: 'daily',
         action_type: task.actionType,
         target_count: task.target,
