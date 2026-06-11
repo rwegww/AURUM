@@ -15,6 +15,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import Footer from '@/components/common/Footer';
 import { 
   ingredients, 
   rarityConfig, 
@@ -414,19 +415,19 @@ const CraftingPage = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0a0b0f] text-white">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[oklch(0.98_0.02_135)] text-[#1a1a1a]">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          className="mb-6 h-12 w-12 rounded-full border-4 border-emerald-500 border-t-transparent"
+          className="mb-6 h-12 w-12 rounded-full border-4 border-viet-green border-t-transparent"
         />
-        <h2 className="animate-pulse text-sm font-black uppercase tracking-[0.2em] text-emerald-400">Đang khởi động Cơ xưởng chế tạo...</h2>
+        <h2 className="animate-pulse text-sm font-black uppercase tracking-[0.2em] text-viet-green">Đang khởi động Cơ xưởng chế tạo...</h2>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#07080b] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900/60 via-slate-950/80 to-[#07080b] pb-24 pt-24 text-white selection:bg-emerald-500 selection:text-white font-sans">
+    <div className="min-h-screen bg-[oklch(0.98_0.02_135)] pb-24 pt-32 text-[#1a1a1a] selection:bg-viet-green selection:text-white font-sans">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Navigation & Title */}
@@ -434,35 +435,35 @@ const CraftingPage = () => {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => navigate('/lab')}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-white/80 hover:text-white"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-duo-border border-b-4 bg-white text-[#1a1a1a] hover:bg-slate-50 transition-all"
             >
               <ChevronLeft size={20} />
             </button>
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-2">
+              <div className="inline-flex items-center gap-2 rounded-full bg-viet-green/10 border border-viet-green/20 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-viet-green mb-2">
                 <Hammer size={12} className="animate-pulse" />
                 Synthesis Laboratory
               </div>
-              <h1 className="text-3xl md:text-4xl font-black italic uppercase tracking-tight">Cơ xưởng chế tạo</h1>
+              <h1 className="text-3xl md:text-4xl font-black italic uppercase tracking-tight text-[#1a1a1a]">Cơ xưởng chế tạo</h1>
             </div>
           </div>
           
           {/* Quick Stats Dashboard */}
-          <div className="grid grid-cols-3 gap-3 bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-3xl p-3 md:min-w-[480px]">
-            <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3 flex flex-col justify-center">
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Cấp độ Lab</span>
-              <span className="text-lg font-black text-emerald-400">LV.{stats.levelInfo.level}</span>
-              <span className="text-[9px] font-medium text-slate-400 truncate mt-0.5">{stats.levelInfo.title}</span>
+          <div className="grid grid-cols-3 gap-3 bg-white border-2 border-duo-border border-b-4 rounded-3xl p-3 md:min-w-[480px]">
+            <div className="bg-slate-50 border border-duo-border rounded-2xl p-3 flex flex-col justify-center">
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#1a1a1a]/50 block mb-1">Cấp độ Lab</span>
+              <span className="text-lg font-black text-viet-green">LV.{stats.levelInfo.level}</span>
+              <span className="text-[9px] font-bold text-[#1a1a1a]/70 truncate mt-0.5">{stats.levelInfo.title}</span>
             </div>
-            <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3 flex flex-col justify-center">
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Kho nguyên tố</span>
-              <span className="text-lg font-black text-blue-400">{stats.totalIngredients}</span>
-              <span className="text-[9px] font-medium text-slate-400 mt-0.5">Mảnh hạt</span>
+            <div className="bg-slate-50 border border-duo-border rounded-2xl p-3 flex flex-col justify-center">
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#1a1a1a]/50 block mb-1">Kho nguyên tố</span>
+              <span className="text-lg font-black text-blue-600">{stats.totalIngredients}</span>
+              <span className="text-[9px] font-bold text-[#1a1a1a]/70 mt-0.5">Mảnh hạt</span>
             </div>
-            <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3 flex flex-col justify-center">
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Đã chế tạo</span>
-              <span className="text-lg font-black text-purple-400">{stats.totalCrafted}</span>
-              <span className="text-[9px] font-medium text-slate-400 mt-0.5">/ {craftableItems.length} công thức</span>
+            <div className="bg-slate-50 border border-duo-border rounded-2xl p-3 flex flex-col justify-center">
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#1a1a1a]/50 block mb-1">Đã chế tạo</span>
+              <span className="text-lg font-black text-purple-600">{stats.totalCrafted}</span>
+              <span className="text-[9px] font-bold text-[#1a1a1a]/70 mt-0.5">/ {craftableItems.length} công thức</span>
             </div>
           </div>
         </div>
@@ -472,16 +473,16 @@ const CraftingPage = () => {
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`mb-8 rounded-2xl border p-4 text-sm font-semibold flex items-center justify-between gap-4 ${
+            className={`mb-8 rounded-2xl border-2 p-4 text-sm font-bold flex items-center justify-between gap-4 ${
               notice.type === 'success'
-                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200'
-                : 'border-rose-500/30 bg-rose-500/10 text-rose-200'
+                ? 'border-viet-green/30 bg-viet-green/10 text-viet-green'
+                : 'border-rose-300 bg-rose-50 text-rose-700'
             }`}
           >
             <span>{notice.text}</span>
             <button 
               onClick={() => setNotice(null)}
-              className="text-xs font-bold uppercase tracking-widest opacity-60 hover:opacity-100"
+              className="text-xs font-black uppercase tracking-widest opacity-60 hover:opacity-100"
             >
               Đóng
             </button>
@@ -493,14 +494,14 @@ const CraftingPage = () => {
           
           {/* LEFT COLUMN: Ingredient Tasks (5 Grid Cols on large screens) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-[32px] p-6">
+            <div className="bg-white border-2 border-duo-border border-b-4 rounded-[32px] p-6">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-2">
-                    <Award className="text-amber-400" size={20} />
+                  <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-2 text-[#1a1a1a]">
+                    <Award className="text-amber-500" size={20} />
                     Nhiệm vụ thu thập
                   </h2>
-                  <p className="text-[11px] font-medium text-slate-400 mt-1">Hoàn thành để kiếm mảnh nguyên tố thiết yếu</p>
+                  <p className="text-[11px] font-bold text-[#1a1a1a]/60 mt-1">Hoàn thành để kiếm mảnh nguyên tố thiết yếu</p>
                 </div>
               </div>
 
@@ -513,37 +514,37 @@ const CraftingPage = () => {
                   return (
                     <div 
                       key={task.id} 
-                      className={`border rounded-2xl p-4 transition-all duration-300 ${
+                      className={`border-2 border-duo-border border-b-4 rounded-2xl p-4 transition-all duration-300 ${
                         isCompleted 
-                          ? 'border-emerald-500/20 bg-emerald-500/[0.02]' 
-                          : 'border-white/5 bg-white/[0.01]'
+                          ? 'border-viet-green/30 bg-viet-green/[0.02]' 
+                          : 'bg-slate-50/50'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="space-y-1">
                           <span className={`inline-block text-[9px] font-black uppercase tracking-widest rounded-lg px-2 py-0.5 ${
                             task.difficulty === 'hard' 
-                              ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' 
+                              ? 'bg-rose-100 text-rose-700 border border-rose-200' 
                               : task.difficulty === 'medium'
-                                ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                                : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                                ? 'bg-amber-100 text-amber-700 border border-amber-200'
+                                : 'bg-blue-100 text-blue-700 border border-blue-200'
                           }`}>
                             Độ khó: {task.difficulty === 'hard' ? 'Khó' : task.difficulty === 'medium' ? 'Vừa' : 'Dễ'}
                           </span>
-                          <h3 className="text-sm font-black text-white">{task.title}</h3>
-                          <p className="text-[11px] text-slate-400 font-medium leading-relaxed">{task.description}</p>
+                          <h3 className="text-sm font-black text-[#1a1a1a]">{task.title}</h3>
+                          <p className="text-[11px] text-[#1a1a1a]/70 font-semibold leading-relaxed">{task.description}</p>
                         </div>
                       </div>
 
                       {/* Progress Bar */}
                       <div className="mb-4">
-                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 mb-1.5">
+                        <div className="flex justify-between items-center text-[10px] font-black text-[#1a1a1a]/60 mb-1.5">
                           <span>Tiến độ</span>
                           <span>{task.progress}/{task.target} ({percent}%)</span>
                         </div>
-                        <div className="h-2 overflow-hidden rounded-full bg-slate-950 border border-white/5">
+                        <div className="h-2.5 overflow-hidden rounded-full bg-slate-100 border border-duo-border">
                           <motion.div
-                            className={`h-full ${isCompleted ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                            className={`h-full ${isCompleted ? 'bg-viet-green' : 'bg-blue-500'}`}
                             initial={{ width: 0 }}
                             animate={{ width: `${percent}%` }}
                             transition={{ duration: 0.8 }}
@@ -552,14 +553,14 @@ const CraftingPage = () => {
                       </div>
 
                       {/* Rewards & Action Button */}
-                      <div className="flex items-center justify-between gap-4 pt-3 border-t border-white/5">
+                      <div className="flex items-center justify-between gap-4 pt-3 border-t border-duo-border">
                         <div className="flex flex-wrap gap-1.5">
                           {task.rewards.map((rew, i) => {
                             const ing = ingredients.find(x => x.id === rew.ingredientId);
                             return (
                               <span 
                                 key={i} 
-                                className="bg-white/5 border border-white/5 rounded-xl pl-1.5 pr-2 py-1 text-[10px] font-black text-emerald-300 flex items-center gap-1.5"
+                                className="bg-white border-2 border-duo-border rounded-xl pl-1.5 pr-2 py-1 text-[10px] font-black text-viet-green flex items-center gap-1.5"
                               >
                                 <ElementSphere symbol={ing?.formula || rew.ingredientId} size="sm" />
                                 <span>{ing?.formula || rew.ingredientId}: +{rew.amount}</span>
@@ -572,9 +573,9 @@ const CraftingPage = () => {
                           <button
                             onClick={() => handleClaimReward(task.id)}
                             disabled={claimingId === task.id}
-                            className="bg-emerald-500 hover:bg-emerald-400 disabled:bg-emerald-800 disabled:cursor-not-allowed text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl transition shadow-lg shadow-emerald-500/25 flex items-center gap-1.5"
+                            className="bg-viet-green hover:bg-viet-green/90 border-b-4 border-viet-green-dark disabled:bg-slate-200 disabled:text-slate-400 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl transition flex items-center gap-1.5"
                           >
-                            <Sparkles size={12} className="animate-spin" />
+                            <Sparkles size={12} />
                             {claimingId === task.id ? 'Đang nhận' : 'Nhận thưởng'}
                           </button>
                         ) : (
@@ -586,7 +587,7 @@ const CraftingPage = () => {
                                 navigate('/library');
                               }
                             }}
-                            className="bg-white/5 hover:bg-white/10 text-white/80 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border border-white/10 transition flex items-center gap-1.5"
+                            className="bg-white hover:bg-slate-50 text-[#1a1a1a]/80 text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl border-2 border-duo-border border-b-4 transition flex items-center gap-1.5"
                           >
                             {task.actionType === 'watch_video' ? <Play size={10} /> : <BookOpen size={10} />}
                             Thực hiện
@@ -599,8 +600,8 @@ const CraftingPage = () => {
               </div>
 
               {/* Inventory overview below quests */}
-              <div className="mt-8 pt-6 border-t border-white/5">
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+              <div className="mt-8 pt-6 border-t border-duo-border">
+                <h3 className="text-xs font-black uppercase tracking-widest text-[#1a1a1a]/60 mb-4 flex items-center gap-2">
                   <Package size={14} />
                   Kho nguyên tố hiện có
                 </h3>
@@ -609,18 +610,18 @@ const CraftingPage = () => {
                     {ingredients
                       .filter((ing) => (ingredientAmounts[ing.id] || 0) > 0)
                       .map((ingredient) => (
-                        <div key={ingredient.id} className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] p-2.5">
+                        <div key={ingredient.id} className="flex items-center gap-3 rounded-2xl border-2 border-duo-border bg-slate-50 p-2.5">
                           <ElementSphere symbol={ingredient.formula} size="md" />
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-[10px] font-black text-white">{ingredient.name}</p>
-                            <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">{ingredient.formula}</p>
+                            <p className="truncate text-[10px] font-black text-[#1a1a1a]">{ingredient.name}</p>
+                            <p className="text-[8px] font-bold uppercase tracking-widest text-[#1a1a1a]/55">{ingredient.formula}</p>
                           </div>
-                          <span className="rounded-lg bg-white px-2 py-0.5 text-xs font-black text-slate-950">{ingredientAmounts[ingredient.id]}</span>
+                          <span className="rounded-lg bg-viet-green text-white px-2 py-0.5 text-xs font-black">{ingredientAmounts[ingredient.id]}</span>
                         </div>
                       ))}
                   </div>
                 ) : (
-                  <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.01] p-6 text-center text-xs font-bold text-slate-500 leading-relaxed">
+                  <div className="rounded-2xl border-2 border-dashed border-duo-border bg-slate-50/50 p-6 text-center text-xs font-bold text-[#1a1a1a]/50 leading-relaxed">
                     Kho nguyên liệu đang trống. Hãy hoàn thành các nhiệm vụ thu thập ở trên để tích lũy nguyên liệu!
                   </div>
                 )}
@@ -630,16 +631,16 @@ const CraftingPage = () => {
 
           {/* RIGHT COLUMN: Crafting Recipes (7 Grid Cols on large screens) */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="bg-white/[0.02] border border-white/5 backdrop-blur-md rounded-[32px] p-6">
+            <div className="bg-white border-2 border-duo-border border-b-4 rounded-[32px] p-6">
               
               {/* Filters & Header */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-2">
-                    <FlaskConical className="text-purple-400" size={20} />
+                  <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-2 text-[#1a1a1a]">
+                    <FlaskConical className="text-purple-500" size={20} />
                     Công thức hợp chất
                   </h2>
-                  <p className="text-[11px] font-medium text-slate-400 mt-1">Đồng bộ dữ liệu mô phỏng phản ứng 3D</p>
+                  <p className="text-[11px] font-bold text-[#1a1a1a]/60 mt-1">Đồng bộ dữ liệu mô phỏng phản ứng 3D</p>
                 </div>
 
                 {/* Filter Controls */}
@@ -647,7 +648,7 @@ const CraftingPage = () => {
                   <select 
                     value={filterRarity} 
                     onChange={(e) => setFilterRarity(e.target.value)}
-                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs font-bold text-white focus:outline-none"
+                    className="bg-white border-2 border-duo-border rounded-xl px-3 py-1.5 text-xs font-black text-[#1a1a1a] focus:outline-none focus:border-viet-green"
                   >
                     <option value="all">Tất cả độ hiếm</option>
                     <option value="common">Phổ thông</option>
@@ -661,7 +662,7 @@ const CraftingPage = () => {
                     placeholder="Tìm tên chất, công thức..." 
                     value={filterQuery}
                     onChange={(e) => setFilterQuery(e.target.value)}
-                    className="bg-slate-900 border border-white/10 rounded-xl px-3 py-1.5 text-xs font-bold text-white placeholder-slate-500 focus:outline-none w-[180px]"
+                    className="bg-white border-2 border-duo-border rounded-xl px-3 py-1.5 text-xs font-black text-[#1a1a1a] placeholder-[#1a1a1a]/40 focus:outline-none focus:border-viet-green w-[180px]"
                   />
                 </div>
               </div>
@@ -678,12 +679,12 @@ const CraftingPage = () => {
                     return (
                       <div 
                         key={item.id} 
-                        className={`rounded-2xl border p-4 transition-all duration-300 ${
+                        className={`rounded-3xl border-2 border-duo-border border-b-4 p-4 transition-all duration-300 bg-white ${
                           alreadyOwned 
-                            ? 'border-purple-500/10 bg-purple-500/[0.01]' 
+                            ? 'border-purple-500/25 bg-purple-50/30' 
                             : status.canCraft 
-                              ? 'border-emerald-500/20 bg-emerald-500/[0.02] shadow-lg shadow-emerald-500/5' 
-                              : 'border-white/5 bg-white/[0.01]'
+                              ? 'border-viet-green/30 bg-viet-green/[0.02] shadow-md shadow-viet-green/5' 
+                              : 'bg-slate-50/60'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-4 mb-3">
@@ -697,12 +698,12 @@ const CraftingPage = () => {
                             </div>
                             <div className="min-w-0">
                               <div className="mb-0.5 flex flex-wrap items-center gap-2">
-                                <h4 className="text-sm font-black leading-tight text-white">{item.name}</h4>
+                                <h4 className="text-sm font-black leading-tight text-[#1a1a1a]">{item.name}</h4>
                                 <span className={`rounded-full border px-2 py-0.5 text-[8px] font-black uppercase tracking-widest ${rarity.color}`}>
                                   {rarity.label}
                                 </span>
                               </div>
-                              <p className="text-xl font-black italic text-emerald-400 leading-tight">
+                              <p className="text-xl font-black italic text-viet-green leading-tight">
                                 {formatFormula(toAsciiFormula(item.formula))}
                               </p>
                             </div>
@@ -713,10 +714,10 @@ const CraftingPage = () => {
                             disabled={loading || craftingId === item.id || alreadyOwned || !status.canCraft}
                             className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition ${
                               alreadyOwned 
-                                ? 'bg-purple-500/20 border border-purple-500/30 text-purple-200' 
+                                ? 'bg-purple-600 hover:bg-purple-700 shadow-sm' 
                                 : status.canCraft 
-                                  ? 'bg-emerald-500 hover:bg-emerald-400 shadow-md shadow-emerald-500/10' 
-                                  : 'bg-white/5 border border-white/5 text-slate-500 cursor-not-allowed'
+                                  ? 'bg-viet-green hover:bg-viet-green/90 shadow-md shadow-viet-green/10' 
+                                  : 'bg-slate-200 text-[#1a1a1a]/30 cursor-not-allowed'
                             }`}
                           >
                             {alreadyOwned ? <CheckCircle2 size={12} /> : status.canCraft ? <Hammer size={12} /> : <LockKeyhole size={12} />}
@@ -725,7 +726,7 @@ const CraftingPage = () => {
                         </div>
 
                         {item.description && (
-                          <p className="mb-3 text-[11px] font-medium leading-relaxed text-slate-400">{item.description}</p>
+                          <p className="mb-3 text-[11px] font-semibold leading-relaxed text-[#1a1a1a]/70">{item.description}</p>
                         )}
 
                         {/* Ingredients Requirements list */}
@@ -739,8 +740,8 @@ const CraftingPage = () => {
                                 key={ingredientId}
                                 className={`rounded-lg border pl-1.5 pr-2 py-1 text-[9px] font-black flex items-center gap-1.5 ${
                                   enough
-                                    ? 'border-emerald-500/20 bg-emerald-500/5 text-emerald-400'
-                                    : 'border-rose-500/20 bg-rose-500/5 text-rose-400'
+                                    ? 'border-viet-green/20 bg-viet-green/5 text-viet-green-dark'
+                                    : 'border-rose-500/20 bg-rose-500/5 text-rose-600'
                                 }`}
                               >
                                 <ElementSphere symbol={ingredient?.formula || ingredientId} size="sm" />
@@ -748,7 +749,7 @@ const CraftingPage = () => {
                               </span>
                             );
                           })}
-                          <span className="rounded-lg border border-amber-500/20 bg-amber-500/5 px-2 py-1 text-[9px] font-black text-amber-400">
+                          <span className="rounded-lg border border-amber-500/30 bg-amber-50 px-2 py-1 text-[9px] font-black text-amber-600">
                             +{item.xpReward} XP
                           </span>
                         </div>
@@ -756,7 +757,7 @@ const CraftingPage = () => {
                     );
                   })
                 ) : (
-                  <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.01] p-12 text-center text-xs font-bold text-slate-500">
+                  <div className="rounded-2xl border border-dashed border-duo-border bg-slate-50/50 p-12 text-center text-xs font-bold text-[#1a1a1a]/50">
                     Không tìm thấy công thức nào khớp với bộ lọc của bạn.
                   </div>
                 )}
@@ -774,18 +775,18 @@ const CraftingPage = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSuccessCelebration(null)}
-                className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                className="absolute inset-0 bg-[#1a1a1a]/60 backdrop-blur-sm"
               />
               
               <motion.div 
                 initial={{ scale: 0.9, y: 20, opacity: 0 }}
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.9, y: 20, opacity: 0 }}
-                className="relative bg-gradient-to-b from-[#181d28] to-[#0d0f14] border border-white/10 rounded-[36px] p-8 max-w-[500px] w-full text-center shadow-[0_30px_100px_rgba(0,0,0,0.8)] z-10 overflow-hidden"
+                className="relative bg-white border-2 border-duo-border rounded-[36px] p-8 max-w-[500px] w-full text-center shadow-2xl z-10 overflow-hidden"
               >
                 {/* Background glow sparks */}
-                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-64 h-64 bg-viet-green/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative mb-6">
                   <div className="w-24 h-24 rounded-3xl bg-slate-950 border border-white/10 flex items-center justify-center mx-auto shadow-xl shadow-emerald-500/20">
@@ -794,33 +795,33 @@ const CraftingPage = () => {
                   <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    className="absolute inset-0 w-28 h-28 border border-dashed border-emerald-500/30 rounded-full mx-auto -top-2"
+                    className="absolute inset-0 w-28 h-28 border border-dashed border-viet-green/30 rounded-full mx-auto -top-2"
                   />
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-emerald-400 mb-3 border border-emerald-500/20">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-viet-green/10 px-3 py-1 text-[9px] font-black uppercase tracking-[0.2em] text-viet-green mb-3 border border-viet-green/20">
                   <Sparkles size={10} />
                   Mở khóa thành công
                 </div>
 
-                <h2 className="text-3xl font-black text-white mb-1">{successCelebration.name}</h2>
-                <h3 className="text-2xl font-black italic text-emerald-400 mb-4">
+                <h2 className="text-3xl font-black text-[#1a1a1a] mb-1">{successCelebration.name}</h2>
+                <h3 className="text-2xl font-black italic text-viet-green mb-4">
                   {formatFormula(toAsciiFormula(successCelebration.formula))}
                 </h3>
 
-                <p className="text-slate-300 text-sm font-medium leading-relaxed mb-6">
+                <p className="text-[#1a1a1a]/70 text-sm font-semibold leading-relaxed mb-6">
                   {successCelebration.message || `Bạn đã tổng hợp thành công hợp chất ${successCelebration.name} (${successCelebration.formula}) từ các mảnh nguyên tử học tập.`}
                 </p>
 
-                <div className="bg-white/5 border border-white/5 rounded-2xl p-4 flex items-center justify-around gap-4 mb-8">
+                <div className="bg-slate-50 border-2 border-duo-border rounded-2xl p-4 flex items-center justify-around gap-4 mb-8">
                   <div>
-                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">XP Nhận được</span>
-                    <span className="text-xl font-black text-amber-400">+{successCelebration.xpReward} XP</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest text-[#1a1a1a]/50 block mb-1">XP Nhận được</span>
+                    <span className="text-xl font-black text-amber-600">+{successCelebration.xpReward} XP</span>
                   </div>
-                  <div className="h-8 w-px bg-white/10" />
+                  <div className="h-8 w-px bg-slate-200" />
                   <div>
-                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 block mb-1">Trạng thái mô phỏng</span>
-                    <span className="text-xs font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-[#1a1a1a]/50 block mb-1">Trạng thái mô phỏng</span>
+                    <span className="text-xs font-black text-viet-green uppercase tracking-widest flex items-center gap-1">
                       <CheckCircle2 size={12} /> Sẵn sàng 3D
                     </span>
                   </div>
@@ -828,7 +829,7 @@ const CraftingPage = () => {
 
                 <button
                   onClick={() => setSuccessCelebration(null)}
-                  className="w-full bg-emerald-500 hover:bg-emerald-400 text-white font-black uppercase tracking-[0.2em] text-xs py-4 rounded-2xl transition shadow-lg shadow-emerald-500/20 cursor-pointer"
+                  className="w-full bg-viet-green hover:bg-viet-green/90 border-b-4 border-viet-green-dark text-white font-black uppercase tracking-[0.2em] text-xs py-4 rounded-2xl transition cursor-pointer"
                 >
                   Xác nhận
                 </button>
@@ -838,6 +839,7 @@ const CraftingPage = () => {
         </AnimatePresence>
 
       </div>
+      <Footer />
     </div>
   );
 };
