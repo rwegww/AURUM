@@ -1,4 +1,4 @@
-﻿import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Canvas } from '@react-three/fiber';
 import LabScene from './magic-lab/LabScene';
 import useLabStore from './magic-lab/store';
@@ -13,6 +13,210 @@ const normalize = (f) => {
   if (!f) return "";
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
+};
+
+const isElement = (formula) => {
+  const clean = String(formula || '').replace(/[^a-zA-Z]/g, '');
+  const capitals = clean.match(/[A-Z]/g) || [];
+  return capitals.length === 1;
+};
+
+const getElementSymbol = (formula) => {
+  return String(formula || '').replace(/[^a-zA-Z]/g, '');
+};
+
+const getElementStyle = (symbol) => {
+  const styles = {
+    H: { bg: 'radial-gradient(circle at 35% 35%, #38bdf8 10%, #0284c7 80%, #0369a1 100%)', shadow: 'shadow-blue-500/20' },
+    O: { bg: 'radial-gradient(circle at 35% 35%, #f87171 10%, #dc2626 80%, #991b1b 100%)', shadow: 'shadow-red-500/20' },
+    FE: { bg: 'radial-gradient(circle at 35% 35%, #cbd5e1 10%, #64748b 80%, #475569 100%)', shadow: 'shadow-slate-400/20' },
+    NA: { bg: 'radial-gradient(circle at 35% 35%, #fb923c 10%, #ea580c 80%, #c2410c 100%)', shadow: 'shadow-orange-500/20' },
+    CL: { bg: 'radial-gradient(circle at 35% 35%, #4ade80 10%, #16a34a 80%, #15803d 100%)', shadow: 'shadow-green-500/20' },
+    C: { bg: 'radial-gradient(circle at 35% 35%, #6b7280 10%, #374151 80%, #111827 100%)', shadow: 'shadow-gray-700/20' },
+    S: { bg: 'radial-gradient(circle at 35% 35%, #fde047 10%, #ca8a04 80%, #a16207 100%)', shadow: 'shadow-yellow-500/20' },
+    N: { bg: 'radial-gradient(circle at 35% 35%, #818cf8 10%, #4f46e5 80%, #3730a3 100%)', shadow: 'shadow-indigo-500/20' },
+    CA: { bg: 'radial-gradient(circle at 35% 35%, #f8fafc 10%, #cbd5e1 80%, #94a3b8 100%)', shadow: 'shadow-slate-300/20' },
+    AG: { bg: 'radial-gradient(circle at 35% 35%, #e2e8f0 10%, #94a3b8 80%, #64748b 100%)', shadow: 'shadow-slate-400/20' },
+    AU: { bg: 'radial-gradient(circle at 35% 35%, #fcd34d 10%, #d97706 80%, #b45309 100%)', shadow: 'shadow-amber-500/20' },
+    F: { bg: 'radial-gradient(circle at 35% 35%, #a7f3d0 10%, #10b981 80%, #047857 100%)', shadow: 'shadow-emerald-500/20' },
+    BR: { bg: 'radial-gradient(circle at 35% 35%, #b45309 10%, #78350f 80%, #451a03 100%)', shadow: 'shadow-amber-900/20' },
+    I: { bg: 'radial-gradient(circle at 35% 35%, #d8b4fe 10%, #8b5cf6 80%, #6d28d9 100%)', shadow: 'shadow-purple-500/20' },
+    HE: { bg: 'radial-gradient(circle at 35% 35%, #f472b6 10%, #db2777 80%, #9d174d 100%)', shadow: 'shadow-pink-500/20' },
+    NE: { bg: 'radial-gradient(circle at 35% 35%, #fda4af 10%, #f43f5e 80%, #be123c 100%)', shadow: 'shadow-rose-500/20' },
+    AR: { bg: 'radial-gradient(circle at 35% 35%, #67e8f9 10%, #06b6d4 80%, #0891b2 100%)', shadow: 'shadow-cyan-500/20' },
+    SI: { bg: 'radial-gradient(circle at 35% 35%, #94a3b8 10%, #475569 80%, #334155 100%)', shadow: 'shadow-slate-600/20' },
+    BE: { bg: 'radial-gradient(circle at 35% 35%, #bef264 10%, #84cc16 80%, #4d7c0f 100%)', shadow: 'shadow-lime-500/20' },
+    BA: { bg: 'radial-gradient(circle at 35% 35%, #a7f3d0 10%, #22c55e 80%, #15803d 100%)', shadow: 'shadow-green-600/20' }
+  };
+  return styles[symbol.toUpperCase()] || { bg: 'radial-gradient(circle at 35% 35%, #d8b4fe 10%, #a855f7 80%, #6b21a8 100%)', shadow: 'shadow-purple-500/20' };
+};
+
+const ElementSphere = ({ symbol, size = 'md' }) => {
+  const style = getElementStyle(symbol);
+  const sizeClasses = {
+    sm: 'w-5 h-5 text-[9px] font-black',
+    md: 'w-8 h-8 text-[12px] font-black',
+    lg: 'w-10 h-10 text-[15px] font-black'
+  };
+  return (
+    <span 
+      className={`${sizeClasses[size]} rounded-full flex items-center justify-center text-white shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)] border border-white/20 ${style.shadow} shrink-0 select-none`}
+      style={{ background: style.bg }}
+    >
+      {symbol}
+    </span>
+  );
+};
+
+const MoleculeModel = ({ formula, size = 'md' }) => {
+  const formulaUpper = String(formula || '').toUpperCase();
+  
+  const conf = {
+    sm: {
+      container: 'w-8 h-8',
+      center: 'w-4 h-4 text-[6px]',
+      sat: 'w-2.5 h-2.5 text-[4px]',
+      bondH: 'w-4 h-0.5',
+      bondV: 'w-4 h-0.5',
+      offsetH2O_X: 'translate-x-2.5',
+      offsetH2O_Y: 'translate-y-1.5',
+      offsetCO2: 'translate-x-3',
+      offsetNaCl: 'translate-x-1.5',
+      offsetNH3_X: 'translate-x-2.5',
+      offsetNH3_Y: 'translate-y-1.5',
+      offsetNH3_B: 'translate-y-2.5',
+      offsetFe_X: 'translate-x-1.5',
+      offsetFe_Y: 'translate-y-1',
+      offsetFe_O: 'translate-y-1.5',
+      offsetGen: 'translate-x-1'
+    },
+    md: {
+      container: 'w-12 h-12',
+      center: 'w-6 h-6 text-[8px]',
+      sat: 'w-4 h-4 text-[6px]',
+      bondH: 'w-6 h-0.5',
+      bondV: 'w-6 h-0.5',
+      offsetH2O_X: 'translate-x-4',
+      offsetH2O_Y: 'translate-y-2',
+      offsetCO2: 'translate-x-4.5',
+      offsetNaCl: 'translate-x-2',
+      offsetNH3_X: 'translate-x-4',
+      offsetNH3_Y: 'translate-y-2',
+      offsetNH3_B: 'translate-y-4',
+      offsetFe_X: 'translate-x-2',
+      offsetFe_Y: 'translate-y-1',
+      offsetFe_O: 'translate-y-2',
+      offsetGen: 'translate-x-1.5'
+    },
+    lg: {
+      container: 'w-24 h-24',
+      center: 'w-12 h-12 text-[14px]',
+      sat: 'w-8 h-8 text-[10px]',
+      bondH: 'w-12 h-1',
+      bondV: 'w-12 h-1',
+      offsetH2O_X: 'translate-x-8',
+      offsetH2O_Y: 'translate-y-4',
+      offsetCO2: 'translate-x-9',
+      offsetNaCl: 'translate-x-4',
+      offsetNH3_X: 'translate-x-8',
+      offsetNH3_Y: 'translate-y-4',
+      offsetNH3_B: 'translate-y-8',
+      offsetFe_X: 'translate-x-4',
+      offsetFe_Y: 'translate-y-2',
+      offsetFe_O: 'translate-y-4',
+      offsetGen: 'translate-x-3'
+    }
+  }[size] || {
+    container: 'w-12 h-12',
+    center: 'w-6 h-6 text-[8px]',
+    sat: 'w-4 h-4 text-[6px]',
+    bondH: 'w-6 h-0.5',
+    bondV: 'w-6 h-0.5',
+    offsetH2O_X: 'translate-x-4',
+    offsetH2O_Y: 'translate-y-2',
+    offsetCO2: 'translate-x-4.5',
+    offsetNaCl: 'translate-x-2',
+    offsetNH3_X: 'translate-x-4',
+    offsetNH3_Y: 'translate-y-2',
+    offsetNH3_B: 'translate-y-4',
+    offsetFe_X: 'translate-x-2',
+    offsetFe_Y: 'translate-y-1',
+    offsetFe_O: 'translate-y-2',
+    offsetGen: 'translate-x-1.5'
+  };
+
+  const styleH = { bg: 'radial-gradient(circle at 35% 35%, #38bdf8 10%, #0284c7 80%, #0369a1 100%)' };
+  const styleO = { bg: 'radial-gradient(circle at 35% 35%, #f87171 10%, #dc2626 80%, #991b1b 100%)' };
+  const styleC = { bg: 'radial-gradient(circle at 35% 35%, #6b7280 10%, #374151 80%, #111827 100%)' };
+  const styleNa = { bg: 'radial-gradient(circle at 35% 35%, #fb923c 10%, #ea580c 80%, #c2410c 100%)' };
+  const styleCl = { bg: 'radial-gradient(circle at 35% 35%, #4ade80 10%, #16a34a 80%, #15803d 100%)' };
+  const styleN = { bg: 'radial-gradient(circle at 35% 35%, #818cf8 10%, #4f46e5 80%, #3730a3 100%)' };
+  const styleFe = { bg: 'radial-gradient(circle at 35% 35%, #cbd5e1 10%, #64748b 80%, #475569 100%)' };
+
+  const commonClasses = "rounded-full flex items-center justify-center text-white shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)] border border-white/20 select-none shrink-0 font-black";
+
+  if (formulaUpper.includes('H') && formulaUpper.includes('O') && !formulaUpper.includes('C')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`absolute ${conf.bondH} bg-white/20 rotate-[30deg] -${conf.offsetH2O_X} -translate-y-1`} />
+        <div className={`absolute ${conf.bondH} bg-white/20 -rotate-[30deg] ${conf.offsetH2O_X} -translate-y-1`} />
+        <div className={`${commonClasses} ${conf.center} absolute`} style={{ background: styleO.bg }}>O</div>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetH2O_X} ${conf.offsetH2O_Y}`} style={{ background: styleH.bg }}>H</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetH2O_X} ${conf.offsetH2O_Y}`} style={{ background: styleH.bg }}>H</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('C') && formulaUpper.includes('O')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`absolute bg-white/20`} style={{ width: `calc(${conf.bondH} * 1.5)`, height: '2px' }} />
+        <div className={`${commonClasses} ${conf.center} absolute`} style={{ background: styleC.bg }}>C</div>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetCO2}`} style={{ background: styleO.bg }}>O</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetCO2}`} style={{ background: styleO.bg }}>O</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('NA') && formulaUpper.includes('CL')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`${commonClasses} ${conf.center} absolute -${conf.offsetNaCl}`} style={{ background: styleNa.bg }}>Na</div>
+        <div className={`${commonClasses} ${conf.center} absolute ${conf.offsetNaCl}`} style={{ background: styleCl.bg }}>Cl</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('N') && formulaUpper.includes('H')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`absolute ${conf.bondV} bg-white/20 rotate-[90deg] translate-y-1`} />
+        <div className={`absolute ${conf.bondH} bg-white/20 rotate-[30deg] -${conf.offsetNH3_X} -translate-y-1`} />
+        <div className={`absolute ${conf.bondH} bg-white/20 -rotate-[30deg] ${conf.offsetNH3_X} -translate-y-1`} />
+        <div className={`${commonClasses} ${conf.center} absolute`} style={{ background: styleN.bg }}>N</div>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetNH3_X} -${conf.offsetNH3_Y}`} style={{ background: styleH.bg }}>H</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetNH3_X} -${conf.offsetNH3_Y}`} style={{ background: styleH.bg }}>H</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetNH3_B}`} style={{ background: styleH.bg }}>H</div>
+      </div>
+    );
+  }
+
+  if (formulaUpper.includes('FE')) {
+    return (
+      <div className={`relative ${conf.container} flex items-center justify-center`}>
+        <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetFe_X} -${conf.offsetFe_Y}`} style={{ background: styleFe.bg }}>Fe</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetFe_X} -${conf.offsetFe_Y}`} style={{ background: styleFe.bg }}>Fe</div>
+        <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetFe_O}`} style={{ background: styleO.bg }}>O</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${conf.container} flex items-center justify-center`}>
+      <div className={`${commonClasses} ${conf.sat} absolute -${conf.offsetGen}`} style={{ background: 'radial-gradient(circle at 35% 35%, #d8b4fe 10%, #a855f7 80%, #6b21a8 100%)' }}>M</div>
+      <div className={`${commonClasses} ${conf.sat} absolute ${conf.offsetGen}`} style={{ background: 'radial-gradient(circle at 35% 35%, #a7f3d0 10%, #22c55e 80%, #15803d 100%)' }}>X</div>
+    </div>
+  );
 };
 
 const MagicLab3D = () => {
@@ -411,34 +615,10 @@ const MagicLab3D = () => {
                         background: `radial-gradient(circle, ${chem.color}18 0%, rgba(2, 6, 23, 0.6) 85%)`
                       }}
                     >
-                      {chem.state === 'solid' ? (
-                        <div className="relative w-8 h-8 flex items-center justify-center scale-90 group-hover:scale-105 transition-transform duration-300">
-                          {/* 2D Solid Crystal SVG */}
-                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2L4 9l8 13 8-13-8-7z" fill={chem.color} fillOpacity={0.7} stroke="rgba(255,255,255,0.4)" strokeWidth={1.5} />
-                            <path d="M12 2v20" stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
-                            <path d="M4 9h16" stroke="rgba(255,255,255,0.2)" strokeWidth={1} />
-                          </svg>
-                        </div>
-                      ) : chem.state === 'gas' ? (
-                        <div className="relative w-8 h-8 flex items-center justify-center scale-95 group-hover:scale-105 transition-transform duration-300">
-                          {/* 2D Gas Flask SVG */}
-                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 3h6M12 3v5M7 16.5c0-3 3-6.5 3-7.5h4c0 1 3 4.5 3 7.5A5 5 0 0 1 7 16.5z" stroke="rgba(255,255,255,0.5)" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M8.5 16.5c0-1.5 1.8-3.5 1.8-4H13.7c0 .5 1.8 2.5 1.8 4a3.5 3.5 0 0 1-7 0z" fill={chem.color} fillOpacity={0.7} />
-                            <circle cx="12" cy="13" r="1" fill="white" fillOpacity={0.8} />
-                            <circle cx="10" cy="15" r="0.8" fill="white" fillOpacity={0.8} />
-                            <circle cx="14" cy="14" r="0.8" fill="white" fillOpacity={0.8} />
-                          </svg>
-                        </div>
+                      {isElement(chem.formula) ? (
+                        <ElementSphere symbol={getElementSymbol(chem.formula)} size="md" />
                       ) : (
-                        <div className="relative w-8 h-8 flex items-center justify-center scale-95 group-hover:scale-105 transition-transform duration-300">
-                          {/* 2D Liquid Test Tube SVG */}
-                          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 3h6M10 3v13a2 2 0 0 0 4 0V3" stroke="rgba(255,255,255,0.5)" strokeWidth={1.5} strokeLinecap="round" />
-                            <path d="M10 8v8a2 2 0 0 0 4 0V8h-4z" fill={chem.color} fillOpacity={0.7} />
-                          </svg>
-                        </div>
+                        <MoleculeModel formula={chem.formula} size="md" />
                       )}
                     </div>
                     <div className="flex flex-col items-center leading-none">
