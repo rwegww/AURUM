@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'r
 // Common Components (Static - small & frequently used)
 import { AuthProvider } from '@/context/AuthContext'
 import Navbar from '@/components/navigation/Navbar'
+import FloatingWidget from '@/components/common/FloatingWidget'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
 
@@ -92,6 +93,16 @@ function AppContent() {
     }
   }, []);
 
+  React.useEffect(() => {
+    if (location.state?.openMissions) {
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('aurum_open_nhiem_vu'));
+      }, 300);
+      // Clear location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
+
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
   const isImmersivePage = location.pathname.includes('/journey/') && (
     location.pathname.endsWith('/intro') || 
@@ -143,7 +154,7 @@ function AppContent() {
           <Route path="/arena" element={<ProtectedRoute><Arena /></ProtectedRoute>} />
           <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
           <Route path="/library/:id" element={<ProtectedRoute><MaterialDetail /></ProtectedRoute>} />
-          <Route path="/nhiem_vu" element={<Navigate to="/" replace />} />
+          <Route path="/nhiem_vu" element={<Navigate to="/" replace state={{ openMissions: true }} />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/knowledge-map" element={<ProtectedRoute><KnowledgeMap /></ProtectedRoute>} />
@@ -170,6 +181,9 @@ function AppContent() {
           </Route>
         </Routes>
       </Suspense>
+      
+      {/* Floating Global UI */}
+      {!isManagementPage && !isStandalonePage && <FloatingWidget />}
     </>
   );
 }
