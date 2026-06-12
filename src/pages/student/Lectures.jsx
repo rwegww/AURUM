@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import { BookOpen, Play, Search, Video } from 'lucide-react';
+import {
+  formatSgkLessonReference,
+  getAurumLessonOrder,
+  getLessonDisplayTitle,
+} from '@/utils/lessonLabels';
 
 const Lectures = () => {
   const { t } = useTranslation();
@@ -19,7 +23,7 @@ const Lectures = () => {
     try {
       const res = await fetch(`/api/lessons?classId=${grade}`);
       const data = await res.json();
-      setLessons(data);
+      setLessons(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Lỗi tải bài giảng:', err);
     } finally {
@@ -31,10 +35,29 @@ const Lectures = () => {
     fetchLessons(selectedGrade);
   }, [selectedGrade]);
 
-  const filteredLessons = bai_hoc.filter(l => 
-    l.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    l.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const lessonsWithLabels = bai_hoc.map((lesson, index) => {
+    const displayTitle = getLessonDisplayTitle(lesson);
+    const sgkReference = formatSgkLessonReference(lesson);
+
+    return {
+      ...lesson,
+      aurumOrder: getAurumLessonOrder(lesson, index),
+      displayTitle,
+      sgkReference,
+    };
+  });
+
+  const normalizedSearchQuery = searchQuery.trim().toLowerCase();
+  const filteredLessons = lessonsWithLabels.filter((lesson) => {
+    if (!normalizedSearchQuery) return true;
+
+    return [
+      lesson.title,
+      lesson.displayTitle,
+      lesson.description,
+      lesson.sgkReference,
+    ].some((value) => String(value || '').toLowerCase().includes(normalizedSearchQuery));
+  });
 
   return (
     <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
@@ -93,7 +116,10 @@ const Lectures = () => {
               >
                 <div className="flex items-center justify-between mb-4">
                    <span className="text-[10px] font-black text-viet-green uppercase tracking-widest">
-                      {t('common.lesson', { order: lesson.order || lesson.lessonId.split('_').pop() })}
+                      {t('lectures.card.system_lesson', {
+                        order: lesson.aurumOrder,
+                        defaultValue: 'Bài {{order}} trên AURUM',
+                      })}
                    </span>
                    <div className="w-8 h-8 rounded-full bg-viet-green/10 flex items-center justify-center text-viet-green text-sm opacity-0 group-hover:opacity-100 transition-opacity">
                       <Play size={14} fill="currentColor" aria-hidden="true" />
@@ -101,8 +127,15 @@ const Lectures = () => {
                 </div>
                 
                 <h3 className="text-lg font-bold text-viet-text mb-3 leading-snug group-hover:text-viet-green transition-colors">
-                   {lesson.title}
+                   {lesson.displayTitle}
                 </h3>
+
+                {lesson.sgkReference && (
+                  <div className="mb-4 inline-flex w-fit max-w-full items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-black tracking-[0.02em] text-amber-700">
+                    <BookOpen size={12} aria-hidden="true" />
+                    <span className="truncate">({lesson.sgkReference})</span>
+                  </div>
+                )}
                 
                 <p className="text-viet-text-light text-xs font-medium line-clamp-2 mb-6 flex-1">
                    {lesson.description}

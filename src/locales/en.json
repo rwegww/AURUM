@@ -230,6 +230,9 @@
     "loading": "Loading resources...",
     "no_results": "No matching chemistry resources found",
     "clear_filters": "Clear filters",
+    "card": {
+      "system_lesson": "AURUM lesson {{order}}"
+    },
     "metadata": {
       "video": "1 lesson video",
       "theory": "Notes"

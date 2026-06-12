@@ -1,14 +1,18 @@
 ﻿import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { BookOpen } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import TheoryRenderer from '@/components/lessons/TheoryRenderer';
 import LessonSidebar from '@/components/navigation/LessonSidebar';
 import { activityService } from '@/services/ActivityService';
 import DiscussionBoard from '@/components/lessons/DiscussionBoard';
-import StoryIntro from '@/components/lessons/StoryIntro';
 import { getVideoEmbedUrl, isFileVideo } from '@/utils/videoLinks';
+import {
+  formatSgkLessonReference,
+  getAurumLessonOrder,
+  getLessonDisplayTitle,
+} from '@/utils/lessonLabels';
 
 const LessonPage = () => {
   const { t } = useTranslation();
@@ -70,6 +74,10 @@ const LessonPage = () => {
 
   // --- RENDERING LOGIC (Unified Light Theme) ---
   const video = lesson.videoModules?.find(module => module?.url) || null;
+  const lessonIndex = gradeLessons.findIndex((item) => item.lessonId === lesson.lessonId || item.id === lesson.id);
+  const aurumOrder = getAurumLessonOrder(lesson, lessonIndex);
+  const displayTitle = getLessonDisplayTitle(lesson);
+  const sgkReference = formatSgkLessonReference(lesson);
 
   return (
     <div className="min-h-screen bg-viet-bg pt-[70px]">
@@ -85,13 +93,27 @@ const LessonPage = () => {
 
         <main className={`flex-1 p-8 max-w-[1200px] ${isLoggedIn ? 'ml-[320px]' : 'mx-auto'}`}>
           <div className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className="px-3 py-1 bg-viet-green text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
                 {t('lesson_page.grade_label', { grade })}
               </span>
+              {aurumOrder && (
+                <span className="px-3 py-1 bg-white border border-viet-border text-viet-text-light text-[11px] font-bold rounded-lg uppercase tracking-wider">
+                  {t('lectures.card.system_lesson', {
+                    order: aurumOrder,
+                    defaultValue: 'Bài {{order}} trên AURUM',
+                  })}
+                </span>
+              )}
+              {sgkReference && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 text-[11px] font-bold rounded-lg">
+                  <BookOpen size={13} aria-hidden="true" />
+                  {sgkReference}
+                </span>
+              )}
             </div>
             <h1 className="text-[28px] font-bold text-viet-text leading-tight">
-              {lesson.title}
+              {displayTitle}
             </h1>
           </div>
 
@@ -105,7 +127,7 @@ const LessonPage = () => {
                   </svg>
                 </div>
                 <div className="flex flex-col">
-                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{lesson.title} | Aurum TV</h2>
+                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{displayTitle} | Aurum TV</h2>
                    <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Aurum</span>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
