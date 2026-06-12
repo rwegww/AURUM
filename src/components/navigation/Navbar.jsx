@@ -54,14 +54,8 @@ const Navbar = () => {
       <div className="w-full flex items-center justify-between">
         <div className="flex items-center gap-12 xl:gap-20">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <div className="w-10 h-10 sm:w-16 sm:h-16 relative flex items-center justify-center shrink-0">
-              <img src="/logo.png" alt="Aurum Logo" className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" />
-            </div>
-            <div className="flex flex-col justify-center">
-              <span className="text-2xl sm:text-3xl font-black text-viet-text leading-none tracking-tighter italic">
-                AURUM
-              </span>
-              <span className="text-[8px] font-bold text-viet-green uppercase tracking-[3px] mt-1">Chemistry Currency</span>
+            <div className="w-20 h-20 sm:w-32 sm:h-32 relative flex items-center justify-center shrink-0">
+              <img src="/logo.png" alt="Aurum Logo" className="w-full h-full object-contain scale-125 group-hover:scale-[1.35] transition-transform duration-500" />
             </div>
           </Link>
 
