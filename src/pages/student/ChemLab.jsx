@@ -43,14 +43,7 @@ const ChemLab = () => {
       path: '/lab/solver',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
     },
-    { 
-      id: 'balance-practice', 
-      label: t('chem_lab.modules.balance.label'), 
-      icon: <Scale className="w-8 h-8 text-orange-500" />, 
-      desc: t('chem_lab.modules.balance.desc'),
-      path: '/lab/balancer',
-      colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
-    },
+
     { 
       id: 'molecule', 
       label: t('chem_lab.modules.molecule.label'), 

@@ -44,7 +44,6 @@ const StageReward = lazyWithRetry(() => import('@/pages/student/StageReward'));
 const Lectures = lazyWithRetry(() => import('@/pages/student/Lectures'));
 const ChemLab = lazyWithRetry(() => import('@/pages/student/ChemLab'));
 const LabSimulatorPage = lazyWithRetry(() => import('@/pages/student/LabSimulatorPage'));
-const LabBalancerPage = lazyWithRetry(() => import('@/pages/student/LabBalancerPage'));
 const LabMoleculePage = lazyWithRetry(() => import('@/pages/student/LabMoleculePage'));
 const LabSolverPage = lazyWithRetry(() => import('@/pages/student/LabSolverPage'));
 const DiscoveryJournalPage = lazyWithRetry(() => import('@/pages/student/DiscoveryJournalPage'));
@@ -149,7 +148,7 @@ function AppContent() {
           <Route path="/lab/simulator" element={<ProtectedRoute><LabSimulatorPage /></ProtectedRoute>} />
           <Route path="/lab/discovery" element={<ProtectedRoute><DiscoveryJournalPage /></ProtectedRoute>} />
           <Route path="/lab/crafting" element={<ProtectedRoute><CraftingPage /></ProtectedRoute>} />
-          <Route path="/lab/balancer" element={<ProtectedRoute><LabBalancerPage /></ProtectedRoute>} />
+
           <Route path="/lab/molecules" element={<ProtectedRoute><LabMoleculePage /></ProtectedRoute>} />
           <Route path="/lab/solver" element={<ProtectedRoute><LabSolverPage /></ProtectedRoute>} />
           <Route path="/arena" element={<ProtectedRoute><Arena /></ProtectedRoute>} />

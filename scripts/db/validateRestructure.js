@@ -22,7 +22,6 @@ const expectedTables = [
   'bai_nop',
   'hoa_chat',
   'phan_ung',
-  'cau_hoi_can',
   'cau_hoi_dau',
   'phong_dau',
   'nguoi_choi',
@@ -87,7 +86,6 @@ const expectedColumns = {
   bai_nop: ['bai_dang_id', 'hoc_sinh_id', 'diem', 'phan_hoi_giao_vien', 'nop_luc', 'cau_tra_loi'],
   hoa_chat: ['cong_thuc', 'ten', 'trang_thai_vat_chat', 'mau_sac', 'danh_muc', 'la_chat_khoi_dau'],
   phan_ung: ['ten', 'phuong_trinh', 'chat_tham_gia', 'san_pham', 'khoi_id', 'danh_muc', 'dieu_kien'],
-  cau_hoi_can: ['chat_tham_gia', 'san_pham', 'dap_an', 'do_kho', 'danh_muc', 'khoi_id', 'chuoi_phuong_trinh'],
   cau_hoi_dau: ['khoi_id', 'do_kho', 'cau_hoi', 'lua_chon', 'chi_so_dap_an_dung', 'diem', 'loai_game', 'noi_dung_game'],
   phong_dau: ['ten', 'chu_phong_id', 'che_do', 'do_kho', 'so_nguoi_toi_da', 'so_nguoi_hien_tai', 'danh_sach_cau_hoi_id'],
   nguoi_choi: ['phong_dau_id', 'nguoi_dung_id', 'so_cau_dung', 'vong_da_tra_loi', 'tham_gia_luc', 'xem_cuoi_luc'],
@@ -169,7 +167,7 @@ const main = async () => {
   assert(!propertiesOf(definitions, 'phong_dau').current_players, 'Expected phong_dau.current_players to be renamed.');
   assert(!propertiesOf(definitions, 'cau_hoi_dau').payload, 'Expected cau_hoi_dau.payload to be renamed.');
 
-  const rowChecks = ['nguoi_dung', 'bai_hoc', 'cau_hoi_can', 'hoa_chat', 'phan_ung'];
+  const rowChecks = ['nguoi_dung', 'bai_hoc', 'hoa_chat', 'phan_ung'];
   for (const table of rowChecks) {
     const result = await countRows(table);
     assert(result.ok, `Could not count rows for ${table}: ${result.status}`);

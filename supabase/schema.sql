@@ -72,7 +72,6 @@ BEGIN
       ('class_assignment_submissions', 'bai_nop'),
       ('lab_chemicals', 'hoa_chat'),
       ('lab_reactions', 'phan_ung'),
-      ('balancing_questions', 'cau_hoi_can'),
       ('arena_questions', 'cau_hoi_dau'),
       ('arena_rooms', 'phong_dau'),
       ('arena_room_players', 'nguoi_choi'),
@@ -223,16 +222,6 @@ BEGIN
       ('phan_ung', 'requires_heat', 'can_nhiet'),
       ('phan_ung', 'danger_level', 'muc_do_nguy_hiem'),
       ('phan_ung', 'safety_warning', 'canh_bao_an_toan'),
-      ('cau_hoi_can', 'reactants', 'chat_tham_gia'),
-      ('cau_hoi_can', 'products', 'san_pham'),
-      ('cau_hoi_can', 'answer', 'dap_an'),
-      ('cau_hoi_can', 'difficulty', 'do_kho'),
-      ('cau_hoi_can', 'category', 'danh_muc'),
-      ('cau_hoi_can', 'grade_level', 'khoi_id'),
-      ('cau_hoi_can', 'grade_level_id', 'khoi_id'),
-      ('cau_hoi_can', 'equation_string', 'chuoi_phuong_trinh'),
-      ('cau_hoi_can', 'node_id', 'nut_id'),
-      ('cau_hoi_can', 'lesson_id', 'bai_hoc_id'),
       ('cau_hoi_dau', 'grade_level', 'khoi_id'),
       ('cau_hoi_dau', 'grade_level_id', 'khoi_id'),
       ('cau_hoi_dau', 'difficulty', 'do_kho'),
@@ -434,21 +423,6 @@ CREATE TABLE IF NOT EXISTS public.phan_ung (
   muc_do_nguy_hiem integer NOT NULL DEFAULT 0,
   canh_bao_an_toan text,
   created_at timestamp with time zone NOT NULL DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS public.cau_hoi_can (
-  id bigserial PRIMARY KEY,
-  chat_tham_gia jsonb NOT NULL,
-  san_pham jsonb NOT NULL,
-  dap_an jsonb NOT NULL,
-  do_kho text,
-  danh_muc text,
-  khoi_id integer DEFAULT 8 REFERENCES public.khoi(id),
-  chuoi_phuong_trinh text,
-  nut_id integer NOT NULL,
-  bai_hoc_id text REFERENCES public.bai_hoc(id),
-  created_at timestamp with time zone NOT NULL DEFAULT now(),
-  CONSTRAINT cau_hoi_can_do_kho_check CHECK (do_kho IS NULL OR do_kho IN ('easy', 'medium', 'hard'))
 );
 
 CREATE TABLE IF NOT EXISTS public.cau_hoi_dau (
@@ -958,7 +932,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_pending_hash
   ON public.yeu_cau_duyet_admin (request_hash)
   WHERE status = 'pending';
 CREATE INDEX IF NOT EXISTS idx_phan_ung_khoi_id ON public.phan_ung (khoi_id);
-CREATE INDEX IF NOT EXISTS idx_cau_hoi_can_khoi_id ON public.cau_hoi_can (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_cau_hoi_dau_khoi_id ON public.cau_hoi_dau (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_cau_hoi_dau_loai_game ON public.cau_hoi_dau (loai_game);
 CREATE INDEX IF NOT EXISTS idx_cau_hoi_dau_dang_hoat_dong_do_kho ON public.cau_hoi_dau (dang_hoat_dong, do_kho);
@@ -1001,7 +974,6 @@ ALTER TABLE public.phan_hoi ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.yeu_cau_duyet_admin ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.hoa_chat ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.phan_ung ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.cau_hoi_can ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.cau_hoi_dau ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.phong_dau ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.nguoi_choi ENABLE ROW LEVEL SECURITY;
@@ -1031,9 +1003,6 @@ CREATE POLICY "Public read lab chemicals" ON public.hoa_chat FOR SELECT USING (t
 
 DROP POLICY IF EXISTS "Public read lab reactions" ON public.phan_ung;
 CREATE POLICY "Public read lab reactions" ON public.phan_ung FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Public read balancing questions" ON public.cau_hoi_can;
-CREATE POLICY "Public read balancing questions" ON public.cau_hoi_can FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Public read arena questions" ON public.cau_hoi_dau;
 CREATE POLICY "Public read arena questions" ON public.cau_hoi_dau FOR SELECT USING (true);
@@ -1414,7 +1383,6 @@ SELECT tieu_de, mo_ta, loai_hanh_dong, so_luong_muc_tieu, thuong_xp, type, bieu_
 FROM (
   VALUES
     ('Nha luyen kim tap su', 'Thuc hien 3 phan ung hoa hoc.', 'reaction', 3, 100, 'daily', 'reaction'),
-    ('Bac thay can bang', 'Can bang chinh xac 5 phuong trinh.', 'balancing', 5, 150, 'daily', 'balance'),
     ('Chien binh dau truong', 'Thang 1 tran dau dau truong.', 'arena_win', 1, 200, 'daily', 'arena'),
     ('Thap lua hom nay', 'Online du 10 phut hoac hoan thanh 1 bai hoc de thap chuoi.', 'streak_light', 1, 50, 'daily', 'flame'),
     ('Giu lua 3 ngay', 'Duy tri chuoi hoc tap trong 3 ngay lien tiep.', 'streak', 3, 300, 'achievement', 'streak-3'),

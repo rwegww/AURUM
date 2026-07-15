@@ -1,4 +1,4 @@
-﻿import request from 'supertest';
+import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -286,22 +286,6 @@ describe('security acceptance matrix', () => {
     });
   });
 
-  it('serves balancing progress before the node wildcard route', async () => {
-    nguoi_dung.student.balancingProgress = {
-      completedNodeIds: [1, 2],
-      completedCount: 2,
-      passedGrades: [],
-      lessonStars: {},
-    };
-
-    const res = await request(app)
-      .get('/api/lab/balancing/progress')
-      .set('Authorization', `Bearer ${tokenFor('student')}`);
-
-    expect(res.status).toBe(200);
-    expect(res.body).toMatchObject({ completedNodeIds: [1, 2], completedCount: 2 });
-    expect(supabase.from).not.toHaveBeenCalledWith('cau_hoi_can');
-  });
 
   it('blocks non-members from class members', async () => {
     supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };

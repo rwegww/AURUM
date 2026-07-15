@@ -103,21 +103,35 @@ router.get('/reactions', async (req, res) => {
   }
 });
 
-// GET /api/lab/balancing/search - Search for balanced equations
+// GET /api/lab/balancing/search - Search for balanced equations (searches phan_ung table as cau_hoi_can is removed)
 router.get('/balancing/search', async (req, res) => {
   try {
     const { q } = req.query;
     if (!q) return res.status(200).json([]);
 
-    // Simple search in equation_string
+    // Simple search in phuong_trinh of phan_ung
     const { data, error } = await supabase
-      .from('cau_hoi_can')
-      .select('chat_tham_gia, san_pham, dap_an, chuoi_phuong_trinh')
-      .ilike('chuoi_phuong_trinh', `%${q}%`)
+      .from('phan_ung')
+      .select('chat_tham_gia, san_pham, phuong_trinh')
+      .ilike('phuong_trinh', `%${q}%`)
       .limit(10);
 
     if (error) throw error;
-    res.status(200).json((data || []).map(normalizeLabRecord));
+    
+    // Map database model to expected format of the solver search page:
+    // reactants: array of formula strings, products: array of formula strings, answer: flat array of coefficients
+    const mapped = (data || []).map(item => {
+      const reactantsList = Array.isArray(item.chat_tham_gia) ? item.chat_tham_gia : [];
+      const productsList = Array.isArray(item.san_pham) ? item.san_pham : [];
+      return {
+        reactants: reactantsList.map(r => r.formula),
+        products: productsList.map(p => p.formula),
+        answer: [...reactantsList.map(r => r.coeff), ...productsList.map(p => p.coeff)],
+        equation_string: item.phuong_trinh
+      };
+    });
+
+    res.status(200).json(mapped);
   } catch (error) {
     console.error('Lỗi tìm phương trình cân bằng:', error);
     res.status(500).json({ message: 'Không thể tìm phương trình lúc này.' });
@@ -146,62 +160,6 @@ router.post('/balancing/solve', async (req, res) => {
       message: 'Không thể cân bằng phương trình lúc này.',
       error: error.message,
     });
-  }
-});
-
-// GET /api/lab/balancing/progress - Get user's balancing progress
-router.get('/balancing/progress', auth, async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(200).json({ completedNodeIds: [], completedCount: 0 });
-    }
-    res.status(200).json(req.user.balancingProgress);
-  } catch (error) {
-    console.error('Lỗi tải tiến độ cân bằng phương trình:', error);
-    res.status(500).json({ message: 'Không thể tải tiến độ cân bằng phương trình.' });
-  }
-});
-
-// POST /api/lab/balancing/progress - Update user's balancing progress
-router.post('/balancing/progress', auth, async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(200).json({ message: 'Bạn đang học ở chế độ khách nên tiến độ chưa được lưu.' });
-    }
-
-    const { balancingProgress } = req.body;
-    if (!balancingProgress) {
-      return res.status(400).json({ message: 'Thiếu tiến độ cần lưu.' });
-    }
-
-    const updatedUser = await User.update(req.user.id, { 
-      balancingProgress 
-    });
-
-    res.status(200).json(updatedUser.balancingProgress);
-  } catch (error) {
-    console.error('Lỗi cập nhật tiến độ cân bằng phương trình:', error);
-    res.status(500).json({ message: 'Không thể lưu tiến độ cân bằng phương trình.' });
-  }
-});
-
-// GET /api/lab/balancing/:nodeId - Get 6 questions for a specific balancing node
-router.get('/balancing/:nodeId', async (req, res) => {
-  try {
-    const { nodeId } = req.params;
-    const { data, error } = await supabase
-      .from('cau_hoi_can')
-      .select('*')
-      .eq('nut_id', nodeId);
-
-    if (error) throw error;
-    
-    // If no data found for this specific nodeId, maybe it's out of range, 
-    // but we return whatever we have.
-    res.status(200).json((data || []).map(normalizeLabRecord));
-  } catch (error) {
-    console.error('Lỗi tải câu hỏi cân bằng phương trình:', error);
-    res.status(500).json({ message: 'Không thể tải câu hỏi cân bằng phương trình.', error: error.message });
   }
 });
 
