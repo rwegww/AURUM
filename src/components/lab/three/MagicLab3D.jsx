@@ -1,6 +1,5 @@
 import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { Canvas } from '@react-three/fiber';
-import LabScene from './magic-lab/LabScene';
+import GameWorkspace from '../2d-engine/GameWorkspace';
 import useLabStore from './magic-lab/store';
 
 import SoundManager from './magic-lab/SoundManager';
@@ -439,15 +438,7 @@ const MagicLab3D = () => {
       ref={containerRef}
       className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10 bg-[#0a0a0f]"
     >
-      <Canvas
-        shadows={{ type: 1 }}
-        camera={{ position: [0, 6, 12], fov: 35 }}
-        className="w-full h-full"
-        style={{ pointerEvents: 'auto', position: 'absolute', top: 0, left: 0 }}
-      >
-        <color attach="background" args={['#0a0a0f']} />
-        <LabScene beakers={beakers} currentBeakerIndex={activeBeakerIndex} />
-      </Canvas>
+      <GameWorkspace />
 
       <SoundManager />
 
