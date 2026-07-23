@@ -197,10 +197,11 @@ export const chemicalImages = {
 
 export const getChemicalImage = (formula) => {
   if (!formula) return null;
-  const normalized = String(formula)
+  const originalCaseNormalized = String(formula)
     .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]))
-    .toUpperCase()
     .trim();
+  const normalized = originalCaseNormalized.toUpperCase();
+
   for (const [key, value] of Object.entries(chemicalImages)) {
     if (key.toUpperCase() === normalized) {
       return value;
@@ -208,8 +209,9 @@ export const getChemicalImage = (formula) => {
   }
   
   // Fallback to PubChem for pure alphanumeric formulas if not explicitly defined
-  if (/^[a-zA-Z0-9]+$/.test(normalized)) {
-      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/${normalized}/PNG`;
+  // PubChem fastformula is case-sensitive for elements (e.g., K2MnO4, not K2MNO4)
+  if (/^[a-zA-Z0-9]+$/.test(originalCaseNormalized)) {
+      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/${originalCaseNormalized}/PNG`;
   }
   
   return null;
