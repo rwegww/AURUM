@@ -276,11 +276,15 @@ const useLabStore = create((set, get) => ({
 
   _findReaction: (formulas, isHeating) => {
     const { reactions } = get();
-    const normalizedFormulas = formulas.map(normalizeFormula).sort();
+    // Use Set to get unique chemical types in the beaker (ignores amount/drops)
+    const uniqueFormulas = Array.from(new Set(formulas.map(normalizeFormula))).sort();
+    
     return reactions.find(rx => {
-      const rxReactants = rx.reactants.map(r => normalizeFormula(r.formula)).sort();
-      if (rxReactants.length !== normalizedFormulas.length) return false;
-      const match = normalizedFormulas.every((formula, index) => formula === rxReactants[index]);
+      // Get unique reactant types for this reaction
+      const rxReactants = Array.from(new Set(rx.reactants.map(r => normalizeFormula(r.formula)))).sort();
+      
+      if (rxReactants.length !== uniqueFormulas.length) return false;
+      const match = uniqueFormulas.every((formula, index) => formula === rxReactants[index]);
       
       const requiresHeat = Boolean(rx.requires_heat ?? rx.requiresHeat);
       if (requiresHeat && !isHeating) return false;
