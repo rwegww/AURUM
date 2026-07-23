@@ -183,8 +183,11 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
   const { contents, isHeating, activeBubbles, activeSmoke, smokeColor, intensity, shake, activeFlame, containerType } = beakerData;
   const config = containerConfigs[containerType || 'beaker'] || containerConfigs['beaker'];
 
-  const totalVolume = Math.min(contents.length * 20, 95); // max 95% full
-  const topColor = contents.length > 0 ? contents[contents.length - 1].color : 'transparent';
+  // Lọc ra các chất lỏng/dung dịch để tính toán mực nước
+  const liquidContents = contents.filter(c => c.state !== 'solid' && c.type !== 'metal');
+  
+  const totalVolume = Math.min(liquidContents.length * 20, 95); // max 95% full
+  const topColor = liquidContents.length > 0 ? liquidContents[liquidContents.length - 1].color : 'transparent';
 
   // Generate particles based on state
   const bubbles = useMemo(() => {
