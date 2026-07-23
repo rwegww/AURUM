@@ -154,8 +154,11 @@ export const chemicalImages = {
   "I": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Iodine_crystals.jpg/330px-Iodine_crystals.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "He": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Helium_discharge_tube.jpg/330px-Helium_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "Ne": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Neon_discharge_tube.jpg/330px-Neon_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "Ar": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Argon_discharge_tube.jpg/330px-Argon_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
-
+  "Ar": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Argon_discharge_tube.jpg/330px-Argon_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "Cr": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Chromium_pieces.jpg/330px-Chromium_pieces.jpg",
+  "Sn": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Tin-2.jpg/330px-Tin-2.jpg",
+  "Pb": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Lead_electrolytic_and_1cm3_cube.jpg/330px-Lead_electrolytic_and_1cm3_cube.jpg",
+  "Be": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Beryllium_%28Be%29.jpg/330px-Beryllium_%28Be%29.jpg",
   "BaO": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Barium_oxide.jpg/330px-Barium_oxide.jpg",
   "FeCl2": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Iron%28II%29-chloride-tetrahydrate-sample.jpg/330px-Iron%28II%29-chloride-tetrahydrate-sample.jpg",
   "C2H5OH": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Ethanol-3D-vdW.png/330px-Ethanol-3D-vdW.png",
