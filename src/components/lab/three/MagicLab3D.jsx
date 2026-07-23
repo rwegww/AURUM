@@ -6,7 +6,7 @@ import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
 import { ArrowLeft, Beaker, RotateCcw, Save, Trash2, Zap, Droplets, Flame, Search, Layers, TestTube } from 'lucide-react';
-import { getChemicalImage } from '../../data/chemicalImages';
+import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
