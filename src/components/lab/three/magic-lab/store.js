@@ -281,8 +281,16 @@ const useLabStore = create((set, get) => ({
       const rxReactants = rx.reactants.map(r => normalizeFormula(r.formula)).sort();
       if (rxReactants.length !== normalizedFormulas.length) return false;
       const match = normalizedFormulas.every((formula, index) => formula === rxReactants[index]);
+      
       const requiresHeat = Boolean(rx.requires_heat ?? rx.requiresHeat);
       if (requiresHeat && !isHeating) return false;
+
+      // Block automatic reactions that require special conditions like electrolysis or catalysts
+      const condition = (rx.conditions || '').toLowerCase();
+      if (condition.includes('điện phân') || condition.includes('xúc tác')) {
+        return false;
+      }
+
       return match;
     });
   },
