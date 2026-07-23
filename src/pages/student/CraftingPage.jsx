@@ -20,10 +20,10 @@ import {
   rarityConfig, 
   normalizeInventory, 
   getIngredientAmountMap, 
-  getRecipeRequirementCounts, 
   getLevelFromXP,
   canCraftItem
 } from '@/data/labInventory';
+import { chemicalImages } from '@/data/chemicalImages';
 
 const toAsciiFormula = (formula) => {
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
@@ -57,12 +57,22 @@ const getElementStyle = (symbol) => {
 };
 
 const ElementSphere = ({ symbol, size = 'md' }) => {
-  const style = getElementStyle(symbol);
+  const imgSrc = chemicalImages[String(symbol || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]))];
   const sizeClasses = {
     sm: 'w-5 h-5 text-[9px] font-black',
     md: 'w-8 h-8 text-[12px] font-black',
     lg: 'w-10 h-10 text-[15px] font-black'
   };
+  
+  if (imgSrc) {
+    return (
+      <div className={`relative ${sizeClasses[size]} rounded-full shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)] border border-white/20 shrink-0 select-none overflow-hidden`}>
+        <img src={imgSrc} alt={symbol} className="absolute inset-0 w-full h-full object-cover" />
+      </div>
+    );
+  }
+
+  const style = getElementStyle(symbol);
   return (
     <span 
       className={`${sizeClasses[size]} rounded-full flex items-center justify-center text-white shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)] border border-white/20 ${style.shadow} shrink-0 select-none`}
@@ -75,7 +85,9 @@ const ElementSphere = ({ symbol, size = 'md' }) => {
 
 const MoleculeModel = ({ formula, size = 'md' }) => {
   const formulaUpper = String(formula || '').toUpperCase();
-  
+  const rawFormula = String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]));
+  const imgSrc = chemicalImages[rawFormula];
+
   const conf = {
     sm: {
       container: 'w-8 h-8',
@@ -149,6 +161,14 @@ const MoleculeModel = ({ formula, size = 'md' }) => {
     offsetFe_O: 'translate-y-2',
     offsetGen: 'translate-x-1.5'
   };
+
+  if (imgSrc) {
+    return (
+      <div className={`relative ${conf.container} rounded-full overflow-hidden flex items-center justify-center shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.5),0_4px_8px_rgba(0,0,0,0.3)] border border-white/20 select-none shrink-0`}>
+        <img src={imgSrc} alt={formula} className="absolute inset-0 w-full h-full object-cover" />
+      </div>
+    );
+  }
 
   const styleH = { bg: 'radial-gradient(circle at 35% 35%, #38bdf8 10%, #0284c7 80%, #0369a1 100%)' };
   const styleO = { bg: 'radial-gradient(circle at 35% 35%, #f87171 10%, #dc2626 80%, #991b1b 100%)' };
