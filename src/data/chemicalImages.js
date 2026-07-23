@@ -165,6 +165,34 @@ export const chemicalImages = {
   "HCl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Hydrochloric_acid_30_percent.jpg/330px-Hydrochloric_acid_30_percent.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "SO2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Sulfur-dioxide-2D.svg/330px-Sulfur-dioxide-2D.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "O3": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ozone-1%2C3-dipole.svg/330px-Ozone-1%2C3-dipole.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "Ca(OH)2": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Calcium_hydroxide.jpg/330px-Calcium_hydroxide.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "KOH": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/KOH/PNG",
+  "Mg(OH)2": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Mg%28OH%292Xray.jpg/330px-Mg%28OH%292Xray.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "Ba(OH)2": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Ba%28OH%292monohydrate.tif/lossless-page1-330px-Ba%28OH%292monohydrate.tif.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "NO": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/NO/PNG",
+  "SO3": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/SO3/PNG",
+  "CO": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/CO/PNG",
+  "HF": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/HF/PNG",
+  "H2SiO3": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/H2SiO3/PNG",
+  "AgBr": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/AgBr/PNG",
+  "FeCl3": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/FeCl3/PNG",
+  "KI": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/KI/PNG",
+  "FeS2": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/FeS2/PNG",
+  "C6H5NH3Cl": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H5NH3Cl/PNG",
+  "CH3COOC2H5": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/CH3COOC2H5/PNG",
+  "C12H22O11": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C12H22O11/PNG",
+  "CH3CHO": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/CH3CHO/PNG",
+  "C17H35COOH": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C17H35COOH/PNG",
+  "C6H12": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H12/PNG",
+  "C7H7Br": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C7H7Br/PNG",
+  "CH3Cl": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/CH3Cl/PNG",
+  "Saponin": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/Saponin/PNG",
+  "PS": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/PS/PNG",
+  "C6H2Br3NH2": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H2Br3NH2/PNG",
+  "C6H2Br3OH": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H2Br3OH/PNG",
+  "Ceramic": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/Ceramic/PNG",
+  "C2H5OC2H5": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C2H5OC2H5/PNG",
+  "C6H11O7Na": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H11O7Na/PNG",
 };
 
 export const getChemicalImage = (formula) => {
@@ -178,5 +206,11 @@ export const getChemicalImage = (formula) => {
       return value;
     }
   }
+  
+  // Fallback to PubChem for pure alphanumeric formulas if not explicitly defined
+  if (/^[a-zA-Z0-9]+$/.test(normalized)) {
+      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/${normalized}/PNG`;
+  }
+  
   return null;
 };
