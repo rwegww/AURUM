@@ -276,26 +276,31 @@ const useLabStore = create((set, get) => ({
 
   _findReaction: (formulas, isHeating) => {
     const { reactions } = get();
-    // Use Set to get unique chemical types in the beaker (ignores amount/drops)
-    const uniqueFormulas = Array.from(new Set(formulas.map(normalizeFormula))).sort();
+    // Lấy danh sách các loại hóa chất độc nhất trong cốc
+    const uniqueFormulas = Array.from(new Set(formulas.map(normalizeFormula)));
     
-    return reactions.find(rx => {
-      // Get unique reactant types for this reaction
-      const rxReactants = Array.from(new Set(rx.reactants.map(r => normalizeFormula(r.formula)))).sort();
+    // Ưu tiên các phản ứng cần nhiều chất tham gia nhất để tránh phản ứng phụ kích hoạt trước
+    const sortedReactions = [...reactions].sort((a, b) => b.reactants.length - a.reactants.length);
+
+    return sortedReactions.find(rx => {
+      // Lấy danh sách các chất tham gia của phản ứng này
+      const rxReactants = Array.from(new Set(rx.reactants.map(r => normalizeFormula(r.formula))));
       
-      if (rxReactants.length !== uniqueFormulas.length) return false;
-      const match = uniqueFormulas.every((formula, index) => formula === rxReactants[index]);
+      // Kiểm tra xem TOÀN BỘ chất tham gia của phản ứng có NẰM TRONG cốc hay không (Subset match)
+      // Không cần phải khớp chính xác số lượng chất trong cốc (vì cốc có thể chứa thêm chất xúc tác/dung môi như nước)
+      const isSubset = rxReactants.every(r => uniqueFormulas.includes(r));
+      if (!isSubset) return false;
       
       const requiresHeat = Boolean(rx.requires_heat ?? rx.requiresHeat);
       if (requiresHeat && !isHeating) return false;
 
-      // Block automatic reactions that require special conditions like electrolysis or catalysts
+      // Chặn các phản ứng yêu cầu điều kiện đặc biệt nếu chưa hỗ trợ
       const condition = (rx.conditions || '').toLowerCase();
       if (condition.includes('điện phân') || condition.includes('xúc tác')) {
         return false;
       }
 
-      return match;
+      return true;
     });
   },
 
