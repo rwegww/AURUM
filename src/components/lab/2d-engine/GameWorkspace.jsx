@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import useLabStore from '../three/magic-lab/store';
 import Beaker2D from './Beaker2D';
 import PourEffect2D from './PourEffect2D';
