@@ -195,6 +195,19 @@ export const chemicalImages = {
   "C6H11O7Na": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H11O7Na/PNG",
 };
 
+const fixFormulaCase = (formula) => {
+  let fixed = formula;
+  const safeReplacements = {
+    'MN': 'Mn', 'FE': 'Fe', 'ZN': 'Zn', 'NA': 'Na', 'MG': 'Mg', 
+    'AL': 'Al', 'CL': 'Cl', 'CA': 'Ca', 'BA': 'Ba', 'BR': 'Br', 
+    'HG': 'Hg', 'AG': 'Ag', 'LI': 'Li', 'CU': 'Cu', 'PB': 'Pb'
+  };
+  for (const [upper, proper] of Object.entries(safeReplacements)) {
+    fixed = fixed.replace(new RegExp(upper, 'g'), proper);
+  }
+  return fixed;
+};
+
 export const getChemicalImage = (formula) => {
   if (!formula) return null;
   const originalCaseNormalized = String(formula)
@@ -211,7 +224,8 @@ export const getChemicalImage = (formula) => {
   // Fallback to PubChem for pure alphanumeric formulas if not explicitly defined
   // PubChem fastformula is case-sensitive for elements (e.g., K2MnO4, not K2MNO4)
   if (/^[a-zA-Z0-9]+$/.test(originalCaseNormalized)) {
-      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/${originalCaseNormalized}/PNG`;
+      const fixedFormula = fixFormulaCase(originalCaseNormalized);
+      return `https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/${fixedFormula}/PNG`;
   }
   
   return null;
