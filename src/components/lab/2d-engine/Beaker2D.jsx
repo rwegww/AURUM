@@ -26,6 +26,35 @@ const Particle = ({ delay, xOffset, color, speed = 1, size = 4 }) => (
   />
 );
 
+const SolidChunk = ({ color, index }) => {
+  return (
+    <motion.div
+      initial={{ y: -150, opacity: 0, rotate: Math.random() * 180 }}
+      animate={{ y: 0, opacity: 1, rotate: Math.random() * 40 - 20 }}
+      transition={{ type: 'spring', bounce: 0.3, damping: 10, stiffness: 50 }}
+      className="absolute bottom-1"
+      style={{
+        left: `${25 + (index * 15) % 50}%`, // Nằm rải rác ở đáy
+        width: '35px',
+        height: '25px',
+        backgroundColor: color,
+        borderRadius: '3px 8px 4px 6px', // Góc cạnh giống khối đá/kim loại
+        border: '1px solid rgba(0,0,0,0.15)',
+        boxShadow: `inset -4px -4px 8px rgba(0,0,0,0.4), inset 3px 3px 6px rgba(255,255,255,0.5), 2px 3px 6px rgba(0,0,0,0.3)`,
+        zIndex: 10 + index
+      }}
+    >
+      {/* Thêm chút texture xước/gồ ghề cho khối kim loại */}
+      <div 
+        className="absolute inset-0 opacity-20 mix-blend-overlay rounded-sm"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+        }}
+      />
+    </motion.div>
+  );
+};
+
 const Precipitate = ({ color, index }) => {
   return (
     <div className="absolute bottom-0 left-0 w-full pointer-events-none flex flex-col justify-end" style={{ height: `${25 + index * 5}%`, zIndex: 5 + index }}>
@@ -254,9 +283,12 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                 <Particle key={p.id} delay={p.delay} xOffset={p.x + 50} color={p.color} speed={p.speed} size={p.size} />
               ))}
 
-              {/* Precipitates (Kết tủa) */}
+              {/* Solids: Tách biệt khối thả vào (SolidChunk) và kết tủa sinh ra (Precipitate) */}
               {beakerData.droppedSolids?.map((solid, idx) => (
-                <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
+                solid.isPrecipitate ? 
+                  <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
+                  : 
+                  <SolidChunk key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
               ))}
 
               {/* Water Surface Line */}

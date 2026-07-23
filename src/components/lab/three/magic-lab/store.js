@@ -314,7 +314,7 @@ const useLabStore = create((set, get) => ({
     const products = [];
     reaction.products.forEach((prod) => {
       const prodData = chemicals[prod.formula] || { formula: prod.formula, color: '#ffffff', state: 'liquid' };
-      processedContents.push({ ...prodData, id: generateId() });
+      processedContents.push({ ...prodData, id: generateId(), isPrecipitate: true });
       products.push({ formula: prodData.formula, color: prodData.color });
     });
 
