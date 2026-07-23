@@ -5,16 +5,27 @@ import { elements } from '../../data/elements';
 import { molecules } from '../../data/molecules';
 import { getChemicalImage } from '../../data/chemicalImages';
 
-const ChemicalTooltip = ({ formula, x, y, visible }) => {
+const ChemicalTooltip = ({ chemicalInfo, x, y, visible }) => {
   const details = useMemo(() => {
-    if (!formula) return null;
-    const chemical = chemicals.find(c => c.formula === formula || c.id === formula);
+    if (!chemicalInfo) return null;
+    const formula = chemicalInfo.formula || chemicalInfo; // Fallback in case a string is passed
+    
+    const chemFromRx = chemicals.find(c => c.formula === formula || c.id === formula);
     const element = elements.find(e => e.symbol === formula);
     const molecule = molecules.find(m => m.formula === formula || m.id === formula);
     const description = element ? element.desc : (molecule ? molecule.description : '');
     
-    return { chemical, description };
-  }, [formula]);
+    const combinedChemical = {
+      formula: formula,
+      name: chemicalInfo.name || (chemFromRx ? chemFromRx.name : (element ? element.name : (molecule ? molecule.name : 'Chưa rõ tên'))),
+      category: chemicalInfo.category || (chemFromRx ? chemFromRx.category : (element ? 'Nguyên tố' : (molecule ? molecule.category : 'Hợp chất'))),
+      molarMass: chemicalInfo.molarMass || (chemFromRx ? chemFromRx.molarMass : (element ? element.weight : null)),
+      state: chemicalInfo.state || (chemFromRx ? chemFromRx.state : (element ? 'solid' : 'Chưa rõ')),
+      color: chemicalInfo.color || (chemFromRx ? chemFromRx.color : '#ffffff')
+    };
+
+    return { chemical: combinedChemical, description, formula };
+  }, [chemicalInfo]);
 
   return (
     <AnimatePresence>
@@ -33,59 +44,47 @@ const ChemicalTooltip = ({ formula, x, y, visible }) => {
           className="fixed z-[9999] pointer-events-none min-w-[320px] max-w-[360px] rounded-2xl border border-white/10 bg-[#0a0a0f]/95 p-4 shadow-2xl backdrop-blur-xl flex flex-col"
         >
           {/* Header Đặc tính */}
-          {details.chemical ? (
-            <div className="flex flex-col gap-3">
-               <div className="flex gap-4 items-center">
-                   <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-white/10 overflow-hidden relative shadow-inner"
-                        style={{ background: `radial-gradient(circle, ${details.chemical.color || '#fff'}20 0%, rgba(2, 6, 23, 0.8) 100%)` }}>
-                       {getChemicalImage(formula) ? (
-                           <img src={getChemicalImage(formula)} alt={formula} className="w-full h-full object-cover mix-blend-screen opacity-90" />
-                       ) : (
-                           <span className="text-2xl font-black text-white">{details.chemical.formula}</span>
+          <div className="flex flex-col gap-3">
+             <div className="flex gap-4 items-center">
+                 <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-white/10 overflow-hidden relative shadow-inner"
+                      style={{ background: `radial-gradient(circle, ${details.chemical.color || '#fff'}20 0%, rgba(2, 6, 23, 0.8) 100%)` }}>
+                     {getChemicalImage(details.formula) ? (
+                         <img src={getChemicalImage(details.formula)} alt={details.formula} className="w-full h-full object-cover mix-blend-screen opacity-90" />
+                     ) : (
+                         <span className="text-2xl font-black text-white">{details.formula}</span>
+                     )}
+                 </div>
+                 <div className="min-w-0 flex-1">
+                    <h4 className="font-bold text-white text-lg truncate leading-tight mb-2">{details.chemical.name}</h4>
+                    <div className="text-[11px] font-bold text-white/50 flex flex-col gap-1.5 uppercase tracking-wider">
+                       <div className="flex items-center gap-2">
+                         <span className="text-emerald-400/80">{details.chemical.category}</span>
+                       </div>
+                       {details.chemical.molarMass && (
+                         <div className="flex items-center gap-2">
+                           <span>{details.chemical.molarMass} g/mol</span>
+                         </div>
                        )}
-                   </div>
-                   <div className="min-w-0 flex-1">
-                      <h4 className="font-bold text-white text-lg truncate leading-tight mb-2">{details.chemical.name}</h4>
-                      <div className="text-[11px] font-bold text-white/50 flex flex-col gap-1.5 uppercase tracking-wider">
-                         <div className="flex items-center gap-2">
-                           <span className="text-emerald-400/80">{details.chemical.category || 'Không xác định'}</span>
-                         </div>
-                         <div className="flex items-center gap-2">
-                           <span>{details.chemical.molarMass ? `${details.chemical.molarMass} g/mol` : '? g/mol'}</span>
-                         </div>
+                       {details.chemical.state && details.chemical.state !== 'Chưa rõ' && (
                          <div className="flex items-center gap-2">
                            <span className="text-blue-400/80">
                              {details.chemical.state === 'solid' ? 'Khối rắn (Solid)' : 
                               details.chemical.state === 'liquid' ? 'Lỏng (Liquid)' : 
-                              details.chemical.state === 'gas' ? 'Khí (Gas)' : 'Chưa rõ'}
+                              details.chemical.state === 'gas' ? 'Khí (Gas)' : details.chemical.state}
                            </span>
                          </div>
-                      </div>
-                   </div>
-               </div>
-               
-               {details.description && (
-                 <div className="mt-2 bg-white/5 p-3 rounded-xl border border-white/5">
-                   <h5 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1.5">Thông tin quan trọng</h5>
-                   <p className="text-xs text-white/80 leading-relaxed">{details.description}</p>
+                       )}
+                    </div>
                  </div>
-               )}
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-               <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/5">
-                   {getChemicalImage(formula) ? (
-                       <img src={getChemicalImage(formula)} alt={formula} className="w-full h-full object-cover mix-blend-screen opacity-90" />
-                   ) : (
-                       <span className="text-2xl font-black text-white">{formula}</span>
-                   )}
+             </div>
+             
+             {details.description && (
+               <div className="mt-2 bg-white/5 p-3 rounded-xl border border-white/5">
+                 <h5 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1.5">Thông tin quan trọng</h5>
+                 <p className="text-xs text-white/80 leading-relaxed">{details.description}</p>
                </div>
-               <div>
-                  <h4 className="font-bold text-white text-[15px] leading-tight mb-1">Chưa rõ thông tin</h4>
-                  <p className="text-[10px] text-white/50 uppercase">Chất chưa có trong CSDL</p>
-               </div>
-            </div>
-          )}
+             )}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

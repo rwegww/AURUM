@@ -619,7 +619,7 @@ const MagicLab3D = () => {
                         e.currentTarget.style.borderColor = chem.color + '60';
                         e.currentTarget.style.boxShadow = `0 0 15px ${chem.color}30`;
                       }
-                      setHoveredChem(chem.formula);
+                      setHoveredChem(chem);
                     }}
                     onMouseLeave={(e) => {
                       if (isPouringFormula !== chem.formula) {
@@ -784,7 +784,7 @@ const MagicLab3D = () => {
         }
       `}</style>
       <ChemicalTooltip 
-        formula={hoveredChem} 
+        chemicalInfo={hoveredChem} 
         x={mousePos.x} 
         y={mousePos.y} 
         visible={!!hoveredChem} 
