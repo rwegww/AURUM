@@ -6,7 +6,8 @@ import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
 import { ArrowLeft, Beaker, RotateCcw, Save, Trash2, Zap, Droplets, Flame, Search, Layers, TestTube } from 'lucide-react';
-import { getChemicalImage } from '@/data/chemicalImages';
+import { getChemicalImage } from '../../data/chemicalImages';
+import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -267,6 +268,11 @@ const MagicLab3D = () => {
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Tooltip state
+  const [hoveredChem, setHoveredChem] = useState(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
   const [isMessageVisible, setIsMessageVisible] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -613,12 +619,17 @@ const MagicLab3D = () => {
                         e.currentTarget.style.borderColor = chem.color + '60';
                         e.currentTarget.style.boxShadow = `0 0 15px ${chem.color}30`;
                       }
+                      setHoveredChem(chem.formula);
                     }}
                     onMouseLeave={(e) => {
                       if (isPouringFormula !== chem.formula) {
                         e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)';
                         e.currentTarget.style.boxShadow = 'none';
                       }
+                      setHoveredChem(null);
+                    }}
+                    onMouseMove={(e) => {
+                      setMousePos({ x: e.clientX, y: e.clientY });
                     }}
                   >
                     <div 
@@ -772,6 +783,12 @@ const MagicLab3D = () => {
           animation: crystal-shine 4s ease-in-out infinite;
         }
       `}</style>
+      <ChemicalTooltip 
+        formula={hoveredChem} 
+        x={mousePos.x} 
+        y={mousePos.y} 
+        visible={!!hoveredChem} 
+      />
     </div>
   );
 };
