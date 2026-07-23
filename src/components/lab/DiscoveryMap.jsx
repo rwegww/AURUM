@@ -208,13 +208,13 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
     if (node) isDiscovered = isDiscovered || node.is_starter || node.isStarter;
 
     const molecule = molecules.find(m => normalize(m.formula) === selectedId);
-    if (molecule) return { ...node, ...molecule, isDiscovered, formula: selectedId };
+    if (molecule) return { ...node, ...molecule, isDiscovered, formula: molecule.formula };
     const element = elements.find(e => normalize(e.symbol) === selectedId);
-    if (element) return { ...node, ...element, isDiscovered, name: element.name, description: element.desc, formula: selectedId };
+    if (element) return { ...node, ...element, isDiscovered, name: element.name, description: element.desc, formula: element.symbol };
     const craftable = craftableItems.find(c => normalize(c.formula) === selectedId);
-    if (craftable) return { ...node, ...craftable, isDiscovered, formula: selectedId };
+    if (craftable) return { ...node, ...craftable, isDiscovered, formula: craftable.formula };
 
-    return { ...node, isDiscovered, formula: selectedId };
+    return { ...node, isDiscovered, formula: node?.formula || selectedId };
   }, [selectedId, chemicals, normalizedDiscovered]);
 
   const synthesisPathways = useMemo(() => {
@@ -515,7 +515,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                      <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border flex flex-col gap-2">
                         <span className="text-[8px] font-black text-viet-green uppercase tracking-[3px]">Khối lượng nguyên tử / phân tử</span>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-3xl font-black text-viet-text italic">{calculateMolarMass(selectedData.formula || selectedData.symbol, elements)}</span>
+                           <span className="text-3xl font-black text-viet-text italic">{selectedData.molarMass || selectedData.weight || calculateMolarMass(selectedData.formula || selectedData.symbol, elements)}</span>
                            <span className="text-[10px] font-bold text-viet-text-light opacity-70 uppercase tracking-widest">u (amu)</span>
                         </div>
                      </div>
