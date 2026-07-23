@@ -5,7 +5,7 @@ import useLabStore from './magic-lab/store';
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
-import { ArrowLeft, Beaker, RotateCcw, Save, Trash2, Zap, Droplets, Flame, Search, Layers, TestTube } from 'lucide-react';
+import { ArrowLeft, Beaker, RotateCcw, Save, Trash2, Zap, Droplets, Flame, Search, Layers, TestTube, FlaskConical } from 'lucide-react';
 import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
@@ -264,6 +264,7 @@ const MagicLab3D = () => {
   const addBeaker = useLabStore(state => state.addBeaker);
   const removeBeaker = useLabStore(state => state.removeBeaker);
   const setActiveBeaker = useLabStore(state => state.setActiveBeaker);
+  const cycleContainerType = useLabStore(state => state.cycleContainerType);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
@@ -555,6 +556,17 @@ const MagicLab3D = () => {
 
             {/* Tools Area */}
             <div className="flex justify-between items-center mb-4 bg-white/5 p-1.5 rounded-2xl border border-white/5 gap-1.5">
+              <button 
+                onClick={cycleContainerType}
+                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-indigo-500/10 text-white/50 hover:text-indigo-400 border border-transparent hover:border-indigo-500/20 transition-all hover:scale-105 active:scale-95"
+                title="Đổi dụng cụ"
+              >
+                {activeBeaker.containerType === 'test_tube' && <TestTube className="w-5 h-5" />}
+                {activeBeaker.containerType === 'flask' && <FlaskConical className="w-5 h-5" />}
+                {activeBeaker.containerType === 'dish' && <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="16" rx="10" ry="3"/><path d="M2 16v-2a10 3 0 0 1 20 0v2"/></svg>}
+                {activeBeaker.containerType === 'bubbler' && <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20"/><rect x="6" y="8" width="12" height="14" rx="2"/></svg>}
+                {(!activeBeaker.containerType || activeBeaker.containerType === 'beaker') && <Beaker className="w-5 h-5" />}
+              </button>
               <button 
                 onClick={handleToggleHeat}
                 className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${

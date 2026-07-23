@@ -1,4 +1,4 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 
 // Helper for generating unique IDs
 let idCounter = Date.now();
@@ -15,6 +15,7 @@ const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   droppedSolids: [],
   reactionMessage: message,
   isHeating: false,
+  containerType: 'beaker', // 'beaker', 'test_tube', 'flask', 'dish', 'bubbler'
   activeBubbles: false,
   activeFlame: false,
   activeSmoke: false,
@@ -374,6 +375,16 @@ const useLabStore = create((set, get) => ({
     const newBeakers = [...state.beakers];
     newBeakers[idx] = createDefaultBeaker(generateId(), "Đã làm sạch dụng cụ.");
     return { beakers: newBeakers, isPouringFormula: null };
+  }),
+
+  cycleContainerType: () => set(state => {
+    const idx = state.activeBeakerIndex;
+    const newBeakers = [...state.beakers];
+    const types = ['beaker', 'test_tube', 'flask', 'dish', 'bubbler'];
+    const current = newBeakers[idx].containerType || 'beaker';
+    const nextIdx = (types.indexOf(current) + 1) % types.length;
+    newBeakers[idx] = { ...newBeakers[idx], containerType: types[nextIdx] };
+    return { beakers: newBeakers };
   }),
 }));
 
