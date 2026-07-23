@@ -27,46 +27,29 @@ const Particle = ({ delay, xOffset, color, speed = 1, size = 4 }) => (
 );
 
 const Precipitate = ({ color, index }) => {
-  const clusters = useMemo(() => Array.from({ length: 30 }).map((_, i) => ({
-    id: i,
-    x: Math.random() * 80 + 10,
-    y: Math.random() * 30, // Chiều cao của đống kết tủa
-    width: Math.random() * 20 + 10, // Kích thước hạt nhỏ hơn để ra chất rắn
-    height: Math.random() * 15 + 5,
-    delay: Math.random() * 2,
-    duration: Math.random() * 2 + 2,
-    blur: Math.random() < 0.3 ? 1 : 0, // Đa số sắc nét, một số ít mờ nhẹ
-    rotation: Math.random() * 180 - 90, // Xoay ngẫu nhiên tạo góc cạnh
-    borderRadius: Math.random() > 0.5 ? '10% 30% 20% 15%' : '50%' // Trộn lẫn hạt sần sùi và tròn
-  })), []);
-
   return (
-    <div className="absolute bottom-0 left-0 w-full pointer-events-none" style={{ height: '40%', zIndex: 5 + index }}>
-      {clusters.map((c) => (
-        <motion.div
-          key={c.id}
-          initial={{ y: -150, opacity: 0, scale: 0.3, rotate: 0 }} // Rơi từ trên xuống
-          animate={{ y: -c.y, opacity: 1, scale: 1, rotate: c.rotation }} // Lắng xuống đáy và xoay
-          transition={{ 
-            duration: c.duration, 
-            delay: c.delay, 
-            type: 'spring', 
-            damping: 12, 
-            stiffness: 30 
-          }}
-          className="absolute bottom-0"
+    <div className="absolute bottom-0 left-0 w-full pointer-events-none flex flex-col justify-end" style={{ height: `${25 + index * 5}%`, zIndex: 5 + index }}>
+      <motion.div
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: '100%', opacity: 1 }}
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="w-full relative"
+        style={{
+          backgroundColor: color,
+          backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(255,255,255,0.2) 100%)`,
+          borderTopLeftRadius: '12px',
+          borderTopRightRadius: '12px',
+          boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+        }}
+      >
+        {/* Noise overlay to simulate granular/powdery texture of chemical precipitates */}
+        <div 
+          className="absolute inset-0 opacity-40 mix-blend-overlay pointer-events-none rounded-t-xl"
           style={{
-            left: `${c.x}%`,
-            width: `${c.width}%`,
-            height: `${c.height}px`,
-            backgroundColor: color,
-            filter: `blur(${c.blur}px)`, 
-            borderRadius: c.borderRadius,
-            transform: 'translateX(-50%)',
-            boxShadow: `inset -2px -2px 6px rgba(0,0,0,0.3), 1px 1px 3px rgba(0,0,0,0.2)` // Đổ bóng tạo khối 3D cho chất rắn
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
           }}
         />
-      ))}
+      </motion.div>
     </div>
   );
 };
