@@ -92,22 +92,31 @@ const containerConfigs = {
     )
   },
   bubbler: {
-    clipPath: 'polygon(20% 10%, 80% 10%, 80% 90%, 70% 100%, 30% 100%, 20% 90%)',
-    width: 'w-24',
-    height: 'h-48',
+    clipPath: 'polygon(15% 10%, 85% 10%, 85% 90%, 75% 100%, 25% 100%, 15% 90%)',
+    width: 'w-28',
+    height: 'h-40',
     viewBox: '0 0 100 140',
     renderSVG: () => (
       <>
-        {/* Main Bottle */}
-        <ellipse cx="50" cy="15" rx="30" ry="5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <path d="M 20 15 L 20 125 A 15 15 0 0 0 35 140 L 65 140 A 15 15 0 0 0 80 125 L 80 15" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
-        <path d="M 20 15 A 30 5 0 0 0 80 15" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" />
+        {/* Normal Beaker Glass */}
+        <ellipse cx="50" cy="15" rx="35" ry="5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+        <path d="M 15 15 L 15 125 A 15 15 0 0 0 30 140 L 70 140 A 15 15 0 0 0 85 125 L 85 15" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
+        <path d="M 15 15 A 35 5 0 0 0 85 15" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" />
         
-        {/* Central glass tube */}
-        <rect x="45" y="-10" width="10" height="130" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)" strokeWidth="1" rx="2" />
-        {/* Side exit tube */}
-        <path d="M 80 30 L 95 30 L 95 20" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="4" />
-        <path d="M 25 25 L 25 120" stroke="rgba(255,255,255,0.3)" strokeWidth="3" strokeLinecap="round" />
+        {/* Measurement Lines */}
+        <line x1="20" y1="40" x2="30" y2="40" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+        <line x1="20" y1="70" x2="35" y2="70" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+        <line x1="20" y1="100" x2="30" y2="100" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
+        <text x="38" y="74" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="sans-serif">250ml</text>
+
+        {/* Gas tube coming from top right, angling into the liquid */}
+        <path d="M 120 -10 L 90 -10 L 90 10 L 60 10 L 60 120" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="4" strokeLinejoin="round" />
+        <path d="M 120 -10 L 90 -10 L 90 10 L 60 10 L 60 120" fill="none" stroke="rgba(200,220,255,0.8)" strokeWidth="1.5" strokeLinejoin="round" />
+        {/* Small bubbler head at the bottom */}
+        <ellipse cx="60" cy="120" rx="4" ry="2" fill="rgba(255,255,255,0.6)" />
+        
+        {/* Reflection Lines */}
+        <path d="M 22 25 L 22 120" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round" />
       </>
     )
   }
