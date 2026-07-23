@@ -43,19 +43,66 @@ const GameWorkspace = () => {
             <div key={beaker.id} className="relative flex flex-col items-center">
               
               {/* Drop Shadow on the table */}
-              <div className="absolute -bottom-4 w-32 h-6 bg-black/40 blur-md rounded-full pointer-events-none" />
-
-              {/* The Pouring Stream (if active) */}
-              {isActive && isPouringFormula && (
-                <PourEffect2D formula={isPouringFormula} targetBeakerIndex={i} />
-              )}
-
-              {/* The 2D Beaker Sprite */}
-              <Beaker2D 
-                beakerData={beaker} 
-                isActive={isActive} 
-                onClick={() => setActiveBeaker(i)} 
+              <div 
+                 className="absolute -bottom-4 w-32 h-6 bg-black/40 blur-md rounded-full pointer-events-none transition-all duration-300"
+                 style={{ opacity: beaker.isHeating ? 0.2 : 1, transform: beaker.isHeating ? 'scale(0.8)' : 'scale(1)' }}
               />
+
+              {/* Tripod Stand and Bunsen Burner */}
+              <AnimatePresence>
+                {beaker.isHeating && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute -bottom-4 w-32 h-20 pointer-events-none flex flex-col items-center justify-end z-0"
+                  >
+                    {/* Burner Flame */}
+                    <div className="absolute bottom-1 w-12 h-14 flex items-end justify-center z-10">
+                       <div className="absolute bottom-0 w-6 h-3 bg-slate-700 rounded-sm shadow-md border-t border-slate-500" />
+                       <div className="absolute bottom-3 w-2 h-3 bg-slate-600 rounded-sm" />
+                       
+                       <motion.div 
+                         animate={{ scale: [1, 1.1, 1], opacity: [0.7, 0.9, 0.7] }}
+                         transition={{ repeat: Infinity, duration: 0.15 }}
+                         className="absolute bottom-5 w-8 h-10 bg-gradient-to-t from-blue-500 via-cyan-400 to-transparent blur-[2px] rounded-t-full origin-bottom mix-blend-screen"
+                       />
+                       <motion.div 
+                         animate={{ scale: [1, 1.2, 1] }}
+                         transition={{ repeat: Infinity, duration: 0.1 }}
+                         className="absolute bottom-5 w-4 h-7 bg-gradient-to-t from-white to-blue-200 blur-[1px] rounded-t-full origin-bottom mix-blend-screen"
+                       />
+                    </div>
+                    
+                    {/* Tripod Structure */}
+                    <svg className="absolute w-full h-full text-slate-500 drop-shadow-xl z-20" viewBox="0 0 100 100" preserveAspectRatio="none">
+                      <path d="M 20 95 L 35 25 L 65 25 L 80 95" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M 50 25 L 50 95" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" className="opacity-60" />
+                      <path d="M 25 25 L 75 25" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+                      <path d="M 32 25 A 18 6 0 0 0 68 25" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    </svg>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Beaker Container (moves up when heating) */}
+              <motion.div
+                animate={{ y: beaker.isHeating ? -70 : 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                className="relative z-10 flex flex-col items-center"
+              >
+                {/* The Pouring Stream (if active) */}
+                {isActive && isPouringFormula && (
+                  <PourEffect2D formula={isPouringFormula} targetBeakerIndex={i} />
+                )}
+
+                {/* The 2D Beaker Sprite */}
+                <Beaker2D 
+                  beakerData={beaker} 
+                  isActive={isActive} 
+                  onClick={() => setActiveBeaker(i)} 
+                />
+              </motion.div>
             </div>
           );
         })}
