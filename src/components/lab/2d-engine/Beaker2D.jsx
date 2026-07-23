@@ -27,15 +27,17 @@ const Particle = ({ delay, xOffset, color, speed = 1, size = 4 }) => (
 );
 
 const Precipitate = ({ color, index }) => {
-  const clusters = useMemo(() => Array.from({ length: 15 }).map((_, i) => ({
+  const clusters = useMemo(() => Array.from({ length: 30 }).map((_, i) => ({
     id: i,
     x: Math.random() * 80 + 10,
-    y: Math.random() * 20, // Variation in pile height
-    width: Math.random() * 40 + 20,
-    height: Math.random() * 25 + 15,
+    y: Math.random() * 30, // Chiều cao của đống kết tủa
+    width: Math.random() * 20 + 10, // Kích thước hạt nhỏ hơn để ra chất rắn
+    height: Math.random() * 15 + 5,
     delay: Math.random() * 2,
-    duration: Math.random() * 2 + 3,
-    blur: Math.random() * 3 + 2
+    duration: Math.random() * 2 + 2,
+    blur: Math.random() < 0.3 ? 1 : 0, // Đa số sắc nét, một số ít mờ nhẹ
+    rotation: Math.random() * 180 - 90, // Xoay ngẫu nhiên tạo góc cạnh
+    borderRadius: Math.random() > 0.5 ? '10% 30% 20% 15%' : '50%' // Trộn lẫn hạt sần sùi và tròn
   })), []);
 
   return (
@@ -43,14 +45,14 @@ const Precipitate = ({ color, index }) => {
       {clusters.map((c) => (
         <motion.div
           key={c.id}
-          initial={{ y: -150, opacity: 0, scale: 0.3 }} // Rơi từ trên xuống
-          animate={{ y: -c.y, opacity: 0.9, scale: 1 }} // Lắng xuống đáy
+          initial={{ y: -150, opacity: 0, scale: 0.3, rotate: 0 }} // Rơi từ trên xuống
+          animate={{ y: -c.y, opacity: 1, scale: 1, rotate: c.rotation }} // Lắng xuống đáy và xoay
           transition={{ 
             duration: c.duration, 
             delay: c.delay, 
             type: 'spring', 
-            damping: 20, 
-            stiffness: 40 
+            damping: 12, 
+            stiffness: 30 
           }}
           className="absolute bottom-0"
           style={{
@@ -59,9 +61,9 @@ const Precipitate = ({ color, index }) => {
             height: `${c.height}px`,
             backgroundColor: color,
             filter: `blur(${c.blur}px)`, 
-            borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%', // Hình dạng hữu cơ tự nhiên
+            borderRadius: c.borderRadius,
             transform: 'translateX(-50%)',
-            boxShadow: `inset 0 -5px 15px rgba(0,0,0,0.2)`
+            boxShadow: `inset -2px -2px 6px rgba(0,0,0,0.3), 1px 1px 3px rgba(0,0,0,0.2)` // Đổ bóng tạo khối 3D cho chất rắn
           }}
         />
       ))}
