@@ -5,6 +5,7 @@ import { elements } from '../../data/elements';
 import { craftableItems } from '../../data/labInventory';
 import { CheckCircle2, Lock, ChevronRight, Activity, ArrowRight, Plus, Microscope } from 'lucide-react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { chemicalImages } from '../../data/chemicalImages';
 
 // Helper to normalize formulas (H₂ -> H2)
 const normalize = (f) => {
@@ -244,13 +245,27 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
 
   const renderPathwayNode = (formula, coeff, name, isProduct = false) => {
      const isDiscovered = normalizedDiscovered.has(normalize(formula));
+     const rawFormula = String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]));
+     const imgSrc = chemicalImages[rawFormula] || chemicalImages[normalize(formula)];
+
      return (
         <div className="flex flex-col items-center gap-1">
-           <div className={`w-12 h-12 rounded-xl flex items-center justify-center border ${isProduct ? 'border-viet-green bg-viet-green/10' : (isDiscovered ? 'border-viet-border bg-white' : 'border-red-300 bg-red-50')}`}>
-              <span className={`font-black italic ${isProduct ? 'text-viet-green' : (isDiscovered ? 'text-viet-text' : 'text-red-500')}`}>
-                 {coeff > 1 ? <span className="text-[10px] opacity-70 mr-0.5">{coeff}</span> : null}
-                 {formula}
-              </span>
+           <div className={`relative overflow-hidden w-12 h-12 rounded-xl flex items-center justify-center border ${isProduct ? 'border-viet-green bg-viet-green/10' : (isDiscovered ? 'border-viet-border bg-white' : 'border-red-300 bg-red-50')}`}>
+              {isDiscovered && imgSrc ? (
+                 <>
+                    <img src={imgSrc} alt={formula} className="absolute inset-0 w-full h-full object-cover" />
+                    {coeff > 1 && (
+                        <div className="absolute top-0 right-0 bg-black/60 text-white text-[10px] px-1 rounded-bl-md font-bold z-10">
+                            {coeff}
+                        </div>
+                    )}
+                 </>
+              ) : (
+                 <span className={`font-black italic ${isProduct ? 'text-viet-green' : (isDiscovered ? 'text-viet-text' : 'text-red-500')}`}>
+                    {coeff > 1 ? <span className="text-[10px] opacity-70 mr-0.5">{coeff}</span> : null}
+                    {formula}
+                 </span>
+              )}
            </div>
            <span className="text-[9px] text-center font-bold text-viet-text-light w-16 truncate" title={name}>{name || formula}</span>
         </div>
@@ -260,6 +275,8 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
   const renderItemNode = (item, theme) => {
     const isHighlighted = highlightedNodes.has(item.normalizedFormula);
     const isFaded = highlightedNodes.size > 0 && !isHighlighted;
+    const rawFormula = String(item.formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]));
+    const imgSrc = chemicalImages[rawFormula] || chemicalImages[item.normalizedFormula];
 
     return (
         <motion.button
@@ -288,13 +305,19 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                 className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border border-viet-border relative overflow-hidden transition-colors"
                 style={{ backgroundColor: item.isDiscovered ? theme.color + '15' : 'rgba(0,0,0,0.04)' }}
             >
-                {item.isDiscovered && (
-                    <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
-                )}
-                {item.isDiscovered ? (
-                    <span className="text-[11px] font-black italic text-viet-text relative z-10">{item.formula}</span>
+                {item.isDiscovered && imgSrc ? (
+                    <img src={imgSrc} alt={item.formula} className="absolute inset-0 w-full h-full object-cover" />
                 ) : (
-                    <Lock size={14} className="text-viet-text-light opacity-50 relative z-10" />
+                    <>
+                        {item.isDiscovered && (
+                            <div className="absolute inset-0 opacity-20 blur-md" style={{ backgroundColor: theme.color }} />
+                        )}
+                        {item.isDiscovered ? (
+                            <span className="text-[11px] font-black italic text-viet-text relative z-10">{item.formula}</span>
+                        ) : (
+                            <Lock size={14} className="text-viet-text-light opacity-50 relative z-10" />
+                        )}
+                    </>
                 )}
             </div>
             <div className="flex-1 min-w-0">
