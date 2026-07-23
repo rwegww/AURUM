@@ -6,7 +6,7 @@ import Avatar from '@/components/common/Avatar';
 import AssistantAvatar from '@/components/common/AssistantAvatar';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 import { ingredients } from '@/data/labInventory';
-import { chemicalImages } from '@/data/chemicalImages';
+import { getChemicalImage } from '@/data/chemicalImages';
 
 const getElementStyle = (symbol) => {
   const styles = {
@@ -35,7 +35,7 @@ const getElementStyle = (symbol) => {
 };
 
 const ElementSphere = ({ symbol, size = 'md' }) => {
-  const imgSrc = chemicalImages[String(symbol || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]))];
+  const imgSrc = getChemicalImage(symbol);
   const sizeClasses = {
     sm: 'w-5 h-5 text-[8px] font-black',
     md: 'w-7 h-7 text-[10px] font-black',

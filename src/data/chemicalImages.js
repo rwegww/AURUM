@@ -155,4 +155,25 @@ export const chemicalImages = {
   "He": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Helium_discharge_tube.jpg/330px-Helium_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "Ne": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Neon_discharge_tube.jpg/330px-Neon_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "Ar": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Argon_discharge_tube.jpg/330px-Argon_discharge_tube.jpg?utm_source=vi.wikipedia.org&utm_campaign=api&utm_content=thumbnail"
+
+  "BaO": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Barium_oxide.jpg/330px-Barium_oxide.jpg",
+  "FeCl2": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Iron%28II%29-chloride-tetrahydrate-sample.jpg/330px-Iron%28II%29-chloride-tetrahydrate-sample.jpg",
+  "C2H5OH": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Ethanol-3D-vdW.png/330px-Ethanol-3D-vdW.png",
+  "HCl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Hydrochloric_acid_01.jpg/330px-Hydrochloric_acid_01.jpg",
+  "SO2": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Sulfur-dioxide-3D-vdW.png/330px-Sulfur-dioxide-3D-vdW.png",
+  "O3": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Ozone-3D-vdW.png/330px-Ozone-3D-vdW.png",
+};
+
+export const getChemicalImage = (formula) => {
+  if (!formula) return null;
+  const normalized = String(formula)
+    .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]))
+    .toUpperCase()
+    .trim();
+  for (const [key, value] of Object.entries(chemicalImages)) {
+    if (key.toUpperCase() === normalized) {
+      return value;
+    }
+  }
+  return null;
 };

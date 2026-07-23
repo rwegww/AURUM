@@ -5,7 +5,7 @@ import { elements } from '../../data/elements';
 import { craftableItems } from '../../data/labInventory';
 import { CheckCircle2, Lock, ChevronRight, Activity, ArrowRight, Plus, Microscope } from 'lucide-react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { chemicalImages } from '../../data/chemicalImages';
+import { getChemicalImage } from '../../data/chemicalImages';
 
 // Helper to normalize formulas (H₂ -> H2)
 const normalize = (f) => {
@@ -245,8 +245,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
 
   const renderPathwayNode = (formula, coeff, name, isProduct = false) => {
      const isDiscovered = normalizedDiscovered.has(normalize(formula));
-     const rawFormula = String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]));
-     const imgSrc = chemicalImages[rawFormula] || chemicalImages[normalize(formula)];
+     const imgSrc = getChemicalImage(formula);
 
      return (
         <div className="flex flex-col items-center gap-1">
@@ -275,8 +274,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
   const renderItemNode = (item, theme) => {
     const isHighlighted = highlightedNodes.has(item.normalizedFormula);
     const isFaded = highlightedNodes.size > 0 && !isHighlighted;
-    const rawFormula = String(item.formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]));
-    const imgSrc = chemicalImages[rawFormula] || chemicalImages[item.normalizedFormula];
+    const imgSrc = getChemicalImage(item.formula);
 
     return (
         <motion.button

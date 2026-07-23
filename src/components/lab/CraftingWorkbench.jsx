@@ -12,7 +12,7 @@ import {
   normalizeInventory,
   rarityConfig,
 } from '@/data/labInventory';
-import { chemicalImages } from '@/data/chemicalImages';
+import { getChemicalImage } from '@/data/chemicalImages';
 
 const LOCAL_INVENTORY_KEY = 'aurum_lab_inventory';
 const LOCAL_DISCOVERY_KEY = 'chem_odyssey_discovered';
@@ -57,7 +57,7 @@ const getElementStyle = (symbol) => {
 };
 
 const ElementSphere = ({ symbol, size = 'md' }) => {
-  const imgSrc = chemicalImages[String(symbol || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]))];
+  const imgSrc = getChemicalImage(symbol);
   const sizeClasses = {
     sm: 'w-5 h-5 text-[9px] font-black',
     md: 'w-8 h-8 text-[12px] font-black',
@@ -84,9 +84,7 @@ const ElementSphere = ({ symbol, size = 'md' }) => {
 };
 
 const MoleculeModel = ({ formula, size = 'md' }) => {
-  const formulaUpper = String(formula || '').toUpperCase();
-  const rawFormula = String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => ({ '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' }[m]));
-  const imgSrc = chemicalImages[rawFormula];
+  const imgSrc = getChemicalImage(formula);
 
   const conf = {
     sm: {
