@@ -5,7 +5,7 @@ import useLabStore from './magic-lab/store';
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
-import { ArrowLeft, Beaker, Zap, Droplets, Flame, Search, FlaskConical } from 'lucide-react';
+import { ArrowLeft, Beaker, Zap, Droplets, Flame, Search, FlaskConical, BookOpen, NotebookPen, Download, Trash2, Save } from 'lucide-react';
 import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
@@ -269,6 +269,66 @@ const MagicLab3D = () => {
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // --- Lab Notepad State & Storage ---
+  const [showNotepad, setShowNotepad] = useState(false);
+  const [notepadTab, setNotepadTab] = useState('history'); // 'history' | 'notes'
+  const [userNotes, setUserNotes] = useState(() => {
+    return localStorage.getItem('aurum_lab_notes') || '';
+  });
+
+  useEffect(() => {
+    localStorage.setItem('aurum_lab_notes', userNotes);
+  }, [userNotes]);
+
+  // Aggregate action history from activeBeaker
+  const activeHistory = useMemo(() => {
+    const events = [];
+    (activeBeaker.addedHistory || []).forEach(item => {
+      events.push({
+        type: 'input',
+        text: `Cho ${item.amount}${item.unit} ${item.name} (${item.formula}) vào cốc`,
+        time: item.time || 'Vừa xong',
+        color: 'text-blue-400',
+        badge: '📥'
+      });
+    });
+    (activeBeaker.yieldHistory || []).forEach(item => {
+      events.push({
+        type: 'yield',
+        text: `Thu được ${item.amount}${item.unit} ${item.name} (${item.formula})`,
+        time: 'Vừa xong',
+        color: 'text-emerald-400',
+        badge: '🧪'
+      });
+    });
+    return events;
+  }, [activeBeaker.addedHistory, activeBeaker.yieldHistory]);
+
+  const handleExportNotepad = () => {
+    const lines = [];
+    lines.push("=== AURUM CHEMISTRY LAB - SỔ TAY NHẬT KÝ THÍ NGHIỆM ===");
+    lines.push(`Thời gian xuất: ${new Date().toLocaleString('vi-VN')}`);
+    lines.push(`Cốc thí nghiệm đang chọn: #${activeBeakerIndex + 1}\n`);
+    lines.push("--- 📜 LỊCH SỬ THAO TÁC HÓA CHẤT ---");
+    if (activeHistory.length === 0) {
+      lines.push("(Chưa có thao tác nào)");
+    } else {
+      activeHistory.forEach((h, i) => {
+        lines.push(`${i + 1}. [${h.time}] ${h.text}`);
+      });
+    }
+    lines.push("\n--- 📝 GHI CHÚ CÁ NHÂN ---");
+    lines.push(userNotes || "(Chưa có ghi chú)");
+    
+    const blob = new Blob([lines.join("\n")], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AURUM_Lab_Notepad_Beaker${activeBeakerIndex + 1}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
   
   // Tooltip state
   const [hoveredChem, setHoveredChem] = useState(null);
@@ -490,6 +550,22 @@ const MagicLab3D = () => {
         {/* Top Header */}
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
+            <button 
+              onClick={() => setShowNotepad(!showNotepad)}
+              className={`flex items-center gap-2 px-4 h-12 rounded-2xl border backdrop-blur-xl transition-all font-bold text-xs uppercase tracking-widest shadow-lg group relative ${
+                showNotepad 
+                  ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]' 
+                  : 'bg-slate-900/40 border-white/10 hover:border-white/20 hover:bg-slate-800/40 text-white/80'
+              }`}
+            >
+              <NotebookPen className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform duration-300" />
+              <span>Nhật ký thí nghiệm</span>
+              {activeHistory.length > 0 && (
+                <span className="ml-1 px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-md text-[10px] font-black">
+                  {activeHistory.length}
+                </span>
+              )}
+            </button>
             <button 
               onClick={() => window.open('/lab/discovery', '_blank')}
               className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
@@ -793,6 +869,153 @@ const MagicLab3D = () => {
           animation: crystal-shine 4s ease-in-out infinite;
         }
       `}</style>
+      {/* Right-side Spiral Notebook Matching Attached Image */}
+      <AnimatePresence>
+        {showNotepad && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.92 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 160 }}
+            className="absolute top-16 right-4 z-40 w-80 sm:w-[380px] flex flex-col pointer-events-auto filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]"
+          >
+            {/* Top Wooden Bar with Metallic Spiral Coils */}
+            <div className="relative w-full h-11 bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] rounded-t-[18px] border-b-2 border-[#24130a] flex items-center justify-between px-4 z-20">
+              {/* Spiral Coil Rings overlaying top wooden bar & paper holes */}
+              <div className="absolute -top-3 left-4 right-4 flex justify-between pointer-events-none px-1">
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <div key={i} className="relative flex flex-col items-center">
+                    {/* Metal Coil Loop */}
+                    <div className="w-3.5 h-7 rounded-full border-[2.5px] border-[#20120a] bg-gradient-to-r from-[#6e4e3b] via-[#e2c7b3] to-[#4a3022] shadow-sm" />
+                    {/* Hole punched in paper */}
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#361e12] shadow-inner -mt-1.5" />
+                  </div>
+                ))}
+              </div>
+
+              {/* Title inside wooden header */}
+              <div className="text-[11px] font-bold text-[#e6d0bf] tracking-wider uppercase flex items-center gap-1.5 pl-2 z-10 font-serif">
+                <span>✦ Sổ Tay Thí Nghiệm ✦</span>
+              </div>
+
+              {/* Header Action Buttons */}
+              <div className="flex items-center gap-1 z-10">
+                <button
+                  onClick={handleExportNotepad}
+                  className="p-1 rounded-lg bg-[#6e4e3b]/40 hover:bg-[#6e4e3b]/80 text-[#e6d0bf] transition-colors"
+                  title="Xuất file nhật ký (.txt)"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={() => setShowNotepad(false)}
+                  className="w-6 h-6 rounded-full bg-[#6e4e3b]/40 hover:bg-[#6e4e3b]/80 flex items-center justify-center text-[#e6d0bf] transition-colors text-xs font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Lined Parchment Paper Body */}
+            <div 
+              className="relative w-full bg-[#fcf8ee] text-[#3e2b1d] rounded-b-[24px] border-2 border-t-0 border-[#5c3a27]/30 p-5 pt-4 flex flex-col min-h-[460px] max-h-[70vh] overflow-hidden"
+              style={{
+                backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(160, 135, 105, 0.22) 28px)',
+                backgroundAttachment: 'local'
+              }}
+            >
+              {/* Bottom Right Cute Sparkle Star Icon (matching user image) */}
+              <div className="absolute bottom-4 right-4 pointer-events-none opacity-40 text-[#a89078] flex flex-col items-end z-0">
+                <svg className="w-9 h-9" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+                </svg>
+                <svg className="w-5 h-5 -mr-2 -mt-2 opacity-80" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
+                </svg>
+              </div>
+
+              {/* Tab Selector Buttons */}
+              <div className="flex bg-[#efe6d5] p-1 rounded-xl mb-3 border border-[#d6c7b0] gap-1 z-10">
+                <button
+                  onClick={() => setNotepadTab('history')}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                    notepadTab === 'history'
+                      ? 'bg-[#fcf8ee] text-[#4a2e20] shadow-sm border border-[#d6c7b0]'
+                      : 'text-[#8a725d] hover:text-[#4a2e20]'
+                  }`}
+                >
+                  📜 Lịch Sử Hóa Chất ({activeHistory.length})
+                </button>
+                <button
+                  onClick={() => setNotepadTab('notes')}
+                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                    notepadTab === 'notes'
+                      ? 'bg-[#fcf8ee] text-[#4a2e20] shadow-sm border border-[#d6c7b0]'
+                      : 'text-[#8a725d] hover:text-[#4a2e20]'
+                  }`}
+                >
+                  📝 Ghi Chú Cá Nhân
+                </button>
+              </div>
+
+              {/* Tab 1: Real-time History Stream on Ruled Lines */}
+              {notepadTab === 'history' && (
+                <div className="flex-1 overflow-y-auto custom-scrollbar my-1 pr-1 space-y-1.5 max-h-[48vh] z-10 font-serif">
+                  {activeHistory.length > 0 ? (
+                    activeHistory.map((item, idx) => (
+                      <div key={idx} className="flex items-start gap-2 py-0.5 text-xs border-b border-[#e6dccb]/60 leading-[27px]">
+                        <span className="text-sm">{item.badge}</span>
+                        <div className="flex-1">
+                          <span className="font-semibold text-[#4a2e20]">{item.text}</span>
+                          <span className="text-[10px] text-[#9c846e] ml-2 font-sans font-normal">({item.time})</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="py-12 text-center text-[#9c846e] text-xs italic font-serif leading-[28px]">
+                      Chưa có thao tác nào trong Cốc #{activeBeakerIndex + 1}.<br />
+                      Hãy rót hoặc thả hóa chất vào cốc!
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Tab 2: Custom Editable User Notes directly on Ruled Paper */}
+              {notepadTab === 'notes' && (
+                <div className="flex-1 my-1 flex flex-col gap-2 z-10">
+                  <textarea
+                    value={userNotes}
+                    onChange={(e) => setUserNotes(e.target.value)}
+                    placeholder="Viết nhận xét, phương trình hoặc ghi chú ở đây... (Tự động lưu vào DataStorage)"
+                    className="w-full h-52 bg-transparent text-xs text-[#3e2b1d] placeholder:text-[#ab9884] outline-none resize-none custom-scrollbar font-serif leading-[28px] tracking-wide"
+                  />
+                  <div className="flex justify-between items-center text-[10px] text-[#8a725d] pt-1 border-t border-[#d6c7b0]/60 font-sans">
+                    <span>💾 Tự động lưu vào DataStorage</span>
+                    <button
+                      onClick={() => setUserNotes('')}
+                      className="text-red-700/70 hover:text-red-700 flex items-center gap-1 transition-colors font-bold"
+                    >
+                      <Trash2 className="w-3 h-3" /> Xóa ghi chú
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Notebook Footer */}
+              <div className="pt-2 border-t border-[#d6c7b0] flex justify-between items-center text-[11px] text-[#8a725d] font-serif z-10">
+                <span>Cốc thí nghiệm #{activeBeakerIndex + 1}</span>
+                <button
+                  onClick={handleExportNotepad}
+                  className="flex items-center gap-1 text-[#5c3a27] hover:text-[#361e12] font-bold transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" /> Xuất file (.txt)
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <ChemicalTooltip 
         chemicalInfo={hoveredChem} 
         x={mousePos.x} 

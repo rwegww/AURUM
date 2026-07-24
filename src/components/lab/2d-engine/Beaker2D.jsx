@@ -294,6 +294,33 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
     }));
   }, [activeSmoke, smokeColor, intensity]);
 
+  // Group and sum chemical quantities for inputs and yields
+  const groupedInputs = useMemo(() => {
+    if (!addedHistory || addedHistory.length === 0) return [];
+    const map = new Map();
+    addedHistory.forEach(item => {
+      const key = `${item.formula}_${item.unit}`;
+      if (!map.has(key)) {
+        map.set(key, { ...item, totalAmount: 0 });
+      }
+      map.get(key).totalAmount += (item.amount || 0);
+    });
+    return Array.from(map.values());
+  }, [addedHistory]);
+
+  const groupedYields = useMemo(() => {
+    if (!yieldHistory || yieldHistory.length === 0) return [];
+    const map = new Map();
+    yieldHistory.forEach(item => {
+      const key = `${item.formula}_${item.unit}`;
+      if (!map.has(key)) {
+        map.set(key, { ...item, totalAmount: 0 });
+      }
+      map.get(key).totalAmount += (item.amount || 0);
+    });
+    return Array.from(map.values());
+  }, [yieldHistory]);
+
   const shakeAnimation = shake ? {
     x: [0, -5, 5, -5, 5, 0],
     transition: { duration: 0.4, repeat: Infinity }
@@ -307,51 +334,6 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
       whileHover={{ scale: 1.05, y: -10 }}
       whileTap={{ scale: 0.95 }}
     >
-      {/* Dynamic Live Mass & Volume HUD (Right Above Beaker Top) */}
-      {((addedHistory && addedHistory.length > 0) || (yieldHistory && yieldHistory.length > 0)) && (
-        <motion.div
-          initial={{ opacity: 0, y: 10, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          className="absolute -top-16 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center pointer-events-none"
-        >
-          {/* Main Floating Glass Badge */}
-          <div className="bg-slate-950/90 backdrop-blur-xl border border-white/20 px-3 py-1.5 rounded-2xl shadow-[0_8px_20px_rgba(0,0,0,0.6)] flex items-center gap-2 text-[11px] font-bold text-white whitespace-nowrap">
-            {/* Input Items Badge */}
-            {addedHistory && addedHistory.length > 0 && (
-              <div className="flex items-center gap-1.5">
-                <span className="text-blue-400 text-xs">📥</span>
-                {addedHistory.map((item, i) => (
-                  <span key={i} className="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-1.5 py-0.5 rounded-lg flex items-center gap-1">
-                    <span>{item.formula}</span>
-                    <span className="text-white/80 font-normal">{item.amount}{item.unit}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Separator if both exist */}
-            {addedHistory?.length > 0 && yieldHistory?.length > 0 && (
-              <span className="text-white/30 font-light">|</span>
-            )}
-
-            {/* Yield / Reaction Products Badge */}
-            {yieldHistory && yieldHistory.length > 0 && (
-              <div className="flex items-center gap-1.5">
-                <span className="text-emerald-400 text-xs">🧪</span>
-                {yieldHistory.map((item, i) => (
-                  <span key={i} className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded-lg flex items-center gap-1">
-                    <span>{item.formula}</span>
-                    <span className="text-emerald-200/90 font-normal">{item.amount}{item.unit}</span>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Little Pointer Arrow pointing down to beaker opening */}
-          <div className="w-2 h-2 bg-slate-950/90 border-r border-b border-white/20 rotate-45 -mt-1 shadow-md" />
-        </motion.div>
-      )}
       {/* Smoke Effects (above beaker) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 pointer-events-none z-30">
         <AnimatePresence>
