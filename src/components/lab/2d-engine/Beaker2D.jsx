@@ -71,7 +71,7 @@ const pseudoRandom = (seed) => {
   };
 };
 
-const SolidChunk = ({ solid, color = '#7e8794', index = 0, totalSolids = 1 }) => {
+const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
   const seedKey = solid?.id || solid?.formula || `solid-${index}`;
   
   const { chips, leftPos } = useMemo(() => {
@@ -99,13 +99,13 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0, totalSolids = 1 }) =>
     }
 
     // Spread solids across the bottom width evenly based on index (12% to 62%)
-    // so multiple dropped items spread out across the container instead of clumping!
-    const step = totalSolids > 1 ? Math.min(50 / totalSolids, 20) : 22;
-    const rawLeft = 14 + ((index * step) % 52) + (rng() * 6 - 3);
-    const boundedLeft = Math.min(Math.max(rawLeft, 12), 62);
+    // Position depends strictly on index & seedKey (NEVER totalSolids)
+    // so dropping a new solid (n+1) will NEVER cause previous solids (n) to move!
+    const baseLeft = 14 + ((index * 16) % 48);
+    const boundedLeft = Math.min(Math.max(baseLeft + (rng() * 6 - 3), 12), 62);
 
     return { chips: generatedChips, leftPos: boundedLeft };
-  }, [seedKey, index, totalSolids]);
+  }, [seedKey, index]);
 
   return (
     <motion.div
@@ -377,7 +377,7 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
               solid.isPrecipitate ? 
                 <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
                 : 
-                <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} totalSolids={beakerData.droppedSolids.length} />
+                <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} />
             ))}
           </div>
         </div>
