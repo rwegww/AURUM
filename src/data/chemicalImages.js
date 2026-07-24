@@ -160,7 +160,7 @@ export const chemicalImages = {
   "Pb": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Lead_electrolytic_and_1cm3_cube.jpg/330px-Lead_electrolytic_and_1cm3_cube.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "Be": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Be-140g.jpg/330px-Be-140g.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "BaO": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Barium-oxide-3D-vdW.png/330px-Barium-oxide-3D-vdW.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
-  "FeCl2": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/FeCl2/PNG",
+  "FeCl2": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/iron(II)%20chloride/PNG",
   "C2H5OH": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C2H5OH/PNG",
   "HCl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Hydrochloric_acid_30_percent.jpg/330px-Hydrochloric_acid_30_percent.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
   "SO2": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Sulfur-dioxide-2D.svg/330px-Sulfur-dioxide-2D.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
@@ -175,7 +175,7 @@ export const chemicalImages = {
   "HF": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/HF/PNG",
   "H2SiO3": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/H2SiO3/PNG",
   "AgBr": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/AgBr/PNG",
-  "FeCl3": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/FeCl3/PNG",
+  "FeCl3": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/iron(III)%20chloride/PNG",
   "KI": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/KI/PNG",
   "FeS2": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/FeS2/PNG",
   "C6H5NH3Cl": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H5NH3Cl/PNG",
@@ -193,6 +193,7 @@ export const chemicalImages = {
   "Ceramic": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/Ceramic/PNG",
   "C2H5OC2H5": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C2H5OC2H5/PNG",
   "C6H11O7Na": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/fastformula/C6H11O7Na/PNG",
+  "K2MnO4": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/potassium%20manganate/PNG",
 };
 
 const fixFormulaCase = (formula) => {
