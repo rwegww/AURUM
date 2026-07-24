@@ -286,19 +286,19 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                 <Particle key={p.id} delay={p.delay} xOffset={p.x + 50} color={p.color} speed={p.speed} size={p.size} />
               ))}
 
-              {/* Solids: Tách biệt khối thả vào (SolidChunk) và kết tủa sinh ra (Precipitate) */}
-              {beakerData.droppedSolids?.map((solid, idx) => (
-                solid.isPrecipitate ? 
-                  <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
-                  : 
-                  <SolidChunk key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
-              ))}
-
               {/* Water Surface Line */}
               {totalVolume > 0 && (
                  <div className="absolute top-0 w-full h-1 bg-white/30" />
               )}
             </motion.div>
+
+            {/* Solids: Tách biệt khối thả vào (SolidChunk) và kết tủa sinh ra (Precipitate) */}
+            {beakerData.droppedSolids?.map((solid, idx) => (
+              solid.isPrecipitate ? 
+                <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
+                : 
+                <SolidChunk key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
+            ))}
           </div>
         </div>
 
