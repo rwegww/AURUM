@@ -26,31 +26,119 @@ const Particle = ({ delay, xOffset, color, speed = 1, size = 4 }) => (
   />
 );
 
-const SolidChunk = ({ color, index }) => {
+const SolidChunk = ({ color = '#7e8794', index = 0 }) => {
+  const chips = useMemo(() => {
+    // Standard chemical granule base colors (slate/metallic/grey unless custom)
+    const baseColor = (!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color;
+    return [
+      {
+        id: 1,
+        x: -14,
+        y: 2,
+        scale: 0.95,
+        rot: (index * 37) % 40 - 20,
+        facets: [
+          { points: "10,25 28,8 48,15 42,38 20,42", fill: 'top', stroke: 'bright' },
+          { points: "20,42 42,38 38,55 12,50", fill: 'front', stroke: 'dim' },
+          { points: "42,38 48,15 58,26 38,55", fill: 'side', stroke: 'dim' }
+        ]
+      },
+      {
+        id: 2,
+        x: 6,
+        y: -4,
+        scale: 1.15,
+        rot: (index * 53) % 50 - 25,
+        facets: [
+          { points: "15,18 35,5 55,20 40,42 18,36", fill: 'top', stroke: 'bright' },
+          { points: "18,36 40,42 32,58 10,48", fill: 'front', stroke: 'dim' },
+          { points: "40,42 55,20 62,35 32,58", fill: 'side', stroke: 'dim' }
+        ]
+      },
+      {
+        id: 3,
+        x: 24,
+        y: 3,
+        scale: 0.88,
+        rot: (index * 29) % 45 - 22,
+        facets: [
+          { points: "12,22 30,10 46,18 36,40 16,38", fill: 'top', stroke: 'bright' },
+          { points: "16,38 36,40 28,52 8,46", fill: 'front', stroke: 'dim' },
+          { points: "36,40 46,18 52,28 28,52", fill: 'side', stroke: 'dim' }
+        ]
+      }
+    ];
+  }, [index, color]);
+
+  const leftPos = useMemo(() => 20 + (index * 22) % 48, [index]);
+
   return (
     <motion.div
-      initial={{ y: -150, opacity: 0, rotate: Math.random() * 180 }}
-      animate={{ y: 0, opacity: 1, rotate: Math.random() * 40 - 20 }}
-      transition={{ type: 'spring', bounce: 0.3, damping: 10, stiffness: 50 }}
-      className="absolute bottom-1"
+      initial={{ y: -150, opacity: 0, scale: 0.5 }}
+      animate={{ y: 0, opacity: 1, scale: 1 }}
+      transition={{ type: 'spring', bounce: 0.25, damping: 12, stiffness: 60 }}
+      className="absolute bottom-2 pointer-events-none"
       style={{
-        left: `${25 + (index * 15) % 50}%`, // Nằm rải rác ở đáy
-        width: '35px',
-        height: '25px',
-        backgroundColor: color,
-        borderRadius: '3px 8px 4px 6px', // Góc cạnh giống khối đá/kim loại
-        border: '1px solid rgba(0,0,0,0.15)',
-        boxShadow: `inset -4px -4px 8px rgba(0,0,0,0.4), inset 3px 3px 6px rgba(255,255,255,0.5), 2px 3px 6px rgba(0,0,0,0.3)`,
-        zIndex: 10 + index
+        left: `${leftPos}%`,
+        width: '75px',
+        height: '50px',
+        zIndex: 15 + index,
+        filter: 'drop-shadow(0px 3px 5px rgba(0,0,0,0.5))'
       }}
     >
-      {/* Thêm chút texture xước/gồ ghề cho khối kim loại */}
-      <div 
-        className="absolute inset-0 opacity-20 mix-blend-overlay rounded-sm"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
-        }}
-      />
+      <svg viewBox="0 0 130 90" className="w-full h-full overflow-visible">
+        <defs>
+          <linearGradient id={`gravel-top-${index}`} x1="20%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stopColor="#d5dce4" />
+            <stop offset="50%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color} />
+            <stop offset="100%" stopColor="#525a66" />
+          </linearGradient>
+          <linearGradient id={`gravel-front-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color} />
+            <stop offset="100%" stopColor="#323842" />
+          </linearGradient>
+          <linearGradient id={`gravel-side-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#454c57" />
+            <stop offset="100%" stopColor="#1e2228" />
+          </linearGradient>
+        </defs>
+
+        {chips.map((chip) => (
+          <g
+            key={chip.id}
+            transform={`translate(${40 + chip.x}, ${25 + chip.y}) rotate(${chip.rot}) scale(${chip.scale})`}
+          >
+            {/* Soft Ambient Ground Shadow */}
+            <ellipse cx="30" cy="52" rx="22" ry="7" fill="rgba(0, 0, 0, 0.45)" />
+
+            {/* Polygon Facets for Sharp Conchoidal Granule */}
+            {chip.facets.map((facet, fIdx) => (
+              <polygon
+                key={fIdx}
+                points={facet.points}
+                fill={
+                  facet.fill === 'top'
+                    ? `url(#gravel-top-${index})`
+                    : facet.fill === 'front'
+                    ? `url(#gravel-front-${index})`
+                    : `url(#gravel-side-${index})`
+                }
+                stroke={facet.stroke === 'bright' ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.45)'}
+                strokeWidth={facet.stroke === 'bright' ? "1.3" : "0.9"}
+                strokeLinejoin="round"
+              />
+            ))}
+
+            {/* Conchoidal Fracture Texture */}
+            <path
+              d="M 22 25 Q 30 20 38 27"
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.45)"
+              strokeWidth="0.8"
+            />
+          </g>
+        ))}
+      </svg>
     </motion.div>
   );
 };
