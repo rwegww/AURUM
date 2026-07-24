@@ -71,22 +71,22 @@ const pseudoRandom = (seed) => {
   };
 };
 
-const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
+const SolidChunk = ({ solid, color = '#7e8794', index = 0, totalSolids = 1 }) => {
   const seedKey = solid?.id || solid?.formula || `solid-${index}`;
   
   const { chips, leftPos } = useMemo(() => {
     const rng = pseudoRandom(seedKey);
     
-    // Number of chips per cluster (2 to 4)
-    const chipCount = Math.floor(rng() * 3) + 2;
+    // Render 1-2 clean, sharp mineral chips per dropped solid
+    const chipCount = Math.floor(rng() * 2) + 1;
     const generatedChips = [];
 
     for (let i = 0; i < chipCount; i++) {
       const shapeIdx = Math.floor(rng() * CHIP_SHAPES.length);
-      const rot = (rng() * 60) - 30; // -30 to +30 deg
-      const scale = 0.8 + rng() * 0.45; // 0.8 to 1.25
-      const x = (i * 12) - 8 + (rng() * 6 - 3);
-      const y = (rng() * 6) - 3;
+      const rot = (rng() * 50) - 25; // -25 to +25 deg
+      const scale = 0.85 + rng() * 0.35; // 0.85 to 1.2
+      const x = (i * 18) - (chipCount > 1 ? 9 : 0) + (rng() * 4 - 2);
+      const y = (rng() * 4) - 2;
 
       generatedChips.push({
         id: i,
@@ -98,39 +98,41 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
       });
     }
 
-    // Keep left position STRICTLY bounded inside beaker (18% to 48%)
-    // so chips never stick out or overlap the glass wall!
-    const boundedLeft = 18 + (rng() * 30); 
+    // Spread solids across the bottom width evenly based on index (12% to 62%)
+    // so multiple dropped items spread out across the container instead of clumping!
+    const step = totalSolids > 1 ? Math.min(50 / totalSolids, 20) : 22;
+    const rawLeft = 14 + ((index * step) % 52) + (rng() * 6 - 3);
+    const boundedLeft = Math.min(Math.max(rawLeft, 12), 62);
 
     return { chips: generatedChips, leftPos: boundedLeft };
-  }, [seedKey]);
+  }, [seedKey, index, totalSolids]);
 
   return (
     <motion.div
-      initial={{ y: -140, opacity: 0, scale: 0.5, rotate: (index % 2 === 0 ? -15 : 15) }}
+      initial={{ y: -140, opacity: 0, scale: 0.5, rotate: (index % 2 === 0 ? -12 : 12) }}
       animate={{ y: 0, opacity: 1, scale: 1, rotate: 0 }}
       transition={{ type: 'spring', bounce: 0.2, damping: 14, stiffness: 70 }}
       className="absolute bottom-2 pointer-events-none"
       style={{
         left: `${leftPos}%`,
-        width: '50px',
-        height: '42px',
+        width: '45px',
+        height: '38px',
         zIndex: 15 + index,
-        filter: 'drop-shadow(0px 3px 4px rgba(0,0,0,0.5))'
+        filter: 'drop-shadow(0px 3px 4px rgba(0,0,0,0.45))'
       }}
     >
-      <svg viewBox="0 0 110 80" className="w-full h-full overflow-visible">
+      <svg viewBox="0 0 100 75" className="w-full h-full overflow-visible">
         <defs>
-          <linearGradient id={`gravel-top-${seedKey}`} x1="20%" y1="0%" x2="80%" y2="100%">
+          <linearGradient id={`gravel-top-${seedKey}-${index}`} x1="20%" y1="0%" x2="80%" y2="100%">
             <stop offset="0%" stopColor="#e2e8f0" />
             <stop offset="50%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#8892a0' : color} />
             <stop offset="100%" stopColor="#4a525d" />
           </linearGradient>
-          <linearGradient id={`gravel-front-${seedKey}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`gravel-front-${seedKey}-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color} />
             <stop offset="100%" stopColor="#2c323b" />
           </linearGradient>
-          <linearGradient id={`gravel-side-${seedKey}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`gravel-side-${seedKey}-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#454c57" />
             <stop offset="100%" stopColor="#181b20" />
           </linearGradient>
@@ -139,22 +141,22 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
         {chips.map((chip) => (
           <g
             key={chip.id}
-            transform={`translate(${30 + chip.x}, ${20 + chip.y}) rotate(${chip.rot}) scale(${chip.scale})`}
+            transform={`translate(${25 + chip.x}, ${18 + chip.y}) rotate(${chip.rot}) scale(${chip.scale})`}
           >
             {/* Soft Ambient Ground Shadow */}
-            <ellipse cx="28" cy="48" rx="20" ry="6" fill="rgba(0, 0, 0, 0.45)" />
+            <ellipse cx="28" cy="48" rx="18" ry="5" fill="rgba(0, 0, 0, 0.4)" />
 
-            {/* Polygon Facets for Procedural Granule */}
+            {/* Polygon Facets for Granule */}
             {chip.facets.map((facet, fIdx) => (
               <polygon
                 key={fIdx}
                 points={facet.points}
                 fill={
                   facet.fill === 'top'
-                    ? `url(#gravel-top-${seedKey})`
+                    ? `url(#gravel-top-${seedKey}-${index})`
                     : facet.fill === 'front'
-                    ? `url(#gravel-front-${seedKey})`
-                    : `url(#gravel-side-${seedKey})`
+                    ? `url(#gravel-front-${seedKey}-${index})`
+                    : `url(#gravel-side-${seedKey}-${index})`
                 }
                 stroke={facet.stroke === 'bright' ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.5)'}
                 strokeWidth={facet.stroke === 'bright' ? "1.2" : "0.8"}
@@ -224,20 +226,6 @@ const containerConfigs = {
       </>
     )
   },
-  test_tube: {
-    clipPath: 'polygon(30% 5%, 70% 5%, 70% 86%, 69.5% 89.5%, 67.8% 93%, 64.5% 96%, 60% 98.2%, 55% 99.3%, 50% 99.5%, 45% 99.3%, 40% 98.2%, 35.5% 96%, 32.2% 93%, 30.5% 89.5%, 30% 86%)',
-    width: 'w-16',
-    height: 'h-48',
-    viewBox: '0 0 100 140',
-    renderSVG: () => (
-      <>
-        <ellipse cx="50" cy="5" rx="20" ry="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <path d="M 30 5 L 30 120 A 20 20 0 0 0 70 120 L 70 5" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
-        <path d="M 30 5 A 20 3 0 0 0 70 5" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" />
-        <path d="M 35 15 L 35 110" stroke="rgba(255,255,255,0.3)" strokeWidth="3" strokeLinecap="round" />
-      </>
-    )
-  },
   flask: {
     clipPath: 'polygon(40% 10%, 60% 10%, 60% 40%, 85% 88%, 84.2% 92%, 82.5% 95.5%, 79.5% 98%, 75% 99%, 25% 99%, 20.5% 98%, 17.5% 95.5%, 15.8% 92%, 15% 88%, 40% 40%)',
     width: 'w-32',
@@ -266,35 +254,6 @@ const containerConfigs = {
         <path d="M 5 10 L 5 25 A 25 25 0 0 0 30 50 L 70 50 A 25 25 0 0 0 95 25 L 95 10" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
         <path d="M 5 10 A 45 8 0 0 0 95 10" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" />
         <path d="M 12 18 L 12 25" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round" />
-      </>
-    )
-  },
-  bubbler: {
-    clipPath: 'polygon(15% 10%, 85% 10%, 85% 89%, 84.6% 92.5%, 83% 95.5%, 80% 97.8%, 76% 99%, 71% 99%, 29% 99%, 24% 99%, 20% 97.8%, 17% 95.5%, 15.4% 92.5%, 15% 89%)',
-    width: 'w-28',
-    height: 'h-40',
-    viewBox: '0 0 100 140',
-    renderSVG: () => (
-      <>
-        {/* Normal Beaker Glass */}
-        <ellipse cx="50" cy="15" rx="35" ry="5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
-        <path d="M 15 15 L 15 125 A 15 15 0 0 0 30 140 L 70 140 A 15 15 0 0 0 85 125 L 85 15" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.6)" strokeWidth="2" />
-        <path d="M 15 15 A 35 5 0 0 0 85 15" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" />
-        
-        {/* Measurement Lines */}
-        <line x1="20" y1="40" x2="30" y2="40" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-        <line x1="20" y1="70" x2="35" y2="70" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-        <line x1="20" y1="100" x2="30" y2="100" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-        <text x="38" y="74" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="sans-serif">250ml</text>
-
-        {/* Gas tube coming from top right, angling into the liquid */}
-        <path d="M 120 -10 L 90 -10 L 90 10 L 60 10 L 60 120" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="4" strokeLinejoin="round" />
-        <path d="M 120 -10 L 90 -10 L 90 10 L 60 10 L 60 120" fill="none" stroke="rgba(200,220,255,0.8)" strokeWidth="1.5" strokeLinejoin="round" />
-        {/* Small bubbler head at the bottom */}
-        <ellipse cx="60" cy="120" rx="4" ry="2" fill="rgba(255,255,255,0.6)" />
-        
-        {/* Reflection Lines */}
-        <path d="M 22 25 L 22 120" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round" />
       </>
     )
   }
@@ -418,7 +377,7 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
               solid.isPrecipitate ? 
                 <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
                 : 
-                <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} />
+                <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} totalSolids={beakerData.droppedSolids.length} />
             ))}
           </div>
         </div>

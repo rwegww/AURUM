@@ -397,7 +397,7 @@ const useLabStore = create((set, get) => ({
   cycleContainerType: () => set(state => {
     const idx = state.activeBeakerIndex;
     const newBeakers = [...state.beakers];
-    const types = ['beaker', 'test_tube', 'flask', 'dish', 'bubbler'];
+    const types = ['beaker', 'flask', 'dish'];
     const current = newBeakers[idx].containerType || 'beaker';
     const nextIdx = (types.indexOf(current) + 1) % types.length;
     newBeakers[idx] = { ...newBeakers[idx], containerType: types[nextIdx] };

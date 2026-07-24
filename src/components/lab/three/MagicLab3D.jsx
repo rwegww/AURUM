@@ -561,10 +561,8 @@ const MagicLab3D = () => {
                 className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-indigo-500/10 text-white/50 hover:text-indigo-400 border border-transparent hover:border-indigo-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Đổi dụng cụ"
               >
-                {activeBeaker.containerType === 'test_tube' && <TestTube className="w-5 h-5" />}
                 {activeBeaker.containerType === 'flask' && <FlaskConical className="w-5 h-5" />}
                 {activeBeaker.containerType === 'dish' && <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="16" rx="10" ry="3"/><path d="M2 16v-2a10 3 0 0 1 20 0v2"/></svg>}
-                {activeBeaker.containerType === 'bubbler' && <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2v20"/><rect x="6" y="8" width="12" height="14" rx="2"/></svg>}
                 {(!activeBeaker.containerType || activeBeaker.containerType === 'beaker') && <Beaker className="w-5 h-5" />}
               </button>
               <button 
