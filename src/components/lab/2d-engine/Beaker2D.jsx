@@ -26,114 +26,147 @@ const Particle = ({ delay, xOffset, color, speed = 1, size = 4 }) => (
   />
 );
 
-const SolidChunk = ({ color = '#7e8794', index = 0 }) => {
-  const chips = useMemo(() => {
-    // Standard chemical granule base colors (slate/metallic/grey unless custom)
-    const baseColor = (!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color;
-    return [
-      {
-        id: 1,
-        x: -14,
-        y: 2,
-        scale: 0.95,
-        rot: (index * 37) % 40 - 20,
-        facets: [
-          { points: "10,25 28,8 48,15 42,38 20,42", fill: 'top', stroke: 'bright' },
-          { points: "20,42 42,38 38,55 12,50", fill: 'front', stroke: 'dim' },
-          { points: "42,38 48,15 58,26 38,55", fill: 'side', stroke: 'dim' }
-        ]
-      },
-      {
-        id: 2,
-        x: 6,
-        y: -4,
-        scale: 1.15,
-        rot: (index * 53) % 50 - 25,
-        facets: [
-          { points: "15,18 35,5 55,20 40,42 18,36", fill: 'top', stroke: 'bright' },
-          { points: "18,36 40,42 32,58 10,48", fill: 'front', stroke: 'dim' },
-          { points: "40,42 55,20 62,35 32,58", fill: 'side', stroke: 'dim' }
-        ]
-      },
-      {
-        id: 3,
-        x: 24,
-        y: 3,
-        scale: 0.88,
-        rot: (index * 29) % 45 - 22,
-        facets: [
-          { points: "12,22 30,10 46,18 36,40 16,38", fill: 'top', stroke: 'bright' },
-          { points: "16,38 36,40 28,52 8,46", fill: 'front', stroke: 'dim' },
-          { points: "36,40 46,18 52,28 28,52", fill: 'side', stroke: 'dim' }
-        ]
-      }
-    ];
-  }, [index, color]);
+const CHIP_SHAPES = [
+  // Shape 0: Sharp Pentagon Crystal
+  [
+    { points: "12,24 28,6 48,12 42,36 20,40", fill: 'top', stroke: 'bright' },
+    { points: "20,40 42,36 36,54 12,48", fill: 'front', stroke: 'dim' },
+    { points: "42,36 48,12 58,24 36,54", fill: 'side', stroke: 'dim' }
+  ],
+  // Shape 1: Angular Trapezoidal Chunk
+  [
+    { points: "8,18 36,8 54,22 34,42 14,38", fill: 'top', stroke: 'bright' },
+    { points: "14,38 34,42 26,56 6,46", fill: 'front', stroke: 'dim' },
+    { points: "34,42 54,22 58,38 26,56", fill: 'side', stroke: 'dim' }
+  ],
+  // Shape 2: Sharp Triangular Spike
+  [
+    { points: "25,5 52,28 15,38", fill: 'top', stroke: 'bright' },
+    { points: "15,38 52,28 38,55 10,48", fill: 'front', stroke: 'dim' },
+    { points: "52,28 25,5 60,20 38,55", fill: 'side', stroke: 'dim' }
+  ],
+  // Shape 3: Rhomboid Mineral Block
+  [
+    { points: "18,12 45,8 55,30 28,35", fill: 'top', stroke: 'bright' },
+    { points: "28,35 55,30 42,52 15,48", fill: 'front', stroke: 'dim' },
+    { points: "55,30 45,8 62,20 42,52", fill: 'side', stroke: 'dim' }
+  ],
+  // Shape 4: Irregular Hexagonal Pebble
+  [
+    { points: "15,20 28,10 46,14 50,30 32,40 18,36", fill: 'top', stroke: 'bright' },
+    { points: "18,36 32,40 24,54 10,46", fill: 'front', stroke: 'dim' },
+    { points: "32,40 50,30 56,42 24,54", fill: 'side', stroke: 'dim' }
+  ]
+];
 
-  const leftPos = useMemo(() => 20 + (index * 22) % 48, [index]);
+const pseudoRandom = (seed) => {
+  let h = 0;
+  const str = String(seed);
+  for (let i = 0; i < str.length; i++) {
+    h = Math.imul(31, h) + str.charCodeAt(i) | 0;
+  }
+  return () => {
+    h = Math.imul(48271, h) % 2147483647;
+    return (h & 2147483647) / 2147483647;
+  };
+};
+
+const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
+  const seedKey = solid?.id || solid?.formula || `solid-${index}`;
+  
+  const { chips, leftPos } = useMemo(() => {
+    const rng = pseudoRandom(seedKey);
+    
+    // Number of chips per cluster (2 to 4)
+    const chipCount = Math.floor(rng() * 3) + 2;
+    const generatedChips = [];
+
+    for (let i = 0; i < chipCount; i++) {
+      const shapeIdx = Math.floor(rng() * CHIP_SHAPES.length);
+      const rot = (rng() * 60) - 30; // -30 to +30 deg
+      const scale = 0.8 + rng() * 0.45; // 0.8 to 1.25
+      const x = (i * 12) - 8 + (rng() * 6 - 3);
+      const y = (rng() * 6) - 3;
+
+      generatedChips.push({
+        id: i,
+        x,
+        y,
+        scale,
+        rot,
+        facets: CHIP_SHAPES[shapeIdx]
+      });
+    }
+
+    // Keep left position STRICTLY bounded inside beaker (18% to 48%)
+    // so chips never stick out or overlap the glass wall!
+    const boundedLeft = 18 + (rng() * 30); 
+
+    return { chips: generatedChips, leftPos: boundedLeft };
+  }, [seedKey]);
 
   return (
     <motion.div
-      initial={{ y: -150, opacity: 0, scale: 0.5 }}
-      animate={{ y: 0, opacity: 1, scale: 1 }}
-      transition={{ type: 'spring', bounce: 0.25, damping: 12, stiffness: 60 }}
+      initial={{ y: -140, opacity: 0, scale: 0.5, rotate: (index % 2 === 0 ? -15 : 15) }}
+      animate={{ y: 0, opacity: 1, scale: 1, rotate: 0 }}
+      transition={{ type: 'spring', bounce: 0.2, damping: 14, stiffness: 70 }}
       className="absolute bottom-2 pointer-events-none"
       style={{
         left: `${leftPos}%`,
-        width: '75px',
-        height: '50px',
+        width: '50px',
+        height: '42px',
         zIndex: 15 + index,
-        filter: 'drop-shadow(0px 3px 5px rgba(0,0,0,0.5))'
+        filter: 'drop-shadow(0px 3px 4px rgba(0,0,0,0.5))'
       }}
     >
-      <svg viewBox="0 0 130 90" className="w-full h-full overflow-visible">
+      <svg viewBox="0 0 110 80" className="w-full h-full overflow-visible">
         <defs>
-          <linearGradient id={`gravel-top-${index}`} x1="20%" y1="0%" x2="80%" y2="100%">
-            <stop offset="0%" stopColor="#d5dce4" />
-            <stop offset="50%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color} />
-            <stop offset="100%" stopColor="#525a66" />
+          <linearGradient id={`gravel-top-${seedKey}`} x1="20%" y1="0%" x2="80%" y2="100%">
+            <stop offset="0%" stopColor="#e2e8f0" />
+            <stop offset="50%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#8892a0' : color} />
+            <stop offset="100%" stopColor="#4a525d" />
           </linearGradient>
-          <linearGradient id={`gravel-front-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`gravel-front-${seedKey}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color} />
-            <stop offset="100%" stopColor="#323842" />
+            <stop offset="100%" stopColor="#2c323b" />
           </linearGradient>
-          <linearGradient id={`gravel-side-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id={`gravel-side-${seedKey}`} x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#454c57" />
-            <stop offset="100%" stopColor="#1e2228" />
+            <stop offset="100%" stopColor="#181b20" />
           </linearGradient>
         </defs>
 
         {chips.map((chip) => (
           <g
             key={chip.id}
-            transform={`translate(${40 + chip.x}, ${25 + chip.y}) rotate(${chip.rot}) scale(${chip.scale})`}
+            transform={`translate(${30 + chip.x}, ${20 + chip.y}) rotate(${chip.rot}) scale(${chip.scale})`}
           >
             {/* Soft Ambient Ground Shadow */}
-            <ellipse cx="30" cy="52" rx="22" ry="7" fill="rgba(0, 0, 0, 0.45)" />
+            <ellipse cx="28" cy="48" rx="20" ry="6" fill="rgba(0, 0, 0, 0.45)" />
 
-            {/* Polygon Facets for Sharp Conchoidal Granule */}
+            {/* Polygon Facets for Procedural Granule */}
             {chip.facets.map((facet, fIdx) => (
               <polygon
                 key={fIdx}
                 points={facet.points}
                 fill={
                   facet.fill === 'top'
-                    ? `url(#gravel-top-${index})`
+                    ? `url(#gravel-top-${seedKey})`
                     : facet.fill === 'front'
-                    ? `url(#gravel-front-${index})`
-                    : `url(#gravel-side-${index})`
+                    ? `url(#gravel-front-${seedKey})`
+                    : `url(#gravel-side-${seedKey})`
                 }
-                stroke={facet.stroke === 'bright' ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.45)'}
-                strokeWidth={facet.stroke === 'bright' ? "1.3" : "0.9"}
+                stroke={facet.stroke === 'bright' ? 'rgba(255,255,255,0.75)' : 'rgba(0,0,0,0.5)'}
+                strokeWidth={facet.stroke === 'bright' ? "1.2" : "0.8"}
                 strokeLinejoin="round"
               />
             ))}
 
-            {/* Conchoidal Fracture Texture */}
+            {/* Conchoidal Texture Line */}
             <path
-              d="M 22 25 Q 30 20 38 27"
+              d="M 20 22 Q 28 17 35 24"
               fill="none"
-              stroke="rgba(255, 255, 255, 0.45)"
+              stroke="rgba(255, 255, 255, 0.4)"
               strokeWidth="0.8"
             />
           </g>
@@ -385,7 +418,7 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
               solid.isPrecipitate ? 
                 <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
                 : 
-                <SolidChunk key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
+                <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} />
             ))}
           </div>
         </div>
