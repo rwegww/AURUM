@@ -15,7 +15,7 @@ const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   droppedSolids: [],
   reactionMessage: message,
   isHeating: false,
-  containerType: 'beaker', // 'beaker', 'test_tube', 'flask', 'dish', 'bubbler'
+  containerType: 'beaker', // 'beaker', 'flask', 'dish'
   activeBubbles: false,
   activeFlame: false,
   activeSmoke: false,

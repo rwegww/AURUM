@@ -26,17 +26,28 @@ const GameWorkspace = () => {
   return (
     <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-end overflow-hidden perspective-[1000px]">
       
-      {/* 2D Background / Environment */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#020617] pointer-events-none -z-20">
-         {/* Wall Grid Pattern */}
-         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+      {/* 2D Background Image */}
+      <div className="absolute inset-0 pointer-events-none -z-20 overflow-hidden">
+        <img 
+          src="/images/lab/bg-lab.png" 
+          alt="Lab Background" 
+          className="w-full h-full object-cover filter brightness-[0.85] contrast-[1.05]"
+        />
+        {/* Subtle Ambient Vignette Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/40 pointer-events-none" />
       </div>
 
-      {/* The 2D Table Surface */}
-      <div className="absolute bottom-0 w-[150%] h-[25vh] bg-[#0f172a] border-t-4 border-[#334155] shadow-[inset_0_20px_50px_rgba(0,0,0,0.5)] -z-10" style={{ transform: 'rotateX(60deg)', transformOrigin: 'bottom' }} />
+      {/* The 2D Lab Table Surface Image */}
+      <div className="absolute bottom-0 w-full h-[30vh] z-0 pointer-events-none flex items-end justify-center overflow-hidden">
+        <img 
+          src="/images/lab/table-lab.png" 
+          alt="Lab Table" 
+          className="w-full h-full object-fill drop-shadow-[0_-10px_30px_rgba(0,0,0,0.7)]"
+        />
+      </div>
 
       {/* Beakers Layout */}
-      <div className="relative w-full max-w-4xl h-full flex items-end justify-center gap-16 pb-[15vh]">
+      <div className="relative z-10 w-full max-w-4xl h-full flex items-end justify-center gap-16 pb-[10vh]">
         {beakers.map((beaker, i) => {
           const isActive = i === activeBeakerIndex;
 
