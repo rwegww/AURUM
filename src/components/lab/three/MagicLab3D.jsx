@@ -5,7 +5,7 @@ import useLabStore from './magic-lab/store';
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
-import { ArrowLeft, Beaker, RotateCcw, Save, Trash2, Zap, Droplets, Flame, Search, Layers, TestTube, FlaskConical } from 'lucide-react';
+import { ArrowLeft, Beaker, RotateCcw, Save, Trash2, Zap, Droplets, Flame, Search, Layers, TestTube, FlaskConical, Scale } from 'lucide-react';
 import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
@@ -268,6 +268,8 @@ const MagicLab3D = () => {
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
+  const [showTrackerModal, setShowTrackerModal] = useState(false);
+  const [trackerTab, setTrackerTab] = useState('input'); // 'input' | 'yield'
   const [searchQuery, setSearchQuery] = useState('');
   
   // Tooltip state
@@ -584,6 +586,16 @@ const MagicLab3D = () => {
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               </button>
               <button 
+                onClick={() => setShowTrackerModal(true)}
+                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-amber-500/10 text-white/50 hover:text-amber-400 border border-transparent hover:border-amber-500/20 transition-all hover:scale-105 active:scale-95 relative"
+                title="Bảng Khối lượng & Thể tích (g/ml)"
+              >
+                <Scale className="w-5 h-5" />
+                {((activeBeaker.addedHistory && activeBeaker.addedHistory.length > 0) || (activeBeaker.yieldHistory && activeBeaker.yieldHistory.length > 0)) && (
+                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+                )}
+              </button>
+              <button 
                 onClick={addBeaker}
                 className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-emerald-500/10 text-white/50 hover:text-emerald-400 border border-transparent hover:border-emerald-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Thêm cốc mới"
@@ -799,6 +811,143 @@ const MagicLab3D = () => {
         y={mousePos.y} 
         visible={!!hoveredChem} 
       />
+
+      {/* Mass & Volume Tracker Modal (Bảng Đo Lường g/ml) */}
+      <AnimatePresence>
+        {showTrackerModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 pointer-events-auto"
+            onClick={() => setShowTrackerModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-lg bg-slate-900/90 border border-white/20 rounded-3xl p-6 shadow-2xl backdrop-blur-2xl text-white flex flex-col max-h-[85vh] overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex justify-between items-center pb-4 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                    <Scale className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base text-white flex items-center gap-2">
+                      Bảng Thống Kê Khối Lượng & Thể Tích
+                    </h3>
+                    <p className="text-xs text-white/50">Cốc thí nghiệm #{activeBeakerIndex + 1}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowTrackerModal(false)}
+                  className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors text-sm font-bold"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Tab Buttons */}
+              <div className="flex bg-white/5 p-1 rounded-xl mt-4 border border-white/10 gap-1">
+                <button
+                  onClick={() => setTrackerTab('input')}
+                  className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    trackerTab === 'input'
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  📥 Chất Đã Cho Vào ({(activeBeaker.addedHistory || []).length})
+                </button>
+                <button
+                  onClick={() => setTrackerTab('yield')}
+                  className={`flex-1 py-2 rounded-lg text-xs font-semibold transition-all ${
+                    trackerTab === 'yield'
+                      ? 'bg-emerald-600 text-white shadow-lg'
+                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  🧪 Sản Phẩm Thu Được ({(activeBeaker.yieldHistory || []).length})
+                </button>
+              </div>
+
+              {/* Tab Contents */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar my-4 pr-1 space-y-2.5">
+                {trackerTab === 'input' ? (
+                  activeBeaker.addedHistory && activeBeaker.addedHistory.length > 0 ? (
+                    activeBeaker.addedHistory.map((item, idx) => (
+                      <div key={item.id || idx} className="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-blue-500/30 transition-all">
+                        <div className="flex items-center gap-3">
+                          <span className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center border border-blue-500/30">
+                            {item.formula}
+                          </span>
+                          <div>
+                            <div className="text-xs font-semibold text-white">{item.name}</div>
+                            <div className="text-[10px] text-white/40">{item.time || 'Vừa xong'}</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-bold text-blue-300">
+                            +{item.amount} {item.unit}
+                          </span>
+                          <div className="text-[10px] text-white/40 capitalize">{item.state === 'solid' ? 'Chất rắn / Kim loại' : (item.state === 'gas' ? 'Chất khí' : 'Dung dịch')}</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="py-12 text-center text-white/40 text-xs">Chưa cho chất nào vào cốc này.</div>
+                  )
+                ) : (
+                  activeBeaker.yieldHistory && activeBeaker.yieldHistory.length > 0 ? (
+                    activeBeaker.yieldHistory.map((item, idx) => (
+                      <div key={item.id || idx} className="flex items-center justify-between p-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all">
+                        <div className="flex items-center gap-3">
+                          <span className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center border border-emerald-500/30">
+                            {item.formula}
+                          </span>
+                          <div>
+                            <div className="text-xs font-semibold text-emerald-200">{item.name}</div>
+                            <div className="text-[10px] text-emerald-400/60">Sản phẩm phản ứng</div>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-sm font-bold text-emerald-300">
+                            {item.amount} {item.unit}
+                          </span>
+                          <div className="text-[10px] text-emerald-400/60 capitalize">
+                            {item.state === 'solid' ? 'Kết tủa (Chất rắn)' : (item.state === 'gas' ? 'Khí thoát ra' : 'Dung dịch sinh ra')}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="py-12 text-center text-white/40 text-xs">Chưa có sản phẩm phản ứng nào thu được.</div>
+                  )
+                )}
+              </div>
+
+              {/* Summary Footer */}
+              <div className="pt-3 border-t border-white/10 flex justify-between items-center text-xs">
+                <div className="text-white/60">
+                  Tổng chất rắn: <span className="font-bold text-amber-400">
+                    {((activeBeaker.addedHistory || []).filter(i => i.unit === 'g').reduce((a, b) => a + (b.amount || 0), 0) +
+                      (activeBeaker.yieldHistory || []).filter(i => i.unit === 'g').reduce((a, b) => a + (b.amount || 0), 0)).toFixed(1)} g
+                  </span>
+                </div>
+                <div className="text-white/60">
+                  Tổng dung dịch / khí: <span className="font-bold text-cyan-400">
+                    {((activeBeaker.addedHistory || []).filter(i => i.unit === 'ml').reduce((a, b) => a + (b.amount || 0), 0) +
+                      (activeBeaker.yieldHistory || []).filter(i => i.unit === 'ml').reduce((a, b) => a + (b.amount || 0), 0))} ml
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -25,6 +25,8 @@ const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   shake: false,
   heatTime: 0,
   liquidVolume: 1.0,
+  addedHistory: [], // Array of { id, formula, name, state, amount, unit, timestamp }
+  yieldHistory: [], // Array of { id, formula, name, state, amount, unit, isProduct }
 });
 
 const useLabStore = create((set, get) => ({
@@ -228,6 +230,19 @@ const useLabStore = create((set, get) => ({
           newSolids.push({ ...chemical, id: newId });
         }
 
+        const doseAmount = (chemical.state === 'solid' || chemical.type === 'metal') ? 5.0 : (chemical.state === 'gas' ? 100 : 50);
+        const doseUnit = (chemical.state === 'solid' || chemical.type === 'metal') ? 'g' : 'ml';
+        const historyItem = {
+          id: newId,
+          formula: chemical.formula,
+          name: chemical.name || chemical.formula,
+          state: chemical.state || 'liquid',
+          amount: doseAmount,
+          unit: doseUnit,
+          time: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+        };
+        const updatedAddedHistory = [...(beaker.addedHistory || []), historyItem];
+
         const formulas = newContents.map(c => c.formula);
         const reaction = get()._findReaction(formulas, beaker.isHeating);
         
@@ -236,6 +251,7 @@ const useLabStore = create((set, get) => ({
           ...beaker,
           contents: newContents,
           droppedSolids: newSolids,
+          addedHistory: updatedAddedHistory,
           liquidVolume: 1.0,
           heatTime: 0,
         };
@@ -312,10 +328,24 @@ const useLabStore = create((set, get) => ({
     processedContents = []; 
 
     const products = [];
+    const newYields = [...(beakerIdx !== undefined && get().beakers[beakerIdx]?.yieldHistory || [])];
+
     reaction.products.forEach((prod) => {
-      const prodData = chemicals[prod.formula] || { formula: prod.formula, color: '#ffffff', state: 'liquid' };
+      const prodData = chemicals[prod.formula] || { formula: prod.formula, name: prod.formula, color: '#ffffff', state: 'liquid' };
       processedContents.push({ ...prodData, id: generateId(), isPrecipitate: true });
       products.push({ formula: prodData.formula, color: prodData.color });
+
+      const yAmount = prodData.state === 'solid' ? 5.0 : (prodData.state === 'gas' ? 100 : 50);
+      const yUnit = prodData.state === 'solid' ? 'g' : 'ml';
+      newYields.push({
+        id: generateId(),
+        formula: prodData.formula,
+        name: prodData.name || prodData.formula,
+        state: prodData.state || 'liquid',
+        amount: yAmount,
+        unit: yUnit,
+        isProduct: true
+      });
     });
 
     const newSolids = processedContents.filter(c => c.state === 'solid');
@@ -371,6 +401,7 @@ const useLabStore = create((set, get) => ({
     return {
       contents: processedContents,
       droppedSolids: newSolids,
+      yieldHistory: newYields,
       reactionMessage: reaction.name || "Phản ứng đã xảy ra!",
       activeBubbles: hasGas,
       activeFlame: isExplosion,
