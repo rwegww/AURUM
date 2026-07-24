@@ -281,28 +281,63 @@ const MagicLab3D = () => {
     localStorage.setItem('aurum_lab_notes', userNotes);
   }, [userNotes]);
 
-  // Aggregate action history from activeBeaker
+  // Group and aggregate chemical history for active beaker
   const activeHistory = useMemo(() => {
-    const events = [];
+    const eventsMap = new Map();
+
+    // Process inputs added
     (activeBeaker.addedHistory || []).forEach(item => {
-      events.push({
-        type: 'input',
-        text: `Cho ${item.amount}${item.unit} ${item.name} (${item.formula}) vào cốc`,
-        time: item.time || 'Vừa xong',
-        color: 'text-blue-400',
-        badge: '📥'
-      });
+      const key = `input_${item.formula}_${item.unit}`;
+      if (!eventsMap.has(key)) {
+        eventsMap.set(key, {
+          type: 'input',
+          formula: item.formula,
+          name: item.name,
+          unit: item.unit,
+          totalAmount: 0,
+          count: 0,
+          lastTime: item.time || 'Vừa xong'
+        });
+      }
+      const entry = eventsMap.get(key);
+      entry.totalAmount += (item.amount || 0);
+      entry.count += 1;
+      if (item.time) entry.lastTime = item.time;
     });
+
+    // Process reaction yields
     (activeBeaker.yieldHistory || []).forEach(item => {
-      events.push({
-        type: 'yield',
-        text: `Thu được ${item.amount}${item.unit} ${item.name} (${item.formula})`,
-        time: 'Vừa xong',
-        color: 'text-emerald-400',
-        badge: '🧪'
-      });
+      const key = `yield_${item.formula}_${item.unit}`;
+      if (!eventsMap.has(key)) {
+        eventsMap.set(key, {
+          type: 'yield',
+          formula: item.formula,
+          name: item.name,
+          unit: item.unit,
+          totalAmount: 0,
+          count: 0,
+          lastTime: 'Vừa xong'
+        });
+      }
+      const entry = eventsMap.get(key);
+      entry.totalAmount += (item.amount || 0);
+      entry.count += 1;
     });
-    return events;
+
+    // Format lines
+    return Array.from(eventsMap.values()).map(e => {
+      if (e.type === 'input') {
+        return {
+          text: `Cho ${e.totalAmount}${e.unit} ${e.name} (${e.formula}) vào cốc${e.count > 1 ? ` (x${e.count})` : ''}`,
+          time: e.lastTime
+        };
+      } else {
+        return {
+          text: `Thu được ${e.totalAmount}${e.unit} ${e.name} (${e.formula})${e.count > 1 ? ` (x${e.count})` : ''}`,
+          time: e.lastTime
+        };
+      }
+    });
   }, [activeBeaker.addedHistory, activeBeaker.yieldHistory]);
 
   const handleExportNotepad = () => {
@@ -934,72 +969,32 @@ const MagicLab3D = () => {
                 </svg>
               </div>
 
-              {/* Tab Selector Buttons */}
-              <div className="flex bg-[#efe6d5] p-1 rounded-xl mb-3 border border-[#d6c7b0] gap-1 z-10">
-                <button
-                  onClick={() => setNotepadTab('history')}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                    notepadTab === 'history'
-                      ? 'bg-[#fcf8ee] text-[#4a2e20] shadow-sm border border-[#d6c7b0]'
-                      : 'text-[#8a725d] hover:text-[#4a2e20]'
-                  }`}
-                >
-                  📜 Lịch Sử Hóa Chất ({activeHistory.length})
-                </button>
-                <button
-                  onClick={() => setNotepadTab('notes')}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                    notepadTab === 'notes'
-                      ? 'bg-[#fcf8ee] text-[#4a2e20] shadow-sm border border-[#d6c7b0]'
-                      : 'text-[#8a725d] hover:text-[#4a2e20]'
-                  }`}
-                >
-                  📝 Ghi Chú Cá Nhân
-                </button>
+              {/* Header Title inside Notebook */}
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#d6c7b0] z-10 font-serif">
+                <span className="font-bold text-xs text-[#4a2e20]">
+                  Lịch Sử Hóa Chất ({activeHistory.length})
+                </span>
+                <span className="text-[10px] text-[#8a725d]">Cốc #{activeBeakerIndex + 1}</span>
               </div>
 
-              {/* Tab 1: Real-time History Stream on Ruled Lines */}
-              {notepadTab === 'history' && (
-                <div className="flex-1 overflow-y-auto custom-scrollbar my-1 pr-1 space-y-1.5 max-h-[48vh] z-10 font-serif">
-                  {activeHistory.length > 0 ? (
-                    activeHistory.map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-2 py-0.5 text-xs border-b border-[#e6dccb]/60 leading-[27px]">
-                        <span className="text-sm">{item.badge}</span>
-                        <div className="flex-1">
-                          <span className="font-semibold text-[#4a2e20]">{item.text}</span>
-                          <span className="text-[10px] text-[#9c846e] ml-2 font-sans font-normal">({item.time})</span>
-                        </div>
+              {/* Real-time Aggregated Chemical History Stream on Ruled Lines */}
+              <div className="flex-1 overflow-y-auto custom-scrollbar my-1 pr-1 space-y-1.5 max-h-[50vh] z-10 font-serif">
+                {activeHistory.length > 0 ? (
+                  activeHistory.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-2 py-0.5 text-xs border-b border-[#e6dccb]/60 leading-[27px]">
+                      <div className="flex-1">
+                        <span className="font-semibold text-[#4a2e20]">{item.text}</span>
+                        <span className="text-[10px] text-[#9c846e] ml-2 font-sans font-normal">({item.time})</span>
                       </div>
-                    ))
-                  ) : (
-                    <div className="py-12 text-center text-[#9c846e] text-xs italic font-serif leading-[28px]">
-                      Chưa có thao tác nào trong Cốc #{activeBeakerIndex + 1}.<br />
-                      Hãy rót hoặc thả hóa chất vào cốc!
                     </div>
-                  )}
-                </div>
-              )}
-
-              {/* Tab 2: Custom Editable User Notes directly on Ruled Paper */}
-              {notepadTab === 'notes' && (
-                <div className="flex-1 my-1 flex flex-col gap-2 z-10">
-                  <textarea
-                    value={userNotes}
-                    onChange={(e) => setUserNotes(e.target.value)}
-                    placeholder="Viết nhận xét, phương trình hoặc ghi chú ở đây... (Tự động lưu vào DataStorage)"
-                    className="w-full h-52 bg-transparent text-xs text-[#3e2b1d] placeholder:text-[#ab9884] outline-none resize-none custom-scrollbar font-serif leading-[28px] tracking-wide"
-                  />
-                  <div className="flex justify-between items-center text-[10px] text-[#8a725d] pt-1 border-t border-[#d6c7b0]/60 font-sans">
-                    <span>💾 Tự động lưu vào DataStorage</span>
-                    <button
-                      onClick={() => setUserNotes('')}
-                      className="text-red-700/70 hover:text-red-700 flex items-center gap-1 transition-colors font-bold"
-                    >
-                      <Trash2 className="w-3 h-3" /> Xóa ghi chú
-                    </button>
+                  ))
+                ) : (
+                  <div className="py-16 text-center text-[#9c846e] text-xs italic font-serif leading-[28px]">
+                    Chưa có hóa chất nào trong Cốc #{activeBeakerIndex + 1}.<br />
+                    Hãy rót hoặc thả hóa chất vào cốc!
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               {/* Notebook Footer */}
               <div className="pt-2 border-t border-[#d6c7b0] flex justify-between items-center text-[11px] text-[#8a725d] font-serif z-10">
