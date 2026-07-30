@@ -165,10 +165,9 @@
     },
     "support": {
       "title": "Hỗ trợ",
-      "user_guide": "Hướng dẫn sử dụng",
-      "faq": "Câu hỏi thường gặp",
-      "privacy_policy": "Chính sách bảo mật",
-      "terms_of_service": "Điều khoản dịch vụ"
+      "user_guide": "Về chúng tôi",
+      "faq": "Đội ngũ Aurum",
+      "terms_of_service": "Chính sách bảo mật & Điều khoản"
     },
     "contact": {
       "title": "Liên hệ",
@@ -262,12 +261,14 @@
         {
           "name": "Huỳnh Vũ Luân",
           "role": "Phụ trách nội dung bài học và cân bằng hệ thống",
-          "image": "/images/team/luan.jpg"
+          "image": "/images/team/luan.jpg",
+          "email": "2200002540@nttu.edu.vn"
         },
         {
           "name": "Nguyễn Thanh Tiền",
           "role": "Thiết kế chính cho ứng dụng web và đảm bảo trải nghiệm người dùng",
-          "image": "/images/team/tien.jpg"
+          "image": "/images/team/tien.jpg",
+          "email": "2200000601@nttu.edu.vn"
         }
       ]
     }

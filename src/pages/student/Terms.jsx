@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation, Trans } from 'react-i18next';
 import Footer from '@/components/common/Footer';
@@ -28,14 +28,14 @@ const Terms = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-[#fffbf0] pt-[160px] pb-32">
+    <div className="min-h-screen bg-[#fffbf0] pt-[160px]">
       {/* Background Decorative Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03]">
         <div className="absolute top-40 -left-20 w-96 h-96 rounded-full bg-viet-green blur-3xl" />
         <div className="absolute bottom-40 -right-20 w-96 h-96 rounded-full bg-blue-500 blur-3xl" />
       </div>
 
-      <div className="max-w-[1000px] mx-auto px-6 relative">
+      <div className="max-w-[1000px] mx-auto px-6 relative mb-32">
         
         <header className="mb-20 text-center">
            <motion.div

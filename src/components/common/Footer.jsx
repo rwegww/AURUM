@@ -72,8 +72,6 @@ const Footer = () => {
             <ul className="flex flex-col gap-4">
               {[
                 { label: t('footer.support.user_guide'), path: '/about' },
-                { label: t('footer.support.faq'), path: '/about' },
-                { label: t('footer.support.privacy_policy'), path: '/terms' },
                 { label: t('footer.support.terms_of_service'), path: '/terms' },
               ].map((link, i) => (
                 <li key={i}>

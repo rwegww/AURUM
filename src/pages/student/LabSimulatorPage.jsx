@@ -46,21 +46,25 @@ const LabSimulatorPage = () => {
           </div>
         </header>
 
-        <div className="relative group">
+        <div className="relative group flex flex-col xl:flex-row gap-6 items-start w-full">
           {/* Backglow effect */}
-          <div className="lab-backglow opacity-50" />
+          <div className="lab-backglow opacity-50 hidden xl:block" />
           
-          <div className="w-full relative z-10 rounded-[2.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-2xl lab-container-shadow" style={{ height: 'calc(100vh - 320px)', minHeight: '600px' }}>
+          {/* Main Lab Engine Container */}
+          <div className="flex-1 w-full relative z-10 rounded-[2.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-2xl lab-container-shadow" style={{ height: 'calc(100vh - 320px)', minHeight: '600px' }}>
             <MagicLab3D />
           </div>
 
+          {/* Handbook (Sổ tay) Portal Container */}
+          <div id="lab-handbook-portal" className="w-full xl:w-[380px] shrink-0 relative z-20 flex flex-col gap-6" />
+
           {/* Decorative Footer Info */}
           <div className="absolute -bottom-12 left-8 right-8 flex justify-between items-center opacity-40">
-             <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest">
+             <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest hidden sm:flex">
                 <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-viet-green" /> GPU Accelerated</span>
                 <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Real-time Physics</span>
              </div>
-             <div className="text-[10px] font-bold italic">AURUM CHEMISTRY LAB ENGINE</div>
+             <div className="text-[10px] font-bold italic ml-auto sm:ml-0">AURUM CHEMISTRY LAB ENGINE</div>
           </div>
         </div>
       </div>

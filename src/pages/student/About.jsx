@@ -59,25 +59,8 @@ const About = () => {
           </motion.p>
         </section>
 
-        {/* Vision Pillars */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
-          {visionPillars.map((item, idx) => (
-             <motion.div 
-               key={idx}
-               initial={{ opacity: 0, y: 30 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               transition={{ delay: idx * 0.1 }}
-               className="viet-card p-10 flex flex-col items-center text-center gap-6"
-             >
-                <div className="flex items-center justify-center p-4 bg-gray-50 rounded-2xl shadow-inner border border-gray-100">{item.icon}</div>
-                <h3 className="text-xl font-black text-viet-text">{item.title}</h3>
-                <p className="text-[15px] text-viet-text-light font-medium leading-relaxed">{item.desc}</p>
-             </motion.div>
-          ))}
-        </div>
-
-        {/* Content Section */}
-        <section className="max-w-4xl mx-auto text-center flex flex-col items-center">
+        {/* Team Section (Moved Up) */}
+        <section className="max-w-4xl mx-auto text-center flex flex-col items-center mb-32">
            <div className="space-y-8 w-full">
               <h2 className="text-3xl md:text-5xl font-black text-viet-text mb-6">{t('about.team_section.title')}</h2>
               <p className="text-lg text-viet-text-light/80 font-medium leading-relaxed max-w-2xl mx-auto">
@@ -97,13 +80,33 @@ const About = () => {
                        </div>
                        <div className="flex-1 w-full flex flex-col items-center">
                          <h4 className="text-xl font-black text-viet-text mb-1.5">{member.name}</h4>
-                         <p className="text-[13px] font-bold text-viet-green uppercase tracking-wide leading-relaxed max-w-[250px]">{member.role}</p>
+                         <p className="text-[13px] font-bold text-viet-green uppercase tracking-wide leading-relaxed max-w-[250px] mb-2">{member.role}</p>
+                         {member.email && (
+                           <a href={`mailto:${member.email}`} className="text-[12px] font-bold text-blue-500 hover:text-blue-600 hover:underline">{member.email}</a>
+                         )}
                        </div>
                     </div>
                  ))}
               </div>
            </div>
         </section>
+
+        {/* Vision Pillars */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
+          {visionPillars.map((item, idx) => (
+             <motion.div 
+               key={idx}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               transition={{ delay: idx * 0.1 }}
+               className="viet-card p-10 flex flex-col items-center text-center gap-6"
+             >
+                <div className="flex items-center justify-center p-4 bg-gray-50 rounded-2xl shadow-inner border border-gray-100">{item.icon}</div>
+                <h3 className="text-xl font-black text-viet-text">{item.title}</h3>
+                <p className="text-[15px] text-viet-text-light font-medium leading-relaxed">{item.desc}</p>
+             </motion.div>
+          ))}
+        </div>
       </div>
       <Footer />
     </div>

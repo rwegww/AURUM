@@ -1029,11 +1029,11 @@ const MagicLab3D = () => {
       <AnimatePresence>
         {showNotepad && createPortal(
           <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.92 }}
+            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.95 }}
             transition={{ type: 'spring', damping: 22, stiffness: 160 }}
-            className="fixed top-16 right-4 z-[9999] w-80 sm:w-[380px] flex flex-col pointer-events-auto filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]"
+            className="relative w-full h-full max-h-[calc(100vh-320px)] min-h-[600px] flex flex-col pointer-events-auto filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
           >
             {/* Top Wooden Bar with Metallic Spiral Coils */}
             <div className="relative w-full h-11 bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] rounded-t-[18px] border-b-2 border-[#24130a] flex items-center justify-between px-4 z-20">
@@ -1074,7 +1074,7 @@ const MagicLab3D = () => {
 
             {/* Lined Parchment Paper Body */}
             <div 
-              className="relative w-full bg-[#fcf8ee] text-[#3e2b1d] rounded-b-[24px] border-2 border-t-0 border-[#5c3a27]/30 p-5 pt-4 flex flex-col min-h-[460px] max-h-[70vh] overflow-hidden"
+              className="relative w-full bg-[#fcf8ee] text-[#3e2b1d] rounded-b-[24px] border-2 border-t-0 border-[#5c3a27]/30 p-5 pt-4 flex-1 flex flex-col overflow-hidden"
               style={{
                 backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(160, 135, 105, 0.22) 28px)',
                 backgroundAttachment: 'local'
@@ -1129,7 +1129,7 @@ const MagicLab3D = () => {
               </div>
             </div>
           </motion.div>,
-          document.body
+          document.getElementById('lab-handbook-portal') || document.body
         )}
       </AnimatePresence>
       {/* Recipe Book Bottom Dock Panel */}

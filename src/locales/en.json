@@ -164,11 +164,8 @@
       "arena": "PK Race"
     },
     "support": {
-      "title": "Support",
-      "user_guide": "User Guide",
-      "faq": "FAQ",
-      "privacy_policy": "Privacy Policy",
-      "terms_of_service": "Terms of Service"
+      "user_guide": "About Us",
+      "terms_of_service": "Terms & Conditions"
     },
     "contact": {
       "title": "Contact",
@@ -259,10 +256,19 @@
     "team_section": {
       "title": "Aurum team",
       "description": "We bring together chemistry teachers and education product developers. Aurum keeps improving lessons, simulations, and practice tools so students can learn chemistry more clearly.",
-      "achievements": [
-        "Over 1,000 high-quality chemistry resources",
-        "Interactive 3D chemistry simulations",
-        "Learning community of over 50,000 members"
+      "members": [
+        {
+          "name": "Huỳnh Vũ Luân",
+          "role": "Content Creation & System Balancing",
+          "image": "/images/team/luan.jpg",
+          "email": "2200002540@nttu.edu.vn"
+        },
+        {
+          "name": "Nguyễn Thanh Tiền",
+          "role": "Lead UI/UX Web Designer",
+          "image": "/images/team/tien.jpg",
+          "email": "2200000601@nttu.edu.vn"
+        }
       ]
     }
   },
