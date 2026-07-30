@@ -77,40 +77,27 @@ const About = () => {
         </div>
 
         {/* Content Section */}
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-           <motion.div 
-             initial={{ opacity: 0, x: -30 }}
-             whileInView={{ opacity: 1, x: 0 }}
-             className="relative aspect-square bg-viet-text rounded-[50px] overflow-hidden shadow-2xl"
-           >
-              <div className="absolute inset-0 bg-gradient-to-br from-viet-green/30 to-blue-500/30" />
-              <div className="absolute inset-0 flex items-center justify-center p-12">
-                 <svg viewBox="0 0 100 100" className="w-full h-full text-white/20">
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
-                    <circle cx="50" cy="50" r="20" fill="currentColor" opacity="0.5" />
-                    <circle cx="80" cy="30" r="10" fill="currentColor" opacity="0.3" />
-                 </svg>
-              </div>
-           </motion.div>
-           <div className="space-y-8">
-              <h2 className="text-3xl md:text-4xl font-black text-viet-text">{t('about.team_section.title')}</h2>
-              <p className="text-[16px] text-viet-text-light/80 font-medium leading-relaxed">
+        <section className="max-w-4xl mx-auto text-center flex flex-col items-center">
+           <div className="space-y-8 w-full">
+              <h2 className="text-3xl md:text-5xl font-black text-viet-text mb-6">{t('about.team_section.title')}</h2>
+              <p className="text-lg text-viet-text-light/80 font-medium leading-relaxed max-w-2xl mx-auto">
                 {t('about.team_section.description')}
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-12 w-full">
                  {Array.isArray(teamMembers) && teamMembers.map((member, i) => (
-                    <div key={i} className="bg-white/80 p-4 rounded-2xl border-2 border-viet-border hover:border-viet-green/50 transition-colors shadow-sm flex items-center gap-4">
-                       <div className="w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full overflow-hidden border-2 border-viet-green shadow-inner bg-gray-100 flex items-center justify-center">
+                    <div key={i} className="bg-white/80 p-6 rounded-2xl border-2 border-viet-border hover:border-viet-green/50 transition-colors shadow-sm flex flex-col items-center text-center gap-4">
+                       <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-full overflow-hidden border-4 border-white ring-2 ring-viet-green shadow-md bg-gray-100 flex items-center justify-center relative">
                          {member.image ? (
-                           <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                         ) : (
-                           <span className="text-gray-400 font-bold text-xl">{member.name.charAt(0)}</span>
-                         )}
+                           <img src={member.image} alt={member.name} className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
+                         ) : null}
+                         <span className="text-gray-400 font-black text-4xl" style={{ display: member.image ? 'none' : 'flex' }}>
+                           {member.name.charAt(0)}
+                         </span>
                        </div>
-                       <div>
-                         <h4 className="text-lg font-black text-viet-text mb-0.5">{member.name}</h4>
-                         <p className="text-[12px] font-bold text-viet-green uppercase tracking-wide leading-snug">{member.role}</p>
+                       <div className="flex-1 w-full flex flex-col items-center">
+                         <h4 className="text-xl font-black text-viet-text mb-1.5">{member.name}</h4>
+                         <p className="text-[13px] font-bold text-viet-green uppercase tracking-wide leading-relaxed max-w-[250px]">{member.role}</p>
                        </div>
                     </div>
                  ))}
