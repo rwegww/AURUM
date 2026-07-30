@@ -1212,6 +1212,63 @@ const MagicLab3D = () => {
         )}
       </AnimatePresence>
 
+      {/* Default Guide Panel */}
+      <AnimatePresence>
+        {!showNotepad && !showRecipeBook && createPortal(
+          <motion.div
+            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 160 }}
+            className="relative w-full h-full max-h-[calc(100vh-320px)] min-h-[600px] flex flex-col pointer-events-auto filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
+          >
+            <div className="relative w-full h-full bg-[#f8f9fa] rounded-[20px] border-2 border-gray-200 shadow-inner overflow-hidden flex flex-col">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-4 flex items-center justify-between border-b-2 border-indigo-800/30">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <BookOpen className="w-4 h-4 text-white" />
+                  </div>
+                  <h2 className="text-sm font-black text-white uppercase tracking-widest">Bảng Hướng Dẫn</h2>
+                </div>
+              </div>
+              
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-gray-700">
+                <div className="bg-blue-50/80 rounded-xl p-5 border border-blue-100 shadow-sm">
+                  <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2 text-base">
+                    <Zap className="w-5 h-5 text-blue-500" /> Bắt đầu thí nghiệm
+                  </h3>
+                  <p className="text-sm leading-relaxed text-blue-800/80 font-medium">Kéo thả các hóa chất từ kệ vào cốc để xem phản ứng xảy ra. Bạn có thể sử dụng thanh công cụ để tìm kiếm và lọc hóa chất.</p>
+                </div>
+
+                <div className="bg-orange-50/80 rounded-xl p-5 border border-orange-100 shadow-sm">
+                  <h3 className="font-bold text-orange-900 mb-2 flex items-center gap-2 text-base">
+                    <Flame className="w-5 h-5 text-orange-500" /> Điều kiện phản ứng
+                  </h3>
+                  <p className="text-sm leading-relaxed text-orange-800/80 font-medium">Một số phản ứng cần chất xúc tác hoặc nhiệt độ cao. Hãy thử bật đèn cồn ở bảng điều khiển bên trái cốc.</p>
+                </div>
+
+                <div className="bg-emerald-50/80 rounded-xl p-5 border border-emerald-100 shadow-sm">
+                  <h3 className="font-bold text-emerald-900 mb-2 flex items-center gap-2 text-base">
+                    <NotebookPen className="w-5 h-5 text-emerald-500" /> Sổ tay & Ghi chép
+                  </h3>
+                  <p className="text-sm leading-relaxed text-emerald-800/80 font-medium">Bấm vào các nút ở mép trên của khung nhìn để mở Sổ tay thí nghiệm hoặc tra cứu các công thức đã thu thập.</p>
+                </div>
+                
+                <div className="mt-8 text-center opacity-40 pt-4">
+                  <div className="inline-flex p-4 rounded-full bg-gray-200 mb-3">
+                    <FlaskConical className="w-8 h-8 text-gray-500" />
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Aurum Lab Engine Ready</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>,
+          document.getElementById('lab-handbook-portal') || document.body
+        )}
+      </AnimatePresence>
+
       <ChemicalTooltip 
         chemicalInfo={hoveredChem} 
         x={mousePos.x} 
