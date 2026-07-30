@@ -46,9 +46,9 @@ const LabSimulatorPage = () => {
           </div>
         </header>
 
-        <div className="relative group flex flex-col xl:flex-row gap-6 items-start w-full">
+        <div className="relative group flex flex-col lg:flex-row gap-6 items-start w-full">
           {/* Backglow effect */}
-          <div className="lab-backglow opacity-50 hidden xl:block" />
+          <div className="lab-backglow opacity-50 hidden lg:block" />
           
           {/* Main Lab Engine Container */}
           <div className="flex-1 w-full relative z-10 rounded-[2.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-2xl lab-container-shadow" style={{ height: 'calc(100vh - 320px)', minHeight: '600px' }}>
@@ -56,7 +56,7 @@ const LabSimulatorPage = () => {
           </div>
 
           {/* Handbook (Sổ tay) Portal Container */}
-          <div id="lab-handbook-portal" className="w-full xl:w-[380px] shrink-0 relative z-20 flex flex-col gap-6" />
+          <div id="lab-handbook-portal" className="w-full lg:w-[340px] xl:w-[380px] shrink-0 relative z-20 flex flex-col gap-6" />
 
           {/* Decorative Footer Info */}
           <div className="absolute -bottom-12 left-8 right-8 flex justify-between items-center opacity-40">

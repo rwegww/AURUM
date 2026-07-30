@@ -288,6 +288,15 @@ const MagicLab3D = () => {
     localStorage.setItem('aurum_lab_notes', userNotes);
   }, [userNotes]);
 
+  // Portal target container binding
+  const [portalEl, setPortalEl] = useState(null);
+  useEffect(() => {
+    const el = document.getElementById('lab-handbook-portal');
+    if (el) {
+      setPortalEl(el);
+    }
+  }, []);
+
   // Group and aggregate chemical history for active beaker
   const activeHistory = useMemo(() => {
     const eventsMap = new Map();
@@ -1135,7 +1144,7 @@ const MagicLab3D = () => {
               </div>
             </div>
           </motion.div>,
-          document.getElementById('lab-handbook-portal') || document.body
+          portalEl || document.body
         )}
       </AnimatePresence>
       {/* Recipe Book Bottom Dock Panel */}
@@ -1208,7 +1217,7 @@ const MagicLab3D = () => {
               </div>
             </div>
           </motion.div>,
-          document.getElementById('lab-handbook-portal') || document.body
+          portalEl || document.body
         )}
       </AnimatePresence>
 
@@ -1265,7 +1274,7 @@ const MagicLab3D = () => {
               </div>
             </div>
           </motion.div>,
-          document.getElementById('lab-handbook-portal') || document.body
+          portalEl || document.body
         )}
       </AnimatePresence>
 
