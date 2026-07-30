@@ -416,27 +416,58 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                 >
                   {/* Left Electrode (Anode +) */}
                   <div className="absolute left-[26%] bottom-[8%] top-[-28px] w-[10%] flex flex-col items-center z-30">
-                    {/* Red Plug Socket on Top */}
-                    <div className="w-5 h-7 bg-gradient-to-r from-red-600 via-red-500 to-red-700 rounded-t-md shadow-lg border border-red-900 flex items-center justify-center text-[10px] font-black text-white">
-                      +
-                    </div>
-                    {/* Metallic Neck */}
-                    <div className="w-3 h-2 bg-gradient-to-r from-slate-400 to-slate-600 border-t border-b border-slate-700" />
-                    {/* Carbon Rod (Deep in Liquid) */}
+                    <div className="w-3 h-2 mt-[28px] bg-gradient-to-r from-slate-400 to-slate-600 border-t border-b border-slate-700" />
                     <div className="w-[85%] h-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 rounded-b-md shadow-inner border-x border-slate-800" />
                   </div>
                   
                   {/* Right Electrode (Cathode -) */}
                   <div className="absolute right-[26%] bottom-[8%] top-[-28px] w-[10%] flex flex-col items-center z-30">
-                    {/* Black Plug Socket on Top */}
-                    <div className="w-5 h-7 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-900 rounded-t-md shadow-lg border border-slate-950 flex items-center justify-center text-[10px] font-black text-white">
-                      -
-                    </div>
-                    {/* Metallic Neck */}
-                    <div className="w-3 h-2 bg-gradient-to-r from-slate-400 to-slate-600 border-t border-b border-slate-700" />
-                    {/* Carbon Rod (Deep in Liquid) */}
+                    <div className="w-3 h-2 mt-[28px] bg-gradient-to-r from-slate-400 to-slate-600 border-t border-b border-slate-700" />
                     <div className="w-[85%] h-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 rounded-b-md shadow-inner border-x border-slate-800" />
                   </div>
+
+                  {/* SVG Wires (Behind the Beaker Glass) */}
+                  <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none -z-10">
+                     <defs>
+                       <linearGradient id="redWire" x1="0%" y1="0%" x2="0%" y2="100%">
+                         <stop offset="0%" stopColor="#f87171" />
+                         <stop offset="100%" stopColor="#991b1b" />
+                       </linearGradient>
+                       <linearGradient id="blackWire" x1="0%" y1="0%" x2="0%" y2="100%">
+                         <stop offset="0%" stopColor="#64748b" />
+                         <stop offset="100%" stopColor="#020617" />
+                       </linearGradient>
+                     </defs>
+
+                     {/* Red Wire (+) -> curves up, left, then down behind desk */}
+                     <path d="M 35 -28 C 10 -50, -40 0, -60 96" fill="none" stroke="#000" strokeWidth="8" strokeOpacity="0.4" strokeLinecap="round" />
+                     <path d="M 35 -28 C 10 -50, -40 0, -60 96" fill="none" stroke="url(#redWire)" strokeWidth="6.5" strokeLinecap="round" />
+                     <path d="M 35 -28 C 10 -50, -40 0, -60 96" fill="none" stroke="#fef08a" strokeWidth="1.5" strokeDasharray="6 18" strokeLinecap="round">
+                       <animate attributeName="stroke-dashoffset" from="24" to="0" dur="0.7s" repeatCount="indefinite" />
+                     </path>
+
+                     {/* Black Wire (-) -> curves higher up, left, then down parallel to red wire */}
+                     <path d="M 77 -28 C 40 -80, -20 0, -40 96" fill="none" stroke="#000" strokeWidth="8" strokeOpacity="0.4" strokeLinecap="round" />
+                     <path d="M 77 -28 C 40 -80, -20 0, -40 96" fill="none" stroke="url(#blackWire)" strokeWidth="6.5" strokeLinecap="round" />
+                     <path d="M 77 -28 C 40 -80, -20 0, -40 96" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="6 18" strokeLinecap="round">
+                       <animate attributeName="stroke-dashoffset" from="0" to="24" dur="0.7s" repeatCount="indefinite" />
+                     </path>
+                  </svg>
+
+                  {/* SVG Plugs (In front of the Beaker and Electrodes) */}
+                  <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none z-40">
+                     {/* Red Plug Socket */}
+                     <g transform="translate(27, -32)">
+                       <rect width="16" height="24" rx="3" fill="#ef4444" stroke="#7f1d1d" strokeWidth="1.5" />
+                       <text x="8" y="16" textAnchor="middle" fill="#ffffff" fontSize="13" fontWeight="900">+</text>
+                     </g>
+
+                     {/* Black Plug Socket */}
+                     <g transform="translate(69, -32)">
+                       <rect width="16" height="24" rx="3" fill="#1e293b" stroke="#0f172a" strokeWidth="1.5" />
+                       <text x="8" y="16" textAnchor="middle" fill="#ffffff" fontSize="15" fontWeight="900">-</text>
+                     </g>
+                  </svg>
 
                   {/* Floating Ion Particles (+ and -) inside liquid */}
                   <div className="absolute inset-x-2 bottom-[10%] h-[60%] overflow-hidden pointer-events-none mix-blend-screen">
