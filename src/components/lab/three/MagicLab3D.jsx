@@ -475,10 +475,12 @@ const MagicLab3D = () => {
     }
   }, [dbChemicals, isLoggedIn, setUnlocked, user]);
 
+  const discoveredSet = useMemo(() => new Set(discoveredFormulas), [discoveredFormulas]);
+  const normalizedDiscoveredSet = useMemo(() => new Set(discoveredFormulas.map(f => normalize(f))), [discoveredFormulas]);
+
   // Handle new discoveries
   const handleOnDiscovery = useCallback((products) => {
-    const normalizedDiscovered = discoveredFormulas.map(f => normalize(f));
-    const newProducts = products.filter(p => !normalizedDiscovered.includes(normalize(p.formula)));
+    const newProducts = products.filter(p => !normalizedDiscoveredSet.has(normalize(p.formula)));
     
     if (newProducts.length > 0) {
       const targetNorm = normalize(newProducts[0].formula);
@@ -549,12 +551,10 @@ const MagicLab3D = () => {
   // Danh sách phản ứng đã khám phá cho sách điều chế
   const knownReactions = useMemo(() => {
     const rxs = useLabStore.getState().reactions || [];
-    const normalizedDiscovered = discoveredFormulas.map(f => normalize(f));
     return rxs.filter(rx => {
-      const rxFormulas = rx.reactants.map(r => normalize(r.formula));
-      return rxFormulas.every(f => normalizedDiscovered.includes(f));
+      return rx.reactants.every(r => normalizedDiscoveredSet.has(normalize(r.formula)));
     });
-  }, [discoveredFormulas]);
+  }, [normalizedDiscoveredSet]);
 
   useEffect(() => {
     const isDefaultMessage = activeBeaker.reactionMessage?.includes("Mời bắt đầu");
@@ -572,12 +572,12 @@ const MagicLab3D = () => {
     const query = searchQuery.toLowerCase().trim();
     
     return Object.values(chemicalsMap)
-      .filter(c => discoveredFormulas.includes(c.formula))
+      .filter(c => discoveredSet.has(c.formula))
       .filter(c => 
         c.name.toLowerCase().includes(query) || 
         c.formula.toLowerCase().includes(query)
       );
-  }, [discoveredFormulas, searchQuery]);
+  }, [discoveredSet, searchQuery]);
 
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] text-white rounded-3xl min-h-[600px]">
@@ -630,7 +630,10 @@ const MagicLab3D = () => {
         <div className="flex justify-end items-start pointer-events-auto">
           <div className="flex gap-2">
             <button 
-              onClick={() => setShowNotepad(!showNotepad)}
+              onClick={() => {
+                setShowNotepad(!showNotepad);
+                if (!showNotepad) setShowRecipeBook(false);
+              }}
               className={`flex items-center gap-2 px-4 h-12 rounded-2xl border backdrop-blur-xl transition-all font-bold text-xs uppercase tracking-widest shadow-lg group relative ${
                 showNotepad 
                   ? 'bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.3)]' 
@@ -654,7 +657,10 @@ const MagicLab3D = () => {
               <span className="ml-1 px-1.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-md text-[10px] font-black">{discoveredFormulas.length}</span>
             </button>
             <button 
-              onClick={() => setShowRecipeBook(!showRecipeBook)}
+              onClick={() => {
+                setShowRecipeBook(!showRecipeBook);
+                if (!showRecipeBook) setShowNotepad(false);
+              }}
               className={`flex items-center gap-2 px-4 h-12 backdrop-blur-xl rounded-2xl border transition-all font-bold text-xs uppercase tracking-widest shadow-lg group ${
                 showRecipeBook
                   ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
@@ -1136,10 +1142,11 @@ const MagicLab3D = () => {
       <AnimatePresence>
         {showRecipeBook && createPortal(
           <motion.div
-            initial={{ opacity: 0, y: 80 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 80 }}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-4xl h-[300px] flex justify-center drop-shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
+            initial={{ opacity: 0, x: 20, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 22, stiffness: 160 }}
+            className="relative w-full h-full max-h-[calc(100vh-320px)] min-h-[600px] flex flex-col pointer-events-auto filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
           >
             <div className="relative w-full h-full bg-[#fcf8ee] rounded-[20px] border-2 border-[#5c3a27]/60 shadow-[0_15px_40px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col pointer-events-auto">
               {/* Header */}
@@ -1201,7 +1208,7 @@ const MagicLab3D = () => {
               </div>
             </div>
           </motion.div>,
-          document.body
+          document.getElementById('lab-handbook-portal') || document.body
         )}
       </AnimatePresence>
 
