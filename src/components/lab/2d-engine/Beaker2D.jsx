@@ -412,27 +412,37 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 pointer-events-none flex justify-center items-end pb-[10%]"
+                  className="absolute inset-0 pointer-events-none flex justify-center items-end"
                 >
-                  {/* Left Electrode (Anode) */}
-                  <div className="absolute left-[30%] bottom-0 w-[6%] h-[70%] bg-gradient-to-r from-slate-700 via-slate-400 to-slate-800 rounded-t-sm shadow-inner" />
+                  {/* Left Electrode (Anode +) */}
+                  <div className="absolute left-[28%] bottom-[5%] top-[-8px] w-[7%] flex flex-col items-center">
+                    {/* Brass Cap / Terminal */}
+                    <div className="w-full h-3 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-700 rounded-t-sm shadow-md border-b border-amber-800" />
+                    {/* Carbon Rod */}
+                    <div className="w-[80%] h-full bg-gradient-to-r from-slate-800 via-slate-500 to-slate-900 shadow-inner rounded-b-sm" />
+                  </div>
                   
-                  {/* Right Electrode (Cathode) */}
-                  <div className="absolute right-[30%] bottom-0 w-[6%] h-[70%] bg-gradient-to-r from-slate-700 via-slate-400 to-slate-800 rounded-t-sm shadow-inner" />
+                  {/* Right Electrode (Cathode -) */}
+                  <div className="absolute right-[28%] bottom-[5%] top-[-8px] w-[7%] flex flex-col items-center">
+                    {/* Brass Cap / Terminal */}
+                    <div className="w-full h-3 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-700 rounded-t-sm shadow-md border-b border-amber-800" />
+                    {/* Carbon Rod */}
+                    <div className="w-[80%] h-full bg-gradient-to-r from-slate-800 via-slate-500 to-slate-900 shadow-inner rounded-b-sm" />
+                  </div>
 
                   {/* Electricity Sparks between electrodes */}
                   <motion.div 
-                    className="absolute bottom-[20%] w-[40%] h-[20%] mix-blend-screen"
+                    className="absolute bottom-[25%] w-[44%] h-[30%] mix-blend-screen"
                     animate={{ 
-                      opacity: [0, 1, 0, 0.8, 0],
-                      scaleY: [1, 1.2, 0.8, 1.1, 1],
-                      filter: ['hue-rotate(0deg)', 'hue-rotate(45deg)', 'hue-rotate(0deg)']
+                      opacity: [0.2, 1, 0.3, 0.9, 0.1],
+                      scaleY: [1, 1.15, 0.85, 1.1, 1],
+                      filter: ['hue-rotate(0deg)', 'hue-rotate(60deg)', 'hue-rotate(0deg)']
                     }}
-                    transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 0.3, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <svg viewBox="0 0 100 50" className="w-full h-full drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]">
-                       <path d="M 0 25 Q 25 0 50 25 T 100 25" fill="none" stroke="#0ff" strokeWidth="2" strokeLinecap="round" />
-                       <path d="M 0 25 Q 25 50 50 25 T 100 25" fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" />
+                    <svg viewBox="0 0 100 50" className="w-full h-full drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">
+                       <path d="M 5 25 Q 25 5 50 25 T 95 25" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
+                       <path d="M 5 25 Q 25 45 50 25 T 95 25" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
                     </svg>
                   </motion.div>
                 </motion.div>
