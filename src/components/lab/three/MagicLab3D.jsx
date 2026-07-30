@@ -911,69 +911,191 @@ const MagicLab3D = () => {
             </div>
           </motion.div>
 
-          {/* Right Column - Beakers Selector */}
-          <div className="w-24 bg-slate-900/30 backdrop-blur-xl border border-white/10 p-3 rounded-[28px] flex flex-col gap-3 my-auto pointer-events-auto self-center max-h-[90%] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]">
-            {beakers.map((b, idx) => (
-              <div key={b.id} className="relative group">
-                <button
-                  onClick={() => setActiveBeaker(idx)}
-                  className={`w-full aspect-square rounded-2xl flex flex-col items-center justify-center transition-all border duration-300 relative overflow-hidden ${
-                    activeBeakerIndex === idx 
-                      ? 'bg-gradient-to-b from-blue-500/20 to-blue-500/5 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.25)] ring-1 ring-blue-400/30' 
-                      : 'bg-slate-950/40 border-white/5 hover:border-white/20 hover:bg-slate-900/40'
-                  }`}
+          {/* Right Side Panel - Swaps between Beakers Selector and Handbook/Recipe Book with 3D Flip */}
+          <div className="my-auto pointer-events-auto self-center max-h-[95%] [perspective:1000px] z-30 mr-2">
+            <AnimatePresence mode="wait">
+              {(!showNotepad && !showRecipeBook) ? (
+                /* --- FRONT: Beaker Selector Column (#1, #2, #3, #4) --- */
+                <motion.div
+                  key="beakers-column"
+                  initial={{ rotateY: 90, opacity: 0 }}
+                  animate={{ rotateY: 0, opacity: 1 }}
+                  exit={{ rotateY: -90, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  className="w-24 bg-slate-900/40 backdrop-blur-xl border border-white/10 p-3 rounded-[28px] flex flex-col gap-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)]"
                 >
-                  {/* Active Indicator Pulse dot */}
-                  {activeBeakerIndex === idx && (
-                    <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
-                    </span>
-                  )}
-                  
-                  {/* Heating Indicator badge */}
-                  {b.isHeating && (
-                    <div className="absolute top-1 left-1 w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse shadow-[0_0_8px_#f97316] z-10" title="Đang đun nóng" />
-                  )}
-
-                  <div className="w-8 h-10 relative overflow-hidden mb-1 flex items-end justify-center">
-                    {/* Outer beaker glass line */}
-                    <div className="absolute inset-0 border border-white/30 rounded-b-lg rounded-t-sm" />
-                    {/* Lip of beaker */}
-                    <div className="absolute top-0 left-0 w-full h-0.5 border-b border-white/30" />
-                    {/* Graduations/Measurement lines */}
-                    <div className="absolute top-2 left-0.5 w-1.5 h-0.5 bg-white/20" />
-                    <div className="absolute top-4 left-0.5 w-2 h-0.5 bg-white/20" />
-                    <div className="absolute top-6 left-0.5 w-1.5 h-0.5 bg-white/20" />
-                    
-                    {/* Liquid content */}
-                    {b.contents.length > 0 && (
-                      <div 
-                        className="absolute bottom-0 w-full transition-all duration-500 rounded-b-[7px] overflow-hidden" 
-                        style={{ 
-                          height: `${Math.min(b.contents.length * 25, 90)}%`,
-                          backgroundColor: b.contents[b.contents.length - 1].color 
-                        }} 
+                  {beakers.map((b, idx) => (
+                    <div key={b.id} className="relative group">
+                      <button
+                        onClick={() => setActiveBeaker(idx)}
+                        className={`w-full aspect-square rounded-2xl flex flex-col items-center justify-center transition-all border duration-300 relative overflow-hidden ${
+                          activeBeakerIndex === idx 
+                            ? 'bg-gradient-to-b from-blue-500/20 to-blue-500/5 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.25)] ring-1 ring-blue-400/30' 
+                            : 'bg-slate-950/40 border-white/5 hover:border-white/20 hover:bg-slate-900/40'
+                        }`}
                       >
-                        {/* Wave effect in beaker */}
-                        <div className="absolute -top-[48px] -left-1/2 w-[200%] aspect-square bg-white/25 rounded-[38%] animate-wave opacity-50" />
-                        <div className="absolute -top-[52px] -left-1/2 w-[200%] aspect-square bg-white/15 rounded-[35%] animate-wave-slow opacity-75" />
+                        {/* Active Indicator Pulse dot */}
+                        {activeBeakerIndex === idx && (
+                          <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
+                          </span>
+                        )}
+                        
+                        {/* Heating Indicator badge */}
+                        {b.isHeating && (
+                          <div className="absolute top-1 left-1 w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse shadow-[0_0_8px_#f97316] z-10" title="Đang đun nóng" />
+                        )}
+
+                        <div className="w-8 h-10 relative overflow-hidden mb-1 flex items-end justify-center">
+                          <div className="absolute inset-0 border border-white/30 rounded-b-lg rounded-t-sm" />
+                          <div className="absolute top-0 left-0 w-full h-0.5 border-b border-white/30" />
+                          <div className="absolute top-2 left-0.5 w-1.5 h-0.5 bg-white/20" />
+                          <div className="absolute top-4 left-0.5 w-2 h-0.5 bg-white/20" />
+                          <div className="absolute top-6 left-0.5 w-1.5 h-0.5 bg-white/20" />
+                          
+                          {b.contents.length > 0 && (
+                            <div 
+                              className="absolute bottom-0 w-full transition-all duration-500 rounded-b-[7px] overflow-hidden" 
+                              style={{ 
+                                height: `${Math.min(b.contents.length * 25, 90)}%`,
+                                backgroundColor: b.contents[b.contents.length - 1].color 
+                              }} 
+                            >
+                              <div className="absolute -top-[48px] -left-1/2 w-[200%] aspect-square bg-white/25 rounded-[38%] animate-wave opacity-50" />
+                              <div className="absolute -top-[52px] -left-1/2 w-[200%] aspect-square bg-white/15 rounded-[35%] animate-wave-slow opacity-75" />
+                            </div>
+                          )}
+                        </div>
+                        <span className={`text-[10px] font-black tracking-wider transition-colors ${activeBeakerIndex === idx ? 'text-blue-400' : 'text-white/40'}`}>#{idx + 1}</span>
+                      </button>
+                      {beakers.length > 1 && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); removeBeaker(idx); }}
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform hover:scale-110 shadow-md"
+                          title="Xóa cốc"
+                        >
+                          <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+              ) : showNotepad ? (
+                /* --- BACK: Nhật ký thí nghiệm (Notepad Panel) --- */
+                <motion.div
+                  key="notepad-panel"
+                  initial={{ rotateY: -90, opacity: 0 }}
+                  animate={{ rotateY: 0, opacity: 1 }}
+                  exit={{ rotateY: 90, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  className="w-[360px] h-[500px] max-h-[80vh] bg-slate-950/85 backdrop-blur-2xl border border-white/15 p-4 rounded-[28px] flex flex-col gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                    <div className="flex items-center gap-2">
+                      <NotebookPen className="w-4 h-4 text-amber-400" />
+                      <h3 className="text-xs font-black text-white uppercase tracking-wider">Nhật Ký Thí Nghiệm</h3>
+                    </div>
+                    <button
+                      onClick={() => setShowNotepad(false)}
+                      className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white/80 flex items-center justify-center text-xs font-bold transition-colors"
+                      title="Thu nhỏ lại"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* History Stream */}
+                  <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 my-1">
+                    {activeHistory.length > 0 ? (
+                      activeHistory.map((item, idx) => (
+                        <div key={idx} className="p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs flex items-start gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1 shrink-0" />
+                          <div className="flex-1">
+                            <p className="font-semibold text-white/90 leading-tight">{item.text}</p>
+                            <span className="text-[10px] text-white/40 font-normal">{item.time}</span>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="h-full flex flex-col items-center justify-center text-center text-white/40 text-xs italic">
+                        Chưa có lịch sử thao tác nào trong Cốc #{activeBeakerIndex + 1}.
                       </div>
                     )}
                   </div>
-                  <span className={`text-[10px] font-black tracking-wider transition-colors ${activeBeakerIndex === idx ? 'text-blue-400' : 'text-white/40'}`}>#{idx + 1}</span>
-                </button>
-                {beakers.length > 1 && (
-                  <button 
-                    onClick={(e) => { e.stopPropagation(); removeBeaker(idx); }}
-                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center border border-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform hover:scale-110 shadow-md"
-                    title="Xóa cốc"
-                  >
-                    <svg className="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                  </button>
-                )}
-              </div>
-            ))}
+
+                  {/* Footer actions */}
+                  <div className="pt-2 border-t border-white/10 flex justify-between items-center text-xs">
+                    <span className="text-white/40 text-[11px]">Cốc #{activeBeakerIndex + 1}</span>
+                    <button
+                      onClick={handleExportNotepad}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-[11px] transition-colors border border-amber-500/30"
+                    >
+                      <Download className="w-3.5 h-3.5" /> Xuất file (.txt)
+                    </button>
+                  </div>
+                </motion.div>
+              ) : (
+                /* --- BACK: Sách điều chế (Recipe Book Panel) --- */
+                <motion.div
+                  key="recipe-panel"
+                  initial={{ rotateY: -90, opacity: 0 }}
+                  animate={{ rotateY: 0, opacity: 1 }}
+                  exit={{ rotateY: 90, opacity: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  className="w-[360px] h-[500px] max-h-[80vh] bg-slate-950/85 backdrop-blur-2xl border border-white/15 p-4 rounded-[28px] flex flex-col gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-emerald-400" />
+                      <h3 className="text-xs font-black text-white uppercase tracking-wider">Sách Điều Chế</h3>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/30">
+                        {knownReactions.length} phản ứng
+                      </span>
+                      <button
+                        onClick={() => setShowRecipeBook(false)}
+                        className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 text-white/80 flex items-center justify-center text-xs font-bold transition-colors"
+                        title="Thu nhỏ lại"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Reaction List */}
+                  <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2.5 pr-1 my-1">
+                    {knownReactions.length === 0 ? (
+                      <div className="h-full flex flex-col items-center justify-center text-center text-white/40 text-xs italic">
+                        Chưa khám phá được phản ứng nào.<br />Hãy thử trộn các hóa chất!
+                      </div>
+                    ) : (
+                      knownReactions.map((rx, idx) => (
+                        <div key={rx.id || idx} className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <h4 className="text-xs font-bold text-white leading-tight">{rx.name}</h4>
+                            <span className="text-[9px] font-black uppercase text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                              Lớp {rx.gradeLevel || '?'}
+                            </span>
+                          </div>
+                          <div className="bg-slate-900/60 rounded-lg px-2.5 py-1.5 mb-1.5 border border-white/5 font-mono text-[11px] text-emerald-400">
+                            {rx.equation}
+                          </div>
+                          {rx.observation && (
+                            <p className="text-[10px] text-white/60 leading-relaxed">
+                              <span className="font-bold text-white/80">Hiện tượng:</span> {rx.observation}
+                            </p>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -1040,243 +1162,7 @@ const MagicLab3D = () => {
           animation: crystal-shine 4s ease-in-out infinite;
         }
       `}</style>
-      {/* Right-side Spiral Notebook Matching Attached Image */}
-      <AnimatePresence>
-        {showNotepad && createPortal(
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 22, stiffness: 160 }}
-            className="relative w-full h-full max-h-[calc(100vh-320px)] min-h-[600px] flex flex-col pointer-events-auto filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-          >
-            {/* Top Wooden Bar with Metallic Spiral Coils */}
-            <div className="relative w-full h-11 bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] rounded-t-[18px] border-b-2 border-[#24130a] flex items-center justify-between px-4 z-20">
-              {/* Spiral Coil Rings overlaying top wooden bar & paper holes */}
-              <div className="absolute -top-3 left-4 right-4 flex justify-between pointer-events-none px-1">
-                {Array.from({ length: 12 }).map((_, i) => (
-                  <div key={i} className="relative flex flex-col items-center">
-                    {/* Metal Coil Loop */}
-                    <div className="w-3.5 h-7 rounded-full border-[2.5px] border-[#20120a] bg-gradient-to-r from-[#6e4e3b] via-[#e2c7b3] to-[#4a3022] shadow-sm" />
-                    {/* Hole punched in paper */}
-                    <div className="w-2.5 h-2.5 rounded-full bg-[#361e12] shadow-inner -mt-1.5" />
-                  </div>
-                ))}
-              </div>
 
-              {/* Title inside wooden header */}
-              <div className="text-[11px] font-bold text-[#e6d0bf] tracking-wider uppercase flex items-center gap-1.5 pl-2 z-10 font-serif">
-                <span>✦ Sổ Tay Thí Nghiệm ✦</span>
-              </div>
-
-              {/* Header Action Buttons */}
-              <div className="flex items-center gap-1 z-10">
-                <button
-                  onClick={handleExportNotepad}
-                  className="p-1 rounded-lg bg-[#6e4e3b]/40 hover:bg-[#6e4e3b]/80 text-[#e6d0bf] transition-colors"
-                  title="Xuất file nhật ký (.txt)"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                </button>
-                <button
-                  onClick={() => setShowNotepad(false)}
-                  className="w-6 h-6 rounded-full bg-[#6e4e3b]/40 hover:bg-[#6e4e3b]/80 flex items-center justify-center text-[#e6d0bf] transition-colors text-xs font-bold"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            {/* Lined Parchment Paper Body */}
-            <div 
-              className="relative w-full bg-[#fcf8ee] text-[#3e2b1d] rounded-b-[24px] border-2 border-t-0 border-[#5c3a27]/30 p-5 pt-4 flex-1 flex flex-col overflow-hidden"
-              style={{
-                backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(160, 135, 105, 0.22) 28px)',
-                backgroundAttachment: 'local'
-              }}
-            >
-              {/* Bottom Right Cute Sparkle Star Icon (matching user image) */}
-              <div className="absolute bottom-4 right-4 pointer-events-none opacity-40 text-[#a89078] flex flex-col items-end z-0">
-                <svg className="w-9 h-9" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
-                </svg>
-                <svg className="w-5 h-5 -mr-2 -mt-2 opacity-80" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z" />
-                </svg>
-              </div>
-
-              {/* Header Title inside Notebook */}
-              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#d6c7b0] z-10 font-serif">
-                <span className="font-bold text-xs text-[#4a2e20]">
-                  Lịch Sử Hóa Chất ({activeHistory.length})
-                </span>
-                <span className="text-[10px] text-[#8a725d]">Cốc #{activeBeakerIndex + 1}</span>
-              </div>
-
-              {/* Real-time Aggregated Chemical History Stream on Ruled Lines */}
-              <div className="flex-1 overflow-y-auto custom-scrollbar my-1 pr-1 space-y-1.5 max-h-[50vh] z-10 font-serif">
-                {activeHistory.length > 0 ? (
-                  activeHistory.map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-2 py-0.5 text-xs border-b border-[#e6dccb]/60 leading-[27px]">
-                      <div className="flex-1">
-                        <span className="font-semibold text-[#4a2e20]">{item.text}</span>
-                        <span className="text-[10px] text-[#9c846e] ml-2 font-sans font-normal">({item.time})</span>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="py-16 text-center text-[#9c846e] text-xs italic font-serif leading-[28px]">
-                    Chưa có hóa chất nào trong Cốc #{activeBeakerIndex + 1}.<br />
-                    Hãy rót hoặc thả hóa chất vào cốc!
-                  </div>
-                )}
-              </div>
-
-              {/* Notebook Footer */}
-              <div className="pt-2 border-t border-[#d6c7b0] flex justify-between items-center text-[11px] text-[#8a725d] font-serif z-10">
-                <span>Cốc thí nghiệm #{activeBeakerIndex + 1}</span>
-                <button
-                  onClick={handleExportNotepad}
-                  className="flex items-center gap-1 text-[#5c3a27] hover:text-[#361e12] font-bold transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5" /> Xuất file (.txt)
-                </button>
-              </div>
-            </div>
-          </motion.div>,
-          portalEl || document.body
-        )}
-      </AnimatePresence>
-      {/* Recipe Book Bottom Dock Panel */}
-      <AnimatePresence>
-        {showRecipeBook && createPortal(
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 22, stiffness: 160 }}
-            className="relative w-full h-full max-h-[calc(100vh-320px)] min-h-[600px] flex flex-col pointer-events-auto filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-          >
-            <div className="relative w-full h-full bg-[#fcf8ee] rounded-[20px] border-2 border-[#5c3a27]/60 shadow-[0_15px_40px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col pointer-events-auto">
-              {/* Header */}
-              <div className="bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] px-5 py-2.5 flex items-center justify-between border-b-2 border-[#24130a]">
-                <div className="flex items-center gap-2.5">
-                  <BookOpen className="w-4 h-4 text-[#e6d0bf]" />
-                  <h2 className="text-sm font-black text-[#e6d0bf] uppercase tracking-widest font-serif">Sổ Tay Điều Chế</h2>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-[11px] text-[#a89078] font-bold">{knownReactions.length} phản ứng</span>
-                  <button
-                    onClick={() => setShowRecipeBook(false)}
-                    className="w-8 h-8 rounded-full bg-[#6e4e3b]/40 hover:bg-[#6e4e3b]/80 flex items-center justify-center text-[#e6d0bf] transition-colors text-sm font-bold"
-                  >
-                    ✕
-                  </button>
-                </div>
-              </div>
-
-              {/* Body */}
-              <div
-                className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar"
-                style={{
-                  backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(160, 135, 105, 0.22) 28px)',
-                  backgroundAttachment: 'local'
-                }}
-              >
-                {knownReactions.length === 0 ? (
-                  <div className="py-20 text-center text-[#9c846e] italic font-serif">
-                    Chưa khám phá được phản ứng nào.<br />
-                    Hãy thử trộn các hóa chất trong phòng thí nghiệm!
-                  </div>
-                ) : (
-                  knownReactions.map((rx, idx) => (
-                    <div key={rx.id || idx} className="bg-white/60 rounded-2xl border border-[#d6c7b0] p-4 hover:bg-white/80 transition-colors">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <h3 className="text-sm font-black text-[#3e2b1d] font-serif leading-snug">{rx.name}</h3>
-                        <span className="shrink-0 text-[9px] font-black uppercase tracking-widest text-[#8a725d] bg-[#f0e6d6] px-2 py-1 rounded-lg border border-[#d6c7b0]">
-                          Lớp {rx.gradeLevel || '?'}
-                        </span>
-                      </div>
-                      <div className="bg-[#f7f0e4] rounded-xl px-3 py-2 mb-2 border border-[#e6dccb]">
-                        <p className="text-[13px] font-black text-[#4a2e20] font-mono tracking-wide">{rx.equation}</p>
-                      </div>
-                      {rx.conditions && (
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className="text-[9px] font-black uppercase tracking-widest text-orange-700 bg-orange-100 px-2 py-0.5 rounded-md border border-orange-200">ĐK</span>
-                          <span className="text-[11px] font-bold text-[#6b4c36]">{rx.conditions}</span>
-                        </div>
-                      )}
-                      {rx.observation && (
-                        <p className="text-[11px] text-[#6b4c36] font-serif leading-relaxed mt-1">
-                          <span className="font-bold text-[#4a2e20]">Hiện tượng:</span> {rx.observation}
-                        </p>
-                      )}
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </motion.div>,
-          portalEl || document.body
-        )}
-      </AnimatePresence>
-
-      {/* Default Guide Panel */}
-      <AnimatePresence>
-        {!showNotepad && !showRecipeBook && createPortal(
-          <motion.div
-            initial={{ opacity: 0, x: 20, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            transition={{ type: 'spring', damping: 22, stiffness: 160 }}
-            className="relative w-full h-full max-h-[calc(100vh-320px)] min-h-[600px] flex flex-col pointer-events-auto filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-          >
-            <div className="relative w-full h-full bg-[#f8f9fa] rounded-[20px] border-2 border-gray-200 shadow-inner overflow-hidden flex flex-col">
-              {/* Header */}
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-4 flex items-center justify-between border-b-2 border-indigo-800/30">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                    <BookOpen className="w-4 h-4 text-white" />
-                  </div>
-                  <h2 className="text-sm font-black text-white uppercase tracking-widest">Bảng Hướng Dẫn</h2>
-                </div>
-              </div>
-              
-              {/* Body */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar text-gray-700">
-                <div className="bg-blue-50/80 rounded-xl p-5 border border-blue-100 shadow-sm">
-                  <h3 className="font-bold text-blue-900 mb-2 flex items-center gap-2 text-base">
-                    <Zap className="w-5 h-5 text-blue-500" /> Bắt đầu thí nghiệm
-                  </h3>
-                  <p className="text-sm leading-relaxed text-blue-800/80 font-medium">Kéo thả các hóa chất từ kệ vào cốc để xem phản ứng xảy ra. Bạn có thể sử dụng thanh công cụ để tìm kiếm và lọc hóa chất.</p>
-                </div>
-
-                <div className="bg-orange-50/80 rounded-xl p-5 border border-orange-100 shadow-sm">
-                  <h3 className="font-bold text-orange-900 mb-2 flex items-center gap-2 text-base">
-                    <Flame className="w-5 h-5 text-orange-500" /> Điều kiện phản ứng
-                  </h3>
-                  <p className="text-sm leading-relaxed text-orange-800/80 font-medium">Một số phản ứng cần chất xúc tác hoặc nhiệt độ cao. Hãy thử bật đèn cồn ở bảng điều khiển bên trái cốc.</p>
-                </div>
-
-                <div className="bg-emerald-50/80 rounded-xl p-5 border border-emerald-100 shadow-sm">
-                  <h3 className="font-bold text-emerald-900 mb-2 flex items-center gap-2 text-base">
-                    <NotebookPen className="w-5 h-5 text-emerald-500" /> Sổ tay & Ghi chép
-                  </h3>
-                  <p className="text-sm leading-relaxed text-emerald-800/80 font-medium">Bấm vào các nút ở mép trên của khung nhìn để mở Sổ tay thí nghiệm hoặc tra cứu các công thức đã thu thập.</p>
-                </div>
-                
-                <div className="mt-8 text-center opacity-40 pt-4">
-                  <div className="inline-flex p-4 rounded-full bg-gray-200 mb-3">
-                    <FlaskConical className="w-8 h-8 text-gray-500" />
-                  </div>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-500">Aurum Lab Engine Ready</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>,
-          portalEl || document.body
-        )}
-      </AnimatePresence>
 
       <ChemicalTooltip 
         chemicalInfo={hoveredChem} 
