@@ -4,6 +4,100 @@ import { create } from 'zustand';
 let idCounter = Date.now();
 const generateId = () => ++idCounter;
 
+const MOLAR_MASS = {
+  'H2': 2.016, 'O2': 32.00, 'Cl2': 70.90, 'HCl': 36.46, 'Na': 22.99, 'H2O': 18.015,
+  'NaOH': 39.997, 'C': 12.011, 'CO2': 44.01, 'Fe': 55.845, 'Fe2O3': 159.69,
+  'Al': 26.982, 'Al2O3': 101.96, 'Cu': 63.546, 'CuO': 79.545, 'CuSO4': 159.61,
+  'Zn': 65.38, 'ZnSO4': 161.47, 'AgNO3': 169.87, 'Ag': 107.87, 'BaCl2': 208.23,
+  'BaSO4': 233.38, 'NaCl': 58.44, 'CaCO3': 100.09, 'CaO': 56.08, 'KMnO4': 158.03
+};
+
+function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
+  if (!addedHistory || addedHistory.length === 0) return [];
+
+  const inputMolesMap = new Map();
+  addedHistory.forEach(item => {
+    const formula = item.formula;
+    const amount = item.amount || (item.unit === 'g' ? 5 : 50);
+    const unit = item.unit || 'ml';
+    const state = item.state || 'liquid';
+    const M = MOLAR_MASS[formula] || 40.0;
+
+    let moles = 0;
+    if (unit === 'g' || state === 'solid' || state === 'metal') {
+      moles = amount / M;
+    } else if (state === 'gas') {
+      moles = (amount / 1000) / 22.4;
+    } else {
+      moles = amount / M;
+    }
+
+    inputMolesMap.set(formula, (inputMolesMap.get(formula) || 0) + moles);
+  });
+
+  let limitMoles = Infinity;
+  const reactants = reaction.reactants || [];
+  if (reactants.length > 0) {
+    reactants.forEach(r => {
+      const form = typeof r === 'string' ? r : r.formula;
+      const coeff = typeof r === 'object' && r.coeff ? r.coeff : 1;
+      const availMoles = inputMolesMap.get(form) || 0.1;
+      const normMoles = availMoles / coeff;
+      if (normMoles < limitMoles) {
+        limitMoles = normMoles;
+      }
+    });
+  }
+
+  if (!isFinite(limitMoles) || limitMoles <= 0) {
+    limitMoles = 0.1087;
+  }
+
+  const yields = [];
+  const products = reaction.products || [];
+
+  products.forEach(p => {
+    const prodFormula = typeof p === 'string' ? p : p.formula;
+    const coeff = typeof p === 'object' && (p.coeff || p.coefficient || p.ratio) ? (p.coeff || p.coefficient || p.ratio) : (products.length === 1 && reactants.length >= 2 ? 2 : 1);
+    const prodData = chemicals[prodFormula] || { formula: prodFormula, name: prodFormula, state: 'liquid' };
+    const M = MOLAR_MASS[prodFormula] || 40.0;
+
+    const prodMoles = limitMoles * coeff;
+
+    let amount = 0;
+    let unit = 'g';
+
+    if (prodData.state === 'solid' || prodData.type === 'metal') {
+      amount = Math.round(prodMoles * M * 100) / 100;
+      unit = 'g';
+    } else if (prodData.state === 'gas') {
+      const volLiters = prodMoles * 22.4;
+      if (volLiters >= 1.0) {
+        amount = Math.round(volLiters * 100) / 100;
+        unit = 'L';
+      } else {
+        amount = Math.round(volLiters * 1000 * 10) / 10;
+        unit = 'ml';
+      }
+    } else {
+      amount = Math.round(prodMoles * M * 100) / 100;
+      unit = 'g';
+    }
+
+    yields.push({
+      id: generateId(),
+      formula: prodFormula,
+      name: prodData.name || prodFormula,
+      state: prodData.state || 'liquid',
+      amount: amount > 0 ? amount : 5,
+      unit,
+      isProduct: true
+    });
+  });
+
+  return yields;
+}
+
 const normalizeFormula = (formula) => {
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   return String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subMap[match] || match).trim().toUpperCase();
@@ -455,35 +549,36 @@ const useLabStore = create((set, get) => ({
     const products = [];
     const newYields = [...(beakerIdx !== undefined && get().beakers[beakerIdx]?.yieldHistory || [])];
 
-    // Calculate stoichiometric amounts for products based on reactant inputs
+    // Calculate exact chemical yields using stoichiometry and limiting reactant algorithm
     const currentAdded = (beakerIdx !== undefined && get().beakers[beakerIdx]?.addedHistory) || [];
-    const totalInputVol = currentAdded.reduce((sum, item) => sum + (item.amount || 50), 0);
-    const baseReactantVol = currentAdded.length > 0 ? (totalInputVol / currentAdded.length) : 100;
+    const stoichiometricYields = calculateStoichiometricYields(reaction, currentAdded, chemicals);
 
-    reaction.products.forEach((prod) => {
-      const prodData = chemicals[prod.formula] || { formula: prod.formula, name: prod.formula, color: '#ffffff', state: 'liquid' };
-      processedContents.push({ ...prodData, id: generateId(), isPrecipitate: true });
-      products.push({ formula: prodData.formula, color: prodData.color });
-
-      // Determine product coefficient relative to reactants (e.g. H2 + Cl2 -> 2HCl => ratio 2)
-      const prodCoeff = prod.coeff || prod.coefficient || prod.ratio || (reaction.products?.length === 1 && reaction.reactants?.length >= 2 ? 2 : 1);
-      const reactCoeff = reaction.reactants?.[0]?.coeff || reaction.reactants?.[0]?.coefficient || 1;
-      const ratio = prodCoeff / reactCoeff;
-      const calculatedAmount = Math.round(baseReactantVol * ratio * 100) / 100;
-
-      const yAmount = calculatedAmount > 0 ? calculatedAmount : (prodData.state === 'solid' ? 5.0 : (prodData.state === 'gas' ? 100 : 50));
-      const yUnit = prodData.state === 'solid' ? 'g' : (prodData.state === 'gas' ? 'ml' : 'ml');
-      
-      newYields.push({
-        id: generateId(),
-        formula: prodData.formula,
-        name: prodData.name || prodData.formula,
-        state: prodData.state || 'liquid',
-        amount: yAmount,
-        unit: yUnit,
-        isProduct: true
+    if (stoichiometricYields.length > 0) {
+      stoichiometricYields.forEach(yd => {
+        const prodData = chemicals[yd.formula] || { formula: yd.formula, name: yd.formula, color: '#ffffff', state: yd.state };
+        processedContents.push({ ...prodData, id: generateId(), isPrecipitate: true });
+        products.push({ formula: prodData.formula, color: prodData.color });
+        newYields.push(yd);
       });
-    });
+    } else {
+      reaction.products.forEach((prod) => {
+        const prodData = chemicals[prod.formula] || { formula: prod.formula, name: prod.formula, color: '#ffffff', state: 'liquid' };
+        processedContents.push({ ...prodData, id: generateId(), isPrecipitate: true });
+        products.push({ formula: prodData.formula, color: prodData.color });
+
+        const yAmount = prodData.state === 'solid' ? 5.0 : (prodData.state === 'gas' ? 100 : 50);
+        const yUnit = prodData.state === 'solid' ? 'g' : 'ml';
+        newYields.push({
+          id: generateId(),
+          formula: prodData.formula,
+          name: prodData.name || prodData.formula,
+          state: prodData.state || 'liquid',
+          amount: yAmount,
+          unit: yUnit,
+          isProduct: true
+        });
+      });
+    }
 
     const newSolids = processedContents.filter(c => c.state === 'solid');
 
