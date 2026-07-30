@@ -136,9 +136,7 @@ const Footer = () => {
 
 
 
-        <div className="absolute bottom-6 right-6 text-[11px] font-semibold uppercase tracking-[0.25em] text-viet-text-light/70">
-          created bh Nguyễn Thanh Tiền
-        </div>
+
 
       </div>
     </footer>
