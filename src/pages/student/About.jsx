@@ -69,12 +69,12 @@ const About = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mt-12 w-full">
                  {Array.isArray(teamMembers) && teamMembers.map((member, i) => (
-                    <div key={i} className="bg-white/80 p-6 rounded-2xl border-2 border-viet-border hover:border-viet-green/50 transition-colors shadow-sm flex flex-col items-center text-center gap-4">
-                       <div className="w-24 h-24 sm:w-28 sm:h-28 shrink-0 rounded-full overflow-hidden border-4 border-white ring-2 ring-viet-green shadow-md bg-gray-100 flex items-center justify-center relative">
+                    <div key={i} className="bg-white/80 p-8 rounded-2xl border-2 border-viet-border hover:border-viet-green/50 transition-colors shadow-sm flex flex-col items-center text-center gap-6">
+                       <div className="w-32 h-32 sm:w-44 sm:h-44 shrink-0 rounded-full overflow-hidden border-4 border-white ring-2 ring-viet-green shadow-md bg-gray-100 flex items-center justify-center relative">
                          {member.image ? (
                            <img src={member.image} alt={member.name} className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
                          ) : null}
-                         <span className="text-gray-400 font-black text-4xl" style={{ display: member.image ? 'none' : 'flex' }}>
+                         <span className="text-gray-400 font-black text-6xl" style={{ display: member.image ? 'none' : 'flex' }}>
                            {member.name.charAt(0)}
                          </span>
                        </div>

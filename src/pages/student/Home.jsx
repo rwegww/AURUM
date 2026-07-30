@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
@@ -351,18 +351,21 @@ const Home = () => {
 
       {/* â”€â”€â”€ FINAL CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {!isLoggedIn && (
-        <section className="py-24 bg-viet-green relative overflow-hidden">
+        <section className="py-24 bg-[#1a1a1a] relative overflow-hidden">
           <div className="absolute inset-0 opacity-10 bg-[url('/icons.svg')] bg-repeat bg-[length:100px_100px]" />
+          {/* Subtle Green Glow Effect */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-viet-green/20 blur-[100px] rounded-full pointer-events-none" />
+          
           <div className="max-w-[800px] mx-auto px-6 relative z-10 text-center">
             <h2 className="font-rubik text-4xl md:text-5xl font-black text-white mb-4">
               {t('home.final_cta.title')}
             </h2>
-            <p className="text-lg text-white/90 font-medium mb-10 max-w-xl mx-auto">
+            <p className="text-lg text-white/70 font-medium mb-10 max-w-xl mx-auto">
               {t('home.final_cta.subtitle')}
             </p>
             <Link
               to="/login"
-              className="bg-white text-viet-green hover:bg-gray-50 hover:scale-105 transition-all text-lg font-black px-10 py-5 rounded-full inline-flex items-center justify-center gap-3 shadow-lg"
+              className="bg-viet-green text-white hover:bg-emerald-600 hover:scale-105 transition-all text-lg font-black px-10 py-5 rounded-full inline-flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(118,192,52,0.3)]"
             >
               {t('home.final_cta.button')}
               <Zap className="fill-current" size={20} />

@@ -164,7 +164,9 @@
       "arena": "PK Race"
     },
     "support": {
+      "title": "Support",
       "user_guide": "About Us",
+      "faq": "Aurum Team",
       "terms_of_service": "Terms & Conditions"
     },
     "contact": {
