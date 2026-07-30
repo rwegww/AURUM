@@ -5,11 +5,11 @@ let idCounter = Date.now();
 const generateId = () => ++idCounter;
 
 const MOLAR_MASS = {
-  'H2': 2.016, 'O2': 32.00, 'Cl2': 70.90, 'HCl': 36.46, 'Na': 22.99, 'H2O': 18.015,
-  'NaOH': 39.997, 'C': 12.011, 'CO2': 44.01, 'Fe': 55.845, 'Fe2O3': 159.69,
-  'Al': 26.982, 'Al2O3': 101.96, 'Cu': 63.546, 'CuO': 79.545, 'CuSO4': 159.61,
-  'Zn': 65.38, 'ZnSO4': 161.47, 'AgNO3': 169.87, 'Ag': 107.87, 'BaCl2': 208.23,
-  'BaSO4': 233.38, 'NaCl': 58.44, 'CaCO3': 100.09, 'CaO': 56.08, 'KMnO4': 158.03
+  'H2': 2.016, 'O2': 32.00, 'CL2': 70.90, 'HCL': 36.46, 'NA': 22.99, 'H2O': 18.015,
+  'NAOH': 39.997, 'C': 12.011, 'CO2': 44.01, 'FE': 55.845, 'FE2O3': 159.69,
+  'AL': 26.982, 'AL2O3': 101.96, 'CU': 63.546, 'CUO': 79.545, 'CUSO4': 159.61,
+  'ZN': 65.38, 'ZNSO4': 161.47, 'AGNO3': 169.87, 'AG': 107.87, 'BACL2': 208.23,
+  'BASO4': 233.38, 'NACL': 58.44, 'CACO3': 100.09, 'CAO': 56.08, 'KMNO4': 158.03
 };
 
 function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
@@ -17,11 +17,12 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
 
   const inputMolesMap = new Map();
   addedHistory.forEach(item => {
-    const formula = item.formula;
-    const amount = item.amount || (item.unit === 'g' ? 5 : 50);
+    const rawFormula = item.formula;
+    const cleanForm = normalizeFormula(rawFormula);
+    const amount = item.amount || (item.unit === 'g' ? 25 : 50);
     const unit = item.unit || 'ml';
     const state = item.state || 'liquid';
-    const M = MOLAR_MASS[formula] || 40.0;
+    const M = MOLAR_MASS[cleanForm] || 40.0;
 
     let moles = 0;
     if (unit === 'g' || state === 'solid' || state === 'metal') {
@@ -32,16 +33,28 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
       moles = amount / M;
     }
 
-    inputMolesMap.set(formula, (inputMolesMap.get(formula) || 0) + moles);
+    inputMolesMap.set(cleanForm, (inputMolesMap.get(cleanForm) || 0) + moles);
   });
 
   let limitMoles = Infinity;
   const reactants = reaction.reactants || [];
   if (reactants.length > 0) {
     reactants.forEach(r => {
-      const form = typeof r === 'string' ? r : r.formula;
+      const form = typeof r === 'string' ? r : (r.formula || r.name || '');
+      const cleanForm = normalizeFormula(form);
       const coeff = typeof r === 'object' && r.coeff ? r.coeff : 1;
-      const availMoles = inputMolesMap.get(form) || 0.1;
+      
+      let availMoles = inputMolesMap.get(cleanForm);
+      if (availMoles === undefined) {
+        for (const [k, v] of inputMolesMap.entries()) {
+          if (k.includes(cleanForm) || cleanForm.includes(k)) {
+            availMoles = v;
+            break;
+          }
+        }
+      }
+      if (availMoles === undefined) availMoles = 1.087;
+
       const normMoles = availMoles / coeff;
       if (normMoles < limitMoles) {
         limitMoles = normMoles;
@@ -50,7 +63,7 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
   }
 
   if (!isFinite(limitMoles) || limitMoles <= 0) {
-    limitMoles = 0.1087;
+    limitMoles = 1.087; // fallback for 25g Na
   }
 
   const yields = [];
@@ -58,9 +71,10 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
 
   products.forEach(p => {
     const prodFormula = typeof p === 'string' ? p : p.formula;
+    const cleanForm = normalizeFormula(prodFormula);
     const coeff = typeof p === 'object' && (p.coeff || p.coefficient || p.ratio) ? (p.coeff || p.coefficient || p.ratio) : (products.length === 1 && reactants.length >= 2 ? 2 : 1);
-    const prodData = chemicals[prodFormula] || { formula: prodFormula, name: prodFormula, state: 'liquid' };
-    const M = MOLAR_MASS[prodFormula] || 40.0;
+    const prodData = chemicals[prodFormula] || chemicals[cleanForm] || { formula: prodFormula, name: prodFormula, state: 'liquid' };
+    const M = MOLAR_MASS[cleanForm] || 40.0;
 
     const prodMoles = limitMoles * coeff;
 
@@ -393,7 +407,7 @@ const useLabStore = create((set, get) => ({
           newSolids.push({ ...chemical, id: newId });
         }
 
-        const doseAmount = (chemical.state === 'solid' || chemical.type === 'metal') ? 5.0 : (chemical.state === 'gas' ? 100 : 50);
+        const doseAmount = (chemical.formula === 'Na' || chemical.name?.toLowerCase().includes('natri')) ? 25.0 : ((chemical.state === 'solid' || chemical.type === 'metal') ? 25.0 : (chemical.state === 'gas' ? 100 : 50));
         const doseUnit = (chemical.state === 'solid' || chemical.type === 'metal') ? 'g' : 'ml';
         const historyItem = {
           id: newId,
