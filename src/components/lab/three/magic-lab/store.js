@@ -4,13 +4,102 @@ import { create } from 'zustand';
 let idCounter = Date.now();
 const generateId = () => ++idCounter;
 
-const MOLAR_MASS = {
-  'H2': 2.016, 'O2': 32.00, 'CL2': 70.90, 'HCL': 36.46, 'NA': 22.99, 'H2O': 18.015,
-  'NAOH': 39.997, 'C': 12.011, 'CO2': 44.01, 'FE': 55.845, 'FE2O3': 159.69,
-  'AL': 26.982, 'AL2O3': 101.96, 'CU': 63.546, 'CUO': 79.545, 'CUSO4': 159.61,
-  'ZN': 65.38, 'ZNSO4': 161.47, 'AGNO3': 169.87, 'AG': 107.87, 'BACL2': 208.23,
-  'BASO4': 233.38, 'NACL': 58.44, 'CACO3': 100.09, 'CAO': 56.08, 'KMNO4': 158.03
+// Bảng khối lượng nguyên tử chuẩn IUPAC
+const ATOMIC_WEIGHTS = {
+  'H': 1.008, 'He': 4.0026, 'Li': 6.94, 'Be': 9.0122, 'B': 10.81, 'C': 12.011,
+  'N': 14.007, 'O': 15.999, 'F': 18.998, 'Ne': 20.180, 'Na': 22.990, 'Mg': 24.305,
+  'Al': 26.982, 'Si': 28.085, 'P': 30.974, 'S': 32.06, 'Cl': 35.45, 'K': 39.098,
+  'Ar': 39.948, 'Ca': 40.078, 'Sc': 44.956, 'Ti': 47.867, 'V': 50.942, 'Cr': 51.996,
+  'Mn': 54.938, 'Fe': 55.845, 'Co': 58.933, 'Ni': 58.693, 'Cu': 63.546, 'Zn': 65.38,
+  'Ga': 69.723, 'Ge': 72.630, 'As': 74.922, 'Se': 78.971, 'Br': 79.904, 'Kr': 83.798,
+  'Rb': 85.468, 'Sr': 87.62, 'Ag': 107.868, 'Ba': 137.327, 'Pt': 195.084, 'Au': 196.967,
+  'Hg': 200.592, 'Pb': 207.2, 'I': 126.904
 };
+
+/**
+ * Đếm số lượng từng nguyên tố trong công thức có ngoặc (), [].
+ */
+function parseFormula(formula) {
+  if (!formula) return {};
+  const cleaned = String(formula)
+    .replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => {
+      const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
+      return subMap[match] || match;
+    })
+    .replace(/\[/g, '(')
+    .replace(/\]/g, ')');
+
+  const tokens = cleaned.match(/([A-Z][a-z]?|\d+|[()])/g);
+  if (!tokens) return {};
+
+  const stack = [{}];
+  let i = 0;
+
+  while (i < tokens.length) {
+    const token = tokens[i];
+    if (token === '(') {
+      stack.push({});
+    } else if (token === ')') {
+      i++;
+      const multiplier = (i < tokens.length && /^\d+$/.test(tokens[i])) ? parseInt(tokens[i], 10) : 1;
+      const top = stack.pop();
+      const current = stack[stack.length - 1];
+      for (const [elem, count] of Object.entries(top)) {
+        current[elem] = (current[elem] || 0) + count * multiplier;
+      }
+      continue;
+    } else if (/^\d+$/.test(token)) {
+      // digit handled by previous element/bracket
+    } else {
+      const elem = token;
+      let multiplier = 1;
+      if (i + 1 < tokens.length && /^\d+$/.test(tokens[i + 1])) {
+        multiplier = parseInt(tokens[i + 1], 10);
+        i++;
+      }
+      const current = stack[stack.length - 1];
+      current[elem] = (current[elem] || 0) + multiplier;
+    }
+    i++;
+  }
+
+  return stack[0];
+}
+
+/**
+ * Tính khối lượng mol phân tử, hỗ trợ chất ngậm nước (vd: CuSO4.5H2O).
+ */
+function calculateMolarMass(formula) {
+  if (!formula) return 40.0;
+  const cleanStr = String(formula).replace(/\(aq\)|\(s\)|\(g\)|\(l\)|\+/gi, '').trim();
+  const parts = cleanStr.split('.');
+  let totalMass = 0.0;
+
+  // Xử lý phần chính
+  const mainElements = parseFormula(parts[0]);
+  for (const [elem, count] of Object.entries(mainElements)) {
+    totalMass += (ATOMIC_WEIGHTS[elem] || 0.0) * count;
+  }
+
+  // Xử lý phần ngậm nước (nếu có)
+  if (parts.length > 1) {
+    for (let p = 1; p < parts.length; p++) {
+      const hydrate = parts[p];
+      const match = hydrate.match(/^(\d*)(.*)/);
+      if (match) {
+        const n = match[1] ? parseInt(match[1], 10) : 1;
+        const subElements = parseFormula(match[2]);
+        let subMass = 0;
+        for (const [el, cnt] of Object.entries(subElements)) {
+          subMass += (ATOMIC_WEIGHTS[el] || 0.0) * cnt;
+        }
+        totalMass += n * subMass;
+      }
+    }
+  }
+
+  return totalMass > 0 ? Math.round(totalMass * 1000) / 1000 : 40.0;
+}
 
 function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
   if (!addedHistory || addedHistory.length === 0) return [];
@@ -22,16 +111,11 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
     const amount = item.amount || (item.unit === 'g' ? 25 : 50);
     const unit = item.unit || 'ml';
     const state = item.state || 'liquid';
-    const M = MOLAR_MASS[cleanForm] || 40.0;
+    const M = calculateMolarMass(rawFormula);
 
-    let moles = 0;
-    if (unit === 'g' || state === 'solid' || state === 'metal') {
-      moles = amount / M;
-    } else if (state === 'gas') {
-      moles = (amount / 1000) / 22.4;
-    } else {
-      moles = amount / M;
-    }
+    let moles = (unit === 'g' || state === 'solid' || state === 'metal') 
+      ? amount / M 
+      : (state === 'gas' ? (amount / 1000) / 22.4 : amount / M);
 
     inputMolesMap.set(cleanForm, (inputMolesMap.get(cleanForm) || 0) + moles);
   });
@@ -63,7 +147,7 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
   }
 
   if (!isFinite(limitMoles) || limitMoles <= 0) {
-    limitMoles = 1.087; // fallback for 25g Na
+    limitMoles = 1.087; // fallback 25g Na
   }
 
   const yields = [];
@@ -74,7 +158,7 @@ function calculateStoichiometricYields(reaction, addedHistory, chemicals) {
     const cleanForm = normalizeFormula(prodFormula);
     const coeff = typeof p === 'object' && (p.coeff || p.coefficient || p.ratio) ? (p.coeff || p.coefficient || p.ratio) : (products.length === 1 && reactants.length >= 2 ? 2 : 1);
     const prodData = chemicals[prodFormula] || chemicals[cleanForm] || { formula: prodFormula, name: prodFormula, state: 'liquid' };
-    const M = MOLAR_MASS[cleanForm] || 40.0;
+    const M = calculateMolarMass(prodFormula);
 
     const prodMoles = limitMoles * coeff;
 
@@ -667,7 +751,16 @@ const useLabStore = create((set, get) => ({
   clearBeaker: () => set(state => {
     const idx = state.activeBeakerIndex;
     const newBeakers = [...state.beakers];
-    newBeakers[idx] = createDefaultBeaker(generateId(), "Đã làm sạch dụng cụ.");
+    newBeakers[idx] = {
+      ...createDefaultBeaker(generateId(), "Đã làm sạch dụng cụ."),
+      isHeating: false,
+      isElectrolyzing: false,
+      heatTemperature: 25,
+      activeFlame: false,
+      activeSmoke: false,
+      activeBubbles: false,
+      shake: false
+    };
     return { beakers: newBeakers, isPouringFormula: null };
   }),
 
