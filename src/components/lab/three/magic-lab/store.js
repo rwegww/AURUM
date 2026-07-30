@@ -457,13 +457,25 @@ const useLabStore = create((set, get) => ({
     const products = [];
     const newYields = [...(beakerIdx !== undefined && get().beakers[beakerIdx]?.yieldHistory || [])];
 
+    // Calculate stoichiometric amounts for products based on reactant inputs
+    const currentAdded = (beakerIdx !== undefined && get().beakers[beakerIdx]?.addedHistory) || [];
+    const totalInputVol = currentAdded.reduce((sum, item) => sum + (item.amount || 50), 0);
+    const baseReactantVol = currentAdded.length > 0 ? (totalInputVol / currentAdded.length) : 100;
+
     reaction.products.forEach((prod) => {
       const prodData = chemicals[prod.formula] || { formula: prod.formula, name: prod.formula, color: '#ffffff', state: 'liquid' };
       processedContents.push({ ...prodData, id: generateId(), isPrecipitate: true });
       products.push({ formula: prodData.formula, color: prodData.color });
 
-      const yAmount = prodData.state === 'solid' ? 5.0 : (prodData.state === 'gas' ? 100 : 50);
-      const yUnit = prodData.state === 'solid' ? 'g' : 'ml';
+      // Determine product coefficient relative to reactants (e.g. H2 + Cl2 -> 2HCl => ratio 2)
+      const prodCoeff = prod.coeff || prod.coefficient || prod.ratio || (reaction.products?.length === 1 && reaction.reactants?.length >= 2 ? 2 : 1);
+      const reactCoeff = reaction.reactants?.[0]?.coeff || reaction.reactants?.[0]?.coefficient || 1;
+      const ratio = prodCoeff / reactCoeff;
+      const calculatedAmount = Math.round(baseReactantVol * ratio * 100) / 100;
+
+      const yAmount = calculatedAmount > 0 ? calculatedAmount : (prodData.state === 'solid' ? 5.0 : (prodData.state === 'gas' ? 100 : 50));
+      const yUnit = prodData.state === 'solid' ? 'g' : (prodData.state === 'gas' ? 'ml' : 'ml');
+      
       newYields.push({
         id: generateId(),
         formula: prodData.formula,
