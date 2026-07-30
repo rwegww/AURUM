@@ -1,4 +1,5 @@
 import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import GameWorkspace from '../2d-engine/GameWorkspace';
 import useLabStore from './magic-lab/store';
 
@@ -1026,13 +1027,13 @@ const MagicLab3D = () => {
       `}</style>
       {/* Right-side Spiral Notebook Matching Attached Image */}
       <AnimatePresence>
-        {showNotepad && (
+        {showNotepad && createPortal(
           <motion.div
             initial={{ opacity: 0, y: -20, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.92 }}
             transition={{ type: 'spring', damping: 22, stiffness: 160 }}
-            className="absolute top-16 right-4 z-40 w-80 sm:w-[380px] flex flex-col pointer-events-auto filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]"
+            className="fixed top-16 right-4 z-[9999] w-80 sm:w-[380px] flex flex-col pointer-events-auto filter drop-shadow-[0_25px_35px_rgba(0,0,0,0.6)]"
           >
             {/* Top Wooden Bar with Metallic Spiral Coils */}
             <div className="relative w-full h-11 bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] rounded-t-[18px] border-b-2 border-[#24130a] flex items-center justify-between px-4 z-20">
@@ -1127,17 +1128,18 @@ const MagicLab3D = () => {
                 </button>
               </div>
             </div>
-          </motion.div>
+          </motion.div>,
+          document.body
         )}
       </AnimatePresence>
       {/* Recipe Book Bottom Dock Panel */}
       <AnimatePresence>
-        {showRecipeBook && (
+        {showRecipeBook && createPortal(
           <motion.div
             initial={{ opacity: 0, y: 80 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 80 }}
-            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-[200] w-[95%] max-w-3xl h-[250px] flex justify-center drop-shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] w-[95%] max-w-4xl h-[300px] flex justify-center drop-shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
           >
             <div className="relative w-full h-full bg-[#fcf8ee] rounded-[20px] border-2 border-[#5c3a27]/60 shadow-[0_15px_40px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col pointer-events-auto">
               {/* Header */}
@@ -1198,7 +1200,8 @@ const MagicLab3D = () => {
                 )}
               </div>
             </div>
-          </motion.div>
+          </motion.div>,
+          document.body
         )}
       </AnimatePresence>
 

@@ -258,10 +258,17 @@
     "team_section": {
       "title": "Đội ngũ Aurum",
       "description": "Chúng tôi quy tụ giáo viên Hóa học và đội ngũ phát triển sản phẩm giáo dục. Aurum liên tục cải tiến nội dung bài học, mô phỏng và công cụ luyện tập để giúp học sinh học Hóa học dễ hiểu hơn.",
-      "achievements": [
-        "Hơn 1.000 tài liệu bài học chất lượng cao",
-        "Công nghệ mô phỏng thiết bị hóa học 3D đỉnh cao",
-        "Cộng đồng học viên hơn 50.000 thành viên"
+      "members": [
+        {
+          "name": "Huỳnh Vũ Luân",
+          "role": "Phụ trách nội dung bài học và cân bằng hệ thống",
+          "image": "/images/team/luan.jpg"
+        },
+        {
+          "name": "Nguyễn Thanh Tiền",
+          "role": "Thiết kế chính cho ứng dụng web và đảm bảo trải nghiệm người dùng",
+          "image": "/images/team/tien.jpg"
+        }
       ]
     }
   },
@@ -1135,4 +1142,3 @@
     "send_another": "Gửi phản hồi khác"
   }
 }
-
