@@ -66,17 +66,26 @@ const useLabStore = create((set, get) => ({
         let updatedBeaker = { ...beaker };
         let changed = false;
 
-        // Xử lý tăng/giảm nhiệt độ
+        // Xử lý tăng/giảm nhiệt độ (Sanitize NaN/undefined)
+        const currentTemp = (typeof beaker.heatTemperature === 'number' && !Number.isNaN(beaker.heatTemperature)) ? beaker.heatTemperature : 25;
+        const currentPower = (typeof beaker.heatPower === 'number' && !Number.isNaN(beaker.heatPower)) ? beaker.heatPower : 5;
+
         if (beaker.isHeating) {
           // Tăng nhiệt: mỗi giây (tick) tăng = heatPower * 1.5
-          updatedBeaker.heatTemperature = Math.min(1200, beaker.heatTemperature + beaker.heatPower * 1.5);
+          updatedBeaker.heatTemperature = Math.min(1200, currentTemp + currentPower * 1.5);
+          updatedBeaker.heatPower = currentPower;
           changed = true;
-          updatedBeaker.heatTime = beaker.heatTime + 1;
+          updatedBeaker.heatTime = (beaker.heatTime || 0) + 1;
         } else {
           // Giảm nhiệt tự nhiên về 25°C
-          if (beaker.heatTemperature > 25) {
-            updatedBeaker.heatTemperature = Math.max(25, beaker.heatTemperature - 5);
+          if (currentTemp > 25) {
+            updatedBeaker.heatTemperature = Math.max(25, currentTemp - 5);
             changed = true;
+          } else {
+            if (beaker.heatTemperature !== 25) {
+              updatedBeaker.heatTemperature = 25;
+              changed = true;
+            }
           }
         }
 

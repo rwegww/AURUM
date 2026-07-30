@@ -137,26 +137,130 @@ const GameWorkspace = () => {
                   onClick={() => setActiveBeaker(i)} 
                 />
 
+                {/* Left Side Display: Chemical Inputs & Reaction Products */}
+                <AnimatePresence>
+                  {(() => {
+                    const added = beaker.addedHistory || [];
+                    const yields = beaker.yieldHistory || [];
+                    const contents = beaker.contents || [];
+
+                    if (added.length === 0 && contents.length === 0 && yields.length === 0) return null;
+
+                    // Aggregate added inputs
+                    const inputMap = new Map();
+                    added.forEach(item => {
+                      const key = `${item.formula}_${item.unit}`;
+                      if (!inputMap.has(key)) {
+                        inputMap.set(key, { formula: item.formula, name: item.name, amount: 0, unit: item.unit });
+                      }
+                      inputMap.get(key).amount += (item.amount || 0);
+                    });
+
+                    // Fallback if addedHistory is empty but contents exist
+                    if (inputMap.size === 0 && contents.length > 0) {
+                      contents.forEach(c => {
+                        const unit = (c.state === 'solid' || c.type === 'metal') ? 'g' : 'ml';
+                        const defaultAmt = (c.state === 'solid' || c.type === 'metal') ? 5 : 50;
+                        const key = `${c.formula}_${unit}`;
+                        if (!inputMap.has(key)) {
+                          inputMap.set(key, { formula: c.formula, name: c.name || c.formula, amount: defaultAmt, unit });
+                        }
+                      });
+                    }
+
+                    // Aggregate yields / products
+                    const yieldMap = new Map();
+                    yields.forEach(item => {
+                      const key = `${item.formula}_${item.unit}`;
+                      if (!yieldMap.has(key)) {
+                        yieldMap.set(key, { formula: item.formula, name: item.name, amount: 0, unit: item.unit, state: item.state });
+                      }
+                      yieldMap.get(key).amount += (item.amount || 0);
+                    });
+
+                    const inputList = Array.from(inputMap.values());
+                    const yieldList = Array.from(yieldMap.values());
+
+                    return (
+                      <motion.div 
+                        initial={{ opacity: 0, x: 10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 10 }}
+                        className="absolute top-1/2 -translate-y-1/2 -left-48 sm:-left-56 bg-slate-950/90 backdrop-blur-xl border border-white/15 rounded-2xl p-3 z-30 pointer-events-auto shadow-2xl flex flex-col gap-2 min-w-[170px] max-w-[210px] text-white"
+                      >
+                        {/* Input Chemicals */}
+                        {inputList.length > 0 && (
+                          <div>
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                              <span className="text-[9px] font-black uppercase tracking-wider text-blue-400">Đã cho vào</span>
+                            </div>
+                            <div className="space-y-0.5 pl-2.5 border-l border-blue-500/30 text-xs font-medium">
+                              {inputList.map((inp, idx) => (
+                                <div key={idx} className="flex justify-between items-center gap-2">
+                                  <span className="font-bold text-white/90">{inp.formula}</span>
+                                  <span className="text-[11px] font-mono text-blue-300">{inp.amount}{inp.unit}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Reaction Yields / Products */}
+                        {yieldList.length > 0 && (
+                          <div className="pt-1.5 border-t border-white/10">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                              <span className="text-[9px] font-black uppercase tracking-wider text-emerald-400">Sản phẩm thu được</span>
+                            </div>
+                            <div className="space-y-0.5 pl-2.5 border-l border-emerald-500/30 text-xs font-medium">
+                              {yieldList.map((yd, idx) => (
+                                <div key={idx} className="flex justify-between items-center gap-2">
+                                  <span className="font-bold text-emerald-300">
+                                    {yd.formula} {yd.state === 'gas' ? '↑' : ''}
+                                  </span>
+                                  <span className="text-[11px] font-mono text-emerald-400">{yd.amount}{yd.unit}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Reaction Message badge if not default */}
+                        {beaker.reactionMessage && !beaker.reactionMessage.includes("Mời bắt đầu") && (
+                          <div className="mt-1 pt-1.5 border-t border-white/10 text-[10px] font-bold text-amber-300 leading-tight italic">
+                            ✨ {beaker.reactionMessage}
+                          </div>
+                        )}
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
+
                 {/* Temperature Display (Right Side) */}
                 <AnimatePresence>
-                  {(beaker.isHeating || Math.round(beaker.heatTemperature) > 25) && (
-                    <motion.div 
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      className="absolute top-1/2 -translate-y-1/2 -right-20 bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-2 z-30 pointer-events-none shadow-xl flex flex-col items-center"
-                    >
-                      <span className="text-[9px] uppercase font-bold text-white/50 mb-1 tracking-widest">Nhiệt độ</span>
-                      <span className={`text-sm font-black tabular-nums leading-none ${
-                        beaker.heatTemperature >= 800 ? 'text-red-400 animate-pulse drop-shadow-[0_0_5px_rgba(248,113,113,0.5)]'
-                        : beaker.heatTemperature >= 400 ? 'text-orange-400 drop-shadow-[0_0_5px_rgba(251,146,60,0.5)]'
-                        : beaker.heatTemperature > 50 ? 'text-amber-400'
-                        : 'text-blue-300'
-                      }`}>
-                        {Math.round(beaker.heatTemperature)}°C
-                      </span>
-                    </motion.div>
-                  )}
+                  {(() => {
+                    const temp = (typeof beaker?.heatTemperature === 'number' && !Number.isNaN(beaker.heatTemperature)) ? beaker.heatTemperature : 25;
+                    if (!beaker?.isHeating && Math.round(temp) <= 25) return null;
+                    return (
+                      <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -10 }}
+                        className="absolute top-1/2 -translate-y-1/2 -right-20 bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-xl p-2 z-30 pointer-events-none shadow-xl flex flex-col items-center"
+                      >
+                        <span className="text-[9px] uppercase font-bold text-white/50 mb-1 tracking-widest">Nhiệt độ</span>
+                        <span className={`text-sm font-black tabular-nums leading-none ${
+                          temp >= 800 ? 'text-red-400 animate-pulse drop-shadow-[0_0_5px_rgba(248,113,113,0.5)]'
+                          : temp >= 400 ? 'text-orange-400 drop-shadow-[0_0_5px_rgba(251,146,60,0.5)]'
+                          : temp > 50 ? 'text-amber-400'
+                          : 'text-blue-300'
+                        }`}>
+                          {Math.round(temp)}°C
+                        </span>
+                      </motion.div>
+                    );
+                  })()}
                 </AnimatePresence>
               </motion.div>
             </div>

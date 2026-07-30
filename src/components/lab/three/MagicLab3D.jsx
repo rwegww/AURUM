@@ -798,45 +798,51 @@ const MagicLab3D = () => {
             </div>
 
             {/* Heat Power Slider */}
-            <div className={`mb-3 p-3 rounded-2xl border transition-all ${activeBeaker.isHeating ? 'bg-white/5 border-orange-500/30' : 'bg-black/20 border-white/5 opacity-50'}`}>
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[9px] font-black uppercase tracking-widest text-orange-400/80">Mức lửa</span>
-                <div className="flex gap-3 text-[11px] font-black tabular-nums">
-                  <span className={`${!activeBeaker.isHeating ? 'text-white/30' : 'text-orange-400'}`}>
-                    🔥 Mức {activeBeaker.heatPower}
-                  </span>
-                  <span className={`${
-                    !activeBeaker.isHeating ? 'text-white/30'
-                    : activeBeaker.heatTemperature >= 800 ? 'text-red-400 animate-pulse' 
-                    : activeBeaker.heatTemperature >= 400 ? 'text-orange-400' 
-                    : activeBeaker.heatTemperature >= 100 ? 'text-amber-400' 
-                    : 'text-white/60'
-                  }`}>
-                    🌡️ {Math.round(activeBeaker.heatTemperature)}°C
-                  </span>
+            {(() => {
+              const tempVal = (typeof activeBeaker?.heatTemperature === 'number' && !Number.isNaN(activeBeaker.heatTemperature)) ? activeBeaker.heatTemperature : 25;
+              const powerVal = (typeof activeBeaker?.heatPower === 'number' && !Number.isNaN(activeBeaker.heatPower)) ? activeBeaker.heatPower : 5;
+              return (
+                <div className={`mb-3 p-3 rounded-2xl border transition-all ${activeBeaker.isHeating ? 'bg-white/5 border-orange-500/30' : 'bg-black/20 border-white/5 opacity-50'}`}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-orange-400/80">Mức lửa</span>
+                    <div className="flex gap-3 text-[11px] font-black tabular-nums">
+                      <span className={`${!activeBeaker.isHeating ? 'text-white/30' : 'text-orange-400'}`}>
+                        🔥 Mức {powerVal}
+                      </span>
+                      <span className={`${
+                        !activeBeaker.isHeating ? 'text-white/30'
+                        : tempVal >= 800 ? 'text-red-400 animate-pulse' 
+                        : tempVal >= 400 ? 'text-orange-400' 
+                        : tempVal >= 100 ? 'text-amber-400' 
+                        : 'text-white/60'
+                      }`}>
+                        🌡️ {Math.round(tempVal)}°C
+                      </span>
+                    </div>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value={powerVal}
+                    disabled={!activeBeaker.isHeating}
+                    onChange={(e) => setHeatPower(Number(e.target.value))}
+                    className={`w-full h-1.5 rounded-full appearance-none accent-orange-500 ${activeBeaker.isHeating ? 'cursor-pointer' : 'cursor-not-allowed grayscale'}`}
+                    style={{
+                      background: activeBeaker.isHeating 
+                        ? `linear-gradient(to right, #f59e0b 0%, #ef4444 ${((powerVal - 1) / 9) * 100}%, rgba(255,255,255,0.1) ${((powerVal - 1) / 9) * 100}%)`
+                        : 'rgba(255,255,255,0.1)'
+                    }}
+                  />
+                  <div className="flex justify-between mt-1 text-[8px] text-white/30 font-bold">
+                    <span>Nhỏ</span>
+                    <span>Vừa</span>
+                    <span>Max</span>
+                  </div>
                 </div>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                step="1"
-                value={activeBeaker.heatPower}
-                disabled={!activeBeaker.isHeating}
-                onChange={(e) => setHeatPower(Number(e.target.value))}
-                className={`w-full h-1.5 rounded-full appearance-none accent-orange-500 ${activeBeaker.isHeating ? 'cursor-pointer' : 'cursor-not-allowed grayscale'}`}
-                style={{
-                  background: activeBeaker.isHeating 
-                    ? `linear-gradient(to right, #f59e0b 0%, #ef4444 ${((activeBeaker.heatPower - 1) / 9) * 100}%, rgba(255,255,255,0.1) ${((activeBeaker.heatPower - 1) / 9) * 100}%)`
-                    : 'rgba(255,255,255,0.1)'
-                }}
-              />
-              <div className="flex justify-between mt-1 text-[8px] text-white/30 font-bold">
-                <span>Nhỏ</span>
-                <span>Vừa</span>
-                <span>Max</span>
-              </div>
-            </div>
+              );
+            })()}
 
 
             {/* Search Bar */}

@@ -25,13 +25,13 @@ const LabSimulatorPage = () => {
                 Pro Lab v2.0
               </span>
             </div>
-            
+
             <h1 className="text-4xl md:text-6xl font-black text-viet-text italic tracking-tighter uppercase leading-none">
               Mô phỏng <br />
-              <span className="text-viet-green drop-shadow-sm">phản ứng 3D</span>
+              <span className="text-viet-green drop-shadow-sm">phản ứng </span>
             </h1>
           </div>
-          
+
           <div className="bg-white p-6 rounded-[2rem] border-2 border-viet-border flex items-center gap-5 shadow-xl hover:shadow-2xl transition-shadow relative group overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-viet-green/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="w-14 h-14 bg-viet-green text-white rounded-2xl flex items-center justify-center shadow-tactile-green active:shadow-none active:translate-y-1 transition-all"><Beaker className="w-7 h-7" /></div>
@@ -49,7 +49,7 @@ const LabSimulatorPage = () => {
         <div className="relative group flex flex-col w-full">
           {/* Backglow effect */}
           <div className="lab-backglow opacity-50 hidden lg:block" />
-          
+
           {/* Main Lab Engine Container */}
           <div className="w-full relative z-10 rounded-[2.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-2xl lab-container-shadow" style={{ height: 'calc(100vh - 320px)', minHeight: '600px' }}>
             <MagicLab3D />
@@ -57,11 +57,8 @@ const LabSimulatorPage = () => {
 
           {/* Decorative Footer Info */}
           <div className="absolute -bottom-12 left-8 right-8 flex justify-between items-center opacity-40">
-             <div className="flex gap-6 text-[10px] font-black uppercase tracking-widest hidden sm:flex">
-                <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-viet-green" /> GPU Accelerated</span>
-                <span className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Real-time Physics</span>
-             </div>
-             <div className="text-[10px] font-bold italic ml-auto sm:ml-0">AURUM CHEMISTRY LAB ENGINE</div>
+
+            <div className="text-[10px] font-bold italic ml-auto sm:ml-0">AURUM CHEMISTRY LAB ENGINE</div>
           </div>
         </div>
       </div>
