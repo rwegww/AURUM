@@ -9,19 +9,16 @@ const GameWorkspace = () => {
   const activeBeakerIndex = useLabStore(state => state.activeBeakerIndex);
   const setActiveBeaker = useLabStore(state => state.setActiveBeaker);
   const isPouringFormula = useLabStore(state => state.isPouringFormula);
-  const evaporateStep = useLabStore(state => state.evaporateStep);
+  const gameTick = useLabStore(state => state.gameTick);
+  const pourToBeaker = useLabStore(state => state.pourToBeaker);
 
-  // Evaporation Effect Timer
+  // Global Game Loop (1 tick = 1 second)
   React.useEffect(() => {
     const interval = setInterval(() => {
-      beakers.forEach((beaker, beakerIdx) => {
-        if (beaker.isHeating) {
-            evaporateStep(beakerIdx);
-        }
-      });
-    }, 2000);
+       gameTick();
+    }, 1000);
     return () => clearInterval(interval);
-  }, [beakers, evaporateStep]);
+  }, [gameTick]);
 
   return (
     <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-end overflow-hidden perspective-[1000px]">
@@ -52,7 +49,7 @@ const GameWorkspace = () => {
           const isActive = i === activeBeakerIndex;
 
           return (
-            <div key={beaker.id} className="relative flex flex-col items-center">
+            <div key={beaker.id} className="relative flex flex-col items-center" data-beaker-target={i}>
               
               {/* Drop Shadow on the table */}
               <div 
@@ -110,9 +107,32 @@ const GameWorkspace = () => {
 
               {/* Beaker Container (moves up when heating) */}
               <motion.div
+                drag
+                dragSnapToOrigin={true}
+                onDragStart={() => setActiveBeaker(i)}
+                onDragEnd={(e, info) => {
+                  const draggedEl = document.querySelector(`[data-drag-id="${i}"]`);
+                  if (draggedEl) {
+                    const originalPointerEvents = draggedEl.style.pointerEvents;
+                    draggedEl.style.pointerEvents = 'none';
+                    const dropTarget = document.elementFromPoint(info.point.x, info.point.y);
+                    draggedEl.style.pointerEvents = originalPointerEvents;
+
+                    const targetBeaker = dropTarget?.closest('[data-beaker-target]');
+                    if (targetBeaker) {
+                      const targetIdx = parseInt(targetBeaker.getAttribute('data-beaker-target'), 10);
+                      if (targetIdx !== i && !isNaN(targetIdx)) {
+                         pourToBeaker(i, targetIdx);
+                      }
+                    }
+                  }
+                }}
+                whileDrag={{ scale: 1.1, rotate: 15, zIndex: 100 }}
                 animate={{ y: beaker.isHeating ? -70 : 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                className="relative z-10 flex flex-col items-center"
+                className="relative flex flex-col items-center cursor-grab active:cursor-grabbing touch-none"
+                style={{ zIndex: isActive ? 50 : 10 }}
+                data-drag-id={i}
               >
                 {/* The Pouring Stream (if active) */}
                 {isActive && isPouringFormula && (
@@ -125,6 +145,45 @@ const GameWorkspace = () => {
                   isActive={isActive} 
                   onClick={() => setActiveBeaker(i)} 
                 />
+
+                {/* Battery for Electrolysis */}
+                <AnimatePresence>
+                  {beaker.isElectrolyzing && (
+                    <motion.div 
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      className="absolute -left-[140%] bottom-0 w-24 h-20 pointer-events-none z-0 flex items-end justify-center"
+                    >
+                       {/* Wires connecting to beaker */}
+                       <svg className="absolute w-[150%] h-[120%] -right-[110%] bottom-4 overflow-visible mix-blend-screen drop-shadow-md">
+                         <path d="M 10 20 Q 50 -10 90 20" fill="none" stroke="#ef4444" strokeWidth="2" strokeDasharray="4 2">
+                           <animate attributeName="stroke-dashoffset" from="12" to="0" dur="0.5s" repeatCount="indefinite" />
+                         </path>
+                         <path d="M 10 30 Q 50 0 90 30" fill="none" stroke="#3b82f6" strokeWidth="2" strokeDasharray="4 2">
+                           <animate attributeName="stroke-dashoffset" from="0" to="12" dur="0.5s" repeatCount="indefinite" />
+                         </path>
+                       </svg>
+
+                       {/* Battery Body */}
+                       <div className="relative w-16 h-16 bg-slate-800 rounded-lg shadow-[0_5px_15px_rgba(0,0,0,0.5)] border-2 border-slate-600 flex flex-col items-center justify-between p-1">
+                          {/* Terminals */}
+                          <div className="absolute -top-3 left-2 w-3 h-3 bg-red-500 rounded-t-sm border border-red-700 flex items-center justify-center text-[8px] font-black text-white">+</div>
+                          <div className="absolute -top-3 right-2 w-3 h-3 bg-blue-500 rounded-t-sm border border-blue-700 flex items-center justify-center text-[8px] font-black text-white">-</div>
+                          
+                          {/* Label */}
+                          <div className="w-full mt-2 bg-yellow-500 text-center rounded-sm text-[8px] font-black text-black">12V DC</div>
+                          
+                          {/* Electricity Effect inside battery */}
+                          <motion.div 
+                             animate={{ opacity: [0.3, 1, 0.3] }}
+                             transition={{ repeat: Infinity, duration: 1 }}
+                             className="w-8 h-4 mt-1 bg-cyan-400 blur-[6px]"
+                          />
+                       </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             </div>
           );

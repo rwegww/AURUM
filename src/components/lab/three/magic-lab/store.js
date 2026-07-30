@@ -17,6 +17,7 @@ const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   isHeating: false,
   isElectrolyzing: false,
   heatTemperature: 25, // °C - nhiệt độ hiện tại
+  heatPower: 5, // Mức lửa (0-10)
   containerType: 'beaker', // 'beaker', 'flask', 'dish'
   activeBubbles: false,
   activeFlame: false,
@@ -58,53 +59,69 @@ const useLabStore = create((set, get) => ({
     }));
   },
 
-  evaporateStep: (beakerIdx) => {
+  gameTick: () => {
     set(state => {
-      const beaker = state.beakers[beakerIdx];
-      if (!beaker) return {};
+      let beakersChanged = false;
+      const newBeakers = state.beakers.map(beaker => {
+        let updatedBeaker = { ...beaker };
+        let changed = false;
 
-      const newBeakers = [...state.beakers];
-      let updatedBeaker = { ...beaker };
-
-      if (beaker.isHeating) {
-        const newHeatTime = beaker.heatTime + 1;
-        updatedBeaker.heatTime = newHeatTime;
-
-        // Overheat logic: vỡ cốc sau 15 bước (30 giây)
-        if (newHeatTime >= 15) {
-          updatedBeaker = {
-            ...createDefaultBeaker(beaker.id, "💥 CỐC BỊ QUÁ NHIỆT VÀ ĐÃ VỠ!"),
-            isHeating: false,
-            activeFlame: true,
-            activeSmoke: true,
-            intensity: 'extreme',
-            shake: true,
-          };
-          
-          setTimeout(() => {
-            set(s => {
-              const bks = [...s.beakers];
-              const b = bks[beakerIdx];
-              if (b && b.reactionMessage.includes("CỐC BỊ QUÁ NHIỆT")) {
-                bks[beakerIdx] = {
-                  ...b,
-                  activeFlame: false,
-                  activeSmoke: false,
-                  shake: false,
-                  reactionMessage: "Cốc thí nghiệm mới (đã thay cốc khác)"
-                };
-              }
-              return { beakers: bks };
-            });
-          }, 3500);
+        // Xử lý tăng/giảm nhiệt độ
+        if (beaker.isHeating) {
+          // Tăng nhiệt: mỗi giây (tick) tăng = heatPower * 1.5
+          updatedBeaker.heatTemperature = Math.min(1200, beaker.heatTemperature + beaker.heatPower * 1.5);
+          changed = true;
+          updatedBeaker.heatTime = beaker.heatTime + 1;
         } else {
-          if (newHeatTime >= 10) {
-            updatedBeaker.reactionMessage = "⚠️ Cảnh báo: Cốc đang quá nhiệt!";
+          // Giảm nhiệt tự nhiên về 25°C
+          if (beaker.heatTemperature > 25) {
+            updatedBeaker.heatTemperature = Math.max(25, beaker.heatTemperature - 5);
+            changed = true;
           }
+        }
 
-          // Evaporation logic if beaker has liquids
+        // Nếu nhiệt độ thay đổi, kiểm tra giới hạn chịu nhiệt của cốc
+        if (changed) {
+          let maxTemp = 450; // beaker
+          if (beaker.containerType === 'flask') maxTemp = 250;
+          if (beaker.containerType === 'dish') maxTemp = 1000;
+
+          if (updatedBeaker.heatTemperature > maxTemp && !updatedBeaker.reactionMessage.includes("QUÁ NHIỆT")) {
+            updatedBeaker = {
+              ...createDefaultBeaker(beaker.id, "💥 CỐC BỊ QUÁ NHIỆT VÀ ĐÃ VỠ!"),
+              isHeating: false,
+              activeFlame: true,
+              activeSmoke: true,
+              intensity: 'extreme',
+              shake: true,
+            };
+            
+            // Xóa hiệu ứng vỡ sau 3.5s
+            setTimeout(() => {
+              set(s => {
+                const bks = [...s.beakers];
+                const bIdx = bks.findIndex(b => b.id === beaker.id);
+                if (bIdx !== -1 && bks[bIdx].reactionMessage.includes("QUÁ NHIỆT")) {
+                  bks[bIdx] = {
+                    ...bks[bIdx],
+                    activeFlame: false,
+                    activeSmoke: false,
+                    shake: false,
+                    reactionMessage: "Cốc thí nghiệm mới (đã thay cốc khác)"
+                  };
+                }
+                return { beakers: bks };
+              });
+            }, 3500);
+          } else if (updatedBeaker.heatTemperature > maxTemp * 0.9 && !updatedBeaker.reactionMessage.includes("QUÁ NHIỆT")) {
+            updatedBeaker.reactionMessage = "⚠️ Cảnh báo: Cốc sắp quá nhiệt!";
+          }
+        }
+
+        // Logic bay hơi (Mỗi 2 tick = 2 giây, nếu đang đun)
+        if (beaker.isHeating && beaker.heatTime % 2 === 0 && !updatedBeaker.reactionMessage.includes("QUÁ NHIỆT")) {
           const hasLiquids = beaker.contents.some(c => c.state !== 'solid');
-          if (hasLiquids) {
+          if (hasLiquids && updatedBeaker.heatTemperature >= 100) {
             const newVol = Math.max(0, beaker.liquidVolume - 0.05);
             updatedBeaker.liquidVolume = newVol;
             updatedBeaker.activeSmoke = true;
@@ -112,22 +129,29 @@ const useLabStore = create((set, get) => ({
             updatedBeaker.intensity = newVol < 0.3 ? 'high' : 'low';
 
             if (newVol <= 0) {
-              // Liquid is fully evaporated, filter out all non-solids
               updatedBeaker.contents = beaker.contents.filter(c => c.state === 'solid');
               updatedBeaker.reactionMessage = "Dung dịch đã bay hơi hoàn toàn.";
               updatedBeaker.activeSmoke = false;
             }
+            changed = true;
           }
         }
-      } else {
-        // Cooling down when not heating
-        if (beaker.heatTime > 0) {
-          updatedBeaker.heatTime = Math.max(0, beaker.heatTime - 1);
+        
+        // Kiểm tra xem phản ứng mới có được kích hoạt không (do nhiệt độ tăng)
+        if (changed && beaker.isHeating && !updatedBeaker.reactionMessage.includes("QUÁ NHIỆT")) {
+           const formulas = updatedBeaker.contents.map(c => c.formula);
+           const reaction = get()._findReaction(formulas, true, updatedBeaker.isElectrolyzing, updatedBeaker.heatTemperature);
+           if (reaction) {
+              const bIdx = state.beakers.findIndex(b => b.id === beaker.id);
+              updatedBeaker = get()._processBeakerReaction(reaction, updatedBeaker.contents, updatedBeaker.droppedSolids, true, bIdx, updatedBeaker);
+           }
         }
-      }
 
-      newBeakers[beakerIdx] = updatedBeaker;
-      return { beakers: newBeakers };
+        if (changed) beakersChanged = true;
+        return updatedBeaker;
+      });
+
+      return beakersChanged ? { beakers: newBeakers } : {};
     });
   },
 
@@ -183,11 +207,11 @@ const useLabStore = create((set, get) => ({
     });
   },
 
-  setHeatTemperature: (temp) => {
+  setHeatPower: (power) => {
     set(state => {
       const idx = state.activeBeakerIndex;
       const newBeakers = [...state.beakers];
-      newBeakers[idx] = { ...newBeakers[idx], heatTemperature: temp };
+      newBeakers[idx] = { ...newBeakers[idx], heatPower: power };
       return { beakers: newBeakers };
     });
   },
@@ -522,7 +546,7 @@ const useLabStore = create((set, get) => ({
   cycleContainerType: () => set(state => {
     const idx = state.activeBeakerIndex;
     const newBeakers = [...state.beakers];
-    const types = ['beaker', 'flask', 'dish'];
+    const types = ['beaker', 'dish'];
     const current = newBeakers[idx].containerType || 'beaker';
     const nextIdx = (types.indexOf(current) + 1) % types.length;
     newBeakers[idx] = { ...newBeakers[idx], containerType: types[nextIdx] };

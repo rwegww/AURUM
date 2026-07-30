@@ -265,7 +265,7 @@ const MagicLab3D = () => {
   const removeBeaker = useLabStore(state => state.removeBeaker);
   const setActiveBeaker = useLabStore(state => state.setActiveBeaker);
   const cycleContainerType = useLabStore(state => state.cycleContainerType);
-  const setHeatTemperature = useLabStore(state => state.setHeatTemperature);
+  const setHeatPower = useLabStore(state => state.setHeatPower);
   const scoopSolids = useLabStore(state => state.scoopSolids);
   const pourToBeaker = useLabStore(state => state.pourToBeaker);
   const toggleElectrolysis = useLabStore(state => state.toggleElectrolysis);
@@ -597,14 +597,28 @@ const MagicLab3D = () => {
       {/* --- Discovery UI Overlays --- */}
       <AnimatePresence>
         {newDiscovery && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-xl rounded-3xl">
-             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-slate-950/80 backdrop-blur-2xl border border-white/10 rounded-[40px] p-10 text-center max-w-sm shadow-[0_0_50px_rgba(59,130,246,0.3)]">
-                <div className="text-5xl mb-6">✨</div>
-                <h2 className="text-2xl font-black text-white mb-2 uppercase italic">Phát hiện mới!</h2>
-                <div className="text-4xl font-black text-blue-400 mb-2 drop-shadow-md">{newDiscovery.formula}</div>
-                <p className="text-white/60 mb-8 font-medium text-sm">{newDiscovery.name}</p>
-                <button onClick={() => setNewDiscovery(null)} className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl w-full font-bold uppercase tracking-widest transition-all">Tuyệt quá!</button>
-             </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: -50 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            exit={{ opacity: 0, y: -50 }} 
+            className="absolute top-6 left-1/2 -translate-x-1/2 z-[200] pointer-events-auto"
+          >
+             <div className="bg-slate-900/90 backdrop-blur-2xl border border-blue-500/30 rounded-3xl p-5 flex items-center gap-5 shadow-[0_10px_40px_rgba(59,130,246,0.4)]">
+                <div className="text-4xl">✨</div>
+                <div>
+                  <h2 className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-0.5">Khám phá hóa chất mới</h2>
+                  <div className="flex items-end gap-2">
+                    <span className="text-2xl font-black text-white drop-shadow-md leading-none">{newDiscovery.formula}</span>
+                    <span className="text-white/60 font-medium text-xs mb-1">({newDiscovery.name})</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setNewDiscovery(null)} 
+                  className="ml-4 w-8 h-8 flex items-center justify-center bg-blue-600/20 hover:bg-blue-600/40 text-blue-400 rounded-xl transition-all"
+                >
+                  ✕
+                </button>
+             </div>
            </motion.div>
         )}
       </AnimatePresence>
@@ -750,18 +764,7 @@ const MagicLab3D = () => {
               >
                 <Filter className="w-4 h-4" />
               </button>
-              <button 
-                onClick={() => setPouringMode(!pouringMode)}
-                disabled={beakers.length < 2 || !activeBeaker.contents.some(c => c.state !== 'solid')}
-                className={`flex-1 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed ${
-                  pouringMode
-                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                    : 'hover:bg-teal-500/10 text-white/50 hover:text-teal-400 border border-transparent hover:border-teal-500/20'
-                }`}
-                title="Rót sang cốc khác"
-              >
-                <ArrowRightLeft className="w-4 h-4" />
-              </button>
+
               <button 
                 onClick={handleClearBeaker}
                 className="flex-1 h-10 rounded-xl flex items-center justify-center hover:bg-cyan-500/10 text-white/50 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all hover:scale-105 active:scale-95"
@@ -778,64 +781,47 @@ const MagicLab3D = () => {
               </button>
             </div>
 
-            {/* Temperature Slider */}
-            <div className="mb-3 bg-white/5 p-3 rounded-2xl border border-white/5">
+            {/* Heat Power Slider */}
+            <div className={`mb-3 p-3 rounded-2xl border transition-all ${activeBeaker.isHeating ? 'bg-white/5 border-orange-500/30' : 'bg-black/20 border-white/5 opacity-50'}`}>
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Nhiệt độ</span>
-                <span className={`text-[11px] font-black tabular-nums ${
-                  activeBeaker.heatTemperature >= 800 ? 'text-red-400' 
-                  : activeBeaker.heatTemperature >= 400 ? 'text-orange-400' 
-                  : activeBeaker.heatTemperature >= 100 ? 'text-amber-400' 
-                  : 'text-white/60'
-                }`}>
-                  🌡️ {activeBeaker.heatTemperature}°C
-                </span>
+                <span className="text-[9px] font-black uppercase tracking-widest text-orange-400/80">Mức lửa</span>
+                <div className="flex gap-3 text-[11px] font-black tabular-nums">
+                  <span className={`${!activeBeaker.isHeating ? 'text-white/30' : 'text-orange-400'}`}>
+                    🔥 Mức {activeBeaker.heatPower}
+                  </span>
+                  <span className={`${
+                    !activeBeaker.isHeating ? 'text-white/30'
+                    : activeBeaker.heatTemperature >= 800 ? 'text-red-400 animate-pulse' 
+                    : activeBeaker.heatTemperature >= 400 ? 'text-orange-400' 
+                    : activeBeaker.heatTemperature >= 100 ? 'text-amber-400' 
+                    : 'text-white/60'
+                  }`}>
+                    🌡️ {Math.round(activeBeaker.heatTemperature)}°C
+                  </span>
+                </div>
               </div>
               <input
                 type="range"
-                min="25"
-                max="1200"
-                step="25"
-                value={activeBeaker.heatTemperature}
-                onChange={(e) => setHeatTemperature(Number(e.target.value))}
-                className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-orange-500"
+                min="1"
+                max="10"
+                step="1"
+                value={activeBeaker.heatPower}
+                disabled={!activeBeaker.isHeating}
+                onChange={(e) => setHeatPower(Number(e.target.value))}
+                className={`w-full h-1.5 rounded-full appearance-none accent-orange-500 ${activeBeaker.isHeating ? 'cursor-pointer' : 'cursor-not-allowed grayscale'}`}
                 style={{
-                  background: `linear-gradient(to right, #3b82f6 0%, #f59e0b ${((activeBeaker.heatTemperature - 25) / (1200 - 25)) * 100}%, rgba(255,255,255,0.1) ${((activeBeaker.heatTemperature - 25) / (1200 - 25)) * 100}%)`
+                  background: activeBeaker.isHeating 
+                    ? `linear-gradient(to right, #f59e0b 0%, #ef4444 ${((activeBeaker.heatPower - 1) / 9) * 100}%, rgba(255,255,255,0.1) ${((activeBeaker.heatPower - 1) / 9) * 100}%)`
+                    : 'rgba(255,255,255,0.1)'
                 }}
               />
               <div className="flex justify-between mt-1 text-[8px] text-white/30 font-bold">
-                <span>25°C</span>
-                <span>600°C</span>
-                <span>1200°C</span>
+                <span>Nhỏ</span>
+                <span>Vừa</span>
+                <span>Max</span>
               </div>
             </div>
 
-            {/* Pouring Mode Target Selector */}
-            <AnimatePresence>
-              {pouringMode && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mb-3 bg-blue-500/10 border border-blue-500/20 rounded-2xl p-3 overflow-hidden"
-                >
-                  <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2">Chọn cốc đích để rót:</p>
-                  <div className="flex gap-2">
-                    {beakers.map((b, idx) => (
-                      idx !== activeBeakerIndex && (
-                        <button
-                          key={b.id}
-                          onClick={() => handlePourTo(idx)}
-                          className="flex-1 h-10 rounded-xl bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/30 text-blue-200 text-xs font-black transition-all hover:scale-105"
-                        >
-                          Cốc #{idx + 1}
-                        </button>
-                      )
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Search Bar */}
             <div className="relative mb-3 group">
@@ -1144,23 +1130,16 @@ const MagicLab3D = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Recipe Book Modal */}
+      {/* Recipe Book Floating Panel */}
       <AnimatePresence>
         {showRecipeBook && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm"
-            onClick={() => setShowRecipeBook(false)}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="absolute bottom-[35vh] left-1/2 -translate-x-1/2 z-[200] w-full max-w-xl max-h-[50vh] flex justify-center drop-shadow-2xl"
           >
-            <motion.div
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl max-h-[85vh] bg-[#fcf8ee] rounded-[28px] border-2 border-[#5c3a27]/40 shadow-[0_25px_60px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col"
-            >
+            <div className="relative w-full h-full bg-[#fcf8ee] rounded-[24px] border-2 border-[#5c3a27]/40 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto">
               {/* Header */}
               <div className="bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] px-6 py-4 flex items-center justify-between border-b-2 border-[#24130a]">
                 <div className="flex items-center gap-3">
@@ -1218,7 +1197,7 @@ const MagicLab3D = () => {
                   ))
                 )}
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
