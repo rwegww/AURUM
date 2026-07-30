@@ -405,44 +405,77 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                 <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} />
             ))}
             
-            {/* Electrodes & Electricity (Electrolysis) */}
+            {/* Electrodes & Electrolysis Visuals */}
             <AnimatePresence>
               {isElectrolyzing && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="absolute inset-0 pointer-events-none flex justify-center items-end"
+                  className="absolute inset-0 pointer-events-none z-10"
                 >
                   {/* Left Electrode (Anode +) */}
-                  <div className="absolute left-[28%] bottom-[5%] top-[-8px] w-[7%] flex flex-col items-center">
-                    {/* Brass Cap / Terminal */}
-                    <div className="w-full h-3 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-700 rounded-t-sm shadow-md border-b border-amber-800" />
-                    {/* Carbon Rod */}
-                    <div className="w-[80%] h-full bg-gradient-to-r from-slate-800 via-slate-500 to-slate-900 shadow-inner rounded-b-sm" />
+                  <div className="absolute left-[26%] bottom-[8%] top-[-28px] w-[10%] flex flex-col items-center z-30">
+                    {/* Red Plug Socket on Top */}
+                    <div className="w-5 h-7 bg-gradient-to-r from-red-600 via-red-500 to-red-700 rounded-t-md shadow-lg border border-red-900 flex items-center justify-center text-[10px] font-black text-white">
+                      +
+                    </div>
+                    {/* Metallic Neck */}
+                    <div className="w-3 h-2 bg-gradient-to-r from-slate-400 to-slate-600 border-t border-b border-slate-700" />
+                    {/* Carbon Rod (Deep in Liquid) */}
+                    <div className="w-[85%] h-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 rounded-b-md shadow-inner border-x border-slate-800" />
                   </div>
                   
                   {/* Right Electrode (Cathode -) */}
-                  <div className="absolute right-[28%] bottom-[5%] top-[-8px] w-[7%] flex flex-col items-center">
-                    {/* Brass Cap / Terminal */}
-                    <div className="w-full h-3 bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-700 rounded-t-sm shadow-md border-b border-amber-800" />
-                    {/* Carbon Rod */}
-                    <div className="w-[80%] h-full bg-gradient-to-r from-slate-800 via-slate-500 to-slate-900 shadow-inner rounded-b-sm" />
+                  <div className="absolute right-[26%] bottom-[8%] top-[-28px] w-[10%] flex flex-col items-center z-30">
+                    {/* Black Plug Socket on Top */}
+                    <div className="w-5 h-7 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-900 rounded-t-md shadow-lg border border-slate-950 flex items-center justify-center text-[10px] font-black text-white">
+                      -
+                    </div>
+                    {/* Metallic Neck */}
+                    <div className="w-3 h-2 bg-gradient-to-r from-slate-400 to-slate-600 border-t border-b border-slate-700" />
+                    {/* Carbon Rod (Deep in Liquid) */}
+                    <div className="w-[85%] h-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-950 rounded-b-md shadow-inner border-x border-slate-800" />
                   </div>
 
-                  {/* Electricity Sparks between electrodes */}
+                  {/* Floating Ion Particles (+ and -) inside liquid */}
+                  <div className="absolute inset-x-2 bottom-[10%] h-[60%] overflow-hidden pointer-events-none mix-blend-screen">
+                     {/* Red Positive Ions (+) */}
+                     <motion.div 
+                       animate={{ y: [0, -15, 0], x: [0, 8, 0], opacity: [0.5, 1, 0.5] }}
+                       transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                       className="absolute left-[38%] top-[30%] w-3 h-3 rounded-full bg-red-500/80 border border-red-300 text-white text-[8px] font-black flex items-center justify-center shadow-[0_0_6px_#ef4444]"
+                     >+</motion.div>
+                     <motion.div 
+                       animate={{ y: [0, 12, 0], x: [0, -6, 0], opacity: [0.4, 0.9, 0.4] }}
+                       transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                       className="absolute left-[45%] top-[60%] w-3 h-3 rounded-full bg-red-500/80 border border-red-300 text-white text-[8px] font-black flex items-center justify-center shadow-[0_0_6px_#ef4444]"
+                     >+</motion.div>
+
+                     {/* Blue Negative Ions (-) */}
+                     <motion.div 
+                       animate={{ y: [0, -12, 0], x: [0, -8, 0], opacity: [0.5, 1, 0.5] }}
+                       transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+                       className="absolute right-[42%] top-[25%] w-3 h-3 rounded-full bg-blue-500/80 border border-blue-300 text-white text-[8px] font-black flex items-center justify-center shadow-[0_0_6px_#3b82f6]"
+                     >-</motion.div>
+                     <motion.div 
+                       animate={{ y: [0, 15, 0], x: [0, 6, 0], opacity: [0.4, 0.9, 0.4] }}
+                       transition={{ duration: 2.7, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+                       className="absolute right-[36%] top-[55%] w-3 h-3 rounded-full bg-blue-500/80 border border-blue-300 text-white text-[8px] font-black flex items-center justify-center shadow-[0_0_6px_#3b82f6]"
+                     >-</motion.div>
+                  </div>
+
+                  {/* Micro Electric Sparks */}
                   <motion.div 
-                    className="absolute bottom-[25%] w-[44%] h-[30%] mix-blend-screen"
+                    className="absolute bottom-[20%] inset-x-[30%] h-[30%] mix-blend-screen"
                     animate={{ 
-                      opacity: [0.2, 1, 0.3, 0.9, 0.1],
-                      scaleY: [1, 1.15, 0.85, 1.1, 1],
-                      filter: ['hue-rotate(0deg)', 'hue-rotate(60deg)', 'hue-rotate(0deg)']
+                      opacity: [0.2, 0.8, 0.3, 1, 0.2],
+                      filter: ['hue-rotate(0deg)', 'hue-rotate(90deg)', 'hue-rotate(0deg)']
                     }}
-                    transition={{ duration: 0.3, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 0.4, repeat: Infinity }}
                   >
-                    <svg viewBox="0 0 100 50" className="w-full h-full drop-shadow-[0_0_8px_rgba(6,182,212,0.9)]">
-                       <path d="M 5 25 Q 25 5 50 25 T 95 25" fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" />
-                       <path d="M 5 25 Q 25 45 50 25 T 95 25" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" />
+                    <svg viewBox="0 0 100 50" className="w-full h-full drop-shadow-[0_0_6px_rgba(34,211,238,0.9)]">
+                       <path d="M 5 25 Q 25 5 50 25 T 95 25" fill="none" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" />
                     </svg>
                   </motion.div>
                 </motion.div>

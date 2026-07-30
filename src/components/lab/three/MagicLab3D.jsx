@@ -1130,21 +1130,21 @@ const MagicLab3D = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Recipe Book Floating Panel */}
+      {/* Recipe Book Bottom Dock Panel */}
       <AnimatePresence>
         {showRecipeBook && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="absolute bottom-[35vh] left-1/2 -translate-x-1/2 z-[200] w-full max-w-xl max-h-[50vh] flex justify-center drop-shadow-2xl"
+            initial={{ opacity: 0, y: 80 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 80 }}
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 z-[200] w-[95%] max-w-3xl h-[250px] flex justify-center drop-shadow-[0_-10px_30px_rgba(0,0,0,0.8)]"
           >
-            <div className="relative w-full h-full bg-[#fcf8ee] rounded-[24px] border-2 border-[#5c3a27]/40 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col pointer-events-auto">
+            <div className="relative w-full h-full bg-[#fcf8ee] rounded-[20px] border-2 border-[#5c3a27]/60 shadow-[0_15px_40px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col pointer-events-auto">
               {/* Header */}
-              <div className="bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] px-6 py-4 flex items-center justify-between border-b-2 border-[#24130a]">
-                <div className="flex items-center gap-3">
-                  <BookOpen className="w-5 h-5 text-[#e6d0bf]" />
-                  <h2 className="text-lg font-black text-[#e6d0bf] uppercase tracking-widest font-serif">Sách Điều Chế</h2>
+              <div className="bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] px-5 py-2.5 flex items-center justify-between border-b-2 border-[#24130a]">
+                <div className="flex items-center gap-2.5">
+                  <BookOpen className="w-4 h-4 text-[#e6d0bf]" />
+                  <h2 className="text-sm font-black text-[#e6d0bf] uppercase tracking-widest font-serif">Sổ Tay Điều Chế</h2>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] text-[#a89078] font-bold">{knownReactions.length} phản ứng</span>

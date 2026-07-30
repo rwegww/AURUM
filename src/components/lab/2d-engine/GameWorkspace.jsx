@@ -159,112 +159,153 @@ const GameWorkspace = () => {
                   )}
                 </AnimatePresence>
 
-                {/* Battery & Wires for Electrolysis */}
+                {/* DC Power Supply & Wires for Electrolysis */}
                 <AnimatePresence>
                   {beaker.isElectrolyzing && (
                     <motion.div 
-                      initial={{ opacity: 0, scale: 0.9 }}
+                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="absolute -left-[160px] bottom-0 w-36 h-32 pointer-events-none z-10 flex flex-col justify-end"
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      className="absolute -left-[190px] bottom-0 w-44 h-44 pointer-events-none z-10 flex flex-col justify-end"
                     >
-                       {/* SVG Wires Connecting Battery to Beaker Electrodes */}
-                       <svg className="absolute -top-[110px] left-0 w-[280px] h-[220px] overflow-visible pointer-events-none z-30 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]">
+                       {/* SVG Wires (Matching Reference Image Arc Paths) */}
+                       <svg className="absolute -top-[125px] -left-6 w-[340px] h-[260px] overflow-visible pointer-events-none z-30 drop-shadow-[0_8px_15px_rgba(0,0,0,0.6)]">
                          <defs>
-                           {/* Cable Gradients */}
-                           <linearGradient id="redWireGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                             <stop offset="0%" stopColor="#ef4444" />
-                             <stop offset="50%" stopColor="#f87171" />
-                             <stop offset="100%" stopColor="#b91c1c" />
+                           {/* Cable Gradients for 3D Tubular Look */}
+                           <linearGradient id="redWireTubular" x1="0%" y1="0%" x2="0%" y2="100%">
+                             <stop offset="0%" stopColor="#f87171" />
+                             <stop offset="40%" stopColor="#ef4444" />
+                             <stop offset="100%" stopColor="#991b1b" />
                            </linearGradient>
-                           <linearGradient id="blueWireGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                             <stop offset="0%" stopColor="#3b82f6" />
-                             <stop offset="50%" stopColor="#60a5fa" stopOpacity="1" />
-                             <stop offset="100%" stopColor="#1d4ed8" />
+                           <linearGradient id="blackWireTubular" x1="0%" y1="0%" x2="0%" y2="100%">
+                             <stop offset="0%" stopColor="#475569" />
+                             <stop offset="40%" stopColor="#0f172a" />
+                             <stop offset="100%" stopColor="#020617" />
                            </linearGradient>
                          </defs>
 
-                         {/* Shadow paths for realism */}
-                         <path d="M 32 175 C 65 220, 150 180, 202 32" fill="none" stroke="#000" strokeWidth="6" strokeOpacity="0.4" strokeLinecap="round" />
-                         <path d="M 104 175 C 130 225, 180 185, 238 32" fill="none" stroke="#000" strokeWidth="6" strokeOpacity="0.4" strokeLinecap="round" />
+                         {/* Shadows under wires */}
+                         <path d="M 68 188 C -10 180, 30 15, 240 34" fill="none" stroke="#000" strokeWidth="8" strokeOpacity="0.35" strokeLinecap="round" />
+                         <path d="M 148 188 C 165 90, 205 10, 276 34" fill="none" stroke="#000" strokeWidth="8" strokeOpacity="0.35" strokeLinecap="round" />
 
-                         {/* Red (+) Cable */}
-                         <path d="M 32 175 C 65 220, 150 180, 202 32" fill="none" stroke="url(#redWireGrad)" strokeWidth="4.5" strokeLinecap="round" />
-                         {/* Animated Glowing Pulse Inside Red Wire */}
-                         <path d="M 32 175 C 65 220, 150 180, 202 32" fill="none" stroke="#fef08a" strokeWidth="2" strokeDasharray="8 16" strokeLinecap="round" opacity="0.8">
-                           <animate attributeName="stroke-dashoffset" from="24" to="0" dur="0.8s" repeatCount="indefinite" />
+                         {/* Red (+) Cable: Plugs into Red Socket on Power Supply -> Loops Left and Up -> Plugs into Left Electrode Socket */}
+                         <path d="M 68 188 C -10 180, 30 15, 240 34" fill="none" stroke="url(#redWireTubular)" strokeWidth="6" strokeLinecap="round" />
+                         <path d="M 68 188 C -10 180, 30 15, 240 34" fill="none" stroke="#fef08a" strokeWidth="1.5" strokeDasharray="6 18" strokeLinecap="round" opacity="0.9">
+                           <animate attributeName="stroke-dashoffset" from="24" to="0" dur="0.7s" repeatCount="indefinite" />
                          </path>
 
-                         {/* Black/Blue (-) Cable */}
-                         <path d="M 104 175 C 130 225, 180 185, 238 32" fill="none" stroke="url(#blueWireGrad)" strokeWidth="4.5" strokeLinecap="round" />
-                         {/* Animated Glowing Pulse Inside Blue Wire */}
-                         <path d="M 104 175 C 130 225, 180 185, 238 32" fill="none" stroke="#93c5fd" strokeWidth="2" strokeDasharray="8 16" strokeLinecap="round" opacity="0.8">
-                           <animate attributeName="stroke-dashoffset" from="0" to="24" dur="0.8s" repeatCount="indefinite" />
+                         {/* Black (-) Cable: Plugs into Black Socket on Power Supply -> Loops High Up -> Plugs into Right Electrode Socket */}
+                         <path d="M 148 188 C 165 90, 205 10, 276 34" fill="none" stroke="url(#blackWireTubular)" strokeWidth="6" strokeLinecap="round" />
+                         <path d="M 148 188 C 165 90, 205 10, 276 34" fill="none" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="6 18" strokeLinecap="round" opacity="0.9">
+                           <animate attributeName="stroke-dashoffset" from="0" to="24" dur="0.7s" repeatCount="indefinite" />
                          </path>
 
-                         {/* Alligator Clips Clamping Electrodes */}
-                         {/* Red Clip on Left Electrode */}
-                         <g transform="translate(196, 22) rotate(-15)">
-                           <rect x="0" y="0" width="12" height="16" rx="2" fill="#ef4444" stroke="#991b1b" strokeWidth="1" />
-                           <rect x="2" y="14" width="8" height="6" fill="#94a3b8" />
-                           <circle cx="6" cy="6" r="2" fill="#fef08a" />
+                         {/* Plugs into Power Supply Sockets */}
+                         {/* Red Banana Plug on Power Supply */}
+                         <g transform="translate(62, 178)">
+                           <rect x="0" y="0" width="12" height="14" rx="3" fill="#ef4444" stroke="#7f1d1d" strokeWidth="1" />
+                           <circle cx="6" cy="7" r="2.5" fill="#fef08a" />
+                         </g>
+                         {/* Black Banana Plug on Power Supply */}
+                         <g transform="translate(142, 178)">
+                           <rect x="0" y="0" width="12" height="14" rx="3" fill="#1e293b" stroke="#0f172a" strokeWidth="1" />
+                           <circle cx="6" cy="7" r="2.5" fill="#38bdf8" />
                          </g>
 
-                         {/* Blue Clip on Right Electrode */}
-                         <g transform="translate(232, 22) rotate(15)">
-                           <rect x="0" y="0" width="12" height="16" rx="2" fill="#2563eb" stroke="#1e40af" strokeWidth="1" />
-                           <rect x="2" y="14" width="8" height="6" fill="#94a3b8" />
-                           <circle cx="6" cy="6" r="2" fill="#93c5fd" />
+                         {/* Plugs inserted Vertically into Electrode Sockets */}
+                         {/* Red Banana Plug on Left Electrode (+)") */}
+                         <g transform="translate(233, 14)">
+                           <rect x="0" y="0" width="14" height="22" rx="3" fill="#ef4444" stroke="#7f1d1d" strokeWidth="1.5" />
+                           <text x="7" y="15" textAnchor="middle" fill="#ffffff" fontSize="12" fontWeight="900">+</text>
+                         </g>
+                         {/* Black Banana Plug on Right Electrode (-)") */}
+                         <g transform="translate(269, 14)">
+                           <rect x="0" y="0" width="14" height="22" rx="3" fill="#1e293b" stroke="#0f172a" strokeWidth="1.5" />
+                           <text x="7" y="14" textAnchor="middle" fill="#ffffff" fontSize="14" fontWeight="900">-</text>
                          </g>
                        </svg>
 
-                       {/* Lab Power Supply / Heavy Duty Battery */}
-                       <div className="relative w-36 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 rounded-xl shadow-[0_15px_30px_rgba(0,0,0,0.8)] border-2 border-slate-700 p-2.5 flex flex-col justify-between z-20">
-                          {/* Corner Bolts */}
-                          <div className="absolute top-1.5 left-1.5 w-1.5 h-1.5 rounded-full bg-slate-500 shadow-inner" />
-                          <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-slate-500 shadow-inner" />
+                       {/* Metallic Grey Benchtop DC Power Supply Unit (Matching Reference Image) */}
+                       <div className="relative w-44 bg-gradient-to-b from-slate-200 via-slate-300 to-slate-400 rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.7)] border-2 border-slate-400/80 p-3 flex flex-col items-center z-20">
                           
-                          {/* Binding Posts / Terminals on Top */}
-                          <div className="flex justify-between px-3 -mt-6 mb-1">
-                             {/* Positive (+) Terminal Knob */}
+                          {/* Top Screws */}
+                          <div className="absolute top-2 left-2 w-1.5 h-1.5 rounded-full bg-slate-500 shadow-inner border border-slate-600" />
+                          <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-slate-500 shadow-inner border border-slate-600" />
+
+                          {/* Terminals Sockets on Upper Face */}
+                          <div className="w-full flex justify-between px-2 mb-2">
+                             {/* Red Socket (+) */}
+                             <div className="flex items-center gap-1">
+                               <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-red-800 via-red-600 to-red-500 border-2 border-red-900 shadow-md flex items-center justify-center">
+                                 <div className="w-2.5 h-2.5 rounded-full bg-slate-950 border border-slate-800" />
+                               </div>
+                               <span className="text-[12px] font-black text-slate-800">+</span>
+                             </div>
+
+                             {/* Black Socket (-) */}
+                             <div className="flex items-center gap-1">
+                               <span className="text-[12px] font-black text-slate-800">-</span>
+                               <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-700 border-2 border-slate-950 shadow-md flex items-center justify-center">
+                                 <div className="w-2.5 h-2.5 rounded-full bg-slate-950 border border-slate-800" />
+                               </div>
+                             </div>
+                          </div>
+
+                          {/* Machine Title Label */}
+                          <div className="text-[9px] font-extrabold uppercase tracking-wider text-slate-800 mb-1.5">
+                             DC POWER SUPPLY
+                          </div>
+
+                          {/* LED Display Box */}
+                          <div className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl p-2 mb-2 flex items-center justify-center shadow-inner relative overflow-hidden">
+                             {/* Segment Glow */}
+                             <div className="absolute inset-0 bg-cyan-500/10 blur-sm pointer-events-none" />
+                             <span className="text-xl font-mono font-black text-cyan-400 tracking-widest drop-shadow-[0_0_8px_#22d3ee]">
+                               12.0 V
+                             </span>
+                          </div>
+
+                          {/* Status Indicator LEDs */}
+                          <div className="w-full flex justify-around mb-2 text-[7px] font-black uppercase text-slate-700">
+                             <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_#10b981] animate-pulse" />
+                                <span>POWER</span>
+                             </div>
+                             <div className="flex items-center gap-1">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500/80 shadow-[0_0_4px_#10b981]" />
+                                <span>O.C.P</span>
+                             </div>
+                          </div>
+
+                          {/* Rotary Knobs & Output Button */}
+                          <div className="w-full grid grid-cols-3 gap-1 items-center pt-1 border-t border-slate-400/50">
+                             {/* VOLTAGE Knob */}
                              <div className="flex flex-col items-center">
-                               <div className="w-5 h-5 bg-gradient-to-t from-red-700 via-red-500 to-red-400 rounded-full border-2 border-red-900 shadow-md flex items-center justify-center text-[10px] font-black text-white">+</div>
-                               <div className="w-2.5 h-2 bg-amber-600 rounded-b-sm border-t border-amber-400" />
+                               <span className="text-[6px] font-black text-slate-700 uppercase mb-0.5">VOLTAGE</span>
+                               <div className="w-6 h-6 rounded-full bg-gradient-to-b from-slate-800 to-slate-950 border border-slate-600 shadow-md flex items-center justify-center relative">
+                                  <div className="absolute top-0.5 w-0.5 h-2 bg-white rounded-full" />
+                               </div>
+                               <span className="text-[5px] text-slate-600 font-bold mt-0.5">0-30 V</span>
                              </div>
 
-                             {/* Negative (-) Terminal Knob */}
+                             {/* OUTPUT Button */}
                              <div className="flex flex-col items-center">
-                               <div className="w-5 h-5 bg-gradient-to-t from-blue-700 via-blue-500 to-blue-400 rounded-full border-2 border-blue-900 shadow-md flex items-center justify-center text-[10px] font-black text-white">-</div>
-                               <div className="w-2.5 h-2 bg-amber-600 rounded-b-sm border-t border-amber-400" />
+                               <span className="text-[6px] font-black text-slate-700 uppercase mb-0.5">OUTPUT</span>
+                               <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-700 via-emerald-500 to-emerald-400 border-2 border-emerald-900 shadow-[0_0_10px_rgba(16,185,129,0.8)] flex items-center justify-center text-[6px] font-black text-white cursor-pointer active:scale-95 transition-transform">
+                                  ON
+                               </div>
+                             </div>
+
+                             {/* CURRENT Knob */}
+                             <div className="flex flex-col items-center">
+                               <span className="text-[6px] font-black text-slate-700 uppercase mb-0.5">CURRENT</span>
+                               <div className="w-6 h-6 rounded-full bg-gradient-to-b from-slate-800 to-slate-950 border border-slate-600 shadow-md flex items-center justify-center relative">
+                                  <div className="absolute top-0.5 w-0.5 h-2 bg-white rounded-full" />
+                               </div>
+                               <span className="text-[5px] text-slate-600 font-bold mt-0.5">0-5 A</span>
                              </div>
                           </div>
 
-                          {/* Digital LED Display Panel */}
-                          <div className="bg-black/90 border border-slate-700 rounded-lg p-1.5 mb-2 flex items-center justify-between shadow-inner">
-                             <div className="flex flex-col">
-                               <span className="text-[7px] uppercase font-bold text-slate-400 tracking-wider">DC POWER</span>
-                               <span className="text-[9px] font-bold text-slate-500">12.0 V / 3.5 A</span>
-                             </div>
-                             <div className="flex items-center gap-1 bg-slate-950 px-2 py-0.5 rounded border border-cyan-900/50">
-                                <motion.div 
-                                  animate={{ opacity: [0.6, 1, 0.6] }}
-                                  transition={{ repeat: Infinity, duration: 0.8 }}
-                                  className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_#22d3ee]" 
-                                />
-                                <span className="text-[11px] font-mono font-black text-cyan-400 tracking-widest drop-shadow-[0_0_3px_#22d3ee]">12.0V</span>
-                             </div>
-                          </div>
-
-                          {/* Controls & Brand */}
-                          <div className="flex items-center justify-between pt-1 border-t border-slate-800">
-                             <div className="flex items-center gap-1.5">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981] animate-pulse" />
-                                <span className="text-[8px] font-extrabold text-emerald-400 tracking-wider">ACTIVE</span>
-                             </div>
-                             <div className="text-[8px] font-black text-amber-500/80 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-500/20">
-                               ⚡ DÒNG ĐIỆN DC
-                             </div>
-                          </div>
                        </div>
                     </motion.div>
                   )}
