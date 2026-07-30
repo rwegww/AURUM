@@ -71,9 +71,12 @@ const pseudoRandom = (seed) => {
   };
 };
 
-const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
+const SolidChunk = ({ solid, color = '#7e8794', index = 0, isHeating = false, temp = 25 }) => {
   const seedKey = solid?.id || solid?.formula || `solid-${index}`;
   
+  const isGlowingHot = isHeating && temp > 120;
+  const isCarbon = solid?.formula === 'C' || solid?.name?.toLowerCase().includes('cacbon');
+
   const { chips, leftPos } = useMemo(() => {
     const rng = pseudoRandom(seedKey);
     
@@ -98,14 +101,16 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
       });
     }
 
-    // Spread solids across the bottom width evenly based on index (12% to 62%)
-    // Position depends strictly on index & seedKey (NEVER totalSolids)
-    // so dropping a new solid (n+1) will NEVER cause previous solids (n) to move!
     const baseLeft = 14 + ((index * 16) % 48);
     const boundedLeft = Math.min(Math.max(baseLeft + (rng() * 6 - 3), 12), 62);
 
     return { chips: generatedChips, leftPos: boundedLeft };
   }, [seedKey, index]);
+
+  // Glow color scheme when heated hot (>120°C)
+  const topGlow = temp >= 400 ? '#ff3300' : (temp >= 250 ? '#ff6600' : '#ff9900');
+  const frontGlow = temp >= 400 ? '#dc2626' : (temp >= 250 ? '#ea580c' : '#f97316');
+  const sideGlow = temp >= 400 ? '#991b1b' : (temp >= 250 ? '#b45309' : '#c2410c');
 
   return (
     <motion.div
@@ -118,23 +123,25 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0 }) => {
         width: '45px',
         height: '38px',
         zIndex: 15 + index,
-        filter: 'drop-shadow(0px 3px 4px rgba(0,0,0,0.45))'
+        filter: isGlowingHot 
+          ? `drop-shadow(0 0 10px ${topGlow}) drop-shadow(0 0 20px #ef4444)` 
+          : 'drop-shadow(0px 3px 4px rgba(0,0,0,0.45))'
       }}
     >
       <svg viewBox="0 0 100 75" className="w-full h-full overflow-visible">
         <defs>
           <linearGradient id={`gravel-top-${seedKey}-${index}`} x1="20%" y1="0%" x2="80%" y2="100%">
-            <stop offset="0%" stopColor="#e2e8f0" />
-            <stop offset="50%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#8892a0' : color} />
-            <stop offset="100%" stopColor="#4a525d" />
+            <stop offset="0%" stopColor={isGlowingHot ? '#ffeedd' : '#e2e8f0'} />
+            <stop offset="50%" stopColor={isGlowingHot ? topGlow : ((!color || color === '#ffffff' || color === '#c0c0c0') ? '#8892a0' : color)} />
+            <stop offset="100%" stopColor={isGlowingHot ? frontGlow : '#4a525d'} />
           </linearGradient>
           <linearGradient id={`gravel-front-${seedKey}-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={(!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color} />
-            <stop offset="100%" stopColor="#2c323b" />
+            <stop offset="0%" stopColor={isGlowingHot ? frontGlow : ((!color || color === '#ffffff' || color === '#c0c0c0') ? '#7e8794' : color)} />
+            <stop offset="100%" stopColor={isGlowingHot ? sideGlow : '#2c323b'} />
           </linearGradient>
           <linearGradient id={`gravel-side-${seedKey}-${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#454c57" />
-            <stop offset="100%" stopColor="#181b20" />
+            <stop offset="0%" stopColor={isGlowingHot ? sideGlow : '#4a525d'} />
+            <stop offset="100%" stopColor={isGlowingHot ? '#7f1d1d' : '#1a202c'} />
           </linearGradient>
         </defs>
 
@@ -402,7 +409,14 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
               solid.isPrecipitate ? 
                 <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
                 : 
-                <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} />
+                <SolidChunk 
+                  key={solid.id || idx} 
+                  solid={solid} 
+                  color={solid.color || '#ffffff'} 
+                  index={idx}
+                  isHeating={beakerData.isHeating}
+                  temp={beakerData.heatTemperature || 25}
+                />
             ))}
             
             {/* Electrodes & Electrolysis Visuals */}

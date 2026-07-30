@@ -364,7 +364,7 @@ const useLabStore = create((set, get) => ({
           }
         }
 
-        // Gas escape logic for directly dropped gases
+        // Visual effect when dropping gases (keep gas in beaker for reactions)
         if (chemical.state === 'gas') {
           updatedBeaker.activeBubbles = true;
           updatedBeaker.activeSmoke = true;
@@ -376,12 +376,10 @@ const useLabStore = create((set, get) => ({
               if (bks[idx]) {
                 bks[idx].activeBubbles = false;
                 bks[idx].activeSmoke = false;
-                bks[idx].contents = bks[idx].contents.filter(c => c.id !== newId);
-                bks[idx].reactionMessage = `Khí ${chemical.formula} đã bay thoát hết.`;
               }
               return { beakers: bks };
             });
-          }, 5000);
+          }, 3000);
         }
 
         newBeakers[idx] = updatedBeaker;

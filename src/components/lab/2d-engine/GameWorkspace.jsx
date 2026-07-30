@@ -146,7 +146,7 @@ const GameWorkspace = () => {
 
                     if (added.length === 0 && contents.length === 0 && yields.length === 0) return null;
 
-                    // Aggregate added inputs
+                    // Aggregate added inputs strictly from addedHistory
                     const inputMap = new Map();
                     added.forEach(item => {
                       const key = `${item.formula}_${item.unit}`;
@@ -155,18 +155,6 @@ const GameWorkspace = () => {
                       }
                       inputMap.get(key).amount += (item.amount || 0);
                     });
-
-                    // Fallback if addedHistory is empty but contents exist
-                    if (inputMap.size === 0 && contents.length > 0) {
-                      contents.forEach(c => {
-                        const unit = (c.state === 'solid' || c.type === 'metal') ? 'g' : 'ml';
-                        const defaultAmt = (c.state === 'solid' || c.type === 'metal') ? 5 : 50;
-                        const key = `${c.formula}_${unit}`;
-                        if (!inputMap.has(key)) {
-                          inputMap.set(key, { formula: c.formula, name: c.name || c.formula, amount: defaultAmt, unit });
-                        }
-                      });
-                    }
 
                     // Aggregate yields / products
                     const yieldMap = new Map();
