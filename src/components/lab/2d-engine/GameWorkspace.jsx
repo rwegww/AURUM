@@ -85,6 +85,17 @@ const GameWorkspace = () => {
                          className="absolute bottom-5 w-4 h-7 bg-gradient-to-t from-white to-blue-200 blur-[1px] rounded-t-full origin-bottom mix-blend-screen"
                        />
                     </div>
+
+                    {/* Temperature Display on Burner */}
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-sm border border-white/10 rounded-lg px-2 py-0.5 z-30">
+                      <span className={`text-[10px] font-black tabular-nums ${
+                        beaker.heatTemperature >= 800 ? 'text-red-400'
+                        : beaker.heatTemperature >= 400 ? 'text-orange-400'
+                        : 'text-amber-400'
+                      }`}>
+                        {beaker.heatTemperature || 25}°C
+                      </span>
+                    </div>
                     
                     {/* Tripod Structure */}
                     <svg className="absolute w-full h-full text-slate-500 drop-shadow-xl z-20" viewBox="0 0 100 100" preserveAspectRatio="none">

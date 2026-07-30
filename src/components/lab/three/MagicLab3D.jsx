@@ -5,7 +5,7 @@ import useLabStore from './magic-lab/store';
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
 import DiscoveryMap from '../DiscoveryMap'; 
-import { ArrowLeft, Beaker, Zap, Droplets, Flame, Search, FlaskConical, BookOpen, NotebookPen, Download, Trash2, Save } from 'lucide-react';
+import { ArrowLeft, Beaker, Zap, Droplets, Flame, Search, FlaskConical, BookOpen, NotebookPen, Download, Trash2, Save, Filter, ArrowRightLeft } from 'lucide-react';
 import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
@@ -265,10 +265,16 @@ const MagicLab3D = () => {
   const removeBeaker = useLabStore(state => state.removeBeaker);
   const setActiveBeaker = useLabStore(state => state.setActiveBeaker);
   const cycleContainerType = useLabStore(state => state.cycleContainerType);
+  const setHeatTemperature = useLabStore(state => state.setHeatTemperature);
+  const scoopSolids = useLabStore(state => state.scoopSolids);
+  const pourToBeaker = useLabStore(state => state.pourToBeaker);
+  const toggleElectrolysis = useLabStore(state => state.toggleElectrolysis);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showRecipeBook, setShowRecipeBook] = useState(false);
+  const [pouringMode, setPouringMode] = useState(false); // true khi đang chọn cốc đích để rót
 
   // --- Lab Notepad State & Storage ---
   const [showNotepad, setShowNotepad] = useState(false);
@@ -526,6 +532,29 @@ const MagicLab3D = () => {
     dropToBeaker(chemKey);
   }, [dropToBeaker, playSound]);
 
+  const handleScoopSolids = useCallback(() => {
+    const hasSolids = activeBeaker.contents.some(c => c.state === 'solid');
+    if (!hasSolids) return;
+    playSound('click');
+    scoopSolids();
+  }, [scoopSolids, activeBeaker.contents, playSound]);
+
+  const handlePourTo = useCallback((toIdx) => {
+    playSound('pour', { chemicalState: 'liquid' });
+    pourToBeaker(activeBeakerIndex, toIdx);
+    setPouringMode(false);
+  }, [pourToBeaker, activeBeakerIndex, playSound]);
+
+  // Danh sách phản ứng đã khám phá cho sách điều chế
+  const knownReactions = useMemo(() => {
+    const rxs = useLabStore.getState().reactions || [];
+    const normalizedDiscovered = discoveredFormulas.map(f => normalize(f));
+    return rxs.filter(rx => {
+      const rxFormulas = rx.reactants.map(r => normalize(r.formula));
+      return rxFormulas.every(f => normalizedDiscovered.includes(f));
+    });
+  }, [discoveredFormulas]);
+
   useEffect(() => {
     const isDefaultMessage = activeBeaker.reactionMessage?.includes("Mời bắt đầu");
     if (activeBeaker.reactionMessage && !isDefaultMessage) {
@@ -610,6 +639,18 @@ const MagicLab3D = () => {
               <span className="ml-1 px-1.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-md text-[10px] font-black">{discoveredFormulas.length}</span>
             </button>
             <button 
+              onClick={() => setShowRecipeBook(!showRecipeBook)}
+              className={`flex items-center gap-2 px-4 h-12 backdrop-blur-xl rounded-2xl border transition-all font-bold text-xs uppercase tracking-widest shadow-lg group ${
+                showRecipeBook
+                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                  : 'bg-slate-900/40 border-white/10 hover:border-white/20 hover:bg-slate-800/40 text-white/80'
+              }`}
+            >
+              <BookOpen className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
+              <span>Sách điều chế</span>
+              <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-md text-[10px] font-black">{knownReactions.length}</span>
+            </button>
+            <button 
               onClick={toggleFullscreen}
               className="w-12 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all text-blue-400 shadow-lg group"
               title={isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình"}
@@ -666,42 +707,135 @@ const MagicLab3D = () => {
             </button>
 
             {/* Tools Area */}
-            <div className="flex justify-between items-center mb-4 bg-white/5 p-1.5 rounded-2xl border border-white/5 gap-1.5">
+            <div className="flex justify-between items-center mb-2 bg-white/5 p-1.5 rounded-2xl border border-white/5 gap-1">
               <button 
                 onClick={cycleContainerType}
-                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-indigo-500/10 text-white/50 hover:text-indigo-400 border border-transparent hover:border-indigo-500/20 transition-all hover:scale-105 active:scale-95"
+                className="flex-1 h-10 rounded-xl flex items-center justify-center hover:bg-indigo-500/10 text-white/50 hover:text-indigo-400 border border-transparent hover:border-indigo-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Đổi dụng cụ"
               >
-                {activeBeaker.containerType === 'flask' && <FlaskConical className="w-5 h-5" />}
-                {activeBeaker.containerType === 'dish' && <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="16" rx="10" ry="3"/><path d="M2 16v-2a10 3 0 0 1 20 0v2"/></svg>}
-                {(!activeBeaker.containerType || activeBeaker.containerType === 'beaker') && <Beaker className="w-5 h-5" />}
+                {activeBeaker.containerType === 'flask' && <FlaskConical className="w-4 h-4" />}
+                {activeBeaker.containerType === 'dish' && <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><ellipse cx="12" cy="16" rx="10" ry="3"/><path d="M2 16v-2a10 3 0 0 1 20 0v2"/></svg>}
+                {(!activeBeaker.containerType || activeBeaker.containerType === 'beaker') && <Beaker className="w-4 h-4" />}
               </button>
               <button 
                 onClick={handleToggleHeat}
-                className={`flex-1 h-12 rounded-xl flex items-center justify-center transition-all ${
+                className={`flex-1 h-10 rounded-xl flex items-center justify-center transition-all ${
                   activeBeaker.isHeating 
                     ? 'bg-gradient-to-tr from-amber-600 to-orange-500 text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] border border-orange-400/30' 
                     : 'hover:bg-white/5 text-white/50 hover:text-white border border-transparent'
                 }`}
                 title="Đun nóng"
               >
-                <svg className={`w-5 h-5 ${activeBeaker.isHeating ? 'animate-bounce' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 5.5 3 8.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                <Flame className={`w-4 h-4 ${activeBeaker.isHeating ? 'animate-bounce' : ''}`} />
+              </button>
+              <button 
+                onClick={() => {
+                  playSound('click');
+                  toggleElectrolysis();
+                }}
+                className={`flex-1 h-10 rounded-xl flex items-center justify-center transition-all ${
+                  activeBeaker.isElectrolyzing 
+                    ? 'bg-gradient-to-tr from-cyan-600 to-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-blue-400/30' 
+                    : 'hover:bg-white/5 text-white/50 hover:text-cyan-300 border border-transparent'
+                }`}
+                title="Điện phân"
+              >
+                <Zap className={`w-4 h-4 ${activeBeaker.isElectrolyzing ? 'animate-pulse' : ''}`} />
+              </button>
+              <button 
+                onClick={handleScoopSolids}
+                disabled={!activeBeaker.contents.some(c => c.state === 'solid')}
+                className="flex-1 h-10 rounded-xl flex items-center justify-center hover:bg-amber-500/10 text-white/50 hover:text-amber-400 border border-transparent hover:border-amber-500/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Vớt kết tủa / chất rắn"
+              >
+                <Filter className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={() => setPouringMode(!pouringMode)}
+                disabled={beakers.length < 2 || !activeBeaker.contents.some(c => c.state !== 'solid')}
+                className={`flex-1 h-10 rounded-xl flex items-center justify-center transition-all hover:scale-105 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed ${
+                  pouringMode
+                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                    : 'hover:bg-teal-500/10 text-white/50 hover:text-teal-400 border border-transparent hover:border-teal-500/20'
+                }`}
+                title="Rót sang cốc khác"
+              >
+                <ArrowRightLeft className="w-4 h-4" />
               </button>
               <button 
                 onClick={handleClearBeaker}
-                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-cyan-500/10 text-white/50 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all hover:scale-105 active:scale-95"
+                className="flex-1 h-10 rounded-xl flex items-center justify-center hover:bg-cyan-500/10 text-white/50 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Làm mới cốc"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
               </button>
               <button 
                 onClick={addBeaker}
-                className="flex-1 h-12 rounded-xl flex items-center justify-center hover:bg-emerald-500/10 text-white/50 hover:text-emerald-400 border border-transparent hover:border-emerald-500/20 transition-all hover:scale-105 active:scale-95"
+                className="flex-1 h-10 rounded-xl flex items-center justify-center hover:bg-emerald-500/10 text-white/50 hover:text-emerald-400 border border-transparent hover:border-emerald-500/20 transition-all hover:scale-105 active:scale-95"
                 title="Thêm cốc mới"
               >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
               </button>
             </div>
+
+            {/* Temperature Slider */}
+            <div className="mb-3 bg-white/5 p-3 rounded-2xl border border-white/5">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[9px] font-black uppercase tracking-widest text-white/40">Nhiệt độ</span>
+                <span className={`text-[11px] font-black tabular-nums ${
+                  activeBeaker.heatTemperature >= 800 ? 'text-red-400' 
+                  : activeBeaker.heatTemperature >= 400 ? 'text-orange-400' 
+                  : activeBeaker.heatTemperature >= 100 ? 'text-amber-400' 
+                  : 'text-white/60'
+                }`}>
+                  🌡️ {activeBeaker.heatTemperature}°C
+                </span>
+              </div>
+              <input
+                type="range"
+                min="25"
+                max="1200"
+                step="25"
+                value={activeBeaker.heatTemperature}
+                onChange={(e) => setHeatTemperature(Number(e.target.value))}
+                className="w-full h-1.5 rounded-full appearance-none cursor-pointer accent-orange-500"
+                style={{
+                  background: `linear-gradient(to right, #3b82f6 0%, #f59e0b ${((activeBeaker.heatTemperature - 25) / (1200 - 25)) * 100}%, rgba(255,255,255,0.1) ${((activeBeaker.heatTemperature - 25) / (1200 - 25)) * 100}%)`
+                }}
+              />
+              <div className="flex justify-between mt-1 text-[8px] text-white/30 font-bold">
+                <span>25°C</span>
+                <span>600°C</span>
+                <span>1200°C</span>
+              </div>
+            </div>
+
+            {/* Pouring Mode Target Selector */}
+            <AnimatePresence>
+              {pouringMode && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-3 bg-blue-500/10 border border-blue-500/20 rounded-2xl p-3 overflow-hidden"
+                >
+                  <p className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2">Chọn cốc đích để rót:</p>
+                  <div className="flex gap-2">
+                    {beakers.map((b, idx) => (
+                      idx !== activeBeakerIndex && (
+                        <button
+                          key={b.id}
+                          onClick={() => handlePourTo(idx)}
+                          className="flex-1 h-10 rounded-xl bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/30 text-blue-200 text-xs font-black transition-all hover:scale-105"
+                        >
+                          Cốc #{idx + 1}
+                        </button>
+                      )
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Search Bar */}
             <div className="relative mb-3 group">
@@ -1007,6 +1141,84 @@ const MagicLab3D = () => {
                 </button>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Recipe Book Modal */}
+      <AnimatePresence>
+        {showRecipeBook && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowRecipeBook(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-2xl max-h-[85vh] bg-[#fcf8ee] rounded-[28px] border-2 border-[#5c3a27]/40 shadow-[0_25px_60px_rgba(0,0,0,0.6)] overflow-hidden flex flex-col"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-b from-[#5c3a27] via-[#482b1b] to-[#361e12] px-6 py-4 flex items-center justify-between border-b-2 border-[#24130a]">
+                <div className="flex items-center gap-3">
+                  <BookOpen className="w-5 h-5 text-[#e6d0bf]" />
+                  <h2 className="text-lg font-black text-[#e6d0bf] uppercase tracking-widest font-serif">Sách Điều Chế</h2>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-[11px] text-[#a89078] font-bold">{knownReactions.length} phản ứng</span>
+                  <button
+                    onClick={() => setShowRecipeBook(false)}
+                    className="w-8 h-8 rounded-full bg-[#6e4e3b]/40 hover:bg-[#6e4e3b]/80 flex items-center justify-center text-[#e6d0bf] transition-colors text-sm font-bold"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div
+                className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar"
+                style={{
+                  backgroundImage: 'repeating-linear-gradient(transparent, transparent 27px, rgba(160, 135, 105, 0.22) 28px)',
+                  backgroundAttachment: 'local'
+                }}
+              >
+                {knownReactions.length === 0 ? (
+                  <div className="py-20 text-center text-[#9c846e] italic font-serif">
+                    Chưa khám phá được phản ứng nào.<br />
+                    Hãy thử trộn các hóa chất trong phòng thí nghiệm!
+                  </div>
+                ) : (
+                  knownReactions.map((rx, idx) => (
+                    <div key={rx.id || idx} className="bg-white/60 rounded-2xl border border-[#d6c7b0] p-4 hover:bg-white/80 transition-colors">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <h3 className="text-sm font-black text-[#3e2b1d] font-serif leading-snug">{rx.name}</h3>
+                        <span className="shrink-0 text-[9px] font-black uppercase tracking-widest text-[#8a725d] bg-[#f0e6d6] px-2 py-1 rounded-lg border border-[#d6c7b0]">
+                          Lớp {rx.gradeLevel || '?'}
+                        </span>
+                      </div>
+                      <div className="bg-[#f7f0e4] rounded-xl px-3 py-2 mb-2 border border-[#e6dccb]">
+                        <p className="text-[13px] font-black text-[#4a2e20] font-mono tracking-wide">{rx.equation}</p>
+                      </div>
+                      {rx.conditions && (
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <span className="text-[9px] font-black uppercase tracking-widest text-orange-700 bg-orange-100 px-2 py-0.5 rounded-md border border-orange-200">ĐK</span>
+                          <span className="text-[11px] font-bold text-[#6b4c36]">{rx.conditions}</span>
+                        </div>
+                      )}
+                      {rx.observation && (
+                        <p className="text-[11px] text-[#6b4c36] font-serif leading-relaxed mt-1">
+                          <span className="font-bold text-[#4a2e20]">Hiện tượng:</span> {rx.observation}
+                        </p>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

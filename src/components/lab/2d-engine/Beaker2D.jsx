@@ -220,7 +220,6 @@ const containerConfigs = {
         <line x1="20" y1="40" x2="30" y2="40" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
         <line x1="20" y1="70" x2="35" y2="70" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
         <line x1="20" y1="100" x2="30" y2="100" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-        <text x="38" y="74" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="sans-serif">250ml</text>
         <path d="M 22 25 L 22 120" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round" />
         <path d="M 78 45 L 78 110" stroke="rgba(255,255,255,0.1)" strokeWidth="2" strokeLinecap="round" />
       </>
@@ -238,7 +237,6 @@ const containerConfigs = {
         <path d="M 40 15 A 10 3 0 0 0 60 15" fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth="2" />
         <line x1="25" y1="100" x2="35" y2="100" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
         <line x1="20" y1="115" x2="30" y2="115" stroke="rgba(255,255,255,0.4)" strokeWidth="2" />
-        <text x="40" y="104" fill="rgba(255,255,255,0.4)" fontSize="10" fontFamily="sans-serif">250ml</text>
         <path d="M 22 110 L 35 75" stroke="rgba(255,255,255,0.3)" strokeWidth="4" strokeLinecap="round" />
       </>
     )
@@ -260,7 +258,7 @@ const containerConfigs = {
 };
 
 const Beaker2D = ({ beakerData, isActive, onClick }) => {
-  const { contents, addedHistory, yieldHistory, isHeating, activeBubbles, activeSmoke, smokeColor, intensity, shake, activeFlame, containerType } = beakerData;
+  const { contents, addedHistory, yieldHistory, isHeating, isElectrolyzing, activeBubbles, activeSmoke, smokeColor, intensity, shake, activeFlame, containerType } = beakerData;
   const config = containerConfigs[containerType || 'beaker'] || containerConfigs['beaker'];
 
   // Lọc ra các chất lỏng/dung dịch để tính toán mực nước
@@ -406,6 +404,40 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                 : 
                 <SolidChunk key={solid.id || idx} solid={solid} color={solid.color || '#ffffff'} index={idx} />
             ))}
+            
+            {/* Electrodes & Electricity (Electrolysis) */}
+            <AnimatePresence>
+              {isElectrolyzing && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 pointer-events-none flex justify-center items-end pb-[10%]"
+                >
+                  {/* Left Electrode (Anode) */}
+                  <div className="absolute left-[30%] bottom-0 w-[6%] h-[70%] bg-gradient-to-r from-slate-700 via-slate-400 to-slate-800 rounded-t-sm shadow-inner" />
+                  
+                  {/* Right Electrode (Cathode) */}
+                  <div className="absolute right-[30%] bottom-0 w-[6%] h-[70%] bg-gradient-to-r from-slate-700 via-slate-400 to-slate-800 rounded-t-sm shadow-inner" />
+
+                  {/* Electricity Sparks between electrodes */}
+                  <motion.div 
+                    className="absolute bottom-[20%] w-[40%] h-[20%] mix-blend-screen"
+                    animate={{ 
+                      opacity: [0, 1, 0, 0.8, 0],
+                      scaleY: [1, 1.2, 0.8, 1.1, 1],
+                      filter: ['hue-rotate(0deg)', 'hue-rotate(45deg)', 'hue-rotate(0deg)']
+                    }}
+                    transition={{ duration: 0.5, repeat: Infinity, ease: "linear" }}
+                  >
+                    <svg viewBox="0 0 100 50" className="w-full h-full drop-shadow-[0_0_5px_rgba(0,255,255,0.8)]">
+                       <path d="M 0 25 Q 25 0 50 25 T 100 25" fill="none" stroke="#0ff" strokeWidth="2" strokeLinecap="round" />
+                       <path d="M 0 25 Q 25 50 50 25 T 100 25" fill="none" stroke="#fff" strokeWidth="1" strokeLinecap="round" />
+                    </svg>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 

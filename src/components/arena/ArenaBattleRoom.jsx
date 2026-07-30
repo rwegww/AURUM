@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Atom,
@@ -733,7 +733,7 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
   );
 };
 
-const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
+const MiniGameRenderer = React.memo(({ task, onSubmit, submitting, disabled }) => {
   if (!task) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-viet-text shadow-sm">
@@ -761,32 +761,35 @@ const MiniGameRenderer = ({ task, onSubmit, submitting, disabled }) => {
         </div>
       );
   }
-};
+});
 
-const Scoreboard = ({ players, currentUserId }) => (
-  <div className="flex w-full items-center gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white p-3 hide-scrollbar shadow-sm">
-    <div className="flex shrink-0 items-center gap-2 border-r border-slate-200 pr-4">
-      <Trophy className="h-4 w-4 text-amber-400" />
-      <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Bảng điểm</span>
-    </div>
-    <div className="flex gap-3">
-      {[...players].sort((a, b) => (b.score || 0) - (a.score || 0)).map((player, index) => (
-        <div
-          key={player.nguoi_dung_id}
-          className={`flex shrink-0 items-center gap-2.5 rounded-full border px-3 py-1.5 ${player.nguoi_dung_id === currentUserId ? 'border-viet-green/50 bg-viet-green/10' : 'border-slate-200 bg-slate-50'}`}
-        >
-          <span className="text-[10px] font-black text-viet-text-light">#{index + 1}</span>
-          <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={24} />
-          <span className="max-w-[100px] truncate text-xs font-bold text-viet-text">{player.username}</span>
-          <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
-            <span className="text-[10px] font-bold text-viet-text-light">{player.correct_count || 0} ✓</span>
-            <span className="text-xs font-black text-viet-green">{player.score || 0}</span>
+const Scoreboard = React.memo(({ players, currentUserId }) => {
+  const sortedPlayers = useMemo(() => [...players].sort((a, b) => (b.score || 0) - (a.score || 0)), [players]);
+  return (
+    <div className="flex w-full items-center gap-4 overflow-x-auto rounded-xl border border-slate-200 bg-white p-3 hide-scrollbar shadow-sm">
+      <div className="flex shrink-0 items-center gap-2 border-r border-slate-200 pr-4">
+        <Trophy className="h-4 w-4 text-amber-400" />
+        <span className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Bảng điểm</span>
+      </div>
+      <div className="flex gap-3">
+        {sortedPlayers.map((player, index) => (
+          <div
+            key={player.nguoi_dung_id}
+            className={`flex shrink-0 items-center gap-2.5 rounded-full border px-3 py-1.5 ${player.nguoi_dung_id === currentUserId ? 'border-viet-green/50 bg-viet-green/10' : 'border-slate-200 bg-slate-50'}`}
+          >
+            <span className="text-[10px] font-black text-viet-text-light">#{index + 1}</span>
+            <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={24} />
+            <span className="max-w-[100px] truncate text-xs font-bold text-viet-text">{player.username}</span>
+            <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
+              <span className="text-[10px] font-bold text-viet-text-light">{player.correct_count || 0} ✓</span>
+              <span className="text-xs font-black text-viet-green">{player.score || 0}</span>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+});
 
 const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
   const room = state?.room || {};
@@ -908,13 +911,56 @@ const FinishedRoom = ({ state, user, onContinue }) => {
   );
 };
 
+const RoomTimer = React.memo(({ roundEndsAt, serverOffset, timeLimitSeconds, progress, onTimeUp }) => {
+  const [timeLeft, setTimeLeft] = useState(0);
+
+  useEffect(() => {
+    const tick = () => {
+      if (!roundEndsAt) {
+        setTimeLeft(0);
+        return;
+      }
+      const serverNow = Date.now() + serverOffset;
+      const next = Math.max(0, Math.ceil((new Date(roundEndsAt).getTime() - serverNow) / 1000));
+      setTimeLeft(next);
+      if (next <= 0 && onTimeUp) {
+        onTimeUp();
+      }
+    };
+
+    tick();
+    const timer = setInterval(tick, 500);
+    return () => clearInterval(timer);
+  }, [roundEndsAt, serverOffset, onTimeUp]);
+
+  const timerPct = timeLimitSeconds ? Math.max(0, Math.min(100, (timeLeft / timeLimitSeconds) * 100)) : 0;
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+      <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-viet-text-light">
+        <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> Thời gian</span>
+        <span className={timeLeft <= 5 ? 'text-red-500' : 'text-viet-green'}>{timeLeft}s</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-slate-100">
+        <motion.div
+          className={`h-full rounded-full ${timeLeft <= 5 ? 'bg-red-500' : 'bg-viet-green'}`}
+          animate={{ width: `${timerPct}%` }}
+          transition={{ duration: 0.25 }}
+        />
+      </div>
+      <div className="mt-2 h-1 overflow-hidden rounded-full bg-slate-50">
+        <div className="h-full rounded-full bg-slate-300" style={{ width: `${progress}%` }} />
+      </div>
+    </div>
+  );
+});
+
 const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const [state, setState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [phan_hoi, setFeedback] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(0);
   const serverOffsetRef = useRef(0);
   const advanceLockRef = useRef(null);
 
@@ -941,6 +987,14 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   useEffect(() => {
     let channel;
     let active = true;
+    let syncTimeout = null;
+
+    const handleSync = () => {
+      if (syncTimeout) clearTimeout(syncTimeout);
+      syncTimeout = setTimeout(() => {
+        if (active) loadState().catch((error) => console.warn('Arena sync error:', error.message));
+      }, 200 + Math.random() * 800);
+    };
 
     const setupRealtime = async () => {
       try {
@@ -954,13 +1008,13 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
             schema: 'public',
             table: 'phong_dau',
             filter: `id=eq.${room.id}`,
-          }, () => loadState().catch((error) => console.warn('Arena room sync error:', error.message)))
+          }, handleSync)
           .on('postgres_changes', {
             event: '*',
             schema: 'public',
             table: 'nguoi_choi',
             filter: `phong_dau_id=eq.${room.id}`,
-          }, () => loadState().catch((error) => console.warn('Arena player sync error:', error.message)))
+          }, handleSync)
           .subscribe();
       } catch (error) {
         console.warn('Arena realtime setup error:', error.message);
@@ -970,6 +1024,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
     setupRealtime();
     return () => {
       active = false;
+      if (syncTimeout) clearTimeout(syncTimeout);
       if (channel) supabase.removeChannel(channel);
     };
   }, [loadState, room.id]);
@@ -977,6 +1032,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const advanceRoom = useCallback(async () => {
     const currentRoom = state?.room;
     if (!currentRoom || currentRoom.status !== 'playing') return;
+    if (currentRoom.chu_phong_id !== user?.id) return;
     const lockKey = `${currentRoom.id}-${currentRoom.current_round_index}`;
     if (advanceLockRef.current === lockKey) return;
     advanceLockRef.current = lockKey;
@@ -989,25 +1045,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
     } catch (error) {
       console.warn('Arena advance skipped:', error.message);
     }
-  }, [room.id, state?.room]);
-
-  useEffect(() => {
-    const tick = () => {
-      const currentRoom = state?.room;
-      if (!currentRoom?.round_ends_at || currentRoom.status !== 'playing') {
-        setTimeLeft(0);
-        return;
-      }
-      const serverNow = Date.now() + serverOffsetRef.current;
-      const next = Math.max(0, Math.ceil((new Date(currentRoom.round_ends_at).getTime() - serverNow) / 1000));
-      setTimeLeft(next);
-      if (next <= 0) advanceRoom();
-    };
-
-    tick();
-    const timer = setInterval(tick, 500);
-    return () => clearInterval(timer);
-  }, [advanceRoom, state?.room]);
+  }, [room.id, state?.room, user?.id]);
 
   const startRoom = async () => {
     setStarting(true);
@@ -1054,9 +1092,6 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const totalRounds = currentRoom?.total_rounds || 1;
   const progress = currentRoom?.status === 'playing'
     ? Math.min(100, (((currentRoom.current_round_index || 0) + 1) / totalRounds) * 100)
-    : 0;
-  const timerPct = currentTask?.timeLimitSeconds
-    ? Math.max(0, Math.min(100, (timeLeft / currentTask.timeLimitSeconds) * 100))
     : 0;
 
   if (loading) {
@@ -1120,22 +1155,13 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
-            <div className="mb-2 flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-viet-text-light">
-              <span className="inline-flex items-center gap-1"><Clock3 className="h-3.5 w-3.5" /> Thời gian</span>
-              <span className={timeLeft <= 5 ? 'text-red-500' : 'text-viet-green'}>{timeLeft}s</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <motion.div
-                className={`h-full rounded-full ${timeLeft <= 5 ? 'bg-red-500' : 'bg-viet-green'}`}
-                animate={{ width: `${timerPct}%` }}
-                transition={{ duration: 0.25 }}
-              />
-            </div>
-            <div className="mt-2 h-1 overflow-hidden rounded-full bg-slate-50">
-              <div className="h-full rounded-full bg-slate-300" style={{ width: `${progress}%` }} />
-            </div>
-          </div>
+          <RoomTimer
+            roundEndsAt={currentRoom?.status === 'playing' ? currentRoom?.round_ends_at : null}
+            serverOffset={serverOffsetRef.current}
+            timeLimitSeconds={currentTask?.timeLimitSeconds}
+            progress={progress}
+            onTimeUp={advanceRoom}
+          />
 
           <div className="flex items-center justify-between gap-3 lg:justify-end">
             <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-right shadow-sm">
