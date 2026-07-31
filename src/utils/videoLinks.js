@@ -16,6 +16,8 @@ const normalizeHostname = (hostname) => hostname
   .replace(/^www\./, '')
   .replace(/^m\./, '');
 
+const isHostname = (hostname, domain) => hostname === domain || hostname.endsWith(`.${domain}`);
+
 const getYouTubeId = (parsedUrl) => {
   if (!parsedUrl) return '';
 
@@ -23,7 +25,7 @@ const getYouTubeId = (parsedUrl) => {
   const segments = parsedUrl.pathname.split('/').filter(Boolean);
 
   if (hostname === 'youtu.be') return segments[0] || '';
-  if (!hostname.endsWith('youtube.com') && !hostname.endsWith('youtube-nocookie.com')) return '';
+  if (!isHostname(hostname, 'youtube.com') && !isHostname(hostname, 'youtube-nocookie.com')) return '';
 
   if (parsedUrl.pathname === '/watch') return parsedUrl.searchParams.get('v') || '';
   if (['embed', 'shorts', 'live'].includes(segments[0])) return segments[1] || '';
@@ -35,7 +37,7 @@ const getVimeoId = (parsedUrl) => {
   if (!parsedUrl) return '';
 
   const hostname = normalizeHostname(parsedUrl.hostname);
-  if (!hostname.endsWith('vimeo.com')) return '';
+  if (!isHostname(hostname, 'vimeo.com')) return '';
 
   const segments = parsedUrl.pathname.split('/').filter(Boolean);
   if (hostname === 'player.vimeo.com' && segments[0] === 'video') return segments[1] || '';
@@ -60,15 +62,26 @@ export const isFileVideo = (url = '') => {
   return /\.(mp4|webm|ogg)$/i.test(pathname);
 };
 
+export const normalizeHttpUrl = (url = '') => {
+  const value = typeof url === 'string' ? url.trim() : '';
+  if (!value) return '';
+
+  const parsedUrl = parseUrl(value);
+  if (!parsedUrl || !['http:', 'https:'].includes(parsedUrl.protocol)) return '';
+  return parsedUrl.href;
+};
+
+export const isValidHttpUrl = (url = '') => Boolean(normalizeHttpUrl(url));
+
 export const isExternalEmbedVideo = (url = '') => {
   const parsedUrl = parseUrl(url);
   if (!parsedUrl) return false;
 
   const hostname = normalizeHostname(parsedUrl.hostname);
   return hostname === 'youtu.be'
-    || hostname.endsWith('youtube.com')
-    || hostname.endsWith('youtube-nocookie.com')
-    || hostname.endsWith('vimeo.com');
+    || isHostname(hostname, 'youtube.com')
+    || isHostname(hostname, 'youtube-nocookie.com')
+    || isHostname(hostname, 'vimeo.com');
 };
 
 export const getVideoEmbedUrl = (url = '') => {

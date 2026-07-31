@@ -161,7 +161,7 @@ function AppContent() {
           <Route path="/calculator" element={<ProtectedRoute><ChemCalculator /></ProtectedRoute>} />
 
           {/* Protected Admin Routes */}
-          <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route path="/admin" element={<ProtectedRoute allowedRoles={['admin']}><AdminLayout /></ProtectedRoute>}>
              <Route index element={<AdminDashboard />} />
              <Route path="journey" element={<JourneyManager />} />
              <Route path="journey/:lessonId" element={<JourneyDetail />} />
@@ -171,10 +171,11 @@ function AppContent() {
              <Route path="feedback" element={<FeedbackManager />} />
              <Route path="phan_hoi" element={<FeedbackManager />} />
              <Route path="approvals" element={<ApprovalManager />} />
+             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Route>
 
           {/* Protected Teacher Routes */}
-          <Route path="/teacher" element={<ProtectedRoute><TeacherLayout /></ProtectedRoute>}>
+          <Route path="/teacher" element={<ProtectedRoute allowedRoles={['teacher', 'admin']}><TeacherLayout /></ProtectedRoute>}>
              <Route index element={<TeacherDashboard />} />
              <Route path="lop" element={<ClassManager />} />
              <Route path="lop/:id" element={<ClassDetail />} />

@@ -107,15 +107,18 @@ export const AuthProvider = ({ children }) => {
           setIsLoggedIn(true);
         }
         return userData;
-      } else if (res.status === 401) {
+      } else {
         const errorData = await res.json().catch(() => ({}));
-        console.error('Lỗi 401 từ Server:', errorData);
-        if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
-          alert('Tài khoản của bạn đã được đăng nhập ở một thiết bị khác. Bạn sẽ bị đăng xuất để bảo mật.');
+        const isAuthenticationFailure = res.status === 401
+          || (res.status === 403 && ['ACCOUNT_LOCKED', 'PRIVILEGED_ACCOUNT_LINK_REQUIRED'].includes(errorData.error));
+
+        if (isAuthenticationFailure) {
+          const message = errorData.message || 'Phiên đăng nhập không còn hợp lệ.';
+          if (mountedRef.current) setAuthError(message);
+          alert(message);
           await logout();
         } else {
-          alert(`Lỗi xác thực: ${errorData.message || 'Không rõ'}. Vui lòng kiểm tra Server Vercel.`);
-          await logout();
+          throw new Error(errorData.message || `Không thể tải hồ sơ (HTTP ${res.status}).`);
         }
       }
     } catch (err) {
@@ -170,6 +173,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
       const userData = await fetchProfile(data.token, true);
+      if (!userData) throw new Error('Không thể xác nhận hồ sơ sau khi đăng nhập.');
       return { success: true, user: userData };
     } catch (err) {
       return { success: false, message: err.message };
@@ -198,6 +202,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
       const userData = await fetchProfile(data.token, true);
+      if (!userData) throw new Error('Không thể xác nhận hồ sơ sau khi đăng nhập.');
       return { success: true, user: userData };
     } catch (err) {
       return { success: false, message: err.message };
@@ -253,7 +258,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
-      await fetchProfile(data.token, true);
+      const userData = await fetchProfile(data.token, true);
+      if (!userData) throw new Error('Không thể xác nhận hồ sơ sau khi đăng ký.');
       return { success: true };
     } catch (err) {
       return { success: false, message: err.message };
@@ -483,10 +489,14 @@ export const AuthProvider = ({ children }) => {
 
 
           }
-        } else if (res.status === 401) {
+        } else if (res.status === 401 || res.status === 403) {
           const errorData = await res.json().catch(() => ({}));
           if (errorData.message?.includes('đăng nhập ở một thiết bị khác') || errorData.error === 'DUAL_LOGIN') {
             alert('Phiên đăng nhập hết hạn vì bạn đã đăng nhập ở thiết bị khác.');
+          } else if (errorData.error === 'ACCOUNT_LOCKED') {
+            alert(errorData.message || 'Tài khoản của bạn đã bị khóa.');
+          } else if (res.status === 403) {
+            return;
           } else {
             // Silent logout for expired token
             console.warn('Phiên đăng nhập không hợp lệ hoặc đã hết hạn.');

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { getPostLoginPath } from '@/utils/authNavigation';
 
-const ProtectedRoute = ({ children }) => {
-  const { isLoggedIn, loading } = useAuth();
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { isLoggedIn, loading, user } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -20,6 +21,10 @@ const ProtectedRoute = ({ children }) => {
   if (!isLoggedIn) {
     // Redirect to login but save the current location to redirect back after login
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (allowedRoles?.length && !allowedRoles.includes(user?.role)) {
+    return <Navigate to={getPostLoginPath(user)} replace />;
   }
 
   return children;

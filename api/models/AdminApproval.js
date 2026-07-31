@@ -3,6 +3,19 @@ import { supabase } from '../lib/supabase.js';
 
 export const REQUIRED_ADMIN_APPROVALS = 2;
 const TABLE_NAME = 'yeu_cau_duyet_admin';
+const ACTIVE_STATUSES = new Set(['pending', 'executing']);
+
+const approvalError = (status, message, code) => {
+  const error = new Error(message);
+  error.status = status;
+  error.code = code;
+  error.expose = true;
+  return error;
+};
+
+const isExpired = (request) => (
+  request?.expiresAt && new Date(request.expiresAt).getTime() <= Date.now()
+);
 
 const sortValue = (value) => {
   if (Array.isArray(value)) return value.map(sortValue);
@@ -60,15 +73,25 @@ const getSingle = async (query) => {
 export const AdminApproval = {
   createRequestHash,
 
-  async list({ status = 'pending' } = {}) {
+  async list({ status = 'pending', limit = 50, cursor } = {}) {
     let query = supabase
       .from(TABLE_NAME)
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false });
 
     if (status) {
       query = query.eq('status', status);
     }
+    if (status === 'pending') {
+      query = query.gt('expires_at', new Date().toISOString());
+    }
+    if (cursor) {
+      query = query.or(
+        `created_at.lt.${cursor.sort},and(created_at.eq.${cursor.sort},id.lt.${cursor.id})`
+      );
+    }
+    query = query.limit(limit + 1);
 
     const { data, error } = await query;
     if (error) throw error;
@@ -84,22 +107,30 @@ export const AdminApproval = {
     );
   },
 
-  async findPendingByHash(requestHash) {
+  async findPendingByHash(requestHash, { includeExpired = false } = {}) {
+    let query = supabase
+      .from(TABLE_NAME)
+      .select('*')
+      .eq('request_hash', requestHash)
+      .eq('status', 'pending');
+    if (!includeExpired) query = query.gt('expires_at', new Date().toISOString());
+
     return getSingle(
-      supabase
-        .from(TABLE_NAME)
-        .select('*')
-        .eq('request_hash', requestHash)
-        .eq('status', 'pending')
+      query
     );
   },
 
   async createOrApprove({ actionKey, actionLabel, payload, adminUser }) {
     const requestHash = createRequestHash(actionKey, payload);
-    const existing = await this.findPendingByHash(requestHash);
+    let existing = await this.findPendingByHash(requestHash, { includeExpired: true });
 
     if (existing) {
-      return this.addApproval(existing.id, adminUser);
+      if (isExpired(existing)) {
+        await this.markFailed(existing.id, 'Yêu cầu duyệt đã hết hạn.', 'pending');
+        existing = null;
+      } else {
+        return this.addApproval(existing.id, adminUser);
+      }
     }
 
     const { data, error } = await supabase
@@ -116,6 +147,12 @@ export const AdminApproval = {
       .select()
       .single();
 
+    if (error?.code === '23505') {
+      // Another request created the same pending action concurrently. Reuse it
+      // instead of surfacing an intermittent unique-constraint failure.
+      const concurrent = await this.findPendingByHash(requestHash);
+      if (concurrent) return this.addApproval(concurrent.id, adminUser);
+    }
     if (error) throw error;
 
     const request = normalizeApproval(data);
@@ -139,6 +176,10 @@ export const AdminApproval = {
       err.status = 409;
       throw err;
     }
+    if (isExpired(request)) {
+      await this.markFailed(request.id, 'Yêu cầu duyệt đã hết hạn.', 'pending');
+      throw approvalError(410, 'Yêu cầu duyệt đã hết hạn. Vui lòng tạo yêu cầu mới.', 'APPROVAL_EXPIRED');
+    }
 
     if (request.approverIds.includes(adminUser.id)) {
       return {
@@ -157,10 +198,18 @@ export const AdminApproval = {
       })
       .eq('id', id)
       .eq('status', 'pending')
+      .eq('updated_at', request.updatedAt)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) {
+      throw approvalError(
+        409,
+        'Yêu cầu duyệt vừa được thay đổi. Vui lòng tải lại danh sách.',
+        'APPROVAL_CONFLICT'
+      );
+    }
 
     const updatedRequest = normalizeApproval(data);
     return {
@@ -168,6 +217,47 @@ export const AdminApproval = {
       readyToExecute: updatedRequest.currentApprovals >= REQUIRED_ADMIN_APPROVALS,
       alreadyApproved: false,
     };
+  },
+
+  async claimExecution(id, adminUser) {
+    const request = await this.findById(id);
+    if (!request) {
+      throw approvalError(404, 'Không tìm thấy yêu cầu duyệt.', 'APPROVAL_NOT_FOUND');
+    }
+    if (request.status !== 'pending') {
+      throw approvalError(409, 'Yêu cầu này đang hoặc đã được xử lý.', 'APPROVAL_NOT_PENDING');
+    }
+    if (isExpired(request)) {
+      await this.markFailed(id, 'Yêu cầu duyệt đã hết hạn.', 'pending');
+      throw approvalError(410, 'Yêu cầu duyệt đã hết hạn. Vui lòng tạo yêu cầu mới.', 'APPROVAL_EXPIRED');
+    }
+
+    const distinctApprovers = [...new Set(request.approverIds)];
+    if (
+      distinctApprovers.length < REQUIRED_ADMIN_APPROVALS
+      || !distinctApprovers.includes(adminUser.id)
+    ) {
+      throw approvalError(409, 'Yêu cầu chưa có đủ xác nhận hợp lệ.', 'APPROVALS_INSUFFICIENT');
+    }
+
+    const { data, error } = await supabase
+      .from(TABLE_NAME)
+      .update({
+        status: 'executing',
+        executed_by: adminUser.id,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .eq('status', 'pending')
+      .eq('updated_at', request.updatedAt)
+      .select()
+      .maybeSingle();
+
+    if (error) throw error;
+    if (!data) {
+      throw approvalError(409, 'Yêu cầu này đang được xử lý bởi quản trị viên khác.', 'APPROVAL_ALREADY_CLAIMED');
+    }
+    return normalizeApproval(data);
   },
 
   async markExecuted(id, result, executedBy) {
@@ -182,24 +272,28 @@ export const AdminApproval = {
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
+      .eq('status', 'executing')
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) throw approvalError(409, 'Trạng thái yêu cầu duyệt không hợp lệ.', 'APPROVAL_STATE_CONFLICT');
     return normalizeApproval(data);
   },
 
-  async markFailed(id, errorMessage) {
-    const { data, error } = await supabase
+  async markFailed(id, errorMessage, expectedStatus = 'executing') {
+    let query = supabase
       .from(TABLE_NAME)
       .update({
         status: 'failed',
-        error: errorMessage,
+        error: String(errorMessage || 'Lỗi thực thi không xác định').slice(0, 1000),
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq('id', id);
+    if (expectedStatus) query = query.eq('status', expectedStatus);
+    const { data, error } = await query
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     return normalizeApproval(data);
@@ -228,10 +322,13 @@ export const AdminApproval = {
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
+      .eq('status', 'pending')
+      .eq('updated_at', request.updatedAt)
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    if (!data) throw approvalError(409, 'Yêu cầu duyệt vừa được thay đổi. Vui lòng tải lại.', 'APPROVAL_CONFLICT');
     return normalizeApproval(data);
   },
 };

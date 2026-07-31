@@ -6,7 +6,11 @@
  *   VITE_CLOUDINARY_CLOUD_NAME   = your cloud name (e.g. "abc123")
  *   VITE_CLOUDINARY_UPLOAD_PRESET = an UNSIGNED upload preset (e.g. "aurum_public")
  */
-export async function uploadToCloudinary(file, folder = 'chemistry-odyssey/public') {
+export async function uploadToCloudinary(file, folder = 'chemistry-odyssey/public', { signal } = {}) {
+  if (!(file instanceof File)) {
+    throw new Error('Tệp tải lên không hợp lệ.');
+  }
+
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
@@ -23,7 +27,7 @@ export async function uploadToCloudinary(file, folder = 'chemistry-odyssey/publi
 
   const res = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-    { method: 'POST', body: formData }
+    { method: 'POST', body: formData, signal }
   );
 
   if (!res.ok) {
@@ -32,6 +36,10 @@ export async function uploadToCloudinary(file, folder = 'chemistry-odyssey/publi
   }
 
   const data = await res.json();
+  if (!data.secure_url) {
+    throw new Error('Cloudinary không trả về đường dẫn tệp an toàn.');
+  }
+
   return {
     url: data.secure_url,
     publicId: data.public_id,

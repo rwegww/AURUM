@@ -1,15 +1,245 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
 import AdminApproval from '../models/AdminApproval.js';
-import { auth, requireRole } from '../_middleware/auth.js';
+import { auth, authenticateToken, extractBearerToken, requireRole } from '../_middleware/auth.js';
 import { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../lib/mailer.js';
 import { supabase } from '../lib/supabase.js';
 
 const router = express.Router();
 const adminGuard = [auth, requireRole('admin')];
+const DEFAULT_PAGE_SIZE = 50;
+const MAX_PAGE_SIZE = 100;
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const SAFE_TEXT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:@-]{0,127}$/;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const BCRYPT_HASH_PATTERN = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
+const PUBLIC_FEEDBACK_TYPES = new Set(['bug', 'suggestion', 'praise', 'other']);
+const LESSON_ARRAY_FIELDS = ['theoryModules', 'videoModules', 'quizzes', 'storySlides', 'challenges'];
+
+router.use((_req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
+const httpError = (status, message, code = 'INVALID_REQUEST') => {
+  const error = new Error(message);
+  error.status = status;
+  error.code = code;
+  error.expose = true;
+  return error;
+};
+
+const isPlainObject = (value) => Boolean(
+  value
+  && typeof value === 'object'
+  && !Array.isArray(value)
+  && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)
+);
+
+const assertUuid = (value, label = 'ID') => {
+  if (typeof value !== 'string' || !UUID_PATTERN.test(value)) {
+    throw httpError(400, `${label} không hợp lệ.`, 'INVALID_ID');
+  }
+  return value;
+};
+
+const assertTextId = (value, label = 'ID') => {
+  if (typeof value !== 'string' || !SAFE_TEXT_ID_PATTERN.test(value)) {
+    throw httpError(400, `${label} không hợp lệ.`, 'INVALID_ID');
+  }
+  return value;
+};
+
+const normalizeRequiredText = (value, label, maxLength) => {
+  if (typeof value !== 'string' || !value.trim()) {
+    throw httpError(400, `${label} không được để trống.`, 'VALIDATION_ERROR');
+  }
+  const normalized = value.trim();
+  if (normalized.length > maxLength) {
+    throw httpError(400, `${label} không được vượt quá ${maxLength} ký tự.`, 'VALIDATION_ERROR');
+  }
+  return normalized;
+};
+
+const normalizeOptionalText = (value, label, maxLength) => {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  if (typeof value !== 'string') {
+    throw httpError(400, `${label} phải là chuỗi.`, 'VALIDATION_ERROR');
+  }
+  const normalized = value.trim();
+  if (normalized.length > maxLength) {
+    throw httpError(400, `${label} không được vượt quá ${maxLength} ký tự.`, 'VALIDATION_ERROR');
+  }
+  return normalized || null;
+};
+
+const normalizeWebUrl = (value, label, { required = false } = {}) => {
+  if (value === undefined || value === null || value === '') {
+    if (required) throw httpError(400, `${label} không được để trống.`, 'VALIDATION_ERROR');
+    return value === undefined ? undefined : null;
+  }
+  if (typeof value !== 'string' || value.length > 2048) {
+    throw httpError(400, `${label} không hợp lệ.`, 'VALIDATION_ERROR');
+  }
+  try {
+    const parsed = new URL(value);
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('invalid protocol');
+    return parsed.toString();
+  } catch {
+    throw httpError(400, `${label} phải là địa chỉ HTTP(S) hợp lệ.`, 'VALIDATION_ERROR');
+  }
+};
+
+const parsePageOptions = (query) => {
+  const rawLimit = query.limit;
+  const limit = rawLimit === undefined ? DEFAULT_PAGE_SIZE : Number(rawLimit);
+  if (!Number.isInteger(limit) || limit < 1 || limit > MAX_PAGE_SIZE) {
+    throw httpError(400, `limit phải là số nguyên từ 1 đến ${MAX_PAGE_SIZE}.`, 'INVALID_PAGINATION');
+  }
+
+  let cursor;
+  if (query.before !== undefined) {
+    try {
+      const decoded = JSON.parse(Buffer.from(String(query.before), 'base64url').toString('utf8'));
+      if (
+        !isPlainObject(decoded)
+        || typeof decoded.sort !== 'string'
+        || Number.isNaN(Date.parse(decoded.sort))
+        || typeof decoded.id !== 'string'
+        || !SAFE_TEXT_ID_PATTERN.test(decoded.id)
+      ) {
+        throw new Error('invalid cursor');
+      }
+      cursor = { sort: new Date(decoded.sort).toISOString(), id: decoded.id };
+    } catch {
+      throw httpError(400, 'Con trỏ before không hợp lệ.', 'INVALID_PAGINATION');
+    }
+  }
+  return { limit, cursor };
+};
+
+const encodeCursor = (sort, id) => Buffer
+  .from(JSON.stringify({ sort, id }), 'utf8')
+  .toString('base64url');
+
+const sendPage = (res, items, limit, cursorSelector) => {
+  const hasMore = items.length > limit;
+  const page = hasMore ? items.slice(0, limit) : items;
+  const nextCursor = hasMore && page.length ? cursorSelector(page.at(-1)) : null;
+  res.set('X-Has-More', hasMore ? 'true' : 'false');
+  if (nextCursor) res.set('X-Next-Cursor', nextCursor);
+  return res.json(page);
+};
+
+const redactSensitiveFields = (value) => {
+  if (Array.isArray(value)) return value.map(redactSensitiveFields);
+  if (!isPlainObject(value)) return value;
+
+  return Object.entries(value).reduce((safe, [key, nestedValue]) => {
+    if (/(?:password|password_hash|hashedpassword|token|secret|authorization|sessionid|current_session_id)/i.test(key)) {
+      return safe;
+    }
+    safe[key] = redactSensitiveFields(nestedValue);
+    return safe;
+  }, {});
+};
+
+const toAdminUserDto = (user) => redactSensitiveFields(user);
+
+const toAdminFeedbackDto = (feedback) => {
+  if (!feedback || feedback.type !== 'teacher_registration') return feedback;
+
+  let publicMessage = '{}';
+  try {
+    const payload = JSON.parse(feedback.message);
+    publicMessage = JSON.stringify({ email: typeof payload?.email === 'string' ? payload.email : null });
+  } catch {
+    // Keep malformed legacy requests inspectable without exposing their raw contents.
+  }
+  return { ...feedback, message: publicMessage };
+};
+
+const normalizeLessonInput = (input, { create = false } = {}) => {
+  if (!isPlainObject(input)) {
+    throw httpError(400, 'Dữ liệu bài học phải là một đối tượng JSON.', 'VALIDATION_ERROR');
+  }
+
+  const lesson = {};
+  const requestedId = input.lessonId ?? input.id;
+  if (requestedId !== undefined) lesson.lessonId = assertTextId(String(requestedId), 'ID bài học');
+
+  const grade = input.gradeLevelId ?? input.khoi_id ?? input.classId;
+  if (grade !== undefined) {
+    const numericGrade = Number(grade);
+    if (!Number.isInteger(numericGrade) || numericGrade < 6 || numericGrade > 12) {
+      throw httpError(400, 'Khối lớp phải là số nguyên từ 6 đến 12.', 'VALIDATION_ERROR');
+    }
+    lesson.gradeLevelId = numericGrade;
+  }
+
+  if (input.title !== undefined) lesson.title = normalizeRequiredText(input.title, 'Tiêu đề bài học', 300);
+  if (input.chapter !== undefined) lesson.chapter = normalizeOptionalText(input.chapter, 'Chương', 200);
+  if (input.description !== undefined) lesson.description = normalizeOptionalText(input.description, 'Mô tả', 5000);
+  if (input.programId !== undefined) {
+    const programId = normalizeRequiredText(input.programId, 'Bộ sách', 50);
+    if (!/^[A-Za-z0-9_-]+$/.test(programId)) {
+      throw httpError(400, 'Mã bộ sách không hợp lệ.', 'VALIDATION_ERROR');
+    }
+    lesson.programId = programId;
+  }
+  if (input.order !== undefined) {
+    const order = Number(input.order);
+    if (!Number.isInteger(order) || order < 0 || order > 10000) {
+      throw httpError(400, 'Thứ tự bài học phải là số nguyên từ 0 đến 10000.', 'VALIDATION_ERROR');
+    }
+    lesson.order = order;
+  }
+
+  for (const field of LESSON_ARRAY_FIELDS) {
+    if (input[field] !== undefined) {
+      if (!Array.isArray(input[field])) {
+        throw httpError(400, `${field} phải là một mảng.`, 'VALIDATION_ERROR');
+      }
+      lesson[field] = input[field];
+    }
+  }
+
+  if (input.game !== undefined) {
+    if (!isPlainObject(input.game)) {
+      throw httpError(400, 'game phải là một đối tượng JSON.', 'VALIDATION_ERROR');
+    }
+    lesson.game = input.game;
+  }
+  if (input.introVideoUrl !== undefined) {
+    lesson.introVideoUrl = normalizeWebUrl(input.introVideoUrl, 'Video giới thiệu');
+  }
+  if (input.isPremium !== undefined) {
+    if (typeof input.isPremium !== 'boolean') {
+      throw httpError(400, 'isPremium phải là giá trị boolean.', 'VALIDATION_ERROR');
+    }
+    lesson.isPremium = input.isPremium;
+  }
+
+  if (create) {
+    lesson.lessonId ||= `lesson_${crypto.randomUUID()}`;
+    if (!lesson.title || lesson.gradeLevelId === undefined) {
+      throw httpError(400, 'Tiêu đề và khối lớp là bắt buộc khi tạo bài học.', 'VALIDATION_ERROR');
+    }
+    lesson.programId ||= 'ketnoi';
+  } else if (Object.keys(lesson).filter((key) => key !== 'lessonId').length === 0) {
+    throw httpError(400, 'Không có trường bài học hợp lệ để cập nhật.', 'VALIDATION_ERROR');
+  }
+
+  if (JSON.stringify(lesson).length > 1_500_000) {
+    throw httpError(413, 'Nội dung bài học vượt quá dung lượng cho phép.', 'PAYLOAD_TOO_LARGE');
+  }
+  return lesson;
+};
 
 const approvalSummary = (request) => ({
   id: request.id,
@@ -20,6 +250,8 @@ const approvalSummary = (request) => ({
   requiredApprovals: request.requiredApprovals,
   approverIds: request.approverIds,
 });
+
+const toAdminApprovalDto = (request) => request ? redactSensitiveFields(request) : request;
 
 const withApproval = (result, request) => {
   const approval = approvalSummary(request);
@@ -34,7 +266,7 @@ const sendPendingApproval = (res, state) => res.status(202).json({
     ? 'Bạn đã xác nhận yêu cầu này. Cần quản trị viên còn lại xác nhận để thực thi.'
     : 'Đã ghi nhận xác nhận đầu tiên. Cần quản trị viên còn lại xác nhận để thực thi.',
   requiresSecondAdminApproval: true,
-  approvalRequest: state.request,
+  approvalRequest: toAdminApprovalDto(state.request),
 });
 
 const ensureFeedback = async (id) => {
@@ -47,24 +279,55 @@ const ensureFeedback = async (id) => {
   return feedback;
 };
 
-const parseTeacherRequest = async (id) => {
+const parseTeacherRequest = async (id, { requirePassword = true } = {}) => {
+  assertUuid(id, 'ID yêu cầu giáo viên');
   const phan_hoi = await Feedback.findById(id);
   if (!phan_hoi || phan_hoi.type !== 'teacher_registration') {
-    const err = new Error('Yêu cầu không tồn tại');
-    err.status = 404;
-    throw err;
+    throw httpError(404, 'Yêu cầu không tồn tại.', 'TEACHER_REQUEST_NOT_FOUND');
+  }
+  if (phan_hoi.status !== 'unread') {
+    throw httpError(409, 'Yêu cầu giáo viên này đã được xử lý.', 'TEACHER_REQUEST_ALREADY_PROCESSED');
   }
 
   let requestPayload;
   try {
     requestPayload = JSON.parse(phan_hoi.message);
   } catch {
-    const err = new Error('Dữ liệu yêu cầu giáo viên không hợp lệ');
-    err.status = 400;
-    throw err;
+    throw httpError(400, 'Dữ liệu yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
   }
 
-  return { phan_hoi, requestPayload };
+  if (!isPlainObject(requestPayload)) {
+    throw httpError(400, 'Dữ liệu yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
+  }
+
+  const email = typeof requestPayload.email === 'string'
+    ? requestPayload.email.trim().toLowerCase()
+    : '';
+  if (!EMAIL_PATTERN.test(email) || email.length > 320) {
+    throw httpError(400, 'Email trong yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
+  }
+  if (
+    requirePassword
+    && (typeof requestPayload.hashedPassword !== 'string' || !BCRYPT_HASH_PATTERN.test(requestPayload.hashedPassword))
+  ) {
+    throw httpError(400, 'Mật khẩu bảo vệ trong yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
+  }
+  if (typeof phan_hoi.username !== 'string' || !SAFE_TEXT_ID_PATTERN.test(phan_hoi.username)) {
+    throw httpError(400, 'Tên đăng nhập trong yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
+  }
+  normalizeWebUrl(phan_hoi.imageUrl, 'Ảnh minh chứng', { required: true });
+
+  if (requirePassword) {
+    const [existingUsername, existingEmail] = await Promise.all([
+      User.findOne({ username: phan_hoi.username }),
+      User.findOne({ email }),
+    ]);
+    if (existingUsername || existingEmail) {
+      throw httpError(409, 'Tên đăng nhập hoặc email giáo viên đã tồn tại.', 'TEACHER_ALREADY_EXISTS');
+    }
+  }
+
+  return { phan_hoi, requestPayload: { ...requestPayload, email } };
 };
 
 const normalizeClass = (classData) => {
@@ -139,11 +402,19 @@ const adminActions = {
   'user.lock': {
     label: 'Thay đổi trạng thái tài khoản',
     execute: async ({ id, isLocked }) => {
-      const locked = Boolean(isLocked);
-      const updatedUser = await User.toggleLock(id, locked);
+      assertTextId(id, 'ID người dùng');
+      if (typeof isLocked !== 'boolean') {
+        throw httpError(400, 'isLocked phải là giá trị boolean.', 'VALIDATION_ERROR');
+      }
+      const target = await User.findById(id);
+      if (!target) throw httpError(404, 'Không tìm thấy người dùng.', 'USER_NOT_FOUND');
+      if (target.role === 'admin') {
+        throw httpError(403, 'Không thể khóa tài khoản quản trị viên.', 'ADMIN_LOCK_FORBIDDEN');
+      }
+      const updatedUser = await User.toggleLock(id, isLocked);
       return {
-        message: locked ? 'Đã khóa tài khoản' : 'Đã mở khóa tài khoản',
-        user: updatedUser,
+        message: isLocked ? 'Đã khóa tài khoản' : 'Đã mở khóa tài khoản',
+        user: toAdminUserDto(updatedUser),
       };
     },
   },
@@ -171,15 +442,25 @@ const adminActions = {
   },
   'lesson.create': {
     label: 'Tạo bài học',
-    execute: async ({ lesson }) => Lesson.create(lesson),
+    execute: async ({ lesson }) => Lesson.create(normalizeLessonInput(lesson, { create: true })),
   },
   'lesson.update': {
     label: 'Cập nhật bài học',
-    execute: async ({ id, lesson }) => Lesson.update(id, lesson),
+    execute: async ({ id, lesson }) => {
+      assertTextId(id, 'ID bài học');
+      const currentLesson = await Lesson.findById(id);
+      if (!currentLesson) throw httpError(404, 'Không tìm thấy bài học.', 'LESSON_NOT_FOUND');
+      const patch = normalizeLessonInput(lesson);
+      const mergedLesson = normalizeLessonInput({ ...currentLesson, ...patch, lessonId: id }, { create: true });
+      return Lesson.update(id, mergedLesson);
+    },
   },
   'lesson.delete': {
     label: 'Xóa bài học',
     execute: async ({ id }) => {
+      assertTextId(id, 'ID bài học');
+      const lesson = await Lesson.findById(id);
+      if (!lesson) throw httpError(404, 'Không tìm thấy bài học.', 'LESSON_NOT_FOUND');
       await Lesson.delete(id);
       return { message: 'Đã xóa bài học thành công' };
     },
@@ -213,7 +494,7 @@ const adminActions = {
   'teacher.reject': {
     label: 'Từ chối tài khoản giáo viên',
     execute: async ({ id }) => {
-      const { phan_hoi, requestPayload } = await parseTeacherRequest(id);
+      const { phan_hoi, requestPayload } = await parseTeacherRequest(id, { requirePassword: false });
       const { email } = requestPayload;
 
       await Feedback.updateStatus(phan_hoi.id, 'rejected');

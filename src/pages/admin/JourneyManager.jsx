@@ -1,226 +1,286 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import { AlertCircle, AlertTriangle, ChevronLeft, ChevronRight, GripVertical, Map, RefreshCcw, Save } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Map, ChevronRight, ChevronLeft, Save, RefreshCcw, GripVertical, AlertTriangle } from 'lucide-react';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
 
+const GRADES = [6, 7, 8, 9, 10, 11, 12];
+
+const getOrder = (lesson, fallback = Number.MAX_SAFE_INTEGER) => {
+  const order = Number(lesson?.order);
+  return Number.isFinite(order) ? order : fallback;
+};
+
+const sortLessons = (lessons) => [...lessons].sort((first, second) => (
+  getOrder(first) - getOrder(second)
+  || String(first?.title || '').localeCompare(String(second?.title || ''), 'vi')
+));
+
+const getResponseData = async (response) => {
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.message || data.error || 'Không thể tải hành trình.');
+  return data;
+};
+
 const JourneyManager = () => {
-  const [bai_hoc, setLessons] = useState([]);
+  const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedGrade, setSelectedGrade] = useState(8);
   const [saving, setSaving] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [selectedGrade, setSelectedGrade] = useState(8);
+  const [loadError, setLoadError] = useState('');
+  const [saveError, setSaveError] = useState('');
+  const savedOrdersRef = useRef(new Map());
 
-  const fetchJourney = async (grade) => {
+  const hasChanges = useMemo(() => lessons.some((lesson) => (
+    getOrder(lesson) !== savedOrdersRef.current.get(lesson.lessonId)
+  )), [lessons]);
+
+  const fetchJourney = useCallback(async (signal) => {
     setLoading(true);
+    setLoadError('');
+    setSaveError('');
     try {
-      const res = await fetch(`/api/lessons?classId=${grade}`);
-      const data = await res.json();
-      // Ensure bai_hoc are sorted by order
-      const sortedData = [...data].sort((a, b) => (a.order || 0) - (b.order || 0));
+      const response = await fetch(`/api/lessons?classId=${selectedGrade}`, { signal });
+      const data = await getResponseData(response);
+      if (!Array.isArray(data)) throw new Error('Dữ liệu hành trình trả về không hợp lệ.');
+      const sortedData = sortLessons(data);
+      savedOrdersRef.current = new Map(sortedData.map((lesson) => [lesson.lessonId, getOrder(lesson)]));
       setLessons(sortedData);
-      setHasChanges(false);
     } catch (err) {
-      console.error('Lỗi tải hành trình:', err);
+      if (err.name !== 'AbortError') {
+        console.error('Lỗi tải hành trình:', err);
+        setLoadError(err.message || 'Không thể tải hành trình.');
+        setLessons([]);
+      }
     } finally {
-      setLoading(false);
+      if (!signal?.aborted) setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchJourney(selectedGrade);
   }, [selectedGrade]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchJourney(controller.signal);
+    return () => controller.abort();
+  }, [fetchJourney]);
+
+  useEffect(() => {
+    const warnBeforeUnload = (event) => {
+      if (!hasChanges) return;
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', warnBeforeUnload);
+    return () => window.removeEventListener('beforeunload', warnBeforeUnload);
+  }, [hasChanges]);
+
+  const confirmDiscard = () => !hasChanges || window.confirm('Bạn có thay đổi thứ tự chưa lưu. Bạn có chắc muốn rời khỏi trang?');
+
+  const handleGradeChange = (grade) => {
+    if (grade === selectedGrade || saving || !confirmDiscard()) return;
+    setSelectedGrade(grade);
+  };
+
   const moveItem = (index, direction) => {
-    const newLessons = [...bai_hoc];
     const newIndex = index + direction;
-    
-    if (newIndex < 0 || newIndex >= newLessons.length) return;
-    
-    const temp = newLessons[index];
-    newLessons[index] = newLessons[newIndex];
-    newLessons[newIndex] = temp;
-    
-    // Update order values based on new indices
-    const updatedLessons = newLessons.map((lesson, idx) => ({
-      ...lesson,
-      order: idx + 1
-    }));
-    
-    setLessons(updatedLessons);
-    setHasChanges(true);
+    if (saving || newIndex < 0 || newIndex >= lessons.length) return;
+
+    setLessons((current) => {
+      const next = [...current];
+      const currentItem = next[index];
+      const targetItem = next[newIndex];
+      const currentOrder = getOrder(currentItem, index + 1);
+      const targetOrder = getOrder(targetItem, newIndex + 1);
+      next[index] = { ...targetItem, order: currentOrder };
+      next[newIndex] = { ...currentItem, order: targetOrder };
+      return next;
+    });
+    setSaveError('');
   };
 
   const handleSave = async () => {
+    if (!hasChanges || saving) return;
+    const changedLessons = lessons.filter((lesson) => (
+      getOrder(lesson) !== savedOrdersRef.current.get(lesson.lessonId)
+    ));
+
     setSaving(true);
+    setSaveError('');
     try {
       const token = localStorage.getItem('token');
-      
-      // Update all bai_hoc in parallel or sequence
-      const updatePromises = bai_hoc.map(lesson => 
-        fetch(`/api/admin/lessons/${lesson.lessonId}`, {
-          method: 'PUT',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}` 
-          },
-          body: JSON.stringify({
-            ...lesson,
-            order: lesson.order
-          })
-        })
-      );
-      
-      const responses = await Promise.all(updatePromises);
-      const results = await Promise.all(responses.map(parseAdminMutationResponse));
-      const pendingCount = results.filter(result => result.pendingApproval).length;
-      setHasChanges(false);
-      if (pendingCount > 0) {
-        alert(`Đã tạo ${pendingCount} yêu cầu duyệt. Cần quản trị viên còn lại xác nhận để cập nhật thứ tự hành trình.`);
-      } else {
-        alert('Đã cập nhật thứ tự hành trình thành công!');
+      const outcomes = await Promise.all(changedLessons.map(async (lesson) => {
+        try {
+          const response = await fetch(`/api/admin/lessons/${encodeURIComponent(lesson.lessonId)}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token || ''}`,
+            },
+            // The API update mapper supplies defaults for omitted fields, so the complete lesson
+            // must be sent here to preserve quizzes, story slides, challenges and rewards.
+            body: JSON.stringify({ ...lesson, order: getOrder(lesson) }),
+          });
+          return { lesson, result: await parseAdminMutationResponse(response) };
+        } catch (error) {
+          return { lesson, error };
+        }
+      }));
+
+      const accepted = outcomes.filter((outcome) => !outcome.error);
+      const failed = outcomes.filter((outcome) => outcome.error);
+      const pendingCount = accepted.filter((outcome) => outcome.result.pendingApproval).length;
+      const savedById = new Map(accepted
+        .filter((outcome) => !outcome.result.pendingApproval)
+        .map((outcome) => [outcome.lesson.lessonId, outcome.result.data]));
+
+      accepted.forEach(({ lesson }) => {
+        savedOrdersRef.current.set(lesson.lessonId, getOrder(lesson));
+      });
+      setLessons((current) => current.map((lesson) => savedById.get(lesson.lessonId) || { ...lesson }));
+
+      if (failed.length > 0) {
+        const firstMessage = failed[0].error?.message || 'Lỗi không xác định.';
+        setSaveError(`Đã ghi nhận ${accepted.length}/${outcomes.length} thay đổi. ${failed.length} bài chưa lưu được: ${firstMessage}`);
       }
-    } catch (err) {
-      console.error('Lỗi lưu hành trình:', err);
-      alert('Có lỗi xảy ra khi lưu hành trình.');
+
+      if (pendingCount > 0) {
+        window.alert(`Đã tạo ${pendingCount} yêu cầu duyệt thứ tự. Cần quản trị viên còn lại xác nhận để áp dụng.`);
+      } else if (failed.length === 0) {
+        window.alert(`Đã cập nhật thứ tự của ${accepted.length} bài học thành công.`);
+      }
     } finally {
       setSaving(false);
     }
   };
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
+      <header className="mb-8 flex flex-col justify-between gap-6 lg:mb-10 lg:flex-row lg:items-center">
         <div>
-          <Link to="/admin" className="text-viet-green font-bold text-xs mb-2 block hover:underline">← Quay lại Bảng điều khiển</Link>
-          <h1 className="text-3xl font-bold text-viet-text tracking-tight flex items-center gap-3">
-            Quản lý <span className="text-viet-green">Hành trình</span> <Map className="text-viet-green" size={28} />
+          <Link
+            to="/admin"
+            onClick={(event) => { if (!confirmDiscard()) event.preventDefault(); }}
+            className="mb-2 block text-xs font-bold text-viet-green hover:underline"
+          >
+            ← Quay lại Bảng điều khiển
+          </Link>
+          <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight text-viet-text">
+            Quản lý <span className="text-viet-green">Hành trình</span> <Map className="text-viet-green" size={28} aria-hidden="true" />
           </h1>
-          <p className="text-viet-text-light mt-1 font-medium italic">Sắp xếp lộ trình học tập cho học sinh theo từng khối lớp.</p>
+          <p className="mt-1 font-medium italic text-viet-text-light">Sắp xếp lộ trình học tập cho học sinh theo từng khối lớp.</p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex gap-1 p-1 bg-white rounded-2xl border border-viet-border shadow-sm">
-            {[6, 7, 8, 9, 10, 11, 12].map(g => (
-              <button 
-                key={g} 
-                onClick={() => setSelectedGrade(g)}
-                className={`px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-                  selectedGrade === g ? 'bg-viet-green text-white shadow-md' : 'text-viet-text-light hover:bg-gray-50'
-                }`}
+        <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex max-w-full gap-1 overflow-x-auto rounded-2xl border border-viet-border bg-white p-1 shadow-sm" aria-label="Chọn khối lớp">
+            {GRADES.map((grade) => (
+              <button
+                type="button"
+                key={grade}
+                onClick={() => handleGradeChange(grade)}
+                disabled={saving}
+                aria-pressed={selectedGrade === grade}
+                className={`shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-all sm:px-5 ${
+                  selectedGrade === grade ? 'bg-viet-green text-white shadow-md' : 'text-viet-text-light hover:bg-gray-50'
+                } disabled:opacity-60`}
               >
-                Lớp {g}
+                Lớp {grade}
               </button>
             ))}
           </div>
-          
-          <button 
+
+          <button
+            type="button"
             onClick={handleSave}
             disabled={!hasChanges || saving}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-bold transition-all shadow-lg ${
-              hasChanges 
-                ? 'bg-viet-green text-white shadow-viet-green/20 hover:scale-105' 
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-viet-green px-6 py-2.5 text-xs font-bold text-white shadow-lg shadow-viet-green/20 transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none"
           >
             {saving ? <RefreshCcw className="animate-spin" size={16} /> : <Save size={16} />}
-            Lưu thay đổi
+            {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
           </button>
         </div>
       </header>
 
       {hasChanges && (
-        <motion.div 
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-3 text-amber-700 text-sm font-medium"
-        >
-          <AlertTriangle size={18} />
-          Bạn có thay đổi chưa lưu. Hãy nhấn "Lưu thay đổi" để cập nhật thứ tự mới cho học sinh.
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-700" role="status">
+          <AlertTriangle className="mt-0.5 shrink-0" size={18} />
+          Bạn có thay đổi chưa lưu. Hãy lưu trước khi chuyển lớp hoặc mở trang chi tiết.
         </motion.div>
       )}
 
+      {saveError && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700" role="alert">
+          <AlertCircle className="mt-0.5 shrink-0" size={18} /> {saveError}
+        </div>
+      )}
+
       {loading ? (
-        <div className="space-y-4">
-          {[1, 2, 3, 4, 5].map(i => (
-            <div key={i} className="h-20 bg-white rounded-2xl animate-pulse border border-viet-border" />
-          ))}
+        <div className="space-y-4" role="status" aria-label="Đang tải hành trình">
+          {[1, 2, 3, 4, 5].map((item) => <div key={item} className="h-24 animate-pulse rounded-2xl border border-viet-border bg-white" />)}
+        </div>
+      ) : loadError ? (
+        <div className="rounded-[32px] border border-red-200 bg-white px-6 py-14 text-center">
+          <AlertCircle className="mx-auto mb-4 text-red-500" size={36} />
+          <p className="font-bold text-viet-text">Không thể tải hành trình lớp {selectedGrade}</p>
+          <p className="mt-2 text-sm text-viet-text-light">{loadError}</p>
+          <button type="button" onClick={() => fetchJourney()} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-viet-green px-5 py-2.5 text-sm font-bold text-white">
+            <RefreshCcw size={16} /> Thử lại
+          </button>
+        </div>
+      ) : lessons.length === 0 ? (
+        <div className="rounded-[40px] border border-dashed border-slate-200 bg-white py-20 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300"><Map size={32} /></div>
+          <p className="font-bold text-slate-500">Chưa có bài học nào cho khối lớp này.</p>
+          <Link to="/admin/bai_hoc" className="mt-2 block text-sm font-bold text-viet-green hover:underline">Tới trang Quản lý Học liệu →</Link>
         </div>
       ) : (
         <div className="relative">
-          {/* Path Line */}
-          <div className="absolute left-[52px] top-10 bottom-10 w-1 bg-slate-100 rounded-full" />
-          
+          <div className="absolute bottom-10 left-6 top-10 hidden w-1 rounded-full bg-slate-100 sm:block" aria-hidden="true" />
           <div className="space-y-4">
-            {bai_hoc.map((lesson, index) => (
+            {lessons.map((lesson, index) => (
               <motion.div
                 key={lesson.lessonId}
                 layout
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.05 }}
-                className="group relative flex items-center gap-6"
+                transition={{ delay: Math.min(index * 0.03, 0.3) }}
+                className="group relative flex items-stretch gap-3 sm:items-center sm:gap-6"
               >
-                {/* Step Indicator */}
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-black text-sm border-4 z-10 transition-colors ${
-                  index === 0 ? 'bg-viet-green text-white border-viet-green/20' : 'bg-white text-viet-text-light border-slate-50'
-                }`}>
+                <div className={`z-10 hidden h-12 w-12 shrink-0 items-center justify-center rounded-full border-4 text-sm font-black transition-colors sm:flex ${
+                  index === 0 ? 'border-viet-green/20 bg-viet-green text-white' : 'border-slate-50 bg-white text-viet-text-light'
+                }`} aria-label={`Chặng ${index + 1}`}>
                   {index + 1}
                 </div>
 
-                {/* Content Card */}
-                <div className="flex-1 bg-white p-5 rounded-[28px] border border-viet-border shadow-sm group-hover:shadow-md group-hover:border-viet-green/30 transition-all flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400">
+                <article className="flex min-w-0 flex-1 flex-col gap-4 rounded-[24px] border border-viet-border bg-white p-4 shadow-sm transition-all group-hover:border-viet-green/30 group-hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:rounded-[28px] sm:p-5">
+                  <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-400" aria-hidden="true">
                       <GripVertical size={20} />
                     </div>
-                    <div>
-                      <h3 className="font-bold text-viet-text leading-tight">{lesson.title}</h3>
-                      <p className="text-[11px] text-viet-text-light font-medium mt-1 uppercase tracking-wider">
-                        {lesson.chapter || 'Nội dung cốt lõi'} • ID: {lesson.lessonId}
-                      </p>
+                    <div className="min-w-0">
+                      <h2 className="truncate font-bold leading-tight text-viet-text">{lesson.title || 'Bài học chưa có tiêu đề'}</h2>
+                      <p className="mt-1 truncate text-[11px] font-medium uppercase tracking-wider text-viet-text-light">{lesson.chapter || 'Nội dung cốt lõi'} • ID: {lesson.lessonId}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => moveItem(index, -1)}
-                      disabled={index === 0}
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 hover:text-viet-green disabled:opacity-30 disabled:hover:bg-transparent transition-all"
-                    >
+                  <div className="flex items-center justify-end gap-1 sm:gap-2">
+                    <button type="button" onClick={() => moveItem(index, -1)} disabled={saving || index === 0} className="flex h-10 w-10 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-50 hover:text-viet-green disabled:opacity-30" aria-label={`Đưa ${lesson.title} lên một chặng`}>
                       <ChevronLeft size={20} className="rotate-90" />
                     </button>
-                    <button 
-                      onClick={() => moveItem(index, 1)}
-                      disabled={index === bai_hoc.length - 1}
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-50 hover:text-viet-green disabled:opacity-30 disabled:hover:bg-transparent transition-all"
-                    >
+                    <button type="button" onClick={() => moveItem(index, 1)} disabled={saving || index === lessons.length - 1} className="flex h-10 w-10 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-slate-50 hover:text-viet-green disabled:opacity-30" aria-label={`Đưa ${lesson.title} xuống một chặng`}>
                       <ChevronRight size={20} className="rotate-90" />
                     </button>
-                    
-                    <div className="w-px h-6 bg-slate-100 mx-2" />
-                    
-                    <Link 
-                      to={`/admin/journey/${lesson.lessonId}`} 
-                      className="px-4 py-2 rounded-xl text-[11px] font-black uppercase text-viet-green bg-viet-green/5 hover:bg-viet-green hover:text-white transition-all"
+                    <div className="mx-1 h-6 w-px bg-slate-100 sm:mx-2" />
+                    <Link
+                      to={`/admin/journey/${encodeURIComponent(lesson.lessonId)}`}
+                      onClick={(event) => { if (!confirmDiscard()) event.preventDefault(); }}
+                      className="rounded-xl bg-viet-green/5 px-3 py-2 text-[11px] font-black uppercase text-viet-green transition-colors hover:bg-viet-green hover:text-white sm:px-4"
                     >
                       Chi tiết
                     </Link>
                   </div>
-                </div>
+                </article>
               </motion.div>
             ))}
           </div>
-
-          {bai_hoc.length === 0 && (
-            <div className="text-center py-20 bg-white rounded-[40px] border border-dashed border-slate-200">
-              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-                <Map size={32} />
-              </div>
-              <p className="text-slate-400 font-bold">Chưa có bài học nào cho khối lớp này.</p>
-              <Link to="/admin/bai_hoc" className="text-viet-green font-bold text-sm mt-2 block hover:underline">Tới trang Quản lý Học liệu →</Link>
-            </div>
-          )}
         </div>
       )}
     </div>
@@ -228,5 +288,3 @@ const JourneyManager = () => {
 };
 
 export default JourneyManager;
-
-

@@ -1,17 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { getPostLoginPath } from '@/utils/authNavigation';
+
+const readReturnLocation = () => {
+    try {
+        return JSON.parse(sessionStorage.getItem('aurum-auth-return-to') || 'null');
+    } catch {
+        return null;
+    }
+};
 
 const AuthCallback = () => {
     const navigate = useNavigate();
     const { user, isLoggedIn, loading } = useAuth();
+    const returnLocationRef = useRef(readReturnLocation());
 
     useEffect(() => {
         const handleCallback = async () => {
             const { error } = await supabase.auth.getSession();
             if (error) {
                 console.error('Auth callback error:', error.message);
+                sessionStorage.removeItem('aurum-auth-return-to');
                 navigate('/login?error=' + encodeURIComponent(error.message));
             }
         };
@@ -21,13 +32,11 @@ const AuthCallback = () => {
 
     useEffect(() => {
         if (!loading && isLoggedIn && user) {
-            if (user.role === 'admin') {
-                navigate('/admin');
-            } else if (user.role === 'teacher') {
-                navigate('/teacher');
-            } else {
-                navigate('/');
-            }
+            sessionStorage.removeItem('aurum-auth-return-to');
+            navigate(getPostLoginPath(user, returnLocationRef.current), { replace: true });
+        } else if (!loading && !isLoggedIn) {
+            sessionStorage.removeItem('aurum-auth-return-to');
+            navigate('/login?error=' + encodeURIComponent('Phiên đăng nhập Google không hợp lệ hoặc đã hết hạn.'), { replace: true });
         }
     }, [loading, isLoggedIn, user, navigate]);
 

@@ -2,81 +2,146 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
+class AuthenticationError extends Error {
+  constructor(code, message, status = 401) {
+    super(message);
+    this.name = 'AuthenticationError';
+    this.code = code;
+    this.status = status;
+  }
+}
+
+export const extractBearerToken = (req) => {
+  const header = req.header('Authorization');
+  if (!header) return null;
+
+  const match = /^Bearer\s+(\S+)$/i.exec(header.trim());
+  if (!match) {
+    throw new AuthenticationError(
+      'INVALID_AUTHORIZATION_HEADER',
+      'Định dạng phiên đăng nhập không hợp lệ.'
+    );
+  }
+
+  return match[1];
+};
+
+const verifyCustomToken = (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
+    if (
+      decoded
+      && typeof decoded === 'object'
+      && typeof decoded.id === 'string'
+      && decoded.id.trim()
+    ) {
+      return decoded;
+    }
+  } catch {
+    // It may be a Supabase access token; validate it with the Auth server below.
+  }
+  return null;
+};
+
+const resolveSupabaseUser = async (token) => {
+  const { data, error } = await supabase.auth.getUser(token);
+  const sbUser = data?.user;
+
+  if (!sbUser || error) {
+    throw new AuthenticationError('INVALID_TOKEN', 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn.');
+  }
+
+  let user = await User.findById(sbUser.id);
+
+  if (!user) {
+    user = await User.findOne({ googleId: sbUser.id });
+  }
+
+  if (!user && sbUser.email) {
+    const emailConfirmed = Boolean(sbUser.email_confirmed_at || sbUser.confirmed_at);
+    const emailUser = emailConfirmed ? await User.findOne({ email: sbUser.email }) : null;
+
+    // Never attach an OAuth identity to a privileged account merely because its
+    // email text matches. Privileged linking must be an explicit authenticated action.
+    if (emailUser && emailUser.role !== 'student') {
+      throw new AuthenticationError(
+        'PRIVILEGED_ACCOUNT_LINK_REQUIRED',
+        'Tài khoản quản trị hoặc giáo viên cần liên kết đăng nhập Google từ hồ sơ hiện tại.',
+        403
+      );
+    }
+    user = emailUser;
+  }
+
+  if (!user) {
+    user = await User.create({
+      id: sbUser.id,
+      username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
+      email: sbUser.email,
+      password: 'supabase_oauth_no_password',
+      role: 'student',
+    });
+  }
+
+  return { user, decodedCustomJwt: null };
+};
+
+export const authenticateToken = async (token) => {
+  if (!token) {
+    throw new AuthenticationError('MISSING_TOKEN', 'Thiếu phiên đăng nhập.');
+  }
+
+  const decoded = verifyCustomToken(token);
+  let user;
+
+  if (decoded) {
+    user = await User.findById(decoded.id);
+    if (!user) {
+      throw new AuthenticationError('USER_NOT_FOUND', 'Không tìm thấy thông tin người dùng.');
+    }
+    if (typeof decoded.sessionId !== 'string' || !decoded.sessionId.trim() || !user.currentSessionId) {
+      throw new AuthenticationError('INVALID_SESSION', 'Phiên đăng nhập không còn hợp lệ.');
+    }
+    if (user.currentSessionId !== decoded.sessionId) {
+      throw new AuthenticationError('DUAL_LOGIN', 'Tài khoản này đang đăng nhập ở nơi khác.');
+    }
+  } else {
+    ({ user } = await resolveSupabaseUser(token));
+  }
+
+  if (user.isLocked) {
+    throw new AuthenticationError(
+      'ACCOUNT_LOCKED',
+      'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.',
+      403
+    );
+  }
+
+  return { user, decodedCustomJwt: decoded };
+};
+
 export const auth = async (req, res, next) => {
   try {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) throw new Error('Thiếu phiên đăng nhập.');
-
-    let userId;
-    let user;
-
-    const decoded = (() => {
-      try {
-        return jwt.verify(token, process.env.JWT_SECRET);
-      } catch {
-        return null;
-      }
-    })();
-
-    if (decoded) {
-      userId = decoded.id;
-      req.decodedCustomJwt = decoded;
-      user = await User.findById(userId);
-
-      if (!decoded.sessionId) {
-        throw new Error('INVALID_SESSION');
-      }
-      if (user?.currentSessionId && user.currentSessionId !== decoded.sessionId) {
-        throw new Error('DUAL_LOGIN');
-      }
-    } else {
-      const { data, error: sbError } = await supabase.auth.getUser(token);
-      const sbUser = data?.user;
-
-      if (!sbUser || sbError) {
-        throw new Error('Xác thực thất bại');
-      }
-
-      userId = sbUser.id;
-      user = await User.findById(userId);
-
-      if (!user) {
-        user = await User.findOne({ googleId: sbUser.id });
-        if (!user && sbUser.email) {
-          user = await User.findOne({ email: sbUser.email });
-        }
-      }
-
-      if (!user) {
-        user = await User.create({
-          id: userId,
-          username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
-          email: sbUser.email,
-          password: 'supabase_oauth_no_password',
-          role: 'student',
-        });
-      }
-    }
-
-    if (!user) throw new Error('Không tìm thấy thông tin người dùng');
-    if (user.isLocked) {
-      throw new Error('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.');
-    }
+    const token = extractBearerToken(req);
+    const { user, decodedCustomJwt } = await authenticateToken(token);
 
     req.user = user;
     req.userId = user.id;
     req.token = token;
-    next();
+    if (decodedCustomJwt) req.decodedCustomJwt = decodedCustomJwt;
+    return next();
   } catch (error) {
-    const message = error.message === 'DUAL_LOGIN'
-      ? 'Tài khoản này đang đăng nhập ở nơi khác.'
-      : error.message === 'INVALID_SESSION'
-        ? 'Phiên đăng nhập không còn hợp lệ.'
-        : error.message;
+    if (!(error instanceof AuthenticationError)) {
+      console.error('Authentication backend error:', error);
+      return res.status(503).json({
+        message: 'Dịch vụ xác thực tạm thời không khả dụng. Vui lòng thử lại sau.',
+        error: 'AUTH_SERVICE_UNAVAILABLE',
+      });
+    }
 
-    res.status(401).json({
-      message,
-      error: error.message === 'DUAL_LOGIN' ? 'DUAL_LOGIN' : error.message,
+    return res.status(error.status).json({
+      message: error.message,
+      error: error.code,
     });
   }
 };

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { Hand, AlertTriangle } from 'lucide-react';
+import { getPostLoginPath } from '@/utils/authNavigation';
 
 
 const Login = () => {
@@ -15,17 +16,20 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { login, magicLogin, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const navigateAfterLogin = React.useCallback((loggedInUser) => {
+    navigate(getPostLoginPath(loggedInUser, location.state?.from), { replace: true });
+  }, [location.state, navigate]);
 
   const displayError = error || authError;
 
   // Auto-redirect if already logged in.
   React.useEffect(() => {
     if (isLoggedIn && user) {
-      if (user.role === 'admin') navigate('/admin');
-      else if (user.role === 'teacher') navigate('/teacher');
-      else navigate('/');
+      navigateAfterLogin(user);
     }
-  }, [isLoggedIn, user, navigate]);
+  }, [isLoggedIn, user, navigateAfterLogin]);
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -40,9 +44,7 @@ const Login = () => {
       setLoading(true);
       magicLogin(magicToken).then(result => {
         if (result.success) {
-          if (result.user?.role === 'admin') navigate('/admin');
-          else if (result.user?.role === 'teacher') navigate('/teacher');
-          else navigate('/');
+          navigateAfterLogin(result.user);
         } else {
           setError(result.message || 'Link đăng nhập tự động không hợp lệ');
           setLoading(false);
@@ -60,7 +62,7 @@ const Login = () => {
       setEmail(savedEmail);
       setRememberMe(true);
     }
-  }, [magicLogin, navigate]);
+  }, [magicLogin, navigateAfterLogin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,13 +78,7 @@ const Login = () => {
       }
       localStorage.removeItem('rememberPassword');
 
-      if (result.user?.role === 'admin') {
-        navigate('/admin');
-      } else if (result.user?.role === 'teacher') {
-        navigate('/teacher');
-      } else {
-        navigate('/');
-      }
+      navigateAfterLogin(result.user);
     } else {
       setError(result.message || 'Sai email hoặc mật khẩu');
       setLoading(false);
@@ -92,15 +88,19 @@ const Login = () => {
   const handleGoogleLogin = async () => {
     setAuthError(null);
     setError('');
+    const returnLocation = location.state?.from;
+    if (returnLocation?.pathname) {
+      sessionStorage.setItem('aurum-auth-return-to', JSON.stringify({
+        pathname: returnLocation.pathname,
+        search: returnLocation.search || '',
+        hash: returnLocation.hash || '',
+      }));
+    } else {
+      sessionStorage.removeItem('aurum-auth-return-to');
+    }
     const result = await loginWithGoogle();
     if (result.success && !result.redirecting) {
-      if (result.user?.role === 'admin') {
-        navigate('/admin');
-      } else if (result.user?.role === 'teacher') {
-        navigate('/teacher');
-      } else {
-        navigate('/');
-      }
+      navigateAfterLogin(result.user);
     } else if (result.message) {
       setError(result.message);
     }
