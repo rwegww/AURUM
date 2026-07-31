@@ -79,21 +79,24 @@ const UserDetail = () => {
                 </div>
               </div>
               
-              <div className="flex gap-4">
-                 <div className="bg-white p-4 px-6 rounded-2xl border border-viet-border shadow-sm text-center min-w-[120px]">
-                    <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1 opacity-40">Kinh nghiệm</p>
-                    <p className="text-2xl font-black text-viet-green">{student.xp.toLocaleString()}</p>
-                 </div>
-                 <div className="bg-white p-4 px-6 rounded-2xl border border-viet-border shadow-sm text-center min-w-[120px]">
-                    <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1 opacity-40">Bài đã học</p>
-                    <p className="text-2xl font-black text-viet-text">{student.unlockedLessons?.length || 0}</p>
-                 </div>
-              </div>
+              {student.role === 'student' && (
+                <div className="flex gap-4">
+                   <div className="bg-white p-4 px-6 rounded-2xl border border-viet-border shadow-sm text-center min-w-[120px]">
+                      <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1 opacity-40">Kinh nghiệm</p>
+                      <p className="text-2xl font-black text-viet-green">{student.xp.toLocaleString()}</p>
+                   </div>
+                   <div className="bg-white p-4 px-6 rounded-2xl border border-viet-border shadow-sm text-center min-w-[120px]">
+                      <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1 opacity-40">Bài đã học</p>
+                      <p className="text-2xl font-black text-viet-text">{student.unlockedLessons?.length || 0}</p>
+                   </div>
+                </div>
+              )}
            </div>
         </header>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {student.role === 'student' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
            {/* Progress Section */}
            <div className="lg:col-span-2 space-y-8">
               <section className="bg-white p-8 rounded-[40px] border border-viet-border shadow-sm">
@@ -228,11 +231,20 @@ const UserDetail = () => {
                  </div>
               </section>
            </div>
-        </div>
+         </div>
+        ) : (
+          <div className="mt-8 text-center py-24 bg-white rounded-[40px] border border-viet-border shadow-sm">
+             <div className="text-6xl mb-6">🛡️</div>
+             <h2 className="text-2xl font-black text-viet-text mb-2">Hồ sơ {student.role === 'teacher' ? 'Giáo viên' : 'Quản trị viên'}</h2>
+             <p className="text-viet-text-light font-medium">Tài khoản này có quyền quản trị/giáo viên. Các chỉ số học tập được ẩn.</p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
+
 
 export default UserDetail;
 
