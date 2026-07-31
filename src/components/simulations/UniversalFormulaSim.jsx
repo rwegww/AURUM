@@ -429,7 +429,7 @@ const UniversalFormulaSim = ({ formula }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Khung Chọn Biến Cần Tính */}
         <div className="viet-card p-5 border-2 border-blue-200 bg-blue-50/50">
-          <h3 className="text-[12px] font-black text-blue-800 uppercase tracking-[2px] mb-3">🎯 Chọn Đại Lượng Cần Tính</h3>
+          <h3 className="text-[12px] font-black text-blue-800 uppercase tracking-[2px] mb-3">Target Chọn Đại Lượng Cần Tính</h3>
           <div className="flex flex-wrap gap-3">
             {formula.variables.map(v => (
               <label key={v.key} className={`cursor-pointer flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all ${targetVarKey === v.key ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-blue-200 text-blue-800 hover:border-blue-400'}`}>
@@ -441,14 +441,14 @@ const UniversalFormulaSim = ({ formula }) => {
             ))}
           </div>
           <div className="mt-4 text-[11px] text-blue-700 font-medium">
-            💡 Kéo các thanh trượt ở trên để thay đổi thông số, đại lượng <strong className="font-black">[{targetVarKey}]</strong> sẽ tự động tính toán.
+            Lightbulb Kéo các thanh trượt ở trên để thay đổi thông số, đại lượng <strong className="font-black">[{targetVarKey}]</strong> sẽ tự động tính toán.
           </div>
         </div>
 
         {/* Khung Chọn Chất (Bảng Tuần Hoàn) */}
         <div className="viet-card p-5 border-2 border-amber-200 bg-amber-50/50">
           <h3 className="text-[12px] font-black text-amber-800 uppercase tracking-[2px] mb-3 flex items-center gap-2">
-            <span>⚛️</span> Nạp chất từ Lab Chemicals
+            <span>Atom</span> Nạp chất từ Lab Chemicals
           </h3>
           <div className="relative">
             <input

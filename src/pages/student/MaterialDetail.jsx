@@ -286,7 +286,7 @@ const MaterialDetail = () => {
                           </div>
                         </div>
                         <div className="bg-viet-bg px-3 py-1 rounded-full text-[10px] font-black text-viet-green uppercase">
-                           {'★'.repeat(f.rating)}
+                           {'Star'.repeat(f.rating)}
                         </div>
                       </div>
                       <p className="text-viet-text text-sm font-medium pl-13 leading-relaxed">

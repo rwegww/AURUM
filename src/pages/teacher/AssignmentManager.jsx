@@ -284,7 +284,7 @@ const AssignmentManager = () => {
                 <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                     <div>
                         <h1 className="text-4xl font-black text-viet-text tracking-tight mb-2 uppercase">
-                           📝 QUẢN LÝ BÀI TẬP
+                           FileText QUẢN LÝ BÀI TẬP
                         </h1>
                         <p className="text-viet-text-light font-bold">Lên lịch học, giao nhiệm vụ và theo dõi tiến độ nộp bài.</p>
                     </div>
@@ -359,7 +359,7 @@ const AssignmentManager = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-2 text-[11px] text-viet-text-light font-bold">
-                                    <span className="w-5">📄</span>
+                                    <span className="w-5">FileText</span>
                                     <span>Tài liệu: </span>
                                     {assignment.media_url ? (
                                         <a href={assignment.media_url} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline truncate max-w-[150px]">Xem tệp đính kèm</a>
@@ -381,7 +381,7 @@ const AssignmentManager = () => {
                         </motion.div>
                     )) : (
                         <div className="col-span-full py-20 text-center bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200">
-                            <span className="text-6xl block mb-4 grayscale opacity-30">📭</span>
+                            <span className="text-6xl block mb-4 grayscale opacity-30">MailX</span>
                             <p className="text-viet-text-light font-black uppercase tracking-widest text-sm">Chưa có bài tập nào hiển thị.</p>
                         </div>
                     )}
@@ -401,7 +401,7 @@ const AssignmentManager = () => {
                                 className="relative bg-white rounded-[40px] shadow-2xl w-full max-w-xl p-10 border border-white/20 max-h-[90vh] overflow-y-auto flex flex-col custom-scrollbar"
                             >
                                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-viet-green to-emerald-400"></div>
-                                <h2 className="text-3xl font-black text-viet-text mb-8 uppercase tracking-tight">➕ Giao Bài Tập Mới</h2>
+                                <h2 className="text-3xl font-black text-viet-text mb-8 uppercase tracking-tight">Plus Giao Bài Tập Mới</h2>
                                 <form onSubmit={handleCreateAssignment} className="space-y-6">
                                     <div className="grid grid-cols-2 gap-6">
                                         <div>
@@ -427,7 +427,7 @@ const AssignmentManager = () => {
                                                         }}
                                                         className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${uploadMethod === m ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400'}`}
                                                     >
-                                                        {m === 'link' ? '🔗 Dán Link' : '📄 Tải file & Phân tích'}
+                                                        {m === 'link' ? 'Link2 Dán Link' : 'FileText Tải file & Phân tích'}
                                                     </button>
                                                 ))}
                                             </div>
@@ -455,13 +455,13 @@ const AssignmentManager = () => {
                                                             </div>
                                                         ) : uploadedFile ? (
                                                             <div className="flex items-center gap-2 text-blue-600">
-                                                                <span className="text-lg">📄</span>
+                                                                <span className="text-lg">FileText</span>
                                                                 <span className="text-xs font-bold truncate max-w-[150px]">{uploadedFile.name}</span>
                                                                 <button type="button" onClick={() => setUploadedFile(null)} className="ml-2 text-slate-400 hover:text-red-500"><X className="w-4 h-4" /></button>
                                                             </div>
                                                         ) : (
                                                             <div className="flex items-center gap-2 text-slate-400">
-                                                                <span className="text-lg">☁️</span>
+                                                                <span className="text-lg">Cloud</span>
                                                                 <span className="text-xs font-bold uppercase tracking-widest text-center">Tải file PDF/Word để hệ thống tự động đọc và tạo câu hỏi</span>
                                                             </div>
                                                         )}
@@ -551,9 +551,9 @@ const AssignmentManager = () => {
                                                                     }}
                                                                     className="text-[9px] font-black uppercase tracking-widest bg-white border border-slate-200 rounded-lg px-2 py-1 outline-none"
                                                                 >
-                                                                    <option value="multiple_choice">🔘 Trắc nghiệm</option>
-                                                                    <option value="true_false">☑️ Đúng / Sai</option>
-                                                                    <option value="short_answer">📝 Trả lời ngắn</option>
+                                                                    <option value="multiple_choice">CircleDot Trắc nghiệm</option>
+                                                                    <option value="true_false">CheckSquare Đúng / Sai</option>
+                                                                    <option value="short_answer">FileText Trả lời ngắn</option>
                                                                 </select>
                                                             </div>
                                                             <div>
@@ -682,7 +682,7 @@ const AssignmentManager = () => {
                             >
                                 <div className="flex justify-between items-center mb-8 pb-6 border-b border-slate-100">
                                     <div>
-                                        <h2 className="text-3xl font-black text-viet-text mb-1 uppercase tracking-tight">📊 TIẾN ĐỘ NỘP BÀI</h2>
+                                        <h2 className="text-3xl font-black text-viet-text mb-1 uppercase tracking-tight">BarChart3 TIẾN ĐỘ NỘP BÀI</h2>
                                         <p className="text-sm font-bold text-viet-green uppercase tracking-widest">{viewingSubmissions.content}</p>
                                     </div>
                                     <button 
@@ -704,7 +704,7 @@ const AssignmentManager = () => {
                                                     <div>
                                                         <p className="text-sm font-black text-viet-text uppercase">{sub.student.username}</p>
                                                         <p className={`text-[9px] font-black uppercase tracking-widest ${sub.submitted ? 'text-viet-green' : 'text-red-500'}`}>
-                                                            {sub.submitted ? '✓ Đã hoàn thành' : '✗ Chưa nộp bài'}
+                                                            {sub.submitted ? 'Check Đã hoàn thành' : 'X Chưa nộp bài'}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -787,7 +787,7 @@ const AssignmentManager = () => {
 
                                                     <div className="bg-slate-50 p-4 rounded-2xl space-y-3">
                                                         <h4 className="text-[10px] font-black text-viet-text uppercase tracking-widest flex items-center gap-2">
-                                                            <span>✍️</span> Chấm điểm & Nhận xét
+                                                            <span>PenTool</span> Chấm điểm & Nhận xét
                                                         </h4>
                                                         <div className="flex items-center gap-3">
                                                             <div className="relative">

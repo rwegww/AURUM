@@ -7,6 +7,8 @@ import AssistantAvatar from '@/components/common/AssistantAvatar';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 import { ingredients } from '@/data/labInventory';
 import { getChemicalImage } from '@/data/chemicalImages';
+import { MessageCircle, Flame, Trophy, Target, Lock } from 'lucide-react';
+import { RenderIcon } from '@/utils/IconMapper';
 
 const getElementStyle = (symbol) => {
   const styles = {
@@ -349,7 +351,7 @@ const FloatingWidget = () => {
                   : 'text-viet-text-light hover:text-viet-text'
                 }`}
               >
-                💬 {t('nav.phan_hoi')}
+                <MessageCircle className="w-4 h-4 inline mr-1" /> {t('nav.phan_hoi')}
               </button>
             </div>
 
@@ -361,7 +363,7 @@ const FloatingWidget = () => {
                 <div className="space-y-4">
                   {!isLoggedIn ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center px-4 space-y-4">
-                      <span className="text-5xl">🔒</span>
+                      <div className="flex justify-center mb-2"><Lock className="w-12 h-12 text-slate-300" /></div>
                       <h4 className="font-black text-viet-text uppercase tracking-tight text-lg">{t('widget.login_required')}</h4>
                       <p className="text-xs font-semibold text-viet-text-light">
                         {t('widget.login_required_desc')}
@@ -400,7 +402,7 @@ const FloatingWidget = () => {
                           <p className="text-[8px] font-black text-viet-text-light/40 uppercase tracking-widest leading-none mb-1">{t('widget.streak')}</p>
                           <div className="flex items-center gap-1 justify-center leading-none">
                             <span className="text-base font-black text-viet-text">{user?.streakCount || 0}</span>
-                            <span className="text-sm">🔥</span>
+                            <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
                           </div>
                         </div>
                       </div>
@@ -408,7 +410,7 @@ const FloatingWidget = () => {
                       {/* Daily countdown */}
                       {nhiem_vuActiveTab === 'daily' && (
                         <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold uppercase tracking-[2px] text-viet-text-light">
-                          <span>⏳ {t('widget.reset_in')}</span>
+                          <span>Hourglass {t('widget.reset_in')}</span>
                           <span className="text-viet-text font-black">{timeLeft}</span>
                         </div>
                       )}
@@ -417,7 +419,7 @@ const FloatingWidget = () => {
                       <div className="flex gap-2">
                         {[
                           { id: 'daily', label: t('nhiem_vu.tabs.daily'), icon: '' },
-                          { id: 'achievement', label: t('nhiem_vu.tabs.achievement'), icon: '🏆' }
+                          { id: 'achievement', label: t('nhiem_vu.tabs.achievement'), icon: <Trophy className="w-3 h-3 inline mr-1" /> }
                         ].map(subTab => (
                           <button
                             key={subTab.id}
@@ -456,7 +458,7 @@ const FloatingWidget = () => {
                                     <div className={`w-10 h-10 shrink-0 rounded-xl flex items-center justify-center text-xl border ${
                                       isClaimable ? 'bg-viet-green/10 border-viet-green/20 text-viet-green' : 'bg-viet-bg border-[#e6e2d6]'
                                     }`}>
-                                      {mission.icon || '🎯'}
+                                      {mission.icon ? <RenderIcon iconName={mission.icon} className="w-5 h-5 text-viet-green" /> : <Target className="w-5 h-5 text-viet-green" />}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                       <h5 className="text-xs font-black text-viet-text uppercase tracking-tight italic truncate">{mission.title}</h5>
@@ -465,7 +467,7 @@ const FloatingWidget = () => {
                                       {mission.isCraftingTask && mission.rewards && mission.rewards.length > 0 && (
                                         <div className="mt-2 mb-2.5 p-2 bg-slate-50 border border-slate-100 rounded-xl">
                                           <p className="text-[8px] font-black text-viet-text-light/60 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                                            🎁 {t('widget.reward_elements')}
+                                            Gift {t('widget.reward_elements')}
                                           </p>
                                           <div className="flex flex-wrap gap-1.5">
                                             {mission.rewards.map((rew, idx) => (
@@ -543,7 +545,7 @@ const FloatingWidget = () => {
                   {phan_hoiSuccess ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
                       <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl animate-bounce">
-                        ✓
+                        Check
                       </div>
                       <h4 className="font-black text-viet-text text-lg uppercase tracking-tight">{t('widget.success_title')}</h4>
                       <p className="text-xs font-semibold text-viet-text-light px-6">

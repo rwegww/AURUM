@@ -159,7 +159,7 @@
       "type": "infoBox",
       "content": {
         "title": "Ví dụ 2: Phản ứng đốt cháy Metan",
-        "content": "**Sơ đồ**: $CH_4 + O_2 \\rightarrow CO_2 + H_2O$\\n\\n- C: 1 = 1 ✓\\n- H: 4 bên trái, 2 bên phải → đặt hệ số **2** trước $H_2O$: $CH_4 + O_2 \\rightarrow CO_2 + 2H_2O$\\n- O: Bên phải có $2 + 2 = 4$ O, bên trái có 2 O → đặt hệ số **2** trước $O_2$.\\n\\n**Kết quả**: $CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O$\\n\\nKiểm tra: C(1=1) ✓, H(4=4) ✓, O(4=4) ✓",
+        "content": "**Sơ đồ**: $CH_4 + O_2 \\rightarrow CO_2 + H_2O$\\n\\n- C: 1 = 1 Check\\n- H: 4 bên trái, 2 bên phải → đặt hệ số **2** trước $H_2O$: $CH_4 + O_2 \\rightarrow CO_2 + 2H_2O$\\n- O: Bên phải có $2 + 2 = 4$ O, bên trái có 2 O → đặt hệ số **2** trước $O_2$.\\n\\n**Kết quả**: $CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O$\\n\\nKiểm tra: C(1=1) Check, H(4=4) Check, O(4=4) Check",
         "color": "blue"
       }
     },

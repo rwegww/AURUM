@@ -41,7 +41,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(6, 182, 212, 0.4)',
     gradient: 'from-cyan-500 to-blue-600',
     blobColor: 'bg-cyan-400',
-    doodleSymbol: '🧪'
+    doodleSymbol: 'FlaskConical'
   },
   '8': {
     titleKey: 'journey.themes.8.title',
@@ -61,7 +61,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(99, 102, 241, 0.4)',
     gradient: 'from-indigo-500 to-purple-600',
     blobColor: 'bg-indigo-400',
-    doodleSymbol: '⚡'
+    doodleSymbol: 'Zap'
   },
   '10': {
     titleKey: 'journey.themes.10.title',
@@ -71,7 +71,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(20, 184, 166, 0.4)',
     gradient: 'from-teal-500 to-emerald-600',
     blobColor: 'bg-teal-400',
-    doodleSymbol: '⚛️'
+    doodleSymbol: 'Atom'
   },
   '11': {
     titleKey: 'journey.themes.11.title',
@@ -81,7 +81,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(244, 63, 94, 0.4)',
     gradient: 'from-rose-500 to-pink-600',
     blobColor: 'bg-rose-400',
-    doodleSymbol: '🧬'
+    doodleSymbol: 'Dna'
   },
   '12': {
     titleKey: 'journey.themes.12.title',
@@ -91,7 +91,7 @@ const CLASS_THEMES = {
     primaryGlow: 'rgba(245, 158, 11, 0.4)',
     gradient: 'from-amber-500 to-orange-600',
     blobColor: 'bg-amber-400',
-    doodleSymbol: '☢️'
+    doodleSymbol: 'Radiation'
   }
 };
 
@@ -620,7 +620,7 @@ const GradeJourney = () => {
                         )}
                         <div className="my-auto mx-auto text-center relative z-10">
                           <span className="text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)] select-none">
-                            {canOpenBook ? activeTheme.doodleSymbol : '🔒'}
+                            {canOpenBook ? activeTheme.doodleSymbol : 'Lock'}
                           </span>
                         </div>
                         <div className={`w-full text-center text-[6px] font-black uppercase tracking-widest relative z-10 select-none ${canOpenBook ? 'text-amber-300/90' : 'text-slate-400'}`}>

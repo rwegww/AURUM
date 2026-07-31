@@ -51,9 +51,9 @@ const Contact = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <ContactInfo icon="📞" label={t('contact.info.hotline')} value="0334 681 752" />
+                <ContactInfo icon="Phone" label={t('contact.info.hotline')} value="0334 681 752" />
                 <a href="https://maps.app.goo.gl/6Xye2dPzwe4GqhjX9" target="_blank" rel="noopener noreferrer">
-                  <ContactInfo icon="📍" label={t('contact.info.address')} value={t('contact.info.google_maps')} />
+                  <ContactInfo icon="MapPin" label={t('contact.info.address')} value={t('contact.info.google_maps')} />
                 </a>
               </div>
 

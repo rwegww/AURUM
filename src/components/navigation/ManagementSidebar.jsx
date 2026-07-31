@@ -86,10 +86,10 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
   const getNotificationIcon = (type) => {
     switch (type) {
-      case 'student_join': return '🏫';
-      case 'message': return '💬';
-      case 'submission': return '📝';
-      case 'due_soon': return '⏳';
+      case 'student_join': return 'School';
+      case 'message': return 'MessageCircle';
+      case 'submission': return 'FileText';
+      case 'due_soon': return 'Hourglass';
       default: return '🔔';
     }
   };

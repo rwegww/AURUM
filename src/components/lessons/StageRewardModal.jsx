@@ -28,7 +28,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson 
           transition={{ type: "spring", damping: 12 }}
           className="mb-8 px-8 py-3 bg-viet-green text-white rounded-full font-black text-[14px] uppercase tracking-[4px] shadow-2xl shadow-viet-green/30"
         >
-          ✨ Đã hoàn thành chặng đường ✨
+          Sparkles Đã hoàn thành chặng đường Sparkles
         </motion.div>
 
         <motion.h2 
@@ -47,7 +47,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson 
              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4 }}
              className="bg-white px-6 py-4 rounded-3xl border border-rose-100 flex items-center gap-3 shadow-lg"
            >
-              <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-xl">⚡</div>
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-xl">Zap</div>
               <div>
                  <div className="text-[10px] font-black text-slate-400 uppercase">Kinh nghiệm</div>
                  <div className="text-lg font-black text-rose-600">+{gameData?.rewardXp || 100} XP</div>
@@ -57,7 +57,7 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson 
              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }}
              className="bg-white px-6 py-4 rounded-3xl border border-sky-100 flex items-center gap-3 shadow-lg"
            >
-              <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center text-xl">💎</div>
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center text-xl">Diamond</div>
               <div>
                  <div className="text-[10px] font-black text-slate-400 uppercase">Đá Aurum</div>
                  <div className="text-lg font-black text-sky-500">+{gameData?.rewardGem || 5}</div>

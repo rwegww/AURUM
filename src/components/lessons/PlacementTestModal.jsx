@@ -121,7 +121,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                     exit={{ opacity: 0, y: -20 }}
                     className="text-center py-10"
                   >
-                     <div className="text-6xl mb-6">🎓</div>
+                     <div className="text-6xl mb-6">GraduationCap</div>
                      <h3 className="text-2xl font-black text-viet-text mb-4 uppercase">Sẵn sàng thử thách?</h3>
                      <p className="text-viet-text-light font-bold mb-8 leading-relaxed">
                         Bài test gồm {questions.length} câu hỏi tổng hợp kiến thức nền tảng.
@@ -176,7 +176,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                            >
                               <span className="font-bold">{option}</span>
                               {selectedAnswer === idx && (
-                                <span className="text-2xl">{isCorrect ? '✨' : '💥'}</span>
+                                <span className="text-2xl">{isCorrect ? 'Sparkles' : 'Zap'}</span>
                               )}
                            </button>
                         ))}
@@ -193,7 +193,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                   >
                      {score >= passingScore ? (
                        <>
-                         <div className="text-7xl mb-6">🏆</div>
+                         <div className="text-7xl mb-6">Trophy</div>
                          <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">Hành Trình Đã Mở!</h3>
                          <p className="text-viet-text-light font-bold mb-8">
                            Tuyệt vời! Bạn đã đúng {score}/{questions.length} câu.
@@ -206,7 +206,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                        </>
                      ) : (
                        <>
-                         <div className="text-7xl mb-6">📚</div>
+                         <div className="text-7xl mb-6">BookOpen</div>
                          <h3 className="text-3xl font-black text-red-500 mb-2 uppercase italic">Cần Cố Gắng Thêm</h3>
                          <p className="text-viet-text-light font-bold mb-8">
                            Bạn đúng {score}/{questions.length} câu. (Cần tối thiểu {passingScore} câu).

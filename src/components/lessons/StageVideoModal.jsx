@@ -219,7 +219,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
             {canContinue ? t('stage_video.action_btn.ready') : t('stage_video.action_btn.processing')}
           </span>
           <span className={`relative z-10 text-xl transition-all duration-300 ${canContinue ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`}>
-            {canContinue ? '🚀' : '⏳'}
+            {canContinue ? 'Rocket' : 'Hourglass'}
           </span>
         </button>
 

@@ -100,7 +100,7 @@ const UserActivityHistory = () => {
               ))
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-center py-20 opacity-30">
-                <div className="text-5xl mb-6 grayscale">⏳</div>
+                <div className="text-5xl mb-6 grayscale">Hourglass</div>
                 <p className="text-sm font-bold uppercase tracking-widest">{t('profile.history_empty')}</p>
               </div>
             )}

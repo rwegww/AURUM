@@ -237,7 +237,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                                   animate={{ scale: 1 }} 
                                   className="absolute inset-0 bg-viet-green/20 flex items-center justify-center"
                                 >
-                                  <span className="text-5xl">✅</span>
+                                  <span className="text-5xl">CheckCircle</span>
                                 </motion.div>
                               )}
                               {isAnswered && isSelected && !isRight && (
@@ -246,7 +246,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                                   animate={{ scale: 1 }} 
                                   className="absolute inset-0 bg-red-500/20 flex items-center justify-center"
                                 >
-                                  <span className="text-5xl">❌</span>
+                                  <span className="text-5xl">XCircle</span>
                                 </motion.div>
                               )}
                            </button>

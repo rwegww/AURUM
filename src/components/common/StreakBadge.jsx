@@ -1,7 +1,7 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
-import { Leaf, FlaskConical, Beaker, Flame } from 'lucide-react';
+import { Leaf, FlaskConical, Beaker, Flame, Hourglass } from 'lucide-react';
 
 const StreakBadge = () => {
   const { user, recoverStreak, resetStreak } = useAuth();
@@ -77,7 +77,7 @@ const StreakBadge = () => {
           : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
           }`}
       >
-        <span className="font-bold text-sm">🔥 {streak}</span>
+        <span className="font-bold text-sm flex items-center gap-1"><Flame className="w-4 h-4 text-orange-500 fill-orange-500" /> {streak}</span>
       </motion.div>
 
       <AnimatePresence>
@@ -90,8 +90,10 @@ const StreakBadge = () => {
               className="bg-zinc-900 border border-zinc-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl"
             >
               <div className="p-6 text-center">
-                <div className="text-6xl mb-4">
-                  {isMaintainedToday ? '🔥' : '⏳'}
+                <div className={`w-16 h-16 mx-auto rounded-full border-2 flex items-center justify-center text-3xl mb-4 ${
+                  isMaintainedToday ? 'border-orange-500 bg-orange-500/10 text-orange-500' : 'border-zinc-700 bg-zinc-800 text-zinc-500'
+                }`}>
+                  {isMaintainedToday ? <Flame className="w-8 h-8 fill-orange-500" /> : <Hourglass className="w-8 h-8" />}
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-2">
                   Chuỗi {streak} ngày!

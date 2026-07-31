@@ -272,7 +272,7 @@ const KnowledgeMap = () => {
                                           }`}
                                         style={{ backgroundColor: lessonDone ? theme.color : undefined }}
                                       >
-                                        {lessonDone ? '✓' : <Lock size={12} />}
+                                        {lessonDone ? 'Check' : <Lock size={12} />}
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <p className={`text-[13px] font-bold leading-snug truncate ${lessonDone ? 'text-slate-800' : 'text-slate-500'

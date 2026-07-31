@@ -96,7 +96,7 @@ const Profile = () => {
 
                 {/* Streak Callout */}
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-6 flex items-center gap-6 self-center md:self-auto min-w-[280px]">
-                  <div className="text-5xl animate-bounce">🔥</div>
+                  <div className="text-5xl animate-bounce">Flame</div>
                   <div className="flex-1">
                     <div className="text-3xl font-black text-white mb-1">{user.streakCount} Ngày</div>
                     <div className="text-[11px] font-black text-orange-400 uppercase tracking-widest">Chuỗi hiện tại</div>

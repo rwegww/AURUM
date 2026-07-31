@@ -18,7 +18,7 @@ const modulesToMarkdown = (modules) => {
     if (m.type === 'paragraph') return m.content.text;
     if (m.type === 'list') return m.content.items.map(i => `- ${i}`).join('\n');
     if (m.type === 'infoBox') return `> ℹ️ **${m.content.title}**\n> ${m.content.content}`;
-    if (m.type === 'warningBox') return `> ⚠️ **${m.content.title}**\n> ${m.content.content}`;
+    if (m.type === 'warningBox') return `> AlertTriangle **${m.content.title}**\n> ${m.content.content}`;
     return '';
   }).join('\n\n');
 };
@@ -180,7 +180,7 @@ const LessonManager = () => {
               onClick={handleCreateNew}
               className="px-6 py-2.5 bg-viet-green text-white rounded-xl text-xs font-bold shadow-lg shadow-viet-green/20 hover:scale-105 transition-all flex items-center gap-2"
             >
-              <span>➕</span> Thêm bài học
+              <span>Plus</span> Thêm bài học
             </button>
             <div className="flex gap-2 p-1.5 bg-white rounded-2xl border border-viet-border shadow-sm">
                {[null, 6, 7, 8, 9, 10, 11, 12].map(g => (
@@ -220,11 +220,11 @@ const LessonManager = () => {
                       <button 
                         onClick={() => handleEdit(lesson.lessonId)}
                         className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-100 transition-all"
-                      >✎</button>
+                      >Pencil</button>
                       <button 
                         onClick={() => handleDelete(lesson.lessonId)}
                         className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center hover:bg-red-100 transition-all"
-                      >🗑</button>
+                      >Trash2</button>
                    </div>
                 </div>
                 <h3 className="text-lg font-bold text-viet-text mb-2 line-clamp-2">{lesson.title}</h3>

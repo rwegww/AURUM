@@ -56,7 +56,7 @@ const StageQuiz = () => {
       try {
         await completeLessonSegment(lessonId, currentLevel, stars, xpGain, isLessonCompletion);
       } catch (err) {
-        console.error('❌ Lỗi khi lưu giai đoạn:', err);
+        console.error('XCircle Lỗi khi lưu giai đoạn:', err);
       }
     }
   };
@@ -71,7 +71,7 @@ const StageQuiz = () => {
       try {
         await completeLessonSegment(lessonId, 'level1', 3, 30, false);
       } catch (err) {
-        console.error('❌ Lỗi khi lưu giai đoạn video:', err);
+        console.error('XCircle Lỗi khi lưu giai đoạn video:', err);
       }
     }
   };
@@ -187,7 +187,7 @@ const StageQuiz = () => {
                 </div>
               ) : (
                 <div className="aspect-video bg-slate-50 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-slate-200 mb-4">
-                  <div className="text-4xl mb-3">📭</div>
+                  <div className="text-4xl mb-3">MailX</div>
                   <h4 className="text-sm font-black text-slate-400">Chưa có video bài giảng</h4>
                   <p className="text-[12px] text-slate-300 mt-1">Bài học này chưa được cập nhật video</p>
                 </div>
@@ -203,7 +203,7 @@ const StageQuiz = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="text-viet-green font-black text-[12px] uppercase flex items-center justify-center gap-2"
                     >
-                      <span>✅ Đã học xong — Bắt đầu làm bài tập ngay!</span>
+                      <span>CheckCircle Đã học xong — Bắt đầu làm bài tập ngay!</span>
                     </motion.div>
                   ) : (
                     <motion.p 

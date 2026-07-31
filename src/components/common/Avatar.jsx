@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flame } from 'lucide-react';
 
 export default function Avatar({ seed = 'User', size = 128, className = "", streakCount = 0, level = null }) {
   const avatarUri = `https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(seed)}`;
@@ -96,16 +97,8 @@ export default function Avatar({ seed = 'User', size = 128, className = "", stre
       
       {/* Streak Badge - Bottom Right */}
       {streakCount > 0 && (
-         <div 
-           className="absolute -bottom-1 -right-1 bg-white text-orange-600 font-black rounded-full border-2 border-orange-500 flex items-center justify-center shadow-lg z-30"
-           style={{ 
-             fontSize: size * 0.14,
-             minWidth: size * 0.38,
-             height: size * 0.38,
-             padding: '0 4px'
-           }}
-         >
-           🔥{streakCount}
+         <div className="absolute -bottom-2 -right-2 bg-zinc-900 border-2 border-zinc-800 text-orange-500 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center shadow-lg transform group-hover:scale-110 transition-transform z-20">
+           <Flame className="w-3 h-3 fill-orange-500 mr-0.5" />{streakCount}
          </div>
       )}
     </div>

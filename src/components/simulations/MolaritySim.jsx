@@ -143,7 +143,7 @@ const MolaritySim = () => {
               {concentration.toFixed(4)} <span className="text-[10px] text-viet-text-light">mol/L</span>
             </div>
             {isSaturated && (
-              <div className="text-[10px] font-bold text-red-500 mt-1">⚠️ Bão hòa! Nồng độ bão hòa: {solute.maxConc} M — Chất tan dư sẽ lắng xuống đáy.</div>
+              <div className="text-[10px] font-bold text-red-500 mt-1">AlertTriangle Bão hòa! Nồng độ bão hòa: {solute.maxConc} M — Chất tan dư sẽ lắng xuống đáy.</div>
             )}
           </div>
         </div>

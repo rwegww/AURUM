@@ -65,7 +65,7 @@ const ClassManager = () => {
         <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
              <h1 className="text-3xl font-bold text-viet-text tracking-tight mb-2">
-                👥 Quản Lý Lớp Học
+                Users Quản Lý Lớp Học
              </h1>
              <p className="text-viet-text-light font-medium">Tạo và quản lý các lớp học, không gian bài tập và sinh hoạt chung.</p>
           </div>
@@ -115,7 +115,7 @@ const ClassManager = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {lop.length === 0 ? (
              <div className="col-span-full py-16 text-center border-2 border-dashed border-viet-border rounded-[32px]">
-               <span className="text-4xl block opacity-30 mb-2">🏫</span>
+               <span className="text-4xl block opacity-30 mb-2">School</span>
                <p className="text-viet-text-light font-bold">Chưa có lớp học nào được tạo.</p>
              </div>
           ) : (

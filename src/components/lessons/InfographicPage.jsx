@@ -83,7 +83,7 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'singl
              animate={{ scale: 1, opacity: 1 }}
              className="w-20 h-20 bg-white rounded-3xl border-4 border-viet-green shadow-2xl flex items-center justify-center text-4xl mb-6"
            >
-              🔒
+              Lock
            </motion.div>
            <h3 className="text-2xl font-black text-viet-text font-sora uppercase italic">Nhiệm vụ chưa hoàn thành</h3>
            <p className="max-w-[280px] text-viet-text-light font-bold text-sm mt-2 leading-relaxed">

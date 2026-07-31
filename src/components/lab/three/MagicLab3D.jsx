@@ -369,7 +369,7 @@ const MagicLab3D = () => {
         lines.push(`${i + 1}. [${h.time}] ${h.text}`);
       });
     }
-    lines.push("\n--- 📝 GHI CHÚ CÁ NHÂN ---");
+    lines.push("\n--- FileText GHI CHÚ CÁ NHÂN ---");
     lines.push(userNotes || "(Chưa có ghi chú)");
     
     const blob = new Blob([lines.join("\n")], { type: 'text/plain;charset=utf-8' });
@@ -614,7 +614,7 @@ const MagicLab3D = () => {
             className="absolute top-6 left-1/2 -translate-x-1/2 z-[200] pointer-events-auto"
           >
              <div className="bg-slate-900/90 backdrop-blur-2xl border border-blue-500/30 rounded-3xl p-5 flex items-center gap-5 shadow-[0_10px_40px_rgba(59,130,246,0.4)]">
-                <div className="text-4xl">✨</div>
+                <div className="text-4xl">Sparkles</div>
                 <div>
                   <h2 className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-0.5">Khám phá hóa chất mới</h2>
                   <div className="flex items-end gap-2">
@@ -807,7 +807,7 @@ const MagicLab3D = () => {
                     <span className="text-[9px] font-black uppercase tracking-widest text-orange-400/80">Mức lửa</span>
                     <div className="flex gap-3 text-[11px] font-black tabular-nums">
                       <span className={`${!activeBeaker.isHeating ? 'text-white/30' : 'text-orange-400'}`}>
-                        🔥 Mức {powerVal}
+                        Flame Mức {powerVal}
                       </span>
                       <span className={`${
                         !activeBeaker.isHeating ? 'text-white/30'

@@ -148,7 +148,7 @@ const GasLawSim = () => {
           </div>
         </div>
         <div className="text-[10px] text-viet-text-light mt-2 leading-relaxed">
-          💡 Thay đổi nhiệt độ → phân tử chuyển động nhanh/chậm hơn. Thu nhỏ thể tích → áp suất tăng (Boyle). Tăng số mol → nhiều phân tử va chạm hơn.
+          Lightbulb Thay đổi nhiệt độ → phân tử chuyển động nhanh/chậm hơn. Thu nhỏ thể tích → áp suất tăng (Boyle). Tăng số mol → nhiều phân tử va chạm hơn.
         </div>
       </div>
     </div>

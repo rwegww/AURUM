@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Trophy, Zap, Users, Layers, Mail, Plus } from 'lucide-react';
+import { Trophy, Zap, Users, Layers, Mail, Plus, BookOpen, MessageSquare, Hand } from 'lucide-react';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -66,10 +66,9 @@ const AdminDashboard = () => {
   }
 
   const statCards = [
-    { title: "Bài Học", value: stats.totalLessons, icon: "📚", color: "bg-blue-50 text-blue-600", link: "/admin/bai_hoc" },
-    { title: "Học Sinh", value: stats.totalUsers, icon: "👤", color: "bg-green-50 text-green-600", link: "/admin/nguoi_dung" },
-    { title: "Phản Hồi", value: stats.unreadFeedback, icon: "💬", color: "bg-orange-50 text-orange-600", link: "/admin/feedback" },
-
+    { title: "Bài Học", value: stats.totalLessons, icon: <BookOpen className="w-6 h-6" />, color: "bg-blue-50 text-blue-600", link: "/admin/bai_hoc" },
+    { title: "Học Sinh", value: stats.totalUsers, icon: <Users className="w-6 h-6" />, color: "bg-green-50 text-green-600", link: "/admin/nguoi_dung" },
+    { title: "Phản Hồi", value: stats.unreadFeedback, icon: <MessageSquare className="w-6 h-6" />, color: "bg-orange-50 text-orange-600", link: "/admin/feedback" },
   ];
 
   const itemVariants = {
@@ -86,8 +85,8 @@ const AdminDashboard = () => {
               Bảng Điều Khiển
             </span>
           </div>
-          <h1 className="text-4xl font-bold text-viet-text tracking-tight">
-            Xin chào, <span className="text-viet-green">{user?.username}</span> 👋
+          <h1 className="text-4xl font-bold text-viet-text tracking-tight flex items-center gap-3">
+            Xin chào, <span className="text-viet-green">{user?.username}</span> <Hand className="w-8 h-8 text-yellow-500 origin-bottom-right rotate-12" />
           </h1>
           <p className="text-viet-text-light mt-2 font-medium">Hệ thống quản trị Aurum.</p>
         </header>

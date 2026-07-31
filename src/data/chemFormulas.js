@@ -6,7 +6,7 @@
 export const CHEM_FORMULAS = {
   basic: {
     label: 'Số mol & Khối lượng',
-    icon: '⚖️',
+    icon: 'Scale',
     categories: [
       {
         name: 'Công thức tính số mol',
@@ -83,7 +83,7 @@ export const CHEM_FORMULAS = {
   },
   concentration: {
     label: 'Dung dịch & Nồng độ',
-    icon: '🧪',
+    icon: 'FlaskConical',
     categories: [
       {
         name: 'Nồng độ dung dịch',
@@ -165,7 +165,7 @@ export const CHEM_FORMULAS = {
   },
   gases: {
     label: 'Chất khí & Trạng thái',
-    icon: '🌬️',
+    icon: 'Wind',
     categories: [
       {
         name: 'Thể tích & Áp suất',
@@ -244,7 +244,7 @@ export const CHEM_FORMULAS = {
   },
   reaction: {
     label: 'Phản ứng & Hiệu suất',
-    icon: '⚡',
+    icon: 'Zap',
     categories: [
       {
         name: 'Hiệu suất & Tốc độ',
@@ -287,7 +287,7 @@ export const CHEM_FORMULAS = {
   },
   advanced: {
     label: 'pH & Điện hóa',
-    icon: '⚛️',
+    icon: 'Atom',
     categories: [
       {
         name: 'pH & Cân bằng',

@@ -88,10 +88,10 @@ const getApplications = (formula, name, category) => {
 };
 
 const TIER_THEME = {
-  0: { color: '#3b82f6', icon: '💎', label: 'Bậc 0: Nguyên bản' },
-  1: { color: '#10b981', icon: '🌿', label: 'Bậc 1: Sơ cấp' },
-  2: { color: '#f59e0b', icon: '⚡', label: 'Bậc 2: Trung cấp' },
-  3: { color: '#ef4444', icon: '🔥', label: 'Bậc 3: Cao cấp' },
+  0: { color: '#3b82f6', icon: 'Diamond', label: 'Bậc 0: Nguyên bản' },
+  1: { color: '#10b981', icon: 'Leaf', label: 'Bậc 1: Sơ cấp' },
+  2: { color: '#f59e0b', icon: 'Zap', label: 'Bậc 2: Trung cấp' },
+  3: { color: '#ef4444', icon: 'Flame', label: 'Bậc 3: Cao cấp' },
   4: { color: '#8b5cf6', icon: '🔮', label: 'Khác / Huyền bí' }
 };
 

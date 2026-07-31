@@ -65,7 +65,7 @@ const Register = () => {
           const uploadData = await uploadToCloudinary(proofFile, 'chemistry-odyssey/teacher-proofs');
           proofImageUrl = uploadData.url;
         } catch (uploadErr) {
-          console.error('❌ Upload error:', uploadErr);
+          console.error('XCircle Upload error:', uploadErr);
           setError(`Lỗi tải ảnh: ${uploadErr.message}. Hãy kiểm tra lại cấu hình Cloudinary.`);
           setLoading(false);
           return;
@@ -87,7 +87,7 @@ const Register = () => {
         }
       }
     } catch (err) {
-      console.error('❌ Register error:', err);
+      console.error('XCircle Register error:', err);
       setError(`Lỗi: ${err.message || 'Không thể kết nối đến máy chủ'}`);
     }
     setLoading(false);
@@ -123,7 +123,7 @@ const Register = () => {
             animate={{ opacity: 1, height: 'auto' }}
             className="mb-3 p-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase ring-1 ring-red-100 flex items-center gap-2 shadow-sm"
           >
-             <span className="text-base">🚨</span> {error}
+             <span className="text-base">AlertTriangle</span> {error}
           </motion.div>
         )}
 

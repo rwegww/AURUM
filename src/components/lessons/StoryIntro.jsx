@@ -90,7 +90,7 @@ const StoryIntro = ({ slides, onComplete, onSkip }) => {
                     onClick={nextSlide}
                     className="w-full sm:w-auto px-10 py-4 bg-viet-green text-white rounded-[20px] font-black text-[14px] uppercase tracking-widest shadow-xl shadow-viet-green/20 hover:scale-105 transition-all flex items-center justify-center gap-2"
                   >
-                    {currentSlide < slides.length - 1 ? 'Tiếp theo ➔' : 'Bắt đầu ngay 🚀'}
+                    {currentSlide < slides.length - 1 ? 'Tiếp theo ➔' : 'Bắt đầu ngay Rocket'}
                   </button>
                   <button
                     onClick={onSkip}

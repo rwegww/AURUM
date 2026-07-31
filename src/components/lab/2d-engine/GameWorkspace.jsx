@@ -217,7 +217,7 @@ const GameWorkspace = () => {
                         {/* Reaction Message badge if not default */}
                         {beaker.reactionMessage && !beaker.reactionMessage.includes("Mời bắt đầu") && (
                           <div className="mt-1 pt-1.5 border-t border-white/10 text-[10px] font-bold text-amber-300 leading-tight italic">
-                            ✨ {beaker.reactionMessage}
+                            Sparkles {beaker.reactionMessage}
                           </div>
                         )}
                       </motion.div>

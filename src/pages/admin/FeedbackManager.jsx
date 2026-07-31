@@ -147,7 +147,7 @@ const FeedbackManager = () => {
           <div className="space-y-6">
             {phan_hois.filter(f => activeTab === 'teachers' ? f.type === 'teacher_registration' : f.type !== 'teacher_registration').length === 0 ? (
                <div className="bg-white rounded-[32px] border border-viet-border p-24 text-center">
-                  <span className="text-4xl mb-4 block">{activeTab === 'teachers' ? '🎓' : '📫'}</span>
+                  <span className="text-4xl mb-4 block">{activeTab === 'teachers' ? 'GraduationCap' : 'Mail'}</span>
                   <p className="text-viet-text-light font-bold">{activeTab === 'teachers' ? 'Không có yêu cầu duyệt nào' : 'Hòm thư hiện đang trống'}</p>
                </div>
             ) : (
@@ -229,7 +229,7 @@ const FeedbackManager = () => {
                        <div className="mt-4 flex justify-end">
                          {f.isApproved ? (
                            <span className="px-3 py-1.5 bg-green-100 text-green-700 text-xs font-bold rounded-xl flex items-center gap-2">
-                             ✓ Đang hiển thị trang chủ
+                             Check Đang hiển thị trang chủ
                            </span>
                          ) : (
                            <button 

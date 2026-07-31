@@ -134,17 +134,17 @@ const ClassDetail = () => {
                      onChange={e => setNewPost({...newPost, type: e.target.value})}
                      className="h-10 px-4 rounded-xl border border-viet-border outline-none text-xs font-bold uppercase tracking-wider text-viet-text"
                    >
-                      <option value="announcement">📢 Chung</option>
-                      <option value="video">📺 Video bài giảng</option>
-                      <option value="assignment">📝 Bài tập</option>
+                      <option value="announcement">Megaphone Chung</option>
+                      <option value="video">Monitor Video bài giảng</option>
+                      <option value="assignment">FileText Bài tập</option>
                    </select>
                    <select                     value={newPost.hoc_sinh_nhan_id}
                      onChange={e => setNewPost({...newPost, hoc_sinh_nhan_id: e.target.value})}
                      className="h-10 px-4 rounded-xl border border-viet-border outline-none text-xs font-bold uppercase tracking-wider text-viet-text"
                    >
-                      <option value="">👥 Cả lớp</option>
+                      <option value="">Users Cả lớp</option>
                       {members.map(m => (
-                        <option key={m.id} value={m.id}>👤 {m.username}</option>
+                        <option key={m.id} value={m.id}>User {m.username}</option>
                       ))}
                    </select>
 
@@ -285,7 +285,7 @@ const ClassDetail = () => {
                            className="w-8 h-8 rounded-lg bg-white border border-viet-border flex items-center justify-center text-xs opacity-0 group-hover/member:opacity-100 transition-all hover:bg-viet-green hover:text-white hover:border-viet-green shadow-sm"
                            title="Nhắn tin riêng"
                          >
-                           💬
+                           MessageCircle
                          </button>
                        </div>
                      );

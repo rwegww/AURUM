@@ -1,8 +1,9 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/auth/AuthLayout';
+import { Hand, AlertTriangle } from 'lucide-react';
 
 
 const Login = () => {
@@ -133,8 +134,8 @@ const Login = () => {
            <h2 className="text-[28px] md:text-[22px] font-bold md:font-black text-slate-800 md:text-viet-text tracking-tight md:uppercase font-sora md:italic">
              Đăng nhập
            </h2>
-           <p className="text-[14px] md:text-[12px] font-medium md:font-bold text-slate-500 md:text-viet-text-light mt-2 md:mt-1.5 tracking-tight leading-relaxed">
-             Chào mừng bạn quay trở lại! 👋
+           <p className="text-[14px] md:text-[12px] font-medium md:font-bold text-slate-500 md:text-viet-text-light mt-2 md:mt-1.5 tracking-tight leading-relaxed flex items-center justify-center md:justify-start gap-1">
+             Chào mừng bạn quay trở lại! <Hand className="w-4 h-4 text-yellow-500 origin-bottom-right rotate-12" />
            </p>
         </header>
 
@@ -146,7 +147,7 @@ const Login = () => {
             animate={{ opacity: 1, height: 'auto' }}
             className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase ring-1 ring-red-100 flex items-center gap-2 shadow-sm"
           >
-             <span className="text-base">🚨</span> {displayError}
+             <AlertTriangle className="w-5 h-5" /> {displayError}
           </motion.div>
         )}
 

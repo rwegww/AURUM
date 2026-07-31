@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Avatar from '@/components/common/Avatar';
-import { FlaskConical, Beaker } from 'lucide-react';
+import { FlaskConical, Beaker, TrendingUp, CheckCircle, Backpack, Swords, Shield, AlertTriangle, BookOpen, Users } from 'lucide-react';
 import { craftableItems } from '@/data/labInventory';
+import { supabase } from '@/lib/supabase';
+import { RenderIcon } from '@/utils/IconMapper';
 
 const normalizeChemicalLabel = (item) => {
   if (typeof item === 'string' || typeof item === 'number') return String(item).trim();
@@ -28,6 +30,18 @@ const UserDetail = () => {
         if (!res.ok) throw new Error('Không thể tải thông tin học sinh');
         
         const data = await res.json();
+        
+        if (data.role === 'teacher') {
+          const { data: classes } = await supabase.from('lop').select('id, ten_lop, khoi_id').eq('giao_vien_id', data.id);
+          const classIds = classes?.map(c => c.id) || [];
+          let totalStudents = 0;
+          if (classIds.length > 0) {
+            const { data: members } = await supabase.from('thanh_vien_lop').select('hoc_sinh_id').in('lop_id', classIds);
+            totalStudents = new Set(members?.map(m => m.hoc_sinh_id)).size;
+          }
+          data.teacherStats = { classes: classes || [], totalStudents };
+        }
+        
         setStudent(data);
       } catch (err) {
         setError(err.message);
@@ -48,7 +62,7 @@ const UserDetail = () => {
 
   if (error) return (
     <div className="p-8 text-center bg-red-50 rounded-[32px] border border-red-100 max-w-2xl mx-auto my-12">
-      <span className="text-4xl mb-4 block">🚨</span>
+      <div className="mb-4 flex justify-center"><AlertTriangle className="w-10 h-10 text-red-500" /></div>
       <h2 className="text-xl font-bold text-red-600 mb-2">Đã có lỗi xảy ra</h2>
       <p className="text-red-500 mb-6">{error}</p>
       <Link to="/admin/nguoi_dung" className="px-6 py-2 bg-red-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest">Quay lại danh sách</Link>
@@ -102,7 +116,7 @@ const UserDetail = () => {
            <div className="lg:col-span-2 space-y-8">
               <section className="bg-white p-8 rounded-[40px] border border-viet-border shadow-sm">
                  <h2 className="text-xl font-bold text-viet-text mb-6 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-viet-green/10 flex items-center justify-center text-sm">📈</span>
+                    <span className="w-8 h-8 rounded-xl bg-viet-green/10 flex items-center justify-center"><TrendingUp className="w-4 h-4 text-viet-green" /></span>
                     Tiến độ Học tập
                  </h2>
                  
@@ -137,7 +151,9 @@ const UserDetail = () => {
                                 transition={{ delay: i * 0.05 }}
                                 className="flex items-center gap-3 p-4 bg-viet-bg/20 rounded-2xl border border-viet-border/50 hover:bg-white transition-all group"
                               >
-                                 <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[10px] group-hover:bg-viet-green group-hover:text-white transition-colors duration-300">✅</div>
+                                 <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center group-hover:bg-viet-green group-hover:text-white transition-colors duration-300">
+                                   <CheckCircle className="w-4 h-4" />
+                                 </div>
                                  <span className="text-xs font-bold text-viet-text">{lessonId}</span>
                               </motion.div>
                             ))
@@ -177,7 +193,7 @@ const UserDetail = () => {
            <div className="space-y-8">
               <section className="bg-white p-8 rounded-[40px] border border-viet-border shadow-sm">
                  <h2 className="text-lg font-bold text-viet-text mb-6 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center text-sm">🎒</span>
+                    <span className="w-8 h-8 rounded-xl bg-purple-100 flex items-center justify-center"><Backpack className="w-4 h-4 text-purple-600" /></span>
                     Hành trang
                  </h2>
                  <div className="space-y-4">
@@ -189,7 +205,7 @@ const UserDetail = () => {
                               const craftDef = craftableItems.find(c => c.id === item);
                               return (
                                 <span key={i} className="px-3 py-1 bg-white border border-viet-border rounded-lg text-[10px] font-bold text-viet-text shadow-sm flex items-center gap-1">
-                                  {craftDef ? <>{craftDef.icon || '🧪'} {craftDef.name}</> : item}
+                                  {craftDef ? <>{craftDef.icon || <FlaskConical className="w-3 h-3 text-slate-400" />} {craftDef.name}</> : item}
                                 </span>
                               );
                             })
@@ -205,7 +221,7 @@ const UserDetail = () => {
                            {student.inventory?.ingredients?.filter(i => i.amount > 0).length > 0 ? (
                              student.inventory.ingredients.filter(i => i.amount > 0).map((item, i) => (
                                <span key={i} className="px-3 py-1 bg-white border border-viet-border rounded-lg text-[10px] font-bold text-viet-text shadow-sm flex items-center gap-1">
-                                 {item.icon} {item.name} <span className="text-viet-green">x{item.amount}</span>
+                                 <RenderIcon iconName={item.icon} className="w-3 h-3 text-slate-400" /> {item.name} <span className="text-viet-green">x{item.amount}</span>
                                </span>
                              ))
                            ) : (
@@ -218,7 +234,7 @@ const UserDetail = () => {
 
               <section className="bg-gradient-to-br from-viet-text to-slate-800 p-8 rounded-[40px] text-white shadow-xl shadow-slate-200">
                  <h2 className="text-lg font-bold mb-6 flex items-center gap-3 uppercase tracking-tighter italic">
-                    <span className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-sm">⚔️</span>
+                    <span className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center"><Swords className="w-4 h-4 text-white" /></span>
                     Đấu Trường
                  </h2>
                  <div className="grid grid-cols-2 gap-4">
@@ -238,11 +254,41 @@ const UserDetail = () => {
               </section>
            </div>
          </div>
+        ) : student.role === 'teacher' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+             <div className="bg-white p-8 rounded-[40px] border border-viet-border shadow-sm flex flex-col items-center justify-center text-center">
+                 <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center mb-6"><BookOpen className="w-8 h-8" /></div>
+                 <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-2 opacity-60">Tổng số Lớp học</p>
+                 <p className="text-4xl font-black text-viet-text">{student.teacherStats?.classes?.length || 0}</p>
+             </div>
+             <div className="bg-white p-8 rounded-[40px] border border-viet-border shadow-sm flex flex-col items-center justify-center text-center">
+                 <div className="w-16 h-16 rounded-2xl bg-green-50 text-green-500 flex items-center justify-center mb-6"><Users className="w-8 h-8" /></div>
+                 <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-2 opacity-60">Tổng số Học sinh</p>
+                 <p className="text-4xl font-black text-viet-green">{student.teacherStats?.totalStudents || 0}</p>
+             </div>
+             {student.teacherStats?.classes?.length > 0 && (
+               <div className="col-span-full bg-white p-8 rounded-[40px] border border-viet-border shadow-sm">
+                  <h3 className="text-lg font-bold text-viet-text mb-6">Danh sách lớp đang quản lý</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                     {student.teacherStats.classes.map(c => (
+                        <div key={c.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+                           <div className="w-12 h-12 rounded-xl bg-viet-green/10 text-viet-green flex items-center justify-center font-black">
+                             {c.khoi_id}
+                           </div>
+                           <div>
+                             <p className="font-bold text-sm text-viet-text">{c.ten_lop}</p>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+             )}
+          </div>
         ) : (
           <div className="mt-8 text-center py-24 bg-white rounded-[40px] border border-viet-border shadow-sm">
-             <div className="text-6xl mb-6">🛡️</div>
-             <h2 className="text-2xl font-black text-viet-text mb-2">Hồ sơ {student.role === 'teacher' ? 'Giáo viên' : 'Quản trị viên'}</h2>
-             <p className="text-viet-text-light font-medium">Tài khoản này có quyền quản trị/giáo viên. Các chỉ số học tập được ẩn.</p>
+             <div className="flex justify-center mb-6"><Shield className="w-16 h-16 text-slate-300" /></div>
+             <h2 className="text-2xl font-black text-viet-text mb-2">Hồ sơ Quản trị viên</h2>
+             <p className="text-viet-text-light font-medium">Tài khoản này có quyền quản trị tối cao. Các chỉ số được ẩn.</p>
           </div>
         )}
       </div>

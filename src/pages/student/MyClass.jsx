@@ -166,12 +166,12 @@ const MyClass = () => {
   };
 
   const getFileIcon = (url) => {
-    if (!url) return '🔗';
+    if (!url) return 'Link2';
     const lowerUrl = url.toLowerCase();
     if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return '📕';
     if (lowerUrl.includes('doc') || lowerUrl.includes('word') || lowerUrl.includes('docx')) return '📘';
     if (lowerUrl.includes('xls') || lowerUrl.includes('excel') || lowerUrl.includes('xlsx')) return '📗';
-    return '🔗';
+    return 'Link2';
   };
 
   const getFileLabel = (url) => {
@@ -296,7 +296,7 @@ const MyClass = () => {
           className="bg-white p-10 rounded-[40px] max-w-md w-full text-center border border-viet-border shadow-xl shadow-black/5"
         >
           <div className="w-20 h-20 bg-viet-green/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-4xl text-viet-green">🏫</span>
+            <span className="text-4xl text-viet-green">School</span>
           </div>
           <h2 className="text-2xl font-black text-viet-text mb-2 uppercase tracking-tight">{t('my_class.empty.title')}</h2>
           <p className="text-sm font-medium text-viet-text-light mb-8">
@@ -381,7 +381,7 @@ const MyClass = () => {
               
               {posts.length === 0 ? (
                 <div className="bg-white border text-center border-viet-border border-dashed p-12 rounded-[32px]">
-                   <span className="text-4xl block mb-2 opacity-30">📭</span>
+                   <span className="text-4xl block mb-2 opacity-30">MailX</span>
                    <p className="text-viet-text-light font-bold text-sm">{t('my_class.feed.empty')}</p>
                 </div>
               ) : (
@@ -451,7 +451,7 @@ const MyClass = () => {
                           {post.is_completed ? (
                             <div className="flex flex-col gap-2">
                                 <div className="w-full py-4 bg-emerald-50 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
-                                  <span>✓</span> {t('my_class.feed.assignment.completed')}
+                                  <span>Check</span> {t('my_class.feed.assignment.completed')}
                                 </div>
                                 {post.user_submission?.score !== null && post.user_submission?.score !== undefined && (
                                    <div className="flex items-center justify-between p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-sm">
@@ -474,7 +474,7 @@ const MyClass = () => {
                               }}
                               className="w-full py-4 bg-viet-green text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all border-b-4 border-emerald-700"
                             >
-                              🚀 {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
+                              Rocket {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
                             </button>
                           ) : (
                             <button 
@@ -524,7 +524,7 @@ const MyClass = () => {
 
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span>👥</span> {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
+                 <span>Users</span> {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
                </h3>
                
                <div className="space-y-3">
@@ -562,7 +562,7 @@ const MyClass = () => {
                     {t('my_class.support.btn')}
                   </button>
                </div>
-               <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">💬</div>
+               <div className="absolute right-0 bottom-0 text-7xl opacity-10 translate-x-1/4 translate-y-1/4">MessageCircle</div>
             </div>
 
             {/* Messaging Modal */}
@@ -669,7 +669,7 @@ const MyClass = () => {
                          rel="noreferrer"
                          className="px-6 py-3 bg-white/90 backdrop-blur shadow-xl border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all flex items-center gap-2"
                        >
-                         <span>🔗</span> {t('my_class.viewer.tab_fallback')}
+                         <span>Link2</span> {t('my_class.viewer.tab_fallback')}
                        </a>
                     </div>
                   )}

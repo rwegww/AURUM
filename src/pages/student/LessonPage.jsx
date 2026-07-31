@@ -43,7 +43,7 @@ const LessonPage = () => {
         type: 'lesson',
         label: `Học bài: ${lessonData.title}`,
         description: `Đã truy cập bài học ${lessonData.title} (Lớp ${grade})`,
-        icon: '📚',
+        icon: 'BookOpen',
         link: `/bai_hoc/${grade}/${lessonId}`
       });
 

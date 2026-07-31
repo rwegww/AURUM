@@ -289,7 +289,7 @@ const useLabStore = create((set, get) => ({
 
           if (updatedBeaker.heatTemperature > maxTemp && !updatedBeaker.reactionMessage.includes("QUÁ NHIỆT")) {
             updatedBeaker = {
-              ...createDefaultBeaker(beaker.id, "💥 CỐC BỊ QUÁ NHIỆT VÀ ĐÃ VỠ!"),
+              ...createDefaultBeaker(beaker.id, "Zap CỐC BỊ QUÁ NHIỆT VÀ ĐÃ VỠ!"),
               isHeating: false,
               activeFlame: true,
               activeSmoke: true,
@@ -315,7 +315,7 @@ const useLabStore = create((set, get) => ({
               });
             }, 3500);
           } else if (updatedBeaker.heatTemperature > maxTemp * 0.9 && !updatedBeaker.reactionMessage.includes("QUÁ NHIỆT")) {
-            updatedBeaker.reactionMessage = "⚠️ Cảnh báo: Cốc sắp quá nhiệt!";
+            updatedBeaker.reactionMessage = "AlertTriangle Cảnh báo: Cốc sắp quá nhiệt!";
           }
         }
 
@@ -528,7 +528,7 @@ const useLabStore = create((set, get) => ({
             const requiresElectrolysis = conditionStr.includes('điện phân');
             const requiresMolten = conditionStr.includes('nóng chảy');
 
-            let msg = "⚠️ Thiếu điều kiện: ";
+            let msg = "AlertTriangle Thiếu điều kiện: ";
             let missing = [];
 
             if (requiresHeat && !beaker.isHeating) {
@@ -550,7 +550,7 @@ const useLabStore = create((set, get) => ({
             } else if (potential.conditions && !requiresElectrolysis) {
               msg += potential.conditions;
             } else {
-              msg = "⚠️ Cần thêm điều kiện (Xúc tác/...)";
+              msg = "AlertTriangle Cần thêm điều kiện (Xúc tác/...)";
             }
             updatedBeaker.reactionMessage = msg;
           }
@@ -862,7 +862,7 @@ const useLabStore = create((set, get) => ({
           const requiresElectrolysis = conditionStr.includes('điện phân');
           const requiresMolten = conditionStr.includes('nóng chảy');
           
-          let msg = "⚠️ Thiếu điều kiện: ";
+          let msg = "AlertTriangle Thiếu điều kiện: ";
           let missing = [];
 
           if (requiresHeat && !toBeaker.isHeating) missing.push("Cần đun nóng");
@@ -873,7 +873,7 @@ const useLabStore = create((set, get) => ({
 
           if (missing.length > 0) msg += missing.join(", ");
           else if (potential.conditions && !requiresElectrolysis) msg += potential.conditions;
-          else msg = "⚠️ Cần thêm điều kiện (Xúc tác/...)";
+          else msg = "AlertTriangle Cần thêm điều kiện (Xúc tác/...)";
           
           updatedToBeaker.reactionMessage = msg;
         }
