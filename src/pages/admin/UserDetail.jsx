@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Avatar from '@/components/common/Avatar';
 import { FlaskConical, Beaker } from 'lucide-react';
+import { craftableItems } from '@/data/labInventory';
 
 const normalizeChemicalLabel = (item) => {
   if (typeof item === 'string' || typeof item === 'number') return String(item).trim();
@@ -184,9 +185,14 @@ const UserDetail = () => {
                        <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-3 opacity-60">Vật phẩm đã chế tạo</p>
                        <div className="flex flex-wrap gap-2">
                           {student.inventory?.craftedItems?.length > 0 ? (
-                            student.inventory.craftedItems.map((item, i) => (
-                              <span key={i} className="px-3 py-1 bg-white border border-viet-border rounded-lg text-[10px] font-bold text-viet-text shadow-sm">{item}</span>
-                            ))
+                            student.inventory.craftedItems.map((item, i) => {
+                              const craftDef = craftableItems.find(c => c.id === item);
+                              return (
+                                <span key={i} className="px-3 py-1 bg-white border border-viet-border rounded-lg text-[10px] font-bold text-viet-text shadow-sm flex items-center gap-1">
+                                  {craftDef ? <>{craftDef.icon || '🧪'} {craftDef.name}</> : item}
+                                </span>
+                              );
+                            })
                           ) : (
                             <p className="text-[10px] font-medium text-viet-text-light italic">Chưa có thành phẩm nào</p>
                           )}
