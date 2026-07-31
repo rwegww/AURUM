@@ -144,12 +144,14 @@ const UserManager = () => {
                            >
                              {u.is_locked ? <><Unlock className="w-3.5 h-3.5" /> Mở khóa</> : <><Lock className="w-3.5 h-3.5" /> Khóa</>}
                            </button>
-                           <Link                             to={`/admin/nguoi_dung/${u.id}`}
-                             className="p-2 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white text-slate-500 hover:text-blue-600 transition-all shadow-sm"
-                             title="Chi tiết"
-                           >
-                             <Eye className="w-4 h-4" />
-                           </Link>
+                           {u.role !== 'admin' && (
+                             <Link                               to={`/admin/nguoi_dung/${u.id}`}
+                               className="p-2 bg-slate-50 border border-slate-200 rounded-xl hover:bg-white text-slate-500 hover:text-blue-600 transition-all shadow-sm"
+                               title="Chi tiết"
+                             >
+                               <Eye className="w-4 h-4" />
+                             </Link>
+                           )}
                          </div>
                       </td>
                     </motion.tr>
