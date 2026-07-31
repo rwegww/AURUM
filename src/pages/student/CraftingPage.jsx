@@ -21,7 +21,8 @@ import {
   normalizeInventory, 
   getIngredientAmountMap, 
   getLevelFromXP,
-  canCraftItem
+  canCraftItem,
+  getRecipeRequirementCounts
 } from '@/data/labInventory';
 import { getChemicalImage } from '@/data/chemicalImages';
 

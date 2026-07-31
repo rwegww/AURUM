@@ -1015,7 +1015,14 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
             table: 'nguoi_choi',
             filter: `phong_dau_id=eq.${room.id}`,
           }, handleSync)
-          .subscribe();
+          .subscribe((status) => {
+            if (status === 'SUBSCRIBED' && active) {
+              handleSync();
+            }
+            if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+              console.warn('Arena realtime channel status:', status);
+            }
+          });
       } catch (error) {
         console.warn('Arena realtime setup error:', error.message);
       }
@@ -1028,6 +1035,19 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       if (channel) supabase.removeChannel(channel);
     };
   }, [loadState, room.id]);
+
+  // Fallback polling while in waiting room — ensures host sees new players
+  // even if Supabase Realtime fails to deliver postgres_changes events
+  useEffect(() => {
+    const roomStatus = state?.room?.status;
+    if (roomStatus !== 'waiting') return;
+
+    const pollInterval = setInterval(() => {
+      loadState().catch((error) => console.warn('Arena poll error:', error.message));
+    }, 3000);
+
+    return () => clearInterval(pollInterval);
+  }, [state?.room?.status, loadState]);
 
   const advanceRoom = useCallback(async () => {
     const currentRoom = state?.room;
