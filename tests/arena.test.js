@@ -254,7 +254,29 @@ const createQueryBuilder = (table) => {
 const supabase = {
   from: vi.fn((table) => createQueryBuilder(table)),
   auth: { getUser: vi.fn() },
-  rpc: vi.fn(async () => ({ data: arenaState.room, error: null })),
+  rpc: vi.fn(async (name, args) => {
+    if (name !== 'join_arena_room') return { data: arenaState.room, error: null };
+    if (!arenaState.room || arenaState.room.current_players >= arenaState.room.max_players) {
+      return { data: null, error: null };
+    }
+    arenaState.room = { ...arenaState.room, current_players: arenaState.room.current_players + 1 };
+    const existingIndex = arenaState.players.findIndex((player) => (
+      player.phong_dau_id === args.p_room_id && player.nguoi_dung_id === args.p_user_id
+    ));
+    const player = {
+      phong_dau_id: args.p_room_id,
+      nguoi_dung_id: args.p_user_id,
+      username: args.p_username,
+      avatar_seed: args.p_avatar_seed,
+      score: 0,
+      so_cau_dung: 0,
+      vong_da_tra_loi: [],
+      status: 'joined',
+    };
+    if (existingIndex >= 0) arenaState.players[existingIndex] = { ...arenaState.players[existingIndex], ...player };
+    else arenaState.players.push(player);
+    return { data: arenaState.room, error: null };
+  }),
 };
 
 vi.mock('../api/models/User.js', () => ({ default: userModel }));
@@ -304,6 +326,29 @@ beforeEach(() => {
 });
 
 describe('arena mini game backend', () => {
+  it('joins a room atomically so the host state contains the new player', async () => {
+    resetArenaState();
+    arenaState.room.status = 'waiting';
+    arenaState.room.current_players = 1;
+    arenaState.room.la_luyen_tap = false;
+    arenaState.players = [arenaState.players[0]];
+
+    const joined = await request(app)
+      .post('/api/arena/join')
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`)
+      .send({ phong_dau_id: 'room-1' });
+
+    const hostState = await request(app)
+      .get('/api/arena/room/room-1/state')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(joined.status).toBe(200);
+    expect(hostState.status).toBe(200);
+    expect(hostState.body.state.players.map((player) => player.nguoi_dung_id))
+      .toEqual(expect.arrayContaining(['student', 'opponent']));
+    expect(hostState.body.state.room.current_players).toBe(2);
+  });
+
   it('issues a short lived Supabase Realtime compatible token', async () => {
     const res = await request(app)
       .get('/api/arena/realtime-token')

@@ -724,12 +724,30 @@ ALTER TABLE public.hoat_dong_nguoi_dung
   ADD COLUMN IF NOT EXISTS thong_tin_bo_sung jsonb DEFAULT '{}'::jsonb;
 
 -- Normalize selected legacy column types after rename.
-ALTER TABLE IF EXISTS public.hoc_lieu
-  ALTER COLUMN nguoi_tao_id TYPE text USING nguoi_tao_id::text;
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'hoc_lieu' AND column_name = 'nguoi_tao_id' AND data_type != 'text'
+  ) THEN
+    ALTER TABLE public.hoc_lieu ALTER COLUMN nguoi_tao_id TYPE text USING nguoi_tao_id::text;
+  END IF;
 
-ALTER TABLE IF EXISTS public.phan_hoi_hoc_lieu
-  ALTER COLUMN nguoi_dung_id TYPE text USING nguoi_dung_id::text,
-  ALTER COLUMN nguoi_tra_loi_id TYPE text USING nguoi_tra_loi_id::text;
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'phan_hoi_hoc_lieu' AND column_name = 'nguoi_dung_id' AND data_type != 'text'
+  ) THEN
+    DROP POLICY IF EXISTS "Authenticated users can insert material feedback" ON public.phan_hoi_hoc_lieu;
+    ALTER TABLE public.phan_hoi_hoc_lieu ALTER COLUMN nguoi_dung_id TYPE text USING nguoi_dung_id::text;
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'phan_hoi_hoc_lieu' AND column_name = 'nguoi_tra_loi_id' AND data_type != 'text'
+  ) THEN
+    ALTER TABLE public.phan_hoi_hoc_lieu ALTER COLUMN nguoi_tra_loi_id TYPE text USING nguoi_tra_loi_id::text;
+  END IF;
+END $$;
 
 ALTER TABLE IF EXISTS public.nguoi_dung
   DROP COLUMN IF EXISTS unlocked_lessons,
@@ -861,25 +879,84 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION public.join_arena_room(p_room_id text)
+DROP FUNCTION IF EXISTS public.join_arena_room(text);
+
+CREATE OR REPLACE FUNCTION public.join_arena_room(
+  p_room_id text,
+  p_user_id text,
+  p_username text,
+  p_avatar_seed text
+)
 RETURNS jsonb
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = ''
 AS $$
 DECLARE
   joined_room jsonb;
 BEGIN
+  SELECT to_jsonb(room_row.*) INTO joined_room
+  FROM public.phong_dau room_row
+  WHERE room_row.id = p_room_id
+    AND room_row.status = 'waiting'
+    AND EXISTS (
+      SELECT 1
+      FROM public.nguoi_choi player_row
+      WHERE player_row.phong_dau_id = p_room_id
+        AND player_row.nguoi_dung_id = p_user_id
+        AND player_row.status = 'joined'
+    );
+
+  IF joined_room IS NOT NULL THEN
+    RETURN joined_room;
+  END IF;
+
   UPDATE public.phong_dau
   SET so_nguoi_hien_tai = COALESCE(so_nguoi_hien_tai, 0) + 1
   WHERE id = p_room_id
     AND status = 'waiting'
     AND COALESCE(so_nguoi_hien_tai, 0) < COALESCE(so_nguoi_toi_da, 2)
+    AND NOT EXISTS (
+      SELECT 1
+      FROM public.nguoi_choi player_row
+      WHERE player_row.phong_dau_id = p_room_id
+        AND player_row.nguoi_dung_id = p_user_id
+        AND player_row.status = 'joined'
+    )
   RETURNING to_jsonb(public.phong_dau.*) INTO joined_room;
+
+  IF joined_room IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  INSERT INTO public.nguoi_choi (
+    phong_dau_id,
+    nguoi_dung_id,
+    username,
+    avatar_seed,
+    status,
+    xem_cuoi_luc
+  )
+  VALUES (
+    p_room_id,
+    p_user_id,
+    COALESCE(NULLIF(trim(p_username), ''), 'Ẩn danh'),
+    COALESCE(NULLIF(trim(p_avatar_seed), ''), 'Aurum'),
+    'joined',
+    now()
+  )
+  ON CONFLICT (phong_dau_id, nguoi_dung_id) DO UPDATE
+  SET username = EXCLUDED.username,
+      avatar_seed = EXCLUDED.avatar_seed,
+      status = 'joined',
+      xem_cuoi_luc = now();
 
   RETURN joined_room;
 END;
 $$;
+
+REVOKE ALL ON FUNCTION public.join_arena_room(text, text, text, text) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.join_arena_room(text, text, text, text) TO service_role;
 
 CREATE OR REPLACE FUNCTION public.sync_user_streak(user_id_text text)
 RETURNS jsonb
@@ -1321,13 +1398,13 @@ REVOKE ALL ON FUNCTION public.increment_active_minutes(text) FROM PUBLIC, anon, 
 REVOKE ALL ON FUNCTION public.increment_likes(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_material_view(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.claim_mission_reward(text, uuid) FROM PUBLIC, anon, authenticated;
-REVOKE ALL ON FUNCTION public.join_arena_room(text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.join_arena_room(text, text, text, text) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.sync_user_streak(text) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.handle_new_user() TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_likes(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_material_view(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.claim_mission_reward(text, uuid) TO service_role;
-GRANT EXECUTE ON FUNCTION public.join_arena_room(text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.join_arena_room(text, text, text, text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_active_minutes(text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.sync_user_streak(text) TO service_role;
 

@@ -629,14 +629,21 @@ router.post('/join', auth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Phòng đã đầy.' });
     }
 
+    // The database function reserves a slot and creates/reactivates the player
+    // in the same transaction.  Keeping these writes together prevents a room
+    // from displaying 2/2 while its host can still only load one player.
     const { data: updatedRoomData, error: updateError } = await supabase
-      .rpc('join_arena_room', { p_room_id: phong_dau_id });
+      .rpc('join_arena_room', {
+        p_room_id: phong_dau_id,
+        p_user_id: req.userId,
+        p_username: req.user.username || 'Ẩn danh',
+        p_avatar_seed: req.user.avatarSeed || req.user.avatar_seed || req.user.username || 'Aurum',
+      });
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
     if (!updatedRoom) return res.status(400).json({ success: false, message: 'Phòng đã đầy hoặc không còn chỗ.' });
 
-    await upsertRoomPlayer(phong_dau_id, req.user, 'joined');
     res.status(200).json({ success: true, room: updatedRoom });
   } catch (error) {
     console.error('Lỗi tham gia phòng Arena:', error);
@@ -666,13 +673,17 @@ router.post('/find-match', auth, async (req, res) => {
     }
 
     const { data: updatedRoomData, error: updateError } = await supabase
-      .rpc('join_arena_room', { p_room_id: roomToJoin.id });
+      .rpc('join_arena_room', {
+        p_room_id: roomToJoin.id,
+        p_user_id: req.userId,
+        p_username: req.user.username || 'Ẩn danh',
+        p_avatar_seed: req.user.avatarSeed || req.user.avatar_seed || req.user.username || 'Aurum',
+      });
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
     if (!updatedRoom) return res.status(200).json({ success: true, found: false, message: 'Đang xếp trận...' });
 
-    await upsertRoomPlayer(roomToJoin.id, req.user, 'joined');
     return res.status(200).json({ success: true, room: updatedRoom, found: true });
   } catch (error) {
     console.error('Lỗi tìm trận:', error);
