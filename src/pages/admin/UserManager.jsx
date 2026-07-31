@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Lock, Unlock, Eye, Search } from 'lucide-react';
@@ -91,7 +91,7 @@ const UserManager = () => {
                               {u.role === 'teacher' && <span className="bg-blue-100 text-blue-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase">Giáo viên</span>}
                               {u.is_locked && <span className="bg-red-100 text-red-600 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-widest">ĐÃ KHÓA</span>}
                             </p>
-                            <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Tham gia: {new Date(u.createdAt).toLocaleDateString('vi-VN')}</p>
+                            <p className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Tham gia: {u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : 'Không rõ'}</p>
                           </div>
                         </div>
                       </td>

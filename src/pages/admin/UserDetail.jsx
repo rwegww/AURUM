@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Avatar from '@/components/common/Avatar';
@@ -75,7 +75,7 @@ const UserDetail = () => {
                       <span className="px-3 py-1 bg-viet-green text-white text-[10px] font-black rounded-lg uppercase tracking-widest shadow-md shadow-viet-green/20">Lv {student.level}</span>
                    </div>
                    <p className="text-viet-text-light mt-1 font-medium">{student.email}</p>
-                   <p className="text-[10px] text-viet-text-light/60 font-black uppercase tracking-[2px] mt-2 italic">GIA NHẬP HỌC VIỆN: {new Date(student.createdAt).toLocaleDateString('vi-VN')}</p>
+                   <p className="text-[10px] text-viet-text-light/60 font-black uppercase tracking-[2px] mt-2 italic">GIA NHẬP HỌC VIỆN: {student.createdAt ? new Date(student.createdAt).toLocaleDateString('vi-VN') : 'Không rõ'}</p>
                 </div>
               </div>
               
@@ -192,15 +192,17 @@ const UserDetail = () => {
                     
                     <div className="p-4 bg-slate-50 rounded-2xl">
                        <p className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-3 opacity-60">Nguyên liệu hiện có</p>
-                       <div className="flex flex-wrap gap-2">
-                          {student.inventory?.ingredients?.length > 0 ? (
-                            student.inventory.ingredients.map((item, i) => (
-                              <span key={i} className="px-3 py-1 bg-white border border-viet-border rounded-lg text-[10px] font-bold text-viet-text shadow-sm">{item}</span>
-                            ))
-                          ) : (
-                            <p className="text-[10px] font-medium text-viet-text-light italic">Kho nguyên liệu trống</p>
-                          )}
-                       </div>
+                        <div className="flex flex-wrap gap-2">
+                           {student.inventory?.ingredients?.filter(i => i.amount > 0).length > 0 ? (
+                             student.inventory.ingredients.filter(i => i.amount > 0).map((item, i) => (
+                               <span key={i} className="px-3 py-1 bg-white border border-viet-border rounded-lg text-[10px] font-bold text-viet-text shadow-sm flex items-center gap-1">
+                                 {item.icon} {item.name} <span className="text-viet-green">x{item.amount}</span>
+                               </span>
+                             ))
+                           ) : (
+                             <p className="text-[10px] font-medium text-viet-text-light italic">Kho nguyên liệu trống</p>
+                           )}
+                        </div>
                     </div>
                  </div>
               </section>
