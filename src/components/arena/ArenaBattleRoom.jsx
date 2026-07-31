@@ -791,7 +791,7 @@ const Scoreboard = React.memo(({ players, currentUserId }) => {
   );
 });
 
-const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
+const WaitingRoom = ({ state, user, onStart, onLeave, onRefresh, refreshing, starting }) => {
   const room = state?.room || {};
   const players = state?.players || [];
   const isHost = room.chu_phong_id === user?.id;
@@ -847,15 +847,27 @@ const WaitingRoom = ({ state, user, onStart, onLeave, starting }) => {
             <p className="text-sm font-bold text-viet-text-light">
               {isHost ? 'Chủ phòng có thể bắt đầu khi đủ người.' : 'Đợi chủ phòng bắt đầu trận.'}
             </p>
-            <button
-              type="button"
-              disabled={!canStart || starting}
-              onClick={onStart}
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-viet-green px-6 text-sm font-black uppercase tracking-widest text-white shadow-sm transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {starting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5 fill-current" />}
-              Bắt đầu
-            </button>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button
+                type="button"
+                disabled={refreshing || starting}
+                onClick={onRefresh}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-5 text-sm font-black uppercase tracking-widest text-viet-text-light transition hover:border-viet-green/40 hover:text-viet-green disabled:cursor-not-allowed disabled:opacity-60"
+                title="Làm mới danh sách người chơi"
+              >
+                <RefreshCw className={`h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Đang tải' : 'Làm mới'}
+              </button>
+              <button
+                type="button"
+                disabled={!canStart || starting || refreshing}
+                onClick={onStart}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-viet-green px-6 text-sm font-black uppercase tracking-widest text-white shadow-sm transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {starting ? <Loader2 className="h-5 w-5 animate-spin" /> : <Play className="h-5 w-5 fill-current" />}
+                Bắt đầu
+              </button>
+            </div>
           </div>
         </div>
     </div>
@@ -960,6 +972,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [phan_hoi, setFeedback] = useState(null);
   const serverOffsetRef = useRef(0);
   const advanceLockRef = useRef(null);
@@ -972,6 +985,18 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
     setState(data.state);
     return data.state;
   }, [room.id]);
+
+  const refreshState = useCallback(async () => {
+    if (refreshing) return;
+    setRefreshing(true);
+    try {
+      await loadState();
+    } catch (error) {
+      setFeedback({ type: 'error', message: error.message });
+    } finally {
+      setRefreshing(false);
+    }
+  }, [loadState, refreshing]);
 
   useEffect(() => {
     let active = true;
@@ -1134,7 +1159,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   }
 
   if (currentRoom?.status === 'waiting') {
-    return <WaitingRoom state={state} user={user} onStart={startRoom} onLeave={onLeave} starting={starting} />;
+    return <WaitingRoom state={state} user={user} onStart={startRoom} onLeave={onLeave} onRefresh={refreshState} refreshing={refreshing} starting={starting} />;
   }
 
   if (currentRoom?.status === 'finished') {

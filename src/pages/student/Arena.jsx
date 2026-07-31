@@ -777,7 +777,6 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const [gameOver, setGameOver] = useState(false);
   const [isWaiting, setIsWaiting] = useState(!room.isPractice);
   const [currentPlayers, setCurrentPlayers] = useState(room.current_players || 1);
-  const [refreshingRoom, setRefreshingRoom] = useState(false);
   const expectedMax = room.max_players || MODE_CONFIG[room.mode]?.maxPlayers || 2;
   const correctCountRef = useRef(0);
   const timeLeftRef = useRef(30);
@@ -802,23 +801,6 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
     }, 3000);
     return () => clearInterval(interval);
   }, [isWaiting, room.id, room.max_players, room.mode, room.isPractice]);
-
-  const refreshRoom = useCallback(async () => {
-    if (refreshingRoom || room.isPractice) return;
-    setRefreshingRoom(true);
-    try {
-      const data = await apiCall(`/api/arena/room/${room.id}`);
-      if (data.success && data.room) {
-        const nextPlayers = data.room.current_players || 0;
-        setCurrentPlayers(nextPlayers);
-        if (data.room.status === 'playing' || nextPlayers >= expectedMax) setIsWaiting(false);
-      }
-    } catch (err) {
-      console.warn('Room refresh error:', err.message);
-    } finally {
-      setRefreshingRoom(false);
-    }
-  }, [expectedMax, refreshingRoom, room.id, room.isPractice]);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -942,15 +924,6 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
           </div>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
-            <IconButton
-              onClick={refreshRoom}
-              disabled={refreshingRoom}
-              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text-light hover:text-viet-green sm:col-span-2"
-              title={t('arena.browser.refresh')}
-            >
-              <RefreshCw className={`h-5 w-5 ${refreshingRoom ? 'animate-spin' : ''}`} />
-              {refreshingRoom ? t('arena.browser.scanning') : t('arena.browser.refresh')}
-            </IconButton>
             <IconButton onClick={onLeave} className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text-light hover:text-red-500">
               <LogOut className="h-5 w-5" />
               {t('arena.room.waiting.exit_btn')}
