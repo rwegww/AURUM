@@ -1,11 +1,12 @@
-﻿import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
-import { Settings as SettingsIcon, FlaskConical } from 'lucide-react';
+import { Settings as SettingsIcon, FlaskConical, Droplet, Wind, Hexagon } from 'lucide-react';
+import { chemicals } from '@/data/reactions/chemicals';
 
 const ProfileCard = ({ title, value, icon, color }) => (
   <motion.div
@@ -212,20 +213,51 @@ const Profile = () => {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
             {unlockedChemicals.length > 0 ? (
-              unlockedChemicals.map((formula, i) => (
-                <motion.div
-                  key={`${formula}-${i}`}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="bg-white p-6 rounded-3xl border border-viet-border flex flex-col items-center gap-3 hover:border-viet-green transition-all shadow-sm"
-                >
-                  <div className="w-12 h-12 bg-viet-green/10 rounded-2xl flex items-center justify-center">
-                    <span className="text-xl font-black text-viet-green">{formula}</span>
-                  </div>
-                  <span className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest leading-none">{t('profile.collection.status')}</span>
-                </motion.div>
-              ))
+              unlockedChemicals.map((formula, i) => {
+                const chemData = chemicals.find(c => c.id.toUpperCase() === formula.toUpperCase() || c.formula.toUpperCase() === formula.toUpperCase());
+                
+                const chemColor = chemData?.color || '#76c034';
+                const IconComponent = chemData?.state === 'gas' ? Wind : chemData?.state === 'liquid' ? Droplet : Hexagon;
+                
+                return (
+                  <motion.div
+                    key={`${formula}-${i}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    whileHover={{ y: -5, scale: 1.05 }}
+                    transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 20 }}
+                    className="relative bg-white p-5 rounded-[24px] border border-slate-100 flex flex-col items-center gap-4 transition-all overflow-hidden group cursor-pointer shadow-sm hover:shadow-lg hover:border-slate-200"
+                    style={{
+                      boxShadow: `0 4px 20px -5px ${chemColor}30`
+                    }}
+                  >
+                    {/* Background Glow */}
+                    <div 
+                      className="absolute top-0 left-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                      style={{ background: `radial-gradient(circle at 50% 0%, ${chemColor}15, transparent 70%)` }}
+                    />
+                    
+                    <div 
+                      className="w-14 h-14 rounded-[20px] flex items-center justify-center relative z-10 shadow-sm border border-white/50 group-hover:rotate-12 transition-transform duration-300"
+                      style={{ background: `linear-gradient(135deg, ${chemColor}20, ${chemColor}40)` }}
+                    >
+                      <IconComponent className="w-7 h-7 text-slate-700" strokeWidth={1.5} />
+                    </div>
+                    
+                    <div className="text-center relative z-10 w-full">
+                      <h4 className="text-lg font-black text-slate-800 leading-tight tracking-tight mb-1 truncate px-1">
+                        {chemData?.formula || formula}
+                      </h4>
+                      <p 
+                        className="text-[9px] font-black uppercase tracking-widest truncate w-full px-2"
+                        style={{ color: chemData?.color && chemData.color !== '#ffffff' ? chemData.color : '#94a3b8' }}
+                      >
+                        {chemData?.name || t('profile.collection.status')}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })
             ) : (
               <div className="col-span-full py-16 text-center bg-white rounded-[40px] border-2 border-dashed border-viet-border flex flex-col items-center gap-6">
                 <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-4xl"><FlaskConical className="w-10 h-10 text-slate-400" /></div>
