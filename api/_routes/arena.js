@@ -704,7 +704,9 @@ router.get('/questions/:difficulty', async (req, res) => {
 
 router.get('/realtime-token', auth, async (req, res) => {
   try {
-    const secret = process.env.SUPABASE_JWT_SECRET || (process.env.NODE_ENV !== 'production' ? process.env.JWT_SECRET : null);
+    // This token is consumed by Supabase Realtime and must be signed with the
+    // project's JWT secret. The application's JWT_SECRET is unrelated.
+    const secret = process.env.SUPABASE_JWT_SECRET;
     if (!secret) {
       return res.status(500).json({ success: false, message: 'Thiếu SUPABASE_JWT_SECRET để cấp realtime token.' });
     }

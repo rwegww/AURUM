@@ -998,9 +998,11 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
 
     const setupRealtime = async () => {
       try {
-        const tokenData = await apiCall('/api/arena/realtime-token');
-        if (!active) return;
-        supabase.realtime.setAuth(tokenData.token);
+        // Arena uses the authenticated API for the full room state. Do not
+        // attach the app's custom JWT to Supabase Realtime: it is not signed
+        // with the Supabase project secret and causes CHANNEL_ERROR. The room
+        // table is publicly readable while waiting, and polling below keeps
+        // the player list in sync even when Realtime is unavailable.
         channel = supabase
           .channel(`arena-room-${room.id}`)
           .on('postgres_changes', {
@@ -1008,12 +1010,6 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
             schema: 'public',
             table: 'phong_dau',
             filter: `id=eq.${room.id}`,
-          }, handleSync)
-          .on('postgres_changes', {
-            event: '*',
-            schema: 'public',
-            table: 'nguoi_choi',
-            filter: `phong_dau_id=eq.${room.id}`,
           }, handleSync)
           .subscribe((status) => {
             if (status === 'SUBSCRIBED' && active) {
