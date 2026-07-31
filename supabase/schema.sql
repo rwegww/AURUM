@@ -881,6 +881,125 @@ $$;
 
 DROP FUNCTION IF EXISTS public.join_arena_room(text);
 
+CREATE OR REPLACE FUNCTION public.cleanup_user_arena_memberships(
+  p_user_id text,
+  p_keep_room_id text
+)
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  old_room record;
+  remaining_count integer;
+  next_host_id text;
+BEGIN
+  FOR old_room IN
+    SELECT room_row.id, room_row.status, room_row.chu_phong_id
+    FROM public.phong_dau room_row
+    JOIN public.nguoi_choi player_row
+      ON player_row.phong_dau_id = room_row.id
+    WHERE player_row.nguoi_dung_id = p_user_id
+      AND player_row.status IN ('joined', 'ready', 'playing')
+      AND (p_keep_room_id IS NULL OR room_row.id <> p_keep_room_id)
+    ORDER BY room_row.id
+    FOR UPDATE OF room_row
+  LOOP
+    UPDATE public.nguoi_choi
+    SET status = 'left', xem_cuoi_luc = pg_catalog.now()
+    WHERE phong_dau_id = old_room.id
+      AND nguoi_dung_id = p_user_id
+      AND status IN ('joined', 'ready', 'playing');
+
+    SELECT
+      count(*)::integer,
+      (array_agg(player_row.nguoi_dung_id ORDER BY player_row.tham_gia_luc))[1]
+    INTO remaining_count, next_host_id
+    FROM public.nguoi_choi player_row
+    WHERE player_row.phong_dau_id = old_room.id
+      AND player_row.status IN ('joined', 'ready', 'playing');
+
+    IF remaining_count = 0 THEN
+      IF old_room.status = 'waiting' THEN
+        DELETE FROM public.phong_dau WHERE id = old_room.id;
+      ELSIF old_room.status = 'playing' THEN
+        UPDATE public.phong_dau
+        SET status = 'finished',
+            so_nguoi_hien_tai = 0,
+            ket_thuc_luc = pg_catalog.now(),
+            vong_ket_thuc_luc = pg_catalog.now(),
+            nguoi_thang_id = NULL
+        WHERE id = old_room.id;
+      END IF;
+    ELSE
+      UPDATE public.phong_dau
+      SET so_nguoi_hien_tai = remaining_count,
+          chu_phong_id = CASE
+            WHEN old_room.chu_phong_id = p_user_id AND next_host_id IS NOT NULL THEN next_host_id
+            ELSE chu_phong_id
+          END
+      WHERE id = old_room.id;
+    END IF;
+  END LOOP;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.create_arena_room(
+  p_room_id text,
+  p_name text,
+  p_user_id text,
+  p_username text,
+  p_avatar_seed text,
+  p_mode text,
+  p_difficulty text,
+  p_max_players integer,
+  p_is_practice boolean
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  created_room public.phong_dau%ROWTYPE;
+BEGIN
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('aurum-arena-membership', 0));
+  PERFORM public.cleanup_user_arena_memberships(p_user_id, NULL);
+
+  INSERT INTO public.phong_dau (
+    id, ten, chu_phong_id, che_do, do_kho, status,
+    so_nguoi_toi_da, so_nguoi_hien_tai, la_luyen_tap
+  )
+  VALUES (
+    p_room_id,
+    COALESCE(NULLIF(pg_catalog.btrim(p_name), ''), 'Arena ' || p_room_id),
+    p_user_id,
+    p_mode,
+    p_difficulty,
+    'waiting',
+    p_max_players,
+    1,
+    p_is_practice
+  )
+  RETURNING * INTO created_room;
+
+  INSERT INTO public.nguoi_choi (
+    phong_dau_id, nguoi_dung_id, username, avatar_seed, status, xem_cuoi_luc
+  )
+  VALUES (
+    p_room_id,
+    p_user_id,
+    COALESCE(NULLIF(pg_catalog.btrim(p_username), ''), 'Ẩn danh'),
+    COALESCE(NULLIF(pg_catalog.btrim(p_avatar_seed), ''), 'Aurum'),
+    CASE WHEN p_is_practice THEN 'ready' ELSE 'joined' END,
+    pg_catalog.now()
+  );
+
+  RETURN to_jsonb(created_room);
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION public.join_arena_room(
   p_room_id text,
   p_user_id text,
@@ -893,70 +1012,217 @@ SECURITY DEFINER
 SET search_path = ''
 AS $$
 DECLARE
+  target_room public.phong_dau%ROWTYPE;
   joined_room jsonb;
+  active_count integer;
+  already_joined boolean;
 BEGIN
-  SELECT to_jsonb(room_row.*) INTO joined_room
-  FROM public.phong_dau room_row
-  WHERE room_row.id = p_room_id
-    AND room_row.status = 'waiting'
-    AND EXISTS (
-      SELECT 1
-      FROM public.nguoi_choi player_row
-      WHERE player_row.phong_dau_id = p_room_id
-        AND player_row.nguoi_dung_id = p_user_id
-        AND player_row.status = 'joined'
-    );
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('aurum-arena-membership', 0));
 
-  IF joined_room IS NOT NULL THEN
-    RETURN joined_room;
-  END IF;
+  SELECT * INTO target_room
+  FROM public.phong_dau
+  WHERE id = p_room_id AND status = 'waiting'
+  FOR UPDATE;
 
-  UPDATE public.phong_dau
-  SET so_nguoi_hien_tai = COALESCE(so_nguoi_hien_tai, 0) + 1
-  WHERE id = p_room_id
-    AND status = 'waiting'
-    AND COALESCE(so_nguoi_hien_tai, 0) < COALESCE(so_nguoi_toi_da, 2)
-    AND NOT EXISTS (
-      SELECT 1
-      FROM public.nguoi_choi player_row
-      WHERE player_row.phong_dau_id = p_room_id
-        AND player_row.nguoi_dung_id = p_user_id
-        AND player_row.status = 'joined'
-    )
-  RETURNING to_jsonb(public.phong_dau.*) INTO joined_room;
-
-  IF joined_room IS NULL THEN
+  IF NOT FOUND OR target_room.la_luyen_tap THEN
     RETURN NULL;
   END IF;
 
+  SELECT
+    count(*)::integer,
+    COALESCE(bool_or(player_row.nguoi_dung_id = p_user_id), false)
+  INTO active_count, already_joined
+  FROM public.nguoi_choi player_row
+  WHERE player_row.phong_dau_id = p_room_id
+    AND player_row.status IN ('joined', 'ready', 'playing');
+
+  IF NOT already_joined AND active_count >= target_room.so_nguoi_toi_da THEN
+    RETURN NULL;
+  END IF;
+
+  PERFORM public.cleanup_user_arena_memberships(p_user_id, p_room_id);
+
   INSERT INTO public.nguoi_choi (
-    phong_dau_id,
-    nguoi_dung_id,
-    username,
-    avatar_seed,
-    status,
-    xem_cuoi_luc
+    phong_dau_id, nguoi_dung_id, username, avatar_seed, status, xem_cuoi_luc
   )
   VALUES (
     p_room_id,
     p_user_id,
-    COALESCE(NULLIF(trim(p_username), ''), 'Ẩn danh'),
-    COALESCE(NULLIF(trim(p_avatar_seed), ''), 'Aurum'),
+    COALESCE(NULLIF(pg_catalog.btrim(p_username), ''), 'Ẩn danh'),
+    COALESCE(NULLIF(pg_catalog.btrim(p_avatar_seed), ''), 'Aurum'),
     'joined',
-    now()
+    pg_catalog.now()
   )
   ON CONFLICT (phong_dau_id, nguoi_dung_id) DO UPDATE
   SET username = EXCLUDED.username,
       avatar_seed = EXCLUDED.avatar_seed,
       status = 'joined',
-      xem_cuoi_luc = now();
+      tham_gia_luc = pg_catalog.now(),
+      xem_cuoi_luc = pg_catalog.now();
+
+  SELECT count(*)::integer INTO active_count
+  FROM public.nguoi_choi player_row
+  WHERE player_row.phong_dau_id = p_room_id
+    AND player_row.status IN ('joined', 'ready', 'playing');
+
+  UPDATE public.phong_dau
+  SET so_nguoi_hien_tai = active_count
+  WHERE id = p_room_id
+  RETURNING to_jsonb(public.phong_dau.*) INTO joined_room;
 
   RETURN joined_room;
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION public.leave_arena_room(
+  p_room_id text,
+  p_user_id text
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  target_room public.phong_dau%ROWTYPE;
+  remaining_count integer;
+  next_host_id text;
+BEGIN
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('aurum-arena-membership', 0));
+
+  SELECT * INTO target_room
+  FROM public.phong_dau
+  WHERE id = p_room_id
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('deleted', true, 'current_players', 0);
+  END IF;
+
+  UPDATE public.nguoi_choi
+  SET status = 'left', xem_cuoi_luc = pg_catalog.now()
+  WHERE phong_dau_id = p_room_id
+    AND nguoi_dung_id = p_user_id
+    AND status IN ('joined', 'ready', 'playing');
+
+  SELECT
+    count(*)::integer,
+    (array_agg(player_row.nguoi_dung_id ORDER BY player_row.tham_gia_luc))[1]
+  INTO remaining_count, next_host_id
+  FROM public.nguoi_choi player_row
+  WHERE player_row.phong_dau_id = p_room_id
+    AND player_row.status IN ('joined', 'ready', 'playing');
+
+  IF remaining_count = 0 THEN
+    IF target_room.status = 'waiting' THEN
+      DELETE FROM public.phong_dau WHERE id = p_room_id;
+      RETURN jsonb_build_object('deleted', true, 'current_players', 0);
+    ELSIF target_room.status = 'playing' THEN
+      UPDATE public.phong_dau
+      SET status = 'finished',
+          so_nguoi_hien_tai = 0,
+          ket_thuc_luc = pg_catalog.now(),
+          vong_ket_thuc_luc = pg_catalog.now(),
+          nguoi_thang_id = NULL
+      WHERE id = p_room_id;
+      RETURN jsonb_build_object('deleted', false, 'finished', true, 'current_players', 0);
+    END IF;
+  END IF;
+
+  UPDATE public.phong_dau
+  SET so_nguoi_hien_tai = remaining_count,
+      chu_phong_id = CASE
+        WHEN target_room.chu_phong_id = p_user_id AND next_host_id IS NOT NULL THEN next_host_id
+        ELSE chu_phong_id
+      END
+  WHERE id = p_room_id;
+
+  RETURN jsonb_build_object(
+    'deleted', false,
+    'current_players', remaining_count,
+    'host_id', CASE
+      WHEN target_room.chu_phong_id = p_user_id AND next_host_id IS NOT NULL THEN next_host_id
+      ELSE target_room.chu_phong_id
+    END
+  );
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.start_arena_room(
+  p_room_id text,
+  p_user_id text,
+  p_started_at timestamp with time zone,
+  p_round_ends_at timestamp with time zone
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+  target_room public.phong_dau%ROWTYPE;
+  active_count integer;
+  started_room jsonb;
+BEGIN
+  PERFORM pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('aurum-arena-membership', 0));
+
+  SELECT * INTO target_room
+  FROM public.phong_dau
+  WHERE id = p_room_id
+  FOR UPDATE;
+
+  IF NOT FOUND OR target_room.status = 'finished' THEN
+    RETURN NULL;
+  END IF;
+
+  IF target_room.status = 'playing' THEN
+    RETURN to_jsonb(target_room);
+  END IF;
+
+  IF target_room.chu_phong_id <> p_user_id
+     OR COALESCE(pg_catalog.array_length(target_room.danh_sach_cau_hoi_id, 1), 0) = 0 THEN
+    RETURN NULL;
+  END IF;
+
+  SELECT count(*)::integer INTO active_count
+  FROM public.nguoi_choi player_row
+  WHERE player_row.phong_dau_id = p_room_id
+    AND player_row.status IN ('joined', 'ready', 'playing');
+
+  IF NOT target_room.la_luyen_tap AND active_count < target_room.so_nguoi_toi_da THEN
+    RETURN NULL;
+  END IF;
+
+  UPDATE public.phong_dau
+  SET status = 'playing',
+      so_nguoi_hien_tai = active_count,
+      vong_hien_tai = 0,
+      bat_dau_luc = p_started_at,
+      ket_thuc_luc = NULL,
+      nguoi_thang_id = NULL,
+      vong_bat_dau_luc = p_started_at,
+      vong_ket_thuc_luc = p_round_ends_at
+  WHERE id = p_room_id
+  RETURNING to_jsonb(public.phong_dau.*) INTO started_room;
+
+  UPDATE public.nguoi_choi
+  SET status = 'playing', xem_cuoi_luc = pg_catalog.now()
+  WHERE phong_dau_id = p_room_id
+    AND status IN ('joined', 'ready', 'playing');
+
+  RETURN started_room;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.cleanup_user_arena_memberships(text, text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.create_arena_room(text, text, text, text, text, text, text, integer, boolean) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.join_arena_room(text, text, text, text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.leave_arena_room(text, text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.start_arena_room(text, text, timestamp with time zone, timestamp with time zone) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.create_arena_room(text, text, text, text, text, text, text, integer, boolean) TO service_role;
 GRANT EXECUTE ON FUNCTION public.join_arena_room(text, text, text, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.leave_arena_room(text, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.start_arena_room(text, text, timestamp with time zone, timestamp with time zone) TO service_role;
 
 CREATE OR REPLACE FUNCTION public.sync_user_streak(user_id_text text)
 RETURNS jsonb
@@ -994,6 +1260,97 @@ $$;
 -- ---------------------------------------------------------------------------
 -- Indexes.
 -- ---------------------------------------------------------------------------
+-- Repair legacy Arena data before enforcing one active room per user.
+-- Supabase migrations run transactionally; this lock prevents concurrent
+-- Arena writes from inserting another duplicate between cleanup and indexing.
+LOCK TABLE public.phong_dau, public.nguoi_choi IN SHARE ROW EXCLUSIVE MODE;
+
+UPDATE public.nguoi_choi player_row
+SET status = 'finished', xem_cuoi_luc = now()
+FROM public.phong_dau room_row
+WHERE room_row.id = player_row.phong_dau_id
+  AND room_row.status = 'finished'
+  AND player_row.status IN ('joined', 'ready', 'playing');
+
+WITH ranked_memberships AS (
+  SELECT
+    player_row.phong_dau_id,
+    player_row.nguoi_dung_id,
+    row_number() OVER (
+      PARTITION BY player_row.nguoi_dung_id
+      ORDER BY
+        CASE WHEN room_row.status = 'playing' THEN 0 ELSE 1 END,
+        player_row.xem_cuoi_luc DESC,
+        player_row.tham_gia_luc DESC,
+        player_row.phong_dau_id DESC
+    ) AS membership_rank
+  FROM public.nguoi_choi player_row
+  JOIN public.phong_dau room_row ON room_row.id = player_row.phong_dau_id
+  WHERE player_row.status IN ('joined', 'ready', 'playing')
+)
+UPDATE public.nguoi_choi player_row
+SET status = 'left', xem_cuoi_luc = now()
+FROM ranked_memberships ranked
+WHERE ranked.membership_rank > 1
+  AND player_row.phong_dau_id = ranked.phong_dau_id
+  AND player_row.nguoi_dung_id = ranked.nguoi_dung_id;
+
+UPDATE public.phong_dau room_row
+SET so_nguoi_hien_tai = (
+  SELECT count(*)::integer
+  FROM public.nguoi_choi player_row
+  WHERE player_row.phong_dau_id = room_row.id
+    AND player_row.status IN ('joined', 'ready', 'playing')
+)
+WHERE room_row.status IN ('waiting', 'playing');
+
+UPDATE public.phong_dau room_row
+SET chu_phong_id = (
+  SELECT player_row.nguoi_dung_id
+  FROM public.nguoi_choi player_row
+  WHERE player_row.phong_dau_id = room_row.id
+    AND player_row.status IN ('joined', 'ready', 'playing')
+  ORDER BY player_row.tham_gia_luc
+  LIMIT 1
+)
+WHERE room_row.status IN ('waiting', 'playing')
+  AND NOT EXISTS (
+    SELECT 1
+    FROM public.nguoi_choi host_player
+    WHERE host_player.phong_dau_id = room_row.id
+      AND host_player.nguoi_dung_id = room_row.chu_phong_id
+      AND host_player.status IN ('joined', 'ready', 'playing')
+  )
+  AND EXISTS (
+    SELECT 1
+    FROM public.nguoi_choi active_player
+    WHERE active_player.phong_dau_id = room_row.id
+      AND active_player.status IN ('joined', 'ready', 'playing')
+  );
+
+DELETE FROM public.phong_dau room_row
+WHERE room_row.status = 'waiting'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM public.nguoi_choi player_row
+    WHERE player_row.phong_dau_id = room_row.id
+      AND player_row.status IN ('joined', 'ready', 'playing')
+  );
+
+UPDATE public.phong_dau room_row
+SET status = 'finished',
+    so_nguoi_hien_tai = 0,
+    ket_thuc_luc = now(),
+    vong_ket_thuc_luc = now(),
+    nguoi_thang_id = NULL
+WHERE room_row.status = 'playing'
+  AND NOT EXISTS (
+    SELECT 1
+    FROM public.nguoi_choi player_row
+    WHERE player_row.phong_dau_id = room_row.id
+      AND player_row.status IN ('joined', 'ready', 'playing')
+  );
+
 CREATE INDEX IF NOT EXISTS idx_nguoi_dung_phut_hoat_dong ON public.nguoi_dung (phut_hoat_dong DESC);
 CREATE INDEX IF NOT EXISTS idx_nguoi_dung_hoat_dong_cuoi_luc ON public.nguoi_dung (hoat_dong_cuoi_luc DESC);
 CREATE INDEX IF NOT EXISTS idx_nguoi_dung_role ON public.nguoi_dung (role);
@@ -1014,6 +1371,12 @@ CREATE INDEX IF NOT EXISTS idx_cau_hoi_dau_loai_game ON public.cau_hoi_dau (loai
 CREATE INDEX IF NOT EXISTS idx_cau_hoi_dau_dang_hoat_dong_do_kho ON public.cau_hoi_dau (dang_hoat_dong, do_kho);
 CREATE INDEX IF NOT EXISTS idx_phong_dau_chu_phong_id ON public.phong_dau (chu_phong_id);
 CREATE INDEX IF NOT EXISTS idx_nguoi_choi_nguoi_dung_id ON public.nguoi_choi (nguoi_dung_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_nguoi_choi_mot_phong_dang_hoat_dong
+  ON public.nguoi_choi (nguoi_dung_id)
+  WHERE status IN ('joined', 'ready', 'playing');
+CREATE INDEX IF NOT EXISTS idx_nguoi_choi_phong_dang_hoat_dong
+  ON public.nguoi_choi (phong_dau_id, tham_gia_luc)
+  WHERE status IN ('joined', 'ready', 'playing');
 CREATE INDEX IF NOT EXISTS idx_tra_loi_vong_phong_dau_thu_tu_vong ON public.tra_loi_vong (phong_dau_id, thu_tu_vong);
 CREATE INDEX IF NOT EXISTS idx_lich_su_dau_nguoi_dung_id ON public.lich_su_dau (nguoi_dung_id);
 CREATE INDEX IF NOT EXISTS idx_lich_su_dau_phong_dau_id ON public.lich_su_dau (phong_dau_id);
@@ -1398,13 +1761,20 @@ REVOKE ALL ON FUNCTION public.increment_active_minutes(text) FROM PUBLIC, anon, 
 REVOKE ALL ON FUNCTION public.increment_likes(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_material_view(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.claim_mission_reward(text, uuid) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.cleanup_user_arena_memberships(text, text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.create_arena_room(text, text, text, text, text, text, text, integer, boolean) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.join_arena_room(text, text, text, text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.leave_arena_room(text, text) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.start_arena_room(text, text, timestamp with time zone, timestamp with time zone) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.sync_user_streak(text) FROM PUBLIC, anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.handle_new_user() TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_likes(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_material_view(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.claim_mission_reward(text, uuid) TO service_role;
+GRANT EXECUTE ON FUNCTION public.create_arena_room(text, text, text, text, text, text, text, integer, boolean) TO service_role;
 GRANT EXECUTE ON FUNCTION public.join_arena_room(text, text, text, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.leave_arena_room(text, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.start_arena_room(text, text, timestamp with time zone, timestamp with time zone) TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_active_minutes(text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.sync_user_streak(text) TO service_role;
 

@@ -112,12 +112,25 @@ const questions = {
 };
 
 const arenaState = {
-  room: null,
+  rooms: new Map(),
   players: [],
   answers: [],
   insertedAnswers: [],
   history: [],
 };
+
+Object.defineProperty(arenaState, 'room', {
+  get() {
+    return arenaState.rooms.get('room-1') || arenaState.rooms.values().next().value || null;
+  },
+  set(value) {
+    if (!value) {
+      arenaState.rooms.clear();
+      return;
+    }
+    arenaState.rooms.set(value.id, value);
+  },
+});
 
 const tokenFor = (id) => jwt.sign({ id, role: nguoi_dung[id].role, sessionId }, process.env.JWT_SECRET);
 
@@ -125,6 +138,7 @@ const matchFilter = (ctx, column) => ctx.filters.find((filter) => filter.column 
 
 const matchesFilters = (row, ctx) => ctx.filters.every((filter) => {
   if (filter.op === 'neq') return row[filter.column] !== filter.value;
+  if (filter.op === 'in') return filter.value.includes(row[filter.column]);
   return row[filter.column] === filter.value;
 });
 
@@ -133,7 +147,7 @@ const listFor = (ctx) => {
     return Object.values(questions).filter((question) => matchesFilters(question, ctx));
   }
   if (ctx.table === 'phong_dau') {
-    return arenaState.room && matchesFilters(arenaState.room, ctx) ? [arenaState.room] : [];
+    return [...arenaState.rooms.values()].filter((room) => matchesFilters(room, ctx));
   }
   if (ctx.table === 'nguoi_choi') {
     return arenaState.players.filter((player) => matchesFilters(player, ctx));
@@ -158,8 +172,29 @@ const applyWrite = (ctx) => {
   }
 
   if (ctx.table === 'phong_dau' && ctx.action === 'update') {
-    arenaState.room = { ...arenaState.room, ...ctx.payload };
-    return [arenaState.room];
+    const updated = [];
+    for (const [roomId, room] of arenaState.rooms) {
+      if (!matchesFilters(room, ctx)) continue;
+      const nextRoom = { ...room, ...ctx.payload };
+      arenaState.rooms.set(roomId, nextRoom);
+      updated.push(nextRoom);
+    }
+    return updated;
+  }
+
+  if (ctx.table === 'phong_dau' && ctx.action === 'insert') {
+    const rows = Array.isArray(ctx.payload) ? ctx.payload : [ctx.payload];
+    rows.forEach((room) => arenaState.rooms.set(room.id, room));
+    return rows;
+  }
+
+  if (ctx.table === 'phong_dau' && ctx.action === 'delete') {
+    const deleted = [...arenaState.rooms.values()].filter((room) => matchesFilters(room, ctx));
+    deleted.forEach((room) => {
+      arenaState.rooms.delete(room.id);
+      arenaState.players = arenaState.players.filter((player) => player.phong_dau_id !== room.id);
+    });
+    return deleted;
   }
 
   if (ctx.table === 'nguoi_choi' && ctx.action === 'update') {
@@ -239,7 +274,10 @@ const createQueryBuilder = (table) => {
       ctx.filters.push({ column, value, op: 'neq' });
       return builder;
     }),
-    in: vi.fn(() => builder),
+    in: vi.fn((column, value) => {
+      ctx.filters.push({ column, value, op: 'in' });
+      return builder;
+    }),
     or: vi.fn(() => builder),
     not: vi.fn(() => builder),
     order: vi.fn(() => builder),
@@ -255,11 +293,120 @@ const supabase = {
   from: vi.fn((table) => createQueryBuilder(table)),
   auth: { getUser: vi.fn() },
   rpc: vi.fn(async (name, args) => {
-    if (name !== 'join_arena_room') return { data: arenaState.room, error: null };
-    if (!arenaState.room || arenaState.room.current_players >= arenaState.room.max_players) {
+    if (name === 'create_arena_room') {
+      const activeMemberships = arenaState.players.filter((player) => (
+        player.nguoi_dung_id === args.p_user_id
+        && ['joined', 'ready', 'playing'].includes(player.status)
+      ));
+      for (const membership of activeMemberships) {
+        arenaState.players = arenaState.players.map((player) => (
+          player === membership ? { ...player, status: 'left' } : player
+        ));
+        const remaining = arenaState.players.filter((player) => (
+          player.phong_dau_id === membership.phong_dau_id && player.status !== 'left'
+        ));
+        if (remaining.length === 0) arenaState.rooms.delete(membership.phong_dau_id);
+      }
+
+      const room = {
+        id: args.p_room_id,
+        ten: args.p_name,
+        chu_phong_id: args.p_user_id,
+        che_do: args.p_mode,
+        do_kho: args.p_difficulty,
+        status: 'waiting',
+        so_nguoi_toi_da: args.p_max_players,
+        so_nguoi_hien_tai: 1,
+        la_luyen_tap: args.p_is_practice,
+        danh_sach_cau_hoi_id: [],
+      };
+      arenaState.rooms.set(room.id, room);
+      arenaState.players.push({
+        phong_dau_id: room.id,
+        nguoi_dung_id: args.p_user_id,
+        username: args.p_username,
+        avatar_seed: args.p_avatar_seed,
+        status: args.p_is_practice ? 'ready' : 'joined',
+        score: 0,
+        so_cau_dung: 0,
+        vong_da_tra_loi: [],
+      });
+      return { data: room, error: null };
+    }
+
+    if (name === 'leave_arena_room') {
+      arenaState.players = arenaState.players.map((player) => (
+        player.phong_dau_id === args.p_room_id && player.nguoi_dung_id === args.p_user_id
+          ? { ...player, status: 'left' }
+          : player
+      ));
+      const remaining = arenaState.players.filter((player) => (
+        player.phong_dau_id === args.p_room_id && player.status !== 'left'
+      ));
+      if (remaining.length === 0) arenaState.rooms.delete(args.p_room_id);
+      return { data: { deleted: remaining.length === 0, current_players: remaining.length }, error: null };
+    }
+
+    if (name === 'start_arena_room') {
+      const targetRoom = arenaState.rooms.get(args.p_room_id);
+      if (!targetRoom || targetRoom.status === 'finished') return { data: null, error: null };
+      if (targetRoom.status === 'playing') return { data: targetRoom, error: null };
+
+      const hostId = targetRoom.chu_phong_id ?? targetRoom.host_id;
+      const questionIds = targetRoom.danh_sach_cau_hoi_id ?? targetRoom.question_ids ?? [];
+      const activePlayers = arenaState.players.filter((player) => (
+        player.phong_dau_id === args.p_room_id
+        && ['joined', 'ready', 'playing'].includes(player.status)
+      ));
+      const maxPlayers = targetRoom.so_nguoi_toi_da ?? targetRoom.max_players ?? 2;
+      const isPractice = targetRoom.la_luyen_tap ?? targetRoom.is_practice ?? false;
+      if (hostId !== args.p_user_id || questionIds.length === 0) return { data: null, error: null };
+      if (!isPractice && activePlayers.length < maxPlayers) return { data: null, error: null };
+
+      const startedRoom = {
+        ...targetRoom,
+        status: 'playing',
+        ...(targetRoom.so_nguoi_hien_tai !== undefined
+          ? { so_nguoi_hien_tai: activePlayers.length }
+          : { current_players: activePlayers.length }),
+        vong_hien_tai: 0,
+        bat_dau_luc: args.p_started_at,
+        ket_thuc_luc: null,
+        nguoi_thang_id: null,
+        vong_bat_dau_luc: args.p_started_at,
+        vong_ket_thuc_luc: args.p_round_ends_at,
+      };
+      arenaState.rooms.set(args.p_room_id, startedRoom);
+      arenaState.players = arenaState.players.map((player) => (
+        player.phong_dau_id === args.p_room_id
+        && ['joined', 'ready', 'playing'].includes(player.status)
+          ? { ...player, status: 'playing' }
+          : player
+      ));
+      return { data: startedRoom, error: null };
+    }
+
+    if (name !== 'join_arena_room') return { data: null, error: null };
+    const targetRoom = arenaState.rooms.get(args.p_room_id);
+    if (!targetRoom) return { data: null, error: null };
+    const currentPlayers = targetRoom.so_nguoi_hien_tai ?? targetRoom.current_players ?? 0;
+    const maxPlayers = targetRoom.so_nguoi_toi_da ?? targetRoom.max_players ?? 2;
+    const alreadyJoined = arenaState.players.some((player) => (
+      player.phong_dau_id === args.p_room_id
+      && player.nguoi_dung_id === args.p_user_id
+      && player.status !== 'left'
+    ));
+    if (!alreadyJoined && currentPlayers >= maxPlayers) {
       return { data: null, error: null };
     }
-    arenaState.room = { ...arenaState.room, current_players: arenaState.room.current_players + 1 };
+    const nextCount = alreadyJoined ? currentPlayers : currentPlayers + 1;
+    const updatedRoom = {
+      ...targetRoom,
+      ...(targetRoom.so_nguoi_hien_tai !== undefined
+        ? { so_nguoi_hien_tai: nextCount }
+        : { current_players: nextCount }),
+    };
+    arenaState.rooms.set(args.p_room_id, updatedRoom);
     const existingIndex = arenaState.players.findIndex((player) => (
       player.phong_dau_id === args.p_room_id && player.nguoi_dung_id === args.p_user_id
     ));
@@ -275,7 +422,7 @@ const supabase = {
     };
     if (existingIndex >= 0) arenaState.players[existingIndex] = { ...arenaState.players[existingIndex], ...player };
     else arenaState.players.push(player);
-    return { data: arenaState.room, error: null };
+    return { data: updatedRoom, error: null };
   }),
 };
 
@@ -293,6 +440,7 @@ vi.mock('../api/lib/mailer.js', () => ({
 const { default: app } = await import('../api/index.js');
 
 const resetArenaState = (question = questions.calculation) => {
+  arenaState.rooms.clear();
   arenaState.room = {
     id: 'room-1',
     name: 'Arena test',
@@ -326,6 +474,68 @@ beforeEach(() => {
 });
 
 describe('arena mini game backend', () => {
+  it('keeps both players in the same room from create through refresh and start', async () => {
+    arenaState.rooms.clear();
+    arenaState.players = [];
+    arenaState.answers = [];
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0);
+
+    const created = await request(app)
+      .post('/api/arena/create')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ name: 'PK regression', mode: 'solo', difficulty: 'auto', max_players: 2 });
+
+    random.mockRestore();
+    const roomId = created.body.room?.id;
+    const joined = await request(app)
+      .post('/api/arena/join')
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`)
+      .send({ phong_dau_id: roomId });
+    const [hostRefresh, guestRefresh, guestRecoveredRoom] = await Promise.all([
+      request(app)
+        .get(`/api/arena/room/${roomId}/state`)
+        .set('Authorization', `Bearer ${tokenFor('student')}`),
+      request(app)
+        .get(`/api/arena/room/${roomId}/state`)
+        .set('Authorization', `Bearer ${tokenFor('opponent')}`),
+      request(app)
+        .get('/api/arena/active-room')
+        .set('Authorization', `Bearer ${tokenFor('opponent')}`),
+    ]);
+
+    expect(created.status).toBe(201);
+    expect(joined.status).toBe(200);
+    expect(joined.body.room.id).toBe(roomId);
+    for (const refreshed of [hostRefresh, guestRefresh]) {
+      expect(refreshed.status).toBe(200);
+      expect(refreshed.body.state.room.id).toBe(roomId);
+      expect(refreshed.body.state.room.current_players).toBe(2);
+      expect(refreshed.body.state.players.map((player) => player.nguoi_dung_id).sort())
+        .toEqual(['opponent', 'student']);
+    }
+    expect(guestRecoveredRoom.status).toBe(200);
+    expect(guestRecoveredRoom.body.room.id).toBe(roomId);
+
+    const started = await request(app)
+      .post(`/api/arena/room/${roomId}/start`)
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({});
+    const guestPlayingState = await request(app)
+      .get(`/api/arena/room/${roomId}/state`)
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`);
+
+    expect(started.status).toBe(200);
+    expect(started.body.state.room).toMatchObject({ id: roomId, status: 'playing' });
+    expect(supabase.rpc).toHaveBeenCalledWith('start_arena_room', expect.objectContaining({
+      p_room_id: roomId,
+      p_user_id: 'student',
+    }));
+    expect(guestPlayingState.status).toBe(200);
+    expect(guestPlayingState.body.state.room).toMatchObject({ id: roomId, status: 'playing' });
+    expect(guestPlayingState.body.state.currentQuestion.id)
+      .toBe(started.body.state.currentQuestion.id);
+  });
+
   it('joins a room atomically so the host state contains the new player', async () => {
     resetArenaState();
     arenaState.room.status = 'waiting';
@@ -347,6 +557,143 @@ describe('arena mini game backend', () => {
     expect(hostState.body.state.players.map((player) => player.nguoi_dung_id))
       .toEqual(expect.arrayContaining(['student', 'opponent']));
     expect(hostState.body.state.room.current_players).toBe(2);
+  });
+
+  it('moves a player out of an old room before joining the requested room', async () => {
+    resetArenaState();
+    arenaState.room.status = 'waiting';
+    arenaState.room.current_players = 1;
+    arenaState.room.la_luyen_tap = false;
+    arenaState.players = [arenaState.players[0]];
+    arenaState.rooms.set('room-old', {
+      id: 'room-old',
+      name: 'Old room',
+      chu_phong_id: 'opponent',
+      mode: 'solo',
+      status: 'waiting',
+      max_players: 2,
+      current_players: 1,
+      la_luyen_tap: false,
+    });
+    arenaState.players.push({
+      phong_dau_id: 'room-old',
+      nguoi_dung_id: 'opponent',
+      username: 'Opponent',
+      status: 'joined',
+    });
+
+    const joined = await request(app)
+      .post('/api/arena/join')
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`)
+      .send({ phong_dau_id: 'room-1' });
+
+    const hostState = await request(app)
+      .get('/api/arena/room/room-1/state')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(joined.status).toBe(200);
+    expect(joined.body.room.id).toBe('room-1');
+    expect(arenaState.rooms.has('room-old')).toBe(false);
+    expect(hostState.body.state.room.id).toBe('room-1');
+    expect(hostState.body.state.players.map((player) => player.nguoi_dung_id).sort())
+      .toEqual(['opponent', 'student']);
+  });
+
+  it('keeps the current room when joining a full room fails', async () => {
+    resetArenaState();
+    arenaState.room.status = 'waiting';
+    arenaState.room.current_players = 2;
+    arenaState.room.max_players = 2;
+    arenaState.room.la_luyen_tap = false;
+    arenaState.players = [
+      arenaState.players[0],
+      {
+        phong_dau_id: 'room-1',
+        nguoi_dung_id: 'occupant',
+        username: 'Occupant',
+        status: 'joined',
+      },
+    ];
+    arenaState.rooms.set('room-old', {
+      id: 'room-old',
+      name: 'Old room',
+      chu_phong_id: 'opponent',
+      mode: 'solo',
+      status: 'waiting',
+      max_players: 2,
+      current_players: 1,
+      la_luyen_tap: false,
+    });
+    arenaState.players.push({
+      phong_dau_id: 'room-old',
+      nguoi_dung_id: 'opponent',
+      username: 'Opponent',
+      status: 'joined',
+    });
+
+    const joined = await request(app)
+      .post('/api/arena/join')
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`)
+      .send({ phong_dau_id: 'room-1' });
+
+    expect(joined.status).toBe(400);
+    expect(arenaState.rooms.has('room-old')).toBe(true);
+    expect(arenaState.players).toContainEqual(expect.objectContaining({
+      phong_dau_id: 'room-old',
+      nguoi_dung_id: 'opponent',
+      status: 'joined',
+    }));
+    expect(arenaState.players).not.toContainEqual(expect.objectContaining({
+      phong_dau_id: 'room-1',
+      nguoi_dung_id: 'opponent',
+    }));
+  });
+
+  it('keeps only the newest room when the same user creates twice', async () => {
+    const random = vi.spyOn(Math, 'random')
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.1);
+
+    const first = await request(app)
+      .post('/api/arena/create')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ name: 'First', mode: 'solo', difficulty: 'auto' });
+    const second = await request(app)
+      .post('/api/arena/create')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ name: 'Second', mode: 'solo', difficulty: 'auto' });
+
+    random.mockRestore();
+    expect(first.status).toBe(201);
+    expect(second.status).toBe(201);
+    expect(second.body.room.id).not.toBe(first.body.room.id);
+    expect(arenaState.rooms.has(first.body.room.id)).toBe(false);
+    expect(arenaState.rooms.has(second.body.room.id)).toBe(true);
+    expect(arenaState.players.filter((player) => (
+      player.nguoi_dung_id === 'student' && ['joined', 'ready', 'playing'].includes(player.status)
+    ))).toHaveLength(1);
+  });
+
+  it('derives room count from active player rows and rejects a stale 2/2 counter', async () => {
+    resetArenaState();
+    arenaState.room.status = 'waiting';
+    arenaState.room.current_players = 2;
+    arenaState.room.max_players = 2;
+    arenaState.room.la_luyen_tap = false;
+    arenaState.players = [arenaState.players[0]];
+
+    const state = await request(app)
+      .get('/api/arena/room/room-1/state')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+    const started = await request(app)
+      .post('/api/arena/room/room-1/start')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(state.status).toBe(200);
+    expect(state.body.state.room.current_players).toBe(1);
+    expect(state.body.state.players).toHaveLength(1);
+    expect(started.status).toBe(400);
+    expect(started.body.message).toContain('Chưa đủ người chơi');
   });
 
   it('issues a short lived Supabase Realtime compatible token', async () => {
@@ -401,6 +748,36 @@ describe('arena mini game backend', () => {
     expect(res.body.state.room.status).toBe('playing');
     expect(res.body.state.currentQuestion.answer).toBeUndefined();
     expect(arenaState.room.danh_sach_cau_hoi_id.length).toBeGreaterThan(0);
+  });
+
+  it('handles concurrent host start requests idempotently', async () => {
+    resetArenaState(questions.calculation);
+    arenaState.room.status = 'waiting';
+    arenaState.room.la_luyen_tap = false;
+    arenaState.room.danh_sach_cau_hoi_id = Array(10).fill(questions.calculation.id);
+    arenaState.players = arenaState.players.map((player) => ({ ...player, status: 'joined' }));
+
+    const starts = await Promise.all([
+      request(app)
+        .post('/api/arena/room/room-1/start')
+        .set('Authorization', `Bearer ${tokenFor('student')}`)
+        .send({}),
+      request(app)
+        .post('/api/arena/room/room-1/start')
+        .set('Authorization', `Bearer ${tokenFor('student')}`)
+        .send({}),
+    ]);
+
+    for (const started of starts) {
+      expect(started.status).toBe(200);
+      expect(started.body.state.room).toMatchObject({ id: 'room-1', status: 'playing' });
+      expect(started.body.state.currentQuestion.id).toBe(questions.calculation.id);
+    }
+    expect(arenaState.players.filter((player) => (
+      player.phong_dau_id === 'room-1' && player.status === 'playing'
+    ))).toHaveLength(2);
+    expect(supabase.rpc.mock.calls.filter(([name]) => name === 'start_arena_room').length)
+      .toBeGreaterThanOrEqual(1);
   });
 
   it.each([

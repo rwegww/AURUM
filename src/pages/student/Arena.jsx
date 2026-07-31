@@ -1186,6 +1186,7 @@ const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, 
 
 const Arena = () => {
   const { user, refreshUser } = useAuth();
+  const userId = user?.id;
   const { t } = useTranslation();
   const [activeRoom, setActiveRoom] = useState(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -1193,9 +1194,70 @@ const Arena = () => {
   const [matchResult, setMatchResult] = useState(null);
   const [isSearchingMatch, setIsSearchingMatch] = useState(false);
   const searchInterval = useRef(null);
+  const searchGenerationRef = useRef(0);
+  const searchRequestRef = useRef(null);
+  const roomActionRef = useRef(null);
+
+  const cancelMatchmaking = useCallback(() => {
+    searchGenerationRef.current += 1;
+    if (searchInterval.current) {
+      clearInterval(searchInterval.current);
+      searchInterval.current = null;
+    }
+    setIsSearchingMatch(false);
+  }, []);
+
+  const waitForMatchmakingToStop = useCallback(async () => {
+    cancelMatchmaking();
+    const pendingRequest = searchRequestRef.current;
+    if (pendingRequest) {
+      try {
+        await pendingRequest;
+      } catch {
+        // The manual room action below remains authoritative.
+      }
+    }
+  }, [cancelMatchmaking]);
+
+  const activateRoom = useCallback((nextRoom) => {
+    if (!nextRoom?.id) throw new Error('Máy chủ không trả về mã phòng hợp lệ.');
+    cancelMatchmaking();
+    setActiveRoom({ ...nextRoom, asModerator: false });
+  }, [cancelMatchmaking]);
+
+  const clearActiveRoom = useCallback(() => {
+    cancelMatchmaking();
+    setActiveRoom(null);
+  }, [cancelMatchmaking]);
+
+  useEffect(() => {
+    if (!userId || typeof window === 'undefined') return undefined;
+    let active = true;
+    const controller = new AbortController();
+    const restoreGeneration = searchGenerationRef.current;
+
+    apiCall('/api/arena/active-room', { cache: 'no-store', signal: controller.signal })
+      .then((data) => {
+        if (!active || restoreGeneration !== searchGenerationRef.current) return;
+        if (data.room?.id) activateRoom(data.room);
+      })
+      .catch((error) => {
+        if (error.name !== 'AbortError') {
+          console.warn('Không thể khôi phục phòng Arena:', error.message);
+        }
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [activateRoom, userId]);
 
   const handlePractice = async () => {
+    if (roomActionRef.current) return;
+    roomActionRef.current = 'practice';
     try {
+      await waitForMatchmakingToStop();
       const data = await apiCall('/api/arena/create', {
         method: 'POST',
         body: JSON.stringify({
@@ -1206,20 +1268,26 @@ const Arena = () => {
           is_practice: true,
         }),
       });
-      setActiveRoom({ ...data.room, isPractice: true, asModerator: false });
+      activateRoom({ ...data.room, isPractice: true });
     } catch (err) {
       alert(err.message || 'Không thể tạo phòng luyện tập Arena.');
+    } finally {
+      roomActionRef.current = null;
     }
   };
 
   useEffect(() => {
     return () => {
+      searchGenerationRef.current += 1;
       if (searchInterval.current) clearInterval(searchInterval.current);
     };
   }, []);
 
   const handleCreateRoom = async (formData) => {
+    if (roomActionRef.current) return;
+    roomActionRef.current = 'create';
     try {
+      await waitForMatchmakingToStop();
       const max_players = MODE_CONFIG[formData.mode]?.maxPlayers || 2;
       const data = await apiCall('/api/arena/create', {
         method: 'POST',
@@ -1230,41 +1298,46 @@ const Arena = () => {
           max_players,
         }),
       });
-      setActiveRoom({ ...data.room, max_players, asModerator: false });
+      activateRoom({ ...data.room, max_players });
       setIsCreateModalOpen(false);
     } catch (err) {
       console.warn('Không thể tạo phòng qua API:', err.message);
       alert(err.message || 'Không thể tạo phòng Arena.');
-      return;
+    } finally {
+      roomActionRef.current = null;
     }
   };
 
   const handleFindMatch = (modeParam) => {
-    if (isSearchingMatch) {
-      clearInterval(searchInterval.current);
-      searchInterval.current = null;
-      setIsSearchingMatch(false);
+    if (searchInterval.current || isSearchingMatch) {
+      cancelMatchmaking();
       return;
     }
+    if (roomActionRef.current) return;
 
+    const generation = searchGenerationRef.current + 1;
+    searchGenerationRef.current = generation;
     setIsSearchingMatch(true);
 
     const checkMatch = async () => {
+      if (generation !== searchGenerationRef.current || searchRequestRef.current) return;
+      const request = apiCall('/api/arena/find-match', {
+        method: 'POST',
+        body: JSON.stringify(modeParam ? { mode: modeParam } : {}),
+      });
+      searchRequestRef.current = request;
       try {
-        const data = await apiCall('/api/arena/find-match', {
-          method: 'POST',
-          body: JSON.stringify(modeParam ? { mode: modeParam } : {}),
-        });
-        if (data.found) {
-          setIsSearchingMatch(false);
-          if (searchInterval.current) {
-            clearInterval(searchInterval.current);
-            searchInterval.current = null;
-          }
-          setActiveRoom({ ...data.room, asModerator: false });
+        const data = await request;
+        if (generation !== searchGenerationRef.current) return;
+        if (data.found && data.room?.id) {
+          activateRoom(data.room);
         }
       } catch (err) {
-        console.warn('Lỗi tìm trận:', err.message);
+        if (generation === searchGenerationRef.current) {
+          console.warn('Lỗi tìm trận:', err.message);
+        }
+      } finally {
+        if (searchRequestRef.current === request) searchRequestRef.current = null;
       }
     };
 
@@ -1273,22 +1346,32 @@ const Arena = () => {
   };
 
   const handleJoinRoom = async (code) => {
+    if (roomActionRef.current) return;
+    roomActionRef.current = 'join';
     try {
+      await waitForMatchmakingToStop();
+      const requestedRoomId = String(code || '').trim();
+      if (!requestedRoomId) throw new Error('Vui lòng nhập mã phòng.');
       const data = await apiCall('/api/arena/join', {
         method: 'POST',
-        body: JSON.stringify({ phong_dau_id: code }),
+        body: JSON.stringify({ phong_dau_id: requestedRoomId }),
       });
-      setActiveRoom({ ...data.room, asModerator: false });
+      if (String(data.room?.id) !== requestedRoomId) {
+        throw new Error('Máy chủ trả về sai phòng. Vui lòng thử lại.');
+      }
+      activateRoom(data.room);
       setIsBrowserOpen(false);
     } catch (err) {
       alert(err.message || t('arena.room.join_error'));
+    } finally {
+      roomActionRef.current = null;
     }
   };
 
   const handleLeaveRoom = useCallback(async () => {
     if (!activeRoom) return;
     const roomId = activeRoom.id;
-    setActiveRoom(null);
+    clearActiveRoom();
     try {
       await apiCall('/api/arena/leave', {
         method: 'POST',
@@ -1299,39 +1382,19 @@ const Arena = () => {
         console.warn('Lỗi khi rời phòng:', err.message);
       }
     }
-  }, [activeRoom]);
-
-  useEffect(() => {
-    const handleUnload = () => {
-      if (!activeRoom) return;
-      const token = localStorage.getItem('token');
-      const url = `${window.location.protocol}//${window.location.host}/api/arena/leave`;
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ phong_dau_id: activeRoom.id }),
-        keepalive: true,
-      });
-    };
-
-    window.addEventListener('beforeunload', handleUnload);
-    return () => window.removeEventListener('beforeunload', handleUnload);
-  }, [activeRoom]);
+  }, [activeRoom, clearActiveRoom]);
 
   const handleMatchEnd = async ({ result, score, phong_dau_id, isPractice, serverFinalized }) => {
     if (serverFinalized) {
       setMatchResult({ result, score, ptsChange: 0, isPractice });
-      setActiveRoom(null);
+      clearActiveRoom();
       if (!isPractice) await refreshUser();
       return;
     }
 
     if (isPractice) {
       setMatchResult({ result, score, ptsChange: 0, isPractice: true });
-      setActiveRoom(null);
+      clearActiveRoom();
       return;
     }
     try {
@@ -1358,7 +1421,7 @@ const Arena = () => {
     if (activeRoom.asModerator) {
       return <ModeratorDashboard room={activeRoom} onLeave={handleLeaveRoom} />;
     }
-    return <ArenaBattleRoom user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
+    return <ArenaBattleRoom key={activeRoom.id} user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
   }
 
   return (

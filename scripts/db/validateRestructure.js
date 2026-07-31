@@ -177,7 +177,10 @@ const main = async () => {
   assert(paths.includes('/rpc/claim_mission_reward'), 'Expected claim_mission_reward RPC to be exposed.');
   assert(paths.includes('/rpc/increment_likes'), 'Expected increment_likes RPC to be exposed.');
   assert(paths.includes('/rpc/increment_material_view'), 'Expected increment_material_view RPC to be exposed.');
+  assert(paths.includes('/rpc/create_arena_room'), 'Expected create_arena_room RPC to be exposed.');
   assert(paths.includes('/rpc/join_arena_room'), 'Expected join_arena_room RPC to be exposed.');
+  assert(paths.includes('/rpc/leave_arena_room'), 'Expected leave_arena_room RPC to be exposed.');
+  assert(paths.includes('/rpc/start_arena_room'), 'Expected start_arena_room RPC to be exposed.');
 
   console.log('Vietnamese business schema validation passed.');
 };

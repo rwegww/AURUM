@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import Avatar from '@/components/common/Avatar';
 import AtomicModel from '@/components/common/AtomicModel';
-import { supabase } from '@/lib/supabase';
 
 const apiCall = async (url, options = {}) => {
   const token = localStorage.getItem('token');
@@ -791,7 +790,7 @@ const Scoreboard = React.memo(({ players, currentUserId }) => {
   );
 });
 
-const WaitingRoom = ({ state, user, onStart, onLeave, onRefresh, refreshing, starting }) => {
+const WaitingRoom = ({ state, user, onStart, onLeave, onRefresh, refreshing, starting, feedback }) => {
   const room = state?.room || {};
   const players = state?.players || [];
   const isHost = room.chu_phong_id === user?.id;
@@ -869,6 +868,11 @@ const WaitingRoom = ({ state, user, onStart, onLeave, onRefresh, refreshing, sta
               </button>
             </div>
           </div>
+          {feedback?.message && (
+            <p className={`mt-3 rounded-xl px-4 py-3 text-sm font-bold ${feedback.type === 'error' ? 'bg-red-50 text-red-600' : 'bg-viet-green/10 text-viet-green'}`}>
+              {feedback.message}
+            </p>
+          )}
         </div>
     </div>
   );
@@ -974,29 +978,41 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const [submitting, setSubmitting] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [phan_hoi, setFeedback] = useState(null);
-  const serverOffsetRef = useRef(0);
+  const [serverOffset, setServerOffset] = useState(0);
   const advanceLockRef = useRef(null);
+  const refreshLockRef = useRef(false);
+  const startLockRef = useRef(false);
+  const stateRequestRef = useRef(0);
 
   const loadState = useCallback(async () => {
-    const data = await apiCall(`/api/arena/room/${room.id}/state`);
+    const requestId = stateRequestRef.current + 1;
+    stateRequestRef.current = requestId;
+    const data = await apiCall(`/api/arena/room/${room.id}/state`, { cache: 'no-store' });
+    if (requestId !== stateRequestRef.current) return null;
+    if (!data.state?.room || String(data.state.room.id) !== String(room.id)) {
+      throw new Error('Trạng thái phòng trả về không khớp mã phòng hiện tại.');
+    }
     if (data.state?.serverTime) {
-      serverOffsetRef.current = new Date(data.state.serverTime).getTime() - Date.now();
+      setServerOffset(new Date(data.state.serverTime).getTime() - Date.now());
     }
     setState(data.state);
     return data.state;
   }, [room.id]);
 
   const refreshState = useCallback(async () => {
-    if (refreshing) return;
+    if (refreshLockRef.current) return;
+    refreshLockRef.current = true;
     setRefreshing(true);
     try {
       await loadState();
+      setFeedback(null);
     } catch (error) {
       setFeedback({ type: 'error', message: error.message });
     } finally {
+      refreshLockRef.current = false;
       setRefreshing(false);
     }
-  }, [loadState, refreshing]);
+  }, [loadState]);
 
   useEffect(() => {
     let active = true;
@@ -1006,69 +1022,47 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       .finally(() => active && setLoading(false));
     return () => {
       active = false;
+      stateRequestRef.current += 1;
     };
   }, [loadState]);
 
+  // The authenticated API is the authoritative source for an Arena room.
+  // A single guarded poll avoids Realtime/RLS token mismatches and rejects
+  // out-of-order responses, so an older 1/2 response cannot overwrite 2/2.
   useEffect(() => {
-    let channel;
+    if (state?.room?.status === 'finished') return undefined;
     let active = true;
-    let syncTimeout = null;
+    let polling = false;
 
-    const handleSync = () => {
-      if (syncTimeout) clearTimeout(syncTimeout);
-      syncTimeout = setTimeout(() => {
-        if (active) loadState().catch((error) => console.warn('Arena sync error:', error.message));
-      }, 200 + Math.random() * 800);
-    };
-
-    const setupRealtime = async () => {
+    const sync = async ({ force = false } = {}) => {
+      if (!active || polling) return;
+      if (!force && document.visibilityState === 'hidden') return;
+      polling = true;
       try {
-        // Arena uses the authenticated API for the full room state. Do not
-        // attach the app's custom JWT to Supabase Realtime: it is not signed
-        // with the Supabase project secret and causes CHANNEL_ERROR. The room
-        // table is publicly readable while waiting, and polling below keeps
-        // the player list in sync even when Realtime is unavailable.
-        channel = supabase
-          .channel(`arena-room-${room.id}`)
-          .on('postgres_changes', {
-            event: '*',
-            schema: 'public',
-            table: 'phong_dau',
-            filter: `id=eq.${room.id}`,
-          }, handleSync)
-          .subscribe((status) => {
-            if (status === 'SUBSCRIBED' && active) {
-              handleSync();
-            }
-            if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-              console.warn('Arena realtime channel status:', status);
-            }
-          });
+        await loadState();
       } catch (error) {
-        console.warn('Arena realtime setup error:', error.message);
+        console.warn('Arena sync error:', error.message);
+      } finally {
+        polling = false;
       }
     };
 
-    setupRealtime();
+    const handleFocus = () => sync({ force: true });
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') sync({ force: true });
+    };
+
+    const pollInterval = setInterval(sync, 2000);
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('visibilitychange', handleVisibility);
+
     return () => {
       active = false;
-      if (syncTimeout) clearTimeout(syncTimeout);
-      if (channel) supabase.removeChannel(channel);
+      clearInterval(pollInterval);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('visibilitychange', handleVisibility);
     };
-  }, [loadState, room.id]);
-
-  // Fallback polling while in waiting room — ensures host sees new players
-  // even if Supabase Realtime fails to deliver postgres_changes events
-  useEffect(() => {
-    const roomStatus = state?.room?.status;
-    if (roomStatus !== 'waiting') return;
-
-    const pollInterval = setInterval(() => {
-      loadState().catch((error) => console.warn('Arena poll error:', error.message));
-    }, 3000);
-
-    return () => clearInterval(pollInterval);
-  }, [state?.room?.status, loadState]);
+  }, [loadState, state?.room?.status]);
 
   const advanceRoom = useCallback(async () => {
     const currentRoom = state?.room;
@@ -1080,23 +1074,33 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
     try {
       const data = await apiCall(`/api/arena/room/${room.id}/advance`, { method: 'POST' });
       if (data.state) {
+        stateRequestRef.current += 1;
         setState(data.state);
         setFeedback(null);
+      } else {
+        advanceLockRef.current = null;
       }
     } catch (error) {
+      advanceLockRef.current = null;
       console.warn('Arena advance skipped:', error.message);
     }
   }, [room.id, state?.room, user?.id]);
 
   const startRoom = async () => {
+    if (startLockRef.current) return;
+    startLockRef.current = true;
     setStarting(true);
     setFeedback(null);
     try {
       const data = await apiCall(`/api/arena/room/${room.id}/start`, { method: 'POST' });
-      if (data.state) setState(data.state);
+      if (data.state) {
+        stateRequestRef.current += 1;
+        setState(data.state);
+      }
     } catch (error) {
       setFeedback({ type: 'error', message: error.message });
     } finally {
+      startLockRef.current = false;
       setStarting(false);
     }
   };
@@ -1115,7 +1119,10 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
         type: data.isCorrect ? 'success' : 'error',
         message: data.isCorrect ? `Chính xác +${data.scoreAwarded}` : 'Chưa đúng, chờ hết lượt để xem đáp án.',
       });
-      if (data.state) setState(data.state);
+      if (data.state) {
+        stateRequestRef.current += 1;
+        setState(data.state);
+      }
     } catch (error) {
       setFeedback({ type: 'error', message: error.message });
     } finally {
@@ -1159,7 +1166,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   }
 
   if (currentRoom?.status === 'waiting') {
-    return <WaitingRoom state={state} user={user} onStart={startRoom} onLeave={onLeave} onRefresh={refreshState} refreshing={refreshing} starting={starting} />;
+    return <WaitingRoom state={state} user={user} onStart={startRoom} onLeave={onLeave} onRefresh={refreshState} refreshing={refreshing} starting={starting} feedback={phan_hoi} />;
   }
 
   if (currentRoom?.status === 'finished') {
@@ -1198,7 +1205,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
 
           <RoomTimer
             roundEndsAt={currentRoom?.status === 'playing' ? currentRoom?.round_ends_at : null}
-            serverOffset={serverOffsetRef.current}
+            serverOffset={serverOffset}
             timeLimitSeconds={currentTask?.timeLimitSeconds}
             progress={progress}
             onTimeUp={advanceRoom}
