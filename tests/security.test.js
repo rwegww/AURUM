@@ -91,6 +91,8 @@ const supabaseState = {
   insertAttempted: false,
   updateAttempted: false,
   insertedPost: null,
+  materialData: null,
+  deleteAttempted: false,
 };
 
 const matchFilter = (ctx, column) => ctx.filters.find((filter) => filter.column === column)?.value;
@@ -127,6 +129,16 @@ const resolveSingle = async (ctx) => {
 };
 
 const resolveMaybeSingle = async (ctx) => {
+  if (ctx.table === 'hoc_lieu') {
+    const materialId = matchFilter(ctx, 'id');
+    const creatorId = matchFilter(ctx, 'nguoi_tao_id');
+    const matches = supabaseState.materialData
+      && supabaseState.materialData.id === materialId
+      && (!creatorId || supabaseState.materialData.nguoi_tao_id === creatorId);
+    if (ctx.action === 'delete') supabaseState.deleteAttempted = true;
+    return { data: matches ? supabaseState.materialData : null, error: null };
+  }
+
   if (ctx.table === 'lop') {
     return supabaseState.classData ? { data: supabaseState.classData, error: null } : { data: null, error: null };
   }
@@ -225,6 +237,8 @@ beforeEach(() => {
   supabaseState.insertAttempted = false;
   supabaseState.updateAttempted = false;
   supabaseState.insertedPost = null;
+  supabaseState.materialData = null;
+  supabaseState.deleteAttempted = false;
   userModel.findById.mockImplementation(async (id) => nguoi_dung[id] || null);
   userModel.findOne.mockResolvedValue(null);
   userModel.comparePassword.mockResolvedValue(false);
@@ -627,6 +641,23 @@ describe('security acceptance matrix', () => {
       .set('Authorization', `Bearer ${tokenFor('outsider')}`);
 
     expect(res.status).toBe(403);
+  });
+
+  it('allows a teacher to delete only their own library material', async () => {
+    supabaseState.materialData = { id: 'material-1', nguoi_tao_id: 'teacher' };
+
+    const ownerResponse = await request(app)
+      .delete('/api/materials/material-1')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+    expect(ownerResponse.status).toBe(200);
+    expect(ownerResponse.body.id).toBe('material-1');
+
+    supabaseState.deleteAttempted = false;
+    const outsiderResponse = await request(app)
+      .delete('/api/materials/material-1')
+      .set('Authorization', `Bearer ${tokenFor('otherTeacher')}`);
+    expect(outsiderResponse.status).toBe(404);
+    expect(supabaseState.deleteAttempted).toBe(true);
   });
 
   it('rejects invalid class data before creating an admin approval request', async () => {

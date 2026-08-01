@@ -174,6 +174,34 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
+// Delete a material owned by the current teacher. Admins may remove any material.
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Chỉ giáo viên hoặc quản trị viên mới được xóa học liệu.' });
+    }
+
+    let query = supabase
+      .from('hoc_lieu')
+      .delete()
+      .eq('id', req.params.id);
+
+    if (req.user.role === 'teacher') {
+      query = query.eq('nguoi_tao_id', req.user.id);
+    }
+
+    const { data, error } = await query.select('id').maybeSingle();
+    if (error) throw error;
+    if (!data) {
+      return res.status(404).json({ message: 'Không tìm thấy học liệu hoặc bạn không có quyền xóa.' });
+    }
+
+    return res.json({ message: 'Đã xóa học liệu.', id: data.id });
+  } catch (err) {
+    return res.status(500).json({ message: 'Không thể xóa học liệu lúc này.', error: err.message });
+  }
+});
+
 // 3. Get Single Material & Increment View Count
 router.get('/:id', async (req, res) => {
   try {

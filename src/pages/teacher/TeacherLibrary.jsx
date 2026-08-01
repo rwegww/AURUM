@@ -10,6 +10,7 @@ import {
   FileText,
   Image as ImageIcon,
   Loader2,
+  Trash2,
   UploadCloud,
   X,
 } from 'lucide-react';
@@ -100,6 +101,8 @@ const TeacherLibrary = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [listNotice, setListNotice] = useState('');
 
   const isTeacher = user?.role === 'teacher';
   const isBusy = isSubmitting || isUploading;
@@ -243,6 +246,32 @@ const TeacherLibrary = () => {
     } finally {
       setIsUploading(false);
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteMaterial = async (material) => {
+    if (deletingId || material.created_by_user_id !== user?.id) return;
+    if (!window.confirm(`Xóa học liệu “${material.title}”? Các phản hồi liên quan cũng sẽ bị xóa.`)) return;
+
+    setDeletingId(material.id);
+    setListError('');
+    setListNotice('');
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
+      const response = await fetch(`/api/materials/${material.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.message || 'Không thể xóa học liệu.');
+
+      setMaterials((current) => current.filter((item) => item.id !== material.id));
+      setListNotice('Đã xóa học liệu khỏi thư viện.');
+    } catch (err) {
+      setListError(err.message || 'Không thể xóa học liệu.');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -476,6 +505,13 @@ const TeacherLibrary = () => {
               </div>
             )}
 
+            {listNotice && (
+              <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-2xl p-4 flex gap-3" role="status">
+                <CheckCircle2 size={18} className="shrink-0 mt-0.5" aria-hidden="true" />
+                <p className="text-xs font-bold">{listNotice}</p>
+              </div>
+            )}
+
             {listLoading ? (
               <div className="py-24 rounded-[32px] border-2 border-dashed border-slate-200 bg-white/60 flex flex-col items-center justify-center">
                 <Loader2 size={32} className="animate-spin text-viet-green mb-3" aria-hidden="true" />
@@ -529,13 +565,27 @@ const TeacherLibrary = () => {
                         </span>
                         <span>#{material.file_type || 'file'}</span>
                       </div>
-                      <Link
-                        to={`/library/${material.id}`}
-                        className="inline-flex items-center gap-1.5 text-[10px] font-black text-viet-green uppercase tracking-widest hover:text-viet-text transition-colors"
-                      >
-                        Xem
-                        <ExternalLink size={12} aria-hidden="true" />
-                      </Link>
+                      <div className="flex items-center gap-3">
+                        {material.created_by_user_id === user?.id && (
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteMaterial(material)}
+                            disabled={deletingId !== null}
+                            className="inline-flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
+                            aria-label={`Xóa học liệu ${material.title}`}
+                          >
+                            {deletingId === material.id ? <Loader2 size={12} className="animate-spin" aria-hidden="true" /> : <Trash2 size={12} aria-hidden="true" />}
+                            Xóa
+                          </button>
+                        )}
+                        <Link
+                          to={`/library/${material.id}`}
+                          className="inline-flex min-h-9 items-center gap-1.5 text-[10px] font-black text-viet-green uppercase tracking-widest hover:text-viet-text transition-colors"
+                        >
+                          Xem
+                          <ExternalLink size={12} aria-hidden="true" />
+                        </Link>
+                      </div>
                     </div>
                   </motion.article>
                 ))}
