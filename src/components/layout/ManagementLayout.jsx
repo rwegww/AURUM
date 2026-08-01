@@ -1,38 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import ManagementSidebar from '../navigation/ManagementSidebar';
 import { Menu, X, LogOut } from 'lucide-react';
 
 const ManagementLayout = ({ menuItems, title }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMenuButtonRef = useRef(null);
+  const mobileMenuRef = useRef(null);
 
   useEffect(() => {
     if (!mobileMenuOpen) return undefined;
+
     const closeOnEscape = (event) => {
-      if (event.key === 'Escape') setMobileMenuOpen(false);
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+        mobileMenuButtonRef.current?.focus();
+      }
     };
+    const closeOnOutsidePress = (event) => {
+      if (
+        !mobileMenuRef.current?.contains(event.target)
+        && !mobileMenuButtonRef.current?.contains(event.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+
     window.addEventListener('keydown', closeOnEscape);
-    return () => window.removeEventListener('keydown', closeOnEscape);
+    document.addEventListener('pointerdown', closeOnOutsidePress);
+    return () => {
+      window.removeEventListener('keydown', closeOnEscape);
+      document.removeEventListener('pointerdown', closeOnOutsidePress);
+    };
   }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia('(min-width: 768px)');
+    const closeMenuOnDesktop = (event) => {
+      if (event.matches) setMobileMenuOpen(false);
+    };
+
+    desktopQuery.addEventListener?.('change', closeMenuOnDesktop);
+    return () => desktopQuery.removeEventListener?.('change', closeMenuOnDesktop);
+  }, []);
 
   return (
     <div className="min-h-screen bg-viet-bg flex">
-      <ManagementSidebar menuItems={menuItems} title={title} />
+      <a
+        href="#management-main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-bold focus:text-viet-green focus:shadow-xl"
+      >
+        Chuyển đến nội dung chính
+      </a>
+
+      <ManagementSidebar key={user?.id || user?.username || 'management'} menuItems={menuItems} title={title} />
 
       <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-viet-border z-50 flex items-center justify-between px-4">
-        <div className="flex items-center gap-3 min-w-0">
-          <img src="/logo.png" alt="AURUM" className="w-8 h-8 object-contain shrink-0" />
+        <Link
+          to="/"
+          className={`flex flex-1 items-center gap-3 min-w-0 ${user?.role === 'teacher' ? 'pr-12' : ''}`}
+          aria-label="Về trang chủ AURUM"
+        >
+          <img src="/logo.png" alt="" aria-hidden="true" className="w-8 h-8 object-contain shrink-0" />
           <div className="min-w-0">
             <p className="text-sm font-black text-viet-text uppercase leading-none">AURUM</p>
             <p className="text-[10px] font-bold text-viet-text-light uppercase truncate">{title}</p>
           </div>
-        </div>
+        </Link>
         <button
+          ref={mobileMenuButtonRef}
           type="button"
           onClick={() => setMobileMenuOpen((value) => !value)}
-          className="w-10 h-10 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
+          className="w-10 h-10 shrink-0 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
           aria-label={mobileMenuOpen ? 'Đóng trình đơn' : 'Mở trình đơn'}
           aria-expanded={mobileMenuOpen}
           aria-controls="management-mobile-menu"
@@ -42,12 +83,12 @@ const ManagementLayout = ({ menuItems, title }) => {
       </header>
 
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/30" onClick={() => setMobileMenuOpen(false)}>
+        <div className="md:hidden fixed inset-0 z-40 bg-black/30">
           <nav
+            ref={mobileMenuRef}
             id="management-mobile-menu"
-            aria-label="Điều hướng quản lý"
-            className="absolute top-16 left-0 right-0 bg-white border-b border-viet-border shadow-xl p-4 space-y-2"
-            onClick={(event) => event.stopPropagation()}
+            aria-label={`Điều hướng ${title}`}
+            className="absolute top-16 left-0 right-0 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-white border-b border-viet-border shadow-xl p-4 space-y-2"
           >
             {menuItems.map((item, index) => (
               <NavLink
@@ -77,7 +118,7 @@ const ManagementLayout = ({ menuItems, title }) => {
       )}
       
       {/* Main Content Area */}
-      <main className="md:ml-64 min-w-0 flex-1 h-screen overflow-y-auto pt-16 md:pt-0">
+      <main id="management-main-content" tabIndex="-1" className="md:ml-64 min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0">
          <div className="pb-20">
             <Outlet />
          </div>

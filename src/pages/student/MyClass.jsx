@@ -24,6 +24,7 @@ const MyClass = () => {
   const [activeQuiz, setActiveQuiz] = useState(null);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
+  const [referenceTime, setReferenceTime] = useState(() => Date.now());
 
   const markAsRead = useCallback((classId) => {
     const lastReadData = JSON.parse(localStorage.getItem('classroom_last_read') || '{}');
@@ -33,6 +34,7 @@ const MyClass = () => {
   }, []);
 
   const selectClass = useCallback(async (cls) => {
+    setReferenceTime(Date.now());
     setSelectedClass(cls);
     markAsRead(cls.id);
     const token = localStorage.getItem('token');
@@ -89,7 +91,8 @@ const MyClass = () => {
   }, [selectClass]);
 
   useEffect(() => {
-    fetchClasses();
+    const timeout = window.setTimeout(fetchClasses, 0);
+    return () => window.clearTimeout(timeout);
   }, [fetchClasses]);
 
   const handleJoinClass = async (e) => {
@@ -193,6 +196,12 @@ const MyClass = () => {
     if (hours && remainingMinutes) return `${hours} giờ ${remainingMinutes} phút`;
     if (hours) return `${hours} giờ`;
     return `${remainingMinutes} phút`;
+  };
+
+  const hasAssignmentExpired = (assignment) => {
+    if (!assignment?.deadline) return false;
+    const deadline = new Date(assignment.deadline).getTime();
+    return Number.isFinite(deadline) && deadline <= referenceTime;
   };
 
   const isQuestionAnswered = (question, index) => {
@@ -465,6 +474,10 @@ const MyClass = () => {
                                       </div>
                                    </div>
                                 )}
+                            </div>
+                          ) : hasAssignmentExpired(post) ? (
+                            <div className="w-full py-4 bg-slate-100 text-slate-500 font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center border-2 border-slate-200">
+                              Đã hết hạn nộp bài
                             </div>
                           ) : post.questions && post.questions.length > 0 ? (
                             <button 

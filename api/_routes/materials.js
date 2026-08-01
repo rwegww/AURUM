@@ -1,8 +1,7 @@
 import express from 'express';
 import { supabase } from '../lib/supabase.js';
-import { auth } from '../_middleware/auth.js';
+import { auth, authenticateToken, extractBearerToken } from '../_middleware/auth.js';
 import User from '../models/User.js';
-import jwt from 'jsonwebtoken';
 
 
 const router = express.Router();
@@ -193,30 +192,24 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
     }
 
-    // Increment view count (fire and forget) if not explicitly disabled
+    // Increment atomically and return the current count so the UI is not stale.
     if (increment !== 'false') {
-      supabase.rpc('increment_material_view', { material_id: id }).then();
+      const { data: nextViewCount, error: viewError } = await supabase
+        .rpc('increment_material_view', { material_id: id });
+      if (viewError) {
+        console.warn('Không thể cập nhật lượt xem học liệu:', viewError.message);
+      } else if (Number.isFinite(Number(nextViewCount))) {
+        data.luot_xem = Number(nextViewCount);
+      }
     }
 
     // Try optional authentication to track crafting quest progress
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (token) {
       try {
-        let userId;
-        const decoded = (() => {
-          try { return jwt.verify(token, process.env.JWT_SECRET); } catch { return null; }
-        })();
-
-        if (decoded && decoded.id) {
-          userId = decoded.id;
-        } else {
-          const { data: sbData } = await supabase.auth.getUser(token);
-          if (sbData?.user) userId = sbData.user.id;
-        }
-
-        if (userId) {
-          await User.incrementCraftingTaskProgress(userId, 'interact_library', id);
-        }
+        extractBearerToken(req);
+        const { user } = await authenticateToken(token);
+        await User.incrementCraftingTaskProgress(user.id, 'interact_library', id);
       } catch (authErr) {
         console.warn('⚠️ [Materials] Optional auth tracking failed:', authErr.message);
       }
@@ -233,27 +226,14 @@ router.post('/:id/download', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const { data: material, error: fetchError } = await supabase
-      .from('hoc_lieu')
-      .select('luot_tai')
-      .eq('id', id)
-      .single();
-
-    if (fetchError && fetchError.code !== 'PGRST116') throw fetchError;
-    if (!material) {
-      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
-    }
-
-    const nextCount = Number(material?.luot_tai || 0) + 1;
-    const { data, error } = await supabase
-      .from('hoc_lieu')
-      .update({ luot_tai: nextCount })
-      .eq('id', id)
-      .select('luot_tai')
-      .single();
+    const { data: nextCount, error } = await supabase
+      .rpc('increment_material_download', { material_id: id });
 
     if (error) throw error;
-    res.json({ download_count: data.luot_tai });
+    if (nextCount === null || nextCount === undefined) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
+    }
+    res.json({ download_count: Number(nextCount) });
   } catch (err) {
     res.status(500).json({ message: 'Không thể cập nhật lượt tải tài liệu.', error: err.message });
   }
@@ -355,7 +335,7 @@ router.get('/:id/feedback', async (req, res) => {
 // 7. Reply to a Feedback
 router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
   try {
-    const { feedbackId } = req.params;
+    const { id: materialId, feedbackId } = req.params;
     const { reply_content } = req.body;
     const trimmedReply = normalizeText(reply_content);
 
@@ -379,6 +359,7 @@ router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
         tra_loi_luc: new Date().toISOString()
       })
       .eq('id', feedbackId)
+      .eq('hoc_lieu_id', materialId)
       .select();
 
     if (error) throw error;

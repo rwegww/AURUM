@@ -114,6 +114,10 @@ const resolveSingle = async (ctx) => {
     return { data: supabaseState.upsertedSubmission, error: null };
   }
 
+  if (ctx.table === 'bai_nop' && ctx.action === 'insert') {
+    return { data: supabaseState.upsertedSubmission, error: null };
+  }
+
   if (ctx.table === 'bai_nop' && ctx.action === 'update') {
     supabaseState.updateAttempted = true;
     return { data: supabaseState.updatedSubmission, error: null };
@@ -237,6 +241,40 @@ const validMaterialPayload = {
   file_type: 'pdf',
 };
 
+const createMinimalPdf = (lines) => {
+  const escapedLines = lines.map((line) => line.replace(/([\\()])/g, '\\$1'));
+  const stream = [
+    'BT /F1 12 Tf 72 720 Td',
+    ...escapedLines.flatMap((line, index) => [
+      ...(index === 0 ? [] : ['0 -20 Td']),
+      `(${line}) Tj`,
+    ]),
+    'ET',
+  ].join('\n');
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>',
+    `<< /Length ${Buffer.byteLength(stream)} >>\nstream\n${stream}\nendstream`,
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+  ];
+
+  let pdf = '%PDF-1.4\n';
+  const offsets = [0];
+  objects.forEach((object, index) => {
+    offsets.push(Buffer.byteLength(pdf));
+    pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+  });
+  const xrefOffset = Buffer.byteLength(pdf);
+  pdf += `xref\n0 ${objects.length + 1}\n`;
+  pdf += '0000000000 65535 f \n';
+  offsets.slice(1).forEach((offset) => {
+    pdf += `${String(offset).padStart(10, '0')} 00000 n \n`;
+  });
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  return Buffer.from(pdf);
+};
+
 describe('security acceptance matrix', () => {
   it('blocks the legacy shared OAuth password even on existing accounts', async () => {
     userModel.findOne.mockResolvedValue(nguoi_dung.student);
@@ -271,6 +309,44 @@ describe('security acceptance matrix', () => {
       code: 'PRIVILEGED_ACCOUNT_LINK_REQUIRED', status: 403,
     });
     expect(userModel.create).not.toHaveBeenCalled();
+  });
+
+  it('prefers an explicitly linked teacher account for Supabase OAuth sessions', async () => {
+    supabase.auth.getUser.mockResolvedValue({ data: { user: {
+      id: 'oauth-shadow-user', email: 'teacher@gmail.com', email_confirmed_at: '2026-09-01',
+    } }, error: null });
+    userModel.findOne.mockImplementation(async (filter) => (filter.googleId ? nguoi_dung.teacher : null));
+    userModel.findById.mockImplementation(async (id) => (id === 'oauth-shadow-user'
+      ? { ...nguoi_dung.student, id: 'oauth-shadow-user' }
+      : nguoi_dung[id] || null));
+
+    const { user } = await authenticateToken('oauth-fixture-token');
+
+    expect(user.id).toBe('teacher');
+    expect(user.role).toBe('teacher');
+  });
+
+  it('normalizes teacher role casing before class permission checks', async () => {
+    const roleVariantUser = {
+      ...nguoi_dung.teacher,
+      id: 'teacherRoleVariant',
+      role: ' Teacher ',
+    };
+    userModel.findById.mockImplementation(async (id) => (id === roleVariantUser.id ? roleVariantUser : nguoi_dung[id] || null));
+    const token = jwt.sign({ id: roleVariantUser.id, role: roleVariantUser.role, sessionId }, process.env.JWT_SECRET);
+
+    const res = await request(app)
+      .post('/api/classes')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ name: '8A1', khoi_id: 8, description: 'Luyen tap on thi' });
+
+    expect(res.status).toBe(201);
+    expect(supabaseState.lastInsertPayload[0]).toMatchObject({
+      ten: '8A1',
+      khoi_id: 8,
+      mo_ta: 'Luyen tap on thi',
+      giao_vien_id: 'teacherRoleVariant',
+    });
   });
 
   it('rejects public admin registration', async () => {
@@ -652,6 +728,76 @@ describe('security acceptance matrix', () => {
     });
   });
 
+  it('increments material downloads atomically through the database function', async () => {
+    supabase.rpc.mockResolvedValueOnce({ data: 7, error: null });
+
+    const res = await request(app).post('/api/materials/material-1/download');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ download_count: 7 });
+    expect(supabase.rpc).toHaveBeenCalledWith('increment_material_download', {
+      material_id: 'material-1',
+    });
+    expect(supabase.from).not.toHaveBeenCalledWith('hoc_lieu');
+  });
+
+  it('parses PDF exam files with the installed pdf-parse v2 API', async () => {
+    const pdf = createMinimalPdf([
+      'C1: Chat nao la nuoc?',
+      'A. H2O',
+      'B. NaCl',
+      'C. CO2',
+      'D. O2',
+    ]);
+
+    const res = await request(app)
+      .post('/api/classes/parse-exam-file')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .attach('file', pdf, { filename: 'de-thi.pdf', contentType: 'application/pdf' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(1);
+    expect(res.body[0]).toMatchObject({
+      type: 'multiple_choice',
+      content: 'Chat nao la nuoc?',
+      options: { A: 'H2O', B: 'NaCl', C: 'CO2', D: 'O2' },
+    });
+  });
+
+  it('rejects a class post targeted to a student outside the class', async () => {
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
+
+    const res = await request(app)
+      .post('/api/classes/class-1/posts')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({
+        type: 'announcement',
+        content: 'Thông báo riêng',
+        hoc_sinh_nhan_id: 'outsider',
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('không thuộc lớp');
+    expect(supabaseState.lastInsertPayload).toBeNull();
+  });
+
+  it('rejects a class schedule whose end time is before its start time', async () => {
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
+
+    const res = await request(app)
+      .post('/api/classes/class-1/schedules')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({
+        title: 'Ôn tập chương 1',
+        start_time: '2026-09-06T09:00:00+07:00',
+        end_time: '2026-09-06T08:00:00+07:00',
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('phải sau');
+    expect(supabaseState.lastInsertPayload).toBeNull();
+  });
+
   it('fails closed for production cron reminders when CRON_SECRET is missing', async () => {
     const previousNodeEnv = process.env.NODE_ENV;
     const previousCronSecret = process.env.CRON_SECRET;
@@ -698,7 +844,7 @@ describe('security acceptance matrix', () => {
       .send({ answers: { 0: 1 }, score: 100, status: 'graded' });
 
     expect(res.status).toBe(200);
-    expect(supabaseState.lastUpsertPayload[0]).toMatchObject({
+    expect(supabaseState.lastInsertPayload[0]).toMatchObject({
       status: 'graded',
       diem: 0,
       phan_hoi_giao_vien: null,
@@ -710,6 +856,37 @@ describe('security acceptance matrix', () => {
       total: 1,
       needsManualReview: false,
     });
+  });
+
+  it('blocks assignment submissions after the deadline', async () => {
+    supabaseState.post = {
+      id: 'post-1',
+      lop_id: 'class-1',
+      type: 'assignment',
+      hoc_sinh_nhan_id: null,
+      cau_hoi: [],
+      han_nop: '2020-01-01T00:00:00.000Z',
+    };
+
+    const res = await request(app)
+      .post('/api/classes/assignments/post-1/submit')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ answers: {} });
+
+    expect(res.status).toBe(409);
+    expect(res.body.error).toContain('hết hạn');
+    expect(supabaseState.lastInsertPayload).toBeNull();
+  });
+
+  it('does not interpret a missing grade as zero', async () => {
+    const res = await request(app)
+      .post('/api/classes/assignments/post-1/grade/student')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({ phan_hoi: 'Cần bổ sung lời giải.' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toContain('nhập điểm');
+    expect(supabaseState.updateAttempted).toBe(false);
   });
 
   it('blocks teachers who do not own the class from grading', async () => {

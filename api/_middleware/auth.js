@@ -44,6 +44,29 @@ const verifyCustomToken = (token) => {
   return null;
 };
 
+const normalizeUserRole = (role) => {
+  const normalized = typeof role === 'string'
+    ? role.trim().toLowerCase().replace(/\s+/g, '_')
+    : '';
+
+  if (['admin', 'quan_tri', 'quan_tri_vien', 'quản_trị', 'quản_trị_viên'].includes(normalized)) {
+    return 'admin';
+  }
+  if (['teacher', 'giao_vien', 'giáo_viên'].includes(normalized)) {
+    return 'teacher';
+  }
+  if (['student', 'hoc_sinh', 'học_sinh'].includes(normalized)) {
+    return 'student';
+  }
+
+  return role;
+};
+
+const normalizeAuthenticatedUser = (user) => user ? ({
+  ...user,
+  role: normalizeUserRole(user.role),
+}) : user;
+
 const resolveSupabaseUser = async (token) => {
   const { data, error } = await supabase.auth.getUser(token);
   const sbUser = data?.user;
@@ -52,10 +75,12 @@ const resolveSupabaseUser = async (token) => {
     throw new AuthenticationError('INVALID_TOKEN', 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn.');
   }
 
-  let user = await User.findById(sbUser.id);
+  // Prefer an explicit OAuth link over a same-id lookup. A teacher/admin may
+  // link Google after a student shadow profile was created for that OAuth id.
+  let user = await User.findOne({ googleId: sbUser.id });
 
   if (!user) {
-    user = await User.findOne({ googleId: sbUser.id });
+    user = await User.findById(sbUser.id);
   }
 
   if (!user && sbUser.email) {
@@ -85,7 +110,7 @@ const resolveSupabaseUser = async (token) => {
     });
   }
 
-  return { user, decodedCustomJwt: null };
+  return { user: normalizeAuthenticatedUser(user), decodedCustomJwt: null };
 };
 
 export const authenticateToken = async (token) => {
@@ -110,6 +135,8 @@ export const authenticateToken = async (token) => {
   } else {
     ({ user } = await resolveSupabaseUser(token));
   }
+
+  user = normalizeAuthenticatedUser(user);
 
   if (user.isLocked) {
     throw new AuthenticationError(

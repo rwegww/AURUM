@@ -945,6 +945,24 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION public.increment_material_download(material_id uuid)
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  next_count integer;
+BEGIN
+  UPDATE public.hoc_lieu
+  SET luot_tai = COALESCE(luot_tai, 0) + 1
+  WHERE id = $1
+  RETURNING luot_tai INTO next_count;
+
+  RETURN next_count;
+END;
+$$;
+
 CREATE OR REPLACE FUNCTION public.create_arena_room(
   p_room_id text,
   p_name text,
@@ -1391,15 +1409,23 @@ CREATE INDEX IF NOT EXISTS idx_lop_giao_vien_id ON public.lop (giao_vien_id);
 CREATE INDEX IF NOT EXISTS idx_lop_giao_vien_created ON public.lop (giao_vien_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_lop_khoi_id ON public.lop (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_thanh_vien_lop_hoc_sinh_id ON public.thanh_vien_lop (hoc_sinh_id);
+CREATE INDEX IF NOT EXISTS idx_thanh_vien_lop_lop_tham_gia ON public.thanh_vien_lop (lop_id, tham_gia_luc DESC);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_id ON public.bai_dang_lop (lop_id);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_tac_gia_id ON public.bai_dang_lop (tac_gia_id);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_hoc_sinh_nhan_id ON public.bai_dang_lop (hoc_sinh_nhan_id);
+CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_type_created ON public.bai_dang_lop (lop_id, type, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_assignment_deadline ON public.bai_dang_lop (lop_id, han_nop)
+  WHERE type = 'assignment';
+CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_target_created ON public.bai_dang_lop (lop_id, hoc_sinh_nhan_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_bai_nop_bai_dang_id ON public.bai_nop (bai_dang_id);
 CREATE INDEX IF NOT EXISTS idx_bai_nop_hoc_sinh_id ON public.bai_nop (hoc_sinh_id);
+CREATE INDEX IF NOT EXISTS idx_bai_nop_bai_dang_nop_luc ON public.bai_nop (bai_dang_id, nop_luc DESC);
 CREATE INDEX IF NOT EXISTS idx_lich_lop_lop_id ON public.lich_lop (lop_id);
+CREATE INDEX IF NOT EXISTS idx_lich_lop_lop_bat_dau ON public.lich_lop (lop_id, bat_dau_luc);
 CREATE INDEX IF NOT EXISTS idx_hoc_lieu_nguoi_tao_id ON public.hoc_lieu (nguoi_tao_id);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_hoc_lieu_id ON public.phan_hoi_hoc_lieu (hoc_lieu_id);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_nguoi_dung_id ON public.phan_hoi_hoc_lieu (nguoi_dung_id);
+CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_hoc_lieu_created ON public.phan_hoi_hoc_lieu (hoc_lieu_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_nhiem_vu_loai_hanh_dong ON public.nhiem_vu (loai_hanh_dong);
 CREATE INDEX IF NOT EXISTS idx_nhiem_vu_nguoi_dung_nguoi_dung_id ON public.nhiem_vu_nguoi_dung (nguoi_dung_id);
 CREATE INDEX IF NOT EXISTS idx_nhiem_vu_nguoi_dung_nhiem_vu_id ON public.nhiem_vu_nguoi_dung (nhiem_vu_id);
@@ -1763,10 +1789,31 @@ CREATE POLICY "Users can delete own activities"
 REVOKE UPDATE ON TABLE public.nguoi_dung FROM anon, authenticated;
 GRANT UPDATE (avatar_seed, ke_hoach_hoc) ON TABLE public.nguoi_dung TO authenticated;
 
+-- Class and material mutations must pass through the Express authorization layer.
+REVOKE INSERT, UPDATE, DELETE ON TABLE
+  public.lop,
+  public.thanh_vien_lop,
+  public.bai_dang_lop,
+  public.bai_nop,
+  public.lich_lop,
+  public.hoc_lieu,
+  public.phan_hoi_hoc_lieu
+FROM anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE
+  public.lop,
+  public.thanh_vien_lop,
+  public.bai_dang_lop,
+  public.bai_nop,
+  public.lich_lop,
+  public.hoc_lieu,
+  public.phan_hoi_hoc_lieu
+TO service_role;
+
 REVOKE ALL ON FUNCTION public.handle_new_user() FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_active_minutes(text) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_likes(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.increment_material_view(uuid) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.increment_material_download(uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.claim_mission_reward(text, uuid) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.cleanup_user_arena_memberships(text, text) FROM PUBLIC, anon, authenticated;
 REVOKE ALL ON FUNCTION public.create_arena_room(text, text, text, text, text, text, text, integer, boolean) FROM PUBLIC, anon, authenticated;
@@ -1777,6 +1824,7 @@ REVOKE ALL ON FUNCTION public.sync_user_streak(text) FROM PUBLIC, anon, authenti
 GRANT EXECUTE ON FUNCTION public.handle_new_user() TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_likes(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.increment_material_view(uuid) TO service_role;
+GRANT EXECUTE ON FUNCTION public.increment_material_download(uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.claim_mission_reward(text, uuid) TO service_role;
 GRANT EXECUTE ON FUNCTION public.create_arena_room(text, text, text, text, text, text, text, integer, boolean) TO service_role;
 GRANT EXECUTE ON FUNCTION public.join_arena_room(text, text, text, text) TO service_role;

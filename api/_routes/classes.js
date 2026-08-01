@@ -12,6 +12,14 @@ const ALLOWED_EXAM_MIME_TYPES = new Set([
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ]);
 const ALLOWED_EXAM_EXTENSIONS = new Set(['.pdf', '.doc', '.docx']);
+const ALLOWED_POST_TYPES = new Set(['announcement', 'assignment', 'video']);
+const ALLOWED_QUESTION_TYPES = new Set(['multiple_choice', 'true_false', 'short_answer']);
+const MAX_POST_CONTENT_LENGTH = 10_000;
+const MAX_MEDIA_REFERENCE_LENGTH = 2_048;
+const MAX_ASSIGNMENT_QUESTIONS = 200;
+const MAX_SCHEDULE_TITLE_LENGTH = 200;
+const MAX_MEETING_URL_LENGTH = 2_048;
+const MAX_ANSWER_PAYLOAD_LENGTH = 100_000;
 
 const getFileExtension = (filename = '') => {
   const dotIndex = filename.lastIndexOf('.');
@@ -49,7 +57,7 @@ const parseExamUpload = (req, res, next) => {
 const router = express.Router();
 
 const canManageClasses = (user) => user?.role === 'teacher' || user?.role === 'admin';
-const canUseStudentClassFeatures = (user) => user?.role === 'student' || user?.role === 'admin';
+const canUseStudentClassFeatures = (user) => user?.role === 'student';
 
 const normalizeCreateClassInput = ({ name, description, khoi_id }) => {
   const normalizedName = typeof name === 'string' ? name.trim() : '';
@@ -82,6 +90,142 @@ const normalizeCreateClassInput = ({ name, description, khoi_id }) => {
     description: normalizedDescription || null,
     khoi_id: gradeLevelId,
   };
+};
+
+const httpError = (status, message) => {
+  const error = new Error(message);
+  error.status = status;
+  return error;
+};
+
+const normalizeOptionalText = (value, fieldLabel, maxLength) => {
+  if (value === undefined || value === null || value === '') return null;
+  if (typeof value !== 'string') {
+    throw httpError(400, `${fieldLabel} phải là chuỗi.`);
+  }
+
+  const normalized = value.trim();
+  if (!normalized) return null;
+  if (normalized.length > maxLength) {
+    throw httpError(400, `${fieldLabel} không được vượt quá ${maxLength} ký tự.`);
+  }
+  return normalized;
+};
+
+const normalizeDateTime = (value, fieldLabel, { required = false } = {}) => {
+  if (value === undefined || value === null || value === '') {
+    if (required) throw httpError(400, `${fieldLabel} là bắt buộc.`);
+    return null;
+  }
+  if (typeof value !== 'string') {
+    throw httpError(400, `${fieldLabel} không hợp lệ.`);
+  }
+
+  const timestamp = Date.parse(value);
+  if (!Number.isFinite(timestamp)) {
+    throw httpError(400, `${fieldLabel} không hợp lệ.`);
+  }
+  return new Date(timestamp).toISOString();
+};
+
+const isHttpUrl = (value) => {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
+const normalizePostInput = (body = {}) => {
+  const type = typeof body.type === 'string' ? body.type.trim() : '';
+  if (!ALLOWED_POST_TYPES.has(type)) {
+    throw httpError(400, 'Loại bài đăng không hợp lệ.');
+  }
+
+  const content = typeof body.content === 'string' ? body.content.trim() : '';
+  if (!content) throw httpError(400, 'Nội dung bài đăng là bắt buộc.');
+  if (content.length > MAX_POST_CONTENT_LENGTH) {
+    throw httpError(400, `Nội dung bài đăng không được vượt quá ${MAX_POST_CONTENT_LENGTH} ký tự.`);
+  }
+
+  const mediaUrl = normalizeOptionalText(body.media_url, 'Liên kết học liệu', MAX_MEDIA_REFERENCE_LENGTH);
+  if (type === 'video' && (!mediaUrl || !isHttpUrl(mediaUrl))) {
+    throw httpError(400, 'Bài đăng video cần một đường dẫn http hoặc https hợp lệ.');
+  }
+
+  const deadline = type === 'assignment'
+    ? normalizeDateTime(body.deadline, 'Hạn nộp')
+    : null;
+  if (deadline && Date.parse(deadline) <= Date.now()) {
+    throw httpError(400, 'Hạn nộp phải ở thời điểm tương lai.');
+  }
+
+  const targetStudentId = normalizeOptionalText(body.hoc_sinh_nhan_id, 'ID học sinh nhận', 128);
+  const questions = body.questions ?? [];
+  if (!Array.isArray(questions)) {
+    throw httpError(400, 'Danh sách câu hỏi không hợp lệ.');
+  }
+  if (questions.length > MAX_ASSIGNMENT_QUESTIONS) {
+    throw httpError(400, `Mỗi bài tập chỉ được có tối đa ${MAX_ASSIGNMENT_QUESTIONS} câu hỏi.`);
+  }
+  if (type !== 'assignment' && questions.length > 0) {
+    throw httpError(400, 'Chỉ bài tập mới được chứa câu hỏi.');
+  }
+  if (questions.some((question) => (
+    !question
+    || typeof question !== 'object'
+    || Array.isArray(question)
+    || !ALLOWED_QUESTION_TYPES.has(question.type || 'multiple_choice')
+  ))) {
+    throw httpError(400, 'Danh sách câu hỏi chứa phần tử không hợp lệ.');
+  }
+
+  return {
+    type,
+    content,
+    media_url: mediaUrl,
+    deadline,
+    hoc_sinh_nhan_id: targetStudentId,
+    questions: type === 'assignment' ? questions : [],
+  };
+};
+
+const normalizeScheduleInput = (body = {}) => {
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
+  if (!title) throw httpError(400, 'Tên lịch học là bắt buộc.');
+  if (title.length > MAX_SCHEDULE_TITLE_LENGTH) {
+    throw httpError(400, `Tên lịch học không được vượt quá ${MAX_SCHEDULE_TITLE_LENGTH} ký tự.`);
+  }
+
+  const startTime = normalizeDateTime(body.start_time, 'Thời gian bắt đầu', { required: true });
+  const endTime = normalizeDateTime(body.end_time, 'Thời gian kết thúc');
+  if (endTime && Date.parse(endTime) <= Date.parse(startTime)) {
+    throw httpError(400, 'Thời gian kết thúc phải sau thời gian bắt đầu.');
+  }
+
+  const meetUrl = normalizeOptionalText(body.meet_url, 'Liên kết buổi học', MAX_MEETING_URL_LENGTH);
+  if (meetUrl && !isHttpUrl(meetUrl)) {
+    throw httpError(400, 'Liên kết buổi học phải dùng giao thức http hoặc https.');
+  }
+
+  return {
+    title,
+    start_time: startTime,
+    end_time: endTime,
+    meet_url: meetUrl,
+  };
+};
+
+const extractPdfText = async (buffer) => {
+  const { PDFParse } = await import('pdf-parse');
+  const parser = new PDFParse({ data: buffer });
+  try {
+    const result = await parser.getText();
+    return result.text || '';
+  } finally {
+    await parser.destroy();
+  }
 };
 
 const sendPendingAdminApproval = (res, request, alreadyApproved = false) => res.status(202).json({
@@ -346,6 +490,41 @@ const ensureClassAccess = async (classId, user, res) => {
   return classData;
 };
 
+const fetchAllRows = async (createQuery, pageSize = 1000) => {
+  const rows = [];
+  let from = 0;
+
+  while (true) {
+    const { data, error } = await createQuery(from, from + pageSize - 1);
+    if (error) throw error;
+
+    const page = data || [];
+    rows.push(...page);
+    if (page.length < pageSize) return rows;
+    from += pageSize;
+  }
+};
+
+const createClassCode = () => Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, '0');
+
+const insertClassWithUniqueCode = async (classInput, maxAttempts = 5) => {
+  let lastError;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+    const { data, error } = await supabase
+      .from('lop')
+      .insert([{ ...classInput, ma_lop: createClassCode() }])
+      .select()
+      .single();
+
+    if (!error) return data;
+    lastError = error;
+    if (error.code !== '23505') throw error;
+  }
+
+  throw lastError || new Error('Không thể tạo mã lớp duy nhất.');
+};
+
 
 
 // Parse exam files for 2025 format
@@ -355,16 +534,26 @@ router.post('/parse-exam-file', auth, parseExamUpload, async (req, res) => {
     if (!req.file) return res.status(400).json({ error: 'Không tìm thấy tệp' });
 
     let text = '';
-    if (req.file.mimetype === 'application/pdf' || getFileExtension(req.file.originalname) === '.pdf') {
-        const pdf = (await import('pdf-parse')).default;
-        const data = await pdf(req.file.buffer);
-        text = data.text;
-    } else {
+    try {
+      if (req.file.mimetype === 'application/pdf' || getFileExtension(req.file.originalname) === '.pdf') {
+        text = await extractPdfText(req.file.buffer);
+      } else {
         const data = await mammoth.extractRawText({ buffer: req.file.buffer });
         text = data.value;
+      }
+    } catch (parseError) {
+      console.warn('Không thể đọc tệp đề thi:', parseError.message);
+      return res.status(422).json({ error: 'Không thể đọc nội dung tệp. Vui lòng kiểm tra lại tệp PDF, DOC hoặc DOCX.' });
     }
 
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    if (!text.trim()) {
+      return res.status(422).json({ error: 'Tệp không có nội dung văn bản để tạo câu hỏi.' });
+    }
+
+    const lines = text
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && !/^--\s*\d+\s+of\s+\d+\s*--$/i.test(line));
     const questions = [];
     let currentPart = 1;
     let qIndex = 0;
@@ -546,10 +735,16 @@ router.post('/parse-exam-file', auth, parseExamUpload, async (req, res) => {
         }
     }
 
+    if (questions.length === 0) {
+      return res.status(422).json({ error: 'Không tìm thấy câu hỏi theo định dạng được hỗ trợ trong tệp.' });
+    }
+
     res.json(questions);
   } catch (err) {
     console.error('Error parsing exam file:', err);
-    res.status(500).json({ error: 'Failed to parse file', details: err.message });
+    res.status(err.status || 500).json({
+      error: err.status ? err.message : 'Không thể phân tích tệp đề thi.',
+    });
   }
 });
 
@@ -634,24 +829,40 @@ router.get('/teacher-summary', auth, async (req, res) => {
        return res.status(403).json({ error: 'Chỉ dành cho giáo viên' });
     }
 
-    // 1. Get all class IDs for this teacher
-    const { data: lop } = await supabase.from('lop').select('id').eq('giao_vien_id', userId);
-    const classIds = lop?.map(c => c.id) || [];
+    // Admins inspect the same global class list returned by GET /api/classes.
+    const lop = await fetchAllRows((from, to) => {
+      let query = supabase
+        .from('lop')
+        .select('id')
+        .order('id', { ascending: true });
+      if (req.user.role === 'teacher') query = query.eq('giao_vien_id', userId);
+      return query.range(from, to);
+    });
+    const classIds = lop.map(c => c.id);
 
     if (classIds.length === 0) {
       return res.json({ total_students: 0, active_assignments: 0 });
     }
 
     // 2. Count unique students
-    const { data: members } = await supabase.from('thanh_vien_lop').select('hoc_sinh_id').in('lop_id', classIds);
-    const uniqueStudents = new Set(members?.map(m => m.hoc_sinh_id));
+    const members = await fetchAllRows((from, to) => supabase
+      .from('thanh_vien_lop')
+      .select('lop_id, hoc_sinh_id')
+      .in('lop_id', classIds)
+      .order('hoc_sinh_id', { ascending: true })
+      .order('lop_id', { ascending: true })
+      .range(from, to));
+    const uniqueStudents = new Set(members.map(m => m.hoc_sinh_id));
 
     // 3. Count active assignments
-    const { count: assignmentCount } = await supabase
+    const { count: assignmentCount, error: assignmentError } = await supabase
       .from('bai_dang_lop')
       .select('*', { count: 'exact', head: true })
       .in('lop_id', classIds)
-      .eq('type', 'assignment');
+      .eq('type', 'assignment')
+      .or(`han_nop.is.null,han_nop.gt.${new Date().toISOString()}`);
+
+    if (assignmentError) throw assignmentError;
 
     res.json({
       total_students: uniqueStudents.size,
@@ -683,15 +894,12 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-
-    const { data, error } = await supabase
-      .from('lop')
-      .insert([{ ten: name, khoi_id, mo_ta: description, giao_vien_id, ma_lop: code }])
-      .select()
-      .single();
-
-    if (error) throw error;
+    const data = await insertClassWithUniqueCode({
+      ten: name,
+      khoi_id,
+      mo_ta: description,
+      giao_vien_id,
+    });
     res.status(201).json(normalizeClass(data));
   } catch (err) {
     res.status(err.status || 500).json({ error: err.status ? err.message : 'Không thể tạo lớp học.' });
@@ -702,26 +910,30 @@ router.post('/', auth, async (req, res) => {
 router.post('/join', auth, async (req, res) => {
   try {
     if (!canUseStudentClassFeatures(req.user)) {
-      return res.status(403).json({ error: 'Chỉ học sinh hoặc quản trị viên mới có thể tham gia lớp học.' });
+      return res.status(403).json({ error: 'Chỉ học sinh mới có thể tham gia lớp học.' });
     }
 
-    const { code } = req.body;
+    const code = typeof req.body?.code === 'string' ? req.body.code.trim().toUpperCase() : '';
+    if (!/^[A-Z0-9]{6}$/.test(code)) {
+      return res.status(400).json({ error: 'Mã lớp phải gồm đúng 6 chữ cái hoặc chữ số.' });
+    }
     const hoc_sinh_id = req.user.id;
 
     const { data: classData, error: classErr } = await supabase
       .from('lop')
       .select('id, ten, giao_vien_id')
       .eq('ma_lop', code)
-      .single();
+      .maybeSingle();
 
-    if (classErr || !classData) return res.status(404).json({ error: 'Mã lớp không hợp lệ' });
+    if (classErr) throw classErr;
+    if (!classData) return res.status(404).json({ error: 'Mã lớp không hợp lệ' });
 
     const { error: joinErr } = await supabase
       .from('thanh_vien_lop')
       .insert([{ lop_id: classData.id, hoc_sinh_id }]);
 
     if (joinErr) {
-        if (joinErr.code === '23505') return res.status(400).json({ error: 'Bạn đã tham gia lớp này rồi' });
+        if (joinErr.code === '23505') return res.status(409).json({ error: 'Bạn đã tham gia lớp này rồi' });
         throw joinErr;
     }
 
@@ -808,13 +1020,18 @@ router.get('/:id/posts', auth, async (req, res) => {
     if (postErr) throw postErr;
     if (!posts) posts = [];
 
-    // For students, check if each assignment is completed
-    if (canUseStudentClassFeatures(req.user)) {
+    const assignmentPostIds = posts
+      .filter((post) => post.type === 'assignment')
+      .map((post) => post.id);
+
+    // For students, check completion only against assignments in this response.
+    if (req.user.role === 'student' && assignmentPostIds.length > 0) {
       const { data: submissions, error: subErr } = await supabase
         .from('bai_nop')
-        .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien')
-        .eq('hoc_sinh_id', req.user.id);
-      if (subErr) console.error('Submissions fetch error:', subErr);
+        .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien, nop_luc')
+        .eq('hoc_sinh_id', req.user.id)
+        .in('bai_dang_id', assignmentPostIds);
+      if (subErr) throw subErr;
 
       const submissionMap = {};
       (submissions || []).forEach(s => {
@@ -828,17 +1045,24 @@ router.get('/:id/posts', auth, async (req, res) => {
       }));
     }
 
-    // Enhance assignments with lesson details if media_url is a lesson ID
-    const enhancedPosts = await Promise.all(posts.map(async (p) => {
-      if (p.type === 'assignment' && p.media_url) {
-        const { data: lesson } = await supabase
-          .from('bai_hoc')
-          .select('id, khoi_id')
-          .eq('id', p.media_url)
-          .single();
-        if (lesson) p.lesson = normalizeLessonRef(lesson);
-      }
-      return p;
+    // Resolve lesson references in one query instead of one round trip per assignment.
+    const lessonIds = [...new Set(posts
+      .filter((post) => post.type === 'assignment' && post.media_url && !isHttpUrl(post.media_url))
+      .map((post) => post.media_url))];
+    const lessonMap = new Map();
+
+    if (lessonIds.length > 0) {
+      const { data: lessons, error: lessonError } = await supabase
+        .from('bai_hoc')
+        .select('id, khoi_id')
+        .in('id', lessonIds);
+      if (lessonError) throw lessonError;
+      (lessons || []).forEach((lesson) => lessonMap.set(lesson.id, normalizeLessonRef(lesson)));
+    }
+
+    const enhancedPosts = posts.map((post) => ({
+      ...post,
+      ...(lessonMap.has(post.media_url) ? { lesson: lessonMap.get(post.media_url) } : {}),
     }));
 
     res.json(enhancedPosts.map(normalizePost));
@@ -852,7 +1076,7 @@ router.post('/:id/messages', auth, async (req, res) => {
   try {
     const { id } = req.params;
     if (!canUseStudentClassFeatures(req.user)) {
-      return res.status(403).json({ error: 'Chỉ học sinh hoặc quản trị viên mới có thể gửi tin nhắn cho giáo viên.' });
+      return res.status(403).json({ error: 'Chỉ học sinh mới có thể gửi tin nhắn cho giáo viên.' });
     }
 
     const classData = await ensureClassAccess(id, req.user, res);
@@ -895,19 +1119,39 @@ router.post('/:id/posts', auth, async (req, res) => {
     if (!requireTeacherOrAdmin(req, res)) return;
     if (!(await ensureClassOwner(id, req.user, res))) return;
 
-    const { type, content, media_url, deadline, hoc_sinh_nhan_id } = req.body;
+    const {
+      type,
+      content,
+      media_url,
+      deadline,
+      hoc_sinh_nhan_id,
+      questions,
+    } = normalizePostInput(req.body || {});
     const tac_gia_id = req.user.id;
 
-    // Sanitize empty strings to null for DB insertion
+    if (hoc_sinh_nhan_id) {
+      const { data: membership, error: membershipError } = await supabase
+        .from('thanh_vien_lop')
+        .select('lop_id')
+        .eq('lop_id', id)
+        .eq('hoc_sinh_id', hoc_sinh_nhan_id)
+        .maybeSingle();
+
+      if (membershipError) throw membershipError;
+      if (!membership) {
+        return res.status(400).json({ error: 'Học sinh nhận không thuộc lớp học này.' });
+      }
+    }
+
     const insertData = {
       lop_id: id,
       tac_gia_id,
       type,
       noi_dung: content,
-      media_url: media_url || null,
-      han_nop: deadline || null,
-      hoc_sinh_nhan_id: hoc_sinh_nhan_id || null,
-      cau_hoi: req.body.questions || []
+      media_url,
+      han_nop: deadline,
+      hoc_sinh_nhan_id,
+      cau_hoi: questions,
     };
 
     if (req.user.role === 'admin') {
@@ -923,7 +1167,7 @@ router.post('/:id/posts', auth, async (req, res) => {
     if (error) throw error;
     res.status(201).json(normalizePost(data));
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(err.status || 500).json({ error: err.status ? err.message : 'Không thể tạo bài đăng.' });
   }
 });
 
@@ -953,7 +1197,7 @@ router.post('/:id/schedules', auth, async (req, res) => {
     if (!requireTeacherOrAdmin(req, res)) return;
     if (!(await ensureClassOwner(id, req.user, res))) return;
 
-    const { title, start_time, end_time, meet_url } = req.body;
+    const { title, start_time, end_time, meet_url } = normalizeScheduleInput(req.body || {});
     const insertData = { lop_id: id, tieu_de: title, bat_dau_luc: start_time, ket_thuc_luc: end_time, meet_url };
 
     if (req.user.role === 'admin') {
@@ -969,7 +1213,7 @@ router.post('/:id/schedules', auth, async (req, res) => {
     if (error) throw error;
     res.status(201).json(normalizeSchedule(data));
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(err.status || 500).json({ error: err.status ? err.message : 'Không thể tạo lịch học.' });
   }
 });
 
@@ -1015,18 +1259,37 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 
     const { postId } = req.params;
     // Get assignment info to get lop_id
-    const { data: post } = await supabase.from('bai_dang_lop').select('lop_id').eq('id', postId).single();
-    if (post && !(await ensureClassOwner(post.lop_id, req.user, res))) return;
-    if (!post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    const { data: post, error: postError } = await supabase
+      .from('bai_dang_lop')
+      .select('lop_id, type')
+      .eq('id', postId)
+      .single();
+    if (postError?.code === 'PGRST116' || !post) {
+      return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    }
+    if (postError) throw postError;
+    if (post.type !== 'assignment') {
+      return res.status(400).json({ error: 'Bài đăng này không phải bài tập.' });
+    }
+    if (!(await ensureClassOwner(post.lop_id, req.user, res))) return;
 
     // Get all class members
-    const { data: members } = await supabase.from('thanh_vien_lop').select('student:hoc_sinh_id(id, username)').eq('lop_id', post.lop_id);
+    const { data: members, error: memberError } = await supabase
+      .from('thanh_vien_lop')
+      .select('student:hoc_sinh_id(id, username)')
+      .eq('lop_id', post.lop_id);
+    if (memberError) throw memberError;
     // Get submissions
-    const { data: submissions } = await supabase.from('bai_nop').select('*').eq('bai_dang_id', postId);
+    const { data: submissions, error: submissionError } = await supabase
+      .from('bai_nop')
+      .select('*')
+      .eq('bai_dang_id', postId);
+    if (submissionError) throw submissionError;
 
     // Map together
-    const progress = (members || []).map(m => {
-      const sub = (submissions || []).find(s => s.hoc_sinh_id === m.student.id);
+    const submissionMap = new Map((submissions || []).map((submission) => [submission.hoc_sinh_id, submission]));
+    const progress = (members || []).filter((member) => member.student).map(m => {
+      const sub = submissionMap.get(m.student.id);
       return {
         student: m.student,
         submitted: !!sub,
@@ -1048,7 +1311,7 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
 router.post('/assignments/:postId/submit', auth, async (req, res) => {
   try {
     if (!canUseStudentClassFeatures(req.user)) {
-      return res.status(403).json({ error: 'Chỉ học sinh hoặc quản trị viên mới có thể nộp bài.' });
+      return res.status(403).json({ error: 'Chỉ học sinh mới có thể nộp bài.' });
     }
 
     const { postId } = req.params;
@@ -1057,7 +1320,7 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
 
     const { data: post, error: postError } = await supabase
       .from('bai_dang_lop')
-      .select('lop_id, type, hoc_sinh_nhan_id, cau_hoi')
+      .select('lop_id, type, hoc_sinh_nhan_id, cau_hoi, han_nop')
       .eq('id', postId)
       .single();
     if (postError || !post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
@@ -1066,6 +1329,9 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
     }
     if (post.hoc_sinh_nhan_id && post.hoc_sinh_nhan_id !== hoc_sinh_id) {
       return res.status(403).json({ error: 'Bài tập này không được giao cho bạn.' });
+    }
+    if (post.han_nop && Number.isFinite(Date.parse(post.han_nop)) && Date.parse(post.han_nop) <= Date.now()) {
+      return res.status(409).json({ error: 'Bài tập đã hết hạn nộp.' });
     }
 
     const { data: membership, error: membershipError } = await supabase
@@ -1078,23 +1344,32 @@ router.post('/assignments/:postId/submit', auth, async (req, res) => {
     if (membershipError) throw membershipError;
     if (!membership) return res.status(403).json({ error: 'Bạn chưa tham gia lớp học này' });
 
-    const safeAnswers = answers && typeof answers === 'object' ? answers : {};
+    if (answers !== undefined && (!answers || typeof answers !== 'object')) {
+      return res.status(400).json({ error: 'Câu trả lời không hợp lệ.' });
+    }
+    const safeAnswers = answers || {};
+    if (JSON.stringify(safeAnswers).length > MAX_ANSWER_PAYLOAD_LENGTH) {
+      return res.status(413).json({ error: 'Nội dung câu trả lời quá lớn.' });
+    }
     const autoGrade = computeAutoGrade(post.cau_hoi, safeAnswers);
     const hasFinalAutoScore = !autoGrade.needsManualReview && autoGrade.score !== null;
 
     const { data, error } = await supabase
       .from('bai_nop')
-      .upsert([{
+      .insert([{
         bai_dang_id: postId,
         hoc_sinh_id,
         status: hasFinalAutoScore ? 'graded' : 'submitted',
         cau_tra_loi: safeAnswers,
         diem: hasFinalAutoScore ? autoGrade.score : null,
         phan_hoi_giao_vien: null
-      }], { onConflict: 'bai_dang_id,hoc_sinh_id' })
+      }])
       .select()
       .single();
 
+    if (error?.code === '23505') {
+      return res.status(409).json({ error: 'Bạn đã nộp bài tập này rồi.' });
+    }
     if (error) throw error;
 
     res.json({
@@ -1117,11 +1392,17 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
       return res.status(403).json({ error: 'Chỉ giáo viên mới có quyền chấm điểm' });
     }
 
+    if (score === undefined || score === null || (typeof score === 'string' && !score.trim())) {
+      return res.status(400).json({ error: 'Vui lòng nhập điểm từ 0 đến 10.' });
+    }
     const numericScore = Number(score);
     if (!Number.isFinite(numericScore) || numericScore < 0 || numericScore > 10) {
       return res.status(400).json({ error: 'Điểm phải là một số từ 0 đến 10.' });
     }
 
+    if (phan_hoi !== undefined && phan_hoi !== null && typeof phan_hoi !== 'string') {
+      return res.status(400).json({ error: 'Phản hồi của giáo viên phải là chuỗi.' });
+    }
     const trimmedFeedback = typeof phan_hoi === 'string' ? phan_hoi.trim() : '';
     if (trimmedFeedback.length > 1500) {
       return res.status(400).json({ error: 'Phản hồi không được vượt quá 1500 ký tự.' });
@@ -1160,6 +1441,9 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
       .select()
       .single();
 
+    if (error?.code === 'PGRST116' || !data) {
+      return res.status(404).json({ error: 'Học sinh chưa nộp bài tập này.' });
+    }
     if (error) throw error;
     res.json(normalizeSubmission(data));
   } catch (err) {
@@ -1171,9 +1455,20 @@ router.post('/assignments/:postId/grade/:studentId', auth, async (req, res) => {
 router.delete('/assignments/:postId', auth, async (req, res) => {
   try {
     const { postId } = req.params;
-    // Check if user is the author or teacher of the class
-    const { data: post } = await supabase.from('bai_dang_lop').select('tac_gia_id, lop_id').eq('id', postId).single();
-    if (!post) return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    if (!requireTeacherOrAdmin(req, res)) return;
+
+    const { data: post, error: postError } = await supabase
+      .from('bai_dang_lop')
+      .select('tac_gia_id, lop_id, type')
+      .eq('id', postId)
+      .single();
+    if (postError?.code === 'PGRST116' || !post) {
+      return res.status(404).json({ error: 'Không tìm thấy bài tập' });
+    }
+    if (postError) throw postError;
+    if (post.type !== 'assignment') {
+      return res.status(400).json({ error: 'Bài đăng này không phải bài tập.' });
+    }
 
     const ownsClass = req.user.role === 'admin' || !!(await ensureClassOwner(post.lop_id, req.user, res));
     if (res.headersSent) return;
@@ -1233,7 +1528,7 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       .from('bai_dang_lop')
       .select('id, lop_id, noi_dung, type, created_at, author:tac_gia_id(username)')
       .in('lop_id', classIds)
-      .neq('tac_gia_id', userId)
+      .eq('hoc_sinh_nhan_id', userId)
       .order('created_at', { ascending: false })
       .limit(15);
 
@@ -1288,6 +1583,7 @@ router.get('/teacher/notifications', auth, async (req, res) => {
       .eq('type', 'assignment')
       .gt('han_nop', now.toISOString())
       .lt('han_nop', fortyEightHoursLater.toISOString())
+      .order('han_nop', { ascending: true })
       .limit(5);
 
     if (dueErr) throw dueErr;

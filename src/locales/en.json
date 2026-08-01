@@ -19,6 +19,9 @@
  "logout": "Log out",
  "login": "Log in",
  "login_now": "Log in now",
+ "teacher_portal": "TEACHER PORTAL",
+ "open_menu": "Open main menu",
+ "close_menu": "Close main menu",
  "phan_hoi": "Aurum Feedback"
  },
  "home": {

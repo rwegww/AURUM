@@ -2,7 +2,7 @@
 
 ## Phạm vi
 
-Rà soát mã nguồn các màn hình quản trị, API liên quan, xác thực/phân quyền, duyệt hai quản trị viên, quản lý bài học/hành trình, người dùng, phản hồi, tải tệp và truy vấn thống kê. Các sửa đổi nằm trong workspace; chưa commit, đẩy mã hoặc triển khai production.
+Rà soát mã nguồn các màn hình quản trị, API liên quan, xác thực/phân quyền, duyệt hai quản trị viên, quản lý bài học/hành trình, người dùng, phản hồi, tải tệp và truy vấn thống kê. Các sửa đổi đã có trong workspace. Phiên rà soát không chủ động tạo commit, đẩy mã hoặc triển khai production; trong lúc kiểm chứng, HEAD đã được cập nhật bên ngoài sang `a33ab26` chứa các sửa đổi.
 
 ## Các lỗi đã xử lý
 
@@ -22,6 +22,7 @@ Rà soát mã nguồn các màn hình quản trị, API liên quan, xác thực/
 
 ## Kiểm chứng
 
+- Kết quả cuối: **82/82 test đạt**, 10 tệp kiểm thử; `npm test -- --reporter=dot` và `npm run build` thành công.
 - Test tự động bao gồm bảo mật API, điều hướng, xử lý dữ liệu bài học/video, tranh chấp duyệt đồng thời, thống kê 1.001 học sinh với giới hạn trang 150 và render ban đầu của tám màn hình admin.
 - Kiểm tra UI cục bộ bằng dữ liệu giả lập: dashboard, duyệt thay đổi, hành trình, học liệu, người dùng và hồ sơ giáo viên. Đã thao tác lọc bộ sách, đổi thứ tự và gửi yêu cầu duyệt giả lập.
 - Màn hình Hành trình và hồ sơ giáo viên ở chiều rộng 375 px có chiều rộng nội dung bằng chiều rộng viewport.

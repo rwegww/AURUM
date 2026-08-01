@@ -110,7 +110,9 @@ function AppContent() {
     location.pathname.endsWith('/reward')
   );
 
-  const isManagementPage = location.pathname.startsWith('/admin') || location.pathname.startsWith('/teacher');
+  const isManagementPage = ['/admin', '/teacher'].some((basePath) => (
+    location.pathname === basePath || location.pathname.startsWith(`${basePath}/`)
+  ));
   const isStandalonePage = location.pathname === '/lab/discovery';
 
   return (
@@ -181,6 +183,7 @@ function AppContent() {
              <Route path="lop/:id" element={<ClassDetail />} />
              <Route path="assignments" element={<AssignmentManager />} />
              <Route path="library" element={<TeacherLibrary />} />
+             <Route path="*" element={<Navigate to="/teacher" replace />} />
           </Route>
         </Routes>
       </Suspense>

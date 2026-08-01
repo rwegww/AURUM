@@ -89,6 +89,7 @@ const isImageMaterial = (fileType = '') => /^(png|jpg|jpeg|webp|gif)$/i.test(fil
 const TeacherLibrary = () => {
   const { user } = useAuth();
   const fileInputRef = useRef(null);
+  const listRequestRef = useRef({ id: 0, controller: null });
   const [hoc_lieu, setMaterials] = useState([]);
   const [listLoading, setListLoading] = useState(true);
   const [listError, setListError] = useState('');
@@ -108,24 +109,35 @@ const TeacherLibrary = () => {
   }, [form.category, form.customCategory]);
 
   const fetchMaterials = useCallback(async () => {
+    listRequestRef.current.controller?.abort();
+    const controller = new AbortController();
+    const requestId = listRequestRef.current.id + 1;
+    listRequestRef.current = { id: requestId, controller };
     setListLoading(true);
     setListError('');
 
     try {
-      const res = await fetch('/api/materials');
+      const res = await fetch('/api/materials', { signal: controller.signal });
       const data = await res.json().catch(() => []);
       if (!res.ok) throw new Error(data.message || 'Không thể tải danh sách thư viện');
-      setMaterials(Array.isArray(data) ? data : []);
+      if (listRequestRef.current.id === requestId) {
+        setMaterials(Array.isArray(data) ? data : []);
+      }
     } catch (err) {
-      setListError(err.message);
+      if (err.name !== 'AbortError' && listRequestRef.current.id === requestId) {
+        setListError(err.message);
+      }
     } finally {
-      setListLoading(false);
+      if (listRequestRef.current.id === requestId) setListLoading(false);
     }
   }, []);
 
   useEffect(() => {
     const timeout = window.setTimeout(fetchMaterials, 0);
-    return () => window.clearTimeout(timeout);
+    return () => {
+      window.clearTimeout(timeout);
+      listRequestRef.current.controller?.abort();
+    };
   }, [fetchMaterials]);
 
   const validateFile = (file) => {
@@ -196,12 +208,13 @@ const TeacherLibrary = () => {
     setIsSubmitting(true);
 
     try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
       setIsUploading(true);
       const uploadData = await uploadToCloudinary(selectedFile, 'chemistry-odyssey/hoc_lieu');
       setIsUploading(false);
 
       const fileType = getFileType(selectedFile, uploadData);
-      const token = localStorage.getItem('token');
       const res = await fetch('/api/materials', {
         method: 'POST',
         headers: {
@@ -496,7 +509,7 @@ const TeacherLibrary = () => {
                           <span className="text-[9px] font-black text-viet-green uppercase tracking-widest truncate">
                             {material.category || 'HỌC LIỆU'}
                           </span>
-                          {material.nguoi_tao_id === user?.id && (
+                          {material.created_by_user_id === user?.id && (
                             <span className="shrink-0 text-[9px] font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-widest">
                               Của tôi
                             </span>

@@ -12,6 +12,7 @@ const Navbar = () => {
   const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [unreadCount, setUnreadCount] = React.useState(0);
+  const mobileMenuButtonRef = React.useRef(null);
 
   const fetchUnreadStats = React.useCallback(async () => {
     try {
@@ -38,16 +39,42 @@ const Navbar = () => {
 
   React.useEffect(() => {
     if (isLoggedIn) {
-      fetchUnreadStats();
+      const initialFetch = window.setTimeout(fetchUnreadStats, 0);
       const interval = setInterval(fetchUnreadStats, 30000); // Check every 30s
 
       window.addEventListener('classroom_read', fetchUnreadStats);
       return () => {
+        window.clearTimeout(initialFetch);
         clearInterval(interval);
         window.removeEventListener('classroom_read', fetchUnreadStats);
       };
     }
   }, [fetchUnreadStats, isLoggedIn]);
+
+  React.useEffect(() => {
+    if (!isMenuOpen) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+        mobileMenuButtonRef.current?.focus();
+      }
+    };
+    const closeOnDesktop = (event) => {
+      if (event.matches) setIsMenuOpen(false);
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', closeOnEscape);
+    desktopQuery.addEventListener?.('change', closeOnDesktop);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', closeOnEscape);
+      desktopQuery.removeEventListener?.('change', closeOnDesktop);
+    };
+  }, [isMenuOpen]);
 
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent h-[90px] flex items-center px-6 lg:px-12">
@@ -141,7 +168,7 @@ const Navbar = () => {
             )}
             {user?.role === 'teacher' && (
               <NavLink to="/teacher" className={({ isActive }) => `nav-link !text-blue-500 hover:!text-blue-600 ${isActive ? 'bg-blue-50' : ''}`}>
-                GIÁO VIÊN
+                {t('nav.teacher_portal')}
               </NavLink>
             )}
           </div>
@@ -197,8 +224,12 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
+            ref={mobileMenuButtonRef}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white rounded-2xl shadow-sm border border-viet-border relative z-[100]"
+            aria-label={isMenuOpen ? t('nav.close_menu') : t('nav.open_menu')}
+            aria-expanded={isMenuOpen}
+            aria-controls="main-mobile-navigation"
           >
             <motion.span
               animate={isMenuOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
@@ -226,16 +257,18 @@ const Navbar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
+              aria-hidden="true"
               className="fixed inset-0 bg-viet-text/40 backdrop-blur-sm z-[80] lg:hidden"
             />
 
             {/* Drawer */}
             <motion.div
+              id="main-mobile-navigation"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[300px] bg-white z-[90] lg:hidden shadow-2xl overflow-y-auto"
+              className="fixed top-0 right-0 bottom-0 w-[min(300px,100vw)] bg-white z-[90] lg:hidden shadow-2xl overflow-y-auto"
             >
               <div className="flex flex-col h-full p-8 pt-24">
                 <div className="flex flex-col gap-4 mb-auto">
@@ -250,7 +283,11 @@ const Navbar = () => {
                     { path: "/arena", label: t('nav.arena_link'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19" /></svg>, requiresAuth: true },
                     { path: "/lab/solver", label: t('nav.solver'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> },
                     { path: "/calculator", label: t('nav.calculator'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/><line x1="12" y1="6" x2="12" y2="18"/></svg> },
-                  ].filter(item => !item.requiresAuth || isLoggedIn).map((item) => {
+                    { path: "/teacher", label: t('nav.teacher_portal'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>, allowedRoles: ['teacher'] },
+                  ].filter((item) => (
+                    (!item.requiresAuth || isLoggedIn)
+                    && (!item.allowedRoles || item.allowedRoles.includes(user?.role))
+                  )).map((item) => {
                     if (item.onClick) {
                       return (
                         <button
