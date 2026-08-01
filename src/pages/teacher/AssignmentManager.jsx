@@ -14,7 +14,7 @@ import {
     Trash2,
     X,
 } from 'lucide-react';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import {
     ASSIGNMENT_FILE_ACCEPT,
     assignmentMatchesClass,
@@ -56,6 +56,8 @@ const AssignmentManager = () => {
     const [lop, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState('');
+    const [actionError, setActionError] = useState('');
+    const [actionNotice, setActionNotice] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [viewingSubmissions, setViewingSubmissions] = useState(null);
     const [submissions, setSubmissions] = useState([]);
@@ -147,6 +149,8 @@ const AssignmentManager = () => {
         if (deletingId !== null) return;
         if (!window.confirm('Bạn có chắc chắn muốn xóa bài tập này?')) return;
         setDeletingId(id);
+        setActionError('');
+        setActionNotice('');
         try {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
@@ -155,14 +159,14 @@ const AssignmentManager = () => {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await parseAdminMutationResponse(res);
-            notifyAdminApprovalResult(result);
+            setActionNotice(result.message || 'Đã gửi yêu cầu xóa bài tập.');
             if (!result.pendingApproval) {
                 setAssignments((current) => current.filter((assignment) => assignment.id !== id));
                 await fetchInitialData({ showLoader: false });
             }
         } catch (err) {
             console.error(err);
-            alert(err.message || 'Không thể xóa bài tập.');
+            setActionError(err.message || 'Không thể xóa bài tập.');
         } finally {
             setDeletingId(null);
         }
@@ -218,10 +222,11 @@ const AssignmentManager = () => {
         const controller = new AbortController();
         const requestId = analysisRequestRef.current.id + 1;
         analysisRequestRef.current = { id: requestId, controller };
-        console.log('Analyzing file:', file.name, 'Type:', file.type, 'Size:', file.size, 'bytes');
-        
         if (file.size < 1000) {
-            alert(`Tệp "${file.name}" quá nhỏ (${file.size} byte) và có thể không phải tài liệu hợp lệ.`);
+            setFormErrors((current) => ({
+                ...current,
+                questions: `Tệp "${file.name}" quá nhỏ (${file.size} byte). Hệ thống đã chuyển sang chế độ nhập câu hỏi thủ công.`,
+            }));
             setParsedQuestions([createEmptyQuestion()]);
             setShowQuestionsReview(true);
             return;
@@ -248,20 +253,22 @@ const AssignmentManager = () => {
                     setParsedQuestions(normalizedQuestions);
                     setShowQuestionsReview(true);
                 } else {
-                    alert('Hệ thống không tự động nhận diện được câu hỏi từ file này. Bạn có thể nhập câu hỏi thủ công bên dưới.');
+                    setFormErrors((current) => ({
+                        ...current,
+                        questions: 'Không tự động nhận diện được câu hỏi. Hệ thống đã chuyển sang chế độ nhập thủ công.',
+                    }));
                     setParsedQuestions([createEmptyQuestion()]);
                     setShowQuestionsReview(true);
                 }
             } else {
                 const errorData = await res.json().catch(() => ({ message: 'Lỗi không xác định từ máy chủ' }));
                 console.error('Analysis API Error:', errorData);
-                const useManual = window.confirm(
-                    `${errorData.message || errorData.error || 'Máy chủ gặp sự cố khi đọc file.'}\n\nBạn có muốn nhập câu hỏi thủ công không?`
-                );
-                if (useManual) {
-                    setParsedQuestions([createEmptyQuestion()]);
-                    setShowQuestionsReview(true);
-                }
+                setFormErrors((current) => ({
+                    ...current,
+                    questions: `${errorData.message || errorData.error || 'Máy chủ gặp sự cố khi đọc file.'} Hệ thống đã chuyển sang chế độ nhập thủ công.`,
+                }));
+                setParsedQuestions([createEmptyQuestion()]);
+                setShowQuestionsReview(true);
             }
         } catch (err) {
             if (err.name !== 'AbortError' && analysisRequestRef.current.id === requestId) {
@@ -334,6 +341,8 @@ const AssignmentManager = () => {
         const controller = new AbortController();
         createRequestRef.current = controller;
         setIsSubmitting(true);
+        setActionError('');
+        setActionNotice('');
         try {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
@@ -348,7 +357,7 @@ const AssignmentManager = () => {
             });
 
             const result = await parseAdminMutationResponse(res);
-            notifyAdminApprovalResult(result);
+            setActionNotice(result.message || 'Đã gửi bài tập.');
             if (!result.pendingApproval) await fetchInitialData({ showLoader: false });
             setIsModalOpen(false);
             resetAssignmentForm();
@@ -429,6 +438,8 @@ const AssignmentManager = () => {
 
         const postId = viewingSubmissions.id;
         setGradingStudentId(studentId);
+        setActionError('');
+        setActionNotice('');
         try {
             const token = localStorage.getItem('token');
             if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
@@ -444,7 +455,7 @@ const AssignmentManager = () => {
                 })
             });
             const result = await parseAdminMutationResponse(res);
-            notifyAdminApprovalResult(result);
+            setActionNotice(result.message || 'Đã lưu kết quả chấm điểm.');
             if (!result.pendingApproval) await fetchSubmissions(postId);
             setGrading(EMPTY_GRADING);
             setGradingErrors({});
@@ -497,6 +508,14 @@ const AssignmentManager = () => {
                             Thử lại
                         </button>
                     </div>
+                )}
+
+                {actionError && (
+                    <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700" role="alert">{actionError}</div>
+                )}
+
+                {actionNotice && (
+                    <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-800" role="status" aria-live="polite">{actionNotice}</div>
                 )}
 
                 {/* Filters Row */}

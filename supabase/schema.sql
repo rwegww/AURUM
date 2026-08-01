@@ -1383,9 +1383,16 @@ CREATE INDEX IF NOT EXISTS idx_phan_hoi_created_id ON public.phan_hoi (created_a
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_teacher_pending_email
   ON public.phan_hoi ((thong_tin_bo_sung->>'email'))
   WHERE type = 'teacher_registration' AND status = 'unread';
+CREATE INDEX IF NOT EXISTS idx_phan_hoi_teacher_created_id
+  ON public.phan_hoi (created_at DESC, id DESC)
+  WHERE type = 'teacher_registration';
+CREATE INDEX IF NOT EXISTS idx_phan_hoi_general_created_id
+  ON public.phan_hoi (created_at DESC, id DESC)
+  WHERE type <> 'teacher_registration';
 CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_status_created ON public.yeu_cau_duyet_admin (status, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_status_created_id ON public.yeu_cau_duyet_admin (status, created_at DESC, id DESC);
 CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_requested_by ON public.yeu_cau_duyet_admin (requested_by);
+CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_executed_by ON public.yeu_cau_duyet_admin (executed_by);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_pending_hash
   ON public.yeu_cau_duyet_admin (request_hash)
   WHERE status = 'pending';

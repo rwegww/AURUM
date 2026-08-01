@@ -8,5 +8,10 @@ CREATE INDEX IF NOT EXISTS idx_phan_hoi_teacher_pending_email
   WHERE type = 'teacher_registration' AND status = 'unread';
 CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_status_created_id
   ON public.yeu_cau_duyet_admin (status, created_at DESC, id DESC);
+CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_executed_by
+  ON public.yeu_cau_duyet_admin (executed_by);
 CREATE INDEX IF NOT EXISTS idx_lop_giao_vien_created
   ON public.lop (giao_vien_id, created_at DESC);
+
+-- Giữ lại tên chỉ mục chuẩn trong schema và loại bỏ bản sao giống hệt.
+DROP INDEX IF EXISTS public.idx_nguoi_dung_dang_hoat_dong_minutes;

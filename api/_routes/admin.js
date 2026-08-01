@@ -19,6 +19,7 @@ const SAFE_TEXT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:@-]{0,127}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BCRYPT_HASH_PATTERN = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
 const PUBLIC_FEEDBACK_TYPES = new Set(['bug', 'suggestion', 'praise', 'other']);
+const ADMIN_FEEDBACK_KINDS = new Set(['all', 'feedback', 'teachers']);
 const LESSON_ARRAY_FIELDS = ['theoryModules', 'videoModules', 'storySlides', 'challenges'];
 
 router.use((_req, res, next) => {
@@ -1039,7 +1040,16 @@ router.get(['/users/:id', '/nguoi_dung/:id'], adminGuard, async (req, res) => {
 router.get(['/feedback', '/phan_hoi'], adminGuard, async (req, res) => {
   try {
     const { limit, cursor } = parsePageOptions(req.query);
-    const feedback = (await Feedback.findAll({ limit, cursor })).map(toAdminFeedbackDto);
+    const kind = req.query.kind === undefined ? 'all' : String(req.query.kind);
+    if (!ADMIN_FEEDBACK_KINDS.has(kind)) {
+      throw httpError(400, 'Nhóm phản hồi không hợp lệ.', 'INVALID_FEEDBACK_KIND');
+    }
+    const [feedbackRows, unreadTeacherRequests] = await Promise.all([
+      Feedback.findAll({ limit, cursor, kind }),
+      Feedback.countPendingTeacherRegistrations(),
+    ]);
+    const feedback = feedbackRows.map(toAdminFeedbackDto);
+    res.set('X-Unread-Teacher-Requests', String(unreadTeacherRequests));
     return sendPage(
       res,
       feedback,

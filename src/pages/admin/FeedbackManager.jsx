@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2, Clock3, GraduationCap, Mail, RefreshCcw } from 'lucide-react';
@@ -56,6 +56,7 @@ const FeedbackManager = () => {
   const [actionError, setActionError] = useState('');
   const [actionNotice, setActionNotice] = useState('');
   const [activeTab, setActiveTab] = useState('feedback');
+  const [unreadTeacherRequests, setUnreadTeacherRequests] = useState(0);
   const [actingId, setActingId] = useState(null);
   const [pendingActions, setPendingActions] = useState(() => new Set());
   const requestSequence = useRef(0);
@@ -72,6 +73,7 @@ const FeedbackManager = () => {
       if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
 
       const params = new URLSearchParams({ limit: String(PAGE_SIZE) });
+      params.set('kind', activeTab);
       if (append && cursor) params.set('before', cursor);
       const res = await fetch(`/api/admin/feedback?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -84,6 +86,8 @@ const FeedbackManager = () => {
       if (requestId === requestSequence.current) {
         setFeedbacks((current) => append ? mergeUniqueFeedback(current, data) : data);
         setNextCursor(res.headers.get('X-Next-Cursor') || null);
+        const unreadCount = Number(res.headers.get('X-Unread-Teacher-Requests'));
+        setUnreadTeacherRequests(Number.isInteger(unreadCount) && unreadCount >= 0 ? unreadCount : 0);
         if (!append) setPendingActions(new Set());
       }
     } catch (err) {
@@ -97,7 +101,7 @@ const FeedbackManager = () => {
         setLoadingMore(false);
       }
     }
-  }, []);
+  }, [activeTab]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -107,14 +111,6 @@ const FeedbackManager = () => {
       controller.abort();
     };
   }, [fetchFeedbacks]);
-
-  const visibleFeedbacks = useMemo(() => feedbacks.filter((item) => (
-    activeTab === 'teachers' ? item.type === 'teacher_registration' : item.type !== 'teacher_registration'
-  )), [activeTab, feedbacks]);
-
-  const unreadTeacherRequests = useMemo(() => feedbacks.filter((item) => (
-    item.type === 'teacher_registration' && item.status === 'unread'
-  )).length, [feedbacks]);
 
   const hasPendingAction = (id) => Array.from(pendingActions).some((key) => key.startsWith(`${id}:`));
 
@@ -140,7 +136,11 @@ const FeedbackManager = () => {
       if (result.pendingApproval) {
         setPendingActions((current) => new Set(current).add(actionKey));
       } else if (update) {
+        const currentItem = feedbacks.find((item) => item.id === id);
         setFeedbacks((current) => current.map((item) => item.id === id ? update(item, result.data) : item));
+        if (currentItem?.type === 'teacher_registration' && currentItem.status === 'unread') {
+          setUnreadTeacherRequests((current) => Math.max(0, current - 1));
+        }
         setPendingActions((current) => {
           const next = new Set(current);
           Array.from(next).forEach((key) => {
@@ -184,7 +184,11 @@ const FeedbackManager = () => {
             type="button"
             role="tab"
             aria-selected={activeTab === 'feedback'}
-            onClick={() => setActiveTab('feedback')}
+            onClick={() => {
+              setActionError('');
+              setActionNotice('');
+              setActiveTab('feedback');
+            }}
             className={`px-5 sm:px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'feedback' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
             Phản hồi và báo lỗi
@@ -193,7 +197,11 @@ const FeedbackManager = () => {
             type="button"
             role="tab"
             aria-selected={activeTab === 'teachers'}
-            onClick={() => setActiveTab('teachers')}
+            onClick={() => {
+              setActionError('');
+              setActionNotice('');
+              setActiveTab('teachers');
+            }}
             className={`px-5 sm:px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === 'teachers' ? 'bg-viet-green text-white shadow-md' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'} flex items-center gap-2`}
           >
             Duyệt giáo viên
@@ -231,16 +239,16 @@ const FeedbackManager = () => {
           </div>
         ) : (
           <div role="tabpanel" className="space-y-6" aria-busy={refreshing || loadingMore}>
-            {visibleFeedbacks.length === 0 ? (
+            {feedbacks.length === 0 ? (
               <div className="bg-white rounded-[32px] border border-viet-border p-12 sm:p-20 text-center">
                 {activeTab === 'teachers'
                   ? <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-4" aria-hidden="true" />
                   : <Mail className="w-12 h-12 text-slate-300 mx-auto mb-4" aria-hidden="true" />}
                 <p className="text-viet-text-light font-bold">
-                  {activeTab === 'teachers' ? 'Không có yêu cầu giáo viên trong dữ liệu đã tải.' : 'Không có phản hồi trong dữ liệu đã tải.'}
+                  {activeTab === 'teachers' ? 'Không có yêu cầu giáo viên.' : 'Không có phản hồi hoặc báo lỗi.'}
                 </p>
               </div>
-            ) : visibleFeedbacks.map((feedback, index) => {
+            ) : feedbacks.map((feedback, index) => {
               const username = feedback.username === 'Anonymous' ? 'Ẩn danh' : (feedback.username || 'Không rõ người gửi');
               const pending = hasPendingAction(feedback.id);
               const acting = actingId === feedback.id;

@@ -91,6 +91,8 @@ const TeacherDashboard = () => {
   const [loading, setLoading] = React.useState(true);
   const [loadError, setLoadError] = React.useState('');
   const [isLinkingGoogle, setIsLinkingGoogle] = React.useState(false);
+  const [googleError, setGoogleError] = React.useState('');
+  const [googleNotice, setGoogleNotice] = React.useState('');
   const dashboardRequestRef = React.useRef(null);
   const googleCallbackHandledRef = React.useRef(false);
   const { user, linkAccount } = useAuth();
@@ -152,6 +154,8 @@ const TeacherDashboard = () => {
 
     const completeGoogleLink = async () => {
       setIsLinkingGoogle(true);
+      setGoogleError('');
+      setGoogleNotice('');
       try {
         const { data, error } = await supabase.auth.getSession();
         if (error) throw error;
@@ -160,9 +164,9 @@ const TeacherDashboard = () => {
         const providerUser = data.session.user;
         const result = await linkAccount('google', providerUser.id, providerUser.email);
         if (!result.success) throw new Error(result.message || 'Không thể liên kết tài khoản Google.');
-        if (active) window.alert('Liên kết Google thành công!');
+        if (active) setGoogleNotice('Liên kết Google thành công!');
       } catch (error) {
-        if (active) window.alert(`Lỗi liên kết Google: ${error.message}`);
+        if (active) setGoogleError(`Lỗi liên kết Google: ${error.message}`);
       } finally {
         currentUrl.searchParams.delete('linking_google');
         const cleanUrl = `${currentUrl.pathname}${currentUrl.search}${currentUrl.hash}`;
@@ -180,6 +184,8 @@ const TeacherDashboard = () => {
   const handleLinkGoogle = async () => {
     if (isLinkingGoogle) return;
     setIsLinkingGoogle(true);
+    setGoogleError('');
+    setGoogleNotice('');
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -191,7 +197,7 @@ const TeacherDashboard = () => {
       if (error) throw error;
     } catch (error) {
       setIsLinkingGoogle(false);
-      window.alert(`Lỗi liên kết Google: ${error.message}`);
+      setGoogleError(`Lỗi liên kết Google: ${error.message}`);
     }
   };
 
@@ -215,6 +221,14 @@ const TeacherDashboard = () => {
               {loading ? 'Đang tải…' : 'Thử lại'}
             </button>
           </div>
+        )}
+
+        {googleError && (
+          <div role="alert" className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{googleError}</div>
+        )}
+
+        {googleNotice && (
+          <div role="status" aria-live="polite" className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">{googleNotice}</div>
         )}
 
         <section aria-label="Số liệu tổng quan" aria-busy={loading} className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">

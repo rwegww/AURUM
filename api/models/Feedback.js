@@ -31,12 +31,18 @@ export const Feedback = {
     return mapFeedback(data);
   },
 
-  async findAll({ limit, cursor } = {}) {
+  async findAll({ limit, cursor, kind = 'all' } = {}) {
     let query = supabase
       .from('phan_hoi')
       .select('*, nguoi_dung(username)')
       .order('created_at', { ascending: false })
       .order('id', { ascending: false });
+
+    if (kind === 'teachers') {
+      query = query.eq('type', 'teacher_registration');
+    } else if (kind === 'feedback') {
+      query = query.neq('type', 'teacher_registration');
+    }
 
     if (cursor) {
       query = query.or(
@@ -99,6 +105,17 @@ export const Feedback = {
     
     if (error) throw error;
     return count;
+  },
+
+  async countPendingTeacherRegistrations() {
+    const { count, error } = await supabase
+      .from('phan_hoi')
+      .select('id', { count: 'exact', head: true })
+      .eq('type', 'teacher_registration')
+      .eq('status', 'unread');
+
+    if (error) throw error;
+    return count || 0;
   },
 
   async updateStatus(id, status) {

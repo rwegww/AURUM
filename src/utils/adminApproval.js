@@ -19,8 +19,3 @@ export const parseAdminMutationResponse = async (res) => {
     message: data.message || (data.approval ? 'Thay đổi đã được hai quản trị viên xác nhận và thực thi.' : ''),
   };
 };
-
-export const notifyAdminApprovalResult = (result) => {
-  if (!result?.message) return;
-  window.alert(result.message);
-};

@@ -34,6 +34,7 @@ const lessonModel = {
 
 const phan_hoiModel = {
   countUnread: vi.fn(async () => 0),
+  countPendingTeacherRegistrations: vi.fn(async () => 0),
   getTypeDistribution: vi.fn(async () => ({})),
   findAll: vi.fn(async () => []),
   findById: vi.fn(async () => null),
@@ -243,6 +244,7 @@ beforeEach(() => {
   userModel.findOne.mockResolvedValue(null);
   userModel.comparePassword.mockResolvedValue(false);
   phan_hoiModel.findAll.mockResolvedValue([]);
+  phan_hoiModel.countPendingTeacherRegistrations.mockResolvedValue(0);
   phan_hoiModel.findById.mockResolvedValue(null);
   phan_hoiModel.findPendingTeacherRegistration.mockResolvedValue(null);
 });
@@ -512,6 +514,31 @@ describe('security acceptance matrix', () => {
     expect(JSON.stringify(res.body)).not.toContain('super-sensitive-hash');
     expect(res.body[0]).not.toHaveProperty('noi_dung');
     expect(JSON.parse(res.body[0].message)).toEqual({ email: 'teacher@example.com' });
+  });
+
+  it('filters admin feedback on the server before pagination', async () => {
+    phan_hoiModel.countPendingTeacherRegistrations.mockResolvedValueOnce(137);
+
+    const res = await request(app)
+      .get('/api/admin/feedback?limit=50&kind=teachers')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`);
+
+    expect(res.status).toBe(200);
+    expect(res.headers['x-unread-teacher-requests']).toBe('137');
+    expect(phan_hoiModel.findAll).toHaveBeenCalledWith(expect.objectContaining({
+      limit: 50,
+      kind: 'teachers',
+    }));
+  });
+
+  it('rejects invalid admin feedback groups', async () => {
+    const res = await request(app)
+      .get('/api/admin/feedback?kind=unknown')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`);
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('INVALID_FEEDBACK_KIND');
+    expect(phan_hoiModel.findAll).not.toHaveBeenCalled();
   });
 
   it('accepts grouped journey quizzes without corrupting them into an array', async () => {

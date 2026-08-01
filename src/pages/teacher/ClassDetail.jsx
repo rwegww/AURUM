@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import {
   getVideoEmbedUrl,
   isExternalEmbedVideo,
@@ -99,6 +99,8 @@ const ClassDetail = () => {
   const [newSchedule, setNewSchedule] = useState(EMPTY_SCHEDULE);
   const [postError, setPostError] = useState('');
   const [scheduleError, setScheduleError] = useState('');
+  const [postNotice, setPostNotice] = useState('');
+  const [scheduleNotice, setScheduleNotice] = useState('');
   const [isPosting, setIsPosting] = useState(false);
   const [isScheduling, setIsScheduling] = useState(false);
   const [referenceTime, setReferenceTime] = useState(0);
@@ -211,6 +213,7 @@ const ClassDetail = () => {
     postRequestRef.current = controller;
     setIsPosting(true);
     setPostError('');
+    setPostNotice('');
 
     try {
       const token = localStorage.getItem('token');
@@ -232,7 +235,7 @@ const ClassDetail = () => {
       const result = await parseAdminMutationResponse(response);
       if (controller.signal.aborted) return;
 
-      notifyAdminApprovalResult(result);
+      setPostNotice(result.message || 'Đã gửi bài đăng.');
       if (!result.pendingApproval && result.data?.id) {
         const targetMember = members.find((member) => member.id === newPost.hoc_sinh_nhan_id);
         const createdPost = targetMember && !result.data.target
@@ -277,6 +280,7 @@ const ClassDetail = () => {
     scheduleRequestRef.current = controller;
     setIsScheduling(true);
     setScheduleError('');
+    setScheduleNotice('');
 
     try {
       const token = localStorage.getItem('token');
@@ -292,7 +296,7 @@ const ClassDetail = () => {
       const result = await parseAdminMutationResponse(response);
       if (controller.signal.aborted) return;
 
-      notifyAdminApprovalResult(result);
+      setScheduleNotice(result.message || 'Đã gửi lịch học.');
       if (!result.pendingApproval && result.data?.id) {
         setSchedules((current) => [result.data, ...current.filter((schedule) => schedule.id !== result.data.id)]
           .sort((left, right) => new Date(left.start_time).getTime() - new Date(right.start_time).getTime()));
@@ -389,6 +393,7 @@ const ClassDetail = () => {
             <h2 id="new-post-title" className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Tạo bài đăng mới</h2>
             <form onSubmit={handleCreatePost} className="space-y-4">
               {postError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{postError}</p>}
+              {postNotice && <p role="status" aria-live="polite" className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800">{postNotice}</p>}
               <div>
                 <label htmlFor="post-content" className="mb-1 block text-xs font-bold text-viet-text-light">Nội dung</label>
                 <textarea
@@ -488,6 +493,7 @@ const ClassDetail = () => {
             <h2 id="schedule-title" className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Lên lịch học</h2>
             <form onSubmit={handleCreateSchedule} className="space-y-3 mb-6">
               {scheduleError && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-700">{scheduleError}</p>}
+              {scheduleNotice && <p role="status" aria-live="polite" className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-800">{scheduleNotice}</p>}
               <div>
                 <label htmlFor="schedule-name" className="mb-1 block text-xs font-bold text-viet-text-light">Tiêu đề buổi học</label>
                 <input id="schedule-name" type="text" placeholder="Ôn tập chương 1" maxLength={200} value={newSchedule.title} onChange={(event) => setNewSchedule((current) => ({ ...current, title: event.target.value }))} className="w-full h-11 px-4 rounded-xl border border-viet-border outline-none text-xs focus:border-viet-green focus:ring-2 focus:ring-viet-green/20" required />

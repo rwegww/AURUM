@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Trash2 } from 'lucide-react';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { toNonNegativeInteger } from '@/utils/teacherUi';
 
 const EMPTY_CLASS = { name: '', khoi_id: '10', description: '' };
@@ -14,6 +14,7 @@ const ClassManager = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createError, setCreateError] = useState('');
+  const [createNotice, setCreateNotice] = useState('');
   const [newClass, setNewClass] = useState(EMPTY_CLASS);
   const [deleteTarget, setDeleteTarget] = useState(null); // { id, name }
   const [isDeleting, setIsDeleting] = useState(false);
@@ -126,6 +127,7 @@ const ClassManager = () => {
     createRequestRef.current = controller;
     setIsSubmitting(true);
     setCreateError('');
+    setCreateNotice('');
 
     try {
       const token = localStorage.getItem('token');
@@ -145,7 +147,7 @@ const ClassManager = () => {
       const result = await parseAdminMutationResponse(response);
       if (controller.signal.aborted) return;
 
-      notifyAdminApprovalResult(result);
+      setCreateNotice(result.message || 'Đã gửi yêu cầu tạo lớp học.');
       if (!result.pendingApproval && result.data?.id) {
         setClasses((current) => [result.data, ...current.filter((item) => item.id !== result.data.id)]);
       }
@@ -181,6 +183,7 @@ const ClassManager = () => {
             type="button"
             onClick={() => {
               setCreateError('');
+              setCreateNotice('');
               setIsCreating(true);
             }}
             disabled={isCreating}
@@ -194,6 +197,12 @@ const ClassManager = () => {
           <div role="alert" className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             <span>{loadError} Danh sách hiện tại có thể chưa được cập nhật.</span>
             <button type="button" onClick={() => fetchClasses(false)} className="min-h-10 shrink-0 rounded-xl border border-amber-300 bg-white px-4 font-bold">Thử lại</button>
+          </div>
+        )}
+
+        {createNotice && (
+          <div role="status" aria-live="polite" className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">
+            {createNotice}
           </div>
         )}
 

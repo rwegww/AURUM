@@ -29,6 +29,7 @@ const configuredOrigins = [
 ].filter(Boolean).map((origin) => origin.trim());
 
 app.use(cors({
+  exposedHeaders: ['X-Has-More', 'X-Next-Cursor', 'X-Unread-Teacher-Requests'],
   origin(origin, callback) {
     if (!origin || process.env.NODE_ENV !== 'production' || configuredOrigins.includes(origin)) {
       return callback(null, true);
