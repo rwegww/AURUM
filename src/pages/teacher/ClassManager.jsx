@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { Trash2 } from 'lucide-react';
 import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
 import { toNonNegativeInteger } from '@/utils/teacherUi';
 
@@ -14,8 +15,12 @@ const ClassManager = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createError, setCreateError] = useState('');
   const [newClass, setNewClass] = useState(EMPTY_CLASS);
+  const [deleteTarget, setDeleteTarget] = useState(null); // { id, name }
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const loadRequestRef = useRef(null);
   const createRequestRef = useRef(null);
+  const deleteRequestRef = useRef(null);
 
   const fetchClasses = useCallback(async (showLoader = true) => {
     loadRequestRef.current?.abort();
@@ -54,6 +59,7 @@ const ClassManager = () => {
       window.clearTimeout(timer);
       loadRequestRef.current?.abort();
       createRequestRef.current?.abort();
+      deleteRequestRef.current?.abort();
     };
   }, [fetchClasses]);
 
@@ -61,6 +67,47 @@ const ClassManager = () => {
     setIsCreating(false);
     setCreateError('');
     setNewClass(EMPTY_CLASS);
+  };
+
+  const openDeleteDialog = (cls) => {
+    setDeleteError('');
+    setDeleteTarget({ id: cls.id, name: cls.name || 'Lớp chưa đặt tên' });
+  };
+
+  const closeDeleteDialog = () => {
+    if (isDeleting) return;
+    setDeleteTarget(null);
+    setDeleteError('');
+  };
+
+  const handleDelete = async () => {
+    if (!deleteTarget || isDeleting) return;
+    deleteRequestRef.current?.abort();
+    const controller = new AbortController();
+    deleteRequestRef.current = controller;
+    setIsDeleting(true);
+    setDeleteError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/classes/${deleteTarget.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+        signal: controller.signal,
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data.error || data.message || 'Không thể xóa lớp học.');
+      }
+      setClasses((current) => current.filter((c) => c.id !== deleteTarget.id));
+      setDeleteTarget(null);
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        setDeleteError(error.message || 'Không thể xóa lớp học.');
+      }
+    } finally {
+      if (deleteRequestRef.current === controller) setIsDeleting(false);
+    }
   };
 
   const handleCreate = async (event) => {
@@ -234,7 +281,17 @@ const ClassManager = () => {
                 <article key={cls.id} className="bg-white p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] border border-viet-border shadow-sm hover:shadow-md transition-all group flex flex-col h-full">
                   <div className="flex items-start justify-between gap-3 mb-4">
                     <span className="px-3 py-1 bg-viet-green/10 text-viet-green text-[10px] font-black uppercase rounded tracking-widest">{grade ? `Khối ${grade}` : 'Chưa rõ khối'}</span>
-                    {cls.code && <span className="text-[11px] font-black text-viet-text opacity-60 text-right select-all">Mã: {cls.code}</span>}
+                    <div className="flex items-center gap-2">
+                      {cls.code && <span className="text-[11px] font-black text-viet-text opacity-60 select-all">Mã: {cls.code}</span>}
+                      <button
+                        type="button"
+                        onClick={() => openDeleteDialog(cls)}
+                        aria-label={`Xóa lớp ${cls.name || ''}`.trim()}
+                        className="w-8 h-8 flex items-center justify-center rounded-lg text-viet-text-light hover:text-red-500 hover:bg-red-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
                   </div>
                   <h2 className="text-xl font-black text-viet-text leading-tight mb-2 break-words">{cls.name || 'Lớp chưa đặt tên'}</h2>
                   <p className="text-xs font-medium text-viet-text-light mb-4 flex-1 whitespace-pre-wrap break-words">{cls.description || 'Chưa có mô tả.'}</p>
@@ -255,6 +312,68 @@ const ClassManager = () => {
           )}
         </section>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {deleteTarget && (
+          <motion.div
+            key="delete-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+            onClick={closeDeleteDialog}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-dialog-title"
+          >
+            <motion.div
+              key="delete-dialog"
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.18 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm bg-white rounded-[28px] p-6 shadow-2xl border border-viet-border"
+            >
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-2xl bg-red-50 text-red-500">
+                <Trash2 size={22} />
+              </div>
+              <h2 id="delete-dialog-title" className="text-center text-base font-black text-viet-text mb-1">Xóa lớp học?</h2>
+              <p className="text-center text-sm text-viet-text-light mb-1">
+                Bạn có chắc muốn xóa lớp
+              </p>
+              <p className="text-center text-sm font-bold text-viet-text mb-4 break-words">
+                &ldquo;{deleteTarget.name}&rdquo;?
+              </p>
+              <p className="text-center text-xs text-red-500 font-medium mb-5">Hành động này không thể hoàn tác.</p>
+
+              {deleteError && (
+                <p role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700 text-center">{deleteError}</p>
+              )}
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={closeDeleteDialog}
+                  disabled={isDeleting}
+                  className="flex-1 min-h-11 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-viet-text-light bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors disabled:opacity-60"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="flex-1 min-h-11 px-4 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-md shadow-red-500/20 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {isDeleting ? 'Đang xóa…' : 'Xóa lớp'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

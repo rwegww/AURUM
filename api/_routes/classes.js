@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import { supabase } from '../lib/supabase.js';
 import AdminApproval from '../models/AdminApproval.js';
 import { auth } from '../_middleware/auth.js';
@@ -965,6 +965,28 @@ router.get('/:id', auth, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete a class (Teacher owner or Admin only)
+router.delete('/:id', auth, async (req, res) => {
+  try {
+    if (!requireTeacherOrAdmin(req, res)) return;
+
+    const { id } = req.params;
+    const classData = await ensureClassOwner(id, req.user, res);
+    if (!classData) return;
+
+    const { error } = await supabase
+      .from('lop')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    res.json({ message: 'Đã xóa lớp học thành công.' });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Không thể xóa lớp học.' });
   }
 });
 
