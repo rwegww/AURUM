@@ -21,7 +21,8 @@ export const Feedback = {
         noi_dung: phan_hoiData.message,
         type: phan_hoiData.type || 'suggestion',
         status: phan_hoiData.status || 'unread',
-        image_url: phan_hoiData.imageUrl || null
+        image_url: phan_hoiData.imageUrl || null,
+        thong_tin_bo_sung: phan_hoiData.metadata || {},
       }])
       .select()
       .single();
@@ -30,15 +31,25 @@ export const Feedback = {
     return mapFeedback(data);
   },
 
-  async findAll() {
-    const { data, error } = await supabase
+  async findAll({ limit, cursor } = {}) {
+    let query = supabase
       .from('phan_hoi')
       .select('*, nguoi_dung(username)')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false });
+
+    if (cursor) {
+      query = query.or(
+        `created_at.lt.${cursor.sort},and(created_at.eq.${cursor.sort},id.lt.${cursor.id})`
+      );
+    }
+    if (Number.isInteger(limit) && limit > 0) query = query.limit(limit + 1);
+
+    const { data, error } = await query;
     
     if (error) throw error;
     // Map internal nguoi_dung object to match what populate would provide if needed
-    return data.map(f => ({
+    return (data || []).map(f => ({
       ...mapFeedback(f),
       userId: { username: f.nguoi_dung?.username }
     }));
@@ -53,6 +64,31 @@ export const Feedback = {
     
     if (error && error.code !== 'PGRST116') throw error;
     return mapFeedback(data);
+  },
+
+  async findPendingTeacherRegistration({ username, email }) {
+    const [byUsername, byEmail] = await Promise.all([
+      supabase
+        .from('phan_hoi')
+        .select('id')
+        .eq('type', 'teacher_registration')
+        .eq('status', 'unread')
+        .eq('username', username)
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('phan_hoi')
+        .select('id')
+        .eq('type', 'teacher_registration')
+        .eq('status', 'unread')
+        .eq('thong_tin_bo_sung->>email', email)
+        .limit(1)
+        .maybeSingle(),
+    ]);
+
+    if (byUsername.error) throw byUsername.error;
+    if (byEmail.error) throw byEmail.error;
+    return byUsername.data || byEmail.data || null;
   },
 
   async countUnread() {
@@ -90,18 +126,16 @@ export const Feedback = {
   },
 
   async getTypeDistribution() {
-    const { data, error } = await supabase
+    const types = ['bug', 'suggestion', 'praise'];
+    const results = await Promise.all(types.map((type) => supabase
       .from('phan_hoi')
-      .select('type');
-    if (error) throw error;
-    
-    const distribution = { bug: 0, suggestion: 0, praise: 0 };
-    data.forEach(f => {
-      if (distribution[f.type] !== undefined) {
-        distribution[f.type]++;
-      } else {
-        distribution[f.type] = 1;
-      }
+      .select('id', { count: 'exact', head: true })
+      .eq('type', type)));
+
+    const distribution = {};
+    results.forEach((result, index) => {
+      if (result.error) throw result.error;
+      distribution[types[index]] = result.count || 0;
     });
     
     return [

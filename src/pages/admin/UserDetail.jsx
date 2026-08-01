@@ -113,7 +113,7 @@ const UserDetail = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <header className="mb-12">
-           <Link to="/admin/nguoi_dung" className="text-viet-green font-bold text-xs mb-4 block hover:underline">← Quay lại Danh sách học sinh</Link>
+           <Link to="/admin/nguoi_dung" className="text-viet-green font-bold text-xs mb-4 block hover:underline">← Quay lại Danh sách người dùng</Link>
            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-6 min-w-0">
                 <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-[28px] sm:rounded-[32px] bg-gradient-to-br from-viet-green/20 to-viet-green/5 p-1 border border-viet-border shadow-inner flex items-center justify-center overflow-hidden">

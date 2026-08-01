@@ -22,16 +22,50 @@ const userModel = {
   update: vi.fn(async (id, data) => ({ ...nguoi_dung[id], ...data })),
   countStudents: vi.fn(async () => 0),
   aggregateStats: vi.fn(async () => ({ totalXP: 0, avgLevel: 1, levelDistribution: {}, gradeDistribution: {}, topXP: [], topStreak: [] })),
+  comparePassword: vi.fn(async () => false),
+  toggleLock: vi.fn(),
 };
 
 const lessonModel = {
   countAll: vi.fn(async () => 0),
   findById: vi.fn(async (id) => ({ id, lessonId: id })),
+  update: vi.fn(async (id, lesson) => ({ ...lesson, id, lessonId: id })),
 };
 
 const phan_hoiModel = {
   countUnread: vi.fn(async () => 0),
   getTypeDistribution: vi.fn(async () => ({})),
+  findAll: vi.fn(async () => []),
+  findById: vi.fn(async () => null),
+  create: vi.fn(async (data) => ({ id: 'feedback-1', ...data })),
+  updateStatus: vi.fn(),
+  approve: vi.fn(),
+  findPendingTeacherRegistration: vi.fn(async () => null),
+};
+
+const approvalModel = {
+  list: vi.fn(async () => []),
+  createOrApprove: vi.fn(async ({ actionKey, actionLabel, payload, adminUser }) => ({
+    request: {
+      id: '11111111-1111-4111-8111-111111111111',
+      status: 'pending',
+      actionKey,
+      actionLabel,
+      payload,
+      requestedBy: adminUser.id,
+      approverIds: [adminUser.id],
+      currentApprovals: 1,
+      requiredApprovals: 2,
+      createdAt: new Date().toISOString(),
+    },
+    readyToExecute: false,
+    alreadyApproved: false,
+  })),
+  addApproval: vi.fn(),
+  claimExecution: vi.fn(),
+  markExecuted: vi.fn(),
+  markFailed: vi.fn(),
+  reject: vi.fn(),
 };
 
 const discussionModel = {
@@ -160,6 +194,7 @@ const supabase = {
 vi.mock('../api/models/User.js', () => ({ default: userModel }));
 vi.mock('../api/models/Lesson.js', () => ({ default: lessonModel }));
 vi.mock('../api/models/Feedback.js', () => ({ default: phan_hoiModel }));
+vi.mock('../api/models/AdminApproval.js', () => ({ default: approvalModel }));
 vi.mock('../api/models/Discussion.js', () => ({ Discussion: discussionModel, Note: noteModel }));
 vi.mock('../api/lib/supabase.js', () => ({ supabase }));
 vi.mock('../api/lib/mailer.js', () => ({
@@ -168,11 +203,13 @@ vi.mock('../api/lib/mailer.js', () => ({
 }));
 
 const { default: app } = await import('../api/index.js');
+const { authenticateToken } = await import('../api/_middleware/auth.js');
 
 const tokenFor = (id) => jwt.sign({ id, role: nguoi_dung[id].role, sessionId }, process.env.JWT_SECRET);
 
 beforeEach(() => {
   vi.clearAllMocks();
+  supabase.auth.getUser.mockResolvedValue({ data: { user: null }, error: null });
   supabaseState.classData = null;
   supabaseState.membership = null;
   supabaseState.post = null;
@@ -184,6 +221,12 @@ beforeEach(() => {
   supabaseState.insertAttempted = false;
   supabaseState.updateAttempted = false;
   supabaseState.insertedPost = null;
+  userModel.findById.mockImplementation(async (id) => nguoi_dung[id] || null);
+  userModel.findOne.mockResolvedValue(null);
+  userModel.comparePassword.mockResolvedValue(false);
+  phan_hoiModel.findAll.mockResolvedValue([]);
+  phan_hoiModel.findById.mockResolvedValue(null);
+  phan_hoiModel.findPendingTeacherRegistration.mockResolvedValue(null);
 });
 
 const validMaterialPayload = {
@@ -195,6 +238,41 @@ const validMaterialPayload = {
 };
 
 describe('security acceptance matrix', () => {
+  it('blocks the legacy shared OAuth password even on existing accounts', async () => {
+    userModel.findOne.mockResolvedValue(nguoi_dung.student);
+    userModel.comparePassword.mockResolvedValue(true);
+    const res = await request(app).post('/api/auth/login').send({
+      username: 'student', password: 'supabase_oauth_no_password',
+    });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('INVALID_CREDENTIALS');
+    expect(userModel.comparePassword).not.toHaveBeenCalled();
+    expect(userModel.update).not.toHaveBeenCalled();
+  });
+
+  it('creates OAuth accounts with different unpredictable password placeholders', async () => {
+    supabase.auth.getUser.mockResolvedValue({ data: { user: {
+      id: 'new-oauth-user', email: 'oauth@example.com', email_confirmed_at: '2026-09-01',
+    } }, error: null });
+    await authenticateToken('oauth-fixture-token');
+    await authenticateToken('oauth-fixture-token');
+    const passwords = userModel.create.mock.calls.map(([input]) => input.password);
+    expect(passwords).toHaveLength(2);
+    expect(passwords[0]).toMatch(/^[A-Za-z0-9_-]{64}$/);
+    expect(passwords[1]).not.toBe(passwords[0]);
+  });
+
+  it('does not automatically link an OAuth email to an administrator', async () => {
+    supabase.auth.getUser.mockResolvedValue({ data: { user: {
+      id: 'new-oauth-user', email: 'admin@example.com', email_confirmed_at: '2026-09-01',
+    } }, error: null });
+    userModel.findOne.mockImplementation(async (filter) => filter.email ? nguoi_dung.admin : null);
+    await expect(authenticateToken('oauth-fixture-token')).rejects.toMatchObject({
+      code: 'PRIVILEGED_ACCOUNT_LINK_REQUIRED', status: 403,
+    });
+    expect(userModel.create).not.toHaveBeenCalled();
+  });
+
   it('rejects public admin registration', async () => {
     const res = await request(app)
       .post('/api/auth/register')
@@ -202,6 +280,21 @@ describe('security acceptance matrix', () => {
 
     expect(res.status).toBe(403);
     expect(userModel.create).not.toHaveBeenCalled();
+  });
+
+  it('rejects a non-string teacher proof URL without leaking an internal error', async () => {
+    const res = await request(app)
+      .post('/api/auth/register-teacher')
+      .send({
+        username: 'teacher-candidate',
+        password: 'secure-password',
+        email: 'candidate@example.com',
+        proofImageUrl: { url: 'https://example.com/proof.png' },
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('INVALID_PROOF_URL');
+    expect(phan_hoiModel.create).not.toHaveBeenCalled();
   });
 
   it('rejects profile updates for sensitive or unknown fields', async () => {
@@ -221,6 +314,169 @@ describe('security acceptance matrix', () => {
       .set('Authorization', `Bearer ${tokenFor('teacher')}`);
 
     expect(res.status).toBe(403);
+  });
+
+  it('does not allow teachers to request an admin media upload signature', async () => {
+    const res = await request(app)
+      .post('/api/admin/media/signature')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({ folder: 'chemistry-odyssey/admin' });
+
+    expect(res.status).toBe(403);
+  });
+
+  it('restricts signed admin uploads to the admin media folder', async () => {
+    const res = await request(app)
+      .post('/api/admin/media/signature')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`)
+      .send({ folder: 'chemistry-odyssey/teacher-proofs' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('INVALID_UPLOAD_FOLDER');
+  });
+
+  it('blocks a locked account from creating a new password session', async () => {
+    userModel.findOne.mockResolvedValueOnce({
+      ...nguoi_dung.student,
+      password: '$2b$10$test',
+      isLocked: true,
+    });
+    userModel.comparePassword.mockResolvedValueOnce(true);
+
+    const res = await request(app)
+      .post('/api/auth/login')
+      .send({ username: 'student', password: 'correct-password' });
+
+    expect(res.status).toBe(403);
+    expect(res.body.error).toBe('ACCOUNT_LOCKED');
+    expect(userModel.update).not.toHaveBeenCalled();
+  });
+
+  it('rejects string values for the admin account lock flag', async () => {
+    const res = await request(app)
+      .patch('/api/admin/users/student/lock')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`)
+      .send({ isLocked: 'false' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('VALIDATION_ERROR');
+    expect(approvalModel.createOrApprove).not.toHaveBeenCalled();
+  });
+
+  it('never allows an admin account to be locked', async () => {
+    const res = await request(app)
+      .patch('/api/admin/users/admin/lock')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`)
+      .send({ isLocked: true });
+
+    expect(res.status).toBe(403);
+    expect(res.body.error).toBe('ADMIN_LOCK_FORBIDDEN');
+    expect(approvalModel.createOrApprove).not.toHaveBeenCalled();
+  });
+
+  it('redacts password and session fields from admin user details', async () => {
+    userModel.findById.mockImplementation(async (id) => {
+      if (id === 'student') {
+        return {
+          ...nguoi_dung.student,
+          email: 'student@example.com',
+          password: '$2b$10$sensitive',
+          password_hash: '$2b$10$sensitive',
+          currentSessionId: 'private-session',
+        };
+      }
+      return nguoi_dung[id] || null;
+    });
+
+    const res = await request(app)
+      .get('/api/admin/users/student')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.email).toBe('student@example.com');
+    expect(res.body).not.toHaveProperty('password');
+    expect(res.body).not.toHaveProperty('password_hash');
+    expect(res.body).not.toHaveProperty('currentSessionId');
+  });
+
+  it('redacts teacher password hashes from the admin feedback list', async () => {
+    const sensitiveMessage = JSON.stringify({
+      email: 'teacher@example.com',
+      hashedPassword: '$2b$10$super-sensitive-hash',
+    });
+    phan_hoiModel.findAll.mockResolvedValueOnce([{
+      id: '22222222-2222-4222-8222-222222222222',
+      username: 'teacher-candidate',
+      type: 'teacher_registration',
+      status: 'unread',
+      message: sensitiveMessage,
+      noi_dung: sensitiveMessage,
+      createdAt: '2026-09-04T09:00:00.000Z',
+    }]);
+
+    const res = await request(app)
+      .get('/api/admin/feedback?limit=50')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`);
+
+    expect(res.status).toBe(200);
+    expect(JSON.stringify(res.body)).not.toContain('super-sensitive-hash');
+    expect(res.body[0]).not.toHaveProperty('noi_dung');
+    expect(JSON.parse(res.body[0].message)).toEqual({ email: 'teacher@example.com' });
+  });
+
+  it('accepts grouped journey quizzes without corrupting them into an array', async () => {
+    const quizzes = {
+      level1: [{ question: 'Câu 1', options: ['A', 'B'], answer: 0 }],
+      level2: [],
+      level3: [],
+    };
+
+    const res = await request(app)
+      .post('/api/admin/lessons')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`)
+      .send({ lessonId: 'hoa8_bai1', title: 'Bài 1', gradeLevelId: 8, quizzes });
+
+    expect(res.status).toBe(202);
+    expect(approvalModel.createOrApprove).toHaveBeenCalledWith(expect.objectContaining({
+      payload: expect.objectContaining({ lesson: expect.objectContaining({ quizzes }) }),
+    }));
+  });
+
+  it('preserves the latest lesson content when approving an order-only change', async () => {
+    const approvalId = '11111111-1111-4111-8111-111111111111';
+    const currentLesson = {
+      lessonId: 'hoa8_bai1', title: 'Tiêu đề mới', gradeLevelId: 8, order: 1,
+      quizzes: { level1: [{ question: 'Mới cập nhật', options: ['A', 'B'], answer: 1 }] },
+      theoryModules: [{ type: 'markdown', content: { text: 'Nội dung mới nhất' } }],
+      isPremium: true,
+    };
+    lessonModel.findById.mockResolvedValueOnce(currentLesson);
+    approvalModel.addApproval.mockResolvedValueOnce({ readyToExecute: true, request: { id: approvalId } });
+    approvalModel.claimExecution.mockResolvedValueOnce({
+      id: approvalId, actionKey: 'lesson.update', payload: { id: 'hoa8_bai1', lesson: { order: 2 } },
+    });
+    approvalModel.markExecuted.mockResolvedValueOnce({ id: approvalId, status: 'executed' });
+
+    const res = await request(app)
+      .post(`/api/admin/approvals/${approvalId}/approve`)
+      .set('Authorization', `Bearer ${tokenFor('admin')}`);
+
+    expect(res.status).toBe(200);
+    expect(lessonModel.update).toHaveBeenCalledWith('hoa8_bai1', expect.objectContaining({
+      title: 'Tiêu đề mới', order: 2, quizzes: currentLesson.quizzes,
+      theoryModules: currentLesson.theoryModules, isPremium: true,
+    }));
+    expect(approvalModel.markFailed).not.toHaveBeenCalled();
+  });
+
+  it('validates public feedback before writing to the database', async () => {
+    const res = await request(app)
+      .post('/api/admin/feedback/submit')
+      .send({ type: 'teacher_registration', message: 'Không được phép' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('INVALID_FEEDBACK_TYPE');
+    expect(phan_hoiModel.create).not.toHaveBeenCalled();
   });
 
   it('blocks students from uploading library hoc_lieu', async () => {
@@ -295,6 +551,17 @@ describe('security acceptance matrix', () => {
       .set('Authorization', `Bearer ${tokenFor('outsider')}`);
 
     expect(res.status).toBe(403);
+  });
+
+  it('rejects invalid class data before creating an admin approval request', async () => {
+    const res = await request(app)
+      .post('/api/classes')
+      .set('Authorization', `Bearer ${tokenFor('admin')}`)
+      .send({ name: '   ', khoi_id: 99, description: 'Không hợp lệ' });
+
+    expect(res.status).toBe(400);
+    expect(approvalModel.createOrApprove).not.toHaveBeenCalled();
+    expect(supabaseState.lastInsertPayload).toBeNull();
   });
 
   it('returns class detail for the owning teacher', async () => {

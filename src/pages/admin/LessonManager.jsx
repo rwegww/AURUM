@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { AlertCircle, BookOpen, Pencil, Plus, RefreshCcw, Save, Trash2, X } from 'lucide-react';
+import { AlertCircle, BookOpen, CheckCircle2, Pencil, Plus, RefreshCcw, Save, Trash2, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import MediaUploader from '@/components/admin/MediaUploader';
 import { modulesToMarkdown } from '@/utils/adminLessonData';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { isExternalEmbedVideo, normalizeHttpUrl } from '@/utils/videoLinks';
 
 const GRADES = [6, 7, 8, 9, 10, 11, 12];
@@ -57,12 +57,14 @@ const LessonManager = () => {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
+  const [actionNotice, setActionNotice] = useState('');
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [editingLesson, setEditingLesson] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState(() => createFormDefaults([], 8));
   const [formDirty, setFormDirty] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [mediaUploading, setMediaUploading] = useState(false);
   const [editingId, setEditingId] = useState('');
   const [deletingId, setDeletingId] = useState('');
 
@@ -88,19 +90,22 @@ const LessonManager = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchLessons(controller.signal);
-    return () => controller.abort();
+    const timeoutId = window.setTimeout(() => fetchLessons(controller.signal), 0);
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [fetchLessons]);
 
   useEffect(() => {
     const warnBeforeUnload = (event) => {
-      if (!formDirty) return;
+      if (!formDirty && !mediaUploading) return;
       event.preventDefault();
       event.returnValue = '';
     };
     window.addEventListener('beforeunload', warnBeforeUnload);
     return () => window.removeEventListener('beforeunload', warnBeforeUnload);
-  }, [formDirty]);
+  }, [formDirty, mediaUploading]);
 
   const modalOpen = Boolean(editingLesson || isCreating);
   const modalTitleId = 'lesson-editor-title';
@@ -114,7 +119,7 @@ const LessonManager = () => {
 
   const closeEditor = () => {
     if (saving) return;
-    if (formDirty && !window.confirm('Bạn có thay đổi chưa lưu. Bạn có chắc muốn đóng?')) return;
+    if ((formDirty || mediaUploading) && !window.confirm('Bạn có thay đổi chưa lưu hoặc tệp đang tải lên. Bạn có chắc muốn đóng?')) return;
     resetEditor();
   };
 
@@ -175,6 +180,7 @@ const LessonManager = () => {
 
     setDeletingId(lessonId);
     setActionError('');
+    setActionNotice('');
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(`/api/admin/lessons/${encodeURIComponent(lessonId)}`, {
@@ -182,7 +188,7 @@ const LessonManager = () => {
         headers: { Authorization: `Bearer ${token || ''}` },
       });
       const result = await parseAdminMutationResponse(response);
-      notifyAdminApprovalResult(result);
+      setActionNotice(result.message);
       if (!result.pendingApproval) {
         setLessons((current) => current.filter((lesson) => lesson.lessonId !== lessonId));
       }
@@ -235,7 +241,7 @@ const LessonManager = () => {
 
   const handleSave = async (event) => {
     event.preventDefault();
-    if (saving) return;
+    if (saving || mediaUploading) return;
 
     const validationError = validateForm();
     if (validationError) {
@@ -245,6 +251,7 @@ const LessonManager = () => {
 
     setSaving(true);
     setActionError('');
+    setActionNotice('');
     try {
       const normalizedVideoUrl = formData.videoUrl.trim() ? normalizeHttpUrl(formData.videoUrl) : '';
       const originalMarkdown = modulesToMarkdown(editingLesson?.theoryModules);
@@ -257,6 +264,7 @@ const LessonManager = () => {
         title: formData.title.trim(),
         description: formData.description.trim(),
         classId: Number(formData.classId),
+        gradeLevelId: Number(formData.classId),
         chapter: formData.chapter.trim(),
         programId: formData.programId,
         order: Number(formData.order),
@@ -278,7 +286,7 @@ const LessonManager = () => {
         body: JSON.stringify(payload),
       });
       const result = await parseAdminMutationResponse(response);
-      notifyAdminApprovalResult(result);
+      setActionNotice(result.message);
 
       if (!result.pendingApproval) {
         const savedLesson = result.data;
@@ -344,6 +352,14 @@ const LessonManager = () => {
             <AlertCircle className="mt-0.5 shrink-0" size={18} />
             <span className="flex-1">{actionError}</span>
             <button type="button" onClick={() => setActionError('')} aria-label="Đóng thông báo lỗi"><X size={16} /></button>
+          </div>
+        )}
+
+        {actionNotice && !modalOpen && (
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-700" role="status" aria-live="polite">
+            <CheckCircle2 className="mt-0.5 shrink-0" size={18} />
+            <span className="flex-1">{actionNotice}</span>
+            <button type="button" onClick={() => setActionNotice('')} aria-label="Đóng thông báo"><X size={16} /></button>
           </div>
         )}
 
@@ -515,13 +531,13 @@ const LessonManager = () => {
                       <h3 id="upload-video-title" className="text-sm font-bold uppercase tracking-widest text-viet-green">Tải video lên Cloudinary</h3>
                       <p className="mt-1 text-xs text-viet-text-light">URL sau khi tải thành công sẽ tự động điền vào ô “Link video chính”.</p>
                     </div>
-                    <MediaUploader type="video" maxSizeMB={10} disabled={saving} onUploadSuccess={(url) => updateForm('videoUrl', url)} />
+                    <MediaUploader type="video" maxSizeMB={10} disabled={saving} onUploadingChange={setMediaUploading} onUploadSuccess={(url) => updateForm('videoUrl', url)} />
                   </section>
                 </div>
 
                 <div className="flex flex-col-reverse gap-3 border-t border-viet-border bg-viet-bg/30 p-5 sm:flex-row sm:justify-end sm:p-8">
                   <button type="button" onClick={closeEditor} disabled={saving} className="rounded-2xl px-8 py-3 font-bold text-viet-text-light transition-colors hover:bg-white disabled:opacity-50">Hủy bỏ</button>
-                  <button type="submit" disabled={saving} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-viet-green px-8 py-3 font-bold text-white shadow-lg shadow-viet-green/20 transition-transform hover:scale-[1.01] disabled:cursor-wait disabled:opacity-60">
+                  <button type="submit" disabled={saving || mediaUploading} title={mediaUploading ? 'Vui lòng đợi tải video hoàn tất trước khi lưu.' : undefined} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-viet-green px-8 py-3 font-bold text-white shadow-lg shadow-viet-green/20 transition-transform hover:scale-[1.01] disabled:cursor-wait disabled:opacity-60">
                     {saving ? <RefreshCcw className="animate-spin" size={18} /> : <Save size={18} />}
                     {saving ? 'Đang lưu...' : isCreating ? 'Tạo bài học' : 'Lưu thay đổi'}
                   </button>

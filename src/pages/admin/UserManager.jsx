@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, Eye, Lock, RefreshCcw, Search, Unlock } from 'lucide-react';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { AlertTriangle, CheckCircle2, Eye, Lock, RefreshCcw, Search, Unlock } from 'lucide-react';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const PAGE_SIZE = 100;
 
@@ -37,6 +37,7 @@ const UserManager = () => {
   const [nextCursor, setNextCursor] = useState(null);
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
+  const [actionNotice, setActionNotice] = useState('');
   const [actingId, setActingId] = useState(null);
   const [pendingApprovalIds, setPendingApprovalIds] = useState(() => new Set());
   const [searchTerm, setSearchTerm] = useState('');
@@ -66,6 +67,7 @@ const UserManager = () => {
       if (requestId === requestSequence.current) {
         setUsers((current) => append ? mergeUniqueUsers(current, data) : data);
         setNextCursor(res.headers.get('X-Next-Cursor') || null);
+        if (!append) setPendingApprovalIds(new Set());
       }
     } catch (err) {
       if (err.name === 'AbortError' || requestId !== requestSequence.current) return;
@@ -106,6 +108,7 @@ const UserManager = () => {
 
     setActingId(user.id);
     setActionError('');
+    setActionNotice('');
     try {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
@@ -119,7 +122,7 @@ const UserManager = () => {
         body: JSON.stringify({ isLocked: shouldLock }),
       });
       const result = await parseAdminMutationResponse(res);
-      notifyAdminApprovalResult(result);
+      setActionNotice(result.message);
 
       if (result.pendingApproval) {
         setPendingApprovalIds((current) => new Set(current).add(user.id));
@@ -137,7 +140,6 @@ const UserManager = () => {
       console.error('Lỗi thay đổi trạng thái tài khoản:', err);
       const message = err.message || 'Không thể thay đổi trạng thái tài khoản.';
       setActionError(message);
-      window.alert(message);
     } finally {
       setActingId(null);
     }
@@ -182,6 +184,13 @@ const UserManager = () => {
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-bold text-red-700 flex items-start gap-3" role="alert">
             <AlertTriangle className="w-5 h-5 shrink-0" aria-hidden="true" />
             <span>{actionError || loadError}</span>
+          </div>
+        )}
+
+        {actionNotice && (
+          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-700 flex items-start gap-3" role="status" aria-live="polite">
+            <CheckCircle2 className="w-5 h-5 shrink-0" aria-hidden="true" />
+            <span>{actionNotice}</span>
           </div>
         )}
 

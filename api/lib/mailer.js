@@ -1,5 +1,18 @@
 ﻿import nodemailer from 'nodemailer';
 
+const escapeHtml = (value) => String(value ?? '')
+  .replaceAll('&', '&amp;')
+  .replaceAll('<', '&lt;')
+  .replaceAll('>', '&gt;')
+  .replaceAll('"', '&quot;')
+  .replaceAll("'", '&#39;');
+
+const getPublicAppUrl = () => {
+  const configuredUrl = process.env.PUBLIC_APP_URL || process.env.APP_URL;
+  const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
+  return (configuredUrl || vercelUrl || 'https://chem-aurum.vercel.app').replace(/\/+$/, '');
+};
+
 // Create a reusable transporter
 const createTransporter = async () => {
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
@@ -66,10 +79,10 @@ export const sendLoginOtpEmail = async (toEmail, username, otp, ttlMinutes = 10)
   html: `
     <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; color: #1f2937;">
       <h2 style="margin: 0 0 12px; color: #437d0c;">Học viện Hóa học Aurum</h2>
-      <p>Xin chào <strong>${username || 'bạn'}</strong>,</p>
+      <p>Xin chào <strong>${escapeHtml(username || 'bạn')}</strong>,</p>
       <p>Mã xác thực đăng nhập của bạn là:</p>
       <div style="margin: 24px 0; padding: 18px; text-align: center; border-radius: 14px; background: #f4faef; border: 1px solid #d9f2c9;">
-        <span style="font-size: 34px; letter-spacing: 8px; font-weight: 800; color: #1a1a1a;">${otp}</span>
+        <span style="font-size: 34px; letter-spacing: 8px; font-weight: 800; color: #1a1a1a;">${escapeHtml(otp)}</span>
       </div>
       <p style="margin: 0 0 8px;">Mã này có hiệu lực trong ${ttlMinutes} phút.</p>
       <p style="margin: 0; color: #64748b; font-size: 13px;">Nếu bạn không yêu cầu đăng nhập, hãy bỏ qua email này.</p>
@@ -88,7 +101,7 @@ export const sendStudyPlanConfirmationEmail = async (toEmail, username, planData
           <span style="font-size: 44px;">🎒</span>
         </div>
         <h2 style="color: #059669; text-align: center; margin-top: 10px; font-weight: 800; font-size: 22px;">Chào mừng bạn tham gia kế hoạch học tập!</h2>
-        <p>Xin chào <strong>${username}</strong>,</p>
+        <p>Xin chào <strong>${escapeHtml(username)}</strong>,</p>
         <p>Kế hoạch học tập của bạn đã được kích hoạt thành công. Chúng mình sẽ đồng hành cùng bạn trên con đường làm chủ kiến thức Hóa học nhé! ✨</p>
         
         <div style="background-color: #f0fdf4; padding: 18px; border-radius: 16px; margin: 25px 0; border: 1px solid #bbf7d0; text-align: center;">
@@ -168,7 +181,7 @@ export const sendStudyPlanHourlyReminderEmail = async (toEmail, username, planDa
           <span style="font-size: 44px;">${emoji}</span>
         </div>
         <h2 style="color: ${accentColor}; text-align: center; margin-top: 10px; font-weight: 800; font-size: 20px;">${greetingMsg}</h2>
-        <p>Xin chào <strong>${username}</strong>,</p>
+        <p>Xin chào <strong>${escapeHtml(username)}</strong>,</p>
         <p>${mainContent}</p>
         
         <div style="background-color: #f8fafc; padding: 18px; border-radius: 16px; margin: 25px 0; text-align: center; border: 1px solid #e2e8f0;">
@@ -241,7 +254,7 @@ export const sendStreakReminderEmail = async (toEmail, username, streakCount, ho
           <span style="font-size: 44px;">${emoji}</span>
         </div>
         <h2 style="color: ${accentColor}; text-align: center; margin-top: 10px; font-weight: 800; font-size: 20px;">${greetingMsg}</h2>
-        <p>Xin chào <strong>${username}</strong>,</p>
+        <p>Xin chào <strong>${escapeHtml(username)}</strong>,</p>
         <p>${mainContent}</p>
         
         <div style="background-color: #ffedd5; padding: 18px; border-radius: 16px; margin: 25px 0; text-align: center; border: 1px dashed #f97316;">
@@ -260,18 +273,19 @@ export const sendStreakReminderEmail = async (toEmail, username, streakCount, ho
 };
 
 export const sendTeacherApprovalEmail = async (toEmail, username, token) => {
-  const loginUrl = token ? `https://chem-aurum.vercel.app/login?token=${token}` : 'https://chem-aurum.vercel.app/login';
+  const loginBaseUrl = `${getPublicAppUrl()}/login`;
+  const loginUrl = token ? `${loginBaseUrl}?token=${encodeURIComponent(token)}` : loginBaseUrl;
   return sendMail({
     to: toEmail,
     subject: '✅ Tài khoản giáo viên đã được duyệt - Học viện Hóa học Aurum',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
         <h2 style="color: #059669; text-align: center;">Học viện Hóa học Aurum</h2>
-        <p>Xin chào <strong>${username}</strong>,</p>
+        <p>Xin chào <strong>${escapeHtml(username)}</strong>,</p>
         <p>🎉 Chúc mừng! Yêu cầu đăng ký tài khoản <strong>Giáo viên</strong> của bạn đã được <strong style="color: #059669;">phê duyệt</strong>.</p>
         <p>Bạn có thể đăng nhập vào hệ thống ngay bây giờ bằng tên đăng nhập và mật khẩu đã đăng ký.</p>
         <div style="text-align: center; margin-top: 30px;">
-          <a href="${loginUrl}" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Đăng nhập ngay</a>
+          <a href="${escapeHtml(loginUrl)}" style="background-color: #059669; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Đăng nhập ngay</a>
         </div>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
         <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum.</p>
@@ -287,9 +301,9 @@ export const sendTeacherRejectionEmail = async (toEmail, username, reason) => {
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
         <h2 style="color: #dc2626; text-align: center;">Học viện Hóa học Aurum</h2>
-        <p>Xin chào <strong>${username}</strong>,</p>
+        <p>Xin chào <strong>${escapeHtml(username)}</strong>,</p>
         <p>Chúng tôi rất tiếc phải thông báo rằng yêu cầu đăng ký tài khoản <strong>Giáo viên</strong> của bạn đã <strong style="color: #dc2626;">không được chấp thuận</strong>.</p>
-        ${reason ? `<div style="background-color: #fef2f2; padding: 15px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #dc2626;"><p style="margin: 0;"><strong>Lý do:</strong> ${reason}</p></div>` : ''}
+        ${reason ? `<div style="background-color: #fef2f2; padding: 15px; border-radius: 12px; margin: 20px 0; border-left: 4px solid #dc2626;"><p style="margin: 0;"><strong>Lý do:</strong> ${escapeHtml(reason)}</p></div>` : ''}
         <p>Nếu bạn có thắc mắc hoặc muốn đăng ký lại với thông tin bổ sung, vui lòng liên hệ với chúng tôi.</p>
         <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-top: 40px;" />
         <p style="font-size: 12px; color: #64748b; text-align: center;">Đây là email tự động từ hệ thống Học viện Hóa học Aurum.</p>

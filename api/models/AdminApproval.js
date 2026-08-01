@@ -3,8 +3,6 @@ import { supabase } from '../lib/supabase.js';
 
 export const REQUIRED_ADMIN_APPROVALS = 2;
 const TABLE_NAME = 'yeu_cau_duyet_admin';
-const ACTIVE_STATUSES = new Set(['pending', 'executing']);
-
 const approvalError = (status, message, code) => {
   const error = new Error(message);
   error.status = status;
@@ -52,6 +50,7 @@ const normalizeApproval = (row) => {
     updatedAt: row.updated_at,
     executedAt: row.executed_at,
     expiresAt: row.expires_at,
+    executedBy: row.executed_by,
     action_key: undefined,
     action_label: undefined,
     request_hash: undefined,
@@ -61,6 +60,7 @@ const normalizeApproval = (row) => {
     updated_at: undefined,
     executed_at: undefined,
     expires_at: undefined,
+    executed_by: undefined,
   };
 };
 
@@ -184,7 +184,7 @@ export const AdminApproval = {
     if (request.approverIds.includes(adminUser.id)) {
       return {
         request,
-        readyToExecute: false,
+        readyToExecute: request.currentApprovals >= REQUIRED_ADMIN_APPROVALS,
         alreadyApproved: true,
       };
     }
@@ -243,7 +243,11 @@ export const AdminApproval = {
     const { data, error } = await supabase
       .from(TABLE_NAME)
       .update({
-        status: 'executing',
+        // Claim with an existing constrained status so this remains compatible
+        // with databases created before a dedicated "executing" status existed.
+        status: 'executed',
+        result: { executionState: 'running' },
+        error: null,
         executed_by: adminUser.id,
         updated_at: new Date().toISOString(),
       })
@@ -272,7 +276,8 @@ export const AdminApproval = {
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
-      .eq('status', 'executing')
+      .eq('status', 'executed')
+      .is('executed_at', null)
       .select()
       .maybeSingle();
 
@@ -281,7 +286,7 @@ export const AdminApproval = {
     return normalizeApproval(data);
   },
 
-  async markFailed(id, errorMessage, expectedStatus = 'executing') {
+  async markFailed(id, errorMessage, expectedStatus = 'executed') {
     let query = supabase
       .from(TABLE_NAME)
       .update({
@@ -291,6 +296,7 @@ export const AdminApproval = {
       })
       .eq('id', id);
     if (expectedStatus) query = query.eq('status', expectedStatus);
+    if (expectedStatus === 'executed') query = query.is('executed_at', null);
     const { data, error } = await query
       .select()
       .maybeSingle();
@@ -311,6 +317,10 @@ export const AdminApproval = {
       const err = new Error('Yêu cầu này không còn ở trạng thái chờ duyệt.');
       err.status = 409;
       throw err;
+    }
+    if (isExpired(request)) {
+      await this.markFailed(request.id, 'Yêu cầu duyệt đã hết hạn.', 'pending');
+      throw approvalError(410, 'Yêu cầu duyệt đã hết hạn và không thể bị từ chối.', 'APPROVAL_EXPIRED');
     }
 
     const { data, error } = await supabase

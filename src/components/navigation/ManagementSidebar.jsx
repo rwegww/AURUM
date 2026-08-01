@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '../common/Avatar';
-import { LogOut, Bell } from 'lucide-react';
+import { Bell, FileText, Hourglass, LogOut, MessageCircle, School } from 'lucide-react';
 
 const ManagementSidebar = ({ menuItems, title }) => {
   const { user, logout } = useAuth();
@@ -13,15 +13,21 @@ const ManagementSidebar = ({ menuItems, title }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [readIds, setReadIds] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem('teacher_read_notification_ids') || '[]');
+      const storedIds = JSON.parse(localStorage.getItem('teacher_read_notification_ids') || '[]');
+      return Array.isArray(storedIds) ? storedIds.filter((id) => typeof id === 'string') : [];
     } catch {
       return [];
     }
   });
 
   const saveReadIds = (ids) => {
-    localStorage.setItem('teacher_read_notification_ids', JSON.stringify(ids));
-    setReadIds(ids);
+    const normalizedIds = Array.from(new Set(ids.filter((id) => typeof id === 'string'))).slice(-500);
+    try {
+      localStorage.setItem('teacher_read_notification_ids', JSON.stringify(normalizedIds));
+    } catch (err) {
+      console.warn('Không thể lưu trạng thái thông báo đã đọc:', err);
+    }
+    setReadIds(normalizedIds);
   };
 
   const fetchNotifications = useCallback(async () => {
@@ -33,7 +39,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
       });
       if (res.ok) {
         const data = await res.json();
-        setNotifications(data);
+        setNotifications(Array.isArray(data) ? data : []);
       }
     } catch (err) {
       console.error('Lỗi tải thông báo:', err);
@@ -86,11 +92,11 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
   const getNotificationIcon = (type) => {
     switch (type) {
-      case 'student_join': return 'School';
-      case 'message': return 'MessageCircle';
-      case 'submission': return 'FileText';
-      case 'due_soon': return 'Hourglass';
-      default: return '🔔';
+      case 'student_join': return <School size={17} aria-hidden="true" />;
+      case 'message': return <MessageCircle size={17} aria-hidden="true" />;
+      case 'submission': return <FileText size={17} aria-hidden="true" />;
+      case 'due_soon': return <Hourglass size={17} aria-hidden="true" />;
+      default: return <Bell size={17} aria-hidden="true" />;
     }
   };
 
@@ -158,7 +164,10 @@ const ManagementSidebar = ({ menuItems, title }) => {
           {user?.role === 'teacher' && (
             <div className="relative shrink-0">
               <button
+                type="button"
                 onClick={toggleNotifications}
+                aria-label={isOpen ? 'Đóng thông báo' : `Mở thông báo${unreadCount ? `, ${unreadCount} chưa đọc` : ''}`}
+                aria-expanded={isOpen}
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
                   isOpen 
                     ? 'bg-viet-green/10 text-viet-green' 
@@ -219,7 +228,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
                     >
                       <div className="flex gap-2 items-start justify-between">
                         <div className="flex gap-2 flex-1 min-w-0">
-                          <span className="text-base shrink-0 mt-0.5">{getNotificationIcon(notif.type)}</span>
+                          <span className="text-viet-green shrink-0 mt-0.5">{getNotificationIcon(notif.type)}</span>
                           <div className="flex-1 min-w-0">
                             <p className={`text-xs leading-snug ${isUnread ? 'font-black text-viet-text' : 'font-bold text-slate-700'}`}>{notif.title}</p>
                             <p className="text-[11px] text-viet-text-light mt-1 font-medium leading-relaxed break-words">
@@ -233,9 +242,11 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
                         {/* Interactive Read/Unread Toggle Button */}
                         <button
+                          type="button"
                           onClick={(e) => toggleReadStatus(e, notif.id)}
                           className="shrink-0 w-6 h-6 rounded-lg flex items-center justify-center hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-all self-center ml-1"
                           title={isUnread ? "Đánh dấu là đã đọc" : "Đánh dấu là chưa đọc"}
+                          aria-label={isUnread ? 'Đánh dấu là đã đọc' : 'Đánh dấu là chưa đọc'}
                         >
                           <div className={`w-2.5 h-2.5 rounded-full transition-all ${
                             isUnread 
@@ -260,8 +271,9 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
           return (
             <NavLink
-              key={index}
+              key={item.path || index}
               to={item.path}
+              end={item.path === '/admin' || item.path === '/teacher'}
               className={`flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all relative group ${isActive
                   ? 'text-viet-green bg-viet-green/5 font-bold shadow-sm shadow-viet-green/5'
                   : 'text-viet-text-light font-medium hover:bg-slate-50 hover:text-viet-text'
@@ -285,6 +297,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
       {/* Footer */}
       <div className="p-4 border-t border-viet-border bg-slate-50/30">
         <button
+          type="button"
           onClick={logout}
           className="flex items-center justify-center w-full gap-2 px-4 py-3 rounded-xl text-red-500 font-bold text-[13px] hover:bg-red-50 transition-all active:scale-95"
         >

@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import { v2 as cloudinary } from 'cloudinary';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
 import Lesson from '../models/Lesson.js';
@@ -18,7 +19,7 @@ const SAFE_TEXT_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:@-]{0,127}$/;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const BCRYPT_HASH_PATTERN = /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/;
 const PUBLIC_FEEDBACK_TYPES = new Set(['bug', 'suggestion', 'praise', 'other']);
-const LESSON_ARRAY_FIELDS = ['theoryModules', 'videoModules', 'quizzes', 'storySlides', 'challenges'];
+const LESSON_ARRAY_FIELDS = ['theoryModules', 'videoModules', 'storySlides', 'challenges'];
 
 router.use((_req, res, next) => {
   res.set('Cache-Control', 'no-store');
@@ -39,6 +40,11 @@ const isPlainObject = (value) => Boolean(
   && !Array.isArray(value)
   && (Object.getPrototypeOf(value) === Object.prototype || Object.getPrototypeOf(value) === null)
 );
+
+const hasControlCharacters = (value) => [...value].some((character) => {
+  const codePoint = character.codePointAt(0);
+  return codePoint < 32 || codePoint === 127;
+});
 
 const assertUuid = (value, label = 'ID') => {
   if (typeof value !== 'string' || !UUID_PATTERN.test(value)) {
@@ -95,7 +101,7 @@ const normalizeWebUrl = (value, label, { required = false } = {}) => {
   }
 };
 
-const parsePageOptions = (query) => {
+const parsePageOptions = (query, { allowNullSort = false } = {}) => {
   const rawLimit = query.limit;
   const limit = rawLimit === undefined ? DEFAULT_PAGE_SIZE : Number(rawLimit);
   if (!Number.isInteger(limit) || limit < 1 || limit > MAX_PAGE_SIZE) {
@@ -108,14 +114,19 @@ const parsePageOptions = (query) => {
       const decoded = JSON.parse(Buffer.from(String(query.before), 'base64url').toString('utf8'));
       if (
         !isPlainObject(decoded)
-        || typeof decoded.sort !== 'string'
-        || Number.isNaN(Date.parse(decoded.sort))
+        || !(
+          (typeof decoded.sort === 'string' && !Number.isNaN(Date.parse(decoded.sort)))
+          || (allowNullSort && decoded.sort === null)
+        )
         || typeof decoded.id !== 'string'
         || !SAFE_TEXT_ID_PATTERN.test(decoded.id)
       ) {
         throw new Error('invalid cursor');
       }
-      cursor = { sort: new Date(decoded.sort).toISOString(), id: decoded.id };
+      cursor = {
+        sort: decoded.sort === null ? null : new Date(decoded.sort).toISOString(),
+        id: decoded.id,
+      };
     } catch {
       throw httpError(400, 'Con trỏ before không hợp lệ.', 'INVALID_PAGINATION');
     }
@@ -149,19 +160,59 @@ const redactSensitiveFields = (value) => {
   }, {});
 };
 
-const toAdminUserDto = (user) => redactSensitiveFields(user);
+const toAdminUserDto = (user) => {
+  if (!user) return user;
+  return redactSensitiveFields({
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    role: user.role,
+    xp: user.xp,
+    level: user.level,
+    avatarSeed: user.avatarSeed,
+    createdAt: user.createdAt,
+    lastActiveAt: user.lastActiveAt,
+    activeMinutes: user.activeMinutes,
+    isLocked: user.isLocked,
+    streakCount: user.streakCount,
+    unlockedLessons: user.unlockedLessons,
+    unlockedChemicals: user.unlockedChemicals,
+    inventory: user.inventory,
+    arenaStats: user.arenaStats,
+    teacherStats: user.teacherStats,
+  });
+};
 
 const toAdminFeedbackDto = (feedback) => {
-  if (!feedback || feedback.type !== 'teacher_registration') return feedback;
+  if (!feedback) return feedback;
 
-  let publicMessage = '{}';
-  try {
-    const payload = JSON.parse(feedback.message);
-    publicMessage = JSON.stringify({ email: typeof payload?.email === 'string' ? payload.email : null });
-  } catch {
-    // Keep malformed legacy requests inspectable without exposing their raw contents.
+  let message = typeof feedback.message === 'string' ? feedback.message : '';
+  if (feedback.type === 'teacher_registration') {
+    message = '{}';
+    try {
+      const payload = JSON.parse(feedback.message);
+      message = JSON.stringify({ email: typeof payload?.email === 'string' ? payload.email : null });
+    } catch {
+      // Keep malformed legacy requests inspectable without exposing their raw contents.
+    }
   }
-  return { ...feedback, message: publicMessage };
+
+  const owner = feedback.userId && typeof feedback.userId === 'object'
+    ? { username: feedback.userId.username || null }
+    : feedback.userId || null;
+
+  return redactSensitiveFields({
+    id: feedback.id,
+    username: feedback.username,
+    message,
+    type: feedback.type,
+    status: feedback.status,
+    imageUrl: feedback.imageUrl,
+    isApproved: Boolean(feedback.isApproved ?? feedback.is_approved),
+    metadata: feedback.metadata,
+    userId: owner,
+    createdAt: feedback.createdAt,
+  });
 };
 
 const normalizeLessonInput = (input, { create = false } = {}) => {
@@ -171,7 +222,7 @@ const normalizeLessonInput = (input, { create = false } = {}) => {
 
   const lesson = {};
   const requestedId = input.lessonId ?? input.id;
-  if (requestedId !== undefined) lesson.lessonId = assertTextId(String(requestedId), 'ID bài học');
+  if (requestedId !== undefined) lesson.lessonId = assertTextId(requestedId, 'ID bài học');
 
   const grade = input.gradeLevelId ?? input.khoi_id ?? input.classId;
   if (grade !== undefined) {
@@ -206,6 +257,22 @@ const normalizeLessonInput = (input, { create = false } = {}) => {
         throw httpError(400, `${field} phải là một mảng.`, 'VALIDATION_ERROR');
       }
       lesson[field] = input[field];
+    }
+  }
+
+  if (input.quizzes !== undefined) {
+    const quizzes = input.quizzes;
+    if (Array.isArray(quizzes)) {
+      lesson.quizzes = quizzes;
+    } else if (isPlainObject(quizzes)) {
+      for (const level of ['level1', 'level2', 'level3']) {
+        if (quizzes[level] !== undefined && !Array.isArray(quizzes[level])) {
+          throw httpError(400, `quizzes.${level} phải là một mảng.`, 'VALIDATION_ERROR');
+        }
+      }
+      lesson.quizzes = quizzes;
+    } else {
+      throw httpError(400, 'quizzes phải là một mảng hoặc đối tượng phân cấp.', 'VALIDATION_ERROR');
     }
   }
 
@@ -312,14 +379,15 @@ const parseTeacherRequest = async (id, { requirePassword = true } = {}) => {
   ) {
     throw httpError(400, 'Mật khẩu bảo vệ trong yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
   }
-  if (typeof phan_hoi.username !== 'string' || !SAFE_TEXT_ID_PATTERN.test(phan_hoi.username)) {
+  const teacherUsername = typeof phan_hoi.username === 'string' ? phan_hoi.username.trim() : '';
+  if (!teacherUsername || teacherUsername.length > 64 || hasControlCharacters(teacherUsername)) {
     throw httpError(400, 'Tên đăng nhập trong yêu cầu giáo viên không hợp lệ.', 'INVALID_TEACHER_REQUEST');
   }
   normalizeWebUrl(phan_hoi.imageUrl, 'Ảnh minh chứng', { required: true });
 
   if (requirePassword) {
     const [existingUsername, existingEmail] = await Promise.all([
-      User.findOne({ username: phan_hoi.username }),
+      User.findOne({ username: teacherUsername }),
       User.findOne({ email }),
     ]);
     if (existingUsername || existingEmail) {
@@ -327,7 +395,10 @@ const parseTeacherRequest = async (id, { requirePassword = true } = {}) => {
     }
   }
 
-  return { phan_hoi, requestPayload: { ...requestPayload, email } };
+  return {
+    phan_hoi: { ...phan_hoi, username: teacherUsername },
+    requestPayload: { ...requestPayload, email },
+  };
 };
 
 const normalizeClass = (classData) => {
@@ -396,11 +467,37 @@ const normalizeSubmission = (submission) => {
   };
 };
 
-const createClassCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
+const createClassCode = () => crypto.randomBytes(5).toString('base64url').slice(0, 6).toUpperCase();
+
+const normalizeClassCreateInput = ({ name, description, khoi_id, giao_vien_id } = {}) => {
+  const gradeLevelId = Number(khoi_id);
+  if (!Number.isInteger(gradeLevelId) || gradeLevelId < 6 || gradeLevelId > 12) {
+    throw httpError(400, 'Khối lớp phải là số nguyên từ 6 đến 12.', 'VALIDATION_ERROR');
+  }
+
+  return {
+    name: normalizeRequiredText(name, 'Tên lớp', 200),
+    description: normalizeOptionalText(description, 'Mô tả lớp', 2000),
+    khoi_id: gradeLevelId,
+    giao_vien_id: assertTextId(giao_vien_id, 'ID giáo viên'),
+  };
+};
 
 const adminActions = {
   'user.lock': {
     label: 'Thay đổi trạng thái tài khoản',
+    prepare: async ({ id, isLocked }) => {
+      assertTextId(id, 'ID người dùng');
+      if (typeof isLocked !== 'boolean') {
+        throw httpError(400, 'isLocked phải là giá trị boolean.', 'VALIDATION_ERROR');
+      }
+      const target = await User.findById(id);
+      if (!target) throw httpError(404, 'Không tìm thấy người dùng.', 'USER_NOT_FOUND');
+      if (target.role === 'admin') {
+        throw httpError(403, 'Không thể khóa tài khoản quản trị viên.', 'ADMIN_LOCK_FORBIDDEN');
+      }
+      return { id, isLocked };
+    },
     execute: async ({ id, isLocked }) => {
       assertTextId(id, 'ID người dùng');
       if (typeof isLocked !== 'boolean') {
@@ -420,20 +517,45 @@ const adminActions = {
   },
   'feedback.resolve': {
     label: 'Đánh dấu phản hồi đã xử lý',
+    prepare: async ({ id }) => {
+      assertUuid(id, 'ID phản hồi');
+      const feedback = await ensureFeedback(id);
+      if (feedback.status !== 'unread') {
+        throw httpError(409, 'Phản hồi này đã được xử lý.', 'FEEDBACK_ALREADY_PROCESSED');
+      }
+      return { id };
+    },
     execute: async ({ id }) => {
-      await ensureFeedback(id);
+      assertUuid(id, 'ID phản hồi');
+      const feedback = await ensureFeedback(id);
+      if (feedback.status !== 'unread') {
+        throw httpError(409, 'Phản hồi này đã được xử lý.', 'FEEDBACK_ALREADY_PROCESSED');
+      }
       await Feedback.updateStatus(id, 'resolved');
       return { message: 'Đã giải quyết phản hồi' };
     },
   },
   'feedback.approve_praise': {
     label: 'Duyệt lời khen hiển thị trang chủ',
+    prepare: async ({ id }) => {
+      assertUuid(id, 'ID phản hồi');
+      const feedback = await ensureFeedback(id);
+      if (feedback.type !== 'praise') {
+        throw httpError(400, 'Chỉ có thể duyệt lời khen ngợi.', 'INVALID_FEEDBACK_TYPE');
+      }
+      if (feedback.isApproved || feedback.is_approved) {
+        throw httpError(409, 'Lời khen này đã được duyệt.', 'FEEDBACK_ALREADY_APPROVED');
+      }
+      return { id };
+    },
     execute: async ({ id }) => {
+      assertUuid(id, 'ID phản hồi');
       const phan_hoi = await ensureFeedback(id);
       if (phan_hoi.type !== 'praise') {
-        const err = new Error('Chỉ có thể duyệt lời khen ngợi');
-        err.status = 400;
-        throw err;
+        throw httpError(400, 'Chỉ có thể duyệt lời khen ngợi.', 'INVALID_FEEDBACK_TYPE');
+      }
+      if (phan_hoi.isApproved || phan_hoi.is_approved) {
+        throw httpError(409, 'Lời khen này đã được duyệt.', 'FEEDBACK_ALREADY_APPROVED');
       }
 
       await Feedback.approve(id);
@@ -442,10 +564,17 @@ const adminActions = {
   },
   'lesson.create': {
     label: 'Tạo bài học',
+    prepare: async ({ lesson }) => ({ lesson: normalizeLessonInput(lesson, { create: true }) }),
     execute: async ({ lesson }) => Lesson.create(normalizeLessonInput(lesson, { create: true })),
   },
   'lesson.update': {
     label: 'Cập nhật bài học',
+    prepare: async ({ id, lesson }) => {
+      assertTextId(id, 'ID bài học');
+      const currentLesson = await Lesson.findById(id);
+      if (!currentLesson) throw httpError(404, 'Không tìm thấy bài học.', 'LESSON_NOT_FOUND');
+      return { id, lesson: normalizeLessonInput(lesson) };
+    },
     execute: async ({ id, lesson }) => {
       assertTextId(id, 'ID bài học');
       const currentLesson = await Lesson.findById(id);
@@ -457,6 +586,12 @@ const adminActions = {
   },
   'lesson.delete': {
     label: 'Xóa bài học',
+    prepare: async ({ id }) => {
+      assertTextId(id, 'ID bài học');
+      const lesson = await Lesson.findById(id);
+      if (!lesson) throw httpError(404, 'Không tìm thấy bài học.', 'LESSON_NOT_FOUND');
+      return { id };
+    },
     execute: async ({ id }) => {
       assertTextId(id, 'ID bài học');
       const lesson = await Lesson.findById(id);
@@ -467,6 +602,10 @@ const adminActions = {
   },
   'teacher.approve': {
     label: 'Duyệt tài khoản giáo viên',
+    prepare: async ({ id }) => {
+      await parseTeacherRequest(id);
+      return { id };
+    },
     execute: async ({ id }) => {
       const { phan_hoi, requestPayload } = await parseTeacherRequest(id);
       const { email, hashedPassword } = requestPayload;
@@ -479,37 +618,83 @@ const adminActions = {
         skipHash: true,
       });
 
-      await Feedback.updateStatus(phan_hoi.id, 'resolved');
+      let feedbackUpdated = true;
+      try {
+        await Feedback.updateStatus(phan_hoi.id, 'resolved');
+      } catch (error) {
+        feedbackUpdated = false;
+        console.error('Đã tạo tài khoản giáo viên nhưng không thể cập nhật yêu cầu:', error);
+      }
 
-      const magicToken = jwt.sign(
-        { id: user.id, role: user.role, magicLogin: true },
-        process.env.JWT_SECRET,
-        { expiresIn: '7d' }
-      );
+      let magicToken = null;
+      try {
+        magicToken = jwt.sign(
+          { id: user.id, role: user.role, magicLogin: true },
+          process.env.JWT_SECRET,
+          { expiresIn: '7d' }
+        );
+      } catch (error) {
+        console.error('Không thể tạo liên kết đăng nhập nhanh cho giáo viên:', error);
+      }
 
-      await sendTeacherApprovalEmail(email, phan_hoi.username, magicToken);
-      return { message: 'Đã duyệt yêu cầu và gửi email thành công' };
+      let emailResult;
+      try {
+        emailResult = await sendTeacherApprovalEmail(email, phan_hoi.username, magicToken);
+      } catch (error) {
+        emailResult = { success: false, error: error.message };
+      }
+      if (!emailResult?.success) {
+        console.error('Đã tạo tài khoản giáo viên nhưng không thể gửi email thông báo:', emailResult?.error);
+      }
+      const warnings = [];
+      if (!feedbackUpdated) warnings.push('trạng thái yêu cầu chưa được đồng bộ');
+      if (!emailResult?.success) warnings.push('email thông báo chưa gửi được');
+      return {
+        message: warnings.length === 0
+          ? 'Đã duyệt yêu cầu và gửi email thành công.'
+          : `Đã tạo tài khoản giáo viên; ${warnings.join(' và ')}.`,
+        emailSent: Boolean(emailResult?.success),
+        feedbackUpdated,
+      };
     },
   },
   'teacher.reject': {
     label: 'Từ chối tài khoản giáo viên',
+    prepare: async ({ id }) => {
+      await parseTeacherRequest(id, { requirePassword: false });
+      return { id };
+    },
     execute: async ({ id }) => {
       const { phan_hoi, requestPayload } = await parseTeacherRequest(id, { requirePassword: false });
       const { email } = requestPayload;
 
       await Feedback.updateStatus(phan_hoi.id, 'rejected');
-      await sendTeacherRejectionEmail(
-        email,
-        phan_hoi.username,
-        'Tài liệu minh chứng của bạn có thể không hợp lệ hoặc không rõ ràng.'
-      );
+      let emailResult;
+      try {
+        emailResult = await sendTeacherRejectionEmail(
+          email,
+          phan_hoi.username,
+          'Tài liệu minh chứng của bạn có thể không hợp lệ hoặc không rõ ràng.'
+        );
+      } catch (error) {
+        emailResult = { success: false, error: error.message };
+      }
+      if (!emailResult?.success) {
+        console.error('Đã từ chối yêu cầu giáo viên nhưng không thể gửi email thông báo:', emailResult?.error);
+      }
 
-      return { message: 'Đã từ chối yêu cầu và gửi email thành công' };
+      return {
+        message: emailResult?.success
+          ? 'Đã từ chối yêu cầu và gửi email thành công.'
+          : 'Đã từ chối yêu cầu, nhưng chưa gửi được email thông báo.',
+        emailSent: Boolean(emailResult?.success),
+      };
     },
   },
   'class.create': {
     label: 'Tạo lớp học',
-    execute: async ({ name, description, khoi_id, giao_vien_id }) => {
+    execute: async (payload) => {
+      const { name, description, khoi_id, giao_vien_id } = normalizeClassCreateInput(payload);
       const { data, error } = await supabase
         .from('lop')
         .insert([{ ten: name, khoi_id, mo_ta: description, giao_vien_id, ma_lop: createClassCode() }])
@@ -582,24 +767,41 @@ const getAdminAction = (actionKey) => {
 };
 
 const executeApprovalState = async (req, res, state, statusCode = 200) => {
-  const action = getAdminAction(state.request.actionKey);
+  const claimedRequest = await AdminApproval.claimExecution(state.request.id, req.user);
+  const action = getAdminAction(claimedRequest.actionKey);
+  let result;
 
   try {
-    const result = await action.execute(state.request.payload || {});
-    const executedRequest = await AdminApproval.markExecuted(state.request.id, result, req.user.id);
+    result = await action.execute(claimedRequest.payload || {});
+  } catch (err) {
+    try {
+      await AdminApproval.markFailed(claimedRequest.id, err.message);
+    } catch (stateError) {
+      console.error('Không thể ghi nhận lỗi thực thi yêu cầu duyệt:', stateError);
+    }
+    throw err;
+  }
+
+  try {
+    const executedRequest = await AdminApproval.markExecuted(claimedRequest.id, result, req.user.id);
     return res.status(statusCode).json(withApproval(result, executedRequest));
   } catch (err) {
-    await AdminApproval.markFailed(state.request.id, err.message);
-    throw err;
+    console.error('Thay đổi đã thực thi nhưng không thể chốt yêu cầu duyệt:', err);
+    throw httpError(
+      500,
+      'Thay đổi đã được áp dụng nhưng trạng thái xác nhận chưa đồng bộ. Vui lòng kiểm tra nhật ký trước khi thử lại.',
+      'APPROVAL_FINALIZATION_FAILED',
+    );
   }
 };
 
 const requestAdminChange = async (req, res, actionKey, payload, { statusCode = 200 } = {}) => {
   const action = getAdminAction(actionKey);
+  const preparedPayload = action.prepare ? await action.prepare(payload) : payload;
   const state = await AdminApproval.createOrApprove({
     actionKey,
     actionLabel: action.label,
-    payload,
+    payload: preparedPayload,
     adminUser: req.user,
   });
 
@@ -612,7 +814,11 @@ const requestAdminChange = async (req, res, actionKey, payload, { statusCode = 2
 
 const handleRouteError = (res, message, err, fallbackStatus = 500) => {
   const status = err.status || fallbackStatus;
-  return res.status(status).json({ message, error: err.message });
+  const exposedMessage = err.expose || status < 500 ? err.message : message;
+  return res.status(status).json({
+    message: exposedMessage || message,
+    error: err.code || (status >= 500 ? 'INTERNAL_ERROR' : 'REQUEST_FAILED'),
+  });
 };
 
 // GET /api/admin/stats - System-wide statistics
@@ -639,7 +845,30 @@ router.get('/stats', adminGuard, async (req, res) => {
       feedbackDistribution,
     });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi lấy thống kê', error: err.message });
+    handleRouteError(res, 'Lỗi lấy thống kê', err);
+  }
+});
+
+// POST /api/admin/media/signature - Short-lived signed upload parameters for admin media
+router.post('/media/signature', adminGuard, async (req, res) => {
+  try {
+    const folder = typeof req.body?.folder === 'string' ? req.body.folder.trim() : '';
+    if (!/^chemistry-odyssey\/admin(?:\/[A-Za-z0-9_-]+)*$/.test(folder) || folder.length > 160) {
+      throw httpError(400, 'Thư mục tải lên của quản trị viên không hợp lệ.', 'INVALID_UPLOAD_FOLDER');
+    }
+
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const apiKey = process.env.CLOUDINARY_API_KEY;
+    const apiSecret = process.env.CLOUDINARY_API_SECRET;
+    if (!cloudName || !apiKey || !apiSecret) {
+      throw httpError(503, 'Dịch vụ tải tệp tạm thời chưa được cấu hình.', 'UPLOAD_SERVICE_UNAVAILABLE');
+    }
+
+    const timestamp = Math.floor(Date.now() / 1000);
+    const signature = cloudinary.utils.api_sign_request({ folder, timestamp }, apiSecret);
+    return res.json({ cloudName, apiKey, folder, timestamp, signature });
+  } catch (err) {
+    return handleRouteError(res, 'Không thể tạo quyền tải tệp.', err);
   }
 });
 
@@ -647,18 +876,45 @@ router.get('/stats', adminGuard, async (req, res) => {
 router.get('/approvals', adminGuard, async (req, res) => {
   try {
     const allowedStatuses = new Set(['pending', 'executed', 'rejected', 'failed']);
-    const status = allowedStatuses.has(req.query.status) ? req.query.status : 'pending';
-    const approvals = await AdminApproval.list({ status });
-    res.json(approvals);
+    const requestedStatus = req.query.status ?? 'pending';
+    if (!allowedStatuses.has(requestedStatus)) {
+      throw httpError(400, 'Trạng thái yêu cầu duyệt không hợp lệ.', 'INVALID_STATUS');
+    }
+    const { limit, cursor } = parsePageOptions(req.query);
+    const approvalRows = await AdminApproval.list({ status: requestedStatus, limit, cursor });
+    const actorIds = [...new Set(approvalRows.flatMap((item) => (
+      [item.requestedBy, item.executedBy].filter(Boolean)
+    )))];
+    let actorsById = new Map();
+    if (actorIds.length > 0) {
+      const { data: actors, error: actorError } = await supabase
+        .from('nguoi_dung')
+        .select('id, username')
+        .in('id', actorIds);
+      if (actorError) throw actorError;
+      actorsById = new Map((actors || []).map((actor) => [actor.id, { username: actor.username }]));
+    }
+    const approvals = approvalRows.map((item) => toAdminApprovalDto({
+      ...item,
+      requester: actorsById.get(item.requestedBy) || null,
+      executor: actorsById.get(item.executedBy) || null,
+    }));
+    return sendPage(
+      res,
+      approvals,
+      limit,
+      (item) => encodeCursor(item.createdAt, item.id),
+    );
   } catch (err) {
-    handleRouteError(res, 'Lỗi lấy danh sách yêu cầu duyệt', err);
+    return handleRouteError(res, 'Lỗi lấy danh sách yêu cầu duyệt', err);
   }
 });
 
 // POST /api/admin/approvals/:id/approve - Second admin confirmation
 router.post('/approvals/:id/approve', adminGuard, async (req, res) => {
   try {
-    const state = await AdminApproval.addApproval(req.params.id, req.user);
+    const id = assertUuid(req.params.id, 'ID yêu cầu duyệt');
+    const state = await AdminApproval.addApproval(id, req.user);
     if (!state.readyToExecute) {
       return sendPendingApproval(res, state);
     }
@@ -672,8 +928,10 @@ router.post('/approvals/:id/approve', adminGuard, async (req, res) => {
 // POST /api/admin/approvals/:id/reject - Reject a pending admin change
 router.post('/approvals/:id/reject', adminGuard, async (req, res) => {
   try {
-    const rejected = await AdminApproval.reject(req.params.id, req.user, req.body?.reason);
-    res.json({ message: 'Đã từ chối yêu cầu thay đổi', approval: approvalSummary(rejected) });
+    const id = assertUuid(req.params.id, 'ID yêu cầu duyệt');
+    const reason = normalizeOptionalText(req.body?.reason, 'Lý do từ chối', 500) || '';
+    const rejected = await AdminApproval.reject(id, req.user, reason);
+    return res.json({ message: 'Đã từ chối yêu cầu thay đổi', approval: approvalSummary(rejected) });
   } catch (err) {
     handleRouteError(res, 'Lỗi từ chối yêu cầu duyệt', err);
   }
@@ -682,20 +940,31 @@ router.post('/approvals/:id/reject', adminGuard, async (req, res) => {
 // GET /api/admin/users - List all users with activity monitoring
 router.get(['/users', '/nguoi_dung'], adminGuard, async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { limit, cursor } = parsePageOptions(req.query, { allowNullSort: true });
+    let query = supabase
       .from('nguoi_dung')
       .select('id, username, role, diem_kinh_nghiem, cap_do, hoat_dong_cuoi_luc, phut_hoat_dong, bi_khoa, created_at')
-      .order('hoat_dong_cuoi_luc', { ascending: false });
+      .order('hoat_dong_cuoi_luc', { ascending: false, nullsFirst: false })
+      .order('id', { ascending: false });
+
+    if (cursor) {
+      query = cursor.sort === null
+        ? query.is('hoat_dong_cuoi_luc', null).lt('id', cursor.id)
+        : query.or(
+          `hoat_dong_cuoi_luc.is.null,hoat_dong_cuoi_luc.lt.${cursor.sort},and(hoat_dong_cuoi_luc.eq.${cursor.sort},id.lt.${cursor.id})`
+        );
+    }
+    const { data, error } = await query.limit(limit + 1);
 
     if (error) throw error;
-    res.json(data.map(u => ({
+    const users = (data || []).map(u => ({
       ...u,
       xp: u.diem_kinh_nghiem ?? 0,
       level: u.cap_do ?? 1,
       last_active_at: u.hoat_dong_cuoi_luc,
       active_minutes: u.phut_hoat_dong ?? 0,
       is_locked: u.bi_khoa ?? false,
-      isOnline: u.hoat_dong_cuoi_luc && new Date(u.hoat_dong_cuoi_luc) > new Date(Date.now() - 5 * 60 * 1000),
+      isOnline: Boolean(u.hoat_dong_cuoi_luc && new Date(u.hoat_dong_cuoi_luc) > new Date(Date.now() - 5 * 60 * 1000)),
       createdAt: u.created_at,
       diem_kinh_nghiem: undefined,
       cap_do: undefined,
@@ -703,9 +972,15 @@ router.get(['/users', '/nguoi_dung'], adminGuard, async (req, res) => {
       phut_hoat_dong: undefined,
       bi_khoa: undefined,
       created_at: undefined,
-    })));
+    }));
+    return sendPage(
+      res,
+      users,
+      limit,
+      (item) => encodeCursor(item.last_active_at, item.id),
+    );
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi lấy danh sách người dùng', error: err.message });
+    return handleRouteError(res, 'Lỗi lấy danh sách người dùng', err);
   }
 });
 
@@ -714,7 +989,7 @@ router.patch(['/users/:id/lock', '/nguoi_dung/:id/lock'], adminGuard, async (req
   try {
     const { id } = req.params;
     const { isLocked } = req.body;
-    return await requestAdminChange(req, res, 'user.lock', { id, isLocked: Boolean(isLocked) });
+    return await requestAdminChange(req, res, 'user.lock', { id, isLocked });
   } catch (err) {
     handleRouteError(res, 'Lỗi thay đổi trạng thái tài khoản', err);
   }
@@ -723,70 +998,89 @@ router.patch(['/users/:id/lock', '/nguoi_dung/:id/lock'], adminGuard, async (req
 // GET /api/admin/users/:id - Get single user detail
 router.get(['/users/:id', '/nguoi_dung/:id'], adminGuard, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'Không tìm thấy học sinh' });
-    res.json(user);
+    const id = assertTextId(req.params.id, 'ID người dùng');
+    const user = await User.findById(id);
+    if (!user) throw httpError(404, 'Không tìm thấy người dùng.', 'USER_NOT_FOUND');
+
+    if (user.role === 'teacher') {
+      const { data: classes, error } = await supabase
+        .from('lop')
+        .select('id, ten, ma_lop, khoi_id, created_at, thanh_vien_lop(count)')
+        .eq('giao_vien_id', id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+
+      const normalizedClasses = (classes || []).map((classItem) => {
+        const relationCount = Array.isArray(classItem.thanh_vien_lop)
+          ? classItem.thanh_vien_lop[0]?.count
+          : classItem.thanh_vien_lop?.count;
+        return {
+          id: classItem.id,
+          name: classItem.ten,
+          code: classItem.ma_lop,
+          gradeLevelId: classItem.khoi_id,
+          studentCount: Number(relationCount) || 0,
+          createdAt: classItem.created_at,
+        };
+      });
+      user.teacherStats = {
+        classes: normalizedClasses,
+        totalStudents: normalizedClasses.reduce((total, classItem) => total + classItem.studentCount, 0),
+      };
+    }
+
+    return res.json(toAdminUserDto(user));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi lấy thông tin học sinh', error: err.message });
+    return handleRouteError(res, 'Lỗi lấy thông tin người dùng', err);
   }
 });
 
 // GET /api/admin/feedback - List all feedback
 router.get(['/feedback', '/phan_hoi'], adminGuard, async (req, res) => {
   try {
-    const phan_hois = await Feedback.findAll();
-    res.json(phan_hois);
+    const { limit, cursor } = parsePageOptions(req.query);
+    const feedback = (await Feedback.findAll({ limit, cursor })).map(toAdminFeedbackDto);
+    return sendPage(
+      res,
+      feedback,
+      limit,
+      (item) => encodeCursor(item.createdAt, item.id),
+    );
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi lấy phản hồi', error: err.message });
+    return handleRouteError(res, 'Lỗi lấy phản hồi', err);
   }
 });
 
 // POST /api/admin/feedback/submit - Student submission
 router.post('/feedback/submit', async (req, res) => {
   try {
-    const { message, type, imageUrl } = req.body;
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    const { message, type = 'suggestion', imageUrl } = req.body || {};
+    const normalizedMessage = normalizeRequiredText(message, 'Nội dung phản hồi', 5000);
+    if (!PUBLIC_FEEDBACK_TYPES.has(type)) {
+      throw httpError(400, 'Loại phản hồi không hợp lệ.', 'INVALID_FEEDBACK_TYPE');
+    }
+    const normalizedImageUrl = normalizeWebUrl(imageUrl, 'Ảnh đính kèm');
+    const token = extractBearerToken(req);
 
     let userId = null;
-    let username = 'Anonymous';
+    let username = 'Ẩn danh';
 
     if (token) {
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-        if (user) {
-          userId = user.id;
-          username = user.username;
-        }
-      } catch (_jwtErr) {
-        try {
-          const { data } = await supabase.auth.getUser(token);
-          const sbUser = data?.user;
-          if (sbUser) {
-            const user = await User.findById(sbUser.id) || await User.findOne({ email: sbUser.email });
-            if (user) {
-              userId = user.id;
-              username = user.username;
-            }
-          }
-        } catch (_sbErr) {
-          // Ignore Supabase token fallback failure.
-        }
-      }
+      const { user } = await authenticateToken(token);
+      userId = user.id;
+      username = user.username;
     }
-
-    if (!message) return res.status(400).json({ message: 'Vui lòng nhập nội dung' });
 
     await Feedback.create({
       userId,
       username,
-      message,
+      message: normalizedMessage,
       type,
-      imageUrl,
+      imageUrl: normalizedImageUrl,
     });
-    res.status(201).json({ message: 'Gửi phản hồi thành công!' });
+    return res.status(201).json({ message: 'Gửi phản hồi thành công!' });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi gửi phản hồi', error: err.message });
+    return handleRouteError(res, 'Lỗi gửi phản hồi', err);
   }
 });
 

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2, Clock3, GraduationCap, Mail, RefreshCcw } from 'lucide-react';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const PAGE_SIZE = 100;
 
@@ -54,6 +54,7 @@ const FeedbackManager = () => {
   const [nextCursor, setNextCursor] = useState(null);
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
+  const [actionNotice, setActionNotice] = useState('');
   const [activeTab, setActiveTab] = useState('feedback');
   const [actingId, setActingId] = useState(null);
   const [pendingActions, setPendingActions] = useState(() => new Set());
@@ -83,6 +84,7 @@ const FeedbackManager = () => {
       if (requestId === requestSequence.current) {
         setFeedbacks((current) => append ? mergeUniqueFeedback(current, data) : data);
         setNextCursor(res.headers.get('X-Next-Cursor') || null);
+        if (!append) setPendingActions(new Set());
       }
     } catch (err) {
       if (err.name === 'AbortError' || requestId !== requestSequence.current) return;
@@ -123,6 +125,7 @@ const FeedbackManager = () => {
 
     setActingId(id);
     setActionError('');
+    setActionNotice('');
     try {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
@@ -132,12 +135,12 @@ const FeedbackManager = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const result = await parseAdminMutationResponse(res);
-      notifyAdminApprovalResult(result);
+      setActionNotice(result.message);
 
       if (result.pendingApproval) {
         setPendingActions((current) => new Set(current).add(actionKey));
       } else if (update) {
-        setFeedbacks((current) => current.map((item) => item.id === id ? update(item) : item));
+        setFeedbacks((current) => current.map((item) => item.id === id ? update(item, result.data) : item));
         setPendingActions((current) => {
           const next = new Set(current);
           Array.from(next).forEach((key) => {
@@ -150,7 +153,6 @@ const FeedbackManager = () => {
       console.error('Lỗi xử lý phản hồi:', err);
       const message = err.message || 'Không thể xử lý phản hồi.';
       setActionError(message);
-      window.alert(message);
     } finally {
       setActingId(null);
     }
@@ -207,6 +209,13 @@ const FeedbackManager = () => {
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-bold text-red-700 flex items-start gap-3" role="alert">
             <AlertTriangle className="w-5 h-5 shrink-0" aria-hidden="true" />
             <span>{actionError || loadError}</span>
+          </div>
+        )}
+
+        {actionNotice && (
+          <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-700 flex items-start gap-3" role="status" aria-live="polite">
+            <CheckCircle2 className="w-5 h-5 shrink-0" aria-hidden="true" />
+            <span>{actionNotice}</span>
           </div>
         )}
 
@@ -288,7 +297,10 @@ const FeedbackManager = () => {
                               endpoint: `/api/admin/teacher-requests/${encodeURIComponent(feedback.id)}/approve`,
                               method: 'POST',
                               confirmation: `Duyệt tài khoản giáo viên ${username}? Nếu đủ xác nhận, tài khoản sẽ được tạo và email sẽ được gửi.`,
-                              update: (item) => ({ ...item, status: 'resolved' }),
+                              update: (item, resultData) => ({
+                                ...item,
+                                status: resultData?.feedbackUpdated === false ? item.status : 'resolved',
+                              }),
                             })}
                             disabled={Boolean(actingId)}
                             className="px-4 py-1.5 bg-green-600 text-white text-[10px] font-black rounded-lg uppercase tracking-tight disabled:opacity-50"

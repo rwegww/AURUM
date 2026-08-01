@@ -2,6 +2,14 @@ const QUIZ_LEVELS = ['level1', 'level2', 'level3'];
 
 const readText = (value) => typeof value === 'string' ? value : '';
 
+export const reorderJourneyLessons = (lessons, index, direction) => {
+  const targetIndex = index + direction;
+  if (index < 0 || index >= lessons.length || targetIndex < 0 || targetIndex >= lessons.length) return lessons;
+  const reordered = [...lessons];
+  [reordered[index], reordered[targetIndex]] = [reordered[targetIndex], reordered[index]];
+  return reordered.map((lesson, position) => ({ ...lesson, order: position + 1 }));
+};
+
 export const modulesToMarkdown = (modules) => {
   if (!Array.isArray(modules) || modules.length === 0) return '';
   if (modules.length === 1 && modules[0]?.type === 'markdown') {
@@ -29,11 +37,15 @@ export const modulesToMarkdown = (modules) => {
   }).filter(Boolean).join('\n\n');
 };
 
-const normalizeQuestion = (question = {}) => {
+const normalizeQuestion = (value) => {
+  const question = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
   const options = Array.isArray(question.options)
     ? question.options.map((option) => readText(option))
     : [];
-  const parsedAnswer = Number(question.answer ?? question.correctAnswer);
+  const rawAnswer = question.answer ?? question.correctAnswer;
+  const parsedAnswer = typeof rawAnswer === 'number' || (typeof rawAnswer === 'string' && rawAnswer.trim())
+    ? Number(rawAnswer)
+    : NaN;
   const answer = Number.isInteger(parsedAnswer) && parsedAnswer >= 0 && parsedAnswer < options.length
     ? parsedAnswer
     : null;

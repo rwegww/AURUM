@@ -1,7 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Clock3, RefreshCcw, ShieldCheck, XCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Clock3, RefreshCcw, ShieldCheck, XCircle } from 'lucide-react';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
+import { useAuth } from '@/context/AuthContext';
+
+const PAGE_SIZE = 50;
 
 const statusConfig = {
   pending: { label: 'Chờ duyệt', color: 'bg-amber-50 text-amber-700 border-amber-200', icon: Clock3 },
@@ -14,41 +17,95 @@ const summarizePayload = (payload = {}) => {
   if (payload.id && Object.keys(payload).length <= 2) return `ID: ${payload.id}`;
   if (payload.lesson?.title) return payload.lesson.title;
   if (payload.id && payload.lesson) return `ID: ${payload.id}`;
-  return JSON.stringify(payload).slice(0, 140);
+  try {
+    return JSON.stringify(payload).slice(0, 140);
+  } catch {
+    return 'Dữ liệu thay đổi không thể hiển thị';
+  }
+};
+
+const mergeApprovals = (current, incoming) => {
+  const byId = new Map(current.map((item) => [item.id, item]));
+  incoming.forEach((item) => byId.set(item.id, item));
+  return Array.from(byId.values());
+};
+
+const formatDateTime = (value) => {
+  if (!value) return 'Không rõ thời gian';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 'Không rõ thời gian' : date.toLocaleString('vi-VN');
 };
 
 const ApprovalManager = () => {
+  const { user } = useAuth();
   const [approvals, setApprovals] = useState([]);
   const [status, setStatus] = useState('pending');
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [actingId, setActingId] = useState(null);
+  const [nextCursor, setNextCursor] = useState(null);
+  const [loadError, setLoadError] = useState('');
+  const [actionError, setActionError] = useState('');
+  const [actionNotice, setActionNotice] = useState('');
+  const requestSequence = useRef(0);
 
   const tabs = useMemo(() => Object.keys(statusConfig), []);
 
-  const fetchApprovals = async (nextStatus = status) => {
-    setLoading(true);
+  const fetchApprovals = useCallback(async ({
+    nextStatus = status,
+    append = false,
+    cursor = null,
+    signal,
+  } = {}) => {
+    const requestId = ++requestSequence.current;
+    if (append) setLoadingMore(true);
+    else setLoading(true);
+    setLoadError('');
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`/api/admin/approvals?status=${nextStatus}`, {
+      if (!token) throw new Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
+      const params = new URLSearchParams({ status: nextStatus, limit: String(PAGE_SIZE) });
+      if (append && cursor) params.set('before', cursor);
+      const res = await fetch(`/api/admin/approvals?${params.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
+        signal,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Không tải được danh sách yêu cầu duyệt.');
-      setApprovals(data);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || data.error || 'Không tải được danh sách yêu cầu duyệt.');
+      if (!Array.isArray(data)) throw new Error('Dữ liệu yêu cầu duyệt trả về không hợp lệ.');
+      if (signal?.aborted || requestId !== requestSequence.current) return;
+      setApprovals((current) => append ? mergeApprovals(current, data) : data);
+      setNextCursor(res.headers.get('X-Next-Cursor') || null);
     } catch (err) {
+      if (err.name === 'AbortError' || requestId !== requestSequence.current) return;
       console.error('Lỗi tải yêu cầu duyệt:', err);
-      alert(err.message);
+      setLoadError(err.message || 'Không tải được danh sách yêu cầu duyệt.');
+      if (!append) setApprovals([]);
     } finally {
-      setLoading(false);
+      if (!signal?.aborted && requestId === requestSequence.current) {
+        setLoading(false);
+        setLoadingMore(false);
+      }
     }
-  };
-
-  useEffect(() => {
-    fetchApprovals(status);
   }, [status]);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => {
+      fetchApprovals({ nextStatus: status, signal: controller.signal });
+    }, 0);
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+      requestSequence.current += 1;
+    };
+  }, [fetchApprovals, status]);
+
   const approveRequest = async (id) => {
+    if (actingId) return;
     setActingId(id);
+    setActionError('');
+    setActionNotice('');
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/admin/approvals/${id}/approve`, {
@@ -56,19 +113,22 @@ const ApprovalManager = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const result = await parseAdminMutationResponse(res);
-      alert(result.message || 'Thay đổi đã được xác nhận và thực thi.');
-      await fetchApprovals(status);
+      setActionNotice(result.message || 'Thay đổi đã được xác nhận và thực thi.');
+      await fetchApprovals({ nextStatus: status });
     } catch (err) {
       console.error('Lỗi xác nhận yêu cầu duyệt:', err);
-      alert(err.message);
+      setActionError(err.message || 'Không thể xác nhận yêu cầu duyệt.');
     } finally {
       setActingId(null);
     }
   };
 
   const rejectRequest = async (id) => {
+    if (actingId) return;
     if (!window.confirm('Bạn có chắc chắn muốn từ chối yêu cầu này?')) return;
     setActingId(id);
+    setActionError('');
+    setActionNotice('');
     try {
       const token = localStorage.getItem('token');
       const res = await fetch(`/api/admin/approvals/${id}/reject`, {
@@ -77,18 +137,18 @@ const ApprovalManager = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Không thể từ chối yêu cầu.');
-      alert(data.message || 'Đã từ chối yêu cầu thay đổi.');
-      await fetchApprovals(status);
+      setActionNotice(data.message || 'Đã từ chối yêu cầu thay đổi.');
+      await fetchApprovals({ nextStatus: status });
     } catch (err) {
       console.error('Lỗi từ chối yêu cầu duyệt:', err);
-      alert(err.message);
+      setActionError(err.message || 'Không thể từ chối yêu cầu.');
     } finally {
       setActingId(null);
     }
   };
 
   return (
-    <div className="p-8 pb-12">
+    <div className="p-4 sm:p-8 pb-12">
       <div className="max-w-6xl mx-auto">
         <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
@@ -100,10 +160,12 @@ const ApprovalManager = () => {
           </div>
 
           <button
-            onClick={() => fetchApprovals(status)}
+            type="button"
+            onClick={() => fetchApprovals({ nextStatus: status })}
+            disabled={loading || loadingMore || Boolean(actingId)}
             className="flex items-center gap-2 px-5 py-3 bg-white border border-viet-border rounded-2xl text-xs font-black text-viet-text hover:text-viet-green transition-all"
           >
-            <RefreshCcw size={16} /> Làm mới
+            <RefreshCcw size={16} className={loading ? 'animate-spin' : ''} /> Làm mới
           </button>
         </header>
 
@@ -112,8 +174,15 @@ const ApprovalManager = () => {
             const Icon = statusConfig[tab].icon;
             return (
               <button
+                type="button"
                 key={tab}
-                onClick={() => setStatus(tab)}
+                disabled={Boolean(actingId)}
+                aria-pressed={status === tab}
+                onClick={() => {
+                  setStatus(tab);
+                  setActionError('');
+                  setActionNotice('');
+                }}
                 className={`px-5 py-2.5 rounded-2xl border text-xs font-black flex items-center gap-2 transition-all ${
                   status === tab ? statusConfig[tab].color : 'bg-white border-viet-border text-viet-text-light hover:text-viet-text'
                 }`}
@@ -123,6 +192,15 @@ const ApprovalManager = () => {
             );
           })}
         </div>
+
+        {loadError && (
+          <div className="mb-6 flex items-start justify-between gap-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700" role="alert">
+            <span className="flex items-start gap-2"><AlertCircle size={18} className="mt-0.5 shrink-0" />{loadError}</span>
+            <button type="button" onClick={() => fetchApprovals({ nextStatus: status })} className="shrink-0 font-black underline">Thử lại</button>
+          </div>
+        )}
+        {actionError && <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-bold text-red-700" role="alert">{actionError}</div>}
+        {actionNotice && <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold text-emerald-700" role="status" aria-live="polite">{actionNotice}</div>}
 
         {loading ? (
           <div className="flex justify-center py-24">
@@ -136,7 +214,7 @@ const ApprovalManager = () => {
         ) : (
           <div className="bg-white rounded-[32px] border border-viet-border overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-left">
+              <table className="w-full min-w-[760px] text-left">
                 <thead className="bg-viet-bg/40 border-b border-viet-border">
                   <tr>
                     <th className="px-6 py-4 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Thay đổi</th>
@@ -147,7 +225,12 @@ const ApprovalManager = () => {
                 </thead>
                 <tbody className="divide-y divide-viet-border">
                   {approvals.map((item) => {
-                    const cfg = statusConfig[item.status] || statusConfig.pending;
+                    const executionUnfinished = item.status === 'executed' && !item.executedAt;
+                    const cfg = executionUnfinished
+                      ? { ...statusConfig.pending, label: 'Chưa chốt kết quả' }
+                      : statusConfig[item.status] || statusConfig.pending;
+                    const alreadyApproved = Array.isArray(item.approverIds) && item.approverIds.includes(user?.id);
+                    const canRetryExecution = Number(item.currentApprovals) >= Number(item.requiredApprovals);
                     return (
                       <tr key={item.id} className="hover:bg-viet-bg/20 transition-colors">
                         <td className="px-6 py-5">
@@ -158,7 +241,11 @@ const ApprovalManager = () => {
                             <div>
                               <p className="text-sm font-black text-viet-text">{item.actionLabel}</p>
                               <p className="text-xs text-viet-text-light font-medium mt-1 break-all">{summarizePayload(item.payload)}</p>
-                              <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">{new Date(item.createdAt).toLocaleString('vi-VN')}</p>
+                              <details className="mt-2 text-xs">
+                                <summary className="cursor-pointer font-bold text-viet-green">Xem chi tiết thay đổi</summary>
+                                <pre className="mt-2 max-h-64 max-w-lg overflow-auto whitespace-pre-wrap break-all rounded-xl bg-slate-50 p-3 text-slate-700">{JSON.stringify(item.payload || {}, null, 2)}</pre>
+                              </details>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">{formatDateTime(item.createdAt)}</p>
                             </div>
                           </div>
                         </td>
@@ -174,22 +261,26 @@ const ApprovalManager = () => {
                           {item.status === 'pending' ? (
                             <div className="flex justify-end gap-2">
                               <button
+                                type="button"
                                 onClick={() => approveRequest(item.id)}
-                                disabled={actingId === item.id}
+                                disabled={Boolean(actingId) || (alreadyApproved && !canRetryExecution)}
                                 className="px-4 py-2 bg-viet-green text-white rounded-xl text-xs font-black uppercase tracking-wider disabled:opacity-50"
                               >
-                                Xác nhận
+                                {alreadyApproved && !canRetryExecution ? 'Đã xác nhận' : canRetryExecution ? 'Tiếp tục' : 'Xác nhận'}
                               </button>
                               <button
+                                type="button"
                                 onClick={() => rejectRequest(item.id)}
-                                disabled={actingId === item.id}
+                                disabled={Boolean(actingId)}
                                 className="px-4 py-2 bg-red-50 text-red-600 border border-red-100 rounded-xl text-xs font-black uppercase tracking-wider disabled:opacity-50"
                               >
                                 Từ chối
                               </button>
                             </div>
                           ) : (
-                            <p className="text-right text-xs font-bold text-viet-text-light">{item.error || item.executor?.username || ''}</p>
+                            <p className="text-right text-xs font-bold text-viet-text-light">{executionUnfinished
+                              ? 'Kết quả chưa được xác nhận. Hãy làm mới và kiểm tra dữ liệu trước khi tạo lại yêu cầu.'
+                              : item.error || item.result?.message || item.executor?.username || ''}</p>
                           )}
                         </td>
                       </tr>
@@ -198,6 +289,20 @@ const ApprovalManager = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+        )}
+
+        {!loading && nextCursor && (
+          <div className="mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={() => fetchApprovals({ nextStatus: status, append: true, cursor: nextCursor })}
+              disabled={loadingMore || Boolean(actingId)}
+              className="inline-flex items-center gap-2 rounded-xl border border-viet-border bg-white px-5 py-2.5 text-sm font-bold text-viet-text transition-colors hover:text-viet-green disabled:opacity-60"
+            >
+              <RefreshCcw size={16} className={loadingMore ? 'animate-spin' : ''} />
+              {loadingMore ? 'Đang tải...' : 'Tải thêm yêu cầu'}
+            </button>
           </div>
         )}
       </div>

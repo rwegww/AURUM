@@ -401,9 +401,9 @@ const mapUser = (user) => {
     arena_stats: undefined,
     thong_ke_dau: undefined,
     created_at: undefined,
-    lastActiveAt: user.updated_at || lastActiveAt,
+    lastActiveAt: lastActiveAt || user.updated_at,
     activeMinutes,
-    isOnline: user.is_online || (lastActiveAt && new Date(lastActiveAt) > new Date(Date.now() - 5*60*1000)),
+    isOnline: Boolean(user.is_online || (lastActiveAt && new Date(lastActiveAt) > new Date(Date.now() - 5*60*1000))),
     isLocked,
     balancingProgress: normalizeBalancingProgress(user.balancingProgressPayload || user.balancingProgress),
     balancingProgressPayload: undefined,
@@ -607,7 +607,6 @@ export const User = {
     }
 
     if (Object.keys(pgUpdateData).length > 0) {
-      console.log(`[User.update] Updating ID ${id} with:`, JSON.stringify(pgUpdateData, null, 2));
       const { error } = await supabase
         .from('nguoi_dung')
         .update(pgUpdateData)
@@ -710,15 +709,29 @@ export const User = {
   },
 
   async aggregateStats() {
-    const { data, error } = await supabase
-      .from('nguoi_dung')
-      .select('id, username, diem_kinh_nghiem, cap_do, ke_hoach_hoc, so_ngay_chuoi, avatar_seed')
-      .eq('role', 'student');
-    
-    if (error) throw error;
+    const data = [];
+    let cursor;
+    // PostgREST caps each response. Walk the primary key so every student is
+    // included, even when the server's configured cap is below our page size.
+    while (true) {
+      let query = supabase
+        .from('nguoi_dung')
+        .select('id, username, diem_kinh_nghiem, cap_do, ke_hoach_hoc, so_ngay_chuoi, avatar_seed')
+        .eq('role', 'student')
+        .order('id', { ascending: true })
+        .limit(500);
+      if (cursor) query = query.gt('id', cursor);
+      const { data: page, error } = await query;
+      if (error) throw error;
+      if (!page?.length) break;
+      data.push(...page);
+      const nextCursor = page.at(-1).id;
+      if (!nextCursor || nextCursor === cursor) throw new Error('Không thể phân trang thống kê người dùng.');
+      cursor = nextCursor;
+    }
     
     const totalXP = data.reduce((sum, u) => sum + (u.diem_kinh_nghiem || 0), 0);
-    const avgLevel = data.length > 0 ? data.reduce((sum, u) => sum + (u.cap_do || 1), 0) / data.length : 1;
+    const avgLevel = data.length > 0 ? data.reduce((sum, u) => sum + (u.cap_do || 1), 0) / data.length : 0;
     
     const levels = {};
     const grades = {};

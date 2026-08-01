@@ -8,10 +8,24 @@ import { getPostLoginPath } from '@/utils/authNavigation';
 
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => {
+    try {
+      return localStorage.getItem('rememberEmail') || '';
+    } catch {
+      return '';
+    }
+  });
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState('');
+  const [rememberMe, setRememberMe] = useState(() => {
+    try {
+      return Boolean(localStorage.getItem('rememberEmail'));
+    } catch {
+      return false;
+    }
+  });
+  const [error, setError] = useState(() => (
+    new URLSearchParams(window.location.search).get('error') || ''
+  ));
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { login, magicLogin, loginWithGoogle, authError, setAuthError, isLoggedIn, user, loading: authLoading } = useAuth();
@@ -32,17 +46,23 @@ const Login = () => {
   }, [isLoggedIn, user, navigateAfterLogin]);
 
   React.useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const urlError = params.get('error');
+    const params = new URLSearchParams(location.search);
     const magicToken = params.get('token');
 
-    if (urlError) {
-      setError(decodeURIComponent(urlError));
+    try {
+      localStorage.removeItem('rememberPassword');
+    } catch {
+      // Storage may be unavailable in hardened/private browser contexts.
     }
 
-    if (magicToken) {
+    if (!magicToken) return undefined;
+
+    let active = true;
+    const timeoutId = window.setTimeout(() => {
+      if (!active) return;
       setLoading(true);
       magicLogin(magicToken).then(result => {
+        if (!active) return;
         if (result.success) {
           navigateAfterLogin(result.user);
         } else {
@@ -52,17 +72,13 @@ const Login = () => {
           window.history.replaceState({}, document.title, window.location.pathname);
         }
       });
-      return;
-    }
+    }, 0);
 
-    const savedEmail = localStorage.getItem('rememberEmail');
-    localStorage.removeItem('rememberPassword');
-    
-    if (savedEmail) {
-      setEmail(savedEmail);
-      setRememberMe(true);
-    }
-  }, [magicLogin, navigateAfterLogin]);
+    return () => {
+      active = false;
+      window.clearTimeout(timeoutId);
+    };
+  }, [location.search, magicLogin, navigateAfterLogin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -146,6 +162,7 @@ const Login = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             className="mb-4 p-3 bg-red-50 text-red-600 rounded-xl text-[10px] font-black uppercase ring-1 ring-red-100 flex items-center gap-2 shadow-sm"
+            role="alert"
           >
              <AlertTriangle className="w-5 h-5" /> {displayError}
           </motion.div>
@@ -153,7 +170,7 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5 md:space-y-3">
            <div className="space-y-2 md:space-y-1.5">
-              <label className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Email</label>
+              <label htmlFor="login-identity" className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Email hoặc tên đăng nhập</label>
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-viet-green transition-colors">
                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,10 +178,12 @@ const Login = () => {
                    </svg>
                 </div>
                 <input 
-                  type="email" 
+                  id="login-identity"
+                  type="text"
+                  autoComplete="username"
                   required
                   className="w-full h-12 md:h-11 pl-12 pr-6 rounded-xl md:rounded-2xl bg-[#fdf0e0] md:bg-slate-50 border border-[#f3e3d0] md:border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[15px] md:text-[14px] font-medium md:font-bold text-slate-800 md:text-viet-text placeholder:text-slate-400/50"
-                  placeholder="Nhập địa chỉ email"
+                  placeholder="Nhập email hoặc tên đăng nhập"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -172,7 +191,7 @@ const Login = () => {
            </div>
 
            <div className="space-y-2 md:space-y-1.5">
-              <label className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Mật khẩu</label>
+              <label htmlFor="login-password" className="text-[14px] md:text-[9px] font-bold md:font-black text-slate-700 md:text-viet-text-light md:uppercase tracking-normal md:tracking-[1.5px] pl-1 opacity-100 md:opacity-60">Mật khẩu</label>
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-viet-green transition-colors">
                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +199,9 @@ const Login = () => {
                    </svg>
                 </div>
                  <input 
+                  id="login-password"
                   type={showPassword ? "text" : "password"} 
+                  autoComplete="current-password"
                   required
                   className="w-full h-12 md:h-11 pl-12 pr-12 rounded-xl md:rounded-2xl bg-[#fdf0e0] md:bg-slate-50 border border-[#f3e3d0] md:border-transparent focus:bg-white focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none text-[15px] md:text-[14px] font-medium md:font-bold text-slate-800 md:text-viet-text placeholder:text-slate-400/50"
                   placeholder="••••••••"
@@ -190,6 +211,8 @@ const Login = () => {
                 <button 
                   type="button" 
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                  aria-pressed={showPassword}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-viet-green"
                 >
                    {showPassword ? (
@@ -222,7 +245,7 @@ const Login = () => {
                   </div>
                   <span className="text-[13px] md:text-[10px] font-medium md:font-black text-slate-600 md:text-viet-text-light md:uppercase md:tracking-widest">Ghi nhớ đăng nhập</span>
               </label>
-              <Link to="/" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">Quên mật khẩu?</Link>
+              <Link to="/contact" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">Cần trợ giúp?</Link>
            </div>
 
            <button 
@@ -243,7 +266,8 @@ const Login = () => {
           <button 
             onClick={handleGoogleLogin}
             type="button"
-            className="w-full h-12 md:h-11 bg-[#fdf0e0] md:bg-white border border-[#f3e3d0] md:border-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-[14px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest text-slate-700 md:text-viet-text hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+            disabled={loading}
+            className="w-full h-12 md:h-11 bg-[#fdf0e0] md:bg-white border border-[#f3e3d0] md:border-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-[14px] md:text-[10px] font-bold md:font-black md:uppercase md:tracking-widest text-slate-700 md:text-viet-text hover:bg-slate-50 transition-all shadow-sm active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
           >
              <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-5 h-5" alt="Google" />
              Google

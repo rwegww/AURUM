@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
+import { uploadAdminMedia } from '@/utils/cloudinaryUpload';
 
 const ACCEPT_BY_TYPE = {
   image: 'image/png,image/jpeg,image/webp,image/gif',
@@ -14,7 +14,7 @@ const TYPE_LABELS = {
   media: 'PNG, JPG, WEBP, GIF, MP4, WEBM, OGG hoặc MOV',
 };
 
-const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabled = false }) => {
+const MediaUploader = ({ onUploadSuccess, onUploadingChange, type = 'image', maxSizeMB = 10, disabled = false }) => {
   const inputId = useId();
   const inputRef = useRef(null);
   const abortRef = useRef(null);
@@ -25,13 +25,18 @@ const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabl
   const [preview, setPreview] = useState(null);
   const [error, setError] = useState('');
 
-  useEffect(() => () => {
-    mountedRef.current = false;
-    const activeController = abortRef.current;
-    abortRef.current = null;
-    activeController?.abort();
-    if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
-  }, []);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      const activeController = abortRef.current;
+      abortRef.current = null;
+      activeController?.abort();
+      if (activeController) onUploadingChange?.(false);
+      if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = '';
+    };
+  }, [onUploadingChange]);
 
   const clearPreviewUrl = () => {
     if (previewUrlRef.current) URL.revokeObjectURL(previewUrlRef.current);
@@ -43,14 +48,11 @@ const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabl
   };
 
   const validateFile = (file) => {
-    const allowsImage = type === 'image' || type === 'media';
-    const allowsVideo = type === 'video' || type === 'media';
-    const isImage = file.type.startsWith('image/');
-    const isVideo = file.type.startsWith('video/');
-
-    if ((!isImage || !allowsImage) && (!isVideo || !allowsVideo)) {
+    const allowedTypes = (ACCEPT_BY_TYPE[type] || ACCEPT_BY_TYPE.image).split(',');
+    if (!allowedTypes.includes(file.type)) {
       return `Định dạng tệp không hợp lệ. Vui lòng chọn ${TYPE_LABELS[type] || TYPE_LABELS.image}.`;
     }
+    if (file.size === 0) return 'Tệp đang trống. Vui lòng chọn tệp khác.';
     if (file.size > maxSizeMB * 1024 * 1024) {
       return `Tệp vượt quá dung lượng tối đa ${maxSizeMB} MB.`;
     }
@@ -58,7 +60,7 @@ const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabl
   };
 
   const uploadFile = async (file) => {
-    if (!file || uploading || disabled) return;
+    if (!file || abortRef.current || uploading || disabled) return;
 
     const validationError = validateFile(file);
     if (validationError) {
@@ -75,13 +77,20 @@ const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabl
     previewUrlRef.current = localUrl;
     setPreview({ url: localUrl, isImage: file.type.startsWith('image/'), name: file.name });
     setUploading(true);
+    onUploadingChange?.(true);
     setError('');
 
     try {
-      const uploadData = await uploadToCloudinary(file, 'chemistry-odyssey/admin', { signal: controller.signal });
-      if (mountedRef.current) onUploadSuccess?.(uploadData.url, uploadData);
+      const token = localStorage.getItem('token');
+      const uploadData = await uploadAdminMedia(file, 'chemistry-odyssey/admin', {
+        signal: controller.signal,
+        token,
+      });
+      if (mountedRef.current && abortRef.current === controller && !controller.signal.aborted) {
+        onUploadSuccess?.(uploadData.url, uploadData);
+      }
     } catch (err) {
-      if (mountedRef.current && err.name !== 'AbortError') {
+      if (mountedRef.current && abortRef.current === controller && err.name !== 'AbortError') {
         setError(err.message || 'Không thể tải tệp lên. Vui lòng thử lại.');
         clearPreviewUrl();
         setPreview(null);
@@ -90,6 +99,7 @@ const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabl
       if (mountedRef.current && abortRef.current === controller) {
         abortRef.current = null;
         setUploading(false);
+        onUploadingChange?.(false);
         resetInput();
       }
     }
@@ -109,6 +119,7 @@ const MediaUploader = ({ onUploadSuccess, type = 'image', maxSizeMB = 10, disabl
     clearPreviewUrl();
     setPreview(null);
     setUploading(false);
+    onUploadingChange?.(false);
     setError('');
     resetInput();
   };

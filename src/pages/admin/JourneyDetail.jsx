@@ -17,7 +17,7 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import MediaUploader from '@/components/admin/MediaUploader';
 import { countQuizQuestions, normalizeQuizGroups, validateJourneyLesson } from '@/utils/adminLessonData';
-import { notifyAdminApprovalResult, parseAdminMutationResponse } from '@/utils/adminApproval';
+import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { getVideoEmbedUrl, isExternalEmbedVideo, normalizeHttpUrl } from '@/utils/videoLinks';
 
 const QUIZ_LEVELS = [
@@ -56,11 +56,12 @@ const JourneyDetail = () => {
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [mediaUploading, setMediaUploading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [formErrors, setFormErrors] = useState([]);
   const [saveNotice, setSaveNotice] = useState('');
-  const [videoPlaybackError, setVideoPlaybackError] = useState(false);
+  const [failedVideoUrl, setFailedVideoUrl] = useState('');
   const [activeTab, setActiveTab] = useState('video');
   const [activeQuizLevel, setActiveQuizLevel] = useState('level1');
 
@@ -90,19 +91,22 @@ const JourneyDetail = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchLesson(controller.signal);
-    return () => controller.abort();
+    const timeoutId = window.setTimeout(() => fetchLesson(controller.signal), 0);
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [fetchLesson]);
 
   useEffect(() => {
     const warnBeforeUnload = (event) => {
-      if (!hasChanges) return;
+      if (!hasChanges && !mediaUploading) return;
       event.preventDefault();
       event.returnValue = '';
     };
     window.addEventListener('beforeunload', warnBeforeUnload);
     return () => window.removeEventListener('beforeunload', warnBeforeUnload);
-  }, [hasChanges]);
+  }, [hasChanges, mediaUploading]);
 
   const updateLesson = (updater) => {
     setLesson((current) => typeof updater === 'function' ? updater(current) : updater);
@@ -111,7 +115,7 @@ const JourneyDetail = () => {
     setSaveNotice('');
   };
 
-  const confirmDiscard = () => !hasChanges || window.confirm('Bạn có thay đổi chưa lưu. Bạn có chắc muốn rời khỏi trang?');
+  const confirmDiscard = () => (!hasChanges && !mediaUploading) || window.confirm('Bạn có thay đổi chưa lưu hoặc tệp đang tải lên. Bạn có chắc muốn rời khỏi trang?');
 
   const handleBack = () => {
     if (saving || !confirmDiscard()) return;
@@ -162,7 +166,7 @@ const JourneyDetail = () => {
   };
 
   const handleSave = async () => {
-    if (!lesson || !hasChanges || saving) return;
+    if (!lesson || !hasChanges || saving || mediaUploading) return;
 
     const normalizedVideoUrl = lesson.introVideoUrl.trim() ? normalizeHttpUrl(lesson.introVideoUrl) : '';
     const errors = validateJourneyLesson(lesson);
@@ -191,13 +195,12 @@ const JourneyDetail = () => {
         body: JSON.stringify(payload),
       });
       const result = await parseAdminMutationResponse(response);
-      notifyAdminApprovalResult(result);
       if (!result.pendingApproval) {
         setLesson(normalizeLessonForEditor(result.data));
-        setSaveNotice('Đã cập nhật chi tiết hành trình thành công.');
+        setSaveNotice(result.message || 'Đã cập nhật chi tiết hành trình thành công.');
       } else {
         setLesson(payload);
-        setSaveNotice('Thay đổi đã được gửi và đang chờ quản trị viên còn lại xác nhận.');
+        setSaveNotice(result.message || 'Thay đổi đã được gửi và đang chờ quản trị viên còn lại xác nhận.');
       }
       setHasChanges(false);
     } catch (err) {
@@ -213,10 +216,7 @@ const JourneyDetail = () => {
   const normalizedPreviewUrl = videoUrl ? normalizeHttpUrl(videoUrl) : '';
   const canPreviewVideo = Boolean(normalizedPreviewUrl);
   const isEmbedVideo = canPreviewVideo && isExternalEmbedVideo(normalizedPreviewUrl);
-
-  useEffect(() => {
-    setVideoPlaybackError(false);
-  }, [videoUrl]);
+  const videoPlaybackError = Boolean(normalizedPreviewUrl && failedVideoUrl === normalizedPreviewUrl);
 
   if (loading) {
     return (
@@ -255,7 +255,7 @@ const JourneyDetail = () => {
           <p className="mt-1 font-medium italic text-viet-text-light">Tùy chỉnh video, câu hỏi và phần thưởng cho: <span className="font-bold text-viet-green">{lesson.title}</span></p>
         </div>
 
-        <button type="button" onClick={handleSave} disabled={saving || !hasChanges} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-viet-green px-8 py-3 text-sm font-bold text-white shadow-lg shadow-viet-green/20 transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none">
+        <button type="button" onClick={handleSave} disabled={saving || mediaUploading || !hasChanges} title={mediaUploading ? 'Vui lòng đợi tải video hoàn tất trước khi lưu.' : undefined} className="inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl bg-viet-green px-8 py-3 text-sm font-bold text-white shadow-lg shadow-viet-green/20 transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none">
           {saving ? <RefreshCcw className="animate-spin" size={18} /> : <Save size={18} />}
           {saving ? 'Đang lưu...' : 'Lưu toàn bộ thay đổi'}
         </button>
@@ -312,7 +312,10 @@ const JourneyDetail = () => {
                 <div className="space-y-5 rounded-2xl border border-slate-100 bg-slate-50/30 p-4 sm:p-6">
                   <label className="block space-y-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
                     Link video bài giảng
-                    <input type="url" value={lesson.introVideoUrl} onChange={(event) => updateLesson((current) => ({ ...current, introVideoUrl: event.target.value }))} placeholder="https://www.youtube.com/watch?v=... hoặc https://.../video.mp4" className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm font-normal normal-case tracking-normal outline-none focus:border-amber-400" />
+                    <input type="url" value={lesson.introVideoUrl} onChange={(event) => {
+                      setFailedVideoUrl('');
+                      updateLesson((current) => ({ ...current, introVideoUrl: event.target.value }));
+                    }} placeholder="https://www.youtube.com/watch?v=... hoặc https://.../video.mp4" className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm font-normal normal-case tracking-normal outline-none focus:border-amber-400" />
                   </label>
 
                   {videoUrl && !canPreviewVideo && <p className="text-xs font-bold text-red-600" role="alert">URL chưa hợp lệ. Vui lòng dùng đường dẫn bắt đầu bằng http:// hoặc https://.</p>}
@@ -322,7 +325,7 @@ const JourneyDetail = () => {
                       {isEmbedVideo ? (
                         <iframe src={getVideoEmbedUrl(normalizedPreviewUrl)} title={`Video bài giảng ${lesson.title}`} className="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
                       ) : (
-                        <video src={normalizedPreviewUrl} className="h-full w-full object-contain" controls onError={() => setVideoPlaybackError(true)} aria-label={`Video bài giảng ${lesson.title}`} />
+                        <video src={normalizedPreviewUrl} className="h-full w-full object-contain" controls onError={() => setFailedVideoUrl(normalizedPreviewUrl)} aria-label={`Video bài giảng ${lesson.title}`} />
                       )}
                     </div>
                   ) : canPreviewVideo && videoPlaybackError ? (
@@ -344,7 +347,7 @@ const JourneyDetail = () => {
 
                 <div className="mt-6 space-y-3 border-t border-viet-border pt-6">
                   <h3 className="text-sm font-bold text-viet-text">Hoặc tải video mới lên Cloudinary</h3>
-                  <MediaUploader type="video" maxSizeMB={10} disabled={saving} onUploadSuccess={(url) => updateLesson((current) => ({ ...current, introVideoUrl: url }))} />
+                  <MediaUploader type="video" maxSizeMB={10} disabled={saving} onUploadingChange={setMediaUploading} onUploadSuccess={(url) => updateLesson((current) => ({ ...current, introVideoUrl: url }))} />
                 </div>
               </motion.section>
             )}

@@ -51,6 +51,39 @@ const router = express.Router();
 const canManageClasses = (user) => user?.role === 'teacher' || user?.role === 'admin';
 const canUseStudentClassFeatures = (user) => user?.role === 'student' || user?.role === 'admin';
 
+const normalizeCreateClassInput = ({ name, description, khoi_id }) => {
+  const normalizedName = typeof name === 'string' ? name.trim() : '';
+  const normalizedDescription = typeof description === 'string' ? description.trim() : '';
+  const gradeLevelId = Number(khoi_id);
+
+  if (!normalizedName || normalizedName.length > 200) {
+    const error = new Error('Tên lớp phải có từ 1 đến 200 ký tự.');
+    error.status = 400;
+    throw error;
+  }
+  if (description !== undefined && typeof description !== 'string') {
+    const error = new Error('Mô tả lớp phải là chuỗi.');
+    error.status = 400;
+    throw error;
+  }
+  if (normalizedDescription.length > 2000) {
+    const error = new Error('Mô tả lớp không được vượt quá 2000 ký tự.');
+    error.status = 400;
+    throw error;
+  }
+  if (!Number.isInteger(gradeLevelId) || gradeLevelId < 6 || gradeLevelId > 12) {
+    const error = new Error('Khối lớp phải là số nguyên từ 6 đến 12.');
+    error.status = 400;
+    throw error;
+  }
+
+  return {
+    name: normalizedName,
+    description: normalizedDescription || null,
+    khoi_id: gradeLevelId,
+  };
+};
+
 const sendPendingAdminApproval = (res, request, alreadyApproved = false) => res.status(202).json({
   message: alreadyApproved
     ? 'Yêu cầu này đang chờ quản trị viên còn lại xác nhận.'
@@ -634,8 +667,11 @@ router.post('/', auth, async (req, res) => {
   try {
     if (!requireTeacherOrAdmin(req, res)) return;
 
-    const { name, description } = req.body;
-    const khoi_id = req.body.khoi_id ?? req.body.gradeLevelId;
+    const { name, description, khoi_id } = normalizeCreateClassInput({
+      name: req.body?.name,
+      description: req.body?.description,
+      khoi_id: req.body?.khoi_id ?? req.body?.gradeLevelId,
+    });
     const giao_vien_id = req.user.id;
 
     if (req.user.role === 'admin') {
@@ -658,7 +694,7 @@ router.post('/', auth, async (req, res) => {
     if (error) throw error;
     res.status(201).json(normalizeClass(data));
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(err.status || 500).json({ error: err.status ? err.message : 'Không thể tạo lớp học.' });
   }
 });
 

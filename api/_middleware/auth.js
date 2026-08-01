@@ -1,5 +1,6 @@
 ﻿import { supabase } from '../lib/supabase.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'node:crypto';
 import User from '../models/User.js';
 
 class AuthenticationError extends Error {
@@ -78,7 +79,8 @@ const resolveSupabaseUser = async (token) => {
       id: sbUser.id,
       username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
       email: sbUser.email,
-      password: 'supabase_oauth_no_password',
+      // OAuth accounts must never share a publicly known password.
+      password: crypto.randomBytes(48).toString('base64url'),
       role: 'student',
     });
   }

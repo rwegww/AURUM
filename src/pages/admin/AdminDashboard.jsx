@@ -100,8 +100,11 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchStats(controller.signal);
-    return () => controller.abort();
+    const timeoutId = window.setTimeout(() => fetchStats(controller.signal), 0);
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [fetchStats]);
 
   if (loading) {

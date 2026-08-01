@@ -185,7 +185,9 @@ Hệ thống React SPA quản lý định tuyến bằng React Router 7, phân c
     *   `/admin` : Dashboard quản trị viên giám sát hệ thống.
     *   `/admin/journey`, `/admin/journey/:lessonId` : Quản lý lộ trình học tập và cấu hình stage.
     *   `/admin/nguoi_dung`, `/admin/nguoi_dung/:id` : Quản lý phân quyền và thông tin người dùng.
-    *   `/admin/phan_hoi` : Quản lý các khiếu nại, phản hồi của người dùng.
+    *   `/admin/bai_hoc` : Quản lý nội dung bài học và video.
+    *   `/admin/feedback` : Quản lý các khiếu nại, phản hồi và yêu cầu giáo viên.
+    *   `/admin/approvals` : Duyệt thay đổi cần hai quản trị viên xác nhận.
 
 ### 6.2. Backend API Endpoint Prefix
 Backend Express tổ chức các route nghiệp vụ thành các module riêng biệt dưới tiền tố `/api`:
@@ -217,6 +219,16 @@ Backend Express tổ chức các route nghiệp vụ thành các module riêng b
 ---
 
 ## 8. Quy Ước Phát Triển (Code & Commit Conventions)
+
+### Cấu hình và kiểm tra phân hệ quản trị
+
+- Báo cáo sửa lỗi, kiểm chứng và giới hạn: [Rà soát admin ngày 05/09/2026](docs/admin-audit-2026-09-05.md).
+- Upload học liệu trong admin dùng chữ ký từ `/api/admin/media/signature`. Máy chủ cần `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` và `CLOUDINARY_API_SECRET`. Không đặt khóa bí mật trong biến có tiền tố `VITE_`.
+- Đặt `PUBLIC_APP_URL` thành địa chỉ website chính thức để liên kết đăng nhập trong email trỏ đúng môi trường. Nếu chưa đặt, hệ thống dùng `APP_URL`, sau đó `VERCEL_URL`, cuối cùng là domain production mặc định.
+- Cập nhật chỉ mục bằng tệp `supabase/migrations/20260905_admin_query_indexes.sql` trong quy trình triển khai database. Tệp chỉ thêm chỉ mục; không cần chạy lại toàn bộ schema hoặc seed dữ liệu.
+- API danh sách người dùng, phản hồi và yêu cầu duyệt hỗ trợ `limit` và con trỏ `before`. Header `X-Next-Cursor` cho biết trang kế tiếp; giao diện hiển thị nút tải thêm khi còn dữ liệu.
+- Thay đổi quản trị cần hai tài khoản admin khác nhau xác nhận. Trang duyệt cho phép xem đầy đủ nội dung thay đổi. Bản ghi chưa có thời gian hoàn tất được hiển thị là “Chưa chốt kết quả” để kiểm tra lại dữ liệu trước khi gửi yêu cầu mới.
+- Chạy `npm test`, `npm run lint` và `npm run build` trước khi triển khai. Kiểm thử tự động dùng dữ liệu giả lập cho các thao tác ghi; kiểm tra Supabase đang chạy chỉ dùng truy vấn đọc.
 
 ### 8.1. Quy ước viết mã nguồn
 *   **Database:** Đảm bảo tuân thủ nghiêm ngặt việc đặt tên bảng/cột bằng tiếng Việt không dấu dưới dạng `snake_case`. Không tạo bảng mới có tên tiếng Anh hoặc tên mơ hồ như `info`, `data`.

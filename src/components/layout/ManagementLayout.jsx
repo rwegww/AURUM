@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import ManagementSidebar from '../navigation/ManagementSidebar';
 import { Menu, X, LogOut } from 'lucide-react';
 
-const ManagementLayout = ({ role, menuItems, title }) => {
-  const { user, loading, logout } = useAuth();
-  const navigate = useNavigate();
+const ManagementLayout = ({ menuItems, title }) => {
+  const { logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        navigate('/login');
-      } else if (role === 'admin' && user.role !== 'admin') {
-        navigate('/');
-      } else if (role === 'teacher' && user.role !== 'teacher' && user.role !== 'admin') {
-        // Admins can also view teacher panels
-        navigate('/');
-      }
-    }
-  }, [user, loading, navigate, role]);
-
-  if (loading || !user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-viet-bg">
-        <div className="w-16 h-16 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
-      </div>
-    );
-  }
-
-  // Double check before rendering
-  if (role === 'admin' && user.role !== 'admin') return null;
-  if (role === 'teacher' && user.role !== 'teacher' && user.role !== 'admin') return null;
+    if (!mobileMenuOpen) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [mobileMenuOpen]);
 
   return (
     <div className="min-h-screen bg-viet-bg flex">
@@ -50,7 +33,9 @@ const ManagementLayout = ({ role, menuItems, title }) => {
           type="button"
           onClick={() => setMobileMenuOpen((value) => !value)}
           className="w-10 h-10 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
-          aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={mobileMenuOpen ? 'Đóng trình đơn' : 'Mở trình đơn'}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="management-mobile-menu"
         >
           {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -59,13 +44,16 @@ const ManagementLayout = ({ role, menuItems, title }) => {
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 z-40 bg-black/30" onClick={() => setMobileMenuOpen(false)}>
           <nav
+            id="management-mobile-menu"
+            aria-label="Điều hướng quản lý"
             className="absolute top-16 left-0 right-0 bg-white border-b border-viet-border shadow-xl p-4 space-y-2"
             onClick={(event) => event.stopPropagation()}
           >
             {menuItems.map((item, index) => (
               <NavLink
-                key={index}
+                key={item.path || index}
                 to={item.path}
+                end={item.path === '/admin' || item.path === '/teacher'}
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm ${isActive ? 'bg-viet-green/10 text-viet-green' : 'text-viet-text-light hover:bg-slate-50'}`}
               >
@@ -75,18 +63,21 @@ const ManagementLayout = ({ role, menuItems, title }) => {
             ))}
             <button
               type="button"
-              onClick={logout}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                logout();
+              }}
               className="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-red-500 w-full"
             >
               <LogOut size={18} />
-              <span>Dang xuat</span>
+              <span>Đăng xuất</span>
             </button>
           </nav>
         </div>
       )}
       
       {/* Main Content Area */}
-      <main className="md:ml-64 flex-1 h-screen overflow-y-auto pt-16 md:pt-0">
+      <main className="md:ml-64 min-w-0 flex-1 h-screen overflow-y-auto pt-16 md:pt-0">
          <div className="pb-20">
             <Outlet />
          </div>

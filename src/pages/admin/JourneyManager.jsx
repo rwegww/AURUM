@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, AlertTriangle, ChevronLeft, ChevronRight, GripVertical, Map, RefreshCcw, Save } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, GripVertical, Map as MapIcon, RefreshCcw, Save } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
+import { reorderJourneyLessons } from '@/utils/adminLessonData';
 
 const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
@@ -27,24 +28,28 @@ const JourneyManager = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState(8);
+  const [selectedProgram, setSelectedProgram] = useState('ketnoi');
   const [loadError, setLoadError] = useState('');
   const [saveError, setSaveError] = useState('');
-  const savedOrdersRef = useRef(new Map());
+  const [saveNotice, setSaveNotice] = useState('');
+  const [savedOrders, setSavedOrders] = useState(() => new Map());
 
   const hasChanges = useMemo(() => lessons.some((lesson) => (
-    getOrder(lesson) !== savedOrdersRef.current.get(lesson.lessonId)
-  )), [lessons]);
+    getOrder(lesson) !== savedOrders.get(lesson.lessonId)
+  )), [lessons, savedOrders]);
 
   const fetchJourney = useCallback(async (signal) => {
     setLoading(true);
     setLoadError('');
     setSaveError('');
+    setSaveNotice('');
     try {
-      const response = await fetch(`/api/lessons?classId=${selectedGrade}`, { signal });
+      const params = new URLSearchParams({ classId: String(selectedGrade), programId: selectedProgram });
+      const response = await fetch(`/api/lessons?${params}`, { signal });
       const data = await getResponseData(response);
       if (!Array.isArray(data)) throw new Error('Dữ liệu hành trình trả về không hợp lệ.');
       const sortedData = sortLessons(data);
-      savedOrdersRef.current = new Map(sortedData.map((lesson) => [lesson.lessonId, getOrder(lesson)]));
+      setSavedOrders(new Map(sortedData.map((lesson) => [lesson.lessonId, getOrder(lesson)])));
       setLessons(sortedData);
     } catch (err) {
       if (err.name !== 'AbortError') {
@@ -55,12 +60,15 @@ const JourneyManager = () => {
     } finally {
       if (!signal?.aborted) setLoading(false);
     }
-  }, [selectedGrade]);
+  }, [selectedGrade, selectedProgram]);
 
   useEffect(() => {
     const controller = new AbortController();
-    fetchJourney(controller.signal);
-    return () => controller.abort();
+    const timeoutId = window.setTimeout(() => fetchJourney(controller.signal), 0);
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [fetchJourney]);
 
   useEffect(() => {
@@ -84,27 +92,20 @@ const JourneyManager = () => {
     const newIndex = index + direction;
     if (saving || newIndex < 0 || newIndex >= lessons.length) return;
 
-    setLessons((current) => {
-      const next = [...current];
-      const currentItem = next[index];
-      const targetItem = next[newIndex];
-      const currentOrder = getOrder(currentItem, index + 1);
-      const targetOrder = getOrder(targetItem, newIndex + 1);
-      next[index] = { ...targetItem, order: currentOrder };
-      next[newIndex] = { ...currentItem, order: targetOrder };
-      return next;
-    });
+    setLessons((current) => reorderJourneyLessons(current, index, direction));
     setSaveError('');
+    setSaveNotice('');
   };
 
   const handleSave = async () => {
     if (!hasChanges || saving) return;
     const changedLessons = lessons.filter((lesson) => (
-      getOrder(lesson) !== savedOrdersRef.current.get(lesson.lessonId)
+      getOrder(lesson) !== savedOrders.get(lesson.lessonId)
     ));
 
     setSaving(true);
     setSaveError('');
+    setSaveNotice('');
     try {
       const token = localStorage.getItem('token');
       const outcomes = await Promise.all(changedLessons.map(async (lesson) => {
@@ -115,9 +116,8 @@ const JourneyManager = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token || ''}`,
             },
-            // The API update mapper supplies defaults for omitted fields, so the complete lesson
-            // must be sent here to preserve quizzes, story slides, challenges and rewards.
-            body: JSON.stringify({ ...lesson, order: getOrder(lesson) }),
+            // The API merges this patch with the latest lesson at execution time.
+            body: JSON.stringify({ order: getOrder(lesson) }),
           });
           return { lesson, result: await parseAdminMutationResponse(response) };
         } catch (error) {
@@ -132,8 +132,10 @@ const JourneyManager = () => {
         .filter((outcome) => !outcome.result.pendingApproval)
         .map((outcome) => [outcome.lesson.lessonId, outcome.result.data]));
 
-      accepted.forEach(({ lesson }) => {
-        savedOrdersRef.current.set(lesson.lessonId, getOrder(lesson));
+      setSavedOrders((current) => {
+        const next = new Map(current);
+        accepted.forEach(({ lesson }) => next.set(lesson.lessonId, getOrder(lesson)));
+        return next;
       });
       setLessons((current) => current.map((lesson) => savedById.get(lesson.lessonId) || { ...lesson }));
 
@@ -143,9 +145,9 @@ const JourneyManager = () => {
       }
 
       if (pendingCount > 0) {
-        window.alert(`Đã tạo ${pendingCount} yêu cầu duyệt thứ tự. Cần quản trị viên còn lại xác nhận để áp dụng.`);
+        setSaveNotice(`Đã tạo ${pendingCount} yêu cầu duyệt thứ tự. Cần quản trị viên còn lại xác nhận để áp dụng.`);
       } else if (failed.length === 0) {
-        window.alert(`Đã cập nhật thứ tự của ${accepted.length} bài học thành công.`);
+        setSaveNotice(`Đã cập nhật thứ tự của ${accepted.length} bài học thành công.`);
       }
     } finally {
       setSaving(false);
@@ -164,7 +166,7 @@ const JourneyManager = () => {
             ← Quay lại Bảng điều khiển
           </Link>
           <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight text-viet-text">
-            Quản lý <span className="text-viet-green">Hành trình</span> <Map className="text-viet-green" size={28} aria-hidden="true" />
+            Quản lý <span className="text-viet-green">Hành trình</span> <MapIcon className="text-viet-green" size={28} aria-hidden="true" />
           </h1>
           <p className="mt-1 font-medium italic text-viet-text-light">Sắp xếp lộ trình học tập cho học sinh theo từng khối lớp.</p>
         </div>
@@ -199,6 +201,22 @@ const JourneyManager = () => {
         </div>
       </header>
 
+      <label className="mb-6 flex flex-wrap items-center gap-3 text-sm font-bold text-viet-text">
+        Bộ sách
+        <select
+          value={selectedProgram}
+          disabled={saving}
+          onChange={(event) => {
+            if (confirmDiscard()) setSelectedProgram(event.target.value);
+          }}
+          className="max-w-full rounded-xl border border-viet-border bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-viet-green"
+        >
+          <option value="ketnoi">Kết nối tri thức</option>
+          <option value="canhdieu">Cánh Diều</option>
+          <option value="chantroi">Chân trời sáng tạo</option>
+        </select>
+      </label>
+
       {hasChanges && (
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-700" role="status">
           <AlertTriangle className="mt-0.5 shrink-0" size={18} />
@@ -209,6 +227,12 @@ const JourneyManager = () => {
       {saveError && (
         <div className="mb-6 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700" role="alert">
           <AlertCircle className="mt-0.5 shrink-0" size={18} /> {saveError}
+        </div>
+      )}
+
+      {saveNotice && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-700" role="status" aria-live="polite">
+          <CheckCircle2 className="mt-0.5 shrink-0" size={18} /> {saveNotice}
         </div>
       )}
 
@@ -227,7 +251,7 @@ const JourneyManager = () => {
         </div>
       ) : lessons.length === 0 ? (
         <div className="rounded-[40px] border border-dashed border-slate-200 bg-white py-20 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300"><Map size={32} /></div>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-50 text-slate-300"><MapIcon size={32} /></div>
           <p className="font-bold text-slate-500">Chưa có bài học nào cho khối lớp này.</p>
           <Link to="/admin/bai_hoc" className="mt-2 block text-sm font-bold text-viet-green hover:underline">Tới trang Quản lý Học liệu →</Link>
         </div>

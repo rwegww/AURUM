@@ -14,12 +14,80 @@ const OTP_MAX_ATTEMPTS = Number(process.env.LOGIN_OTP_MAX_ATTEMPTS || 5);
 
 const normalizeEmail = (email = '') => String(email).trim().toLowerCase();
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const hasControlCharacters = (value) => [...value].some((character) => {
+  const codePoint = character.codePointAt(0);
+  return codePoint < 32 || codePoint === 127;
+});
 const createOtp = () => crypto.randomInt(100000, 1000000).toString();
 const hashOtp = (email, otp) =>
   crypto
     .createHash('sha256')
     .update(`${email}:${otp}:${process.env.JWT_SECRET || 'aurum-login-otp'}`)
     .digest('hex');
+
+const authRouteError = (status, message, code) => {
+  const error = new Error(message);
+  error.status = status;
+  error.code = code;
+  error.expose = true;
+  return error;
+};
+
+const assertLoginAllowed = (user) => {
+  if (user?.isLocked) {
+    throw authRouteError(
+      403,
+      'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.',
+      'ACCOUNT_LOCKED',
+    );
+  }
+};
+
+const sendAuthRouteError = (res, err, fallbackMessage, fallbackStatus = 500) => {
+  const status = err.status || fallbackStatus;
+  return res.status(status).json({
+    message: err.expose ? err.message : fallbackMessage,
+    error: err.code || (status >= 500 ? 'AUTH_INTERNAL_ERROR' : 'AUTH_FAILED'),
+  });
+};
+
+const normalizeRegistrationInput = ({ username, password, email, proofImageUrl } = {}) => {
+  const normalizedUsername = typeof username === 'string' ? username.trim() : '';
+  const normalizedPassword = typeof password === 'string' ? password : '';
+  const normalizedEmail = normalizeEmail(email);
+
+  if (!normalizedUsername || normalizedUsername.length > 64 || hasControlCharacters(normalizedUsername)) {
+    throw authRouteError(400, 'Tên đăng nhập không hợp lệ hoặc vượt quá 64 ký tự.', 'INVALID_USERNAME');
+  }
+  if (normalizedPassword.length < 6 || normalizedPassword.length > 128) {
+    throw authRouteError(400, 'Mật khẩu phải có từ 6 đến 128 ký tự.', 'INVALID_PASSWORD');
+  }
+  if (normalizedPassword === 'supabase_oauth_no_password') {
+    throw authRouteError(400, 'Mật khẩu này không an toàn. Vui lòng chọn mật khẩu khác.', 'INVALID_PASSWORD');
+  }
+  if (!isValidEmail(normalizedEmail) || normalizedEmail.length > 320) {
+    throw authRouteError(400, 'Email không hợp lệ.', 'INVALID_EMAIL');
+  }
+
+  let normalizedProofImageUrl;
+  if (proofImageUrl !== undefined) {
+    try {
+      if (typeof proofImageUrl !== 'string') throw new Error('invalid URL');
+      const parsed = new URL(proofImageUrl);
+      if (!['http:', 'https:'].includes(parsed.protocol) || proofImageUrl.length > 2048) throw new Error('invalid URL');
+      normalizedProofImageUrl = parsed.toString();
+    } catch {
+      throw authRouteError(400, 'Ảnh minh chứng phải là địa chỉ HTTP(S) hợp lệ.', 'INVALID_PROOF_URL');
+    }
+  }
+
+  return {
+    username: normalizedUsername,
+    password: normalizedPassword,
+    email: normalizedEmail,
+    proofImageUrl: normalizedProofImageUrl,
+  };
+};
 
 const removeExpiredOtp = (email) => {
   const record = emailOtpStore.get(email);
@@ -31,6 +99,7 @@ const removeExpiredOtp = (email) => {
 };
 
 const createLoginResponse = async (user) => {
+  assertLoginAllowed(user);
   const sessionId = crypto.randomUUID();
   await User.update(user.id, { currentSessionId: sessionId });
 
@@ -60,15 +129,13 @@ const createLoginResponse = async (user) => {
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { username, password, email, role = 'student', grade } = req.body;
+    const { role = 'student', grade } = req.body || {};
 
     if (role !== 'student') {
       return res.status(403).json({ message: 'Đăng ký công khai chỉ dành cho tài khoản học sinh.' });
     }
 
-    if (!username || !password || !email) {
-      return res.status(400).json({ message: 'Vui lòng nhập đầy đủ tên đăng nhập, email và mật khẩu.' });
-    }
+    const { username, password, email } = normalizeRegistrationInput(req.body);
     
     // Check if user exists
     const existingUser = await User.findOne({ username });
@@ -82,29 +149,9 @@ router.post('/register', async (req, res) => {
     }
 
     const user = await User.create({ username, password, email, role: 'student', grade });
-    const sessionId = crypto.randomUUID();
-    await User.update(user.id, { currentSessionId: sessionId });
-
-    const token = jwt.sign(
-      { id: user.id, role: user.role, sessionId },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    res.status(201).json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        xp: user.xp,
-        level: user.level,
-        createdAt: user.createdAt,
-        linkedAccounts: user.linkedAccounts || {}
-      }
-    });
+    return res.status(201).json(await createLoginResponse(user));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi đăng ký', error: err.message });
+    return sendAuthRouteError(res, err, 'Lỗi đăng ký');
   }
 });
 
@@ -114,13 +161,10 @@ router.post('/register-teacher', async (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   
   try {
-    console.log('📝 [register-teacher] Request body keys:', Object.keys(req.body || {}));
-    const { username, password, email, proofImageUrl } = req.body;
-    
-    if (!username || !password || !email || !proofImageUrl) {
-      console.warn('⚠️ [register-teacher] Missing fields:', { username: !!username, password: !!password, email: !!email, proofImageUrl: !!proofImageUrl });
+    if (!req.body?.proofImageUrl) {
       return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ thông tin và ảnh minh chứng' });
     }
+    const { username, password, email, proofImageUrl } = normalizeRegistrationInput(req.body);
     
     // Check if user exists
     const existingUser = await User.findOne({ username });
@@ -132,6 +176,15 @@ router.post('/register-teacher', async (req, res) => {
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return res.status(400).json({ message: 'Email đã được sử dụng' });
+    }
+
+    const pendingRequest = await Feedback.findPendingTeacherRegistration({ username, email });
+    if (pendingRequest) {
+      throw authRouteError(
+        409,
+        'Tên đăng nhập hoặc email này đã có yêu cầu đang chờ duyệt.',
+        'TEACHER_REQUEST_PENDING',
+      );
     }
     
     // Hash the password so we don't store it in plain text even in phan_hoi
@@ -149,14 +202,16 @@ router.post('/register-teacher', async (req, res) => {
       type: 'teacher_registration',
       message: messageContent,
       imageUrl: proofImageUrl,
-      status: 'unread'
+      status: 'unread',
+      metadata: { email },
     });
 
-    console.log('Đã tạo yêu cầu đăng ký giáo viên cho:', username);
     return res.status(201).json({ message: 'Yêu cầu đăng ký đã được gửi. Vui lòng chờ Quản trị viên duyệt qua Email.' });
   } catch (err) {
-    console.error('❌ [register-teacher] Error:', err.message, err.stack);
-    return res.status(500).json({ message: 'Lỗi server', error: err.message });
+    if ((err.status || 500) >= 500) {
+      console.error('Lỗi tạo yêu cầu giáo viên:', err);
+    }
+    return sendAuthRouteError(res, err, 'Không thể tạo yêu cầu giáo viên.');
   }
 });
 
@@ -166,7 +221,7 @@ router.post('/magic-login', async (req, res) => {
     const { token } = req.body;
     if (!token) return res.status(400).json({ message: 'Thiếu mã đăng nhập.' });
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
     if (!decoded.magicLogin) {
       return res.status(400).json({ message: 'Token không hợp lệ cho tính năng này' });
     }
@@ -176,31 +231,15 @@ router.post('/magic-login', async (req, res) => {
       return res.status(404).json({ message: 'Không tìm thấy người dùng' });
     }
 
-    const sessionId = crypto.randomUUID();
-    await User.update(user.id, { currentSessionId: sessionId });
-
-    const authToken = jwt.sign(
-      { id: user.id, role: user.role, sessionId },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    res.json({
-      token: authToken,
-      user: {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        xp: user.xp,
-        level: user.level,
-        inventory: user.inventory || { ingredients: [], craftedItems: [] },
-        unlockedLessons: user.unlockedLessons,
-        createdAt: user.createdAt,
-        linkedAccounts: user.linkedAccounts || {}
-      }
-    });
+    return res.json(await createLoginResponse(user));
   } catch (err) {
-    res.status(401).json({ message: 'Link đăng nhập đã hết hạn hoặc không hợp lệ', error: err.message });
+    if (err.code === 'ACCOUNT_LOCKED') {
+      return sendAuthRouteError(res, err, 'Không thể đăng nhập.');
+    }
+    return res.status(401).json({
+      message: 'Link đăng nhập đã hết hạn hoặc không hợp lệ',
+      error: 'INVALID_MAGIC_LINK',
+    });
   }
 });
 
@@ -228,7 +267,7 @@ router.post('/request-otp', async (req, res) => {
     };
 
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user || user.isLocked) {
       return res.json(publicResponse);
     }
 
@@ -258,7 +297,7 @@ router.post('/request-otp', async (req, res) => {
         : {})
     });
   } catch (err) {
-    return res.status(500).json({ message: 'Lỗi gửi mã OTP', error: err.message });
+    return sendAuthRouteError(res, err, 'Lỗi gửi mã OTP');
   }
 });
 
@@ -303,7 +342,7 @@ router.post('/verify-otp', async (req, res) => {
 
     return res.json(await createLoginResponse(user));
   } catch (err) {
-    return res.status(500).json({ message: 'Lỗi xác thực OTP', error: err.message });
+    return sendAuthRouteError(res, err, 'Lỗi xác thực OTP');
   }
 });
 
@@ -311,7 +350,13 @@ router.post('/verify-otp', async (req, res) => {
 // Login
 router.post('/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const username = typeof req.body?.username === 'string' ? req.body.username.trim() : '';
+    const password = typeof req.body?.password === 'string' ? req.body.password : '';
+    // Older OAuth accounts were provisioned with this shared placeholder.
+    // Deny it for existing accounts too, without modifying their database rows.
+    if (!username || !password || password === 'supabase_oauth_no_password') {
+      return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác', error: 'INVALID_CREDENTIALS' });
+    }
     
     // Attempt to find user by username OR email
     const user = await User.findOne({ username, email: username });
@@ -325,31 +370,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
     }
 
-    const sessionId = crypto.randomUUID();
-    await User.update(user.id, { currentSessionId: sessionId });
-
-    const token = jwt.sign(
-      { id: user.id, role: user.role, sessionId },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        xp: user.xp,
-        level: user.level,
-        inventory: user.inventory || { ingredients: [], craftedItems: [] },
-        unlockedLessons: user.unlockedLessons,
-        createdAt: user.createdAt,
-        linkedAccounts: user.linkedAccounts || {}
-      }
-    });
+    return res.json(await createLoginResponse(user));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi đăng nhập', error: err.message });
+    return sendAuthRouteError(res, err, 'Lỗi đăng nhập');
   }
 });
 

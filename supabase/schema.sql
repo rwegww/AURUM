@@ -1353,6 +1353,7 @@ WHERE room_row.status = 'playing'
 
 CREATE INDEX IF NOT EXISTS idx_nguoi_dung_phut_hoat_dong ON public.nguoi_dung (phut_hoat_dong DESC);
 CREATE INDEX IF NOT EXISTS idx_nguoi_dung_hoat_dong_cuoi_luc ON public.nguoi_dung (hoat_dong_cuoi_luc DESC);
+CREATE INDEX IF NOT EXISTS idx_nguoi_dung_hoat_dong_id ON public.nguoi_dung (hoat_dong_cuoi_luc DESC NULLS LAST, id DESC);
 CREATE INDEX IF NOT EXISTS idx_nguoi_dung_role ON public.nguoi_dung (role);
 CREATE INDEX IF NOT EXISTS idx_bai_hoc_khoi_thu_tu ON public.bai_hoc (khoi_id, thu_tu);
 CREATE INDEX IF NOT EXISTS idx_bai_hoc_chuong_trinh ON public.bai_hoc (chuong_trinh_id);
@@ -1360,7 +1361,12 @@ CREATE INDEX IF NOT EXISTS idx_tien_do_nguoi_dung_loai_tien_do ON public.tien_do
 CREATE INDEX IF NOT EXISTS idx_tien_do_nguoi_dung_doi_tuong_id ON public.tien_do_nguoi_dung (loai_tien_do, doi_tuong_id);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_status ON public.phan_hoi (status);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_type ON public.phan_hoi (type);
+CREATE INDEX IF NOT EXISTS idx_phan_hoi_created_id ON public.phan_hoi (created_at DESC, id DESC);
+CREATE INDEX IF NOT EXISTS idx_phan_hoi_teacher_pending_email
+  ON public.phan_hoi ((thong_tin_bo_sung->>'email'))
+  WHERE type = 'teacher_registration' AND status = 'unread';
 CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_status_created ON public.yeu_cau_duyet_admin (status, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_status_created_id ON public.yeu_cau_duyet_admin (status, created_at DESC, id DESC);
 CREATE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_requested_by ON public.yeu_cau_duyet_admin (requested_by);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_yeu_cau_duyet_admin_pending_hash
   ON public.yeu_cau_duyet_admin (request_hash)
@@ -1382,6 +1388,7 @@ CREATE INDEX IF NOT EXISTS idx_lich_su_dau_nguoi_dung_id ON public.lich_su_dau (
 CREATE INDEX IF NOT EXISTS idx_lich_su_dau_phong_dau_id ON public.lich_su_dau (phong_dau_id);
 CREATE INDEX IF NOT EXISTS idx_lich_su_dau_dau_luc ON public.lich_su_dau (dau_luc DESC);
 CREATE INDEX IF NOT EXISTS idx_lop_giao_vien_id ON public.lop (giao_vien_id);
+CREATE INDEX IF NOT EXISTS idx_lop_giao_vien_created ON public.lop (giao_vien_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_lop_khoi_id ON public.lop (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_thanh_vien_lop_hoc_sinh_id ON public.thanh_vien_lop (hoc_sinh_id);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_id ON public.bai_dang_lop (lop_id);
