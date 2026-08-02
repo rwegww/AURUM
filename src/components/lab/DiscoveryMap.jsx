@@ -3,61 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { molecules } from '../../data/molecules';
 import { elements } from '../../data/elements';
 import { craftableItems } from '../../data/labInventory';
-import { CheckCircle2, Lock, ChevronRight, Activity, ArrowRight, Plus, Microscope } from 'lucide-react';
+import { Activity, ArrowRight, Diamond, Flame, Leaf, Lock, Microscope, Plus, Sparkles, Zap } from 'lucide-react';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { getChemicalImage } from '../../data/chemicalImages';
+import { calculateMolarMass } from '../../utils/labChemistry';
 
 // Helper to normalize formulas (H₂ -> H2)
 const normalize = (f) => {
   if (!f) return "";
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
-};
-
-const calculateMolarMass = (formula, elements) => {
-  if (!formula) return 0;
-  const clean = formula.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => {
-    const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
-    return subMap[m];
-  }).trim();
-
-  const parse = (f) => {
-    let total = 0;
-    let i = 0;
-    while (i < f.length) {
-      if (f[i] === '(') {
-        let start = i + 1;
-        let pMatch = 1;
-        while (pMatch > 0 && ++i < f.length) {
-          if (f[i] === '(') pMatch++;
-          if (f[i] === ')') pMatch--;
-        }
-        let sub = f.substring(start, i);
-        i++;
-        let multiplierMatch = f.substring(i).match(/^\d+/);
-        let multiplier = 1;
-        if (multiplierMatch) {
-          multiplier = parseInt(multiplierMatch[0]);
-          i += multiplierMatch[0].length;
-        }
-        total += parse(sub) * multiplier;
-      } else {
-        let match = f.substring(i).match(/^([A-Z][a-z]*)(\d*)/);
-        if (match) {
-          const sym = match[1];
-          const count = parseInt(match[2] || "1");
-          const el = elements.find(e => e.symbol === sym);
-          if (el) total += parseFloat(el.weight) * count;
-          i += match[0].length;
-        } else {
-          i++;
-        }
-      }
-    }
-    return total;
-  };
-  const result = parse(clean);
-  return result > 0 ? result.toFixed(3) : "??";
 };
 
 const getApplications = (formula, name, category) => {
@@ -88,11 +43,11 @@ const getApplications = (formula, name, category) => {
 };
 
 const TIER_THEME = {
-  0: { color: '#3b82f6', icon: 'Diamond', label: 'Bậc 0: Nguyên bản' },
-  1: { color: '#10b981', icon: 'Leaf', label: 'Bậc 1: Sơ cấp' },
-  2: { color: '#f59e0b', icon: 'Zap', label: 'Bậc 2: Trung cấp' },
-  3: { color: '#ef4444', icon: 'Flame', label: 'Bậc 3: Cao cấp' },
-  4: { color: '#8b5cf6', icon: '🔮', label: 'Khác / Huyền bí' }
+  0: { color: '#3b82f6', icon: Diamond, label: 'Bậc 0: Nguyên bản' },
+  1: { color: '#10b981', icon: Leaf, label: 'Bậc 1: Sơ cấp' },
+  2: { color: '#f59e0b', icon: Zap, label: 'Bậc 2: Trung cấp' },
+  3: { color: '#ef4444', icon: Flame, label: 'Bậc 3: Cao cấp' },
+  4: { color: '#8b5cf6', icon: Sparkles, label: 'Khác / Chưa phân bậc' }
 };
 
 const buildPyramidRows = (items) => {
@@ -227,7 +182,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
   const highlightedNodes = useMemo(() => {
     const highlights = new Set();
     const activeId = hoveredId || selectedId;
-    if (activeId) {
+    if (activeId && normalizedDiscovered.has(activeId)) {
       highlights.add(activeId);
       _reactions.forEach(rx => {
         if (rx.products && rx.products.some(p => normalize(p.formula) === activeId)) {
@@ -241,7 +196,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
       });
     }
     return highlights;
-  }, [hoveredId, selectedId, _reactions]);
+  }, [hoveredId, selectedId, _reactions, normalizedDiscovered]);
 
   const renderPathwayNode = (formula, coeff, name, isProduct = false) => {
      const isDiscovered = normalizedDiscovered.has(normalize(formula));
@@ -262,7 +217,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
               ) : (
                  <span className={`font-black italic ${isProduct ? 'text-viet-green' : (isDiscovered ? 'text-viet-text' : 'text-red-500')}`}>
                     {coeff > 1 ? <span className="text-[10px] opacity-70 mr-0.5">{coeff}</span> : null}
-                    {formula}
+                    {isDiscovered || isProduct ? formula : <Lock size={14} />}
                  </span>
               )}
            </div>
@@ -279,7 +234,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
     return (
         <motion.button
             key={item.formula}
-            onMouseEnter={() => setHoveredId(item.normalizedFormula)}
+            onMouseEnter={() => item.isDiscovered && setHoveredId(item.normalizedFormula)}
             onMouseLeave={() => setHoveredId(null)}
             onClick={() => setSelectedId(item.normalizedFormula)}
             className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-300 w-[180px] text-left relative overflow-hidden group ${
@@ -323,7 +278,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                     {item.isDiscovered ? item.name : 'Chất bí ẩn'}
                 </p>
                 <p className="text-[8px] font-black text-viet-text-light opacity-70 mt-0.5 uppercase tracking-widest">
-                    {item.category || 'Vật chất'}
+                    {item.isDiscovered ? (item.category || 'Vật chất') : 'Chưa khám phá'}
                 </p>
             </div>
         </motion.button>
@@ -358,13 +313,14 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                    animate={{ opacity: 1, scale: 1 }}
                    className="px-8 py-4 bg-viet-green text-white rounded-full font-black text-xl uppercase tracking-widest shadow-[0_0_40px_rgba(16,185,129,0.3)] border-b-[4px] border-emerald-700 select-none flex items-center justify-center"
                  >
-                   CÂY TIẾN HÓA VẬT CHẤT
+                   BẢN ĐỒ KHÁM PHÁ VẬT CHẤT
                  </motion.div>
               </div>
 
               {/* TIERS AS ROWS */}
               {tierKeys.map((tier, tIdx) => {
                 const theme = TIER_THEME[tier];
+                const TierIcon = theme.icon;
                 const items = treeData[tier] || [];
                 
                 return (
@@ -377,7 +333,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                       className="z-20 bg-white/80 backdrop-blur-md py-3 px-8 rounded-full border border-viet-border flex items-center justify-center gap-4 shadow-sm mb-4"
                     >
                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg bg-viet-bg border border-viet-border" style={{ color: theme.color }}>
-                          {theme.icon}
+                          <TierIcon size={18} />
                        </div>
                        <div className="flex flex-col">
                            <h2 className="text-sm font-black uppercase tracking-widest text-viet-text leading-none">{theme.label}</h2>
@@ -422,7 +378,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                initial={{ x: 600, opacity: 0 }} 
                animate={{ x: 0, opacity: 1 }} 
                exit={{ x: 600, opacity: 0 }}
-               className="absolute top-4 right-4 bottom-4 w-[550px] bg-white/95 backdrop-blur-3xl border-l border-viet-border rounded-[40px] shadow-[-10px_0_40px_rgba(0,0,0,0.05)] z-[101] overflow-hidden flex flex-col"
+               className="absolute inset-x-2 bottom-2 top-2 z-[101] flex flex-col overflow-hidden rounded-[28px] border-l border-viet-border bg-white/95 shadow-[-10px_0_40px_rgba(0,0,0,0.05)] backdrop-blur-3xl sm:left-auto sm:right-4 sm:w-[min(550px,calc(100vw-2rem))] sm:rounded-[40px]"
             >
                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-viet-green to-transparent opacity-50" />
                <div className="p-8 pb-4 flex flex-col items-center text-center relative shrink-0">
@@ -435,12 +391,12 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         className="absolute -inset-10 bg-viet-green/10 blur-3xl rounded-full pointer-events-none" 
                      />
                      <h2 className="text-6xl font-black italic tracking-tighter text-viet-text font-sora relative z-10 drop-shadow-md">
-                        {selectedData.formula || selectedData.symbol}
+                        {selectedData.isDiscovered ? (selectedData.formula || selectedData.symbol) : '???'}
                      </h2>
                   </div>
                   <h3 className="text-2xl font-black text-viet-text mb-2">{selectedData.isDiscovered ? selectedData.name : 'Vật chất bí ẩn'}</h3>
                   <div className="px-5 py-1.5 bg-viet-bg border border-viet-border text-viet-text-light rounded-full text-[10px] font-black uppercase tracking-[3px]">
-                     {selectedData.category || 'Vật chất'}
+                     {selectedData.isDiscovered ? (selectedData.category || 'Vật chất') : 'Chưa khám phá'}
                   </div>
                </div>
                <div className="flex-1 overflow-y-auto custom-scrollbar p-8 pt-4 flex flex-col gap-6">
@@ -449,10 +405,15 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         <div className="w-8 h-8 rounded-xl bg-viet-green/20 flex items-center justify-center text-viet-green">
                            <Activity size={16} />
                         </div>
-                        <h4 className="text-[12px] font-black text-viet-text-light uppercase tracking-[3px]">Cây Tổng Hợp</h4>
+                        <h4 className="text-[12px] font-black text-viet-text-light uppercase tracking-[3px]">Đường Tổng Hợp</h4>
                      </div>
                      <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border flex flex-col gap-6">
-                        {selectedData.is_starter || selectedData.isStarter ? (
+                        {!selectedData.isDiscovered ? (
+                           <div className="flex flex-col items-center gap-3 py-6 text-center">
+                              <Lock className="text-viet-text-light" size={24} />
+                              <p className="text-[13px] font-semibold italic text-viet-text-light opacity-70">Công thức và đường tổng hợp sẽ hiện sau khi bạn khám phá chất này trong phòng Lab.</p>
+                           </div>
+                        ) : selectedData.is_starter || selectedData.isStarter ? (
                            <div className="text-center py-4">
                               <p className="text-viet-text-light opacity-70 text-[13px] font-semibold italic">Nguyên liệu gốc. Trọng tâm trong vũ trụ vật chất.</p>
                            </div>
@@ -511,11 +472,11 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                         </p>
                      </div>
                   </div>
-                  <div className="flex flex-col gap-4">
+                  {selectedData.isDiscovered && <div className="flex flex-col gap-4">
                      <div className="bg-viet-bg p-6 rounded-[24px] border border-viet-border flex flex-col gap-2">
                         <span className="text-[8px] font-black text-viet-green uppercase tracking-[3px]">Khối lượng nguyên tử / phân tử</span>
                         <div className="flex items-baseline gap-2">
-                           <span className="text-3xl font-black text-viet-text italic">{selectedData.molarMass || selectedData.weight || calculateMolarMass(selectedData.formula || selectedData.symbol, elements)}</span>
+                           <span className="text-3xl font-black text-viet-text italic">{selectedData.molarMass || selectedData.weight || calculateMolarMass(selectedData.formula || selectedData.symbol)?.toFixed(3) || '??'}</span>
                            <span className="text-[10px] font-bold text-viet-text-light opacity-70 uppercase tracking-widest">u (amu)</span>
                         </div>
                      </div>
@@ -528,7 +489,7 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
                            {selectedData.isDiscovered ? getApplications(selectedData.formula || selectedData.symbol, selectedData.name, selectedData.category) : 'Khám phá chất này trong phòng Lab để tìm hiểu các ứng dụng thực tế phong phú!'}
                         </p>
                      </div>
-                  </div>
+                  </div>}
                </div>
             </motion.div>
           </>
@@ -539,4 +500,3 @@ const DiscoveryMap = ({ chemicals = [], reactions: _reactions = [], discoveredFo
 };
 
 export default DiscoveryMap;
-

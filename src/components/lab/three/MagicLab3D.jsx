@@ -1,12 +1,10 @@
-import React, { Suspense, useState, useMemo, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import GameWorkspace from '../2d-engine/GameWorkspace';
 import useLabStore from './magic-lab/store';
 
 import SoundManager from './magic-lab/SoundManager';
 import { useSoundEffects, useSoundStore } from './magic-lab/useSoundEffects';
-import DiscoveryMap from '../DiscoveryMap'; 
-import { ArrowLeft, Beaker, Zap, Droplets, Flame, Search, FlaskConical, BookOpen, NotebookPen, Download, Trash2, Save, Filter, ArrowRightLeft } from 'lucide-react';
+import { AlertTriangle, ArrowRightLeft, Beaker, Zap, Flame, FlaskConical, BookOpen, NotebookPen, Download, Filter, Sparkles } from 'lucide-react';
 import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
@@ -17,6 +15,10 @@ const normalize = (f) => {
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   return f.toString().replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (m) => subMap[m]).trim().toUpperCase();
 };
+
+const withAlpha = (color, alpha) => /^#[0-9a-f]{6}$/i.test(color || '')
+  ? `${color}${alpha}`
+  : color || 'rgba(255,255,255,0.2)';
 
 const isElement = (formula) => {
   const clean = String(formula || '').replace(/[^a-zA-Z]/g, '');
@@ -243,11 +245,17 @@ const MoleculeModel = ({ formula, size = 'md' }) => {
 
 const MagicLab3D = () => {
   const { user, isLoggedIn, refreshUser } = useAuth();
+  const userId = user?.id;
+  const userUnlockedChemicals = user?.unlockedChemicals;
   
   // --- Game Data Local State ---
   const [dbChemicals, setDbChemicals] = useState([]);
   const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
+  const discoveredFormulasRef = useRef([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [labLoadError, setLabLoadError] = useState('');
+  const [loadVersion, setLoadVersion] = useState(0);
+  const [progressSaveError, setProgressSaveError] = useState('');
   
   // --- Discovery State ---
   const [newDiscovery, setNewDiscovery] = useState(null);
@@ -270,6 +278,7 @@ const MagicLab3D = () => {
   const scoopSolids = useLabStore(state => state.scoopSolids);
   const pourToBeaker = useLabStore(state => state.pourToBeaker);
   const toggleElectrolysis = useLabStore(state => state.toggleElectrolysis);
+  const resetLabSession = useLabStore(state => state.resetLabSession);
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
@@ -280,22 +289,24 @@ const MagicLab3D = () => {
   // --- Lab Notepad State & Storage ---
   const [showNotepad, setShowNotepad] = useState(false);
   const [notepadTab, setNotepadTab] = useState('history'); // 'history' | 'notes'
-  const [userNotes, setUserNotes] = useState(() => {
-    return localStorage.getItem('aurum_lab_notes') || '';
-  });
+  const [userNotes, setUserNotes] = useState('');
+  const notesStorageKey = `aurum_lab_notes:${isLoggedIn && userId ? userId : 'guest'}`;
+  const [notesReadyKey, setNotesReadyKey] = useState('');
 
   useEffect(() => {
-    localStorage.setItem('aurum_lab_notes', userNotes);
-  }, [userNotes]);
+    resetLabSession(isLoggedIn && userId ? `user:${userId}` : 'guest');
+  }, [isLoggedIn, resetLabSession, userId]);
 
-  // Portal target container binding
-  const [portalEl, setPortalEl] = useState(null);
   useEffect(() => {
-    const el = document.getElementById('lab-handbook-portal');
-    if (el) {
-      setPortalEl(el);
+    setUserNotes(localStorage.getItem(notesStorageKey) || '');
+    setNotesReadyKey(notesStorageKey);
+  }, [notesStorageKey]);
+
+  useEffect(() => {
+    if (notesReadyKey === notesStorageKey) {
+      localStorage.setItem(notesStorageKey, userNotes);
     }
-  }, []);
+  }, [notesReadyKey, notesStorageKey, userNotes]);
 
   // Group and aggregate chemical history for active beaker
   const activeHistory = useMemo(() => {
@@ -349,7 +360,7 @@ const MagicLab3D = () => {
         };
       } else {
         return {
-          text: `Thu được ${e.totalAmount}${e.unit} ${e.name} (${e.formula})${e.count > 1 ? ` (x${e.count})` : ''}`,
+          text: `Ước tính thu được ${e.totalAmount}${e.unit} ${e.name} (${e.formula})${e.count > 1 ? ` (x${e.count})` : ''}`,
           time: e.lastTime
         };
       }
@@ -361,6 +372,7 @@ const MagicLab3D = () => {
     lines.push("=== AURUM CHEMISTRY LAB - SỔ TAY NHẬT KÝ THÍ NGHIỆM ===");
     lines.push(`Thời gian xuất: ${new Date().toLocaleString('vi-VN')}`);
     lines.push(`Cốc thí nghiệm đang chọn: #${activeBeakerIndex + 1}\n`);
+    lines.push("Giả định tính lượng: dung dịch 1 M; khí ở 25°C và 1 atm.\n");
     lines.push("--- 📜 LỊCH SỬ THAO TÁC HÓA CHẤT ---");
     if (activeHistory.length === 0) {
       lines.push("(Chưa có thao tác nào)");
@@ -369,7 +381,7 @@ const MagicLab3D = () => {
         lines.push(`${i + 1}. [${h.time}] ${h.text}`);
       });
     }
-    lines.push("\n--- FileText GHI CHÚ CÁ NHÂN ---");
+    lines.push("\n--- GHI CHÚ CÁ NHÂN ---");
     lines.push(userNotes || "(Chưa có ghi chú)");
     
     const blob = new Blob([lines.join("\n")], { type: 'text/plain;charset=utf-8' });
@@ -418,17 +430,22 @@ const MagicLab3D = () => {
 
   // --- 1. Fetch Backend Data ---
   useEffect(() => {
+    const controller = new AbortController();
     const fetchData = async () => {
+      setIsLoading(true);
+      setLabLoadError('');
       try {
         const token = localStorage.getItem('token');
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
 
         const [chemsRes, rxsRes] = await Promise.all([
-          fetch('/api/lab/chemicals', { headers }),
-          fetch('/api/lab/reactions', { headers })
+          fetch('/api/lab/chemicals', { headers, signal: controller.signal }),
+          fetch('/api/lab/reactions', { headers, signal: controller.signal })
         ]);
+        if (!chemsRes.ok || !rxsRes.ok) throw new Error('Không thể tải dữ liệu hóa chất và phản ứng.');
         const chemsData = await chemsRes.json();
         const rxsData = await rxsRes.json();
+        if (!Array.isArray(chemsData) || !Array.isArray(rxsData)) throw new Error('Dữ liệu Lab trả về không hợp lệ.');
         
         // Frontend Override: Force KMnO4 to be liquid (solution) as requested
         // Frontend Override: Force all forms of KMnO4 to be liquid (solution)
@@ -453,43 +470,55 @@ const MagicLab3D = () => {
         setDbChemicals(processedChems);
         // Initial progression
         const starters = processedChems.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
-        const saved = localStorage.getItem('chem_odyssey_discovered');
         let initialDiscovered = starters;
-        
-        if (saved) {
-          try {
-            initialDiscovered = Array.from(new Set([...starters, ...JSON.parse(saved)]));
-          } catch (e) { console.error("Stored data corrupted"); }
+
+        if (isLoggedIn && userUnlockedChemicals) {
+          initialDiscovered = Array.from(new Set([...starters, ...userUnlockedChemicals]));
+        } else if (!isLoggedIn) {
+          const saved = localStorage.getItem('chem_odyssey_discovered:guest') || localStorage.getItem('chem_odyssey_discovered');
+          if (saved) {
+            try {
+              initialDiscovered = Array.from(new Set([...starters, ...JSON.parse(saved)]));
+            } catch {
+              localStorage.removeItem('chem_odyssey_discovered:guest');
+            }
+          }
         }
         
+        discoveredFormulasRef.current = initialDiscovered;
         setDiscoveredFormulas(initialDiscovered);
         setData(processedChems, rxsData, initialDiscovered);
         
       } catch (err) {
+        if (err.name === 'AbortError') return;
         console.error("Failed to fetch lab data:", err);
+        setLabLoadError(err.message || 'Không thể tải dữ liệu Lab.');
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) setIsLoading(false);
       }
     };
     fetchData();
-  }, [setData]);
+    return () => controller.abort();
+  }, [isLoggedIn, loadVersion, setData, userId, userUnlockedChemicals]);
 
   // Sync auth user progress
   useEffect(() => {
-    if (isLoggedIn && user && user.unlockedChemicals && dbChemicals.length > 0) {
+    if (isLoggedIn && userId && userUnlockedChemicals && dbChemicals.length > 0) {
       const starters = dbChemicals.filter(c => c.is_starter || c.isStarter).map(c => c.formula);
-      const combined = Array.from(new Set([...starters, ...user.unlockedChemicals]));
+      const combined = Array.from(new Set([...starters, ...userUnlockedChemicals]));
+      discoveredFormulasRef.current = combined;
       setDiscoveredFormulas(combined);
       setUnlocked(combined);
     }
-  }, [dbChemicals, isLoggedIn, setUnlocked, user]);
+  }, [dbChemicals, isLoggedIn, setUnlocked, userId, userUnlockedChemicals]);
 
-  const discoveredSet = useMemo(() => new Set(discoveredFormulas), [discoveredFormulas]);
   const normalizedDiscoveredSet = useMemo(() => new Set(discoveredFormulas.map(f => normalize(f))), [discoveredFormulas]);
 
   // Handle new discoveries
   const handleOnDiscovery = useCallback((products) => {
-    const newProducts = products.filter(p => !normalizedDiscoveredSet.has(normalize(p.formula)));
+    const previousFormulas = discoveredFormulasRef.current;
+    const previousNormalized = new Set(previousFormulas.map(formula => normalize(formula)));
+    const newProducts = products.filter(p => !previousNormalized.has(normalize(p.formula)));
     
     if (newProducts.length > 0) {
       const targetNorm = normalize(newProducts[0].formula);
@@ -500,27 +529,49 @@ const MagicLab3D = () => {
       }
 
       const allNewFormulas = newProducts.map(p => p.formula);
-      const updated = Array.from(new Set([...discoveredFormulas, ...allNewFormulas]));
+      const updated = Array.from(new Set([...previousFormulas, ...allNewFormulas]));
+      discoveredFormulasRef.current = updated;
       setDiscoveredFormulas(updated);
       setUnlocked(updated);
+      setProgressSaveError('');
       
       if (isLoggedIn) {
         const token = localStorage.getItem('token');
-        fetch('/api/lab/unlock', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ formulas: allNewFormulas })
-        }).then(() => {
-          refreshUser();
-        }).catch(err => console.error("Failed to save progress:", err));
+        void (async () => {
+          try {
+            const response = await fetch('/api/lab/unlock', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+              body: JSON.stringify({ formulas: allNewFormulas }),
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.message || 'Không thể lưu khám phá.');
+            try {
+              await refreshUser();
+            } catch (refreshError) {
+              console.warn('Đã lưu khám phá nhưng chưa làm mới được hồ sơ:', refreshError);
+            }
+          } catch (error) {
+            console.error("Failed to save progress:", error);
+            const failedFormulas = new Set(allNewFormulas.map(formula => normalize(formula)));
+            const rollback = discoveredFormulasRef.current.filter(formula => (
+              !failedFormulas.has(normalize(formula)) || previousNormalized.has(normalize(formula))
+            ));
+            discoveredFormulasRef.current = rollback;
+            setDiscoveredFormulas(rollback);
+            setUnlocked(rollback);
+            setNewDiscovery(null);
+            setProgressSaveError(`${error.message} Tiến độ cục bộ đã được hoàn tác.`);
+          }
+        })();
       } else {
-        localStorage.setItem('chem_odyssey_discovered', JSON.stringify(updated));
+        localStorage.setItem('chem_odyssey_discovered:guest', JSON.stringify(updated));
       }
     }
-  }, [discoveredFormulas, dbChemicals, isLoggedIn, playSound, refreshUser, setUnlocked]);
+  }, [dbChemicals, isLoggedIn, playSound, refreshUser, setUnlocked]);
 
   useEffect(() => {
     setOnDiscovery(handleOnDiscovery);
@@ -581,12 +632,12 @@ const MagicLab3D = () => {
     const query = searchQuery.toLowerCase().trim();
     
     return Object.values(chemicalsMap)
-      .filter(c => discoveredSet.has(c.formula))
+      .filter(c => normalizedDiscoveredSet.has(normalize(c.formula)))
       .filter(c => 
-        c.name.toLowerCase().includes(query) || 
-        c.formula.toLowerCase().includes(query)
+        String(c.name || '').toLowerCase().includes(query) ||
+        String(c.formula || '').toLowerCase().includes(query)
       );
-  }, [discoveredSet, searchQuery]);
+  }, [normalizedDiscoveredSet, searchQuery]);
 
   if (isLoading) return (
     <div className="flex-1 flex flex-col items-center justify-center bg-[#0a0a0f] text-white rounded-3xl min-h-[600px]">
@@ -595,10 +646,25 @@ const MagicLab3D = () => {
     </div>
   );
 
+  if (labLoadError) return (
+    <div className="flex min-h-[420px] flex-1 flex-col items-center justify-center rounded-3xl bg-[#0a0a0f] p-8 text-center text-white">
+      <AlertTriangle className="mb-4 h-12 w-12 text-amber-400" />
+      <h2 className="text-xl font-black">Không thể mở phòng Lab</h2>
+      <p className="mt-2 max-w-md text-sm text-white/60">{labLoadError}</p>
+      <button
+        type="button"
+        onClick={() => setLoadVersion(version => version + 1)}
+        className="mt-6 rounded-xl bg-blue-600 px-5 py-2.5 text-xs font-black uppercase tracking-widest hover:bg-blue-500"
+      >
+        Thử lại
+      </button>
+    </div>
+  );
+
   return (
     <div 
       ref={containerRef}
-      className="relative w-full min-h-[600px] h-full overflow-hidden font-sans text-white select-none transition-colors duration-1000 rounded-3xl shadow-2xl border border-white/10 bg-[#0a0a0f]"
+      className="relative h-full min-h-[720px] w-full overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0f] font-sans text-white shadow-2xl transition-colors duration-1000 md:min-h-[600px]"
     >
       <GameWorkspace />
 
@@ -614,7 +680,7 @@ const MagicLab3D = () => {
             className="absolute top-6 left-1/2 -translate-x-1/2 z-[200] pointer-events-auto"
           >
              <div className="bg-slate-900/90 backdrop-blur-2xl border border-blue-500/30 rounded-3xl p-5 flex items-center gap-5 shadow-[0_10px_40px_rgba(59,130,246,0.4)]">
-                <div className="text-4xl">Sparkles</div>
+                <Sparkles className="h-10 w-10 text-blue-300" />
                 <div>
                   <h2 className="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-0.5">Khám phá hóa chất mới</h2>
                   <div className="flex items-end gap-2">
@@ -633,11 +699,27 @@ const MagicLab3D = () => {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {progressSaveError && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            className="absolute left-1/2 top-4 z-[210] flex max-w-[calc(100%-2rem)] -translate-x-1/2 items-start gap-3 rounded-2xl border border-rose-400/30 bg-rose-950/90 p-4 text-xs text-rose-100 shadow-2xl backdrop-blur-xl"
+            role="alert"
+          >
+            <AlertTriangle className="h-4 w-4 shrink-0 text-rose-300" />
+            <span>{progressSaveError}</span>
+            <button type="button" onClick={() => setProgressSaveError('')} className="ml-2 text-rose-200" aria-label="Đóng thông báo">✕</button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Main UI Layout */}
-      <div className="absolute inset-0 flex flex-col justify-between pointer-events-none px-4 pt-4 pb-4 z-[10]">
+      <div className="pointer-events-none absolute inset-0 z-[10] flex flex-col justify-between px-2 pb-2 pt-2 sm:px-4 sm:pb-4 sm:pt-4">
         {/* Top Header */}
-        <div className="flex justify-end items-start pointer-events-auto">
-          <div className="flex gap-2">
+        <div className="pointer-events-auto flex items-start justify-end overflow-x-auto pb-2">
+          <div className="flex min-w-max gap-2">
             <button 
               onClick={() => {
                 setShowNotepad(!showNotepad);
@@ -658,7 +740,7 @@ const MagicLab3D = () => {
               )}
             </button>
             <button 
-              onClick={() => window.open('/lab/discovery', '_blank')}
+              onClick={() => window.location.assign('/lab/discovery')}
               className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
@@ -714,6 +796,11 @@ const MagicLab3D = () => {
                   className="bg-blue-600/20 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl text-blue-200 text-sm font-medium shadow-2xl"
                 >
                   {activeBeaker.reactionMessage}
+                  {activeBeaker.safetyWarning && (
+                    <span className="mt-2 block border-t border-amber-300/20 pt-2 text-xs font-bold text-amber-200">
+                      ⚠️ {activeBeaker.safetyWarning}
+                    </span>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -724,7 +811,7 @@ const MagicLab3D = () => {
             initial={false}
             animate={{ x: isSidebarOpen ? 0 : -280, opacity: 1 }}
             transition={{ type: "spring", damping: 20, stiffness: 120 }}
-            className="relative w-[280px] mt-2 mb-2 bg-slate-950/40 backdrop-blur-xl border border-white/10 rounded-[28px] p-4 pb-3 pointer-events-auto flex flex-col shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] min-h-0 z-20"
+            className="pointer-events-auto relative z-20 mb-2 mt-2 flex min-h-0 w-[min(280px,calc(100vw-3rem))] flex-col rounded-[28px] border border-white/10 bg-slate-950/70 p-3 pb-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl sm:p-4"
           >
             {/* Toggle Button */}
             <button 
@@ -781,6 +868,16 @@ const MagicLab3D = () => {
                 <Filter className="w-4 h-4" />
               </button>
 
+              <button
+                type="button"
+                onClick={() => setPouringMode(value => !value)}
+                disabled={beakers.length < 2 || !activeBeaker.contents.some(c => c.state === 'liquid')}
+                className={`flex h-10 flex-1 items-center justify-center rounded-xl border transition-all disabled:cursor-not-allowed disabled:opacity-30 ${pouringMode ? 'border-blue-400/40 bg-blue-500/20 text-blue-300' : 'border-transparent text-white/50 hover:border-blue-500/20 hover:bg-blue-500/10 hover:text-blue-300'}`}
+                title="Rót dung dịch sang cốc khác"
+              >
+                <ArrowRightLeft className="h-4 w-4" />
+              </button>
+
               <button 
                 onClick={handleClearBeaker}
                 className="flex-1 h-10 rounded-xl flex items-center justify-center hover:bg-cyan-500/10 text-white/50 hover:text-cyan-400 border border-transparent hover:border-cyan-500/20 transition-all hover:scale-105 active:scale-95"
@@ -807,7 +904,7 @@ const MagicLab3D = () => {
                     <span className="text-[9px] font-black uppercase tracking-widest text-orange-400/80">Mức lửa</span>
                     <div className="flex gap-3 text-[11px] font-black tabular-nums">
                       <span className={`${!activeBeaker.isHeating ? 'text-white/30' : 'text-orange-400'}`}>
-                        Flame Mức {powerVal}
+                        🔥 Mức {powerVal}
                       </span>
                       <span className={`${
                         !activeBeaker.isHeating ? 'text-white/30'
@@ -844,6 +941,10 @@ const MagicLab3D = () => {
               );
             })()}
 
+            <p className="mb-2 rounded-lg border border-white/5 bg-black/20 px-2 py-1.5 text-[8px] font-semibold leading-relaxed text-white/35">
+              Định lượng ước tính với dung dịch 1 M và khí ở 25°C, 1 atm.
+            </p>
+
 
             {/* Search Bar */}
             <div className="relative mb-3 group">
@@ -869,6 +970,8 @@ const MagicLab3D = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleDropToBeaker(chem.formula)}
                     disabled={isPouringFormula !== null}
+                    aria-label={`Thêm ${chem.name} (${chem.formula}), trạng thái ${chem.state || 'chưa xác định'}`}
+                    title={`${chem.name} (${chem.formula})`}
                     className={`group relative p-2 rounded-xl border transition-all duration-300 ${
                       isPouringFormula === chem.formula 
                         ? 'bg-blue-600/30 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.3)] text-white' 
@@ -879,8 +982,8 @@ const MagicLab3D = () => {
                     }}
                     onMouseEnter={(e) => {
                       if (isPouringFormula !== chem.formula) {
-                        e.currentTarget.style.borderColor = chem.color + '60';
-                        e.currentTarget.style.boxShadow = `0 0 15px ${chem.color}30`;
+                        e.currentTarget.style.borderColor = withAlpha(chem.color, '60');
+                        e.currentTarget.style.boxShadow = `0 0 15px ${withAlpha(chem.color, '30')}`;
                       }
                       setHoveredChem(chem);
                     }}
@@ -894,6 +997,12 @@ const MagicLab3D = () => {
                     onMouseMove={(e) => {
                       setMousePos({ x: e.clientX, y: e.clientY });
                     }}
+                    onFocus={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      setMousePos({ x: rect.right, y: rect.top });
+                      setHoveredChem(chem);
+                    }}
+                    onBlur={() => setHoveredChem(null)}
                   >
                     <div 
                       className="aspect-square flex items-center justify-center rounded-lg mb-1.5 overflow-hidden relative border border-white/5"
@@ -933,9 +1042,14 @@ const MagicLab3D = () => {
                   {beakers.map((b, idx) => (
                     <div key={b.id} className="relative group">
                       <button
-                        onClick={() => setActiveBeaker(idx)}
+                        onClick={() => {
+                          if (pouringMode && idx !== activeBeakerIndex) handlePourTo(idx);
+                          else setActiveBeaker(idx);
+                        }}
                         className={`w-full aspect-square rounded-2xl flex flex-col items-center justify-center transition-all border duration-300 relative overflow-hidden ${
-                          activeBeakerIndex === idx 
+                          pouringMode && activeBeakerIndex !== idx
+                            ? 'bg-blue-500/15 border-blue-400 animate-pulse'
+                            : activeBeakerIndex === idx
                             ? 'bg-gradient-to-b from-blue-500/20 to-blue-500/5 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.25)] ring-1 ring-blue-400/30' 
                             : 'bg-slate-950/40 border-white/5 hover:border-white/20 hover:bg-slate-900/40'
                         }`}
@@ -995,7 +1109,7 @@ const MagicLab3D = () => {
                   animate={{ rotateY: 0, opacity: 1 }}
                   exit={{ rotateY: 90, opacity: 0 }}
                   transition={{ duration: 0.35, ease: 'easeInOut' }}
-                  className="w-[360px] h-[500px] max-h-[80vh] bg-slate-950/85 backdrop-blur-2xl border border-white/15 p-4 rounded-[28px] flex flex-col gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                  className="flex h-[500px] max-h-[75vh] w-[min(360px,calc(100vw-1.5rem))] flex-col gap-3 rounded-[28px] border border-white/15 bg-slate-950/90 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between pb-3 border-b border-white/10">
@@ -1012,24 +1126,45 @@ const MagicLab3D = () => {
                     </button>
                   </div>
 
-                  {/* History Stream */}
-                  <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1 my-1">
-                    {activeHistory.length > 0 ? (
-                      activeHistory.map((item, idx) => (
-                        <div key={idx} className="p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs flex items-start gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1 shrink-0" />
+                  <div className="grid grid-cols-2 gap-1 rounded-xl bg-white/5 p-1">
+                    <button type="button" onClick={() => setNotepadTab('history')} className={`rounded-lg px-3 py-2 text-[10px] font-black uppercase tracking-wider ${notepadTab === 'history' ? 'bg-amber-500/20 text-amber-200' : 'text-white/50'}`}>
+                      Lịch sử
+                    </button>
+                    <button type="button" onClick={() => setNotepadTab('notes')} className={`rounded-lg px-3 py-2 text-[10px] font-black uppercase tracking-wider ${notepadTab === 'notes' ? 'bg-amber-500/20 text-amber-200' : 'text-white/50'}`}>
+                      Ghi chú
+                    </button>
+                  </div>
+
+                  {notepadTab === 'history' ? (
+                    <div className="my-1 flex-1 space-y-2 overflow-y-auto pr-1 custom-scrollbar">
+                      {activeHistory.length > 0 ? activeHistory.map((item, idx) => (
+                        <div key={idx} className="flex items-start gap-2 rounded-xl border border-white/5 bg-white/5 p-2.5 text-xs">
+                          <div className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
                           <div className="flex-1">
-                            <p className="font-semibold text-white/90 leading-tight">{item.text}</p>
-                            <span className="text-[10px] text-white/40 font-normal">{item.time}</span>
+                            <p className="font-semibold leading-tight text-white/90">{item.text}</p>
+                            <span className="text-[10px] font-normal text-white/40">{item.time}</span>
                           </div>
                         </div>
-                      ))
-                    ) : (
-                      <div className="h-full flex flex-col items-center justify-center text-center text-white/40 text-xs italic">
-                        Chưa có lịch sử thao tác nào trong Cốc #{activeBeakerIndex + 1}.
-                      </div>
-                    )}
-                  </div>
+                      )) : (
+                        <div className="flex h-full flex-col items-center justify-center text-center text-xs italic text-white/40">
+                          Chưa có lịch sử thao tác nào trong Cốc #{activeBeakerIndex + 1}.
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="my-1 flex min-h-0 flex-1 flex-col gap-2">
+                      <label htmlFor="lab-personal-notes" className="text-[10px] font-bold text-white/50">
+                        Ghi chú này được lưu riêng cho tài khoản hiện tại.
+                      </label>
+                      <textarea
+                        id="lab-personal-notes"
+                        value={userNotes}
+                        onChange={event => setUserNotes(event.target.value)}
+                        placeholder="Ghi lại giả thuyết, quan sát hoặc kết luận..."
+                        className="min-h-0 flex-1 resize-none rounded-xl border border-white/10 bg-black/20 p-3 text-xs leading-relaxed text-white outline-none placeholder:text-white/25 focus:border-amber-400/50"
+                      />
+                    </div>
+                  )}
 
                   {/* Footer actions */}
                   <div className="pt-2 border-t border-white/10 flex justify-between items-center text-xs">
@@ -1050,7 +1185,7 @@ const MagicLab3D = () => {
                   animate={{ rotateY: 0, opacity: 1 }}
                   exit={{ rotateY: 90, opacity: 0 }}
                   transition={{ duration: 0.35, ease: 'easeInOut' }}
-                  className="w-[360px] h-[500px] max-h-[80vh] bg-slate-950/85 backdrop-blur-2xl border border-white/15 p-4 rounded-[28px] flex flex-col gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                  className="flex h-[500px] max-h-[75vh] w-[min(360px,calc(100vw-1.5rem))] flex-col gap-3 rounded-[28px] border border-white/15 bg-slate-950/90 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between pb-3 border-b border-white/10">
@@ -1181,4 +1316,3 @@ const MagicLab3D = () => {
 };
 
 export default MagicLab3D;
-

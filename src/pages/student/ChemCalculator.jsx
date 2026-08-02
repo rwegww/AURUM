@@ -243,7 +243,7 @@ const ChemCalculator = () => {
                         })}
                       </div>
                       {result?.error && (
-                        <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-2xl text-[13px] font-bold text-red-600">AlertTriangle {result.error}</div>
+                        <div className="mt-4 p-4 bg-red-50 border-2 border-red-200 rounded-2xl text-[13px] font-bold text-red-600">⚠️ {result.error}</div>
                       )}
                       <div className="flex gap-3 mt-6">
                         <button onClick={handleCalculate} className="flex-1 h-[52px] bg-viet-green text-white rounded-2xl text-[14px] font-black uppercase tracking-wider hover:bg-[#5fa52e] transition-all shadow-lg shadow-viet-green/20 active:scale-[0.98]">Tính kết quả</button>
@@ -280,4 +280,3 @@ const ChemCalculator = () => {
 };
 
 export default ChemCalculator;
-

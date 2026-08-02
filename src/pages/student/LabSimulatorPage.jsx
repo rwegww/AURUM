@@ -8,13 +8,13 @@ import { Beaker } from 'lucide-react';
 const LabSimulatorPage = () => {
   const { t } = useTranslation();
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-viet-green/5 via-white to-white pb-32 pt-32 relative overflow-hidden">
+    <div className="relative min-h-screen overflow-x-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-viet-green/5 via-white to-white pb-24 pt-24 md:pb-32 md:pt-32">
       {/* Decorative Background Blobs */}
       <div className="bg-blob bg-blob-green w-[500px] h-[500px] -top-64 -right-32 animate-pulse-slow" />
       <div className="bg-blob bg-blob-blue w-[400px] h-[400px] top-1/2 -left-32 opacity-10" />
 
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+        <header className="mb-8 flex flex-col justify-between gap-6 md:mb-16 md:flex-row md:items-end md:gap-8">
           <div>
             <div className="flex items-center gap-4 mb-4">
               <Link to="/lab" className="group inline-flex items-center gap-2 px-4 py-1.5 bg-white border-2 border-viet-border rounded-full text-viet-text-light hover:text-viet-green font-bold text-xs transition-all hover:border-viet-green/30 hover:shadow-sm">
@@ -51,7 +51,7 @@ const LabSimulatorPage = () => {
           <div className="lab-backglow opacity-50 hidden lg:block" />
 
           {/* Main Lab Engine Container */}
-          <div className="w-full relative z-10 rounded-[2.5rem] overflow-hidden border-4 border-[#1a1a1a] shadow-2xl lab-container-shadow" style={{ height: 'calc(100vh - 320px)', minHeight: '600px' }}>
+          <div className="lab-container-shadow relative z-10 h-[760px] w-full overflow-hidden rounded-[1.5rem] border-4 border-[#1a1a1a] shadow-2xl md:h-[calc(100vh-320px)] md:min-h-[600px] md:rounded-[2.5rem]">
             <MagicLab3D />
           </div>
 

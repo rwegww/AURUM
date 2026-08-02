@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +25,30 @@ const itemVariants = {
 
 const ChemLab = () => {
   const { t } = useTranslation();
+  const [labStats, setLabStats] = useState({ chemicals: null, reactions: null });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void (async () => {
+      try {
+        const [chemicalsResponse, reactionsResponse] = await Promise.all([
+          fetch('/api/lab/chemicals', { signal: controller.signal }),
+          fetch('/api/lab/reactions', { signal: controller.signal }),
+        ]);
+        if (!chemicalsResponse.ok || !reactionsResponse.ok) return;
+        const [chemicals, reactions] = await Promise.all([chemicalsResponse.json(), reactionsResponse.json()]);
+        if (!controller.signal.aborted) {
+          setLabStats({
+            chemicals: Array.isArray(chemicals) ? chemicals.length : null,
+            reactions: Array.isArray(reactions) ? reactions.length : null,
+          });
+        }
+      } catch (error) {
+        if (error.name !== 'AbortError') console.error('Không thể tải thống kê Lab:', error);
+      }
+    })();
+    return () => controller.abort();
+  }, []);
 
   const labModules = [
     { 
@@ -37,9 +61,9 @@ const ChemLab = () => {
     },
     { 
       id: 'solver', 
-      label: 'Cân bằng tự do', 
+      label: t('chem_lab.modules.balance.label'),
       icon: <Search className="w-8 h-8 text-amber-500" />, 
-      desc: 'Nhập hai vế phương trình, hệ thống tự tính hệ số và kiểm toán từng nguyên tố.',
+      desc: t('chem_lab.modules.balance.desc'),
       path: '/lab/solver',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
     },
@@ -54,19 +78,27 @@ const ChemLab = () => {
     },
     {
       id: 'discovery',
-      label: 'Sổ khám phá',
+      label: t('chem_lab.modules.discovery.label'),
       icon: <BookOpenCheck className="w-8 h-8 text-indigo-500" />,
-      desc: 'Theo dõi chất đã mở khóa và dùng nguyên liệu kiến thức để chế tạo vật phẩm mới.',
+      desc: t('chem_lab.modules.discovery.desc'),
       path: '/lab/discovery',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-indigo-500'
     },
     {
       id: 'craft',
-      label: 'Xưởng chế tạo',
+      label: t('chem_lab.modules.craft.label'),
       icon: <Hammer className="w-8 h-8 text-rose-500" />,
-      desc: 'Biến điểm học tập và nguyên liệu thành các hợp chất có thể dùng trong phòng lab.',
+      desc: t('chem_lab.modules.craft.desc'),
       path: '/lab/crafting',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-rose-500'
+    },
+    {
+      id: 'calculator',
+      label: t('chem_lab.modules.calculator.label'),
+      icon: <Scale className="w-8 h-8 text-cyan-500" />,
+      desc: t('chem_lab.modules.calculator.desc'),
+      path: '/calculator',
+      colorClass: 'bg-[#1a1a1a] text-white hover:bg-cyan-500',
     },
   ];
 
@@ -145,12 +177,12 @@ const ChemLab = () => {
         >
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-around gap-8">
             <div className="text-center">
-              <p className="font-rubik text-5xl font-black text-viet-green mb-2">3,000+</p>
+              <p className="font-rubik text-5xl font-black text-viet-green mb-2">{labStats.chemicals?.toLocaleString('vi-VN') || '—'}</p>
               <p className="text-[11px] font-black text-white/70 uppercase tracking-widest">{t('chem_lab.stats.chemicals')}</p>
             </div>
             <div className="w-full h-1 md:w-1 md:h-16 bg-white/10 rounded-full"></div>
             <div className="text-center">
-              <p className="font-rubik text-5xl font-black text-viet-green mb-2">10,000+</p>
+              <p className="font-rubik text-5xl font-black text-viet-green mb-2">{labStats.reactions?.toLocaleString('vi-VN') || '—'}</p>
               <p className="text-[11px] font-black text-white/70 uppercase tracking-widest">{t('chem_lab.stats.reactions')}</p>
             </div>
             <div className="w-full h-1 md:w-1 md:h-16 bg-white/10 rounded-full"></div>

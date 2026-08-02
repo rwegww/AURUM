@@ -175,6 +175,9 @@ const main = async () => {
   }
 
   assert(paths.includes('/rpc/claim_mission_reward'), 'Expected claim_mission_reward RPC to be exposed.');
+  assert(paths.includes('/rpc/increment_crafting_task_progress'), 'Expected increment_crafting_task_progress RPC to be exposed.');
+  assert(paths.includes('/rpc/claim_crafting_task_reward'), 'Expected claim_crafting_task_reward RPC to be exposed.');
+  assert(paths.includes('/rpc/craft_lab_item'), 'Expected craft_lab_item RPC to be exposed.');
   assert(paths.includes('/rpc/increment_likes'), 'Expected increment_likes RPC to be exposed.');
   assert(paths.includes('/rpc/increment_material_view'), 'Expected increment_material_view RPC to be exposed.');
   assert(paths.includes('/rpc/create_arena_room'), 'Expected create_arena_room RPC to be exposed.');

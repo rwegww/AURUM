@@ -1236,8 +1236,8 @@
  "desc": "Combine substances and observe visual reactions."
  },
  "balance": {
- "label": "Equation Balancer",
- "desc": "Train your equation balancing skills with thousands of exercises."
+ "label": "Free-form Balancer",
+ "desc": "Enter both sides of an equation to calculate coefficients and verify atoms and electric charge."
  },
  "molecule": {
  "label": "Molecule Model",
@@ -1248,8 +1248,16 @@
  "desc": "Search and look up balanced chemical equations instantly from the database."
  },
  "calculator": {
- "label": "Calculating Lab",
- "desc": "Calculate atomic mass, chemical concentration, and universal formulas."
+ "label": "Chemistry Calculator",
+ "desc": "Calculate moles, concentration, mass, gas volume, and other common chemistry quantities."
+ },
+ "discovery": {
+ "label": "Discovery Journal",
+ "desc": "Track unlocked substances and review the reaction paths you have discovered."
+ },
+ "craft": {
+ "label": "Crafting Workshop",
+ "desc": "Use knowledge ingredients with carefully authored crafting recipes."
  },
  "start_btn": "Start"
  },

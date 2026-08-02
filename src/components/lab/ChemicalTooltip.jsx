@@ -5,7 +5,13 @@ import { elements } from '../../data/elements';
 import { molecules } from '../../data/molecules';
 import { getChemicalImage } from '../../data/chemicalImages';
 
+const withAlpha = (color, alpha) => /^#[0-9a-f]{6}$/i.test(color || '')
+  ? `${color}${alpha}`
+  : color || 'rgba(255,255,255,0.2)';
+
 const ChemicalTooltip = ({ chemicalInfo, x, y, visible }) => {
+  const viewportWidth = typeof window === 'undefined' ? 1024 : window.innerWidth;
+  const viewportHeight = typeof window === 'undefined' ? 768 : window.innerHeight;
   const details = useMemo(() => {
     if (!chemicalInfo) return null;
     const formula = chemicalInfo.formula || chemicalInfo; // Fallback in case a string is passed
@@ -36,18 +42,19 @@ const ChemicalTooltip = ({ chemicalInfo, x, y, visible }) => {
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
           transition={{ duration: 0.15, ease: "easeOut" }}
           style={{ 
-             left: x + 20, 
-             top: y - 20,
+             left: Math.max(8, Math.min(x + 20, viewportWidth - 368)),
+             top: Math.max(8, Math.min(y - 20, viewportHeight - 260)),
              // Chống tràn màn hình cơ bản
              maxHeight: '90vh' 
           }}
-          className="fixed z-[9999] pointer-events-none min-w-[320px] max-w-[360px] rounded-2xl border border-white/10 bg-[#0a0a0f]/95 p-4 shadow-2xl backdrop-blur-xl flex flex-col"
+          className="pointer-events-none fixed z-[9999] flex min-w-[min(280px,calc(100vw-1rem))] max-w-[min(360px,calc(100vw-1rem))] flex-col rounded-2xl border border-white/10 bg-[#0a0a0f]/95 p-4 shadow-2xl backdrop-blur-xl"
+          role="tooltip"
         >
           {/* Header Đặc tính */}
           <div className="flex flex-col gap-3">
              <div className="flex gap-4 items-center">
                  <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl border border-white/10 overflow-hidden relative shadow-inner"
-                      style={{ background: `radial-gradient(circle, ${details.chemical.color || '#fff'}20 0%, rgba(2, 6, 23, 0.8) 100%)` }}>
+                      style={{ background: `radial-gradient(circle, ${withAlpha(details.chemical.color, '20')} 0%, rgba(2, 6, 23, 0.8) 100%)` }}>
                      {getChemicalImage(details.formula) ? (
                          <img src={getChemicalImage(details.formula)} alt={details.formula} className="w-full h-full object-cover mix-blend-screen opacity-90" />
                      ) : (

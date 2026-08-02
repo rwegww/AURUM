@@ -21,15 +21,18 @@ const EXAMPLES = [
   'C2H5OH + O2 -> CO2 + H2O',
   'KMnO4 + HCl -> KCl + MnCl2 + Cl2 + H2O',
   'Al2(SO4)3 + Ca(OH)2 -> Al(OH)3 + CaSO4',
+  'Fe^2+ -> Fe^3+ + e-',
 ];
 
-const formatFormula = (formula) =>
-  String(formula || '').split('').map((char, index) => {
+const formatFormula = (formula) => {
+  const [base, charge] = String(formula || '').split('^');
+  return <>{base.split('').map((char, index) => {
     if (/\d/.test(char) && index > 0) {
       return <sub key={`${char}-${index}`} className="text-[0.65em] leading-none">{char}</sub>;
     }
     return <React.Fragment key={`${char}-${index}`}>{char}</React.Fragment>;
-  });
+  })}{charge && <sup className="text-[0.6em] leading-none">{charge}</sup>}</>;
+};
 
 const formatEquationForCopy = (eq) => {
   if (!eq) return '';
@@ -82,6 +85,7 @@ const LabSolverPage = () => {
   const [results, setResults] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [searchError, setSearchError] = useState('');
   const [copiedText, setCopiedText] = useState('');
 
   const canSolve = equationInput.trim().length > 0;
@@ -91,26 +95,40 @@ const LabSolverPage = () => {
       const resetId = window.setTimeout(() => {
         setResults([]);
         setSearched(false);
+        setSearchError('');
       }, 0);
       return () => window.clearTimeout(resetId);
     }
 
+    const controller = new AbortController();
     const timeoutId = window.setTimeout(async () => {
       setLoadingSearch(true);
+      setSearchError('');
       try {
-        const res = await fetch(`/api/lab/balancing/search?q=${encodeURIComponent(query.trim())}`);
-        const data = res.ok ? await res.json() : [];
+        const res = await fetch(`/api/lab/balancing/search?q=${encodeURIComponent(query.trim())}`, {
+          signal: controller.signal,
+        });
+        if (!res.ok) throw new Error('Không thể tìm trong kho phương trình.');
+        const data = await res.json();
         setResults(Array.isArray(data) ? data : []);
       } catch (error) {
-        console.error('Search error:', error);
-        setResults([]);
+        if (error.name !== 'AbortError') {
+          console.error('Search error:', error);
+          setResults([]);
+          setSearchError(error.message || 'Mất kết nối khi tìm phương trình.');
+        }
       } finally {
-        setLoadingSearch(false);
-        setSearched(true);
+        if (!controller.signal.aborted) {
+          setLoadingSearch(false);
+          setSearched(true);
+        }
       }
     }, 350);
 
-    return () => window.clearTimeout(timeoutId);
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, [query]);
 
   const coefficientSummary = useMemo(() => {
@@ -120,9 +138,13 @@ const LabSolverPage = () => {
 
   const handleCopy = async (text) => {
     if (!text) return;
-    await navigator.clipboard.writeText(text);
-    setCopiedText(text);
-    window.setTimeout(() => setCopiedText(''), 1600);
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedText(text);
+      window.setTimeout(() => setCopiedText(''), 1600);
+    } catch {
+      setSolveError('Trình duyệt không cho phép sao chép tự động. Hãy chọn và sao chép thủ công.');
+    }
   };
 
   const solveEquation = async () => {
@@ -137,7 +159,7 @@ const LabSolverPage = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ equation: equationInput.trim() }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (!res.ok || !data.balanced) {
         setSolveError(data.error || data.message || 'Chưa thể cân bằng phương trình này.');
@@ -219,6 +241,9 @@ const LabSolverPage = () => {
                   </button>
                 ))}
               </div>
+              <p className="mt-3 text-xs font-semibold text-slate-500">
+                Với ion, viết điện tích bằng dấu <strong>^</strong>, ví dụ Fe^2+, SO4^2-; electron viết e-.
+              </p>
             </div>
 
             <AnimatePresence mode="wait">
@@ -265,7 +290,7 @@ const LabSolverPage = () => {
                     </div>
                     <div className="rounded-2xl border border-white bg-white/80 p-4">
                       <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Phương pháp</p>
-                      <p className="mt-1 text-sm font-black uppercase tracking-widest text-slate-700">Ma trận nguyên tố</p>
+                      <p className="mt-1 text-sm font-black uppercase tracking-widest text-slate-700">Ma trận nguyên tố và điện tích</p>
                     </div>
                   </div>
                 </motion.div>
@@ -354,6 +379,12 @@ const LabSolverPage = () => {
               </div>
             )}
 
+            {!loadingSearch && searchError && (
+              <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm font-bold text-rose-700">
+                {searchError}
+              </div>
+            )}
+
             {!loadingSearch && results.map((eq, index) => {
               const normalized = {
                 balanced: true,
@@ -382,7 +413,7 @@ const LabSolverPage = () => {
               );
             })}
 
-            {!loadingSearch && searched && results.length === 0 && (
+            {!loadingSearch && !searchError && searched && results.length === 0 && (
               <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-10 text-center">
                 <p className="text-sm font-bold text-slate-500">Không tìm thấy phương trình phù hợp trong kho dữ liệu.</p>
               </div>

@@ -35,7 +35,7 @@ const SkillNode = ({ node, index, isActive, isCompleted, onClick }) => {
         }}
       >
         {isCompleted ? (
-          <span className="text-2xl">Check</span>
+          <span className="text-2xl">✓</span>
         ) : (
           <span className="text-xl font-bold">{node.id}</span>
         )}
@@ -135,4 +135,3 @@ const EquationSkillTree = ({ progress = {}, onSelectNode }) => {
 };
 
 export default EquationSkillTree;
-

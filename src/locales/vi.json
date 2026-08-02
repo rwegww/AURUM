@@ -820,8 +820,8 @@
  "desc": "Kết hợp các chất và quan sát phản ứng trực quan."
  },
  "balance": {
- "label": "Cân bằng công thức",
- "desc": "Rèn luyện kỹ năng cân bằng phương trình với hàng nghìn bài tập."
+ "label": "Cân bằng tự do",
+ "desc": "Nhập hai vế phương trình, tính hệ số và kiểm tra nguyên tố lẫn điện tích."
  },
  "molecule": {
  "label": "Mô hình mẫu chất",
@@ -833,7 +833,15 @@
  },
  "calculator": {
  "label": "Máy tính Hóa học",
- "desc": "Tính toán khối lượng nguyên tố, nồng độ dung dịch và các công thức cần thiết."
+ "desc": "Tính số mol, nồng độ, khối lượng, thể tích khí và các đại lượng thường dùng."
+ },
+ "discovery": {
+ "label": "Sổ khám phá",
+ "desc": "Theo dõi các chất đã mở khóa và xem lại đường phản ứng đã khám phá."
+ },
+ "craft": {
+ "label": "Xưởng chế tạo",
+ "desc": "Dùng nguyên liệu kiến thức cho các công thức chế tạo đã được biên soạn."
  },
  "start_btn": "Bắt đầu"
  },

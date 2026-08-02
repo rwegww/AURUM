@@ -28,10 +28,40 @@ const cleanFormulaInput = (formula) => {
   return normalizeDigits(String(formula))
     .replace(/[↑↓]/g, '')
     .replace(/\s+/g, '')
-    .replace(/\((aq|s|l|g|r|dd)\)$/i, '')
-    .replace(/\^\d*[+-]$/u, '')
-    .replace(/[+-]$/u, '')
+    .replace(/\((aq|s|l|g|r|dd)\)/gi, '')
     .trim();
+};
+
+const parseCharge = (formula) => {
+  const cleaned = cleanFormulaInput(formula);
+  if (/^e(?:\^\d*)?[+-]$/i.test(cleaned)) {
+    return { formula: 'e', charge: cleaned.endsWith('+') ? 1 : -1, isElectron: true };
+  }
+
+  const explicit = cleaned.match(/^(.*)\^(\d*)([+-])$/u);
+  if (explicit) {
+    const magnitude = Number.parseInt(explicit[2] || '1', 10);
+    return { formula: explicit[1], charge: explicit[3] === '+' ? magnitude : -magnitude, isElectron: false };
+  }
+
+  const signed = cleaned.match(/^(.*)([+-])$/u);
+  if (!signed) return { formula: cleaned, charge: 0, isElectron: false };
+
+  let baseFormula = signed[1];
+  let magnitude = 1;
+  const monoatomicCharge = baseFormula.match(/^([A-Z][a-z]?)(\d+)$/u);
+  if (monoatomicCharge) {
+    baseFormula = monoatomicCharge[1];
+    magnitude = Number.parseInt(monoatomicCharge[2], 10);
+  }
+
+  return { formula: baseFormula, charge: signed[2] === '+' ? magnitude : -magnitude, isElectron: false };
+};
+
+const formatChargedFormula = ({ formula, charge, isElectron }) => {
+  if (!charge) return formula;
+  if (isElectron) return `e${charge > 0 ? '+' : '-'}`;
+  return `${formula}^${Math.abs(charge) > 1 ? Math.abs(charge) : ''}${charge > 0 ? '+' : '-'}`;
 };
 
 const readNumber = (text, startIndex) => {
@@ -98,14 +128,18 @@ const parseHydratePart = (part) => {
 };
 
 export function normalizeFormula(formula) {
-  return cleanFormulaInput(formula).replace(/^(\d+)(?=[A-Z([{])/u, '');
+  const cleaned = cleanFormulaInput(formula).replace(/^(\d+)(?=[A-Z([{])/u, '');
+  return formatChargedFormula(parseCharge(cleaned));
 }
 
 export function parseFormula(formula) {
   const cleaned = cleanFormulaInput(formula);
   if (!cleaned) throw new Error('Công thức hóa học không được để trống.');
 
-  const formulaWithoutLeadingCoefficient = cleaned.replace(/^(\d+)(?=[A-Z([{])/u, '');
+  const parsedCharge = parseCharge(cleaned);
+  if (parsedCharge.isElectron) return {};
+
+  const formulaWithoutLeadingCoefficient = parsedCharge.formula.replace(/^(\d+)(?=[A-Z([{])/u, '');
   const parts = formulaWithoutLeadingCoefficient.split(/[·.]/u).filter(Boolean);
   const total = {};
 
@@ -124,9 +158,31 @@ export function parseFormula(formula) {
 }
 
 export function parseSpeciesList(input) {
-  const list = Array.isArray(input)
-    ? input
-    : String(input || '').split('+');
+  let list;
+  if (Array.isArray(input)) {
+    list = input;
+  } else {
+    const text = String(input || '').trim();
+    if (/\s\+\s/u.test(text)) {
+      list = text.split(/\s+\+\s+/u);
+    } else {
+      const compact = [];
+      let start = 0;
+      for (let index = 0; index < text.length; index += 1) {
+        if (text[index] !== '+') continue;
+        const isTrailingCharge = index === text.length - 1;
+        const isChargeBeforeSeparator = text[index + 1] === '+';
+        const followsCharge = text[index - 1] === '+';
+        if (isTrailingCharge || isChargeBeforeSeparator) continue;
+        if (followsCharge || text[index + 1] !== '+') {
+          compact.push(text.slice(start, index));
+          start = index + 1;
+        }
+      }
+      compact.push(text.slice(start));
+      list = compact;
+    }
+  }
 
   return list
     .map((formula) => normalizeFormula(formula))
@@ -339,14 +395,28 @@ const validateBalance = (reactants, products, coefficients) => {
     });
   });
 
+  const reactantCharge = reactants.reduce(
+    (total, formula, index) => total + parseCharge(formula).charge * coefficients[index],
+    0,
+  );
+  const productCharge = products.reduce(
+    (total, formula, index) => total + parseCharge(formula).charge * coefficients[reactantCount + index],
+    0,
+  );
+
   const elements = Array.from(new Set([...Object.keys(reactantTotals), ...Object.keys(productTotals)])).sort();
   return {
-    balanced: elements.every((element) => reactantTotals[element] === productTotals[element]),
-    elements: elements.map((element) => ({
+    balanced: elements.every((element) => reactantTotals[element] === productTotals[element])
+      && reactantCharge === productCharge,
+    elements: [...elements.map((element) => ({
       element,
       reactants: reactantTotals[element] || 0,
       products: productTotals[element] || 0,
-    })),
+    })), {
+      element: 'Điện tích',
+      reactants: reactantCharge,
+      products: productCharge,
+    }],
   };
 };
 
@@ -391,6 +461,11 @@ export function balanceEquation(reactantFormulas, productFormulas) {
       ...reactantCounts.map((counts) => counts[element] || 0),
       ...productCounts.map((counts) => -(counts[element] || 0)),
     ]);
+    const charges = [
+      ...reactants.map((formula) => parseCharge(formula).charge),
+      ...products.map((formula) => -parseCharge(formula).charge),
+    ];
+    if (charges.some(charge => charge !== 0)) rawMatrix.push(charges);
 
     const basis = buildNullspaceBasis(toFractionMatrix(rawMatrix));
     const solutionVector = findPositiveNullspaceVector(basis);
@@ -432,12 +507,20 @@ export function balanceEquation(reactantFormulas, productFormulas) {
       method: 'linear-algebra',
     };
   } catch (error) {
+    let reactants = [];
+    let products = [];
+    try {
+      reactants = parseSpeciesList(reactantFormulas);
+      products = parseSpeciesList(productFormulas);
+    } catch {
+      // Giữ danh sách rỗng để không che mất lỗi phân tích ban đầu.
+    }
     return {
       balanced: false,
       coefficients: [],
       equation: '',
-      reactants: parseSpeciesList(reactantFormulas),
-      products: parseSpeciesList(productFormulas),
+      reactants,
+      products,
       error: error.message,
     };
   }

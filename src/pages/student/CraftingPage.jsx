@@ -271,6 +271,8 @@ const CraftingPage = () => {
   const [notice, setNotice] = useState(null);
 
   const loadData = async () => {
+    setLoading(true);
+    setNotice(null);
     try {
       const token = localStorage.getItem('token');
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -286,10 +288,9 @@ const CraftingPage = () => {
 
       // Fetch crafting tasks
       const tasksRes = await fetch('/api/lab/crafting/tasks', { headers });
-      if (tasksRes.ok) {
-        const tasksData = await tasksRes.json();
-        setTasks(tasksData);
-      }
+      if (!tasksRes.ok) throw new Error('Không thể tải nhiệm vụ thu thập.');
+      const tasksData = await tasksRes.json();
+      setTasks(tasksData);
     } catch (error) {
       console.error(error);
       setNotice({ type: 'error', text: error.message });
@@ -315,9 +316,7 @@ const CraftingPage = () => {
 
   const stats = useMemo(() => {
     const totalIngredients = inventory.ingredients?.reduce((sum, item) => sum + item.amount, 0) || 0;
-    const totalCrafted = craftableItems.filter(item => 
-      craftedSet.has(item.id) || unlockedChemicalsSet.has(toAsciiFormula(item.formula).toUpperCase())
-    ).length;
+    const totalCrafted = craftableItems.filter(item => craftedSet.has(item.id)).length;
     
     const xp = user?.xp || 0;
     const levelInfo = getLevelFromXP(xp);
@@ -327,7 +326,7 @@ const CraftingPage = () => {
       totalCrafted,
       levelInfo
     };
-  }, [inventory, craftableItems, craftedSet, unlockedChemicalsSet, user]);
+  }, [inventory, craftableItems, craftedSet, user]);
 
   const handleClaimReward = async (taskId) => {
     setClaimingId(taskId);
@@ -342,11 +341,14 @@ const CraftingPage = () => {
         },
         body: JSON.stringify({ taskId })
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || 'Không thể nhận phần thưởng.');
       
       // Update local state
       setInventory(normalizeInventory(data.inventory));
+      setTasks(current => current.map(task => (
+        task.id === taskId ? { ...task, claimed: true } : task
+      )));
       
       // Reload tasks list
       const tasksRes = await fetch('/api/lab/crafting/tasks', { 
@@ -358,7 +360,7 @@ const CraftingPage = () => {
       
       // Show reward notification
       const task = tasks.find(t => t.id === taskId);
-      const rewardsText = task.rewards.map(r => {
+      const rewardsText = (data.rewards || task?.rewards || []).map(r => {
         const ing = ingredients.find(i => i.id === r.ingredientId);
         return `${r.amount}x ${ing ? ing.formula : r.ingredientId} (${ing ? ing.name : ''})`;
       }).join(', ');
@@ -368,7 +370,11 @@ const CraftingPage = () => {
         text: `Chúc mừng! Bạn đã nhận: ${rewardsText}` 
       });
       
-      await refreshUser?.();
+      try {
+        await refreshUser?.();
+      } catch (refreshError) {
+        console.warn('Đã nhận thưởng nhưng chưa làm mới được hồ sơ:', refreshError);
+      }
     } catch (error) {
       setNotice({ type: 'error', text: error.message });
     } finally {
@@ -389,7 +395,7 @@ const CraftingPage = () => {
         },
         body: JSON.stringify({ itemId: item.id }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || 'Không thể chế tạo hợp chất.');
 
       setInventory(normalizeInventory(data.inventory));
@@ -405,7 +411,11 @@ const CraftingPage = () => {
         message: data.message || item.unlockMessage
       });
 
-      await refreshUser?.();
+      try {
+        await refreshUser?.();
+      } catch (refreshError) {
+        console.warn('Đã chế tạo nhưng chưa làm mới được hồ sơ:', refreshError);
+      }
       
       // Update tasks as crafting might affect active achievements
       const tasksRes = await fetch('/api/lab/crafting/tasks', { 
@@ -499,12 +509,19 @@ const CraftingPage = () => {
             }`}
           >
             <span>{notice.text}</span>
-            <button 
-              onClick={() => setNotice(null)}
-              className="text-xs font-black uppercase tracking-widest opacity-60 hover:opacity-100"
-            >
-              Đóng
-            </button>
+            <div className="flex items-center gap-3">
+              {notice.type === 'error' && (
+                <button onClick={() => loadData()} className="text-xs font-black uppercase tracking-widest hover:underline">
+                  Thử lại
+                </button>
+              )}
+              <button
+                onClick={() => setNotice(null)}
+                className="text-xs font-black uppercase tracking-widest opacity-60 hover:opacity-100"
+              >
+                Đóng
+              </button>
+            </div>
           </motion.div>
         )}
 
@@ -574,7 +591,7 @@ const CraftingPage = () => {
                       {/* Rewards & Action Button */}
                       <div className="flex items-center justify-between gap-4 pt-3 border-t border-duo-border">
                         <div className="flex flex-wrap gap-1.5">
-                          {task.rewards.map((rew, i) => {
+                          {(task.rewards || []).map((rew, i) => {
                             const ing = ingredients.find(x => x.id === rew.ingredientId);
                             return (
                               <span 
@@ -588,10 +605,14 @@ const CraftingPage = () => {
                           })}
                         </div>
 
-                        {isCompleted ? (
+                        {isClaimed ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-xl border-2 border-emerald-200 bg-emerald-50 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-emerald-700">
+                            <Award size={12} /> Đã nhận
+                          </span>
+                        ) : isCompleted ? (
                           <button
                             onClick={() => handleClaimReward(task.id)}
-                            disabled={claimingId === task.id}
+                            disabled={claimingId !== ''}
                             className="bg-viet-green hover:bg-viet-green/90 border-b-4 border-viet-green-dark disabled:bg-slate-200 disabled:text-slate-400 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl transition flex items-center gap-1.5"
                           >
                             <Sparkles size={12} />
@@ -691,7 +712,8 @@ const CraftingPage = () => {
                 {filteredRecipes.length > 0 ? (
                   filteredRecipes.map((item) => {
                     const status = canCraftItem(item, inventory);
-                    const alreadyOwned = status.alreadyCrafted || unlockedChemicalsSet.has(toAsciiFormula(item.formula).toUpperCase());
+                    const alreadyOwned = status.alreadyCrafted;
+                    const alreadyDiscovered = unlockedChemicalsSet.has(toAsciiFormula(item.formula).toUpperCase());
                     const requirementCounts = getRecipeRequirementCounts(item);
                     const rarity = rarityConfig[item.rarity] || rarityConfig.common;
 
@@ -721,6 +743,11 @@ const CraftingPage = () => {
                                 <span className={`rounded-full border px-2 py-0.5 text-[8px] font-black uppercase tracking-widest ${rarity.color}`}>
                                   {rarity.label}
                                 </span>
+                                {alreadyDiscovered && !alreadyOwned && (
+                                  <span className="rounded-full border border-cyan-200 bg-cyan-50 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-cyan-700">
+                                    Đã khám phá
+                                  </span>
+                                )}
                               </div>
                               <p className="text-xl font-black italic text-viet-green leading-tight">
                                 {formatFormula(toAsciiFormula(item.formula))}
@@ -730,7 +757,7 @@ const CraftingPage = () => {
 
                           <button
                             onClick={() => handleCraft(item)}
-                            disabled={loading || craftingId === item.id || alreadyOwned || !status.canCraft}
+                            disabled={loading || craftingId !== '' || alreadyOwned || !status.canCraft}
                             className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white transition ${
                               alreadyOwned 
                                 ? 'bg-purple-600 hover:bg-purple-700 shadow-sm' 

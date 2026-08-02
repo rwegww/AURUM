@@ -113,11 +113,9 @@ function AppContent() {
   const isManagementPage = ['/admin', '/teacher'].some((basePath) => (
     location.pathname === basePath || location.pathname.startsWith(`${basePath}/`)
   ));
-  const isStandalonePage = location.pathname === '/lab/discovery';
-
   return (
     <>
-      {!isAuthPage && !isImmersivePage && !isManagementPage && !isStandalonePage && <Navbar />}
+      {!isAuthPage && !isImmersivePage && !isManagementPage && <Navbar />}
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* ... standard routes ... */}
@@ -189,7 +187,7 @@ function AppContent() {
       </Suspense>
       
       {/* Floating Global UI */}
-      {!isManagementPage && !isStandalonePage && <FloatingWidget />}
+      {!isManagementPage && <FloatingWidget />}
     </>
   );
 }

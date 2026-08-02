@@ -44,7 +44,7 @@ const GameWorkspace = () => {
       </div>
 
       {/* Beakers Layout */}
-      <div className="relative z-10 w-full max-w-4xl h-full flex items-end justify-center gap-16 pb-[10vh]">
+      <div className="relative z-10 flex h-full w-full max-w-4xl items-end justify-start gap-4 overflow-x-auto px-6 pb-[10vh] sm:justify-center sm:gap-8 lg:gap-16">
         {beakers.map((beaker, i) => {
           const isActive = i === activeBeakerIndex;
 
@@ -174,7 +174,7 @@ const GameWorkspace = () => {
                         initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 10 }}
-                        className="absolute top-1/2 -translate-y-1/2 -left-48 sm:-left-56 bg-slate-950/90 backdrop-blur-xl border border-white/15 rounded-2xl p-3 z-30 pointer-events-auto shadow-2xl flex flex-col gap-2 min-w-[170px] max-w-[210px] text-white"
+                        className="absolute top-1/2 -translate-y-1/2 -left-48 sm:-left-56 bg-slate-950/90 backdrop-blur-xl border border-white/15 rounded-2xl p-3 z-30 pointer-events-auto shadow-2xl hidden sm:flex flex-col gap-2 min-w-[170px] max-w-[210px] text-white"
                       >
                         {/* Input Chemicals */}
                         {inputList.length > 0 && (
@@ -217,7 +217,7 @@ const GameWorkspace = () => {
                         {/* Reaction Message badge if not default */}
                         {beaker.reactionMessage && !beaker.reactionMessage.includes("Mời bắt đầu") && (
                           <div className="mt-1 pt-1.5 border-t border-white/10 text-[10px] font-bold text-amber-300 leading-tight italic">
-                            Sparkles {beaker.reactionMessage}
+                            ✨ {beaker.reactionMessage}
                           </div>
                         )}
                       </motion.div>

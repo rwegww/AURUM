@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Particle = ({ delay, xOffset, color, speed = 1, size = 4 }) => (
+const Particle = ({ delay, xOffset, color, speed = 1, size = 4, drift = 0, duration = 2 }) => (
   <motion.div
     initial={{ y: '100%', x: `${xOffset}px`, opacity: 0, scale: 0 }}
     animate={{ 
       y: '-20%', 
-      x: `${xOffset + (Math.random() * 10 - 5)}px`,
+      x: `${xOffset + drift}px`,
       opacity: [0, 1, 0.8, 0], 
       scale: [0, 1, 1.2, 0] 
     }}
     transition={{
-      duration: (1.5 + Math.random()) / speed,
+      duration: duration / speed,
       repeat: Infinity,
       delay: delay,
       ease: "easeOut"
@@ -75,8 +75,6 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0, isHeating = false, te
   const seedKey = solid?.id || solid?.formula || `solid-${index}`;
   
   const isGlowingHot = isHeating && temp > 120;
-  const isCarbon = solid?.formula === 'C' || solid?.name?.toLowerCase().includes('cacbon');
-
   const { chips, leftPos } = useMemo(() => {
     const rng = pseudoRandom(seedKey);
     
@@ -265,66 +263,46 @@ const containerConfigs = {
 };
 
 const Beaker2D = ({ beakerData, isActive, onClick }) => {
-  const { contents, addedHistory, yieldHistory, isHeating, isElectrolyzing, activeBubbles, activeSmoke, smokeColor, intensity, shake, activeFlame, containerType } = beakerData;
+  const { contents, isElectrolyzing, activeBubbles, activeSmoke, smokeColor, intensity, shake, activeFlame, containerType, liquidVolume = 1 } = beakerData;
   const config = containerConfigs[containerType || 'beaker'] || containerConfigs['beaker'];
 
   // Lọc ra các chất lỏng/dung dịch để tính toán mực nước
-  const liquidContents = contents.filter(c => c.state !== 'solid' && c.type !== 'metal');
+  const liquidContents = contents.filter(c => c.state === 'liquid');
   
-  const totalVolume = Math.min(liquidContents.length * 20, 95); // max 95% full
+  const volumeRatio = Math.max(0, Math.min(1, Number(liquidVolume) || 0));
+  const totalVolume = Math.min(liquidContents.length * 20, 95) * volumeRatio;
   const topColor = liquidContents.length > 0 ? liquidContents[liquidContents.length - 1].color : 'transparent';
 
   // Generate particles based on state
   const bubbles = useMemo(() => {
     if (!activeBubbles) return [];
+    const rng = pseudoRandom(`${beakerData.id}:bubbles:${intensity}`);
     return Array.from({ length: intensity === 'extreme' ? 15 : 8 }).map((_, i) => ({
       id: i,
-      delay: Math.random() * 2,
-      x: Math.random() * 60 - 30, // -30 to 30
+      delay: rng() * 2,
+      x: rng() * 60 - 30, // -30 to 30
       color: 'rgba(255, 255, 255, 0.6)',
       speed: intensity === 'extreme' ? 1.5 : 1,
-      size: Math.random() * 4 + 2
+      size: rng() * 4 + 2,
+      drift: rng() * 10 - 5,
+      duration: 1.5 + rng(),
     }));
-  }, [activeBubbles, intensity]);
+  }, [activeBubbles, beakerData.id, intensity]);
 
   const smoke = useMemo(() => {
     if (!activeSmoke) return [];
+    const rng = pseudoRandom(`${beakerData.id}:smoke:${intensity}`);
     return Array.from({ length: intensity === 'extreme' ? 12 : 6 }).map((_, i) => ({
       id: i,
-      delay: Math.random() * 2,
-      x: Math.random() * 40 - 20,
+      delay: rng() * 2,
+      x: rng() * 40 - 20,
       color: smokeColor || 'rgba(200, 200, 200, 0.6)',
       speed: intensity === 'extreme' ? 1 : 0.7,
-      size: Math.random() * 10 + 5
+      size: rng() * 10 + 5,
+      rise: -100 - rng() * 50,
+      drift: rng() * 40 - 20,
     }));
-  }, [activeSmoke, smokeColor, intensity]);
-
-  // Group and sum chemical quantities for inputs and yields
-  const groupedInputs = useMemo(() => {
-    if (!addedHistory || addedHistory.length === 0) return [];
-    const map = new Map();
-    addedHistory.forEach(item => {
-      const key = `${item.formula}_${item.unit}`;
-      if (!map.has(key)) {
-        map.set(key, { ...item, totalAmount: 0 });
-      }
-      map.get(key).totalAmount += (item.amount || 0);
-    });
-    return Array.from(map.values());
-  }, [addedHistory]);
-
-  const groupedYields = useMemo(() => {
-    if (!yieldHistory || yieldHistory.length === 0) return [];
-    const map = new Map();
-    yieldHistory.forEach(item => {
-      const key = `${item.formula}_${item.unit}`;
-      if (!map.has(key)) {
-        map.set(key, { ...item, totalAmount: 0 });
-      }
-      map.get(key).totalAmount += (item.amount || 0);
-    });
-    return Array.from(map.values());
-  }, [yieldHistory]);
+  }, [activeSmoke, beakerData.id, smokeColor, intensity]);
 
   const shakeAnimation = shake ? {
     x: [0, -5, 5, -5, 5, 0],
@@ -347,8 +325,8 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
               key={p.id}
               initial={{ y: 0, x: p.x, opacity: 0, scale: 0.5 }}
               animate={{ 
-                y: -100 - Math.random() * 50, 
-                x: p.x + (Math.random() * 40 - 20),
+                y: p.rise,
+                x: p.x + p.drift,
                 opacity: [0, 0.6, 0], 
                 scale: [0.5, 2, 3] 
               }}
@@ -395,7 +373,7 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
             >
               {/* Internal Bubbles */}
               {activeBubbles && bubbles.map(p => (
-                <Particle key={p.id} delay={p.delay} xOffset={p.x + 50} color={p.color} speed={p.speed} size={p.size} />
+                <Particle key={p.id} delay={p.delay} xOffset={p.x + 50} color={p.color} speed={p.speed} size={p.size} drift={p.drift} duration={p.duration} />
               ))}
 
               {/* Water Surface Line */}

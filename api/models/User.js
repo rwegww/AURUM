@@ -1,7 +1,7 @@
 import { supabase } from '../lib/supabase.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import { normalizeInventory, craftableItems, grantIngredientsToInventory } from '../../src/data/labInventory.js';
+import { normalizeInventory, craftableItems } from '../../src/data/labInventory.js';
 import { craftingTasks } from '../../src/data/craftingTasks.js';
 
 const toNormalFormula = (formula) => {
@@ -40,7 +40,23 @@ const syncUserProgressData = (unlockedChemicalsArray, inventoryObject) => {
     ? [...inventory.craftedItems] 
     : [];
 
-  let changed = false;
+  const rawIngredients = Array.isArray(inventoryObject?.ingredients) ? inventoryObject.ingredients : [];
+  const rawAmountById = new Map();
+  rawIngredients.forEach(item => {
+    const id = typeof item === 'string' ? item : item?.id;
+    if (!id) return;
+    const amount = typeof item === 'string' ? 1 : Math.max(0, Number.parseInt(item.amount ?? 0, 10) || 0);
+    rawAmountById.set(id, (rawAmountById.get(id) || 0) + amount);
+  });
+  const rawCrafted = Array.isArray(inventoryObject?.craftedItems)
+    ? inventoryObject.craftedItems.map(item => (typeof item === 'string' ? item : item?.id)).filter(Boolean)
+    : [];
+  const inventoryNeedsSync = rawAmountById.size !== inventory.ingredients.length
+    || inventory.ingredients.some(item => rawAmountById.get(item.id) !== item.amount)
+    || rawCrafted.length !== crafted.length
+    || rawCrafted.some(item => !crafted.includes(item));
+
+  let changed = inventoryNeedsSync;
 
   const normToCraftable = {};
   craftableItems.forEach(item => {
@@ -48,17 +64,8 @@ const syncUserProgressData = (unlockedChemicalsArray, inventoryObject) => {
     normToCraftable[norm] = item;
   });
 
-  // Step A: Sync from unlockedChemicals to inventory.craftedItems
-  unlocked.forEach(formula => {
-    const norm = toNormalFormula(formula);
-    const item = normToCraftable[norm];
-    if (item && !crafted.includes(item.id)) {
-      crafted.push(item.id);
-      changed = true;
-    }
-  });
-
-  // Step B: Sync from inventory.craftedItems to unlockedChemicals
+  // Vật phẩm đã chế tạo sẽ mở khóa hóa chất. Chiều ngược lại không đúng:
+  // khám phá một chất trong simulator không có nghĩa là đã tiêu nguyên liệu để chế tạo.
   crafted.forEach(craftId => {
     const item = craftableItems.find(c => c.id === craftId);
     if (item) {
@@ -72,7 +79,7 @@ const syncUserProgressData = (unlockedChemicalsArray, inventoryObject) => {
     }
   });
 
-  // Step C: Normalize formulas in unlocked to match craftableItems exactly (subscripts)
+  // Chuẩn hóa công thức đã mở khóa theo dữ liệu biên soạn.
   unlocked = unlocked.map(formula => {
     const normalizedFormula = normalizeChemicalFormulaValue(formula);
     if (!normalizedFormula) {
@@ -118,6 +125,11 @@ const isMissingDbObject = (error) =>
   error?.message?.includes('Could not find the table') ||
   error?.message?.includes('Could not find the column');
 
+const isMissingDbFunction = (error) =>
+  error?.code === '42883' ||
+  error?.code === 'PGRST202' ||
+  error?.message?.includes('Could not find the function');
+
 const normalizeIdList = (items, objectKey) => {
   if (!Array.isArray(items)) return [];
   return items
@@ -153,46 +165,13 @@ const normalizeBalancingProgress = (progress) => {
   };
 };
 
-const ALL_INGREDIENTS = [
-  "ing_h", "ing_o", "ing_fe", "ing_na", "ing_cl", "ing_c", "ing_s", "ing_n", "ing_ca", 
-  "ing_ag", "ing_au", "ing_f", "ing_br", "ing_i", "ing_he", "ing_ne", "ing_ar", "ing_si", "ing_be", "ing_ba"
-];
-
-const generateRandomRewards = (difficulty) => {
-  const rewards = [];
-  const numTypes = difficulty === 'hard' ? 3 + Math.floor(Math.random() * 2) : 
-                   difficulty === 'medium' ? 2 + Math.floor(Math.random() * 2) : 
-                   1 + Math.floor(Math.random() * 2);
-  
-  const selectedIngs = [];
-  const availableIngs = [...ALL_INGREDIENTS];
-  
-  for (let i = 0; i < numTypes; i++) {
-    if (availableIngs.length === 0) break;
-    const idx = Math.floor(Math.random() * availableIngs.length);
-    selectedIngs.push(availableIngs.splice(idx, 1)[0]);
-  }
-  
-  selectedIngs.forEach(ingId => {
-    const minAmt = difficulty === 'hard' ? 2 : difficulty === 'medium' ? 2 : 1;
-    const maxAmt = difficulty === 'hard' ? 4 : difficulty === 'medium' ? 3 : 2;
-    const amount = minAmt + Math.floor(Math.random() * (maxAmt - minAmt + 1));
-    rewards.push({ ingredientId: ingId, amount });
-  });
-  
-  return rewards;
-};
-
 const normalizeCraftingTasks = (payload) => {
   const base = {
     lastResetDate: "",
-    tasks: {
-      task_video_1: { progress: 0, claimed: false, history: [], rewards: [] },
-      task_library_1: { progress: 0, claimed: false, history: [], rewards: [] },
-      task_library_2: { progress: 0, claimed: false, history: [], rewards: [] },
-      task_library_3: { progress: 0, claimed: false, history: [], rewards: [] },
-      task_lesson_1: { progress: 0, claimed: false, history: [], rewards: [] }
-    }
+    tasks: Object.fromEntries(craftingTasks.map(task => [
+      task.id,
+      { progress: 0, claimed: false, history: [], rewards: [] },
+    ])),
   };
   if (!payload || typeof payload !== 'object' || !payload.tasks) {
     return base;
@@ -209,6 +188,38 @@ const normalizeCraftingTasks = (payload) => {
     };
   });
   return base;
+};
+
+const getVietnamToday = () => {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date())
+      .filter(part => part.type !== 'literal')
+      .map(part => [part.type, part.value]),
+  );
+  return `${parts.year}-${parts.month}-${parts.day}`;
+};
+
+const resetDailyCraftingTasks = (payload) => {
+  const currentTasks = normalizeCraftingTasks(payload);
+  const today = getVietnamToday();
+  if (currentTasks.lastResetDate === today) return currentTasks;
+
+  currentTasks.lastResetDate = today;
+  Object.keys(currentTasks.tasks).forEach(taskId => {
+    const taskDef = craftingTasks.find(task => task.id === taskId);
+    currentTasks.tasks[taskId] = {
+      progress: 0,
+      claimed: false,
+      history: [],
+      rewards: (taskDef?.rewards || []).map(reward => ({ ...reward })),
+    };
+  });
+  return currentTasks;
 };
 
 
@@ -237,62 +248,30 @@ const attachUserProgress = async (user) => {
       (item) => item.loai_tien_do === 'achievement' && item.doi_tuong_id === 'crafting_tasks'
     );
     
-    const VIETNAM_TIME_ZONE_DAILY = 'Asia/Ho_Chi_Minh';
-    const formatterDaily = new Intl.DateTimeFormat('en-US', {
-      timeZone: VIETNAM_TIME_ZONE_DAILY,
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-    const getVietnamTodayStr = () => {
-      const parts = Object.fromEntries(
-        formatterDaily.formatToParts(new Date())
-          .filter(part => part.type !== 'literal')
-          .map(part => [part.type, part.value])
-      );
-      return `${parts.year}-${parts.month}-${parts.day}`;
-    };
-    
-    const todayStr = getVietnamTodayStr();
+    const todayStr = getVietnamToday();
     let currentTasksPayload = normalizeCraftingTasks(craftingTasksRecord?.noi_dung_tien_do);
     
     if (!currentTasksPayload.lastResetDate || currentTasksPayload.lastResetDate !== todayStr) {
       console.log(`[attachUserProgress] Resetting daily crafting tasks for user ${user.id}. Old reset date: ${currentTasksPayload.lastResetDate}, New: ${todayStr}`);
-      currentTasksPayload.lastResetDate = todayStr;
-      Object.keys(currentTasksPayload.tasks).forEach(taskId => {
-        const taskDef = craftingTasks.find(t => t.id === taskId);
-        currentTasksPayload.tasks[taskId] = {
-          progress: 0,
-          claimed: false,
-          history: [],
-          rewards: generateRandomRewards(taskDef ? taskDef.difficulty : 'easy')
-        };
+      const { data: resetPayload, error: resetError } = await supabase.rpc('increment_crafting_task_progress', {
+        p_user_id: user.id,
+        p_item_id: null,
+        p_tasks: [],
+        p_reset_payload: resetDailyCraftingTasks(currentTasksPayload),
       });
-      
-      await upsertUserProgress([{
-        nguoi_dung_id: user.id,
-        loai_tien_do: 'achievement',
-        doi_tuong_id: 'crafting_tasks',
-        noi_dung_tien_do: currentTasksPayload
-      }]);
-    } else {
-      let tasksUpdated = false;
-      Object.keys(currentTasksPayload.tasks).forEach(taskId => {
-        const userTask = currentTasksPayload.tasks[taskId];
-        if (!userTask.rewards || userTask.rewards.length === 0) {
-          const taskDef = craftingTasks.find(t => t.id === taskId);
-          userTask.rewards = generateRandomRewards(taskDef ? taskDef.difficulty : 'easy');
-          tasksUpdated = true;
-        }
-      });
-      
-      if (tasksUpdated) {
+      if (resetError) {
+        if (!isMissingDbFunction(resetError)) throw resetError;
+        // Giữ đăng nhập hoạt động trong lúc triển khai cuốn chiếu; tính nguyên tử
+        // sẽ được dùng ngay sau khi schema mới đã được áp dụng.
+        currentTasksPayload = resetDailyCraftingTasks(currentTasksPayload);
         await upsertUserProgress([{
           nguoi_dung_id: user.id,
           loai_tien_do: 'achievement',
           doi_tuong_id: 'crafting_tasks',
-          noi_dung_tien_do: currentTasksPayload
+          noi_dung_tien_do: currentTasksPayload,
         }]);
+      } else {
+        currentTasksPayload = normalizeCraftingTasks(resetPayload);
       }
     }
 
@@ -791,45 +770,19 @@ export const User = {
 
   async incrementCraftingTaskProgress(userId, actionType, itemId) {
     try {
-      const { data: record, error: fetchError } = await supabase
-        .from('tien_do_nguoi_dung')
-        .select('noi_dung_tien_do')
-        .eq('nguoi_dung_id', userId)
-        .eq('loai_tien_do', 'achievement')
-        .eq('doi_tuong_id', 'crafting_tasks')
-        .maybeSingle();
+      const matchingTasks = craftingTasks
+        .filter(task => task.actionType === actionType)
+        .map(task => ({ id: task.id, target: task.target }));
+      if (matchingTasks.length === 0) return null;
 
-      if (fetchError && !isMissingDbObject(fetchError)) throw fetchError;
-
-      const currentTasks = normalizeCraftingTasks(record?.noi_dung_tien_do);
-      let updated = false;
-
-      craftingTasks.forEach(taskDef => {
-        const userTask = currentTasks.tasks[taskDef.id];
-        if (userTask && !userTask.claimed && taskDef.actionType === actionType) {
-          if (itemId && !userTask.history.includes(itemId)) {
-            userTask.history.push(itemId);
-            userTask.progress = userTask.history.length;
-            updated = true;
-          } else if (!itemId) {
-            userTask.progress = Math.min(taskDef.target, userTask.progress + 1);
-            updated = true;
-          }
-        }
+      const { data, error } = await supabase.rpc('increment_crafting_task_progress', {
+        p_user_id: userId,
+        p_item_id: itemId || null,
+        p_tasks: matchingTasks,
+        p_reset_payload: resetDailyCraftingTasks(null),
       });
-
-      if (updated) {
-        await supabase
-          .from('tien_do_nguoi_dung')
-          .upsert({
-            nguoi_dung_id: userId,
-            loai_tien_do: 'achievement',
-            doi_tuong_id: 'crafting_tasks',
-            noi_dung_tien_do: currentTasks
-          }, { onConflict: 'nguoi_dung_id,loai_tien_do,doi_tuong_id' });
-      }
-
-      return currentTasks;
+      if (error) throw error;
+      return normalizeCraftingTasks(data);
     } catch (e) {
       console.error('[incrementCraftingTaskProgress] Error:', e.message);
       return null;
@@ -853,69 +806,30 @@ export const User = {
       
       const taskDef = craftingTasks.find(t => t.id === taskId);
       if (!userTask || !taskDef) throw new Error("Không tìm thấy nhiệm vụ.");
+      if (userTask.claimed) throw new Error("Phần thưởng này đã được nhận.");
       if (userTask.progress < taskDef.target) throw new Error("Chưa hoàn thành mục tiêu nhiệm vụ.");
-
-      const { data: invRecord, error: fetchInvError } = await supabase
-        .from('tien_do_nguoi_dung')
-        .select('noi_dung_tien_do')
-        .eq('nguoi_dung_id', userId)
-        .eq('loai_tien_do', 'achievement')
-        .eq('doi_tuong_id', 'inventory')
-        .maybeSingle();
-
-      if (fetchInvError) throw fetchInvError;
-
-      const currentInventory = invRecord?.noi_dung_tien_do || {};
       const rewardsToGrant = (userTask.rewards && userTask.rewards.length > 0)
         ? userTask.rewards
         : taskDef.rewards;
-
-      const updatedInventory = grantIngredientsToInventory(currentInventory, rewardsToGrant);
-
-      userTask.claimed = true; 
-
-      // Cộng thêm XP và Level
-      const { data: userRecord, error: fetchUserError } = await supabase
-        .from('nguoi_dung')
-        .select('diem_kinh_nghiem')
-        .eq('id', userId)
-        .single();
-      
-      if (fetchUserError) throw fetchUserError;
-      
       const xpReward = taskDef.difficulty === 'hard' ? 150 : taskDef.difficulty === 'medium' ? 100 : 50;
-      const nextXp = (userRecord.diem_kinh_nghiem || 0) + xpReward;
-      const nextLevel = Math.floor(nextXp / 1000) + 1;
-      
-      await supabase
-        .from('nguoi_dung')
-        .update({ diem_kinh_nghiem: nextXp, cap_do: nextLevel })
-        .eq('id', userId);
 
-      await supabase
-        .from('tien_do_nguoi_dung')
-        .upsert([
-          {
-            nguoi_dung_id: userId,
-            loai_tien_do: 'achievement',
-            doi_tuong_id: 'crafting_tasks',
-            noi_dung_tien_do: currentTasks
-          },
-          {
-            nguoi_dung_id: userId,
-            loai_tien_do: 'achievement',
-            doi_tuong_id: 'inventory',
-            noi_dung_tien_do: updatedInventory
-          }
-        ], { onConflict: 'nguoi_dung_id,loai_tien_do,doi_tuong_id' });
+      const { data, error } = await supabase.rpc('claim_crafting_task_reward', {
+        p_user_id: userId,
+        p_task_id: taskId,
+        p_target: taskDef.target,
+        p_rewards: rewardsToGrant,
+        p_xp_reward: xpReward,
+      });
+      if (error) throw error;
+      if (!data) throw new Error('Không thể nhận phần thưởng lúc này.');
 
       return {
-        tasks: currentTasks,
-        inventory: updatedInventory,
-        rewards: rewardsToGrant,
-        xpGained: xpReward,
-        totalXP: nextXp,
-        newLevel: nextLevel
+        tasks: normalizeCraftingTasks(data.tasks),
+        inventory: normalizeInventory(data.inventory),
+        rewards: Array.isArray(data.rewards) ? data.rewards : rewardsToGrant,
+        xpGained: data.xpGained ?? xpReward,
+        totalXP: data.totalXP,
+        newLevel: data.newLevel,
       };
     } catch (e) {
       console.error('[claimCraftingTaskReward] Error:', e.message);

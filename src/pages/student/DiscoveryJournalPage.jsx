@@ -14,38 +14,34 @@ const normalize = (formula) => {
 const DiscoveryJournalPage = () => {
   const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
+  const userId = user?.id;
+  const userUnlockedChemicals = user?.unlockedChemicals;
   const [dbChemicals, setDbChemicals] = useState([]);
   const [dbReactions, setDbReactions] = useState([]);
   const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+  const [loadVersion, setLoadVersion] = useState(0);
 
-  const handleClose = () => {
-    if (window.opener) {
-      window.close();
-      setTimeout(() => {
-        if (!window.closed) {
-          navigate('/lab');
-        }
-      }, 100);
-    } else if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/lab');
-    }
-  };
+  const handleClose = () => navigate('/lab');
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchData = async () => {
+      setIsLoading(true);
+      setLoadError('');
       try {
         const token = localStorage.getItem('token');
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
         const [chemsRes, rxsRes] = await Promise.all([
-          fetch('/api/lab/chemicals', { headers }),
-          fetch('/api/lab/reactions', { headers }),
+          fetch('/api/lab/chemicals', { headers, signal: controller.signal }),
+          fetch('/api/lab/reactions', { headers, signal: controller.signal }),
         ]);
+        if (!chemsRes.ok || !rxsRes.ok) throw new Error('Không thể tải dữ liệu sổ khám phá.');
         const chemsData = await chemsRes.json();
         const rxsData = await rxsRes.json();
+        if (!Array.isArray(chemsData) || !Array.isArray(rxsData)) throw new Error('Dữ liệu sổ khám phá không hợp lệ.');
 
         const processedChems = [];
         const seenFormulas = new Set();
@@ -59,7 +55,7 @@ const DiscoveryJournalPage = () => {
             normalizedChemical.opacity = 0.9;
           }
 
-          const key = `${normalizedChemical.formula}:${normalizedChemical.name}`;
+          const key = normalize(normalizedChemical.formula);
           if (!seenFormulas.has(key)) {
             processedChems.push(normalizedChemical);
             seenFormulas.add(key);
@@ -71,32 +67,40 @@ const DiscoveryJournalPage = () => {
           .map((chemical) => chemical.formula);
 
         let initialDiscovered = starters;
-        const saved = localStorage.getItem('chem_odyssey_discovered');
-        if (saved) {
-          try {
-            initialDiscovered = Array.from(new Set([...starters, ...JSON.parse(saved)]));
-          } catch (error) {
-            console.error('Stored discovery data is corrupted:', error);
+        if (isLoggedIn) {
+          initialDiscovered = Array.from(new Set([...starters, ...(userUnlockedChemicals || [])]));
+        } else {
+          const saved = localStorage.getItem('chem_odyssey_discovered:guest') || localStorage.getItem('chem_odyssey_discovered');
+          if (saved) {
+            try {
+              initialDiscovered = Array.from(new Set([...starters, ...JSON.parse(saved)]));
+            } catch {
+              localStorage.removeItem('chem_odyssey_discovered:guest');
+            }
           }
         }
 
-        if (isLoggedIn && user?.unlockedChemicals) {
-          initialDiscovered = Array.from(new Set([...initialDiscovered, ...user.unlockedChemicals]));
-        }
+        const canonicalFormulaByKey = new Map(processedChems.map(chemical => [normalize(chemical.formula), chemical.formula]));
+        initialDiscovered = Array.from(new Set(initialDiscovered
+          .map(item => canonicalFormulaByKey.get(normalize(item)))
+          .filter(Boolean)));
 
         setDbChemicals(processedChems);
         setDbReactions(Array.isArray(rxsData) ? rxsData : []);
         setDiscoveredFormulas(initialDiscovered);
       } catch (error) {
+        if (error.name === 'AbortError') return;
         console.error('Failed to fetch lab data:', error);
+        setLoadError(error.message || 'Không thể tải sổ khám phá.');
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) setIsLoading(false);
       }
     };
 
-    if (isLoggedIn && !user) return;
+    if (isLoggedIn && !userId) return;
     fetchData();
-  }, [isLoggedIn, user]);
+    return () => controller.abort();
+  }, [isLoggedIn, loadVersion, userId, userUnlockedChemicals]);
 
   if (isLoading) {
     return (
@@ -111,12 +115,22 @@ const DiscoveryJournalPage = () => {
     );
   }
 
-  const discoveryPercent = Math.round((discoveredFormulas.length / Math.max(1, dbChemicals.length)) * 100);
+  if (loadError) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-viet-bg p-8 text-center text-viet-text">
+        <h2 className="text-2xl font-black">Không thể mở sổ khám phá</h2>
+        <p className="mt-2 text-sm font-semibold text-viet-text-light">{loadError}</p>
+        <button type="button" onClick={() => setLoadVersion(version => version + 1)} className="viet-btn-green mt-6">Thử lại</button>
+      </div>
+    );
+  }
+
+  const discoveryPercent = Math.min(100, Math.round((discoveredFormulas.length / Math.max(1, dbChemicals.length)) * 100));
 
   return (
-    <div className="flex h-screen flex-col bg-viet-bg font-sans text-viet-text">
-      <div className="flex shrink-0 items-center justify-between border-b border-viet-border bg-white/80 backdrop-blur shadow-sm p-6 md:p-8 z-20 relative">
-        <div className="flex items-center gap-12">
+    <div className="flex min-h-screen flex-col bg-viet-bg pt-20 font-sans text-viet-text">
+      <div className="relative z-20 flex shrink-0 flex-col gap-4 border-b border-viet-border bg-white/80 p-4 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between md:p-6">
+        <div className="flex min-w-0 items-center gap-4 md:gap-12">
           <div>
             <h2 className="text-2xl font-black uppercase italic tracking-tighter text-viet-text">Từ Điển Vật Chất</h2>
             <p className="mt-1 text-xs font-bold uppercase tracking-widest text-viet-text-light">Sổ tay vật chất & phản ứng</p>
@@ -145,7 +159,7 @@ const DiscoveryJournalPage = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           <button
             onClick={() => navigate('/lab/crafting')}
             className="flex items-center justify-center gap-2 viet-btn-green shadow-lg hover:shadow-xl text-xs py-3 !px-5"

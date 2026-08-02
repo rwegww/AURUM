@@ -1,5 +1,3 @@
-import { parseFormula } from '../utils/balancer.js';
-
 export const ingredients = [
   { id: "ing_h", name: "Tinh chất Hydro", icon: "Droplet", formula: "H", requiredQuiz: "hoa8_kntt_bai1", gradeLevel: 8 },
   { id: "ing_o", name: "Tinh chất Oxy", icon: "Wind", formula: "O", requiredQuiz: "hoa8_kntt_bai2", gradeLevel: 8 },
@@ -61,7 +59,7 @@ export const craftableItems = [
     category: "Trung bình",
     rarity: "uncommon",
     description: "Có từ tính, dùng làm nam châm và sơn chống gỉ.",
-    ingredients: ["ing_fe", "ing_fe", "ing_fe", "ing_o", "ing_o"],
+    ingredients: ["ing_fe", "ing_fe", "ing_fe", "ing_o", "ing_o", "ing_o", "ing_o"],
     xpReward: 100,
     unlockMessage: "Fe₃O₄ — oxit sắt có từ tính! Đây là phản ứng đốt cháy sắt trong oxy.",
   },
@@ -131,11 +129,14 @@ export const recipes = [
 ];
 
 export const getLevelFromXP = (xp) => {
-  if (xp < 100) return { level: 1, title: "Tập sự giả kim", nextLevelXP: 100 };
-  if (xp < 300) return { level: 2, title: "Học đồ hóa học", nextLevelXP: 300 };
-  if (xp < 600) return { level: 3, title: "Chuyên viên Lab", nextLevelXP: 600 };
-  if (xp < 1000) return { level: 4, title: "Bậc thầy phân tử", nextLevelXP: 1000 };
-  return { level: 5, title: "Giáo sư Hóa học", nextLevelXP: 2000 };
+  const normalizedXP = Math.max(0, Number(xp) || 0);
+  const level = Math.floor(normalizedXP / 1000) + 1;
+  const titles = ["Tập sự giả kim", "Học đồ hóa học", "Chuyên viên Lab", "Bậc thầy phân tử", "Giáo sư Hóa học"];
+  return {
+    level,
+    title: titles[Math.min(level - 1, titles.length - 1)],
+    nextLevelXP: level * 1000,
+  };
 };
 
 export const getIngredientAmountMap = (inventory) => {
@@ -261,101 +262,26 @@ export const grantIngredientsToInventory = (inventory, rewards = []) => {
   });
 };
 
-const ingredientMap = {
-  'H': 'ing_h',
-  'O': 'ing_o',
-  'FE': 'ing_fe',
-  'NA': 'ing_na',
-  'CL': 'ing_cl',
-  'C': 'ing_c',
-  'S': 'ing_s',
-  'N': 'ing_n',
-  'CA': 'ing_ca',
-  'AG': 'ing_ag',
-  'AU': 'ing_au',
-  'F': 'ing_f',
-  'BR': 'ing_br',
-  'I': 'ing_i',
-  'HE': 'ing_he',
-  'NE': 'ing_ne',
-  'AR': 'ing_ar',
-  'SI': 'ing_si',
-  'BE': 'ing_be',
-  'BA': 'ing_ba'
-};
-
-const getRarity = (ingredientCount) => {
-  if (ingredientCount <= 2) return 'common';
-  if (ingredientCount <= 4) return 'uncommon';
-  if (ingredientCount <= 6) return 'rare';
-  return 'legendary';
-};
-
 const toCompareKey = (formula) => {
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
   return String(formula || '').replace(/[₀₁₂₃₄₅₆₇₈₉]/g, (match) => subMap[match] || match).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
 };
 
 export const generateCraftableItems = (chemicalsList) => {
-  const items = [];
-  const generatedKeys = new Set();
-  
-  (chemicalsList || []).forEach(c => {
-    if (c.la_chat_khoi_dau || c.is_starter || c.isStarter) return;
-    
-    try {
-      const formula = c.cong_thuc || c.formula;
-      if (!formula) return;
-      
-      const parsed = parseFormula(formula);
-      const recipeIngredients = [];
-      let canBuildRecipe = true;
-      
-      Object.entries(parsed).forEach(([element, count]) => {
-        const ingId = ingredientMap[element.toUpperCase()];
-        if (!ingId) {
-          canBuildRecipe = false;
-        } else {
-          for (let i = 0; i < count; i++) {
-            recipeIngredients.push(ingId);
-          }
-        }
-      });
-      
-      if (!canBuildRecipe || recipeIngredients.length === 0) return;
-      
-      const compKey = toCompareKey(formula);
-      if (generatedKeys.has(compKey)) return;
-      generatedKeys.add(compKey);
-      
-      const rarity = getRarity(recipeIngredients.length);
-      const xpReward = recipeIngredients.length * 30;
-      const cleanFormulaId = compKey.toLowerCase();
-      
-      items.push({
-        id: `craft_${cleanFormulaId}`,
-        name: c.ten || c.name,
-        formula: formula,
-        icon: c.trang_thai_vat_chat === 'gas' ? 'Wind' : (c.trang_thai_vat_chat === 'liquid' ? 'Droplet' : 'FlaskConical'),
-        category: c.danh_muc || 'Hợp chất',
-        rarity: rarity,
-        description: `Hợp chất hóa học cấu tạo từ các nguyên tố thành phần.`,
-        ingredients: recipeIngredients,
-        xpReward: xpReward,
-        unlockMessage: `Bạn đã chế tạo thành công ${c.ten || c.name} (${formula})!`
-      });
-    } catch (e) {
-      console.warn(`[Crafting] Could not generate recipe for formula: ${c.cong_thuc || c.formula}`, e.message);
-    }
-  });
-  
-  craftableItems.forEach(item => {
-    const compKey = toCompareKey(item.formula);
-    if (!generatedKeys.has(compKey)) {
-      generatedKeys.add(compKey);
-      items.push(item);
-    }
-  });
+  const chemicalByFormula = new Map((chemicalsList || []).map((chemical) => [
+    toCompareKey(chemical.cong_thuc || chemical.formula),
+    chemical,
+  ]));
 
-  return items;
+  // Chỉ cung cấp các công thức đã được biên soạn. Việc tách mọi phân tử
+  // thành các nguyên tử riêng lẻ không phải là một quy trình hóa học hợp lệ.
+  return craftableItems.map((item) => {
+    const chemical = chemicalByFormula.get(toCompareKey(item.formula));
+    if (!chemical) return item;
+    return {
+      ...item,
+      name: chemical.ten || chemical.name || item.name,
+      category: chemical.danh_muc || chemical.category || item.category,
+    };
+  });
 };

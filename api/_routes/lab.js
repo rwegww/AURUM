@@ -3,8 +3,13 @@ import { supabase } from '../lib/supabase.js';
 import User from '../models/User.js';
 import Mission from '../models/Mission.js';
 import { auth } from '../_middleware/auth.js';
-import { balanceEquation, balanceEquationText, normalizeFormula, parseSpeciesList } from '../../src/utils/balancer.js';
-import { craftableItems, craftItemInInventory, normalizeInventory, generateCraftableItems } from '../../src/data/labInventory.js';
+import { balanceEquation, balanceEquationText, parseSpeciesList } from '../../src/utils/balancer.js';
+import {
+  formatStructuredEquation,
+  isStructurallyBalancedReaction,
+  normalizeLabFormula,
+} from '../../src/utils/labChemistry.js';
+import { getRecipeRequirementCounts, normalizeInventory, generateCraftableItems } from '../../src/data/labInventory.js';
 import { craftingTasks } from '../../src/data/craftingTasks.js';
 
 const router = express.Router();
@@ -80,7 +85,15 @@ router.get('/chemicals', async (req, res) => {
       .order('cong_thuc', { ascending: true });
 
     if (error) throw error;
-    res.status(200).json((data || []).map(normalizeChemical));
+    const seen = new Set();
+    const chemicals = (data || []).map(normalizeChemical).filter((chemical) => {
+      const key = normalizeLabFormula(chemical.formula);
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    res.set('Cache-Control', 'private, max-age=300');
+    res.status(200).json(chemicals);
   } catch (error) {
     console.error('Lỗi tải danh sách hóa chất:', error);
     res.status(500).json({ message: 'Không thể tải danh sách hóa chất.', error: error.message });
@@ -90,13 +103,27 @@ router.get('/chemicals', async (req, res) => {
 // GET /api/lab/reactions - Get all reactions
 router.get('/reactions', async (req, res) => {
   try {
-    const { data, error } = await supabase
-      .from('phan_ung')
-      .select('*')
-      .order('id', { ascending: true });
+    const [reactionResult, chemicalResult] = await Promise.all([
+      supabase.from('phan_ung').select('*').order('id', { ascending: true }),
+      supabase.from('hoa_chat').select('cong_thuc'),
+    ]);
 
-    if (error) throw error;
-    res.status(200).json((data || []).map(normalizeLabRecord));
+    if (reactionResult.error) throw reactionResult.error;
+    if (chemicalResult.error) throw chemicalResult.error;
+
+    const knownFormulas = new Set((chemicalResult.data || []).map(item => normalizeLabFormula(item.cong_thuc)));
+    const normalizedReactions = (reactionResult.data || []).map(normalizeLabRecord);
+    const usableReactions = normalizedReactions.filter((reaction) => {
+      const species = [...(reaction.reactants || []), ...(reaction.products || [])];
+      return species.every(item => knownFormulas.has(normalizeLabFormula(item.formula)))
+        && isStructurallyBalancedReaction(reaction);
+    });
+
+    if (usableReactions.length !== normalizedReactions.length) {
+      console.warn(`[Lab] Đã loại ${normalizedReactions.length - usableReactions.length} phản ứng không cân bằng hoặc tham chiếu hóa chất không tồn tại.`);
+    }
+    res.set('Cache-Control', 'private, max-age=300');
+    res.status(200).json(usableReactions);
   } catch (error) {
     console.error('Lỗi tải danh sách phản ứng:', error);
     res.status(500).json({ message: 'Không thể tải danh sách phản ứng.', error: error.message });
@@ -123,13 +150,15 @@ router.get('/balancing/search', async (req, res) => {
     const mapped = (data || []).map(item => {
       const reactantsList = Array.isArray(item.chat_tham_gia) ? item.chat_tham_gia : [];
       const productsList = Array.isArray(item.san_pham) ? item.san_pham : [];
+      const structuredReaction = { reactants: reactantsList, products: productsList };
+      if (!isStructurallyBalancedReaction(structuredReaction)) return null;
       return {
         reactants: reactantsList.map(r => r.formula),
         products: productsList.map(p => p.formula),
-        answer: [...reactantsList.map(r => r.coeff), ...productsList.map(p => p.coeff)],
-        equation_string: item.phuong_trinh
+        answer: [...reactantsList.map(r => Number(r.coeff) || 1), ...productsList.map(p => Number(p.coeff) || 1)],
+        equation_string: formatStructuredEquation(structuredReaction),
       };
-    });
+    }).filter(Boolean);
 
     res.status(200).json(mapped);
   } catch (error) {
@@ -175,26 +204,64 @@ router.post('/unlock', auth, async (req, res) => {
       return res.status(400).json({ message: 'Thiếu công thức cần mở khóa.' });
     }
 
-    const formulasToUnlock = formulas ? formulas : [formula];
+    const requestedFormulas = formulas ? formulas : [formula];
+    const normalizedRequested = Array.from(new Set(requestedFormulas.map(normalizeLabFormula).filter(Boolean)));
+    if (normalizedRequested.length === 0 || normalizedRequested.length > 20) {
+      return res.status(400).json({ message: 'Danh sách hóa chất cần mở khóa không hợp lệ.' });
+    }
+    const { data: existingChemicals, error: chemicalError } = await supabase
+      .from('hoa_chat')
+      .select('cong_thuc, la_chat_khoi_dau');
+    if (chemicalError) throw chemicalError;
+    const canonicalByNormalized = new Map((existingChemicals || []).map(item => [normalizeLabFormula(item.cong_thuc), item.cong_thuc]));
+    const formulasToUnlock = normalizedRequested.map(item => canonicalByNormalized.get(item)).filter(Boolean);
 
-    // Ensure it's treated as an array
-    let unlockedChemicals = Array.isArray(req.user.unlockedChemicals) 
-      ? [...req.user.unlockedChemicals] 
-      : [];
+    if (formulasToUnlock.length !== normalizedRequested.length) {
+      return res.status(400).json({ message: 'Có hóa chất không tồn tại trong thư viện.' });
+    }
 
-    let changed = false;
-    formulasToUnlock.forEach(f => {
-      if (!unlockedChemicals.includes(f)) {
-        unlockedChemicals.push(f);
-        changed = true;
-        console.log(`🔓 Unlocking ${f} for user ${req.user.id}`);
+    const unlockedByNormalized = new Map((req.user.unlockedChemicals || []).map(item => [normalizeLabFormula(item), item]));
+    const newFormulas = formulasToUnlock.filter(item => !unlockedByNormalized.has(normalizeLabFormula(item)));
+    newFormulas.forEach(item => unlockedByNormalized.set(normalizeLabFormula(item), item));
+    const unlockedChemicals = Array.from(unlockedByNormalized.values());
+
+    if (newFormulas.length > 0) {
+      const { data: reactionRows, error: reactionError } = await supabase
+        .from('phan_ung')
+        .select('chat_tham_gia, san_pham');
+      if (reactionError) throw reactionError;
+
+      const availableReactants = new Set([
+        ...(req.user.unlockedChemicals || []).map(normalizeLabFormula),
+        ...(existingChemicals || [])
+          .filter(item => item.la_chat_khoi_dau)
+          .map(item => normalizeLabFormula(item.cong_thuc)),
+      ]);
+      const authoredReactions = (reactionRows || [])
+        .map(normalizeLabRecord)
+        .filter(isStructurallyBalancedReaction);
+      const invalidUnlock = newFormulas.find(targetFormula => !authoredReactions.some(reaction => (
+        (reaction.products || []).some(product => normalizeLabFormula(product.formula) === normalizeLabFormula(targetFormula))
+        && (reaction.reactants || []).every(reactant => availableReactants.has(normalizeLabFormula(reactant.formula)))
+      )));
+
+      if (invalidUnlock) {
+        return res.status(409).json({
+          message: `Chưa thể mở khóa ${invalidUnlock}: hãy thực hiện một phản ứng hợp lệ từ các chất đã khám phá.`,
+        });
       }
-    });
 
-    if (changed) {
-      await User.update(req.user.id, { 
-        unlockedChemicals: unlockedChemicals 
-      });
+      const { error: unlockError } = await supabase
+        .from('tien_do_nguoi_dung')
+        .upsert(newFormulas.map(item => ({
+          nguoi_dung_id: req.user.id,
+          loai_tien_do: 'chemical',
+          doi_tuong_id: item,
+          noi_dung_tien_do: {},
+          updated_at: new Date().toISOString(),
+        })), { onConflict: 'nguoi_dung_id,loai_tien_do,doi_tuong_id' });
+      if (unlockError) throw unlockError;
+
       // Track mission progress
       try {
         await Mission.updateProgress(req.user.id, 'reaction', 1);
@@ -248,23 +315,23 @@ router.post('/craft', auth, async (req, res) => {
     if (chemError) throw chemError;
     const dynamicCraftableItems = generateCraftableItems(chemicals);
 
-    const { inventory, item } = craftItemInInventory(itemId, req.user.inventory, dynamicCraftableItems);
-    const unlockedChemicals = Array.isArray(req.user.unlockedChemicals)
-      ? [...req.user.unlockedChemicals]
-      : [];
-    const formulaToUnlock = item.formula;
+    const item = dynamicCraftableItems.find(candidate => candidate.id === itemId);
+    if (!item) return res.status(404).json({ success: false, message: 'Không tìm thấy vật phẩm cần chế tạo.' });
 
-    if (formulaToUnlock && !unlockedChemicals.includes(formulaToUnlock)) {
-      unlockedChemicals.push(formulaToUnlock);
-    }
-
-    const nextXp = (req.user.xp || 0) + (item.xpReward || 0);
-    const updatedUser = await User.update(req.user.id, {
-      inventory,
-      unlockedChemicals,
-      xp: nextXp,
-      level: Math.floor(nextXp / 1000) + 1,
+    const { data: craftResult, error: craftError } = await supabase.rpc('craft_lab_item', {
+      p_user_id: req.user.id,
+      p_item_id: item.id,
+      p_formula: item.formula,
+      p_requirements: getRecipeRequirementCounts(item),
+      p_xp_reward: item.xpReward || 0,
     });
+    if (craftError) throw craftError;
+
+    const unlockedByFormula = new Map(
+      [...(req.user.unlockedChemicals || []), item.formula]
+        .map(formula => [normalizeLabFormula(formula), formula]),
+    );
+    const unlockedChemicals = Array.from(unlockedByFormula.values());
 
     try {
       await Mission.updateProgress(req.user.id, 'reaction', 1);
@@ -275,10 +342,10 @@ router.post('/craft', auth, async (req, res) => {
     res.status(200).json({
       success: true,
       item,
-      inventory: updatedUser.inventory,
-      unlockedChemicals: updatedUser.unlockedChemicals || unlockedChemicals,
-      xp: updatedUser.xp,
-      level: updatedUser.level,
+      inventory: normalizeInventory(craftResult.inventory),
+      unlockedChemicals,
+      xp: craftResult.totalXP,
+      level: craftResult.newLevel,
       message: item.unlockMessage,
     });
   } catch (error) {
@@ -343,4 +410,3 @@ router.post('/crafting/tasks/claim', auth, async (req, res) => {
 });
 
 export default router;
-
