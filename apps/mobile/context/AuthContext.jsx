@@ -1,5 +1,6 @@
 import React from "react";
 import { authApi, ApiError } from "../services/api";
+import { resolveAuthFailure } from "../services/authErrors";
 import { createSessionId, sessionKeys, sessionStore } from "../services/session";
 import {
   clearSupabaseSession,
@@ -53,7 +54,7 @@ export const AuthProvider = ({ children }) => {
 
   const isLoggedIn = Boolean(token && user);
 
-  const logout = React.useCallback(async () => {
+  const endSession = React.useCallback(async (message = null) => {
     await Promise.all([
       clearSession(),
       clearSupabaseSession().catch(() => null)
@@ -62,8 +63,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     setSessionId(null);
-    setAuthError(null);
+    setAuthError(message);
   }, []);
+
+  const logout = React.useCallback(async () => {
+    await endSession();
+  }, [endSession]);
 
   const refreshProfile = React.useCallback(async (nextToken = token, nextSessionId = sessionId) => {
     if (!nextToken) return null;
@@ -74,13 +79,19 @@ export const AuthProvider = ({ children }) => {
       setAuthError(null);
       return profile;
     } catch (error) {
-      if (error instanceof ApiError && error.status === 401) {
-        await logout();
+      const failure = resolveAuthFailure(error);
+      if (failure.shouldInvalidateSession) {
+        await endSession(failure.message);
+      } else if (mountedRef.current) {
+        setAuthError(failure.message);
       }
-      if (mountedRef.current) setAuthError(error.message);
+
+      if (failure.message !== error?.message) {
+        throw new ApiError(failure.message, error?.status, error?.payload);
+      }
       throw error;
     }
-  }, [logout, sessionId, token]);
+  }, [endSession, sessionId, token]);
 
   const finishAuth = React.useCallback(async (result, authType = "custom") => {
     const nextToken = result.token;
@@ -101,26 +112,32 @@ export const AuthProvider = ({ children }) => {
       await finishAuth(result);
       return { success: true };
     } catch (error) {
-      const message = error.message || "Không thể đăng nhập";
+      const message = resolveAuthFailure(error).message || "Không thể đăng nhập";
       if (mountedRef.current) setAuthError(message);
       return { success: false, message };
     }
   }, [finishAuth]);
 
   const loginWithGoogle = React.useCallback(async () => {
+    let hasSupabaseSession = false;
     try {
       const session = await startGoogleOAuth();
       if (!session?.access_token) {
         throw new Error("Google không trả về phiên đăng nhập hợp lệ");
       }
+      hasSupabaseSession = true;
       await finishAuth({ token: session.access_token }, "supabase");
       return { success: true };
     } catch (error) {
-      const message = error.message || "Không thể đăng nhập bằng Google";
+      const failure = resolveAuthFailure(error);
+      const message = failure.message || "Không thể đăng nhập bằng Google";
+      if (hasSupabaseSession) {
+        await endSession(message);
+      }
       if (mountedRef.current) setAuthError(message);
       return { success: false, message };
     }
-  }, [finishAuth]);
+  }, [endSession, finishAuth]);
 
   const requestEmailOtp = React.useCallback(async (email) => {
     try {
@@ -128,7 +145,7 @@ export const AuthProvider = ({ children }) => {
       if (mountedRef.current) setAuthError(null);
       return { success: true, ...result };
     } catch (error) {
-      const message = error.message || "Không thể gửi mã OTP";
+      const message = resolveAuthFailure(error).message || "Không thể gửi mã OTP";
       if (mountedRef.current) setAuthError(message);
       return { success: false, message };
     }
@@ -140,7 +157,7 @@ export const AuthProvider = ({ children }) => {
       await finishAuth(result);
       return { success: true };
     } catch (error) {
-      const message = error.message || "Không thể xác thực mã OTP";
+      const message = resolveAuthFailure(error).message || "Không thể xác thực mã OTP";
       if (mountedRef.current) setAuthError(message);
       return { success: false, message };
     }
@@ -157,7 +174,7 @@ export const AuthProvider = ({ children }) => {
       await finishAuth(result);
       return { success: true };
     } catch (error) {
-      const message = error.message || "Không thể đăng ký";
+      const message = resolveAuthFailure(error).message || "Không thể đăng ký";
       if (mountedRef.current) setAuthError(message);
       return { success: false, message };
     }
@@ -208,12 +225,13 @@ export const AuthProvider = ({ children }) => {
         setSessionId(nextSessionId);
         setUser(profile);
       } catch (error) {
+        const failure = resolveAuthFailure(error);
         await Promise.all([
           clearSession(),
           clearSupabaseSession().catch(() => null)
         ]);
         if (mountedRef.current) {
-          setAuthError(error.message);
+          setAuthError(failure.message);
           setUser(null);
           setToken(null);
           setSessionId(null);
@@ -265,8 +283,9 @@ export const AuthProvider = ({ children }) => {
           }));
         }
       } catch (error) {
-        if (error instanceof ApiError && error.status === 401) {
-          await logout();
+        const failure = resolveAuthFailure(error);
+        if (failure.shouldInvalidateSession) {
+          await endSession(failure.message);
         }
       }
     };
@@ -277,7 +296,7 @@ export const AuthProvider = ({ children }) => {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [logout, sessionId, token, user?.id]);
+  }, [endSession, sessionId, token, user?.id]);
 
   const value = React.useMemo(() => ({
     user,

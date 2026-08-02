@@ -22,6 +22,16 @@ const supabasePublishableKey =
 const normalizedSupabaseUrl = typeof supabaseUrl === "string" ? supabaseUrl.trim() : "";
 const normalizedSupabaseKey = typeof supabasePublishableKey === "string" ? supabasePublishableKey.trim() : "";
 
+const getSupabaseStorageKey = () => {
+  try {
+    return `sb-${new URL(normalizedSupabaseUrl).hostname.split(".")[0]}-auth-token`;
+  } catch {
+    return null;
+  }
+};
+
+const supabaseStorageKey = getSupabaseStorageKey();
+
 const getSupabaseConfigError = () => {
   if (!normalizedSupabaseUrl || !normalizedSupabaseKey) {
     return "Chưa cấu hình đăng nhập Google. Hãy đặt EXPO_PUBLIC_SUPABASE_URL và EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY.";
@@ -48,6 +58,7 @@ export const supabase = supabaseConfigError
   : createClient(normalizedSupabaseUrl, normalizedSupabaseKey, {
       auth: {
         storage: supabaseStorage,
+        storageKey: supabaseStorageKey,
         autoRefreshToken: true,
         persistSession: true,
         detectSessionInUrl: false,
@@ -178,6 +189,17 @@ export const getSupabaseAccessToken = async () => {
 };
 
 export const clearSupabaseSession = async () => {
-  if (!supabase) return;
-  await supabase.auth.signOut();
+  try {
+    if (!supabase) return;
+    const { error } = await supabase.auth.signOut({ scope: "local" });
+    if (error) throw error;
+  } finally {
+    if (supabaseStorageKey) {
+      await Promise.all([
+        supabaseStorage.removeItem(supabaseStorageKey),
+        supabaseStorage.removeItem(`${supabaseStorageKey}-code-verifier`),
+        supabaseStorage.removeItem(`${supabaseStorageKey}-user`)
+      ]);
+    }
+  }
 };
