@@ -811,12 +811,12 @@ const MagicLab3D = () => {
             initial={false}
             animate={{ x: isSidebarOpen ? 0 : -280, opacity: 1 }}
             transition={{ type: "spring", damping: 20, stiffness: 120 }}
-            className="pointer-events-auto relative z-20 mb-2 mt-2 flex min-h-0 w-[min(280px,calc(100vw-3rem))] flex-col rounded-[28px] border border-white/10 bg-slate-950/70 p-3 pb-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl sm:p-4"
+            className="pointer-events-auto relative z-20 mb-2 mt-2 flex min-h-0 w-[min(280px,calc(100vw-3rem))] flex-col rounded-[28px] border border-white/10 bg-slate-950/85 p-3 pb-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-xl isolate sm:p-4"
           >
             {/* Toggle Button */}
             <button 
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="absolute -right-8 top-1/2 -translate-y-1/2 w-8 h-20 bg-slate-900/60 backdrop-blur-xl border border-white/10 border-l-0 hover:border-white/20 rounded-r-2xl flex items-center justify-center shadow-[4px_0_10px_-2px_rgba(0,0,0,0.5)] transition-all pointer-events-auto hover:bg-slate-800/80 group"
+              className="absolute -right-8 top-1/2 -translate-y-1/2 w-8 h-20 bg-slate-900/90 border border-white/10 border-l-0 hover:border-white/20 rounded-r-2xl flex items-center justify-center shadow-[4px_0_10px_-2px_rgba(0,0,0,0.5)] transition-all pointer-events-auto hover:bg-slate-800/90 group"
             >
               <div className="text-white/60 group-hover:text-blue-400 transition-colors">
                 {isSidebarOpen ? <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m15 18-6-6 6-6"/></svg> : <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m9 18 6-6-6-6"/></svg>}
@@ -1027,7 +1027,7 @@ const MagicLab3D = () => {
           </motion.div>
 
           {/* Right Side Panel - Swaps between Beakers Selector and Handbook/Recipe Book with 3D Flip */}
-          <div className="my-auto pointer-events-auto self-center max-h-[95%] [perspective:1000px] z-30 mr-2">
+          <div className="my-auto pointer-events-auto self-center max-h-[95%] [perspective:1000px] isolate z-30 mr-2">
             <AnimatePresence mode="wait">
               {(!showNotepad && !showRecipeBook) ? (
                 /* --- FRONT: Beaker Selector Column (#1, #2, #3, #4) --- */

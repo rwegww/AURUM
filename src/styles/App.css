@@ -196,11 +196,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .lab-backglow {
-  @apply absolute -inset-4 bg-viet-green/5 rounded-[3rem] blur-2xl opacity-0 transition-opacity duration-1000;
-}
-
-.group:hover .lab-backglow {
-  @apply opacity-100;
+  @apply absolute -inset-4 bg-viet-green/5 rounded-[3rem] blur-2xl opacity-40 transition-opacity duration-1000 pointer-events-none;
 }
 
 /* Hide Microsoft Edge default password reveal icon */
