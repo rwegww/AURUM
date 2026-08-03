@@ -9,6 +9,7 @@ import { getChemicalImage } from '../../../data/chemicalImages';
 import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
+import { reactions as staticReactionsData } from '@/data/reactions';
 
 const normalize = (f) => {
   if (!f) return "";
@@ -608,7 +609,19 @@ const MagicLab3D = () => {
     setPouringMode(false);
   }, [pourToBeaker, activeBeakerIndex, playSound]);
 
-  // Danh sách phản ứng đã khám phá cho sách điều chế
+  // Bản đồ tra cứu Lớp học dự phòng cho Bảng điều chế
+  const staticGradeMap = useMemo(() => {
+    const map = {};
+    if (Array.isArray(staticReactionsData)) {
+      staticReactionsData.forEach(r => {
+        if (r.id && r.gradeLevel) map[r.id] = r.gradeLevel;
+        if (r.equation && r.gradeLevel) map[r.equation] = r.gradeLevel;
+      });
+    }
+    return map;
+  }, []);
+
+  // Danh sách phản ứng đã khám phá cho bảng điều chế
   const knownReactions = useMemo(() => {
     const rxs = useLabStore.getState().reactions || [];
     return rxs.filter(rx => {
@@ -759,7 +772,7 @@ const MagicLab3D = () => {
               }`}
             >
               <BookOpen className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
-              <span>Sách điều chế</span>
+              <span>Bảng điều chế</span>
               <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-md text-[10px] font-black">{knownReactions.length}</span>
             </button>
             <button 
@@ -1178,7 +1191,7 @@ const MagicLab3D = () => {
                   </div>
                 </motion.div>
               ) : (
-                /* --- BACK: Sách điều chế (Recipe Book Panel) --- */
+                /* --- BACK: Bảng điều chế (Recipe Book Panel) --- */
                 <motion.div
                   key="recipe-panel"
                   initial={{ rotateY: -90, opacity: 0 }}
@@ -1191,7 +1204,7 @@ const MagicLab3D = () => {
                   <div className="flex items-center justify-between pb-3 border-b border-white/10">
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4 text-emerald-400" />
-                      <h3 className="text-xs font-black text-white uppercase tracking-wider">Sách Điều Chế</h3>
+                      <h3 className="text-xs font-black text-white uppercase tracking-wider">Bảng Điều Chế</h3>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/30">
@@ -1214,24 +1227,27 @@ const MagicLab3D = () => {
                         Chưa khám phá được phản ứng nào.<br />Hãy thử trộn các hóa chất!
                       </div>
                     ) : (
-                      knownReactions.map((rx, idx) => (
-                        <div key={rx.id || idx} className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                          <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <h4 className="text-xs font-bold text-white leading-tight">{rx.name}</h4>
-                            <span className="text-[9px] font-black uppercase text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
-                              Lớp {rx.gradeLevel || '?'}
-                            </span>
+                      knownReactions.map((rx, idx) => {
+                        const gradeVal = rx.gradeLevel || rx.grade_level_id || rx.grade || rx.khoi_id || staticGradeMap[rx.id] || staticGradeMap[rx.equation] || 8;
+                        return (
+                          <div key={rx.id || idx} className="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                            <div className="flex items-center justify-between gap-2 mb-1.5">
+                              <h4 className="text-xs font-bold text-white leading-tight">{rx.name}</h4>
+                              <span className="text-[9px] font-black uppercase text-emerald-300 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                                Lớp {gradeVal}
+                              </span>
+                            </div>
+                            <div className="bg-slate-900/60 rounded-lg px-2.5 py-1.5 mb-1.5 border border-white/5 font-mono text-[11px] text-emerald-400">
+                              {rx.equation}
+                            </div>
+                            {rx.observation && (
+                              <p className="text-[10px] text-white/60 leading-relaxed">
+                                <span className="font-bold text-white/80">Hiện tượng:</span> {rx.observation}
+                              </p>
+                            )}
                           </div>
-                          <div className="bg-slate-900/60 rounded-lg px-2.5 py-1.5 mb-1.5 border border-white/5 font-mono text-[11px] text-emerald-400">
-                            {rx.equation}
-                          </div>
-                          {rx.observation && (
-                            <p className="text-[10px] text-white/60 leading-relaxed">
-                              <span className="font-bold text-white/80">Hiện tượng:</span> {rx.observation}
-                            </p>
-                          )}
-                        </div>
-                      ))
+                        );
+                      })
                     )}
                   </div>
                 </motion.div>
