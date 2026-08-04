@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { activityService } from '@/services/ActivityService';
 import { Beaker, BookOpenCheck, Hammer, Microscope, Scale, Search } from 'lucide-react';
+import DiscoveryJournalModal from '@/components/lab/DiscoveryJournalModal';
 
 // --- Animations ---
 const containerVariants = {
@@ -25,7 +26,20 @@ const itemVariants = {
 
 const ChemLab = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [labStats, setLabStats] = useState({ chemicals: null, reactions: null });
+  const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(Boolean(location.state?.openDiscovery));
+
+  const closeDiscovery = useCallback(() => {
+    setIsDiscoveryOpen(false);
+    if (location.state?.openDiscovery) navigate('/lab', { replace: true, state: null });
+  }, [location.state, navigate]);
+
+  const openCrafting = useCallback(() => {
+    setIsDiscoveryOpen(false);
+    navigate('/lab/crafting');
+  }, [navigate]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -81,7 +95,7 @@ const ChemLab = () => {
       label: t('chem_lab.modules.discovery.label'),
       icon: <BookOpenCheck className="w-8 h-8 text-indigo-500" />,
       desc: t('chem_lab.modules.discovery.desc'),
-      path: '/lab/discovery',
+      path: null,
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-indigo-500'
     },
     {
@@ -135,17 +149,51 @@ const ChemLab = () => {
         >
           {labModules.map((module) => (
             <motion.div key={module.id} variants={itemVariants} className="flex flex-col h-full">
-              <Link 
-                to={module.path}
-                onClick={() => activityService.log({
-                  type: 'lab',
-                  label: `Phòng Lab: ${module.label}`,
-                  description: `Đã truy cập mô-đun ${module.label}`,
-                  icon: module.id,
-                  link: module.path
-                })}
-                className="card-tactile group relative flex flex-col h-full hover:translate-y-1 transition-all duration-200 overflow-hidden"
-              >
+              {module.id === 'discovery' ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsDiscoveryOpen(true);
+                    activityService.log({
+                      type: 'lab',
+                      label: `Phòng Lab: ${module.label}`,
+                      description: `Đã mở mô-đun ${module.label}`,
+                      icon: module.id,
+                      link: '/lab',
+                    });
+                  }}
+                  className="card-tactile group relative flex h-full flex-col overflow-hidden text-left transition-all duration-200 hover:translate-y-1"
+                >
+                  <div className="p-8 flex flex-col h-full">
+                    <div className="w-16 h-16 rounded-[1rem] bg-white border-2 border-duo-border border-b-4 flex items-center justify-center text-3xl mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
+                      {module.icon}
+                    </div>
+
+                    <h3 className="font-rubik text-2xl font-black text-[#1a1a1a] uppercase mb-4 leading-tight group-hover:text-viet-green transition-colors">
+                      {module.label}
+                    </h3>
+
+                    <p className="text-[#1a1a1a]/70 font-medium text-[15px] leading-relaxed mb-8 flex-grow">
+                      {module.desc}
+                    </p>
+
+                    <div className={`mt-auto py-3 px-6 rounded-full font-black text-[13px] uppercase tracking-widest transition-colors flex items-center justify-center gap-2 border-2 border-duo-border border-b-4 ${module.colorClass.replace('bg-[#1a1a1a]', 'bg-viet-green')}`}>
+                      Mở sổ tay <span className="text-lg">↗</span>
+                    </div>
+                  </div>
+                </button>
+              ) : (
+                <Link
+                  to={module.path}
+                  onClick={() => activityService.log({
+                    type: 'lab',
+                    label: `Phòng Lab: ${module.label}`,
+                    description: `Đã truy cập mô-đun ${module.label}`,
+                    icon: module.id,
+                    link: module.path
+                  })}
+                  className="card-tactile group relative flex flex-col h-full hover:translate-y-1 transition-all duration-200 overflow-hidden"
+                >
                 <div className="p-8 flex flex-col h-full">
                   <div className="w-16 h-16 rounded-[1rem] bg-white border-2 border-duo-border border-b-4 flex items-center justify-center text-3xl mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300">
                     {module.icon}
@@ -163,7 +211,8 @@ const ChemLab = () => {
                     {t('chem_lab.modules.start_btn')} <span className="text-lg">→</span>
                   </div>
                 </div>
-              </Link>
+                </Link>
+              )}
             </motion.div>
           ))}
         </motion.div>
@@ -193,6 +242,12 @@ const ChemLab = () => {
           </div>
         </motion.div>
       </div>
+
+      <DiscoveryJournalModal
+        open={isDiscoveryOpen}
+        onClose={closeDiscovery}
+        onOpenCrafting={openCrafting}
+      />
     </div>
   );
 };

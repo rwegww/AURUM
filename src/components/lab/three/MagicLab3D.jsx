@@ -10,6 +10,7 @@ import ChemicalTooltip from '../ChemicalTooltip';
 import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { reactions as staticReactionsData } from '@/data/reactions';
+import DiscoveryJournalModal from '@/components/lab/DiscoveryJournalModal';
 
 const normalize = (f) => {
   if (!f) return "";
@@ -284,6 +285,9 @@ const MagicLab3D = () => {
 
   const activeBeaker = beakers[activeBeakerIndex] || beakers[0];
   const [showLabSettings, setShowLabSettings] = useState(false);
+  const [showDiscoveryJournal, setShowDiscoveryJournal] = useState(false);
+  const closeDiscoveryJournal = useCallback(() => setShowDiscoveryJournal(false), []);
+  const openCraftingFromDiscovery = useCallback(() => window.location.assign('/lab/crafting'), []);
   const [searchQuery, setSearchQuery] = useState('');
   const [showRecipeBook, setShowRecipeBook] = useState(false);
   const [pouringMode, setPouringMode] = useState(false); // true khi đang chọn cốc đích để rót
@@ -772,8 +776,12 @@ const MagicLab3D = () => {
               )}
             </button>
             <button 
-              onClick={() => window.location.assign('/lab/discovery')}
-              className="flex items-center gap-2 px-4 h-12 bg-slate-900/40 backdrop-blur-xl rounded-2xl border border-white/10 hover:border-white/20 hover:bg-slate-800/40 transition-all font-bold text-xs uppercase tracking-widest shadow-lg group"
+              onClick={() => setShowDiscoveryJournal(true)}
+              className={`flex items-center gap-2 px-4 h-12 backdrop-blur-xl rounded-2xl border transition-all font-bold text-xs uppercase tracking-widest shadow-lg group ${
+                showDiscoveryJournal
+                  ? 'bg-purple-500/20 border-purple-400/40 text-purple-100'
+                  : 'bg-slate-900/40 border-white/10 hover:border-white/20 hover:bg-slate-800/40'
+              }`}
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
               <span className="text-white/80 group-hover:text-white transition-colors">Sổ tay khám phá</span>
@@ -1394,6 +1402,13 @@ const MagicLab3D = () => {
         x={mousePos.x} 
         y={mousePos.y} 
         visible={!!hoveredChem} 
+      />
+
+      <DiscoveryJournalModal
+        open={showDiscoveryJournal}
+        onClose={closeDiscoveryJournal}
+        onOpenCrafting={openCraftingFromDiscovery}
+        additionalDiscoveredFormulas={discoveredFormulas}
       />
     </div>
   );
