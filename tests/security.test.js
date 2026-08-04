@@ -214,6 +214,10 @@ vi.mock('../api/models/Feedback.js', () => ({ default: phan_hoiModel }));
 vi.mock('../api/models/AdminApproval.js', () => ({ default: approvalModel }));
 vi.mock('../api/models/Discussion.js', () => ({ Discussion: discussionModel, Note: noteModel }));
 vi.mock('../api/lib/supabase.js', () => ({ supabase }));
+vi.mock('../api/lib/authSecurity.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, AuthSecurity: { limit: vi.fn(), createSession: vi.fn(async () => true), oauthSessionActive: vi.fn(async () => true) } };
+});
 vi.mock('../api/lib/mailer.js', () => ({
   sendTeacherApprovalEmail: vi.fn(),
   sendTeacherRejectionEmail: vi.fn(),

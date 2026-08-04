@@ -1,30 +1,22 @@
-﻿import express from 'express';
+import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Feedback from '../models/Feedback.js';
-import { sendLoginOtpEmail } from '../lib/mailer.js';
+import { sendLoginOtpEmail, sendPasswordResetOtpEmail } from '../lib/mailer.js';
+import { AuthSecurity, authSecret, normalizeEmail, isValidEmail } from '../lib/authSecurity.js';
+import { auth } from '../_middleware/auth.js';
+import { supabase } from '../lib/supabase.js';
+import { isValidNewPassword, PASSWORD_POLICY_MESSAGE } from '../../shared/passwordPolicy.js';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 
 const router = express.Router();
-const emailOtpStore = new Map();
-const OTP_TTL_MS = Number(process.env.LOGIN_OTP_TTL_SECONDS || 600) * 1000;
-const OTP_COOLDOWN_MS = Number(process.env.LOGIN_OTP_COOLDOWN_SECONDS || 60) * 1000;
-const OTP_MAX_ATTEMPTS = Number(process.env.LOGIN_OTP_MAX_ATTEMPTS || 5);
-
-const normalizeEmail = (email = '') => String(email).trim().toLowerCase();
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+router.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
 const hasControlCharacters = (value) => [...value].some((character) => {
   const codePoint = character.codePointAt(0);
   return codePoint < 32 || codePoint === 127;
 });
 const createOtp = () => crypto.randomInt(100000, 1000000).toString();
-const hashOtp = (email, otp) =>
-  crypto
-    .createHash('sha256')
-    .update(`${email}:${otp}:${process.env.JWT_SECRET || 'aurum-login-otp'}`)
-    .digest('hex');
-
 const authRouteError = (status, message, code) => {
   const error = new Error(message);
   error.status = status;
@@ -45,9 +37,11 @@ const assertLoginAllowed = (user) => {
 
 const sendAuthRouteError = (res, err, fallbackMessage, fallbackStatus = 500) => {
   const status = err.status || fallbackStatus;
+  if (err.retryAfter) res.set('Retry-After', String(err.retryAfter));
   return res.status(status).json({
     message: err.expose ? err.message : fallbackMessage,
     error: err.code || (status >= 500 ? 'AUTH_INTERNAL_ERROR' : 'AUTH_FAILED'),
+    ...(err.retryAfter ? { retryAfter: err.retryAfter } : {}),
   });
 };
 
@@ -56,14 +50,11 @@ const normalizeRegistrationInput = ({ username, password, email, proofImageUrl }
   const normalizedPassword = typeof password === 'string' ? password : '';
   const normalizedEmail = normalizeEmail(email);
 
-  if (!normalizedUsername || normalizedUsername.length > 64 || hasControlCharacters(normalizedUsername)) {
-    throw authRouteError(400, 'Tên đăng nhập không hợp lệ hoặc vượt quá 64 ký tự.', 'INVALID_USERNAME');
+  if (!normalizedUsername || normalizedUsername.length > 64 || normalizedUsername.includes('@') || hasControlCharacters(normalizedUsername)) {
+    throw authRouteError(400, 'Tên đăng nhập không được chứa @, ký tự điều khiển hoặc vượt quá 64 ký tự.', 'INVALID_USERNAME');
   }
-  if (normalizedPassword.length < 6 || normalizedPassword.length > 128) {
-    throw authRouteError(400, 'Mật khẩu phải có từ 6 đến 128 ký tự.', 'INVALID_PASSWORD');
-  }
-  if (normalizedPassword === 'supabase_oauth_no_password') {
-    throw authRouteError(400, 'Mật khẩu này không an toàn. Vui lòng chọn mật khẩu khác.', 'INVALID_PASSWORD');
+  if (!isValidNewPassword(normalizedPassword)) {
+    throw authRouteError(400, PASSWORD_POLICY_MESSAGE, 'INVALID_PASSWORD');
   }
   if (!isValidEmail(normalizedEmail) || normalizedEmail.length > 320) {
     throw authRouteError(400, 'Email không hợp lệ.', 'INVALID_EMAIL');
@@ -89,28 +80,23 @@ const normalizeRegistrationInput = ({ username, password, email, proofImageUrl }
   };
 };
 
-const removeExpiredOtp = (email) => {
-  const record = emailOtpStore.get(email);
-  if (record && record.expiresAt <= Date.now()) {
-    emailOtpStore.delete(email);
-    return true;
-  }
-  return false;
-};
-
-const createLoginResponse = async (user) => {
+const createLoginResponse = async (user, completedSessionId = null) => {
+  authSecret();
   assertLoginAllowed(user);
-  const sessionId = crypto.randomUUID();
-  await User.update(user.id, { currentSessionId: sessionId });
+  const sessionId = completedSessionId || crypto.randomUUID();
+  if (!completedSessionId && !await AuthSecurity.createSession(user, sessionId)) {
+    throw authRouteError(401, 'Thông tin đăng nhập đã thay đổi. Vui lòng đăng nhập lại.', 'INVALID_CREDENTIALS');
+  }
 
   const token = jwt.sign(
     { id: user.id, role: user.role, sessionId },
-    process.env.JWT_SECRET,
-    { expiresIn: '7d' }
+    authSecret(),
+    { algorithm: 'HS256', expiresIn: '7d' }
   );
 
   return {
     token,
+    sessionId,
     user: {
       id: user.id,
       username: user.username,
@@ -136,6 +122,7 @@ router.post('/register', async (req, res) => {
     }
 
     const { username, password, email } = normalizeRegistrationInput(req.body);
+    await AuthSecurity.limit(req, 'register', email, { account: 5, ip: 20, seconds: 3600 });
     
     // Check if user exists
     const existingUser = await User.findOne({ username });
@@ -165,6 +152,7 @@ router.post('/register-teacher', async (req, res) => {
       return res.status(400).json({ message: 'Vui lòng cung cấp đầy đủ thông tin và ảnh minh chứng' });
     }
     const { username, password, email, proofImageUrl } = normalizeRegistrationInput(req.body);
+    await AuthSecurity.limit(req, 'register', email, { account: 5, ip: 20, seconds: 3600 });
     
     // Check if user exists
     const existingUser = await User.findOne({ username });
@@ -215,166 +203,130 @@ router.post('/register-teacher', async (req, res) => {
   }
 });
 
-// Magic Login via Email Link
-router.post('/magic-login', async (req, res) => {
-  try {
-    const { token } = req.body;
-    if (!token) return res.status(400).json({ message: 'Thiếu mã đăng nhập.' });
+// Legacy approval links were reusable bearer credentials. Existing links now
+// guide the recipient to password login or email recovery without exchanging a token.
+router.post('/magic-login', (_req, res) => res.status(410).json({
+  message: 'Liên kết đăng nhập cũ không còn được hỗ trợ. Hãy đăng nhập bằng mật khẩu hoặc chọn Quên mật khẩu.',
+  error: 'MAGIC_LINK_RETIRED',
+}));
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
-    if (!decoded.magicLogin) {
-      return res.status(400).json({ message: 'Token không hợp lệ cho tính năng này' });
-    }
-
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return res.status(404).json({ message: 'Không tìm thấy người dùng' });
-    }
-
-    return res.json(await createLoginResponse(user));
-  } catch (err) {
-    if (err.code === 'ACCOUNT_LOCKED') {
-      return sendAuthRouteError(res, err, 'Không thể đăng nhập.');
-    }
-    return res.status(401).json({
-      message: 'Link đăng nhập đã hết hạn hoặc không hợp lệ',
-      error: 'INVALID_MAGIC_LINK',
-    });
-  }
-});
-
-// Request login OTP via email
-router.post('/request-otp', async (req, res) => {
+const requestChallenge = (purpose) => async (req, res) => {
   try {
     const email = normalizeEmail(req.body?.email);
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ message: 'Email không hợp lệ' });
-    }
-
-    removeExpiredOtp(email);
-    const existingOtp = emailOtpStore.get(email);
-    if (existingOtp && Date.now() - existingOtp.sentAt < OTP_COOLDOWN_MS) {
-      const retryAfter = Math.ceil((OTP_COOLDOWN_MS - (Date.now() - existingOtp.sentAt)) / 1000);
-      return res.status(429).json({
-        message: `Vui lòng chờ ${retryAfter} giây trước khi gửi lại mã`,
-        retryAfter
-      });
-    }
-
-    const publicResponse = {
-      message: 'Nếu email đã đăng ký, mã OTP đã được gửi.',
-      expiresIn: Math.floor(OTP_TTL_MS / 1000)
-    };
-
-    const user = await User.findOne({ email });
-    if (!user || user.isLocked) {
-      return res.json(publicResponse);
-    }
-
-    const otp = createOtp();
-    const ttlMinutes = Math.max(1, Math.ceil(OTP_TTL_MS / 60000));
-    const sendResult = await sendLoginOtpEmail(email, user.username, otp, ttlMinutes);
-
-    if (!sendResult.success) {
-      return res.status(500).json({
-        message: 'Không gửi được mã OTP. Vui lòng thử lại sau.',
-        error: sendResult.error
-      });
-    }
-
-    emailOtpStore.set(email, {
-      userId: user.id,
-      hash: hashOtp(email, otp),
-      expiresAt: Date.now() + OTP_TTL_MS,
-      attempts: 0,
-      sentAt: Date.now()
-    });
-
-    return res.json({
-      ...publicResponse,
-      ...(process.env.NODE_ENV !== 'production' && sendResult.previewUrl
-        ? { previewUrl: sendResult.previewUrl }
-        : {})
-    });
-  } catch (err) {
-    return sendAuthRouteError(res, err, 'Lỗi gửi mã OTP');
-  }
-});
-
-// Verify login OTP and create a normal app session
-router.post('/verify-otp', async (req, res) => {
-  try {
-    const email = normalizeEmail(req.body?.email);
-    const otp = String(req.body?.otp || '').replace(/\s/g, '');
-
-    if (!isValidEmail(email)) {
-      return res.status(400).json({ message: 'Email không hợp lệ' });
-    }
-    if (!/^\d{6}$/.test(otp)) {
-      return res.status(400).json({ message: 'Mã OTP phải gồm 6 chữ số' });
-    }
-
-    const expired = removeExpiredOtp(email);
-    const record = emailOtpStore.get(email);
-    if (expired || !record) {
-      return res.status(400).json({ message: 'Mã OTP đã hết hạn hoặc không hợp lệ' });
-    }
-
-    record.attempts += 1;
-    if (record.attempts > OTP_MAX_ATTEMPTS) {
-      emailOtpStore.delete(email);
-      return res.status(400).json({ message: 'Bạn đã nhập sai quá nhiều lần. Vui lòng gửi mã mới.' });
-    }
-
-    if (hashOtp(email, otp) !== record.hash) {
-      if (record.attempts >= OTP_MAX_ATTEMPTS) {
-        emailOtpStore.delete(email);
+    if (!isValidEmail(email)) throw authRouteError(400, 'Email không hợp lệ.', 'INVALID_EMAIL');
+    await AuthSecurity.limit(req, `request-${purpose}`, email, { account: 5, ip: 20, seconds: 3600 });
+    const responseAt = Date.now() + 4000;
+    const code = createOtp();
+    const challenge = await AuthSecurity.issue(email, purpose, code);
+    if (!challenge || typeof challenge.issued !== 'boolean') throw new Error('Invalid challenge result');
+    if (challenge.issued && challenge.user_id) {
+      const send = purpose === 'reset' ? sendPasswordResetOtpEmail : sendLoginOtpEmail;
+      // Same public response for missing, locked, cooldown and failed-delivery cases.
+      // Never return SMTP errors or a mailbox preview containing a login credential.
+      try {
+        const result = await send(email, challenge.username, code, 10);
+        if (!result?.success) console.error('Authentication email delivery failed:', purpose);
+      } catch {
+        console.error('Authentication email delivery failed:', purpose);
       }
-      return res.status(400).json({ message: 'Mã OTP không chính xác' });
     }
-
-    const user = await User.findById(record.userId);
-    emailOtpStore.delete(email);
-
-    if (!user) {
-      return res.status(404).json({ message: 'Không tìm thấy người dùng' });
-    }
-
-    return res.json(await createLoginResponse(user));
+    await AuthSecurity.waitForEmailResponse(responseAt);
+    return res.json({
+      message: 'Nếu email thuộc tài khoản đang hoạt động, bạn sẽ nhận được mã xác thực. Vui lòng kiểm tra hộp thư và thư rác.',
+      expiresIn: 600,
+      retryAfter: 60,
+    });
   } catch (err) {
-    return sendAuthRouteError(res, err, 'Lỗi xác thực OTP');
+    return sendAuthRouteError(res, err, 'Không thể xử lý yêu cầu lúc này. Vui lòng thử lại sau.');
   }
-});
+};
 
+router.post('/request-otp', requestChallenge('login'));
+router.post('/forgot-password', requestChallenge('reset'));
 
-// Login
+const verifyChallenge = (purpose) => async (req, res) => {
+  try {
+    const email = normalizeEmail(req.body?.email);
+    const code = typeof req.body?.otp === 'string' ? req.body.otp.replace(/\s/g, '') : '';
+    if (!isValidEmail(email) || !/^\d{6}$/.test(code)) {
+      throw authRouteError(400, 'Vui lòng nhập email hợp lệ và mã gồm 6 chữ số.', 'INVALID_CHALLENGE');
+    }
+    if (purpose === 'reset' && !isValidNewPassword(req.body?.newPassword)) {
+      throw authRouteError(400, PASSWORD_POLICY_MESSAGE, 'INVALID_PASSWORD');
+    }
+    await AuthSecurity.limit(req, `verify-${purpose}`, email, { account: 20, ip: 60, seconds: 900 });
+    const passwordHash = purpose === 'reset' ? await bcrypt.hash(req.body.newPassword, 12) : null;
+    const result = await AuthSecurity.complete(email, purpose, code, passwordHash);
+    if (!result?.user_id) {
+      throw authRouteError(400, 'Mã không hợp lệ, đã hết hạn hoặc đã dùng. Vui lòng yêu cầu mã mới.', 'INVALID_CHALLENGE');
+    }
+    if (purpose === 'reset') {
+      return res.json({ message: 'Đã đặt lại mật khẩu và thu hồi các phiên cũ. Vui lòng đăng nhập bằng mật khẩu mới.' });
+    }
+    const user = await User.findById(result.user_id);
+    if (!user || !result.session_id) throw new Error('Invalid completed login');
+    return res.json(await createLoginResponse(user, result.session_id));
+  } catch (err) {
+    return sendAuthRouteError(res, err, 'Không thể xác thực lúc này. Vui lòng thử lại sau.');
+  }
+};
+router.post('/verify-otp', verifyChallenge('login'));
+router.post('/reset-password', verifyChallenge('reset'));
+
+// A real bcrypt comparison also runs for unknown usernames to reduce timing leaks.
+const DUMMY_PASSWORD_HASH = bcrypt.hashSync('unused-auth-timing-placeholder', 10);
 router.post('/login', async (req, res) => {
   try {
     const username = typeof req.body?.username === 'string' ? req.body.username.trim() : '';
     const password = typeof req.body?.password === 'string' ? req.body.password : '';
-    // Older OAuth accounts were provisioned with this shared placeholder.
-    // Deny it for existing accounts too, without modifying their database rows.
-    if (!username || !password || password === 'supabase_oauth_no_password') {
-      return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác', error: 'INVALID_CREDENTIALS' });
+    if (!username || username.length > 320 || !password || Buffer.byteLength(password) > 1024
+      || password === 'supabase_oauth_no_password') {
+      throw authRouteError(400, 'Thông tin đăng nhập không chính xác.', 'INVALID_CREDENTIALS');
     }
-    
-    // Attempt to find user by username OR email
-    const user = await User.findOne({ username, email: username });
-    
-    if (!user) {
-      return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
+    await AuthSecurity.limit(req, 'login', username.toLowerCase());
+    const user = await User.findOne({ username, email: normalizeEmail(username) });
+    const isMatch = await User.comparePassword(password, user?.password || DUMMY_PASSWORD_HASH);
+    if (!user || !isMatch) {
+      throw authRouteError(400, 'Thông tin đăng nhập không chính xác.', 'INVALID_CREDENTIALS');
     }
-
-    const isMatch = await User.comparePassword(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Thông tin đăng nhập không chính xác' });
-    }
-
     return res.json(await createLoginResponse(user));
   } catch (err) {
     return sendAuthRouteError(res, err, 'Lỗi đăng nhập');
   }
 });
 
-export default router;
+router.post('/change-password', auth, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body || {};
+    if (typeof currentPassword !== 'string' || !currentPassword || Buffer.byteLength(currentPassword) > 1024
+      || !isValidNewPassword(newPassword)) {
+      throw authRouteError(400, `Cần mật khẩu hiện tại. ${PASSWORD_POLICY_MESSAGE}`, 'INVALID_PASSWORD');
+    }
+    await AuthSecurity.limit(req, 'change-password', req.user.id);
+    if (currentPassword === 'supabase_oauth_no_password' || !req.user.password
+      || !await User.comparePassword(currentPassword, req.user.password)) {
+      throw authRouteError(400, 'Mật khẩu hiện tại không chính xác.', 'INVALID_CREDENTIALS');
+    }
+    const changed = await AuthSecurity.changePassword(req.user, await bcrypt.hash(newPassword, 12));
+    if (!changed) throw authRouteError(409, 'Thông tin tài khoản đã thay đổi. Vui lòng đăng nhập lại.', 'CREDENTIALS_CHANGED');
+    return res.json({ message: 'Đã đổi mật khẩu và thu hồi các phiên cũ. Vui lòng đăng nhập lại.' });
+  } catch (err) {
+    return sendAuthRouteError(res, err, 'Không thể đổi mật khẩu lúc này.');
+  }
+});
 
+router.post('/logout', auth, async (req, res) => {
+  try {
+    if (req.decodedCustomJwt) {
+      await AuthSecurity.logout(req.user.id, req.decodedCustomJwt.sessionId);
+    } else {
+      const { error } = await supabase.auth.admin.signOut(req.token, 'local');
+      if (error) throw error;
+    }
+    return res.json({ success: true });
+  } catch (err) {
+    return sendAuthRouteError(res, err, 'Không thể thu hồi phiên lúc này.');
+  }
+});
+
+export default router;

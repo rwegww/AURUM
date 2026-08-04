@@ -1,4 +1,5 @@
-﻿import React from "react";
+import { isValidNewPassword, PASSWORD_POLICY_MESSAGE } from '../../../../shared/passwordPolicy';
+import React from "react";
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import { Link, router } from "expo-router";
 import {
@@ -26,8 +27,8 @@ export default function RegisterScreen() {
       setAuthError("Vui lòng nhập đầy đủ thông tin");
       return;
     }
-    if (password.length < 6) {
-      setAuthError("Mật khẩu cần tối thiểu 6 ký tự");
+    if (!isValidNewPassword(password)) {
+      setAuthError(PASSWORD_POLICY_MESSAGE);
       return;
     }
 

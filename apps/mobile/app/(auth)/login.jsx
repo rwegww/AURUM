@@ -76,6 +76,9 @@ export default function LoginScreen() {
             disabled={submitting}
           />
 
+          <Link href="/forgot-password" asChild>
+            <GhostButton label="Quên mật khẩu?" icon="key-outline" disabled={submitting} />
+          </Link>
           <View style={styles.dividerContainer}>
             <View style={styles.dividerLine} />
             <Text style={styles.dividerText}>Hoặc</Text>

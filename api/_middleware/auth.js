@@ -1,7 +1,8 @@
-﻿import { supabase } from '../lib/supabase.js';
+import { supabase } from '../lib/supabase.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'node:crypto';
 import User from '../models/User.js';
+import { AuthSecurity } from '../lib/authSecurity.js';
 
 class AuthenticationError extends Error {
   constructor(code, message, status = 401) {
@@ -33,6 +34,7 @@ const verifyCustomToken = (token) => {
     if (
       decoded
       && typeof decoded === 'object'
+      && !decoded.magicLogin && !decoded.purpose
       && typeof decoded.id === 'string'
       && decoded.id.trim()
     ) {
@@ -87,12 +89,12 @@ const resolveSupabaseUser = async (token) => {
     const emailConfirmed = Boolean(sbUser.email_confirmed_at || sbUser.confirmed_at);
     const emailUser = emailConfirmed ? await User.findOne({ email: sbUser.email }) : null;
 
-    // Never attach an OAuth identity to a privileged account merely because its
-    // email text matches. Privileged linking must be an explicit authenticated action.
-    if (emailUser && emailUser.role !== 'student') {
+    // Registration email is not proof of ownership: automatic email merging
+    // would let a pre-registered password survive the victim's Google login.
+    if (emailUser) {
       throw new AuthenticationError(
-        'PRIVILEGED_ACCOUNT_LINK_REQUIRED',
-        'Tài khoản quản trị hoặc giáo viên cần liên kết đăng nhập Google từ hồ sơ hiện tại.',
+        emailUser.role !== 'student' ? 'PRIVILEGED_ACCOUNT_LINK_REQUIRED' : 'ACCOUNT_LINK_REQUIRED',
+        'Email này đã có tài khoản. Hãy đăng nhập bằng mật khẩu (hoặc đặt lại mật khẩu), rồi liên kết Google từ hồ sơ.',
         403
       );
     }
@@ -100,6 +102,9 @@ const resolveSupabaseUser = async (token) => {
   }
 
   if (!user) {
+    if (!sbUser.email_confirmed_at && !sbUser.confirmed_at) {
+      throw new AuthenticationError('EMAIL_NOT_VERIFIED', 'Vui lòng xác minh email trước khi đăng nhập.', 403);
+    }
     user = await User.create({
       id: sbUser.id,
       username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
@@ -110,6 +115,10 @@ const resolveSupabaseUser = async (token) => {
     });
   }
 
+  const sessionId = jwt.decode(token)?.session_id;
+  if (!await AuthSecurity.oauthSessionActive(sessionId, sbUser.id, user.id)) {
+    throw new AuthenticationError('INVALID_SESSION', 'Phiên đăng nhập đã bị thu hồi. Vui lòng đăng nhập lại.');
+  }
   return { user: normalizeAuthenticatedUser(user), decodedCustomJwt: null };
 };
 

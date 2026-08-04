@@ -43,6 +43,7 @@ const notConfigured = () => {
 // Non-production keeps imports alive, but DB calls fail explicitly instead of returning fake data.
 export const supabase = hasValidCredentials
   ? createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
       realtime: {
         transport: ws,
       },

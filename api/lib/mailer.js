@@ -1,4 +1,4 @@
-﻿import nodemailer from 'nodemailer';
+import nodemailer from 'nodemailer';
 
 const escapeHtml = (value) => String(value ?? '')
   .replaceAll('&', '&amp;')
@@ -45,19 +45,26 @@ const createTransporter = async () => {
 };
 
 // Generic sendMail function (used as default export for admin.js compatibility)
-const sendMail = async ({ to, subject, html }) => {
+const sendMail = async ({ to, subject, html, timeoutMs }) => {
   try {
     if (!to || typeof to !== 'string') {
       return { success: false, error: 'Missing recipient email address.' };
     }
 
     const transporter = await createTransporter();
-    const info = await transporter.sendMail({
+    let timeoutId;
+    const delivery = transporter.sendMail({
       from: process.env.SMTP_FROM || '"Hoc vien Hoa hoc Aurum" <no-reply@aurum-academy.org>',
       to,
       subject,
       html,
     });
+    const info = await (timeoutMs ? Promise.race([delivery, new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        transporter.close();
+        reject(new Error('Email delivery timed out'));
+      }, timeoutMs);
+    })]) : delivery).finally(() => clearTimeout(timeoutId));
     console.log('Email sent:', info.messageId);
     if (!process.env.SMTP_HOST) {
       const previewUrl = nodemailer.getTestMessageUrl(info);
@@ -76,6 +83,7 @@ export default sendMail;
 export const sendLoginOtpEmail = async (toEmail, username, otp, ttlMinutes = 10) => sendMail({
   to: toEmail,
   subject: 'Mã đăng nhập AURUM',
+  timeoutMs: 3000,
   html: `
     <div style="font-family: Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; color: #1f2937;">
       <h2 style="margin: 0 0 12px; color: #437d0c;">Học viện Hóa học Aurum</h2>
@@ -272,9 +280,8 @@ export const sendStreakReminderEmail = async (toEmail, username, streakCount, ho
   });
 };
 
-export const sendTeacherApprovalEmail = async (toEmail, username, token) => {
-  const loginBaseUrl = `${getPublicAppUrl()}/login`;
-  const loginUrl = token ? `${loginBaseUrl}?token=${encodeURIComponent(token)}` : loginBaseUrl;
+export const sendTeacherApprovalEmail = async (toEmail, username) => {
+  const loginUrl = `${getPublicAppUrl()}/login`;
   return sendMail({
     to: toEmail,
     subject: '✅ Tài khoản giáo viên đã được duyệt - Học viện Hóa học Aurum',
@@ -312,3 +319,17 @@ export const sendTeacherRejectionEmail = async (toEmail, username, reason) => {
   });
 };
 
+
+export const sendPasswordResetOtpEmail = async (toEmail, username, otp, ttlMinutes = 10) => sendMail({
+  to: toEmail,
+  subject: 'Mã đặt lại mật khẩu AURUM',
+  timeoutMs: 3000,
+  html: `<div style="font-family:Arial,sans-serif;max-width:560px;margin:auto;padding:28px;color:#1f2937">
+    <h2>Đặt lại mật khẩu AURUM</h2>
+    <p>Xin chào ${escapeHtml(username || 'bạn')},</p>
+    <p>Nhập mã dưới đây tại màn hình Quên mật khẩu để đặt mật khẩu mới:</p>
+    <p style="font-size:32px;font-weight:bold;letter-spacing:8px">${escapeHtml(otp)}</p>
+    <p>Mã có hiệu lực ${ttlMinutes} phút và chỉ dùng được một lần. Không chia sẻ mã với người khác.</p>
+    <p>Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này. Mật khẩu hiện tại vẫn được giữ nguyên.</p>
+  </div>`,
+});

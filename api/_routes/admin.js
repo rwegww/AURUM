@@ -1,5 +1,4 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { v2 as cloudinary } from 'cloudinary';
 import User from '../models/User.js';
@@ -611,7 +610,7 @@ const adminActions = {
       const { phan_hoi, requestPayload } = await parseTeacherRequest(id);
       const { email, hashedPassword } = requestPayload;
 
-      const user = await User.create({
+      await User.create({
         username: phan_hoi.username,
         email,
         password: hashedPassword,
@@ -627,20 +626,9 @@ const adminActions = {
         console.error('Đã tạo tài khoản giáo viên nhưng không thể cập nhật yêu cầu:', error);
       }
 
-      let magicToken = null;
-      try {
-        magicToken = jwt.sign(
-          { id: user.id, role: user.role, magicLogin: true },
-          process.env.JWT_SECRET,
-          { expiresIn: '7d' }
-        );
-      } catch (error) {
-        console.error('Không thể tạo liên kết đăng nhập nhanh cho giáo viên:', error);
-      }
-
       let emailResult;
       try {
-        emailResult = await sendTeacherApprovalEmail(email, phan_hoi.username, magicToken);
+        emailResult = await sendTeacherApprovalEmail(email, phan_hoi.username);
       } catch (error) {
         emailResult = { success: false, error: error.message };
       }

@@ -67,8 +67,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = React.useCallback(async () => {
+    if (token) await authApi.logout(token).catch(() => null);
     await endSession();
-  }, [endSession]);
+  }, [endSession, token]);
 
   const refreshProfile = React.useCallback(async (nextToken = token, nextSessionId = sessionId) => {
     if (!nextToken) return null;
@@ -95,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 
   const finishAuth = React.useCallback(async (result, authType = "custom") => {
     const nextToken = result.token;
-    const nextSessionId = createSessionId();
+    const nextSessionId = result.sessionId || createSessionId();
     const profile = await authApi.profile(nextToken, nextSessionId);
     await persistSession({ token: nextToken, sessionId: nextSessionId, user: profile, authType });
     if (!mountedRef.current) return profile;

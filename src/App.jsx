@@ -61,6 +61,7 @@ const ChemCalculator = lazyWithRetry(() => import('@/pages/student/ChemCalculato
 
 // Lazy Loaded Auth Pages
 const Login = lazyWithRetry(() => import('@/pages/auth/Login'));
+const ForgotPassword = lazyWithRetry(() => import('@/pages/auth/ForgotPassword'));
 const Register = lazyWithRetry(() => import('@/pages/auth/Register'));
 const AuthCallback = lazyWithRetry(() => import('@/pages/auth/AuthCallback'));
 
@@ -103,7 +104,7 @@ function AppContent() {
     }
   }, [location]);
 
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
+  const isAuthPage = ['/forgot-password', '/reset-password'].includes(location.pathname) || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
   const isImmersivePage = location.pathname.includes('/journey/') && (
     location.pathname.endsWith('/intro') || 
     location.pathname.endsWith('/challenge') || 
@@ -130,6 +131,8 @@ function AppContent() {
           
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ForgotPassword />} />
           <Route path="/register" element={<Register />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/auth" element={<Navigate to="/login" replace />} />

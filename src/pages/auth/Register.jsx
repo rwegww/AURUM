@@ -1,4 +1,5 @@
-﻿import React, { useState } from 'react';
+import { isValidNewPassword, PASSWORD_POLICY_MESSAGE } from '../../../shared/passwordPolicy.js';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -46,8 +47,8 @@ const Register = () => {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Mật khẩu phải có ít nhất 6 ký tự');
+    if (!isValidNewPassword(password)) {
+      setError(PASSWORD_POLICY_MESSAGE);
       setLoading(false);
       return;
     }

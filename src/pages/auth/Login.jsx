@@ -56,6 +56,8 @@ const Login = () => {
     }
 
     if (!magicToken) return undefined;
+    // Remove bearer credentials before rendering external resources or navigating.
+    window.history.replaceState({}, document.title, window.location.pathname);
 
     let active = true;
     const timeoutId = window.setTimeout(() => {
@@ -157,6 +159,9 @@ const Login = () => {
 
 
 
+        {new URLSearchParams(location.search).get('reset') === 'success' && (
+          <p role="status" className="mb-4 rounded-xl bg-green-50 p-3 text-sm text-green-800">Đã cập nhật mật khẩu và thu hồi các phiên cũ. Hãy đăng nhập bằng mật khẩu mới.</p>
+        )}
         {displayError && (
           <motion.div 
             initial={{ opacity: 0, height: 0 }}
@@ -245,7 +250,7 @@ const Login = () => {
                   </div>
                   <span className="text-[13px] md:text-[10px] font-medium md:font-black text-slate-600 md:text-viet-text-light md:uppercase md:tracking-widest">Ghi nhớ đăng nhập</span>
               </label>
-              <Link to="/contact" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">Cần trợ giúp?</Link>
+              <Link to="/forgot-password" className="text-[13px] md:text-[10px] font-bold md:font-black text-viet-green hover:underline md:uppercase md:tracking-widest">Quên mật khẩu?</Link>
            </div>
 
            <button 

@@ -468,7 +468,7 @@ export const User = {
     const userPayload = {
       id: userId,
       username: userData.username,
-      email: userData.email,
+      email: typeof userData.email === 'string' ? userData.email.trim().toLowerCase() : null,
       password_hash: hashedPassword,
       role: userData.role || 'student',
       avatar_seed: userData.avatarSeed || userData.username,

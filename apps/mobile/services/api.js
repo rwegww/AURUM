@@ -94,6 +94,9 @@ export const apiRequest = async (path, options = {}) => {
 };
 
 export const authApi = {
+  forgotPassword: (email) => apiRequest('/api/auth/forgot-password', { method: 'POST', auth: false, body: { email } }),
+  resetPassword: (email, otp, newPassword) => apiRequest('/api/auth/reset-password', { method: 'POST', auth: false, body: { email, otp, newPassword } }),
+  logout: (token) => apiRequest('/api/auth/logout', { method: 'POST', token }),
   login: (username, password) =>
     apiRequest("/api/auth/login", {
       method: "POST",

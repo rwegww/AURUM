@@ -1,5 +1,5 @@
 -- AURUM Supabase schema - latest consolidated version
--- Generated on 2026-06-04.
+-- Consolidated and synchronized on 2026-09-06.
 --
 -- This file is the single source of truth for the current public schema.
 -- It creates the Vietnamese snake_case business schema used by the runtime.
@@ -761,6 +761,24 @@ ALTER TABLE IF EXISTS public.khoi
 
 ALTER TABLE IF EXISTS public.phan_ung
   DROP COLUMN IF EXISTS lesson_id;
+
+CREATE OR REPLACE FUNCTION public.set_bai_hoc_updated_at()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+BEGIN
+  NEW.updated_at := pg_catalog.now();
+  RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.set_bai_hoc_updated_at() FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.set_bai_hoc_updated_at() TO service_role;
+DROP TRIGGER IF EXISTS set_bai_hoc_updated_at ON public.bai_hoc;
+CREATE TRIGGER set_bai_hoc_updated_at
+  BEFORE UPDATE ON public.bai_hoc
+  FOR EACH ROW EXECUTE FUNCTION public.set_bai_hoc_updated_at();
 
 -- ---------------------------------------------------------------------------
 -- Runtime RPC functions.
@@ -1817,6 +1835,12 @@ CREATE INDEX IF NOT EXISTS idx_ghi_chu_bai_hoc_id ON public.ghi_chu (bai_hoc_id)
 CREATE INDEX IF NOT EXISTS idx_ghi_chu_nguoi_dung_bai_hoc ON public.ghi_chu (nguoi_dung_id, bai_hoc_id);
 CREATE INDEX IF NOT EXISTS idx_hoat_dong_nguoi_dung_created ON public.hoat_dong_nguoi_dung (nguoi_dung_id, created_at DESC);
 
+CREATE INDEX IF NOT EXISTS idx_phong_dau_nguoi_thang_id ON public.phong_dau (nguoi_thang_id);
+CREATE INDEX IF NOT EXISTS idx_tra_loi_vong_cau_hoi_id ON public.tra_loi_vong (cau_hoi_id);
+CREATE INDEX IF NOT EXISTS idx_tra_loi_vong_nguoi_dung_id ON public.tra_loi_vong (nguoi_dung_id);
+CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_nguoi_tra_loi_id ON public.phan_hoi_hoc_lieu (nguoi_tra_loi_id);
+DROP INDEX IF EXISTS public.idx_nhiem_vu_nguoi_dung_user;
+
 -- ---------------------------------------------------------------------------
 -- Row level security and policies.
 -- ---------------------------------------------------------------------------
@@ -1858,9 +1882,6 @@ CREATE POLICY "Public read lab chemicals" ON public.hoa_chat FOR SELECT USING (t
 DROP POLICY IF EXISTS "Public read lab reactions" ON public.phan_ung;
 CREATE POLICY "Public read lab reactions" ON public.phan_ung FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Public read arena questions" ON public.cau_hoi_dau;
-CREATE POLICY "Public read arena questions" ON public.cau_hoi_dau FOR SELECT USING (true);
-
 DROP POLICY IF EXISTS "Public read materials" ON public.hoc_lieu;
 CREATE POLICY "Public read materials" ON public.hoc_lieu FOR SELECT USING (true);
 
@@ -1891,17 +1912,6 @@ CREATE POLICY "Users can read own progress"
   ON public.tien_do_nguoi_dung FOR SELECT
   USING (nguoi_dung_id = (select auth.uid())::text);
 
-DROP POLICY IF EXISTS "Users can insert own progress" ON public.tien_do_nguoi_dung;
-CREATE POLICY "Users can insert own progress"
-  ON public.tien_do_nguoi_dung FOR INSERT
-  WITH CHECK (nguoi_dung_id = (select auth.uid())::text);
-
-DROP POLICY IF EXISTS "Users can update own progress" ON public.tien_do_nguoi_dung;
-CREATE POLICY "Users can update own progress"
-  ON public.tien_do_nguoi_dung FOR UPDATE
-  USING (nguoi_dung_id = (select auth.uid())::text)
-  WITH CHECK (nguoi_dung_id = (select auth.uid())::text);
-
 DROP POLICY IF EXISTS "Users can read own notes" ON public.ghi_chu;
 CREATE POLICY "Users can read own notes"
   ON public.ghi_chu FOR SELECT
@@ -1928,36 +1938,6 @@ CREATE POLICY "Users can read own missions"
   ON public.nhiem_vu_nguoi_dung FOR SELECT
   USING (nguoi_dung_id = (select auth.uid())::text);
 
-DROP POLICY IF EXISTS "Public read waiting arena rooms" ON public.phong_dau;
-CREATE POLICY "Public read waiting arena rooms"
-  ON public.phong_dau FOR SELECT
-  USING (status = 'waiting' AND la_luyen_tap = false);
-
-DROP POLICY IF EXISTS "Arena participants read rooms" ON public.phong_dau;
-CREATE POLICY "Arena participants read rooms"
-  ON public.phong_dau FOR SELECT
-  TO authenticated
-  USING (
-    chu_phong_id = (select auth.uid())::text
-    OR EXISTS (
-      SELECT 1
-      FROM public.nguoi_choi p
-      WHERE p.phong_dau_id = phong_dau.id
-        AND p.nguoi_dung_id = (select auth.uid())::text
-    )
-  );
-
-DROP POLICY IF EXISTS "Authenticated users create own arena rooms" ON public.phong_dau;
-CREATE POLICY "Authenticated users create own arena rooms"
-  ON public.phong_dau FOR INSERT
-  WITH CHECK (chu_phong_id = (select auth.uid())::text);
-
-DROP POLICY IF EXISTS "Arena hosts update own rooms" ON public.phong_dau;
-CREATE POLICY "Arena hosts update own rooms"
-  ON public.phong_dau FOR UPDATE
-  USING (chu_phong_id = (select auth.uid())::text)
-  WITH CHECK (chu_phong_id = (select auth.uid())::text);
-
 DROP POLICY IF EXISTS "Authenticated users read arena room players" ON public.nguoi_choi;
 CREATE POLICY "Authenticated users read arena room players"
   ON public.nguoi_choi FOR SELECT
@@ -1974,11 +1954,6 @@ DROP POLICY IF EXISTS "Users can view own match history" ON public.lich_su_dau;
 CREATE POLICY "Users can view own match history"
   ON public.lich_su_dau FOR SELECT
   USING (nguoi_dung_id = (select auth.uid())::text);
-
-DROP POLICY IF EXISTS "Users can insert own match history" ON public.lich_su_dau;
-CREATE POLICY "Users can insert own match history"
-  ON public.lich_su_dau FOR INSERT
-  WITH CHECK (nguoi_dung_id = (select auth.uid())::text);
 
 DROP POLICY IF EXISTS "Class members can read joined classes" ON public.lop;
 CREATE POLICY "Class members can read joined classes"
@@ -2105,41 +2080,10 @@ CREATE POLICY "Teachers can insert schedules for owned classes"
   ON public.lich_lop FOR INSERT
   WITH CHECK (EXISTS (SELECT 1 FROM public.lop c WHERE c.id = lich_lop.lop_id AND c.giao_vien_id = (select auth.uid())::text));
 
-DROP POLICY IF EXISTS "Authenticated users can insert anonymous or own feedback" ON public.phan_hoi;
-CREATE POLICY "Authenticated users can insert anonymous or own feedback"
-  ON public.phan_hoi FOR INSERT
-  WITH CHECK (nguoi_dung_id IS NULL OR nguoi_dung_id = (select auth.uid())::text);
-
 DROP POLICY IF EXISTS "Admins can read approval requests" ON public.yeu_cau_duyet_admin;
 CREATE POLICY "Admins can read approval requests"
   ON public.yeu_cau_duyet_admin FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM public.nguoi_dung u
-      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
-    )
-  );
-
-DROP POLICY IF EXISTS "Admins can create approval requests" ON public.yeu_cau_duyet_admin;
-CREATE POLICY "Admins can create approval requests"
-  ON public.yeu_cau_duyet_admin FOR INSERT
-  WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM public.nguoi_dung u
-      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
-    )
-  );
-
-DROP POLICY IF EXISTS "Admins can update approval requests" ON public.yeu_cau_duyet_admin;
-CREATE POLICY "Admins can update approval requests"
-  ON public.yeu_cau_duyet_admin FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.nguoi_dung u
-      WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
-    )
-  )
-  WITH CHECK (
     EXISTS (
       SELECT 1 FROM public.nguoi_dung u
       WHERE u.id = (select auth.uid())::text AND u.role = 'admin'
@@ -2220,6 +2164,63 @@ GRANT EXECUTE ON FUNCTION public.start_arena_room(text, text, timestamp with tim
 GRANT EXECUTE ON FUNCTION public.increment_active_minutes(text) TO service_role;
 GRANT EXECUTE ON FUNCTION public.sync_user_streak(text) TO service_role;
 
+-- Các trạng thái nghiệp vụ chỉ được ghi qua API Express/service_role.
+REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON TABLE
+  public.tien_do_nguoi_dung,
+  public.phan_hoi,
+  public.yeu_cau_duyet_admin,
+  public.phong_dau,
+  public.nguoi_choi,
+  public.tra_loi_vong,
+  public.lich_su_dau
+FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE
+  public.tien_do_nguoi_dung,
+  public.phan_hoi,
+  public.yeu_cau_duyet_admin,
+  public.phong_dau,
+  public.nguoi_choi,
+  public.tra_loi_vong,
+  public.lich_su_dau
+TO service_role;
+
+-- Đáp án đấu trường chỉ được API đọc và lọc trước khi trả về client.
+REVOKE ALL ON TABLE public.cau_hoi_dau FROM PUBLIC, anon, authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.cau_hoi_dau TO service_role;
+
+-- Không cấp quyền quản trị bảng cho các vai trò trình duyệt.
+REVOKE TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public FROM PUBLIC, anon, authenticated;
+DROP POLICY IF EXISTS "Public read arena questions" ON public."cau_hoi_dau";
+DROP POLICY IF EXISTS "Users can insert own match history" ON public."lich_su_dau";
+DROP POLICY IF EXISTS "Users can insert own progress" ON public."tien_do_nguoi_dung";
+DROP POLICY IF EXISTS "Users can update own progress" ON public."tien_do_nguoi_dung";
+DROP POLICY IF EXISTS "Arena hosts update own rooms" ON public."phong_dau";
+DROP POLICY IF EXISTS "Authenticated users create own arena rooms" ON public."phong_dau";
+DROP POLICY IF EXISTS "Admins can create approval requests" ON public."yeu_cau_duyet_admin";
+DROP POLICY IF EXISTS "Admins can update approval requests" ON public."yeu_cau_duyet_admin";
+DROP POLICY IF EXISTS "Authenticated users can insert anonymous or own feedback" ON public."phan_hoi";
+
+DROP POLICY IF EXISTS "Public read waiting arena rooms" ON public.phong_dau;
+CREATE POLICY "Public read waiting arena rooms"
+  ON public.phong_dau FOR SELECT TO anon
+  USING (status = 'waiting' AND la_luyen_tap = false);
+
+DROP POLICY IF EXISTS "Arena participants read rooms" ON public.phong_dau;
+CREATE POLICY "Arena participants read rooms"
+  ON public.phong_dau FOR SELECT TO authenticated
+  USING (
+    (status = 'waiting' AND la_luyen_tap = false)
+    OR chu_phong_id = (select auth.uid())::text
+    OR EXISTS (
+      SELECT 1 FROM public.nguoi_choi p
+      WHERE p.phong_dau_id = phong_dau.id
+        AND p.nguoi_dung_id = (select auth.uid())::text
+    )
+  );
+
+-- Webhook cũ đã được thay bằng danh sách thông báo trong API giáo viên.
+DROP TRIGGER IF EXISTS aurumhook ON public.bai_nop;
+
 -- ---------------------------------------------------------------------------
 -- Realtime arena tables.
 -- ---------------------------------------------------------------------------
@@ -2291,3 +2292,216 @@ WHERE NOT EXISTS (
 NOTIFY pgrst, 'reload schema';
 
 COMMIT;
+
+-- Bảo mật đăng nhập, khôi phục mật khẩu và thu hồi phiên.
+CREATE SCHEMA IF NOT EXISTS aurum_auth;
+REVOKE ALL ON SCHEMA aurum_auth FROM PUBLIC, anon, authenticated;
+
+CREATE TABLE IF NOT EXISTS aurum_auth.rate_limits (
+  key text PRIMARY KEY CHECK (key ~ '^[0-9a-f]{64}$'),
+  hits integer NOT NULL CHECK (hits > 0),
+  expires_at timestamptz NOT NULL
+);
+CREATE INDEX IF NOT EXISTS auth_rate_limits_expiry ON aurum_auth.rate_limits (expires_at);
+
+CREATE TABLE IF NOT EXISTS aurum_auth.challenges (
+  email text NOT NULL,
+  purpose text NOT NULL CHECK (purpose IN ('login', 'reset')),
+  id uuid NOT NULL UNIQUE,
+  nguoi_dung_id text REFERENCES public.nguoi_dung(id) ON DELETE CASCADE,
+  token_hash text NOT NULL CHECK (token_hash ~ '^[0-9a-f]{64}$'),
+  attempts integer NOT NULL DEFAULT 0 CHECK (attempts BETWEEN 0 AND 5),
+  sent_at timestamptz NOT NULL DEFAULT now(),
+  expires_at timestamptz NOT NULL,
+  consumed_at timestamptz,
+  PRIMARY KEY (email, purpose)
+);
+CREATE INDEX IF NOT EXISTS auth_challenges_user ON aurum_auth.challenges (nguoi_dung_id);
+CREATE INDEX IF NOT EXISTS auth_challenges_expiry ON aurum_auth.challenges (expires_at);
+ALTER TABLE aurum_auth.rate_limits ENABLE ROW LEVEL SECURITY;
+ALTER TABLE aurum_auth.challenges ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON ALL TABLES IN SCHEMA aurum_auth FROM PUBLIC, anon, authenticated;
+
+ALTER TABLE public.nguoi_dung ADD COLUMN IF NOT EXISTS auth_invalid_before timestamptz NOT NULL DEFAULT 'epoch';
+COMMENT ON COLUMN public.nguoi_dung.auth_invalid_before IS 'Các phiên OAuth tạo trước mốc này không được API AURUM chấp nhận; đổi mật khẩu/email sẽ cập nhật mốc.';
+CREATE UNIQUE INDEX IF NOT EXISTS nguoi_dung_email_normalized_unique ON public.nguoi_dung (lower(btrim(email))) WHERE email IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS nguoi_dung_google_identity_unique ON public.nguoi_dung ((tai_khoan_lien_ket->>'google')) WHERE tai_khoan_lien_ket->>'google' IS NOT NULL;
+
+-- Băm mật khẩu và trạng thái thu hồi phiên không được trả qua Data API cho client.
+REVOKE SELECT, INSERT, DELETE ON public.nguoi_dung FROM PUBLIC, anon, authenticated;
+GRANT SELECT (id, username, email, role, avatar_seed, diem_kinh_nghiem, cap_do,
+  thong_ke_dau, created_at, updated_at, hoat_dong_cuoi_luc, phut_hoat_dong,
+  bi_khoa, so_ngay_chuoi, chuoi_cuoi_luc, phut_online_hom_nay,
+  da_hoan_thanh_bai_hom_nay, ke_hoach_hoc, tai_khoan_lien_ket)
+ON public.nguoi_dung TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.nguoi_dung TO service_role;
+
+CREATE OR REPLACE FUNCTION public.consume_auth_rate_limit(p_key text, p_limit integer, p_window_seconds integer)
+RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
+DECLARE r aurum_auth.rate_limits; t timestamptz := clock_timestamp();
+BEGIN
+  IF p_key IS NULL OR p_key !~ '^[0-9a-f]{64}$' OR p_limit IS NULL OR p_limit NOT BETWEEN 1 AND 1000
+    OR p_window_seconds IS NULL OR p_window_seconds NOT BETWEEN 1 AND 86400 THEN
+    RAISE EXCEPTION 'Invalid rate limit parameters';
+  END IF;
+  -- Cleanup runs in its own RPC transaction, before any account/challenge lock.
+  DELETE FROM aurum_auth.challenges WHERE expires_at < t - interval '1 day';
+  DELETE FROM aurum_auth.rate_limits WHERE expires_at < t - interval '1 hour';
+  INSERT INTO aurum_auth.rate_limits AS old (key, hits, expires_at)
+  VALUES (p_key, 1, t + make_interval(secs => p_window_seconds))
+  ON CONFLICT (key) DO UPDATE SET
+    hits = CASE WHEN old.expires_at <= t THEN 1 ELSE least(old.hits + 1, p_limit + 1) END,
+    expires_at = CASE WHEN old.expires_at <= t THEN t + make_interval(secs => p_window_seconds) ELSE old.expires_at END
+  RETURNING * INTO r;
+  RETURN CASE WHEN r.hits <= p_limit THEN 0 ELSE greatest(1, ceil(extract(epoch FROM r.expires_at - t))::integer) END;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.issue_auth_challenge(p_email text, p_purpose text, p_token_hash text, p_challenge_id uuid)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
+DECLARE u public.nguoi_dung; issued_id uuid; t timestamptz := clock_timestamp();
+BEGIN
+  IF p_email IS NULL OR length(p_email) NOT BETWEEN 3 AND 320 OR p_email <> lower(btrim(p_email))
+    OR p_purpose IS NULL OR p_purpose NOT IN ('login','reset')
+    OR p_token_hash IS NULL OR p_token_hash !~ '^[0-9a-f]{64}$' OR p_challenge_id IS NULL THEN
+    RAISE EXCEPTION 'Invalid challenge parameters';
+  END IF;
+  SELECT * INTO u FROM public.nguoi_dung WHERE lower(btrim(email)) = p_email FOR UPDATE;
+  IF u.bi_khoa THEN u.id := NULL; END IF;
+  t := clock_timestamp();
+  INSERT INTO aurum_auth.challenges AS old (email, purpose, id, nguoi_dung_id, token_hash, sent_at, expires_at)
+  VALUES (p_email, p_purpose, p_challenge_id, u.id, p_token_hash, t, t + interval '10 minutes')
+  ON CONFLICT (email, purpose) DO UPDATE SET
+    id = excluded.id, nguoi_dung_id = excluded.nguoi_dung_id, token_hash = excluded.token_hash,
+    attempts = 0, sent_at = excluded.sent_at, expires_at = excluded.expires_at, consumed_at = NULL
+  WHERE old.sent_at <= t - interval '60 seconds'
+  RETURNING id INTO issued_id;
+  RETURN jsonb_build_object('issued', issued_id IS NOT NULL, 'user_id', u.id, 'username', u.username);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.complete_auth_challenge(p_email text, p_purpose text, p_token_hash text, p_password_hash text, p_session_id text)
+RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
+DECLARE c aurum_auth.challenges; u public.nguoi_dung; candidate text; t timestamptz := clock_timestamp();
+BEGIN
+  IF p_purpose IS NULL OR p_purpose NOT IN ('login','reset') OR p_token_hash IS NULL OR p_token_hash !~ '^[0-9a-f]{64}$' THEN
+    RETURN NULL;
+  END IF;
+  IF (p_purpose = 'reset' AND (p_password_hash IS NULL OR p_password_hash !~ '^\$2[aby]\$[0-9]{2}\$[./A-Za-z0-9]{53}$'))
+    OR (p_purpose = 'login' AND (p_password_hash IS NOT NULL OR p_session_id IS NULL OR length(p_session_id) NOT BETWEEN 16 AND 128)) THEN
+    RETURN NULL;
+  END IF;
+  SELECT nguoi_dung_id INTO candidate FROM aurum_auth.challenges WHERE email = p_email AND purpose = p_purpose;
+  -- Account first, then challenge: same lock order as issue and password changes.
+  SELECT * INTO u FROM public.nguoi_dung WHERE id = candidate FOR UPDATE;
+  SELECT * INTO c FROM aurum_auth.challenges WHERE email = p_email AND purpose = p_purpose FOR UPDATE;
+  t := clock_timestamp();
+  IF c.id IS NULL OR c.expires_at <= t OR c.consumed_at IS NOT NULL OR c.attempts >= 5 THEN RETURN NULL; END IF;
+  UPDATE aurum_auth.challenges SET attempts = attempts + 1 WHERE id = c.id;
+  IF c.token_hash <> p_token_hash OR u.id IS NULL OR u.bi_khoa OR c.nguoi_dung_id IS DISTINCT FROM u.id
+    OR lower(btrim(u.email)) IS DISTINCT FROM p_email THEN RETURN NULL; END IF;
+  UPDATE aurum_auth.challenges SET consumed_at = t WHERE id = c.id;
+  IF p_purpose = 'reset' THEN
+    UPDATE public.nguoi_dung SET password_hash = p_password_hash, updated_at = t WHERE id = u.id;
+    RETURN jsonb_build_object('user_id', u.id);
+  END IF;
+  UPDATE public.nguoi_dung SET current_session_id = p_session_id WHERE id = u.id;
+  RETURN jsonb_build_object('user_id', u.id, 'session_id', p_session_id);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION public.create_auth_session(p_user_id text, p_expected_password_hash text, p_session_id text)
+RETURNS boolean LANGUAGE sql SECURITY DEFINER SET search_path = '' AS $$
+  WITH changed AS (
+    UPDATE public.nguoi_dung SET current_session_id = p_session_id
+    WHERE id = p_user_id AND password_hash = p_expected_password_hash AND NOT bi_khoa
+      AND p_session_id IS NOT NULL AND length(p_session_id) BETWEEN 16 AND 128
+    RETURNING id
+  ) SELECT EXISTS (SELECT 1 FROM changed);
+$$;
+
+CREATE OR REPLACE FUNCTION aurum_auth.invalidate_credentials()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
+BEGIN
+  IF NEW.password_hash IS DISTINCT FROM OLD.password_hash OR NEW.email IS DISTINCT FROM OLD.email THEN
+    NEW.current_session_id := NULL;
+    NEW.auth_invalid_before := clock_timestamp();
+    DELETE FROM aurum_auth.challenges WHERE nguoi_dung_id = OLD.id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS invalidate_credentials ON public.nguoi_dung;
+CREATE TRIGGER invalidate_credentials BEFORE UPDATE OF password_hash, email ON public.nguoi_dung
+  FOR EACH ROW EXECUTE FUNCTION aurum_auth.invalidate_credentials();
+
+CREATE OR REPLACE FUNCTION public.is_oauth_session_active(p_session_id uuid, p_auth_user_id uuid, p_user_id text)
+RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = '' AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM auth.sessions s JOIN public.nguoi_dung u ON u.id = p_user_id
+    WHERE s.id = p_session_id AND s.user_id = p_auth_user_id AND NOT u.bi_khoa
+      AND s.created_at > u.auth_invalid_before
+      AND (s.not_after IS NULL OR s.not_after > now())
+  );
+$$;
+
+REVOKE ALL ON FUNCTION public.consume_auth_rate_limit(text,integer,integer),
+  public.issue_auth_challenge(text,text,text,uuid), public.complete_auth_challenge(text,text,text,text,text),
+  public.create_auth_session(text,text,text), public.is_oauth_session_active(uuid,uuid,text)
+FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.consume_auth_rate_limit(text,integer,integer),
+  public.issue_auth_challenge(text,text,text,uuid), public.complete_auth_challenge(text,text,text,text,text),
+  public.create_auth_session(text,text,text), public.is_oauth_session_active(uuid,uuid,text)
+TO service_role;
+REVOKE ALL ON ALL FUNCTIONS IN SCHEMA aurum_auth FROM PUBLIC, anon, authenticated;
+NOTIFY pgrst, 'reload schema';
+
+-- Kiểm tra phiên trong Data API và Realtime.
+-- Called by RLS for the current signed identity only, never an arbitrary user id.
+CREATE OR REPLACE FUNCTION aurum_auth.auth_session_is_current()
+RETURNS boolean LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = '' AS $$
+DECLARE
+  claims jsonb := auth.jwt();
+  subject text := auth.uid()::text;
+  u public.nguoi_dung;
+  session_id text := claims->>'session_id';
+  auth_user_id text := coalesce(claims->>'aurum_auth_user_id', subject);
+BEGIN
+  IF subject IS NULL THEN RETURN false; END IF;
+  SELECT * INTO u FROM public.nguoi_dung
+    WHERE id = subject OR tai_khoan_lien_ket->>'google' = subject
+    ORDER BY (tai_khoan_lien_ket->>'google' = subject) DESC NULLS LAST LIMIT 1;
+  IF u.id IS NULL OR u.bi_khoa THEN RETURN false; END IF;
+  IF session_id IS NOT NULL THEN
+    IF session_id !~ '^[0-9a-fA-F-]{36}$' OR auth_user_id !~ '^[0-9a-fA-F-]{36}$' THEN RETURN false; END IF;
+    RETURN EXISTS (SELECT 1 FROM auth.sessions s
+      WHERE s.id = session_id::uuid AND s.user_id = auth_user_id::uuid
+        AND s.created_at > u.auth_invalid_before AND (s.not_after IS NULL OR s.not_after > now()));
+  END IF;
+  IF claims ? 'app_session_id' THEN
+    RETURN u.current_session_id IS NOT NULL AND u.current_session_id = claims->>'app_session_id';
+  END IF;
+  -- Compatibility for existing 15-minute Arena tokens until they expire.
+  -- Password resets still reject them even after the user logs in again.
+  IF claims->>'iat' IS NULL OR claims->>'exp' IS NULL OR claims->>'iat' !~ '^[0-9]{1,12}$' OR claims->>'exp' !~ '^[0-9]{1,12}$' THEN RETURN false; END IF;
+  RETURN to_timestamp((claims->>'iat')::double precision) > u.auth_invalid_before
+    AND (claims->>'exp')::bigint - (claims->>'iat')::bigint BETWEEN 1 AND 900
+    AND to_timestamp((claims->>'exp')::double precision) > now();
+EXCEPTION WHEN invalid_text_representation OR numeric_value_out_of_range THEN
+  RETURN false;
+END;
+$$;
+REVOKE ALL ON FUNCTION aurum_auth.auth_session_is_current() FROM PUBLIC, anon;
+GRANT USAGE ON SCHEMA aurum_auth TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION aurum_auth.auth_session_is_current() TO authenticated, service_role;
+
+DO $$
+DECLARE item record;
+BEGIN
+  FOR item IN SELECT tablename FROM pg_tables WHERE schemaname = 'public' LOOP
+    EXECUTE format('DROP POLICY IF EXISTS "Require current authentication session" ON public.%I', item.tablename);
+    EXECUTE format('CREATE POLICY "Require current authentication session" ON public.%I AS RESTRICTIVE FOR ALL TO authenticated USING ((SELECT aurum_auth.auth_session_is_current())) WITH CHECK ((SELECT aurum_auth.auth_session_is_current()))', item.tablename);
+  END LOOP;
+END;
+$$;
+NOTIFY pgrst, 'reload schema';

@@ -1,5 +1,6 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { isValidNewPassword, PASSWORD_POLICY_MESSAGE } from '../../../shared/passwordPolicy.js';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
@@ -62,7 +63,8 @@ const STUDY_PLAN_DEFAULTS = {
 
 const Settings = () => {
   const { t } = useTranslation();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, changePassword, logout, linkAccount } = useAuth();
+  const [googleNotice, setGoogleNotice] = useState('');
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSavingAvatar, setIsSavingAvatar] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
@@ -70,6 +72,7 @@ const Settings = () => {
   
   // Credentials edit state
   const [username, setUsername] = useState(user?.username || '');
+  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [usernameError, setUsernameError] = useState('');
@@ -86,6 +89,25 @@ const Settings = () => {
       }
     }
   }, [user]);
+
+  useEffect(() => {
+    if (!user?.id || new URLSearchParams(window.location.search).get('linking_google') !== 'true') return undefined;
+    let active = true;
+    const timer = setTimeout(async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error || !data.session?.user) throw new Error('Không tìm thấy phiên Google để liên kết.');
+        const result = await linkAccount('google', data.session.user.id, data.session.user.email);
+        if (!result.success) throw new Error(result.message);
+        if (active) setGoogleNotice('Đã liên kết Google thành công.');
+      } catch (error) {
+        if (active) setGoogleNotice(error.message);
+      } finally {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }, 0);
+    return () => { active = false; clearTimeout(timer); };
+  }, [linkAccount, user?.id]);
 
   const handleRandomizeAvatar = () => {
     const newSeed = Math.random().toString(36).substring(7);
@@ -125,8 +147,8 @@ const Settings = () => {
 
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
-    if (!newPassword) {
-      setPasswordError("Vui lòng nhập mật khẩu mới");
+    if (!isValidNewPassword(newPassword)) {
+      setPasswordError(PASSWORD_POLICY_MESSAGE);
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -136,9 +158,10 @@ const Settings = () => {
     setLoadingPassword(true);
     setPasswordError('');
     try {
-      const res = await updateUser({ password: newPassword });
+      const res = await changePassword(currentPassword, newPassword);
       if (res.success) {
-        alert("Đã cập nhật mật khẩu thành công!");
+        await logout({ redirectTo: '/login?reset=success' });
+        setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
       } else {
@@ -176,7 +199,7 @@ const Settings = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/profile?linking_google=true`,
+          redirectTo: `${window.location.origin}/settings?linking_google=true`,
           queryParams: {
             prompt: 'select_account'
           }
@@ -203,6 +226,7 @@ const Settings = () => {
     <div className="min-h-screen bg-viet-bg pt-[150px] pb-24">
       <div className="max-w-[1000px] mx-auto px-6">
         
+        {googleNotice && <p role="status" className="mb-4 rounded-xl bg-green-50 p-4 text-sm text-green-900">{googleNotice}</p>}
         {/* Back navigation & Title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <div>
@@ -327,8 +351,22 @@ const Settings = () => {
                     <label className="text-[11px] font-black text-viet-text uppercase tracking-widest pl-1 flex items-center gap-1.5">
                       <Lock className="w-3.5 h-3.5 text-slate-400" /> Đổi mật khẩu
                     </label>
-                    <input 
+                    <input
                       type="password"
+                      autoComplete="current-password"
+                      aria-label="Mật khẩu hiện tại"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="w-full h-12 bg-slate-50 border border-viet-border rounded-xl px-4 text-sm"
+                      placeholder="Mật khẩu hiện tại"
+                      required
+                    />
+                    <Link to="/forgot-password" className="text-sm text-viet-green underline">Quên mật khẩu hoặc chưa có mật khẩu?</Link>
+                    <p className="text-xs text-slate-500">{PASSWORD_POLICY_MESSAGE}</p>
+                    <input
+                      type="password"
+                      autoComplete="new-password"
+                      aria-label="Mật khẩu mới"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       className="w-full h-12 bg-slate-50 border border-viet-border rounded-xl px-4 font-bold text-sm focus:border-viet-green focus:ring-2 focus:ring-viet-green/10 outline-none transition-all"

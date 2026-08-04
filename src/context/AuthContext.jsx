@@ -1,4 +1,4 @@
-﻿/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
@@ -43,13 +43,14 @@ export const AuthProvider = ({ children }) => {
   const mountedRef = useRef(true);
 
   // 2. Define non-dependent functions first
-  const logout = useCallback(async () => {
+  const logout = useCallback(async ({ redirectTo = '/' } = {}) => {
     try {
-      const authType = localStorage.getItem('authType');
-      if (authType === 'supabase') {
-        const supabase = await getSupabase();
-        await supabase.auth.signOut();
+      const token = localStorage.getItem('token');
+      if (token) {
+        await fetch('/api/auth/logout', { method: 'POST', headers: { Authorization: `Bearer ${token}` } }).catch(() => null);
       }
+      const supabase = await getSupabase();
+      await supabase.auth.signOut({ scope: 'local' });
     } catch (err) {
       console.error('Error during logout:', err);
     } finally {
@@ -62,8 +63,8 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
       }
       
-      if (window.location.pathname !== '/') {
-        window.location.href = '/';
+      if (window.location.pathname !== redirectTo) {
+        window.location.href = redirectTo;
       } else {
         window.location.reload();
       }
@@ -90,8 +91,7 @@ export const AuthProvider = ({ children }) => {
 
     try {
       const sessionId = localStorage.getItem('sessionId');
-      // Always claim session if force=true (which happens on login/init)
-      const url = force ? `/api/user/profile?claim=true` : `/api/user/profile`;
+      const url = '/api/user/profile';
       const res = await fetch(url, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }) => {
       } else {
         const errorData = await res.json().catch(() => ({}));
         const isAuthenticationFailure = res.status === 401
-          || (res.status === 403 && ['ACCOUNT_LOCKED', 'PRIVILEGED_ACCOUNT_LINK_REQUIRED'].includes(errorData.error));
+          || (res.status === 403 && ['ACCOUNT_LOCKED', 'PRIVILEGED_ACCOUNT_LINK_REQUIRED', 'ACCOUNT_LINK_REQUIRED', 'EMAIL_NOT_VERIFIED'].includes(errorData.error));
 
         if (isAuthenticationFailure) {
           const message = errorData.message || 'Phiên đăng nhập không còn hợp lệ.';
@@ -302,17 +302,35 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isLoggedIn, user]);
 
+  const changePassword = useCallback(async (currentPassword, newPassword) => {
+    try {
+      const res = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Không thể đổi mật khẩu.');
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  }, []);
+
   const linkAccount = useCallback(async (provider, accountId, providerEmail) => {
     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
     try {
       const token = localStorage.getItem('token');
+      const supabase = await getSupabase();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) throw new Error('Vui lòng đăng nhập Google để xác minh liên kết.');
       const res = await fetch('/api/user/link-account', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ provider, accountId, providerEmail })
+        body: JSON.stringify({ provider, accountId, providerEmail, providerAccessToken: session.access_token })
       });
       const data = await res.json();
       if (res.ok) {
@@ -459,6 +477,32 @@ export const AuthProvider = ({ children }) => {
     };
   }, [fetchProfile]);
 
+  // Keep the token used by Express in sync with Supabase refreshes.
+  useEffect(() => {
+    let active = true;
+    let subscription;
+    let pending;
+    getSupabase().then((supabase) => {
+      if (!active) return;
+      subscription = supabase.auth.onAuthStateChange((event, session) => {
+        if (localStorage.getItem('authType') !== 'supabase') return;
+        if (session?.access_token) {
+          localStorage.setItem('token', session.access_token);
+          clearTimeout(pending);
+          // Run outside the Supabase callback lock.
+          pending = setTimeout(() => { if (active) void fetchProfile(session.access_token); }, 0);
+        } else if (event === 'SIGNED_OUT') {
+          localStorage.removeItem('token');
+          localStorage.removeItem('authType');
+          localStorage.removeItem('sessionId');
+          localStorage.removeItem('userId');
+          setUser(null); setIsLoggedIn(false); setLoading(false);
+        }
+      }).data.subscription;
+    }).catch(() => {});
+    return () => { active = false; clearTimeout(pending); subscription?.unsubscribe(); };
+  }, [fetchProfile]);
+
   // 6. Heartbeat (Activity Tracking)
   useEffect(() => {
     if (!isLoggedIn) return;
@@ -530,13 +574,14 @@ export const AuthProvider = ({ children }) => {
     refreshUser,
     updateUser,
     linkAccount,
+    changePassword,
     completeLessonSegment,
     completePlacementTest,
     recoverStreak,
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, completeLessonSegment, completePlacementTest, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, completePlacementTest, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

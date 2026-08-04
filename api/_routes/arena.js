@@ -826,6 +826,9 @@ router.get('/realtime-token', auth, async (req, res) => {
         sub: req.userId,
         role: 'authenticated',
         aud: 'authenticated',
+        ...(req.decodedCustomJwt
+          ? { app_session_id: req.decodedCustomJwt.sessionId }
+          : { session_id: jwt.decode(req.token)?.session_id, aurum_auth_user_id: jwt.decode(req.token)?.sub }),
       },
       secret,
       { expiresIn: '15m' },

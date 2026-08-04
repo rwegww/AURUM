@@ -19,7 +19,7 @@ const DEFAULT_STUDY_PLAN = {
   grade: null,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 240;
-const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'password']);
+const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username']);
 const LESSON_LEVEL_XP = {
   level1: 30,
   level2: 50,
@@ -185,15 +185,6 @@ router.get('/public-praises', async (req, res) => {
 // Get Profile
 router.get('/profile', auth, async (req, res) => {
   try {
-    // If 'claim' param is true, update the currentSessionId in DB
-    if (req.query.claim === 'true') {
-      const sessionId = req.header('X-Session-ID');
-      if (sessionId) {
-        await User.update(req.user.id, { currentSessionId: sessionId });
-        req.user.currentSessionId = sessionId; // Update in-memory user for immediate consistency
-      }
-    }
-
     res.json(toProfileResponse(req.user));
   } catch (err) {
     console.error('Error in /profile:', err);
@@ -346,20 +337,18 @@ router.post('/placement-pass', auth, async (req, res) => {
 // Link an OAuth provider to the current account.
 router.post('/link-account', auth, async (req, res) => {
   try {
-    const { provider, accountId, providerEmail } = req.body;
-    if (!provider || !accountId) {
-      return res.status(400).json({ message: 'Thiếu thông tin liên kết' });
+    const { provider, providerAccessToken } = req.body || {};
+    if (provider !== 'google' || typeof providerAccessToken !== 'string' || providerAccessToken.length > 16384) {
+      return res.status(400).json({ message: 'Cần phiên Google hợp lệ để liên kết tài khoản.' });
     }
-    
-    // Check if provider is supported
-    if (provider !== 'google') {
-      return res.status(400).json({ message: 'Nhà cung cấp không được hỗ trợ' });
+    const { data, error } = await supabase.auth.getUser(providerAccessToken);
+    const providerUser = data?.user;
+    if (error || !providerUser || !providerUser.email_confirmed_at
+      || !providerUser.identities?.some((identity) => identity.provider === 'google')
+      || !req.user.email || providerUser.email?.trim().toLowerCase() !== req.user.email.trim().toLowerCase()) {
+      return res.status(403).json({ message: 'Phiên Google phải xác minh đúng email của tài khoản hiện tại.' });
     }
-
-    // Verify email matches if the user registered with an email
-    if (req.user.email && req.user.email !== providerEmail) {
-      return res.status(400).json({ message: 'Email liên kết phải trùng khớp với email của tài khoản hiện tại' });
-    }
+    const accountId = providerUser.id;
 
     // Check if another user already linked this account
     const filter = { googleId: accountId };
@@ -368,14 +357,14 @@ router.post('/link-account', auth, async (req, res) => {
       return res.status(400).json({ message: 'Tài khoản này đã được liên kết với một người dùng khác' });
     }
 
-    const linkedAccounts = req.user.linkedAccounts || {};
+    const linkedAccounts = { ...(req.user.linkedAccounts || {}) };
     linkedAccounts[provider] = accountId;
 
     await User.update(req.user.id, { linkedAccounts });
 
     res.json({ message: `Đã liên kết tài khoản ${provider} thành công!`, linkedAccounts });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi liên kết tài khoản', error: err.message });
+    res.status(err.code === '23505' ? 409 : 500).json({ message: 'Không thể liên kết tài khoản. Vui lòng kiểm tra tài khoản Google và thử lại.' });
   }
 });
 

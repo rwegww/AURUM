@@ -223,9 +223,11 @@ Backend Express tổ chức các route nghiệp vụ thành các module riêng b
 ### Cấu hình và kiểm tra phân hệ quản trị
 
 - Báo cáo sửa lỗi, kiểm chứng và giới hạn: [Rà soát admin ngày 05/09/2026](docs/admin-audit-2026-09-05.md).
+- Database đã được đồng bộ ngày 06/09/2026: [Các migration, kiểm chứng và giới hạn còn lại](docs/database-sync-2026-09-06.md).
+- Đăng nhập và khôi phục mật khẩu: [Bản sửa bảo mật ngày 07/09/2026](docs/auth-security-audit-2026-09-07.md), gồm cấu hình SMTP, API mới, migration đã triển khai và các kiểm chứng.
 - Upload học liệu trong admin dùng chữ ký từ `/api/admin/media/signature`. Máy chủ cần `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` và `CLOUDINARY_API_SECRET`. Không đặt khóa bí mật trong biến có tiền tố `VITE_`.
 - Đặt `PUBLIC_APP_URL` thành địa chỉ website chính thức để liên kết đăng nhập trong email trỏ đúng môi trường. Nếu chưa đặt, hệ thống dùng `APP_URL`, sau đó `VERCEL_URL`, cuối cùng là domain production mặc định.
-- Cập nhật chỉ mục bằng tệp `supabase/migrations/20260905_admin_query_indexes.sql` trong quy trình triển khai database. Tệp chỉ thêm chỉ mục; không cần chạy lại toàn bộ schema hoặc seed dữ liệu.
+- Cập nhật chỉ mục bằng tệp `supabase/migrations/20260905162139_admin_query_indexes.sql` trong quy trình triển khai database. Tệp chỉ thêm chỉ mục; không cần chạy lại toàn bộ schema hoặc seed dữ liệu.
 - API danh sách người dùng, phản hồi và yêu cầu duyệt hỗ trợ `limit` và con trỏ `before`. Header `X-Next-Cursor` cho biết trang kế tiếp; giao diện hiển thị nút tải thêm khi còn dữ liệu.
 - Thay đổi quản trị cần hai tài khoản admin khác nhau xác nhận. Trang duyệt cho phép xem đầy đủ nội dung thay đổi. Bản ghi chưa có thời gian hoàn tất được hiển thị là “Chưa chốt kết quả” để kiểm tra lại dữ liệu trước khi gửi yêu cầu mới.
 - Chạy `npm test`, `npm run lint` và `npm run build` trước khi triển khai. Kiểm thử tự động dùng dữ liệu giả lập cho các thao tác ghi; kiểm tra Supabase đang chạy chỉ dùng truy vấn đọc.
