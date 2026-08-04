@@ -680,7 +680,7 @@ const CraftingPage = () => {
                     <FlaskConical className="text-purple-500" size={20} />
                     Công thức hợp chất
                   </h2>
-                  <p className="text-[11px] font-bold text-[#1a1a1a]/60 mt-1">Đồng bộ dữ liệu mô phỏng phản ứng 3D</p>
+                  <p className="text-[11px] font-bold text-[#1a1a1a]/60 mt-1">Đồng bộ dữ liệu mô phỏng phản ứng</p>
                 </div>
 
                 {/* Filter Controls */}
@@ -868,7 +868,7 @@ const CraftingPage = () => {
                   <div>
                     <span className="text-[9px] font-black uppercase tracking-widest text-[#1a1a1a]/50 block mb-1">Trạng thái mô phỏng</span>
                     <span className="text-xs font-black text-viet-green uppercase tracking-widest flex items-center gap-1">
-                      <CheckCircle2 size={12} /> Sẵn sàng 3D
+                      <CheckCircle2 size={12} /> Sẵn sàng
                     </span>
                   </div>
                 </div>

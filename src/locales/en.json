@@ -247,7 +247,7 @@
  "pillars": {
  "safety": {
  "title": "Safe virtual practice",
- "desc": "3D simulations help students practice reactions and identify chemicals in a safe learning environment."
+ "desc": "Simulations help students practice reactions and identify chemicals in a safe learning environment."
  },
  "gamification": {
  "title": "Goal-based practice",
@@ -255,7 +255,7 @@
  },
  "visualization": {
  "title": "Molecular visualization",
- "desc": "All abstract chemical bonds and atomic structures are visualized in stunning interactive 3D."
+ "desc": "All abstract chemical bonds and atomic structures are visualized in stunning interactive graphics."
  }
  },
  "team_section": {
@@ -314,7 +314,7 @@
  },
  "intellectual": {
  "title": "3. Intellectual Property",
- "p1": "All content on Aurum, including but not limited to lectures, 3D simulations, images, and source code, is owned by Aurum Chemistry Learning Hub or its licensors.",
+ "p1": "All content on Aurum, including but not limited to lectures, simulations, images, and source code, is owned by Aurum Chemistry Learning Hub or its licensors.",
  "p2": "Any unauthorized copying, distribution, or commercialization of the content without our prior written consent is strictly prohibited and may result in legal action."
  },
  "privacy": {
@@ -759,7 +759,7 @@
  "tech_manual": "Element database v1.0",
  "quick_guide": {
  "title": "Quick Lookup",
- "desc": "Click elements to view 3D atomic chemistry simulations"
+ "desc": "Click elements to view atomic chemistry simulations"
  },
  "legend": {
  "high_boiling": "Extreme Boiling Point",
@@ -1241,7 +1241,7 @@
  },
  "molecule": {
  "label": "Molecule Model",
- "desc": "View 3D molecular structures and chemical space."
+ "desc": "View molecular structures and chemical space."
  },
  "solver": {
  "label": "Formula Finder",

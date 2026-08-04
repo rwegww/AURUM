@@ -1,4 +1,4 @@
-﻿/**
+/**
  * AURUM CHEMISTRY KNOWLEDGE BASE
  * Contains all static theoretical data, maps, and safety constants for the Aurum AI Agent.
  */
@@ -10,7 +10,7 @@ export const SAFETY_RESTRICTIONS = [
 ];
 
 export const PEDAGOGICAL_PROMPTS = [
-  'Bạn có muốn thử mô phỏng phản ứng này trong Lab 3D không?',
+  'Bạn có muốn thử mô phỏng phản ứng này trong Lab không?',
   'Bạn có biết yếu tố nào ảnh hưởng đến tốc độ của phản ứng này không?',
   'Hãy thử liên hệ chất này với ứng dụng thực tế trong đời sống nhé!',
   'Bạn có muốn xem chất này thuộc nhóm kiến thức nào trong lộ trình hóa học không?',

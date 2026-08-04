@@ -1,5 +1,5 @@
-﻿// Cơ sở dữ liệu phân tử với tọa độ 3D chuẩn hóa
-// Dữ liệu được đồng bộ từ dự án KL, hỗ trợ hiển thị 3D và xoay không gian
+// Cơ sở dữ liệu phân tử với tọa độ chuẩn hóa
+// Dữ liệu được đồng bộ từ dự án KL, hỗ trợ hiển thị và xoay không gian
 
 export const molecules = [
   {

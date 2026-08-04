@@ -246,7 +246,7 @@
  "pillars": {
  "safety": {
  "title": "Phòng thực hành an toàn",
- "desc": "Mô phỏng 3D giúp học viên thực hành phản ứng và nhận biết hóa chất trong môi trường an toàn."
+                "desc": "Mô phỏng giúp học viên thực hành phản ứng và nhận biết hóa chất trong môi trường an toàn."
  },
  "gamification": {
  "title": "Luyện tập có mục tiêu",
@@ -254,7 +254,7 @@
  },
  "visualization": {
  "title": "Quan sát hóa học",
- "desc": "Các liên kết phân tử và cấu trúc nguyên tử được tái hiện bằng hình ảnh 3D trực quan."
+                "desc": "Các liên kết phân tử và cấu trúc nguyên tử được tái hiện bằng hình ảnh trực quan."
  }
  },
  "team_section": {
@@ -313,7 +313,7 @@
  },
  "intellectual": {
  "title": "3. Quyền sở hữu trí tuệ",
- "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng 3D, hình ảnh và mã nguồn, đều thuộc sở hữu của Aurum Chemistry Learning Hub hoặc các bên cấp phép.",
+                "p1": "Tất cả nội dung trên Aurum, bao gồm nhưng không giới hạn ở bài giảng, mô phỏng, hình ảnh và mã nguồn, đều thuộc sở hữu của Aurum Chemistry Learning Hub hoặc các bên cấp phép.",
  "p2": "Mọi hành vi sao chép, phân phối hoặc thương mại hóa nội dung mà không có sự đồng ý bằng văn bản của chúng tôi đều bị nghiêm cấm và có thể bị truy cứu trách nhiệm pháp lý."
  },
  "privacy": {
@@ -758,7 +758,7 @@
  "tech_manual": "Học liệu thư viện v1.0",
  "quick_guide": {
  "title": "Quan sát nhanh",
- "desc": "Nhấn vào từng ô để mở cấu trúc hóa học 3D"
+            "desc": "Nhấn vào từng ô để mở cấu trúc hóa học"
  },
  "legend": {
  "high_boiling": "Điểm sôi cực hạn",
@@ -825,7 +825,7 @@
  },
  "molecule": {
  "label": "Mô hình mẫu chất",
- "desc": "Xem cấu trúc không gian 3D của các phân tử và liên kết hóa học."
+                "desc": "Xem cấu trúc không gian của các phân tử và liên kết hóa học."
  },
  "solver": {
  "label": "Gợi ý công thức",

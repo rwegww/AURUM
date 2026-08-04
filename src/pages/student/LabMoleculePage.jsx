@@ -17,7 +17,7 @@ const LabMoleculePage = () => {
               <span>←</span> Quay lại Phòng Thí Nghiệm
             </Link>
             <h1 className="text-3xl md:text-5xl font-black text-viet-text italic tracking-tighter uppercase">
-              Mô hình <span className="text-viet-green">Phân tử 3D</span>
+              Mô hình <span className="text-viet-green">Phân tử</span>
             </h1>
           </motion.div>
           

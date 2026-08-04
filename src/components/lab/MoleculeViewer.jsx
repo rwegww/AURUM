@@ -363,7 +363,7 @@ const MoleculeViewer = () => {
       <div className="flex justify-center mb-6"><Microscope className="w-16 h-16 text-viet-text" /></div>
       <h2 className="text-2xl font-black text-viet-text italic uppercase mb-2">Thư viện đang trống</h2>
       <p className="text-viet-text-light font-bold max-w-md mx-auto">
-        Vào "Mô phỏng phản ứng" để khám phá thêm các chất mới. Mỗi chất bạn phát hiện sẽ xuất hiện tại đây dưới dạng mô hình 3D.
+        Vào "Mô phỏng phản ứng" để khám phá thêm các chất mới. Mỗi chất bạn phát hiện sẽ xuất hiện tại đây dưới dạng mô hình.
       </p>
     </div>
   );
@@ -373,7 +373,7 @@ const MoleculeViewer = () => {
       <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
         {/* Left Side: Molecule List */}
         <div className="flex max-h-[420px] flex-col rounded-[28px] border border-viet-border bg-white p-5 shadow-sm lg:h-[700px] lg:max-h-none">
-          <h3 className="text-[12px] font-black text-viet-green uppercase tracking-widest mb-4">Thư viện phân tử 3D</h3>
+          <h3 className="text-[12px] font-black text-viet-green uppercase tracking-widest mb-4">Thư viện phân tử</h3>
           
           <div className="flex flex-wrap gap-1.5 mb-4">
             {categories.map(cat => (
