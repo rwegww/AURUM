@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {
   calculateReactionOutcome,
   checkReactionConditions,
+  getReactionVisualProfile,
   normalizeLabFormula,
 } from '../../../../utils/labChemistry.js';
 
@@ -27,9 +28,21 @@ const createDefaultBeaker = (id, message = "Cốc thí nghiệm mới") => ({
   activeBubbles: false,
   activeFlame: false,
   activeSmoke: false,
+  activeSwirl: false,
+  activePrecipitation: false,
   smokeColor: '#ffffff',
+  effectColor: '#60a5fa',
+  secondaryEffectColor: '#93c5fd',
+  flameColors: ['#ea580c', '#fef08a'],
+  reactionEffectId: null,
+  reactionEffectSound: null,
   intensity: 'medium', 
   reactionProducts: [],
+  reactionEquation: '',
+  reactionObservation: '',
+  reactionIonicEquation: '',
+  reactionNetIonicEquation: '',
+  reactionPrecipitate: null,
   shake: false,
   heatTime: 0,
   liquidVolume: 0,
@@ -388,11 +401,13 @@ const useLabStore = create((set, get) => ({
 
         // Visual effect when dropping gases (keep gas in beaker for reactions)
         if (chemical.state === 'gas') {
-          updatedBeaker.activeBubbles = true;
-          updatedBeaker.activeSmoke = true;
-          if (!reaction) updatedBeaker.reactionMessage = `Sục khí ${chemical.formula} vào cốc.`;
+          if (!reaction) {
+            updatedBeaker.activeBubbles = true;
+            updatedBeaker.activeSmoke = true;
+            updatedBeaker.reactionMessage = `Sục khí ${chemical.formula} vào cốc.`;
+          }
           
-          setTimeout(() => {
+          if (!reaction) setTimeout(() => {
             set(s => {
               const bks = [...s.beakers];
               const currentIndex = bks.findIndex(item => item.id === targetBeakerId);
@@ -452,16 +467,19 @@ const useLabStore = create((set, get) => ({
         formula: batch.formula,
         name: batch.name || prodData.name || batch.formula,
         state: batch.state || prodData.state || 'liquid',
-        color: prodData.color || '#ffffff',
+        color: batch.color || prodData.color || '#ffffff',
         id: batch.id,
         amount: batch.amount,
         unit: batch.unit,
         isPrecipitate: Boolean(batch.isPrecipitate),
+        precipitateAppearance: batch.precipitateAppearance || null,
       };
     });
     const products = outcome.productBatches.map(product => ({
       formula: product.formula,
-      color: getChemicalByFormula(chemicals, product.formula).color || '#ffffff',
+      color: product.color || getChemicalByFormula(chemicals, product.formula).color || '#ffffff',
+      state: product.state,
+      isPrecipitate: product.isPrecipitate,
     }));
     const newYields = [
       ...(beaker.yieldHistory || []),
@@ -469,26 +487,11 @@ const useLabStore = create((set, get) => ({
     ];
     const newSolids = processedContents.filter(c => c.state === 'solid');
 
-    // Heuristics for visual effects based on reaction animation string or product types
-    const animation = reaction.animation || '';
-    const isExplosion = animation === 'explosion' || reaction.name?.toLowerCase().includes('nổ');
-    const hasGas = processedContents.some(c => c.state === 'gas') || reaction.name?.toLowerCase().includes('khí');
-    
-    const intensity = isExplosion ? 'high' : (hasGas ? 'medium' : 'low');
-    const smokeColor = animation === 'smoke_purple' ? '#a855f7' : '#ffffff';
+    const visualProfile = getReactionVisualProfile(reaction, outcome.productBatches, chemicals);
+    const reactionEffectId = generateId();
+    const hasGasProduct = outcome.productBatches.some(product => product.state === 'gas');
 
-    if (isExplosion) {
-       setTimeout(() => {
-          set(state => {
-            const bks = [...state.beakers];
-            const index = bks.findIndex(item => item.id === beaker.id);
-            if (index !== -1) bks[index] = { ...bks[index], shake: false };
-            return { beakers: bks };
-          });
-       }, 500);
-    }
-
-    if (hasGas) {
+    if (hasGasProduct) {
         setTimeout(() => {
             set(state => {
               const bks = [...state.beakers];
@@ -507,17 +510,25 @@ const useLabStore = create((set, get) => ({
             });
         }, 5000);
     }
-    
-    if (isExplosion) {
-        setTimeout(() => {
-          set(state => {
-            const bks = [...state.beakers];
-            const index = bks.findIndex(item => item.id === beaker.id);
-            if (index !== -1) bks[index] = { ...bks[index], activeFlame: false };
-            return { beakers: bks };
-          });
-        }, 2500);
-    }
+
+    setTimeout(() => {
+      set(state => {
+        const bks = [...state.beakers];
+        const index = bks.findIndex(item => item.id === beaker.id);
+        if (index !== -1 && bks[index].reactionEffectId === reactionEffectId) {
+          bks[index] = {
+            ...bks[index],
+            activeBubbles: false,
+            activeFlame: false,
+            activeSmoke: false,
+            activeSwirl: false,
+            activePrecipitation: false,
+            shake: false,
+          };
+        }
+        return { beakers: bks };
+      });
+    }, visualProfile.duration);
 
     // Call external discovery handler if provided (will be set in component)
     if (get().onDiscovery) {
@@ -531,14 +542,26 @@ const useLabStore = create((set, get) => ({
       materialBatches,
       yieldHistory: newYields,
       reactionMessage: (reaction.name || "Phản ứng đã xảy ra!") + (reaction.conditions ? ` • ĐK: ${reaction.conditions}` : ''),
-      activeBubbles: hasGas,
-      activeFlame: isExplosion,
-      activeSmoke: hasGas || isExplosion,
-      smokeColor: smokeColor,
-      intensity: intensity,
+      activeBubbles: visualProfile.activeBubbles,
+      activeFlame: visualProfile.activeFlame,
+      activeSmoke: visualProfile.activeSmoke,
+      activeSwirl: visualProfile.activeSwirl,
+      activePrecipitation: visualProfile.activePrecipitation,
+      smokeColor: visualProfile.smokeColor,
+      effectColor: visualProfile.primaryColor,
+      secondaryEffectColor: visualProfile.secondaryColor,
+      flameColors: visualProfile.flameColors,
+      reactionEffectId,
+      reactionEffectSound: visualProfile.sound,
+      intensity: visualProfile.intensity,
       reactionProducts: products,
+      reactionEquation: reaction.equation || '',
+      reactionObservation: reaction.observation || '',
+      reactionIonicEquation: reaction.ionicEquation || '',
+      reactionNetIonicEquation: reaction.netIonicEquation || '',
+      reactionPrecipitate: reaction.precipitate || null,
       isHeating: beaker.isHeating,
-      shake: isExplosion,
+      shake: visualProfile.shake,
       liquidVolume: processedContents.some(content => content.state === 'liquid')
         ? (beaker.contents.some(content => content.state === 'liquid') ? beaker.liquidVolume : 1)
         : 0,

@@ -7,8 +7,11 @@ import {
   calculateReactionOutcome,
   checkReactionConditions,
   formatStructuredEquation,
+  getReactionVisualProfile,
   isStructurallyBalancedReaction,
+  normalizeLabFormula,
 } from '../src/utils/labChemistry.js';
+import { chemicals as labChemicals, reactions as labReactions } from '../src/data/reactions/index.js';
 import {
   craftableItems,
   generateCraftableItems,
@@ -113,6 +116,75 @@ describe('Lab reaction engine', () => {
       reactants: reaction.reactants,
       products: [{ formula: 'H2O', coeff: 1 }],
     })).toBe(false);
+  });
+
+  it('marks only the insoluble product as precipitate', () => {
+    const precipitation = labReactions.find(item => item.id === 'rx_030');
+    const chemistry = Object.fromEntries(labChemicals.map(item => [item.formula, item]));
+    const outcome = calculateReactionOutcome(precipitation, [
+      { formula: 'AgNO₃', state: 'liquid', amount: 50, unit: 'ml' },
+      { formula: 'NaCl', state: 'liquid', amount: 50, unit: 'ml' },
+    ], chemistry);
+
+    expect(outcome.productBatches.find(item => item.formula === 'AgCl')).toMatchObject({
+      state: 'solid',
+      isPrecipitate: true,
+      precipitateAppearance: 'curdy',
+    });
+    expect(outcome.productBatches.find(item => item.formula === 'NaNO₃')).toMatchObject({
+      state: 'liquid',
+      isPrecipitate: false,
+    });
+    expect(precipitation.netIonicEquation).toBe('Ag⁺(aq) + Cl⁻(aq) → AgCl(s)↓');
+  });
+
+  it('maps authored animation types to concrete visual effects', () => {
+    const burn = getReactionVisualProfile({
+      animation: 'burn',
+      reactants: [{ formula: 'Mg' }, { formula: 'O₂' }],
+    });
+    const precipitation = getReactionVisualProfile({}, [{
+      formula: 'Cu(OH)₂', state: 'solid', color: '#38bdf8', isPrecipitate: true,
+    }]);
+
+    expect(burn).toMatchObject({ activeFlame: true, activeSmoke: true, sound: 'fire' });
+    expect(burn.flameColors).toEqual(['#e2e8f0', '#ffffff']);
+    expect(precipitation).toMatchObject({
+      activePrecipitation: true,
+      activeSwirl: true,
+      primaryColor: '#38bdf8',
+    });
+  });
+});
+
+describe('Lab authored data integrity', () => {
+  it('contains complete chemical references and balanced or declared qualitative reactions', () => {
+    const formulas = new Set(labChemicals.map(item => normalizeLabFormula(item.formula)));
+    const missingReferences = labReactions.flatMap(reaction => (
+      [...reaction.reactants, ...reaction.products]
+        .filter(species => !formulas.has(normalizeLabFormula(species.formula)))
+        .map(species => `${reaction.id}:${species.formula}`)
+    ));
+    const invalidReactions = labReactions.filter(reaction => (
+      !reaction.isQualitative && !isStructurallyBalancedReaction(reaction)
+    ));
+
+    expect(missingReferences).toEqual([]);
+    expect(invalidReactions).toEqual([]);
+    expect(new Set(labChemicals.map(item => normalizeLabFormula(item.formula))).size).toBe(labChemicals.length);
+  });
+
+  it('completes precipitation records with colors and equations', () => {
+    const precipitationReactions = labReactions.filter(reaction => (
+      reaction.products.some(product => product.isPrecipitate)
+    ));
+
+    expect(precipitationReactions.length).toBeGreaterThanOrEqual(20);
+    precipitationReactions.forEach((reaction) => {
+      expect(reaction.precipitate?.color).toBeTruthy();
+      expect(reaction.precipitate?.colorLabel).toBeTruthy();
+      expect(reaction.precipitationEquation).toBe(reaction.equation);
+    });
   });
 });
 

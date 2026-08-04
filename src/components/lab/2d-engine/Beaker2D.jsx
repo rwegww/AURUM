@@ -183,20 +183,61 @@ const SolidChunk = ({ solid, color = '#7e8794', index = 0, isHeating = false, te
   );
 };
 
-const Precipitate = ({ color, index }) => {
+const Precipitate = ({ color, index, appearance = 'fine', active = false, seed = index }) => {
+  const particles = useMemo(() => {
+    const rng = pseudoRandom(`precipitate:${seed}:${appearance}`);
+    const count = appearance === 'gelatinous' ? 9 : (appearance === 'curdy' ? 14 : 20);
+    return Array.from({ length: count }).map((_, particleIndex) => ({
+      id: particleIndex,
+      left: 12 + rng() * 76,
+      size: appearance === 'gelatinous' ? 6 + rng() * 7 : (appearance === 'curdy' ? 4 + rng() * 5 : 2 + rng() * 3),
+      delay: rng() * 1.5,
+      drift: rng() * 18 - 9,
+      duration: 1.4 + rng() * 1.4,
+      opacity: 0.55 + rng() * 0.4,
+    }));
+  }, [appearance, seed]);
+  const bedHeight = appearance === 'gelatinous' ? 19 : (appearance === 'curdy' ? 14 : 10);
+
   return (
-    <div className="absolute bottom-0 left-0 w-full pointer-events-none flex flex-col justify-end" style={{ height: `${25 + index * 5}%`, zIndex: 5 + index }}>
+    <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 15 + index }}>
+      <AnimatePresence>
+        {active && particles.map(particle => (
+          <motion.span
+            key={particle.id}
+            initial={{ top: '8%', x: 0, opacity: 0, scale: 0.3 }}
+            animate={{
+              top: '84%',
+              x: particle.drift,
+              opacity: [0, particle.opacity, particle.opacity, 0.2],
+              scale: [0.3, 1, 0.9],
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: particle.duration, delay: particle.delay, ease: 'easeIn' }}
+            className="absolute rounded-full"
+            style={{
+              left: `${particle.left}%`,
+              width: particle.size,
+              height: particle.size,
+              backgroundColor: color,
+              boxShadow: `0 0 ${Math.max(2, particle.size / 2)}px ${color}`,
+            }}
+          />
+        ))}
+      </AnimatePresence>
       <motion.div
         initial={{ height: 0, opacity: 0 }}
-        animate={{ height: '100%', opacity: 1 }}
-        transition={{ duration: 2, ease: "easeOut" }}
-        className="w-full relative"
+        animate={{ height: `${bedHeight + index * 3}%`, opacity: appearance === 'gelatinous' ? 0.88 : 0.96 }}
+        transition={{ duration: 2.4, ease: 'easeOut', delay: active ? 0.7 : 0 }}
+        className="absolute bottom-0 left-[8%] w-[84%] overflow-hidden"
         style={{
           backgroundColor: color,
-          backgroundImage: `linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(255,255,255,0.2) 100%)`,
-          borderTopLeftRadius: '12px',
-          borderTopRightRadius: '12px',
-          boxShadow: '0 -2px 5px rgba(0,0,0,0.1)'
+          backgroundImage: appearance === 'gelatinous'
+            ? 'radial-gradient(ellipse at 25% 20%, rgba(255,255,255,0.6), transparent 42%), linear-gradient(to top, rgba(0,0,0,0.25), rgba(255,255,255,0.2))'
+            : 'linear-gradient(to top, rgba(0,0,0,0.35), rgba(255,255,255,0.24))',
+          borderTopLeftRadius: appearance === 'gelatinous' ? '55%' : '10px',
+          borderTopRightRadius: appearance === 'gelatinous' ? '45%' : '10px',
+          boxShadow: `0 -2px 7px ${color}66`,
         }}
       >
         {/* Noise overlay to simulate granular/powdery texture of chemical precipitates */}
@@ -263,7 +304,12 @@ const containerConfigs = {
 };
 
 const Beaker2D = ({ beakerData, isActive, onClick }) => {
-  const { contents, isElectrolyzing, activeBubbles, activeSmoke, smokeColor, intensity, shake, activeFlame, containerType, liquidVolume = 1 } = beakerData;
+  const {
+    contents, isElectrolyzing, activeBubbles, activeSmoke, activeSwirl,
+    activePrecipitation, smokeColor, effectColor, secondaryEffectColor,
+    flameColors = ['#ea580c', '#fef08a'], intensity, shake, activeFlame,
+    containerType, liquidVolume = 1,
+  } = beakerData;
   const config = containerConfigs[containerType || 'beaker'] || containerConfigs['beaker'];
 
   // Lọc ra các chất lỏng/dung dịch để tính toán mực nước
@@ -376,6 +422,22 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
                 <Particle key={p.id} delay={p.delay} xOffset={p.x + 50} color={p.color} speed={p.speed} size={p.size} drift={p.drift} duration={p.duration} />
               ))}
 
+              {/* Dòng đối lưu/đổi màu trong dung dịch khi phản ứng đang diễn ra */}
+              <AnimatePresence>
+                {activeSwirl && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.65 }}
+                    animate={{ opacity: [0, 0.62, 0.3], scale: [0.65, 1.25, 1], rotate: [0, 180, 360] }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+                    className="absolute -inset-1/2 rounded-[45%] blur-md mix-blend-screen"
+                    style={{
+                      background: `conic-gradient(from 30deg, transparent, ${effectColor || '#60a5fa'}99, transparent, ${secondaryEffectColor || '#93c5fd'}77, transparent)`,
+                    }}
+                  />
+                )}
+              </AnimatePresence>
+
               {/* Water Surface Line */}
               {totalVolume > 0 && (
                  <div className="absolute top-0 w-full h-1 bg-white/30" />
@@ -385,7 +447,14 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
             {/* Solids: Tách biệt khối thả vào (SolidChunk) và kết tủa sinh ra (Precipitate) */}
             {beakerData.droppedSolids?.map((solid, idx) => (
               solid.isPrecipitate ? 
-                <Precipitate key={solid.id || idx} color={solid.color || '#ffffff'} index={idx} />
+                <Precipitate
+                  key={solid.id || idx}
+                  color={solid.color || '#ffffff'}
+                  index={idx}
+                  appearance={solid.precipitateAppearance || 'fine'}
+                  active={activePrecipitation}
+                  seed={solid.id || solid.formula || idx}
+                />
                 : 
                 <SolidChunk 
                   key={solid.id || idx} 
@@ -514,8 +583,8 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
 
       </div>
 
-      {/* Fire Effect (below beaker) */}
-      <div className="absolute -bottom-6 w-24 h-16 z-0 pointer-events-none flex justify-center">
+      {/* Ngọn lửa của phản ứng bốc lên từ miệng cốc; đèn đun được vẽ riêng bên dưới. */}
+      <div className="absolute top-20 w-24 h-16 z-30 pointer-events-none flex justify-center">
         <AnimatePresence>
           {activeFlame && (
             <motion.div
@@ -528,12 +597,14 @@ const Beaker2D = ({ beakerData, isActive, onClick }) => {
               <motion.div 
                 animate={{ scale: [1, 1.1, 1], rotate: [-2, 2, -2] }}
                 transition={{ duration: 0.5, repeat: Infinity }}
-                className="w-16 h-12 bg-gradient-to-t from-orange-600 via-amber-500 to-transparent blur-md rounded-full origin-bottom mix-blend-screen"
+                className="w-16 h-12 blur-md rounded-full origin-bottom mix-blend-screen"
+                style={{ background: `linear-gradient(to top, ${flameColors[0]}, ${flameColors[1]}, transparent)` }}
               />
               <motion.div 
                 animate={{ scale: [1, 1.2, 1], rotate: [3, -3, 3] }}
                 transition={{ duration: 0.3, repeat: Infinity }}
-                className="absolute w-10 h-10 bg-gradient-to-t from-yellow-300 via-white to-transparent blur-sm rounded-full origin-bottom mix-blend-screen"
+                className="absolute w-10 h-10 blur-sm rounded-full origin-bottom mix-blend-screen"
+                style={{ background: `linear-gradient(to top, ${flameColors[1]}, #ffffff, transparent)` }}
               />
             </motion.div>
           )}

@@ -5,13 +5,14 @@ import { reactionsBatch5 } from './reactions_batch_5.js';
 import { chemicals } from './chemicals.js';
 import { unlockRequirements } from './unlockRequirements.js';
 import { reactionTypes } from './constants.js';
+import { enrichReactions } from './enrichment.js';
 
-export const reactions = [
+export const reactions = enrichReactions([
   ...reactionsCore,
   ...reactionsBatch1_2,
   ...reactionsBatch3_4,
   ...reactionsBatch5,
-];
+]);
 
 export { chemicals, unlockRequirements, reactionTypes };
 

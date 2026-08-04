@@ -1,5 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import {
+  clearGoogleOAuthPending,
+  prepareGoogleOAuth,
+  waitForSupabaseSession,
+} from '@/utils/googleOAuth';
 
 // 1. Define Context and Hook first to ensure they are available to all components immediately
 const AuthContext = createContext();
@@ -39,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
-  const fetchingTokenRef = useRef(null);
+  const fetchingProfileRef = useRef({ token: null, promise: null });
   const mountedRef = useRef(true);
 
   // 2. Define non-dependent functions first
@@ -58,6 +63,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem('authType');
       localStorage.removeItem('sessionId');
       localStorage.removeItem('userId');
+      clearGoogleOAuthPending();
       if (mountedRef.current) {
         setUser(null);
         setIsLoggedIn(false);
@@ -72,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // 3. Define functions that depend on others
-  const fetchProfile = useCallback(async (token, force = false) => {
+  const fetchProfile = useCallback((token) => {
     if (!token) {
       localStorage.removeItem('userId');
       if (mountedRef.current) {
@@ -80,60 +86,67 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(prev => (prev !== false ? false : prev));
       }
       setLoading(false);
-      return;
+      return Promise.resolve();
     }
 
-    if (!force && fetchingTokenRef.current === token) {
-      setLoading(false);
-      return;
+    if (fetchingProfileRef.current.token === token && fetchingProfileRef.current.promise) {
+      return fetchingProfileRef.current.promise;
     }
-    fetchingTokenRef.current = token;
 
-    try {
-      const sessionId = localStorage.getItem('sessionId');
-      const url = '/api/user/profile';
-      const res = await fetch(url, {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-          'X-Session-ID': sessionId 
-        }
-      });
-      
-      if (res.ok) {
-        const userData = await res.json();
-        localStorage.setItem('userId', userData.id);
-        if (mountedRef.current) {
-          setUser(userData);
-          setIsLoggedIn(true);
-        }
-        return userData;
-      } else {
-        const errorData = await res.json().catch(() => ({}));
-        const isAuthenticationFailure = res.status === 401
-          || (res.status === 403 && ['ACCOUNT_LOCKED', 'PRIVILEGED_ACCOUNT_LINK_REQUIRED', 'ACCOUNT_LINK_REQUIRED', 'EMAIL_NOT_VERIFIED'].includes(errorData.error));
+    const request = (async () => {
+      try {
+        const sessionId = localStorage.getItem('sessionId');
+        const url = '/api/user/profile';
+        const res = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'X-Session-ID': sessionId
+          }
+        });
 
-        if (isAuthenticationFailure) {
-          const message = errorData.message || 'Phiên đăng nhập không còn hợp lệ.';
-          if (mountedRef.current) setAuthError(message);
-          alert(message);
-          await logout();
+        if (res.ok) {
+          const userData = await res.json();
+          localStorage.setItem('userId', userData.id);
+          if (mountedRef.current) {
+            setUser(userData);
+            setIsLoggedIn(true);
+          }
+          return userData;
         } else {
-          throw new Error(errorData.message || `Không thể tải hồ sơ (HTTP ${res.status}).`);
+          const errorData = await res.json().catch(() => ({}));
+          const isAuthenticationFailure = res.status === 401
+            || (res.status === 403 && ['ACCOUNT_LOCKED', 'PRIVILEGED_ACCOUNT_LINK_REQUIRED', 'ACCOUNT_LINK_REQUIRED', 'EMAIL_NOT_VERIFIED'].includes(errorData.error));
+
+          if (isAuthenticationFailure) {
+            const message = errorData.message || 'Phiên đăng nhập không còn hợp lệ.';
+            if (mountedRef.current) setAuthError(message);
+            alert(message);
+            await logout();
+          } else {
+            throw new Error(errorData.message || `Không thể tải hồ sơ (HTTP ${res.status}).`);
+          }
         }
-      }
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Lỗi tải profile:', err);
-        if (err.message.includes('DUAL_LOGIN')) {
-          setAuthError('Tài khoản đã đăng nhập ở nơi khác.');
-        } else {
-          setAuthError(err.message);
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Lỗi tải profile:', err);
+          if (err.message.includes('DUAL_LOGIN')) {
+            setAuthError('Tài khoản đã đăng nhập ở nơi khác.');
+          } else {
+            setAuthError(err.message);
+          }
         }
+      } finally {
+        if (mountedRef.current) setLoading(false);
       }
-    } finally {
-      fetchingTokenRef.current = null;
-      if (mountedRef.current) setLoading(false);
-    }
+    })();
+
+    fetchingProfileRef.current = { token, promise: request };
+    void request.finally(() => {
+      if (fetchingProfileRef.current.promise === request) {
+        fetchingProfileRef.current = { token: null, promise: null };
+      }
+    });
+    return request;
   }, [logout]);
 
   const registerTeacher = useCallback(async (username, password, email, proofImageUrl) => {
@@ -172,7 +185,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
-      const userData = await fetchProfile(data.token, true);
+      const userData = await fetchProfile(data.token);
       if (!userData) throw new Error('Không thể xác nhận hồ sơ sau khi đăng nhập.');
       return { success: true, user: userData };
     } catch (err) {
@@ -201,7 +214,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
-      const userData = await fetchProfile(data.token, true);
+      const userData = await fetchProfile(data.token);
       if (!userData) throw new Error('Không thể xác nhận hồ sơ sau khi đăng nhập.');
       return { success: true, user: userData };
     } catch (err) {
@@ -213,12 +226,17 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setAuthError(null);
-      
-      // Store intended auth type
-      localStorage.setItem('authType', 'supabase');
-      
-      // Use Supabase OAuth which uses secure redirect out of the box
+
       const supabase = await getSupabase();
+      // Remove any old Supabase session before starting a new OAuth hand-off.
+      // Otherwise getSession() on the callback page can briefly return that stale session.
+      await supabase.auth.signOut({ scope: 'local' }).catch(() => null);
+      prepareGoogleOAuth();
+      if (mountedRef.current) {
+        setUser(null);
+        setIsLoggedIn(false);
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -234,6 +252,11 @@ export const AuthProvider = ({ children }) => {
       return { success: true, redirecting: true };
     } catch (err) {
       console.error('Google login error:', err.message);
+      clearGoogleOAuthPending();
+      localStorage.removeItem('token');
+      localStorage.removeItem('authType');
+      localStorage.removeItem('sessionId');
+      localStorage.removeItem('userId');
       if (mountedRef.current) {
         setLoading(false);
         setAuthError(err.message);
@@ -241,6 +264,41 @@ export const AuthProvider = ({ children }) => {
       return { success: false, message: err.message };
     }
   }, []);
+
+  const completeGoogleLogin = useCallback(async () => {
+    try {
+      setLoading(true);
+      setAuthError(null);
+
+      const supabase = await getSupabase();
+      const session = await waitForSupabaseSession(supabase);
+      localStorage.setItem('authType', 'supabase');
+      localStorage.setItem('token', session.access_token);
+      localStorage.removeItem('sessionId');
+
+      const userData = await fetchProfile(session.access_token);
+      if (!userData) {
+        throw new Error('Không thể xác nhận hồ sơ sau khi đăng nhập Google.');
+      }
+
+      clearGoogleOAuthPending();
+      return { success: true, user: userData };
+    } catch (err) {
+      console.error('Google callback error:', err.message);
+      clearGoogleOAuthPending();
+      localStorage.removeItem('token');
+      localStorage.removeItem('authType');
+      localStorage.removeItem('sessionId');
+      localStorage.removeItem('userId');
+      if (mountedRef.current) {
+        setUser(null);
+        setIsLoggedIn(false);
+        setLoading(false);
+        setAuthError(null);
+      }
+      return { success: false, message: err.message };
+    }
+  }, [fetchProfile]);
 
 
 
@@ -258,7 +316,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('sessionId', newSessionId);
       localStorage.setItem('token', data.token);
       localStorage.setItem('authType', 'custom');
-      const userData = await fetchProfile(data.token, true);
+      const userData = await fetchProfile(data.token);
       if (!userData) throw new Error('Không thể xác nhận hồ sơ sau khi đăng ký.');
       return { success: true };
     } catch (err) {
@@ -273,7 +331,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshUser = useCallback(async () => {
     const token = localStorage.getItem('token');
-    if (token) await fetchProfile(token, true);
+    if (token) await fetchProfile(token);
   }, [fetchProfile]);
 
   const updateUser = useCallback(async (updateData) => {
@@ -449,14 +507,14 @@ export const AuthProvider = ({ children }) => {
         
         if (authType === 'custom' && token) {
           // Custom login uses the API-issued JWT.
-          await fetchProfile(token, true);
+          await fetchProfile(token);
         } else if (authType === 'supabase') {
           // Legacy Supabase login - try to get session
           const supabase = await getSupabase();
           const { data: { session } } = await supabase.auth.getSession();
           if (session) {
             localStorage.setItem('token', session.access_token);
-            await fetchProfile(session.access_token, true);
+            await fetchProfile(session.access_token);
           } else if (mountedRef.current) setLoading(false);
         } else {
           if (mountedRef.current) setLoading(false);
@@ -567,6 +625,7 @@ export const AuthProvider = ({ children }) => {
     login,
     magicLogin,
     loginWithGoogle,
+    completeGoogleLogin,
     register,
     registerTeacher,
     logout,
@@ -581,8 +640,7 @@ export const AuthProvider = ({ children }) => {
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, completePlacementTest, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, completeGoogleLogin, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, completePlacementTest, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

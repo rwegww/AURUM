@@ -18,6 +18,8 @@
   { id: "Si", formula: "Si", name: "Silic", state: "solid", category: "Á kim", molarMass: 28.085, color: "#475569", isStarter: true },
   { id: "K", formula: "K", name: "Kali", state: "solid", category: "Kim loại kiềm", molarMass: 39.098, color: "#e2e8f0", isStarter: true },
   { id: "Ba", formula: "Ba", name: "Bari", state: "solid", category: "Kim loại kiềm thổ", molarMass: 137.33, color: "#e2e8f0", isStarter: true },
+  { id: "Sn", formula: "Sn", name: "Thiếc", state: "solid", category: "Kim loại", molarMass: 118.71, color: "#a8b2bd" },
+  { id: "Pb", formula: "Pb", name: "Chì", state: "solid", category: "Kim loại", molarMass: 207.2, color: "#64748b" },
   { id: "P", formula: "P", name: "Photpho", state: "solid", category: "Phi kim", molarMass: 30.97, color: "#ef4444", isStarter: true },
   { id: "S", formula: "S", name: "Lưu huỳnh", state: "solid", category: "Phi kim", molarMass: 32.06, color: "#eab308", isStarter: true },
   { id: "Br2", formula: "Br₂", name: "Brom", state: "liquid", category: "Halogen", molarMass: 159.8, color: "#7c2d12", isStarter: true },
@@ -31,6 +33,9 @@
   // --- SOLVENTS & INORGANIC LIQUIDS ---
   { id: "H2O", formula: "H₂O", name: "Nước", state: "liquid", category: "Dung môi", molarMass: 18.015, color: "#38bdf8" },
   { id: "HCl", formula: "HCl", name: "Axit Clohidric", state: "liquid", category: "Axit", molarMass: 36.46, color: "rgba(255,255,255,0.2)" },
+  { id: "HBr", formula: "HBr", name: "Axit Bromhiđric", state: "liquid", category: "Axit", molarMass: 80.91, color: "rgba(255,255,255,0.18)" },
+  { id: "HI", formula: "HI", name: "Axit Iothiđric", state: "liquid", category: "Axit", molarMass: 127.91, color: "rgba(255,255,255,0.18)" },
+  { id: "HCHO", formula: "HCHO", name: "Fomanđehit", state: "liquid", category: "Anđehit", molarMass: 30.03, color: "rgba(255,255,255,0.16)" },
 
   // --- BASES & ALKALIS ---
   { id: "NaOH", formula: "NaOH", name: "Natri Hidroxit", state: "solid", category: "Bazơ", molarMass: 40.00, color: "#818cf8" },
@@ -39,6 +44,10 @@
   { id: "LiOH", formula: "LiOH", name: "Liti Hidroxit", state: "solid", category: "Bazơ", molarMass: 23.95, color: "#ffffff" },
   { id: "Mg(OH)2", formula: "Mg(OH)₂", name: "Magiê Hidroxit", state: "solid", category: "Bazơ", molarMass: 58.32, color: "#ffffff" },
   { id: "Ba(OH)2", formula: "Ba(OH)₂", name: "Bari Hidroxit", state: "liquid", category: "Bazơ", molarMass: 171.34, color: "#f8fafc" },
+  { id: "Cu(OH)2", formula: "Cu(OH)₂", name: "Đồng(II) Hidroxit", state: "solid", category: "Bazơ", molarMass: 97.56, color: "#38bdf8" },
+  { id: "Fe(OH)2", formula: "Fe(OH)₂", name: "Sắt(II) Hidroxit", state: "solid", category: "Bazơ", molarMass: 89.86, color: "#a7c7a0" },
+  { id: "Fe(OH)3", formula: "Fe(OH)₃", name: "Sắt(III) Hidroxit", state: "solid", category: "Bazơ", molarMass: 106.87, color: "#9a3412" },
+  { id: "Al(OH)3", formula: "Al(OH)₃", name: "Nhôm Hidroxit", state: "solid", category: "Bazơ", molarMass: 78.00, color: "#f8fafc" },
 
   // --- OXIDES ---
   { id: "MnO2", formula: "MnO₂", name: "Mangan Đioxit", state: "solid", category: "Oxit", molarMass: 86.93, color: "#1e293b" },
@@ -61,6 +70,9 @@
   { id: "N2O", formula: "N₂O", name: "Dinitơ Oxit (Khí cười)", state: "gas", category: "Oxit", molarMass: 44.01, color: "rgba(255,255,255,0.1)" },
   { id: "Na2O", formula: "Na₂O", name: "Natri Oxit", state: "solid", category: "Oxit", molarMass: 61.98, color: "#ffffff" },
   { id: "Na2O2", formula: "Na₂O₂", name: "Natri Peroxit", state: "solid", category: "Oxit", molarMass: 77.98, color: "#fef08a" },
+  { id: "SO2", formula: "SO₂", name: "Lưu huỳnh Đioxit", state: "gas", category: "Oxit", molarMass: 64.06, color: "rgba(226,232,240,0.45)" },
+  { id: "SiF4", formula: "SiF₄", name: "Silic Tetraflorua", state: "gas", category: "Hợp chất vô cơ", molarMass: 104.08, color: "rgba(241,245,249,0.35)" },
+  { id: "Li2O", formula: "Li₂O", name: "Liti Oxit", state: "solid", category: "Oxit", molarMass: 29.88, color: "#f8fafc" },
 
   // --- ACIDS ---
   { id: "H2SO3", formula: "H₂SO₃", name: "Axit Sunfurơ", state: "liquid", category: "Axit", molarMass: 82.07, color: "#fef08a" },
@@ -121,7 +133,9 @@
   { id: "NaClO", formula: "NaClO", name: "Natri Hipoclorit", state: "liquid", category: "Muối", molarMass: 74.44, color: "#fef08a" },
   { id: "NaNO3", formula: "NaNO₃", name: "Natri Nitrat", state: "solid", category: "Muối", molarMass: 84.99, color: "#ffffff" },
   { id: "MnCl2", formula: "MnCl₂", name: "Mangan(II) Clorua", state: "solid", category: "Muối", molarMass: 125.84, color: "#fca5a5" },
-  { id: "Na2O2", formula: "Na₂O₂", name: "Natri Peroxit", state: "solid", category: "Muối", molarMass: 77.98, color: "#fef08a" },
+  { id: "KMnO4", formula: "KMnO₄", name: "Kali Pemanganat", state: "liquid", category: "Muối", molarMass: 158.03, color: "#7e22ce" },
+  { id: "K2MnO4", formula: "K₂MnO₄", name: "Kali Manganat", state: "solid", category: "Muối", molarMass: 197.13, color: "#16a34a" },
+  { id: "KClO3", formula: "KClO₃", name: "Kali Clorat", state: "solid", category: "Muối", molarMass: 122.55, color: "#ffffff" },
   { id: "NaClO3", formula: "NaClO₃", name: "Natri Clorat", state: "solid", category: "Muối", molarMass: 106.44, color: "#ffffff" },
   { id: "NaNO2", formula: "NaNO₂", name: "Natri Nitrit", state: "solid", category: "Muối", molarMass: 69.00, color: "#f3f4f6" },
   { id: "ClH3N-CH2-COOH", formula: "ClH₃N-CH₂-COOH", name: "Glyxin Clorua", state: "solid", category: "Muối", molarMass: 111.53, color: "#ffffff" },
@@ -138,6 +152,13 @@
   { id: "[Cu(NH3)4]SO4", formula: "[Cu(NH₃)₄]SO₄", name: "Phức đồng-amoniac", state: "liquid", category: "Muối", molarMass: 227.73, color: "#1d4ed8" },
   { id: "Ag3PO4", formula: "Ag₃PO₄", name: "Bạc Photphat", state: "solid", category: "Muối", molarMass: 418.58, color: "#eab308" },
   { id: "Al(NO3)3", formula: "Al(NO₃)₃", name: "Nhôm Nitrat", state: "solid", category: "Muối", molarMass: 213.0, color: "#ffffff" },
+  { id: "C17H35COONa", formula: "C₁₇H₃₅COONa", name: "Natri Stearat", state: "solid", category: "Muối", molarMass: 306.46, color: "#f8fafc" },
+  { id: "Ca3(PO4)2", formula: "Ca₃(PO₄)₂", name: "Canxi Photphat", state: "solid", category: "Muối", molarMass: 310.18, color: "#f8fafc" },
+  { id: "CaSiO3", formula: "CaSiO₃", name: "Canxi Silicat", state: "solid", category: "Muối", molarMass: 116.16, color: "#e5e7eb" },
+  { id: "Ag2S", formula: "Ag₂S", name: "Bạc Sunfua", state: "solid", category: "Muối", molarMass: 247.80, color: "#111827" },
+  { id: "Ag2SO4", formula: "Ag₂SO₄", name: "Bạc Sunfat", state: "solid", category: "Muối", molarMass: 311.80, color: "#f3f4f6" },
+  { id: "LiCl", formula: "LiCl", name: "Liti Clorua", state: "solid", category: "Muối", molarMass: 42.39, color: "#ffffff" },
+  { id: "K2S", formula: "K₂S", name: "Kali Sunfua", state: "solid", category: "Muối", molarMass: 110.26, color: "#fef9c3" },
   { id: "Waste", formula: "Waste", name: "Chất thải", state: "liquid", category: "Muối", molarMass: 100.0, color: "#6b7280" },
 
   // --- OTHER INORGANICS ---

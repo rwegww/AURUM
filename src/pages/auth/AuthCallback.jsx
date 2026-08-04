@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/lib/supabase';
 import { getPostLoginPath } from '@/utils/authNavigation';
 
 const readReturnLocation = () => {
@@ -14,31 +13,27 @@ const readReturnLocation = () => {
 
 const AuthCallback = () => {
     const navigate = useNavigate();
-    const { user, isLoggedIn, loading } = useAuth();
+    const { completeGoogleLogin } = useAuth();
     const returnLocationRef = useRef(readReturnLocation());
 
     useEffect(() => {
+        let active = true;
+
         const handleCallback = async () => {
-            const { error } = await supabase.auth.getSession();
-            if (error) {
-                console.error('Auth callback error:', error.message);
-                sessionStorage.removeItem('aurum-auth-return-to');
-                navigate('/login?error=' + encodeURIComponent(error.message));
+            const result = await completeGoogleLogin();
+            if (!active) return;
+
+            sessionStorage.removeItem('aurum-auth-return-to');
+            if (result.success) {
+                navigate(getPostLoginPath(result.user, returnLocationRef.current), { replace: true });
+            } else {
+                navigate('/login?error=' + encodeURIComponent(result.message || 'Không thể đăng nhập bằng Google.'), { replace: true });
             }
         };
 
-        handleCallback();
-    }, [navigate]);
-
-    useEffect(() => {
-        if (!loading && isLoggedIn && user) {
-            sessionStorage.removeItem('aurum-auth-return-to');
-            navigate(getPostLoginPath(user, returnLocationRef.current), { replace: true });
-        } else if (!loading && !isLoggedIn) {
-            sessionStorage.removeItem('aurum-auth-return-to');
-            navigate('/login?error=' + encodeURIComponent('Phiên đăng nhập Google không hợp lệ hoặc đã hết hạn.'), { replace: true });
-        }
-    }, [loading, isLoggedIn, user, navigate]);
+        void handleCallback();
+        return () => { active = false; };
+    }, [completeGoogleLogin, navigate]);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-viet-bg">

@@ -157,6 +157,69 @@ const getSpeciesFormula = (species) => typeof species === 'string'
   ? species
   : species?.formula || species?.name || '';
 
+const isNeutralVisualColor = color => !color
+  || color === '#ffffff'
+  || color === '#f8fafc'
+  || color === '#f1f5f9'
+  || String(color).includes('255,255,255');
+
+const getFlamePalette = (reaction) => {
+  const reactants = new Set((reaction.reactants || []).map(item => normalizeLabFormula(getSpeciesFormula(item))));
+  if (reactants.has('K')) return ['#7c3aed', '#e9d5ff'];
+  if (reactants.has('NA')) return ['#f59e0b', '#fef08a'];
+  if (reactants.has('CU') || [...reactants].some(formula => formula.startsWith('CU'))) return ['#059669', '#a7f3d0'];
+  if (reactants.has('MG') || reactants.has('AL')) return ['#e2e8f0', '#ffffff'];
+  if (reactants.has('H2')) return ['#2563eb', '#bfdbfe'];
+  if (reactants.has('S')) return ['#2563eb', '#93c5fd'];
+  return ['#ea580c', '#fef08a'];
+};
+
+export const getReactionVisualProfile = (reaction = {}, productBatches = [], chemicals = {}) => {
+  const animation = String(reaction.animation || 'mix').toLowerCase();
+  const gasProducts = productBatches.filter((product) => {
+    const chemical = getChemical(chemicals, product.formula);
+    return (product.state || chemical.state) === 'gas';
+  });
+  const precipitateProducts = productBatches.filter(product => product.isPrecipitate);
+  const coloredProduct = productBatches.find((product) => {
+    const chemical = getChemical(chemicals, product.formula);
+    return !isNeutralVisualColor(product.color || chemical.color);
+  });
+  const coloredChemical = coloredProduct ? getChemical(chemicals, coloredProduct.formula) : {};
+  const gasFormula = normalizeLabFormula(gasProducts[0]?.formula);
+  const smokeColors = {
+    NO2: '#9a3412',
+    CL2: '#84cc16',
+    BR2: '#7c2d12',
+    I2: '#7e22ce',
+  };
+  const isExplosion = animation === 'explosion' || /\bnổ\b/i.test(reaction.name || '');
+  const isBurning = animation === 'burn' || animation === 'combustion';
+  const isFizzing = animation === 'fizz' || gasProducts.length > 0;
+  const isSmoking = animation.startsWith('smoke') || isBurning || isExplosion || gasProducts.length > 0;
+  const isColorChange = animation === 'color-change';
+  const isMixing = animation === 'mix' || animation === 'synthesis' || isColorChange;
+  const hasPrecipitation = precipitateProducts.length > 0;
+  const intensity = isExplosion ? 'extreme' : (isBurning || gasProducts.length > 0 ? 'high' : (hasPrecipitation ? 'medium' : 'low'));
+
+  return {
+    type: hasPrecipitation ? 'precipitation' : animation,
+    sound: isExplosion ? 'explosion' : (isBurning ? 'fire' : (isFizzing ? 'fizz' : (isSmoking ? 'smoke' : null))),
+    activeBubbles: isFizzing,
+    activeFlame: isExplosion || isBurning,
+    activeSmoke: isSmoking,
+    activeSwirl: isMixing || hasPrecipitation,
+    activePrecipitation: hasPrecipitation,
+    shake: isExplosion,
+    intensity,
+    duration: isExplosion ? 2800 : (isBurning ? 4500 : 5000),
+    smokeColor: animation === 'smoke_purple' ? '#a855f7' : (smokeColors[gasFormula] || '#e2e8f0'),
+    primaryColor: precipitateProducts[0]?.color || coloredProduct?.color || coloredChemical.color || '#60a5fa',
+    secondaryColor: isColorChange ? '#ffffff' : '#93c5fd',
+    flameColors: getFlamePalette(reaction),
+  };
+};
+
 export const calculateReactionOutcome = (reaction, batches = [], chemicals = {}) => {
   const reactants = Array.isArray(reaction?.reactants) ? reaction.reactants : [];
   const products = Array.isArray(reaction?.products) ? reaction.products : [];
@@ -215,11 +278,13 @@ export const calculateReactionOutcome = (reaction, batches = [], chemicals = {})
     return {
       formula,
       name: chemical.name || product?.name || formula,
-      state: chemical.state || 'liquid',
+      state: product?.state || chemical.state || 'liquid',
+      color: product?.color || chemical.color || '#ffffff',
       ...molesToDisplayAmount(moles, chemical, formula),
       moles,
       isProduct: true,
-      isPrecipitate: chemical.state === 'solid',
+      isPrecipitate: Boolean(product?.isPrecipitate),
+      precipitateAppearance: product?.precipitateAppearance || null,
     };
   });
 

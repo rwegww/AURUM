@@ -11,6 +11,8 @@ import {
 } from '../../src/utils/labChemistry.js';
 import { getRecipeRequirementCounts, normalizeInventory, generateCraftableItems } from '../../src/data/labInventory.js';
 import { craftingTasks } from '../../src/data/craftingTasks.js';
+import { chemicals as staticLabChemicals, reactions as staticLabReactions } from '../../src/data/reactions/index.js';
+import { enrichReaction } from '../../src/data/reactions/enrichment.js';
 
 const router = express.Router();
 
@@ -77,6 +79,50 @@ const normalizeLabRecord = (record) => {
   };
 };
 
+const mergeLabChemicals = (databaseChemicals = []) => {
+  const merged = new Map(staticLabChemicals.map(chemical => [
+    normalizeLabFormula(chemical.formula),
+    { ...chemical },
+  ]));
+
+  databaseChemicals.map(normalizeChemical).forEach((chemical) => {
+    const key = normalizeLabFormula(chemical.formula);
+    if (!key) return;
+    const populatedFields = Object.fromEntries(
+      Object.entries(chemical).filter(([, value]) => value !== undefined && value !== null),
+    );
+    merged.set(key, { ...(merged.get(key) || {}), ...populatedFields });
+  });
+
+  return Array.from(merged.values());
+};
+
+const mergeLabReactions = (databaseReactions = []) => {
+  const merged = new Map(staticLabReactions.map(reaction => [reaction.id, reaction]));
+
+  databaseReactions.map(normalizeLabRecord).forEach((reaction) => {
+    const baseline = merged.get(reaction.id) || {};
+    const populatedFields = Object.fromEntries(
+      Object.entries(reaction).filter(([, value]) => value !== undefined && value !== null),
+    );
+    merged.set(reaction.id, enrichReaction({
+      ...baseline,
+      ...populatedFields,
+      reactants: reaction.reactants?.length ? reaction.reactants : baseline.reactants,
+      products: reaction.products?.length ? reaction.products : baseline.products,
+    }));
+  });
+
+  return Array.from(merged.values());
+};
+
+const isUsableLabReaction = (reaction, knownFormulas) => {
+  const species = [...(reaction.reactants || []), ...(reaction.products || [])];
+  return species.length > 0
+    && species.every(item => knownFormulas.has(normalizeLabFormula(item.formula)))
+    && (reaction.isQualitative || isStructurallyBalancedReaction(reaction));
+};
+
 // GET /api/lab/chemicals - Get all chemicals
 router.get('/chemicals', async (req, res) => {
   try {
@@ -86,18 +132,15 @@ router.get('/chemicals', async (req, res) => {
       .order('cong_thuc', { ascending: true });
 
     if (error) throw error;
-    const seen = new Set();
-    const chemicals = (data || []).map(normalizeChemical).filter((chemical) => {
-      const key = normalizeLabFormula(chemical.formula);
-      if (!key || seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
+    const chemicals = mergeLabChemicals(data || [])
+      .sort((a, b) => String(a.formula).localeCompare(String(b.formula), 'vi'));
     res.set('Cache-Control', 'private, max-age=300');
     res.status(200).json(chemicals);
   } catch (error) {
     console.error('Lỗi tải danh sách hóa chất:', error);
-    res.status(500).json({ message: 'Không thể tải danh sách hóa chất.', error: error.message });
+    res.set('Cache-Control', 'private, max-age=60');
+    res.set('X-Lab-Data-Source', 'static-fallback');
+    res.status(200).json(mergeLabChemicals([]));
   }
 });
 
@@ -112,13 +155,10 @@ router.get('/reactions', async (req, res) => {
     if (reactionResult.error) throw reactionResult.error;
     if (chemicalResult.error) throw chemicalResult.error;
 
-    const knownFormulas = new Set((chemicalResult.data || []).map(item => normalizeLabFormula(item.cong_thuc)));
-    const normalizedReactions = (reactionResult.data || []).map(normalizeLabRecord);
-    const usableReactions = normalizedReactions.filter((reaction) => {
-      const species = [...(reaction.reactants || []), ...(reaction.products || [])];
-      return species.every(item => knownFormulas.has(normalizeLabFormula(item.formula)))
-        && isStructurallyBalancedReaction(reaction);
-    });
+    const allChemicals = mergeLabChemicals(chemicalResult.data || []);
+    const knownFormulas = new Set(allChemicals.map(item => normalizeLabFormula(item.formula)));
+    const normalizedReactions = mergeLabReactions(reactionResult.data || []);
+    const usableReactions = normalizedReactions.filter(reaction => isUsableLabReaction(reaction, knownFormulas));
 
     if (usableReactions.length !== normalizedReactions.length) {
       console.warn(`[Lab] Đã loại ${normalizedReactions.length - usableReactions.length} phản ứng không cân bằng hoặc tham chiếu hóa chất không tồn tại.`);
@@ -127,7 +167,10 @@ router.get('/reactions', async (req, res) => {
     res.status(200).json(usableReactions);
   } catch (error) {
     console.error('Lỗi tải danh sách phản ứng:', error);
-    res.status(500).json({ message: 'Không thể tải danh sách phản ứng.', error: error.message });
+    const knownFormulas = new Set(staticLabChemicals.map(item => normalizeLabFormula(item.formula)));
+    res.set('Cache-Control', 'private, max-age=60');
+    res.set('X-Lab-Data-Source', 'static-fallback');
+    res.status(200).json(staticLabReactions.filter(reaction => isUsableLabReaction(reaction, knownFormulas)));
   }
 });
 
@@ -214,7 +257,8 @@ router.post('/unlock', auth, async (req, res) => {
       .from('hoa_chat')
       .select('cong_thuc, la_chat_khoi_dau');
     if (chemicalError) throw chemicalError;
-    const canonicalByNormalized = new Map((existingChemicals || []).map(item => [normalizeLabFormula(item.cong_thuc), item.cong_thuc]));
+    const completeChemicals = mergeLabChemicals(existingChemicals || []);
+    const canonicalByNormalized = new Map(completeChemicals.map(item => [normalizeLabFormula(item.formula), item.formula]));
     const formulasToUnlock = normalizedRequested.map(item => canonicalByNormalized.get(item)).filter(Boolean);
 
     if (formulasToUnlock.length !== normalizedRequested.length) {
@@ -229,18 +273,18 @@ router.post('/unlock', auth, async (req, res) => {
     if (newFormulas.length > 0) {
       const { data: reactionRows, error: reactionError } = await supabase
         .from('phan_ung')
-        .select('chat_tham_gia, san_pham');
+        .select('id, chat_tham_gia, san_pham');
       if (reactionError) throw reactionError;
 
       const availableReactants = new Set([
         ...(req.user.unlockedChemicals || []).map(normalizeLabFormula),
-        ...(existingChemicals || [])
-          .filter(item => item.la_chat_khoi_dau)
-          .map(item => normalizeLabFormula(item.cong_thuc)),
+        ...completeChemicals
+          .filter(item => item.isStarter || item.is_starter)
+          .map(item => normalizeLabFormula(item.formula)),
       ]);
-      const authoredReactions = (reactionRows || [])
-        .map(normalizeLabRecord)
-        .filter(isStructurallyBalancedReaction);
+      const knownFormulas = new Set(completeChemicals.map(item => normalizeLabFormula(item.formula)));
+      const authoredReactions = mergeLabReactions(reactionRows || [])
+        .filter(reaction => isUsableLabReaction(reaction, knownFormulas));
       const invalidUnlock = newFormulas.find(targetFormula => !authoredReactions.some(reaction => (
         (reaction.products || []).some(product => normalizeLabFormula(product.formula) === normalizeLabFormula(targetFormula))
         && (reaction.reactants || []).every(reactant => availableReactants.has(normalizeLabFormula(reactant.formula)))
@@ -288,7 +332,7 @@ router.get('/inventory', auth, async (req, res) => {
 
     if (chemError) throw chemError;
 
-    const dynamicCraftableItems = generateCraftableItems(chemicals);
+    const dynamicCraftableItems = generateCraftableItems(mergeLabChemicals(chemicals));
 
     res.status(200).json({
       inventory: normalizeInventory(req.user.inventory),
@@ -314,7 +358,7 @@ router.post('/craft', auth, async (req, res) => {
       .select('*');
 
     if (chemError) throw chemError;
-    const dynamicCraftableItems = generateCraftableItems(chemicals);
+    const dynamicCraftableItems = generateCraftableItems(mergeLabChemicals(chemicals));
 
     const item = dynamicCraftableItems.find(candidate => candidate.id === itemId);
     if (!item) return res.status(404).json({ success: false, message: 'Không tìm thấy vật phẩm cần chế tạo.' });

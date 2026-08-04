@@ -266,6 +266,7 @@ const MagicLab3D = () => {
   const setUnlocked = useLabStore(state => state.setUnlocked);
   const setOnDiscovery = useLabStore(state => state.setOnDiscovery);
   const beakers = useLabStore(state => state.beakers);
+  const allReactions = useLabStore(state => state.reactions);
   const activeBeakerIndex = useLabStore(state => state.activeBeakerIndex);
   const isPouringFormula = useLabStore(state => state.isPouringFormula);
   const dropToBeaker = useLabStore(state => state.dropToBeaker);
@@ -374,6 +375,14 @@ const MagicLab3D = () => {
     lines.push(`Thời gian xuất: ${new Date().toLocaleString('vi-VN')}`);
     lines.push(`Cốc thí nghiệm đang chọn: #${activeBeakerIndex + 1}\n`);
     lines.push("Giả định tính lượng: dung dịch 1 M; khí ở 25°C và 1 atm.\n");
+    if (activeBeaker.reactionEquation) {
+      lines.push("--- PHẢN ỨNG GẦN NHẤT ---");
+      lines.push(`Phương trình phân tử: ${activeBeaker.reactionEquation}`);
+      if (activeBeaker.reactionIonicEquation) lines.push(`Phương trình ion đầy đủ: ${activeBeaker.reactionIonicEquation}`);
+      if (activeBeaker.reactionNetIonicEquation) lines.push(`Phương trình ion rút gọn: ${activeBeaker.reactionNetIonicEquation}`);
+      if (activeBeaker.reactionObservation) lines.push(`Hiện tượng: ${activeBeaker.reactionObservation}`);
+      lines.push('');
+    }
     lines.push("--- 📜 LỊCH SỬ THAO TÁC HÓA CHẤT ---");
     if (activeHistory.length === 0) {
       lines.push("(Chưa có thao tác nào)");
@@ -428,6 +437,17 @@ const MagicLab3D = () => {
   // Sound Effects
   const { playSound } = useSoundEffects();
   const { enabled: soundEnabled, toggleSound: toggleLabSound } = useSoundStore();
+  const lastPlayedEffectRef = useRef(null);
+
+  useEffect(() => {
+    if (!activeBeaker.reactionEffectId || !activeBeaker.reactionEffectSound) return;
+    if (lastPlayedEffectRef.current === activeBeaker.reactionEffectId) return;
+    lastPlayedEffectRef.current = activeBeaker.reactionEffectId;
+    playSound(activeBeaker.reactionEffectSound, {
+      intensity: activeBeaker.intensity,
+      duration: activeBeaker.reactionEffectSound === 'fire' ? 1.4 : undefined,
+    });
+  }, [activeBeaker.intensity, activeBeaker.reactionEffectId, activeBeaker.reactionEffectSound, playSound]);
 
   // --- 1. Fetch Backend Data ---
   useEffect(() => {
@@ -623,17 +643,16 @@ const MagicLab3D = () => {
 
   // Danh sách phản ứng đã khám phá cho bảng điều chế
   const knownReactions = useMemo(() => {
-    const rxs = useLabStore.getState().reactions || [];
-    return rxs.filter(rx => {
+    return allReactions.filter(rx => {
       return rx.reactants.every(r => normalizedDiscoveredSet.has(normalize(r.formula)));
     });
-  }, [normalizedDiscoveredSet]);
+  }, [allReactions, normalizedDiscoveredSet]);
 
   useEffect(() => {
     const isDefaultMessage = activeBeaker.reactionMessage?.includes("Mời bắt đầu");
     if (activeBeaker.reactionMessage && !isDefaultMessage) {
       setIsMessageVisible(true);
-      const timer = setTimeout(() => setIsMessageVisible(false), 5000);
+      const timer = setTimeout(() => setIsMessageVisible(false), 8000);
       return () => clearTimeout(timer);
     } else {
       setIsMessageVisible(false);
@@ -773,7 +792,7 @@ const MagicLab3D = () => {
             >
               <BookOpen className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
               <span>Bảng điều chế</span>
-              <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-md text-[10px] font-black">{knownReactions.length}</span>
+              <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-md text-[10px] font-black">{knownReactions.length}/{allReactions.length}</span>
             </button>
             <button 
               onClick={toggleFullscreen}
@@ -806,9 +825,34 @@ const MagicLab3D = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-blue-600/20 backdrop-blur-xl border border-blue-500/30 px-6 py-3 rounded-2xl text-blue-200 text-sm font-medium shadow-2xl"
+                  className="w-[min(560px,calc(100vw-2rem))] rounded-2xl border border-blue-500/30 bg-slate-950/90 px-5 py-4 text-blue-100 shadow-2xl backdrop-blur-xl"
                 >
-                  {activeBeaker.reactionMessage}
+                  <p className="text-sm font-black text-white">{activeBeaker.reactionMessage}</p>
+                  {activeBeaker.reactionEquation && (
+                    <p className="mt-2 rounded-lg border border-emerald-400/20 bg-emerald-500/10 px-3 py-2 font-mono text-xs font-bold text-emerald-300">
+                      {activeBeaker.reactionEquation}
+                    </p>
+                  )}
+                  {activeBeaker.reactionPrecipitate && (
+                    <div className="mt-2 flex items-center gap-2 text-[11px] font-bold text-amber-100">
+                      <span
+                        className="h-3 w-3 rounded-full border border-white/40"
+                        style={{ backgroundColor: activeBeaker.reactionPrecipitate.color }}
+                      />
+                      Kết tủa {activeBeaker.reactionPrecipitate.formula}: {activeBeaker.reactionPrecipitate.colorLabel}
+                    </div>
+                  )}
+                  {activeBeaker.reactionNetIonicEquation && (
+                    <p className="mt-2 text-[11px] leading-relaxed text-cyan-200">
+                      <span className="font-black uppercase tracking-wide text-cyan-400">Ion rút gọn:</span>{' '}
+                      <span className="font-mono">{activeBeaker.reactionNetIonicEquation}</span>
+                    </p>
+                  )}
+                  {activeBeaker.reactionObservation && (
+                    <p className="mt-2 text-[11px] leading-relaxed text-white/70">
+                      <span className="font-bold text-white/90">Hiện tượng:</span> {activeBeaker.reactionObservation}
+                    </p>
+                  )}
                   {activeBeaker.safetyWarning && (
                     <span className="mt-2 block border-t border-amber-300/20 pt-2 text-xs font-bold text-amber-200">
                       ⚠️ {activeBeaker.safetyWarning}
@@ -1208,7 +1252,7 @@ const MagicLab3D = () => {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/30">
-                        {knownReactions.length} phản ứng
+                        {knownReactions.length}/{allReactions.length} đã mở
                       </span>
                       <button
                         onClick={() => setShowRecipeBook(false)}
@@ -1238,8 +1282,32 @@ const MagicLab3D = () => {
                               </span>
                             </div>
                             <div className="bg-slate-900/60 rounded-lg px-2.5 py-1.5 mb-1.5 border border-white/5 font-mono text-[11px] text-emerald-400">
+                              <span className="mb-0.5 block font-sans text-[8px] font-black uppercase tracking-widest text-white/35">Phương trình phân tử</span>
                               {rx.equation}
                             </div>
+                            {rx.precipitate && (
+                              <div className="mb-1.5 rounded-lg border border-amber-300/15 bg-amber-400/10 px-2.5 py-2 text-[10px] text-amber-100">
+                                <div className="flex items-center gap-1.5 font-bold">
+                                  <span
+                                    className="h-2.5 w-2.5 rounded-full border border-white/40"
+                                    style={{ backgroundColor: rx.precipitate.color }}
+                                  />
+                                  {rx.precipitate.formula}↓ — kết tủa {rx.precipitate.colorLabel}
+                                </div>
+                                {rx.netIonicEquation && (
+                                  <p className="mt-1.5 font-mono leading-relaxed text-cyan-200">
+                                    <span className="font-sans font-black uppercase tracking-wide text-cyan-400">Ion rút gọn:</span>{' '}
+                                    {rx.netIonicEquation}
+                                  </p>
+                                )}
+                                {rx.ionicEquation && rx.ionicEquation !== rx.netIonicEquation && (
+                                  <details className="mt-1.5 text-white/65">
+                                    <summary className="cursor-pointer font-bold text-white/55 hover:text-white/80">Xem phương trình ion đầy đủ</summary>
+                                    <p className="mt-1.5 font-mono leading-relaxed text-white/75">{rx.ionicEquation}</p>
+                                  </details>
+                                )}
+                              </div>
+                            )}
                             {rx.observation && (
                               <p className="text-[10px] text-white/60 leading-relaxed">
                                 <span className="font-bold text-white/80">Hiện tượng:</span> {rx.observation}

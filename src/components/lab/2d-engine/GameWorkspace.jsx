@@ -161,7 +161,14 @@ const GameWorkspace = () => {
                     yields.forEach(item => {
                       const key = `${item.formula}_${item.unit}`;
                       if (!yieldMap.has(key)) {
-                        yieldMap.set(key, { formula: item.formula, name: item.name, amount: 0, unit: item.unit, state: item.state });
+                        yieldMap.set(key, {
+                          formula: item.formula,
+                          name: item.name,
+                          amount: 0,
+                          unit: item.unit,
+                          state: item.state,
+                          isPrecipitate: item.isPrecipitate,
+                        });
                       }
                       yieldMap.get(key).amount += (item.amount || 0);
                     });
@@ -205,7 +212,7 @@ const GameWorkspace = () => {
                               {yieldList.map((yd, idx) => (
                                 <div key={idx} className="flex justify-between items-center gap-2">
                                   <span className="font-bold text-emerald-300">
-                                    {yd.formula} {yd.state === 'gas' ? '↑' : ''}
+                                    {yd.formula} {yd.state === 'gas' ? '↑' : (yd.isPrecipitate ? '↓' : '')}
                                   </span>
                                   <span className="text-[11px] font-mono text-emerald-400">{yd.amount}{yd.unit}</span>
                                 </div>
