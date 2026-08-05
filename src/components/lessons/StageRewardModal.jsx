@@ -1,6 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Gem, Sparkles, Zap } from 'lucide-react';
 import LessonSummaryFallback from './LessonSummaryFallback';
 
 const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson }) => {
@@ -26,9 +26,11 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson 
           initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", damping: 12 }}
-          className="mb-8 px-8 py-3 bg-viet-green text-white rounded-full font-black text-[14px] uppercase tracking-[4px] shadow-2xl shadow-viet-green/30"
+          className="mb-8 inline-flex items-center gap-3 rounded-full bg-viet-green px-8 py-3 text-[14px] font-black uppercase tracking-[4px] text-white shadow-2xl shadow-viet-green/30"
         >
-          Sparkles Đã hoàn thành chặng đường Sparkles
+          <Sparkles className="h-4 w-4" aria-hidden="true" />
+          Đã hoàn thành chặng đường
+          <Sparkles className="h-4 w-4" aria-hidden="true" />
         </motion.div>
 
         <motion.h2 
@@ -47,7 +49,9 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson 
              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.4 }}
              className="bg-white px-6 py-4 rounded-3xl border border-rose-100 flex items-center gap-3 shadow-lg"
            >
-              <div className="w-10 h-10 rounded-2xl bg-rose-50 flex items-center justify-center text-xl">Zap</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-rose-50 text-rose-500">
+                <Zap className="h-5 w-5" aria-hidden="true" />
+              </div>
               <div>
                  <div className="text-[10px] font-black text-slate-400 uppercase">Kinh nghiệm</div>
                  <div className="text-lg font-black text-rose-600">+{gameData?.rewardXp || 100} XP</div>
@@ -57,7 +61,9 @@ const StageRewardModal = ({ rewardSrc, onProceed, lessonTitle, gameData, lesson 
              initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 }}
              className="bg-white px-6 py-4 rounded-3xl border border-sky-100 flex items-center gap-3 shadow-lg"
            >
-              <div className="w-10 h-10 rounded-2xl bg-sky-50 flex items-center justify-center text-xl">Diamond</div>
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-sky-50 text-sky-500">
+                <Gem className="h-5 w-5" aria-hidden="true" />
+              </div>
               <div>
                  <div className="text-[10px] font-black text-slate-400 uppercase">Đá Aurum</div>
                  <div className="text-lg font-black text-sky-500">+{gameData?.rewardGem || 5}</div>

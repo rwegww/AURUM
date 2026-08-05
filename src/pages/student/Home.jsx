@@ -10,7 +10,7 @@ import { stableRange } from '@/utils/stableRandom';
 
 // --- Floating Chemistry Background ---
 const FallingChemistry = () => {
-  const symbols = ['H₂O', 'CO₂', 'NaCl', 'CH₄', 'Atom', 'O₂', 'H₂', 'NH₃', 'Fe'];
+  const symbols = ['H₂O', 'CO₂', 'NaCl', 'CH₄', 'C₆H₁₂O₆', 'O₂', 'H₂', 'NH₃', 'Fe'];
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden h-full z-0 opacity-20">
       {[...Array(12)].map((_, i) => {
@@ -345,9 +345,7 @@ const Home = () => {
       </section>
 
       {/* â”€â”€â”€ LEADERBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <div className="bg-[#f4faef] py-20 border-t-2 border-duo-border">
-        <LeaderboardSection />
-      </div>
+      <LeaderboardSection />
 
       {/* â”€â”€â”€ FINAL CTA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       {!isLoggedIn && (

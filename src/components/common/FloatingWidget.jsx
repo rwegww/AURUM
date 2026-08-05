@@ -5,9 +5,8 @@ import { useTranslation, Trans } from 'react-i18next';
 import Avatar from '@/components/common/Avatar';
 import AssistantAvatar from '@/components/common/AssistantAvatar';
 import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
-import { ingredients } from '@/data/labInventory';
 import { getChemicalImage } from '@/data/chemicalImages';
-import { MessageCircle, Flame, Trophy, Target, Lock } from 'lucide-react';
+import { CheckCircle2, Gift, MessageCircle, Flame, Trophy, Target, Lock, Hourglass } from 'lucide-react';
 import { RenderIcon } from '@/utils/IconMapper';
 
 const getElementStyle = (symbol) => {
@@ -410,7 +409,10 @@ const FloatingWidget = () => {
                       {/* Daily countdown */}
                       {nhiem_vuActiveTab === 'daily' && (
                         <div className="flex items-center justify-center gap-1.5 text-[9px] font-bold uppercase tracking-[2px] text-viet-text-light">
-                          <span>Hourglass {t('widget.reset_in')}</span>
+                          <span className="inline-flex items-center gap-1.5">
+                            <Hourglass className="h-3 w-3" aria-hidden="true" />
+                            {t('widget.reset_in')}
+                          </span>
                           <span className="text-viet-text font-black">{timeLeft}</span>
                         </div>
                       )}
@@ -467,7 +469,8 @@ const FloatingWidget = () => {
                                       {mission.isCraftingTask && mission.rewards && mission.rewards.length > 0 && (
                                         <div className="mt-2 mb-2.5 p-2 bg-slate-50 border border-slate-100 rounded-xl">
                                           <p className="text-[8px] font-black text-viet-text-light/60 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                                            Gift {t('widget.reward_elements')}
+                                            <Gift className="mr-1 inline h-3 w-3" aria-hidden="true" />
+                                            {t('widget.reward_elements')}
                                           </p>
                                           <div className="flex flex-wrap gap-1.5">
                                             {mission.rewards.map((rew, idx) => (
@@ -544,8 +547,8 @@ const FloatingWidget = () => {
                 <div className="flex flex-col h-full min-h-[420px] justify-between">
                   {phan_hoiSuccess ? (
                     <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
-                      <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl animate-bounce">
-                        Check
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+                        <CheckCircle2 className="h-8 w-8" aria-hidden="true" />
                       </div>
                       <h4 className="font-black text-viet-text text-lg uppercase tracking-tight">{t('widget.success_title')}</h4>
                       <p className="text-xs font-semibold text-viet-text-light px-6">

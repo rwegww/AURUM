@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Clock3, Loader2, Trash2 } from 'lucide-react';
 import { activityService } from '@/services/ActivityService';
 
 const UserActivityHistory = () => {
@@ -52,26 +53,34 @@ const UserActivityHistory = () => {
   };
 
   return (
-    <div className="bg-white rounded-[40px] p-8 md:p-10 border border-viet-border shadow-sm flex flex-col h-full">
-      <div className="flex items-center justify-between mb-10">
-        <div>
-          <h3 className="text-2xl font-black text-viet-text leading-none">{t('profile.history_title')}</h3>
-          <p className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mt-2 italic">Dữ liệu hoạt động Alpha</p>
+    <section className="rounded-[32px] border-2 border-[#dfe3db] border-b-[6px] bg-white p-6 sm:p-8">
+      <div className="mb-7 flex items-start justify-between gap-4">
+        <div className="flex min-w-0 items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-[#eef6e8] text-[#43752f]" aria-hidden="true">
+            <Clock3 size={19} />
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-xl font-black leading-tight text-viet-text sm:text-2xl">{t('profile.history_title')}</h3>
+            <p className="mt-1 text-xs font-semibold text-viet-text-light/70">{t('profile.history_subtitle')}</p>
+          </div>
         </div>
         {history.length > 0 && (
-          <button 
+          <button
+            type="button"
             onClick={handleClear}
-            className="text-[11px] font-black text-red-400 uppercase tracking-widest hover:text-red-600 transition-colors px-4 py-2 hover:bg-red-50 rounded-xl"
+            className="inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border border-red-100 bg-red-50 px-3 text-[10px] font-black uppercase tracking-wider text-red-600 transition-colors hover:border-red-200 hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
           >
-            {t('profile.history_clear')}
+            <Trash2 size={14} aria-hidden="true" />
+            <span className="hidden sm:inline">{t('profile.history_clear')}</span>
           </button>
         )}
       </div>
 
-      <div className="flex-1 space-y-6 max-h-[500px] overflow-y-auto pr-4 custom-scrollbar">
+      <div className="max-h-[500px] space-y-5 overflow-y-auto pr-2 custom-scrollbar sm:pr-4">
         {loading ? (
-          <div className="h-full flex flex-col items-center justify-center py-20">
-            <div className="w-8 h-8 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
+          <div className="flex items-center justify-center gap-3 rounded-[22px] border border-dashed border-[#dfe3db] bg-[#f9faf7] py-14" role="status" aria-live="polite">
+            <Loader2 className="h-5 w-5 animate-spin text-viet-green motion-reduce:animate-none" aria-hidden="true" />
+            <span className="text-sm font-bold text-viet-text-light">{t('profile.history_loading')}</span>
           </div>
         ) : (
           <AnimatePresence initial={false}>
@@ -82,7 +91,7 @@ const UserActivityHistory = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className="group relative flex gap-6 pb-6 border-b border-viet-border last:border-0 last:pb-0"
+                  className="group relative flex gap-4 border-b border-viet-border pb-5 last:border-0 last:pb-0 sm:gap-5"
                 >
                   <div className={`w-14 h-14 shrink-0 rounded-2xl border flex items-center justify-center text-2xl shadow-sm transition-transform group-hover:scale-110 ${getIconBg(item.type)}`}>
                     {item.icon}
@@ -99,9 +108,9 @@ const UserActivityHistory = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center py-20 opacity-30">
-                <div className="text-5xl mb-6 grayscale">Hourglass</div>
-                <p className="text-sm font-bold uppercase tracking-widest">{t('profile.history_empty')}</p>
+              <div className="flex flex-col items-center justify-center rounded-[22px] border border-dashed border-[#dfe3db] bg-[#f9faf7] px-5 py-12 text-center">
+                <Clock3 className="mb-4 h-9 w-9 text-viet-text-light/30" aria-hidden="true" />
+                <p className="max-w-sm text-sm font-bold leading-6 text-viet-text-light/70">{t('profile.history_empty')}</p>
               </div>
             )}
           </AnimatePresence>
@@ -113,7 +122,7 @@ const UserActivityHistory = () => {
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
       `}</style>
-    </div>
+    </section>
   );
 };
 

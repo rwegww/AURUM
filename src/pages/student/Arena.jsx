@@ -48,6 +48,24 @@ const RANKS = [
   { key: 'master', min: 6000, color: 'text-viet-green', bg: 'bg-viet-green/10', border: 'border-viet-green/30' },
 ];
 
+const LEADERBOARD_ELEMENTS = {
+  1: {
+    symbol: 'Au',
+    atomicNumber: 79,
+    tileClass: 'border-[#d4a91d] bg-[#f4cc54] text-[#3b2d05]',
+  },
+  2: {
+    symbol: 'Ag',
+    atomicNumber: 47,
+    tileClass: 'border-[#b9c2bf] bg-[#e7ecea] text-[#31413b]',
+  },
+  3: {
+    symbol: 'Cu',
+    atomicNumber: 29,
+    tileClass: 'border-[#ae623c] bg-[#dc8c61] text-[#3c1c0e]',
+  },
+};
+
 const apiCall = async (url, options = {}) => {
   const token = localStorage.getItem('token');
   const res = await fetch(url, {
@@ -203,6 +221,66 @@ const RankSummary = ({ user }) => {
   );
 };
 
+const ArenaLeaderboardRow = ({ player, fallbackRank, t }) => {
+  const rank = Number(player.rank) || fallbackRank;
+  const element = LEADERBOARD_ELEMENTS[rank];
+  const isChampion = rank === 1;
+
+  return (
+    <li
+      className={`grid grid-cols-[52px_44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[18px] border px-3 py-3.5 ${
+        isChampion
+          ? 'border-[#244c40] bg-[#173c31] text-white shadow-[0_4px_0_#102c25]'
+          : 'border-[#e1e6dc] bg-[#f9faf7] text-viet-text'
+      }`}
+      aria-label={`${t('arena.ui.current_rank')} ${rank}: ${player.name}, ${player.points} ${t('arena.ui.points_label')}`}
+    >
+      {element ? (
+        <div
+          className={`flex h-[50px] w-[46px] flex-col rounded-[12px] border-2 border-b-[3px] p-1.5 ${element.tileClass}`}
+          aria-hidden="true"
+        >
+          <div className="flex items-start justify-between text-[7px] font-black leading-none opacity-65">
+            <span>{element.atomicNumber}</span>
+            <span>#{rank}</span>
+          </div>
+          <span className="mt-0.5 font-rubik text-[21px] font-bold leading-none">{element.symbol}</span>
+        </div>
+      ) : (
+        <span
+          className="flex h-[46px] w-[46px] items-center justify-center rounded-[14px] border-2 border-[#dfe4db] border-b-4 bg-white font-rubik text-base font-bold text-viet-text-light"
+          aria-hidden="true"
+        >
+          {rank}
+        </span>
+      )}
+
+      <Avatar
+        seed={player.avatarSeed || player.name}
+        size={42}
+        streakCount={player.streakCount}
+        level={player.level}
+      />
+
+      <div className="min-w-0">
+        <p className={`truncate text-sm font-black ${isChampion ? 'text-white' : 'text-viet-text'}`}>{player.name}</p>
+        <p className={`mt-0.5 text-[10px] font-bold uppercase tracking-[0.08em] ${isChampion ? 'text-white/55' : 'text-viet-text-light/65'}`}>
+          {player.wins} {t('arena.stats.wins')}
+        </p>
+      </div>
+
+      <div className="text-right">
+        <span className={`block font-rubik text-lg font-bold ${isChampion ? 'text-[#f4cc54]' : 'text-viet-text'}`}>
+          {player.points}
+        </span>
+        <span className={`block text-[8px] font-black uppercase tracking-[0.12em] ${isChampion ? 'text-white/45' : 'text-viet-text-light/50'}`}>
+          {t('arena.ui.points_label')}
+        </span>
+      </div>
+    </li>
+  );
+};
+
 const StatsPanel = ({ user }) => {
   const { t } = useTranslation();
   const [leaderboard, setLeaderboard] = useState([]);
@@ -263,38 +341,35 @@ const StatsPanel = ({ user }) => {
         </div>
       </Panel>
 
-      <Panel className="p-5">
+      <section className="overflow-hidden rounded-[28px] border-2 border-[#dfe3db] border-b-[6px] bg-white p-5">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-black text-viet-text">{t('arena.ui.leaderboard_panel_title')}</h3>
-          <Trophy className="h-5 w-5 text-amber-500" />
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#f4cc54] text-[#4d3903]" aria-hidden="true">
+            <Trophy className="h-4 w-4" />
+          </span>
         </div>
         {loading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-viet-green" />
+          <div className="space-y-3" role="status" aria-live="polite">
+            <span className="sr-only">{t('arena.stats.loading_leaderboard')}</span>
+            {[0, 1, 2].map((item) => (
+              <div key={item} className="h-[78px] animate-pulse rounded-[18px] bg-[#edf1e9] motion-reduce:animate-none" />
+            ))}
           </div>
         ) : leaderboard.length === 0 ? (
           <p className="py-6 text-center text-sm font-bold text-viet-text-light/60">{t('arena.stats.empty_leaderboard')}</p>
         ) : (
-          <div className="space-y-3">
-            {leaderboard.map((player) => (
-              <div key={`${player.rank}-${player.name}`} className="flex items-center gap-3 rounded-lg border border-viet-border p-3">
-                <span className="w-5 text-center text-sm font-black text-viet-text-light">{player.rank}</span>
-                <Avatar
-                  seed={player.avatarSeed || player.name}
-                  size={40}
-                  streakCount={player.streakCount}
-                  level={player.level}
-                />
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-black text-viet-text">{player.name}</p>
-                  <p className="text-[11px] font-bold text-viet-text-light/60">{player.wins} {t('arena.stats.wins')}</p>
-                </div>
-                <span className="text-sm font-black text-viet-green">{player.points}</span>
-              </div>
+          <ol className="space-y-3">
+            {leaderboard.map((player, index) => (
+              <ArenaLeaderboardRow
+                key={`${player.rank}-${player.name}`}
+                player={player}
+                fallbackRank={index + 1}
+                t={t}
+              />
             ))}
-          </div>
+          </ol>
         )}
-      </Panel>
+      </section>
 
       <Panel className="p-5">
         <div className="mb-4 flex items-center justify-between">

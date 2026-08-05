@@ -93,10 +93,27 @@
  }
  },
  "leaderboard": {
- "badge": "Bảng Vinh Danh",
+ "badge": "Bảng vinh danh",
  "title_main": "Vinh danh",
  "title_highlight": "Nhà khám phá nổi bật",
- "rank_master": "Học viên tiêu biểu",
+ "subtitle": "Thứ hạng được tính theo tổng XP mà mỗi học viên đã tích lũy trên Aurum.",
+ "leader": "Đang dẫn đầu",
+ "rank": "Hạng",
+ "points": "Tổng XP",
+ "study_time": "Thời gian học",
+ "next_title": "Tiếp theo trên bảng xếp hạng",
+ "next_desc": "Hoàn thành bài học và nhiệm vụ để tích lũy thêm XP.",
+ "comparison_label": "So với hạng 1",
+ "leader_comparison": "Bằng {{percent}}% XP của người dẫn đầu",
+ "gold": "Vàng",
+ "silver": "Bạc",
+ "copper": "Đồng",
+ "hour_short": " giờ",
+ "minute_short": " phút",
+ "no_activity": "Chưa ghi nhận",
+ "load_error": "Chưa thể tải bảng xếp hạng lúc này.",
+ "retry": "Thử lại",
+ "rank_master": "Hạng 1",
  "online": "Đang online",
  "offline": "Ngoại tuyến",
  "active": "hoạt động",
@@ -105,7 +122,7 @@
  "disciple": "Học viên Aurum",
  "transmitting": "Đang tải bảng xếp hạng...",
  "empty": "Bảng xếp hạng đang chờ những người học đầu tiên...",
- "conquer_btn": "Tham gia thử thách ngay"
+ "conquer_btn": "Khám phá lộ trình học"
  },
  "social_proof": {
  "text": "10.000+ học viên Việt Nam",
@@ -398,7 +415,9 @@
  "challenge_now": "Quyết đấu ngay →"
  },
  "history_title": "Nhật ký luyện tập",
- "history_empty": "Nhật ký của bạn trống không. Hãy thực hiện hóa học đầu tiên!",
+ "history_subtitle": "Bài học, phòng lab và công cụ bạn vừa sử dụng.",
+ "history_loading": "Đang tải hoạt động gần đây...",
+ "history_empty": "Chưa có hoạt động nào. Bắt đầu một bài học hoặc thử phòng lab để xem lịch sử tại đây.",
  "history_clear": "Xóa nhật ký",
  "history_time_ago": "Lúc"
  },
@@ -560,6 +579,7 @@
  "empty_history": "Chưa thực hiện trận đấu nào gần đây",
  "leaderboard_btn": "Bảng xếp hạng",
  "leaderboard_title": "Bảng xếp hạng học tập",
+ "loading_leaderboard": "Đang tải bảng xếp hạng...",
  "empty_leaderboard": "Chưa có dữ liệu xếp hạng.",
  "history_item": {
  "just_now": "Vừa xong",

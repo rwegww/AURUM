@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Lightbulb } from 'lucide-react';
 
 const GasLawSim = () => {
   const canvasRef = useRef(null);
@@ -147,8 +148,9 @@ const GasLawSim = () => {
             <div className="text-[20px] font-black text-viet-text">{(pressure * 101.325).toFixed(1)} <span className="text-[10px]">kPa</span></div>
           </div>
         </div>
-        <div className="text-[10px] text-viet-text-light mt-2 leading-relaxed">
-          Lightbulb Thay đổi nhiệt độ → phân tử chuyển động nhanh/chậm hơn. Thu nhỏ thể tích → áp suất tăng (Boyle). Tăng số mol → nhiều phân tử va chạm hơn.
+        <div className="mt-2 flex items-start gap-2 text-[10px] leading-relaxed text-viet-text-light">
+          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          <span>Thay đổi nhiệt độ → phân tử chuyển động nhanh/chậm hơn. Thu nhỏ thể tích → áp suất tăng (Boyle). Tăng số mol → nhiều phân tử va chạm hơn.</span>
         </div>
       </div>
     </div>

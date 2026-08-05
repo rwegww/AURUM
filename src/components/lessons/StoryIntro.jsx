@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Rocket } from 'lucide-react';
 
 const characters = {
   professor: {
@@ -90,7 +91,10 @@ const StoryIntro = ({ slides, onComplete, onSkip }) => {
                     onClick={nextSlide}
                     className="w-full sm:w-auto px-10 py-4 bg-viet-green text-white rounded-[20px] font-black text-[14px] uppercase tracking-widest shadow-xl shadow-viet-green/20 hover:scale-105 transition-all flex items-center justify-center gap-2"
                   >
-                    {currentSlide < slides.length - 1 ? 'Tiếp theo ➔' : 'Bắt đầu ngay Rocket'}
+                    <span>{currentSlide < slides.length - 1 ? 'Tiếp theo' : 'Bắt đầu ngay'}</span>
+                    {currentSlide < slides.length - 1
+                      ? <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      : <Rocket className="h-4 w-4" aria-hidden="true" />}
                   </button>
                   <button
                     onClick={onSkip}

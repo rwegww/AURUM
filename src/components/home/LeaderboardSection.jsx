@@ -1,312 +1,446 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useMemo, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Award, Trophy } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Award,
+  Clock3,
+  Gauge,
+  RotateCcw,
+  Trophy,
+} from 'lucide-react';
 import Avatar from '@/components/common/Avatar';
-import { stableRange } from '@/utils/stableRandom';
 
-const ChemistrySpark = ({ delay, index }) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{ 
-      opacity: [0, 0.6, 0], 
-      scale: [0.5, 1, 0.5],
-      y: [-20, -100],
-      x: [0, stableRange('leaderboard-spark-x', index, -20, 20)]
-    }}
-    transition={{ duration: 4, repeat: Infinity, delay, ease: "linear" }}
-    className="absolute text-viet-green/30 pointer-events-none"
-  >
-    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="8" strokeWidth="2" />
-      <path d="M12 8v4l3 2" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  </motion.div>
-);
+const ELEMENT_RANKS = {
+  1: {
+    symbol: 'Au',
+    atomicNumber: 79,
+    nameKey: 'gold',
+    className: 'border-[#d4a91d] bg-[#f4cc54] text-[#3b2d05]',
+  },
+  2: {
+    symbol: 'Ag',
+    atomicNumber: 47,
+    nameKey: 'silver',
+    className: 'border-[#b9c2bf] bg-[#e7ecea] text-[#31413b]',
+  },
+  3: {
+    symbol: 'Cu',
+    atomicNumber: 29,
+    nameKey: 'copper',
+    className: 'border-[#ae623c] bg-[#dc8c61] text-[#3c1c0e]',
+  },
+};
 
-const FloatingIsland = ({ rank, user, delay }) => {
-  const { t } = useTranslation();
-  const isFirst = rank === 1;
-  const isSecond = rank === 2;
-  const isOnline = Boolean(user?.isOnline || user?.computedIsOnline);
+const isOnline = (user) => Boolean(user?.isOnline || user?.computedIsOnline);
 
-  const yOffset = isFirst ? -80 : isSecond ? -30 : 0;
-  
+const ElementRank = ({ rank, compact = false, t }) => {
+  const element = ELEMENT_RANKS[rank];
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 100, scale: 0.8 }}
-      whileInView={{ opacity: 1, y: yOffset, scale: 1 }}
-      transition={{ duration: 1, delay, type: 'spring', bounce: 0.4 }}
-      className="flex flex-col items-center relative"
+    <div
+      className={`${compact ? 'h-[64px] w-[58px] rounded-[16px] p-2' : 'h-[102px] w-[88px] rounded-[22px] p-3'} flex shrink-0 flex-col border-2 border-b-4 ${element.className}`}
+      aria-label={`${t('home.leaderboard.rank')} ${rank}: ${element.symbol}`}
+      role="img"
     >
-      {/* Platform Aura / Glow */}
-      {isFirst && (
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity }}
-          className="absolute -top-10 w-48 h-48 bg-amber-400/20 blur-[60px] rounded-full z-0" 
-        />
-      )}
-
-      {/* Avatar Section */}
-      <div className="relative mb-6 z-10">
-        <motion.div 
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: stableRange('leaderboard-island-duration', rank, 3, 4), repeat: Infinity, ease: "easeInOut" }}
-          className={`w-28 h-28 md:w-32 md:h-32 rounded-3xl bg-white shadow-2xl border-4 ${isFirst ? 'border-amber-400 shadow-amber-200/50' : 'border-white shadow-slate-200/50'} overflow-hidden relative p-1`}
-        >
-          <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-100 flex items-center justify-center p-2">
-            <Avatar 
-              seed={user?.avatarSeed || user?.username} 
-              size={110} 
-              streakCount={user?.streakCount} 
-              level={user?.level}
-              className="w-full h-full object-cover" 
-            />
-          </div>
-        </motion.div>
-        
-        {/* Badge / Rank Marker */}
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center">
-          {isFirst ? (
-             <motion.div
-               animate={{ rotate: [0, 5, -5, 0] }}
-               transition={{ duration: 2, repeat: Infinity }}
-               className="w-14 h-14 rounded-full bg-amber-400 text-white border-4 border-white shadow-xl flex items-center justify-center"
-             >
-               <Trophy size={28} className="fill-current" />
-             </motion.div>
-          ) : (
-             <div className="w-10 h-10 rounded-full bg-white shadow-xl flex items-center justify-center border-2 border-viet-border">
-                <span className={`text-[16px] font-black ${isSecond ? 'text-slate-400' : 'text-amber-700'}`}>{rank}</span>
-             </div>
-          )}
+      <div className="flex h-full flex-col" aria-hidden="true">
+        <div className="flex items-start justify-between font-bold leading-none opacity-70">
+          <span className={compact ? 'text-[8px]' : 'text-[11px]'}>{element.atomicNumber}</span>
+          <span className={compact ? 'text-[8px]' : 'text-[11px]'}>#{rank}</span>
         </div>
-        
-        {/* XP Tooltip-style Badge */}
-        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 z-30 bg-[#1a1a1a] text-white px-4 py-1.5 rounded-full text-[13px] font-black shadow-xl whitespace-nowrap border-2 border-white">
-          {user?.xp || 0} XP
-        </div>
+        <span className={`${compact ? 'mt-0.5 text-[26px]' : 'mt-1 text-[40px]'} font-rubik font-bold leading-none`}>
+          {element.symbol}
+        </span>
+        <span className={`${compact ? 'text-[7px]' : 'text-[9px]'} mt-auto font-black uppercase tracking-[0.12em] opacity-70`}>
+          {t(`home.leaderboard.${element.nameKey}`)}
+        </span>
       </div>
-
-      {/* Detailed SVG Island */}
-      <div className="relative w-44 h-28 mb-6 mt-4">
-        <svg viewBox="0 0 200 120" className="w-full h-full drop-shadow-[0_20px_40px_rgba(0,0,0,0.2)]">
-          {/* Main Island Body */}
-          <path 
-             d="M20,40 Q100,0 180,40 L160,100 Q100,120 40,100 Z" 
-             fill="#5d4037" 
-          />
-          {/* Grass Layer */}
-          <path 
-             d="M20,40 Q100,0 180,40 L170,50 Q100,15 30,50 Z" 
-             fill="#76c034" 
-          />
-          {/* Detail Cracks / Roots */}
-          <path d="M60,105 l-5,10 M140,105 l5,10 M100,110 v10" stroke="#3e2723" strokeWidth="3" strokeLinecap="round" />
-          <text 
-            x="100" y="85" textAnchor="middle" 
-            fill="white" fillOpacity="0.2" 
-            fontSize="45" fontWeight="900" 
-            style={{ pointerEvents: 'none', userSelect: 'none' }}
-          >
-            {rank}
-          </text>
-        </svg>
-      </div>
-
-      <div className="text-center z-10">
-        <h4 className="text-[18px] font-black text-viet-text">{user?.username || '---'}</h4>
-        <div className="flex items-center justify-center gap-2 mt-1">
-           <div className="flex items-center justify-center gap-1.5 bg-viet-green/10 px-3 py-1 rounded-full">
-              <span className="text-[10px] font-black text-viet-green uppercase">{t('home.leaderboard.rank_master')}</span>
-              <span className="text-[12px] font-black text-viet-green">{user?.level || 1}</span>
-           </div>
-           {/* Online Status Dot */}
-           <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={isOnline ? t('home.leaderboard.online') : t('home.leaderboard.offline')}></div>
-        </div>
-        {user?.activeMinutes > 0 && (
-          <p className="text-[9px] font-bold text-viet-text-light/40 uppercase tracking-widest mt-2">
-            ⏱️ {Math.floor(user.activeMinutes / 60)}h {user.activeMinutes % 60}m {t('home.leaderboard.active')}
-          </p>
-        )}
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
-const LeaderboardSection = () => {
-  const { t } = useTranslation();
-  const [leaders, setLeaders] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchLeaders = async () => {
-      try {
-        const res = await fetch('/api/user/leaderboard');
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          const now = Date.now();
-          setLeaders(data.map(user => ({
-            ...user,
-            computedIsOnline: Boolean(
-              user?.isOnline ||
-              (user?.lastActiveAt && new Date(user.lastActiveAt).getTime() > now - 5 * 60 * 1000)
-            ),
-          })));
-        }
-      } catch (err) {
-        console.error('Leaderboard fetch error:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLeaders();
-  }, []);
-
-  const topThree = [
-    leaders.length > 1 ? leaders[1] : null, // 2nd
-    leaders.length > 0 ? leaders[0] : null, // 1st
-    leaders.length > 2 ? leaders[2] : null  // 3rd
-  ];
-
-  const others = leaders.slice(3, 5); // Only show Rank 4 & 5 to keep Top 5 total
+const OnlineBadge = ({ user, t, inverse = false, compactOnMobile = false }) => {
+  if (!isOnline(user)) return null;
 
   return (
-    <section className="relative pt-48 pb-32 bg-viet-bg overflow-hidden">
-      {/* Dynamic Background Decorations */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Floating Sparks */}
-        {[...Array(6)].map((_, i) => (
-          <div key={i} className="absolute" style={{ left: `${15 + i * 15}%`, top: `${70 + (i % 3) * 10}%` }}>
-            <ChemistrySpark delay={i * 0.7} index={i} />
-          </div>
-        ))}
-        
-        {/* Large Decorative Cloud - Transparent Background per user request */}
-        <motion.div 
-          animate={{ x: [100, -100], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          className="absolute -bottom-20 -right-40 w-[800px] h-[400px] bg-viet-green/10 rounded-full blur-[150px]" 
-        />
+    <span className={`inline-flex shrink-0 items-center gap-2 rounded-full py-1 text-[10px] font-black uppercase tracking-[0.12em] ${compactOnMobile ? 'px-2 sm:px-3' : 'px-3'} ${inverse ? 'bg-white/10 text-white' : 'bg-[#e9f6df] text-[#2f6722]'}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${inverse ? 'bg-[#b7e77e]' : 'bg-viet-green'}`} aria-hidden="true" />
+      <span className={compactOnMobile ? 'sr-only sm:not-sr-only' : ''}>{t('home.leaderboard.online')}</span>
+    </span>
+  );
+};
+
+const ChampionCard = ({ user, formatNumber, formatStudyTime, reducedMotion, t }) => (
+  <motion.article
+    initial={reducedMotion ? false : { opacity: 0, y: 18 }}
+    whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.25 }}
+    transition={{ duration: 0.45, ease: 'easeOut' }}
+    className="relative isolate overflow-hidden rounded-[32px] border border-[#244c40] bg-[#173c31] text-white shadow-[0_8px_0_#102c25]"
+  >
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 -z-10 opacity-30"
+      style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',
+        backgroundSize: '36px 36px',
+      }}
+    />
+    <div aria-hidden="true" className="absolute -bottom-24 -right-20 -z-10 h-64 w-64 rounded-full border-[44px] border-white/[0.04]" />
+
+    <div className="p-6 sm:p-8 lg:p-9">
+      <div className="flex items-start justify-between gap-4">
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#d9efc7]">
+          <Trophy size={14} aria-hidden="true" />
+          {t('home.leaderboard.leader')}
+        </span>
+        <div className="sm:hidden">
+          <ElementRank rank={1} compact t={t} />
+        </div>
       </div>
 
-      <div className="max-w-[1100px] mx-auto px-6 relative z-10">
-        
-        <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 border border-viet-green text-viet-green rounded-full text-[11px] font-black uppercase tracking-[3px] mb-6 shadow-sm"
-          >
-            <Award size={18} /> {t('home.leaderboard.badge')}
-          </motion.div>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-black text-viet-text leading-tight"
-          >
-            {t('home.leaderboard.title_main')} <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-viet-green to-blue-500">{t('home.leaderboard.title_highlight')}</span>
-          </motion.h2>
-        </div>
-
-        {/* Top 3 Podium (The Islands) */}
-        <div className="flex items-end justify-center gap-3 sm:gap-6 md:gap-14 pt-40 mb-32 w-full overflow-visible pb-8 px-4">
-          <div className="shrink-0 scale-75 sm:scale-90 md:scale-100 origin-bottom">
-            <FloatingIsland rank={2} user={topThree[0]} delay={0.2} />
+      <div className="mt-5 flex items-center justify-between gap-4 sm:mt-6 sm:gap-6">
+        <div className="flex min-w-0 items-center gap-4 sm:gap-5">
+          <div className="w-fit shrink-0 rounded-full bg-[#f4cc54] p-1 shadow-[0_0_0_5px_rgba(255,255,255,0.08)]">
+            <Avatar
+              seed={user.avatarSeed || user.username}
+              size={96}
+              className="bg-white"
+            />
           </div>
-          <div className="shrink-0 scale-90 sm:scale-105 md:scale-110 origin-bottom z-20">
-            <FloatingIsland rank={1} user={topThree[1]} delay={0.1} />
-          </div>
-          <div className="shrink-0 scale-75 sm:scale-90 md:scale-100 origin-bottom">
-            <FloatingIsland rank={3} user={topThree[2]} delay={0.3} />
+          <div className="min-w-0">
+            <OnlineBadge user={user} t={t} inverse />
+            <h3 className="mt-2 break-words font-rubik text-2xl font-bold leading-tight sm:truncate sm:text-4xl">
+              {user.username}
+            </h3>
           </div>
         </div>
-
-        {/* Ranking List (Premium Cards) */}
-        <div className="max-w-[800px] mx-auto grid grid-cols-1 gap-4">
-          <AnimatePresence>
-            {others.map((u, idx) => {
-              const rank = idx + 4;
-              const isOnline = Boolean(u.isOnline || u.computedIsOnline);
-              const xpProgress = Math.min((u.xp % 1000) / 10, 100);
-              
-              return (
-                <motion.div
-                  key={u.username}
-                  initial={{ opacity: 0, x: -50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  whileHover={{ scale: 1.02, x: 10 }}
-                  className="flex items-center gap-6 p-5 bg-white/40 backdrop-blur-xl border border-white/60 rounded-[32px] shadow-sm hover:shadow-xl hover:bg-white/70 transition-all duration-300"
-                >
-                  <div className="w-12 h-12 flex items-center justify-center text-[24px] font-black text-viet-text/20 hover:text-viet-green transition-colors">
-                    {rank}
-                  </div>
-                  
-                  <div className="w-14 h-14 rounded-2xl bg-white shadow-inner overflow-hidden flex-shrink-0 border-2 border-white flex items-center justify-center p-1">
-                    <Avatar 
-                      seed={u.avatarSeed || u.username} 
-                      size={50} 
-                      streakCount={u.streakCount} 
-                      level={u.level}
-                      className="w-full h-full object-cover" 
-                    />
-                  </div>
-
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h5 className="text-[17px] font-black text-viet-text">{u.username}</h5>
-                      <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} title={isOnline ? t('home.leaderboard.online') : t('home.leaderboard.offline')} />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-viet-text-light/50 uppercase tracking-widest">
-                        {t('home.leaderboard.level')} {u.level} • {u.activeMinutes > 0 ? `${t('home.leaderboard.activity')} ${Math.floor(u.activeMinutes / 60)}h ${u.activeMinutes % 60}m` : t('home.leaderboard.disciple')}
-                      </span>
-                      <div className="text-right">
-                        <span className="text-[18px] font-black text-viet-text">{u.xp}</span>
-                        <span className="text-[10px] font-black text-viet-green ml-1">XP</span>
-                      </div>
-                    </div>
-                    
-                    <div className="w-full h-2 bg-viet-text/5 rounded-full overflow-hidden mt-3">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${xpProgress}%` }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
-                        className="h-full bg-gradient-to-r from-viet-green to-emerald-400"
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-
-          {loading && (
-            <div className="flex flex-col items-center py-20 gap-4">
-              <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
-              <p className="font-bold text-viet-text-light/60 uppercase tracking-widest text-[12px]">{t('home.leaderboard.transmitting')}</p>
-            </div>
-          )}
-
-          {!loading && leaders.length === 0 && (
-            <div className="text-center py-20 bg-white/30 backdrop-blur-sm rounded-[40px] border-2 border-dashed border-viet-border">
-               <p className="text-viet-text-light/50 italic">{t('home.leaderboard.empty')}</p>
-            </div>
-          )}
+        <div className="hidden sm:block">
+          <ElementRank rank={1} compact t={t} />
         </div>
+      </div>
 
-        <div className="mt-20 text-center">
-          <Link to="/arena" className="group inline-flex items-center gap-4 px-10 py-5 bg-viet-text text-white rounded-full font-black text-[15px] hover:bg-viet-green transition-all shadow-xl hover:-translate-y-1">
-            {t('home.leaderboard.conquer_btn')}
-            <span className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-viet-green transition-all">
-              →
+      <div className="mt-7 grid grid-cols-2 border-t border-white/10 pt-6 sm:grid-cols-3">
+        <div className="col-span-2 border-b border-white/10 pb-5 sm:col-span-1 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-5">
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-white/60">
+            {t('home.leaderboard.points')}
+          </p>
+          <p className="mt-1 whitespace-nowrap font-rubik text-3xl font-bold text-[#f4cc54]">
+            {formatNumber(user.xp)} <span className="text-xs font-black">XP</span>
+          </p>
+        </div>
+        <div className="pt-5 pr-4 sm:px-5 sm:pt-0">
+          <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white/60">
+            <Gauge size={13} aria-hidden="true" /> {t('home.leaderboard.level')}
+          </p>
+          <p className="mt-1 font-rubik text-2xl font-bold sm:text-3xl">{user.level || 1}</p>
+        </div>
+        <div className="border-l border-white/10 pt-5 pl-4 sm:pt-0 sm:pl-5">
+          <p className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-white/60">
+            <Clock3 size={13} aria-hidden="true" /> {t('home.leaderboard.study_time')}
+          </p>
+          <p className="mt-1 font-rubik text-base font-bold sm:text-lg">
+            {formatStudyTime(user.activeMinutes)}
+          </p>
+        </div>
+      </div>
+    </div>
+  </motion.article>
+);
+
+const RunnerUpCard = ({ rank, user, formatNumber, formatStudyTime, reducedMotion, t }) => (
+  <motion.article
+    initial={reducedMotion ? false : { opacity: 0, x: 18 }}
+    whileInView={reducedMotion ? undefined : { opacity: 1, x: 0 }}
+    whileHover={reducedMotion ? undefined : { y: -2 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ duration: 0.4, delay: rank * 0.05, ease: 'easeOut' }}
+    className="rounded-[28px] border-2 border-[#dfe3db] border-b-[6px] bg-white p-4 sm:p-5"
+  >
+    <div className="flex items-start gap-3">
+      <ElementRank rank={rank} compact t={t} />
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#667064]">
+            {t('home.leaderboard.rank')} {rank}
+          </span>
+          <OnlineBadge user={user} t={t} />
+        </div>
+        <div className="mt-2 flex items-center gap-3">
+          <Avatar seed={user.avatarSeed || user.username} size={48} />
+          <div className="min-w-0">
+            <h3 className="truncate text-lg font-black text-viet-text">{user.username}</h3>
+            <p className="mt-0.5 text-xs font-bold text-[#70786e]">
+              {t('home.leaderboard.level')} {user.level || 1}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div className="mt-4 flex items-end justify-between gap-4 border-t border-[#edf0e9] pt-3">
+      <span className="flex items-center gap-1.5 text-xs font-bold text-[#70786e]">
+        <Clock3 size={14} aria-hidden="true" /> {formatStudyTime(user.activeMinutes)}
+      </span>
+      <p className="font-rubik text-xl font-bold text-viet-text">
+        {formatNumber(user.xp)} <span className="text-[10px] font-black text-[#43752f]">XP</span>
+      </p>
+    </div>
+  </motion.article>
+);
+
+const RankingRow = ({ rank, user, topXp, formatNumber, formatStudyTime, reducedMotion, t }) => {
+  const progress = topXp > 0
+    ? Math.min(100, Math.max(0, Math.round((user.xp / topXp) * 100)))
+    : 0;
+
+  return (
+    <motion.li
+      initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+      whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.35, delay: (rank - 4) * 0.08 }}
+      className="grid grid-cols-[44px_48px_minmax(0,1fr)] items-center gap-3 px-4 py-4 sm:grid-cols-[48px_52px_minmax(0,1fr)_auto] sm:gap-4 sm:px-6"
+    >
+      <div className="flex h-10 w-10 items-center justify-center rounded-[14px] border-2 border-[#e2e6de] border-b-4 bg-[#f6f8f3] font-rubik text-lg font-bold text-viet-text-light">
+        {rank}
+      </div>
+      <Avatar seed={user.avatarSeed || user.username} size={48} />
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <h4 className="truncate font-black text-viet-text">{user.username}</h4>
+          <OnlineBadge user={user} t={t} compactOnMobile />
+        </div>
+        <p className="mt-0.5 truncate text-[11px] font-bold text-[#70786e]">
+          {t('home.leaderboard.level')} {user.level || 1} · {formatStudyTime(user.activeMinutes)}
+        </p>
+        <div className="mt-2 flex items-center justify-between gap-3 text-[9px] font-black uppercase tracking-[0.1em] text-[#667064]">
+          <span>{t('home.leaderboard.comparison_label')}</span>
+          <span>{progress}%</span>
+        </div>
+        <div
+          className="mt-1 h-1.5 overflow-hidden rounded-full bg-[#e9ede5]"
+          role="progressbar"
+          aria-label={`${user.username}: ${formatNumber(user.xp)} XP`}
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={progress}
+          aria-valuetext={t('home.leaderboard.leader_comparison', { percent: progress })}
+        >
+          <div className="h-full rounded-full bg-viet-green" style={{ width: `${progress}%` }} />
+        </div>
+      </div>
+      <p className="col-start-3 row-start-2 self-start font-rubik text-xl font-bold text-viet-text sm:col-start-4 sm:row-start-1 sm:self-center sm:text-right">
+        {formatNumber(user.xp)} <span className="text-[10px] font-black text-[#43752f]">XP</span>
+      </p>
+    </motion.li>
+  );
+};
+
+const LeaderboardSkeleton = ({ label }) => (
+  <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)]" role="status" aria-live="polite">
+    <span className="sr-only">{label}</span>
+    <div className="h-[330px] animate-pulse rounded-[32px] bg-[#dfe8dc] motion-reduce:animate-none" />
+    <div className="grid gap-5">
+      <div className="h-[155px] animate-pulse rounded-[28px] bg-white/80 motion-reduce:animate-none" />
+      <div className="h-[155px] animate-pulse rounded-[28px] bg-white/80 motion-reduce:animate-none" />
+    </div>
+  </div>
+);
+
+const LeaderboardSection = () => {
+  const { i18n, t } = useTranslation();
+  const reducedMotion = useReducedMotion();
+  const [leaders, setLeaders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [requestVersion, setRequestVersion] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchLeaders = async () => {
+      setLoading(true);
+      setError(false);
+
+      try {
+        const response = await fetch('/api/user/leaderboard', { signal: controller.signal });
+        if (!response.ok) throw new Error(`Leaderboard request failed: ${response.status}`);
+
+        const data = await response.json();
+        if (!Array.isArray(data)) throw new Error('Leaderboard response is not an array');
+
+        const now = Date.now();
+        const normalizedLeaders = data
+          .filter((user) => Number(user?.xp) > 0)
+          .map((user) => ({
+            ...user,
+            xp: Number(user.xp) || 0,
+            computedIsOnline: Boolean(
+              user?.isOnline
+              || (user?.lastActiveAt && new Date(user.lastActiveAt).getTime() > now - 5 * 60 * 1000)
+            ),
+          }))
+          .sort((a, b) => b.xp - a.xp)
+          .slice(0, 5);
+
+        setLeaders(normalizedLeaders);
+      } catch (fetchError) {
+        if (fetchError.name !== 'AbortError') {
+          console.error('Leaderboard fetch error:', fetchError);
+          setLeaders([]);
+          setError(true);
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    };
+
+    fetchLeaders();
+    return () => controller.abort();
+  }, [requestVersion]);
+
+  const numberFormatter = useMemo(
+    () => new Intl.NumberFormat(i18n.resolvedLanguage || i18n.language || 'vi'),
+    [i18n.language, i18n.resolvedLanguage],
+  );
+
+  const formatNumber = (value) => numberFormatter.format(Number(value) || 0);
+  const formatStudyTime = (minutes) => {
+    const totalMinutes = Math.max(0, Number(minutes) || 0);
+    if (totalMinutes === 0) return t('home.leaderboard.no_activity');
+
+    const hours = Math.floor(totalMinutes / 60);
+    const remainingMinutes = totalMinutes % 60;
+    if (hours === 0) return `${remainingMinutes}${t('home.leaderboard.minute_short')}`;
+    if (remainingMinutes === 0) return `${hours}${t('home.leaderboard.hour_short')}`;
+    return `${hours}${t('home.leaderboard.hour_short')} ${remainingMinutes}${t('home.leaderboard.minute_short')}`;
+  };
+
+  const champion = leaders[0];
+  const runnersUp = leaders.slice(1, 3);
+  const remainingLeaders = leaders.slice(3, 5);
+
+  return (
+    <section className="relative isolate overflow-hidden border-y border-[#dfe4d8] bg-[#f5f7f1] py-20 sm:py-24" aria-labelledby="leaderboard-title">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 opacity-60"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(23,60,49,0.11) 1px, transparent 1.25px)',
+          backgroundSize: '28px 28px',
+          maskImage: 'linear-gradient(to bottom, transparent, black 18%, black 82%, transparent)',
+        }}
+      />
+
+      <div className="mx-auto max-w-[1160px] px-5 sm:px-6">
+        <div className="mb-10 flex flex-col gap-7 lg:mb-12 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-[720px]">
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#cfe1c3] bg-white px-3.5 py-1.5 text-[11px] font-black uppercase tracking-[0.16em] text-[#3f7427]">
+              <Award size={15} aria-hidden="true" />
+              {t('home.leaderboard.badge')}
             </span>
-          </Link>
+            <h2 id="leaderboard-title" className="mt-5 font-rubik text-4xl font-bold leading-[1.08] tracking-[-0.035em] text-viet-text sm:text-5xl lg:text-[56px]">
+              <span className="block">{t('home.leaderboard.title_main')}</span>
+              <span className="mt-1 block max-w-[260px] text-[#4f8f35] sm:max-w-none">{t('home.leaderboard.title_highlight')}</span>
+            </h2>
+            <p className="mt-4 max-w-[650px] text-base font-semibold leading-7 text-viet-text-light sm:text-lg">
+              {t('home.leaderboard.subtitle')}
+            </p>
+          </div>
+
+          <div className="lg:pb-1">
+            <Link
+              to="/classroom"
+              className="group inline-flex items-center gap-3 rounded-2xl border-b-4 border-[#0d241e] bg-[#173c31] px-5 py-3.5 text-sm font-black text-white transition-[transform,background-color,border-color] hover:-translate-y-0.5 hover:bg-[#255342] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#43752f] focus-visible:ring-offset-2 active:translate-y-1 active:border-b-0 motion-reduce:transform-none motion-reduce:transition-none"
+            >
+              {t('home.leaderboard.conquer_btn')}
+              <ArrowUpRight size={17} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transform-none motion-reduce:transition-none" aria-hidden="true" />
+            </Link>
+          </div>
         </div>
+
+        {loading && <LeaderboardSkeleton label={t('home.leaderboard.transmitting')} />}
+
+        {!loading && error && (
+          <div className="rounded-[28px] border-2 border-[#dfe3db] border-b-[6px] bg-white px-6 py-14 text-center" role="alert" aria-live="assertive">
+            <Trophy size={38} className="mx-auto text-viet-text-light/35" aria-hidden="true" />
+            <p className="mt-4 font-bold text-viet-text-light">{t('home.leaderboard.load_error')}</p>
+            <button
+              type="button"
+              onClick={() => setRequestVersion((version) => version + 1)}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl border-2 border-[#dfe3db] border-b-4 bg-[#f7f9f4] px-4 py-2.5 text-sm font-black text-viet-text transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#43752f] focus-visible:ring-offset-2 active:translate-y-0.5 active:border-b-2 motion-reduce:transform-none motion-reduce:transition-none"
+            >
+              <RotateCcw size={15} aria-hidden="true" /> {t('home.leaderboard.retry')}
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && leaders.length === 0 && (
+          <div className="rounded-[28px] border-2 border-dashed border-[#cfd8c8] bg-white/75 px-6 py-14 text-center" role="status" aria-live="polite">
+            <Award size={40} className="mx-auto text-viet-green/50" aria-hidden="true" />
+            <p className="mx-auto mt-4 max-w-md font-bold text-viet-text-light">{t('home.leaderboard.empty')}</p>
+          </div>
+        )}
+
+        {!loading && !error && champion && (
+          <>
+            <div className={`grid items-start gap-5 ${runnersUp.length > 1 ? 'lg:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)]' : ''}`}>
+              <ChampionCard
+                user={champion}
+                formatNumber={formatNumber}
+                formatStudyTime={formatStudyTime}
+                reducedMotion={reducedMotion}
+                t={t}
+              />
+              {runnersUp.length > 0 && (
+                <div className={`grid gap-5 ${runnersUp.length > 1 ? 'sm:grid-cols-2 lg:grid-cols-1' : ''}`}>
+                  {runnersUp.map((user, index) => (
+                    <RunnerUpCard
+                      key={`${user.username}-${index + 2}`}
+                      rank={index + 2}
+                      user={user}
+                      formatNumber={formatNumber}
+                      formatStudyTime={formatStudyTime}
+                      reducedMotion={reducedMotion}
+                      t={t}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {remainingLeaders.length > 0 && (
+              <div className="mt-8 overflow-hidden rounded-[28px] border-2 border-[#dfe3db] border-b-[6px] bg-white">
+                <div className="border-b border-[#e8ece5] px-5 py-5 sm:px-6">
+                  <div>
+                    <h3 className="font-rubik text-xl font-bold text-viet-text">
+                      {t('home.leaderboard.next_title')}
+                    </h3>
+                    <p className="mt-1 text-sm font-semibold text-viet-text-light">
+                      {t('home.leaderboard.next_desc')}
+                    </p>
+                  </div>
+                </div>
+                <ol className="divide-y divide-[#edf0e9]" start={4}>
+                  {remainingLeaders.map((user, index) => (
+                    <RankingRow
+                      key={`${user.username}-${index + 4}`}
+                      rank={index + 4}
+                      user={user}
+                      topXp={champion.xp}
+                      formatNumber={formatNumber}
+                      formatStudyTime={formatStudyTime}
+                      reducedMotion={reducedMotion}
+                      t={t}
+                    />
+                  ))}
+                </ol>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   );

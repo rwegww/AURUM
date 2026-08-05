@@ -156,7 +156,7 @@ const LessonPage = () => {
 
 
           <div className="mb-12">
-            <div className="viet-card p-8 min-h-[400px]">
+            <div className="viet-card p-8">
               <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
                  <h3 className="text-[20px] font-bold">{t('lesson_page.content_title')}</h3>
               </div>

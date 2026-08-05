@@ -1,6 +1,7 @@
 ﻿/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle2, Trophy, XCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 const PLACEMENT_TESTS = {
@@ -175,9 +176,9 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                              `}
                            >
                               <span className="font-bold">{option}</span>
-                              {selectedAnswer === idx && (
-                                <span className="text-2xl">{isCorrect ? 'Sparkles' : 'Zap'}</span>
-                              )}
+                              {selectedAnswer === idx && (isCorrect
+                                ? <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" aria-hidden="true" />
+                                : <XCircle className="h-6 w-6 shrink-0 text-red-600" aria-hidden="true" />)}
                            </button>
                         ))}
                      </div>
@@ -193,7 +194,9 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                   >
                      {score >= passingScore ? (
                        <>
-                         <div className="text-7xl mb-6">Trophy</div>
+                         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[24px] bg-amber-100 text-amber-600">
+                           <Trophy className="h-10 w-10" aria-hidden="true" />
+                         </div>
                          <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">Hành Trình Đã Mở!</h3>
                          <p className="text-viet-text-light font-bold mb-8">
                            Tuyệt vời! Bạn đã đúng {score}/{questions.length} câu.

@@ -1,5 +1,6 @@
 ﻿import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Atom, Lightbulb } from 'lucide-react';
 import { elements } from '@/data/elements';
 import { chemicals as labChemicals } from '@/data/reactions/chemicals';
 import { craftableItems } from '@/data/labInventory';
@@ -440,15 +441,16 @@ const UniversalFormulaSim = ({ formula }) => {
               </label>
             ))}
           </div>
-          <div className="mt-4 text-[11px] text-blue-700 font-medium">
-            Lightbulb Kéo các thanh trượt ở trên để thay đổi thông số, đại lượng <strong className="font-black">[{targetVarKey}]</strong> sẽ tự động tính toán.
+          <div className="mt-4 flex items-start gap-2 text-[11px] font-medium text-blue-700">
+            <Lightbulb className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>Kéo các thanh trượt ở trên để thay đổi thông số, đại lượng <strong className="font-black">[{targetVarKey}]</strong> sẽ tự động tính toán.</span>
           </div>
         </div>
 
         {/* Khung Chọn Chất (Bảng Tuần Hoàn) */}
         <div className="viet-card p-5 border-2 border-amber-200 bg-amber-50/50">
           <h3 className="text-[12px] font-black text-amber-800 uppercase tracking-[2px] mb-3 flex items-center gap-2">
-            <span>Atom</span> Nạp chất từ Lab Chemicals
+            <Atom className="h-4 w-4" aria-hidden="true" /> Nạp chất từ Lab Chemicals
           </h3>
           <div className="relative">
             <input

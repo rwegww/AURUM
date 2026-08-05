@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
-import { Settings as SettingsIcon, FlaskConical, Droplet, Wind, Hexagon } from 'lucide-react';
+import { Settings as SettingsIcon, Flame, FlaskConical, Droplet, Wind, Hexagon } from 'lucide-react';
 import { chemicals } from '@/data/reactions/chemicals';
 
 const ProfileCard = ({ title, value, icon, color }) => (
@@ -96,7 +96,9 @@ const Profile = () => {
 
                 {/* Streak Callout */}
                 <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-[32px] p-6 flex items-center gap-6 self-center md:self-auto min-w-[280px]">
-                  <div className="text-5xl animate-bounce">Flame</div>
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-400/10 text-orange-400">
+                    <Flame className="h-8 w-8" aria-hidden="true" />
+                  </div>
                   <div className="flex-1">
                     <div className="text-3xl font-black text-white mb-1">{user.streakCount} Ngày</div>
                     <div className="text-[11px] font-black text-orange-400 uppercase tracking-widest">Chuỗi hiện tại</div>
@@ -157,16 +159,16 @@ const Profile = () => {
         </div>
 
         {/* Detailed Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+        <div className="mb-16 grid grid-cols-1 items-start gap-12 lg:grid-cols-3">
           {/* Activity History */}
           <div className="lg:col-span-2">
             <UserActivityHistory />
           </div>
 
           {/* Arena Performance */}
-          <div className="space-y-6 h-full flex flex-col">
+          <div className="space-y-6">
             <h2 className="text-2xl font-black text-viet-text px-2">{t('profile.arena_stats.title')}</h2>
-            <div className="bg-viet-text text-white rounded-[32px] p-8 shadow-xl relative overflow-hidden flex-1">
+            <div className="relative overflow-hidden rounded-[32px] bg-viet-text p-8 text-white shadow-xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
               <div className="space-y-6 relative z-10">
                 <div className="flex justify-between items-center border-b border-white/10 pb-4">

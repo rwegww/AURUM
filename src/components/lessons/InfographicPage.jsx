@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { motion } from 'framer-motion';
 import LessonSummaryFallback from './LessonSummaryFallback';
+import { LockKeyhole } from 'lucide-react';
 import { getLessonInfographicUrl } from '@/utils/lessonAssets';
 
 const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'single' }) => {
@@ -83,7 +84,7 @@ const InfographicPage = ({ lesson, pageNumber, isCompleted = true, side = 'singl
              animate={{ scale: 1, opacity: 1 }}
              className="w-20 h-20 bg-white rounded-3xl border-4 border-viet-green shadow-2xl flex items-center justify-center text-4xl mb-6"
            >
-              Lock
+              <LockKeyhole className="h-9 w-9 text-viet-green" aria-hidden="true" />
            </motion.div>
            <h3 className="text-2xl font-black text-viet-text font-sora uppercase italic">Nhiệm vụ chưa hoàn thành</h3>
            <p className="max-w-[280px] text-viet-text-light font-bold text-sm mt-2 leading-relaxed">

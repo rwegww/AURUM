@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
+import { CheckCircle2, Rocket } from 'lucide-react';
 
 const MyClass = () => {
   const { user } = useAuth();
@@ -460,7 +461,7 @@ const MyClass = () => {
                           {post.is_completed ? (
                             <div className="flex flex-col gap-2">
                                 <div className="w-full py-4 bg-emerald-50 text-viet-green font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 border-2 border-viet-green/20">
-                                  <span>Check</span> {t('my_class.feed.assignment.completed')}
+                                  <CheckCircle2 className="h-4 w-4" aria-hidden="true" /> {t('my_class.feed.assignment.completed')}
                                 </div>
                                 {post.user_submission?.score !== null && post.user_submission?.score !== undefined && (
                                    <div className="flex items-center justify-between p-4 bg-white border-2 border-slate-100 rounded-2xl shadow-sm">
@@ -487,7 +488,10 @@ const MyClass = () => {
                               }}
                               className="w-full py-4 bg-viet-green text-white font-black text-xs uppercase tracking-[2px] rounded-xl shadow-lg shadow-viet-green/20 hover:scale-[1.02] transition-all border-b-4 border-emerald-700"
                             >
-                              Rocket {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
+                              <span className="inline-flex items-center justify-center gap-2">
+                                <Rocket className="h-4 w-4" aria-hidden="true" />
+                                {t('my_class.feed.assignment.start_online', { count: post.questions.length })}
+                              </span>
                             </button>
                           ) : (
                             <button 

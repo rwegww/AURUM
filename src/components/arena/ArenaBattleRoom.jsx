@@ -780,7 +780,10 @@ const Scoreboard = React.memo(({ players, currentUserId }) => {
             <Avatar seed={player.avatar_seed || player.username || 'Aurum'} size={24} />
             <span className="max-w-[100px] truncate text-xs font-bold text-viet-text">{player.username}</span>
             <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
-              <span className="text-[10px] font-bold text-viet-text-light">{player.correct_count || 0} Check</span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-viet-text-light" aria-label={`${player.correct_count || 0} câu đúng`}>
+                <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+                {player.correct_count || 0}
+              </span>
               <span className="text-xs font-black text-viet-green">{player.score || 0}</span>
             </div>
           </div>

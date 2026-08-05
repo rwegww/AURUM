@@ -94,9 +94,26 @@
  },
  "leaderboard": {
  "badge": "Leaderboard",
- "title_main": "Honoring",
- "title_highlight": "Top explorers",
- "rank_master": "Featured learner",
+ "title_main": "Meet",
+ "title_highlight": "Aurum's top explorers",
+ "subtitle": "Rankings are based on the total XP each learner has earned on Aurum.",
+ "leader": "Current leader",
+ "rank": "Rank",
+ "points": "Total XP",
+ "study_time": "Study time",
+ "next_title": "Next on the leaderboard",
+ "next_desc": "Complete lessons and missions to earn more XP.",
+ "comparison_label": "Compared with rank 1",
+ "leader_comparison": "{{percent}}% of the leader's XP",
+ "gold": "Gold",
+ "silver": "Silver",
+ "copper": "Copper",
+ "hour_short": "h",
+ "minute_short": "m",
+ "no_activity": "Not recorded",
+ "load_error": "The leaderboard could not be loaded right now.",
+ "retry": "Try again",
+ "rank_master": "Rank 1",
  "online": "Online",
  "offline": "Offline",
  "active": "active",
@@ -105,7 +122,7 @@
  "disciple": "Aurum learner",
  "transmitting": "Loading leaderboard...",
  "empty": "The leaderboard is waiting for the first learners...",
- "conquer_btn": "Join the challenge"
+ "conquer_btn": "Explore learning paths"
  },
  "social_proof": {
  "text": "10,000+ Vietnamese learners",
@@ -402,7 +419,9 @@
  "challenge_now": "Challenge Now →"
  },
  "history_title": "Training Log",
- "history_empty": "You haven't performed any chemistry actions yet.",
+ "history_subtitle": "Lessons, labs, and tools you recently used.",
+ "history_loading": "Loading recent activity...",
+ "history_empty": "No activity yet. Start a lesson or open the lab to build your history here.",
  "history_clear": "Clear Log",
  "history_time_ago": "At"
  },
@@ -564,6 +583,7 @@
  "empty_history": "No recent challenges",
  "leaderboard_btn": "Hall of Fame",
  "leaderboard_title": "Top Learners",
+ "loading_leaderboard": "Loading leaderboard...",
  "empty_leaderboard": "No leaderboard data",
  "history_item": {
  "just_now": "Just now",

@@ -181,7 +181,7 @@ const ChemCalculator = () => {
           {/* CỘT PHẢI - Khu vực tính toán & Mô phỏng */}
           <div className="lg:col-span-8">
             {!selectedFormula ? (
-              <div className="viet-card p-12 text-center flex flex-col items-center justify-center min-h-[500px]">
+              <div className="viet-card flex min-h-[320px] flex-col items-center justify-center p-8 text-center sm:p-12 lg:min-h-[500px]">
                 <div className="flex justify-center mb-6">
                   {mode === 'experiment' ? <Microscope className="w-16 h-16 text-viet-text" /> : <Calculator className="w-16 h-16 text-viet-text" />}
                 </div>

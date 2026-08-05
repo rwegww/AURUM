@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { Hourglass, Rocket } from 'lucide-react';
 import { getVideoEmbedUrl, isExternalEmbedVideo } from '@/utils/videoLinks';
 
 const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
@@ -218,8 +219,8 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
           <span className="relative z-10 font-sora">
             {canContinue ? t('stage_video.action_btn.ready') : t('stage_video.action_btn.processing')}
           </span>
-          <span className={`relative z-10 text-xl transition-all duration-300 ${canContinue ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`}>
-            {canContinue ? 'Rocket' : 'Hourglass'}
+          <span className={`relative z-10 transition-all duration-300 ${canContinue ? 'group-hover:rotate-12 group-hover:scale-125' : 'grayscale'}`} aria-hidden="true">
+            {canContinue ? <Rocket className="h-5 w-5" /> : <Hourglass className="h-5 w-5" />}
           </span>
         </button>
 

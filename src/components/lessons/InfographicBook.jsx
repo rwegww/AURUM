@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import InfographicPage from './InfographicPage';
 import { useAuth } from '@/context/AuthContext';
-import { BookOpen, X, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Atom, BookOpen, X, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const GRADE_COVERS = {
   '6': {
@@ -192,7 +192,7 @@ const InfographicBook = ({ isOpen, onClose, bai_hoc, grade, unlockedLessons }) =
 
           {/* Holographic atom design */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] scale-[2] pointer-events-none">
-            <span className="text-[120px]">Atom</span>
+            <Atom className="h-28 w-28" aria-hidden="true" />
           </div>
 
           <div className="mt-8 text-center relative z-10">
