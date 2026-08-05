@@ -12,53 +12,7 @@ import {
 } from 'lucide-react';
 import Avatar from '@/components/common/Avatar';
 
-const ELEMENT_RANKS = {
-  1: {
-    symbol: 'Au',
-    atomicNumber: 79,
-    nameKey: 'gold',
-    className: 'border-[#d4a91d] bg-[#f4cc54] text-[#3b2d05]',
-  },
-  2: {
-    symbol: 'Ag',
-    atomicNumber: 47,
-    nameKey: 'silver',
-    className: 'border-[#b9c2bf] bg-[#e7ecea] text-[#31413b]',
-  },
-  3: {
-    symbol: 'Cu',
-    atomicNumber: 29,
-    nameKey: 'copper',
-    className: 'border-[#ae623c] bg-[#dc8c61] text-[#3c1c0e]',
-  },
-};
-
 const isOnline = (user) => Boolean(user?.isOnline || user?.computedIsOnline);
-
-const ElementRank = ({ rank, compact = false, t }) => {
-  const element = ELEMENT_RANKS[rank];
-
-  return (
-    <div
-      className={`${compact ? 'h-[64px] w-[58px] rounded-[16px] p-2' : 'h-[102px] w-[88px] rounded-[22px] p-3'} flex shrink-0 flex-col border-2 border-b-4 ${element.className}`}
-      aria-label={`${t('home.leaderboard.rank')} ${rank}: ${element.symbol}`}
-      role="img"
-    >
-      <div className="flex h-full flex-col" aria-hidden="true">
-        <div className="flex items-start justify-between font-bold leading-none opacity-70">
-          <span className={compact ? 'text-[8px]' : 'text-[11px]'}>{element.atomicNumber}</span>
-          <span className={compact ? 'text-[8px]' : 'text-[11px]'}>#{rank}</span>
-        </div>
-        <span className={`${compact ? 'mt-0.5 text-[26px]' : 'mt-1 text-[40px]'} font-rubik font-bold leading-none`}>
-          {element.symbol}
-        </span>
-        <span className={`${compact ? 'text-[7px]' : 'text-[9px]'} mt-auto font-black uppercase tracking-[0.12em] opacity-70`}>
-          {t(`home.leaderboard.${element.nameKey}`)}
-        </span>
-      </div>
-    </div>
-  );
-};
 
 const OnlineBadge = ({ user, t, inverse = false, compactOnMobile = false }) => {
   if (!isOnline(user)) return null;
@@ -79,14 +33,6 @@ const ChampionCard = ({ user, formatNumber, formatStudyTime, reducedMotion, t })
     transition={{ duration: 0.45, ease: 'easeOut' }}
     className="relative isolate overflow-hidden rounded-[32px] border border-[#244c40] bg-[#173c31] text-white shadow-[0_8px_0_#102c25]"
   >
-    <div
-      aria-hidden="true"
-      className="absolute inset-0 -z-10 opacity-30"
-      style={{
-        backgroundImage: 'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',
-        backgroundSize: '36px 36px',
-      }}
-    />
     <div aria-hidden="true" className="absolute -bottom-24 -right-20 -z-10 h-64 w-64 rounded-full border-[44px] border-white/[0.04]" />
 
     <div className="p-6 sm:p-8 lg:p-9">
@@ -95,9 +41,6 @@ const ChampionCard = ({ user, formatNumber, formatStudyTime, reducedMotion, t })
           <Trophy size={14} aria-hidden="true" />
           {t('home.leaderboard.leader')}
         </span>
-        <div className="sm:hidden">
-          <ElementRank rank={1} compact t={t} />
-        </div>
       </div>
 
       <div className="mt-5 flex items-center justify-between gap-4 sm:mt-6 sm:gap-6">
@@ -115,9 +58,6 @@ const ChampionCard = ({ user, formatNumber, formatStudyTime, reducedMotion, t })
               {user.username}
             </h3>
           </div>
-        </div>
-        <div className="hidden sm:block">
-          <ElementRank rank={1} compact t={t} />
         </div>
       </div>
 
@@ -159,7 +99,6 @@ const RunnerUpCard = ({ rank, user, formatNumber, formatStudyTime, reducedMotion
     className="rounded-[28px] border-2 border-[#dfe3db] border-b-[6px] bg-white p-4 sm:p-5"
   >
     <div className="flex items-start gap-3">
-      <ElementRank rank={rank} compact t={t} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-3">
           <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#667064]">
@@ -324,16 +263,6 @@ const LeaderboardSection = () => {
 
   return (
     <section className="relative isolate overflow-hidden border-y border-[#dfe4d8] bg-[#f5f7f1] py-20 sm:py-24" aria-labelledby="leaderboard-title">
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 opacity-60"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(23,60,49,0.11) 1px, transparent 1.25px)',
-          backgroundSize: '28px 28px',
-          maskImage: 'linear-gradient(to bottom, transparent, black 18%, black 82%, transparent)',
-        }}
-      />
-
       <div className="mx-auto max-w-[1160px] px-5 sm:px-6">
         <div className="mb-10 flex flex-col gap-7 lg:mb-12 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-[720px]">

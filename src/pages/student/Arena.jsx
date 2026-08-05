@@ -48,24 +48,6 @@ const RANKS = [
   { key: 'master', min: 6000, color: 'text-viet-green', bg: 'bg-viet-green/10', border: 'border-viet-green/30' },
 ];
 
-const LEADERBOARD_ELEMENTS = {
-  1: {
-    symbol: 'Au',
-    atomicNumber: 79,
-    tileClass: 'border-[#d4a91d] bg-[#f4cc54] text-[#3b2d05]',
-  },
-  2: {
-    symbol: 'Ag',
-    atomicNumber: 47,
-    tileClass: 'border-[#b9c2bf] bg-[#e7ecea] text-[#31413b]',
-  },
-  3: {
-    symbol: 'Cu',
-    atomicNumber: 29,
-    tileClass: 'border-[#ae623c] bg-[#dc8c61] text-[#3c1c0e]',
-  },
-};
-
 const apiCall = async (url, options = {}) => {
   const token = localStorage.getItem('token');
   const res = await fetch(url, {
@@ -223,37 +205,20 @@ const RankSummary = ({ user }) => {
 
 const ArenaLeaderboardRow = ({ player, fallbackRank, t }) => {
   const rank = Number(player.rank) || fallbackRank;
-  const element = LEADERBOARD_ELEMENTS[rank];
   const isChampion = rank === 1;
 
   return (
     <li
-      className={`grid grid-cols-[52px_44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[18px] border px-3 py-3.5 ${
+      className={`grid grid-cols-[28px_44px_minmax(0,1fr)_auto] items-center gap-3 rounded-[18px] border px-3 py-3.5 ${
         isChampion
           ? 'border-[#244c40] bg-[#173c31] text-white shadow-[0_4px_0_#102c25]'
           : 'border-[#e1e6dc] bg-[#f9faf7] text-viet-text'
       }`}
       aria-label={`${t('arena.ui.current_rank')} ${rank}: ${player.name}, ${player.points} ${t('arena.ui.points_label')}`}
     >
-      {element ? (
-        <div
-          className={`flex h-[50px] w-[46px] flex-col rounded-[12px] border-2 border-b-[3px] p-1.5 ${element.tileClass}`}
-          aria-hidden="true"
-        >
-          <div className="flex items-start justify-between text-[7px] font-black leading-none opacity-65">
-            <span>{element.atomicNumber}</span>
-            <span>#{rank}</span>
-          </div>
-          <span className="mt-0.5 font-rubik text-[21px] font-bold leading-none">{element.symbol}</span>
-        </div>
-      ) : (
-        <span
-          className="flex h-[46px] w-[46px] items-center justify-center rounded-[14px] border-2 border-[#dfe4db] border-b-4 bg-white font-rubik text-base font-bold text-viet-text-light"
-          aria-hidden="true"
-        >
-          {rank}
-        </span>
-      )}
+      <span className="text-center font-rubik text-base font-bold" aria-hidden="true">
+        {rank}
+      </span>
 
       <Avatar
         seed={player.avatarSeed || player.name}
@@ -1243,7 +1208,6 @@ const MatchResultScreen = ({ result, score, ptsChange, onClose }) => {
 
 const ArenaLobby = ({ user, onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOpenBrowser, onPractice }) => (
   <div className="min-h-screen bg-[#f8faf7] pt-[112px] pb-12">
-    <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(26,26,26,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(26,26,26,0.035)_1px,transparent_1px)] bg-[size:48px_48px]" />
     <div className="relative mx-auto grid max-w-[1380px] grid-cols-1 gap-5 px-4 sm:px-6 lg:grid-cols-[320px_minmax(0,1fr)_340px] lg:px-8">
       <ProfilePanel user={user} />
       <ActionCenter

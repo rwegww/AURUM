@@ -11,7 +11,6 @@ import {
   FlaskConical,
   GraduationCap,
   Lock,
-  MapPinned,
   Radiation,
   Sparkles,
   Star,
@@ -90,27 +89,21 @@ const CLASS_THEMES = {
   },
 };
 
-const MAP_LAYOUTS = {
-  1: {
-    desktop: [{ x: 50, y: 52 }],
-    mobile: [{ x: 50, y: 52 }],
-  },
-  2: {
-    desktop: [{ x: 25, y: 42 }, { x: 75, y: 58 }],
-    mobile: [{ x: 30, y: 32 }, { x: 70, y: 70 }],
-  },
-  3: {
-    desktop: [{ x: 18, y: 31 }, { x: 50, y: 62 }, { x: 82, y: 36 }],
-    mobile: [{ x: 30, y: 21 }, { x: 70, y: 50 }, { x: 32, y: 80 }],
-  },
-  4: {
-    desktop: [{ x: 16, y: 30 }, { x: 47, y: 20 }, { x: 30, y: 74 }, { x: 79, y: 69 }],
-    mobile: [{ x: 28, y: 16 }, { x: 72, y: 39 }, { x: 30, y: 64 }, { x: 70, y: 87 }],
-  },
-  5: {
-    desktop: [{ x: 15, y: 27 }, { x: 45, y: 21 }, { x: 28, y: 69 }, { x: 59, y: 79 }, { x: 84, y: 51 }],
-    mobile: [{ x: 28, y: 13 }, { x: 72, y: 31 }, { x: 29, y: 49 }, { x: 70, y: 68 }, { x: 38, y: 87 }],
-  },
+// Horizontal positions are percentages; vertical positions and map height are rem.
+// Nodes and rails share these coordinates, including across former 5-stage boundaries.
+const createJourneyLayout = (count) => {
+  const makeLayout = (columns, step) => ({
+    height: 20 + Math.max(0, count - 1) * step,
+    points: Array.from({ length: count }, (_, index) => ({
+      x: count === 1 ? 50 : columns[index % columns.length],
+      y: 10 + index * step,
+    })),
+  });
+
+  return {
+    desktop: makeLayout([24, 50, 76, 50], 10),
+    mobile: makeLayout([30, 70], 12.5),
+  };
 };
 
 const LEVELS = ['level1', 'level2', 'level3'];
@@ -122,52 +115,55 @@ const ThemeDoodle = ({ theme, size = 28 }) => {
     : <span className="journey-formula" aria-hidden="true">{theme.doodleSymbol}</span>;
 };
 
-const buildSmoothPath = (points) => {
-  if (points.length < 2) return '';
+const buildSmoothPath = (points, lastIndex = points.length - 1) => {
+  if (points.length < 2 || lastIndex < 1) return '';
 
   let path = `M ${points[0].x} ${points[0].y}`;
-  for (let index = 1; index < points.length - 1; index += 1) {
+  for (let index = 1; index <= Math.min(lastIndex, points.length - 1); index += 1) {
+    const previous = points[index - 1];
+    const before = points[Math.max(0, index - 2)];
     const current = points[index];
-    const next = points[index + 1];
-    const midpoint = {
-      x: (current.x + next.x) / 2,
-      y: (current.y + next.y) / 2,
+    const after = points[Math.min(points.length - 1, index + 1)];
+
+    // Interpolate through every pedestal, with matching tangents at each join.
+    // Use the full point list for both paths so progress follows the exact same curve.
+    const control1 = {
+      x: previous.x + (current.x - before.x) / 6,
+      y: previous.y + (current.y - before.y) / 6,
     };
-    path += ` Q ${current.x} ${current.y} ${midpoint.x} ${midpoint.y}`;
+    const control2 = {
+      x: current.x - (after.x - previous.x) / 6,
+      y: current.y - (after.y - previous.y) / 6,
+    };
+    path += ` C ${control1.x} ${control1.y}, ${control2.x} ${control2.y}, ${current.x} ${current.y}`;
   }
 
-  const penultimate = points[points.length - 2];
-  const last = points[points.length - 1];
-  return `${path} Q ${penultimate.x} ${penultimate.y} ${last.x} ${last.y}`;
+  return path;
 };
 
-const RailSvg = ({ className, path, progress }) => {
+const RailSvg = ({ className, layout, highestUnlockedIndex }) => {
+  const path = buildSmoothPath(layout.points);
+  const progressPath = buildSmoothPath(layout.points, highestUnlockedIndex);
   if (!path) return null;
 
   return (
-    <svg className={className} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <svg className={className} viewBox={`0 0 100 ${layout.height}`} preserveAspectRatio="none" aria-hidden="true">
       <path className="journey-rail-shadow" d={path} vectorEffect="non-scaling-stroke" />
       <path className="journey-rail-bed" d={path} vectorEffect="non-scaling-stroke" />
-      <path className="journey-rail-sleepers" d={path} pathLength="100" vectorEffect="non-scaling-stroke" />
+      <path className="journey-rail-sleepers" d={path} vectorEffect="non-scaling-stroke" />
       <path className="journey-rail-line" d={path} vectorEffect="non-scaling-stroke" />
-      <path
-        className="journey-rail-progress"
-        d={path}
-        pathLength="100"
-        style={{ strokeDasharray: `${progress} ${Math.max(100 - progress, 0)}` }}
-        vectorEffect="non-scaling-stroke"
-      />
+      {progressPath && (
+        <path className="journey-rail-progress" d={progressPath} vectorEffect="non-scaling-stroke" />
+      )}
     </svg>
   );
 };
 
-const JourneyRail = ({ count, progress }) => {
-  const layout = MAP_LAYOUTS[count] || MAP_LAYOUTS[5];
-
+const JourneyRail = ({ layout, highestUnlockedIndex }) => {
   return (
-    <div className="journey-rail-layer">
-      <RailSvg className="journey-rail-svg journey-rail-svg--desktop" path={buildSmoothPath(layout.desktop)} progress={progress} />
-      <RailSvg className="journey-rail-svg journey-rail-svg--mobile" path={buildSmoothPath(layout.mobile)} progress={progress} />
+    <div className="journey-rail-layer" aria-hidden="true">
+      <RailSvg className="journey-rail-svg journey-rail-svg--desktop" layout={layout.desktop} highestUnlockedIndex={highestUnlockedIndex} />
+      <RailSvg className="journey-rail-svg journey-rail-svg--mobile" layout={layout.mobile} highestUnlockedIndex={highestUnlockedIndex} />
     </div>
   );
 };
@@ -184,7 +180,7 @@ const getNextStepLabel = (stars) => {
   return 'Ôn lại';
 };
 
-const StageNode = ({ lesson, globalIndex, localIndex, point, onOpen, reduceMotion }) => {
+const StageNode = ({ lesson, globalIndex, point, onOpen, reduceMotion }) => {
   const isLocked = !lesson.isUnlocked;
   const completedLevels = LEVELS.filter((level) => (lesson.stars[level] || 0) > 0).length;
   const missionCount = Array.isArray(lesson.challenges) ? lesson.challenges.length : 0;
@@ -199,11 +195,11 @@ const StageNode = ({ lesson, globalIndex, localIndex, point, onOpen, reduceMotio
       className={`journey-stage-node ${stateClass}`}
       style={{
         '--node-left': `${point.desktop.x}%`,
-        '--node-top': `${point.desktop.y}%`,
+        '--node-top': `${point.desktop.y}rem`,
         '--node-left-mobile': `${point.mobile.x}%`,
-        '--node-top-mobile': `${point.mobile.y}%`,
+        '--node-top-mobile': `${point.mobile.y}rem`,
       }}
-      data-map-index={localIndex}
+      data-map-index={globalIndex}
       data-side={point.desktop.x > 58 ? 'right' : 'left'}
       aria-disabled={isLocked}
       aria-label={`Chặng ${globalIndex + 1}: ${cleanTitle}, ${statusLabel}`}
@@ -214,7 +210,7 @@ const StageNode = ({ lesson, globalIndex, localIndex, point, onOpen, reduceMotio
       whileHover={!isLocked && !reduceMotion ? { scale: 1.045, y: -4 } : undefined}
       whileTap={!isLocked && !reduceMotion ? { scale: 0.97 } : undefined}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.35, delay: localIndex * 0.06 }}
+      transition={{ duration: 0.35 }}
     >
       <span className="journey-stage-stack" aria-hidden="true">
         <span className="journey-stage-plaque">
@@ -378,10 +374,8 @@ const GradeJourney = () => {
   const completionPercentage = bai_hocStatus.length > 0
     ? (completedCount / bai_hocStatus.length) * 100
     : 0;
-  const mapZones = [];
-  for (let index = 0; index < bai_hocStatus.length; index += 5) {
-    mapZones.push(bai_hocStatus.slice(index, index + 5));
-  }
+  const mapLayout = createJourneyLayout(bai_hocStatus.length);
+  const sceneryCount = Math.ceil(Math.max(mapLayout.desktop.height, mapLayout.mobile.height) / 28);
 
   const lessonOneStars = bai_hoc.length > 0
     ? (user?.balancingProgress?.lessonStars?.[bai_hoc[0].lessonId] || { level1: 0, level2: 0, level3: 0 })
@@ -466,45 +460,37 @@ const GradeJourney = () => {
           </motion.section>
         )}
 
-        {mapZones.length > 0 ? (
-          <div className="journey-map-stack">
-            {mapZones.map((zone, zoneIndex) => {
-              const zoneStart = zoneIndex * 5;
-              const localUnlockedIndex = highestUnlockedIndex - zoneStart;
-              const zoneProgress = zone.length <= 1
-                ? (zone[0]?.isCompleted ? 100 : 0)
-                : Math.max(0, Math.min(100, (localUnlockedIndex / (zone.length - 1)) * 100));
-              const layout = MAP_LAYOUTS[zone.length] || MAP_LAYOUTS[5];
+        {bai_hocStatus.length > 0 ? (
+          <section
+            className="journey-map"
+            aria-label={`Bản đồ hành trình lớp ${grade}, ${bai_hocStatus.length} chặng`}
+            style={{
+              '--map-height': `${mapLayout.desktop.height}rem`,
+              '--map-height-mobile': `${mapLayout.mobile.height}rem`,
+            }}
+          >
+            <div className="journey-map-scenery" aria-hidden="true">
+              {Array.from({ length: sceneryCount }, (_, index) => (
+                <div
+                  key={index}
+                  className="journey-map-scenery-tile"
+                  style={{ top: `${index * 28 - 4}rem` }}
+                />
+              ))}
+            </div>
+            <JourneyRail layout={mapLayout} highestUnlockedIndex={highestUnlockedIndex} />
 
-              return (
-                <section
-                  key={`zone-${zoneIndex + 1}`}
-                  className={`journey-map-zone journey-map-zone--${zone.length}`}
-                  aria-labelledby={`journey-zone-${zoneIndex + 1}`}
-                >
-                  <div className="journey-map-glow" aria-hidden="true" />
-                  <div className="journey-zone-label" id={`journey-zone-${zoneIndex + 1}`}>
-                    <MapPinned size={17} />
-                    <span>Khu vực {zoneIndex + 1}</span>
-                    <small>Chặng {zoneStart + 1}–{zoneStart + zone.length}</small>
-                  </div>
-                  <JourneyRail count={zone.length} progress={zoneProgress} />
-
-                  {zone.map((lesson, localIndex) => (
-                    <StageNode
-                      key={lesson.id || lesson.lessonId || `${zoneIndex}-${localIndex}`}
-                      lesson={lesson}
-                      globalIndex={zoneStart + localIndex}
-                      localIndex={localIndex}
-                      point={{ desktop: layout.desktop[localIndex], mobile: layout.mobile[localIndex] }}
-                      onOpen={handleStageClick}
-                      reduceMotion={reduceMotion}
-                    />
-                  ))}
-                </section>
-              );
-            })}
-          </div>
+            {bai_hocStatus.map((lesson, index) => (
+              <StageNode
+                key={lesson.id || lesson.lessonId || index}
+                lesson={lesson}
+                globalIndex={index}
+                point={{ desktop: mapLayout.desktop.points[index], mobile: mapLayout.mobile.points[index] }}
+                onOpen={handleStageClick}
+                reduceMotion={reduceMotion}
+              />
+            ))}
+          </section>
         ) : (
           <section className="journey-empty-state">
             <Compass size={38} />
