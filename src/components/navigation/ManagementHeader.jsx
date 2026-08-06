@@ -48,6 +48,17 @@ const getRelativeTime = (timestamp) => {
   return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
 };
 
+const formatCurrentDate = () => {
+  const formatted = new Intl.DateTimeFormat('vi-VN', {
+    weekday: 'long',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date());
+
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+};
+
 export const NotificationPanel = ({
   id,
   className,
@@ -248,14 +259,14 @@ const ManagementHeader = ({ title }) => {
   };
 
   return (
-    <header className="hidden md:flex bg-white/90 backdrop-blur-md px-8 py-5 border-b border-slate-200/60 items-center justify-between sticky top-0 z-30">
+    <header className="hidden md:flex min-h-[112px] bg-white/95 backdrop-blur-md px-8 py-5 border-b border-slate-200/60 items-center justify-between sticky top-0 z-30">
       
       {/* Title & Greeting */}
       <div>
         <p className="text-xs font-bold text-slate-400 flex items-center gap-1.5 mb-0.5">
           Xin chào, {user?.username || 'admin'} 👋
         </p>
-        <h1 className="text-2xl font-black text-slate-900 tracking-tight">{title}</h1>
+        <h1 className="text-[26px] leading-tight font-black text-[#0b1f44] tracking-tight">{title}</h1>
         <p className="text-xs font-medium text-slate-400 mt-0.5">Cùng xây dựng môi trường học tập tốt hơn mỗi ngày</p>
       </div>
       
@@ -322,9 +333,11 @@ const ManagementHeader = ({ title }) => {
 
         {/* Date & Handwritten Quote Accent */}
         <div className="hidden lg:flex flex-col items-end pl-2 border-l border-slate-200/60 ml-2 relative">
-          <span className="text-[11px] font-bold text-slate-400">Thứ Ba, 01 Tháng 4, 2025</span>
+          <time dateTime={new Date().toISOString().slice(0, 10)} className="text-[11px] font-bold text-slate-500">
+            {formatCurrentDate()}
+          </time>
           <div className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 italic font-serif">
-            <Leaf size={12} className="text-emerald-500" /> Tri thức Tạo nên những cơ hội mới
+            <Leaf size={12} className="text-emerald-500" /> Mỗi phản ứng mở ra một khám phá mới
           </div>
         </div>
 

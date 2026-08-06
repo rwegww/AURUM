@@ -4,7 +4,7 @@ import { LayoutDashboard, BookOpen, Users, MessageSquare, Map, ShieldCheck } fro
 
 const AdminLayout = () => {
   const adminMenu = [
-    { label: 'Bảng điều khiển', path: '/admin', icon: <LayoutDashboard size={20} /> },
+    { label: 'Tổng quan', path: '/admin', icon: <LayoutDashboard size={20} /> },
     { label: 'Hành trình', path: '/admin/journey', icon: <Map size={20} /> },
     { label: 'Học liệu', path: '/admin/bai_hoc', icon: <BookOpen size={20} /> },
     { label: 'Người dùng', path: '/admin/nguoi_dung', icon: <Users size={20} /> },
@@ -12,7 +12,7 @@ const AdminLayout = () => {
     { label: 'Duyệt thay đổi', path: '/admin/approvals', icon: <ShieldCheck size={20} /> },
   ];
 
-  return <ManagementLayout role="admin" menuItems={adminMenu} title="Quản Trị Hệ Thống" />;
+  return <ManagementLayout role="admin" menuItems={adminMenu} title="Quản trị hệ thống AURUM" />;
 };
 
 export default AdminLayout;

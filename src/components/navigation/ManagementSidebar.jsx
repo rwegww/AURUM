@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import {
-  GraduationCap, LayoutDashboard, Users, BookOpen, FileCheck, MessageSquare,
-  BarChart2, Settings, LogOut, Award
+  FlaskConical, LayoutDashboard, Users, BookOpen, FileCheck, MessageSquare,
+  BarChart2, Settings, LogOut, Atom
 } from 'lucide-react';
 
 const ManagementSidebar = ({ menuItems, title }) => {
@@ -24,29 +24,29 @@ const ManagementSidebar = ({ menuItems, title }) => {
   return (
     <aside
       aria-label={`Thanh điều hướng ${title}`}
-      className="hidden md:flex w-64 h-screen h-dvh fixed top-0 left-0 bg-white border-r border-slate-200/80 flex-col z-40"
+      className="hidden md:flex w-[242px] h-screen h-dvh fixed top-0 left-0 bg-white border-r border-slate-200/80 flex-col z-40"
     >
       {/* Brand Header */}
-      <div className="h-24 flex items-center px-6 border-b border-slate-100 shrink-0">
-        <NavLink to="/" className="flex items-center gap-3 group" aria-label="Về trang chủ EduPro">
-          <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0 group-hover:scale-105 transition-transform">
-            <GraduationCap size={24} />
+      <div className="h-[112px] flex items-center px-6 border-b border-slate-100 shrink-0">
+        <NavLink to="/" className="flex items-center gap-3 group" aria-label="Về trang chủ AURUM">
+          <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0 group-hover:-translate-y-0.5 transition-transform">
+            <FlaskConical size={25} strokeWidth={2.25} />
           </div>
           <div>
             <div className="flex items-center gap-1">
-              <span className="text-xl font-black text-slate-900 tracking-tight">
-                EduPro
+              <span className="text-[21px] font-black text-[#0b1f44] tracking-tight">
+                AURUM
               </span>
             </div>
-            <p className="text-[11px] font-bold text-slate-400 leading-none mt-0.5">
-              Kết nối tri thức
+            <p className="text-[11px] font-bold text-slate-400 leading-none mt-1">
+              Học Hóa thật trực quan
             </p>
           </div>
         </NavLink>
       </div>
 
       {/* Navigation Links */}
-      <nav aria-label={`Các mục ${title}`} className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
+      <nav aria-label={`Các mục ${title}`} className="flex-1 overflow-y-auto py-6 px-4 space-y-2 custom-scrollbar">
         {menuItems.map((item, index) => {
           const icon = item.icon || defaultIcons[item.path] || <LayoutDashboard size={20} />;
           return (
@@ -54,7 +54,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
               key={item.path || item.label || index}
               to={item.path}
               end={item.path === '/admin' || item.path === '/teacher'}
-              className={({ isActive }) => `flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all relative font-bold text-sm ${
+              className={({ isActive }) => `flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all relative font-bold text-sm ${
                 isActive
                   ? 'text-blue-600 bg-blue-50 shadow-sm shadow-blue-500/5'
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
@@ -82,15 +82,16 @@ const ManagementSidebar = ({ menuItems, title }) => {
 
       {/* Bottom Educational Promo Card */}
       <div className="px-4 mb-4 mt-auto shrink-0">
-        <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/60 p-4 rounded-3xl border border-blue-100/80 text-center relative overflow-hidden">
-          <div className="w-12 h-12 mx-auto mb-2.5 rounded-2xl bg-blue-600/10 text-blue-600 flex items-center justify-center">
-            <GraduationCap size={28} />
+        <div className="bg-gradient-to-br from-blue-50 via-white to-emerald-50/70 p-4 rounded-3xl border border-blue-100 text-center relative overflow-hidden">
+          <Atom aria-hidden="true" className="absolute -right-5 -top-5 h-20 w-20 text-blue-100" />
+          <div className="w-12 h-12 mx-auto mb-2.5 rounded-2xl bg-blue-600/10 text-blue-600 flex items-center justify-center relative">
+            <FlaskConical size={27} />
           </div>
           <p className="text-xs font-black text-slate-800 uppercase tracking-tight mb-1">
-            Giáo dục kiến tạo tương lai
+            Hóa học khơi nguồn khám phá
           </p>
           <p className="text-[11px] text-slate-500 font-medium leading-snug">
-            Cùng học, cùng phát triển mỗi ngày!
+            Hiểu bản chất, vững tương lai.
           </p>
         </div>
       </div>

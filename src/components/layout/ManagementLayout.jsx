@@ -48,7 +48,7 @@ const ManagementLayout = ({ menuItems, title }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex">
+    <div className="min-h-screen bg-[#f4f7fb] flex">
       <a
         href="#management-main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-bold focus:text-viet-green focus:shadow-xl"
@@ -126,7 +126,7 @@ const ManagementLayout = ({ menuItems, title }) => {
       )}
       
       {/* Main Content Area */}
-      <main id="management-main-content" tabIndex="-1" className="md:ml-64 min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0 bg-[#f8f9fa] flex flex-col">
+      <main id="management-main-content" tabIndex="-1" className="md:ml-[242px] min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0 bg-[#f4f7fb] flex flex-col">
          <ManagementHeader title={title} />
          <div className="flex-1 pb-20">
             <Outlet />
