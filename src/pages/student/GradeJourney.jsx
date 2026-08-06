@@ -21,6 +21,7 @@ import InfographicBook from '@/components/lessons/InfographicBook';
 import PlacementTestModal, { AVAILABLE_PLACEMENT_TEST_GRADES } from '@/components/lessons/PlacementTestModal';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { buildJourneyPath, createJourneyLayout } from '@/utils/journeyLayout';
 import './GradeJourney.css';
 
 const CLASS_THEMES = {
@@ -89,23 +90,6 @@ const CLASS_THEMES = {
   },
 };
 
-// Horizontal positions are percentages; vertical positions and map height are rem.
-// Nodes and rails share these coordinates, including across former 5-stage boundaries.
-const createJourneyLayout = (count) => {
-  const makeLayout = (columns, step) => ({
-    height: 20 + Math.max(0, count - 1) * step,
-    points: Array.from({ length: count }, (_, index) => ({
-      x: count === 1 ? 50 : columns[index % columns.length],
-      y: 10 + index * step,
-    })),
-  });
-
-  return {
-    desktop: makeLayout([24, 50, 76, 50], 10),
-    mobile: makeLayout([30, 70], 12.5),
-  };
-};
-
 const LEVELS = ['level1', 'level2', 'level3'];
 
 const ThemeDoodle = ({ theme, size = 28 }) => {
@@ -115,35 +99,9 @@ const ThemeDoodle = ({ theme, size = 28 }) => {
     : <span className="journey-formula" aria-hidden="true">{theme.doodleSymbol}</span>;
 };
 
-const buildSmoothPath = (points, lastIndex = points.length - 1) => {
-  if (points.length < 2 || lastIndex < 1) return '';
-
-  let path = `M ${points[0].x} ${points[0].y}`;
-  for (let index = 1; index <= Math.min(lastIndex, points.length - 1); index += 1) {
-    const previous = points[index - 1];
-    const before = points[Math.max(0, index - 2)];
-    const current = points[index];
-    const after = points[Math.min(points.length - 1, index + 1)];
-
-    // Interpolate through every pedestal, with matching tangents at each join.
-    // Use the full point list for both paths so progress follows the exact same curve.
-    const control1 = {
-      x: previous.x + (current.x - before.x) / 6,
-      y: previous.y + (current.y - before.y) / 6,
-    };
-    const control2 = {
-      x: current.x - (after.x - previous.x) / 6,
-      y: current.y - (after.y - previous.y) / 6,
-    };
-    path += ` C ${control1.x} ${control1.y}, ${control2.x} ${control2.y}, ${current.x} ${current.y}`;
-  }
-
-  return path;
-};
-
 const RailSvg = ({ className, layout, highestUnlockedIndex }) => {
-  const path = buildSmoothPath(layout.points);
-  const progressPath = buildSmoothPath(layout.points, highestUnlockedIndex);
+  const path = buildJourneyPath(layout);
+  const progressPath = buildJourneyPath(layout, highestUnlockedIndex);
   if (!path) return null;
 
   return (

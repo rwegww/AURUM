@@ -955,6 +955,16 @@
     border-radius: 1.65rem;
   }
 
+  /* Keep the inner edge clear when an S-bend is compressed on a narrow screen. */
+  .journey-rail-shadow { stroke-width: 3.6rem; }
+  .journey-rail-bed { stroke-width: 3.2rem; }
+  .journey-rail-sleepers {
+    stroke-width: 2.6rem;
+    stroke-dasharray: 0.65rem 0.85rem;
+  }
+  .journey-rail-line { stroke-width: 0.8rem; }
+  .journey-rail-progress { stroke-width: 0.48rem; }
+
   .journey-stage-node {
     --node-anchor-y: 5.05rem;
     width: 7.35rem;
