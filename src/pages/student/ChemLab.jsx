@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { activityService } from '@/services/ActivityService';
-import { Beaker, BookOpenCheck, Hammer, Microscope, Scale, Search } from 'lucide-react';
+import { Beaker, Hammer, Microscope, Scale, Search } from 'lucide-react';
 import DiscoveryJournalModal from '@/components/lab/DiscoveryJournalModal';
 
 // --- Animations ---
@@ -89,14 +89,6 @@ const ChemLab = () => {
       desc: t('chem_lab.modules.molecule.desc'),
       path: '/lab/molecules',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-emerald-500'
-    },
-    {
-      id: 'discovery',
-      label: t('chem_lab.modules.discovery.label'),
-      icon: <BookOpenCheck className="w-8 h-8 text-indigo-500" />,
-      desc: t('chem_lab.modules.discovery.desc'),
-      path: null,
-      colorClass: 'bg-[#1a1a1a] text-white hover:bg-indigo-500'
     },
     {
       id: 'craft',

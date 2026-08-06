@@ -182,7 +182,7 @@ const Navbar = () => {
             <div className="hidden sm:block relative group/profile-dropdown">
               <Link to="/profile" className="flex items-center gap-2 bg-viet-green px-3 py-2 rounded-full shadow-md shadow-viet-green/20 hover:shadow-lg hover:shadow-viet-green/30 transition-all whitespace-nowrap">
                 <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0">
-                  <Avatar seed={user.avatarSeed || user.username} size={32} streakCount={user.streakCount} level={user.level} className="w-full h-full" />
+                  <Avatar seed={user.avatarSeed || user.username} size={32} level={user.level} className="w-full h-full" />
                 </div>
                 <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none block truncate max-w-[100px] select-none">
                   {user?.username}
@@ -330,7 +330,7 @@ const Navbar = () => {
                           className="flex-1 flex items-center gap-4 p-4 bg-slate-50 rounded-2xl group"
                         >
                           <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-viet-green p-0.5 bg-white">
-                            <Avatar seed={user.avatarSeed || user.username} size={40} streakCount={user.streakCount} level={user.level} className="w-full h-full object-cover" />
+                            <Avatar seed={user.avatarSeed || user.username} size={40} level={user.level} className="w-full h-full object-cover" />
                           </div>
                           <div className="flex flex-col">
                             <span className="text-[14px] font-black text-viet-text leading-tight">{user.username}</span>

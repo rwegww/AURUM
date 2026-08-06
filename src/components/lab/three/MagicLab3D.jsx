@@ -769,11 +769,6 @@ const MagicLab3D = () => {
             >
               <NotebookPen className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform duration-300" />
               <span>Nhật ký thí nghiệm</span>
-              {activeHistory.length > 0 && (
-                <span className="ml-1 px-1.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-md text-[10px] font-black">
-                  {activeHistory.length}
-                </span>
-              )}
             </button>
             <button 
               onClick={() => setShowDiscoveryJournal(true)}
@@ -785,7 +780,6 @@ const MagicLab3D = () => {
             >
               <svg className="w-4 h-4 text-purple-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
               <span className="text-white/80 group-hover:text-white transition-colors">Sổ tay khám phá</span>
-              <span className="ml-1 px-1.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-md text-[10px] font-black">{discoveredFormulas.length}</span>
             </button>
             <button 
               onClick={() => {
@@ -800,7 +794,6 @@ const MagicLab3D = () => {
             >
               <BookOpen className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform duration-300" />
               <span>Bảng điều chế</span>
-              <span className="ml-1 px-1.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-md text-[10px] font-black">{knownReactions.length}/{allReactions.length}</span>
             </button>
             <button 
               onClick={toggleFullscreen}
