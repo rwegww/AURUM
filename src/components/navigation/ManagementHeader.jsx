@@ -273,66 +273,8 @@ const ManagementHeader = ({ title }) => {
       {/* Right Controls */}
       <div className="flex items-center gap-4">
         
-        {/* Search Input */}
-        <div className="relative hidden xl:block">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-          <input
-            type="text"
-            placeholder="Tìm kiếm học sinh, bài tập..."
-            className="w-64 pl-10 pr-4 py-2 bg-slate-50 border border-slate-200/80 rounded-2xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:bg-white transition-all shadow-sm"
-          />
-        </div>
-
-        {/* Notification Bell */}
-        <div ref={desktopNotificationRef} className="relative shrink-0">
-          <button
-            ref={desktopNotificationButtonRef}
-            type="button"
-            onClick={toggleNotifications}
-            className={`w-10 h-10 rounded-2xl flex items-center justify-center transition-all bg-white border border-slate-200/80 shadow-sm hover:border-blue-500 ${
-              isOpen ? 'ring-2 ring-blue-500/40 text-blue-600' : 'text-slate-600'
-            }`}
-          >
-            <Bell size={18} aria-hidden="true" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white" />
-          </button>
-
-          <AnimatePresence>
-            {isOpen && (
-              <NotificationPanel
-                id="teacher-notifications-desktop"
-                className="absolute right-0 mt-3 w-[340px] max-h-[400px]"
-                notifications={notifications}
-                readIds={readIds}
-                unreadCount={unreadCount}
-                onClose={closeNotifications}
-                onMarkAllAsRead={markAllAsRead}
-                onOpenNotification={(id) => {
-                  markAsRead(id);
-                  setIsOpen(false);
-                }}
-                onToggleReadStatus={toggleReadStatus}
-              />
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* User Badge */}
-        <div className="flex items-center gap-3 px-3 py-1.5 bg-white rounded-2xl border border-slate-200/80 shadow-sm cursor-pointer hover:border-blue-500 transition-all">
-          <div className="w-8 h-8 rounded-xl overflow-hidden shrink-0 border border-slate-100">
-            <Avatar seed={user?.avatarSeed || user?.username || 'admin'} size={32} className="w-full h-full" />
-          </div>
-          <div className="flex flex-col text-left">
-            <span className="text-xs font-black text-slate-800 leading-none">{user?.username || 'admin'}</span>
-            <span className="text-[10px] font-bold text-slate-400 mt-1 leading-none">
-              {user?.role === 'admin' ? 'Quản trị viên' : user?.role === 'teacher' ? 'Giáo viên' : 'Quản trị viên'}
-            </span>
-          </div>
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-1" />
-        </div>
-
         {/* Date & Handwritten Quote Accent */}
-        <div className="hidden lg:flex flex-col items-end pl-2 border-l border-slate-200/60 ml-2 relative">
+        <div className="hidden lg:flex flex-col items-end relative">
           <time dateTime={new Date().toISOString().slice(0, 10)} className="text-[11px] font-bold text-slate-500">
             {formatCurrentDate()}
           </time>
