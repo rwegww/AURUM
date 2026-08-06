@@ -2,80 +2,107 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
-import { LogOut } from 'lucide-react';
+import {
+  GraduationCap, LayoutDashboard, Users, BookOpen, FileCheck, MessageSquare,
+  BarChart2, Settings, LogOut, Award
+} from 'lucide-react';
 
 const ManagementSidebar = ({ menuItems, title }) => {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  // Custom menu icon mapping if menuItems doesn't provide ideal icons
+  const defaultIcons = {
+    '/admin': <LayoutDashboard size={20} />,
+    '/admin/nguoi_dung': <Users size={20} />,
+    '/admin/bai_hoc': <BookOpen size={20} />,
+    '/admin/assignments': <FileCheck size={20} />,
+    '/admin/feedback': <MessageSquare size={20} />,
+    '/admin/stats': <BarChart2 size={20} />,
+    '/admin/settings': <Settings size={20} />,
+  };
 
   return (
     <aside
       aria-label={`Thanh điều hướng ${title}`}
-      className="hidden md:flex w-64 h-screen h-dvh fixed top-0 left-0 bg-[#121826] border-r border-[#1e293b] flex-col z-40"
+      className="hidden md:flex w-64 h-screen h-dvh fixed top-0 left-0 bg-white border-r border-slate-200/80 flex-col z-40"
     >
       {/* Brand Header */}
-      <div className="h-20 flex items-center px-6 border-b border-[#1e293b] shrink-0">
-        <NavLink to="/" className="flex items-center gap-2 group" aria-label="Về trang chủ AURUM">
-          <div className="w-8 h-8 relative flex items-center justify-center shrink-0 bg-white/10 rounded-lg p-1">
-            <img src="/logo.png" alt="" aria-hidden="true" className="w-full h-full object-contain" />
+      <div className="h-24 flex items-center px-6 border-b border-slate-100 shrink-0">
+        <NavLink to="/" className="flex items-center gap-3 group" aria-label="Về trang chủ EduPro">
+          <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 shrink-0 group-hover:scale-105 transition-transform">
+            <GraduationCap size={24} />
           </div>
-          <span className="text-xl font-black text-white group-hover:text-viet-green transition-colors italic uppercase tracking-tighter">
-            AURUM
-          </span>
+          <div>
+            <div className="flex items-center gap-1">
+              <span className="text-xl font-black text-slate-900 tracking-tight">
+                EduPro
+              </span>
+            </div>
+            <p className="text-[11px] font-bold text-slate-400 leading-none mt-0.5">
+              Kết nối tri thức
+            </p>
+          </div>
         </NavLink>
       </div>
 
-      {/* Navigation */}
+      {/* Navigation Links */}
       <nav aria-label={`Các mục ${title}`} className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 custom-scrollbar">
-        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 px-4 mb-4">
-          Bảng điều khiển
-        </div>
-        {menuItems.map((item, index) => (
-          <NavLink
-            key={item.path || item.label || index}
-            to={item.path}
-            end={item.path === '/admin' || item.path === '/teacher'}
-            className={({ isActive }) => `flex items-center gap-3.5 px-4 py-3 rounded-xl transition-all relative group ${
-              isActive
-                ? 'text-viet-green bg-viet-green/10 font-bold'
-                : 'text-slate-400 font-medium hover:bg-slate-800/50 hover:text-slate-200'
-            }`}
-          >
-            {({ isActive }) => (
-              <>
-                <div aria-hidden="true" className={`shrink-0 transition-colors ${isActive ? 'text-viet-green' : 'text-slate-500 group-hover:text-slate-300'}`}>
-                  {item.icon}
-                </div>
-                <span className="text-[13.5px] tracking-tight">{item.label}</span>
-                {isActive && (
-                  <motion.div
-                    aria-hidden="true"
-                    layoutId="activeTab"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-viet-green rounded-r-full"
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-        ))}
+        {menuItems.map((item, index) => {
+          const icon = item.icon || defaultIcons[item.path] || <LayoutDashboard size={20} />;
+          return (
+            <NavLink
+              key={item.path || item.label || index}
+              to={item.path}
+              end={item.path === '/admin' || item.path === '/teacher'}
+              className={({ isActive }) => `flex items-center gap-3.5 px-4 py-3 rounded-2xl transition-all relative font-bold text-sm ${
+                isActive
+                  ? 'text-blue-600 bg-blue-50 shadow-sm shadow-blue-500/5'
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              {({ isActive }) => (
+                <>
+                  <div aria-hidden="true" className={`shrink-0 transition-colors ${isActive ? 'text-blue-600' : 'text-slate-400'}`}>
+                    {icon}
+                  </div>
+                  <span className="tracking-tight">{item.label}</span>
+                  {isActive && (
+                    <motion.div
+                      aria-hidden="true"
+                      layoutId="activeTabPill"
+                      className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-6 bg-blue-600 rounded-l-full"
+                    />
+                  )}
+                </>
+              )}
+            </NavLink>
+          );
+        })}
       </nav>
 
-      {/* Promo Box */}
+      {/* Bottom Educational Promo Card */}
       <div className="px-4 mb-4 mt-auto shrink-0">
-        <div className="bg-gradient-to-br from-viet-green/20 to-transparent p-4 rounded-2xl border border-viet-green/20 text-center">
-          <img src="/logo.png" alt="" className="w-12 h-12 mx-auto mb-3 opacity-80 mix-blend-screen" />
-          <p className="text-sm font-black text-white leading-tight uppercase mb-1">Giáo dục kết nối</p>
-          <p className="text-[10px] text-slate-400 font-medium">Khơi nguồn sáng tạo tương lai</p>
+        <div className="bg-gradient-to-b from-blue-50/80 to-indigo-50/60 p-4 rounded-3xl border border-blue-100/80 text-center relative overflow-hidden">
+          <div className="w-12 h-12 mx-auto mb-2.5 rounded-2xl bg-blue-600/10 text-blue-600 flex items-center justify-center">
+            <GraduationCap size={28} />
+          </div>
+          <p className="text-xs font-black text-slate-800 uppercase tracking-tight mb-1">
+            Giáo dục kiến tạo tương lai
+          </p>
+          <p className="text-[11px] text-slate-500 font-medium leading-snug">
+            Cùng học, cùng phát triển mỗi ngày!
+          </p>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-[#1e293b] shrink-0">
+      {/* Footer / Logout */}
+      <div className="p-4 border-t border-slate-100 shrink-0">
         <button
           type="button"
           onClick={logout}
-          className="flex items-center justify-center w-full gap-2 px-4 py-3 rounded-xl text-slate-400 font-bold text-[13px] hover:bg-red-500/10 hover:text-red-500 transition-all active:scale-95"
+          className="flex items-center justify-center w-full gap-2 px-4 py-2.5 rounded-xl text-slate-500 font-bold text-xs hover:bg-red-50 hover:text-red-600 transition-all"
         >
-          <LogOut size={18} aria-hidden="true" /> Đăng xuất
+          <LogOut size={16} aria-hidden="true" /> Đăng xuất
         </button>
       </div>
     </aside>

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { toNonNegativeInteger } from '@/utils/teacherUi';
-import { BookOpen, Users, FileText, ArrowUpRight, ArrowDownRight, RefreshCcw, Activity } from 'lucide-react';
-import { ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BookOpen, Users, FileText, ArrowUpRight, ArrowDownRight, RefreshCcw, Activity, Plus } from 'lucide-react';
+import { ResponsiveContainer, AreaChart, Area } from 'recharts';
 
 const fetchJson = async (url, signal, fallbackMessage) => {
   const token = localStorage.getItem('token');
@@ -27,43 +27,47 @@ const ClassCard = ({ className, id, grade, students, code, delay }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md hover:border-viet-green/50 transition-all group flex flex-col"
+    className="bg-white rounded-2xl border border-slate-200/80 p-5 hover:shadow-md hover:border-viet-green/50 transition-all group flex flex-col justify-between"
   >
-    <div className="flex justify-between items-start gap-4 mb-4">
-      <div className="min-w-0">
-        <h3 className="text-lg font-bold text-slate-800 group-hover:text-viet-green transition-colors break-words line-clamp-1">
-          <Link to={`/teacher/lop/${id}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green rounded">
-            {className || 'Lớp chưa đặt tên'}
-          </Link>
-        </h3>
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">
-          {grade ? `Khối ${grade}` : 'Chưa xác định khối'}
-        </p>
+    <div>
+      <div className="flex justify-between items-start gap-3 mb-4">
+        <div className="min-w-0">
+          <h3 className="text-base font-bold text-slate-800 group-hover:text-viet-green transition-colors break-words line-clamp-1">
+            <Link to={`/teacher/lop/${id}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green rounded">
+              {className || 'Lớp chưa đặt tên'}
+            </Link>
+          </h3>
+          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+            {grade ? `Khối ${grade}` : 'Chưa xác định khối'}
+          </p>
+        </div>
+        <div className="w-10 h-10 shrink-0 rounded-xl bg-viet-green/10 text-viet-green flex items-center justify-center font-black text-sm border border-viet-green/20" aria-hidden="true">
+          {grade || '—'}
+        </div>
       </div>
-      <div className="w-10 h-10 shrink-0 rounded-xl bg-viet-green/10 text-viet-green flex items-center justify-center font-black text-sm" aria-hidden="true">
-        {grade || '—'}
+
+      <div className="space-y-2.5">
+        <div className="flex justify-between items-center text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span className="text-slate-500 font-medium">Sĩ số</span>
+          <span className="font-bold text-slate-800">{toNonNegativeInteger(students).toLocaleString('vi-VN')} học sinh</span>
+        </div>
+        <div className="flex justify-between items-center text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <span className="text-slate-500 font-medium">Mã tham gia</span>
+          <span className="font-bold text-viet-green bg-viet-green/10 px-2 py-0.5 rounded-md select-all tracking-wider font-mono">
+            {code || 'Chưa có'}
+          </span>
+        </div>
       </div>
     </div>
 
-    <div className="space-y-3 flex-1">
-      <div className="flex justify-between items-center text-sm bg-slate-50 p-2.5 rounded-lg">
-        <span className="text-slate-500 font-medium">Sĩ số</span>
-        <span className="font-bold text-slate-800">{toNonNegativeInteger(students).toLocaleString('vi-VN')} hs</span>
-      </div>
-      <div className="flex justify-between items-center text-sm bg-slate-50 p-2.5 rounded-lg">
-        <span className="text-slate-500 font-medium">Mã tham gia</span>
-        <span className="font-bold text-viet-green select-all tracking-wider">{code || 'Chưa có'}</span>
-      </div>
-    </div>
-
-    <div className="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
-      <span className="text-[10px] text-slate-400 font-bold uppercase">Hoạt động</span>
+    <div className="mt-5 pt-3.5 border-t border-slate-100 flex justify-between items-center text-xs">
+      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Trạng thái: Hoạt động</span>
       <Link
         to={`/teacher/lop/${id}`}
-        className="inline-flex items-center gap-1 rounded-lg text-xs font-bold text-viet-green hover:underline focus:outline-none"
+        className="inline-flex items-center gap-1 font-bold text-viet-green hover:underline focus:outline-none"
         aria-label={`Quản lý lớp ${className || ''}`.trim()}
       >
-        Chi tiết <ArrowUpRight size={14} />
+        Chi tiết lớp <ArrowUpRight size={14} />
       </Link>
     </div>
   </motion.article>
@@ -185,11 +189,50 @@ const TeacherDashboard = () => {
     }
   };
 
-  // Mock sparkline data
-  const sparklineData = Array(7).fill(0).map(() => ({ value: Math.floor(Math.random() * 100) + 50 }));
+  const statCards = [
+    {
+      title: 'Tổng số lớp',
+      value: loading ? '…' : lop.length.toLocaleString('vi-VN'),
+      icon: <BookOpen className="w-5 h-5 text-blue-600" />,
+      bgIcon: 'bg-blue-50 border border-blue-100',
+      tag: 'Số lượng',
+      trend: '+12%',
+      isUp: true,
+      trendText: 'So với học kỳ trước',
+      sparklineColor: '#3b82f6',
+      gradientId: 'sparkBlueTeacher',
+      sparklineData: [{ value: 20 }, { value: 35 }, { value: 30 }, { value: 55 }, { value: 45 }, { value: 70 }, { value: 65 }]
+    },
+    {
+      title: 'Tổng học sinh',
+      value: loading ? '…' : summary.total_students.toLocaleString('vi-VN'),
+      icon: <Users className="w-5 h-5 text-emerald-600" />,
+      bgIcon: 'bg-emerald-50 border border-emerald-100',
+      tag: 'Quy mô',
+      trend: '+5%',
+      isUp: true,
+      trendText: 'So với tháng trước',
+      sparklineColor: '#10b981',
+      gradientId: 'sparkGreenTeacher',
+      sparklineData: [{ value: 15 }, { value: 25 }, { value: 40 }, { value: 35 }, { value: 60 }, { value: 55 }, { value: 80 }]
+    },
+    {
+      title: 'Bài tập hoạt động',
+      value: loading ? '…' : summary.active_assignments.toLocaleString('vi-VN'),
+      icon: <FileText className="w-5 h-5 text-purple-600" />,
+      bgIcon: 'bg-purple-50 border border-purple-100',
+      tag: 'Tiến độ',
+      trend: '-2%',
+      isUp: false,
+      trendText: 'Tuần này',
+      sparklineColor: '#8b5cf6',
+      gradientId: 'sparkPurpleTeacher',
+      sparklineData: [{ value: 60 }, { value: 50 }, { value: 55 }, { value: 40 }, { value: 45 }, { value: 30 }, { value: 25 }]
+    },
+  ];
 
   return (
-    <div className="px-4 py-6 sm:p-6 lg:p-8 pb-24 space-y-6">
+    <div className="p-4 sm:p-6 lg:p-8 pb-24 space-y-6 max-w-[1600px] mx-auto">
       
       {/* Messages */}
       {loadError && (
@@ -211,88 +254,57 @@ const TeacherDashboard = () => {
 
       {/* 3 Top Cards (Redesigned) */}
       <section aria-label="Số liệu tổng quan" aria-busy={loading} className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-        
-        {/* Card 1 */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="flex justify-between items-start mb-4">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-100 text-blue-600">
-              <BookOpen size={20} />
+        {statCards.map((card, i) => (
+          <motion.div
+            key={card.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.08 }}
+            className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm relative overflow-hidden flex flex-col justify-between"
+          >
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${card.bgIcon}`}>
+                  {card.icon}
+                </div>
+                <span className="text-xs font-bold text-slate-400 bg-slate-50 border border-slate-200/60 px-2.5 py-1 rounded-lg">
+                  {card.tag}
+                </span>
+              </div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1">{card.title}</h3>
+              <p className="text-3xl font-black text-slate-800 tracking-tight">{card.value}</p>
             </div>
-            <span className="text-xs font-bold text-slate-400">Số lượng</span>
-          </div>
-          <h3 className="text-sm font-bold text-slate-500 mb-1">Tổng số lớp</h3>
-          <p className="text-3xl font-black text-slate-800">{loading ? '…' : lop.length.toLocaleString('vi-VN')}</p>
-          
-          <div className="flex items-center gap-2 mt-4 text-xs">
-            <span className="font-bold flex items-center gap-0.5 text-green-500">
-              <ArrowUpRight size={14} /> 12%
-            </span>
-            <span className="text-slate-400 font-medium">So với học kỳ trước</span>
-          </div>
-
-          <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={sparklineData}>
-                <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} dot={false} isAnimationActive={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Card 2 */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="flex justify-between items-start mb-4">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-100 text-green-600">
-              <Users size={20} />
+            
+            <div className="flex items-center gap-2 mt-4 text-xs z-10">
+              <span className={`font-black px-2 py-0.5 rounded-md flex items-center gap-0.5 ${card.isUp ? 'text-emerald-700 bg-emerald-50 border border-emerald-200/60' : 'text-rose-700 bg-rose-50 border border-rose-200/60'}`}>
+                {card.isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />} {card.trend}
+              </span>
+              <span className="text-slate-400 font-medium truncate">{card.trendText}</span>
             </div>
-            <span className="text-xs font-bold text-slate-400">Quy mô</span>
-          </div>
-          <h3 className="text-sm font-bold text-slate-500 mb-1">Tổng học sinh</h3>
-          <p className="text-3xl font-black text-slate-800">{loading ? '…' : summary.total_students.toLocaleString('vi-VN')}</p>
-          
-          <div className="flex items-center gap-2 mt-4 text-xs">
-            <span className="font-bold flex items-center gap-0.5 text-green-500">
-              <ArrowUpRight size={14} /> 5%
-            </span>
-            <span className="text-slate-400 font-medium">So với tháng trước</span>
-          </div>
 
-          <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={sparklineData}>
-                <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} dot={false} isAnimationActive={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Card 3 */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
-          <div className="flex justify-between items-start mb-4">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-100 text-purple-600">
-              <FileText size={20} />
+            {/* Background Sparkline Area */}
+            <div className="absolute -bottom-2 right-0 w-36 h-20 opacity-40 pointer-events-none">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={card.sparklineData}>
+                  <defs>
+                    <linearGradient id={card.gradientId} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={card.sparklineColor} stopOpacity={0.6} />
+                      <stop offset="100%" stopColor={card.sparklineColor} stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <Area
+                    type="monotone"
+                    dataKey="value"
+                    stroke={card.sparklineColor}
+                    strokeWidth={2.5}
+                    fill={`url(#${card.gradientId})`}
+                    isAnimationActive={false}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
-            <span className="text-xs font-bold text-slate-400">Tiến độ</span>
-          </div>
-          <h3 className="text-sm font-bold text-slate-500 mb-1">Bài tập hoạt động</h3>
-          <p className="text-3xl font-black text-slate-800">{loading ? '…' : summary.active_assignments.toLocaleString('vi-VN')}</p>
-          
-          <div className="flex items-center gap-2 mt-4 text-xs">
-            <span className="font-bold flex items-center gap-0.5 text-orange-500">
-              <ArrowDownRight size={14} /> 2%
-            </span>
-            <span className="text-slate-400 font-medium">Tuần này</span>
-          </div>
-
-          <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={sparklineData}>
-                <Line type="monotone" dataKey="value" stroke="#8b5cf6" strokeWidth={2} dot={false} isAnimationActive={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
+          </motion.div>
+        ))}
       </section>
 
       {/* Main Content Area */}
@@ -300,15 +312,18 @@ const TeacherDashboard = () => {
         
         {/* Class List */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
             <div>
               <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                 <Activity className="w-5 h-5 text-viet-green" /> Lớp học của tôi
               </h2>
-              <p className="text-xs text-slate-500 font-medium mt-1">Quản lý danh sách lớp học và học sinh</p>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">Quản lý danh sách lớp học và học sinh</p>
             </div>
-            <Link to="/teacher/lop" className="inline-flex items-center justify-center px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-md hover:bg-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green">
-              Tạo lớp mới <span className="ml-1" aria-hidden="true">+</span>
+            <Link
+              to="/teacher/lop"
+              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-viet-green text-white rounded-xl text-xs font-extrabold shadow-md hover:brightness-105 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green"
+            >
+              <Plus size={16} /> Tạo lớp mới
             </Link>
           </div>
 
@@ -321,7 +336,9 @@ const TeacherDashboard = () => {
             ) : lop.length === 0 ? (
               <div className="col-span-full py-12 px-4 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
                 <p className="text-slate-500 font-bold mb-4">Chưa có lớp nào được tạo.</p>
-                <Link to="/teacher/lop" className="inline-flex min-h-10 items-center rounded-xl bg-viet-green px-5 text-sm font-bold text-white shadow-sm hover:brightness-110">Bắt đầu tạo lớp</Link>
+                <Link to="/teacher/lop" className="inline-flex min-h-10 items-center rounded-xl bg-viet-green px-5 text-sm font-bold text-white shadow-sm hover:brightness-110">
+                  Bắt đầu tạo lớp
+                </Link>
               </div>
             ) : (
               lop.map((cls, index) => (
@@ -341,7 +358,7 @@ const TeacherDashboard = () => {
 
         {/* Linked Accounts */}
         <div className="space-y-6">
-          <section aria-labelledby="linked-accounts-title" className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+          <section aria-labelledby="linked-accounts-title" className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 border border-slate-200">
                 <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth="2" aria-hidden="true">
