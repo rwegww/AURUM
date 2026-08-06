@@ -86,7 +86,7 @@ const expectedColumns = {
   bai_nop: ['bai_dang_id', 'hoc_sinh_id', 'diem', 'phan_hoi_giao_vien', 'nop_luc', 'cau_tra_loi'],
   hoa_chat: ['cong_thuc', 'ten', 'trang_thai_vat_chat', 'mau_sac', 'danh_muc', 'la_chat_khoi_dau'],
   phan_ung: ['ten', 'phuong_trinh', 'chat_tham_gia', 'san_pham', 'khoi_id', 'danh_muc', 'dieu_kien'],
-  cau_hoi_dau: ['khoi_id', 'do_kho', 'cau_hoi', 'lua_chon', 'chi_so_dap_an_dung', 'diem', 'loai_game', 'noi_dung_game'],
+  cau_hoi_dau: ['khoi_id', 'do_kho', 'cau_hoi', 'diem', 'loai_game', 'noi_dung_game'],
   phong_dau: ['ten', 'chu_phong_id', 'che_do', 'do_kho', 'so_nguoi_toi_da', 'so_nguoi_hien_tai', 'danh_sach_cau_hoi_id'],
   nguoi_choi: ['phong_dau_id', 'nguoi_dung_id', 'so_cau_dung', 'vong_da_tra_loi', 'tham_gia_luc', 'xem_cuoi_luc'],
   tra_loi_vong: ['phong_dau_id', 'cau_hoi_id', 'nguoi_dung_id', 'thu_tu_vong', 'noi_dung_tra_loi', 'dung', 'diem_duoc_cong'],

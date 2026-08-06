@@ -226,8 +226,6 @@ BEGIN
       ('cau_hoi_dau', 'grade_level_id', 'khoi_id'),
       ('cau_hoi_dau', 'difficulty', 'do_kho'),
       ('cau_hoi_dau', 'question', 'cau_hoi'),
-      ('cau_hoi_dau', 'options', 'lua_chon'),
-      ('cau_hoi_dau', 'correct_option_index', 'chi_so_dap_an_dung'),
       ('cau_hoi_dau', 'points', 'diem'),
       ('cau_hoi_dau', 'game_type', 'loai_game'),
       ('cau_hoi_dau', 'payload', 'noi_dung_game'),
@@ -430,8 +428,6 @@ CREATE TABLE IF NOT EXISTS public.cau_hoi_dau (
   khoi_id integer NOT NULL DEFAULT 8 REFERENCES public.khoi(id) ON DELETE CASCADE,
   do_kho text NOT NULL DEFAULT 'easy',
   cau_hoi text NOT NULL,
-  lua_chon jsonb NOT NULL DEFAULT '[]'::jsonb,
-  chi_so_dap_an_dung integer,
   diem integer NOT NULL DEFAULT 10,
   loai_game text NOT NULL DEFAULT 'calculation',
   noi_dung_game jsonb NOT NULL DEFAULT '{}'::jsonb,
@@ -441,8 +437,6 @@ CREATE TABLE IF NOT EXISTS public.cau_hoi_dau (
   dang_hoat_dong boolean NOT NULL DEFAULT true,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT cau_hoi_dau_do_kho_check CHECK (do_kho IN ('easy', 'medium', 'hard', 'super', 'auto')),
-  CONSTRAINT cau_hoi_dau_chi_so_dap_an_dung_check
-    CHECK (chi_so_dap_an_dung IS NULL OR (chi_so_dap_an_dung >= 0 AND chi_so_dap_an_dung <= 3)),
   CONSTRAINT cau_hoi_dau_loai_game_check
     CHECK (loai_game IN ('calculation', 'balancing', 'atom_match', 'electron_match')),
   CONSTRAINT cau_hoi_dau_gioi_han_giay_check CHECK (gioi_han_giay BETWEEN 10 AND 180)
@@ -704,9 +698,6 @@ ALTER TABLE public.cau_hoi_dau
   ADD COLUMN IF NOT EXISTS gioi_han_giay integer DEFAULT 45,
   ADD COLUMN IF NOT EXISTS giai_thich text,
   ADD COLUMN IF NOT EXISTS dang_hoat_dong boolean DEFAULT true;
-
-ALTER TABLE public.cau_hoi_dau
-  ALTER COLUMN chi_so_dap_an_dung DROP NOT NULL;
 
 ALTER TABLE public.phong_dau
   ADD COLUMN IF NOT EXISTS danh_sach_cau_hoi_id uuid[] DEFAULT ARRAY[]::uuid[],

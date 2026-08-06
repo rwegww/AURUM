@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import ManagementSidebar from '../navigation/ManagementSidebar';
-import { Menu, X, LogOut } from 'lucide-react';
+import ManagementHeader from '../navigation/ManagementHeader';
+import { Menu, X, LogOut, Bell } from 'lucide-react';
 
 const ManagementLayout = ({ menuItems, title }) => {
   const { logout, user } = useAuth();
@@ -47,7 +48,7 @@ const ManagementLayout = ({ menuItems, title }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-viet-bg flex">
+    <div className="min-h-screen bg-[#f8f9fa] flex">
       <a
         href="#management-main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-bold focus:text-viet-green focus:shadow-xl"
@@ -60,7 +61,7 @@ const ManagementLayout = ({ menuItems, title }) => {
       <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-viet-border z-50 flex items-center justify-between px-4">
         <Link
           to="/"
-          className={`flex flex-1 items-center gap-3 min-w-0 ${user?.role === 'teacher' ? 'pr-12' : ''}`}
+          className={`flex items-center gap-3 min-w-0`}
           aria-label="Về trang chủ AURUM"
         >
           <img src="/logo.png" alt="" aria-hidden="true" className="w-8 h-8 object-contain shrink-0" />
@@ -69,17 +70,24 @@ const ManagementLayout = ({ menuItems, title }) => {
             <p className="text-[10px] font-bold text-viet-text-light uppercase truncate">{title}</p>
           </div>
         </Link>
-        <button
-          ref={mobileMenuButtonRef}
-          type="button"
-          onClick={() => setMobileMenuOpen((value) => !value)}
-          className="w-10 h-10 shrink-0 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
-          aria-label={mobileMenuOpen ? 'Đóng trình đơn' : 'Mở trình đơn'}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="management-mobile-menu"
-        >
-          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </button>
+        <div className="flex items-center gap-2">
+          {user?.role === 'teacher' && (
+            <button type="button" className="w-10 h-10 shrink-0 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
+              <Bell size={18} />
+            </button>
+          )}
+          <button
+            ref={mobileMenuButtonRef}
+            type="button"
+            onClick={() => setMobileMenuOpen((value) => !value)}
+            className="w-10 h-10 shrink-0 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
+            aria-label={mobileMenuOpen ? 'Đóng trình đơn' : 'Mở trình đơn'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="management-mobile-menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </header>
 
       {mobileMenuOpen && (
@@ -108,7 +116,7 @@ const ManagementLayout = ({ menuItems, title }) => {
                 setMobileMenuOpen(false);
                 logout();
               }}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-red-500 w-full"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm text-red-500 w-full hover:bg-red-50"
             >
               <LogOut size={18} />
               <span>Đăng xuất</span>
@@ -118,8 +126,9 @@ const ManagementLayout = ({ menuItems, title }) => {
       )}
       
       {/* Main Content Area */}
-      <main id="management-main-content" tabIndex="-1" className="md:ml-64 min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0">
-         <div className="pb-20">
+      <main id="management-main-content" tabIndex="-1" className="md:ml-64 min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0 bg-[#f8f9fa] flex flex-col">
+         <ManagementHeader title={title} />
+         <div className="flex-1 pb-20">
             <Outlet />
          </div>
       </main>

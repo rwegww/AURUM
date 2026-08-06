@@ -22,8 +22,6 @@ async function seed() {
           do_kho: difficulty === 'auto' ? 'easy' : difficulty,
           khoi_id: question.gradeLevel || 8,
           cau_hoi: question.question,
-          lua_chon: question.options || [],
-          chi_so_dap_an_dung: question.correct ?? null,
           loai_game: question.gameType || 'calculation',
           noi_dung_game: question.payload || {},
           dap_an: question.answer || {},

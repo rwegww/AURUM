@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { toNonNegativeInteger } from '@/utils/teacherUi';
+import { BookOpen, Users, FileText, ArrowUpRight, ArrowDownRight, RefreshCcw, Activity } from 'lucide-react';
+import { ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const fetchJson = async (url, signal, fallbackMessage) => {
   const token = localStorage.getItem('token');
@@ -25,64 +27,46 @@ const ClassCard = ({ className, id, grade, students, code, delay }) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay }}
-    className="bg-white rounded-[28px] sm:rounded-[32px] border border-viet-border p-5 sm:p-6 hover:shadow-md hover:border-viet-green/30 transition-all group"
+    className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md hover:border-viet-green/50 transition-all group flex flex-col"
   >
-    <div className="flex justify-between items-start gap-4 mb-6">
+    <div className="flex justify-between items-start gap-4 mb-4">
       <div className="min-w-0">
-        <h3 className="text-xl font-bold text-viet-text group-hover:text-viet-green transition-colors break-words">
-          <Link to={`/teacher/lop/${id}`} className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green">
+        <h3 className="text-lg font-bold text-slate-800 group-hover:text-viet-green transition-colors break-words line-clamp-1">
+          <Link to={`/teacher/lop/${id}`} className="focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green rounded">
             {className || 'Lớp chưa đặt tên'}
           </Link>
         </h3>
-        <p className="text-xs font-bold text-viet-text-light uppercase tracking-wider">
-          {grade ? `Hóa học khối ${grade}` : 'Chưa xác định khối'}
+        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-1">
+          {grade ? `Khối ${grade}` : 'Chưa xác định khối'}
         </p>
       </div>
-      <div className="w-10 h-10 shrink-0 rounded-2xl bg-viet-green/10 text-viet-green flex items-center justify-center font-black" aria-hidden="true">
+      <div className="w-10 h-10 shrink-0 rounded-xl bg-viet-green/10 text-viet-green flex items-center justify-center font-black text-sm" aria-hidden="true">
         {grade || '—'}
       </div>
     </div>
 
-    <dl className="space-y-4">
-      <div className="flex justify-between items-center gap-4 text-sm">
-        <dt className="text-viet-text-light font-medium">Sĩ số</dt>
-        <dd className="font-bold text-viet-text">{toNonNegativeInteger(students).toLocaleString('vi-VN')} học sinh</dd>
+    <div className="space-y-3 flex-1">
+      <div className="flex justify-between items-center text-sm bg-slate-50 p-2.5 rounded-lg">
+        <span className="text-slate-500 font-medium">Sĩ số</span>
+        <span className="font-bold text-slate-800">{toNonNegativeInteger(students).toLocaleString('vi-VN')} hs</span>
       </div>
-      <div className="flex justify-between items-center gap-4 text-sm">
-        <dt className="text-viet-text-light font-medium">Mã tham gia</dt>
-        <dd className="font-bold text-viet-green select-all">{code || 'Chưa có'}</dd>
+      <div className="flex justify-between items-center text-sm bg-slate-50 p-2.5 rounded-lg">
+        <span className="text-slate-500 font-medium">Mã tham gia</span>
+        <span className="font-bold text-viet-green select-all tracking-wider">{code || 'Chưa có'}</span>
       </div>
-    </dl>
+    </div>
 
-    <div className="mt-6 pt-4 border-t border-viet-border flex justify-end">
+    <div className="mt-5 pt-4 border-t border-slate-100 flex justify-between items-center">
+      <span className="text-[10px] text-slate-400 font-bold uppercase">Hoạt động</span>
       <Link
         to={`/teacher/lop/${id}`}
-        className="inline-flex min-h-10 items-center rounded-lg px-2 text-xs font-bold text-viet-green hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green"
+        className="inline-flex items-center gap-1 rounded-lg text-xs font-bold text-viet-green hover:underline focus:outline-none"
         aria-label={`Quản lý lớp ${className || ''}`.trim()}
       >
-        Quản lý <span aria-hidden="true">→</span>
+        Chi tiết <ArrowUpRight size={14} />
       </Link>
     </div>
   </motion.article>
-);
-
-const IconClass = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false">
-    <path d="M3 21h18M3 10h18M5 10V5a2 2 0 012-2h10a2 2 0 012 2v5M8 21v-4a2 2 0 012-2h4a2 2 0 012 2v4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const IconStudents = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false">
-    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100-8 4 4 0 000 8z" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const IconTasks = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false">
-    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
 );
 
 const TeacherDashboard = () => {
@@ -201,130 +185,202 @@ const TeacherDashboard = () => {
     }
   };
 
+  // Mock sparkline data
+  const sparklineData = Array(7).fill(0).map(() => ({ value: Math.floor(Math.random() * 100) + 50 }));
+
   return (
-    <div className="px-4 py-6 sm:p-8 sm:pb-24">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-8 sm:mb-12 flex items-center gap-4">
-          <div className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-2xl bg-viet-green flex items-center justify-center text-white shadow-lg shadow-viet-green/20">
-            <IconClass />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-2xl sm:text-3xl font-bold text-viet-text tracking-tight">Bảng tóm tắt giáo viên</h1>
-            <p className="text-sm sm:text-base text-viet-text-light font-medium">Quản lý lớp học và bài tập trên Aurum</p>
-          </div>
-        </header>
+    <div className="px-4 py-6 sm:p-6 lg:p-8 pb-24 space-y-6">
+      
+      {/* Messages */}
+      {loadError && (
+        <div role="alert" className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-800">
+          <span>{loadError}</span>
+          <button type="button" onClick={loadDashboard} disabled={loading} className="px-3 py-1.5 rounded-lg border border-red-300 bg-white font-bold text-red-600 disabled:opacity-60 flex items-center gap-1">
+            <RefreshCcw size={14} /> Thử lại
+          </button>
+        </div>
+      )}
 
-        {loadError && (
-          <div role="alert" className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            <span>{loadError}</span>
-            <button type="button" onClick={loadDashboard} disabled={loading} className="min-h-10 shrink-0 rounded-xl border border-amber-300 bg-white px-4 font-bold disabled:cursor-not-allowed disabled:opacity-60">
-              {loading ? 'Đang tải…' : 'Thử lại'}
-            </button>
-          </div>
-        )}
+      {googleError && (
+        <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-800">{googleError}</div>
+      )}
 
-        {googleError && (
-          <div role="alert" className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{googleError}</div>
-        )}
+      {googleNotice && (
+        <div role="status" aria-live="polite" className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">{googleNotice}</div>
+      )}
 
-        {googleNotice && (
-          <div role="status" aria-live="polite" className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-800">{googleNotice}</div>
-        )}
-
-        <section aria-label="Số liệu tổng quan" aria-busy={loading} className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          <div className="bg-gradient-to-br from-viet-green/20 to-viet-green/5 p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] border border-viet-green/20 relative overflow-hidden group hover:shadow-xl hover:shadow-viet-green/5 transition-all duration-500">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-viet-green uppercase tracking-wider">Tổng số lớp</span>
-              <div className="p-2 rounded-lg bg-viet-green/10 text-viet-green group-hover:scale-110 transition-transform"><IconClass /></div>
+      {/* 3 Top Cards (Redesigned) */}
+      <section aria-label="Số liệu tổng quan" aria-busy={loading} className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        
+        {/* Card 1 */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+          <div className="flex justify-between items-start mb-4">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-100 text-blue-600">
+              <BookOpen size={20} />
             </div>
-            <p className="text-4xl font-black text-viet-text tracking-tight">{loading ? '…' : lop.length.toLocaleString('vi-VN')}</p>
+            <span className="text-xs font-bold text-slate-400">Số lượng</span>
+          </div>
+          <h3 className="text-sm font-bold text-slate-500 mb-1">Tổng số lớp</h3>
+          <p className="text-3xl font-black text-slate-800">{loading ? '…' : lop.length.toLocaleString('vi-VN')}</p>
+          
+          <div className="flex items-center gap-2 mt-4 text-xs">
+            <span className="font-bold flex items-center gap-0.5 text-green-500">
+              <ArrowUpRight size={14} /> 12%
+            </span>
+            <span className="text-slate-400 font-medium">So với học kỳ trước</span>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-500/20 to-blue-500/5 p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] border border-blue-500/20 relative overflow-hidden group hover:shadow-xl hover:shadow-blue-500/5 transition-all duration-500">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">Tổng số học sinh</span>
-              <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 group-hover:scale-110 transition-transform"><IconStudents /></div>
-            </div>
-            <p className="text-4xl font-black text-viet-text tracking-tight">{loading ? '…' : summary.total_students.toLocaleString('vi-VN')}</p>
+          <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={sparklineData}>
+                <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={2} dot={false} isAnimationActive={false} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-
-          <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] border border-purple-500/20 relative overflow-hidden group hover:shadow-xl hover:shadow-purple-500/5 transition-all duration-500">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Bài tập đang hoạt động</span>
-              <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 group-hover:scale-110 transition-transform"><IconTasks /></div>
-            </div>
-            <p className="text-4xl font-black text-viet-text tracking-tight">{loading ? '…' : summary.active_assignments.toLocaleString('vi-VN')}</p>
-          </div>
-        </section>
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-          <h2 className="text-xl font-bold text-viet-text">Danh sách lớp học</h2>
-          <Link to="/teacher/lop" className="inline-flex min-h-11 items-center justify-center px-4 py-2 bg-viet-text text-white rounded-xl text-sm font-bold shadow-md hover:bg-black focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green">
-            Quản lý lớp học <span className="ml-1" aria-hidden="true">→</span>
-          </Link>
         </div>
 
-        <section aria-label="Danh sách lớp học" aria-busy={loading} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {loading ? (
-            <div role="status" className="col-span-full py-10 text-center text-sm font-medium text-viet-text-light">
-              <div className="w-8 h-8 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mx-auto mb-3" aria-hidden="true" />
-              Đang tải lớp học…
+        {/* Card 2 */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+          <div className="flex justify-between items-start mb-4">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-green-100 text-green-600">
+              <Users size={20} />
             </div>
-          ) : lop.length === 0 ? (
-            <div className="col-span-full py-10 px-4 text-center text-viet-text-light font-bold border-2 border-dashed border-viet-border rounded-2xl">
-              <p className="mb-4">Chưa có lớp nào được tạo.</p>
-              <Link to="/teacher/lop" className="inline-flex min-h-10 items-center rounded-xl bg-viet-green px-4 text-sm text-white">Tạo lớp đầu tiên</Link>
-            </div>
-          ) : (
-            lop.map((cls, index) => (
-              <ClassCard
-                key={cls.id}
-                className={cls.name}
-                id={cls.id}
-                grade={cls.khoi_id ?? cls.gradeLevelId}
-                students={cls.student_count}
-                code={cls.code}
-                delay={Math.min(index * 0.05, 0.3)}
-              />
-            ))
-          )}
-        </section>
-
-        <section aria-labelledby="linked-accounts-title" className="mt-12 bg-white rounded-[28px] sm:rounded-[32px] border border-viet-border p-5 sm:p-8 hover:shadow-md hover:border-viet-green/30 transition-all">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 shrink-0 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-600">
-              <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6" stroke="currentColor" strokeWidth="2" aria-hidden="true" focusable="false">
-                <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <div>
-              <h2 id="linked-accounts-title" className="text-xl font-bold text-viet-text">Tài khoản liên kết</h2>
-              <p className="text-sm font-medium text-viet-text-light">Liên kết Google để đăng nhập nhanh hơn</p>
-            </div>
+            <span className="text-xs font-bold text-slate-400">Quy mô</span>
+          </div>
+          <h3 className="text-sm font-bold text-slate-500 mb-1">Tổng học sinh</h3>
+          <p className="text-3xl font-black text-slate-800">{loading ? '…' : summary.total_students.toLocaleString('vi-VN')}</p>
+          
+          <div className="flex items-center gap-2 mt-4 text-xs">
+            <span className="font-bold flex items-center gap-0.5 text-green-500">
+              <ArrowUpRight size={14} /> 5%
+            </span>
+            <span className="text-slate-400 font-medium">So với tháng trước</span>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border border-slate-200 bg-slate-50">
-            <div className="flex items-center gap-3 min-w-0">
-              <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-8 h-8 shrink-0" alt="" aria-hidden="true" />
-              <div className="min-w-0">
-                <div className="font-bold text-slate-800">Google</div>
-                <div className="text-xs text-slate-500 font-medium">Đăng nhập nhanh bằng Google</div>
+          <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={sparklineData}>
+                <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} dot={false} isAnimationActive={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Card 3 */}
+        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+          <div className="flex justify-between items-start mb-4">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-100 text-purple-600">
+              <FileText size={20} />
+            </div>
+            <span className="text-xs font-bold text-slate-400">Tiến độ</span>
+          </div>
+          <h3 className="text-sm font-bold text-slate-500 mb-1">Bài tập hoạt động</h3>
+          <p className="text-3xl font-black text-slate-800">{loading ? '…' : summary.active_assignments.toLocaleString('vi-VN')}</p>
+          
+          <div className="flex items-center gap-2 mt-4 text-xs">
+            <span className="font-bold flex items-center gap-0.5 text-orange-500">
+              <ArrowDownRight size={14} /> 2%
+            </span>
+            <span className="text-slate-400 font-medium">Tuần này</span>
+          </div>
+
+          <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={sparklineData}>
+                <Line type="monotone" dataKey="value" stroke="#8b5cf6" strokeWidth={2} dot={false} isAnimationActive={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+      </section>
+
+      {/* Main Content Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Class List */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+              <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-viet-green" /> Lớp học của tôi
+              </h2>
+              <p className="text-xs text-slate-500 font-medium mt-1">Quản lý danh sách lớp học và học sinh</p>
+            </div>
+            <Link to="/teacher/lop" className="inline-flex items-center justify-center px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold shadow-md hover:bg-black transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-viet-green">
+              Tạo lớp mới <span className="ml-1" aria-hidden="true">+</span>
+            </Link>
+          </div>
+
+          <section aria-label="Danh sách lớp học" aria-busy={loading} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {loading ? (
+              <div role="status" className="col-span-full py-12 text-center">
+                <div className="w-8 h-8 border-4 border-slate-200 border-t-viet-green rounded-full animate-spin mx-auto mb-3" aria-hidden="true" />
+                <span className="text-sm font-medium text-slate-500">Đang tải lớp học…</span>
+              </div>
+            ) : lop.length === 0 ? (
+              <div className="col-span-full py-12 px-4 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
+                <p className="text-slate-500 font-bold mb-4">Chưa có lớp nào được tạo.</p>
+                <Link to="/teacher/lop" className="inline-flex min-h-10 items-center rounded-xl bg-viet-green px-5 text-sm font-bold text-white shadow-sm hover:brightness-110">Bắt đầu tạo lớp</Link>
+              </div>
+            ) : (
+              lop.map((cls, index) => (
+                <ClassCard
+                  key={cls.id}
+                  className={cls.name}
+                  id={cls.id}
+                  grade={cls.khoi_id ?? cls.gradeLevelId}
+                  students={cls.student_count}
+                  code={cls.code}
+                  delay={Math.min(index * 0.05, 0.3)}
+                />
+              ))
+            )}
+          </section>
+        </div>
+
+        {/* Linked Accounts */}
+        <div className="space-y-6">
+          <section aria-labelledby="linked-accounts-title" className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 border border-slate-200">
+                <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                  <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div>
+                <h2 id="linked-accounts-title" className="text-base font-bold text-slate-800">Tài khoản liên kết</h2>
+                <p className="text-xs font-medium text-slate-500 mt-0.5">Liên kết Google để đăng nhập nhanh</p>
               </div>
             </div>
-            {user?.linkedAccounts?.google ? (
-              <div className="self-start sm:self-auto px-4 py-2 rounded-xl text-sm font-bold bg-green-50 text-green-700 border border-green-200">Đã liên kết</div>
-            ) : (
-              <button
-                type="button"
-                className="min-h-11 px-4 py-2 rounded-xl text-sm font-bold bg-white border border-slate-200 shadow-sm text-slate-600 hover:text-viet-green hover:border-viet-green transition-all disabled:cursor-not-allowed disabled:opacity-60"
-                onClick={handleLinkGoogle}
-                disabled={isLinkingGoogle}
-              >
-                {isLinkingGoogle ? 'Đang liên kết…' : 'Liên kết'}
-              </button>
-            )}
-          </div>
-        </section>
+
+            <div className="flex flex-col items-center justify-between gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50 text-center sm:text-left sm:flex-row">
+              <div className="flex items-center gap-3 w-full">
+                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-8 h-8 shrink-0 bg-white p-1.5 rounded-full border border-slate-200 shadow-sm" alt="" aria-hidden="true" />
+                <div className="min-w-0 flex-1 text-left">
+                  <div className="text-sm font-bold text-slate-800">Google</div>
+                  <div className="text-[11px] text-slate-500 font-medium">Đăng nhập nhanh 1 chạm</div>
+                </div>
+              </div>
+              
+              <div className="w-full sm:w-auto">
+                {user?.linkedAccounts?.google ? (
+                  <div className="w-full sm:w-auto px-4 py-2 rounded-lg text-xs font-bold bg-green-50 text-green-700 border border-green-200 text-center">Đã liên kết</div>
+                ) : (
+                  <button
+                    type="button"
+                    className="w-full sm:w-auto min-h-9 px-4 py-1.5 rounded-lg text-xs font-bold bg-white border border-slate-300 shadow-sm text-slate-600 hover:text-viet-green hover:border-viet-green transition-all disabled:opacity-60"
+                    onClick={handleLinkGoogle}
+                    disabled={isLinkingGoogle}
+                  >
+                    {isLinkingGoogle ? 'Đang liên kết…' : 'Liên kết ngay'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+        </div>
+
       </div>
     </div>
   );

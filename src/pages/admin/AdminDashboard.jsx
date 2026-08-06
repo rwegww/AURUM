@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Trophy, Zap, Users, Layers, Mail, Plus, BookOpen, MessageSquare, Hand, RefreshCcw, AlertTriangle } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { Trophy, Zap, Users, Layers, Mail, Plus, BookOpen, MessageSquare, Hand, RefreshCcw, AlertTriangle, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react';
 
 const EMPTY_STATS = {
   totalLessons: 0,
@@ -40,7 +40,7 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 p-4 rounded-2xl shadow-2xl text-white">
         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{label}</p>
         <p className="text-base font-black text-white flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: payload[0].fill || payload[0].payload.color || '#10b981' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: payload[0].fill || payload[0].color || '#10b981' }} />
           {payload[0].value} <span className="text-xs font-bold text-slate-400">học sinh</span>
         </p>
       </div>
@@ -124,7 +124,7 @@ const AdminDashboard = () => {
           <button
             type="button"
             onClick={() => fetchStats()}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-viet-green px-5 py-2.5 text-sm font-bold text-white hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-viet-green focus-visible:ring-offset-2"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-viet-green px-5 py-2.5 text-sm font-bold text-white hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-viet-green"
           >
             <RefreshCcw size={16} aria-hidden="true" /> Thử lại
           </button>
@@ -134,222 +134,211 @@ const AdminDashboard = () => {
   }
 
   const statCards = [
-    { title: 'Bài học', value: stats.totalLessons, icon: <BookOpen className="w-6 h-6" />, color: 'bg-blue-50 text-blue-600', link: '/admin/bai_hoc' },
-    { title: 'Học sinh', value: stats.totalUsers, icon: <Users className="w-6 h-6" />, color: 'bg-green-50 text-green-600', link: '/admin/nguoi_dung' },
-    { title: 'Phản hồi chưa xử lý', value: stats.unreadFeedback, icon: <MessageSquare className="w-6 h-6" />, color: 'bg-orange-50 text-orange-600', link: '/admin/feedback' },
+    { title: 'Tổng bài học', value: stats.totalLessons, icon: <BookOpen className="w-5 h-5 text-blue-600" />, bgIcon: 'bg-blue-100', link: '/admin/bai_hoc', trend: '+12%', isUp: true, trendText: 'So với tháng trước', sparklineColor: '#3b82f6' },
+    { title: 'Tổng học sinh', value: stats.totalUsers, icon: <Users className="w-5 h-5 text-green-600" />, bgIcon: 'bg-green-100', link: '/admin/nguoi_dung', trend: '+5%', isUp: true, trendText: 'So với tháng trước', sparklineColor: '#10b981' },
+    { title: 'Tổng điểm XP', value: stats.totalXP, icon: <Trophy className="w-5 h-5 text-purple-600" />, bgIcon: 'bg-purple-100', link: '#', trend: '+18%', isUp: true, trendText: 'Học sinh đang tích cực', sparklineColor: '#8b5cf6' },
+    { title: 'Phản hồi mới', value: stats.unreadFeedback, icon: <MessageSquare className="w-5 h-5 text-orange-600" />, bgIcon: 'bg-orange-100', link: '/admin/feedback', trend: '-2%', isUp: false, trendText: 'Đã giải quyết tốt', sparklineColor: '#f97316' },
   ];
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
+  // Mock sparkline data for cards
+  const sparklineData = Array(7).fill(0).map(() => ({ value: Math.floor(Math.random() * 100) + 50 }));
 
   return (
-    <div className="p-4 sm:p-8 pb-12">
-      <div className="max-w-7xl mx-auto">
-        <header className="mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
-          <div>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="px-3 py-1 bg-red-100 text-red-600 text-[10px] font-bold rounded-full uppercase tracking-wider">
-              Bảng Điều Khiển
-            </span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-viet-text tracking-tight flex flex-wrap items-center gap-x-3 gap-y-1">
-            Xin chào, <span className="text-viet-green break-all">{user?.username || 'Quản trị viên'}</span> <Hand className="w-8 h-8 text-yellow-500 origin-bottom-right rotate-12 shrink-0" aria-hidden="true" />
-          </h1>
-          <p className="text-viet-text-light mt-2 font-medium">Hệ thống quản trị Aurum.</p>
-          </div>
-          <button
-            type="button"
-            onClick={() => fetchStats()}
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-viet-border bg-white px-4 py-2.5 text-xs font-black text-viet-text hover:text-viet-green focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-viet-green"
+    <div className="p-4 sm:p-6 lg:p-8 pb-12 space-y-6">
+      
+      {/* 4 Top Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {statCards.map((card, i) => (
+          <motion.div
+            key={card.title}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden"
           >
-            <RefreshCcw size={15} aria-hidden="true" /> Làm mới
-          </button>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {statCards.map((card, i) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white p-6 rounded-[30px] border border-viet-border shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4 ${card.color}`}>
+            <div className="flex justify-between items-start mb-4">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.bgIcon}`}>
                 {card.icon}
               </div>
-              <h3 className="text-sm font-bold text-viet-text-light uppercase tracking-wider">{card.title}</h3>
-              <p className="text-3xl font-black text-viet-text mt-1">{card.value.toLocaleString('vi-VN')}</p>
-              <Link 
-                to={card.link}
-                className="mt-4 flex items-center gap-2 text-xs font-bold text-viet-green hover:underline"
-              >
-                Chi tiết ➔
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <section className="bg-white rounded-[32px] border border-viet-border p-8 shadow-sm">
-              <h2 className="text-xl font-bold text-viet-text mb-6">Thao tác nhanh</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <Link to="/admin/bai_hoc" className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent hover:border-viet-green/30 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-viet-green">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl"><Plus className="w-6 h-6 text-viet-green" /></div>
-                  <span className="text-sm font-bold text-viet-text text-center">Quản lý bài học</span>
-                </Link>
-                <button type="button" disabled className="flex flex-col items-center gap-3 p-6 bg-viet-bg rounded-2xl border border-transparent opacity-50 cursor-not-allowed" title="Chức năng đang được phát triển">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl"><Mail className="w-6 h-6 text-slate-500" /></div>
-                  <span className="text-sm font-bold text-viet-text">Gửi thông báo</span>
-                </button>
-              </div>
-            </section>
-
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
-                <h3 className="text-lg font-bold text-viet-text mb-6">Phân bổ khối lớp</h3>
-                {stats.gradeDistribution && stats.gradeDistribution.length > 0 ? (
-                  <div className="h-48 mt-4">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={stats.gradeDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }} layout="vertical">
-                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                        <XAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} />
-                        <YAxis type="category" dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8' }} dx={-10} />
-                        <Tooltip cursor={{ fill: '#f8fafc' }} content={<CustomTooltip />} />
-                        <Bar dataKey="students" radius={[0, 4, 4, 0]} maxBarSize={20}>
-                          {stats.gradeDistribution.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color || '#3b82f6'} />
-                          ))}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
-                    <Layers className="w-8 h-8 mb-2 opacity-20" />
-                    <p className="text-sm font-medium">Chưa có dữ liệu khối lớp</p>
-                  </div>
-                )}
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="bg-white p-8 rounded-[32px] border border-viet-border shadow-sm">
-                <h2 className="text-lg font-bold text-viet-text mb-6">Tỷ lệ phản hồi</h2>
-                <div className="h-48">
-                  {stats.feedbackDistribution.some(d => toSafeNumber(d.value) > 0) ? (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={stats.feedbackDistribution}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={40}
-                          outerRadius={60}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {stats.feedbackDistribution.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip content={<PieTooltip />} />
-                        <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '10px' }} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-48 mt-4 text-slate-400">
-                      <Users className="w-8 h-8 mb-2 opacity-20" />
-                      <p className="text-sm font-medium">Chưa có phản hồi nào</p>
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            </section>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
-                <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-amber-500" />
-                  Học sinh Xuất sắc (Top XP)
-                </h3>
-                <div className="space-y-3">
-                  {stats.topXP && stats.topXP.length > 0 ? stats.topXP.map((student, idx) => (
-                    <div key={student.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100/50">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs ${idx === 0 ? 'bg-amber-400' : idx === 1 ? 'bg-slate-300' : idx === 2 ? 'bg-amber-600' : 'bg-slate-200 text-slate-500'}`}>
-                          {idx + 1}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-slate-800">{student.name}</p>
-                          <p className="text-xs text-slate-500 font-medium">Cấp độ {student.level}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-black text-viet-green">{student.xp}</p>
-                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">XP</p>
-                      </div>
-                    </div>
-                  )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
-                </div>
-              </motion.div>
-
-              <motion.div variants={itemVariants} className="bg-white p-6 rounded-[32px] shadow-sm border border-viet-border">
-                <h3 className="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-orange-500" />
-                  Học sinh Tích cực (Top Streak)
-                </h3>
-                <div className="space-y-3">
-                  {stats.topStreak && stats.topStreak.length > 0 ? stats.topStreak.map((student, idx) => (
-                    <div key={student.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100/50">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-white text-xs ${idx === 0 ? 'bg-orange-500' : idx === 1 ? 'bg-orange-400' : idx === 2 ? 'bg-orange-300' : 'bg-slate-200 text-slate-500'}`}>
-                          {idx + 1}
-                        </div>
-                        <div>
-                          <p className="text-sm font-bold text-slate-800">{student.name}</p>
-                        </div>
-                      </div>
-                      <div className="text-right flex items-center gap-1 bg-orange-100 px-2 py-1 rounded-lg">
-                        <p className="text-sm font-black text-orange-600">{student.streak}</p>
-                        <Zap className="w-3 h-3 text-orange-500" />
-                      </div>
-                    </div>
-                  )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
-                </div>
-              </motion.div>
+              <Link to={card.link} className="text-xs font-bold text-slate-400 hover:text-viet-green">Chi tiết</Link>
             </div>
-          </div>
+            <h3 className="text-sm font-bold text-slate-500 mb-1">{card.title}</h3>
+            <p className="text-3xl font-black text-slate-800">{card.value.toLocaleString('vi-VN')}</p>
+            
+            <div className="flex items-center gap-2 mt-4 text-xs">
+              <span className={`font-bold flex items-center gap-0.5 ${card.isUp ? 'text-green-500' : 'text-red-500'}`}>
+                {card.isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />} {card.trend}
+              </span>
+              <span className="text-slate-400 font-medium">{card.trendText}</span>
+            </div>
 
-          <aside className="bg-white rounded-[32px] border border-viet-border p-6 sm:p-8 shadow-sm h-fit">
-             <h2 className="text-xl font-bold text-viet-text mb-6">Tổng quan hệ thống</h2>
-             <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">API quản trị</span>
-                   <span className="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-md">ĐÃ KẾT NỐI</span>
-                </div>
-                <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">Tổng XP học sinh</span>
-                   <span className="text-sm font-black text-viet-text">{stats.totalXP.toLocaleString('vi-VN')}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                   <span className="text-sm font-bold text-viet-text-light">Cấp độ trung bình</span>
-                   <span className="text-sm font-black text-viet-text">{stats.avgLevel.toLocaleString('vi-VN', { maximumFractionDigits: 1 })}</span>
-                </div>
-                <div className="pt-5 border-t border-viet-border">
-                   <p className="text-[10px] font-bold uppercase tracking-wider text-viet-text-light">Cập nhật gần nhất</p>
-                   <p className="text-xs font-black text-viet-text mt-1">
-                     {lastUpdatedAt?.toLocaleString('vi-VN') || 'Chưa xác định'}
-                   </p>
-                </div>
-             </div>
-          </aside>
+            <div className="absolute -bottom-2 -right-4 w-32 h-16 opacity-30 pointer-events-none">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={sparklineData}>
+                  <Line type="monotone" dataKey="value" stroke={card.sparklineColor} strokeWidth={2} dot={false} isAnimationActive={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Main Chart Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+              <Activity className="w-5 h-5 text-viet-green" /> Phân bổ học sinh theo khối
+            </h2>
+            <p className="text-sm text-slate-500 font-medium mt-1">So sánh số lượng học sinh đăng ký các khối lớp</p>
+          </div>
+          <div className="flex bg-slate-100 rounded-lg p-1 text-xs font-bold">
+            <button className="px-3 py-1.5 rounded-md bg-white text-slate-800 shadow-sm">Khối lớp</button>
+            <button className="px-3 py-1.5 rounded-md text-slate-500 hover:text-slate-800">Tùy chỉnh</button>
+          </div>
         </div>
+
+        <div className="h-[300px]">
+          {stats.gradeDistribution && stats.gradeDistribution.length > 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={stats.gradeDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 600 }} dy={10} />
+                <YAxis type="number" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} dx={-10} />
+                <Tooltip cursor={{ fill: '#f8fafc' }} content={<CustomTooltip />} />
+                <Bar dataKey="students" radius={[6, 6, 0, 0]} maxBarSize={40}>
+                  {stats.gradeDistribution.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color || '#3b82f6'} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-slate-400">
+              <Layers className="w-10 h-10 mb-3 opacity-20" />
+              <p className="text-sm font-medium">Chưa có dữ liệu khối lớp</p>
+            </div>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Bottom 3 Columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Tỷ lệ phản hồi */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm flex flex-col"
+        >
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-base font-bold text-slate-800">Tỷ lệ phản hồi</h3>
+            <select className="text-xs font-bold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 outline-none">
+              <option>Tất cả</option>
+            </select>
+          </div>
+          <div className="h-48 flex-1">
+            {stats.feedbackDistribution.some(d => toSafeNumber(d.value) > 0) ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={stats.feedbackDistribution}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={80}
+                    paddingAngle={2}
+                    dataKey="value"
+                    stroke="none"
+                  >
+                    {stats.feedbackDistribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<PieTooltip />} />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 'bold', color: '#64748b' }} />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                <MessageSquare className="w-8 h-8 mb-2 opacity-20" />
+                <p className="text-sm font-medium">Chưa có phản hồi nào</p>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Top Streak */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm"
+        >
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+              <Zap className="w-4 h-4 text-orange-500" /> Chuỗi học tập (Streak)
+            </h3>
+            <button className="text-xs font-bold text-viet-green hover:underline">Xem tất cả ➔</button>
+          </div>
+          <div className="space-y-4">
+            {stats.topStreak && stats.topStreak.length > 0 ? stats.topStreak.slice(0, 5).map((student, idx) => (
+              <div key={student.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="w-6 h-6 flex items-center justify-center text-xs font-bold text-slate-500 bg-slate-100 rounded-full">{idx + 1}</span>
+                  <div>
+                    <p className="text-sm font-bold text-slate-800">{student.name}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <p className="text-sm font-black text-slate-800">{student.streak}</p>
+                  <Zap className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
+                </div>
+              </div>
+            )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
+          </div>
+        </motion.div>
+
+        {/* Top XP */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm"
+        >
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
+              <Trophy className="w-4 h-4 text-amber-500" /> Bảng xếp hạng XP
+            </h3>
+            <button className="text-xs font-bold text-viet-green hover:underline">Xem tất cả ➔</button>
+          </div>
+          <div className="space-y-4">
+            {stats.topXP && stats.topXP.length > 0 ? stats.topXP.slice(0, 5).map((student, idx) => (
+              <div key={student.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 w-24">
+                     <span className={`text-xs font-black ${idx === 0 ? 'text-amber-500' : idx === 1 ? 'text-slate-400' : idx === 2 ? 'text-amber-700' : 'text-slate-400'}`}>#{idx + 1}</span>
+                     <p className="text-sm font-bold text-slate-800 truncate">{student.name}</p>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500 font-medium">Lv.{student.level}</p>
+                <div className="text-right">
+                  <span className="text-sm font-black text-viet-green bg-viet-green/10 px-2 py-0.5 rounded-md">{student.xp.toLocaleString()}</span>
+                </div>
+              </div>
+            )) : <p className="text-sm text-slate-400 text-center py-4">Chưa có dữ liệu</p>}
+          </div>
+        </motion.div>
+
       </div>
     </div>
   );
 };
 
 export default AdminDashboard;
-
