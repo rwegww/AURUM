@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
-import { Bell, Mail, Target, Clock, BookOpen, Save, User, Lock, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Bell, Mail, Target, Clock, BookOpen, Save, User, Lock, ArrowLeft, RefreshCw, Camera } from 'lucide-react';
 
 const ReminderToggle = ({ enabled, onChange, title, icon, activeColor }) => {
   const colorClasses = {
@@ -67,6 +67,7 @@ const Settings = () => {
   const [googleNotice, setGoogleNotice] = useState('');
   const [editableSeed, setEditableSeed] = useState(user?.avatarSeed || user?.username);
   const [isSavingAvatar, setIsSavingAvatar] = useState(false);
+  const [isSavingGoogleAvatar, setIsSavingGoogleAvatar] = useState(false);
   const [isSavingPlan, setIsSavingPlan] = useState(false);
   const [planData, setPlanData] = useState(STUDY_PLAN_DEFAULTS);
   
@@ -123,6 +124,20 @@ const Settings = () => {
       console.error('Lỗi khi lưu ảnh đại diện:', err);
     } finally {
       setIsSavingAvatar(false);
+    }
+  };
+
+  const hasGoogleAvatar = Boolean(user?.linkedAccounts?.google && user?.linkedAccounts?.googleAvatarUrl);
+  const isUsingGoogleAvatar = hasGoogleAvatar && user?.linkedAccounts?.useGoogleAvatar !== false;
+
+  const handleToggleGoogleAvatar = async (useGoogle) => {
+    setIsSavingGoogleAvatar(true);
+    try {
+      await updateUser({ useGoogleAvatar: useGoogle });
+    } catch (err) {
+      console.error('Lỗi khi cập nhật ảnh đại diện Google:', err);
+    } finally {
+      setIsSavingGoogleAvatar(false);
     }
   };
 
@@ -254,6 +269,7 @@ const Settings = () => {
               <div className="w-44 h-44 rounded-[40px] bg-white border border-viet-border relative flex items-center justify-center shadow-md p-1">
                 <Avatar 
                   seed={editableSeed} 
+                  src={editableSeed === (user.avatarSeed || user.username) ? user.avatarUrl : null}
                   size={160} 
                   streakCount={user.streakCount} 
                   level={user.level}
@@ -261,7 +277,52 @@ const Settings = () => {
                 />
               </div>
 
-              <div className="flex gap-3 mt-8 w-full">
+              {/* Google Avatar Toggle */}
+              {hasGoogleAvatar && (
+                <div className="w-full mt-6">
+                  <div 
+                    onClick={() => !isSavingGoogleAvatar && handleToggleGoogleAvatar(!isUsingGoogleAvatar)}
+                    className={`relative p-3 rounded-2xl border-2 transition-all duration-200 cursor-pointer flex items-center justify-between gap-3 ${
+                      isUsingGoogleAvatar 
+                        ? 'border-blue-500 bg-white shadow-sm' 
+                        : 'border-viet-border bg-white/50 opacity-80 hover:opacity-100'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                        isUsingGoogleAvatar ? 'bg-blue-500/10 text-blue-600' : 'bg-slate-100 text-slate-400'
+                      }`}>
+                        <Camera size={16} />
+                      </div>
+                      <div>
+                        <span className={`font-black text-[13px] block ${isUsingGoogleAvatar ? 'text-viet-text' : 'text-slate-500'}`}>
+                          Dùng ảnh Google
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">
+                          Sử dụng ảnh đại diện từ tài khoản Google
+                        </span>
+                      </div>
+                    </div>
+                    <div className="select-none">
+                      {isSavingGoogleAvatar ? (
+                        <div className="w-4 h-4 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin" />
+                      ) : (
+                        <div className={`w-9 h-5 rounded-full relative transition-colors duration-200 ${
+                          isUsingGoogleAvatar ? 'bg-blue-500' : 'bg-slate-200'
+                        }`}>
+                          <motion.div 
+                            animate={{ x: isUsingGoogleAvatar ? 18 : 2 }}
+                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                            className="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className={`flex gap-3 mt-6 w-full ${isUsingGoogleAvatar ? 'opacity-50 pointer-events-none' : ''}`}>
                 <button
                   onClick={handleRandomizeAvatar}
                   className="flex-1 py-3.5 bg-slate-50 border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-100 transition-all flex items-center justify-center gap-2"

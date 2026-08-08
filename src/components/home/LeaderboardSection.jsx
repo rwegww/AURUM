@@ -48,6 +48,7 @@ const ChampionCard = ({ user, formatNumber, formatStudyTime, reducedMotion, t })
           <div className="w-fit shrink-0 rounded-full bg-[#f4cc54] p-1 shadow-[0_0_0_5px_rgba(255,255,255,0.08)]">
             <Avatar
               seed={user.avatarSeed || user.username}
+              src={user.avatarUrl}
               size={96}
               className="bg-white"
             />
@@ -107,7 +108,7 @@ const RunnerUpCard = ({ rank, user, formatNumber, formatStudyTime, reducedMotion
           <OnlineBadge user={user} t={t} />
         </div>
         <div className="mt-2 flex items-center gap-3">
-          <Avatar seed={user.avatarSeed || user.username} size={48} />
+          <Avatar seed={user.avatarSeed || user.username} src={user.avatarUrl} size={48} />
           <div className="min-w-0">
             <h3 className="truncate text-lg font-black text-viet-text">{user.username}</h3>
             <p className="mt-0.5 text-xs font-bold text-[#70786e]">
@@ -145,7 +146,7 @@ const RankingRow = ({ rank, user, topXp, formatNumber, formatStudyTime, reducedM
       <div className="flex h-10 w-10 items-center justify-center rounded-[14px] border-2 border-[#e2e6de] border-b-4 bg-[#f6f8f3] font-rubik text-lg font-bold text-viet-text-light">
         {rank}
       </div>
-      <Avatar seed={user.avatarSeed || user.username} size={48} />
+      <Avatar seed={user.avatarSeed || user.username} src={user.avatarUrl} size={48} />
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <h4 className="truncate font-black text-viet-text">{user.username}</h4>

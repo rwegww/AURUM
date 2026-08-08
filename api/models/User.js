@@ -357,6 +357,7 @@ const mapUser = (user) => {
   const todayLessonCompleted = user.da_hoan_thanh_bai_hom_nay ?? user.today_lesson_completed ?? false;
   const studyPlan = user.ke_hoach_hoc || user.study_plan || { emailEnabled: false, dailyLessonTarget: 1, completed: false };
   const linkedAccounts = user.tai_khoan_lien_ket || user.linked_accounts || {};
+  const avatarUrl = (linkedAccounts.useGoogleAvatar !== false && typeof linkedAccounts.googleAvatarUrl === 'string') ? linkedAccounts.googleAvatarUrl : null;
   return {
     ...user,
     id: user.id,
@@ -371,6 +372,7 @@ const mapUser = (user) => {
       ? normalizeIdList(user.unlocked_chemicals, 'chemical_formula')
       : normalizeIdList(user.unlockedChemicals || [], 'chemical_formula'),
     avatarSeed: user.avatar_seed || user.username,
+    avatarUrl,
     arenaStats,
     arenaAvatar: { seed: 'Chem Master', aura: '#a855f7' },
     // Cleanup
@@ -472,6 +474,7 @@ export const User = {
       password_hash: hashedPassword,
       role: userData.role || 'student',
       avatar_seed: userData.avatarSeed || userData.username,
+      tai_khoan_lien_ket: userData.linkedAccounts || {},
       ke_hoach_hoc: { emailEnabled: false, dailyLessonTarget: 1, completed: false, grade: userData.grade || null },
       so_ngay_chuoi: 0,
       phut_online_hom_nay: 0,
@@ -655,7 +658,7 @@ export const User = {
     const { data, error } = await supabase
       .from('nguoi_dung')
       .select(`
-        id, username, role, diem_kinh_nghiem, cap_do, avatar_seed, updated_at, hoat_dong_cuoi_luc, phut_hoat_dong, bi_khoa
+        id, username, role, diem_kinh_nghiem, cap_do, avatar_seed, tai_khoan_lien_ket, updated_at, hoat_dong_cuoi_luc, phut_hoat_dong, bi_khoa
       `)
       .eq('role', 'student')
       .gt('diem_kinh_nghiem', 0)

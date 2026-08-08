@@ -381,7 +381,7 @@ const FloatingWidget = () => {
                       <div className="bg-white rounded-2xl border border-[#e6e2d6] p-4 shadow-sm flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className="w-14 h-14 shrink-0 flex items-center justify-center">
-                            <Avatar seed={user?.avatarSeed || user?.username} size={56} streakCount={user?.streakCount} level={user?.level} />
+                            <Avatar seed={user?.avatarSeed || user?.username} src={user?.avatarUrl} size={56} streakCount={user?.streakCount} level={user?.level} />
                           </div>
                           <div>
                             <p className="text-[9px] font-bold text-viet-text-light/50 uppercase tracking-wider">{user?.username}</p>

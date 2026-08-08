@@ -19,7 +19,7 @@ const DEFAULT_STUDY_PLAN = {
   grade: null,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 240;
-const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username']);
+const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'useGoogleAvatar']);
 const LESSON_LEVEL_XP = {
   level1: 30,
   level2: 50,
@@ -217,6 +217,14 @@ router.patch('/profile', auth, async (req, res) => {
       updateData.studyPlan = shouldResetStudyReminderState(nextStudyPlan, req.user.studyPlan)
         ? resetStudyReminderState(nextStudyPlan)
         : nextStudyPlan;
+    }
+
+    // Handle useGoogleAvatar toggle - store it inside linkedAccounts
+    if (Object.prototype.hasOwnProperty.call(updateData, 'useGoogleAvatar')) {
+      const useGoogle = Boolean(updateData.useGoogleAvatar);
+      const currentLinked = req.user.linkedAccounts || {};
+      updateData.linkedAccounts = { ...currentLinked, useGoogleAvatar: useGoogle };
+      delete updateData.useGoogleAvatar;
     }
 
     const updatedUser = await User.update(req.user.id, updateData);

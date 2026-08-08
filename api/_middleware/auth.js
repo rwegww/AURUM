@@ -69,6 +69,17 @@ const normalizeAuthenticatedUser = (user) => user ? ({
   role: normalizeUserRole(user.role),
 }) : user;
 
+const getGoogleAvatarUrl = (sbUser) => {
+  const url = sbUser?.user_metadata?.avatar_url || sbUser?.user_metadata?.picture;
+  if (typeof url !== 'string') return null;
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'https:' ? parsed.toString() : null;
+  } catch {
+    return null;
+  }
+};
+
 const resolveSupabaseUser = async (token) => {
   const { data, error } = await supabase.auth.getUser(token);
   const sbUser = data?.user;
@@ -105,6 +116,7 @@ const resolveSupabaseUser = async (token) => {
     if (!sbUser.email_confirmed_at && !sbUser.confirmed_at) {
       throw new AuthenticationError('EMAIL_NOT_VERIFIED', 'Vui lòng xác minh email trước khi đăng nhập.', 403);
     }
+    const googleAvatarUrl = getGoogleAvatarUrl(sbUser);
     user = await User.create({
       id: sbUser.id,
       username: sbUser.user_metadata?.full_name || sbUser.email?.split('@')[0] || 'Môn đồ Hóa học',
@@ -112,7 +124,24 @@ const resolveSupabaseUser = async (token) => {
       // OAuth accounts must never share a publicly known password.
       password: crypto.randomBytes(48).toString('base64url'),
       role: 'student',
+      linkedAccounts: {
+        google: sbUser.id,
+        ...(googleAvatarUrl ? { googleAvatarUrl } : {}),
+      },
     });
+  } else {
+    const googleAvatarUrl = getGoogleAvatarUrl(sbUser);
+    const linkedAccounts = user.linkedAccounts || {};
+    const shouldSyncGoogleProfile = !linkedAccounts.google || linkedAccounts.google === sbUser.id;
+    if (shouldSyncGoogleProfile && (linkedAccounts.google !== sbUser.id || linkedAccounts.googleAvatarUrl !== googleAvatarUrl)) {
+      user = await User.update(user.id, {
+        linkedAccounts: {
+          ...linkedAccounts,
+          google: sbUser.id,
+          ...(googleAvatarUrl ? { googleAvatarUrl } : {}),
+        },
+      });
+    }
   }
 
   const sessionId = jwt.decode(token)?.session_id;

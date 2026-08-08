@@ -57,6 +57,7 @@ const Profile = () => {
             <div className="w-40 h-40 rounded-[40px] bg-white shadow-2xl relative flex items-center justify-center overflow-hidden shrink-0">
               <Avatar 
                 seed={user.avatarSeed || user.username} 
+                src={user.avatarUrl}
                 size={160} 
                 streakCount={user.streakCount} 
                 level={user.level}

@@ -393,7 +393,7 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       if (res.ok) {
         if (mountedRef.current) {
-          setUser(prev => ({ ...prev, linkedAccounts: data.linkedAccounts }));
+          setUser(prev => ({ ...prev, ...(data.user || {}), linkedAccounts: data.linkedAccounts }));
         }
         return { success: true, message: data.message };
       } else {

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Flame } from 'lucide-react';
 
-export default function Avatar({ seed = 'User', size = 128, className = "", streakCount = 0, level = null }) {
+export default function Avatar({ seed = 'User', src = null, size = 128, className = "", streakCount = 0, level = null }) {
   const avatarUri = `https://api.dicebear.com/9.x/lorelei/svg?seed=${encodeURIComponent(seed)}`;
+  const imageSrc = src || avatarUri;
   
   // Milestone Configuration
   let ringStyle = {
@@ -74,9 +75,10 @@ export default function Avatar({ seed = 'User', size = 128, className = "", stre
       
       <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center relative">
         <img 
-          src={avatarUri} 
+          src={imageSrc} 
           alt={`Avatar of ${seed}`} 
-          className="w-full h-full object-cover scale-110"
+          className={`w-full h-full object-cover ${src ? '' : 'scale-110'}`}
+          referrerPolicy="no-referrer"
         />
       </div>
 

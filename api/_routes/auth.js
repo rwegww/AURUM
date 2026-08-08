@@ -106,6 +106,8 @@ const createLoginResponse = async (user, completedSessionId = null) => {
       level: user.level,
       inventory: user.inventory || { ingredients: [], craftedItems: [] },
       unlockedLessons: user.unlockedLessons,
+      avatarSeed: user.avatarSeed,
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
       linkedAccounts: user.linkedAccounts || {}
     }
