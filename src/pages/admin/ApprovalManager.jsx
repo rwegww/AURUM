@@ -292,112 +292,54 @@ const ApprovalManager = () => {
           </div>
         ) : (
           <div className="bg-white rounded-[32px] border border-viet-border overflow-hidden shadow-sm">
-            {hasActiveFilters && (
-              <div className="px-6 py-3 bg-slate-50 border-b border-viet-border flex items-center justify-between gap-4 text-xs">
-                <span className="font-bold text-viet-text-light flex items-center gap-1.5">
-                  <Filter className="w-4 h-4 text-viet-green" />
-                  Đang lọc {filteredApprovals.length} / {approvals.length} yêu cầu
-                </span>
-                <button
-                  type="button"
-                  onClick={resetFilters}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border border-viet-border font-bold text-viet-text hover:text-red-600 transition-colors shadow-sm"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  Xóa tất cả bộ lọc
-                </button>
-              </div>
-            )}
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-left">
-                <thead className="bg-slate-50/90 border-b border-viet-border">
+                <thead className="bg-viet-bg/40 border-b border-viet-border">
                   <tr>
-                    {/* Thay đổi */}
-                    <th className="px-6 py-4 text-left align-top">
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <button
-                          type="button"
-                          onClick={() => handleSort('action')}
-                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
-                        >
-                          <span>Thay đổi</span>
-                          {sortField === 'action' ? (
-                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                          ) : (
-                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                          )}
-                        </button>
-                      </div>
-                      <input
-                        type="search"
-                        placeholder="Lọc thay đổi..."
-                        value={actionFilter}
-                        onChange={(e) => setActionFilter(e.target.value)}
-                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2.5 py-1.5 focus:border-viet-green focus:outline-none shadow-sm placeholder:font-normal"
-                      />
+                    <th className="px-6 py-4">
+                      <button
+                        type="button"
+                        onClick={() => handleSort('action')}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                      >
+                        <span>Thay đổi</span>
+                        {sortField === 'action' ? (
+                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                        ) : (
+                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                        )}
+                      </button>
                     </th>
-
-                    {/* Người tạo */}
-                    <th className="px-6 py-4 text-left align-top">
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <button
-                          type="button"
-                          onClick={() => handleSort('requester')}
-                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
-                        >
-                          <span>Người tạo</span>
-                          {sortField === 'requester' ? (
-                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                          ) : (
-                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                          )}
-                        </button>
-                      </div>
-                      <input
-                        type="search"
-                        placeholder="Lọc người tạo..."
-                        value={requesterFilter}
-                        onChange={(e) => setRequesterFilter(e.target.value)}
-                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2.5 py-1.5 focus:border-viet-green focus:outline-none shadow-sm placeholder:font-normal"
-                      />
+                    <th className="px-6 py-4">
+                      <button
+                        type="button"
+                        onClick={() => handleSort('requester')}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                      >
+                        <span>Người tạo</span>
+                        {sortField === 'requester' ? (
+                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                        ) : (
+                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                        )}
+                      </button>
                     </th>
-
-                    {/* Xác nhận */}
-                    <th className="px-6 py-4 text-center align-top">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <button
-                          type="button"
-                          onClick={() => handleSort('approvals')}
-                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
-                        >
-                          <span>Xác nhận</span>
-                          {sortField === 'approvals' ? (
-                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                          ) : (
-                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                          )}
-                        </button>
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-bold block text-center mt-2">Tỷ lệ duyệt</span>
+                    <th className="px-6 py-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleSort('approvals')}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                      >
+                        <span>Xác nhận</span>
+                        {sortField === 'approvals' ? (
+                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                        ) : (
+                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                        )}
+                      </button>
                     </th>
-
-                    {/* Thao tác */}
-                    <th className="px-6 py-4 text-right align-top">
-                      <div className="flex items-center justify-end gap-2 mb-2">
-                        <button
-                          type="button"
-                          onClick={() => handleSort('date')}
-                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
-                        >
-                          <span>Thời gian</span>
-                          {sortField === 'date' ? (
-                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                          ) : (
-                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                          )}
-                        </button>
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-bold block text-right mt-2">Thao tác</span>
+                    <th className="px-6 py-4 text-right text-[11px] font-black text-viet-text-light uppercase tracking-widest">
+                      Thao tác
                     </th>
                   </tr>
                 </thead>
