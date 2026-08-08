@@ -201,22 +201,6 @@ const JourneyManager = () => {
         </div>
       </header>
 
-      <label className="mb-6 flex flex-wrap items-center gap-3 text-sm font-bold text-viet-text">
-        Bộ sách
-        <select
-          value={selectedProgram}
-          disabled={saving}
-          onChange={(event) => {
-            if (confirmDiscard()) setSelectedProgram(event.target.value);
-          }}
-          className="max-w-full rounded-xl border border-viet-border bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-viet-green"
-        >
-          <option value="ketnoi">Kết nối tri thức</option>
-          <option value="canhdieu">Cánh Diều</option>
-          <option value="chantroi">Chân trời sáng tạo</option>
-        </select>
-      </label>
-
       {hasChanges && (
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-6 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm font-medium text-amber-700" role="status">
           <AlertTriangle className="mt-0.5 shrink-0" size={18} />

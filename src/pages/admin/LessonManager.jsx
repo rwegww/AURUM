@@ -498,14 +498,6 @@ const LessonManager = () => {
                         {GRADES.map((grade) => <option key={grade} value={grade}>Lớp {grade}</option>)}
                       </select>
                     </label>
-                    <label className="space-y-2 text-xs font-bold uppercase tracking-wider text-viet-text-light">
-                      Bộ sách
-                      <select value={formData.programId} onChange={(event) => updateForm('programId', event.target.value)} className="h-12 w-full rounded-2xl border border-viet-border bg-viet-bg/20 px-5 font-bold normal-case outline-none transition-colors focus:border-viet-green focus:bg-white">
-                        <option value="ketnoi">Kết nối tri thức</option>
-                        <option value="canhdieu">Cánh diều</option>
-                        <option value="chantroi">Chân trời sáng tạo</option>
-                      </select>
-                    </label>
                     <label className="space-y-2 text-xs font-bold uppercase tracking-wider text-viet-text-light md:col-span-2">
                       Link video chính
                       <input type="url" value={formData.videoUrl} onChange={(event) => updateForm('videoUrl', event.target.value)} placeholder="https://www.youtube.com/watch?v=... hoặc https://.../video.mp4" className="h-12 w-full rounded-2xl border border-viet-border bg-viet-bg/20 px-5 font-medium normal-case text-blue-600 outline-none transition-colors focus:border-viet-green focus:bg-white" />
