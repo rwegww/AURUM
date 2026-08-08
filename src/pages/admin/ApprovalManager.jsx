@@ -411,11 +411,7 @@ const ApprovalManager = () => {
           <div className="flex justify-center py-24">
             <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin" />
           </div>
-        ) : approvals.length === 0 ? (
-          <div className="flex justify-center py-24">
-            <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin" />
-          </div>
-        ) : approvals.length === 0 ? (
+        ) : filteredApprovals.length === 0 ? (
           <div className="bg-white rounded-[32px] border border-viet-border p-20 text-center">
             <ShieldCheck className="w-12 h-12 text-slate-300 mx-auto mb-4" />
             <p className="text-viet-text-light font-bold">Không có yêu cầu nào trong trạng thái này.</p>
