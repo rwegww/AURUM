@@ -14,14 +14,144 @@ const statusConfig = {
 };
 
 const summarizePayload = (payload = {}) => {
-  if (payload.id && Object.keys(payload).length <= 2) return `ID: ${payload.id}`;
-  if (payload.lesson?.title) return payload.lesson.title;
-  if (payload.id && payload.lesson) return `ID: ${payload.id}`;
+  if (!payload || typeof payload !== 'object') return 'Dữ liệu thay đổi không thể hiển thị';
+  if (payload.content) {
+    const text = String(payload.content);
+    const shortText = text.length > 80 ? `${text.slice(0, 80)}...` : text;
+    return payload.username ? `💬 "${shortText}" — @${payload.username}` : `💬 "${shortText}"`;
+  }
+  if (payload.message) return String(payload.message);
+  if (payload.title || payload.lesson?.title) return `📚 Bài học: ${payload.title || payload.lesson?.title}`;
+  if (payload.name) return `🏫 Lớp: ${payload.name}`;
+  if (payload.username) return `👤 Tài khoản: @${payload.username}${payload.email ? ` (${payload.email})` : ''}`;
+  if (payload.id && Object.keys(payload).length <= 2) return `Mã ID đối tượng: ${payload.id}`;
   try {
     return JSON.stringify(payload).slice(0, 140);
   } catch {
-    return 'Dữ liệu thay đổi không thể hiển thị';
+    return 'Dữ liệu thay đổi';
   }
+};
+
+const ApprovalPayloadDetail = ({ payload = {} }) => {
+  const [showRawJson, setShowRawJson] = useState(false);
+
+  if (!payload || typeof payload !== 'object' || Object.keys(payload).length === 0) {
+    return <div className="mt-2 text-slate-400 italic text-xs">Không có dữ liệu chi tiết.</div>;
+  }
+
+  const content = payload.content || payload.noi_dung || payload.message;
+  const username = payload.username || payload.tac_gia?.username;
+  const email = payload.email;
+  const title = payload.title || payload.tieu_de || payload.lesson?.title;
+  const gradeLevelId = payload.gradeLevelId || payload.khoi_id || payload.lesson?.gradeLevelId;
+  const name = payload.name;
+  const isLocked = payload.isLocked;
+  const proofUrl = payload.proofUrl || payload.imageUrl;
+  const lesson = payload.lesson;
+
+  return (
+    <div className="mt-3 space-y-2.5 max-w-xl">
+      {content && (
+        <div className="p-3 bg-amber-50/80 border border-amber-200/90 rounded-2xl text-slate-800">
+          <div className="flex items-center justify-between gap-2 mb-1 text-[11px] font-black text-amber-800 uppercase tracking-wider">
+            <span>💬 Nội dung phản hồi / Lời khen</span>
+            {username && <span className="normal-case font-bold text-amber-900 bg-amber-200/60 px-2 py-0.5 rounded-md">@{username}</span>}
+          </div>
+          <p className="text-xs font-medium leading-relaxed italic text-slate-800">"{content}"</p>
+        </div>
+      )}
+
+      <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 text-xs space-y-1.5">
+        {title && (
+          <div className="flex items-start justify-between gap-4">
+            <span className="font-bold text-slate-500 shrink-0">Tên bài học:</span>
+            <span className="font-black text-slate-900 text-right">{title}</span>
+          </div>
+        )}
+
+        {gradeLevelId && (
+          <div className="flex items-start justify-between gap-4">
+            <span className="font-bold text-slate-500 shrink-0">Khối lớp:</span>
+            <span className="font-black text-viet-green text-right">Lớp {gradeLevelId}</span>
+          </div>
+        )}
+
+        {name && (
+          <div className="flex items-start justify-between gap-4">
+            <span className="font-bold text-slate-500 shrink-0">Tên lớp:</span>
+            <span className="font-black text-slate-900 text-right">{name}</span>
+          </div>
+        )}
+
+        {username && !content && (
+          <div className="flex items-start justify-between gap-4">
+            <span className="font-bold text-slate-500 shrink-0">Tài khoản:</span>
+            <span className="font-black text-slate-900 text-right">@{username}</span>
+          </div>
+        )}
+
+        {email && (
+          <div className="flex items-start justify-between gap-4">
+            <span className="font-bold text-slate-500 shrink-0">Email:</span>
+            <span className="font-semibold text-slate-700 text-right">{email}</span>
+          </div>
+        )}
+
+        {isLocked !== undefined && (
+          <div className="flex items-start justify-between gap-4">
+            <span className="font-bold text-slate-500 shrink-0">Hành động khóa:</span>
+            <span className={`font-black ${isLocked ? 'text-red-600' : 'text-emerald-600'}`}>
+              {isLocked ? '🔒 Khóa tài khoản' : '🔓 Mở khóa tài khoản'}
+            </span>
+          </div>
+        )}
+
+        {proofUrl && (
+          <div className="flex items-center justify-between gap-4 pt-1">
+            <span className="font-bold text-slate-500 shrink-0">Minh chứng:</span>
+            <a href={proofUrl} target="_blank" rel="noopener noreferrer" className="font-bold text-viet-green underline hover:opacity-80">
+              Xem ảnh minh chứng ↗
+            </a>
+          </div>
+        )}
+
+        {payload.id && (
+          <div className="flex items-start justify-between gap-4 pt-1 border-t border-slate-200/60 text-[11px]">
+            <span className="font-bold text-slate-400 shrink-0">Mã ID đối tượng:</span>
+            <span className="font-mono text-slate-500 break-all">{payload.id}</span>
+          </div>
+        )}
+      </div>
+
+      {lesson && (
+        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3 text-xs space-y-1.5">
+          <div className="font-bold text-slate-700 mb-1">Cấu trúc bài học:</div>
+          <div className="grid grid-cols-2 gap-2 text-slate-600">
+            <div>Mô-đun lý thuyết: <strong className="text-slate-900">{lesson.theoryModules?.length || 0}</strong></div>
+            <div>Mô-đun video: <strong className="text-slate-900">{lesson.videoModules?.length || 0}</strong></div>
+            <div>Slide câu chuyện: <strong className="text-slate-900">{lesson.storySlides?.length || 0}</strong></div>
+            <div>Thử thách/Câu hỏi: <strong className="text-slate-900">{lesson.challenges?.length || 0}</strong></div>
+          </div>
+        </div>
+      )}
+
+      <div className="pt-0.5">
+        <button
+          type="button"
+          onClick={() => setShowRawJson(!showRawJson)}
+          className="text-[11px] font-bold text-slate-400 hover:text-slate-600 underline"
+        >
+          {showRawJson ? 'Ẩn mã JSON thô' : 'Hiển thị mã JSON thô'}
+        </button>
+
+        {showRawJson && (
+          <pre className="mt-2 max-h-60 overflow-auto whitespace-pre-wrap break-all rounded-xl bg-slate-900 p-3 text-[11px] font-mono text-emerald-400">
+            {JSON.stringify(payload, null, 2)}
+          </pre>
+        )}
+      </div>
+    </div>
+  );
 };
 
 const mergeApprovals = (current, incoming) => {
@@ -363,7 +493,7 @@ const ApprovalManager = () => {
                               <p className="text-xs text-viet-text-light font-medium mt-1 break-all">{summarizePayload(item.payload)}</p>
                               <details className="mt-2 text-xs">
                                 <summary className="cursor-pointer font-bold text-viet-green">Xem chi tiết thay đổi</summary>
-                                <pre className="mt-2 max-h-64 max-w-lg overflow-auto whitespace-pre-wrap break-all rounded-xl bg-slate-50 p-3 text-slate-700">{JSON.stringify(item.payload || {}, null, 2)}</pre>
+                                <ApprovalPayloadDetail payload={item.payload} />
                               </details>
                               <p className="text-[10px] text-slate-400 font-bold uppercase mt-1">{formatDateTime(item.createdAt)}</p>
                             </div>

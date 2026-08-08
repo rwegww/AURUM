@@ -145,7 +145,7 @@ const resolveSupabaseUser = async (token) => {
   }
 
   const sessionId = jwt.decode(token)?.session_id;
-  if (!await AuthSecurity.oauthSessionActive(sessionId, sbUser.id, user.id)) {
+  if (!user || !(await AuthSecurity.oauthSessionActive(sessionId, sbUser.id, user.id))) {
     throw new AuthenticationError('INVALID_SESSION', 'Phiên đăng nhập đã bị thu hồi. Vui lòng đăng nhập lại.');
   }
   return { user: normalizeAuthenticatedUser(user), decodedCustomJwt: null };
@@ -219,4 +219,3 @@ export const requireRole = (...roles) => (req, res, next) => {
   }
   return next();
 };
-

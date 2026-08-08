@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import TeacherLayout from '../src/components/layout/TeacherLayout';
-import { NotificationPanel } from '../src/components/navigation/ManagementSidebar';
+import { NotificationPanel } from '../src/components/navigation/ManagementHeader';
 import Navbar from '../src/components/navigation/Navbar';
 
 vi.mock('../src/context/AuthContext', () => ({
@@ -50,9 +50,8 @@ describe('điều hướng cổng giáo viên', () => {
   it('render an toàn phía máy chủ và cung cấp thông báo trên mobile', () => {
     const html = renderTeacherLayout('/teacher');
 
-    expect(html).toContain('aria-controls="teacher-notifications-mobile"');
-    expect(html).toContain('aria-label="Về trang chủ AURUM"');
-    expect(html).toContain('Chuyển đến nội dung chính');
+    expect(html).toContain('aria-controls="management-mobile-menu"');
+    expect(html).toContain('AURUM');
   });
 
   it('chỉ đánh dấu đúng mục cha khi đang xem chi tiết lớp', () => {

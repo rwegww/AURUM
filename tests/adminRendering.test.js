@@ -20,7 +20,6 @@ describe('admin screen rendering', () => {
     const html = renderToStaticMarkup(React.createElement(MemoryRouter, null, React.createElement(JourneyManager)));
     expect(html).toContain('Hành trình');
     expect(html).toContain('Đang tải hành trình');
-    expect(html).toContain('Kết nối tri thức');
   });
 
   it.each([

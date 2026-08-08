@@ -496,7 +496,7 @@ const adminActions = {
       if (target.role === 'admin') {
         throw httpError(403, 'Không thể khóa tài khoản quản trị viên.', 'ADMIN_LOCK_FORBIDDEN');
       }
-      return { id, isLocked };
+      return { id, isLocked, username: target.username, email: target.email, role: target.role };
     },
     execute: async ({ id, isLocked }) => {
       assertTextId(id, 'ID người dùng');
@@ -523,7 +523,12 @@ const adminActions = {
       if (feedback.status !== 'unread') {
         throw httpError(409, 'Phản hồi này đã được xử lý.', 'FEEDBACK_ALREADY_PROCESSED');
       }
-      return { id };
+      return {
+        id,
+        content: feedback.message || feedback.noi_dung || '',
+        username: feedback.username || feedback.userId?.username || 'Ẩn danh',
+        type: feedback.type,
+      };
     },
     execute: async ({ id }) => {
       assertUuid(id, 'ID phản hồi');
@@ -546,7 +551,14 @@ const adminActions = {
       if (feedback.isApproved || feedback.is_approved) {
         throw httpError(409, 'Lời khen này đã được duyệt.', 'FEEDBACK_ALREADY_APPROVED');
       }
-      return { id };
+      return {
+        id,
+        content: feedback.message || feedback.noi_dung || '',
+        username: feedback.username || feedback.userId?.username || 'Ẩn danh',
+        type: feedback.type,
+        rating: feedback.metadata?.rating || feedback.danh_gia || null,
+        createdAt: feedback.createdAt || feedback.created_at || null,
+      };
     },
     execute: async ({ id }) => {
       assertUuid(id, 'ID phản hồi');
@@ -573,7 +585,7 @@ const adminActions = {
       assertTextId(id, 'ID bài học');
       const currentLesson = await Lesson.findById(id);
       if (!currentLesson) throw httpError(404, 'Không tìm thấy bài học.', 'LESSON_NOT_FOUND');
-      return { id, lesson: normalizeLessonInput(lesson) };
+      return { id, title: currentLesson.title, lesson: normalizeLessonInput(lesson) };
     },
     execute: async ({ id, lesson }) => {
       assertTextId(id, 'ID bài học');
@@ -590,7 +602,7 @@ const adminActions = {
       assertTextId(id, 'ID bài học');
       const lesson = await Lesson.findById(id);
       if (!lesson) throw httpError(404, 'Không tìm thấy bài học.', 'LESSON_NOT_FOUND');
-      return { id };
+      return { id, title: lesson.title, gradeLevelId: lesson.gradeLevelId };
     },
     execute: async ({ id }) => {
       assertTextId(id, 'ID bài học');
@@ -603,8 +615,13 @@ const adminActions = {
   'teacher.approve': {
     label: 'Duyệt tài khoản giáo viên',
     prepare: async ({ id }) => {
-      await parseTeacherRequest(id);
-      return { id };
+      const { phan_hoi, requestPayload } = await parseTeacherRequest(id);
+      return {
+        id,
+        username: phan_hoi.username,
+        email: requestPayload.email,
+        proofUrl: phan_hoi.imageUrl || null,
+      };
     },
     execute: async ({ id }) => {
       const { phan_hoi, requestPayload } = await parseTeacherRequest(id);
@@ -650,8 +667,13 @@ const adminActions = {
   'teacher.reject': {
     label: 'Từ chối tài khoản giáo viên',
     prepare: async ({ id }) => {
-      await parseTeacherRequest(id, { requirePassword: false });
-      return { id };
+      const { phan_hoi, requestPayload } = await parseTeacherRequest(id, { requirePassword: false });
+      return {
+        id,
+        username: phan_hoi.username,
+        email: requestPayload.email,
+        proofUrl: phan_hoi.imageUrl || null,
+      };
     },
     execute: async ({ id }) => {
       const { phan_hoi, requestPayload } = await parseTeacherRequest(id, { requirePassword: false });
@@ -861,6 +883,97 @@ router.post('/media/signature', adminGuard, async (req, res) => {
   }
 });
 
+const enrichApprovalPayloads = async (approvalRows) => {
+  if (!Array.isArray(approvalRows) || approvalRows.length === 0) return approvalRows;
+
+  const feedbackIdsToFetch = new Set();
+  const userIdsToFetch = new Set();
+  const lessonIdsToFetch = new Set();
+
+  approvalRows.forEach((item) => {
+    const payload = item.payload || {};
+    if (item.actionKey === 'feedback.approve_praise' || item.actionKey === 'feedback.resolve') {
+      if (payload.id && (!payload.content && !payload.noi_dung)) feedbackIdsToFetch.add(payload.id);
+    } else if (item.actionKey === 'teacher.approve' || item.actionKey === 'teacher.reject') {
+      if (payload.id && !payload.username) feedbackIdsToFetch.add(payload.id);
+    } else if (item.actionKey === 'user.lock') {
+      if (payload.id && !payload.username) userIdsToFetch.add(payload.id);
+    } else if (item.actionKey === 'lesson.delete' || item.actionKey === 'lesson.update') {
+      if (payload.id && !payload.title && !payload.lesson?.title) lessonIdsToFetch.add(payload.id);
+    }
+  });
+
+  const feedbackMap = new Map();
+  if (feedbackIdsToFetch.size > 0) {
+    const { data: feedbacks } = await supabase
+      .from('phan_hoi')
+      .select('id, noi_dung, username, type, image_url, thong_tin_bo_sung')
+      .in('id', Array.from(feedbackIdsToFetch));
+    (feedbacks || []).forEach((f) => feedbackMap.set(f.id, f));
+  }
+
+  const userMap = new Map();
+  if (userIdsToFetch.size > 0) {
+    const { data: users } = await supabase
+      .from('nguoi_dung')
+      .select('id, username, email, role')
+      .in('id', Array.from(userIdsToFetch));
+    (users || []).forEach((u) => userMap.set(u.id, u));
+  }
+
+  const lessonMap = new Map();
+  if (lessonIdsToFetch.size > 0) {
+    const { data: lessons } = await supabase
+      .from('bai_hoc')
+      .select('id, tieu_de, khoi_id')
+      .in('id', Array.from(lessonIdsToFetch));
+    (lessons || []).forEach((l) => lessonMap.set(l.id, l));
+  }
+
+  return approvalRows.map((item) => {
+    const payload = { ...(item.payload || {}) };
+
+    if (item.actionKey === 'feedback.approve_praise' || item.actionKey === 'feedback.resolve') {
+      const fb = feedbackMap.get(payload.id);
+      if (fb) {
+        if (!payload.content && !payload.noi_dung) payload.content = fb.noi_dung || '';
+        if (!payload.username) payload.username = fb.username || 'Ẩn danh';
+        if (!payload.type) payload.type = fb.type;
+        if (fb.thong_tin_bo_sung && typeof fb.thong_tin_bo_sung === 'object') {
+          if (!payload.rating && fb.thong_tin_bo_sung.rating) payload.rating = fb.thong_tin_bo_sung.rating;
+        }
+      }
+    } else if (item.actionKey === 'teacher.approve' || item.actionKey === 'teacher.reject') {
+      const fb = feedbackMap.get(payload.id);
+      if (fb) {
+        if (!payload.username) payload.username = fb.username;
+        let email = '';
+        try {
+          const parsed = JSON.parse(fb.noi_dung);
+          email = parsed.email || '';
+        } catch {}
+        if (!payload.email) payload.email = email || fb.thong_tin_bo_sung?.email;
+        if (!payload.proofUrl) payload.proofUrl = fb.image_url;
+      }
+    } else if (item.actionKey === 'user.lock') {
+      const u = userMap.get(payload.id);
+      if (u) {
+        if (!payload.username) payload.username = u.username;
+        if (!payload.email) payload.email = u.email;
+        if (!payload.role) payload.role = u.role;
+      }
+    } else if (item.actionKey === 'lesson.delete' || item.actionKey === 'lesson.update') {
+      const l = lessonMap.get(payload.id);
+      if (l) {
+        if (!payload.title && !payload.lesson?.title) payload.title = l.tieu_de;
+        if (!payload.gradeLevelId) payload.gradeLevelId = l.khoi_id;
+      }
+    }
+
+    return { ...item, payload };
+  });
+};
+
 // GET /api/admin/approvals - List pending admin changes
 router.get('/approvals', adminGuard, async (req, res) => {
   try {
@@ -870,7 +983,8 @@ router.get('/approvals', adminGuard, async (req, res) => {
       throw httpError(400, 'Trạng thái yêu cầu duyệt không hợp lệ.', 'INVALID_STATUS');
     }
     const { limit, cursor } = parsePageOptions(req.query);
-    const approvalRows = await AdminApproval.list({ status: requestedStatus, limit, cursor });
+    const rawApprovalRows = await AdminApproval.list({ status: requestedStatus, limit, cursor });
+    const approvalRows = await enrichApprovalPayloads(rawApprovalRows);
     const actorIds = [...new Set(approvalRows.flatMap((item) => (
       [item.requestedBy, item.executedBy].filter(Boolean)
     )))];
