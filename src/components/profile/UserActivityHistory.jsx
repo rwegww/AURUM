@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Clock3, Loader2, Trash2 } from 'lucide-react';
 import { activityService } from '@/services/ActivityService';
+import { RenderIcon } from '@/utils/IconMapper';
 
 const UserActivityHistory = () => {
   const { t } = useTranslation();
@@ -93,8 +94,8 @@ const UserActivityHistory = () => {
                   transition={{ delay: idx * 0.05 }}
                   className="group relative flex gap-4 border-b border-viet-border pb-5 last:border-0 last:pb-0 sm:gap-5"
                 >
-                  <div className={`w-14 h-14 shrink-0 rounded-2xl border flex items-center justify-center text-2xl shadow-sm transition-transform group-hover:scale-110 ${getIconBg(item.type)}`}>
-                    {item.icon}
+                  <div className={`w-14 h-14 shrink-0 rounded-2xl border flex items-center justify-center shadow-sm transition-transform group-hover:scale-110 ${getIconBg(item.type)}`}>
+                    <RenderIcon iconName={item.icon || item.type} className="w-7 h-7" />
                   </div>
                   <div className="flex-1 pt-1">
                     <div className="flex items-center justify-between mb-1">

@@ -284,7 +284,7 @@ const TeacherDashboard = () => {
 
             {/* Background Sparkline Area */}
             <div className="absolute -bottom-2 right-0 w-36 h-20 opacity-40 pointer-events-none">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <AreaChart data={card.sparklineData}>
                   <defs>
                     <linearGradient id={card.gradientId} x1="0" y1="0" x2="0" y2="1">

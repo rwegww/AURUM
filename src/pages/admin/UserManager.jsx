@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, CheckCircle2, Eye, Lock, RefreshCcw, Search, Unlock } from 'lucide-react';
+import { AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, Eye, Filter, Lock, RefreshCcw, RotateCcw, Search, Unlock } from 'lucide-react';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const PAGE_SIZE = 100;
@@ -41,6 +41,13 @@ const UserManager = () => {
   const [actingId, setActingId] = useState(null);
   const [pendingApprovalIds, setPendingApprovalIds] = useState(() => new Set());
   const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [levelFilter, setLevelFilter] = useState('all');
+  const [onlineFilter, setOnlineFilter] = useState('all');
+  const [progressFilter, setProgressFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortField, setSortField] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
   const requestSequence = useRef(0);
 
   const fetchUsers = useCallback(async ({ signal, background = false, append = false, cursor = null } = {}) => {
@@ -91,11 +98,129 @@ const UserManager = () => {
     };
   }, [fetchUsers]);
 
+  const handleSort = (field) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') {
+        setSortDirection('desc');
+      } else {
+        setSortField(null);
+        setSortDirection('asc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setRoleFilter('all');
+    setLevelFilter('all');
+    setOnlineFilter('all');
+    setProgressFilter('all');
+    setStatusFilter('all');
+    setSortField(null);
+    setSortDirection('asc');
+  };
+
+  const hasActiveFilters = Boolean(
+    searchTerm ||
+    roleFilter !== 'all' ||
+    levelFilter !== 'all' ||
+    onlineFilter !== 'all' ||
+    progressFilter !== 'all' ||
+    statusFilter !== 'all' ||
+    sortField !== null
+  );
+
+  const nonAdminUsers = useMemo(() => {
+    return users.filter((user) => user.role !== 'admin');
+  }, [users]);
+
   const filteredUsers = useMemo(() => {
+    let result = [...nonAdminUsers];
+
+    // Search term
     const keyword = searchTerm.trim().toLocaleLowerCase('vi');
-    if (!keyword) return users;
-    return users.filter((user) => String(user?.username || '').toLocaleLowerCase('vi').includes(keyword));
-  }, [searchTerm, users]);
+    if (keyword) {
+      result = result.filter((user) => String(user?.username || '').toLocaleLowerCase('vi').includes(keyword));
+    }
+
+    // Role filter
+    if (roleFilter !== 'all') {
+      result = result.filter((user) => user.role === roleFilter);
+    }
+
+    // Level filter
+    if (levelFilter !== 'all') {
+      result = result.filter((user) => {
+        const lvl = Math.max(1, Math.floor(toSafeNumber(user?.level, 1)));
+        if (levelFilter === '1-5') return lvl >= 1 && lvl <= 5;
+        if (levelFilter === '6-10') return lvl >= 6 && lvl <= 10;
+        if (levelFilter === '11+') return lvl >= 11;
+        return true;
+      });
+    }
+
+    // Online status filter
+    if (onlineFilter !== 'all') {
+      result = result.filter((user) => {
+        if (onlineFilter === 'online') return Boolean(user.isOnline);
+        if (onlineFilter === 'offline') return !user.isOnline;
+        return true;
+      });
+    }
+
+    // Progress XP filter
+    if (progressFilter !== 'all') {
+      result = result.filter((user) => {
+        const xp = toSafeNumber(user?.xp);
+        const pct = (xp % 1000) / 10;
+        if (progressFilter === 'low') return pct < 50;
+        if (progressFilter === 'high') return pct >= 50;
+        return true;
+      });
+    }
+
+    // Account status filter
+    if (statusFilter !== 'all') {
+      result = result.filter((user) => {
+        const isPending = pendingApprovalIds.has(user.id);
+        if (statusFilter === 'pending') return isPending;
+        if (statusFilter === 'locked') return user.is_locked;
+        if (statusFilter === 'active') return !user.is_locked && !isPending;
+        return true;
+      });
+    }
+
+    // Sorting
+    if (sortField) {
+      result.sort((a, b) => {
+        let valA, valB;
+        if (sortField === 'username') {
+          valA = String(a?.username || '').toLocaleLowerCase('vi');
+          valB = String(b?.username || '').toLocaleLowerCase('vi');
+          return sortDirection === 'asc' ? valA.localeCompare(valB, 'vi') : valB.localeCompare(valA, 'vi');
+        }
+        if (sortField === 'level') {
+          valA = toSafeNumber(a?.level, 1);
+          valB = toSafeNumber(b?.level, 1);
+        } else if (sortField === 'active_minutes') {
+          valA = toSafeNumber(a?.active_minutes, 0);
+          valB = toSafeNumber(b?.active_minutes, 0);
+        } else if (sortField === 'xp') {
+          valA = toSafeNumber(a?.xp, 0);
+          valB = toSafeNumber(b?.xp, 0);
+        }
+
+        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return result;
+  }, [nonAdminUsers, searchTerm, roleFilter, levelFilter, onlineFilter, progressFilter, statusFilter, pendingApprovalIds, sortField, sortDirection]);
 
   const toggleUserLock = async (user) => {
     if (!user?.id || user.role === 'admin' || actingId || pendingApprovalIds.has(user.id)) return;
@@ -206,16 +331,161 @@ const UserManager = () => {
           </div>
         ) : (
           <div className="bg-white rounded-[24px] sm:rounded-[32px] border border-viet-border overflow-hidden shadow-sm" aria-busy={refreshing || loadingMore}>
+            {hasActiveFilters && (
+              <div className="px-6 py-3 bg-slate-50 border-b border-viet-border flex items-center justify-between gap-4 text-xs">
+                <span className="font-bold text-viet-text-light flex items-center gap-1.5">
+                  <Filter className="w-4 h-4 text-viet-green" />
+                  Đang lọc {filteredUsers.length} / {nonAdminUsers.length} người dùng
+                </span>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border border-viet-border font-bold text-viet-text hover:text-red-600 transition-colors shadow-sm"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Xóa tất cả bộ lọc
+                </button>
+              </div>
+            )}
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[900px] text-left">
+              <table className="w-full min-w-[960px] text-left">
                 <caption className="sr-only">Danh sách tài khoản trong hệ thống</caption>
-                <thead className="bg-viet-bg/30 border-b border-viet-border">
+                <thead className="bg-slate-50/90 border-b border-viet-border">
                   <tr>
-                    <th scope="col" className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Người dùng</th>
-                    <th scope="col" className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Cấp độ</th>
-                    <th scope="col" className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Hoạt động</th>
-                    <th scope="col" className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Tiến trình</th>
-                    <th scope="col" className="px-8 py-5 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Thao tác</th>
+                    {/* Người dùng */}
+                    <th scope="col" className="px-6 py-4 text-left align-top">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('username')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                          title="Sắp xếp theo tên người dùng"
+                        >
+                          <span>Người dùng</span>
+                          {sortField === 'username' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <select
+                        value={roleFilter}
+                        onChange={(e) => setRoleFilter(e.target.value)}
+                        aria-label="Lọc theo vai trò"
+                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2.5 py-1.5 focus:border-viet-green focus:outline-none shadow-sm cursor-pointer"
+                      >
+                        <option value="all">Tất cả vai trò</option>
+                        <option value="student">Học sinh</option>
+                        <option value="teacher">Giáo viên</option>
+                      </select>
+                    </th>
+
+                    {/* Cấp độ */}
+                    <th scope="col" className="px-6 py-4 text-center align-top">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('level')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                          title="Sắp xếp theo cấp độ"
+                        >
+                          <span>Cấp độ</span>
+                          {sortField === 'level' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <select
+                        value={levelFilter}
+                        onChange={(e) => setLevelFilter(e.target.value)}
+                        aria-label="Lọc theo cấp độ"
+                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2 py-1.5 focus:border-viet-green focus:outline-none shadow-sm cursor-pointer text-center"
+                      >
+                        <option value="all">Tất cả cấp độ</option>
+                        <option value="1-5">Cấp 1 - 5</option>
+                        <option value="6-10">Cấp 6 - 10</option>
+                        <option value="11+">Cấp 11 trở lên</option>
+                      </select>
+                    </th>
+
+                    {/* Hoạt động */}
+                    <th scope="col" className="px-6 py-4 text-center align-top">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('active_minutes')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                          title="Sắp xếp theo thời gian hoạt động"
+                        >
+                          <span>Hoạt động</span>
+                          {sortField === 'active_minutes' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <select
+                        value={onlineFilter}
+                        onChange={(e) => setOnlineFilter(e.target.value)}
+                        aria-label="Lọc theo trạng thái trực tuyến"
+                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2 py-1.5 focus:border-viet-green focus:outline-none shadow-sm cursor-pointer text-center"
+                      >
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="online">🟢 Trực tuyến</option>
+                        <option value="offline">⚪ Ngoại tuyến</option>
+                      </select>
+                    </th>
+
+                    {/* Tiến trình */}
+                    <th scope="col" className="px-6 py-4 text-center align-top">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('xp')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                          title="Sắp xếp theo điểm kinh nghiệm (XP)"
+                        >
+                          <span>Tiến trình</span>
+                          {sortField === 'xp' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <select
+                        value={progressFilter}
+                        onChange={(e) => setProgressFilter(e.target.value)}
+                        aria-label="Lọc theo tiến trình kinh nghiệm"
+                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2 py-1.5 focus:border-viet-green focus:outline-none shadow-sm cursor-pointer text-center"
+                      >
+                        <option value="all">Tất cả tiến trình</option>
+                        <option value="high">≥ 50% XP</option>
+                        <option value="low">&lt; 50% XP</option>
+                      </select>
+                    </th>
+
+                    {/* Thao tác */}
+                    <th scope="col" className="px-6 py-4 text-right align-top">
+                      <div className="flex items-center justify-end gap-2 mb-2">
+                        <span className="text-[11px] font-black text-viet-text uppercase tracking-widest">Thao tác</span>
+                      </div>
+                      <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        aria-label="Lọc theo trạng thái tài khoản"
+                        className="w-full max-w-[150px] ml-auto text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2 py-1.5 focus:border-viet-green focus:outline-none shadow-sm cursor-pointer block"
+                      >
+                        <option value="all">Tất cả trạng thái</option>
+                        <option value="active">Hoạt động</option>
+                        <option value="locked">Đã khóa</option>
+                        <option value="pending">Chờ duyệt</option>
+                      </select>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-viet-border">

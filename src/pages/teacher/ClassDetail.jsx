@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
@@ -104,11 +104,49 @@ const ClassDetail = () => {
   const [isPosting, setIsPosting] = useState(false);
   const [isScheduling, setIsScheduling] = useState(false);
   const [referenceTime, setReferenceTime] = useState(0);
+  const [memberSearch, setMemberSearch] = useState('');
+  const [memberSort, setMemberSort] = useState('name_asc');
+  const [memberOnlineFilter, setMemberOnlineFilter] = useState('all');
   const dataRequestRef = useRef(null);
   const postRequestRef = useRef(null);
   const scheduleRequestRef = useRef(null);
   const postFormRef = useRef(null);
   const postContentRef = useRef(null);
+
+  const filteredMembers = useMemo(() => {
+    let result = [...members];
+
+    if (memberSearch.trim()) {
+      const kw = memberSearch.trim().toLocaleLowerCase('vi');
+      result = result.filter((member) => {
+        const name = `${member.username || ''} ${member.full_name || ''}`;
+        return name.toLocaleLowerCase('vi').includes(kw);
+      });
+    }
+
+    if (memberOnlineFilter !== 'all') {
+      result = result.filter((member) => {
+        if (memberOnlineFilter === 'online') return Boolean(member.isOnline);
+        if (memberOnlineFilter === 'offline') return !member.isOnline;
+        return true;
+      });
+    }
+
+    result.sort((a, b) => {
+      const nameA = (a.username || a.full_name || '').toLocaleLowerCase('vi');
+      const nameB = (b.username || b.full_name || '').toLocaleLowerCase('vi');
+      const activeA = toNonNegativeInteger(a.active_minutes);
+      const activeB = toNonNegativeInteger(b.active_minutes);
+
+      if (memberSort === 'name_asc') return nameA.localeCompare(nameB, 'vi');
+      if (memberSort === 'name_desc') return nameB.localeCompare(nameA, 'vi');
+      if (memberSort === 'active_desc') return activeB - activeA;
+      if (memberSort === 'active_asc') return activeA - activeB;
+      return 0;
+    });
+
+    return result;
+  }, [members, memberSearch, memberOnlineFilter, memberSort]);
 
   const fetchClassData = useCallback(async (initialLoad = false) => {
     dataRequestRef.current?.abort();
@@ -542,14 +580,56 @@ const ClassDetail = () => {
           </section>
 
           <section className="bg-white p-5 sm:p-6 rounded-[28px] sm:rounded-[32px] border border-viet-border shadow-sm" aria-labelledby="member-list-title">
-            <h2 id="member-list-title" className="text-sm font-black text-viet-text uppercase tracking-widest mb-4">Danh sách học viên ({members.length.toLocaleString('vi-VN')})</h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <h2 id="member-list-title" className="text-sm font-black text-viet-text uppercase tracking-widest">
+                Danh sách học viên ({filteredMembers.length}/{members.length})
+              </h2>
+            </div>
+
+            {members.length > 0 && (
+              <div className="space-y-2 mb-4">
+                <input
+                  type="search"
+                  placeholder="Tìm học sinh theo tên..."
+                  value={memberSearch}
+                  onChange={(e) => setMemberSearch(e.target.value)}
+                  className="w-full text-xs font-bold text-viet-text bg-slate-50 border border-viet-border rounded-xl px-3 py-2 focus:bg-white focus:border-viet-green focus:outline-none transition-all placeholder:font-normal"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <select
+                    value={memberOnlineFilter}
+                    onChange={(e) => setMemberOnlineFilter(e.target.value)}
+                    aria-label="Lọc theo trạng thái trực tuyến học sinh"
+                    className="w-full text-[11px] font-bold text-viet-text bg-slate-50 border border-viet-border rounded-xl px-2 py-1.5 focus:bg-white focus:border-viet-green focus:outline-none cursor-pointer"
+                  >
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="online">🟢 Trực tuyến</option>
+                    <option value="offline">⚪ Ngoại tuyến</option>
+                  </select>
+                  <select
+                    value={memberSort}
+                    onChange={(e) => setMemberSort(e.target.value)}
+                    aria-label="Sắp xếp danh sách học sinh"
+                    className="w-full text-[11px] font-bold text-viet-text bg-slate-50 border border-viet-border rounded-xl px-2 py-1.5 focus:bg-white focus:border-viet-green focus:outline-none cursor-pointer"
+                  >
+                    <option value="name_asc">Tên (A-Z)</option>
+                    <option value="name_desc">Tên (Z-A)</option>
+                    <option value="active_desc">Hoạt động nhiều nhất</option>
+                    <option value="active_asc">Hoạt động ít nhất</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             <div className="space-y-3">
               {sectionErrors.members ? (
                 <SectionError message={sectionErrors.members} retry={() => fetchClassData(false)} busy={refreshing} />
               ) : members.length === 0 ? (
                 <p className="text-xs text-viet-text-light font-medium italic">Chưa có học sinh tham gia.</p>
+              ) : filteredMembers.length === 0 ? (
+                <p className="text-xs text-viet-text-light font-medium italic text-center py-4">Không tìm thấy học sinh phù hợp.</p>
               ) : (
-                members.map((member) => {
+                filteredMembers.map((member) => {
                   const name = memberName(member);
                   const activeMinutes = toNonNegativeInteger(member.active_minutes);
                   return (

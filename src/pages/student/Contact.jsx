@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation, Trans } from 'react-i18next';
 import Footer from '@/components/common/Footer';
+import { RenderIcon } from '@/utils/IconMapper';
 
 const ContactInfo = ({ icon, label, value }) => (
   <div className="flex items-center gap-6 p-6 bg-white rounded-3xl border border-viet-border hover:border-viet-green/20 transition-all shadow-sm">
-    <div className="w-12 h-12 rounded-2xl bg-viet-green/10 text-viet-green flex items-center justify-center text-2xl shrink-0">
-      {icon}
+    <div className="w-12 h-12 rounded-2xl bg-viet-green/10 text-viet-green flex items-center justify-center shrink-0">
+      <RenderIcon iconName={icon} className="w-6 h-6" />
     </div>
     <div>
       <p className="text-[12px] font-black text-viet-text-light/50 uppercase tracking-widest mb-1">{label}</p>

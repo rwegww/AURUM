@@ -21,9 +21,9 @@ import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { getVideoEmbedUrl, isExternalEmbedVideo, normalizeHttpUrl } from '@/utils/videoLinks';
 
 const QUIZ_LEVELS = [
-  { id: 'level1', label: 'Đoạn 1: Học (Dễ)', shortLabel: 'Đoạn 1', icon: '⭐' },
-  { id: 'level2', label: 'Đoạn 2: Hiểu (Vừa)', shortLabel: 'Đoạn 2', icon: '⭐⭐' },
-  { id: 'level3', label: 'Đoạn 3: Ôn tập (Khó)', shortLabel: 'Đoạn 3', icon: '⭐⭐⭐' },
+  { id: 'level1', label: 'Đoạn 1: Học (Dễ)', shortLabel: 'Đoạn 1', icon: <Star className="w-4 h-4 text-amber-500 fill-amber-400 inline" /> },
+  { id: 'level2', label: 'Đoạn 2: Hiểu (Vừa)', shortLabel: 'Đoạn 2', icon: <span className="inline-flex gap-0.5"><Star className="w-4 h-4 text-amber-500 fill-amber-400" /><Star className="w-4 h-4 text-amber-500 fill-amber-400" /></span> },
+  { id: 'level3', label: 'Đoạn 3: Ôn tập (Khó)', shortLabel: 'Đoạn 3', icon: <span className="inline-flex gap-0.5"><Star className="w-4 h-4 text-amber-500 fill-amber-400" /><Star className="w-4 h-4 text-amber-500 fill-amber-400" /><Star className="w-4 h-4 text-amber-500 fill-amber-400" /></span> },
 ];
 
 const DEFAULT_GAME = {
@@ -453,7 +453,9 @@ const JourneyDetail = () => {
                   </div>
 
                   <div className="flex items-center gap-4 rounded-3xl border border-rose-200 bg-white/60 p-5 sm:gap-6 sm:p-6">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-rose-500 text-2xl text-white shadow-lg shadow-rose-200 sm:h-16 sm:w-16" aria-hidden="true">⭐</div>
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-rose-500 text-white shadow-lg shadow-rose-200 sm:h-16 sm:w-16" aria-hidden="true">
+                      <Star size={28} className="fill-white" />
+                    </div>
                     <div>
                       <h4 className="text-sm font-bold text-rose-900">Cách tính điểm hoàn thành</h4>
                       <p className="mt-1 text-xs font-medium text-rose-700/70">Học sinh nhận phần thưởng khi hoàn thành video và các câu hỏi trắc nghiệm.</p>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AlertCircle, CheckCircle2, Clock3, RefreshCcw, ShieldCheck, XCircle } from 'lucide-react';
+import { AlertCircle, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, Clock3, Filter, RefreshCcw, RotateCcw, ShieldCheck, XCircle } from 'lucide-react';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { useAuth } from '@/context/AuthContext';
 
@@ -47,9 +47,35 @@ const ApprovalManager = () => {
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
   const [actionNotice, setActionNotice] = useState('');
+  const [actionFilter, setActionFilter] = useState('');
+  const [requesterFilter, setRequesterFilter] = useState('');
+  const [sortField, setSortField] = useState(null);
+  const [sortDirection, setSortDirection] = useState('desc');
   const requestSequence = useRef(0);
 
   const tabs = useMemo(() => Object.keys(statusConfig), []);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      if (sortDirection === 'asc') setSortDirection('desc');
+      else {
+        setSortField(null);
+        setSortDirection('desc');
+      }
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const resetFilters = () => {
+    setActionFilter('');
+    setRequesterFilter('');
+    setSortField(null);
+    setSortDirection('desc');
+  };
+
+  const hasActiveFilters = Boolean(actionFilter || requesterFilter || sortField);
 
   const fetchApprovals = useCallback(async ({
     nextStatus = status,
@@ -100,6 +126,55 @@ const ApprovalManager = () => {
       requestSequence.current += 1;
     };
   }, [fetchApprovals, status]);
+
+  const filteredApprovals = useMemo(() => {
+    let result = [...approvals];
+
+    if (actionFilter) {
+      const kw = actionFilter.trim().toLocaleLowerCase('vi');
+      result = result.filter((item) =>
+        String(item.actionLabel || '').toLocaleLowerCase('vi').includes(kw) ||
+        JSON.stringify(item.payload || {}).toLocaleLowerCase('vi').includes(kw)
+      );
+    }
+
+    if (requesterFilter) {
+      const kw = requesterFilter.trim().toLocaleLowerCase('vi');
+      result = result.filter((item) => {
+        const name = item.requester?.username || item.requestedBy || '';
+        return String(name).toLocaleLowerCase('vi').includes(kw);
+      });
+    }
+
+    if (sortField) {
+      result.sort((a, b) => {
+        let valA, valB;
+        if (sortField === 'action') {
+          valA = String(a.actionLabel || '').toLocaleLowerCase('vi');
+          valB = String(b.actionLabel || '').toLocaleLowerCase('vi');
+          return sortDirection === 'asc' ? valA.localeCompare(valB, 'vi') : valB.localeCompare(valA, 'vi');
+        }
+        if (sortField === 'requester') {
+          valA = String(a.requester?.username || a.requestedBy || '').toLocaleLowerCase('vi');
+          valB = String(b.requester?.username || b.requestedBy || '').toLocaleLowerCase('vi');
+          return sortDirection === 'asc' ? valA.localeCompare(valB, 'vi') : valB.localeCompare(valA, 'vi');
+        }
+        if (sortField === 'approvals') {
+          valA = Number(a.currentApprovals || 0) / Math.max(1, Number(a.requiredApprovals || 1));
+          valB = Number(b.currentApprovals || 0) / Math.max(1, Number(b.requiredApprovals || 1));
+        } else if (sortField === 'date') {
+          valA = new Date(a.createdAt || 0).getTime();
+          valB = new Date(b.createdAt || 0).getTime();
+        }
+
+        if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+        if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return result;
+  }, [approvals, actionFilter, requesterFilter, sortField, sortDirection]);
 
   const approveRequest = async (id) => {
     if (actingId) return;
@@ -207,24 +282,127 @@ const ApprovalManager = () => {
             <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin" />
           </div>
         ) : approvals.length === 0 ? (
+          <div className="flex justify-center py-24">
+            <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin" />
+          </div>
+        ) : approvals.length === 0 ? (
           <div className="bg-white rounded-[32px] border border-viet-border p-20 text-center">
             <ShieldCheck className="w-12 h-12 text-slate-300 mx-auto mb-4" />
             <p className="text-viet-text-light font-bold">Không có yêu cầu nào trong trạng thái này.</p>
           </div>
         ) : (
           <div className="bg-white rounded-[32px] border border-viet-border overflow-hidden shadow-sm">
+            {hasActiveFilters && (
+              <div className="px-6 py-3 bg-slate-50 border-b border-viet-border flex items-center justify-between gap-4 text-xs">
+                <span className="font-bold text-viet-text-light flex items-center gap-1.5">
+                  <Filter className="w-4 h-4 text-viet-green" />
+                  Đang lọc {filteredApprovals.length} / {approvals.length} yêu cầu
+                </span>
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border border-viet-border font-bold text-viet-text hover:text-red-600 transition-colors shadow-sm"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Xóa tất cả bộ lọc
+                </button>
+              </div>
+            )}
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-left">
-                <thead className="bg-viet-bg/40 border-b border-viet-border">
+                <thead className="bg-slate-50/90 border-b border-viet-border">
                   <tr>
-                    <th className="px-6 py-4 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Thay đổi</th>
-                    <th className="px-6 py-4 text-[11px] font-black text-viet-text-light uppercase tracking-widest">Người tạo</th>
-                    <th className="px-6 py-4 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-center">Xác nhận</th>
-                    <th className="px-6 py-4 text-[11px] font-black text-viet-text-light uppercase tracking-widest text-right">Thao tác</th>
+                    {/* Thay đổi */}
+                    <th className="px-6 py-4 text-left align-top">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('action')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                        >
+                          <span>Thay đổi</span>
+                          {sortField === 'action' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <input
+                        type="search"
+                        placeholder="Lọc thay đổi..."
+                        value={actionFilter}
+                        onChange={(e) => setActionFilter(e.target.value)}
+                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2.5 py-1.5 focus:border-viet-green focus:outline-none shadow-sm placeholder:font-normal"
+                      />
+                    </th>
+
+                    {/* Người tạo */}
+                    <th className="px-6 py-4 text-left align-top">
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('requester')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                        >
+                          <span>Người tạo</span>
+                          {sortField === 'requester' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <input
+                        type="search"
+                        placeholder="Lọc người tạo..."
+                        value={requesterFilter}
+                        onChange={(e) => setRequesterFilter(e.target.value)}
+                        className="w-full text-[11px] font-bold text-viet-text bg-white border border-viet-border rounded-xl px-2.5 py-1.5 focus:border-viet-green focus:outline-none shadow-sm placeholder:font-normal"
+                      />
+                    </th>
+
+                    {/* Xác nhận */}
+                    <th className="px-6 py-4 text-center align-top">
+                      <div className="flex items-center justify-center gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('approvals')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                        >
+                          <span>Xác nhận</span>
+                          {sortField === 'approvals' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-bold block text-center mt-2">Tỷ lệ duyệt</span>
+                    </th>
+
+                    {/* Thao tác */}
+                    <th className="px-6 py-4 text-right align-top">
+                      <div className="flex items-center justify-end gap-2 mb-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSort('date')}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
+                        >
+                          <span>Thời gian</span>
+                          {sortField === 'date' ? (
+                            sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
+                          ) : (
+                            <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
+                          )}
+                        </button>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-bold block text-right mt-2">Thao tác</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-viet-border">
-                  {approvals.map((item) => {
+                  {filteredApprovals.map((item) => {
                     const executionUnfinished = item.status === 'executed' && !item.executedAt;
                     const cfg = executionUnfinished
                       ? { ...statusConfig.pending, label: 'Chưa chốt kết quả' }

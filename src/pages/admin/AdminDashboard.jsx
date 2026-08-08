@@ -18,7 +18,6 @@ import {
 import {
   AlertTriangle,
   ArrowDownRight,
-  ArrowRight,
   ArrowUpRight,
   BookOpen,
   ChevronDown,
@@ -153,6 +152,8 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState(DEFAULT_STATS);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [gradeFilter, setGradeFilter] = useState('all');
+  const [feedbackFilter, setFeedbackFilter] = useState('all');
 
   const fetchStats = useCallback(async (signal) => {
     setLoading(true);
@@ -191,15 +192,25 @@ const AdminDashboard = () => {
     };
   }, [fetchStats]);
 
+  const filteredGradeDistribution = useMemo(() => {
+    if (gradeFilter === 'all') return stats.gradeDistribution;
+    return stats.gradeDistribution.filter((item) => item.name.includes(gradeFilter));
+  }, [stats.gradeDistribution, gradeFilter]);
+
+  const filteredFeedbackDistribution = useMemo(() => {
+    if (feedbackFilter === 'all') return stats.feedbackDistribution;
+    return stats.feedbackDistribution.filter((item) => item.name === feedbackFilter);
+  }, [stats.feedbackDistribution, feedbackFilter]);
+
   const feedbackTotal = useMemo(
-    () => stats.feedbackDistribution.reduce((sum, item) => sum + item.rawCount, 0),
-    [stats.feedbackDistribution],
+    () => filteredFeedbackDistribution.reduce((sum, item) => sum + item.rawCount, 0),
+    [filteredFeedbackDistribution],
   );
 
   const chartMaximum = useMemo(() => {
-    const largestGroup = Math.max(...stats.gradeDistribution.map((item) => toSafeNumber(item.students)), 0);
+    const largestGroup = Math.max(...filteredGradeDistribution.map((item) => toSafeNumber(item.students)), 0);
     return Math.max(8, Math.ceil(largestGroup / 2) * 2);
-  }, [stats.gradeDistribution]);
+  }, [filteredGradeDistribution]);
 
   if (loading) {
     return (
@@ -306,7 +317,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="pointer-events-none absolute bottom-4 right-4 h-12 w-24 opacity-85">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <LineChart data={card.sparklineData.map((value) => ({ value }))}>
                   <Line type="monotone" dataKey="value" stroke={card.sparklineColor} strokeWidth={2.5} dot={false} isAnimationActive={false} />
                 </LineChart>
@@ -333,9 +344,22 @@ const AdminDashboard = () => {
                 <p className="text-xs font-semibold text-slate-400">So sánh số lượng học sinh đăng ký các khối lớp</p>
               </div>
             </div>
-            <button type="button" className="inline-flex w-fit items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50">
-              Khối lớp <ChevronDown size={14} aria-hidden="true" />
-            </button>
+            <div className="relative">
+              <select
+                value={gradeFilter}
+                onChange={(e) => setGradeFilter(e.target.value)}
+                aria-label="Lọc khối lớp"
+                className="inline-flex w-fit cursor-pointer appearance-none items-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2 pl-3.5 pr-8 text-xs font-bold text-slate-700 shadow-sm outline-none transition-colors hover:bg-slate-50 focus:border-blue-500"
+              >
+                <option value="all">Khối lớp (Tất cả)</option>
+                <option value="8">Lớp 8</option>
+                <option value="9">Lớp 9</option>
+                <option value="10">Lớp 10</option>
+                <option value="11">Lớp 11</option>
+                <option value="12">Lớp 12</option>
+              </select>
+              <ChevronDown size={14} className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true" />
+            </div>
           </div>
 
           <div className="relative mt-4 h-[275px] w-full flex-1">
@@ -343,8 +367,8 @@ const AdminDashboard = () => {
               Số lượng học sinh
             </span>
             <div className="h-full w-full sm:pl-5">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={stats.gradeDistribution} margin={{ top: 22, right: 20, left: 0, bottom: 8 }} barSize={40}>
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                <BarChart data={filteredGradeDistribution} margin={{ top: 22, right: 20, left: 0, bottom: 8 }} barSize={40}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#edf2f7" />
                   <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b', fontWeight: 700 }} dy={10} />
                   <YAxis domain={[0, chartMaximum]} allowDecimals={false} axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#94a3b8', fontWeight: 700 }} />
@@ -376,17 +400,28 @@ const AdminDashboard = () => {
               </div>
               <h2 className="text-lg font-black text-[#071b3f]">Tỷ lệ phản hồi</h2>
             </div>
-            <button type="button" className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50">
-              Tất cả <ChevronDown size={14} aria-hidden="true" />
-            </button>
+            <div className="relative">
+              <select
+                value={feedbackFilter}
+                onChange={(e) => setFeedbackFilter(e.target.value)}
+                aria-label="Lọc loại phản hồi"
+                className="inline-flex cursor-pointer appearance-none items-center gap-1 rounded-xl border border-slate-200 bg-white py-2 pl-3 pr-7 text-xs font-bold text-slate-700 shadow-sm outline-none transition-colors hover:bg-slate-50 focus:border-blue-500"
+              >
+                <option value="all">Tất cả</option>
+                <option value="Báo lỗi">Báo lỗi</option>
+                <option value="Góp ý">Góp ý</option>
+                <option value="Khen ngợi">Khen ngợi</option>
+              </select>
+              <ChevronDown size={14} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-slate-500" aria-hidden="true" />
+            </div>
           </div>
 
           <div className="mt-7 flex flex-col items-center justify-center gap-5 sm:flex-row xl:mt-12 xl:gap-3 2xl:gap-5">
             <div className="relative flex h-44 w-44 shrink-0 items-center justify-center">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                 <PieChart>
-                  <Pie data={stats.feedbackDistribution} cx="50%" cy="50%" innerRadius={52} outerRadius={76} dataKey="value" stroke="#fff" strokeWidth={1}>
-                    {stats.feedbackDistribution.map((entry) => <Cell key={entry.name} fill={entry.color} />)}
+                  <Pie data={filteredFeedbackDistribution} cx="50%" cy="50%" innerRadius={52} outerRadius={76} dataKey="value" stroke="#fff" strokeWidth={1}>
+                    {filteredFeedbackDistribution.map((entry) => <Cell key={entry.name} fill={entry.color} />)}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
@@ -398,7 +433,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="w-full min-w-0 flex-1 space-y-3">
-              {stats.feedbackDistribution.map((item) => (
+              {filteredFeedbackDistribution.map((item) => (
                 <div key={item.name} className="grid grid-cols-[1fr_auto] items-center gap-3 text-xs">
                   <span className="flex min-w-0 items-center gap-2 font-bold text-slate-700">
                     <span className="h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: item.color }} />
@@ -431,9 +466,6 @@ const AdminDashboard = () => {
                 <p className="text-xs font-semibold text-slate-400">5 học sinh duy trì chuỗi dài nhất</p>
               </div>
             </div>
-            <Link to="/admin/nguoi_dung" className="flex shrink-0 items-center gap-1 text-xs font-black text-emerald-600 hover:underline">
-              Xem tất cả <ArrowRight size={14} aria-hidden="true" />
-            </Link>
           </div>
 
           <div className="mt-5 divide-y divide-slate-100">
@@ -468,9 +500,6 @@ const AdminDashboard = () => {
                 <p className="text-xs font-semibold text-slate-400">5 học sinh có điểm XP cao nhất</p>
               </div>
             </div>
-            <Link to="/admin/nguoi_dung" className="flex shrink-0 items-center gap-1 text-xs font-black text-emerald-600 hover:underline">
-              Xem tất cả <ArrowRight size={14} aria-hidden="true" />
-            </Link>
           </div>
 
           <div className="mt-5">
