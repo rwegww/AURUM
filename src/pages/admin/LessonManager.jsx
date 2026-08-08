@@ -329,7 +329,7 @@ const LessonManager = () => {
             >
               <Plus size={16} aria-hidden="true" /> Thêm bài học
             </button>
-            <div className="flex max-w-full gap-1 overflow-x-auto rounded-2xl border border-viet-border bg-white p-1.5 shadow-sm" aria-label="Lọc theo khối lớp">
+            <div className="flex max-w-full gap-1 overflow-x-auto no-scrollbar rounded-2xl border border-viet-border bg-white p-1.5 shadow-sm" aria-label="Lọc theo khối lớp">
               {[null, ...GRADES].map((grade) => (
                 <button
                   type="button"

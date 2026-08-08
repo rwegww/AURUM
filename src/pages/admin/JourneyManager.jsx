@@ -172,7 +172,7 @@ const JourneyManager = () => {
         </div>
 
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
-          <div className="flex max-w-full gap-1 overflow-x-auto rounded-2xl border border-viet-border bg-white p-1 shadow-sm" aria-label="Chọn khối lớp">
+          <div className="flex max-w-full gap-1 overflow-x-auto no-scrollbar rounded-2xl border border-viet-border bg-white p-1 shadow-sm" aria-label="Chọn khối lớp">
             {GRADES.map((grade) => (
               <button
                 type="button"
