@@ -1,3 +1,4 @@
+import LoadingScreen from '@/components/common/LoadingScreen';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -220,11 +221,7 @@ const JourneyDetail = () => {
   const videoPlaybackError = Boolean(normalizedPreviewUrl && failedVideoUrl === normalizedPreviewUrl);
 
   if (loading) {
-    return (
-      <div className="flex min-h-[400px] items-center justify-center p-8" role="status" aria-label="Đang tải chi tiết hành trình">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-viet-green/20 border-t-viet-green" />
-      </div>
-    );
+    return <LoadingScreen inline label="Đang tải chi tiết hành trình…" />;
   }
 
   if (loadError || !lesson) {

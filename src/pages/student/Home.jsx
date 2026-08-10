@@ -35,16 +35,7 @@ const FallingChemistry = () => {
   );
 };
 
-// --- Animations ---
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring', bounce: 0, duration: 0.8 } },
-};
-
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
-};
+import { revealItem as fadeUp, revealGroup as stagger } from '@/utils/motion';
 
 // --- Feature Row Component ---
 // image on right when imageRight=true, left otherwise

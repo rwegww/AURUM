@@ -1,0 +1,109 @@
+/* AURUM: quick feedback, gentle arrivals, quiet idle states. */
+:root {
+  --motion-fast: 140ms;
+  --motion-normal: 240ms;
+  --motion-enter: 420ms;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-accent: #76c034;
+}
+
+/* Base layer preserves intentional per-control transforms and transitions. */
+@layer base {
+  :where(button, a[href], [role="button"], input[type="submit"], input[type="button"]) {
+    -webkit-tap-highlight-color: transparent;
+    transition: color var(--motion-fast), background-color var(--motion-fast),
+      border-color var(--motion-fast), box-shadow var(--motion-normal),
+      opacity var(--motion-fast), transform var(--motion-normal) var(--motion-ease),
+      scale var(--motion-normal) var(--motion-ease);
+  }
+  :where(button, [role="button"], input[type="submit"], input[type="button"]):not(:disabled):not([aria-disabled="true"]):not([data-motion="off"]):active {
+    scale: 0.97;
+  }
+  :where(button, a[href], [role="button"], input, select, textarea):focus-visible {
+    outline: 3px solid var(--motion-accent);
+    outline-offset: 4px;
+  }
+  :where(button:disabled, [aria-disabled="true"]) { cursor: not-allowed; opacity: 0.55; }
+}
+
+.aurum-press-ring {
+  position: fixed;
+  z-index: 2147483647;
+  width: 42px;
+  height: 42px;
+  margin: -21px 0 0 -21px;
+  border: 1.5px solid rgba(118, 192, 52, 0.65);
+  background: radial-gradient(circle, rgba(118, 192, 52, 0.16), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: aurum-press 440ms var(--motion-ease) both;
+}
+
+:is(button:disabled, [aria-disabled="true"], [data-motion="off"]):active {
+  transform: none !important;
+  scale: none !important;
+  translate: none !important;
+}
+.aurum-backdrop { animation: aurum-fade var(--motion-normal) ease-out both; }
+.aurum-panel { animation: aurum-rise var(--motion-enter) var(--motion-ease) both; }
+.animate-fade-in { animation: aurum-fade var(--motion-normal) ease-out both; }
+.animate-slide-up { animation: aurum-rise var(--motion-enter) var(--motion-ease) both; }
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.viet-card, .card-tactile):is(a, button, [role="button"]):hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px -18px rgba(46, 85, 29, 0.35);
+  }
+}
+
+.aurum-loader {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 42%, #eff7df 0, #fffbf0 62%);
+  color: #243b28;
+  text-align: center;
+}
+.aurum-loader--screen { position: fixed; inset: 0; z-index: 9999; min-height: 100dvh; }
+.aurum-loader--inline { min-height: 55vh; border-radius: 24px; }
+.aurum-loader__content { padding: 40px 24px; animation: aurum-rise 420ms var(--motion-ease) both; }
+.aurum-loader__emblem { position: relative; width: 148px; height: 148px; margin: 0 auto 30px; display: grid; place-items: center; }
+.aurum-loader__halo { position: absolute; inset: -20px; border-radius: 50%; background: radial-gradient(circle, #b7dc8155, transparent 70%); animation: aurum-breathe 3s ease-in-out infinite; }
+.aurum-loader__logo { width: 86px; height: 86px; display: grid; place-items: center; border-radius: 28px; border: 1px solid #fff; background: #ffffffbf; box-shadow: 0 12px 32px -12px #49692b40; }
+.aurum-loader__logo img { width: 64px; height: 64px; object-fit: contain; }
+.aurum-loader__orbit { position: absolute; inset: 0; border: 1px solid #76c03430; border-radius: 50%; animation: aurum-orbit 4s linear infinite; }
+.aurum-loader__orbit::after { content: ''; position: absolute; width: 9px; height: 9px; left: calc(50% - 4.5px); top: -4.5px; border-radius: 50%; background: #76c034; box-shadow: 0 0 0 5px #76c03412; }
+.aurum-loader__orbit--inner { inset: 13px; animation-direction: reverse; animation-duration: 3s; border-style: dashed; }
+.aurum-loader__orbit--inner::after { background: #dab44e; width: 6px; height: 6px; top: -3px; box-shadow: none; }
+.aurum-loader__eyebrow { font-size: 9px; font-weight: 800; letter-spacing: 0.22em; color: #66795c; }
+.aurum-loader__title { margin: 8px 0 12px; font-size: clamp(36px, 8vw, 48px); font-weight: 900; letter-spacing: -0.055em; line-height: 1.15; }
+.aurum-loader__title span { color: #76c034; }
+.aurum-loader__label { font-size: 13px; color: #64725d; line-height: 1.6; }
+.aurum-loader__track { width: 160px; height: 3px; margin: 26px auto 22px; border-radius: 8px; background: #76c03422; overflow: hidden; }
+.aurum-loader__track span { display: block; width: 50%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #76c03400, #76c034, #b6d579); animation: aurum-loading 1.6s ease-in-out infinite; }
+.aurum-loader__molecules { display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 10px; font-weight: 800; letter-spacing: 0.05em; color: #859179; }
+.aurum-loader__molecules i { width: 3px; height: 3px; border-radius: 50%; background: #b6c2a6; }
+
+@keyframes aurum-press { from { opacity: 0.9; transform: scale(0.3); } to { opacity: 0; transform: scale(1.5); } }
+@keyframes aurum-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes aurum-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes aurum-orbit { to { transform: rotate(360deg); } }
+@keyframes aurum-breathe { 50% { opacity: 0.5; transform: scale(1.1); } }
+@keyframes aurum-loading { from { transform: translateX(-110%); } to { transform: translateX(210%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .aurum-press-ring { display: none; }
+  .aurum-loader__track span { animation: none !important; width: 100%; opacity: 0.6; }
+  :where(button, a[href], [role="button"], input[type="submit"], input[type="button"]):active {
+    transform: none !important;
+    scale: none !important;
+    translate: none !important;
+  }
+}

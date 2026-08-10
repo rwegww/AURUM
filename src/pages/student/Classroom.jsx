@@ -3,23 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
-// --- Animations ---
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.1 }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { type: "spring", bounce: 0, duration: 0.8 } 
-  }
-};
+import { revealGroup as containerVariants, revealItem as itemVariants } from '@/utils/motion';
 
 const Classroom = () => {
   const navigate = useNavigate();

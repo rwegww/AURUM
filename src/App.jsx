@@ -7,6 +7,7 @@ import Navbar from '@/components/navigation/Navbar'
 import FloatingWidget from '@/components/common/FloatingWidget'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
+import { MotionSystem, PageTransition } from '@/components/common/MotionSystem'
 
 // Helper to handle lazy loading errors in production (due to new deployments/hash changes)
 const lazyWithRetry = (componentImport) =>
@@ -118,6 +119,7 @@ function AppContent() {
     <>
       {!isAuthPage && !isImmersivePage && !isManagementPage && <Navbar />}
       <Suspense fallback={<LoadingScreen />}>
+        <PageTransition disabled={isManagementPage}>
         <Routes>
           {/* ... standard routes ... */}
           <Route path="/" element={<Home />} />
@@ -187,6 +189,7 @@ function AppContent() {
              <Route path="*" element={<Navigate to="/teacher" replace />} />
           </Route>
         </Routes>
+        </PageTransition>
       </Suspense>
       
       {/* Floating Global UI */}
@@ -197,11 +200,13 @@ function AppContent() {
 
 function App() {
   return (
+    <MotionSystem>
     <AuthProvider>
       <Router>
         <AppContent />
       </Router>
     </AuthProvider>
+    </MotionSystem>
   );
 }
 

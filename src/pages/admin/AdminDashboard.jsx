@@ -1,3 +1,4 @@
+import LoadingScreen from '@/components/common/LoadingScreen';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -213,12 +214,7 @@ const AdminDashboard = () => {
   }, [filteredGradeDistribution]);
 
   if (loading) {
-    return (
-      <div className="flex min-h-[60vh] w-full flex-col items-center justify-center" role="status" aria-live="polite">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600/20 border-t-blue-600" aria-hidden="true" />
-        <span className="mt-4 text-sm font-bold text-slate-500">Đang tải số liệu AURUM...</span>
-      </div>
-    );
+    return <LoadingScreen inline label="Đang tải số liệu AURUM…" />;
   }
 
   const statCards = [

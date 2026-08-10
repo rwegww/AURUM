@@ -1,3 +1,4 @@
+import { dialogMotion } from '@/utils/motion';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -161,10 +162,7 @@ const DiscoveryJournalModal = ({ open, onClose, onOpenCrafting, additionalDiscov
             role="dialog"
             aria-modal="true"
             aria-labelledby="discovery-journal-title"
-            initial={{ opacity: 0, y: 28, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.985 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+            {...dialogMotion}
             className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-[#f6f8fb] shadow-[0_30px_100px_rgba(2,6,23,0.45)] sm:h-[min(920px,calc(100dvh-1.5rem))] sm:max-w-[1480px] sm:rounded-[30px] sm:border sm:border-white/80"
           >
             <header className="relative shrink-0 border-b border-slate-200 bg-white px-4 py-4 sm:px-6 lg:px-8">

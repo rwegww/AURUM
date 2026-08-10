@@ -2,20 +2,14 @@ import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { getPostLoginPath } from '@/utils/authNavigation';
+import LoadingScreen from '@/components/common/LoadingScreen';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isLoggedIn, loading, user } = useAuth();
   const location = useLocation();
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-viet-bg">
-        <div className="flex flex-col items-center gap-6">
-          <div className="w-16 h-16 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin"></div>
-          <p className="text-viet-text font-black text-sm uppercase tracking-widest animate-pulse">Đang tải dữ liệu...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen label="Đang xác thực thông tin…" />;
   }
 
   if (!isLoggedIn) {

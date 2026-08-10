@@ -1,3 +1,4 @@
+import LoadingScreen from '@/components/common/LoadingScreen';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -163,12 +164,7 @@ const ClassManager = () => {
   };
 
   if (loading && lop.length === 0) {
-    return (
-      <div role="status" className="px-4 py-12 sm:p-8 flex flex-col items-center justify-center gap-3 text-sm font-medium text-viet-text-light">
-        <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin" aria-hidden="true" />
-        Đang tải danh sách lớp học…
-      </div>
-    );
+    return <LoadingScreen inline label="Đang tải danh sách lớp học…" />;
   }
 
   return (

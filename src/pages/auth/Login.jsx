@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import AuthLayout from '@/components/auth/AuthLayout';
+import LoadingScreen from '@/components/common/LoadingScreen';
 import { Hand, AlertTriangle } from 'lucide-react';
 import { getPostLoginPath } from '@/utils/authNavigation';
 
@@ -127,10 +128,7 @@ const Login = () => {
   if (authLoading || (isLoggedIn && user) || window.location.hash.includes('access_token')) {
     return (
       <AuthLayout>
-        <div className="flex flex-col items-center justify-center min-h-[400px]">
-          <div className="w-12 h-12 border-4 border-viet-green/30 border-t-viet-green rounded-full animate-spin mb-4"></div>
-          <p className="text-slate-500 font-medium animate-pulse">Đang xác thực thông tin...</p>
-        </div>
+        <LoadingScreen inline label="Đang xác thực thông tin…" />
       </AuthLayout>
     );
   }

@@ -4,6 +4,8 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { FlaskConical } from 'lucide-react';
+import LoadingScreen from '@/components/common/LoadingScreen';
+import { revealGroup as containerVariants, revealItem as itemVariants } from '@/utils/motion';
 
 const Lessons = () => {
   const { t } = useTranslation();
@@ -41,19 +43,6 @@ const Lessons = () => {
       fetchLessons(selectedGrade);
     }
   }, [fetchLessons, selectedGrade]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { y: 0, opacity: 1 }
-  };
 
   return (
     <div className="min-h-screen bg-viet-bg pt-24 pb-12 px-4 sm:px-6 lg:px-8">
@@ -108,10 +97,7 @@ const Lessons = () => {
         {/* Lesson List */}
         {selectedGrade ? (
           loading ? (
-            <div className="flex flex-col items-center justify-center py-24">
-              <div className="w-16 h-16 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mb-4"></div>
-              <p className="text-viet-text-light font-bold">{t('bai_hoc.status.loading')}</p>
-            </div>
+            <LoadingScreen inline label={t('bai_hoc.status.loading')} />
           ) : (
             <motion.div
               key={selectedGrade}

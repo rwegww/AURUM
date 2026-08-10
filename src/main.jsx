@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { injectSpeedInsights } from '@vercel/speed-insights'
 import '@/styles/App.css'
+import '@/styles/motion.css'
 import './i18n'
 
 // Silence Three.js deprecation warnings globally

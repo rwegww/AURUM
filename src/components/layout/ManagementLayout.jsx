@@ -1,4 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import { PageTransition } from '@/components/common/MotionSystem';
+import LoadingScreen from '@/components/common/LoadingScreen';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import ManagementSidebar from '../navigation/ManagementSidebar';
@@ -91,12 +93,12 @@ const ManagementLayout = ({ menuItems, title }) => {
       </header>
 
       {mobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-black/30">
+        <div className="aurum-backdrop md:hidden fixed inset-0 z-40 bg-black/30">
           <nav
             ref={mobileMenuRef}
             id="management-mobile-menu"
             aria-label={`Điều hướng ${title}`}
-            className="absolute top-16 left-0 right-0 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-white border-b border-viet-border shadow-xl p-4 space-y-2"
+            className="aurum-panel absolute top-16 left-0 right-0 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-white border-b border-viet-border shadow-xl p-4 space-y-2"
           >
             {menuItems.map((item, index) => (
               <NavLink
@@ -129,7 +131,9 @@ const ManagementLayout = ({ menuItems, title }) => {
       <main id="management-main-content" tabIndex="-1" className="md:ml-[242px] min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0 bg-[#f4f7fb] flex flex-col">
          <ManagementHeader title={title} />
          <div className="flex-1 pb-20">
-            <Outlet />
+            <Suspense fallback={<LoadingScreen inline />}>
+              <PageTransition><Outlet /></PageTransition>
+            </Suspense>
          </div>
       </main>
     </div>

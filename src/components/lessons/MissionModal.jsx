@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import { dialogMotion } from '@/utils/motion';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { stableRandom } from '@/utils/stableRandom';
@@ -117,8 +118,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
   return (
     <div className="fixed inset-0 z-[110] flex items-start justify-center p-4 py-12 bg-[#fffbf0]/90 backdrop-blur-xl overflow-y-auto">
       <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        {...dialogMotion}
         className="max-w-2xl w-full bg-white rounded-[40px] border border-viet-border shadow-2xl overflow-hidden relative"
       >
         {/* Progress Bar */}
