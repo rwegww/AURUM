@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
@@ -77,6 +77,7 @@ const FloatingWidget = () => {
   const [loadingMissions, setLoadingMissions] = useState(false);
   const [nhiem_vuActiveTab, setMissionsActiveTab] = useState('daily'); // 'daily' | 'achievement'
   const [claimingId, setClaimingId] = useState(null);
+  const claimInFlight = useRef(false);
   const [timeLeft, setTimeLeft] = useState('');
   const [claimableCount, setClaimableCount] = useState(0);
 
@@ -162,6 +163,8 @@ const FloatingWidget = () => {
 
   // Claim Mission Reward
   const claimReward = async (missionId) => {
+    if (claimInFlight.current) return;
+    claimInFlight.current = true;
     setClaimingId(missionId);
     try {
       const token = localStorage.getItem('token');
@@ -173,8 +176,12 @@ const FloatingWidget = () => {
         },
         body: JSON.stringify({ missionId })
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success) {
+        await fetchMissions();
+        throw new Error(data.message || data.error || `Không thể nhận thưởng (HTTP ${res.status}). Vui lòng thử lại.`);
+      }
       if (res.ok) {
-        const data = await res.json();
         if (data.success) {
           if (data.rewards && data.rewards.length > 0) {
             const rewardList = data.rewards.map(r => {
@@ -191,7 +198,11 @@ const FloatingWidget = () => {
       }
     } catch (error) {
       console.error('Failed to claim reward:', error);
+      alert(error instanceof TypeError
+        ? 'Không thể kết nối máy chủ. Vui lòng kiểm tra kết nối mạng rồi thử lại.'
+        : error.message || 'Không thể nhận thưởng. Vui lòng thử lại.');
     } finally {
+      claimInFlight.current = false;
       setClaimingId(null);
     }
   };
@@ -511,7 +522,7 @@ const FloatingWidget = () => {
                                     {isClaimable ? (
                                       <button
                                         onClick={() => claimReward(mission.id)}
-                                        disabled={claimingId === mission.id}
+                                        disabled={claimingId !== null}
                                         className="px-3.5 py-1.5 bg-viet-text text-white rounded-xl font-black text-[9px] uppercase tracking-wider shadow-sm hover:bg-black transition-colors cursor-pointer disabled:opacity-50"
                                       >
                                         {claimingId === mission.id ? '...' : t('widget.claim')}

@@ -344,7 +344,7 @@
                 "p2": "Chúng tôi không chịu trách nhiệm cho bất kỳ thiệt hại trực tiếp hoặc gián tiếp nào phát sinh từ việc sử dụng thông tin hoặc thực hành sai lệch từ các hướng dẫn trên nền tảng."
             }
         },
-        "footer_question": "Bạn có câu hỏi về điều khoản?<1/>Vui lòng <contact>Liên hệ với chúng tôi</contact>."
+        "footer_question": "Bạn có câu hỏi về điều khoản?<br/>Vui lòng <contact>Liên hệ với chúng tôi</contact>."
     },
     "profile": {
         "not_logged_in": "Chưa đăng nhập",
