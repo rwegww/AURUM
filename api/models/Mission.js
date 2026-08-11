@@ -60,7 +60,7 @@ export const Mission = {
       .eq('nguoi_dung_id', userId)
       .eq('nhiem_vu.type', 'daily');
 
-    if (umError) return;
+    if (umError) throw umError;
 
     const resetPromises = userMissions
       .filter(um => {
@@ -82,7 +82,9 @@ export const Mission = {
       });
 
     if (resetPromises.length > 0) {
-      await Promise.all(resetPromises);
+      const results = await Promise.all(resetPromises);
+      const failed = results.find(result => result.error);
+      if (failed) throw failed.error;
       return true; // Indicates some resets happened
     }
     return false;
@@ -110,11 +112,13 @@ export const Mission = {
     if (pError) throw pError;
 
     // 2.5 Get user streak info for syncing
-    const { data: user } = await supabase
+    const { data: user, error: userError } = await supabase
       .from('nguoi_dung')
       .select('so_ngay_chuoi, phut_online_hom_nay, da_hoan_thanh_bai_hom_nay')
       .eq('id', userId)
       .single();
+
+    if (userError) throw userError;
 
     // 3. Merge data
     return missionRows.map(mapMissionRow).map(mission => {
@@ -265,13 +269,47 @@ export const Mission = {
   },
 
   async claimReward(userId, missionId) {
+    // Use the same server-derived eligibility as the list, including daily reset.
+    const missions = await this.getUserMissions(userId);
+    const mission = missions.find(item => item.id === missionId);
+    if (!mission) throw new Error('Không tìm thấy nhiệm vụ.');
+    if (mission.isClaimed) throw new Error('Bạn đã nhận phần thưởng nhiệm vụ này.');
+    if (!mission.isCompleted) throw new Error('Bạn chưa hoàn thành mục tiêu nhiệm vụ.');
+
+    if (['streak', 'streak_light'].includes(mission.action_type)) {
+      const progress = {
+        nguoi_dung_id: userId,
+        nhiem_vu_id: missionId,
+        so_luong_hien_tai: mission.currentCount,
+        da_hoan_thanh: true,
+        updated_at: new Date().toISOString(),
+      };
+      // Insert missing progress without replacing an existing claimed flag.
+      const { error: insertError } = await supabase
+        .from('nhiem_vu_nguoi_dung')
+        .upsert(progress, { onConflict: 'nguoi_dung_id,nhiem_vu_id', ignoreDuplicates: true });
+      if (insertError) throw insertError;
+
+      const { error: syncError } = await supabase
+        .from('nhiem_vu_nguoi_dung')
+        .update({
+          so_luong_hien_tai: progress.so_luong_hien_tai,
+          da_hoan_thanh: true,
+          updated_at: progress.updated_at,
+        })
+        .eq('nguoi_dung_id', userId)
+        .eq('nhiem_vu_id', missionId);
+      if (syncError) throw syncError;
+    }
+
+    // The database still atomically claims and grants XP once, even for racing requests.
     const { data, error } = await supabase.rpc('claim_mission_reward', {
       p_user_id: userId,
       p_mission_id: missionId
     });
 
     if (error) throw error;
-    if (!data) throw new Error('Reward already claimed or mission not completed');
+    if (!data) throw new Error('Phần thưởng đã được nhận hoặc trạng thái nhiệm vụ đã thay đổi. Vui lòng tải lại danh sách.');
 
     return data;
   }
