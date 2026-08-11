@@ -3,6 +3,12 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
+const cloudinaryAssetProxy = (publicPath, resourceType = 'image') => ({
+  target: 'https://res.cloudinary.com',
+  changeOrigin: true,
+  rewrite: () => `/dpcorzgkm/${resourceType}/upload/aurum/public${publicPath}`,
+})
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -90,6 +96,21 @@ export default defineConfig({
         proxyTimeout: 30000,
         timeout: 30000,
       },
+      '/assets': {
+        target: 'https://res.cloudinary.com',
+        changeOrigin: true,
+        rewrite: (requestPath) => `/dpcorzgkm/image/upload/aurum/public${requestPath}`,
+      },
+      '/images': {
+        target: 'https://res.cloudinary.com',
+        changeOrigin: true,
+        rewrite: (requestPath) => `/dpcorzgkm/image/upload/aurum/public${requestPath}`,
+      },
+      '/logo.png': cloudinaryAssetProxy('/logo.png'),
+      '/favicon.png': cloudinaryAssetProxy('/favicon.png'),
+      '/og-preview.png': cloudinaryAssetProxy('/og-preview.png'),
+      '/apple-touch-icon.png': cloudinaryAssetProxy('/apple-touch-icon.png'),
+      '/icons.svg': cloudinaryAssetProxy('/icons.svg', 'raw'),
     },
   },
 })

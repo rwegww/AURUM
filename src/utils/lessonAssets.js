@@ -5,5 +5,5 @@ export const getLessonInfographicUrl = (lesson, grade, order) => {
   return lesson?.infographicUrl
     || lesson?.assets?.infographicUrl
     || lesson?.game?.assets?.infographicUrl
-    || (classId && lessonOrder ? `/assets/curriculum/class${classId}/${classId}-${lessonOrder}.png` : '');
+    || (classId && lessonOrder ? `/assets/curriculum/class${classId}/${classId}-${lessonOrder}.webp` : '');
 };

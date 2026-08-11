@@ -3,6 +3,34 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/assets/(.*)",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/assets/$1"
+    },
+    {
+      "source": "/images/(.*)",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/images/$1"
+    },
+    {
+      "source": "/logo.png",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/logo.png"
+    },
+    {
+      "source": "/favicon.png",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/favicon.png"
+    },
+    {
+      "source": "/og-preview.png",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/og-preview.png"
+    },
+    {
+      "source": "/apple-touch-icon.png",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/apple-touch-icon.png"
+    },
+    {
+      "source": "/icons.svg",
+      "destination": "https://res.cloudinary.com/dpcorzgkm/raw/upload/aurum/public/icons.svg"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/index.js"
     },

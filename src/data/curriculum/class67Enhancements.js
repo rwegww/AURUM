@@ -89,7 +89,7 @@ const buildJourneyAssets = (lesson) => {
   const existingVideoUrl = existingVideoModules.find((module) => module?.url)?.url;
   const introVideoUrl = lesson.introVideoUrl || cloudinaryVideoUrl || (assetBase ? `${assetBase}.mp4` : '');
   const learningVideoUrl = youtubeVideoUrl || existingVideoUrl || '';
-  const infographicUrl = lesson.infographicUrl || lesson.assets?.infographicUrl || lesson.game?.assets?.infographicUrl || cloudinaryInfographicUrl || (assetBase ? `${assetBase}.png` : '');
+  const infographicUrl = lesson.infographicUrl || lesson.assets?.infographicUrl || lesson.game?.assets?.infographicUrl || cloudinaryInfographicUrl || (assetBase ? `${assetBase}.webp` : '');
   const hasLearningVideoModule = existingVideoModules.some((module) => module?.url === learningVideoUrl);
   const learningVideoSource = learningVideoUrl === youtubeVideoUrl ? 'youtube' : 'existing';
 
