@@ -8,6 +8,7 @@ import { uploadToCloudinary } from '@/utils/cloudinaryUpload';
 import { getChemicalImage } from '@/data/chemicalImages';
 import { CheckCircle2, Gift, MessageCircle, Flame, Trophy, Target, Lock, Hourglass } from 'lucide-react';
 import { RenderIcon } from '@/utils/IconMapper';
+import { sortMissionsByReward } from '@/utils/missionOrder';
 
 const getElementStyle = (symbol) => {
   const styles = {
@@ -183,6 +184,10 @@ const FloatingWidget = () => {
       }
       if (res.ok) {
         if (data.success) {
+          setMissions(current => current.map(mission => (
+            mission.id === missionId ? { ...mission, isClaimed: true } : mission
+          )));
+          setClaimableCount(current => Math.max(0, current - 1));
           if (data.rewards && data.rewards.length > 0) {
             const rewardList = data.rewards.map(r => {
               const symbol = r.ingredientId.replace('ing_', '').toUpperCase();
@@ -269,7 +274,7 @@ const FloatingWidget = () => {
     }
   };
 
-  const filteredMissions = nhiem_vu.filter(m => m.type === nhiem_vuActiveTab);
+  const filteredMissions = sortMissionsByReward(nhiem_vu.filter(m => m.type === nhiem_vuActiveTab));
 
   return (
     <>

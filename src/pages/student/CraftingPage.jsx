@@ -25,6 +25,7 @@ import {
   getRecipeRequirementCounts
 } from '@/data/labInventory';
 import { getChemicalImage } from '@/data/chemicalImages';
+import { sortMissionsByReward } from '@/utils/missionOrder';
 
 const toAsciiFormula = (formula) => {
   const subMap = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9' };
@@ -542,7 +543,7 @@ const CraftingPage = () => {
               </div>
 
               <div className="space-y-4">
-                {tasks.map(task => {
+                {sortMissionsByReward(tasks).map(task => {
                   const isCompleted = task.progress >= task.target;
                   const isClaimed = task.claimed;
                   const percent = Math.min(100, Math.round((task.progress / task.target) * 100));
