@@ -1166,7 +1166,7 @@ router.get(['/feedback', '/phan_hoi'], adminGuard, async (req, res) => {
 // POST /api/admin/feedback/submit - Student submission
 router.post('/feedback/submit', async (req, res) => {
   try {
-    const { message, type = 'suggestion', imageUrl } = req.body || {};
+    const { message, type = 'suggestion', imageUrl, name, email } = req.body || {};
     const normalizedMessage = normalizeRequiredText(message, 'Nội dung phản hồi', 5000);
     if (!PUBLIC_FEEDBACK_TYPES.has(type)) {
       throw httpError(400, 'Loại phản hồi không hợp lệ.', 'INVALID_FEEDBACK_TYPE');
@@ -1183,12 +1183,24 @@ router.post('/feedback/submit', async (req, res) => {
       username = user.username;
     }
 
+    const trimmedName = typeof name === 'string' ? name.trim() : '';
+    const trimmedEmail = typeof email === 'string' ? email.trim() : '';
+
+    if (trimmedName && username === 'Ẩn danh') {
+      username = trimmedName;
+    }
+
+    const metadata = {};
+    if (trimmedName) metadata.name = trimmedName;
+    if (trimmedEmail) metadata.email = trimmedEmail;
+
     await Feedback.create({
       userId,
       username,
       message: normalizedMessage,
       type,
       imageUrl: normalizedImageUrl,
+      metadata,
     });
     return res.status(201).json({ message: 'Gửi phản hồi thành công!' });
   } catch (err) {

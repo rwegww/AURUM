@@ -19,11 +19,48 @@ const ContactInfo = ({ icon, label, value }) => (
 const Contact = () => {
   const { t } = useTranslation();
   const [sent, setSent] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 3000);
+    if (!name.trim() || !email.trim() || !message.trim()) return;
+
+    setSending(true);
+    setError(null);
+
+    try {
+      const res = await fetch('/api/admin/feedback/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: 'other',
+          message: message.trim(),
+          name: name.trim(),
+          email: email.trim()
+        })
+      });
+
+      if (!res.ok) {
+        throw new Error('Gửi thất bại');
+      }
+
+      setSent(true);
+      setName('');
+      setEmail('');
+      setMessage('');
+      setTimeout(() => setSent(false), 3000);
+    } catch (err) {
+      console.error('Lỗi gửi liên hệ:', err);
+      setError(t('contact.form.error') || 'Có lỗi xảy ra, vui lòng thử lại sau.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -81,11 +118,18 @@ const Contact = () => {
               >
                 <h2 className="text-2xl font-black text-viet-text mb-8">{t('contact.form.title')}</h2>
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {error && (
+                    <div className="bg-red-500/10 text-red-500 p-3 rounded-xl text-sm font-medium">
+                      {error}
+                    </div>
+                  )}
                   <div>
                     <label className="block text-[12px] font-black text-viet-text-light/60 uppercase tracking-widest mb-2 px-1">{t('contact.form.name_label')}</label>
                     <input 
                       type="text" 
                       required
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                       className="w-full px-6 py-4 bg-[#f8f9fa] border border-viet-border rounded-2xl outline-none focus:border-viet-green transition-all font-medium text-[15px]" 
                       placeholder={t('contact.form.name_placeholder')}
                     />
@@ -95,6 +139,8 @@ const Contact = () => {
                     <input 
                       type="email" 
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full px-6 py-4 bg-[#f8f9fa] border border-viet-border rounded-2xl outline-none focus:border-viet-green transition-all font-medium text-[15px]" 
                       placeholder={t('contact.form.email_placeholder')}
                     />
@@ -104,16 +150,18 @@ const Contact = () => {
                     <textarea 
                       required
                       rows={4}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
                       className="w-full px-6 py-4 bg-[#f8f9fa] border border-viet-border rounded-2xl outline-none focus:border-viet-green transition-all font-medium text-[15px] resize-none" 
                       placeholder={t('contact.form.message_placeholder')}
                     ></textarea>
                   </div>
                   <button 
                     type="submit"
-                    disabled={sent}
-                    className={`w-full py-5 rounded-2xl font-black text-[15px] shadow-lg transition-all ${sent ? 'bg-viet-green text-white' : 'bg-viet-text text-white hover:bg-viet-green shadow-viet-text/10'}`}
+                    disabled={sent || sending}
+                    className={`w-full py-5 rounded-2xl font-black text-[15px] shadow-lg transition-all ${sent ? 'bg-viet-green text-white' : 'bg-viet-text text-white hover:bg-viet-green shadow-viet-text/10'} ${(sending || sent) ? 'opacity-80 cursor-not-allowed' : ''}`}
                   >
-                    {sent ? t('contact.form.success') : t('contact.form.submit')}
+                    {sending ? '...' : sent ? t('contact.form.success') : t('contact.form.submit')}
                   </button>
                 </form>
               </motion.div>
