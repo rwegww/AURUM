@@ -1,6 +1,6 @@
 /**
  * AURUM CHEMISTRY KNOWLEDGE BASE
- * Contains all static theoretical data, maps, and safety constants for the Aurum AI Agent.
+ * Contains all static theoretical data, maps, and safety constants for Aurum Assistant.
  */
 
 export const SAFETY_RESTRICTIONS = [

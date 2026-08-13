@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Atom, Lightbulb } from 'lucide-react';
 import { elements } from '@/data/elements';
@@ -141,7 +141,7 @@ const UniversalFormulaSim = ({ formula }) => {
     const results = unifiedDatabase.filter(e =>      e.symbol.toLowerCase().includes(term) ||      e.name.toLowerCase().includes(term)
     ).slice(0, 5);
 
-    // Tính năng AI: Tự động phân tích và tính toán phân tử khối cho mọi công thức người dùng gõ
+    // Tự động phân tích và tính toán phân tử khối cho mọi công thức người dùng gõ
     // (Bao gồm cả các chất KHÔNG CÓ trong hệ thống như HCl, NaOH, HNO3...)
     const calculatedMass = parseFloat(calculateMolarMass(searchTerm));
     // Nếu gõ ra được công thức hợp lệ (Khối lượng > 0 và bắt đầu bằng chữ In hoa)
@@ -152,7 +152,7 @@ const UniversalFormulaSim = ({ formula }) => {
         const formattedSymbol = searchTerm.replace(/[0-9]/g, (m) => String.fromCharCode(0x2080 + Number(m)));
         results.unshift({
           symbol: formattedSymbol,
-          name: 'Hợp chất AI tự phân tích',
+          name: 'Hợp chất tự phân tích',
           weight: calculatedMass,
           category: 'hợp-chất',
           isCompound: true

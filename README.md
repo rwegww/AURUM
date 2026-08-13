@@ -1,6 +1,6 @@
 # AURUM - Nền Tảng Học Tập & Thực Hành Hóa Học Trực Quan
 
-AURUM là hệ thống quản lý học tập (LMS) và nền tảng thực hành Hóa học tương tác thế hệ mới dành cho học sinh từ **Lớp 6 đến Lớp 12**, giáo viên và quản trị viên. Hệ thống kết hợp mô phỏng thí nghiệm trực quan sinh động, đấu trường học tập thời gian thực (Real-time Arena), cơ chế trò chơi hóa (Gamification) và Trợ lý Trí tuệ nhân tạo (AI Agent) nhằm mang lại trải nghiệm tiếp thu kiến thức khoa học trực quan, an toàn và hấp dẫn.
+AURUM là hệ thống quản lý học tập (LMS) và nền tảng thực hành Hóa học tương tác thế hệ mới dành cho học sinh từ **Lớp 6 đến Lớp 12**, giáo viên và quản trị viên. Hệ thống kết hợp mô phỏng thí nghiệm trực quan sinh động, đấu trường học tập thời gian thực (Real-time Arena), cơ chế trò chơi hóa (Gamification) và Trợ lý Aurum nhằm mang lại trải nghiệm tiếp thu kiến thức khoa học trực quan, an toàn và hấp dẫn.
 
 ---
 
@@ -71,7 +71,6 @@ graph TD
     subgraph Data_Storage ["Cơ sở dữ liệu & Dịch vụ ngoài"]
         Supabase["Supabase PostgreSQL (Database, RLS & Realtime)"]
         Cloudinary["Cloudinary (Lưu trữ ảnh & video tài nguyên)"]
-        OpenAI["OpenAI API (Tóm tắt & phân tích tài liệu học tập)"]
         SMTP["SMTP Mail Service (Xác thực & khôi phục mật khẩu)"]
     end
 
@@ -79,7 +78,6 @@ graph TD
     SPA -->|Realtime Channels (Arena PK)| Supabase
     AuthGuard -->|Kiểm tra phiên & quyền hạn| Supabase
     Express -->|CRUD dữ liệu nghiệp vụ| Supabase
-    DocService -->|Trích xuất văn bản PDF / DOCX| OpenAI
     Express -->|Chữ ký upload an toàn| Cloudinary
     Express -->|Gửi email hệ thống| SMTP
 ```
@@ -108,7 +106,6 @@ graph TD
 | **Môi trường chạy** | Node.js 24.x | Môi trường thực thi JavaScript hiện đại nhất |
 | **Cơ sở dữ liệu** | Supabase PostgreSQL | RLS, Realtime Websockets và lưu trữ dữ liệu an toàn |
 | **Bảo mật & Mã hóa** | JWT, bcryptjs | Bảo mật phiên đăng nhập, băm mật khẩu chuẩn mã hóa |
-| **Tích hợp Trí tuệ nhân tạo** | OpenAI API | Đọc hiểu, phân tích tài liệu và hỗ trợ giải đáp |
 | **Xử lý Tài liệu** | pdf-parse v2, mammoth, word-extractor | Trích xuất nội dung văn bản từ tệp PDF và Word (.doc, .docx) |
 | **Lưu trữ Đa phương tiện** | Cloudinary | Lưu trữ và phân phối tài liệu, hình ảnh, video học liệu |
 | **Dịch vụ Email** | Nodemailer | Gửi thư thông báo và liên kết đặt lại mật khẩu |
@@ -200,7 +197,7 @@ Cơ sở dữ liệu sử dụng **Supabase PostgreSQL** với Row Level Securit
 *   `/api/lessons` : Dữ liệu bài học và nội dung 5 giai đoạn học tập.
 *   `/api/classes` : Tạo lớp, cấp mã mời, quản lý thành viên, đăng bài, chấm điểm bài tập.
 *   `/api/materials` : Upload học liệu, phân loại tài liệu, quản lý phản hồi tài liệu.
-*   `/api/analyze` : Phân tích và trích xuất tài liệu thông minh bằng OpenAI.
+*   `/api/analyze` : Phân tích và trích xuất tài liệu từ tệp tin PDF/Word.
 *   `/api/lab` : Dữ liệu hóa chất, phản ứng và bài tập cân bằng phương trình.
 *   `/api/arena` : Khởi tạo phòng đấu, ghép trận (matchmaking), ghi nhận đáp án.
 *   `/api/missions` : Danh sách nhiệm vụ ngày, kiểm tra điều kiện và nhận thưởng.
@@ -223,50 +220,7 @@ cd AURUM
 npm install
 ```
 
-### 6.3. Cấu hình biến môi trường (`.env`)
-Tạo tệp `.env` tại thư mục gốc với các thông số:
-```env
-# Môi trường ứng dụng
-NODE_ENV=development
-PORT=3000
-PUBLIC_APP_URL=http://localhost:5173
 
-# Cấu hình Supabase Database & Auth
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-
-# Xác thực & Phiên làm việc
-JWT_SECRET=your-secure-jwt-secret
-
-# Trí tuệ nhân tạo (OpenAI)
-OPENAI_API_KEY=your-openai-api-key
-
-# Lưu trữ đám mây Cloudinary
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-
-# Dịch vụ gửi thư điện tử (SMTP)
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-specific-password
-```
-
-### 6.4. Các lệnh phát triển chính
-| Lệnh chạy | Mô tả công việc |
-| :--- | :--- |
-| `npm run dev` | Khởi chạy Vite Dev Server cho giao diện Frontend (mặc định cổng 5173) |
-| `npm run server` | Khởi chạy Express Backend API server với chế độ `--watch` |
-| `npm test` | Chạy toàn bộ 20 test suites (183 bài test) bằng Vitest |
-| `npm run build` | Đóng gói sản phẩm tối ưu cho môi trường Production |
-| `npm run lint` | Kiểm tra quy chuẩn mã nguồn với ESLint |
-| `npm run seed:class6-7` | Nạp dữ liệu bài học mẫu cho khối Lớp 6 và Lớp 7 |
-| `npm run validate:lab` | Kiểm chứng tính hợp lệ của cơ sở dữ liệu phòng thí nghiệm |
-
----
 
 ## 7. Quy Ước Đóng Góp & Thông Điệp Commit (Commit Guidelines)
 
