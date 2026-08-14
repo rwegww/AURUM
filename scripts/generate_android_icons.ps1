@@ -40,15 +40,8 @@ foreach ($d in $densities) {
     $bmp.Save($roundPngPath, [System.Drawing.Imaging.ImageFormat]::Png)
     $bmp.Save($fgPngPath, [System.Drawing.Imaging.ImageFormat]::Png)
 
-    # Replace webp files if present
-    $webpPath = Join-Path $targetFolder "ic_launcher.webp"
-    $roundWebpPath = Join-Path $targetFolder "ic_launcher_round.webp"
-    if (Test-Path $webpPath) {
-        $bmp.Save($webpPath, [System.Drawing.Imaging.ImageFormat]::Png)
-    }
-    if (Test-Path $roundWebpPath) {
-        $bmp.Save($roundWebpPath, [System.Drawing.Imaging.ImageFormat]::Png)
-    }
+    # Remove webp files to prevent AAPT2 duplicate resource build errors
+    Get-ChildItem -Path $targetFolder -Filter "ic_launcher*.webp" -ErrorAction SilentlyContinue | Remove-Item -Force
 
     $graph.Dispose()
     $bmp.Dispose()
