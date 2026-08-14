@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 const ManagementSidebar = ({ menuItems, title }) => {
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
 
   // Custom menu icon mapping if menuItems doesn't provide ideal icons
   const defaultIcons = {

@@ -951,7 +951,9 @@ const enrichApprovalPayloads = async (approvalRows) => {
         try {
           const parsed = JSON.parse(fb.noi_dung);
           email = parsed.email || '';
-        } catch {}
+        } catch {
+          email = fb.thong_tin_bo_sung?.email || '';
+        }
         if (!payload.email) payload.email = email || fb.thong_tin_bo_sung?.email;
         if (!payload.proofUrl) payload.proofUrl = fb.image_url;
       }

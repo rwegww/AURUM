@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Atom, Lightbulb } from 'lucide-react';
 import { elements } from '@/data/elements';
@@ -49,28 +49,17 @@ const UniversalFormulaSim = ({ formula }) => {
     return { min: 0.1, max: 100, step: 0.1 };
   };
 
-  // Kết quả tính toán
-  const [result, setResult] = useState({});
-
   // Cập nhật giá trị
   const handleInputChange = (key, val) => {
     setInputs(prev => ({ ...prev, [key]: parseFloat(val) || 0 }));
   };
 
-  // Tự động tính toán khi input hoặc công thức thay đổi
-  useEffect(() => {
+  // Kết quả là dữ liệu dẫn xuất, không cần thêm một vòng render để đồng bộ state.
+  const result = useMemo(() => {
     const varsToSolve = { ...inputs };
     varsToSolve[targetVarKey] = null; // Biến đích cần tính
-    const solved = formula.solve(varsToSolve);
-    if (solved) {
-      setResult(solved);
-    }
+    return formula.solve(varsToSolve) || {};
   }, [inputs, targetVarKey, formula]);
-
-  // Đổi công thức thì reset target
-  useEffect(() => {
-    setTargetVarKey(formula.variables[0].key);
-  }, [formula]);
 
   // Tiện ích tính khối lượng mol tự động từ công thức (H₂O, C₂H₅OH...)
   const calculateMolarMass = (formulaStr) => {

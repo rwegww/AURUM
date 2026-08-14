@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
@@ -127,7 +127,7 @@ const FloatingWidget = () => {
   }, []);
 
   // Fetch nhiem_vu if logged in
-  const fetchMissions = async () => {
+  const fetchMissions = useCallback(async () => {
     if (!isLoggedIn) return;
     setLoadingMissions(true);
     try {
@@ -148,7 +148,7 @@ const FloatingWidget = () => {
     } finally {
       setLoadingMissions(false);
     }
-  };
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -160,7 +160,7 @@ const FloatingWidget = () => {
       setMissions([]);
       setClaimableCount(0);
     }
-  }, [isLoggedIn]);
+  }, [fetchMissions, isLoggedIn]);
 
   // Claim Mission Reward
   const claimReward = async (missionId) => {

@@ -450,6 +450,50 @@ export const AuthProvider = ({ children }) => {
     }
   }, [isLoggedIn, user]);
 
+  const startGradePlacement = useCallback(async (grade) => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/placement/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ grade }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Không thể bắt đầu xếp lớp');
+      if (mountedRef.current && data.user) setUser(data.user);
+      return { success: true, assessment: data.assessment, user: data.user };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
+
+  const submitGradePlacement = useCallback(async ({ attemptId, answers }) => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/placement/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ attemptId, answers }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Không thể chấm bài xếp lớp');
+      if (mountedRef.current && data.user) setUser(data.user);
+      return { success: true, ...data };
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
+
   const recoverStreak = useCallback(async (streakToRestore) => {
     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
     try {
@@ -636,11 +680,13 @@ export const AuthProvider = ({ children }) => {
     changePassword,
     completeLessonSegment,
     completePlacementTest,
+    startGradePlacement,
+    submitGradePlacement,
     recoverStreak,
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, completeGoogleLogin, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, completePlacementTest, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, completeGoogleLogin, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, completePlacementTest, startGradePlacement, submitGradePlacement, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

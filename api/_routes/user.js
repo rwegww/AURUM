@@ -6,6 +6,11 @@ import Mission from '../models/Mission.js';
 import { supabase } from '../lib/supabase.js';
 import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
 import { getLessonIngredientRewards, grantIngredientsToInventory } from '../../src/data/labInventory.js';
+import {
+  getPlacementAssessment,
+  gradePlacementAssessment,
+  PLACEMENT_GRADES as SUPPORTED_PLACEMENT_GRADES,
+} from '../data/placementAssessments.js';
 
 const router = express.Router();
 
@@ -26,6 +31,7 @@ const LESSON_LEVEL_XP = {
   level3: 100,
 };
 const PLACEMENT_GRADES = new Set(['9', '10', '11', '12']);
+const ALL_PLACEMENT_GRADES = new Set(SUPPORTED_PLACEMENT_GRADES);
 
 const datePartFormatter = new Intl.DateTimeFormat('en-US', {
   timeZone: VIETNAM_TIME_ZONE,
@@ -235,7 +241,138 @@ router.patch('/profile', auth, async (req, res) => {
 });
 
 router.post('/progress', auth, async (_req, res) => {
-  res.status(410).json({ message: 'Deprecated. Use /api/user/lesson-segment or /api/user/placement-pass.' });
+  res.status(410).json({ message: 'Deprecated. Use the dedicated lesson and placement endpoints.' });
+});
+
+router.post('/placement/start', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ message: 'Chỉ tài khoản học sinh mới cần xếp lớp.' });
+    }
+
+    const grade = String(req.body?.grade || '');
+    if (!ALL_PLACEMENT_GRADES.has(grade)) {
+      return res.status(400).json({ message: 'Khối lớp lựa chọn không hợp lệ.' });
+    }
+
+    const currentProgress = req.user.balancingProgress || {};
+    const currentPlacement = currentProgress.placement;
+    if (currentPlacement?.required !== true) {
+      return res.status(409).json({ message: 'Tài khoản này không thuộc luồng xếp lớp ban đầu.' });
+    }
+    if (currentPlacement.status === 'placed' && currentPlacement.assignedGrade) {
+      return res.status(409).json({ message: `Bạn đã được xếp vào lớp ${currentPlacement.assignedGrade}.` });
+    }
+
+    const lessons = await Lesson.find({ classId: grade });
+    const firstLesson = lessons[0];
+    const assessment = getPlacementAssessment(grade);
+    if (!firstLesson || !assessment) {
+      return res.status(409).json({ message: 'Khối này chưa đủ dữ liệu để xếp lớp. Vui lòng chọn khối khác.' });
+    }
+
+    const attemptId = crypto.randomUUID();
+    const nextPlacement = {
+      ...currentPlacement,
+      required: true,
+      status: 'testing',
+      assignedGrade: null,
+      selectedGrade: grade,
+      attemptId,
+      attempts: (Number(currentPlacement.attempts) || 0) + 1,
+      startedAt: new Date().toISOString(),
+      firstLessonId: firstLesson.lessonId,
+      firstLessonTitle: firstLesson.title,
+      firstLessonOrder: firstLesson.order,
+    };
+
+    const updatedUser = await User.update(req.user.id, {
+      balancingProgress: { ...currentProgress, placement: nextPlacement },
+    });
+
+    res.json({
+      success: true,
+      user: toProfileResponse(updatedUser),
+      assessment: {
+        ...assessment,
+        attemptId,
+        firstLesson: {
+          lessonId: firstLesson.lessonId,
+          title: firstLesson.title,
+          order: firstLesson.order,
+        },
+      },
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Không thể bắt đầu bài xếp lớp lúc này.', error: err.message });
+  }
+});
+
+router.post('/placement/submit', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ message: 'Chỉ tài khoản học sinh mới cần xếp lớp.' });
+    }
+
+    const currentProgress = req.user.balancingProgress || {};
+    const currentPlacement = currentProgress.placement;
+    const attemptId = String(req.body?.attemptId || '');
+    if (currentPlacement?.required !== true
+      || currentPlacement.status !== 'testing'
+      || !attemptId
+      || attemptId !== currentPlacement.attemptId) {
+      return res.status(409).json({ message: 'Lượt xếp lớp đã hết hạn. Vui lòng chọn khối và bắt đầu lại.' });
+    }
+
+    const result = gradePlacementAssessment(currentPlacement.selectedGrade, req.body?.answers);
+    if (!result) {
+      return res.status(400).json({ message: 'Bạn cần trả lời đầy đủ tất cả câu hỏi.' });
+    }
+
+    const grade = currentPlacement.selectedGrade;
+    const recommendedGrade = result.passed
+      ? grade
+      : String(Math.max(Number(SUPPORTED_PLACEMENT_GRADES[0]), Number(grade) - 1));
+    const completedAt = new Date().toISOString();
+    const history = [
+      ...(Array.isArray(currentPlacement.history) ? currentPlacement.history : []),
+      { grade, correct: result.correct, total: result.total, percent: result.percent, passed: result.passed, completedAt },
+    ].slice(-10);
+    const nextPlacement = {
+      ...currentPlacement,
+      status: result.passed ? 'placed' : 'unassigned',
+      assignedGrade: result.passed ? grade : null,
+      selectedGrade: result.passed ? grade : null,
+      attemptId: null,
+      completedAt,
+      history,
+      lastResult: { ...result, grade, recommendedGrade },
+    };
+
+    const updateFields = {
+      balancingProgress: { ...currentProgress, placement: nextPlacement },
+    };
+    if (result.passed) {
+      updateFields.studyPlan = {
+        ...normalizeStudyPlan(req.user.studyPlan),
+        grade,
+      };
+    }
+
+    const updatedUser = await User.update(req.user.id, updateFields);
+    res.json({
+      success: true,
+      user: toProfileResponse(updatedUser),
+      result: { ...result, grade, recommendedGrade },
+      firstLesson: result.passed ? {
+        lessonId: currentPlacement.firstLessonId,
+        title: currentPlacement.firstLessonTitle,
+        order: currentPlacement.firstLessonOrder,
+      } : null,
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Không thể chấm bài xếp lớp lúc này.', error: err.message });
+  }
 });
 
 router.post('/lesson-segment', auth, async (req, res) => {
@@ -253,6 +390,15 @@ router.post('/lesson-segment', auth, async (req, res) => {
     const lesson = await Lesson.findById(lessonId);
     if (!lesson) {
       return res.status(404).json({ message: 'Không tìm thấy bài học.' });
+    }
+
+    const placement = req.user.balancingProgress?.placement;
+    if (req.user.role === 'student' && placement?.required === true) {
+      const canRecordProgress = placement.status === 'placed'
+        && String(placement.assignedGrade) === String(lesson.classId);
+      if (!canRecordProgress) {
+        return res.status(403).json({ message: 'Bạn cần hoàn tất xếp lớp trước khi lưu tiến độ của khối này.' });
+      }
     }
 
     const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
@@ -314,6 +460,9 @@ router.post('/lesson-segment', auth, async (req, res) => {
 
 router.post('/placement-pass', auth, async (req, res) => {
   try {
+    if (req.user.balancingProgress?.placement?.required === true) {
+      return res.status(403).json({ message: 'Tài khoản mới phải hoàn thành bài xếp lớp được chấm ở máy chủ.' });
+    }
     const grade = String(req.body?.grade || '');
     if (!PLACEMENT_GRADES.has(grade)) {
       return res.status(400).json({ message: 'Khối lớp kiểm tra không hợp lệ.' });
@@ -552,10 +701,19 @@ router.get('/cron-send-reminders', async (req, res) => {
 
     console.log('[Cron Reminders] Starting reminder check...');
 
-    const { data: students, error } = await supabase
+    const loadReminderStudents = () => supabase
       .from('nguoi_dung')
       .select('id, username, email, ke_hoach_hoc, da_hoan_thanh_bai_hom_nay, so_ngay_chuoi')
       .eq('role', 'student');
+
+    let { data: students, error } = await loadReminderStudents();
+    const errorText = [error?.message, error?.details].filter(Boolean).join(' ');
+
+    if (error && /fetch failed|ECONNRESET|network/i.test(errorText)) {
+      console.warn('[Cron Reminders] Transient Supabase error, retrying once.');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      ({ data: students, error } = await loadReminderStudents());
+    }
 
     if (error) {
       console.error('[Cron Reminders] Supabase fetch error:', error);

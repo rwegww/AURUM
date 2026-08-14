@@ -2,7 +2,14 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useLabStore from '../three/magic-lab/store';
 
-const PourEffect2D = ({ formula, targetBeakerIndex }) => {
+const SOLID_PARTICLES = Array.from({ length: 15 }, (_, index) => ({
+  initialX: ((index * 7) % 11) - 5,
+  targetX: ((index * 11) % 16) - 7.5,
+  duration: 0.5 + (index % 4) * 0.05,
+  delay: (index % 10) * 0.05,
+}));
+
+const PourEffect2D = ({ formula }) => {
   const chemicals = useLabStore(state => state.chemicals);
   const chem = chemicals[formula];
   
@@ -29,15 +36,15 @@ const PourEffect2D = ({ formula, targetBeakerIndex }) => {
         {isSolid ? (
           // Solid pouring (particles falling)
           <div className="w-full h-full relative overflow-hidden">
-             {Array.from({ length: 15 }).map((_, i) => (
+             {SOLID_PARTICLES.map((particle, i) => (
                 <motion.div
                   key={i}
-                  initial={{ y: -20, x: Math.random() * 10 - 5 }}
-                  animate={{ y: 250, x: Math.random() * 15 - 7.5 }}
+                  initial={{ y: -20, x: particle.initialX }}
+                  animate={{ y: 250, x: particle.targetX }}
                   transition={{ 
-                    duration: 0.5 + Math.random() * 0.2, 
+                    duration: particle.duration,
                     repeat: Infinity, 
-                    delay: Math.random() * 0.5,
+                    delay: particle.delay,
                     ease: "linear"
                   }}
                   className="absolute top-0 left-1/2 w-1.5 h-1.5 rounded-sm"

@@ -117,7 +117,7 @@ const createLoginResponse = async (user, completedSessionId = null) => {
 // Register
 router.post('/register', async (req, res) => {
   try {
-    const { role = 'student', grade } = req.body || {};
+    const { role = 'student' } = req.body || {};
 
     if (role !== 'student') {
       return res.status(403).json({ message: 'Đăng ký công khai chỉ dành cho tài khoản học sinh.' });
@@ -137,7 +137,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Email đã được sử dụng' });
     }
 
-    const user = await User.create({ username, password, email, role: 'student', grade });
+    const user = await User.create({ username, password, email, role: 'student' });
     return res.status(201).json(await createLoginResponse(user));
   } catch (err) {
     return sendAuthRouteError(res, err, 'Lỗi đăng ký');

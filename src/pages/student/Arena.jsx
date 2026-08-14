@@ -887,7 +887,7 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
         onMatchEnd?.({ result, score: finalScore, phong_dau_id: room.id, isPractice: room.isPractice });
       }
     }, 1200);
-  }, [answered, currentQ, currentQIndex, gameOver, onMatchEnd, questions.length, room.id, score]);
+  }, [answered, currentQ, currentQIndex, gameOver, onMatchEnd, questions.length, room.id, room.isPractice, score]);
 
   useEffect(() => {
     if (isWaiting || answered !== null || gameOver || questions.length === 0 || loadingQ) return;

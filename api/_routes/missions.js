@@ -16,11 +16,6 @@ router.get('/', auth, async (req, res) => {
     const craftingTasksData = craftingTasks.map(task => {
       const uTask = userTasks.tasks[task.id] || { progress: 0, claimed: false, history: [], rewards: [] };
       const rewardsToDisplay = (uTask.rewards && uTask.rewards.length > 0) ? uTask.rewards : task.rewards;
-      
-      const rewardsText = rewardsToDisplay.map(r => {
-        const symbol = r.ingredientId.replace('ing_', '').toUpperCase();
-        return `${r.amount}x ${symbol}`;
-      }).join(', ');
 
       return {
         id: task.id,

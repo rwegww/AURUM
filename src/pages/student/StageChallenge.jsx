@@ -32,10 +32,13 @@ const StageChallenge = () => {
           const currentIndex = sortedLessons.findIndex(l => l.lessonId === lessonId);
           if (currentIndex !== -1) {
             const isFirstDefaultUnlocked = currentIndex === 0 && ['6', '7', '8'].includes(grade);
+            const isPlacedFirstLesson = currentIndex === 0
+              && user?.balancingProgress?.placement?.status === 'placed'
+              && String(user.balancingProgress.placement.assignedGrade) === String(grade);
             const isSelfUnlocked = user?.unlockedLessons?.includes(lessonId);
             const isPrevUnlocked = currentIndex > 0 && user?.unlockedLessons?.includes(sortedLessons[currentIndex - 1].lessonId);
             
-            if (!isFirstDefaultUnlocked && !isSelfUnlocked && !isPrevUnlocked) {
+            if (!isFirstDefaultUnlocked && !isPlacedFirstLesson && !isSelfUnlocked && !isPrevUnlocked) {
               console.warn('Truy cập bị chặn: Bài học chưa được mở khóa (cần pass test học vượt hoặc hoàn thành bài trước)');
               navigate(`/classroom/${grade}/journey`);
             }

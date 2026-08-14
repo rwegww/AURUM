@@ -1,26 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '../common/Avatar';
 import { Bell, FileText, Hourglass, MessageCircle, School, X, Search, ChevronDown, Leaf } from 'lucide-react';
-
-const READ_NOTIFICATION_STORAGE_PREFIX = 'teacher_read_notification_ids';
-
-const normalizeReadIds = (ids) => (
-  Array.isArray(ids)
-    ? Array.from(new Set(ids.filter((id) => typeof id === 'string'))).slice(-500)
-    : []
-);
-
-const loadReadIds = (storageKey) => {
-  if (typeof window === 'undefined') return [];
-  try {
-    return normalizeReadIds(JSON.parse(window.localStorage.getItem(storageKey) || '[]'));
-  } catch {
-    return [];
-  }
-};
 
 const getNotificationIcon = (type) => {
   switch (type) {
@@ -169,94 +152,6 @@ export const NotificationPanel = ({
 
 const ManagementHeader = ({ title }) => {
   const { user } = useAuth();
-  const storageKey = `${READ_NOTIFICATION_STORAGE_PREFIX}:${user?.id || user?.username || 'unknown'}`;
-  const desktopNotificationRef = useRef(null);
-  const desktopNotificationButtonRef = useRef(null);
-  const [notifications, setNotifications] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-  const [readIds, setReadIds] = useState(() => loadReadIds(storageKey));
-
-  const saveReadIds = useCallback((ids) => {
-    const normalizedIds = normalizeReadIds(ids);
-    try {
-      window.localStorage.getItem(storageKey);
-      window.localStorage.setItem(storageKey, JSON.stringify(normalizedIds));
-    } catch (err) {
-      console.warn('Lỗi lưu trạng thái thông báo:', err);
-    }
-    setReadIds(normalizedIds);
-  }, [storageKey]);
-
-  const fetchNotifications = useCallback(async (signal) => {
-    try {
-      const token = window.localStorage.getItem('token');
-      if (!token) return;
-      const res = await fetch('/api/classes/teacher/notifications', {
-        headers: { 'Authorization': `Bearer ${token}` },
-        signal,
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const validNotifications = Array.isArray(data)
-          ? Array.from(new Map(
-            data
-              .filter((notification) => notification && typeof notification.id === 'string')
-              .map((notification) => [notification.id, notification]),
-          ).values())
-          : [];
-        setNotifications(validNotifications);
-      }
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Lỗi tải thông báo:', err);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (user?.role !== 'teacher') return undefined;
-    const controller = new AbortController();
-    let nextPoll;
-    const poll = async () => {
-      await fetchNotifications(controller.signal);
-      if (!controller.signal.aborted) {
-        nextPoll = window.setTimeout(poll, 30000);
-      }
-    };
-    poll();
-    return () => {
-      controller.abort();
-      window.clearTimeout(nextPoll);
-    };
-  }, [user?.id, user?.role, fetchNotifications]);
-
-  const unreadCount = useMemo(() => {
-    return notifications.filter(n => !readIds.includes(n.id)).length;
-  }, [notifications, readIds]);
-
-  const markAsRead = (id) => {
-    if (!readIds.includes(id)) saveReadIds([...readIds, id]);
-  };
-
-  const toggleReadStatus = (id) => {
-    if (readIds.includes(id)) {
-      saveReadIds(readIds.filter((readId) => readId !== id));
-    } else {
-      saveReadIds([...readIds, id]);
-    }
-  };
-
-  const markAllAsRead = () => {
-    saveReadIds([...readIds, ...notifications.map((notification) => notification.id)]);
-  };
-
-  const toggleNotifications = () => {
-    setIsOpen((open) => !open);
-  };
-
-  const closeNotifications = () => {
-    setIsOpen(false);
-  };
 
   return (
     <header className="hidden md:flex min-h-[112px] bg-white/95 backdrop-blur-md px-8 py-5 border-b border-slate-200/60 items-center justify-between sticky top-0 z-30">

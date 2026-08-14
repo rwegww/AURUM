@@ -10,6 +10,13 @@ const sessionId = 'session-1';
 const nguoi_dung = {
   student: { id: 'student', username: 'student', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   outsider: { id: 'outsider', username: 'outsider', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
+  newStudent: {
+    id: 'newStudent', username: 'newStudent', role: 'student', currentSessionId: sessionId, xp: 0, level: 1,
+    balancingProgress: {
+      completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {},
+      placement: { required: true, status: 'unassigned', assignedGrade: null, attempts: 0, history: [] },
+    },
+  },
   teacher: { id: 'teacher', username: 'teacher', role: 'teacher', currentSessionId: sessionId, xp: 0, level: 1 },
   otherTeacher: { id: 'otherTeacher', username: 'otherTeacher', role: 'teacher', currentSessionId: sessionId, xp: 0, level: 1 },
   admin: { id: 'admin', username: 'admin', role: 'admin', currentSessionId: sessionId, xp: 0, level: 1 },
@@ -28,6 +35,7 @@ const userModel = {
 
 const lessonModel = {
   countAll: vi.fn(async () => 0),
+  find: vi.fn(async ({ classId }) => [{ id: `hoa${classId}_bai1`, lessonId: `hoa${classId}_bai1`, classId: Number(classId), title: 'Bài 1', order: 1 }]),
   findById: vi.fn(async (id) => ({ id, lessonId: id })),
   update: vi.fn(async (id, lesson) => ({ ...lesson, id, lessonId: id })),
 };
@@ -376,6 +384,64 @@ describe('security acceptance matrix', () => {
 
     expect(res.status).toBe(403);
     expect(userModel.create).not.toHaveBeenCalled();
+  });
+
+  it('starts initial placement without exposing correct answers', async () => {
+    const res = await request(app)
+      .post('/api/user/placement/start')
+      .set('Authorization', `Bearer ${tokenFor('newStudent')}`)
+      .send({ grade: 9 });
+
+    expect(res.status).toBe(200);
+    expect(res.body.assessment.grade).toBe('9');
+    expect(res.body.assessment.questions).toHaveLength(7);
+    expect(res.body.assessment.questions[0]).not.toHaveProperty('correctAnswer');
+    expect(userModel.update).toHaveBeenCalledWith('newStudent', expect.objectContaining({
+      balancingProgress: expect.objectContaining({
+        placement: expect.objectContaining({ status: 'testing', selectedGrade: '9', firstLessonId: 'hoa9_bai1' }),
+      }),
+    }));
+  });
+
+  it('confirms a grade only after the server grades a valid active attempt', async () => {
+    userModel.findById.mockImplementation(async (id) => (id === 'newStudent' ? {
+      ...nguoi_dung.newStudent,
+      balancingProgress: {
+        ...nguoi_dung.newStudent.balancingProgress,
+        placement: {
+          required: true, status: 'testing', assignedGrade: null, selectedGrade: '9',
+          attemptId: 'attempt-1', attempts: 1, history: [], firstLessonId: 'hoa9_bai1', firstLessonTitle: 'Bài 1', firstLessonOrder: 1,
+        },
+      },
+    } : nguoi_dung[id] || null));
+
+    const res = await request(app)
+      .post('/api/user/placement/submit')
+      .set('Authorization', `Bearer ${tokenFor('newStudent')}`)
+      .send({
+        attemptId: 'attempt-1',
+        answers: { 'g9-1': 1, 'g9-2': 1, 'g9-3': 0, 'g9-4': 1, 'g9-5': 0, 'g9-6': 0, 'g9-7': 0 },
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.result).toMatchObject({ passed: true, grade: '9', percent: 71 });
+    expect(userModel.update).toHaveBeenCalledWith('newStudent', expect.objectContaining({
+      balancingProgress: expect.objectContaining({
+        placement: expect.objectContaining({ status: 'placed', assignedGrade: '9', attemptId: null }),
+      }),
+      studyPlan: expect.objectContaining({ grade: '9' }),
+    }));
+  });
+
+  it('blocks progress writes outside the confirmed placement grade', async () => {
+    lessonModel.findById.mockResolvedValueOnce({ id: 'hoa9_bai1', lessonId: 'hoa9_bai1', classId: 9 });
+    const res = await request(app)
+      .post('/api/user/lesson-segment')
+      .set('Authorization', `Bearer ${tokenFor('newStudent')}`)
+      .send({ lessonId: 'hoa9_bai1', level: 'level1', stars: 3 });
+
+    expect(res.status).toBe(403);
+    expect(userModel.update).not.toHaveBeenCalled();
   });
 
   it('rejects a non-string teacher proof URL without leaking an internal error', async () => {

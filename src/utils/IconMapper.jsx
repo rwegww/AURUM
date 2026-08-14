@@ -99,15 +99,6 @@ const iconMap = {
   '🎓': GraduationCap
 };
 
-export const getIconComponent = (iconName) => {
-  if (!iconName) return FlaskConical;
-  if (typeof iconName === 'string') {
-    const key = iconName.trim();
-    return iconMap[key] || iconMap[key.toLowerCase()] || FlaskConical;
-  }
-  return FlaskConical;
-};
-
 export const RenderIcon = ({ iconName, className = "w-5 h-5", ...props }) => {
   // If iconName is already a valid React element/node, render directly
   if (React.isValidElement(iconName)) {
@@ -131,4 +122,3 @@ export const RenderIcon = ({ iconName, className = "w-5 h-5", ...props }) => {
   // Smart fallback SVG icon so raw string text is never displayed inside icon boxes
   return <FlaskConical className={className} {...props} />;
 };
-

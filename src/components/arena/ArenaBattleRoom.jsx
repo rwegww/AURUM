@@ -354,10 +354,6 @@ const CalculationGame = ({ task, onSubmit, submitting, disabled }) => {
   const [value, setValue] = useState('');
   const payload = task.payload || {};
 
-  useEffect(() => {
-    setValue('');
-  }, [task.id]);
-
   const numberValue = parseNumber(value);
   const canSubmit = Number.isFinite(numberValue);
 
@@ -385,10 +381,6 @@ const BalancingGame = ({ task, onSubmit, submitting, disabled }) => {
   const min = Number(task.payload?.minCoefficient || 1);
   const max = Number(task.payload?.maxCoefficient || 12);
   const [coefficients, setCoefficients] = useState(() => formulas.map(() => 1));
-
-  useEffect(() => {
-    setCoefficients(formulas.map(() => 1));
-  }, [task.id, formulas.length]);
 
   const reactantCounts = useMemo(
     () => sideAtomCounts(equation.reactants || [], coefficients.slice(0, splitIndex)),
@@ -498,13 +490,6 @@ const AtomMatchGame = ({ task, onSubmit, submitting, disabled }) => {
   const [selected, setSelected] = useState(null);
   const [dragging, setDragging] = useState(null);
   const [dragOverSlot, setDragOverSlot] = useState(null);
-
-  useEffect(() => {
-    setPlacements({});
-    setSelected(null);
-    setDragging(null);
-    setDragOverSlot(null);
-  }, [task.id]);
 
   const placeAtom = (slotId, symbol) => {
     if (!symbol || disabled || submitting) return;
@@ -658,10 +643,6 @@ const ElectronMatchGame = ({ task, onSubmit, submitting, disabled }) => {
   const labels = payload.shellLabels || ['K', 'L', 'M'];
   const [shells, setShells] = useState(() => labels.map(() => 0));
 
-  useEffect(() => {
-    setShells(labels.map(() => 0));
-  }, [task.id, labels.length]);
-
   const total = shells.reduce((sum, value) => sum + Number(value || 0), 0);
   const target = Number(payload.atomicNumber || 0);
   const canSubmit = target > 0 && total === target;
@@ -745,13 +726,13 @@ const MiniGameRenderer = React.memo(({ task, onSubmit, submitting, disabled }) =
   const props = { task, onSubmit, submitting, disabled };
   switch (task.gameType) {
     case 'calculation':
-      return <CalculationGame {...props} />;
+      return <CalculationGame key={task.id} {...props} />;
     case 'balancing':
-      return <BalancingGame {...props} />;
+      return <BalancingGame key={task.id} {...props} />;
     case 'atom_match':
-      return <AtomMatchGame {...props} />;
+      return <AtomMatchGame key={task.id} {...props} />;
     case 'electron_match':
-      return <ElectronMatchGame {...props} />;
+      return <ElectronMatchGame key={task.id} {...props} />;
     default:
       return (
         <div className="rounded-lg border border-white/10 bg-white p-8 text-center text-viet-text">

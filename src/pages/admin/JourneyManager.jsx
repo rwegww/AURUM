@@ -28,7 +28,7 @@ const JourneyManager = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState(8);
-  const [selectedProgram, setSelectedProgram] = useState('ketnoi');
+  const selectedProgram = 'ketnoi';
   const [loadError, setLoadError] = useState('');
   const [saveError, setSaveError] = useState('');
   const [saveNotice, setSaveNotice] = useState('');

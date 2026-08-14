@@ -114,7 +114,8 @@ const defaultBalancingProgress = {
   completedNodeIds: [],
   completedCount: 0,
   passedGrades: [],
-  lessonStars: {}
+  lessonStars: {},
+  placement: null,
 };
 
 const isMissingDbObject = (error) =>
@@ -161,7 +162,10 @@ const normalizeBalancingProgress = (progress) => {
     completedNodeIds: progress.completedNodeIds || [],
     completedCount: progress.completedCount || 0,
     passedGrades: progress.passedGrades || [],
-    lessonStars: progress.lessonStars || {}
+    lessonStars: progress.lessonStars || {},
+    placement: progress.placement && typeof progress.placement === 'object' && !Array.isArray(progress.placement)
+      ? progress.placement
+      : null,
   };
 };
 
@@ -492,7 +496,19 @@ export const User = {
     // 2. Initial Unlocked Content (if any)
     const initialLessons = userData.unlockedLessons || [];
     const initialChemicals = userData.unlockedChemicals || [];
-    const initialBalancingProgress = { ...defaultBalancingProgress };
+    const initialBalancingProgress = {
+      ...defaultBalancingProgress,
+      placement: userPayload.role === 'student'
+        ? {
+            required: true,
+            status: 'unassigned',
+            assignedGrade: null,
+            selectedGrade: null,
+            attempts: 0,
+            history: [],
+          }
+        : null,
+    };
 
     const { unlockedChemicals, inventory } = syncUserProgressData(initialChemicals, userData.inventory);
 

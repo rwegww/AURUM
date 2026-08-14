@@ -304,6 +304,9 @@ const GradeJourney = () => {
 
   const isFirstLessonDefaultUnlocked = ['6', '7', '8'].includes(grade);
   const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
+  const assignedPlacementGrade = user?.balancingProgress?.placement?.status === 'placed'
+    ? String(user.balancingProgress.placement.assignedGrade)
+    : null;
 
   const bai_hocStatus = bai_hoc.map((lesson, index) => {
     const previousLessonStars = index > 0
@@ -316,7 +319,7 @@ const GradeJourney = () => {
     const isCompleted = LEVELS.every((level) => currentLessonStars[level] > 0);
     const isUnlocked = user?.role === 'admin'
       || user?.role === 'teacher'
-      || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed))
+      || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed || assignedPlacementGrade === String(grade)))
       || previousLessonFullyCompleted
       || isCompleted;
 
@@ -341,6 +344,7 @@ const GradeJourney = () => {
   const isLessonOneComplete = LEVELS.every((level) => lessonOneStars[level] > 0);
   const canOpenBook = isLessonOneComplete || user?.role === 'admin' || user?.role === 'teacher';
   const showPlacementTest = grade !== '8'
+    && user?.balancingProgress?.placement?.required !== true
     && AVAILABLE_PLACEMENT_TEST_GRADES.includes(String(grade))
     && bai_hoc.length > 0
     && !user?.balancingProgress?.passedGrades?.includes(grade)

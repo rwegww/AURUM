@@ -177,8 +177,6 @@ const ApprovalManager = () => {
   const [loadError, setLoadError] = useState('');
   const [actionError, setActionError] = useState('');
   const [actionNotice, setActionNotice] = useState('');
-  const [actionFilter, setActionFilter] = useState('');
-  const [requesterFilter, setRequesterFilter] = useState('');
   const [sortField, setSortField] = useState(null);
   const [sortDirection, setSortDirection] = useState('desc');
   const requestSequence = useRef(0);
@@ -197,15 +195,6 @@ const ApprovalManager = () => {
       setSortDirection('asc');
     }
   };
-
-  const resetFilters = () => {
-    setActionFilter('');
-    setRequesterFilter('');
-    setSortField(null);
-    setSortDirection('desc');
-  };
-
-  const hasActiveFilters = Boolean(actionFilter || requesterFilter || sortField);
 
   const fetchApprovals = useCallback(async ({
     nextStatus = status,
@@ -260,22 +249,6 @@ const ApprovalManager = () => {
   const filteredApprovals = useMemo(() => {
     let result = [...approvals];
 
-    if (actionFilter) {
-      const kw = actionFilter.trim().toLocaleLowerCase('vi');
-      result = result.filter((item) =>
-        String(item.actionLabel || '').toLocaleLowerCase('vi').includes(kw) ||
-        JSON.stringify(item.payload || {}).toLocaleLowerCase('vi').includes(kw)
-      );
-    }
-
-    if (requesterFilter) {
-      const kw = requesterFilter.trim().toLocaleLowerCase('vi');
-      result = result.filter((item) => {
-        const name = item.requester?.username || item.requestedBy || '';
-        return String(name).toLocaleLowerCase('vi').includes(kw);
-      });
-    }
-
     if (sortField) {
       result.sort((a, b) => {
         let valA, valB;
@@ -304,7 +277,7 @@ const ApprovalManager = () => {
     }
 
     return result;
-  }, [approvals, actionFilter, requesterFilter, sortField, sortDirection]);
+  }, [approvals, sortField, sortDirection]);
 
   const approveRequest = async (id) => {
     if (actingId) return;

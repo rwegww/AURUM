@@ -28,7 +28,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('student');
   const [proofFile, setProofFile] = useState(null);
-  const [grade, setGrade] = useState('8');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
@@ -80,7 +79,7 @@ const Register = () => {
           setError(result.message);
         }
       } else {
-        const result = await register(username, password, email, 'student', '', grade);
+        const result = await register(username, password, email, 'student');
         if (result.success) {
           navigate('/login');
         } else {
@@ -237,34 +236,6 @@ const Register = () => {
                 </div>
               </div>
            </div>
-
-           {role === 'student' && (
-             <motion.div 
-               initial={{ opacity: 0, height: 0 }}
-               animate={{ opacity: 1, height: 'auto' }}
-               className="space-y-1 mt-2"
-             >
-               <label className="text-[9px] font-black text-viet-text-light uppercase tracking-[1.5px] pl-1 opacity-60">Khối lớp của bạn</label>
-               <div className="relative group">
-                 <select 
-                   required
-                   className="w-full h-11 pl-4 pr-4 rounded-xl bg-slate-50 border-2 border-transparent focus:bg-white focus:border-viet-green transition-all outline-none text-[13px] font-bold text-viet-text shadow-sm appearance-none"
-                   value={grade}
-                   onChange={(e) => setGrade(e.target.value)}
-                 >
-                   <option value="" disabled>Chọn khối lớp...</option>
-                   <option value="8">Lớp 8</option>
-                   <option value="9">Lớp 9</option>
-                   <option value="10">Lớp 10</option>
-                   <option value="11">Lớp 11</option>
-                   <option value="12">Lớp 12</option>
-                 </select>
-                 <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-400">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                 </div>
-               </div>
-             </motion.div>
-           )}
 
             {role === 'teacher' && (
               <div className="space-y-2 mt-4">

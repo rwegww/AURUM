@@ -6,6 +6,7 @@ import { AuthProvider } from '@/context/AuthContext'
 import Navbar from '@/components/navigation/Navbar'
 import FloatingWidget from '@/components/common/FloatingWidget'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
+import JourneyPlacementRoute from '@/components/auth/JourneyPlacementRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
 import { MotionSystem, PageTransition } from '@/components/common/MotionSystem'
 
@@ -143,12 +144,12 @@ function AppContent() {
           <Route path="/periodic-table" element={<ProtectedRoute><PeriodicTable /></ProtectedRoute>} />
           <Route path="/classroom" element={<ProtectedRoute><Classroom /></ProtectedRoute>} />
           <Route path="/my-class" element={<ProtectedRoute><MyClass /></ProtectedRoute>} />
-          <Route path="/classroom/:grade/journey" element={<ProtectedRoute><GradeJourney /></ProtectedRoute>} />
-          <Route path="/classroom/:grade/journey/:lessonId/intro" element={<ProtectedRoute><StageIntro /></ProtectedRoute>} />
-          <Route path="/classroom/:grade/journey/:lessonId/story" element={<ProtectedRoute><StageStory /></ProtectedRoute>} />
-          <Route path="/classroom/:grade/journey/:lessonId/challenge" element={<ProtectedRoute><StageChallenge /></ProtectedRoute>} />
-          <Route path="/classroom/:grade/journey/:lessonId/quiz" element={<ProtectedRoute><StageQuiz /></ProtectedRoute>} />
-          <Route path="/classroom/:grade/journey/:lessonId/reward" element={<ProtectedRoute><StageReward /></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey" element={<ProtectedRoute><JourneyPlacementRoute><GradeJourney /></JourneyPlacementRoute></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/intro" element={<ProtectedRoute><JourneyPlacementRoute><StageIntro /></JourneyPlacementRoute></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/story" element={<ProtectedRoute><JourneyPlacementRoute><StageStory /></JourneyPlacementRoute></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/challenge" element={<ProtectedRoute><JourneyPlacementRoute><StageChallenge /></JourneyPlacementRoute></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/quiz" element={<ProtectedRoute><JourneyPlacementRoute><StageQuiz /></JourneyPlacementRoute></ProtectedRoute>} />
+          <Route path="/classroom/:grade/journey/:lessonId/reward" element={<ProtectedRoute><JourneyPlacementRoute><StageReward /></JourneyPlacementRoute></ProtectedRoute>} />
           <Route path="/lab" element={<ProtectedRoute><ChemLab /></ProtectedRoute>} />
           <Route path="/lab/simulator" element={<ProtectedRoute><LabSimulatorPage /></ProtectedRoute>} />
           <Route path="/lab/discovery" element={<ProtectedRoute><DiscoveryJournalPage /></ProtectedRoute>} />
