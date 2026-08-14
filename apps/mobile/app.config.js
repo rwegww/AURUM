@@ -6,11 +6,16 @@ module.exports = {
     scheme: "aurum",
     version: "0.1.0",
     orientation: "portrait",
+    icon: "./assets/logo.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
     android: {
       package: "vn.aurumchemistry.app",
-      usesCleartextTraffic: true
+      usesCleartextTraffic: true,
+      adaptiveIcon: {
+        foregroundImage: "./assets/logo.png",
+        backgroundColor: "#ffffff"
+      }
     },
     ios: {
       bundleIdentifier: "vn.aurumchemistry.app"
