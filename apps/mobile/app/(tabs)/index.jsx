@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -101,23 +101,43 @@ export default function HomeTab() {
       </Card>
 
       <SectionTitle title="Đi nhanh" />
-      <View style={styles.moduleGrid}>
-        {moduleCards.map((item) => (
-          <Pressable
-            key={item.title}
-            onPress={() => router.push(item.href)}
-            style={({ pressed }) => [
-              styles.moduleCard,
-              pressed ? { transform: [{ translateY: 2 }] } : null
-            ]}
-          >
-            <View style={[styles.moduleIcon, { backgroundColor: `${item.color}18` }]}>
-              <Ionicons name={item.icon} size={24} color={item.color} />
-            </View>
-            <Text style={styles.moduleTitle}>{item.title}</Text>
-            <Text style={styles.moduleSubtitle}>{item.subtitle}</Text>
-          </Pressable>
-        ))}
+      <View style={styles.gridStack}>
+        <View style={styles.gridRow}>
+          {moduleCards.slice(0, 2).map((item) => (
+            <Pressable
+              key={item.title}
+              onPress={() => router.push(item.href)}
+              style={({ pressed }) => [
+                styles.moduleCard,
+                pressed ? { transform: [{ translateY: 2 }] } : null
+              ]}
+            >
+              <View style={[styles.moduleIcon, { backgroundColor: `${item.color}18` }]}>
+                <Ionicons name={item.icon} size={24} color={item.color} />
+              </View>
+              <Text style={styles.moduleTitle}>{item.title}</Text>
+              <Text style={styles.moduleSubtitle}>{item.subtitle}</Text>
+            </Pressable>
+          ))}
+        </View>
+        <View style={styles.gridRow}>
+          {moduleCards.slice(2, 4).map((item) => (
+            <Pressable
+              key={item.title}
+              onPress={() => router.push(item.href)}
+              style={({ pressed }) => [
+                styles.moduleCard,
+                pressed ? { transform: [{ translateY: 2 }] } : null
+              ]}
+            >
+              <View style={[styles.moduleIcon, { backgroundColor: `${item.color}18` }]}>
+                <Ionicons name={item.icon} size={24} color={item.color} />
+              </View>
+              <Text style={styles.moduleTitle}>{item.title}</Text>
+              <Text style={styles.moduleSubtitle}>{item.subtitle}</Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
 
       <SectionTitle title="Nhiệm vụ" actionLabel="Tải lại" onAction={dashboard.reload} />
@@ -246,14 +266,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: spacing.sm
   },
-  moduleGrid: {
+  gridStack: {
+    gap: spacing.md
+  },
+  gridRow: {
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: spacing.md
   },
   moduleCard: {
-    width: "47.7%",
-    minHeight: 154,
+    flex: 1,
+    minHeight: 140,
     backgroundColor: colors.surface,
     borderColor: colors.border,
     borderWidth: 1,
