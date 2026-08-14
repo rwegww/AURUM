@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { Link } from 'react-router-dom';
 import Avatar from '@/components/common/Avatar';
 import { useTranslation, Trans } from 'react-i18next';
 import UserActivityHistory from '@/components/profile/UserActivityHistory';
-import { Settings as SettingsIcon, Flame, FlaskConical, Droplet, Wind, Hexagon } from 'lucide-react';
+import { Settings as SettingsIcon, Flame, FlaskConical, Droplet, Wind, Hexagon, GraduationCap, School } from 'lucide-react';
 import { chemicals } from '@/data/reactions/chemicals';
 
 const ProfileCard = ({ title, value, icon, color }) => (
@@ -30,6 +30,18 @@ const normalizeChemicalLabel = (item) => {
 const Profile = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
+  const [enrolledClasses, setEnrolledClasses] = useState([]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token || user?.role !== 'student') return;
+    fetch('/api/classes', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setEnrolledClasses(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, [user]);
 
   if (!user) {
     return (
@@ -41,6 +53,11 @@ const Profile = () => {
       </div>
     );
   }
+
+  const studentGrade = user.grade 
+    || user.studyPlan?.grade 
+    || user.balancingProgress?.placement?.assignedGrade 
+    || null;
 
   const unlockedChemicals = (user.unlockedChemicals || [])
     .map(normalizeChemicalLabel)
@@ -71,6 +88,21 @@ const Profile = () => {
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-2">
                     <h1 className="text-4xl md:text-5xl font-black text-white">{user.username}</h1>
                     <span className="px-3 py-1 bg-white/10 text-white rounded-full text-[11px] font-black uppercase tracking-widest border border-white/20">{t('profile.member_role')}</span>
+                    
+                    {studentGrade && (
+                      <span className="px-3 py-1 bg-viet-green/20 text-viet-green rounded-full text-[11px] font-black uppercase tracking-widest border border-viet-green/40 flex items-center gap-1.5 shadow-sm">
+                        <GraduationCap className="w-3.5 h-3.5" />
+                        Khối {studentGrade}
+                      </span>
+                    )}
+
+                    {enrolledClasses.map(cls => (
+                      <span key={cls.id} className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-[11px] font-black uppercase tracking-widest border border-blue-400/30 flex items-center gap-1.5 shadow-sm">
+                        <School className="w-3.5 h-3.5" />
+                        Lớp {cls.name}
+                      </span>
+                    ))}
+
                     <Link 
                       to="/settings" 
                       className="p-2.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white rounded-2xl transition-all flex items-center justify-center" 
@@ -119,6 +151,72 @@ const Profile = () => {
                   <span className="text-[13px] font-bold text-white/80">{t('profile.online_status')}</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Section: Thông tin Lớp học & Khối học */}
+        <div className="mb-16 bg-white rounded-[32px] p-8 border border-viet-border shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-viet-green/10 text-viet-green flex items-center justify-center shrink-0">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-black text-viet-text">Thông tin Lớp học & Khối học</h3>
+                <p className="text-xs font-bold text-viet-text-light">Khối trình độ và danh sách lớp học chính thức của học sinh</p>
+              </div>
+            </div>
+            <Link to="/my-class" className="px-5 py-2.5 bg-viet-green/10 hover:bg-viet-green text-viet-green hover:text-white rounded-2xl font-black text-xs transition-all flex items-center gap-2 shrink-0">
+              <School className="w-4 h-4" />
+              Vào Lớp học →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Card Khối học */}
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">
+              <div>
+                <span className="text-[11px] font-black uppercase tracking-widest text-viet-text-light/60">Khối trình độ học tập</span>
+                <h4 className="text-2xl font-black text-viet-text mt-1">
+                  {studentGrade ? `Khối ${studentGrade}` : 'Chưa phân khối'}
+                </h4>
+                <p className="text-xs font-medium text-slate-500 mt-1">
+                  {studentGrade ? `Đang học theo lộ trình Hóa học Lớp ${studentGrade}` : 'Chưa chọn hoặc kiểm tra phân lớp ban đầu'}
+                </p>
+              </div>
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-black text-xl shrink-0">
+                {studentGrade ? `${studentGrade}` : '?'}
+              </div>
+            </div>
+
+            {/* Card Lớp tham gia */}
+            <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100">
+              <span className="text-[11px] font-black uppercase tracking-widest text-viet-text-light/60">Lớp học từ Giáo viên</span>
+              {enrolledClasses.length > 0 ? (
+                <div className="space-y-3 mt-3">
+                  {enrolledClasses.map((cls) => (
+                    <div key={cls.id} className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200">
+                      <div>
+                        <span className="font-black text-sm text-viet-text">{cls.name}</span>
+                        {cls.teacher?.username && (
+                          <span className="text-xs font-medium text-slate-500 block">GV: {cls.teacher.username}</span>
+                        )}
+                      </div>
+                      <span className="px-3 py-1 bg-viet-green/10 text-viet-green text-xs font-black rounded-lg">
+                        Mã: {cls.code}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-3">
+                  <p className="text-xs font-medium text-slate-500 mb-3">Chưa gia nhập lớp học nào từ Giáo viên.</p>
+                  <Link to="/my-class" className="inline-block text-xs font-black text-viet-green hover:underline">
+                    + Nhập mã gia nhập lớp ngay
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -276,4 +374,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

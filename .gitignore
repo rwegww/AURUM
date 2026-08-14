@@ -39,4 +39,6 @@ dist-ssr
 scratch/
 backups/
 anh/
+*.zip
+
 

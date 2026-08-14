@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Alert, Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import {
   Card,
@@ -30,6 +30,19 @@ export default function ProfileTab() {
   const [joinCode, setJoinCode] = React.useState("");
   const [savingPlan, setSavingPlan] = React.useState(false);
   const [joining, setJoining] = React.useState(false);
+  const [myClasses, setMyClasses] = React.useState([]);
+
+  const studentGrade = user?.grade 
+    || user?.studyPlan?.grade 
+    || user?.balancingProgress?.placement?.assignedGrade 
+    || null;
+
+  React.useEffect(() => {
+    if (!token || user?.role !== 'student') return;
+    classApi.list(token)
+      .then(data => setMyClasses(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, [token, user]);
 
   const studyPlan = {
     dailyLessonTarget: user?.studyPlan?.dailyLessonTarget || 1,
@@ -59,6 +72,7 @@ export default function ProfileTab() {
       setJoinCode("");
       Alert.alert("Đã tham gia lớp", "Lớp học sẽ xuất hiện trong bảng điều khiển.");
       await refreshProfile();
+      classApi.list(token).then(data => setMyClasses(Array.isArray(data) ? data : []));
     } catch (error) {
       Alert.alert("Không tham gia được", error.message);
     } finally {
@@ -69,9 +83,13 @@ export default function ProfileTab() {
   return (
     <Screen>
       <ScreenHeader
-        eyebrow={roleLabel(user?.role)}
+        eyebrow={`${roleLabel(user?.role)}${studentGrade ? ` • Khối ${studentGrade}` : ''}`}
         title={user?.username || "Hồ sơ"}
-        subtitle={user?.email || "Quản lý tiến độ học tập và phiên đăng nhập."}
+        subtitle={
+          myClasses.length > 0 
+            ? `Lớp: ${myClasses.map(c => c.name).join(', ')}`
+            : (user?.email || "Quản lý tiến độ học tập và phiên đăng nhập.")
+        }
         right={<Pill label={`Cấp ${user?.level || 1}`} icon="sparkles-outline" color={colors.green} />}
       />
 
