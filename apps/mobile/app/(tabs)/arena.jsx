@@ -53,6 +53,7 @@ export default function ArenaTab() {
   const [creating, setCreating] = React.useState(false);
   const [joining, setJoining] = React.useState(false);
   const [activeState, setActiveState] = React.useState(null);
+  const isModerator = user?.role === "teacher" || user?.role === "admin";
 
   const arenaResource = useApiResource(async () => {
     const [leaderboard, rooms, battles] = await Promise.all([
@@ -72,14 +73,19 @@ export default function ArenaTab() {
     setCreating(true);
     try {
       const created = await arenaApi.createRoom(token, {
-        name: `${user?.username || "AURUM"} luyện tập`,
+        name: isModerator ? `${user?.username || "AURUM"} mở phòng` : `${user?.username || "AURUM"} luyện tập`,
         mode: "solo",
         difficulty: "auto",
-        max_players: 1,
-        is_practice: true
+        max_players: isModerator ? 2 : 1,
+        is_practice: !isModerator
       });
-      const started = await arenaApi.startRoom(token, created.room.id);
-      setActiveState(started.state);
+      if (isModerator) {
+        const waiting = await arenaApi.roomState(token, created.room.id);
+        setActiveState(waiting.state);
+      } else {
+        const started = await arenaApi.startRoom(token, created.room.id);
+        setActiveState(started.state);
+      }
     } catch (error) {
       Alert.alert("Không tạo được phòng", error.message);
     } finally {
@@ -118,6 +124,25 @@ export default function ArenaTab() {
     }
   };
 
+  React.useEffect(() => {
+    let active = true;
+    if (!token) return () => { active = false; };
+
+    arenaApi.activeRoom(token)
+      .then(async (response) => {
+        if (!active || !response?.room?.id) return;
+        const current = await arenaApi.roomState(token, response.room.id);
+        if (active && current?.state) setActiveState(current.state);
+      })
+      .catch(() => {
+        // A stale room should not block the Arena lobby from opening.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [token]);
+
   if (arenaResource.loading && !arenaResource.data) {
     return <LoadingState label="Đang tải đấu trường..." />;
   }
@@ -148,11 +173,11 @@ export default function ArenaTab() {
         <View style={styles.heroGlow}><Ionicons name="flash" size={32} color="#d9f2bd" /></View>
         <View style={styles.heroCopy}>
           <Text style={styles.heroEyebrow}>Bắt đầu trong vài giây</Text>
-          <Text style={styles.heroTitle}>Sẵn sàng thử sức?</Text>
-          <Text style={styles.heroDescription}>Chơi một mình để làm quen hoặc dùng mã phòng để đấu cùng bạn bè.</Text>
+          <Text style={styles.heroTitle}>{isModerator ? "Mở phòng cho học sinh" : "Sẵn sàng thử sức?"}</Text>
+          <Text style={styles.heroDescription}>{isModerator ? "Tạo phòng, chờ đủ người rồi theo dõi trận đấu với vai trò giáo viên." : "Chơi một mình để làm quen hoặc dùng mã phòng để đấu cùng bạn bè."}</Text>
         </View>
         <PrimaryButton
-          label={creating ? "Đang chuẩn bị..." : "Luyện tập ngay"}
+          label={creating ? "Đang chuẩn bị..." : isModerator ? "Tạo phòng đấu" : "Luyện tập ngay"}
           icon="play"
           color={colors.green}
           onPress={createPractice}

@@ -263,6 +263,39 @@ const getRoomPlayer = async (roomId, userId, statuses = ACTIVE_PLAYER_STATUSES) 
 
 const getActivePlayer = async (roomId, userId) => getRoomPlayer(roomId, userId);
 
+const demoteModeratorMembership = async (room, user) => {
+  if (!room || !user || !['teacher', 'admin'].includes(user.role) || String(room.host_id) !== String(user.id)) {
+    return room;
+  }
+
+  const membership = await getActivePlayer(room.id, user.id);
+  if (!membership) return room;
+
+  const { error: leaveError } = await supabase
+    .from('nguoi_choi')
+    .update({ status: 'left', xem_cuoi_luc: new Date().toISOString() })
+    .eq('phong_dau_id', room.id)
+    .eq('nguoi_dung_id', user.id)
+    .in('status', ACTIVE_PLAYER_STATUSES);
+  if (leaveError) throw leaveError;
+
+  const players = await getPlayers(room.id);
+  const { data: updatedRoom, error: roomError } = await supabase
+    .from('phong_dau')
+    .update({ so_nguoi_hien_tai: players.length })
+    .eq('id', room.id)
+    .select('*')
+    .single();
+  if (roomError) throw roomError;
+
+  if (room.status === 'playing' && players.length === 1) {
+    await checkAndFinishAbandonedRoom(room.id, players.length);
+    return getRoom(room.id);
+  }
+
+  return normalizeRoomRow(updatedRoom);
+};
+
 const getRoundAnswers = async (roomId, roundIndex) => {
   const { data, error } = await supabase
     .from('tra_loi_vong')
@@ -372,6 +405,26 @@ const leaveOtherActiveRooms = async (userId, keepRoomId = null) => {
   for (const roomId of otherRoomIds) {
     await leaveRoomMembership(roomId, userId);
   }
+};
+
+const joinRoomWithoutRpc = async (roomId, user) => {
+  const room = await getRoom(roomId);
+  if (room.is_practice || room.status !== 'waiting') return null;
+
+  const players = await getPlayers(roomId);
+  const alreadyJoined = players.some((player) => String(player.nguoi_dung_id) === String(user.id));
+  if (!alreadyJoined && players.length >= (room.max_players || 2)) return null;
+
+  await upsertRoomPlayer(roomId, user, 'joined');
+  const activePlayers = await getPlayers(roomId);
+  const { data: updatedRoom, error } = await supabase
+    .from('phong_dau')
+    .update({ so_nguoi_hien_tai: activePlayers.length })
+    .eq('id', roomId)
+    .select('*')
+    .single();
+  if (error) throw error;
+  return updatedRoom;
 };
 
 const selectQuestionSet = (questions) => {
@@ -617,10 +670,11 @@ const finishRoom = async (room) => {
 };
 
 const checkAndFinishAbandonedRoom = async (roomId, currentPlayersCount) => {
-  if (currentPlayersCount !== 1) return;
+  if (currentPlayersCount !== 1) return false;
   const room = await getRoom(roomId);
-  if (!room || room.status !== 'playing' || room.is_practice) return;
+  if (!room || room.status !== 'playing' || room.is_practice) return false;
   await finishRoom(room);
+  return true;
 };
 
 const canAdvanceRound = async (room) => {
@@ -685,10 +739,10 @@ router.post('/create', auth, async (req, res) => {
       p_is_practice: Boolean(is_practice),
     };
 
-    const isTeacher = req.user?.role === 'teacher';
+    const isModerator = ['teacher', 'admin'].includes(req.user?.role);
     let newRoomData, error;
 
-    if (isTeacher) {
+    if (isModerator) {
       const fallback = await supabase
         .from('phong_dau')
         .insert([{
@@ -699,23 +753,13 @@ router.post('/create', auth, async (req, res) => {
           do_kho: difficulty,
           status: 'waiting',
           so_nguoi_toi_da: maxPlayers,
-          so_nguoi_hien_tai: 1,
+          so_nguoi_hien_tai: 0,
           la_luyen_tap: is_practice,
         }])
         .select('*')
         .single();
       newRoomData = fallback.data;
       error = fallback.error;
-
-      if (!error && newRoomData) {
-        try {
-          await upsertRoomPlayer(newRoomData.id, req.user, is_practice ? 'ready' : 'joined');
-          await leaveOtherActiveRooms(req.userId, newRoomData.id);
-        } catch (playerError) {
-          await supabase.from('phong_dau').delete().eq('id', newRoomData.id);
-          throw playerError;
-        }
-      }
     } else {
       const rpcResult = await supabase.rpc('create_arena_room', rpcParams);
       newRoomData = rpcResult.data;
@@ -790,13 +834,18 @@ router.post('/join', auth, async (req, res) => {
     // The database function reserves a slot and creates/reactivates the player
     // in the same transaction.  Keeping these writes together prevents a room
     // from displaying 2/2 while its host can still only load one player.
-    const { data: updatedRoomData, error: updateError } = await supabase
+    let { data: updatedRoomData, error: updateError } = await supabase
       .rpc('join_arena_room', {
         p_room_id: phong_dau_id,
         p_user_id: req.userId,
         p_username: req.user.username || 'Ẩn danh',
         p_avatar_seed: req.user.avatarSeed || req.user.avatar_seed || req.user.username || 'Aurum',
       });
+
+    if (updateError && isMissingRpcError(updateError)) {
+      updatedRoomData = await joinRoomWithoutRpc(phong_dau_id, req.user);
+      updateError = null;
+    }
 
     if (updateError) throw updateError;
     const updatedRoom = normalizeRpcRoom(updatedRoomData);
@@ -917,11 +966,25 @@ router.get('/active-room', auth, async (req, res) => {
       .limit(1).maybeSingle();
 
     if (error) throw error;
-    if (!membership?.phong_dau_id) {
-      return res.json({ success: true, room: null });
-    }
 
-    const room = await getRoom(membership.phong_dau_id);
+    let roomId;
+    if (['teacher', 'admin'].includes(req.user?.role)) {
+      const { data: hostedRoom, error: hostedRoomError } = await supabase
+        .from('phong_dau')
+        .select('*')
+        .eq('chu_phong_id', req.userId)
+        .in('status', ['waiting', 'playing'])
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (hostedRoomError) throw hostedRoomError;
+      roomId = hostedRoom?.id;
+    }
+    roomId ||= membership?.phong_dau_id;
+
+    if (!roomId) return res.json({ success: true, room: null });
+
+    const room = await demoteModeratorMembership(await getRoom(roomId), req.user);
     if (!['waiting', 'playing'].includes(room.status)) {
       return res.json({ success: true, room: null });
     }
@@ -938,7 +1001,7 @@ router.get('/active-room', auth, async (req, res) => {
 
 router.post('/room/:id/start', auth, async (req, res) => {
   try {
-    const room = await getRoom(req.params.id);
+    const room = await demoteModeratorMembership(await getRoom(req.params.id), req.user);
     if (room.status === 'finished') return res.status(400).json({ success: false, message: 'Trận đã kết thúc.' });
     if (room.status === 'playing') {
       return res.json({ success: true, state: await buildRoomState(room, req.userId) });
@@ -1019,7 +1082,7 @@ router.post('/room/:id/start', auth, async (req, res) => {
 
 router.get('/room/:id/state', auth, async (req, res) => {
   try {
-    const room = await getRoom(req.params.id);
+    const room = await demoteModeratorMembership(await getRoom(req.params.id), req.user);
     const viewer = await getRoomPlayer(room.id, req.userId, [...ACTIVE_PLAYER_STATUSES, 'finished']);
     const canSpectate = ['teacher', 'admin'].includes(req.user?.role);
     if (!viewer && !canSpectate) {
@@ -1034,7 +1097,7 @@ router.get('/room/:id/state', auth, async (req, res) => {
 
 router.post('/room/:id/answer', auth, async (req, res) => {
   try {
-    const room = await getRoom(req.params.id);
+    const room = await demoteModeratorMembership(await getRoom(req.params.id), req.user);
     if (room.status !== 'playing') {
       return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
     }
@@ -1321,8 +1384,7 @@ router.post('/leave', auth, async (req, res) => {
     if (error) throw error;
 
     if (result && result.current_players === 1) {
-      await checkAndFinishAbandonedRoom(phong_dau_id, result.current_players);
-      result.finished = true;
+      result.finished = await checkAndFinishAbandonedRoom(phong_dau_id, result.current_players);
     }
 
     res.json({ success: true, ...result });

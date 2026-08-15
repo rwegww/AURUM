@@ -33,7 +33,7 @@ const apiCall = async (url, options = {}) => {
     },
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || 'Server error');
+  if (!res.ok) throw new Error(data.message || `Arena API trả về lỗi ${res.status}.`);
   return data;
 };
 
@@ -862,11 +862,11 @@ const WaitingRoom = ({ state, user, onStart, onLeave, onRefresh, refreshing, sta
   );
 };
 
-const FinishedRoom = ({ state, user, onContinue }) => {
+const FinishedRoom = ({ state, user, isSpectator = false, onContinue }) => {
   const players = [...(state?.players || [])].sort((a, b) => (b.score || 0) - (a.score || 0));
   const room = state?.room || {};
   const current = players.find((player) => player.nguoi_dung_id === user?.id);
-  const result = room.nguoi_thang_id
+  const result = isSpectator ? 'spectator' : room.nguoi_thang_id
     ? (room.nguoi_thang_id === user?.id ? 'win' : 'lose')
     : 'draw';
 
@@ -879,9 +879,11 @@ const FinishedRoom = ({ state, user, onContinue }) => {
           </div>
           <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">Trận đã kết thúc</p>
           <h1 className="mt-2 text-4xl font-black">
-            {result === 'win' ? 'Bạn thắng' : result === 'lose' ? 'Bạn thua' : 'Hòa điểm'}
+            {result === 'spectator' ? 'Kết quả trận đấu' : result === 'win' ? 'Bạn thắng' : result === 'lose' ? 'Bạn thua' : 'Hòa điểm'}
           </h1>
-          <p className="mt-2 text-sm font-bold text-viet-text-light">Điểm của bạn: {current?.score || 0}</p>
+          <p className="mt-2 text-sm font-bold text-viet-text-light">
+            {result === 'spectator' ? 'Bạn đang xem với vai trò quản lý phòng.' : `Điểm của bạn: ${current?.score || 0}`}
+          </p>
 
           <div className="mt-6 space-y-3 text-left">
             {players.map((player, index) => (
@@ -899,11 +901,11 @@ const FinishedRoom = ({ state, user, onContinue }) => {
 
           <button
             type="button"
-            onClick={() => onContinue({ result, score: current?.score || 0 })}
+            onClick={() => onContinue(isSpectator ? {} : { result, score: current?.score || 0 })}
             className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-viet-green px-5 text-sm font-black uppercase tracking-widest text-white transition hover:brightness-105"
           >
             <Play className="h-5 w-5" />
-            Tiếp tục
+            {isSpectator ? 'Quay lại sảnh' : 'Tiếp tục'}
           </button>
         </div>
       </div>
@@ -1118,7 +1120,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const players = state?.players || [];
   const currentTask = state?.currentQuestion;
   const currentPlayer = players.find((player) => player.nguoi_dung_id === user?.id);
-  const isSpectator = user?.role === 'teacher' && !currentPlayer;
+  const isSpectator = ['teacher', 'admin'].includes(user?.role) && !currentPlayer;
   const hasAnswered = (state?.myAnswers || []).some((answer) => answer.round_index === currentRoom?.current_round_index);
   const meta = GAME_META[currentTask?.gameType] || { label: 'Mini game', icon: FlaskConical, tone: 'text-viet-green', bg: 'bg-viet-green/15' };
   const MetaIcon = meta.icon;
@@ -1144,7 +1146,13 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
         <div className="max-w-md rounded-lg border border-white/10 bg-white/5 p-6 text-center">
           <XCircle className="mx-auto mb-4 h-10 w-10 text-red-300" />
           <p className="font-black">Không tải được phòng Arena.</p>
-          <button type="button" onClick={onLeave} className="mt-5 rounded-lg bg-viet-green px-5 py-3 font-black text-white">Quay lại</button>
+          <p className="mt-2 text-sm font-bold leading-6 text-white/60">{phan_hoi?.message || 'Máy chủ chưa trả về trạng thái phòng. Vui lòng thử lại.'}</p>
+          <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:justify-center">
+            <button type="button" onClick={refreshState} disabled={refreshing} className="rounded-lg bg-viet-green px-5 py-3 font-black text-white disabled:opacity-50">
+              {refreshing ? 'Đang tải...' : 'Thử lại'}
+            </button>
+            <button type="button" onClick={onLeave} className="rounded-lg border border-white/15 px-5 py-3 font-black text-white/70">Quay lại</button>
+          </div>
         </div>
       </div>
     );
@@ -1159,13 +1167,20 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       <FinishedRoom
         state={state}
         user={user}
-        onContinue={({ result, score }) => onMatchEnd({
-          result,
-          score,
-          phong_dau_id: currentRoom.id,
-          isPractice: currentRoom.is_practice || room.isPractice,
-          serverFinalized: true,
-        })}
+        isSpectator={isSpectator}
+        onContinue={({ result, score }) => {
+          if (isSpectator) {
+            onLeave();
+            return;
+          }
+          onMatchEnd({
+            result,
+            score,
+            phong_dau_id: currentRoom.id,
+            isPractice: currentRoom.is_practice || room.isPractice,
+            serverFinalized: true,
+          });
+        }}
       />
     );
   }
@@ -1200,7 +1215,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
             <div className="flex items-center justify-between gap-3 lg:justify-end">
               <div className="rounded-xl border border-slate-200 bg-viet-green/10 px-4 py-3 text-right shadow-sm border-viet-green/30">
                 <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Vai trò</p>
-                <p className="text-xl font-black text-viet-green">Giáo viên</p>
+                 <p className="text-xl font-black text-viet-green">Quan sát</p>
               </div>
             </div>
           </header>

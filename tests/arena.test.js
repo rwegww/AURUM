@@ -12,6 +12,7 @@ const nguoi_dung = {
   student: { id: 'student', username: 'Student', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   opponent: { id: 'opponent', username: 'Opponent', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   outsider: { id: 'outsider', username: 'Outsider', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
+  teacher: { id: 'teacher', username: 'Teacher', role: 'teacher', currentSessionId: sessionId, xp: 0, level: 1 },
 };
 
 const userModel = {
@@ -475,6 +476,32 @@ beforeEach(() => {
 });
 
 describe('arena mini game backend', () => {
+  it('creates a teacher-owned room without adding the teacher as a player', async () => {
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0.2);
+
+    const created = await request(app)
+      .post('/api/arena/create')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({ name: 'Teacher room', mode: 'solo', difficulty: 'auto', max_players: 2 });
+
+    random.mockRestore();
+    const roomId = created.body.room.id;
+
+    expect(created.status).toBe(201);
+    expect(created.body.room).toMatchObject({ id: roomId, host_id: 'teacher', current_players: 0 });
+    expect(arenaState.players).not.toContainEqual(expect.objectContaining({
+      phong_dau_id: roomId,
+      nguoi_dung_id: 'teacher',
+    }));
+
+    const recovered = await request(app)
+      .get('/api/arena/active-room')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+
+    expect(recovered.status).toBe(200);
+    expect(recovered.body.room.id).toBe(roomId);
+  });
+
   it('keeps both players in the same room from create through refresh and start', async () => {
     arenaState.rooms.clear();
     arenaState.players = [];
@@ -870,6 +897,21 @@ describe('arena mini game backend', () => {
 
     expect(res.status).toBe(403);
     expect(res.body.message).toContain('chủ phòng');
+  });
+
+  it('finishes the match and awards the remaining player when the opponent leaves', async () => {
+    resetArenaState(questions.calculation);
+    arenaState.room.la_luyen_tap = false;
+
+    const res = await request(app)
+      .post('/api/arena/leave')
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`)
+      .send({ phong_dau_id: 'room-1' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.finished).toBe(true);
+    expect(arenaState.room.status).toBe('finished');
+    expect(arenaState.room.nguoi_thang_id).toBe('student');
   });
 
   it('blocks advancing while the round still has time and unanswered players', async () => {

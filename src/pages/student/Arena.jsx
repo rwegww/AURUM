@@ -59,7 +59,7 @@ const apiCall = async (url, options = {}) => {
     },
   });
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || 'Server error');
+  if (!res.ok) throw new Error(data.message || `Arena API trả về lỗi ${res.status}.`);
   return data;
 };
 
@@ -498,13 +498,15 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
               <Plus className="h-5 w-5" />
               {t('arena.actions.create_room')}
             </IconButton>
-            <IconButton
-              onClick={onPractice}
-              className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text transition-colors hover:border-purple-500 hover:bg-purple-50 hover:text-purple-600"
-            >
-              <FlaskConical className="h-5 w-5" />
-              {t('arena.actions.practice_room')}
-            </IconButton>
+            {onPractice ? (
+              <IconButton
+                onClick={onPractice}
+                className="min-h-12 border border-viet-border bg-white px-5 text-sm uppercase tracking-widest text-viet-text transition-colors hover:border-purple-500 hover:bg-purple-50 hover:text-purple-600"
+              >
+                <FlaskConical className="h-5 w-5" />
+                {t('arena.actions.practice_room')}
+              </IconButton>
+            ) : null}
           </div>
         </div>
       </Panel>
@@ -1098,69 +1100,6 @@ const PlayerRoom = ({ user, room, onLeave, onMatchEnd }) => {
   );
 };
 
-const ModeratorDashboard = ({ room, onLeave }) => {
-  const { t } = useTranslation();
-  const currentPlayers = room.current_players || 1;
-  const maxPlayers = room.max_players || MODE_CONFIG[room.mode]?.maxPlayers || 2;
-
-  return (
-    <div className="min-h-screen bg-[#f8faf7] px-4 pt-[120px] pb-12">
-      <div className="mx-auto max-w-4xl">
-        <Panel className="p-5 sm:p-8">
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="text-[11px] font-black uppercase tracking-widest text-viet-green">{t('arena.ui.moderator_title')}</p>
-              <h1 className="mt-2 text-3xl font-black text-viet-text">{room.name || t('arena.moderator.leaderboard_title')}</h1>
-              <p className="mt-2 text-sm font-bold text-viet-text-light">{t('arena.ui.moderator_subtitle')}</p>
-            </div>
-            <IconButton onClick={onLeave} className="h-11 border border-viet-border px-4 text-sm uppercase tracking-widest text-red-500 hover:bg-red-50">
-              <LogOut className="h-5 w-5" />
-              {t('arena.moderator.close_btn')}
-            </IconButton>
-          </div>
-
-          <div className="rounded-lg border border-viet-border bg-slate-50 p-5 text-center">
-            <p className="text-[11px] font-black uppercase tracking-widest text-viet-text-light">
-              <Trans i18nKey="arena.moderator.instruction">
-                Join with <span className="text-viet-green">PIN</span>
-              </Trans>
-            </p>
-            <p className="mt-4 text-5xl font-black tracking-[0.25em] text-viet-text sm:text-7xl">{room.id}</p>
-          </div>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-lg border border-viet-border p-4">
-              <Gamepad2 className="mb-3 h-5 w-5 text-blue-600" />
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.mode')}</p>
-              <p className="mt-2 font-black text-viet-text">{getModeLabel(t, room.mode)}</p>
-            </div>
-            <div className="rounded-lg border border-viet-border p-4">
-              <FlaskConical className="mb-3 h-5 w-5 text-viet-green" />
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.difficulty')}</p>
-              <p className="mt-2 font-black text-viet-text">{getDifficultyLabel(t, room.difficulty)}</p>
-            </div>
-            <div className="rounded-lg border border-viet-border p-4">
-              <Users className="mb-3 h-5 w-5 text-amber-600" />
-              <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">{t('arena.room.waiting.players')}</p>
-              <p className="mt-2 font-black text-viet-text">{currentPlayers}/{maxPlayers}</p>
-            </div>
-          </div>
-
-          <div className="mt-6 rounded-lg border border-viet-border p-4">
-            <div className="mb-3 flex items-center justify-between text-[11px] font-black uppercase tracking-widest text-viet-text-light">
-              <span>{t('arena.ui.participant_status')}</span>
-              <span>{currentPlayers >= maxPlayers ? t('arena.ui.room_ready') : t('arena.ui.room_waiting')}</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full rounded-full bg-viet-green" style={{ width: `${Math.min((currentPlayers / maxPlayers) * 100, 100)}%` }} />
-            </div>
-          </div>
-        </Panel>
-      </div>
-    </div>
-  );
-};
-
 const MatchResultScreen = ({ result, score, ptsChange, onClose }) => {
   const { t } = useTranslation();
   const isWin = result === 'win';
@@ -1261,8 +1200,10 @@ const Arena = () => {
   const activateRoom = useCallback((nextRoom) => {
     if (!nextRoom?.id) throw new Error('Máy chủ không trả về mã phòng hợp lệ.');
     cancelMatchmaking();
-    setActiveRoom({ ...nextRoom, asModerator: false });
-  }, [cancelMatchmaking]);
+    const hostId = nextRoom.host_id || nextRoom.chu_phong_id;
+    const asModerator = ['teacher', 'admin'].includes(user?.role) && String(hostId) === String(userId);
+    setActiveRoom({ ...nextRoom, asModerator });
+  }, [cancelMatchmaking, user?.role, userId]);
 
   const clearActiveRoom = useCallback(() => {
     cancelMatchmaking();
@@ -1458,7 +1399,7 @@ const Arena = () => {
 
   if (activeRoom) {
     if (activeRoom.asModerator) {
-      return <ModeratorDashboard room={activeRoom} onLeave={handleLeaveRoom} />;
+      return <ArenaBattleRoom key={activeRoom.id} user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
     }
     return <ArenaBattleRoom key={activeRoom.id} user={user} room={activeRoom} onLeave={handleLeaveRoom} onMatchEnd={handleMatchEnd} />;
   }
@@ -1483,7 +1424,7 @@ const Arena = () => {
         onCreateRoom={() => setIsCreateModalOpen(true)}
         onJoinRoom={handleJoinRoom}
         onOpenBrowser={() => setIsBrowserOpen(true)}
-        onPractice={handlePractice}
+        onPractice={user?.role === 'teacher' || user?.role === 'admin' ? null : handlePractice}
       />
 
       <AnimatePresence>

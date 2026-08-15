@@ -222,6 +222,7 @@ export const arenaApi = {
   leaderboard: () => apiRequest("/api/arena/leaderboard", { auth: false }),
   rooms: () => apiRequest("/api/arena/rooms", { auth: false }),
   myBattles: (token) => apiRequest("/api/arena/my-battles", { token }),
+  activeRoom: (token) => apiRequest("/api/arena/active-room", { token }),
   createRoom: (token, body) =>
     apiRequest("/api/arena/create", {
       method: "POST",

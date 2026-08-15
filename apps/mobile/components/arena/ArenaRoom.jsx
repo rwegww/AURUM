@@ -230,6 +230,7 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
   const [state, setState] = React.useState(initialState || null);
   const [syncing, setSyncing] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
+  const [starting, setStarting] = React.useState(false);
   const [feedback, setFeedback] = React.useState(null);
   const [now, setNow] = React.useState(Date.now());
   const [serverOffset, setServerOffset] = React.useState(0);
@@ -336,11 +337,29 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
   const question = state?.currentQuestion;
   const hasAnswered = (state?.myAnswers || []).some((answer) => answer.round_index === room?.current_round_index);
   const currentPlayer = players.find((player) => player.nguoi_dung_id === user?.id);
-  const isSpectator = user?.role === "teacher" && !currentPlayer;
+  const isSpectator = ["teacher", "admin"].includes(user?.role) && !currentPlayer;
   const isHost = String(room?.host_id || room?.chu_phong_id || "") === String(user?.id || "");
+  const canStart = isHost && (room?.is_practice || players.length >= (room?.max_players || 1));
   const remainingSeconds = getRemainingSeconds(room?.round_ends_at, now + serverOffset);
   const timeLimit = question?.timeLimitSeconds || 45;
   const timerProgress = room?.status === "playing" ? Math.max(0, Math.min(1, remainingSeconds / timeLimit)) : 0;
+
+  const startRoom = React.useCallback(async () => {
+    if (!room || room.status !== "waiting" || !canStart || starting) return;
+    setStarting(true);
+    setFeedback(null);
+    try {
+      const response = await arenaApi.startRoom(token, roomId);
+      if (response?.state && mountedRef.current) {
+        setState(response.state);
+        onStateChange?.(response.state);
+      }
+    } catch (error) {
+      if (mountedRef.current) setFeedback({ type: "error", message: error.message });
+    } finally {
+      if (mountedRef.current) setStarting(false);
+    }
+  }, [canStart, onStateChange, room, roomId, starting, token]);
 
   React.useEffect(() => {
     if (room?.status === "playing" && remainingSeconds <= 0 && isHost) {
@@ -393,6 +412,16 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
           <Ionicons name="people-outline" size={28} color={colors.amber} />
           <Text style={styles.waitingTitle}>{isHost ? "Phòng đã sẵn sàng" : "Bạn đã vào phòng"}</Text>
           <Text style={styles.waitingText}>{isHost ? "Mời bạn bè bằng mã phòng hoặc bắt đầu từ web khi đã đủ người." : "Chờ chủ phòng bắt đầu. Khi trận đấu mở, câu hỏi sẽ tự xuất hiện tại đây."}</Text>
+          {isHost ? (
+            <PrimaryButton
+              label={starting ? "Đang bắt đầu..." : "Bắt đầu trận"}
+              icon="play"
+              color={colors.green}
+              onPress={startRoom}
+              disabled={!canStart || starting}
+              style={styles.startButton}
+            />
+          ) : null}
         </Card>
       ) : null}
 
@@ -492,6 +521,7 @@ const styles = StyleSheet.create({
   atomInput: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 11, borderWidth: 1, color: colors.ink, fontFamily: typography.bold, fontSize: 16, height: 42, paddingHorizontal: 10, textAlign: "center", width: 64 },
   unsupportedText: { color: colors.red, fontFamily: typography.medium, fontSize: 13, lineHeight: 20 },
   finishedCard: { alignItems: "center", gap: 8, paddingVertical: spacing.lg },
+  startButton: { alignSelf: "stretch", marginTop: spacing.sm },
   resultStack: { alignSelf: "stretch", gap: 8, marginTop: spacing.sm },
   resultRow: { alignItems: "center", backgroundColor: colors.surfaceAlt, borderRadius: radius.md, flexDirection: "row", gap: spacing.sm, padding: 10 },
   resultRank: { color: colors.muted, fontFamily: typography.bold, fontSize: 13, width: 20 },
