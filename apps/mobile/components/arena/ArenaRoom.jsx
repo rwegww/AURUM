@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Card, GhostButton, Pill, PrimaryButton, ProgressBar, TextField } from "../ui/Primitives";
 import { colors, radius, spacing, typography } from "../../constants/theme";
 import { arenaApi } from "../../services/api";
-
+import { useAuth } from "../../context/AuthContext";
 const roomStatusLabel = (status) => {
   if (status === "waiting") return "Đang chờ chủ phòng";
   if (status === "playing") return "Đang thi đấu";
@@ -226,6 +226,7 @@ const ArenaAnswer = ({ question, disabled, submitting, onSubmit }) => {
 };
 
 export default function ArenaRoom({ token, roomId, initialState, onLeave, onStateChange }) {
+  const { user } = useAuth();
   const [state, setState] = React.useState(initialState || null);
   const [syncing, setSyncing] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
@@ -304,6 +305,8 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
   const players = state?.players || initialState?.players || [];
   const question = state?.currentQuestion;
   const hasAnswered = (state?.myAnswers || []).some((answer) => answer.round_index === room?.current_round_index);
+  const currentPlayer = players.find((player) => player.nguoi_dung_id === user?.id);
+  const isSpectator = user?.role === "teacher" && !currentPlayer;
   const remainingSeconds = getRemainingSeconds(room?.round_ends_at, now);
   const timeLimit = question?.timeLimitSeconds || 45;
   const timerProgress = room?.status === "playing" ? remainingSeconds / timeLimit : 0;
@@ -356,7 +359,7 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
         </Card>
       ) : null}
 
-      {room?.status === "playing" && question ? (
+      {room?.status === "playing" && question && !isSpectator ? (
         <Card accent={colors.green} style={styles.questionCard}>
           <View style={styles.questionHeader}>
             <Pill label={questionTypeLabel(question.gameType)} color={colors.green} icon="flask-outline" />
@@ -364,6 +367,15 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
           </View>
           <Text style={styles.questionText}>{question.question}</Text>
           <ArenaAnswer key={question.id} question={question} disabled={hasAnswered || remainingSeconds <= 0} submitting={submitting} onSubmit={submitAnswer} />
+        </Card>
+      ) : null}
+
+      {room?.status === "playing" && isSpectator ? (
+        <Card accent={colors.green} style={styles.questionCard}>
+          <View style={styles.questionHeader}>
+            <Pill label="Bảng điều khiển" color={colors.green} icon="eye-outline" />
+          </View>
+          <Text style={styles.questionText}>Bạn đang quan sát phòng đấu với tư cách là Giáo viên. Theo dõi điểm số ở danh sách bên trên nhé!</Text>
         </Card>
       ) : null}
 

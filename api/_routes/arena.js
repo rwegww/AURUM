@@ -336,6 +336,7 @@ const leaveRoomMembership = async (roomId, userId) => {
     .eq('id', roomId);
 
   if (updateError) throw updateError;
+  await checkAndFinishAbandonedRoom(roomId, nextCount);
   return { deleted: false, current_players: nextCount, host_id: updates.chu_phong_id || room.host_id };
 };
 
@@ -599,6 +600,13 @@ const finishRoom = async (room) => {
   return normalizedFinishedRoom;
 };
 
+const checkAndFinishAbandonedRoom = async (roomId, currentPlayersCount) => {
+  if (currentPlayersCount !== 1) return;
+  const room = await getRoom(roomId);
+  if (!room || room.status !== 'playing' || room.is_practice) return;
+  await finishRoom(room);
+};
+
 const canAdvanceRound = async (room) => {
   if (room.status !== 'playing') return false;
   const endsAt = room.round_ends_at ? new Date(room.round_ends_at).getTime() : 0;
@@ -661,11 +669,10 @@ router.post('/create', auth, async (req, res) => {
       p_is_practice: Boolean(is_practice),
     };
 
-    let { data: newRoomData, error } = await supabase.rpc('create_arena_room', rpcParams);
+    const isTeacher = req.user?.role === 'teacher';
+    let newRoomData, error;
 
-    // Compatibility while the SQL update is being deployed. Once the RPC is
-    // available, room + host membership are committed in one transaction.
-    if (error && isMissingRpcError(error)) {
+    if (isTeacher) {
       const fallback = await supabase
         .from('phong_dau')
         .insert([{
@@ -676,21 +683,47 @@ router.post('/create', auth, async (req, res) => {
           do_kho: difficulty,
           status: 'waiting',
           so_nguoi_toi_da: maxPlayers,
-          so_nguoi_hien_tai: 1,
+          so_nguoi_hien_tai: 0,
           la_luyen_tap: is_practice,
         }])
         .select('*')
         .single();
-      if (fallback.error) throw fallback.error;
-      try {
-        await upsertRoomPlayer(fallback.data.id, req.user, is_practice ? 'ready' : 'joined');
-        await leaveOtherActiveRooms(req.userId, fallback.data.id);
-      } catch (playerError) {
-        await supabase.from('phong_dau').delete().eq('id', fallback.data.id);
-        throw playerError;
-      }
       newRoomData = fallback.data;
-      error = null;
+      error = fallback.error;
+    } else {
+      const rpcResult = await supabase.rpc('create_arena_room', rpcParams);
+      newRoomData = rpcResult.data;
+      error = rpcResult.error;
+
+      // Compatibility while the SQL update is being deployed. Once the RPC is
+      // available, room + host membership are committed in one transaction.
+      if (error && isMissingRpcError(error)) {
+        const fallback = await supabase
+          .from('phong_dau')
+          .insert([{
+            id: roomId,
+            ten: rpcParams.p_name,
+            chu_phong_id: req.userId,
+            che_do: mode,
+            do_kho: difficulty,
+            status: 'waiting',
+            so_nguoi_toi_da: maxPlayers,
+            so_nguoi_hien_tai: 1,
+            la_luyen_tap: is_practice,
+          }])
+          .select('*')
+          .single();
+        if (fallback.error) throw fallback.error;
+        try {
+          await upsertRoomPlayer(fallback.data.id, req.user, is_practice ? 'ready' : 'joined');
+          await leaveOtherActiveRooms(req.userId, fallback.data.id);
+        } catch (playerError) {
+          await supabase.from('phong_dau').delete().eq('id', fallback.data.id);
+          throw playerError;
+        }
+        newRoomData = fallback.data;
+        error = null;
+      }
     }
 
     if (error) throw error;
@@ -1206,6 +1239,12 @@ router.post('/leave', auth, async (req, res) => {
     }
 
     if (error) throw error;
+
+    if (result && result.current_players === 1) {
+      await checkAndFinishAbandonedRoom(phong_dau_id, result.current_players);
+      result.finished = true;
+    }
+
     res.json({ success: true, ...result });
   } catch (error) {
     console.error('Lỗi rời phòng:', error);

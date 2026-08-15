@@ -324,7 +324,7 @@ const StatsPanel = ({ user }) => {
           <p className="py-6 text-center text-sm font-bold text-viet-text-light/60">{t('arena.stats.empty_leaderboard')}</p>
         ) : (
           <ol className="space-y-3">
-            {leaderboard.map((player, index) => (
+            {leaderboard.slice(0, 3).map((player, index) => (
               <ArenaLeaderboardRow
                 key={`${player.rank}-${player.name}`}
                 player={player}

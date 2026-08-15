@@ -1118,6 +1118,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   const players = state?.players || [];
   const currentTask = state?.currentQuestion;
   const currentPlayer = players.find((player) => player.nguoi_dung_id === user?.id);
+  const isSpectator = user?.role === 'teacher' && !currentPlayer;
   const hasAnswered = (state?.myAnswers || []).some((answer) => answer.round_index === currentRoom?.current_round_index);
   const meta = GAME_META[currentTask?.gameType] || { label: 'Mini game', icon: FlaskConical, tone: 'text-viet-green', bg: 'bg-viet-green/15' };
   const MetaIcon = meta.icon;
@@ -1166,6 +1167,50 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
           serverFinalized: true,
         })}
       />
+    );
+  }
+
+  if (isSpectator && currentRoom?.status === 'playing') {
+    return (
+      <div className="fixed inset-0 z-[120] overflow-y-auto bg-slate-50 p-4 text-viet-text sm:p-6">
+        <div className="mx-auto flex min-h-full max-w-7xl flex-col gap-5">
+          <header className="grid gap-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={onLeave}
+                className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-viet-text-light transition hover:bg-red-50 hover:text-red-500 hover:border-red-200 shadow-sm"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+              <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                <p className="text-[10px] font-black uppercase tracking-widest text-viet-text-light">Tiến độ</p>
+                <p className="font-black">Round {(currentRoom?.current_round_index || 0) + 1}/{totalRounds}</p>
+              </div>
+            </div>
+
+            <RoomTimer
+              roundEndsAt={currentRoom?.status === 'playing' ? currentRoom?.round_ends_at : null}
+              serverOffset={serverOffset}
+              timeLimitSeconds={currentTask?.timeLimitSeconds}
+              progress={progress}
+              onTimeUp={advanceRoom}
+            />
+
+            <div className="flex items-center justify-between gap-3 lg:justify-end">
+              <div className="rounded-xl border border-slate-200 bg-viet-green/10 px-4 py-3 text-right shadow-sm border-viet-green/30">
+                <p className="text-[10px] font-black uppercase tracking-widest text-viet-green">Vai trò</p>
+                <p className="text-xl font-black text-viet-green">Giáo viên</p>
+              </div>
+            </div>
+          </header>
+
+          <main className="flex flex-1 flex-col gap-5">
+            <h2 className="text-2xl font-black text-center text-viet-text uppercase tracking-widest my-4">Bảng điều khiển Tiến độ</h2>
+            <Scoreboard players={players} currentUserId={null} />
+          </main>
+        </div>
+      </div>
     );
   }
 

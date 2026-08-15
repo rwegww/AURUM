@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import {
   Card,
@@ -183,7 +183,7 @@ export default function ArenaTab() {
 
       <SectionTitle title="Xếp hạng đấu trường" />
       <View style={styles.stack}>
-        {leaderboard.slice(0, 5).map((item) => (
+        {leaderboard.slice(0, 3).map((item) => (
           <ListRow
             key={`${item.rank}-${item.name}`}
             icon={item.rank === 1 ? "medal-outline" : "trophy-outline"}
