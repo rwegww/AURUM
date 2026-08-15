@@ -19,28 +19,13 @@ import { colors, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 import { arenaApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
-
-const roomStatusLabel = (status) => {
-  if (status === "waiting") return "Đang chờ";
-  if (status === "active" || status === "playing") return "Đang đấu";
-  if (status === "finished") return "Đã kết thúc";
-  return "Chưa rõ trạng thái";
-};
+import ArenaRoom from "../../components/arena/ArenaRoom";
 
 const battleResultLabel = (result) => {
   if (result === "win") return "Thắng";
   if (result === "lose") return "Thua";
   if (result === "draw") return "Hòa";
   return "Đã đấu";
-};
-
-const questionTypeLabel = (type) => {
-  if (type === "calculation") return "Tính toán";
-  if (type === "balancing") return "Cân bằng phương trình";
-  if (type === "atom_match") return "Ghép nguyên tử";
-  if (type === "electron_match") return "Cấu hình electron";
-  if (type === "multiple_choice") return "Trắc nghiệm";
-  return "Câu hỏi";
 };
 
 export default function ArenaTab() {
@@ -96,6 +81,18 @@ export default function ArenaTab() {
       Alert.alert("Không tham gia được", error.message);
     } finally {
       setJoining(false);
+    }
+  };
+
+  const leaveActiveRoom = async () => {
+    const roomId = activeState?.room?.id;
+    if (!roomId) return;
+    setActiveState(null);
+    try {
+      await arenaApi.leaveRoom(token, roomId);
+      await arenaResource.reload();
+    } catch (error) {
+      Alert.alert("Không rời phòng được", error.message);
     }
   };
 
@@ -157,39 +154,13 @@ export default function ArenaTab() {
       </Card>
 
       {activeState ? (
-        <>
-          <SectionTitle title="Phòng đang mở" />
-          <Card accent={colors.green} style={styles.activeCard}>
-            <View style={styles.activeTop}>
-              <View>
-                <Text style={styles.activeTitle}>{activeState.room?.name || `Phòng ${activeState.room?.id}`}</Text>
-                <Text style={styles.activeMeta}>
-                  Vòng {(activeState.room?.current_round_index || 0) + 1}/{activeState.room?.total_rounds || 10} · {roomStatusLabel(activeState.room?.status)}
-                </Text>
-              </View>
-              <Pill label={activeState.room?.id} color={colors.green} />
-            </View>
-            {activeState.currentQuestion ? (
-              <View style={styles.questionBox}>
-                <Text style={styles.questionType}>{questionTypeLabel(activeState.currentQuestion.gameType)}</Text>
-                <Text style={styles.questionText}>{activeState.currentQuestion.question}</Text>
-              </View>
-            ) : (
-              <Text style={styles.waitingText}>Phòng đang chờ bắt đầu hoặc chưa có câu hỏi hiện tại.</Text>
-            )}
-            <View style={styles.stack}>
-              {(activeState.players || []).map((player) => (
-                <ListRow
-                  key={player.nguoi_dung_id}
-                  icon="person-outline"
-                  title={player.username}
-                  subtitle={`${player.score || 0} điểm · ${player.correct_count || 0} câu đúng`}
-                  color={colors.green}
-                />
-              ))}
-            </View>
-          </Card>
-        </>
+        <ArenaRoom
+          token={token}
+          roomId={activeState.room?.id}
+          initialState={activeState}
+          onStateChange={setActiveState}
+          onLeave={leaveActiveRoom}
+        />
       ) : null}
 
       <SectionTitle title="Phòng chờ" actionLabel="Tải lại" onAction={arenaResource.reload} />
@@ -268,48 +239,6 @@ const styles = StyleSheet.create({
   },
   joinButton: {
     width: 92
-  },
-  activeCard: {
-    gap: spacing.md
-  },
-  activeTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: spacing.md
-  },
-  activeTitle: {
-    color: colors.ink,
-    fontSize: 17,
-    fontWeight: "900"
-  },
-  activeMeta: {
-    color: colors.muted,
-    fontSize: 12,
-    fontWeight: "700",
-    marginTop: 4
-  },
-  questionBox: {
-    backgroundColor: "#f7f3ff",
-    borderRadius: 18,
-    padding: spacing.md,
-    gap: spacing.sm
-  },
-  questionType: {
-    color: colors.green,
-    fontSize: 12,
-    fontWeight: "900",
-    textTransform: "uppercase"
-  },
-  questionText: {
-    color: colors.ink,
-    fontSize: 15,
-    lineHeight: 21,
-    fontWeight: "800"
-  },
-  waitingText: {
-    color: colors.muted,
-    fontSize: 13,
-    fontWeight: "700"
   },
   stack: {
     gap: spacing.sm

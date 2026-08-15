@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 export const colors = {
   bg: "#fffbf0",
   surface: "#ffffff",
@@ -12,6 +14,19 @@ export const colors = {
   amber: "#f5b942",
   red: "#ef4444",
   slate: "#263238"
+};
+
+const systemSans = Platform.select({
+  ios: "System",
+  android: "sans-serif",
+  web: "system-ui",
+  default: "system-ui"
+});
+
+export const typography = {
+  regular: systemSans,
+  medium: systemSans,
+  bold: systemSans
 };
 
 export const spacing = {
@@ -29,9 +44,5 @@ export const radius = {
 };
 
 export const shadow = {
-  shadowColor: "#000000",
-  shadowOpacity: 0.05,
-  shadowRadius: 12,
-  shadowOffset: { width: 0, height: 4 },
-  elevation: 3
+  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)"
 };

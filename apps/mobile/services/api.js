@@ -241,7 +241,19 @@ export const arenaApi = {
       body: {}
     }),
   roomState: (token, roomId) =>
-    apiRequest(`/api/arena/room/${roomId}/state`, { token })
+    apiRequest(`/api/arena/room/${roomId}/state`, { token }),
+  answerRoom: (token, roomId, body) =>
+    apiRequest(`/api/arena/room/${roomId}/answer`, {
+      method: "POST",
+      token,
+      body
+    }),
+  leaveRoom: (token, roomId) =>
+    apiRequest("/api/arena/leave", {
+      method: "POST",
+      token,
+      body: { phong_dau_id: roomId }
+    })
 };
 
 export const libraryApi = {

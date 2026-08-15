@@ -3,240 +3,85 @@ import { Alert, StyleSheet, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import {
   Card,
+  ErrorState,
   GhostButton,
   IconButton,
   LoadingState,
   Pill,
-  PrimaryButton,
   ProgressBar,
   Screen,
-  ScreenHeader,
-  SectionTitle
+  ScreenHeader
 } from "../../../../components/ui/Primitives";
-import { colors, spacing } from "../../../../constants/theme";
+import LessonPlayer from "../../../../components/journey/LessonPlayer";
+import { colors, spacing, typography } from "../../../../constants/theme";
 import { useAuth } from "../../../../context/AuthContext";
 import { learningApi } from "../../../../services/api";
 import { useApiResource } from "../../../../hooks/useApiResource";
 
-const levels = [
-  { key: "level1", label: "Nhập môn", xp: 30, color: colors.green },
-  { key: "level2", label: "Thử thách", xp: 50, color: colors.green },
-  { key: "level3", label: "Câu hỏi", xp: 100, color: colors.green }
-];
-
-const normalizeModuleTitle = (module, index) => (
-  module?.title ||
-  module?.heading ||
-  module?.name ||
-  `Mục lý thuyết ${index + 1}`
-);
-
-const toDisplayText = (value) => {
-  if (!value) return null;
-  if (typeof value === "string") return value;
-  if (Array.isArray(value)) {
-    return value.map((item) => toDisplayText(item)).filter(Boolean).join("\n");
-  }
-  if (typeof value === "object") {
-    return value.text || value.content || value.description || JSON.stringify(value);
-  }
-  return String(value);
-};
+const levels = ["level1", "level2", "level3"];
 
 export default function LessonDetailScreen() {
   const { lessonId, grade } = useLocalSearchParams();
   const { token, user, refreshProfile } = useAuth();
-  const [savingLevel, setSavingLevel] = React.useState(null);
   const lessonKey = Array.isArray(lessonId) ? lessonId[0] : lessonId;
   const gradeKey = Array.isArray(grade) ? grade[0] : grade;
-
-  const lessonResource = useApiResource(
-    () => learningApi.lesson(lessonKey),
-    [lessonKey]
-  );
-
+  const lessonResource = useApiResource(() => learningApi.lesson(lessonKey), [lessonKey]);
   const lesson = lessonResource.data;
   const lessonStars = user?.balancingProgress?.lessonStars?.[lessonKey] || {};
-  const completedLevels = levels.filter((level) => lessonStars[level.key] > 0).length;
+  const completedLevels = levels.filter((level) => lessonStars[level] > 0).length;
 
-  const completeLevel = async (level) => {
-    setSavingLevel(level.key);
+  const saveLevel = async (level, stars) => {
     try {
-      await learningApi.completeLessonSegment(token, {
-        lessonId: lessonKey,
-        level: level.key,
-        stars: 3
-      });
+      await learningApi.completeLessonSegment(token, { lessonId: lessonKey, level, stars });
       await refreshProfile();
-      Alert.alert("Đã lưu tiến độ", `${level.label} hoàn thành với 3 sao.`);
+      const nextCompletedLevels = completedLevels + (lessonStars[level] > 0 ? 0 : 1);
+      Alert.alert("Đã ghi nhận", `Bạn hoàn thành ${nextCompletedLevels}/3 chặng của bài học.`);
     } catch (error) {
-      Alert.alert("Không lưu được", error.message);
-    } finally {
-      setSavingLevel(null);
+      Alert.alert("Chưa lưu được tiến độ", error.message);
+      throw error;
     }
   };
 
-  if (lessonResource.loading && !lesson) {
-    return <LoadingState label="Đang tải bài học..." />;
+  if (lessonResource.loading && !lesson) return <LoadingState label="Đang chuẩn bị bài học..." />;
+  if (lessonResource.error || !lesson) {
+    return (
+      <Screen>
+        <ErrorState message={lessonResource.error?.message || "Không tìm thấy bài học."} onRetry={lessonResource.reload} />
+        <GhostButton label="Quay lại lộ trình" icon="arrow-back-outline" onPress={() => router.back()} />
+      </Screen>
+    );
   }
 
   return (
     <Screen>
       <ScreenHeader
-        eyebrow={`Khối ${gradeKey}`}
-        title={lesson?.title || "Bài học"}
-        subtitle={lesson?.description || lesson?.chapter || "Nội dung bài học từ hệ thống AURUM."}
+        eyebrow={`Lộ trình khối ${gradeKey}`}
+        title={lesson.title || "Bài học"}
+        subtitle={lesson.description || lesson.chapter || lesson.chapterName || "Học theo từng chặng để nắm chắc kiến thức."}
         right={<IconButton icon="arrow-back-outline" onPress={() => router.back()} />}
       />
 
       <Card accent={colors.green} style={styles.progressCard}>
         <View style={styles.progressTop}>
           <View>
-            <Text style={styles.progressTitle}>Tiến độ chặng</Text>
-            <Text style={styles.progressSubtitle}>{completedLevels}/3 chặng đã ghi nhận</Text>
+            <Text style={styles.progressTitle}>Tiến độ bài học</Text>
+            <Text style={styles.progressSubtitle}>{completedLevels}/3 chặng đã đạt yêu cầu</Text>
           </View>
           <Pill label={`${Object.values(lessonStars).reduce((sum, value) => sum + (value || 0), 0)}/9 sao`} color={colors.green} icon="star-outline" />
         </View>
-        <ProgressBar value={completedLevels / 3} color={completedLevels >= 3 ? colors.green : colors.green} />
+        <ProgressBar value={completedLevels / 3} color={colors.green} />
       </Card>
 
-      <SectionTitle title="Ghi nhận học tập" />
-      <View style={styles.levelStack}>
-        {levels.map((level) => {
-          const currentStars = lessonStars[level.key] || 0;
-          const completed = currentStars > 0;
-          return (
-            <Card key={level.key} style={styles.levelCard} accent={level.color}>
-              <View style={styles.levelCopy}>
-                <Text style={styles.levelTitle}>{level.label}</Text>
-                <Text style={styles.levelSubtitle}>
-                  {completed ? `${currentStars} sao đã lưu` : `Hoàn thành để nhận ${level.xp} điểm kinh nghiệm`}
-                </Text>
-              </View>
-              <PrimaryButton
-                label={completed ? "Cập nhật" : "Hoàn thành"}
-                icon={completed ? "checkmark-circle-outline" : "play-outline"}
-                color={completed ? colors.ink : level.color}
-                onPress={() => completeLevel(level)}
-                disabled={savingLevel === level.key}
-                style={styles.levelButton}
-              />
-            </Card>
-          );
-        })}
-      </View>
+      <LessonPlayer lesson={lesson} lessonStars={lessonStars} onCompleteLevel={saveLevel} />
 
-      <SectionTitle title="Nội dung từ hệ thống" />
-      <View style={styles.infoGrid}>
-        <Card style={styles.infoCard}>
-          <Text style={styles.infoValue}>{lesson?.theoryModules?.length || 0}</Text>
-          <Text style={styles.infoLabel}>mục lý thuyết</Text>
-        </Card>
-        <Card style={styles.infoCard}>
-          <Text style={styles.infoValue}>{lesson?.quizzes?.length || 0}</Text>
-          <Text style={styles.infoLabel}>câu hỏi</Text>
-        </Card>
-        <Card style={styles.infoCard}>
-          <Text style={styles.infoValue}>{lesson?.challenges?.length || 0}</Text>
-          <Text style={styles.infoLabel}>thử thách</Text>
-        </Card>
-      </View>
-
-      {(lesson?.theoryModules || []).slice(0, 6).map((module, index) => (
-        <Card key={`${normalizeModuleTitle(module, index)}-${index}`}>
-          <Text style={styles.moduleTitle}>{normalizeModuleTitle(module, index)}</Text>
-          {toDisplayText(module?.content || module?.text || module?.description) ? (
-            <Text style={styles.moduleText} numberOfLines={4}>
-              {toDisplayText(module.content || module.text || module.description)}
-            </Text>
-          ) : (
-            <Text style={styles.moduleText}>Nội dung chi tiết đang được lưu trong dữ liệu bài học.</Text>
-          )}
-        </Card>
-      ))}
-
-      <GhostButton label="Quay lại lộ trình" icon="arrow-back-outline" onPress={() => router.back()} />
+      <GhostButton label="Quay lại lộ trình" icon="arrow-back-outline" color={colors.ink} onPress={() => router.back()} />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  progressCard: {
-    gap: spacing.md
-  },
-  progressTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: spacing.md
-  },
-  progressTitle: {
-    color: colors.ink,
-    fontSize: 18,
-    fontWeight: "900"
-  },
-  progressSubtitle: {
-    color: colors.muted,
-    fontSize: 13,
-    fontWeight: "700",
-    marginTop: 3
-  },
-  levelStack: {
-    gap: spacing.sm
-  },
-  levelCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md
-  },
-  levelCopy: {
-    flex: 1,
-    gap: 4
-  },
-  levelTitle: {
-    color: colors.ink,
-    fontSize: 16,
-    fontWeight: "900"
-  },
-  levelSubtitle: {
-    color: colors.muted,
-    fontSize: 13,
-    fontWeight: "700"
-  },
-  levelButton: {
-    minHeight: 44,
-    width: 126
-  },
-  infoGrid: {
-    flexDirection: "row",
-    gap: spacing.sm
-  },
-  infoCard: {
-    flex: 1,
-    alignItems: "center",
-    gap: 4,
-    paddingVertical: spacing.md
-  },
-  infoValue: {
-    color: colors.green,
-    fontSize: 24,
-    fontWeight: "900"
-  },
-  infoLabel: {
-    color: colors.muted,
-    fontSize: 11,
-    fontWeight: "800",
-    textAlign: "center"
-  },
-  moduleTitle: {
-    color: colors.ink,
-    fontSize: 16,
-    fontWeight: "900",
-    marginBottom: spacing.sm
-  },
-  moduleText: {
-    color: colors.muted,
-    fontSize: 14,
-    lineHeight: 21,
-    fontWeight: "600"
-  }
+  progressCard: { gap: spacing.md },
+  progressTop: { alignItems: "center", flexDirection: "row", gap: spacing.md, justifyContent: "space-between" },
+  progressTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 18 },
+  progressSubtitle: { color: colors.muted, fontFamily: typography.medium, fontSize: 13, marginTop: 3 }
 });

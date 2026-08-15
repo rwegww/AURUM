@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { colors, radius, shadow, spacing } from "../../constants/theme";
+import { colors, radius, shadow, spacing, typography } from "../../constants/theme";
 
 export const Screen = ({ children, scroll = true, footer, style }) => {
   const content = (
@@ -243,19 +243,21 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     color: colors.green,
+    fontFamily: typography.bold,
     fontSize: 12,
-    fontWeight: "900",
     letterSpacing: 1.2,
     textTransform: "uppercase"
   },
   title: {
     color: colors.ink,
+    fontFamily: typography.bold,
     fontSize: 30,
     lineHeight: 36,
     fontWeight: "900"
   },
   subtitle: {
     color: colors.muted,
+    fontFamily: typography.medium,
     fontSize: 15,
     lineHeight: 22,
     fontWeight: "600"
@@ -286,8 +288,8 @@ const styles = StyleSheet.create({
     opacity: 0.95
   },
   buttonText: {
+    fontFamily: typography.bold,
     fontSize: 14,
-    fontWeight: "900",
     textTransform: "uppercase",
     letterSpacing: 0.4,
     flexShrink: 1
@@ -311,8 +313,8 @@ const styles = StyleSheet.create({
     opacity: 0.55
   },
   ghostButtonText: {
+    fontFamily: typography.bold,
     fontSize: 13,
-    fontWeight: "900",
     textTransform: "uppercase",
     letterSpacing: 0.4,
     flexShrink: 1
@@ -337,8 +339,8 @@ const styles = StyleSheet.create({
     gap: 5
   },
   pillText: {
+    fontFamily: typography.bold,
     fontSize: 12,
-    fontWeight: "900"
   },
   metric: {
     flex: 1,
@@ -359,13 +361,13 @@ const styles = StyleSheet.create({
   },
   metricValue: {
     color: colors.ink,
+    fontFamily: typography.bold,
     fontSize: 22,
-    fontWeight: "900"
   },
   metricLabel: {
     color: colors.muted,
+    fontFamily: typography.medium,
     fontSize: 12,
-    fontWeight: "800"
   },
   sectionTitle: {
     flexDirection: "row",
@@ -376,8 +378,8 @@ const styles = StyleSheet.create({
   },
   sectionTitleText: {
     color: colors.ink,
+    fontFamily: typography.bold,
     fontSize: 18,
-    fontWeight: "900"
   },
   sectionAction: {
     flexDirection: "row",
@@ -386,8 +388,8 @@ const styles = StyleSheet.create({
   },
   sectionActionText: {
     color: colors.green,
+    fontFamily: typography.bold,
     fontSize: 13,
-    fontWeight: "900"
   },
   inputWrap: {
     minHeight: 52,
@@ -403,8 +405,8 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: colors.ink,
+    fontFamily: typography.medium,
     fontSize: 15,
-    fontWeight: "700"
   },
   progressTrack: {
     height: 9,
@@ -426,8 +428,8 @@ const styles = StyleSheet.create({
   },
   stateText: {
     color: colors.muted,
+    fontFamily: typography.medium,
     fontSize: 14,
-    fontWeight: "800",
     textAlign: "center"
   },
   emptyState: {
@@ -445,15 +447,15 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     color: colors.ink,
+    fontFamily: typography.bold,
     fontSize: 18,
-    fontWeight: "900",
     textAlign: "center"
   },
   emptySubtitle: {
     color: colors.muted,
+    fontFamily: typography.medium,
     fontSize: 14,
     lineHeight: 21,
-    fontWeight: "600",
     textAlign: "center"
   },
   emptyAction: {
@@ -483,14 +485,14 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     color: colors.ink,
+    fontFamily: typography.bold,
     fontSize: 15,
-    fontWeight: "900"
   },
   rowSubtitle: {
     color: colors.muted,
+    fontFamily: typography.medium,
     fontSize: 13,
     lineHeight: 18,
-    fontWeight: "600"
   }
 });
 
