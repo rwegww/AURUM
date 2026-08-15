@@ -1016,6 +1016,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
   // A single guarded poll avoids Realtime/RLS token mismatches and rejects
   // out-of-order responses, so an older 1/2 response cannot overwrite 2/2.
   useEffect(() => {
+    if (!state) return undefined;
     if (state?.room?.status === 'finished') return undefined;
     let active = true;
     let polling = false;
@@ -1048,7 +1049,7 @@ const ArenaBattleRoom = ({ user, room, onLeave, onMatchEnd }) => {
       window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibility);
     };
-  }, [loadState, state?.room?.status]);
+  }, [loadState, state?.room?.id, state?.room?.status]);
 
   const advanceRoom = useCallback(async () => {
     const currentRoom = state?.room;
