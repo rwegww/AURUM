@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import jwt from 'jsonwebtoken';
 import { supabase } from '../lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
@@ -298,7 +298,7 @@ const leaveRoomMembership = async (roomId, userId) => {
     .from('phong_dau')
     .select('*')
     .eq('id', roomId)
-    .maybeSingle();
+    .limit(1).maybeSingle();
 
   if (roomError) throw roomError;
   if (!roomRow) return { deleted: true, current_players: 0 };
@@ -719,7 +719,7 @@ router.post('/join', auth, async (req, res) => {
       .select('nguoi_dung_id,status')
       .eq('phong_dau_id', phong_dau_id)
       .eq('nguoi_dung_id', req.userId)
-      .maybeSingle();
+      .limit(1).maybeSingle();
 
     if (existingPlayerError) throw existingPlayerError;
 
@@ -855,7 +855,7 @@ router.get('/active-room', auth, async (req, res) => {
       .in('status', ACTIVE_PLAYER_STATUSES)
       .order('xem_cuoi_luc', { ascending: false })
       .limit(1)
-      .maybeSingle();
+      .limit(1).maybeSingle();
 
     if (error) throw error;
     if (!membership?.phong_dau_id) {
@@ -990,7 +990,7 @@ router.post('/room/:id/answer', auth, async (req, res) => {
       .eq('phong_dau_id', room.id)
       .eq('nguoi_dung_id', req.userId)
       .eq('thu_tu_vong', roundIndex)
-      .maybeSingle();
+      .limit(1).maybeSingle();
 
     if (duplicateError) throw duplicateError;
     if (duplicate) {
