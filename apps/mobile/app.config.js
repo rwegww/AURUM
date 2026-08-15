@@ -11,7 +11,6 @@ module.exports = {
     newArchEnabled: true,
     android: {
       package: "vn.aurumchemistry.app",
-      usesCleartextTraffic: true,
       adaptiveIcon: {
         foregroundImage: "./assets/logo.png",
         backgroundColor: "#ffffff"
@@ -29,6 +28,14 @@ module.exports = {
         "expo-web-browser",
         {
           experimentalLauncherActivity: false
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          android: {
+            usesCleartextTraffic: true
+          }
         }
       ]
     ],
