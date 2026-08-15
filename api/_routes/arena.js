@@ -247,6 +247,22 @@ const getPlayers = async (roomId, { includeLeft = false } = {}) => {
   return (data || []).map(normalizePlayerRow);
 };
 
+const getRoomPlayer = async (roomId, userId, statuses = ACTIVE_PLAYER_STATUSES) => {
+  const { data, error } = await supabase
+    .from('nguoi_choi')
+    .select('*')
+    .eq('phong_dau_id', roomId)
+    .eq('nguoi_dung_id', userId)
+    .in('status', statuses)
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw error;
+  return normalizePlayerRow(data);
+};
+
+const getActivePlayer = async (roomId, userId) => getRoomPlayer(roomId, userId);
+
 const getRoundAnswers = async (roomId, roundIndex) => {
   const { data, error } = await supabase
     .from('tra_loi_vong')
@@ -683,13 +699,23 @@ router.post('/create', auth, async (req, res) => {
           do_kho: difficulty,
           status: 'waiting',
           so_nguoi_toi_da: maxPlayers,
-          so_nguoi_hien_tai: 0,
+          so_nguoi_hien_tai: 1,
           la_luyen_tap: is_practice,
         }])
         .select('*')
         .single();
       newRoomData = fallback.data;
       error = fallback.error;
+
+      if (!error && newRoomData) {
+        try {
+          await upsertRoomPlayer(newRoomData.id, req.user, is_practice ? 'ready' : 'joined');
+          await leaveOtherActiveRooms(req.userId, newRoomData.id);
+        } catch (playerError) {
+          await supabase.from('phong_dau').delete().eq('id', newRoomData.id);
+          throw playerError;
+        }
+      }
     } else {
       const rpcResult = await supabase.rpc('create_arena_room', rpcParams);
       newRoomData = rpcResult.data;
@@ -994,6 +1020,11 @@ router.post('/room/:id/start', auth, async (req, res) => {
 router.get('/room/:id/state', auth, async (req, res) => {
   try {
     const room = await getRoom(req.params.id);
+    const viewer = await getRoomPlayer(room.id, req.userId, [...ACTIVE_PLAYER_STATUSES, 'finished']);
+    const canSpectate = ['teacher', 'admin'].includes(req.user?.role);
+    if (!viewer && !canSpectate) {
+      return res.status(403).json({ success: false, message: 'Bạn không tham gia phòng Arena này.' });
+    }
     res.json({ success: true, state: await buildRoomState(room, req.userId) });
   } catch (error) {
     console.error('Lỗi lấy trạng thái phòng Arena:', error);
@@ -1006,6 +1037,11 @@ router.post('/room/:id/answer', auth, async (req, res) => {
     const room = await getRoom(req.params.id);
     if (room.status !== 'playing') {
       return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
+    }
+
+    const activePlayer = await getActivePlayer(room.id, req.userId);
+    if (!activePlayer) {
+      return res.status(403).json({ success: false, message: 'Bạn không phải người chơi đang hoạt động trong phòng này.' });
     }
 
     const endsAt = room.round_ends_at ? new Date(room.round_ends_at).getTime() : 0;
@@ -1044,7 +1080,12 @@ router.post('/room/:id/answer', auth, async (req, res) => {
       diem_duoc_cong: scoreAwarded,
     }]);
 
-    if (insertError) throw insertError;
+    if (insertError) {
+      if (insertError.code === '23505') {
+        return res.status(409).json({ success: false, message: 'Bạn đã trả lời vòng này.' });
+      }
+      throw insertError;
+    }
 
     await updatePlayerAfterAnswer(room.id, req.userId, roundIndex, isCorrect, scoreAwarded);
     const advancedRoom = await maybeAdvanceAfterAnswer(room);
@@ -1069,6 +1110,10 @@ router.post('/room/:id/advance', auth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
     }
 
+    if (room.host_id !== req.userId) {
+      return res.status(403).json({ success: false, message: 'Chỉ chủ phòng được chuyển vòng.' });
+    }
+
     if (!(await canAdvanceRound(room))) {
       return res.status(400).json({ success: false, message: 'Chưa thể chuyển vòng vì còn thời gian hoặc còn người chưa trả lời.' });
     }
@@ -1083,8 +1128,30 @@ router.post('/room/:id/advance', auth, async (req, res) => {
 
 router.post('/match-result', auth, async (req, res) => {
   try {
-    const { phong_dau_id, result, score, opponent_name } = req.body || {};
-    const ptsChange = calcPoints(result, score || 0);
+    const phong_dau_id = String(req.body?.phong_dau_id || '').trim();
+    if (!phong_dau_id) {
+      return res.status(400).json({ success: false, message: 'Thiếu mã phòng.' });
+    }
+
+    const room = await getRoom(phong_dau_id);
+    if (room.status !== 'finished') {
+      return res.status(400).json({ success: false, message: 'Chỉ được ghi nhận kết quả sau khi phòng đã kết thúc.' });
+    }
+
+    const players = await getPlayers(phong_dau_id);
+    const currentPlayer = players.find((player) => player.nguoi_dung_id === req.userId);
+    if (!currentPlayer) {
+      return res.status(403).json({ success: false, message: 'Bạn không phải người chơi của phòng này.' });
+    }
+
+    const { data: existingBattle, error: existingBattleError } = await supabase
+      .from('lich_su_dau')
+      .select('*')
+      .eq('nguoi_dung_id', req.userId)
+      .eq('phong_dau_id', phong_dau_id)
+      .limit(1)
+      .maybeSingle();
+    if (existingBattleError) throw existingBattleError;
 
     const { data: userData, error: fetchErr } = await supabase
       .from('nguoi_dung')
@@ -1093,6 +1160,23 @@ router.post('/match-result', auth, async (req, res) => {
       .single();
 
     if (fetchErr) throw fetchErr;
+
+    if (existingBattle) {
+      return res.json({
+        success: true,
+        stats: userData?.thong_ke_dau || { total: 0, wins: 0, losses: 0, points: 0 },
+        ptsChange: existingBattle.diem_thay_doi ?? 0,
+        result: existingBattle.ket_qua,
+        score: existingBattle.diem ?? 0,
+      });
+    }
+
+    const result = room.winner_user_id
+      ? (room.winner_user_id === req.userId ? 'win' : 'lose')
+      : 'draw';
+    const score = currentPlayer.score || 0;
+    const opponent = players.find((player) => player.nguoi_dung_id !== req.userId);
+    const ptsChange = calcPoints(result, score);
 
     const prev = userData?.thong_ke_dau || { total: 0, wins: 0, losses: 0, points: 0 };
     const newStats = {
@@ -1112,15 +1196,11 @@ router.post('/match-result', auth, async (req, res) => {
     await supabase.from('lich_su_dau').insert([{
       nguoi_dung_id: req.userId,
       phong_dau_id: phong_dau_id || null,
-      ten_doi_thu: opponent_name || 'Đối thủ ẩn danh',
+      ten_doi_thu: opponent?.username || 'Đối thủ ẩn danh',
       ket_qua: result,
-      diem: score || 0,
+      diem: score,
       diem_thay_doi: ptsChange,
     }]);
-
-    if (phong_dau_id) {
-      await supabase.from('phong_dau').update({ status: 'finished' }).eq('id', phong_dau_id);
-    }
 
     if (result === 'win') {
       try {
@@ -1131,7 +1211,7 @@ router.post('/match-result', auth, async (req, res) => {
       }
     }
 
-    res.json({ success: true, stats: newStats, ptsChange });
+    res.json({ success: true, stats: newStats, ptsChange, result, score });
   } catch (error) {
     console.error('Lỗi ghi kết quả trận đấu:', error);
     res.status(500).json({ success: false, message: error.message });
@@ -1266,8 +1346,26 @@ router.get('/rooms', async (req, res) => {
 
     if (error) throw error;
 
+    const roomIds = (rooms || []).map((room) => room.id).filter(Boolean);
+    let activePlayers = [];
+    if (roomIds.length > 0) {
+      const { data: playerRows, error: playerError } = await supabase
+        .from('nguoi_choi')
+        .select('phong_dau_id,status')
+        .in('phong_dau_id', roomIds)
+        .in('status', ACTIVE_PLAYER_STATUSES);
+      if (playerError) throw playerError;
+      activePlayers = playerRows || [];
+    }
+
+    const activePlayerCounts = activePlayers.reduce((counts, player) => {
+      counts.set(player.phong_dau_id, (counts.get(player.phong_dau_id) || 0) + 1);
+      return counts;
+    }, new Map());
+
     const formatted = (rooms || []).map((room) => ({
       ...normalizeRoomRow(room),
+      current_players: activePlayerCounts.get(room.id) || 0,
       host_name: room.nguoi_dung?.username || 'Ẩn danh',
       host_avatar: {
         seed: room.nguoi_dung?.avatar_seed || room.nguoi_dung?.username || 'Aurum',

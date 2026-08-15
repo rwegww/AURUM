@@ -232,7 +232,9 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
   const [submitting, setSubmitting] = React.useState(false);
   const [feedback, setFeedback] = React.useState(null);
   const [now, setNow] = React.useState(Date.now());
+  const [serverOffset, setServerOffset] = React.useState(0);
   const requestRef = React.useRef(0);
+  const advanceLockRef = React.useRef(null);
   const mountedRef = React.useRef(true);
 
   const syncState = React.useCallback(async ({ silent = false } = {}) => {
@@ -246,6 +248,9 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
         throw new Error("Máy chủ trả về trạng thái của phòng khác.");
       }
       if (!mountedRef.current || requestId !== requestRef.current) return null;
+      if (nextState.serverTime) {
+        setServerOffset(new Date(nextState.serverTime).getTime() - Date.now());
+      }
       setState(nextState);
       onStateChange?.(nextState);
       return nextState;
@@ -280,6 +285,31 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
     return () => clearInterval(intervalId);
   }, []);
 
+  const advanceRoom = React.useCallback(async () => {
+    const currentRoom = state?.room;
+    if (!currentRoom || currentRoom.status !== "playing") return;
+    const hostId = currentRoom.host_id || currentRoom.chu_phong_id;
+    if (String(hostId) !== String(user?.id)) return;
+
+    const lockKey = `${currentRoom.id}-${currentRoom.current_round_index}`;
+    if (advanceLockRef.current === lockKey) return;
+    advanceLockRef.current = lockKey;
+
+    try {
+      const response = await arenaApi.advanceRoom(token, roomId);
+      if (response?.state && mountedRef.current) {
+        setState(response.state);
+        onStateChange?.(response.state);
+      }
+    } catch (error) {
+      if (mountedRef.current && !/chưa thể chuyển vòng|còn thời gian|còn người/i.test(error.message || "")) {
+        setFeedback({ type: "error", message: error.message });
+      }
+    } finally {
+      advanceLockRef.current = null;
+    }
+  }, [onStateChange, roomId, state?.room, token, user?.id]);
+
   const submitAnswer = async (payload) => {
     if (submitting || state?.room?.status !== "playing") return;
     setSubmitting(true);
@@ -307,9 +337,16 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
   const hasAnswered = (state?.myAnswers || []).some((answer) => answer.round_index === room?.current_round_index);
   const currentPlayer = players.find((player) => player.nguoi_dung_id === user?.id);
   const isSpectator = user?.role === "teacher" && !currentPlayer;
-  const remainingSeconds = getRemainingSeconds(room?.round_ends_at, now);
+  const isHost = String(room?.host_id || room?.chu_phong_id || "") === String(user?.id || "");
+  const remainingSeconds = getRemainingSeconds(room?.round_ends_at, now + serverOffset);
   const timeLimit = question?.timeLimitSeconds || 45;
-  const timerProgress = room?.status === "playing" ? remainingSeconds / timeLimit : 0;
+  const timerProgress = room?.status === "playing" ? Math.max(0, Math.min(1, remainingSeconds / timeLimit)) : 0;
+
+  React.useEffect(() => {
+    if (room?.status === "playing" && remainingSeconds <= 0 && isHost) {
+      advanceRoom();
+    }
+  }, [advanceRoom, isHost, remainingSeconds, room?.status]);
 
   return (
     <View style={styles.stack}>
@@ -317,7 +354,7 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
         <View style={styles.roomTop}>
           <View style={styles.roomTitleWrap}>
             <Text style={styles.roomTitle}>{room?.name || `Phòng ${roomId}`}</Text>
-            <Text style={styles.roomMeta}>Vòng {(room?.current_round_index || 0) + 1}/{room?.total_rounds || 10} · {roomStatusLabel(room?.status)}</Text>
+            <Text style={styles.roomMeta}>Vòng {(room?.current_round_index || 0) + 1}/{room?.total_rounds || 10} · {isHost && room?.status === "waiting" ? "Bạn là chủ phòng" : roomStatusLabel(room?.status)}</Text>
           </View>
           <Pill label={roomId} color={room?.status === "playing" ? colors.green : colors.amber} />
         </View>
@@ -354,8 +391,8 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
       {room?.status === "waiting" ? (
         <Card style={styles.waitingCard}>
           <Ionicons name="people-outline" size={28} color={colors.amber} />
-          <Text style={styles.waitingTitle}>Bạn đã vào phòng</Text>
-          <Text style={styles.waitingText}>Màn hình này tự đồng bộ mỗi 2 giây. Khi chủ phòng trên PC bắt đầu, câu hỏi sẽ tự hiện tại đây.</Text>
+          <Text style={styles.waitingTitle}>{isHost ? "Phòng đã sẵn sàng" : "Bạn đã vào phòng"}</Text>
+          <Text style={styles.waitingText}>{isHost ? "Mời bạn bè bằng mã phòng hoặc bắt đầu từ web khi đã đủ người." : "Chờ chủ phòng bắt đầu. Khi trận đấu mở, câu hỏi sẽ tự xuất hiện tại đây."}</Text>
         </Card>
       ) : null}
 
@@ -383,7 +420,16 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
         <Card accent={colors.green} style={styles.finishedCard}>
           <Ionicons name="trophy-outline" size={30} color={colors.green} />
           <Text style={styles.waitingTitle}>Trận đấu đã kết thúc</Text>
-          <Text style={styles.waitingText}>Điểm và lịch sử trận được lưu trên máy chủ. Bạn có thể rời phòng để xem lại bảng đấu.</Text>
+          <Text style={styles.waitingText}>Điểm và lịch sử trận đã được lưu. Bạn có thể rời phòng để quay lại sảnh.</Text>
+          <View style={styles.resultStack}>
+            {[...players].sort((a, b) => (b.score || 0) - (a.score || 0)).map((player, index) => (
+              <View key={player.nguoi_dung_id} style={styles.resultRow}>
+                <Text style={styles.resultRank}>{index + 1}</Text>
+                <Text style={styles.resultName} numberOfLines={1}>{player.username}</Text>
+                <Text style={styles.resultScore}>{player.score || 0}</Text>
+              </View>
+            ))}
+          </View>
         </Card>
       ) : null}
 
@@ -446,6 +492,11 @@ const styles = StyleSheet.create({
   atomInput: { backgroundColor: colors.surface, borderColor: colors.border, borderRadius: 11, borderWidth: 1, color: colors.ink, fontFamily: typography.bold, fontSize: 16, height: 42, paddingHorizontal: 10, textAlign: "center", width: 64 },
   unsupportedText: { color: colors.red, fontFamily: typography.medium, fontSize: 13, lineHeight: 20 },
   finishedCard: { alignItems: "center", gap: 8, paddingVertical: spacing.lg },
+  resultStack: { alignSelf: "stretch", gap: 8, marginTop: spacing.sm },
+  resultRow: { alignItems: "center", backgroundColor: colors.surfaceAlt, borderRadius: radius.md, flexDirection: "row", gap: spacing.sm, padding: 10 },
+  resultRank: { color: colors.muted, fontFamily: typography.bold, fontSize: 13, width: 20 },
+  resultName: { color: colors.ink, flex: 1, fontFamily: typography.bold, fontSize: 14 },
+  resultScore: { color: colors.greenDark, fontFamily: typography.bold, fontSize: 16 },
   feedback: { borderRadius: radius.md, fontFamily: typography.bold, fontSize: 13, lineHeight: 20, padding: spacing.md },
   feedbackSuccess: { backgroundColor: "#eaf6df", color: colors.greenDark },
   feedbackError: { backgroundColor: "#fff0f0", color: "#b42318" }

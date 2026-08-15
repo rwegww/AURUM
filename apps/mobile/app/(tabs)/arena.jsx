@@ -1,5 +1,6 @@
 import React from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import {
   Card,
   EmptyState,
@@ -15,7 +16,7 @@ import {
   SectionTitle,
   TextField
 } from "../../components/ui/Primitives";
-import { colors, spacing } from "../../constants/theme";
+import { colors, spacing, typography } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 import { arenaApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
@@ -28,8 +29,26 @@ const battleResultLabel = (result) => {
   return "Đã đấu";
 };
 
+const ActiveRoomScreen = ({ state, token, onLeave, onStateChange }) => (
+  <Screen>
+    <ScreenHeader
+      eyebrow="Đang thi đấu"
+      title={state?.room?.name || "Phòng Arena"}
+      subtitle="Trạng thái được đồng bộ tự động. Tập trung vào câu hỏi hiện tại nhé."
+      right={<Pill label={`${state?.room?.current_players || 0} người`} icon="people-outline" color={colors.green} />}
+    />
+    <ArenaRoom
+      token={token}
+      roomId={state?.room?.id}
+      initialState={state}
+      onStateChange={onStateChange}
+      onLeave={onLeave}
+    />
+  </Screen>
+);
+
 export default function ArenaTab() {
-  const { token, user } = useAuth();
+  const { token, user, refreshProfile } = useAuth();
   const [roomCode, setRoomCode] = React.useState("");
   const [creating, setCreating] = React.useState(false);
   const [joining, setJoining] = React.useState(false);
@@ -49,6 +68,7 @@ export default function ArenaTab() {
   }, [token]);
 
   const createPractice = async () => {
+    if (creating) return;
     setCreating(true);
     try {
       const created = await arenaApi.createRoom(token, {
@@ -86,11 +106,13 @@ export default function ArenaTab() {
 
   const leaveActiveRoom = async () => {
     const roomId = activeState?.room?.id;
+    const wasFinished = activeState?.room?.status === "finished";
     if (!roomId) return;
     setActiveState(null);
     try {
       await arenaApi.leaveRoom(token, roomId);
       await arenaResource.reload();
+      if (wasFinished) await refreshProfile();
     } catch (error) {
       Alert.alert("Không rời phòng được", error.message);
     }
@@ -100,99 +122,161 @@ export default function ArenaTab() {
     return <LoadingState label="Đang tải đấu trường..." />;
   }
 
+  if (activeState) {
+    return <ActiveRoomScreen state={activeState} token={token} onStateChange={setActiveState} onLeave={leaveActiveRoom} />;
+  }
+
   const leaderboard = arenaResource.data?.leaderboard || [];
   const rooms = arenaResource.data?.rooms || [];
   const battles = arenaResource.data?.battles || [];
   const stats = user?.arenaStats || {};
+  const totalMatches = Number(stats.total || 0);
+  const winRate = totalMatches ? Math.round((Number(stats.wins || 0) / totalMatches) * 100) : 0;
 
   return (
     <Screen>
       <ScreenHeader
-        eyebrow="Đấu trường"
+        eyebrow="Khu vực thi đấu"
         title="Đấu trường hóa học"
-        subtitle="Tạo phòng luyện tập, tham gia phòng chờ và theo dõi điểm đấu trường."
+        subtitle="Học nhanh hơn qua những trận đấu ngắn, rõ ràng và có điểm thưởng."
         right={<Pill label={`${stats.points || 0} điểm`} icon="trophy-outline" color={colors.green} />}
       />
 
-      {arenaResource.error ? (
-        <ErrorState message={arenaResource.error.message} onRetry={arenaResource.reload} />
-      ) : null}
+      {arenaResource.error ? <ErrorState message={arenaResource.error.message} onRetry={arenaResource.reload} /> : null}
 
-      <View style={styles.metricRow}>
-        <Metric label="Trận" value={stats.total || 0} icon="game-controller-outline" color={colors.green} />
-        <Metric label="Thắng" value={stats.wins || 0} icon="medal-outline" color={colors.green} />
-        <Metric label="Thua" value={stats.losses || 0} icon="trending-down-outline" color={colors.red} />
-      </View>
-
-      <Card accent={colors.green} style={styles.roomCard}>
-        <Text style={styles.cardTitle}>Phòng đấu</Text>
+      <Card accent={colors.green} style={styles.heroCard}>
+        <View style={styles.heroGlow}><Ionicons name="flash" size={32} color="#d9f2bd" /></View>
+        <View style={styles.heroCopy}>
+          <Text style={styles.heroEyebrow}>Bắt đầu trong vài giây</Text>
+          <Text style={styles.heroTitle}>Sẵn sàng thử sức?</Text>
+          <Text style={styles.heroDescription}>Chơi một mình để làm quen hoặc dùng mã phòng để đấu cùng bạn bè.</Text>
+        </View>
         <PrimaryButton
-          label={creating ? "Đang tạo..." : "Luyện tập nhanh"}
-          icon="flash-outline"
+          label={creating ? "Đang chuẩn bị..." : "Luyện tập ngay"}
+          icon="play"
           color={colors.green}
           onPress={createPractice}
           disabled={creating}
+          style={styles.heroButton}
         />
+      </Card>
+
+      <View style={styles.metricRow}>
+        <Metric label="Trận đấu" value={totalMatches} icon="game-controller-outline" color={colors.green} />
+        <Metric label="Tỉ lệ thắng" value={`${winRate}%`} icon="trending-up-outline" color={colors.blue} />
+        <Metric label="Điểm" value={stats.points || 0} icon="trophy-outline" color={colors.amber} />
+      </View>
+
+      <Card style={styles.joinCard}>
+        <View style={styles.sectionHeading}>
+          <View style={[styles.sectionIcon, styles.joinIcon]}><Ionicons name="keypad-outline" size={18} color={colors.blue} /></View>
+          <View style={styles.sectionHeadingCopy}>
+            <Text style={styles.sectionTitle}>Vào phòng bằng mã</Text>
+            <Text style={styles.sectionSubtitle}>Nhập mã 6 số do chủ phòng gửi cho bạn.</Text>
+          </View>
+        </View>
         <View style={styles.joinRow}>
           <TextField
             icon="keypad-outline"
-            placeholder="Mã phòng"
+            placeholder="Ví dụ: 123456"
             value={roomCode}
-            onChangeText={setRoomCode}
-            autoCapitalize="characters"
+            onChangeText={(value) => setRoomCode(value.replace(/\D/g, "").slice(0, 6))}
+            keyboardType="number-pad"
+            maxLength={6}
             style={styles.joinInput}
           />
-          <GhostButton
-            label={joining ? "..." : "Vào"}
+          <PrimaryButton
+            label={joining ? "..." : "Vào phòng"}
             icon="enter-outline"
             onPress={() => joinRoom()}
-            color={colors.green}
-            disabled={joining}
+            color={colors.blue}
+            disabled={joining || roomCode.trim().length < 4}
             style={styles.joinButton}
           />
         </View>
       </Card>
 
-      {activeState ? (
-        <ArenaRoom
-          token={token}
-          roomId={activeState.room?.id}
-          initialState={activeState}
-          onStateChange={setActiveState}
-          onLeave={leaveActiveRoom}
-        />
-      ) : null}
+      <Card style={styles.guideCard}>
+        <View style={styles.sectionHeading}>
+          <View style={styles.sectionIcon}><Ionicons name="sparkles-outline" size={18} color={colors.green} /></View>
+          <View style={styles.sectionHeadingCopy}>
+            <Text style={styles.sectionTitle}>Chơi như thế nào?</Text>
+            <Text style={styles.sectionSubtitle}>Một ván gồm 10 thử thách hóa học.</Text>
+          </View>
+        </View>
+        <View style={styles.guideSteps}>
+          {[
+            ["1", "Chọn cách chơi", "Luyện tập một mình hoặc vào phòng bạn bè."],
+            ["2", "Trả lời nhanh", "Mỗi câu có đồng hồ và điểm thưởng theo tốc độ."],
+            ["3", "Nhận điểm", "Kết quả và điểm xếp hạng được lưu tự động."]
+          ].map(([number, title, description]) => (
+            <View key={number} style={styles.guideStep}>
+              <View style={styles.stepNumber}><Text style={styles.stepNumberText}>{number}</Text></View>
+              <View style={styles.stepCopy}>
+                <Text style={styles.stepTitle}>{title}</Text>
+                <Text style={styles.stepDescription}>{description}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      </Card>
 
-      <SectionTitle title="Phòng chờ" actionLabel="Tải lại" onAction={arenaResource.reload} />
+      <View style={styles.sectionTitleRow}>
+        <SectionTitle title="Phòng đang mở" actionLabel="Tải lại" onAction={arenaResource.reload} />
+        <Text style={styles.sectionCount}>{rooms.length} phòng</Text>
+      </View>
       {rooms.length > 0 ? (
         <View style={styles.stack}>
-          {rooms.slice(0, 5).map((room) => (
+          {rooms.slice(0, 5).map((room) => {
+            const currentPlayers = Number(room.current_players || 0);
+            const maxPlayers = Number(room.max_players || 2);
+            const isFull = currentPlayers >= maxPlayers;
+            return (
+              <Card key={room.id} style={styles.roomListCard}>
+                <View style={styles.roomListTop}>
+                  <View style={styles.roomListIcon}><Ionicons name="people-outline" size={21} color={colors.green} /></View>
+                  <View style={styles.roomListCopy}>
+                    <Text style={styles.roomListTitle} numberOfLines={1}>{room.name || `Phòng ${room.id}`}</Text>
+                    <Text style={styles.roomListSubtitle} numberOfLines={1}>{room.host_name || "Chủ phòng"} · Mã {room.id}</Text>
+                  </View>
+                  <Pill label={`${currentPlayers}/${maxPlayers}`} color={isFull ? colors.amber : colors.green} />
+                </View>
+                <View style={styles.roomListMeta}>
+                  <Text style={styles.roomMetaText}><Ionicons name="game-controller-outline" size={14} color={colors.muted} /> {room.mode === "solo" ? "Đối kháng 1v1" : room.mode}</Text>
+                  <Text style={styles.roomMetaText}><Ionicons name="flask-outline" size={14} color={colors.muted} /> {room.difficulty === "auto" ? "Theo trình độ" : room.difficulty}</Text>
+                </View>
+                <GhostButton
+                  label={isFull ? "Phòng đã đầy" : joining ? "Đang vào..." : "Vào phòng"}
+                  icon={isFull ? "lock-closed-outline" : "enter-outline"}
+                  color={isFull ? colors.muted : colors.green}
+                  onPress={() => joinRoom(room.id)}
+                  disabled={isFull || joining}
+                  style={styles.roomJoinButton}
+                />
+              </Card>
+            );
+          })}
+        </View>
+      ) : (
+        <EmptyState icon="people-outline" title="Chưa có phòng chờ" subtitle="Bạn có thể luyện tập ngay hoặc nhập mã phòng từ bạn bè." />
+      )}
+
+      <SectionTitle title="Bảng xếp hạng" />
+      {leaderboard.length > 0 ? (
+        <View style={styles.stack}>
+          {leaderboard.slice(0, 3).map((item) => (
             <ListRow
-              key={room.id}
-              icon="people-outline"
-              title={room.name || `Phòng ${room.id}`}
-              subtitle={`${room.host_name || "Chủ phòng"} · ${room.current_players || 0}/${room.max_players || 2} người`}
-              color={colors.green}
-              right={<GhostButton label="Vào" icon="enter-outline" onPress={() => joinRoom(room.id)} color={colors.green} disabled={joining} style={styles.rowButton} />}
+              key={`${item.rank}-${item.name}`}
+              icon={item.rank === 1 ? "medal-outline" : "trophy-outline"}
+              title={`${item.rank}. ${item.name}`}
+              subtitle={`${item.points} điểm · ${item.wins}/${item.total} trận thắng`}
+              color={item.rank === 1 ? colors.amber : colors.green}
             />
           ))}
         </View>
       ) : (
-        <EmptyState icon="people-outline" title="Chưa có phòng chờ" subtitle="Tạo phòng luyện tập hoặc quay lại sau để tìm đối thủ." />
+        <EmptyState icon="trophy-outline" title="Bảng xếp hạng đang trống" subtitle="Hãy hoàn thành trận đầu tiên để xuất hiện trên bảng." />
       )}
-
-      <SectionTitle title="Xếp hạng đấu trường" />
-      <View style={styles.stack}>
-        {leaderboard.slice(0, 3).map((item) => (
-          <ListRow
-            key={`${item.rank}-${item.name}`}
-            icon={item.rank === 1 ? "medal-outline" : "trophy-outline"}
-            title={`${item.rank}. ${item.name}`}
-            subtitle={`${item.points} điểm · ${item.wins}/${item.total} trận thắng`}
-            color={item.rank === 1 ? colors.green : colors.green}
-          />
-        ))}
-      </View>
 
       <SectionTitle title="Trận gần đây" />
       {battles.length > 0 ? (
@@ -202,52 +286,60 @@ export default function ArenaTab() {
             return (
               <ListRow
                 key={battle.id}
-                icon={battle.result === "win" ? "arrow-up-circle-outline" : "remove-circle-outline"}
+                icon={battle.result === "win" ? "arrow-up-circle-outline" : battle.result === "lose" ? "arrow-down-circle-outline" : "remove-circle-outline"}
                 title={battle.opponent_name || "Đấu trường"}
-                subtitle={`${battleResultLabel(battle.result)} · ${battle.score || 0} điểm · ${pointsDelta} điểm xếp hạng`}
-                color={battle.result === "win" ? colors.green : colors.red}
+                subtitle={`${battleResultLabel(battle.result)} · ${battle.score || 0} điểm`}
+                color={battle.result === "win" ? colors.green : battle.result === "lose" ? colors.red : colors.amber}
+                right={<Text style={[styles.pointsDelta, { color: pointsDelta >= 0 ? colors.greenDark : colors.red }]}>{pointsDelta > 0 ? "+" : ""}{pointsDelta}</Text>}
               />
             );
           })}
         </View>
       ) : (
-        <EmptyState icon="time-outline" title="Chưa có lịch sử trận" subtitle="Kết quả sẽ xuất hiện sau khi bạn hoàn thành trận đấu trường." />
+        <EmptyState icon="time-outline" title="Chưa có lịch sử trận" subtitle="Kết quả sẽ xuất hiện sau khi bạn hoàn thành trận đấu." />
       )}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  metricRow: {
-    flexDirection: "row",
-    gap: spacing.sm
-  },
-  roomCard: {
-    gap: spacing.md
-  },
-  cardTitle: {
-    color: colors.ink,
-    fontSize: 17,
-    fontWeight: "900"
-  },
-  joinRow: {
-    flexDirection: "row",
-    gap: spacing.sm
-  },
-  joinInput: {
-    flex: 1
-  },
-  joinButton: {
-    width: 92
-  },
-  stack: {
-    gap: spacing.sm
-  },
-  rowButton: {
-    width: 72,
-    minHeight: 38,
-    paddingHorizontal: 8
-  }
+  heroCard: { backgroundColor: "#f2faea", gap: spacing.md, overflow: "hidden", paddingVertical: spacing.lg },
+  heroGlow: { alignItems: "center", backgroundColor: colors.green, borderRadius: 18, height: 56, justifyContent: "center", width: 56 },
+  heroCopy: { gap: 5 },
+  heroEyebrow: { color: colors.greenDark, fontFamily: typography.bold, fontSize: 12, letterSpacing: 0.7, textTransform: "uppercase" },
+  heroTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 24, lineHeight: 30 },
+  heroDescription: { color: colors.muted, fontFamily: typography.medium, fontSize: 14, lineHeight: 21 },
+  heroButton: { alignSelf: "stretch" },
+  metricRow: { flexDirection: "row", gap: spacing.sm },
+  joinCard: { gap: spacing.md },
+  sectionHeading: { alignItems: "center", flexDirection: "row", gap: spacing.sm },
+  sectionIcon: { alignItems: "center", backgroundColor: "#eaf6df", borderRadius: 13, height: 38, justifyContent: "center", width: 38 },
+  joinIcon: { backgroundColor: "#e9f5ff" },
+  sectionHeadingCopy: { flex: 1, gap: 3 },
+  sectionTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 17 },
+  sectionSubtitle: { color: colors.muted, fontFamily: typography.medium, fontSize: 13, lineHeight: 18 },
+  joinRow: { flexDirection: "row", gap: spacing.sm },
+  joinInput: { flex: 1 },
+  joinButton: { minWidth: 112, paddingHorizontal: 10 },
+  guideCard: { gap: spacing.md },
+  guideSteps: { gap: spacing.md },
+  guideStep: { alignItems: "flex-start", flexDirection: "row", gap: spacing.sm },
+  stepNumber: { alignItems: "center", backgroundColor: colors.green, borderRadius: 14, height: 28, justifyContent: "center", width: 28 },
+  stepNumberText: { color: "#ffffff", fontFamily: typography.bold, fontSize: 13 },
+  stepCopy: { flex: 1, gap: 2 },
+  stepTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 14 },
+  stepDescription: { color: colors.muted, fontFamily: typography.medium, fontSize: 13, lineHeight: 19 },
+  sectionTitleRow: { alignItems: "flex-end", flexDirection: "row", justifyContent: "space-between" },
+  sectionCount: { color: colors.muted, fontFamily: typography.medium, fontSize: 12, marginBottom: 3 },
+  stack: { gap: spacing.sm },
+  roomListCard: { gap: spacing.sm, padding: spacing.md },
+  roomListTop: { alignItems: "center", flexDirection: "row", gap: spacing.sm },
+  roomListIcon: { alignItems: "center", backgroundColor: colors.surfaceAlt, borderRadius: 13, height: 42, justifyContent: "center", width: 42 },
+  roomListCopy: { flex: 1, gap: 3 },
+  roomListTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 15 },
+  roomListSubtitle: { color: colors.muted, fontFamily: typography.medium, fontSize: 12 },
+  roomListMeta: { flexDirection: "row", flexWrap: "wrap", gap: spacing.md, paddingLeft: 50 },
+  roomMetaText: { color: colors.muted, fontFamily: typography.medium, fontSize: 12 },
+  roomJoinButton: { minHeight: 44 },
+  pointsDelta: { fontFamily: typography.bold, fontSize: 14 }
 });
-
-

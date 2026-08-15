@@ -248,6 +248,12 @@ export const arenaApi = {
       token,
       body
     }),
+  advanceRoom: (token, roomId) =>
+    apiRequest(`/api/arena/room/${roomId}/advance`, {
+      method: "POST",
+      token,
+      body: {}
+    }),
   leaveRoom: (token, roomId) =>
     apiRequest("/api/arena/leave", {
       method: "POST",

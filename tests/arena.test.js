@@ -11,6 +11,7 @@ const sessionId = 'session-1';
 const nguoi_dung = {
   student: { id: 'student', username: 'Student', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
   opponent: { id: 'opponent', username: 'Opponent', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
+  outsider: { id: 'outsider', username: 'Outsider', role: 'student', currentSessionId: sessionId, xp: 0, level: 1 },
 };
 
 const userModel = {
@@ -696,6 +697,20 @@ describe('arena mini game backend', () => {
     expect(started.body.message).toContain('Chưa đủ người chơi');
   });
 
+  it('uses active player rows when listing waiting rooms', async () => {
+    resetArenaState();
+    arenaState.room.status = 'waiting';
+    arenaState.room.current_players = 2;
+    arenaState.room.max_players = 2;
+    arenaState.room.la_luyen_tap = false;
+    arenaState.players = [arenaState.players[0]];
+
+    const res = await request(app).get('/api/arena/rooms');
+
+    expect(res.status).toBe(200);
+    expect(res.body.rooms[0].current_players).toBe(1);
+  });
+
   it('issues a short lived Supabase Realtime compatible token', async () => {
     const res = await request(app)
       .get('/api/arena/realtime-token')
@@ -720,6 +735,16 @@ describe('arena mini game backend', () => {
       question: questions.calculation.cau_hoi,
     });
     expect(res.body.state.currentQuestion.answer).toBeUndefined();
+  });
+
+  it('does not expose a room question to a non-member', async () => {
+    resetArenaState(questions.calculation);
+
+    const res = await request(app)
+      .get('/api/arena/room/room-1/state')
+      .set('Authorization', `Bearer ${tokenFor('outsider')}`);
+
+    expect(res.status).toBe(403);
   });
 
   it('filters legacy multiple-choice rows that were defaulted to calculation without mini game payload', async () => {
@@ -820,6 +845,31 @@ describe('arena mini game backend', () => {
 
     expect(first.status).toBe(200);
     expect(second.status).toBe(409);
+  });
+
+  it('does not allow a non-member to submit an answer', async () => {
+    resetArenaState(questions.calculation);
+
+    const res = await request(app)
+      .post('/api/arena/room/room-1/answer')
+      .set('Authorization', `Bearer ${tokenFor('outsider')}`)
+      .send({ gameType: 'calculation', value: 0.5 });
+
+    expect(res.status).toBe(403);
+    expect(arenaState.answers).toHaveLength(0);
+  });
+
+  it('only lets the host advance a round', async () => {
+    resetArenaState(questions.calculation);
+    arenaState.room.vong_ket_thuc_luc = new Date(Date.now() - 1000).toISOString();
+
+    const res = await request(app)
+      .post('/api/arena/room/room-1/advance')
+      .set('Authorization', `Bearer ${tokenFor('opponent')}`)
+      .send({});
+
+    expect(res.status).toBe(403);
+    expect(res.body.message).toContain('chủ phòng');
   });
 
   it('blocks advancing while the round still has time and unanswered players', async () => {
