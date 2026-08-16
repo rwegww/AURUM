@@ -6,6 +6,7 @@ import StageVideoModal from '@/components/lessons/StageVideoModal';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { getLessonSummary } from '@/utils/lessonSummary';
+import { countJourneyQuestions } from '@/utils/journeyLessonData';
 
 const StageIntro = () => {
   const { t } = useTranslation();
@@ -14,52 +15,65 @@ const StageIntro = () => {
   const navigate = useNavigate();
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const order = searchParams.get('order') || '1';
 
   const { user } = useAuth();
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchData = async () => {
       try {
-        // Fetch all bai_hoc for this grade to determine order
-        const listRes = await fetch(`/api/lessons?classId=${grade}`);
+        setLoading(true);
+        setError('');
+        const [listRes, lessonRes] = await Promise.all([
+          fetch(`/api/lessons?classId=${grade}`, { signal: controller.signal }),
+          fetch(`/api/lessons/${lessonId}`, { signal: controller.signal }),
+        ]);
+        if (!listRes.ok || !lessonRes.ok) {
+          throw new Error('Không thể tải dữ liệu mở đầu của chặng này.');
+        }
+
         const listData = await listRes.json();
         const sortedLessons = Array.isArray(listData) ? listData : [];
-
-        const res = await fetch(`/api/lessons/${lessonId}`);
-        const data = await res.json();
+        const data = await lessonRes.json();
         setLesson(data);
 
-        // Security check
         if (user?.role !== 'admin' && user?.role !== 'teacher') {
-          const currentIndex = sortedLessons.findIndex(l => l.lessonId === lessonId);
+          const currentIndex = sortedLessons.findIndex((item) => String(item.lessonId) === String(lessonId));
           if (currentIndex !== -1) {
+            const unlockedLessonIds = (user?.unlockedLessons || []).map(String);
             const isFirstDefaultUnlocked = currentIndex === 0 && ['6', '7', '8'].includes(grade);
             const isPlacedFirstLesson = currentIndex === 0
               && user?.balancingProgress?.placement?.status === 'placed'
               && String(user.balancingProgress.placement.assignedGrade) === String(grade);
-            const isSelfUnlocked = user?.unlockedLessons?.includes(lessonId);
-            const isPrevUnlocked = currentIndex > 0 && user?.unlockedLessons?.includes(sortedLessons[currentIndex - 1].lessonId);
+            const isSelfUnlocked = unlockedLessonIds.includes(String(lessonId));
+            const isPrevUnlocked = currentIndex > 0
+              && unlockedLessonIds.includes(String(sortedLessons[currentIndex - 1].lessonId));
             
             if (!isFirstDefaultUnlocked && !isPlacedFirstLesson && !isSelfUnlocked && !isPrevUnlocked) {
               console.warn('Truy cập bị chặn: Bài học chưa được mở khóa (cần pass test học vượt hoặc hoàn thành bài trước)');
-              navigate(`/classroom/${grade}/journey`);
+              navigate(`/classroom/${grade}/journey`, { replace: true });
             }
           }
         }
-
       } catch (err) {
-        console.error('Lỗi tải bài học:', err);
+        if (err.name !== 'AbortError') {
+          console.error('Lỗi tải bài học:', err);
+          setError(err.message || 'Không thể tải bài học.');
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
     fetchData();
+    return () => controller.abort();
   }, [lessonId, grade, user, navigate]);
 
 
   const handleComplete = () => {
-    navigate(`/classroom/${grade}/journey/${lessonId}/story?order=${order}`);
+    navigate(`/classroom/${grade}/journey/${lessonId}/challenge?order=${order}`);
   };
 
   const handleBack = () => {
@@ -72,16 +86,24 @@ const StageIntro = () => {
     </div>
   );
 
+  if (error) return (
+    <div className="min-h-screen bg-[#fffbf0] flex items-center justify-center px-4">
+      <div className="max-w-md rounded-3xl border border-red-100 bg-white p-8 text-center shadow-xl">
+        <h1 className="text-xl font-black text-viet-text">Chưa tải được bài học</h1>
+        <p className="mt-3 text-sm font-medium text-viet-text-light">{error}</p>
+        <button type="button" onClick={handleBack} className="mt-6 rounded-2xl bg-viet-green px-6 py-3 font-black text-white">
+          Quay lại lộ trình
+        </button>
+      </div>
+    </div>
+  );
+
   const videoSrc = lesson?.introVideoUrl || lesson?.videoModules?.find(module => module?.url)?.url || '';
   const summary = getLessonSummary(lesson);
   const briefingGoals = (summary.goals.length ? summary.goals : [
     lesson?.description || 'Nắm ý chính của bài, ghi lại từ khóa quan trọng và sẵn sàng bước vào nhiệm vụ khám phá.',
   ]).slice(0, 3);
-  const quizTotal = Array.isArray(lesson?.quizzes)
-    ? lesson.quizzes.length
-    : Object.values(lesson?.quizzes || {}).reduce((total, group) => (
-      total + (Array.isArray(group) ? group.length : 0)
-    ), 0);
+  const quizTotal = countJourneyQuestions(lesson);
 
   if (!videoSrc) {
     return (
@@ -204,5 +226,3 @@ const StageIntro = () => {
 };
 
 export default StageIntro;
-
-

@@ -1,88 +1,110 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import MissionModal from '@/components/lessons/MissionModal';
-import { useAuth } from '@/context/AuthContext';
-import { motion, AnimatePresence } from 'framer-motion';
 import LessonSummaryFallback from '@/components/lessons/LessonSummaryFallback';
+import { useAuth } from '@/context/AuthContext';
 import { getLessonInfographicUrl } from '@/utils/lessonAssets';
-import { getVideoEmbedUrl, isExternalEmbedVideo } from '@/utils/videoLinks';
+import { getJourneyQuizGroups, JOURNEY_LEVELS } from '@/utils/journeyLessonData';
+
+const LEVEL_LABELS = {
+  level1: 'Mốc 1: Khởi động',
+  level2: 'Mốc 2: Luyện hiểu',
+  level3: 'Mốc 3: Chốt bài',
+};
+
+const getResultStars = (mistakes, total) => {
+  const safeTotal = Math.max(1, total);
+  const accuracy = Math.max(0, safeTotal - mistakes) / safeTotal;
+  if (accuracy >= 0.9) return 3;
+  if (accuracy >= 0.7) return 2;
+  return 1;
+};
 
 const StageQuiz = () => {
   const { grade, lessonId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, completeLessonSegment } = useAuth();
-  
-  const [lesson, setLesson] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const currentLevel = searchParams.get('level') || 'level1';
-  const [showResult, setShowResult] = useState(false);
-  const [lastResult, setLastResult] = useState(null);
-  const [videoCompleted, setVideoCompleted] = useState(false);
-  const [failedRewardSrc, setFailedRewardSrc] = useState('');
-  
+
+  const requestedLevel = searchParams.get('level') || 'level1';
+  const currentLevel = JOURNEY_LEVELS.includes(requestedLevel) ? requestedLevel : 'level1';
   const order = searchParams.get('order') || '1';
 
+  const [lesson, setLesson] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [showResult, setShowResult] = useState(false);
+  const [lastResult, setLastResult] = useState(null);
+  const [pendingResult, setPendingResult] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const [failedRewardSrc, setFailedRewardSrc] = useState('');
+
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchLesson = async () => {
       try {
-        const res = await fetch(`/api/lessons/${lessonId}`);
-        const data = await res.json();
-        setLesson(data);
-      } catch (err) {
-        console.error('Lỗi tải bài học:', err);
+        setLoading(true);
+        setError('');
+        const response = await fetch(`/api/lessons/${lessonId}`, { signal: controller.signal });
+        if (!response.ok) throw new Error('Không thể tải câu hỏi của chặng này.');
+        setLesson(await response.json());
+      } catch (fetchError) {
+        if (fetchError.name !== 'AbortError') {
+          console.error('Lỗi tải bài học:', fetchError);
+          setError(fetchError.message || 'Không thể tải bài học.');
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) setLoading(false);
       }
     };
+
     fetchLesson();
+    return () => controller.abort();
   }, [lessonId]);
 
-  // Xử lý hoàn thành quiz (level1, level2, level3)
-  const handleLevelComplete = async ({ mistakes, total }) => {
-    let stars = 1;
-    if (mistakes <= 1) stars = 3;
-    else if (mistakes <= 3) stars = 2;
+  const quizGroups = useMemo(() => getJourneyQuizGroups(lesson), [lesson]);
+  const currentQuestions = quizGroups[currentLevel] || [];
+  const rewardSrc = getLessonInfographicUrl(lesson, grade, order);
+  const rewardImageError = failedRewardSrc === rewardSrc;
 
-    const result = { mistakes, total, stars };
-    setLastResult(result);
-    setShowResult(true);
+  const persistResult = async (result) => {
+    if (!user) {
+      setSaveError('Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại để lưu tiến độ.');
+      return;
+    }
 
-    if (user) {
-      const xpMap = { level1: 30, level2: 50, level3: 100 };
-      const xpGain = xpMap[currentLevel] || 30;
-      const isLessonCompletion = currentLevel === 'level3';
-
-      try {
-        await completeLessonSegment(lessonId, currentLevel, stars, xpGain, isLessonCompletion);
-      } catch (err) {
-        console.error('XCircle Lỗi khi lưu giai đoạn:', err);
-      }
+    setIsSaving(true);
+    setSaveError('');
+    try {
+      const response = await completeLessonSegment(lessonId, currentLevel, result.stars);
+      if (!response?.success) throw new Error(response?.message || 'Không thể lưu mốc sao.');
+      setLastResult(result);
+      setShowResult(true);
+      setPendingResult(null);
+    } catch (saveFailure) {
+      console.error('Lỗi khi lưu giai đoạn:', saveFailure);
+      setSaveError(saveFailure.message || 'Không thể lưu tiến độ. Vui lòng thử lại.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
-  // Xử lý hoàn thành xem video (level1)
-  const handleVideoComplete = async () => {
-    setVideoCompleted(true);
-
-    // Chỉ tự động lưu nếu level1 không có bài tập trắc nghiệm nào
-    const currentQuestions = getLevelData('level1');
-    if (user && currentQuestions.length === 0) {
-      try {
-        await completeLessonSegment(lessonId, 'level1', 3, 30, false);
-      } catch (err) {
-        console.error('XCircle Lỗi khi lưu giai đoạn video:', err);
-      }
-    }
+  const handleLevelComplete = ({ mistakes, total }) => {
+    if (isSaving || showResult || pendingResult) return;
+    const result = {
+      mistakes,
+      total,
+      stars: getResultStars(mistakes, total),
+    };
+    setPendingResult(result);
+    persistResult(result);
   };
 
-  const handleContinue = () => {
-    navigate(`/classroom/${grade}/journey`);
-  };
-
-  const handleCancel = () => {
-    navigate(`/classroom/${grade}/journey`);
-  };
+  const handleContinue = () => navigate(`/classroom/${grade}/journey`);
+  const handleCancel = () => navigate(`/classroom/${grade}/journey`);
 
   if (loading) return (
     <div className="min-h-screen bg-[#fffbf0] flex items-center justify-center">
@@ -90,236 +112,113 @@ const StageQuiz = () => {
     </div>
   );
 
-  const getLevelData = (lvl) => {
-    if (!lesson?.quizzes) return [];
-    if (Array.isArray(lesson.quizzes)) return lvl === 'level2' ? lesson.quizzes : [];
-    return lesson.quizzes[lvl] || [];
-  };
-
-  const currentQuestions = getLevelData(currentLevel);
-  const introVideoUrl = lesson?.introVideoUrl || lesson?.videoModules?.find(module => module?.url)?.url || '';
-  const rewardSrc = getLessonInfographicUrl(lesson, grade, order);
-  const rewardImageError = failedRewardSrc === rewardSrc;
-  const getCurrentLevelLabel = () => {
-    if (currentLevel === 'level1') return introVideoUrl ? 'Đoạn 1: Video + Học' : 'Đoạn 1: Khởi động';
-    if (currentLevel === 'level2') return 'Đoạn 2: Hiểu';
-    return 'Đoạn 3: Ôn tập';
-  };
-
-  // ========== LEVEL 1: XEM VIDEO BÀI GIẢNG ==========
-  if (currentLevel === 'level1' && !videoCompleted && introVideoUrl) {
-    const videoUrl = introVideoUrl;
-    const isEmbedVideo = isExternalEmbedVideo(videoUrl);
-    // ... existing video render logic ...
-
-    return (
-      <div className="fixed inset-0 z-[110] flex items-start justify-center p-4 py-12 bg-[#fffbf0]/90 backdrop-blur-xl overflow-y-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="max-w-2xl w-full bg-white rounded-[40px] border border-viet-border shadow-2xl overflow-hidden relative"
-        >
-          {/* Progress Bar - Full for video */}
-          <div className="absolute top-0 left-0 right-0 h-1.5 bg-viet-green/5">
-            <motion.div 
-              className="h-full bg-viet-green" 
-              initial={{ width: '0%' }} 
-              animate={{ width: videoCompleted ? '100%' : '10%' }} 
-              transition={{ duration: 0.8 }}
-            />
-          </div>
-
-          <div className="p-8 md:p-10">
-            {/* Header - Giống MissionModal */}
-            <div className="flex items-center justify-between gap-4 mb-8">
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-viet-green/5 rounded-2xl flex items-center justify-center text-4xl border border-viet-green/10">
-                  🎬
-                </div>
-                <div>
-                  <h3 className="text-[12px] font-black text-viet-green uppercase tracking-[3px] mb-1">Bài giảng</h3>
-                  <h2 className="text-xl font-bold text-viet-text line-clamp-1">{lesson?.title || 'Bài giảng'}</h2>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">Đoạn</div>
-                <div className="text-lg font-black text-viet-green">
-                  1<span className="text-viet-text-light/30"> / 3</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Content Area - Giống MissionModal */}
-            <div className="bg-[#fcf8f0] rounded-[30px] p-6 mb-8 border border-viet-border">
-              {/* Professor Narrative */}
-              <div className="flex items-start gap-4 mb-6">
-                <img 
-                  src="/assets/images/characters/professor_mole.png" 
-                  className="w-14 h-14 object-contain grayscale-[0.5] opacity-80" 
-                  alt="Prof Mole" 
-                />
-                <div className="bg-white px-4 py-3 rounded-2xl border border-viet-border text-[14px] font-medium text-viet-text-light relative shadow-sm">
-                  <div className="absolute top-4 -left-2 w-4 h-4 bg-white border-l border-b border-viet-border rotate-45" />
-                  Hãy xem video bài giảng bên dưới để nắm vững kiến thức trước khi làm bài tập nhé!
-                </div>
-              </div>
-
-              {/* Video Player */}
-              {videoUrl ? (
-                <div className="relative aspect-video bg-black rounded-2xl overflow-hidden shadow-lg border border-viet-border mb-4">
-                  {isEmbedVideo ? (
-                    <iframe
-                      src={getVideoEmbedUrl(videoUrl)}
-                      title={lesson?.title || 'Video bài giảng'}
-                      className="w-full h-full"
-                      allowFullScreen
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    />
-                  ) : (
-                    <video
-                      src={videoUrl}
-                      controls
-                      className="w-full h-full"
-                      onEnded={handleVideoComplete}
-                      playsInline
-                    />
-                  )}
-                </div>
-              ) : (
-                <div className="aspect-video bg-slate-50 rounded-2xl flex flex-col items-center justify-center border-2 border-dashed border-slate-200 mb-4">
-                  <div className="text-4xl mb-3">MailX</div>
-                  <h4 className="text-sm font-black text-slate-400">Chưa có video bài giảng</h4>
-                  <p className="text-[12px] text-slate-300 mt-1">Bài học này chưa được cập nhật video</p>
-                </div>
-              )}
-
-              {/* Video Status */}
-              <div className="text-center">
-                <AnimatePresence mode="wait">
-                  {videoCompleted ? (
-                    <motion.div 
-                      key="done"
-                      initial={{ opacity: 0, y: 10 }} 
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-viet-green font-black text-[12px] uppercase flex items-center justify-center gap-2"
-                    >
-                      <span>CheckCircle Đã học xong — Bắt đầu làm bài tập ngay!</span>
-                    </motion.div>
-                  ) : (
-                    <motion.p 
-                      key="watching"
-                      className="text-[11px] font-bold text-viet-text-light/50 uppercase tracking-widest"
-                    >
-                      Xem hết video để hoàn thành đoạn này
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Footer - Giống MissionModal */}
-            <div className="flex justify-between items-center">
-              <button 
-                onClick={handleCancel}
-                className="text-[11px] font-black text-viet-text-light/50 uppercase tracking-widest hover:text-red-500 transition-colors"
-              >
-                Hủy lộ trình
-              </button>
-
-              {videoCompleted ? (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  onClick={() => setVideoCompleted(true)}
-                  className="px-8 py-3 bg-viet-green text-white rounded-2xl font-black text-[12px] uppercase tracking-widest shadow-lg hover:brightness-110 hover:scale-105 transition-all"
-                >
-                  Bắt đầu học ngay →
-                </motion.button>
-              ) : (
-                <button
-                  onClick={handleVideoComplete}
-                  className="px-6 py-3 bg-slate-100 text-slate-500 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-viet-green hover:text-white transition-all"
-                >
-                  Đã xem xong
-                </button>
-              )}
-            </div>
-          </div>
-        </motion.div>
+  if (error || currentQuestions.length === 0) return (
+    <div className="min-h-screen bg-[#fffbf0] flex items-center justify-center px-4">
+      <div className="max-w-md rounded-3xl border border-amber-100 bg-white p-8 text-center shadow-xl">
+        <div className="text-5xl">🧭</div>
+        <h1 className="mt-4 text-xl font-black text-viet-text">
+          {error ? 'Chưa tải được câu hỏi' : 'Mốc sao đang được cập nhật'}
+        </h1>
+        <p className="mt-3 text-sm font-medium leading-6 text-viet-text-light">
+          {error || 'Bài học này chưa có câu hỏi hợp lệ cho mốc hiện tại. Tiến độ sẽ không bị ghi nhận sai.'}
+        </p>
+        <button type="button" onClick={handleCancel} className="mt-6 rounded-2xl bg-viet-green px-6 py-3 font-black text-white">
+          Quay lại lộ trình
+        </button>
       </div>
-    );
-  }
-
-  // ========== LEVEL 2 & 3: LÀM BÀI KIỂM TRA ==========
-  if (currentQuestions.length === 0) {
-    navigate(`/classroom/${grade}/journey`);
-    return null;
-  }
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-[#fffbf0]">
-       <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4 bg-white/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl border border-viet-border">
-         <div className="pr-4 border-r border-slate-200">
-            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đang làm</div>
-            <div className="text-sm font-bold text-slate-700">
-               {getCurrentLevelLabel()}
-            </div>
-         </div>
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-4 bg-white/90 backdrop-blur px-6 py-3 rounded-2xl shadow-xl border border-viet-border">
+        <div>
+          <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Đang làm</div>
+          <div className="text-sm font-bold text-slate-700">{LEVEL_LABELS[currentLevel]}</div>
+        </div>
       </div>
 
       <MissionModal
         key={currentLevel}
-        lessonTitle={`${lesson?.title || 'Bài kiểm tra'}`}
-        challenges={currentQuestions.map(q => ({
-          ...q,
-          type: 'multiple-choice',
-          correctAnswer: q.answer
-        }))}
+        lessonTitle={lesson?.title || 'Bài kiểm tra'}
+        challenges={currentQuestions}
         onUnlock={handleLevelComplete}
         onCancel={handleCancel}
       />
 
       <AnimatePresence>
+        {(isSaving || saveError) && !showResult && (
+          <div className="fixed inset-0 z-[190] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
+            >
+              {isSaving ? (
+                <>
+                  <div className="mx-auto h-11 w-11 animate-spin rounded-full border-4 border-viet-green border-t-transparent" />
+                  <h2 className="mt-5 text-lg font-black text-viet-text">Đang lưu mốc sao...</h2>
+                  <p className="mt-2 text-sm text-viet-text-light">Vui lòng giữ nguyên màn hình trong giây lát.</p>
+                </>
+              ) : (
+                <>
+                  <div className="text-5xl">⚠️</div>
+                  <h2 className="mt-4 text-lg font-black text-viet-text">Chưa lưu được tiến độ</h2>
+                  <p className="mt-2 text-sm leading-6 text-viet-text-light">{saveError}</p>
+                  <div className="mt-6 grid grid-cols-2 gap-3">
+                    <button type="button" onClick={handleCancel} className="rounded-2xl border border-slate-200 px-4 py-3 text-sm font-black text-slate-600">
+                      Về lộ trình
+                    </button>
+                    <button type="button" onClick={() => pendingResult && persistResult(pendingResult)} className="rounded-2xl bg-viet-green px-4 py-3 text-sm font-black text-white">
+                      Thử lưu lại
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {showResult && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-            <motion.div 
-              initial={{ scale: 0.9, opacity: 0 }} 
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               className="bg-white rounded-[40px] p-8 md:p-10 max-w-lg w-full text-center shadow-2xl border-4 border-viet-green my-8"
             >
               <div className="text-6xl mb-4">🎉</div>
-              <h2 className="text-2xl font-black text-viet-text mb-2">Hoàn thành đoạn!</h2>
+              <h2 className="text-2xl font-black text-viet-text mb-2">Hoàn thành mốc sao!</h2>
               <p className="text-viet-text-light font-medium mb-6 uppercase tracking-widest text-xs">
-                {currentLevel === 'level1' ? 'Bạn đã bắt đầu hành trình xuất sắc' : (currentLevel === 'level2' ? 'Bạn đã nắm vững kiến thức' : 'Bạn đã ôn tập xuất sắc')}
+                {currentLevel === 'level1'
+                  ? 'Bạn đã khởi động hành trình xuất sắc'
+                  : currentLevel === 'level2'
+                    ? 'Bạn đã nắm vững kiến thức'
+                    : 'Bạn đã chốt bài thành công'}
               </p>
 
               <div className="bg-slate-50 rounded-2xl p-4 mb-6 flex justify-around">
                 <div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase">Chính xác</div>
-                   <div className="text-xl font-black text-viet-green">{lastResult?.total - lastResult?.mistakes}/{lastResult?.total}</div>
+                  <div className="text-[10px] font-black text-slate-400 uppercase">Chính xác</div>
+                  <div className="text-xl font-black text-viet-green">{Math.max(0, lastResult.total - lastResult.mistakes)}/{lastResult.total}</div>
                 </div>
                 <div className="w-px bg-slate-200" />
                 <div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase">Đánh giá</div>
-                   <div className="text-xl font-black text-amber-500">
-                     {lastResult?.stars === 3 ? 'A+' : lastResult?.stars === 2 ? 'B' : 'C'}
-                   </div>
+                  <div className="text-[10px] font-black text-slate-400 uppercase">Số sao</div>
+                  <div className="text-xl font-black text-amber-500">{'★'.repeat(lastResult.stars)}{'☆'.repeat(3 - lastResult.stars)}</div>
                 </div>
               </div>
 
-              {/* Infographic Reward Card */}
               <motion.div
                 initial={{ opacity: 0, y: 30, scale: 0.92 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: 0.4, type: "spring", damping: 14 }}
+                transition={{ delay: 0.4, type: 'spring', damping: 14 }}
                 className="relative w-full bg-[#fcf8f0] rounded-[24px] border-2 border-viet-border overflow-hidden shadow-lg mb-6 group"
               >
-                {/* Reward label ribbon */}
-                <div className="absolute top-3 left-3 z-20 px-3 py-1 bg-viet-green text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md flex items-center gap-1.5">
+                <div className="absolute top-3 left-3 z-20 px-3 py-1 bg-viet-green text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-md">
                   Trang sổ tay mới
                 </div>
-
-                {/* Infographic image or structured temporary page */}
                 {!rewardImageError ? (
                   <img
                     src={rewardSrc}
@@ -332,23 +231,10 @@ const StageQuiz = () => {
                     <LessonSummaryFallback lesson={lesson} compact />
                   </div>
                 )}
-
-                {/* Shimmer overlay on reveal */}
-                {!rewardImageError && (
-                  <motion.div
-                    initial={{ x: '-100%' }}
-                    animate={{ x: '200%' }}
-                    transition={{ delay: 0.6, duration: 1, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"
-                  />
-                )}
               </motion.div>
 
-              <p className="text-viet-text-light/40 text-[10px] font-black uppercase tracking-widest mb-6">
-                {rewardImageError ? 'Phiếu tổng kết tạm thời đã được lưu vào sổ tay hành trình' : 'Trang infographic đã được lưu vào sổ tay hành trình'}
-              </p>
-
-              <button 
+              <button
+                type="button"
                 onClick={handleContinue}
                 className="w-full py-4 bg-viet-green text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-lg shadow-viet-green/20 hover:scale-105 transition-all"
               >
@@ -363,6 +249,3 @@ const StageQuiz = () => {
 };
 
 export default StageQuiz;
-
-
-

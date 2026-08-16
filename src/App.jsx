@@ -108,8 +108,10 @@ function AppContent() {
 
   const isAuthPage = ['/forgot-password', '/reset-password'].includes(location.pathname) || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth/callback';
   const isImmersivePage = location.pathname.includes('/journey/') && (
-    location.pathname.endsWith('/intro') || 
-    location.pathname.endsWith('/challenge') || 
+    location.pathname.endsWith('/intro') ||
+    location.pathname.endsWith('/story') ||
+    location.pathname.endsWith('/challenge') ||
+    location.pathname.endsWith('/quiz') ||
     location.pathname.endsWith('/reward')
   );
 

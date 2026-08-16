@@ -404,6 +404,13 @@ router.post('/lesson-segment', auth, async (req, res) => {
     const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
     const lessonStars = { ...(currentProgress.lessonStars || {}) };
     const currentLessonStars = { ...(lessonStars[lessonId] || { level1: 0, level2: 0, level3: 0 }) };
+    const prerequisiteLevel = level === 'level2' ? 'level1' : level === 'level3' ? 'level2' : null;
+    if (req.user.role === 'student' && prerequisiteLevel && !(currentLessonStars[prerequisiteLevel] > 0)) {
+      return res.status(409).json({
+        message: `Bạn cần hoàn thành ${prerequisiteLevel === 'level1' ? 'mốc 1' : 'mốc 2'} trước.`,
+      });
+    }
+
     const previousStars = currentLessonStars[level] || 0;
     const firstCompletionForLevel = previousStars <= 0;
 

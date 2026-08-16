@@ -444,6 +444,19 @@ describe('security acceptance matrix', () => {
     expect(userModel.update).not.toHaveBeenCalled();
   });
 
+  it('không cho học sinh ghi mốc sao sai thứ tự', async () => {
+    lessonModel.findById.mockResolvedValueOnce({ id: 'hoa8_bai1', lessonId: 'hoa8_bai1', classId: 8 });
+
+    const res = await request(app)
+      .post('/api/user/lesson-segment')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ lessonId: 'hoa8_bai1', level: 'level2', stars: 3 });
+
+    expect(res.status).toBe(409);
+    expect(res.body.message).toContain('mốc 1');
+    expect(userModel.update).not.toHaveBeenCalled();
+  });
+
   it('rejects a non-string teacher proof URL without leaking an internal error', async () => {
     const res = await request(app)
       .post('/api/auth/register-teacher')
@@ -1041,4 +1054,3 @@ describe('security acceptance matrix', () => {
     expect(discussionModel.getByLesson).not.toHaveBeenCalled();
   });
 });
-

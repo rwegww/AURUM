@@ -22,6 +22,11 @@ import PlacementTestModal, { AVAILABLE_PLACEMENT_TEST_GRADES } from '@/component
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { buildJourneyPath, createJourneyLayout } from '@/utils/journeyLayout';
+import {
+  countJourneyQuestions,
+  JOURNEY_LEVELS,
+  normalizeJourneyChallenges,
+} from '@/utils/journeyLessonData';
 import './GradeJourney.css';
 
 const CLASS_THEMES = {
@@ -90,7 +95,7 @@ const CLASS_THEMES = {
   },
 };
 
-const LEVELS = ['level1', 'level2', 'level3'];
+const LEVELS = JOURNEY_LEVELS;
 
 const ThemeDoodle = ({ theme, size = 28 }) => {
   const Icon = theme.doodleIcon;
@@ -126,11 +131,6 @@ const JourneyRail = ({ layout, highestUnlockedIndex }) => {
   );
 };
 
-const getQuizCount = (lesson) => {
-  if (!lesson.quizzes || Array.isArray(lesson.quizzes)) return 0;
-  return LEVELS.reduce((total, level) => total + (lesson.quizzes[level]?.length || 0), 0);
-};
-
 const getNextStepLabel = (stars) => {
   if (!stars.level1) return 'Khởi động';
   if (!stars.level2) return 'Luyện hiểu';
@@ -141,8 +141,8 @@ const getNextStepLabel = (stars) => {
 const StageNode = ({ lesson, globalIndex, point, onOpen, reduceMotion }) => {
   const isLocked = !lesson.isUnlocked;
   const completedLevels = LEVELS.filter((level) => (lesson.stars[level] || 0) > 0).length;
-  const missionCount = Array.isArray(lesson.challenges) ? lesson.challenges.length : 0;
-  const quizCount = getQuizCount(lesson);
+  const missionCount = normalizeJourneyChallenges(lesson.challenges).length;
+  const quizCount = countJourneyQuestions(lesson);
   const cleanTitle = lesson.title?.split(': ').pop() || `Bài học ${globalIndex + 1}`;
   const stateClass = isLocked ? 'is-locked' : lesson.isCompleted ? 'is-completed' : 'is-active';
   const statusLabel = isLocked ? 'đang khóa' : lesson.isCompleted ? 'đã hoàn thành' : 'đã mở';
