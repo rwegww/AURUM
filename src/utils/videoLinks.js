@@ -74,14 +74,28 @@ export const normalizeHttpUrl = (url = '') => {
 export const isValidHttpUrl = (url = '') => Boolean(normalizeHttpUrl(url));
 
 export const isExternalEmbedVideo = (url = '') => {
+  const provider = getVideoProvider(url);
+  return provider === 'youtube' || provider === 'vimeo';
+};
+
+export const getVideoProvider = (url = '') => {
   const parsedUrl = parseUrl(url);
-  if (!parsedUrl) return false;
+  if (!parsedUrl) return 'file';
 
   const hostname = normalizeHostname(parsedUrl.hostname);
-  return hostname === 'youtu.be'
+  if (hostname === 'youtu.be'
     || isHostname(hostname, 'youtube.com')
-    || isHostname(hostname, 'youtube-nocookie.com')
-    || isHostname(hostname, 'vimeo.com');
+    || isHostname(hostname, 'youtube-nocookie.com')) return 'youtube';
+  if (isHostname(hostname, 'vimeo.com')) return 'vimeo';
+  return 'file';
+};
+
+export const getYouTubeVideoId = (url = '') => getYouTubeId(parseUrl(url));
+
+export const getYouTubeStartTime = (url = '') => {
+  const parsedUrl = parseUrl(url);
+  if (!parsedUrl) return 0;
+  return parseYouTubeTime(parsedUrl.searchParams.get('start') || parsedUrl.searchParams.get('t'));
 };
 
 export const getVideoEmbedUrl = (url = '') => {
@@ -90,7 +104,7 @@ export const getVideoEmbedUrl = (url = '') => {
 
   const youtubeId = getYouTubeId(parsedUrl);
   if (youtubeId) {
-    const start = parseYouTubeTime(parsedUrl.searchParams.get('start') || parsedUrl.searchParams.get('t'));
+    const start = getYouTubeStartTime(url);
     const query = start ? `?start=${start}` : '';
     return `https://www.youtube.com/embed/${youtubeId}${query}`;
   }

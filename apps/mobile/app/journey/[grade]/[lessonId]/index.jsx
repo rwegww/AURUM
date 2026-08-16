@@ -30,9 +30,9 @@ export default function LessonDetailScreen() {
   const lessonStars = user?.balancingProgress?.lessonStars?.[lessonKey] || {};
   const completedLevels = levels.filter((level) => lessonStars[level] > 0).length;
 
-  const saveLevel = async (level, stars) => {
+  const saveLevel = async (level) => {
     try {
-      await learningApi.completeLessonSegment(token, { lessonId: lessonKey, level, stars });
+      await learningApi.completeLessonSegment(token, { lessonId: lessonKey, level, stars: 1 });
       await refreshProfile();
       const nextCompletedLevels = completedLevels + (lessonStars[level] > 0 ? 0 : 1);
       Alert.alert("Đã ghi nhận", `Bạn hoàn thành ${nextCompletedLevels}/3 chặng của bài học.`);
@@ -67,7 +67,7 @@ export default function LessonDetailScreen() {
             <Text style={styles.progressTitle}>Tiến độ bài học</Text>
             <Text style={styles.progressSubtitle}>{completedLevels}/3 chặng đã đạt yêu cầu</Text>
           </View>
-          <Pill label={`${Object.values(lessonStars).reduce((sum, value) => sum + (value || 0), 0)}/9 sao`} color={colors.green} icon="star-outline" />
+          <Pill label={`${completedLevels}/3 sao`} color={colors.green} icon="star-outline" />
         </View>
         <ProgressBar value={completedLevels / 3} color={colors.green} />
       </Card>

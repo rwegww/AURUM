@@ -1,15 +1,14 @@
 import React from "react";
-import { Linking, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Image, Linking, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Card, EmptyState, GhostButton, Pill, PrimaryButton, ProgressBar } from "../ui/Primitives";
 import { colors, radius, spacing, typography } from "../../constants/theme";
-
-const PASSING_PERCENT = 70;
+import { API_BASE_URL } from "../../services/api";
 
 const stages = [
-  { key: "level1", title: "Khám phá", subtitle: "Đọc ý chính và tự kiểm tra", icon: "book-outline" },
-  { key: "level2", title: "Luyện tập", subtitle: "Áp dụng kiến thức vào câu hỏi", icon: "flask-outline" },
-  { key: "level3", title: "Chinh phục", subtitle: "Kiểm tra tổng kết bài học", icon: "trophy-outline" }
+  { key: "level1", title: "Xem và hiểu", subtitle: "Xem hết video và hoàn thành câu hỏi nền tảng", icon: "play-circle-outline" },
+  { key: "level2", title: "Nâng cao", subtitle: "Giải nhóm câu hỏi khó và thử thách vận dụng", icon: "flask-outline" },
+  { key: "level3", title: "Tổng hợp", subtitle: "Làm lại toàn bộ câu hỏi của hai vòng trước", icon: "trophy-outline" }
 ];
 
 const cleanText = (value) => String(value || "")
@@ -27,49 +26,84 @@ const contentToText = (content) => {
   return cleanText(content.text || content.content || content.description || content.title || "");
 };
 
+const getCorrectAnswer = (question) => question?.answer ?? question?.correctAnswer;
+
+const isSupportedQuestion = (question) => {
+  if (Array.isArray(question?.options)) return Number.isInteger(Number(getCorrectAnswer(question)));
+  return typeof getCorrectAnswer(question) === "string";
+};
+
+const questionSignature = (question) => JSON.stringify([
+  question?.question || question?.content || question?.text || "",
+  question?.options || []
+]);
+
+const uniquePlayableQuestions = (questions = []) => {
+  const seen = new Set();
+  return questions.filter((question) => {
+    if (!question?.question || !isSupportedQuestion(question)) return false;
+    const signature = questionSignature(question);
+    if (seen.has(signature)) return false;
+    seen.add(signature);
+    return true;
+  });
+};
+
+const splitQuestionBank = (questions) => {
+  const bank = uniquePlayableQuestions(questions);
+  if (bank.length <= 1) return [bank, bank];
+  const splitAt = Math.ceil(bank.length / 2);
+  return [bank.slice(0, splitAt), bank.slice(splitAt)];
+};
+
 const getQuizGroups = (lesson) => {
   const quizzes = lesson?.quizzes;
-  if (Array.isArray(quizzes)) {
-    return { level1: quizzes, level2: quizzes, level3: quizzes };
+  const flatQuizzes = Array.isArray(quizzes) ? uniquePlayableQuestions(quizzes) : [];
+  const declared = Array.isArray(quizzes) ? {} : quizzes || {};
+  const declaredLevel1 = uniquePlayableQuestions(declared.level1);
+  const declaredLevel2 = uniquePlayableQuestions(declared.level2);
+  const declaredLevel3 = uniquePlayableQuestions(declared.level3);
+  const gameBasic = uniquePlayableQuestions(lesson?.game?.basic);
+  const gameHarder = uniquePlayableQuestions([
+    ...(lesson?.game?.intermediate || []),
+    ...(lesson?.game?.advanced || [])
+  ]);
+  const challenges = uniquePlayableQuestions(lesson?.challenges);
+  const declaredBasic = declaredLevel1.length ? declaredLevel1 : declaredLevel2;
+  const declaredHarder = declaredLevel1.length
+    ? uniquePlayableQuestions([...declaredLevel2, ...declaredLevel3])
+    : declaredLevel3;
+
+  let level1 = uniquePlayableQuestions([...declaredBasic, ...flatQuizzes, ...gameBasic]);
+  const level1Signatures = new Set(level1.map(questionSignature));
+  let level2 = uniquePlayableQuestions([...declaredHarder, ...gameHarder, ...challenges])
+    .filter((question) => !level1Signatures.has(questionSignature(question)));
+
+  if (!level1.length || !level2.length) {
+    [level1, level2] = splitQuestionBank(uniquePlayableQuestions([
+      ...declaredLevel1,
+      ...declaredLevel2,
+      ...declaredLevel3,
+      ...flatQuizzes,
+      ...gameBasic,
+      ...gameHarder,
+      ...challenges
+    ]));
   }
+
   return {
-    level1: Array.isArray(quizzes?.level1) ? quizzes.level1 : [],
-    level2: Array.isArray(quizzes?.level2) ? quizzes.level2 : [],
-    level3: Array.isArray(quizzes?.level3) ? quizzes.level3 : []
+    level1,
+    level2,
+    level3: uniquePlayableQuestions([...level1, ...level2])
   };
 };
 
-const getQuestionsForLevel = (lesson, level) => {
-  const groups = getQuizGroups(lesson);
-  const gameLevel = level === "level1" ? "basic" : level === "level2" ? "intermediate" : "advanced";
-  const gameQuestions = Array.isArray(lesson?.game?.[gameLevel]) ? lesson.game[gameLevel] : [];
-  const challengeQuestions = (lesson?.challenges || []).filter((question) => Array.isArray(question?.options));
-  const orderedSources = level === "level1"
-    ? [groups.level1, gameQuestions, challengeQuestions, groups.level2, groups.level3]
-    : level === "level2"
-      ? [groups.level2, gameQuestions, challengeQuestions, groups.level1, groups.level3]
-      : [groups.level3, gameQuestions, groups.level2, groups.level1, challengeQuestions];
-
-  const questions = orderedSources.find((items) => items.some((question) => question?.question && (Array.isArray(question?.options) || question?.correctAnswer !== undefined || question?.answer !== undefined))) || [];
-  return questions.slice(0, 8);
-};
-
-const getCorrectAnswer = (question) => question?.answer ?? question?.correctAnswer;
-
-const isSupportedQuestion = (question) => Array.isArray(question?.options) || typeof getCorrectAnswer(question) === "string" || typeof getCorrectAnswer(question) === "number";
+const getQuestionsForLevel = (lesson, level) => getQuizGroups(lesson)[level] || [];
 
 const answerIsCorrect = (question, answer) => {
   const correct = getCorrectAnswer(question);
   if (Array.isArray(question?.options)) return Number(answer) === Number(correct);
   return cleanText(answer).toLocaleLowerCase("vi") === cleanText(correct).toLocaleLowerCase("vi");
-};
-
-const getStars = (correct, total) => {
-  if (!total) return 0;
-  const accuracy = correct / total;
-  if (accuracy >= 0.9) return 3;
-  if (accuracy >= PASSING_PERCENT / 100) return 2;
-  return 1;
 };
 
 const ModuleContent = ({ module, position, total }) => {
@@ -103,21 +137,13 @@ const ModuleContent = ({ module, position, total }) => {
   );
 };
 
-const QuestionRunner = ({ title, questions, onComplete, saving }) => {
+const QuestionRunner = ({ title, questions, onComplete, saving, rewardUrl }) => {
   const supportedQuestions = React.useMemo(() => questions.filter(isSupportedQuestion), [questions]);
   const [index, setIndex] = React.useState(0);
   const [answer, setAnswer] = React.useState("");
   const [correctCount, setCorrectCount] = React.useState(0);
   const [feedback, setFeedback] = React.useState(null);
   const [done, setDone] = React.useState(false);
-
-  const restart = () => {
-    setIndex(0);
-    setAnswer("");
-    setCorrectCount(0);
-    setFeedback(null);
-    setDone(false);
-  };
 
   if (!supportedQuestions.length) {
     return (
@@ -139,7 +165,13 @@ const QuestionRunner = ({ title, questions, onComplete, saving }) => {
   };
 
   const moveNext = async () => {
-    const nextCorrectCount = correctCount + (feedback?.isCorrect ? 1 : 0);
+    if (!feedback?.isCorrect) {
+      setAnswer("");
+      setFeedback(null);
+      return;
+    }
+
+    const nextCorrectCount = correctCount + 1;
     if (index < total - 1) {
       setCorrectCount(nextCorrectCount);
       setIndex((current) => current + 1);
@@ -148,24 +180,22 @@ const QuestionRunner = ({ title, questions, onComplete, saving }) => {
       return;
     }
 
-    const accuracy = Math.round((nextCorrectCount / total) * 100);
-    if (accuracy < PASSING_PERCENT) {
-      setCorrectCount(nextCorrectCount);
-      setDone({ passed: false, accuracy, stars: getStars(nextCorrectCount, total) });
-      return;
-    }
-
-    setDone({ passed: true, accuracy, stars: getStars(nextCorrectCount, total) });
-    await onComplete({ correct: nextCorrectCount, total, stars: getStars(nextCorrectCount, total) });
+    setDone(true);
+    await onComplete({ correct: nextCorrectCount, total, stars: 1 });
   };
 
   if (done) {
     return (
-      <Card accent={done.passed ? colors.green : colors.amber} style={styles.resultCard}>
-        <Ionicons name={done.passed ? "checkmark-circle-outline" : "refresh-circle-outline"} size={42} color={done.passed ? colors.green : colors.amber} />
-        <Text style={styles.resultTitle}>{done.passed ? "Bạn đã qua chặng này" : "Hãy ôn lại rồi làm lại"}</Text>
-        <Text style={styles.resultText}>Kết quả: {done.accuracy}% · {done.stars}/3 sao. {done.passed ? "Tiến độ đã được lưu." : `Cần đạt tối thiểu ${PASSING_PERCENT}% để qua chặng.`}</Text>
-        {!done.passed ? <PrimaryButton label="Làm lại chặng" icon="refresh-outline" color={colors.amber} onPress={restart} /> : null}
+      <Card accent={colors.green} style={styles.resultCard}>
+        <Ionicons name="checkmark-circle-outline" size={42} color={colors.green} />
+        <Text style={styles.resultTitle}>Bạn đã qua vòng này</Text>
+        <Text style={styles.resultText}>Đã hoàn thành toàn bộ câu hỏi. Bạn nhận thêm 1 sao.</Text>
+        {rewardUrl ? (
+          <View style={styles.rewardCard}>
+            <Pill label="Tranh kiến thức đã mở khóa" color={colors.green} icon="image-outline" />
+            <Image source={{ uri: rewardUrl }} resizeMode="contain" style={styles.rewardImage} />
+          </View>
+        ) : null}
       </Card>
     );
   }
@@ -175,7 +205,7 @@ const QuestionRunner = ({ title, questions, onComplete, saving }) => {
       <View style={styles.runnerTop}>
         <View>
           <Text style={styles.runnerTitle}>{title}</Text>
-          <Text style={styles.runnerMeta}>Câu {index + 1}/{total} · cần đạt {PASSING_PERCENT}%</Text>
+          <Text style={styles.runnerMeta}>Câu {index + 1}/{total} · hoàn thành đủ để nhận 1 sao</Text>
         </View>
         <Pill label={`${correctCount} đúng`} color={colors.green} icon="checkmark-outline" />
       </View>
@@ -220,7 +250,13 @@ const QuestionRunner = ({ title, questions, onComplete, saving }) => {
         ) : null}
       </Card>
       {feedback ? (
-        <PrimaryButton label={index === total - 1 ? "Xem kết quả" : "Câu tiếp theo"} icon="arrow-forward-outline" color={colors.green} onPress={moveNext} disabled={saving} />
+        <PrimaryButton
+          label={!feedback.isCorrect ? "Thử lại câu này" : index === total - 1 ? "Xem kết quả" : "Câu tiếp theo"}
+          icon={!feedback.isCorrect ? "refresh-outline" : "arrow-forward-outline"}
+          color={!feedback.isCorrect ? colors.amber : colors.green}
+          onPress={moveNext}
+          disabled={saving}
+        />
       ) : (
         <PrimaryButton label="Kiểm tra đáp án" icon="checkmark-outline" color={colors.green} onPress={submitCurrent} disabled={!canCheck || saving} />
       )}
@@ -232,17 +268,24 @@ export default function LessonPlayer({ lesson, lessonStars, onCompleteLevel }) {
   const theoryModules = Array.isArray(lesson?.theoryModules) ? lesson.theoryModules : [];
   const firstPendingIndex = stages.findIndex((stage) => !(lessonStars?.[stage.key] > 0));
   const unlockedStageIndex = firstPendingIndex >= 0 ? firstPendingIndex : stages.length - 1;
-  const [stageIndex, setStageIndex] = React.useState(firstPendingIndex >= 0 ? firstPendingIndex : 0);
+  const [stageIndex, setStageIndex] = React.useState(firstPendingIndex >= 0 ? firstPendingIndex : stages.length - 1);
   const [theoryIndex, setTheoryIndex] = React.useState(0);
+  const [videoOpened, setVideoOpened] = React.useState(false);
+  const [videoCompleted, setVideoCompleted] = React.useState(Boolean(lessonStars?.level1));
   const [saving, setSaving] = React.useState(false);
   const activeStage = stages[stageIndex];
   const questions = React.useMemo(() => getQuestionsForLevel(lesson, activeStage.key), [activeStage.key, lesson]);
   const video = lesson?.introVideoUrl || lesson?.videoModules?.find((item) => item?.url)?.url;
+  const rawRewardUrl = lesson?.infographicUrl
+    || lesson?.assets?.infographicUrl
+    || lesson?.game?.assets?.infographicUrl
+    || (lesson?.classId && lesson?.order ? `/assets/curriculum/class${lesson.classId}/${lesson.classId}-${lesson.order}.webp` : "");
+  const rewardUrl = rawRewardUrl.startsWith("/") ? `${API_BASE_URL}${rawRewardUrl}` : rawRewardUrl;
 
-  const completeStage = async ({ stars }) => {
+  const completeStage = async () => {
     setSaving(true);
     try {
-      await onCompleteLevel(activeStage.key, stars);
+      await onCompleteLevel(activeStage.key, 1);
       if (stageIndex < stages.length - 1) setStageIndex((current) => current + 1);
     } finally {
       setSaving(false);
@@ -266,33 +309,62 @@ export default function LessonPlayer({ lesson, lessonStars, onCompleteLevel }) {
       </View>
 
       <Card accent={colors.green} style={styles.stageIntro}>
-        <Text style={styles.stageEyebrow}>Chặng {stageIndex + 1}/3</Text>
+        <Text style={styles.stageEyebrow}>Vòng {stageIndex + 1}/3</Text>
         <Text style={styles.stageTitle}>{activeStage.title}</Text>
-        <Text style={styles.stageDescription}>{activeStage.subtitle}. Bạn cần hoàn thành phần tự kiểm với ít nhất {PASSING_PERCENT}% để lưu tiến độ.</Text>
+        <Text style={styles.stageDescription}>{activeStage.subtitle}. Hoàn thành toàn bộ câu hỏi để nhận 1 sao.</Text>
       </Card>
 
-      {activeStage.key === "level1" && theoryModules.length ? (
+      {activeStage.key === "level1" && theoryModules.length && theoryIndex < theoryModules.length ? (
         <View style={styles.theoryStack}>
           <ModuleContent module={theoryModules[theoryIndex]} position={theoryIndex + 1} total={theoryModules.length} />
           <View style={styles.theoryActions}>
             <GhostButton label="Ý trước" icon="arrow-back-outline" color={colors.ink} onPress={() => setTheoryIndex((current) => Math.max(0, current - 1))} disabled={theoryIndex === 0} style={styles.halfAction} />
             <PrimaryButton
-              label={theoryIndex === theoryModules.length - 1 ? "Vào tự kiểm" : "Ý tiếp theo"}
+              label={theoryIndex === theoryModules.length - 1 ? (video ? "Xem video" : "Vào tự kiểm") : "Ý tiếp theo"}
               icon="arrow-forward-outline"
               color={colors.green}
               onPress={() => theoryIndex === theoryModules.length - 1 ? setTheoryIndex(theoryModules.length) : setTheoryIndex((current) => current + 1)}
               style={styles.halfAction}
             />
           </View>
-          {video ? <GhostButton label="Mở video bài giảng" icon="play-circle-outline" color={colors.green} onPress={() => Linking.openURL(video)} /> : null}
           {theoryIndex < theoryModules.length ? (
             <Text style={styles.readingHint}>Đọc hết các ý chính trước khi làm tự kiểm. Bạn có thể quay lại bằng nút “Ý trước”.</Text>
           ) : null}
         </View>
       ) : null}
 
-      {(activeStage.key !== "level1" || theoryIndex >= theoryModules.length || theoryModules.length === 0) ? (
-        <QuestionRunner key={activeStage.key} title={`Tự kiểm: ${activeStage.title}`} questions={questions} onComplete={completeStage} saving={saving} />
+      {activeStage.key === "level1"
+        && (theoryIndex >= theoryModules.length || theoryModules.length === 0)
+        && video
+        && !videoCompleted ? (
+        <Card accent={colors.green} style={styles.videoActions}>
+          <Text style={styles.runnerTitle}>Video bắt buộc của vòng 1</Text>
+          <Text style={styles.resultText}>Xem hết video bài giảng rồi xác nhận để mở nhóm câu hỏi nền tảng.</Text>
+          <GhostButton
+            label={videoOpened ? "Mở lại video bài giảng" : "Mở video bài giảng"}
+            icon="play-circle-outline"
+            color={colors.green}
+            onPress={async () => {
+              await Linking.openURL(video);
+              setVideoOpened(true);
+            }}
+          />
+          {videoOpened ? (
+            <PrimaryButton label="Tôi đã xem hết video" icon="checkmark-circle-outline" color={colors.green} onPress={() => setVideoCompleted(true)} />
+          ) : null}
+        </Card>
+      ) : null}
+
+      {(activeStage.key !== "level1"
+        || ((theoryIndex >= theoryModules.length || theoryModules.length === 0) && (!video || videoCompleted))) ? (
+        <QuestionRunner
+          key={activeStage.key}
+          title={`Tự kiểm: ${activeStage.title}`}
+          questions={questions}
+          onComplete={completeStage}
+          saving={saving}
+          rewardUrl={activeStage.key === "level3" ? rewardUrl : ""}
+        />
       ) : null}
     </View>
   );
@@ -322,6 +394,7 @@ const styles = StyleSheet.create({
   bulletRow: { flexDirection: "row", gap: 10 },
   bulletDot: { backgroundColor: colors.green, borderRadius: 5, height: 8, marginTop: 8, width: 8 },
   theoryActions: { flexDirection: "row", gap: spacing.sm },
+  videoActions: { gap: spacing.sm },
   halfAction: { flex: 1 },
   readingHint: { color: colors.muted, fontFamily: typography.medium, fontSize: 12, lineHeight: 18, textAlign: "center" },
   runnerStack: { gap: spacing.md },
@@ -347,5 +420,7 @@ const styles = StyleSheet.create({
   answerFeedbackTextWrong: { color: "#b42318" },
   resultCard: { alignItems: "center", gap: spacing.sm, paddingVertical: spacing.lg },
   resultTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 20, textAlign: "center" },
-  resultText: { color: colors.muted, fontFamily: typography.medium, fontSize: 14, lineHeight: 21, textAlign: "center" }
+  resultText: { color: colors.muted, fontFamily: typography.medium, fontSize: 14, lineHeight: 21, textAlign: "center" },
+  rewardCard: { gap: spacing.sm, marginTop: spacing.sm, width: "100%" },
+  rewardImage: { backgroundColor: colors.surfaceAlt, borderRadius: radius.lg, height: 320, width: "100%" }
 });

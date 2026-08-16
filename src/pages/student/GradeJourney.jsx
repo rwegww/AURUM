@@ -24,8 +24,8 @@ import { useTranslation } from 'react-i18next';
 import { buildJourneyPath, createJourneyLayout } from '@/utils/journeyLayout';
 import {
   countJourneyQuestions,
+  getJourneyQuizGroups,
   JOURNEY_LEVELS,
-  normalizeJourneyChallenges,
 } from '@/utils/journeyLessonData';
 import './GradeJourney.css';
 
@@ -132,16 +132,22 @@ const JourneyRail = ({ layout, highestUnlockedIndex }) => {
 };
 
 const getNextStepLabel = (stars) => {
-  if (!stars.level1) return 'Khởi động';
-  if (!stars.level2) return 'Luyện hiểu';
-  if (!stars.level3) return 'Chốt bài';
-  return 'Ôn lại';
+  if (!stars.level1) return 'Xem video + câu hỏi cơ bản';
+  if (!stars.level2) return 'Câu hỏi nâng cao';
+  if (!stars.level3) return 'Ôn tập tổng hợp';
+  return 'Xem lại phần thưởng';
 };
 
 const StageNode = ({ lesson, globalIndex, point, onOpen, reduceMotion }) => {
   const isLocked = !lesson.isUnlocked;
   const completedLevels = LEVELS.filter((level) => (lesson.stars[level] || 0) > 0).length;
-  const missionCount = normalizeJourneyChallenges(lesson.challenges).length;
+  const quizGroups = getJourneyQuizGroups(lesson);
+  const nextLevel = !lesson.stars.level1
+    ? 'level1'
+    : !lesson.stars.level2
+      ? 'level2'
+      : 'level3';
+  const nextQuestionCount = quizGroups[nextLevel].length;
   const quizCount = countJourneyQuestions(lesson);
   const cleanTitle = lesson.title?.split(': ').pop() || `Bài học ${globalIndex + 1}`;
   const stateClass = isLocked ? 'is-locked' : lesson.isCompleted ? 'is-completed' : 'is-active';
@@ -204,9 +210,9 @@ const StageNode = ({ lesson, globalIndex, point, onOpen, reduceMotion }) => {
             {lesson.description || 'Khám phá kiến thức và hoàn thành thử thách của chặng này.'}
           </span>
           <span className="journey-popover-stats">
-            <span>{completedLevels}/3 cấp độ</span>
-            <span>{missionCount} nhiệm vụ</span>
-            <span>{quizCount} câu hỏi</span>
+            <span>{completedLevels}/3 sao</span>
+            <span>Vòng sau: {nextQuestionCount} câu</span>
+            <span>Tổng hợp: {quizCount} câu</span>
           </span>
         </span>
       )}

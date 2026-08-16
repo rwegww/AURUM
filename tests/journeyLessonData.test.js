@@ -51,17 +51,44 @@ describe('dữ liệu lộ trình học', () => {
       ],
     });
 
-    JOURNEY_LEVELS.forEach((level) => {
-      expect(groups[level].map((question) => question.correctAnswer)).toEqual([1, 0]);
-    });
+    expect(groups.level1.map((question) => question.correctAnswer)).toEqual([1]);
+    expect(groups.level2.map((question) => question.correctAnswer)).toEqual([0]);
+    expect(groups.level3.map((question) => question.correctAnswer)).toEqual([1, 0]);
   });
 
-  it('dùng ngân hàng game để bù ba mốc sao khi quizzes đang trống', () => {
+  it('chia ngân hàng phẳng thành vòng cơ bản, vòng nâng cao và vòng tổng hợp', () => {
     const lesson = class10Data.ketnoi[0];
     const groups = getJourneyQuizGroups(lesson);
 
     JOURNEY_LEVELS.forEach((level) => expect(groups[level].length).toBeGreaterThan(0));
+    expect(groups.level1.length + groups.level2.length).toBe(lesson.game.basic.length);
+    expect(groups.level3.length).toBe(lesson.game.basic.length);
     expect(countJourneyQuestions(lesson)).toBe(lesson.game.basic.length);
+  });
+
+  it('dùng câu cơ bản cho vòng 1 và thử thách tương tác cho vòng 2 ở dữ liệu khối 8', () => {
+    const lesson = class8Data.ketnoi[0];
+    const groups = getJourneyQuizGroups(lesson);
+
+    expect(groups.level1).toHaveLength(lesson.game.basic.length);
+    expect(groups.level2).toHaveLength(lesson.challenges.length);
+    expect(groups.level2.some((question) => question.type === 'matching')).toBe(true);
+  });
+
+  it('vòng 3 luôn chứa đầy đủ câu hỏi của hai vòng trước và không lặp câu', () => {
+    allLessons.forEach((lesson) => {
+      const groups = getJourneyQuizGroups(lesson);
+      const signature = (question) => JSON.stringify([
+        question.type,
+        question.question || question.content || question.text,
+        question.options || question.images || question.items || [],
+      ]);
+      const expected = new Set([...groups.level1, ...groups.level2].map(signature));
+      const actual = groups.level3.map(signature);
+
+      expect(new Set(actual).size, `${lesson.id || lesson.lessonId} có câu tổng hợp bị lặp`).toBe(actual.length);
+      expect(new Set(actual), `${lesson.id || lesson.lessonId} thiếu câu ở vòng tổng hợp`).toEqual(expected);
+    });
   });
 
   it('tất cả bài trong chương trình đều có câu hỏi chơi được ở cả ba mốc sao', () => {

@@ -96,7 +96,7 @@ export const normalizeJourneyChallenges = (challenges) => asArray(challenges)
   .filter(isPlayableJourneyItem);
 
 const itemSignature = (item) => JSON.stringify([
-  item.id || '',
+  item.type || '',
   item.question || item.content || item.text || '',
   item.options || item.images || item.items || [],
 ]);
@@ -127,26 +127,19 @@ const readQuestionLevel = (question) => {
   return null;
 };
 
-const distributeQuestionBank = (questions) => {
+const splitProgressiveQuestionBank = (questions) => {
   const bank = normalizeQuestionBank(questions);
-  if (bank.length === 0) return emptyGroups();
+  if (bank.length === 0) return [[], []];
 
-  // Ngân hàng chỉ có một hoặc hai câu (dữ liệu cũ khối 11-12) được dùng cho
-  // cả ba mốc để không tạo mốc sao rỗng. Ngân hàng lớn hơn được chia đều.
-  if (bank.length < JOURNEY_LEVELS.length) {
-    return Object.fromEntries(JOURNEY_LEVELS.map((level) => [level, [...bank]]));
-  }
+  // Một số bài cũ chỉ có một câu. Khi chưa thể tạo thêm dữ liệu có kiểm chứng,
+  // dùng lại câu đó ở vòng 2 vẫn an toàn hơn việc tự sinh câu ngoài giáo trình.
+  if (bank.length === 1) return [[...bank], [...bank]];
 
-  return bank.reduce((groups, question, index) => {
-    groups[JOURNEY_LEVELS[index % JOURNEY_LEVELS.length]].push(question);
-    return groups;
-  }, emptyGroups());
+  const splitAt = Math.ceil(bank.length / 2);
+  return [bank.slice(0, splitAt), bank.slice(splitAt)];
 };
 
-const normalizeLegacyQuizArray = (quizzes) => {
-  const hasDeclaredLevels = quizzes.some((question) => readQuestionLevel(question));
-  if (!hasDeclaredLevels) return distributeQuestionBank(quizzes);
-
+const normalizeDeclaredQuizArray = (quizzes) => {
   const groups = emptyGroups();
   quizzes.forEach((question) => {
     const level = readQuestionLevel(question) || 'level2';
@@ -166,45 +159,74 @@ const getGameGroups = (game) => ({
   level3: normalizeQuestionBank(game?.advanced),
 });
 
-const countPopulatedGroups = (groups) => JOURNEY_LEVELS.filter((level) => groups[level].length > 0).length;
+const withoutItems = (items, excludedItems) => {
+  const excluded = new Set(excludedItems.map(itemSignature));
+  return items.filter((item) => !excluded.has(itemSignature(item)));
+};
 
 export const getJourneyQuizGroups = (lesson) => {
   const quizzes = lesson?.quizzes;
-  let groups = Array.isArray(quizzes)
-    ? normalizeLegacyQuizArray(quizzes)
-    : normalizeGroupedQuizzes(quizzes);
   const gameGroups = getGameGroups(lesson?.game);
-  const gamePool = uniqueItems(JOURNEY_LEVELS.flatMap((level) => gameGroups[level]));
-
-  if (countPopulatedGroups(groups) === 0 && gamePool.length > 0) {
-    groups = countPopulatedGroups(gameGroups) > 1
-      ? gameGroups
-      : distributeQuestionBank(gamePool);
-  } else {
-    groups = Object.fromEntries(JOURNEY_LEVELS.map((level) => [
-      level,
-      groups[level].length > 0 ? groups[level] : gameGroups[level],
-    ]));
-  }
-
   const challengePool = normalizeJourneyChallenges(lesson?.challenges)
     .filter((item) => item.type !== 'lab-task');
-  const fallbackPool = uniqueItems([
-    ...JOURNEY_LEVELS.flatMap((level) => groups[level]),
-    ...gamePool,
+
+  let declaredGroups = emptyGroups();
+  let flatQuizPool = [];
+
+  if (Array.isArray(quizzes)) {
+    if (quizzes.some((question) => readQuestionLevel(question))) {
+      declaredGroups = normalizeDeclaredQuizArray(quizzes);
+    } else {
+      flatQuizPool = normalizeQuestionBank(quizzes);
+    }
+  } else {
+    declaredGroups = normalizeGroupedQuizzes(quizzes);
+  }
+
+  const hasExplicitBasicLevel = declaredGroups.level1.length > 0;
+  const declaredBasic = hasExplicitBasicLevel
+    ? declaredGroups.level1
+    : declaredGroups.level2;
+  const declaredHarder = hasExplicitBasicLevel
+    ? uniqueItems([...declaredGroups.level2, ...declaredGroups.level3])
+    : declaredGroups.level3;
+
+  let round1 = uniqueItems([
+    ...declaredBasic,
+    ...flatQuizPool,
+    ...gameGroups.level1,
+  ]);
+  let round2 = uniqueItems([
+    ...declaredHarder,
+    ...gameGroups.level2,
+    ...gameGroups.level3,
     ...challengePool,
   ]);
-  const fallbackGroups = distributeQuestionBank(fallbackPool);
+  round2 = withoutItems(round2, round1);
 
-  return Object.fromEntries(JOURNEY_LEVELS.map((level) => [
-    level,
-    groups[level].length > 0
-      ? groups[level]
-      : (fallbackGroups[level].length > 0 ? fallbackGroups[level] : fallbackPool),
-  ]));
+  const fullLessonPool = uniqueItems([
+    ...JOURNEY_LEVELS.flatMap((level) => declaredGroups[level]),
+    ...flatQuizPool,
+    ...JOURNEY_LEVELS.flatMap((level) => gameGroups[level]),
+    ...challengePool,
+  ]);
+
+  // Dữ liệu khối 10-12 thường chỉ có một ngân hàng phẳng. Khi chưa có nguồn
+  // nâng cao riêng, giữ thứ tự tác giả: nửa đầu là nhận biết, nửa sau là vận dụng.
+  if (round1.length === 0 || round2.length === 0) {
+    [round1, round2] = splitProgressiveQuestionBank(fullLessonPool);
+  }
+
+  return {
+    level1: round1,
+    level2: round2,
+    // Vòng 3 luôn là bài tổng hợp đúng nghĩa: toàn bộ câu của hai vòng trước,
+    // không lấy một nhóm độc lập khiến học sinh bỏ sót kiến thức đã học.
+    level3: uniqueItems([...round1, ...round2]),
+  };
 };
 
 export const countJourneyQuestions = (lesson) => {
   const groups = getJourneyQuizGroups(lesson);
-  return uniqueItems(JOURNEY_LEVELS.flatMap((level) => groups[level])).length;
+  return groups.level3.length;
 };

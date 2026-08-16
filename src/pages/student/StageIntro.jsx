@@ -73,7 +73,8 @@ const StageIntro = () => {
 
 
   const handleComplete = () => {
-    navigate(`/classroom/${grade}/journey/${lessonId}/challenge?order=${order}`);
+    sessionStorage.setItem(`journey-video-complete:${user?.id || 'guest'}:${lessonId}`, 'true');
+    navigate(`/classroom/${grade}/journey/${lessonId}/quiz?level=level1&order=${order}`);
   };
 
   const handleBack = () => {
@@ -201,7 +202,7 @@ const StageIntro = () => {
                   onClick={handleComplete}
                   className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-viet-red px-6 py-4 text-lg font-black text-white shadow-lg shadow-red-900/20 transition-transform hover:scale-[1.01]"
                 >
-                  Vào thử thách
+                  Bắt đầu câu hỏi vòng 1
                   <ArrowRight size={22} />
                 </button>
               </div>
@@ -218,7 +219,6 @@ const StageIntro = () => {
         videoSrc={videoSrc}
         lessonTitle={lesson?.title || t('common.loading')}
         onComplete={handleComplete}
-        onSkip={handleComplete}
         onBack={handleBack}
       />
     </div>

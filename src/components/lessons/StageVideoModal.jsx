@@ -1,24 +1,178 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Hourglass, Rocket } from 'lucide-react';
-import { getVideoEmbedUrl, isExternalEmbedVideo } from '@/utils/videoLinks';
+import { AlertTriangle, Hourglass, Rocket } from 'lucide-react';
+import {
+  getVideoEmbedUrl,
+  getVideoProvider,
+  getYouTubeVideoId,
+} from '@/utils/videoLinks';
+
+let youtubeApiPromise;
+
+const loadYouTubeIframeApi = () => {
+  if (window.YT?.Player) return Promise.resolve(window.YT);
+  if (youtubeApiPromise) return youtubeApiPromise;
+
+  youtubeApiPromise = new Promise((resolve, reject) => {
+    const previousReadyHandler = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => {
+      try {
+        previousReadyHandler?.();
+      } finally {
+        resolve(window.YT);
+      }
+    };
+
+    let script = document.getElementById('youtube-iframe-api');
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'youtube-iframe-api';
+      script.src = 'https://www.youtube.com/iframe_api';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+    script.addEventListener('error', () => reject(new Error('Không tải được trình phát YouTube.')), { once: true });
+  });
+
+  return youtubeApiPromise;
+};
+
+const WATCH_END_TOLERANCE_SECONDS = 5;
 
 const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
   const { t } = useTranslation();
   const videoRef = useRef(null);
+  const youtubeMountRef = useRef(null);
+  const youtubePlayerRef = useRef(null);
+  const vimeoFrameRef = useRef(null);
+  const lastPlaybackPositionRef = useRef(null);
+  const watchedSecondsRef = useRef(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isVideoEnded, setIsVideoEnded] = useState(false);
-  const isEmbedVideo = isExternalEmbedVideo(videoSrc);
+  const [playbackError, setPlaybackError] = useState('');
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [watchedSeconds, setWatchedSeconds] = useState(0);
+  const provider = getVideoProvider(videoSrc);
+  const isEmbedVideo = provider === 'youtube' || provider === 'vimeo';
   const embedVideoUrl = getVideoEmbedUrl(videoSrc);
-  const canContinue = isVideoEnded || isEmbedVideo;
+  const vimeoPlayerId = `journey-video-${useId().replace(/:/g, '')}`;
+  const requiredWatchSeconds = Math.max(1, duration - WATCH_END_TOLERANCE_SECONDS);
+  const canContinue = isVideoEnded
+    && (provider === 'file' || duration === 0 || watchedSeconds >= requiredWatchSeconds);
+
+  const vimeoEmbedUrl = useMemo(() => {
+    if (provider !== 'vimeo') return embedVideoUrl;
+    const separator = embedVideoUrl.includes('?') ? '&' : '?';
+    return `${embedVideoUrl}${separator}api=1&player_id=${encodeURIComponent(vimeoPlayerId)}`;
+  }, [embedVideoUrl, provider, vimeoPlayerId]);
+
+  const recordPlaybackProgress = useCallback((seconds, totalDuration) => {
+    const safeSeconds = Number(seconds) || 0;
+    const safeDuration = Number(totalDuration) || 0;
+    const previousPosition = lastPlaybackPositionRef.current;
+
+    if (previousPosition !== null) {
+      const delta = safeSeconds - previousPosition;
+      if (delta > 0 && delta <= 1.5) {
+        watchedSecondsRef.current += delta;
+        setWatchedSeconds(watchedSecondsRef.current);
+      }
+    }
+
+    lastPlaybackPositionRef.current = safeSeconds;
+    setCurrentTime(safeSeconds);
+    if (safeDuration > 0) setDuration(safeDuration);
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
     document.body.classList.add('no-scroll');
     return () => document.body.classList.remove('no-scroll');
   }, []);
+
+  useEffect(() => {
+    if (provider !== 'youtube' || !youtubeMountRef.current) return undefined;
+
+    let cancelled = false;
+    let progressTimer;
+    const videoId = getYouTubeVideoId(videoSrc);
+
+    loadYouTubeIframeApi()
+      .then((YT) => {
+        if (cancelled || !youtubeMountRef.current || !videoId) return;
+
+        youtubePlayerRef.current = new YT.Player(youtubeMountRef.current, {
+          width: '100%',
+          height: '100%',
+          videoId,
+          playerVars: {
+            autoplay: 1,
+            playsinline: 1,
+            rel: 0,
+          },
+          events: {
+            onReady: (event) => {
+              setDuration(event.target.getDuration() || 0);
+              progressTimer = window.setInterval(() => {
+                const player = youtubePlayerRef.current;
+                if (!player?.getCurrentTime) return;
+                recordPlaybackProgress(player.getCurrentTime(), player.getDuration());
+              }, 500);
+            },
+            onStateChange: (event) => {
+              setIsPlaying(event.data === YT.PlayerState.PLAYING);
+              if (event.data === YT.PlayerState.ENDED) {
+                recordPlaybackProgress(event.target.getDuration(), event.target.getDuration());
+                setIsVideoEnded(true);
+              }
+            },
+            onError: () => setPlaybackError('Video hiện không phát được. Hãy quay lại và thử lại sau.'),
+          },
+        });
+      })
+      .catch((error) => setPlaybackError(error.message || 'Không tải được trình phát video.'));
+
+    return () => {
+      cancelled = true;
+      if (progressTimer) window.clearInterval(progressTimer);
+      youtubePlayerRef.current?.destroy?.();
+      youtubePlayerRef.current = null;
+    };
+  }, [provider, recordPlaybackProgress, videoSrc]);
+
+  useEffect(() => {
+    if (provider !== 'vimeo') return undefined;
+
+    const postVimeoCommand = (method, value) => {
+      vimeoFrameRef.current?.contentWindow?.postMessage({ method, value }, 'https://player.vimeo.com');
+    };
+    const registerVimeoEvents = () => {
+      ['timeupdate', 'ended', 'finish'].forEach((eventName) => postVimeoCommand('addEventListener', eventName));
+    };
+    const handleVimeoMessage = (event) => {
+      if (event.origin !== 'https://player.vimeo.com') return;
+      let payload = event.data;
+      if (typeof payload === 'string') {
+        try {
+          payload = JSON.parse(payload);
+        } catch {
+          return;
+        }
+      }
+      if (!payload || (payload.player_id && payload.player_id !== vimeoPlayerId)) return;
+      if (payload.event === 'ready') registerVimeoEvents();
+      if (payload.event === 'timeupdate' || payload.event === 'playProgress') {
+        recordPlaybackProgress(payload.data?.seconds, payload.data?.duration);
+      }
+      if (payload.event === 'ended' || payload.event === 'finish') setIsVideoEnded(true);
+    };
+
+    window.addEventListener('message', handleVimeoMessage);
+    return () => window.removeEventListener('message', handleVimeoMessage);
+  }, [provider, recordPlaybackProgress, vimeoPlayerId]);
 
   const toggleMute = () => {
     if (videoRef.current) {
@@ -38,33 +192,21 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
     }
   };
 
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const progressPercent = duration ? (currentTime / duration) * 100 : 0;
   const metadataLabel = isEmbedVideo
-    ? 'YouTube'
+    ? `${provider === 'youtube' ? 'YouTube' : 'Vimeo'} · ${Math.round(Math.min(100, (watchedSeconds / Math.max(1, requiredWatchSeconds)) * 100))}%`
     : `${Math.floor(currentTime / 60)}:${Math.floor(currentTime % 60).toString().padStart(2, '0')} / ${Math.floor(duration / 60)}:${Math.floor(duration % 60).toString().padStart(2, '0')}`;
 
   // Update time as video plays
   const handleTimeUpdate = () => {
     if (videoRef.current) {
-      setCurrentTime(videoRef.current.currentTime);
+      recordPlaybackProgress(videoRef.current.currentTime, videoRef.current.duration);
     }
   };
 
   const handleLoadedMetadata = () => {
     if (videoRef.current) {
       setDuration(videoRef.current.duration);
-    }
-  };
-
-  const handleSeek = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const clickedValue = (x / rect.width) * duration;
-    if (videoRef.current) {
-      videoRef.current.currentTime = clickedValue;
-      setCurrentTime(clickedValue);
     }
   };
 
@@ -104,7 +246,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
               <span className="text-viet-green text-[8px] font-black uppercase tracking-[4px]">Mission Insight</span>
            </div>
            <h2 className="text-viet-text text-base md:text-lg font-black font-sora uppercase italic tracking-tight text-center line-clamp-1">
-              {lessonTitle.split(': ').pop()}
+              {(lessonTitle || '').split(': ').pop()}
            </h2>
         </div>
 
@@ -123,11 +265,23 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
            animate={{ scale: 1, opacity: 1 }}
            className="relative w-full aspect-video rounded-[32px] overflow-hidden bg-white shadow-[0_30px_70px_-15px_rgba(0,0,0,0.1)] border-[8px] border-white group"
          >
-            {isEmbedVideo ? (
+            {provider === 'youtube' ? (
+              <div ref={youtubeMountRef} className="h-full w-full" />
+            ) : provider === 'vimeo' ? (
               <iframe
-                src={embedVideoUrl}
+                ref={vimeoFrameRef}
+                id={vimeoPlayerId}
+                src={vimeoEmbedUrl}
                 title={lessonTitle}
                 className="w-full h-full"
+                onLoad={() => {
+                  ['timeupdate', 'ended', 'finish'].forEach((eventName) => {
+                    vimeoFrameRef.current?.contentWindow?.postMessage(
+                      { method: 'addEventListener', value: eventName },
+                      'https://player.vimeo.com',
+                    );
+                  });
+                }}
                 allowFullScreen
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               />
@@ -141,7 +295,17 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
                 onClick={handlePlayPause}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleLoadedMetadata}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onError={() => setPlaybackError('Video hiện không phát được. Hãy quay lại và thử lại sau.')}
               />
+            )}
+
+            {playbackError && (
+              <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-3 bg-slate-950/90 p-8 text-center text-white">
+                <AlertTriangle className="h-10 w-10 text-amber-300" />
+                <p className="max-w-md text-sm font-bold leading-6">{playbackError}</p>
+              </div>
             )}
 
             {/* Play/Pause Indicator Overlay */}
@@ -161,7 +325,7 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
 
             {/* Custom Seek Bar / Progress Bar */}
             {!isEmbedVideo && (
-            <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer z-30" onClick={handleSeek}>
+            <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gray-100/30 opacity-0 group-hover:opacity-100 transition-opacity z-30">
                 <div 
                   className="h-full bg-viet-green relative transition-all duration-100"
                   style={{ width: `${progressPercent}%` }}
@@ -230,9 +394,11 @@ const StageVideoModal = ({ videoSrc, onComplete, onBack, lessonTitle }) => {
            <p className={`text-[10px] font-black uppercase tracking-widest transition-colors
              ${canContinue ? 'text-viet-green' : 'text-gray-400'}
            `}>
-             {canContinue 
-               ? t('stage_video.hints.ready') 
-               : t('stage_video.hints.processing')}
+             {canContinue
+               ? 'Đã xem xong video · câu hỏi vòng 1 đã sẵn sàng'
+               : isVideoEnded && isEmbedVideo
+                 ? 'Bạn cần xem đầy đủ video trước khi tiếp tục'
+                 : 'Hãy xem hết video để mở câu hỏi vòng 1'}
            </p>
         </div>
       </motion.div>

@@ -457,6 +457,25 @@ describe('security acceptance matrix', () => {
     expect(userModel.update).not.toHaveBeenCalled();
   });
 
+  it('mỗi vòng chỉ ghi nhận đúng một sao dù client cũ gửi điểm cao hơn', async () => {
+    lessonModel.findById.mockResolvedValueOnce({ id: 'hoa8_bai1', lessonId: 'hoa8_bai1', classId: 8 });
+
+    const res = await request(app)
+      .post('/api/user/lesson-segment')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ lessonId: 'hoa8_bai1', level: 'level1', stars: 3 });
+
+    expect(res.status).toBe(200);
+    expect(res.body.awardedStars).toBe(1);
+    expect(userModel.update).toHaveBeenCalledWith('student', expect.objectContaining({
+      balancingProgress: expect.objectContaining({
+        lessonStars: expect.objectContaining({
+          hoa8_bai1: expect.objectContaining({ level1: 1 }),
+        }),
+      }),
+    }));
+  });
+
   it('rejects a non-string teacher proof URL without leaking an internal error', async () => {
     const res = await request(app)
       .post('/api/auth/register-teacher')

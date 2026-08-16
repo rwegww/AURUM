@@ -382,8 +382,8 @@ router.post('/lesson-segment', auth, async (req, res) => {
       return res.status(400).json({ message: 'Dữ liệu phần bài học không hợp lệ.' });
     }
 
-    const normalizedStars = Number.parseInt(stars, 10);
-    if (!Number.isFinite(normalizedStars) || normalizedStars < 1 || normalizedStars > 3) {
+    const requestedStars = Number.parseInt(stars, 10);
+    if (!Number.isFinite(requestedStars) || requestedStars < 1 || requestedStars > 3) {
       return res.status(400).json({ message: 'Số sao không hợp lệ.' });
     }
 
@@ -414,7 +414,10 @@ router.post('/lesson-segment', auth, async (req, res) => {
     const previousStars = currentLessonStars[level] || 0;
     const firstCompletionForLevel = previousStars <= 0;
 
-    currentLessonStars[level] = Math.max(previousStars, normalizedStars);
+    // Mỗi vòng là một mốc hoàn thành và chỉ tương ứng với đúng một sao.
+    // Vẫn chấp nhận payload 1-3 từ client cũ nhưng không còn dùng điểm số để
+    // làm tăng số sao của một vòng.
+    currentLessonStars[level] = 1;
     lessonStars[lessonId] = currentLessonStars;
 
     const updateFields = {
@@ -430,7 +433,7 @@ router.post('/lesson-segment', auth, async (req, res) => {
       updateFields.xp = nextXp;
       updateFields.level = Math.floor(nextXp / 1000) + 1;
 
-      const labRewards = getLessonIngredientRewards({ lesson, lessonId, level, stars: normalizedStars });
+      const labRewards = getLessonIngredientRewards({ lesson, lessonId, level, stars: 1 });
       updateFields.inventory = grantIngredientsToInventory(req.user.inventory, labRewards);
     }
 
@@ -459,7 +462,11 @@ router.post('/lesson-segment', auth, async (req, res) => {
     }
 
     const updatedUser = await User.update(req.user.id, updateFields);
-    res.json({ success: true, user: toProfileResponse(updatedUser) });
+    res.json({
+      success: true,
+      user: toProfileResponse(updatedUser),
+      awardedStars: firstCompletionForLevel ? 1 : 0,
+    });
   } catch (err) {
     res.status(500).json({ message: 'Không thể lưu tiến độ bài học lúc này.', error: err.message });
   }

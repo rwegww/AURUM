@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   getVideoEmbedUrl,
+  getVideoProvider,
+  getYouTubeStartTime,
+  getYouTubeVideoId,
   isExternalEmbedVideo,
   normalizeHttpUrl,
 } from '../src/utils/videoLinks.js';
@@ -22,5 +25,9 @@ describe('xử lý đường dẫn video admin', () => {
   it('chuyển URL YouTube hợp lệ thành URL nhúng kèm thời điểm bắt đầu', () => {
     expect(getVideoEmbedUrl('https://youtu.be/abc123?t=1m30s'))
       .toBe('https://www.youtube.com/embed/abc123?start=90');
+    expect(getYouTubeVideoId('https://youtu.be/abc123?t=1m30s')).toBe('abc123');
+    expect(getYouTubeStartTime('https://youtu.be/abc123?t=1m30s')).toBe(90);
+    expect(getVideoProvider('https://youtu.be/abc123')).toBe('youtube');
+    expect(getVideoProvider('https://cdn.example.com/lesson.mp4')).toBe('file');
   });
 });
