@@ -1,4 +1,4 @@
-﻿export const bai16 = {
+export const bai16 = {
   "id": "hoa11_kntt_bai16",
   "classId": 11,
   "lessonId": 16,
@@ -90,9 +90,9 @@
       "id": "q1",
       "question": "Chất nào sau đây tác dụng với dung dịch AgNO3/NH3 dư tạo kết tủa màu vàng nhạt?",
       "options": [
-        "Propyne (CHâ‰¡C-CH3)",
+        "Propyne (CH≡C-CH3)",
         "Propene (CH2=CH-CH3)",
-        "But-2-yne (CH3-Câ‰¡C-CH3)",
+        "But-2-yne (CH3-C≡C-CH3)",
         "Propane (CH3-CH2-CH3)"
       ],
       "correctAnswer": 0,

@@ -3,7 +3,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { stableRandom } from '@/utils/stableRandom';
-import { Search, FlaskConical, Compass } from 'lucide-react';
+import { Search, FlaskConical, Compass, GripVertical } from 'lucide-react';
+import MathText from '@/components/common/MathText';
 
 const getDragItemsForStep = (challenge, step) => {
   const type = challenge?.type || 'multiple-choice';
@@ -188,8 +189,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                  </div>
                )}
 
-               <h4 className="text-[16px] font-black text-viet-text mb-6 text-center italic leading-relaxed">
-                  {currentChallenge.question || currentChallenge.content}
+               <h4 className="text-[17px] font-bold text-viet-text mb-6 text-center leading-relaxed">
+                  <MathText>{currentChallenge.question || currentChallenge.content}</MathText>
                </h4>
 
                {/* ========= Challenge Type Renderers ========= */}
@@ -271,18 +272,18 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                   {(type === 'multiple-choice') && currentChallenge.options && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                        {(Array.isArray(currentChallenge.options) ? currentChallenge.options : (currentChallenge.options ? Object.values(currentChallenge.options) : [])).map((opt, i) => (
-                         <button
-                           key={i}
-                           disabled={isCorrect !== null}
-                           onClick={() => { setSelected(i); validateAnswer(i); }}
-                           className={`px-6 py-4 rounded-[18px] text-[13px] font-bold border-2 transition-all text-center
-                             ${selected === i 
-                               ? (i === currentChallenge.correctAnswer ? 'bg-viet-green border-viet-green text-white scale-95' : 'bg-red-500 border-red-500 text-white scale-95')
-                               : 'bg-white border-viet-border text-viet-text-light hover:border-viet-green/40 hover:bg-viet-green/5 shadow-sm'}
-                           `}
-                         >
-                           {opt}
-                         </button>
+                          <button
+                            key={i}
+                            disabled={isCorrect !== null}
+                            onClick={() => { setSelected(i); validateAnswer(i); }}
+                            className={`px-6 py-4 rounded-[18px] text-[13px] font-bold border-2 transition-all text-center
+                              ${selected === i 
+                                ? (i === currentChallenge.correctAnswer ? 'bg-viet-green border-viet-green text-white scale-95' : 'bg-red-500 border-red-500 text-white scale-95')
+                                : 'bg-white border-viet-border text-viet-text-light hover:border-viet-green/40 hover:bg-viet-green/5 shadow-sm'}
+                            `}
+                          >
+                            <MathText>{opt}</MathText>
+                          </button>
                        ))}
                     </div>
                   )}
@@ -317,15 +318,15 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                        <p className="text-[10px] text-center font-black text-viet-text-light/50 uppercase tracking-widest">{t('mission_modal.drag_drop.instruction')}</p>
                        <Reorder.Group axis="y" values={activeDragItems} onReorder={setDragItems} className="flex flex-col gap-2">
                           {activeDragItems.map((item) => (
-                            <Reorder.Item 
-                              key={item.id} 
-                              value={item}
-                              disabled={isCorrect !== null}
-                              className={`px-6 py-3 bg-white border-2 border-viet-border rounded-xl cursor-grab active:cursor-grabbing font-bold text-viet-text text-sm flex items-center gap-3 transition-colors ${isCorrect !== null ? 'opacity-50 select-none' : 'hover:border-viet-green/30'}`}
-                            >
-                               <span className="opacity-30">â˜°</span>
-                               {item.label}
-                            </Reorder.Item>
+                             <Reorder.Item 
+                               key={item.id} 
+                               value={item}
+                               disabled={isCorrect !== null}
+                               className={`px-6 py-3 bg-white border-2 border-viet-border rounded-xl cursor-grab active:cursor-grabbing font-bold text-viet-text text-sm flex items-center gap-3 transition-colors ${isCorrect !== null ? 'opacity-50 select-none' : 'hover:border-viet-green/30'}`}
+                             >
+                                <GripVertical className="w-4 h-4 text-slate-400 shrink-0" />
+                                <MathText>{item.label}</MathText>
+                             </Reorder.Item>
                           ))}
                        </Reorder.Group>
                        <button
@@ -345,11 +346,11 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                           {/* Column A (Static) */}
                           <div className="flex flex-col gap-2">
                              <div className="text-[10px] font-black text-viet-text-light/40 uppercase tracking-[3px] mb-2 px-2">{t('mission_modal.matching.col_a')}</div>
-                             {currentChallenge.leftItems.map((item, idx) => (
-                               <div key={idx} className="h-[52px] px-6 py-3 bg-viet-green/5 border-2 border-viet-green/10 rounded-xl font-bold text-viet-green text-sm flex items-center shadow-sm">
-                                  {item.label}
-                               </div>
-                             ))}
+                              {currentChallenge.leftItems.map((item, idx) => (
+                                <div key={idx} className="h-[52px] px-6 py-3 bg-viet-green/5 border-2 border-viet-green/10 rounded-xl font-bold text-viet-green text-sm flex items-center shadow-sm">
+                                   <MathText>{item.label}</MathText>
+                                </div>
+                              ))}
                           </div>
                           
                           {/* Column B (Draggable) */}
@@ -363,8 +364,8 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                                     disabled={isCorrect !== null}
                                     className={`h-[52px] px-6 py-3 bg-white border-2 border-viet-border rounded-xl cursor-grab active:cursor-grabbing font-bold text-viet-text text-sm flex items-center justify-between group transition-all ${isCorrect !== null ? 'opacity-50' : 'hover:border-viet-green/40 shadow-sm hover:shadow-md'}`}
                                   >
-                                     <span>{item.label}</span>
-                                     <span className="opacity-20 group-hover:opacity-100 transition-opacity">â˜°</span>
+                                     <span><MathText>{item.label}</MathText></span>
+                                     <GripVertical className="w-4 h-4 text-slate-400 group-hover:text-viet-text transition-colors shrink-0" />
                                   </Reorder.Item>
                                 ))}
                              </Reorder.Group>
@@ -403,7 +404,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
                              <div className="w-6 h-6 rounded-md bg-indigo-500 flex items-center justify-center text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                              </div>
-                             <span className="text-[14px] font-bold text-indigo-900">{currentChallenge.text}</span>
+                              <span className="text-[14px] font-bold text-indigo-900"><MathText>{currentChallenge.text}</MathText></span>
                           </div>
                        </div>
                        <button

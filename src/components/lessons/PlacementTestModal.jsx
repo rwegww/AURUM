@@ -1,8 +1,9 @@
-﻿/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-refresh/only-export-components */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Trophy, XCircle } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import MathText from '@/components/common/MathText';
 
 const PLACEMENT_TESTS = {
   9: [
@@ -157,8 +158,8 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                         </div>
                      </div>
 
-                     <h4 className="text-2xl font-black text-viet-text leading-tight uppercase italic">
-                        {questions[currentQuestion].question || questions[currentQuestion].content}
+                     <h4 className="text-2xl font-bold text-viet-text leading-tight">
+                        <MathText>{questions[currentQuestion].question || questions[currentQuestion].content}</MathText>
                      </h4>
 
                      <div className="grid grid-cols-1 gap-3">
@@ -175,7 +176,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                                }
                              `}
                            >
-                              <span className="font-bold">{option}</span>
+                              <span className="font-bold"><MathText>{option}</MathText></span>
                               {selectedAnswer === idx && (isCorrect
                                 ? <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" aria-hidden="true" />
                                 : <XCircle className="h-6 w-6 shrink-0 text-red-600" aria-hidden="true" />)}
