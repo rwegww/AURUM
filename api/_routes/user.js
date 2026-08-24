@@ -6,6 +6,7 @@ import Mission from '../models/Mission.js';
 import { supabase } from '../lib/supabase.js';
 import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
 import { getLessonIngredientRewards, grantIngredientsToInventory } from '../../src/data/labInventory.js';
+import { LESSON_LEVEL_XP } from '../../shared/journeyRewards.js';
 import {
   getPlacementAssessment,
   gradePlacementAssessment,
@@ -25,11 +26,6 @@ const DEFAULT_STUDY_PLAN = {
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 240;
 const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'useGoogleAvatar']);
-const LESSON_LEVEL_XP = {
-  level1: 30,
-  level2: 50,
-  level3: 100,
-};
 const PLACEMENT_GRADES = new Set(['9', '10', '11', '12']);
 const ALL_PLACEMENT_GRADES = new Set(SUPPORTED_PLACEMENT_GRADES);
 
