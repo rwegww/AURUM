@@ -9,6 +9,7 @@ import { ketnoi as class12Lessons } from '../src/data/curriculum/class12/index.j
 import {
   countJourneyQuestions,
   getJourneyQuizGroups,
+  getJourneyStageOverview,
   JOURNEY_LEVELS,
   normalizeJourneyChallenges,
 } from '../src/utils/journeyLessonData.js';
@@ -73,6 +74,35 @@ describe('dữ liệu lộ trình học', () => {
     expect(groups.level1).toHaveLength(lesson.game.basic.length);
     expect(groups.level2).toHaveLength(lesson.challenges.length);
     expect(groups.level2.some((question) => question.type === 'matching')).toBe(true);
+  });
+
+  it('tạo thông tin chặng cho admin bằng đúng dữ liệu học sinh đang thấy', () => {
+    const lesson = {
+      ...class8Data.ketnoi[0],
+      introVideoUrl: '',
+    };
+    const overview = getJourneyStageOverview(lesson, 0);
+    const groups = getJourneyQuizGroups(lesson);
+
+    expect(overview.title).toBe('Sử dụng một số hóa chất, thiết bị cơ bản trong phòng thí nghiệm');
+    expect(overview.description).toBe(lesson.description);
+    expect(overview.videoUrl).toBe(lesson.videoModules[0].url);
+    JOURNEY_LEVELS.forEach((level) => {
+      expect(overview.questionCounts[level]).toBe(groups[level].length);
+    });
+    expect(overview.totalQuestions).toBe(countJourneyQuestions(lesson));
+  });
+
+  it('ưu tiên video mở đầu giống luồng học sinh', () => {
+    const overview = getJourneyStageOverview({
+      title: 'Bài 3: Liên kết hóa học',
+      introVideoUrl: ' https://cdn.example.com/intro.mp4 ',
+      videoModules: [{ url: 'https://www.youtube.com/watch?v=fallback' }],
+    }, 2);
+
+    expect(overview.title).toBe('Liên kết hóa học');
+    expect(overview.videoUrl).toBe('https://cdn.example.com/intro.mp4');
+    expect(overview.questionCounts).toEqual({ level1: 0, level2: 0, level3: 0 });
   });
 
   it('vòng 3 luôn chứa đầy đủ câu hỏi của hai vòng trước và không lặp câu', () => {

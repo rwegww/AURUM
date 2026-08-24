@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AlertCircle, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, GripVertical, Map as MapIcon, RefreshCcw, Save } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, CirclePlay, Eye, GripVertical, Map as MapIcon, RefreshCcw, Save, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { reorderJourneyLessons } from '@/utils/adminLessonData';
+import { getJourneyStageOverview } from '@/utils/journeyLessonData';
 
 const GRADES = [6, 7, 8, 9, 10, 11, 12];
 
@@ -168,7 +169,7 @@ const JourneyManager = () => {
           <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight text-viet-text">
             Quản lý <span className="text-viet-green">Hành trình</span> <MapIcon className="text-viet-green" size={28} aria-hidden="true" />
           </h1>
-          <p className="mt-1 font-medium italic text-viet-text-light">Sắp xếp lộ trình học tập cho học sinh theo từng khối lớp.</p>
+          <p className="mt-1 font-medium italic text-viet-text-light">Sắp xếp và kiểm tra đúng nội dung học sinh nhìn thấy ở từng chặng.</p>
         </div>
 
         <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
@@ -188,6 +189,14 @@ const JourneyManager = () => {
               </button>
             ))}
           </div>
+
+          <Link
+            to={`/classroom/${selectedGrade}/journey`}
+            onClick={(event) => { if (!confirmDiscard()) event.preventDefault(); }}
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-viet-green/20 bg-white px-5 py-2.5 text-xs font-bold text-viet-green shadow-sm transition-colors hover:bg-viet-green/5"
+          >
+            <Eye size={16} /> Xem như học sinh
+          </Link>
 
           <button
             type="button"
@@ -243,7 +252,9 @@ const JourneyManager = () => {
         <div className="relative">
           <div className="absolute bottom-10 left-6 top-10 hidden w-1 rounded-full bg-slate-100 sm:block" aria-hidden="true" />
           <div className="space-y-4">
-            {lessons.map((lesson, index) => (
+            {lessons.map((lesson, index) => {
+              const overview = getJourneyStageOverview(lesson, index);
+              return (
               <motion.div
                 key={lesson.lessonId}
                 layout
@@ -259,13 +270,34 @@ const JourneyManager = () => {
                 </div>
 
                 <article className="flex min-w-0 flex-1 flex-col gap-4 rounded-[24px] border border-viet-border bg-white p-4 shadow-sm transition-all group-hover:border-viet-green/30 group-hover:shadow-md sm:flex-row sm:items-center sm:justify-between sm:rounded-[28px] sm:p-5">
-                  <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                  <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-400" aria-hidden="true">
                       <GripVertical size={20} />
                     </div>
                     <div className="min-w-0">
-                      <h2 className="truncate font-bold leading-tight text-viet-text">{lesson.title || 'Bài học chưa có tiêu đề'}</h2>
-                      <p className="mt-1 truncate text-[11px] font-medium uppercase tracking-wider text-viet-text-light">{lesson.chapter || 'Nội dung cốt lõi'} • ID: {lesson.lessonId}</p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] font-black uppercase tracking-[0.16em] text-viet-green">Chặng {index + 1}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-viet-text-light">{lesson.chapter || 'Nội dung cốt lõi'}</span>
+                      </div>
+                      <h2 className="mt-1 font-bold leading-tight text-viet-text">{overview.title}</h2>
+                      <p className="mt-1 line-clamp-2 text-xs font-medium leading-5 text-viet-text-light">
+                        {overview.description || 'Khám phá kiến thức và hoàn thành thử thách của chặng này.'}
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2 text-[10px] font-bold">
+                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 ${overview.videoUrl ? 'bg-sky-50 text-sky-700' : 'bg-slate-100 text-slate-500'}`}>
+                          <CirclePlay size={12} /> {overview.videoUrl ? 'Có video mở đầu' : 'Briefing không video'}
+                        </span>
+                        {[
+                          ['level1', 'Vòng 1'],
+                          ['level2', 'Vòng 2'],
+                          ['level3', 'Vòng 3'],
+                        ].map(([level, label]) => (
+                          <span key={level} className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-1 text-amber-700">
+                            <Star size={11} fill="currentColor" /> {label}: {overview.questionCounts[level]} câu
+                          </span>
+                        ))}
+                      </div>
+                      <p className="mt-2 truncate text-[10px] font-medium uppercase tracking-wider text-slate-400">ID: {lesson.lessonId}</p>
                     </div>
                   </div>
 
@@ -287,7 +319,8 @@ const JourneyManager = () => {
                   </div>
                 </article>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

@@ -230,3 +230,25 @@ export const countJourneyQuestions = (lesson) => {
   const groups = getJourneyQuizGroups(lesson);
   return groups.level3.length;
 };
+
+export const getJourneyStageOverview = (lesson, index = 0) => {
+  const quizGroups = getJourneyQuizGroups(lesson);
+  const rawTitle = String(lesson?.title || '').trim();
+  const title = rawTitle.split(': ').pop() || `Bài học ${index + 1}`;
+  const introVideoUrl = typeof lesson?.introVideoUrl === 'string'
+    ? lesson.introVideoUrl.trim()
+    : '';
+  const fallbackVideoUrl = Array.isArray(lesson?.videoModules)
+    ? lesson.videoModules.find((module) => typeof module?.url === 'string' && module.url.trim())?.url.trim() || ''
+    : '';
+
+  return {
+    title,
+    description: String(lesson?.description || '').trim(),
+    videoUrl: introVideoUrl || fallbackVideoUrl,
+    questionCounts: Object.fromEntries(
+      JOURNEY_LEVELS.map((level) => [level, quizGroups[level].length]),
+    ),
+    totalQuestions: quizGroups.level3.length,
+  };
+};
