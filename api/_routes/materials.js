@@ -1,7 +1,7 @@
 import express from 'express';
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 import { auth, authenticateToken, extractBearerToken } from '../_middleware/auth.js';
-import User from '../models/User.js';
+import User from '../_models/User.js';
 
 
 const router = express.Router();

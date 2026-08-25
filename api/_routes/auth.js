@@ -1,11 +1,11 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
-import Feedback from '../models/Feedback.js';
-import { sendLoginOtpEmail, sendPasswordResetOtpEmail } from '../lib/mailer.js';
-import { AuthSecurity, authSecret, normalizeEmail, isValidEmail } from '../lib/authSecurity.js';
+import User from '../_models/User.js';
+import Feedback from '../_models/Feedback.js';
+import { sendLoginOtpEmail, sendPasswordResetOtpEmail } from '../_lib/mailer.js';
+import { AuthSecurity, authSecret, normalizeEmail, isValidEmail } from '../_lib/authSecurity.js';
 import { auth } from '../_middleware/auth.js';
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 import { isValidNewPassword, PASSWORD_POLICY_MESSAGE } from '../../shared/passwordPolicy.js';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';

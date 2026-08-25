@@ -1,10 +1,10 @@
 import express from 'express';
-import { supabase } from '../lib/supabase.js';
-import AdminApproval from '../models/AdminApproval.js';
+import { supabase } from '../_lib/supabase.js';
+import AdminApproval from '../_models/AdminApproval.js';
 import { auth } from '../_middleware/auth.js';
 import multer from 'multer';
 import mammoth from 'mammoth';
-import { parseExamContent } from '../lib/examParser.js';
+import { parseExamContent } from '../_lib/examParser.js';
 
 const MAX_EXAM_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const ALLOWED_EXAM_MIME_TYPES = new Set([

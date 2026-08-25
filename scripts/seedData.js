@@ -6,7 +6,7 @@ import { class9Data } from '../src/data/curriculum/class9.js';
 import { class10Data } from '../src/data/curriculum/class10.js';
 import { class11Data } from '../src/data/curriculum/class11.js';
 import { class12Data } from '../src/data/curriculum/class12.js';
-import Lesson from '../api/models/Lesson.js';
+import Lesson from '../api/_models/Lesson.js';
 
 dotenv.config();
 

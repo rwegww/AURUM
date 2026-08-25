@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 
 const VIETNAM_TIME_ZONE = 'Asia/Ho_Chi_Minh';
 const vietnamDateFormatter = new Intl.DateTimeFormat('en-US', {

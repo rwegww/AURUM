@@ -1,8 +1,8 @@
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'node:crypto';
-import User from '../models/User.js';
-import { AuthSecurity } from '../lib/authSecurity.js';
+import User from '../_models/User.js';
+import { AuthSecurity } from '../_lib/authSecurity.js';
 
 class AuthenticationError extends Error {
   constructor(code, message, status = 401) {

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const database = vi.hoisted(() => ({ row: null }));
-vi.mock('../api/lib/supabase.js', () => ({
+vi.mock('../api/_lib/supabase.js', () => ({
   supabase: {
     from: () => {
       const filters = [];
@@ -22,7 +22,7 @@ vi.mock('../api/lib/supabase.js', () => ({
   },
 }));
 
-import AdminApproval from '../api/models/AdminApproval.js';
+import AdminApproval from '../api/_models/AdminApproval.js';
 
 beforeEach(() => {
   database.row = {

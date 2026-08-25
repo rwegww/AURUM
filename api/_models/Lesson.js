@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 
 const LESSON_TABLE = process.env.LESSONS_TABLE || 'bai_hoc';
 

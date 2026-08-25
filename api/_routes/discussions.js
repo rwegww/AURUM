@@ -1,5 +1,5 @@
 import express from 'express';
-import { Discussion, Note } from '../models/Discussion.js';
+import { Discussion, Note } from '../_models/Discussion.js';
 import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();

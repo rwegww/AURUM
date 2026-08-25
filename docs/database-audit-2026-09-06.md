@@ -47,8 +47,8 @@ Các migration đã xác nhận:
 
 | Hàm thiếu trên remote | Nơi ứng dụng gọi | Hệ quả |
 | --- | --- | --- |
-| increment_crafting_task_progress(text, text, jsonb, jsonb) | [User.js](../api/models/User.js), cập nhật/reset nhiệm vụ | Tiến độ nhiệm vụ không được cập nhật qua giao dịch mới |
-| claim_crafting_task_reward(text, text, integer, jsonb, integer) | [User.js](../api/models/User.js), nhận thưởng | Thao tác nhận thưởng không thể hoàn tất qua RPC |
+| increment_crafting_task_progress(text, text, jsonb, jsonb) | [User.js](../api/_models/User.js), cập nhật/reset nhiệm vụ | Tiến độ nhiệm vụ không được cập nhật qua giao dịch mới |
+| claim_crafting_task_reward(text, text, integer, jsonb, integer) | [User.js](../api/_models/User.js), nhận thưởng | Thao tác nhận thưởng không thể hoàn tất qua RPC |
 | craft_lab_item(text, text, text, jsonb, integer) | [lab.js](../api/_routes/lab.js), POST /api/lab/craft | Thao tác chế tạo thất bại khi gọi RPC |
 
 Định nghĩa đã có trong [schema.sql](../supabase/schema.sql), bắt đầu ở các dòng 882, 987 và 1139, nhưng không có migration triển khai tương ứng trong repository hoặc remote. Có 11 tên RPC được ứng dụng gọi trực tiếp; remote mới đáp ứng 8 tên trong số đó.

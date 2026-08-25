@@ -3,8 +3,8 @@ import multer from 'multer';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-import { supabase } from '../lib/supabase.js';
-import User from '../models/User.js';
+import { supabase } from '../_lib/supabase.js';
+import User from '../_models/User.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();

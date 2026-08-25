@@ -1,4 +1,4 @@
-import { supabase } from '../api/lib/supabase.js';
+import { supabase } from '../api/_lib/supabase.js';
 import { arenaQuestions } from '../src/data/arenaQuestions.js';
 import dotenv from 'dotenv';
 

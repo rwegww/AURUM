@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const rpc = vi.fn();
-vi.mock('../api/lib/supabase.js', () => ({ supabase: { rpc } }));
-const { AuthSecurity, hashChallenge, clientAddress } = await import('../api/lib/authSecurity.js');
+vi.mock('../api/_lib/supabase.js', () => ({ supabase: { rpc } }));
+const { AuthSecurity, hashChallenge, clientAddress } = await import('../api/_lib/authSecurity.js');
 const req = { ip: '192.0.2.1', get: (header) => header === 'x-forwarded-for' ? '198.51.100.2' : undefined };
 beforeEach(() => { vi.clearAllMocks(); vi.stubEnv('JWT_SECRET','fixture-secret'); rpc.mockResolvedValue({ data: 0, error: null }); });
 afterEach(() => vi.unstubAllEnvs());

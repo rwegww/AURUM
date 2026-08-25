@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 import { auth } from '../_middleware/auth.js';
 
 const router = express.Router();
@@ -624,7 +624,7 @@ const recordArenaStats = async (room, players, winnerUserId) => {
 
     if (result === 'win') {
       try {
-        const Mission = (await import('../models/Mission.js')).default;
+        const Mission = (await import('../_models/Mission.js')).default;
         await Mission.updateProgress(player.nguoi_dung_id, 'arena_win', 1);
       } catch (err) {
         console.warn('Failed to update arena mission progress:', err.message);
@@ -1267,7 +1267,7 @@ router.post('/match-result', auth, async (req, res) => {
 
     if (result === 'win') {
       try {
-        const Mission = (await import('../models/Mission.js')).default;
+        const Mission = (await import('../_models/Mission.js')).default;
         await Mission.updateProgress(req.userId, 'arena_win', 1);
       } catch (err) {
         console.warn('Failed to update arena mission progress:', err.message);

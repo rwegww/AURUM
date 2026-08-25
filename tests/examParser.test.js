@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import mammoth from 'mammoth';
 import { describe, expect, it } from 'vitest';
-import { parseExamContent } from '../api/lib/examParser.js';
+import { parseExamContent } from '../api/_lib/examParser.js';
 
 const examPath = fileURLToPath(new URL(
   '../Hóa/hoa-lop-8-de-thi-thuvienhoclieu-com-de-kiem-tra-giua-hk1-khnt8-kntt-24-25.docx',

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const database = vi.hoisted(() => ({ students: [], requests: 0, cap: 150 }));
 
-vi.mock('../api/lib/supabase.js', () => ({
+vi.mock('../api/_lib/supabase.js', () => ({
   supabase: {
     from: () => {
       let cursor;
@@ -23,7 +23,7 @@ vi.mock('../api/lib/supabase.js', () => ({
   },
 }));
 
-import User from '../api/models/User.js';
+import User from '../api/_models/User.js';
 
 beforeEach(() => {
   database.students = [];

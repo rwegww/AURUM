@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 
 export const REQUIRED_ADMIN_APPROVALS = 2;
 const TABLE_NAME = 'yeu_cau_duyet_admin';

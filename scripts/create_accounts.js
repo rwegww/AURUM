@@ -1,6 +1,6 @@
-import '../api/env.js';
-import User from '../api/models/User.js';
-import { supabase } from '../api/lib/supabase.js';
+import '../api/_env.js';
+import User from '../api/_models/User.js';
+import { supabase } from '../api/_lib/supabase.js';
 
 const DEFAULT_PASSWORD = process.env.DEFAULT_SEED_PASSWORD || 'password123';
 const SECOND_ADMIN_USERNAME = process.env.SECOND_ADMIN_USERNAME || 'admin2';

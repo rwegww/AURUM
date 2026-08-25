@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getPlacementAssessment, gradePlacementAssessment, PLACEMENT_GRADES } from '../api/data/placementAssessments.js';
+import { getPlacementAssessment, gradePlacementAssessment, PLACEMENT_GRADES } from '../api/_data/placementAssessments.js';
 import { canAccessJourneyGrade, isStudentPlaced, usesInitialPlacement } from '../src/utils/studentPlacement.js';
 
 describe('student grade placement', () => {
@@ -48,4 +48,3 @@ describe('student grade placement', () => {
     expect(canAccessJourneyGrade(legacy, '10')).toBe(true);
   });
 });
-

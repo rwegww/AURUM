@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import User from '../api/models/User.js';
+import User from '../api/_models/User.js';
 
 dotenv.config({ path: ['.env.local', '.env'] });
 

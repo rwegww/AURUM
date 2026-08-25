@@ -21,10 +21,10 @@ const security = {
 };
 const mailer = { sendLoginOtpEmail: vi.fn(), sendPasswordResetOtpEmail: vi.fn() };
 const supabase = { auth: { getUser: vi.fn(), admin: { signOut: vi.fn() } }, from: vi.fn(), rpc: vi.fn() };
-vi.mock('../api/models/User.js', () => ({ default: userModel }));
-vi.mock('../api/lib/supabase.js', () => ({ supabase }));
-vi.mock('../api/lib/mailer.js', () => mailer);
-vi.mock('../api/lib/authSecurity.js', async (importOriginal) => ({ ...(await importOriginal()), AuthSecurity: security }));
+vi.mock('../api/_models/User.js', () => ({ default: userModel }));
+vi.mock('../api/_lib/supabase.js', () => ({ supabase }));
+vi.mock('../api/_lib/mailer.js', () => mailer);
+vi.mock('../api/_lib/authSecurity.js', async (importOriginal) => ({ ...(await importOriginal()), AuthSecurity: security }));
 const { default: authRouter } = await import('../api/_routes/auth.js');
 const { default: userRouter } = await import('../api/_routes/user.js');
 const { authenticateToken } = await import('../api/_middleware/auth.js');

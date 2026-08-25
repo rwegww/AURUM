@@ -1,6 +1,6 @@
 import express from 'express';
-import Mission from '../models/Mission.js';
-import User from '../models/User.js';
+import Mission from '../_models/Mission.js';
+import User from '../_models/User.js';
 import { auth } from '../_middleware/auth.js';
 import { craftingTasks } from '../../src/data/craftingTasks.js';
 

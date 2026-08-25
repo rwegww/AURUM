@@ -1,4 +1,4 @@
-import '../api/env.js';
+import '../api/_env.js';
 import { v2 as cloudinary } from 'cloudinary';
 import fs from 'node:fs/promises';
 import path from 'node:path';

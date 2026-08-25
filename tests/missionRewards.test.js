@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const db = vi.hoisted(() => ({ missions: [], progress: [], user: {}, writeError: null, xp: 0 }));
-vi.mock('../api/lib/supabase.js', () => ({
+vi.mock('../api/_lib/supabase.js', () => ({
   supabase: {
     from(table) {
       const filters = [];
@@ -46,8 +46,8 @@ vi.mock('../api/lib/supabase.js', () => ({
   },
 }));
 
-import Mission from '../api/models/Mission.js';
-import { supabase } from '../api/lib/supabase.js';
+import Mission from '../api/_models/Mission.js';
+import { supabase } from '../api/_lib/supabase.js';
 
 beforeEach(() => {
   db.missions = [{ id: 'mission', type: 'achievement', loai_hanh_dong: 'streak', so_luong_muc_tieu: 7, thuong_xp: 50 }];

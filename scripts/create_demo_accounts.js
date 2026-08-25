@@ -1,6 +1,6 @@
-import '../api/env.js';
-import User from '../api/models/User.js';
-import { supabase } from '../api/lib/supabase.js';
+import '../api/_env.js';
+import User from '../api/_models/User.js';
+import { supabase } from '../api/_lib/supabase.js';
 
 const ensureAccount = async ({ username, email, password, role }) => {
   let user = await User.findOne({ username });

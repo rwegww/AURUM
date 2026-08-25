@@ -1,7 +1,7 @@
 import { class6Data } from '../src/data/curriculum/class6.js';
 import { class7Data } from '../src/data/curriculum/class7.js';
-import Lesson from '../api/models/Lesson.js';
-import { supabase } from '../api/lib/supabase.js';
+import Lesson from '../api/_models/Lesson.js';
+import { supabase } from '../api/_lib/supabase.js';
 
 const lessons = [
   ...class6Data.ketnoi,

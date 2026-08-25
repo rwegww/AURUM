@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import Lesson from '../api/models/Lesson.js';
+import Lesson from '../api/_models/Lesson.js';
 
 dotenv.config({ path: ['.env.local', '.env'] });
 

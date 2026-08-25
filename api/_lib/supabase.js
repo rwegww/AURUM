@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';
-import '../env.js';
+import '../_env.js';
 
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
 const serverSupabaseKey =

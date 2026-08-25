@@ -1,13 +1,13 @@
 import express from 'express';
 import crypto from 'crypto';
 import { v2 as cloudinary } from 'cloudinary';
-import User from '../models/User.js';
-import Feedback from '../models/Feedback.js';
-import Lesson from '../models/Lesson.js';
-import AdminApproval from '../models/AdminApproval.js';
+import User from '../_models/User.js';
+import Feedback from '../_models/Feedback.js';
+import Lesson from '../_models/Lesson.js';
+import AdminApproval from '../_models/AdminApproval.js';
 import { auth, authenticateToken, extractBearerToken, requireRole } from '../_middleware/auth.js';
-import { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../lib/mailer.js';
-import { supabase } from '../lib/supabase.js';
+import { sendTeacherApprovalEmail, sendTeacherRejectionEmail } from '../_lib/mailer.js';
+import { supabase } from '../_lib/supabase.js';
 
 const router = express.Router();
 const adminGuard = [auth, requireRole('admin')];

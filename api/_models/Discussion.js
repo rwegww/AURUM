@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 
 const mapDiscussion = (comment) => comment ? ({
   ...comment,

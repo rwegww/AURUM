@@ -1,5 +1,5 @@
-﻿import { supabase } from '../api/lib/supabase.js';
-import User from '../api/models/User.js';
+﻿import { supabase } from '../api/_lib/supabase.js';
+import User from '../api/_models/User.js';
 
 async function initialize() {
   console.log('🚀 Initializing Supabase System Data...');

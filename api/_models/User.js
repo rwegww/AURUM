@@ -1,4 +1,4 @@
-import { supabase } from '../lib/supabase.js';
+import { supabase } from '../_lib/supabase.js';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { normalizeInventory, craftableItems } from '../../src/data/labInventory.js';

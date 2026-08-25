@@ -1,17 +1,17 @@
 import express from 'express';
-import User from '../models/User.js';
-import Feedback from '../models/Feedback.js';
-import Lesson from '../models/Lesson.js';
-import Mission from '../models/Mission.js';
-import { supabase } from '../lib/supabase.js';
-import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../lib/mailer.js';
+import User from '../_models/User.js';
+import Feedback from '../_models/Feedback.js';
+import Lesson from '../_models/Lesson.js';
+import Mission from '../_models/Mission.js';
+import { supabase } from '../_lib/supabase.js';
+import { sendStudyPlanHourlyReminderEmail, sendStreakReminderEmail } from '../_lib/mailer.js';
 import { getLessonIngredientRewards, grantIngredientsToInventory } from '../../src/data/labInventory.js';
 import { LESSON_LEVEL_XP } from '../../shared/journeyRewards.js';
 import {
   getPlacementAssessment,
   gradePlacementAssessment,
   PLACEMENT_GRADES as SUPPORTED_PLACEMENT_GRADES,
-} from '../data/placementAssessments.js';
+} from '../_data/placementAssessments.js';
 
 const router = express.Router();
 

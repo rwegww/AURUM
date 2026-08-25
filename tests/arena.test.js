@@ -428,13 +428,13 @@ const supabase = {
   }),
 };
 
-vi.mock('../api/models/User.js', () => ({ default: userModel }));
-vi.mock('../api/models/Lesson.js', () => ({ default: lessonModel }));
-vi.mock('../api/models/Feedback.js', () => ({ default: phan_hoiModel }));
-vi.mock('../api/models/Discussion.js', () => ({ Discussion: discussionModel, Note: noteModel }));
-vi.mock('../api/models/Mission.js', () => ({ default: { updateProgress: vi.fn() } }));
-vi.mock('../api/lib/supabase.js', () => ({ supabase }));
-vi.mock('../api/lib/mailer.js', () => ({
+vi.mock('../api/_models/User.js', () => ({ default: userModel }));
+vi.mock('../api/_models/Lesson.js', () => ({ default: lessonModel }));
+vi.mock('../api/_models/Feedback.js', () => ({ default: phan_hoiModel }));
+vi.mock('../api/_models/Discussion.js', () => ({ Discussion: discussionModel, Note: noteModel }));
+vi.mock('../api/_models/Mission.js', () => ({ default: { updateProgress: vi.fn() } }));
+vi.mock('../api/_lib/supabase.js', () => ({ supabase }));
+vi.mock('../api/_lib/mailer.js', () => ({
   sendTeacherApprovalEmail: vi.fn(),
   sendTeacherRejectionEmail: vi.fn(),
 }));

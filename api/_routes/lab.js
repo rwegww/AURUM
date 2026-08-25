@@ -1,7 +1,7 @@
 import express from 'express';
-import { supabase } from '../lib/supabase.js';
-import User from '../models/User.js';
-import Mission from '../models/Mission.js';
+import { supabase } from '../_lib/supabase.js';
+import User from '../_models/User.js';
+import Mission from '../_models/Mission.js';
 import { auth } from '../_middleware/auth.js';
 import { balanceEquation, balanceEquationText, parseSpeciesList } from '../../src/utils/balancer.js';
 import {
