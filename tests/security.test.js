@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -922,6 +924,26 @@ describe('security acceptance matrix', () => {
       content: 'Chat nao la nuoc?',
       options: { A: 'H2O', B: 'NaCl', C: 'CO2', D: 'O2' },
     });
+  });
+
+  it('parses essay questions and answer-table content from the supplied Word exam', async () => {
+    const examPath = fileURLToPath(new URL(
+      '../Hóa/hoa-lop-8-de-thi-thuvienhoclieu-com-de-kiem-tra-giua-hk1-khnt8-kntt-24-25.docx',
+      import.meta.url,
+    ));
+
+    const res = await request(app)
+      .post('/api/classes/parse-exam-file')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .attach('file', fs.readFileSync(examPath), {
+        filename: 'de-kiem-tra-giua-hoc-ki.docx',
+        contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveLength(18);
+    expect(res.body.slice(12).every((question) => question.type === 'essay')).toBe(true);
+    expect(res.body[13].correct_answer).toContain('Nên ngồi thẳng người');
   });
 
   it('rejects a class post targeted to a student outside the class', async () => {

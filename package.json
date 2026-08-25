@@ -13,6 +13,7 @@
     "seed:arena": "node scripts/seedArenaAndElements.js",
     "seed:class6-7": "node scripts/seedClass6And7Lessons.js",
     "upload:class6-7-assets": "node scripts/uploadClass67CloudinaryAssets.js",
+    "sync:journey-videos": "node scripts/syncJourneyCloudinaryVideos.js",
     "upload:public-images": "node scripts/uploadPublicImagesToCloudinary.js",
     "build": "vite build",
     "lint": "eslint .",

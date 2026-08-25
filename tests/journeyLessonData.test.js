@@ -14,6 +14,7 @@ import {
   JOURNEY_LEVELS,
   normalizeJourneyChallenges,
 } from '../src/utils/journeyLessonData.js';
+import { isCloudinaryVideoUrl } from '../src/utils/videoLinks.js';
 
 const allLessons = [
   ...class6Data.ketnoi,
@@ -87,7 +88,7 @@ describe('dữ liệu lộ trình học', () => {
 
     expect(overview.title).toBe('Sử dụng một số hóa chất, thiết bị cơ bản trong phòng thí nghiệm');
     expect(overview.description).toBe(lesson.description);
-    expect(overview.videoUrl).toBe('');
+    expect(overview.videoUrl).toBe('https://res.cloudinary.com/dpcorzgkm/video/upload/chemistry-odyssey/curriculum/8-1.mp4');
     JOURNEY_LEVELS.forEach((level) => {
       expect(overview.questionCounts[level]).toBe(groups[level].length);
     });
@@ -127,6 +128,13 @@ describe('dữ liệu lộ trình học', () => {
     };
 
     expect(getJourneyVideoUrl(lesson)).toBe('https://res.cloudinary.com/aurum/video/upload/v1/tai-nguyen-hanh-trinh.mp4');
+  });
+
+  it('mọi video được dùng trong hành trình đều được phân phối từ Cloudinary', () => {
+    const journeyVideoUrls = allLessons.map(getJourneyVideoUrl).filter(Boolean);
+
+    expect(journeyVideoUrls).toHaveLength(72);
+    expect(journeyVideoUrls.every(isCloudinaryVideoUrl)).toBe(true);
   });
 
   it('vòng 3 luôn chứa đầy đủ câu hỏi của hai vòng trước và không lặp câu', () => {

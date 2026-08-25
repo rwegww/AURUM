@@ -83,7 +83,7 @@ export const normalizeExamQuestions = (questions) => {
 
   return questions.map((question, index) => {
     const safeQuestion = question && typeof question === 'object' ? question : {};
-    const type = ['multiple_choice', 'true_false', 'short_answer'].includes(safeQuestion.type)
+    const type = ['multiple_choice', 'true_false', 'short_answer', 'essay'].includes(safeQuestion.type)
       ? safeQuestion.type
       : 'multiple_choice';
     const normalized = {
@@ -203,7 +203,9 @@ export const buildAssignmentPayload = (draft, questions) => ({
         Object.entries(normalized.options).map(([key, value]) => [key, normalizeText(String(value))])
       );
     }
-    if (normalized.type === 'short_answer') normalized.correct_answer = normalizeText(normalized.correct_answer);
+    if (normalized.type === 'short_answer' || normalized.type === 'essay') {
+      normalized.correct_answer = normalizeText(normalized.correct_answer);
+    }
     return normalized;
   }),
 });

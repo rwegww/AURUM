@@ -17,6 +17,7 @@ import { bai16 } from './lesson-16.js';
 import { bai17 } from './lesson-17.js';
 import { bai18 } from './lesson-18.js';
 import { bai19 } from './lesson-19.js';
+import { withCurriculumCloudinaryVideo } from '../cloudinaryJourneyVideos.js';
 
 export const class9Data = {
   "ketnoi": [
@@ -39,5 +40,5 @@ export const class9Data = {
     bai17,
     bai18,
     bai19
-  ]
+  ].map(withCurriculumCloudinaryVideo)
 };

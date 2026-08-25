@@ -5,6 +5,20 @@ import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
 import { CheckCircle2, Rocket } from 'lucide-react';
 
+const QUESTION_TYPE_LABELS = {
+  multiple_choice: 'Trắc nghiệm',
+  true_false: 'Đúng/Sai',
+  short_answer: 'Trả lời ngắn',
+  essay: 'Tự luận',
+};
+
+const getQuestionSectionTitle = (question = {}) => {
+  const part = Number(question.part);
+  const partLabel = ({ 1: 'I', 2: 'II', 3: 'III' })[part] || question.part || '';
+  const typeLabel = QUESTION_TYPE_LABELS[question.type || 'multiple_choice'] || 'Câu hỏi';
+  return `Phần ${partLabel} - ${typeLabel}`;
+};
+
 const MyClass = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
@@ -725,11 +739,13 @@ const MyClass = () => {
               <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
                 {activeQuiz.questions.map((q, qIdx) => (
                   <React.Fragment key={qIdx}>
-                    {(qIdx === 0 || activeQuiz.questions[qIdx - 1].part !== q.part) && (
+                    {(qIdx === 0
+                      || activeQuiz.questions[qIdx - 1].part !== q.part
+                      || activeQuiz.questions[qIdx - 1].type !== q.type) && (
                       <div className="flex items-center gap-4 pt-8 pb-4">
                         <div className="h-px flex-1 bg-slate-200"></div>
                         <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">
-                          {q.part === 1 ? 'Phần I - Trắc nghiệm' : q.part === 2 ? 'Phần II - Đúng/Sai' : q.part === 3 ? 'Phần III - Trả lời ngắn' : `Phần ${q.part}`}
+                          {getQuestionSectionTitle(q)}
                         </h3>
                         <div className="h-px flex-1 bg-slate-200"></div>
                       </div>

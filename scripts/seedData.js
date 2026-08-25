@@ -49,6 +49,7 @@ async function seed() {
           { character: 'professor', text: 'Bạn đã sẵn sàng để trở thành một nhà giả kim thực thụ chưa? Hãy bắt đầu thôi!' }
         ] : (l.storySlides || []),
         game: l.game || {},
+        introVideoUrl: l.introVideoUrl || null,
         isPremium: l.isPremium || false
       }));
 

@@ -65,7 +65,11 @@
   text-align: center;
 }
 .aurum-loader--screen { position: fixed; inset: 0; z-index: 9999; min-height: 100dvh; }
-.aurum-loader--inline { min-height: 55vh; border-radius: 24px; }
+.aurum-loader--inline {
+  min-height: 55vh;
+  border-radius: 0;
+  background: transparent;
+}
 .aurum-loader__content { padding: 40px 24px; animation: aurum-rise 420ms var(--motion-ease) both; }
 .aurum-loader__emblem { position: relative; width: 148px; height: 148px; margin: 0 auto 30px; display: grid; place-items: center; }
 .aurum-loader__halo { position: absolute; inset: -20px; border-radius: 50%; background: radial-gradient(circle, #b7dc8155, transparent 70%); animation: aurum-breathe 3s ease-in-out infinite; }

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildAssignmentPayload,
   MAX_ASSIGNMENT_QUESTIONS,
+  normalizeExamQuestions,
   validateAssignmentDraft,
   validateExamQuestions,
   validateGrade,
@@ -48,5 +49,21 @@ describe('kiểm tra dữ liệu bài tập của giáo viên', () => {
   it('không biến điểm trống thành điểm 0', () => {
     expect(validateGrade('', '').score).toBeTruthy();
     expect(validateGrade('0', '').score).toBeUndefined();
+  });
+
+  it('giữ nguyên câu tự luận và đáp án tham khảo nhiều dòng', () => {
+    const [question] = normalizeExamQuestions([{
+      type: 'essay',
+      part: 2,
+      content: 'Trình bày cách pha dung dịch.',
+      correct_answer: 'Bước 1\nBước 2',
+    }]);
+
+    expect(question).toMatchObject({
+      type: 'essay',
+      part: 2,
+      correct_answer: 'Bước 1\nBước 2',
+    });
+    expect(question.options).toBeUndefined();
   });
 });

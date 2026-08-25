@@ -38,11 +38,16 @@ const postTypeLabel = (type) => {
   return "Bài đăng";
 };
 
-const questionTitle = (part) => {
-  if (part === 1) return "Phần I - Trắc nghiệm";
-  if (part === 2) return "Phần II - Đúng / Sai";
-  if (part === 3) return "Phần III - Trả lời ngắn";
-  return `Phần ${part || "bài làm"}`;
+const questionTitle = (question = {}) => {
+  const part = Number(question.part);
+  const partLabel = ({ 1: "I", 2: "II", 3: "III" })[part] || question.part || "bài làm";
+  const typeLabel = ({
+    multiple_choice: "Trắc nghiệm",
+    true_false: "Đúng / Sai",
+    short_answer: "Trả lời ngắn",
+    essay: "Tự luận",
+  })[question.type || "multiple_choice"] || "Câu hỏi";
+  return `Phần ${partLabel} - ${typeLabel}`;
 };
 
 const normalizeOptions = (options) => {
@@ -154,11 +159,13 @@ export default function ClassroomDetailScreen() {
           {questions.map((question, questionIndex) => {
             const type = question.type || "multiple_choice";
             const options = normalizeOptions(question.options);
-            const showPartTitle = questionIndex === 0 || questions[questionIndex - 1].part !== question.part;
+            const showPartTitle = questionIndex === 0
+              || questions[questionIndex - 1].part !== question.part
+              || questions[questionIndex - 1].type !== question.type;
 
             return (
               <React.Fragment key={question.id || questionIndex}>
-                {showPartTitle ? <SectionTitle title={questionTitle(question.part)} /> : null}
+                {showPartTitle ? <SectionTitle title={questionTitle(question)} /> : null}
                 <Card style={styles.questionCard}>
                   <View style={styles.questionHeader}>
                     <View style={styles.questionIndex}>

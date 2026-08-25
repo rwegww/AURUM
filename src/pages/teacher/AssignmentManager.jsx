@@ -775,7 +775,7 @@ const AssignmentManager = () => {
                                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-50 p-4 rounded-2xl border border-viet-green/20">
                                                 <div>
                                                    <h3 className="text-sm font-black text-viet-text uppercase tracking-widest flex items-center"><ClipboardList className="w-5 h-5 mr-2" /> DANH SÁCH CÂU HỎI ({parsedQuestions.length})</h3>
-                                                   <p className="text-[10px] font-bold text-viet-green uppercase mt-1">Format 2025: Trắc nghiệm, Đúng/Sai, Trả lời ngắn</p>
+                                                   <p className="text-[10px] font-bold text-viet-green uppercase mt-1">Hỗ trợ: Trắc nghiệm, Đúng/Sai, Trả lời ngắn, Tự luận</p>
                                                 </div>
                                                  <div className="flex gap-2">
                                                      <button
@@ -825,6 +825,7 @@ const AssignmentManager = () => {
                                                                     <option value="multiple_choice">Trắc nghiệm</option>
                                                                     <option value="true_false">Đúng / Sai</option>
                                                                     <option value="short_answer">Trả lời ngắn</option>
+                                                                    <option value="essay">Tự luận</option>
                                                                 </select>
                                                             </div>
                                                             <div>
@@ -915,6 +916,19 @@ const AssignmentManager = () => {
                                                                         placeholder="Nhập đáp án (thường là số)..."
                                                                         aria-label={`Đáp án tham khảo của câu ${qIdx + 1}`}
                                                                         className="w-full bg-white border border-blue-200 rounded-xl p-3 text-xs font-bold outline-none focus:border-blue-400"
+                                                                    />
+                                                                </div>
+                                                            )}
+
+                                                            {q.type === 'essay' && (
+                                                                <div>
+                                                                    <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-1 block">Đáp án tham khảo</span>
+                                                                    <textarea
+                                                                        value={q.correct_answer || ''}
+                                                                        onChange={(e) => updateQuestion(qIdx, (current) => ({ ...current, correct_answer: e.target.value }))}
+                                                                        placeholder="Nhập đáp án hoặc hướng dẫn chấm..."
+                                                                        aria-label={`Đáp án tham khảo của câu tự luận ${qIdx + 1}`}
+                                                                        className="w-full min-h-28 bg-white border border-blue-200 rounded-xl p-3 text-xs font-medium leading-relaxed outline-none focus:border-blue-400 resize-y"
                                                                     />
                                                                 </div>
                                                             )}
