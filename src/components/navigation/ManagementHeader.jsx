@@ -3,15 +3,16 @@ import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import Avatar from '../common/Avatar';
-import { Bell, FileText, Hourglass, MessageCircle, School, X, Search, ChevronDown, Leaf } from 'lucide-react';
+import { Bell, FileText, Hourglass, MessageCircle, School, X, Search, ChevronDown, Leaf } from 'lucide';
+import MorphIcon from '@/components/common/MorphIcon';
 
 const getNotificationIcon = (type) => {
   switch (type) {
-    case 'student_join': return <School size={17} aria-hidden="true" />;
-    case 'message': return <MessageCircle size={17} aria-hidden="true" />;
-    case 'submission': return <FileText size={17} aria-hidden="true" />;
-    case 'due_soon': return <Hourglass size={17} aria-hidden="true" />;
-    default: return <Bell size={17} aria-hidden="true" />;
+    case 'student_join': return <MorphIcon icon={School} size={17} aria-hidden="true" />;
+    case 'message': return <MorphIcon icon={MessageCircle} size={17} aria-hidden="true" />;
+    case 'submission': return <MorphIcon icon={FileText} size={17} aria-hidden="true" />;
+    case 'due_soon': return <MorphIcon icon={Hourglass} size={17} aria-hidden="true" />;
+    default: return <MorphIcon icon={Bell} size={17} aria-hidden="true" />;
   }
 };
 
@@ -83,7 +84,7 @@ export const NotificationPanel = ({
           className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100"
           aria-label="Đóng thông báo"
         >
-          <X size={17} aria-hidden="true" />
+          <MorphIcon icon={X} size={17} aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -91,7 +92,7 @@ export const NotificationPanel = ({
     <div className="flex-1 overflow-y-auto divide-y divide-slate-100 custom-scrollbar">
       {notifications.length === 0 ? (
         <div className="py-12 text-center text-slate-400">
-          <Bell size={28} aria-hidden="true" className="mx-auto mb-2" />
+          <MorphIcon icon={Bell} size={28} aria-hidden="true" className="mx-auto mb-2" />
           <p className="text-xs font-medium">Chưa có thông báo nào</p>
         </div>
       ) : (
@@ -174,7 +175,7 @@ const ManagementHeader = ({ title }) => {
             {formatCurrentDate()}
           </time>
           <div className="flex items-center gap-1 text-[11px] font-medium text-emerald-600 italic font-serif">
-            <Leaf size={12} className="text-emerald-500" /> Mỗi phản ứng mở ra một khám phá mới
+            <MorphIcon icon={Leaf} size={12} className="text-emerald-500" /> Mỗi phản ứng mở ra một khám phá mới
           </div>
         </div>
 

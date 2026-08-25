@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, Eye, Lock, RefreshCcw, Search, Unlock } from 'lucide-react';
+import { AlertTriangle, ArrowDown, ArrowUp, ArrowUpDown, CheckCircle2, Eye, Lock, RefreshCcw, Search, Unlock } from 'lucide';
+import MorphIcon from '@/components/common/MorphIcon';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
 
 const PAGE_SIZE = 100;
@@ -218,7 +219,7 @@ const UserManager = () => {
                 onChange={(event) => setSearchTerm(event.target.value)}
                 className="w-full h-12 pl-12 pr-4 rounded-2xl border border-viet-border bg-white text-sm font-bold focus:border-viet-green focus:shadow-lg shadow-viet-green/5 transition-all outline-none"
               />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-viet-text-light pointer-events-none" aria-hidden="true" />
+              <MorphIcon icon={Search} size={20} className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-viet-text-light pointer-events-none" aria-hidden="true" />
             </label>
             <button
               type="button"
@@ -226,7 +227,7 @@ const UserManager = () => {
               disabled={isFetching || Boolean(actingId)}
               className="h-12 inline-flex items-center justify-center gap-2 px-4 rounded-2xl border border-viet-border bg-white text-xs font-black text-viet-text hover:text-viet-green disabled:opacity-50"
             >
-              <RefreshCcw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} aria-hidden="true" />
+              <MorphIcon icon={RefreshCcw} size={16} className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} aria-hidden="true" />
               Làm mới
             </button>
           </div>
@@ -234,14 +235,14 @@ const UserManager = () => {
 
         {(loadError || actionError) && (
           <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-bold text-red-700 flex items-start gap-3" role="alert">
-            <AlertTriangle className="w-5 h-5 shrink-0" aria-hidden="true" />
+            <MorphIcon icon={AlertTriangle} size={20} className="w-5 h-5 shrink-0" aria-hidden="true" />
             <span>{actionError || loadError}</span>
           </div>
         )}
 
         {actionNotice && (
           <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-bold text-emerald-700 flex items-start gap-3" role="status" aria-live="polite">
-            <CheckCircle2 className="w-5 h-5 shrink-0" aria-hidden="true" />
+            <MorphIcon icon={CheckCircle2} size={20} className="w-5 h-5 shrink-0" aria-hidden="true" />
             <span>{actionNotice}</span>
           </div>
         )}
@@ -270,11 +271,11 @@ const UserManager = () => {
                         className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
                       >
                         <span>NGƯỜI DÙNG</span>
-                        {sortField === 'username' ? (
-                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                        ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                        )}
+                        <MorphIcon
+                          icon={sortField === 'username' ? (sortDirection === 'asc' ? ArrowUp : ArrowDown) : ArrowUpDown}
+                          size={14}
+                          className={`w-3.5 h-3.5 ${sortField === 'username' ? 'text-viet-green' : 'text-slate-400'}`}
+                        />
                       </button>
                     </th>
                     <th scope="col" className="px-8 py-5 text-center">
@@ -284,11 +285,11 @@ const UserManager = () => {
                         className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
                       >
                         <span>CẤP ĐỘ</span>
-                        {sortField === 'level' ? (
-                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                        ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                        )}
+                        <MorphIcon
+                          icon={sortField === 'level' ? (sortDirection === 'asc' ? ArrowUp : ArrowDown) : ArrowUpDown}
+                          size={14}
+                          className={`w-3.5 h-3.5 ${sortField === 'level' ? 'text-viet-green' : 'text-slate-400'}`}
+                        />
                       </button>
                     </th>
                     <th scope="col" className="px-8 py-5 text-center">
@@ -298,11 +299,11 @@ const UserManager = () => {
                         className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
                       >
                         <span>HOẠT ĐỘNG</span>
-                        {sortField === 'active_minutes' ? (
-                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                        ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                        )}
+                        <MorphIcon
+                          icon={sortField === 'active_minutes' ? (sortDirection === 'asc' ? ArrowUp : ArrowDown) : ArrowUpDown}
+                          size={14}
+                          className={`w-3.5 h-3.5 ${sortField === 'active_minutes' ? 'text-viet-green' : 'text-slate-400'}`}
+                        />
                       </button>
                     </th>
                     <th scope="col" className="px-8 py-5 text-center">
@@ -312,11 +313,11 @@ const UserManager = () => {
                         className="inline-flex items-center gap-1.5 text-[11px] font-black text-viet-text-light uppercase tracking-widest hover:text-viet-green transition-colors focus:outline-none"
                       >
                         <span>TIẾN TRÌNH</span>
-                        {sortField === 'xp' ? (
-                          sortDirection === 'asc' ? <ArrowUp className="w-3.5 h-3.5 text-viet-green" /> : <ArrowDown className="w-3.5 h-3.5 text-viet-green" />
-                        ) : (
-                          <ArrowUpDown className="w-3.5 h-3.5 text-slate-400" />
-                        )}
+                        <MorphIcon
+                          icon={sortField === 'xp' ? (sortDirection === 'asc' ? ArrowUp : ArrowDown) : ArrowUpDown}
+                          size={14}
+                          className={`w-3.5 h-3.5 ${sortField === 'xp' ? 'text-viet-green' : 'text-slate-400'}`}
+                        />
                       </button>
                     </th>
                     <th scope="col" className="px-8 py-5 text-right text-[11px] font-black text-viet-text-light uppercase tracking-widest">
@@ -394,15 +395,16 @@ const UserManager = () => {
                               className={`px-3 py-1.5 flex items-center gap-1.5 rounded-xl font-black text-[10px] uppercase tracking-widest border transition-all disabled:cursor-not-allowed disabled:opacity-50 ${user.is_locked ? 'border-emerald-200 text-emerald-700 hover:bg-emerald-50' : 'border-red-200 text-red-600 hover:bg-red-50'}`}
                             >
                               {isActing ? (
-                                <><RefreshCcw className="w-3.5 h-3.5 animate-spin" aria-hidden="true" /> Đang gửi</>
+                                <><MorphIcon icon={RefreshCcw} size={14} className="w-3.5 h-3.5 animate-spin" aria-hidden="true" /> Đang gửi</>
                               ) : isPending ? (
                                 <>Chờ duyệt</>
                               ) : isProtectedAdmin ? (
                                 <>Được bảo vệ</>
-                              ) : user.is_locked ? (
-                                <><Unlock className="w-3.5 h-3.5" aria-hidden="true" /> Mở khóa</>
                               ) : (
-                                <><Lock className="w-3.5 h-3.5" aria-hidden="true" /> Khóa</>
+                                <>
+                                  <MorphIcon icon={user.is_locked ? Unlock : Lock} size={14} className="w-3.5 h-3.5" aria-hidden="true" />
+                                  {user.is_locked ? ' Mở khóa' : ' Khóa'}
+                                </>
                               )}
                             </button>
                             {user.role !== 'admin' && (
@@ -412,7 +414,7 @@ const UserManager = () => {
                                 aria-label={`Xem chi tiết ${username}`}
                                 title="Xem chi tiết"
                               >
-                                <Eye className="w-4 h-4" aria-hidden="true" />
+                                <MorphIcon icon={Eye} size={16} className="w-4 h-4" aria-hidden="true" />
                               </Link>
                             )}
                           </div>

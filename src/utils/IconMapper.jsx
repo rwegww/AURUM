@@ -1,16 +1,17 @@
 import React from 'react';
-import { 
-  Droplet, Wind, Settings, Diamond, Hexagon, Square, Circle, 
+import MorphIcon from '@/components/common/MorphIcon';
+import {
+  Droplet, Wind, Settings, Diamond, Hexagon, Square, Circle,
   Shield, FlaskConical, Magnet, Flame, Zap, Star, Beaker,
   BookOpen, Hammer, Calculator, Scale, Atom, Microscope, Compass,
   Search, Trophy, Award, Gem, CheckCircle2, Clock, Mail, Phone,
   MapPin, User, Lock, Camera, RefreshCw, Play, Video, HelpCircle,
   Lightbulb, Sparkles, GraduationCap, Swords, Target, Grid,
   FileText, Package, Bookmark, Activity, Heart, Eye, BookOpenCheck
-} from 'lucide-react';
+} from 'lucide';
 
 const iconMap = {
-  // Lucide Names Direct
+  // Lucide Icon Nodes Direct
   Droplet, Wind, Settings, Diamond, Hexagon, Square, Circle,
   Shield, FlaskConical, Magnet, Flame, Zap, Star, Beaker,
   BookOpen, Hammer, Calculator, Scale, Atom, Microscope, Compass,
@@ -111,14 +112,22 @@ export const RenderIcon = ({ iconName, className = "w-5 h-5", ...props }) => {
     return <CustomIcon className={className} {...props} />;
   }
 
+  // Resolve IconNode from key or string
   if (typeof iconName === 'string' && iconName.trim()) {
     const key = iconName.trim();
-    const IconComponent = iconMap[key] || iconMap[key.toLowerCase()];
-    if (IconComponent) {
-      return <IconComponent className={className} {...props} />;
+    const resolved = iconMap[key] || iconMap[key.toLowerCase()];
+    if (resolved) {
+      return <MorphIcon icon={resolved} className={className} {...props} />;
     }
   }
 
-  // Smart fallback SVG icon so raw string text is never displayed inside icon boxes
-  return <FlaskConical className={className} {...props} />;
+  // If an array/IconNode is passed directly
+  if (Array.isArray(iconName)) {
+    return <MorphIcon icon={iconName} className={className} {...props} />;
+  }
+
+  // Smart fallback using MorphIcon with FlaskConical
+  return <MorphIcon icon={FlaskConical} className={className} {...props} />;
 };
+
+export default RenderIcon;

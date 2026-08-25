@@ -5,20 +5,21 @@ import { useAuth } from '@/context/AuthContext';
 import {
   FlaskConical, LayoutDashboard, Users, BookOpen, FileCheck, MessageSquare,
   BarChart2, Settings, LogOut, Atom
-} from 'lucide-react';
+} from 'lucide';
+import MorphIcon from '@/components/common/MorphIcon';
 
 const ManagementSidebar = ({ menuItems, title }) => {
   const { logout } = useAuth();
 
   // Custom menu icon mapping if menuItems doesn't provide ideal icons
   const defaultIcons = {
-    '/admin': <LayoutDashboard size={20} />,
-    '/admin/nguoi_dung': <Users size={20} />,
-    '/admin/bai_hoc': <BookOpen size={20} />,
-    '/admin/assignments': <FileCheck size={20} />,
-    '/admin/feedback': <MessageSquare size={20} />,
-    '/admin/stats': <BarChart2 size={20} />,
-    '/admin/settings': <Settings size={20} />,
+    '/admin': <MorphIcon icon={LayoutDashboard} size={20} />,
+    '/admin/nguoi_dung': <MorphIcon icon={Users} size={20} />,
+    '/admin/bai_hoc': <MorphIcon icon={BookOpen} size={20} />,
+    '/admin/assignments': <MorphIcon icon={FileCheck} size={20} />,
+    '/admin/feedback': <MorphIcon icon={MessageSquare} size={20} />,
+    '/admin/stats': <MorphIcon icon={BarChart2} size={20} />,
+    '/admin/settings': <MorphIcon icon={Settings} size={20} />,
   };
 
   return (
@@ -30,7 +31,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
       <div className="h-[112px] flex items-center px-6 border-b border-slate-100 shrink-0">
         <NavLink to="/" className="flex items-center gap-3 group" aria-label="Về trang chủ AURUM">
           <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0 group-hover:-translate-y-0.5 transition-transform">
-            <FlaskConical size={25} strokeWidth={2.25} />
+            <MorphIcon icon={FlaskConical} size={25} strokeWidth={2.25} />
           </div>
           <div>
             <div className="flex items-center gap-1">
@@ -48,7 +49,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
       {/* Navigation Links */}
       <nav aria-label={`Các mục ${title}`} className="flex-1 overflow-y-auto py-6 px-4 space-y-2 custom-scrollbar">
         {menuItems.map((item, index) => {
-          const icon = item.icon || defaultIcons[item.path] || <LayoutDashboard size={20} />;
+          const icon = item.icon || defaultIcons[item.path] || <MorphIcon icon={LayoutDashboard} size={20} />;
           return (
             <NavLink
               key={item.path || item.label || index}
@@ -83,9 +84,9 @@ const ManagementSidebar = ({ menuItems, title }) => {
       {/* Bottom Educational Promo Card */}
       <div className="px-4 mb-4 mt-auto shrink-0">
         <div className="bg-gradient-to-br from-blue-50 via-white to-emerald-50/70 p-4 rounded-3xl border border-blue-100 text-center relative overflow-hidden">
-          <Atom aria-hidden="true" className="absolute -right-5 -top-5 h-20 w-20 text-blue-100" />
+          <MorphIcon icon={Atom} size={80} aria-hidden="true" className="absolute -right-5 -top-5 h-20 w-20 text-blue-100" />
           <div className="w-12 h-12 mx-auto mb-2.5 rounded-2xl bg-blue-600/10 text-blue-600 flex items-center justify-center relative">
-            <FlaskConical size={27} />
+            <MorphIcon icon={FlaskConical} size={27} />
           </div>
           <p className="text-xs font-black text-slate-800 uppercase tracking-tight mb-1">
             Hóa học khơi nguồn khám phá
@@ -103,7 +104,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
           onClick={logout}
           className="flex items-center justify-center w-full gap-2 px-4 py-2.5 rounded-xl text-slate-500 font-bold text-xs hover:bg-red-50 hover:text-red-600 transition-all"
         >
-          <LogOut size={16} aria-hidden="true" /> Đăng xuất
+          <MorphIcon icon={LogOut} size={16} aria-hidden="true" /> Đăng xuất
         </button>
       </div>
     </aside>

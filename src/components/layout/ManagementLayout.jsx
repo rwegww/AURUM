@@ -5,7 +5,9 @@ import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import ManagementSidebar from '../navigation/ManagementSidebar';
 import ManagementHeader from '../navigation/ManagementHeader';
-import { Menu, X, LogOut, Bell } from 'lucide-react';
+import { LogOut, Bell } from 'lucide-react';
+import { Menu, X } from 'lucide';
+import MorphIcon from '@/components/common/MorphIcon';
 
 const ManagementLayout = ({ menuItems, title }) => {
   const { logout, user } = useAuth();
@@ -87,7 +89,7 @@ const ManagementLayout = ({ menuItems, title }) => {
             aria-expanded={mobileMenuOpen}
             aria-controls="management-mobile-menu"
           >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            <MorphIcon icon={mobileMenuOpen ? X : Menu} size={20} />
           </button>
         </div>
       </header>

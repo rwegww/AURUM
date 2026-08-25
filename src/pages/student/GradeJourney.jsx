@@ -17,6 +17,8 @@ import {
   Trophy,
   Zap,
 } from 'lucide-react';
+import { BookOpen as BookOpenNode, Lock as LockNode } from 'lucide';
+import MorphIcon from '@/components/common/MorphIcon';
 import InfographicBook from '@/components/lessons/InfographicBook';
 import PlacementTestModal, { AVAILABLE_PLACEMENT_TEST_GRADES } from '@/components/lessons/PlacementTestModal';
 import { useAuth } from '@/context/AuthContext';
@@ -490,7 +492,7 @@ const GradeJourney = () => {
               <span>{t('journey.milestone.subtitle', { grade })}</span>
             </span>
             <span className="journey-book-action" aria-hidden="true">
-              {canOpenBook ? <BookOpen size={24} /> : <Lock size={22} />}
+              <MorphIcon icon={canOpenBook ? BookOpenNode : LockNode} size={24} />
               <span>{canOpenBook ? 'Mở sổ tay' : 'Chưa mở'}</span>
             </span>
           </motion.button>

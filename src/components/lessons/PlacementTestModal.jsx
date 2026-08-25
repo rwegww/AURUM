@@ -1,7 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, Trophy, XCircle } from 'lucide-react';
+import { CheckCircle2, Trophy, XCircle, GraduationCap, BookOpen } from 'lucide';
+import MorphIcon from '@/components/common/MorphIcon';
 import { useAuth } from '@/context/AuthContext';
 import MathText from '@/components/common/MathText';
 
@@ -123,7 +124,9 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                     exit={{ opacity: 0, y: -20 }}
                     className="text-center py-10"
                   >
-                     <div className="text-6xl mb-6">GraduationCap</div>
+                     <div className="mb-6 flex justify-center text-viet-green">
+                       <MorphIcon icon={GraduationCap} size={64} className="w-16 h-16 text-viet-green" />
+                     </div>
                      <h3 className="text-2xl font-black text-viet-text mb-4 uppercase">Sẵn sàng thử thách?</h3>
                      <p className="text-viet-text-light font-bold mb-8 leading-relaxed">
                         Bài test gồm {questions.length} câu hỏi tổng hợp kiến thức nền tảng.
@@ -177,9 +180,14 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                              `}
                            >
                               <span className="font-bold"><MathText>{option}</MathText></span>
-                              {selectedAnswer === idx && (isCorrect
-                                ? <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-600" aria-hidden="true" />
-                                : <XCircle className="h-6 w-6 shrink-0 text-red-600" aria-hidden="true" />)}
+                              {selectedAnswer === idx && (
+                                <MorphIcon
+                                  icon={isCorrect ? CheckCircle2 : XCircle}
+                                  size={24}
+                                  className={`h-6 w-6 shrink-0 ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}
+                                  aria-hidden="true"
+                                />
+                              )}
                            </button>
                         ))}
                      </div>
@@ -196,7 +204,7 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                      {score >= passingScore ? (
                        <>
                          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[24px] bg-amber-100 text-amber-600">
-                           <Trophy className="h-10 w-10" aria-hidden="true" />
+                           <MorphIcon icon={Trophy} size={40} className="h-10 w-10" aria-hidden="true" />
                          </div>
                          <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">Hành Trình Đã Mở!</h3>
                          <p className="text-viet-text-light font-bold mb-8">
@@ -210,7 +218,9 @@ const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
                        </>
                      ) : (
                        <>
-                         <div className="text-7xl mb-6">BookOpen</div>
+                         <div className="mb-6 flex justify-center text-red-500">
+                           <MorphIcon icon={BookOpen} size={64} className="w-16 h-16 text-red-500" />
+                         </div>
                          <h3 className="text-3xl font-black text-red-500 mb-2 uppercase italic">Cần Cố Gắng Thêm</h3>
                          <p className="text-viet-text-light font-bold mb-8">
                            Bạn đúng {score}/{questions.length} câu. (Cần tối thiểu {passingScore} câu).
