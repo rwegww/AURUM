@@ -14,7 +14,14 @@ const TYPE_LABELS = {
   media: 'PNG, JPG, WEBP, GIF, MP4, WEBM, OGG hoặc MOV',
 };
 
-const MediaUploader = ({ onUploadSuccess, onUploadingChange, type = 'image', maxSizeMB = 10, disabled = false }) => {
+const MediaUploader = ({
+  onUploadSuccess,
+  onUploadingChange,
+  type = 'image',
+  maxSizeMB = 10,
+  disabled = false,
+  folder = 'chemistry-odyssey/admin',
+}) => {
   const inputId = useId();
   const inputRef = useRef(null);
   const abortRef = useRef(null);
@@ -82,7 +89,7 @@ const MediaUploader = ({ onUploadSuccess, onUploadingChange, type = 'image', max
 
     try {
       const token = localStorage.getItem('token');
-      const uploadData = await uploadAdminMedia(file, 'chemistry-odyssey/admin', {
+      const uploadData = await uploadAdminMedia(file, folder, {
         signal: controller.signal,
         token,
       });

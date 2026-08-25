@@ -22,7 +22,7 @@ import MediaUploader from '@/components/admin/MediaUploader';
 import { normalizeQuizGroups, validateJourneyLesson } from '@/utils/adminLessonData';
 import { parseAdminMutationResponse } from '@/utils/adminApproval';
 import { getJourneyQuizGroups, getJourneyStageOverview } from '@/utils/journeyLessonData';
-import { getVideoEmbedUrl, isExternalEmbedVideo, normalizeHttpUrl } from '@/utils/videoLinks';
+import { isCloudinaryVideoUrl, normalizeHttpUrl } from '@/utils/videoLinks';
 import { LESSON_LEVEL_XP } from '../../../shared/journeyRewards.js';
 
 const QUIZ_LEVELS = [
@@ -269,8 +269,8 @@ const JourneyDetail = () => {
 
     const normalizedVideoUrl = lesson.introVideoUrl.trim() ? normalizeHttpUrl(lesson.introVideoUrl) : '';
     const errors = validateJourneyLesson(lesson);
-    if (lesson.introVideoUrl.trim() && !normalizedVideoUrl) {
-      errors.unshift('Đường dẫn video phải là URL HTTP hoặc HTTPS hợp lệ.');
+    if (lesson.introVideoUrl.trim() && !isCloudinaryVideoUrl(normalizedVideoUrl)) {
+      errors.unshift('Video hành trình phải là URL phân phối Cloudinary hợp lệ (res.cloudinary.com/.../video/upload/...).');
     }
     if (errors.length > 0) {
       setFormErrors(errors);
@@ -316,9 +316,13 @@ const JourneyDetail = () => {
   const customVideoUrl = lesson?.introVideoUrl?.trim() || '';
   const videoUrl = stageOverview.videoUrl;
   const isFallbackVideo = Boolean(videoUrl && !customVideoUrl);
+  const normalizedCustomVideoUrl = customVideoUrl ? normalizeHttpUrl(customVideoUrl) : '';
+  const isCustomVideoInvalid = Boolean(customVideoUrl && !isCloudinaryVideoUrl(normalizedCustomVideoUrl));
   const normalizedPreviewUrl = videoUrl ? normalizeHttpUrl(videoUrl) : '';
-  const canPreviewVideo = Boolean(normalizedPreviewUrl);
-  const isEmbedVideo = canPreviewVideo && isExternalEmbedVideo(normalizedPreviewUrl);
+  const canPreviewVideo = isCloudinaryVideoUrl(normalizedPreviewUrl);
+  const hasLegacyExternalVideo = Boolean(
+    lesson?.videoModules?.some((module) => module?.url && !isCloudinaryVideoUrl(module.url)),
+  );
   const videoPlaybackError = Boolean(normalizedPreviewUrl && failedVideoUrl === normalizedPreviewUrl);
 
   if (loading) {
@@ -379,8 +383,8 @@ const JourneyDetail = () => {
       <section className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Tóm tắt nội dung học sinh nhìn thấy">
         <div className="rounded-2xl border border-sky-100 bg-sky-50 p-4">
           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-700"><CirclePlay size={15} /> Mở đầu</div>
-          <p className="mt-2 text-sm font-bold text-sky-950">{stageOverview.videoUrl ? 'Có video bài học' : 'Briefing không video'}</p>
-          <p className="mt-1 text-[10px] font-medium text-sky-700/70">{isFallbackVideo ? 'Đang dùng video từ học liệu' : stageOverview.videoUrl ? 'Đang dùng video ưu tiên' : 'Học sinh vẫn có thể vào câu hỏi'}</p>
+          <p className="mt-2 text-sm font-bold text-sky-950">{stageOverview.videoUrl ? 'Có video Cloudinary' : 'Chưa có video Cloudinary'}</p>
+          <p className="mt-1 text-[10px] font-medium text-sky-700/70">{isFallbackVideo ? 'Đang dùng video Cloudinary trong học liệu' : stageOverview.videoUrl ? 'Đang dùng video ưu tiên' : 'Học sinh vẫn có thể vào câu hỏi'}</p>
         </div>
         {QUIZ_LEVELS.map((level) => (
           <div key={level.id} className="rounded-2xl border border-amber-100 bg-amber-50 p-4">
@@ -425,28 +429,30 @@ const JourneyDetail = () => {
 
                 <div className="space-y-5 rounded-2xl border border-slate-100 bg-slate-50/30 p-4 sm:p-6">
                   <label className="block space-y-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                    Link video ưu tiên
-                    <input type="url" value={lesson.introVideoUrl} onChange={(event) => {
+                    URL video Cloudinary
+                    <input type="url" value={lesson.introVideoUrl} aria-invalid={isCustomVideoInvalid} onChange={(event) => {
                       setFailedVideoUrl('');
                       updateLesson((current) => ({ ...current, introVideoUrl: event.target.value }));
-                    }} placeholder="https://www.youtube.com/watch?v=... hoặc https://.../video.mp4" className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm font-normal normal-case tracking-normal outline-none focus:border-amber-400" />
+                    }} placeholder="https://res.cloudinary.com/.../video/upload/.../bai-hoc.mp4" className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 font-mono text-sm font-normal normal-case tracking-normal outline-none focus:border-amber-400" />
                   </label>
 
                   {isFallbackVideo && (
                     <div className="rounded-xl border border-sky-100 bg-sky-50 px-4 py-3 text-xs font-medium leading-5 text-sky-800">
-                      Chưa đặt video ưu tiên. Học sinh hiện đang xem video đầu tiên trong học liệu của bài này.
+                      Chưa đặt video ưu tiên. Học sinh đang xem video Cloudinary đầu tiên trong học liệu của bài này.
                     </div>
                   )}
 
-                  {videoUrl && !canPreviewVideo && <p className="text-xs font-bold text-red-600" role="alert">URL chưa hợp lệ. Vui lòng dùng đường dẫn bắt đầu bằng http:// hoặc https://.</p>}
+                  {isCustomVideoInvalid && <p className="text-xs font-bold text-red-600" role="alert">Chỉ chấp nhận URL video từ res.cloudinary.com có đường dẫn /video/upload/.</p>}
+
+                  {!videoUrl && hasLegacyExternalVideo && (
+                    <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-medium leading-5 text-amber-800">
+                      Liên kết YouTube/Vimeo cũ trong học liệu không còn được dùng cho hành trình. Hãy tải video lên Cloudinary để học sinh xem trước Vòng 1.
+                    </div>
+                  )}
 
                   {canPreviewVideo && !videoPlaybackError ? (
                     <div className="aspect-video overflow-hidden rounded-xl border border-slate-100 bg-black shadow-lg">
-                      {isEmbedVideo ? (
-                        <iframe src={getVideoEmbedUrl(normalizedPreviewUrl)} title={`Video bài giảng ${lesson.title}`} className="h-full w-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
-                      ) : (
-                        <video src={normalizedPreviewUrl} className="h-full w-full object-contain" controls onError={() => setFailedVideoUrl(normalizedPreviewUrl)} aria-label={`Video bài giảng ${lesson.title}`} />
-                      )}
+                      <video src={normalizedPreviewUrl} className="h-full w-full object-contain" controls onError={() => setFailedVideoUrl(normalizedPreviewUrl)} aria-label={`Video bài giảng ${lesson.title}`} />
                     </div>
                   ) : canPreviewVideo && videoPlaybackError ? (
                     <div className="flex aspect-video flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-red-200 bg-red-50 px-6 text-center text-red-600">
@@ -456,18 +462,19 @@ const JourneyDetail = () => {
                   ) : !videoUrl ? (
                     <div className="flex aspect-video flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-200 text-slate-400">
                       <Layers size={48} className="opacity-20" />
-                      <p className="text-xs font-medium">Chưa có video được thiết lập</p>
+                      <p className="text-xs font-medium">Chưa có video Cloudinary được thiết lập</p>
                     </div>
                   ) : null}
 
                   {customVideoUrl && (
-                    <button type="button" onClick={() => updateLesson((current) => ({ ...current, introVideoUrl: '' }))} className="text-xs font-bold text-red-600 hover:underline">Bỏ video ưu tiên và dùng video học liệu</button>
+                    <button type="button" onClick={() => updateLesson((current) => ({ ...current, introVideoUrl: '' }))} className="text-xs font-bold text-red-600 hover:underline">Bỏ video ưu tiên</button>
                   )}
                 </div>
 
                 <div className="mt-6 space-y-3 border-t border-viet-border pt-6">
-                  <h3 className="text-sm font-bold text-viet-text">Hoặc tải video mới lên Cloudinary</h3>
-                  <MediaUploader type="video" maxSizeMB={10} disabled={saving} onUploadingChange={setMediaUploading} onUploadSuccess={(url) => updateLesson((current) => ({ ...current, introVideoUrl: url }))} />
+                  <h3 className="text-sm font-bold text-viet-text">Tải video mới lên Cloudinary</h3>
+                  <p className="text-xs font-medium leading-5 text-viet-text-light">Video tải lên sẽ thay cho liên kết YouTube và chỉ được áp dụng sau khi bạn bấm “Lưu toàn bộ thay đổi”.</p>
+                  <MediaUploader folder="chemistry-odyssey/admin/journey-videos" type="video" maxSizeMB={50} disabled={saving} onUploadingChange={setMediaUploading} onUploadSuccess={(url) => updateLesson((current) => ({ ...current, introVideoUrl: url }))} />
                 </div>
               </motion.section>
             )}

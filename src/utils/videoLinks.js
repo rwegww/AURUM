@@ -73,6 +73,16 @@ export const normalizeHttpUrl = (url = '') => {
 
 export const isValidHttpUrl = (url = '') => Boolean(normalizeHttpUrl(url));
 
+export const isCloudinaryVideoUrl = (url = '') => {
+  const normalizedUrl = normalizeHttpUrl(url);
+  if (!normalizedUrl) return false;
+
+  const parsedUrl = new URL(normalizedUrl);
+  return parsedUrl.protocol === 'https:'
+    && parsedUrl.hostname.toLowerCase() === 'res.cloudinary.com'
+    && /\/video\/upload\//i.test(parsedUrl.pathname);
+};
+
 export const isExternalEmbedVideo = (url = '') => {
   const provider = getVideoProvider(url);
   return provider === 'youtube' || provider === 'vimeo';

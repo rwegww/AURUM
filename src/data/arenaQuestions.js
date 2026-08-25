@@ -1,4 +1,6 @@
-﻿export const arenaQuestions = {
+﻿import { additionalArenaQuestions } from './arenaQuestionExpansions.js';
+
+const baseArenaQuestions = {
   easy: [
     {
       id: 'easy-calc-water-mol',
@@ -393,6 +395,8 @@
           { id: 'center', label: 'Trung tâm', hint: 'S' },
           { id: 'oxygen1', label: 'Oxi 1', hint: 'O' },
           { id: 'oxygen2', label: 'Oxi 2', hint: 'O' },
+          { id: 'oxygen3', label: 'Oxi 3', hint: 'O' },
+          { id: 'oxygen4', label: 'Oxi 4', hint: 'O' },
           { id: 'hydrogen1', label: 'Hiđro 1', hint: 'H' },
           { id: 'hydrogen2', label: 'Hiđro 2', hint: 'H' },
         ],
@@ -408,13 +412,15 @@
           center: 'S',
           oxygen1: 'O',
           oxygen2: 'O',
+          oxygen3: 'O',
+          oxygen4: 'O',
           hydrogen1: 'H',
           hydrogen2: 'H',
         },
       },
       points: 240,
       timeLimitSeconds: 70,
-      explanation: 'H2SO4 có S làm trung tâm, liên kết với các nhóm O và H.',
+      explanation: 'H2SO4 gồm một S trung tâm, bốn O và hai H.',
     },
     {
       id: 'super-electron-chlorine',
@@ -434,6 +440,13 @@
     },
   ],
 };
+
+export const arenaQuestions = Object.fromEntries(
+  Object.entries(baseArenaQuestions).map(([difficulty, questions]) => [
+    difficulty,
+    [...questions, ...(additionalArenaQuestions[difficulty] || [])],
+  ]),
+);
 
 export const mockRooms = [
   {

@@ -10,6 +10,7 @@ import {
   countJourneyQuestions,
   getJourneyQuizGroups,
   getJourneyStageOverview,
+  getJourneyVideoUrl,
   JOURNEY_LEVELS,
   normalizeJourneyChallenges,
 } from '../src/utils/journeyLessonData.js';
@@ -86,23 +87,46 @@ describe('dữ liệu lộ trình học', () => {
 
     expect(overview.title).toBe('Sử dụng một số hóa chất, thiết bị cơ bản trong phòng thí nghiệm');
     expect(overview.description).toBe(lesson.description);
-    expect(overview.videoUrl).toBe(lesson.videoModules[0].url);
+    expect(overview.videoUrl).toBe('');
     JOURNEY_LEVELS.forEach((level) => {
       expect(overview.questionCounts[level]).toBe(groups[level].length);
     });
     expect(overview.totalQuestions).toBe(countJourneyQuestions(lesson));
   });
 
-  it('ưu tiên video mở đầu giống luồng học sinh', () => {
+  it('ưu tiên video Cloudinary mở đầu giống luồng học sinh', () => {
     const overview = getJourneyStageOverview({
       title: 'Bài 3: Liên kết hóa học',
-      introVideoUrl: ' https://cdn.example.com/intro.mp4 ',
+      introVideoUrl: ' https://res.cloudinary.com/aurum/video/upload/v1/intro.mp4 ',
       videoModules: [{ url: 'https://www.youtube.com/watch?v=fallback' }],
     }, 2);
 
     expect(overview.title).toBe('Liên kết hóa học');
-    expect(overview.videoUrl).toBe('https://cdn.example.com/intro.mp4');
+    expect(overview.videoUrl).toBe('https://res.cloudinary.com/aurum/video/upload/v1/intro.mp4');
     expect(overview.questionCounts).toEqual({ level1: 0, level2: 0, level3: 0 });
+  });
+
+  it('bỏ qua YouTube và chỉ lấy video Cloudinary trong học liệu', () => {
+    const lesson = {
+      introVideoUrl: 'https://www.youtube.com/watch?v=old-video',
+      videoModules: [
+        { url: 'https://vimeo.com/12345' },
+        { url: 'https://res.cloudinary.com/aurum/video/upload/v1/bai-8.mp4' },
+      ],
+    };
+
+    expect(getJourneyVideoUrl(lesson)).toBe('https://res.cloudinary.com/aurum/video/upload/v1/bai-8.mp4');
+  });
+
+  it('nhận video Cloudinary đã khai báo trong tài nguyên hành trình', () => {
+    const lesson = {
+      introVideoUrl: 'https://www.youtube.com/watch?v=old-video',
+      assets: {
+        journeyVideoUrl: 'https://res.cloudinary.com/aurum/video/upload/v1/tai-nguyen-hanh-trinh.mp4',
+      },
+    };
+
+    expect(getJourneyVideoUrl(lesson)).toBe('https://res.cloudinary.com/aurum/video/upload/v1/tai-nguyen-hanh-trinh.mp4');
   });
 
   it('vòng 3 luôn chứa đầy đủ câu hỏi của hai vòng trước và không lặp câu', () => {

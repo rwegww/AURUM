@@ -5,7 +5,7 @@ import MissionModal from '@/components/lessons/MissionModal';
 import LessonSummaryFallback from '@/components/lessons/LessonSummaryFallback';
 import { useAuth } from '@/context/AuthContext';
 import { getLessonInfographicUrl } from '@/utils/lessonAssets';
-import { getJourneyQuizGroups, JOURNEY_LEVELS } from '@/utils/journeyLessonData';
+import { getJourneyQuizGroups, getJourneyVideoUrl, JOURNEY_LEVELS } from '@/utils/journeyLessonData';
 
 const LEVEL_LABELS = {
   level1: 'Vòng 1: Xem và hiểu',
@@ -80,7 +80,7 @@ const StageQuiz = () => {
 
   const quizGroups = useMemo(() => getJourneyQuizGroups(lesson), [lesson]);
   const currentQuestions = quizGroups[currentLevel] || [];
-  const lessonVideoSrc = lesson?.introVideoUrl || lesson?.videoModules?.find((module) => module?.url)?.url || '';
+  const lessonVideoSrc = getJourneyVideoUrl(lesson);
   const hasCompletedRequiredVideo = sessionStorage.getItem(
     `journey-video-complete:${user?.id || 'guest'}:${lessonId}`,
   ) === 'true';

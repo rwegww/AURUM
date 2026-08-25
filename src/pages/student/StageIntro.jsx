@@ -6,7 +6,7 @@ import StageVideoModal from '@/components/lessons/StageVideoModal';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { getLessonSummary } from '@/utils/lessonSummary';
-import { countJourneyQuestions } from '@/utils/journeyLessonData';
+import { countJourneyQuestions, getJourneyVideoUrl } from '@/utils/journeyLessonData';
 
 const StageIntro = () => {
   const { t } = useTranslation();
@@ -99,7 +99,7 @@ const StageIntro = () => {
     </div>
   );
 
-  const videoSrc = lesson?.introVideoUrl || lesson?.videoModules?.find(module => module?.url)?.url || '';
+  const videoSrc = getJourneyVideoUrl(lesson);
   const summary = getLessonSummary(lesson);
   const briefingGoals = (summary.goals.length ? summary.goals : [
     lesson?.description || 'Nắm ý chính của bài, ghi lại từ khóa quan trọng và sẵn sàng bước vào nhiệm vụ khám phá.',

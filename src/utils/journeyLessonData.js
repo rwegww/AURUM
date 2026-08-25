@@ -1,3 +1,5 @@
+import { isCloudinaryVideoUrl } from './videoLinks.js';
+
 export const JOURNEY_LEVELS = ['level1', 'level2', 'level3'];
 
 const SUPPORTED_TYPES = new Set([
@@ -231,21 +233,28 @@ export const countJourneyQuestions = (lesson) => {
   return groups.level3.length;
 };
 
+export const getJourneyVideoUrl = (lesson) => {
+  const candidates = [
+    lesson?.introVideoUrl,
+    lesson?.assets?.journeyVideoUrl,
+    lesson?.assets?.introVideoUrl,
+    lesson?.assets?.cloudinaryVideoUrl,
+    ...asArray(lesson?.videoModules).map((module) => module?.url),
+  ];
+
+  const cloudinaryUrl = candidates.find((url) => isCloudinaryVideoUrl(url));
+  return typeof cloudinaryUrl === 'string' ? cloudinaryUrl.trim() : '';
+};
+
 export const getJourneyStageOverview = (lesson, index = 0) => {
   const quizGroups = getJourneyQuizGroups(lesson);
   const rawTitle = String(lesson?.title || '').trim();
   const title = rawTitle.split(': ').pop() || `Bài học ${index + 1}`;
-  const introVideoUrl = typeof lesson?.introVideoUrl === 'string'
-    ? lesson.introVideoUrl.trim()
-    : '';
-  const fallbackVideoUrl = Array.isArray(lesson?.videoModules)
-    ? lesson.videoModules.find((module) => typeof module?.url === 'string' && module.url.trim())?.url.trim() || ''
-    : '';
 
   return {
     title,
     description: String(lesson?.description || '').trim(),
-    videoUrl: introVideoUrl || fallbackVideoUrl,
+    videoUrl: getJourneyVideoUrl(lesson),
     questionCounts: Object.fromEntries(
       JOURNEY_LEVELS.map((level) => [level, quizGroups[level].length]),
     ),
