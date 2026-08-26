@@ -368,20 +368,20 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
   }, [advanceRoom, isHost, remainingSeconds, room?.status]);
 
   return (
-    <View style={styles.stack}>
-      <Card accent={room?.status === "playing" ? colors.green : colors.amber} style={styles.roomCard}>
+    <View style={[styles.stack, room?.status === "playing" ? styles.battleStack : null]}>
+      <Card accent={room?.status === "playing" ? colors.green : colors.amber} style={[styles.roomCard, room?.status === "playing" ? styles.battleHeaderCard : null]}>
         <View style={styles.roomTop}>
           <View style={styles.roomTitleWrap}>
-            <Text style={styles.roomTitle}>{room?.name || `Phòng ${roomId}`}</Text>
-            <Text style={styles.roomMeta}>Vòng {(room?.current_round_index || 0) + 1}/{room?.total_rounds || 10} · {isHost && room?.status === "waiting" ? "Bạn là chủ phòng" : roomStatusLabel(room?.status)}</Text>
+            <Text style={[styles.roomTitle, room?.status === "playing" ? styles.battleText : null]}>{room?.name || `Phòng ${roomId}`}</Text>
+            <Text style={[styles.roomMeta, room?.status === "playing" ? styles.battleMutedText : null]}>Vòng {(room?.current_round_index || 0) + 1}/{room?.total_rounds || 10} · {isHost && room?.status === "waiting" ? "Bạn là chủ phòng" : roomStatusLabel(room?.status)}</Text>
           </View>
           <Pill label={roomId} color={room?.status === "playing" ? colors.green : colors.amber} />
         </View>
 
         {room?.status === "playing" ? (
-          <View style={styles.timerBox}>
+          <View style={[styles.timerBox, styles.battleTimerBox]}>
             <View style={styles.timerTop}>
-              <Text style={styles.timerLabel}>Thời gian còn lại</Text>
+              <Text style={[styles.timerLabel, styles.battleMutedText]}>Thời gian còn lại</Text>
               <Text style={[styles.timerValue, remainingSeconds <= 8 ? styles.timerUrgent : null]}>{remainingSeconds}s</Text>
             </View>
             <ProgressBar value={timerProgress} color={remainingSeconds <= 8 ? colors.red : colors.green} />
@@ -390,11 +390,11 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
 
         <View style={styles.playerStack}>
           {players.map((player) => (
-            <View key={player.nguoi_dung_id} style={styles.playerRow}>
+            <View key={player.nguoi_dung_id} style={[styles.playerRow, room?.status === "playing" ? styles.battlePlayerRow : null]}>
               <View style={styles.playerAvatar}><Text style={styles.playerAvatarText}>{String(player.username || "A").slice(0, 1).toUpperCase()}</Text></View>
               <View style={styles.playerCopy}>
-                <Text style={styles.playerName}>{player.username}</Text>
-                <Text style={styles.playerMeta}>{player.correct_count || 0} câu đúng</Text>
+                <Text style={[styles.playerName, room?.status === "playing" ? styles.battleText : null]}>{player.username}</Text>
+                <Text style={[styles.playerMeta, room?.status === "playing" ? styles.battleMutedText : null]}>{player.correct_count || 0} câu đúng</Text>
               </View>
               <Text style={styles.playerScore}>{player.score || 0}</Text>
             </View>
@@ -410,8 +410,18 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
       {room?.status === "waiting" ? (
         <Card style={styles.waitingCard}>
           <Ionicons name="people-outline" size={28} color={colors.amber} />
-          <Text style={styles.waitingTitle}>{isHost ? "Phòng đã sẵn sàng" : "Bạn đã vào phòng"}</Text>
-          <Text style={styles.waitingText}>{isHost ? "Mời bạn bè bằng mã phòng hoặc bắt đầu từ web khi đã đủ người." : "Chờ chủ phòng bắt đầu. Khi trận đấu mở, câu hỏi sẽ tự xuất hiện tại đây."}</Text>
+          <Text style={styles.waitingEyebrow}>{isHost ? "Phòng đã sẵn sàng" : "Bạn đã vào phòng"}</Text>
+          <Text style={styles.waitingCode}>{roomId}</Text>
+          <Text style={styles.waitingText}>{isHost ? "Gửi mã phòng này cho bạn bè rồi bắt đầu khi đã đủ người." : "Chờ chủ phòng bắt đầu. Khi trận đấu mở, câu hỏi sẽ tự xuất hiện tại đây."}</Text>
+          <View style={styles.waitingStats}>
+            <View style={styles.waitingStat}><Text style={styles.waitingStatLabel}>Thể thức</Text><Text style={styles.waitingStatValue}>{room?.mode === "solo" ? "Đấu đơn" : room?.mode}</Text></View>
+            <View style={styles.waitingStat}><Text style={styles.waitingStatLabel}>Độ khó</Text><Text style={styles.waitingStatValue}>{room?.difficulty === "auto" ? "Tự động" : room?.difficulty}</Text></View>
+            <View style={styles.waitingStat}><Text style={styles.waitingStatLabel}>Người chơi</Text><Text style={styles.waitingStatValue}>{players.length}/{room?.max_players || 2}</Text></View>
+          </View>
+          <View style={styles.readyProgress}>
+            <View style={styles.readyProgressCopy}><Text style={styles.waitingStatLabel}>Mức sẵn sàng</Text><Text style={styles.waitingStatValue}>{Math.round(Math.min(1, players.length / (room?.max_players || 2)) * 100)}%</Text></View>
+            <ProgressBar value={Math.min(1, players.length / (room?.max_players || 2))} color={colors.green} />
+          </View>
           {isHost ? (
             <PrimaryButton
               label={starting ? "Đang bắt đầu..." : "Bắt đầu trận"}
@@ -469,18 +479,24 @@ export default function ArenaRoom({ token, roomId, initialState, onLeave, onStat
 
 const styles = StyleSheet.create({
   stack: { gap: spacing.md },
+  battleStack: { minHeight: 680 },
   roomCard: { gap: spacing.md },
+  battleHeaderCard: { backgroundColor: "#0f172a", borderColor: "rgba(255,255,255,0.12)", borderRadius: 12 },
+  battleText: { color: "#ffffff" },
+  battleMutedText: { color: "rgba(255,255,255,0.56)" },
   roomTop: { flexDirection: "row", justifyContent: "space-between", gap: spacing.sm, alignItems: "flex-start" },
   roomTitleWrap: { flex: 1, gap: 4 },
   roomTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 19, lineHeight: 25 },
   roomMeta: { color: colors.muted, fontFamily: typography.medium, fontSize: 13, lineHeight: 19 },
   timerBox: { gap: 7, borderRadius: radius.md, backgroundColor: colors.surfaceAlt, padding: spacing.md },
+  battleTimerBox: { backgroundColor: "rgba(255,255,255,0.06)", borderColor: "rgba(255,255,255,0.1)", borderWidth: 1 },
   timerTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   timerLabel: { color: colors.muted, fontFamily: typography.bold, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.6 },
   timerValue: { color: colors.greenDark, fontFamily: typography.bold, fontSize: 18 },
   timerUrgent: { color: colors.red },
   playerStack: { gap: 8 },
   playerRow: { alignItems: "center", backgroundColor: colors.surfaceAlt, borderRadius: radius.md, flexDirection: "row", gap: spacing.sm, padding: 10 },
+  battlePlayerRow: { backgroundColor: "rgba(255,255,255,0.06)", borderColor: "rgba(255,255,255,0.08)", borderWidth: 1 },
   playerAvatar: { alignItems: "center", backgroundColor: colors.green, borderRadius: 16, height: 32, justifyContent: "center", width: 32 },
   playerAvatarText: { color: "#fff", fontFamily: typography.bold, fontSize: 14 },
   playerCopy: { flex: 1, gap: 2 },
@@ -490,6 +506,14 @@ const styles = StyleSheet.create({
   roomActions: { flexDirection: "row", gap: spacing.sm },
   actionButton: { flex: 1, minHeight: 44 },
   waitingCard: { alignItems: "center", backgroundColor: "#fff9e8", borderColor: "#f4d58d", gap: 8, paddingVertical: spacing.lg },
+  waitingEyebrow: { color: colors.muted, fontFamily: typography.bold, fontSize: 10, letterSpacing: 1.2, textTransform: "uppercase" },
+  waitingCode: { color: colors.ink, fontFamily: typography.bold, fontSize: 42, letterSpacing: 4, lineHeight: 50, textAlign: "center" },
+  waitingStats: { alignSelf: "stretch", flexDirection: "row", gap: 8, marginTop: spacing.sm },
+  waitingStat: { alignItems: "center", backgroundColor: "#ffffff", borderColor: colors.border, borderRadius: 11, borderWidth: 1, flex: 1, gap: 4, minHeight: 70, justifyContent: "center", padding: 8 },
+  waitingStatLabel: { color: colors.muted, fontFamily: typography.bold, fontSize: 8, letterSpacing: 0.7, textTransform: "uppercase" },
+  waitingStatValue: { color: colors.ink, fontFamily: typography.bold, fontSize: 12, textAlign: "center" },
+  readyProgress: { alignSelf: "stretch", gap: 7, marginTop: spacing.sm },
+  readyProgressCopy: { alignItems: "center", flexDirection: "row", justifyContent: "space-between" },
   waitingTitle: { color: colors.ink, fontFamily: typography.bold, fontSize: 18, textAlign: "center" },
   waitingText: { color: colors.muted, fontFamily: typography.medium, fontSize: 14, lineHeight: 21, textAlign: "center" },
   questionCard: { gap: spacing.md },

@@ -168,6 +168,20 @@ export const learningApi = {
       body: { grade }
     }),
 
+  startPlacement: (token, grade) =>
+    apiRequest("/api/user/placement/start", {
+      method: "POST",
+      token,
+      body: { grade }
+    }),
+
+  submitPlacement: (token, { attemptId, answers }) =>
+    apiRequest("/api/user/placement/submit", {
+      method: "POST",
+      token,
+      body: { attemptId, answers }
+    }),
+
   nhiem_vu: (token) => apiRequest("/api/missions", { token }),
 
   claimMission: (token, missionId) =>
@@ -223,6 +237,12 @@ export const arenaApi = {
   rooms: () => apiRequest("/api/arena/rooms", { auth: false }),
   myBattles: (token) => apiRequest("/api/arena/my-battles", { token }),
   activeRoom: (token) => apiRequest("/api/arena/active-room", { token }),
+  findMatch: (token, mode) =>
+    apiRequest("/api/arena/find-match", {
+      method: "POST",
+      token,
+      body: mode ? { mode } : {}
+    }),
   createRoom: (token, body) =>
     apiRequest("/api/arena/create", {
       method: "POST",
