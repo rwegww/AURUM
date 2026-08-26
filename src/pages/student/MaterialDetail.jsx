@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Download, Eye, Folder, Reply, Star } from 'lucide-react';
+import { ArrowLeft, Download, Eye, Folder, Loader2, Reply, Star } from 'lucide-react';
 
 const viewedTimeline = {};
+const FEEDBACK_PAGE_SIZE = 10;
 
 const MaterialDetail = () => {
   const { id } = useParams();
@@ -15,6 +16,10 @@ const MaterialDetail = () => {
   
   const [material, setMaterial] = useState(null);
   const [phan_hoi, setFeedback] = useState([]);
+  const [feedbackPage, setFeedbackPage] = useState(1);
+  const [feedbackTotal, setFeedbackTotal] = useState(0);
+  const [feedbackHasMore, setFeedbackHasMore] = useState(false);
+  const [loadingMoreFeedback, setLoadingMoreFeedback] = useState(false);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [newComment, setNewComment] = useState('');
@@ -38,7 +43,7 @@ const MaterialDetail = () => {
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
         const [matRes, feedRes] = await Promise.all([
           fetch(`/api/materials/${id}${shouldIncrement ? '' : '?increment=false'}`, { headers }),
-          fetch(`/api/materials/${id}/feedback`)
+          fetch(`/api/materials/${id}/feedback?page=1&limit=${FEEDBACK_PAGE_SIZE}`)
         ]);
         
         const matData = await matRes.json().catch(() => ({}));
@@ -48,6 +53,9 @@ const MaterialDetail = () => {
         
         setMaterial(matData);
         setFeedback(Array.isArray(feedData) ? feedData : []);
+        setFeedbackPage(1);
+        setFeedbackTotal(Number(feedRes.headers.get('X-Total-Count')) || (Array.isArray(feedData) ? feedData.length : 0));
+        setFeedbackHasMore(feedRes.headers.get('X-Has-More') === 'true');
       } catch (err) {
         console.error(t('material_detail.phan_hoi.err_fetch'), err);
         setLoadError(err.message || t('material_detail.not_found'));
@@ -58,6 +66,30 @@ const MaterialDetail = () => {
     };
     fetchData();
   }, [id, t]);
+
+  const loadMoreFeedback = useCallback(async () => {
+    if (loadingMoreFeedback || !feedbackHasMore) return;
+    setLoadingMoreFeedback(true);
+    try {
+      const nextPage = feedbackPage + 1;
+      const response = await fetch(`/api/materials/${id}/feedback?page=${nextPage}&limit=${FEEDBACK_PAGE_SIZE}`);
+      const data = await response.json().catch(() => []);
+      if (!response.ok) throw new Error(data.message || 'Không thể tải thêm phản hồi.');
+
+      const nextItems = Array.isArray(data) ? data : [];
+      setFeedback((current) => [
+        ...current,
+        ...nextItems.filter((item) => !current.some((existing) => existing.id === item.id)),
+      ]);
+      setFeedbackPage(nextPage);
+      setFeedbackTotal(Number(response.headers.get('X-Total-Count')) || feedbackTotal);
+      setFeedbackHasMore(response.headers.get('X-Has-More') === 'true');
+    } catch (err) {
+      console.error('Lỗi tải thêm phản hồi:', err);
+    } finally {
+      setLoadingMoreFeedback(false);
+    }
+  }, [feedbackHasMore, feedbackPage, feedbackTotal, id, loadingMoreFeedback]);
 
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
@@ -89,7 +121,8 @@ const MaterialDetail = () => {
         throw new Error(data.message || t('material_detail.phan_hoi.err_submit'));
       }
 
-      setFeedback([{ ...data, nguoi_dung: { username: user.username } }, ...phan_hoi]);
+      setFeedback((current) => [{ ...data, nguoi_dung: { username: user.username } }, ...current]);
+      setFeedbackTotal((current) => current + 1);
       setNewComment('');
     } catch (err) {
       console.error(t('material_detail.phan_hoi.err_submit'), err);
@@ -227,7 +260,7 @@ const MaterialDetail = () => {
             >
               <h3 className="text-2xl font-black text-viet-text uppercase italic mb-8 flex items-center gap-3">
                 {t('material_detail.phan_hoi.title_main')} <span className="text-viet-green">{t('material_detail.phan_hoi.title_highlight')}</span>
-                <span className="text-sm font-bold text-viet-text-light not-italic">({Array.isArray(phan_hoi) ? phan_hoi.length : 0})</span>
+                <span className="text-sm font-bold text-viet-text-light not-italic">({feedbackTotal})</span>
               </h3>
 
               {isLoggedIn ? (
@@ -336,6 +369,19 @@ const MaterialDetail = () => {
                 </AnimatePresence>
                 {(!Array.isArray(phan_hoi) || phan_hoi.length === 0) && (
                   <p className="text-center py-10 text-viet-text-light/50 font-bold text-xs uppercase tracking-widest italic">{t('material_detail.phan_hoi.no_phan_hoi')}</p>
+                )}
+                {feedbackHasMore && (
+                  <div className="flex justify-center pt-2">
+                    <button
+                      type="button"
+                      onClick={loadMoreFeedback}
+                      disabled={loadingMoreFeedback}
+                      className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-viet-border bg-white px-5 py-2.5 text-xs font-black uppercase tracking-widest text-viet-green hover:border-viet-green disabled:opacity-60"
+                    >
+                      {loadingMoreFeedback && <Loader2 size={15} className="animate-spin" aria-hidden="true" />}
+                      {loadingMoreFeedback ? 'Đang tải...' : 'Xem thêm phản hồi'}
+                    </button>
+                  </div>
                 )}
               </div>
             </motion.section>

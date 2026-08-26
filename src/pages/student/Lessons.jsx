@@ -28,7 +28,7 @@ const Lessons = () => {
   const fetchLessons = useCallback(async (grade) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/lessons?classId=${grade}`);
+      const res = await fetch(`/api/lessons?classId=${grade}&view=summary`);
       const data = await res.json();
       setLessons(data);
     } catch (err) {

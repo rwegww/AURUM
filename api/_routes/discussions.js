@@ -5,8 +5,19 @@ import { auth } from '../_middleware/auth.js';
 const router = express.Router();
 const MAX_COMMENT_LENGTH = 2000;
 const MAX_NOTE_LENGTH = 8000;
+const DEFAULT_PAGE_SIZE = 10;
+const MAX_PAGE_SIZE = 30;
 
 const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '');
+
+const parsePagination = (query) => {
+  const page = query.page === undefined ? 1 : Number(query.page);
+  const limit = query.limit === undefined ? DEFAULT_PAGE_SIZE : Number(query.limit);
+  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1 || limit > MAX_PAGE_SIZE) {
+    return null;
+  }
+  return { page, limit };
+};
 
 // --- DISCUSSION ROUTES ---
 
@@ -23,10 +34,16 @@ router.get('/notes/:lessonId', auth, async (req, res) => {
 // Get discussions for a lesson
 router.get('/:lessonId', async (req, res) => {
   try {
-    const discussions = await Discussion.getByLesson(req.params.lessonId);
-    res.json(discussions);
+    const pagination = parsePagination(req.query);
+    if (!pagination) {
+      return res.status(400).json({ error: `page phải từ 1 và limit phải từ 1 đến ${MAX_PAGE_SIZE}.` });
+    }
+    const discussions = await Discussion.getByLesson(req.params.lessonId, pagination);
+    res.set('X-Total-Count', String(discussions.total));
+    res.set('X-Has-More', discussions.hasMore ? 'true' : 'false');
+    return res.json(discussions.items);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return res.status(500).json({ error: err.message });
   }
 });
 

@@ -72,8 +72,9 @@ const LessonManager = () => {
     setLoading(true);
     setLoadError('');
     try {
-      const query = selectedGrade ? `?classId=${selectedGrade}` : '';
-      const response = await fetch(`/api/lessons${query}`, { signal });
+      const query = new URLSearchParams({ view: 'summary' });
+      if (selectedGrade) query.set('classId', String(selectedGrade));
+      const response = await fetch(`/api/lessons?${query.toString()}`, { signal });
       const data = await getResponseData(response, 'Không thể tải danh sách bài học.');
       if (!Array.isArray(data)) throw new Error('Dữ liệu bài học trả về không hợp lệ.');
       setLessons(sortLessons(data));

@@ -22,6 +22,7 @@ const EMPTY_POST = {
   hoc_sinh_nhan_id: '',
 };
 const EMPTY_SCHEDULE = { title: '', start_time: '', meet_url: '' };
+const POST_PAGE_SIZE = 20;
 
 const fetchClassJson = async (url, token, signal, fallbackMessage) => {
   const response = await fetch(url, {
@@ -31,6 +32,20 @@ const fetchClassJson = async (url, token, signal, fallbackMessage) => {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(data.message || data.error || fallbackMessage);
   return data;
+};
+
+const fetchClassPageJson = async (url, token, signal, fallbackMessage) => {
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+    signal,
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.message || data.error || fallbackMessage);
+  return {
+    data,
+    hasMore: response.headers.get('X-Has-More') === 'true',
+    total: Number(response.headers.get('X-Total-Count')) || (Array.isArray(data) ? data.length : 0),
+  };
 };
 
 const memberName = (member) => {
@@ -89,6 +104,10 @@ const ClassDetail = () => {
   const { id } = useParams();
   const [cls, setCls] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [postPage, setPostPage] = useState(1);
+  const [postTotal, setPostTotal] = useState(0);
+  const [postHasMore, setPostHasMore] = useState(false);
+  const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -109,6 +128,7 @@ const ClassDetail = () => {
   const [memberOnlineFilter, setMemberOnlineFilter] = useState('all');
   const dataRequestRef = useRef(null);
   const postRequestRef = useRef(null);
+  const postHistoryRequestRef = useRef(null);
   const scheduleRequestRef = useRef(null);
   const postFormRef = useRef(null);
   const postContentRef = useRef(null);
@@ -150,6 +170,7 @@ const ClassDetail = () => {
 
   const fetchClassData = useCallback(async (initialLoad = false) => {
     dataRequestRef.current?.abort();
+    postHistoryRequestRef.current?.abort();
     const controller = new AbortController();
     dataRequestRef.current = controller;
 
@@ -157,6 +178,9 @@ const ClassDetail = () => {
       setLoading(true);
       setCls(null);
       setPosts([]);
+      setPostPage(1);
+      setPostTotal(0);
+      setPostHasMore(false);
       setSchedules([]);
       setMembers([]);
     } else {
@@ -168,7 +192,7 @@ const ClassDetail = () => {
     const token = localStorage.getItem('token');
     const [classResult, postsResult, schedulesResult, membersResult] = await Promise.allSettled([
       fetchClassJson(`/api/classes/${id}`, token, controller.signal, 'Không thể tải thông tin lớp học.'),
-      fetchClassJson(`/api/classes/${id}/posts`, token, controller.signal, 'Không thể tải bài đăng.'),
+      fetchClassPageJson(`/api/classes/${id}/posts?page=1&limit=${POST_PAGE_SIZE}`, token, controller.signal, 'Không thể tải bài đăng.'),
       fetchClassJson(`/api/classes/${id}/schedules`, token, controller.signal, 'Không thể tải lịch học.'),
       fetchClassJson(`/api/classes/${id}/members`, token, controller.signal, 'Không thể tải danh sách học viên.'),
     ]);
@@ -195,7 +219,16 @@ const ClassDetail = () => {
       }
     };
 
-    updateCollection(postsResult, 'posts', setPosts, 'Dữ liệu bài đăng không đúng định dạng.');
+    if (postsResult.status === 'fulfilled' && Array.isArray(postsResult.value?.data)) {
+      setPosts(postsResult.value.data);
+      setPostPage(1);
+      setPostTotal(postsResult.value.total);
+      setPostHasMore(postsResult.value.hasMore);
+    } else {
+      errors.posts = postsResult.status === 'rejected'
+        ? postsResult.reason?.message || 'Không thể tải bài đăng.'
+        : 'Dữ liệu bài đăng không đúng định dạng.';
+    }
     updateCollection(schedulesResult, 'schedules', setSchedules, 'Dữ liệu lịch học không đúng định dạng.');
     updateCollection(membersResult, 'members', setMembers, 'Dữ liệu học viên không đúng định dạng.');
     setSectionErrors(errors);
@@ -204,12 +237,43 @@ const ClassDetail = () => {
     setRefreshing(false);
   }, [id]);
 
+  const loadMorePosts = useCallback(async () => {
+    if (!postHasMore || loadingMorePosts) return;
+    postHistoryRequestRef.current?.abort();
+    const controller = new AbortController();
+    postHistoryRequestRef.current = controller;
+    setLoadingMorePosts(true);
+    try {
+      const token = localStorage.getItem('token');
+      const nextPage = postPage + 1;
+      const result = await fetchClassPageJson(
+        `/api/classes/${id}/posts?page=${nextPage}&limit=${POST_PAGE_SIZE}`,
+        token,
+        controller.signal,
+        'Không thể tải thêm bài đăng.',
+      );
+      if (controller.signal.aborted || postHistoryRequestRef.current !== controller || !Array.isArray(result.data)) return;
+      setPosts((current) => [
+        ...current,
+        ...result.data.filter((post) => !current.some((existing) => existing.id === post.id)),
+      ]);
+      setPostPage(nextPage);
+      setPostTotal(result.total);
+      setPostHasMore(result.hasMore);
+    } catch (error) {
+      if (error.name !== 'AbortError') setSectionErrors((current) => ({ ...current, posts: error.message }));
+    } finally {
+      if (postHistoryRequestRef.current === controller) setLoadingMorePosts(false);
+    }
+  }, [id, loadingMorePosts, postHasMore, postPage]);
+
   useEffect(() => {
     const timer = window.setTimeout(() => fetchClassData(true), 0);
     return () => {
       window.clearTimeout(timer);
       dataRequestRef.current?.abort();
       postRequestRef.current?.abort();
+      postHistoryRequestRef.current?.abort();
       scheduleRequestRef.current?.abort();
     };
   }, [fetchClassData]);
@@ -279,7 +343,10 @@ const ClassDetail = () => {
         const createdPost = targetMember && !result.data.target
           ? { ...result.data, target: { username: memberName(targetMember) } }
           : result.data;
-        setPosts((current) => [createdPost, ...current.filter((post) => post.id !== createdPost.id)]);
+        setPosts((current) => [createdPost, ...current.filter((post) => post.id !== createdPost.id)].slice(0, POST_PAGE_SIZE));
+        setPostTotal((current) => current + 1);
+        setPostHasMore((current) => current || posts.length >= POST_PAGE_SIZE);
+        setPostPage(1);
         setSectionErrors((current) => ({ ...current, posts: '' }));
       } else if (!result.pendingApproval) {
         await fetchClassData(false);
@@ -486,13 +553,14 @@ const ClassDetail = () => {
           </section>
 
           <section className="space-y-4" aria-labelledby="post-history-title">
-            <h2 id="post-history-title" className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">Lịch sử bài đăng</h2>
+            <h2 id="post-history-title" className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">Lịch sử bài đăng ({posts.length}/{postTotal})</h2>
             {sectionErrors.posts ? (
               <SectionError message={sectionErrors.posts} retry={() => fetchClassData(false)} busy={refreshing} />
             ) : posts.length === 0 ? (
               <p className="rounded-2xl border-2 border-dashed border-viet-border px-4 py-8 text-center text-sm font-medium text-viet-text-light">Chưa có bài đăng nào trong lớp.</p>
             ) : (
-              posts.map((post) => {
+              <>
+              {posts.map((post) => {
                 const authorName = typeof post.author?.username === 'string' && post.author.username.trim() ? post.author.username.trim() : 'Giáo viên';
                 return (
                   <motion.article key={post.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white p-5 sm:p-6 rounded-[24px] border border-viet-border shadow-sm flex flex-col gap-4">
@@ -521,7 +589,18 @@ const ClassDetail = () => {
                     )}
                   </motion.article>
                 );
-              })
+              })}
+              {postHasMore && (
+                <button
+                  type="button"
+                  onClick={loadMorePosts}
+                  disabled={loadingMorePosts}
+                  className="mx-auto min-h-11 rounded-xl border border-viet-border bg-white px-6 py-2.5 text-xs font-black uppercase tracking-widest text-viet-green hover:border-viet-green disabled:opacity-60"
+                >
+                  {loadingMorePosts ? 'Đang tải...' : 'Xem thêm bài đăng'}
+                </button>
+              )}
+              </>
             )}
           </section>
         </main>

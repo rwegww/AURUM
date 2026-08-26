@@ -1,5 +1,7 @@
 import { supabase } from '../_lib/supabase.js';
 
+const DISCUSSION_COLUMNS = 'id,nguoi_dung_id,bai_hoc_id,noi_dung,cha_id,luot_thich,created_at';
+
 const mapDiscussion = (comment) => comment ? ({
   ...comment,
   content: comment.noi_dung ?? comment.content,
@@ -17,17 +19,35 @@ const mapNote = (note) => note ? ({
 }) : null;
 
 export const Discussion = {
-  // Get all discussions for a lesson, joined with user profile info
-  async getByLesson(lessonId) {
-    // 1. Fetch comments first
-    let { data: comments, error } = await supabase
+  // Phân trang theo bình luận gốc và tải kèm phản hồi của từng bình luận.
+  async getByLesson(lessonId, { page = 1, limit = 10 } = {}) {
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+    const { data: rootComments, error, count } = await supabase
       .from('thao_luan')
-      .select('*')
+      .select(DISCUSSION_COLUMNS, { count: 'exact' })
       .eq('bai_hoc_id', lessonId)
-      .order('created_at', { ascending: true });
+      .is('cha_id', null)
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(from, to);
 
     if (error) throw error;
-    if (!comments || comments.length === 0) return [];
+    if (!rootComments || rootComments.length === 0) {
+      return { items: [], total: Number(count) || 0, hasMore: false };
+    }
+
+    const rootIds = rootComments.map((comment) => comment.id);
+    const { data: replies, error: replyError } = await supabase
+      .from('thao_luan')
+      .select(DISCUSSION_COLUMNS)
+      .eq('bai_hoc_id', lessonId)
+      .in('cha_id', rootIds)
+      .order('created_at', { ascending: true })
+      .order('id', { ascending: true });
+
+    if (replyError) throw replyError;
+    let comments = [...rootComments, ...(replies || [])];
 
     // 2. Get unique user IDs
     const userIds = [...new Set(comments.map(c => c.nguoi_dung_id))].filter(Boolean);
@@ -53,7 +73,12 @@ export const Discussion = {
       }
     }
     
-    return comments.map(mapDiscussion);
+    const total = Number(count) || 0;
+    return {
+      items: comments.map(mapDiscussion),
+      total,
+      hasMore: page * limit < total,
+    };
   },
 
   // Create a new comment or reply

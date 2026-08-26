@@ -1,65 +1,110 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
 import Footer from '@/components/common/Footer';
-import { Download, Eye, FileText, Folder, PackageOpen, Search } from 'lucide-react';
-import { CHEMISTRY_GRADES, CHEMISTRY_TYPES } from '@/constants/materialCategories';
+import { Download, Eye, FileText, Folder, Loader2, PackageOpen, Search } from 'lucide-react';
+import { CHEMISTRY_TYPES } from '@/constants/materialCategories';
+
+const PAGE_SIZE = 24;
 
 const Library = () => {
   const { t } = useTranslation();
   const [hoc_lieu, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [loadError, setLoadError] = useState('');
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
   const [selectedGrade, setSelectedGrade] = useState('');
   const [selectedType, setSelectedType] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
+  const loadMoreRef = useRef(null);
 
-  const fetchMaterials = useCallback(async () => {
-    setLoading(true);
+  const fetchMaterials = useCallback(async ({ requestedPage = 1, append = false, signal } = {}) => {
+    if (append) setLoadingMore(true);
+    else setLoading(true);
+    setLoadError('');
     try {
-      // 1. Tính toán category chính xác nếu người dùng chọn cả Grade và Type
-      let queryCategory = '';
+      const params = new URLSearchParams({
+        page: String(requestedPage),
+        limit: String(PAGE_SIZE),
+      });
+
+      let category = '';
+      let categoryContains = '';
       if (selectedGrade && selectedType) {
         const gradeLabel = selectedGrade === 'chung' ? 'CHUNG' : `LỚP ${selectedGrade}`;
         const typeObj = CHEMISTRY_TYPES.find(t => t.id === selectedType);
         const typeLabel = typeObj ? typeObj.label : '';
-        queryCategory = `HÓA ${gradeLabel} - ${typeLabel}`;
+        category = `HÓA ${gradeLabel} - ${typeLabel}`;
+      } else if (selectedGrade) {
+        const gradeLabel = selectedGrade === 'chung' ? 'CHUNG' : `LỚP ${selectedGrade}`;
+        categoryContains = `HÓA ${gradeLabel}`;
+      } else if (selectedType) {
+        const typeObj = CHEMISTRY_TYPES.find(t => t.id === selectedType);
+        categoryContains = typeObj ? ` - ${typeObj.label}` : '';
       }
 
-      // 2. Fetch từ API. Nếu queryCategory trống, API sẽ trả về tất cả
-      const url = `/api/materials?category=${encodeURIComponent(queryCategory)}&search=${encodeURIComponent(search)}`;
-      const res = await fetch(url);
+      if (category) params.set('category', category);
+      if (categoryContains) params.set('categoryContains', categoryContains);
+      if (search) params.set('search', search);
+
+      const res = await fetch(`/api/materials?${params.toString()}`, { signal });
       const data = await res.json();
+      if (!res.ok) throw new Error(data.message || t('library.loading_error'));
 
-      // 3. Thực hiện lọc client-side nếu queryCategory trống (tức là fetch tất cả vì 1 trong 2 filter là 'Tất cả')
-      let filteredData = Array.isArray(data) ? data : [];
-      if (!queryCategory) {
-        if (selectedGrade) {
-          const gradeLabel = selectedGrade === 'chung' ? 'CHUNG' : `LỚP ${selectedGrade}`;
-          filteredData = filteredData.filter(item => 
-            item.category && item.category.includes(`HÓA ${gradeLabel}`)
-          );
-        }
-        if (selectedType) {
-          const typeObj = CHEMISTRY_TYPES.find(t => t.id === selectedType);
-          const typeLabel = typeObj ? typeObj.label : '';
-          filteredData = filteredData.filter(item => 
-            item.category && item.category.includes(` - ${typeLabel}`)
-          );
-        }
-      }
-
-      setMaterials(filteredData);
+      const nextItems = Array.isArray(data) ? data : [];
+      setMaterials((current) => append
+        ? [...current, ...nextItems.filter((item) => !current.some((existing) => existing.id === item.id))]
+        : nextItems);
+      setPage(requestedPage);
+      setHasMore(res.headers.get('X-Has-More') === 'true');
+      setTotalCount(Number(res.headers.get('X-Total-Count')) || nextItems.length);
     } catch (err) {
-      console.error(t('library.loading_error'), err);
+      if (err.name !== 'AbortError') {
+        console.error(t('library.loading_error'), err);
+        setLoadError(err.message || t('library.loading_error'));
+      }
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [selectedGrade, selectedType, search, t]);
 
   useEffect(() => {
-    fetchMaterials();
+    const timeout = window.setTimeout(() => setSearch(searchInput.trim()), 350);
+    return () => window.clearTimeout(timeout);
+  }, [searchInput]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      fetchMaterials({ requestedPage: 1, signal: controller.signal });
+    }, 0);
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
   }, [fetchMaterials]);
+
+  const loadMore = useCallback(() => {
+    if (!hasMore || loading || loadingMore) return;
+    fetchMaterials({ requestedPage: page + 1, append: true });
+  }, [fetchMaterials, hasMore, loading, loadingMore, page]);
+
+  useEffect(() => {
+    const target = loadMoreRef.current;
+    if (!target || !hasMore) return undefined;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) loadMore();
+    }, { rootMargin: '300px 0px' });
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore]);
 
   const grades = [
     { id: '', label: t('library.filter.all_grades', 'Tất cả lớp') },
@@ -103,8 +148,8 @@ const Library = () => {
                 type="text" 
                 placeholder={t('library.search_placeholder')}
                 className="w-full bg-white border-2 border-duo-border border-b-4 rounded-full py-4 px-12 focus:ring-0 focus:outline-none focus:border-gray-300 transition-all font-bold text-[#1a1a1a]"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
               <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-viet-text-light transition-all group-focus-within:text-viet-green" aria-hidden="true" />
             </div>
@@ -160,6 +205,18 @@ const Library = () => {
           </div>
         </div>
 
+        {!loading && (
+          <p className="mb-6 text-sm font-bold text-viet-text-light" aria-live="polite">
+            Đang hiển thị {hoc_lieu.length}/{totalCount} học liệu
+          </p>
+        )}
+
+        {loadError && hoc_lieu.length === 0 && (
+          <div className="mb-8 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-bold text-red-700" role="alert">
+            {loadError}
+          </div>
+        )}
+
         {loading ? (
           <div className="flex flex-col items-center justify-center py-40">
             <div className="w-16 h-16 border-4 border-viet-green/10 border-t-viet-green rounded-full animate-spin mb-6"></div>
@@ -172,7 +229,7 @@ const Library = () => {
                 key={item.id}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.05 }}
+                transition={{ delay: Math.min(index * 0.03, 0.3) }}
               >
                 <Link
                   to={`/library/${item.id}`}
@@ -217,9 +274,28 @@ const Library = () => {
               <div className="col-span-full py-24 text-center bg-white/50 rounded-[1.5rem] border-2 border-dashed border-duo-border">
                 <PackageOpen size={56} className="mx-auto mb-4 text-viet-text-light/30" aria-hidden="true" />
                 <p className="text-viet-text-light font-black text-xl uppercase tracking-widest">{t('library.empty.title')}</p>
-                <button onClick={() => {setSelectedGrade(''); setSelectedType(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
+                <button onClick={() => {setSelectedGrade(''); setSelectedType(''); setSearchInput(''); setSearch('');}} className="mt-4 text-viet-green font-bold hover:underline">{t('library.empty.clear_btn')}</button>
               </div>
             )}
+          </div>
+        )}
+
+        {!loading && hoc_lieu.length > 0 && (
+          <div ref={loadMoreRef} className="mt-10 flex flex-col items-center gap-3">
+            {hasMore ? (
+              <button
+                type="button"
+                onClick={loadMore}
+                disabled={loadingMore}
+                className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-viet-green px-7 py-3 text-sm font-black text-white shadow-lg shadow-viet-green/20 disabled:opacity-60"
+              >
+                {loadingMore && <Loader2 size={18} className="animate-spin" aria-hidden="true" />}
+                {loadingMore ? 'Đang tải thêm...' : 'Tải thêm học liệu'}
+              </button>
+            ) : (
+              <p className="text-xs font-bold uppercase tracking-widest text-viet-text-light/60">Đã hiển thị toàn bộ học liệu</p>
+            )}
+            {loadError && <p className="text-sm font-bold text-red-600" role="alert">{loadError}</p>}
           </div>
         )}
       </div>

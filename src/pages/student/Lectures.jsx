@@ -21,7 +21,7 @@ const Lectures = () => {
   const fetchLessons = async (grade) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/lessons?classId=${grade}`);
+      const res = await fetch(`/api/lessons?classId=${grade}&view=summary`);
       const data = await res.json();
       setLessons(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -162,4 +162,3 @@ const Lectures = () => {
 };
 
 export default Lectures;
-

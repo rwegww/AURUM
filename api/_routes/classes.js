@@ -21,6 +21,8 @@ const MAX_ASSIGNMENT_QUESTIONS = 200;
 const MAX_SCHEDULE_TITLE_LENGTH = 200;
 const MAX_MEETING_URL_LENGTH = 2_048;
 const MAX_ANSWER_PAYLOAD_LENGTH = 100_000;
+const DEFAULT_CLASS_POST_PAGE_SIZE = 20;
+const MAX_CLASS_POST_PAGE_SIZE = 50;
 
 const getFileExtension = (filename = '') => {
   const dotIndex = filename.lastIndexOf('.');
@@ -97,6 +99,16 @@ const httpError = (status, message) => {
   const error = new Error(message);
   error.status = status;
   return error;
+};
+
+const parseClassPostPagination = (query) => {
+  const page = query.page === undefined ? 1 : Number(query.page);
+  const limit = query.limit === undefined ? DEFAULT_CLASS_POST_PAGE_SIZE : Number(query.limit);
+  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1 || limit > MAX_CLASS_POST_PAGE_SIZE) {
+    throw httpError(400, `page phải từ 1 và limit phải từ 1 đến ${MAX_CLASS_POST_PAGE_SIZE}.`);
+  }
+  const from = (page - 1) * limit;
+  return { page, limit, from, to: from + limit - 1 };
 };
 
 const normalizeOptionalText = (value, fieldLabel, maxLength) => {
@@ -844,12 +856,14 @@ router.get('/:id/posts', auth, async (req, res) => {
   try {
     const { id } = req.params;
     if (!(await ensureClassAccess(id, req.user, res))) return;
+    const pagination = parseClassPostPagination(req.query);
 
     let query = supabase
       .from('bai_dang_lop')
-      .select('*, author:tac_gia_id(username), target:hoc_sinh_nhan_id(username)')
+      .select('*, author:tac_gia_id(username), target:hoc_sinh_nhan_id(username)', { count: 'exact' })
       .eq('lop_id', id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false });
 
     // If student, only show:
     // 1. Posts targeted to everyone (null)
@@ -861,7 +875,7 @@ router.get('/:id/posts', auth, async (req, res) => {
       // If teacher, they see everything for their class
     }
 
-    let { data: posts, error: postErr } = await query;
+    let { data: posts, error: postErr, count } = await query.range(pagination.from, pagination.to);
     if (postErr) throw postErr;
     if (!posts) posts = [];
 
@@ -910,9 +924,12 @@ router.get('/:id/posts', auth, async (req, res) => {
       ...(lessonMap.has(post.media_url) ? { lesson: lessonMap.get(post.media_url) } : {}),
     }));
 
+    const total = Number(count) || 0;
+    res.set('X-Total-Count', String(total));
+    res.set('X-Has-More', pagination.page * pagination.limit < total ? 'true' : 'false');
     res.json(enhancedPosts.map(normalizePost));
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(err.status || 500).json({ error: err.message });
   }
 });
 
@@ -1485,4 +1502,3 @@ router.get('/teacher/notifications', auth, async (req, res) => {
 });
 
 export default router;
-

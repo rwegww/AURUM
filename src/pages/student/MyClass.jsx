@@ -11,6 +11,7 @@ const QUESTION_TYPE_LABELS = {
   short_answer: 'Trả lời ngắn',
   essay: 'Tự luận',
 };
+const POST_PAGE_SIZE = 20;
 
 const getQuestionSectionTitle = (question = {}) => {
   const part = Number(question.part);
@@ -29,6 +30,9 @@ const MyClass = () => {
   
   const [selectedClass, setSelectedClass] = useState(null);
   const [posts, setPosts] = useState([]);
+  const [postsPage, setPostsPage] = useState(1);
+  const [postsHasMore, setPostsHasMore] = useState(false);
+  const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [members, setMembers] = useState([]);
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
@@ -40,6 +44,8 @@ const MyClass = () => {
   const [quizAnswers, setQuizAnswers] = useState({});
   const [isSubmittingQuiz, setIsSubmittingQuiz] = useState(false);
   const [referenceTime, setReferenceTime] = useState(() => Date.now());
+  const classDataRequestRef = React.useRef(null);
+  const classPostRequestRef = React.useRef(null);
 
   const markAsRead = useCallback((classId) => {
     const lastReadData = JSON.parse(localStorage.getItem('classroom_last_read') || '{}');
@@ -49,41 +55,81 @@ const MyClass = () => {
   }, []);
 
   const selectClass = useCallback(async (cls) => {
+    classDataRequestRef.current?.abort();
+    classPostRequestRef.current?.abort();
+    const controller = new AbortController();
+    classDataRequestRef.current = controller;
     setReferenceTime(Date.now());
     setSelectedClass(cls);
+    setPosts([]);
+    setPostsPage(1);
+    setPostsHasMore(false);
+    setSchedules([]);
+    setMembers([]);
     markAsRead(cls.id);
     const token = localStorage.getItem('token');
-    
-    // Fetch posts
-    try {
-      const pRes = await fetch(`/api/classes/${cls.id}/posts`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (pRes.ok) setPosts(await pRes.json());
-    } catch (err) {
-      // Keep the class shell usable even if posts fail to load.
-    }
 
-    // Fetch schedules
-    try {
-      const sRes = await fetch(`/api/classes/${cls.id}/schedules`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (sRes.ok) setSchedules(await sRes.json());
-    } catch (err) {
-      // Schedules are optional for the student class view.
-    }
+    const headers = { 'Authorization': `Bearer ${token}` };
+    const requestOptions = { headers, signal: controller.signal };
+    const [postsResult, schedulesResult, membersResult] = await Promise.allSettled([
+      fetch(`/api/classes/${cls.id}/posts?page=1&limit=${POST_PAGE_SIZE}`, requestOptions),
+      fetch(`/api/classes/${cls.id}/schedules`, requestOptions),
+      fetch(`/api/classes/${cls.id}/members`, requestOptions),
+    ]);
 
-    // Fetch members
-    try {
-      const mRes = await fetch(`/api/classes/${cls.id}/members`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (mRes.ok) setMembers(await mRes.json());
-    } catch (err) {
-      // Member list failure should not block posts and assignments.
-    }
+    if (controller.signal.aborted || classDataRequestRef.current !== controller) return;
+
+    const applyResponse = async (result, setter) => {
+      if (result.status !== 'fulfilled' || !result.value.ok) return;
+      const data = await result.value.json().catch(() => []);
+      if (!controller.signal.aborted && classDataRequestRef.current === controller && Array.isArray(data)) setter(data);
+    };
+
+    const applyPostsResponse = async () => {
+      if (postsResult.status !== 'fulfilled' || !postsResult.value.ok) return;
+      const data = await postsResult.value.json().catch(() => []);
+      if (controller.signal.aborted || classDataRequestRef.current !== controller || !Array.isArray(data)) return;
+      setPosts(data);
+      setPostsPage(1);
+      setPostsHasMore(postsResult.value.headers.get('X-Has-More') === 'true');
+    };
+
+    await Promise.all([
+      applyPostsResponse(),
+      applyResponse(schedulesResult, setSchedules),
+      applyResponse(membersResult, setMembers),
+    ]);
   }, [markAsRead]);
+
+  const loadMorePosts = useCallback(async () => {
+    if (!selectedClass || !postsHasMore || loadingMorePosts) return;
+    classPostRequestRef.current?.abort();
+    const controller = new AbortController();
+    classPostRequestRef.current = controller;
+    setLoadingMorePosts(true);
+    try {
+      const token = localStorage.getItem('token');
+      const nextPage = postsPage + 1;
+      const response = await fetch(`/api/classes/${selectedClass.id}/posts?page=${nextPage}&limit=${POST_PAGE_SIZE}`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        signal: controller.signal,
+      });
+      const data = await response.json().catch(() => []);
+      if (!response.ok) throw new Error(data.error || 'Không thể tải thêm bài đăng.');
+      if (!controller.signal.aborted && classPostRequestRef.current === controller && Array.isArray(data)) {
+        setPosts((current) => [
+          ...current,
+          ...data.filter((post) => !current.some((existing) => existing.id === post.id)),
+        ]);
+        setPostsPage(nextPage);
+        setPostsHasMore(response.headers.get('X-Has-More') === 'true');
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') console.error(err);
+    } finally {
+      if (classPostRequestRef.current === controller) setLoadingMorePosts(false);
+    }
+  }, [loadingMorePosts, postsHasMore, postsPage, selectedClass]);
 
   const fetchClasses = useCallback(async () => {
     try {
@@ -107,7 +153,11 @@ const MyClass = () => {
 
   useEffect(() => {
     const timeout = window.setTimeout(fetchClasses, 0);
-    return () => window.clearTimeout(timeout);
+    return () => {
+      window.clearTimeout(timeout);
+      classDataRequestRef.current?.abort();
+      classPostRequestRef.current?.abort();
+    };
   }, [fetchClasses]);
 
   const handleJoinClass = async (e) => {
@@ -409,7 +459,8 @@ const MyClass = () => {
                    <p className="text-viet-text-light font-bold text-sm">{t('my_class.feed.empty')}</p>
                 </div>
               ) : (
-                posts.map((post) => (
+                <>
+                {posts.map((post) => (
                   <motion.div 
                     key={post.id}
                     initial={{ opacity: 0, y: 10 }}
@@ -518,7 +569,18 @@ const MyClass = () => {
                         </div>
                      )}
                   </motion.div>
-                ))
+                ))}
+                {postsHasMore && (
+                  <button
+                    type="button"
+                    onClick={loadMorePosts}
+                    disabled={loadingMorePosts}
+                    className="mx-auto min-h-11 rounded-xl border border-viet-border bg-white px-6 py-2.5 text-xs font-black uppercase tracking-widest text-viet-green hover:border-viet-green disabled:opacity-60"
+                  >
+                    {loadingMorePosts ? 'Đang tải...' : 'Xem thêm bài đăng'}
+                  </button>
+                )}
+                </>
               )}
             </div>
           </div>
@@ -848,4 +910,3 @@ const MyClass = () => {
 };
 
 export default MyClass;
-

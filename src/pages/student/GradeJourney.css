@@ -653,6 +653,14 @@
   outline-offset: 0.24rem;
 }
 
+.journey-book-error {
+  margin: 0.75rem auto 0;
+  color: #b91c1c;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
 .journey-book-art {
   position: relative;
   display: flex;

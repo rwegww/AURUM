@@ -6,11 +6,12 @@ const router = express.Router();
 // Get all bai_hoc with optional class filter
 router.get('/', async (req, res) => {
   try {
-    const { classId, gradeLevelId, programId } = req.query;
+    const { classId, gradeLevelId, programId, view } = req.query;
     let query = {};
     const requestedGradeLevelId = gradeLevelId ?? classId;
     if (requestedGradeLevelId) query.gradeLevelId = parseInt(requestedGradeLevelId);
     if (programId) query.programId = programId;
+    query.view = ['summary', 'journey'].includes(view) ? view : 'full';
 
     const bai_hoc = await Lesson.find(query);
     
@@ -37,4 +38,3 @@ router.get('/:lessonId', async (req, res) => {
 });
 
 export default router;
-

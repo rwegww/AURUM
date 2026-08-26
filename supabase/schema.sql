@@ -1801,6 +1801,7 @@ CREATE INDEX IF NOT EXISTS idx_lop_khoi_id ON public.lop (khoi_id);
 CREATE INDEX IF NOT EXISTS idx_thanh_vien_lop_hoc_sinh_id ON public.thanh_vien_lop (hoc_sinh_id);
 CREATE INDEX IF NOT EXISTS idx_thanh_vien_lop_lop_tham_gia ON public.thanh_vien_lop (lop_id, tham_gia_luc DESC);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_id ON public.bai_dang_lop (lop_id);
+CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_created_id ON public.bai_dang_lop (lop_id, created_at DESC, id DESC);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_tac_gia_id ON public.bai_dang_lop (tac_gia_id);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_hoc_sinh_nhan_id ON public.bai_dang_lop (hoc_sinh_nhan_id);
 CREATE INDEX IF NOT EXISTS idx_bai_dang_lop_lop_type_created ON public.bai_dang_lop (lop_id, type, created_at DESC);
@@ -1813,6 +1814,7 @@ CREATE INDEX IF NOT EXISTS idx_bai_nop_bai_dang_nop_luc ON public.bai_nop (bai_d
 CREATE INDEX IF NOT EXISTS idx_lich_lop_lop_id ON public.lich_lop (lop_id);
 CREATE INDEX IF NOT EXISTS idx_lich_lop_lop_bat_dau ON public.lich_lop (lop_id, bat_dau_luc);
 CREATE INDEX IF NOT EXISTS idx_hoc_lieu_nguoi_tao_id ON public.hoc_lieu (nguoi_tao_id);
+CREATE INDEX IF NOT EXISTS idx_hoc_lieu_created_id ON public.hoc_lieu (created_at DESC, id DESC);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_hoc_lieu_id ON public.phan_hoi_hoc_lieu (hoc_lieu_id);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_nguoi_dung_id ON public.phan_hoi_hoc_lieu (nguoi_dung_id);
 CREATE INDEX IF NOT EXISTS idx_phan_hoi_hoc_lieu_hoc_lieu_created ON public.phan_hoi_hoc_lieu (hoc_lieu_id, created_at DESC);
@@ -1822,6 +1824,7 @@ CREATE INDEX IF NOT EXISTS idx_nhiem_vu_nguoi_dung_nhiem_vu_id ON public.nhiem_v
 CREATE INDEX IF NOT EXISTS idx_thao_luan_bai_hoc_id ON public.thao_luan (bai_hoc_id);
 CREATE INDEX IF NOT EXISTS idx_thao_luan_nguoi_dung_id ON public.thao_luan (nguoi_dung_id);
 CREATE INDEX IF NOT EXISTS idx_thao_luan_cha_id ON public.thao_luan (cha_id);
+CREATE INDEX IF NOT EXISTS idx_thao_luan_bai_hoc_cha_created_id ON public.thao_luan (bai_hoc_id, cha_id, created_at DESC, id DESC);
 CREATE INDEX IF NOT EXISTS idx_ghi_chu_bai_hoc_id ON public.ghi_chu (bai_hoc_id);
 CREATE INDEX IF NOT EXISTS idx_ghi_chu_nguoi_dung_bai_hoc ON public.ghi_chu (nguoi_dung_id, bai_hoc_id);
 CREATE INDEX IF NOT EXISTS idx_hoat_dong_nguoi_dung_created ON public.hoat_dong_nguoi_dung (nguoi_dung_id, created_at DESC);

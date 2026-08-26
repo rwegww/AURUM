@@ -9,6 +9,10 @@ const DiscussionBoard = ({ lessonId }) => {
   const [noteContent, setNoteContent] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [commentPage, setCommentPage] = useState(1);
+  const [commentTotal, setCommentTotal] = useState(0);
+  const [hasMoreComments, setHasMoreComments] = useState(false);
   const [savingNote, setSavingNote] = useState(false);
   const [replyTo, setReplyTo] = useState(null);
   const [expandedComments, setExpandedComments] = useState([]);
@@ -21,13 +25,19 @@ const DiscussionBoard = ({ lessonId }) => {
     }
   };
 
-  const fetchComments = useCallback(async () => {
-    setLoading(true);
+  const fetchComments = useCallback(async ({ page = 1, append = false } = {}) => {
+    if (append) setLoadingMore(true);
+    else setLoading(true);
     try {
-      const res = await fetch(`/api/discussions/${lessonId}`);
+      const res = await fetch(`/api/discussions/${lessonId}?page=${page}&limit=10`);
       const data = await res.json();
       if (Array.isArray(data)) {
-        setComments(data);
+        setComments((current) => append
+          ? [...current, ...data.filter((item) => !current.some((existing) => existing.id === item.id))]
+          : data);
+        setCommentPage(page);
+        setCommentTotal(Number(res.headers.get('X-Total-Count')) || data.filter((item) => !item.parent_id).length);
+        setHasMoreComments(res.headers.get('X-Has-More') === 'true');
       } else {
         setComments([]);
         console.error('Dữ liệu bình luận không hợp lệ:', data);
@@ -37,6 +47,7 @@ const DiscussionBoard = ({ lessonId }) => {
       setComments([]);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   }, [lessonId]);
 
@@ -57,10 +68,12 @@ const DiscussionBoard = ({ lessonId }) => {
   }, [lessonId]);
 
   useEffect(() => {
-    if (lessonId) {
-      if (activeTab === 'qna') fetchComments();
+    const timeout = window.setTimeout(() => {
+      if (!lessonId) return;
+      if (activeTab === 'qna') fetchComments({ page: 1 });
       if (activeTab === 'notes' && isLoggedIn) fetchNote();
-    }
+    }, 0);
+    return () => window.clearTimeout(timeout);
   }, [activeTab, fetchComments, fetchNote, isLoggedIn, lessonId]);
 
   const saveNote = async () => {
@@ -102,7 +115,7 @@ const DiscussionBoard = ({ lessonId }) => {
       if (res.ok) {
         setInputValue('');
         setReplyTo(null);
-        fetchComments();
+        fetchComments({ page: 1 });
       }
     } catch (err) {
       console.error('Lỗi gửi bình luận:', err);
@@ -113,11 +126,16 @@ const DiscussionBoard = ({ lessonId }) => {
     if (!isLoggedIn) return;
     try {
       const token = localStorage.getItem('token');
-      await fetch(`/api/discussions/${id}/like`, {
+      const response = await fetch(`/api/discussions/${id}/like`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      fetchComments();
+      const updated = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setComments((current) => current.map((comment) => (
+          comment.id === id ? { ...comment, likes: updated.likes ?? comment.likes } : comment
+        )));
+      }
     } catch (err) {
       console.error('Lỗi thích bình luận:', err);
     }
@@ -221,7 +239,7 @@ const DiscussionBoard = ({ lessonId }) => {
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-2 px-2">
                  <span className="text-[12px] font-bold text-viet-text-light uppercase tracking-widest">
-                   {comments.length} Bình luận
+                   {commentTotal} Thảo luận
                  </span>
               </div>
               
@@ -314,6 +332,19 @@ const DiscussionBoard = ({ lessonId }) => {
                   Chưa có bình luận nào. Hãy là người đầu tiên đặt câu hỏi!
                 </div>
               )}
+
+              {hasMoreComments && (
+                <div className="flex justify-center pt-2">
+                  <button
+                    type="button"
+                    onClick={() => fetchComments({ page: commentPage + 1, append: true })}
+                    disabled={loadingMore}
+                    className="rounded-xl border border-viet-border bg-white px-5 py-2.5 text-xs font-bold text-viet-green hover:border-viet-green disabled:opacity-60"
+                  >
+                    {loadingMore ? 'Đang tải...' : 'Xem thêm thảo luận'}
+                  </button>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -323,4 +354,3 @@ const DiscussionBoard = ({ lessonId }) => {
 };
 
 export default DiscussionBoard;
-

@@ -29,7 +29,7 @@ const LessonPage = () => {
       // Fetch both specific lesson and the list for sidebar
       const [lessonRes, listRes] = await Promise.all([
         fetch(`/api/lessons/${lessonId}`),
-        fetch(`/api/lessons?classId=${grade}`)
+        fetch(`/api/lessons?classId=${grade}&view=summary`)
       ]);
       
       const lessonData = await lessonRes.json();
@@ -174,5 +174,4 @@ const LessonPage = () => {
 };
 
 export default LessonPage;
-
 

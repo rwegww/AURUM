@@ -20,6 +20,8 @@ import { useAuth } from "../../context/AuthContext";
 import { classApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
+const POST_PAGE_SIZE = 20;
+
 const postColor = (type) => {
   if (type === "assignment") return colors.green;
   if (type === "video") return colors.green;
@@ -74,12 +76,17 @@ export default function ClassroomDetailScreen() {
   const [submittingPostId, setSubmittingPostId] = React.useState(null);
   const [activeAssignment, setActiveAssignment] = React.useState(null);
   const [answers, setAnswers] = React.useState({});
+  const [extraPosts, setExtraPosts] = React.useState([]);
+  const [postPage, setPostPage] = React.useState(1);
+  const [postHasMore, setPostHasMore] = React.useState(false);
+  const [loadingMorePosts, setLoadingMorePosts] = React.useState(false);
+  const [postPaginationClassId, setPostPaginationClassId] = React.useState(null);
   const classId = Array.isArray(id) ? id[0] : id;
 
   const resource = useApiResource(async () => {
     const [lop, posts, schedules] = await Promise.all([
       classApi.list(token).catch(() => []),
-      classApi.posts(token, classId).catch(() => []),
+      classApi.posts(token, classId, { page: 1, limit: POST_PAGE_SIZE }).catch(() => []),
       classApi.schedules(token, classId).catch(() => [])
     ]);
     const currentClass = lop.find((c) => String(c.id) === String(classId));
@@ -89,6 +96,33 @@ export default function ClassroomDetailScreen() {
   const openAssignment = (post) => {
     setActiveAssignment(post);
     setAnswers({});
+  };
+
+  const activeExtraPosts = postPaginationClassId === classId ? extraPosts : [];
+  const activePostPage = postPaginationClassId === classId ? postPage : 1;
+  const activePostHasMore = postPaginationClassId === classId ? postHasMore : false;
+
+  const loadMorePosts = async () => {
+    if (loadingMorePosts) return;
+    setLoadingMorePosts(true);
+    try {
+      const nextPage = activePostPage + 1;
+      const nextPosts = await classApi.posts(token, classId, {
+        page: nextPage,
+        limit: POST_PAGE_SIZE
+      });
+      const items = Array.isArray(nextPosts) ? nextPosts : [];
+      setExtraPosts((current) => postPaginationClassId === classId
+        ? [...current, ...items.filter((item) => !current.some((existing) => existing.id === item.id))]
+        : items);
+      setPostPaginationClassId(classId);
+      setPostPage(nextPage);
+      setPostHasMore(items.length === POST_PAGE_SIZE);
+    } catch (error) {
+      Alert.alert("Không tải được bài đăng", error.message);
+    } finally {
+      setLoadingMorePosts(false);
+    }
   };
 
   const closeAssignment = () => {
@@ -261,7 +295,14 @@ export default function ClassroomDetailScreen() {
     );
   }
 
-  const posts = resource.data?.posts || [];
+  const firstPostPage = resource.data?.posts || [];
+  const posts = [
+    ...firstPostPage,
+    ...activeExtraPosts.filter((item) => !firstPostPage.some((firstItem) => firstItem.id === item.id))
+  ];
+  const canLoadMorePosts = activePostPage === 1
+    ? firstPostPage.length === POST_PAGE_SIZE
+    : activePostHasMore;
   const schedules = resource.data?.schedules || [];
   const currentClass = resource.data?.currentClass;
   const className = currentClass ? currentClass.name : `Lớp ${classId}`;
@@ -348,6 +389,15 @@ export default function ClassroomDetailScreen() {
               </Card>
             );
           })}
+          {canLoadMorePosts ? (
+            <PrimaryButton
+              label={loadingMorePosts ? "Đang tải..." : "Tải thêm bài đăng"}
+              icon="chevron-down-outline"
+              color={colors.green}
+              onPress={loadMorePosts}
+              disabled={loadingMorePosts}
+            />
+          ) : null}
         </View>
       ) : (
         <EmptyState icon="chatbubbles-outline" title="Chưa có bài đăng" subtitle="Thông báo và bài tập của lớp sẽ xuất hiện ở đây." />

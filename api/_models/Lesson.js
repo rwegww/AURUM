@@ -1,6 +1,27 @@
 import { supabase } from '../_lib/supabase.js';
 
 const LESSON_TABLE = process.env.LESSONS_TABLE || 'bai_hoc';
+const LESSON_SUMMARY_COLUMN_NAMES = [
+  'id',
+  'khoi_id',
+  'chuong_trinh_id',
+  'tieu_de',
+  'chuong',
+  'thu_tu',
+  'mo_ta',
+  'intro_video_url',
+  'tra_phi',
+  'created_at',
+  'updated_at',
+];
+const LESSON_SUMMARY_COLUMNS = LESSON_SUMMARY_COLUMN_NAMES.join(',');
+const LESSON_JOURNEY_COLUMNS = [
+  ...LESSON_SUMMARY_COLUMN_NAMES,
+  'module_video',
+  'cau_do',
+  'thu_thach',
+  'tro_choi',
+].join(',');
 
 const getGradeLevelId = (lesson) => lesson?.khoi_id;
 
@@ -77,9 +98,14 @@ const mapToPostgres = (l) => ({
 
 export const Lesson = {
   async find(query = {}) {
+    const columns = query.view === 'summary'
+      ? LESSON_SUMMARY_COLUMNS
+      : query.view === 'journey'
+        ? LESSON_JOURNEY_COLUMNS
+        : '*';
     let supabaseQuery = supabase
       .from(LESSON_TABLE)
-      .select('*');
+      .select(columns);
     
     const gradeLevelId = query.gradeLevelId ?? query.classId;
     if (gradeLevelId) {

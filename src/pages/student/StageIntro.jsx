@@ -28,7 +28,7 @@ const StageIntro = () => {
         setLoading(true);
         setError('');
         const [listRes, lessonRes] = await Promise.all([
-          fetch(`/api/lessons?classId=${grade}`, { signal: controller.signal }),
+          fetch(`/api/lessons?classId=${grade}&view=summary`, { signal: controller.signal }),
           fetch(`/api/lessons/${lessonId}`, { signal: controller.signal }),
         ]);
         if (!listRes.ok || !lessonRes.ok) {

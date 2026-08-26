@@ -8,6 +8,7 @@ import {
   ListRow,
   LoadingState,
   Pill,
+  PrimaryButton,
   Screen,
   ScreenHeader,
   SectionTitle,
@@ -17,26 +18,79 @@ import { colors, radius, spacing } from "../../constants/theme";
 import { libraryApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
+const PAGE_SIZE = 24;
+
 export default function LibraryTab() {
   const [search, setSearch] = React.useState("");
+  const deferredSearch = React.useDeferredValue(search);
   const [category, setCategory] = React.useState("");
   const [knownCategories, setKnownCategories] = React.useState([]);
+  const [extraMaterials, setExtraMaterials] = React.useState([]);
+  const [page, setPage] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(false);
+  const [loadingMore, setLoadingMore] = React.useState(false);
+  const [loadMoreError, setLoadMoreError] = React.useState("");
+  const loadMoreRequestRef = React.useRef(0);
 
   const hoc_lieuResource = useApiResource(
-    () => libraryApi.list({ category, search }),
-    [category, search]
+    () => libraryApi.list({ category, search: deferredSearch, page: 1, limit: PAGE_SIZE }),
+    [category, deferredSearch]
   );
+
+  const firstPageMaterials = hoc_lieuResource.data || [];
+  const hoc_lieu = React.useMemo(() => [
+    ...firstPageMaterials,
+    ...extraMaterials.filter((item) => !firstPageMaterials.some((firstItem) => firstItem.id === item.id))
+  ], [extraMaterials, firstPageMaterials]);
+
+  const resetPagination = () => {
+    loadMoreRequestRef.current += 1;
+    setExtraMaterials([]);
+    setPage(1);
+    setHasMore(false);
+    setLoadMoreError("");
+  };
+
+  const loadMore = async () => {
+    if (loadingMore) return;
+    const requestId = loadMoreRequestRef.current + 1;
+    loadMoreRequestRef.current = requestId;
+    setLoadingMore(true);
+    setLoadMoreError("");
+    try {
+      const nextPage = page + 1;
+      const nextItems = await libraryApi.list({
+        category,
+        search: deferredSearch,
+        page: nextPage,
+        limit: PAGE_SIZE
+      });
+      if (loadMoreRequestRef.current !== requestId) return;
+      const items = Array.isArray(nextItems) ? nextItems : [];
+      setExtraMaterials((current) => [
+        ...current,
+        ...items.filter((item) => !current.some((existing) => existing.id === item.id))
+      ]);
+      setPage(nextPage);
+      setHasMore(items.length === PAGE_SIZE);
+    } catch (error) {
+      if (loadMoreRequestRef.current === requestId) setLoadMoreError(error.message);
+    } finally {
+      if (loadMoreRequestRef.current === requestId) setLoadingMore(false);
+    }
+  };
 
   React.useEffect(() => {
     const nextCategories = Array.from(
-      new Set((hoc_lieuResource.data || []).map((item) => item.category).filter(Boolean))
+      new Set(hoc_lieu.map((item) => item.category).filter(Boolean))
     );
     if (nextCategories.length > 0 && category === "") {
       setKnownCategories(nextCategories.slice(0, 12));
     }
-  }, [category, hoc_lieuResource.data]);
+  }, [category, hoc_lieu]);
 
-  const hoc_lieu = hoc_lieuResource.data || [];
+  const searchPending = search !== deferredSearch;
+  const canLoadMore = !searchPending && (page === 1 ? firstPageMaterials.length === PAGE_SIZE : hasMore);
 
   return (
     <Screen>
@@ -44,19 +98,25 @@ export default function LibraryTab() {
         eyebrow="Thư viện"
         title="Thư viện học liệu"
         subtitle="Tài liệu, đồ họa thông tin, sơ đồ tư duy và học liệu giáo viên đã đăng."
-        right={<Pill label={`${hoc_lieu.length} mục`} icon="documents-outline" color={colors.green} />}
+        right={<Pill label={`${hoc_lieu.length} mục đã tải`} icon="documents-outline" color={colors.green} />}
       />
 
       <TextField
         icon="search-outline"
         placeholder="Tìm tài liệu"
         value={search}
-        onChangeText={setSearch}
+        onChangeText={(value) => {
+          resetPagination();
+          setSearch(value);
+        }}
       />
 
       <View style={styles.categoryRow}>
         <Pressable
-          onPress={() => setCategory("")}
+          onPress={() => {
+            resetPagination();
+            setCategory("");
+          }}
           style={[styles.categoryChip, category === "" ? styles.categoryActive : null]}
         >
           <Text style={[styles.categoryText, category === "" ? styles.categoryTextActive : null]}>Tất cả</Text>
@@ -64,7 +124,10 @@ export default function LibraryTab() {
         {knownCategories.map((item) => (
           <Pressable
             key={item}
-            onPress={() => setCategory(item)}
+            onPress={() => {
+              resetPagination();
+              setCategory(item);
+            }}
             style={[styles.categoryChip, category === item ? styles.categoryActive : null]}
           >
             <Text style={[styles.categoryText, category === item ? styles.categoryTextActive : null]} numberOfLines={1}>
@@ -74,7 +137,14 @@ export default function LibraryTab() {
         ))}
       </View>
 
-      <SectionTitle title="Học liệu" actionLabel="Tải lại" onAction={hoc_lieuResource.reload} />
+      <SectionTitle
+        title="Học liệu"
+        actionLabel="Tải lại"
+        onAction={() => {
+          resetPagination();
+          hoc_lieuResource.reload();
+        }}
+      />
 
       {hoc_lieuResource.loading && !hoc_lieuResource.data ? (
         <LoadingState label="Đang tải thư viện..." />
@@ -94,6 +164,15 @@ export default function LibraryTab() {
               onPress={() => router.push({ pathname: "/library/[id]", params: { id: item.id } })}
             />
           ))}
+          {canLoadMore ? (
+            <PrimaryButton
+              label={loadingMore ? "Đang tải..." : "Tải thêm học liệu"}
+              icon="chevron-down-outline"
+              onPress={loadMore}
+              disabled={loadingMore}
+            />
+          ) : null}
+          {loadMoreError ? <Text style={styles.loadMoreError}>{loadMoreError}</Text> : null}
         </View>
       )}
     </Screen>
@@ -130,7 +209,11 @@ const styles = StyleSheet.create({
   },
   stack: {
     gap: spacing.sm
+  },
+  loadMoreError: {
+    color: colors.red,
+    fontSize: 13,
+    fontWeight: "700",
+    textAlign: "center"
   }
 });
-
-

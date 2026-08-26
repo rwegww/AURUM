@@ -45,7 +45,7 @@ const JourneyManager = () => {
     setSaveError('');
     setSaveNotice('');
     try {
-      const params = new URLSearchParams({ classId: String(selectedGrade), programId: selectedProgram });
+      const params = new URLSearchParams({ classId: String(selectedGrade), programId: selectedProgram, view: 'journey' });
       const response = await fetch(`/api/lessons?${params}`, { signal });
       const data = await getResponseData(response);
       if (!Array.isArray(data)) throw new Error('Dữ liệu hành trình trả về không hợp lệ.');

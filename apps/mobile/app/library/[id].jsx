@@ -19,12 +19,19 @@ import { useAuth } from "../../context/AuthContext";
 import { libraryApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
+const FEEDBACK_PAGE_SIZE = 10;
+
 export default function MaterialDetailScreen() {
   const { id } = useLocalSearchParams();
   const { token } = useAuth();
   const [content, setContent] = React.useState("");
   const [rating, setRating] = React.useState("5");
   const [submitting, setSubmitting] = React.useState(false);
+  const [extraFeedback, setExtraFeedback] = React.useState([]);
+  const [feedbackPage, setFeedbackPage] = React.useState(1);
+  const [feedbackHasMore, setFeedbackHasMore] = React.useState(false);
+  const [loadingMoreFeedback, setLoadingMoreFeedback] = React.useState(false);
+  const [feedbackPaginationMaterialId, setFeedbackPaginationMaterialId] = React.useState(null);
   const materialId = Array.isArray(id) ? id[0] : id;
   const viewedMaterialRef = React.useRef(null);
 
@@ -33,14 +40,24 @@ export default function MaterialDetailScreen() {
     const shouldIncrementView = viewedMaterialRef.current !== materialId;
     const [material, phan_hoi] = await Promise.all([
       libraryApi.detail(materialId, { increment: shouldIncrementView, token }),
-      libraryApi.phan_hoi(materialId).catch(() => [])
+      libraryApi.phan_hoi(materialId, { page: 1, limit: FEEDBACK_PAGE_SIZE }).catch(() => [])
     ]);
     if (shouldIncrementView) viewedMaterialRef.current = materialId;
     return { material, phan_hoi };
   }, [materialId, token]);
 
   const material = resource.data?.material;
-  const phan_hoi = resource.data?.phan_hoi || [];
+  const firstFeedbackPage = resource.data?.phan_hoi || [];
+  const activeExtraFeedback = feedbackPaginationMaterialId === materialId ? extraFeedback : [];
+  const activeFeedbackPage = feedbackPaginationMaterialId === materialId ? feedbackPage : 1;
+  const activeFeedbackHasMore = feedbackPaginationMaterialId === materialId ? feedbackHasMore : false;
+  const phan_hoi = React.useMemo(() => [
+    ...firstFeedbackPage,
+    ...activeExtraFeedback.filter((item) => !firstFeedbackPage.some((firstItem) => firstItem.id === item.id))
+  ], [activeExtraFeedback, firstFeedbackPage]);
+  const canLoadMoreFeedback = activeFeedbackPage === 1
+    ? firstFeedbackPage.length === FEEDBACK_PAGE_SIZE
+    : activeFeedbackHasMore;
 
   const fileTypeLabel = (type) => {
     if (!type) return "Tệp";
@@ -57,6 +74,29 @@ export default function MaterialDetailScreen() {
       await Linking.openURL(material.file_url);
     } else {
       Alert.alert("Không mở được tài liệu", "Đường dẫn tài liệu không được thiết bị hỗ trợ.");
+    }
+  };
+
+  const loadMoreFeedback = async () => {
+    if (loadingMoreFeedback || !canLoadMoreFeedback) return;
+    setLoadingMoreFeedback(true);
+    try {
+      const nextPage = activeFeedbackPage + 1;
+      const nextItems = await libraryApi.phan_hoi(materialId, {
+        page: nextPage,
+        limit: FEEDBACK_PAGE_SIZE
+      });
+      const items = Array.isArray(nextItems) ? nextItems : [];
+      setExtraFeedback((current) => feedbackPaginationMaterialId === materialId
+        ? [...current, ...items.filter((item) => !current.some((existing) => existing.id === item.id))]
+        : items);
+      setFeedbackPaginationMaterialId(materialId);
+      setFeedbackPage(nextPage);
+      setFeedbackHasMore(items.length === FEEDBACK_PAGE_SIZE);
+    } catch (error) {
+      Alert.alert("Không tải được phản hồi", error.message);
+    } finally {
+      setLoadingMoreFeedback(false);
     }
   };
 
@@ -77,6 +117,10 @@ export default function MaterialDetailScreen() {
         rating: numericRating
       });
       setContent("");
+      setExtraFeedback([]);
+      setFeedbackPage(1);
+      setFeedbackHasMore(false);
+      setFeedbackPaginationMaterialId(materialId);
       await resource.reload();
     } catch (error) {
       Alert.alert("Không gửi được phản hồi", error.message);
@@ -161,6 +205,14 @@ export default function MaterialDetailScreen() {
             <Text style={styles.phan_hoiText}>Chưa có phản hồi cho tài liệu này.</Text>
           </Card>
         )}
+        {canLoadMoreFeedback ? (
+          <PrimaryButton
+            label={loadingMoreFeedback ? "Đang tải..." : "Tải thêm phản hồi"}
+            icon="chevron-down-outline"
+            onPress={loadMoreFeedback}
+            disabled={loadingMoreFeedback}
+          />
+        ) : null}
       </View>
 
       <GhostButton label="Quay lại thư viện" icon="arrow-back-outline" onPress={() => router.back()} />

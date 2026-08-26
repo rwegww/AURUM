@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import {
@@ -232,7 +232,11 @@ const GradeJourney = () => {
   const [bai_hoc, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isBookOpen, setIsBookOpen] = useState(false);
+  const [bookData, setBookData] = useState({ grade: null, lessons: [] });
+  const [bookLoading, setBookLoading] = useState(false);
+  const [bookError, setBookError] = useState('');
   const [isTestOpen, setIsTestOpen] = useState(false);
+  const bookRequestRef = useRef(null);
 
   const activeTheme = CLASS_THEMES[grade] || CLASS_THEMES['8'];
 
@@ -241,7 +245,7 @@ const GradeJourney = () => {
 
     const fetchLessons = async () => {
       try {
-        const response = await fetch(`/api/lessons?classId=${grade}`, { signal: controller.signal });
+        const response = await fetch(`/api/lessons?classId=${grade}&view=journey`, { signal: controller.signal });
         if (!response.ok) {
           const text = await response.text();
           throw new Error(`Lỗi server (${response.status}): ${text.substring(0, 100)}`);
@@ -266,6 +270,8 @@ const GradeJourney = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [grade, loading]);
+
+  useEffect(() => () => bookRequestRef.current?.abort(), [grade]);
 
   useLayoutEffect(() => {
     if (!loading) {
@@ -358,6 +364,32 @@ const GradeJourney = () => {
     && !user?.balancingProgress?.passedGrades?.includes(grade)
     && !user?.unlockedLessons?.includes(bai_hoc[0].lessonId)
     && user?.role === 'student';
+
+  const handleOpenBook = async () => {
+    if (!canOpenBook || bookLoading) return;
+    if (bookData.grade === grade && bookData.lessons.length > 0) {
+      setIsBookOpen(true);
+      return;
+    }
+
+    bookRequestRef.current?.abort();
+    const controller = new AbortController();
+    bookRequestRef.current = controller;
+    setBookLoading(true);
+    setBookError('');
+    try {
+      const response = await fetch(`/api/lessons?classId=${grade}`, { signal: controller.signal });
+      const data = await response.json().catch(() => []);
+      if (!response.ok || !Array.isArray(data)) throw new Error('Không thể tải nội dung sổ tay.');
+      if (bookRequestRef.current !== controller) return;
+      setBookData({ grade, lessons: data });
+      setIsBookOpen(true);
+    } catch (error) {
+      if (error.name !== 'AbortError') setBookError(error.message || 'Không thể tải nội dung sổ tay.');
+    } finally {
+      if (bookRequestRef.current === controller) setBookLoading(false);
+    }
+  };
 
   return (
     <div
@@ -475,7 +507,7 @@ const GradeJourney = () => {
             type="button"
             className={`journey-book-milestone ${canOpenBook ? 'is-open' : 'is-locked'}`}
             aria-disabled={!canOpenBook}
-            onClick={() => canOpenBook && setIsBookOpen(true)}
+            onClick={handleOpenBook}
             initial={reduceMotion ? false : { opacity: 0, y: 18 }}
             whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             whileHover={canOpenBook && !reduceMotion ? { y: -4 } : undefined}
@@ -488,15 +520,16 @@ const GradeJourney = () => {
             </span>
             <span className="journey-book-copy">
               <span className="journey-book-kicker"><Sparkles size={15} /> Cột mốc đặc biệt</span>
-              <strong>{canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}</strong>
+              <strong>{bookLoading ? 'Đang chuẩn bị sổ tay...' : canOpenBook ? t('journey.milestone.title') : 'Hoàn thành chặng 1 để mở'}</strong>
               <span>{t('journey.milestone.subtitle', { grade })}</span>
             </span>
             <span className="journey-book-action" aria-hidden="true">
               <MorphIcon icon={canOpenBook ? BookOpenNode : LockNode} size={24} />
-              <span>{canOpenBook ? 'Mở sổ tay' : 'Chưa mở'}</span>
+              <span>{bookLoading ? 'Đang tải' : canOpenBook ? 'Mở sổ tay' : 'Chưa mở'}</span>
             </span>
           </motion.button>
         )}
+        {bookError && <p className="journey-book-error" role="alert">{bookError}</p>}
       </main>
 
       <AnimatePresence>
@@ -504,7 +537,7 @@ const GradeJourney = () => {
           <InfographicBook
             isOpen={isBookOpen}
             onClose={() => setIsBookOpen(false)}
-            bai_hoc={bai_hoc}
+            bai_hoc={bookData.grade === grade ? bookData.lessons : []}
             grade={grade}
             unlockedLessons={user?.unlockedLessons}
           />

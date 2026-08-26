@@ -260,7 +260,7 @@ router.post('/placement/start', auth, async (req, res) => {
       return res.status(409).json({ message: `Bạn đã được xếp vào lớp ${currentPlacement.assignedGrade}.` });
     }
 
-    const lessons = await Lesson.find({ classId: grade });
+    const lessons = await Lesson.find({ classId: grade, view: 'summary' });
     const firstLesson = lessons[0];
     const assessment = getPlacementAssessment(grade);
     if (!firstLesson || !assessment) {

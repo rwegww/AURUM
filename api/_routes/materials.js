@@ -5,6 +5,32 @@ import User from '../_models/User.js';
 
 
 const router = express.Router();
+const DEFAULT_MATERIAL_PAGE_SIZE = 24;
+const DEFAULT_FEEDBACK_PAGE_SIZE = 10;
+const MAX_PAGE_SIZE = 60;
+const MATERIAL_LIST_COLUMNS = [
+  'id',
+  'tieu_de',
+  'mo_ta',
+  'danh_muc',
+  'file_url',
+  'file_type',
+  'luot_xem',
+  'luot_tai',
+  'nguoi_tao_id',
+  'created_at',
+].join(',');
+const MATERIAL_FEEDBACK_COLUMNS = [
+  'id',
+  'hoc_lieu_id',
+  'nguoi_dung_id',
+  'noi_dung',
+  'danh_gia',
+  'noi_dung_tra_loi',
+  'nguoi_tra_loi_id',
+  'tra_loi_luc',
+  'created_at',
+].join(',');
 
 const MAX_TEXT_LENGTH = {
   title: 160,
@@ -32,6 +58,26 @@ const ALLOWED_FILE_TYPES = new Set([
 ]);
 
 const normalizeText = (value) => (typeof value === 'string' ? value.trim() : '');
+
+const parsePagination = (query, defaultLimit) => {
+  const page = query.page === undefined ? 1 : Number(query.page);
+  const limit = query.limit === undefined ? defaultLimit : Number(query.limit);
+
+  if (!Number.isInteger(page) || page < 1 || !Number.isInteger(limit) || limit < 1 || limit > MAX_PAGE_SIZE) {
+    const error = new Error(`page phải từ 1 và limit phải từ 1 đến ${MAX_PAGE_SIZE}.`);
+    error.status = 400;
+    throw error;
+  }
+
+  const from = (page - 1) * limit;
+  return { page, limit, from, to: from + limit - 1 };
+};
+
+const setPageHeaders = (res, { count, page, limit }) => {
+  const total = Number(count) || 0;
+  res.set('X-Total-Count', String(total));
+  res.set('X-Has-More', page * limit < total ? 'true' : 'false');
+};
 
 const normalizeMaterial = (material) => {
   if (!material) return material;
@@ -127,25 +173,42 @@ const validateMaterialPayload = (body) => {
 // 1. Get List of Materials with Filters
 router.get('/', async (req, res) => {
   try {
-    const { category, search } = req.query;
+    const { category, categoryContains, search } = req.query;
+    const pagination = parsePagination(req.query, DEFAULT_MATERIAL_PAGE_SIZE);
+    const normalizedCategory = normalizeText(category);
+    const normalizedCategoryContains = normalizeText(categoryContains);
+    const normalizedSearch = normalizeText(search);
+
+    if (normalizedCategory.length > MAX_TEXT_LENGTH.category || normalizedCategoryContains.length > MAX_TEXT_LENGTH.category) {
+      return res.status(400).json({ message: 'Danh mục tìm kiếm không hợp lệ.' });
+    }
+    if (normalizedSearch.length > MAX_TEXT_LENGTH.title) {
+      return res.status(400).json({ message: `Từ khóa tìm kiếm tối đa ${MAX_TEXT_LENGTH.title} ký tự.` });
+    }
+
     let query = supabase
       .from('hoc_lieu')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .select(MATERIAL_LIST_COLUMNS, { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false });
 
-    if (category) {
-      query = query.eq('danh_muc', category);
+    if (normalizedCategory) {
+      query = query.eq('danh_muc', normalizedCategory);
     }
-    if (search) {
-      query = query.ilike('tieu_de', `%${search}%`);
+    if (normalizedCategoryContains) {
+      query = query.ilike('danh_muc', `%${normalizedCategoryContains}%`);
+    }
+    if (normalizedSearch) {
+      query = query.ilike('tieu_de', `%${normalizedSearch}%`);
     }
 
-    const { data, error } = await query;
+    const { data, error, count } = await query.range(pagination.from, pagination.to);
     if (error) throw error;
 
+    setPageHeaders(res, { count, page: pagination.page, limit: pagination.limit });
     res.json((data || []).map(normalizeMaterial));
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi tải danh sách tài liệu', error: err.message });
+    res.status(err.status || 500).json({ message: err.status ? err.message : 'Lỗi tải danh sách tài liệu', error: err.message });
   }
 });
 
@@ -315,15 +378,19 @@ router.post('/:id/feedback', auth, async (req, res) => {
 router.get('/:id/feedback', async (req, res) => {
   try {
     const { id: hoc_lieu_id } = req.params;
+    const pagination = parsePagination(req.query, DEFAULT_FEEDBACK_PAGE_SIZE);
     
     // 1. Fetch phan_hois first
-    let { data: phan_hois, error } = await supabase
+    let { data: phan_hois, error, count } = await supabase
       .from('phan_hoi_hoc_lieu')
-      .select('*')
+      .select(MATERIAL_FEEDBACK_COLUMNS, { count: 'exact' })
       .eq('hoc_lieu_id', hoc_lieu_id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(pagination.from, pagination.to);
 
     if (error) throw error;
+    setPageHeaders(res, { count, page: pagination.page, limit: pagination.limit });
     if (!phan_hois || phan_hois.length === 0) return res.json([]);
 
     // 2. Get unique user IDs
@@ -356,7 +423,7 @@ router.get('/:id/feedback', async (req, res) => {
     return res.json(phan_hois.map(normalizeMaterialFeedback));
   } catch (err) {
     console.error('Lỗi tải phản hồi:', err);
-    res.status(500).json({ message: 'Không thể tải phản hồi lúc này.', error: err.message });
+    res.status(err.status || 500).json({ message: err.status ? err.message : 'Không thể tải phản hồi lúc này.', error: err.message });
   }
 });
 
@@ -399,4 +466,3 @@ router.post('/:id/feedback/:feedbackId/reply', auth, async (req, res) => {
 });
 
 export default router;
-

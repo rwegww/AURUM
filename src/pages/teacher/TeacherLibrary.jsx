@@ -92,6 +92,7 @@ const TeacherLibrary = () => {
   const fileInputRef = useRef(null);
   const listRequestRef = useRef({ id: 0, controller: null });
   const [hoc_lieu, setMaterials] = useState([]);
+  const [totalMaterials, setTotalMaterials] = useState(0);
   const [listLoading, setListLoading] = useState(true);
   const [listError, setListError] = useState('');
   const [form, setForm] = useState(initialForm);
@@ -120,11 +121,12 @@ const TeacherLibrary = () => {
     setListError('');
 
     try {
-      const res = await fetch('/api/materials', { signal: controller.signal });
+      const res = await fetch('/api/materials?page=1&limit=10', { signal: controller.signal });
       const data = await res.json().catch(() => []);
       if (!res.ok) throw new Error(data.message || 'Không thể tải danh sách thư viện');
       if (listRequestRef.current.id === requestId) {
         setMaterials(Array.isArray(data) ? data : []);
+        setTotalMaterials(Number(res.headers.get('X-Total-Count')) || (Array.isArray(data) ? data.length : 0));
       }
     } catch (err) {
       if (err.name !== 'AbortError' && listRequestRef.current.id === requestId) {
@@ -238,7 +240,8 @@ const TeacherLibrary = () => {
         throw new Error(data.message || 'Không thể lưu học liệu');
       }
 
-      setMaterials((prev) => [data, ...prev.filter((item) => item.id !== data.id)]);
+      setMaterials((prev) => [data, ...prev.filter((item) => item.id !== data.id)].slice(0, 10));
+      setTotalMaterials((current) => current + 1);
       setSuccessMessage('Đã thêm học liệu vào thư viện');
       resetForm();
     } catch (err) {
@@ -267,6 +270,7 @@ const TeacherLibrary = () => {
       if (!response.ok) throw new Error(data.message || 'Không thể xóa học liệu.');
 
       setMaterials((current) => current.filter((item) => item.id !== material.id));
+      setTotalMaterials((current) => Math.max(0, current - 1));
       setListNotice('Đã xóa học liệu khỏi thư viện.');
     } catch (err) {
       setListError(err.message || 'Không thể xóa học liệu.');
@@ -485,7 +489,7 @@ const TeacherLibrary = () => {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
               <div>
                 <h2 className="text-xl font-black text-viet-text uppercase tracking-tight">Học liệu mới nhất</h2>
-                <p className="text-xs font-bold text-viet-text-light mt-1">{hoc_lieu.length} mục trong thư viện</p>
+                <p className="text-xs font-bold text-viet-text-light mt-1">{totalMaterials} mục trong thư viện · hiển thị 10 mục mới nhất</p>
               </div>
               <button
                 type="button"
@@ -524,7 +528,7 @@ const TeacherLibrary = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                {hoc_lieu.slice(0, 10).map((material, index) => (
+                {hoc_lieu.map((material, index) => (
                   <motion.article
                     key={material.id}
                     initial={{ opacity: 0, y: 10 }}
@@ -599,4 +603,3 @@ const TeacherLibrary = () => {
 };
 
 export default TeacherLibrary;
-

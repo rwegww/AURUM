@@ -145,10 +145,10 @@ export const authApi = {
 };
 
 export const learningApi = {
-  bai_hoc: ({ classId, programId } = {}) =>
+  bai_hoc: ({ classId, programId, view = "summary" } = {}) =>
     apiRequest("/api/lessons", {
       auth: false,
-      query: { classId, programId }
+      query: { classId, programId, view }
     }),
 
   lesson: (lessonId) =>
@@ -195,8 +195,11 @@ export const learningApi = {
 export const classApi = {
   list: (token) => apiRequest("/api/classes", { token }),
 
-  posts: (token, classId) =>
-    apiRequest(`/api/classes/${classId}/posts`, { token }),
+  posts: (token, classId, { page = 1, limit = 20 } = {}) =>
+    apiRequest(`/api/classes/${classId}/posts`, {
+      token,
+      query: { page, limit }
+    }),
 
   schedules: (token, classId) =>
     apiRequest(`/api/classes/${classId}/schedules`, { token }),
@@ -284,10 +287,10 @@ export const arenaApi = {
 };
 
 export const libraryApi = {
-  list: ({ category, search } = {}) =>
+  list: ({ category, search, page = 1, limit = 24 } = {}) =>
     apiRequest("/api/materials", {
       auth: false,
-      query: { category, search }
+      query: { category, search, page, limit }
     }),
   detail: (id, { increment, token } = {}) =>
     apiRequest(`/api/materials/${id}`, {
@@ -295,7 +298,10 @@ export const libraryApi = {
       token,
       query: { increment: increment === false ? "false" : undefined }
     }),
-  phan_hoi: (id) => apiRequest(`/api/materials/${id}/feedback`, { auth: false }),
+  phan_hoi: (id, { page = 1, limit = 10 } = {}) => apiRequest(`/api/materials/${id}/feedback`, {
+    auth: false,
+    query: { page, limit }
+  }),
   postFeedback: (token, id, body) =>
     apiRequest(`/api/materials/${id}/feedback`, {
       method: "POST",
