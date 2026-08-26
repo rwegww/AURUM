@@ -104,6 +104,11 @@ const supabaseState = {
   insertedPost: null,
   materialData: null,
   deleteAttempted: false,
+  classPosts: [],
+  classList: [],
+  classMemberships: [],
+  classMembers: [],
+  classSchedules: [],
 };
 
 const matchFilter = (ctx, column) => ctx.filters.find((filter) => filter.column === column)?.value;
@@ -166,11 +171,29 @@ const resolveMaybeSingle = async (ctx) => {
   return resolveSingle(ctx);
 };
 
+const resolveCollection = async (ctx) => {
+  if (ctx.table === 'lop' && ctx.action === 'select') {
+    return { data: supabaseState.classList, error: null, count: supabaseState.classList.length };
+  }
+  if (ctx.table === 'bai_dang_lop' && ctx.action === 'select') {
+    return { data: supabaseState.classPosts, error: null, count: supabaseState.classPosts.length };
+  }
+  if (ctx.table === 'thanh_vien_lop' && ctx.action === 'select') {
+    const data = ctx.columns === 'lop_id' ? supabaseState.classMemberships : supabaseState.classMembers;
+    return { data, error: null, count: data.length };
+  }
+  if (ctx.table === 'lich_lop' && ctx.action === 'select') {
+    return { data: supabaseState.classSchedules, error: null, count: supabaseState.classSchedules.length };
+  }
+  return { data: [], error: null, count: 0 };
+};
+
 const createQueryBuilder = (table) => {
-  const ctx = { table, action: null, filters: [], payload: null };
+  const ctx = { table, action: null, filters: [], payload: null, columns: null };
   const builder = {
-    select: vi.fn(() => {
+    select: vi.fn((columns) => {
       ctx.action ||= 'select';
+      ctx.columns = columns;
       return builder;
     }),
     insert: vi.fn((payload) => {
@@ -203,11 +226,14 @@ const createQueryBuilder = (table) => {
     or: vi.fn(() => builder),
     neq: vi.fn(() => builder),
     gt: vi.fn(() => builder),
+    gte: vi.fn(() => builder),
     lt: vi.fn(() => builder),
     order: vi.fn(() => builder),
     limit: vi.fn(() => builder),
+    range: vi.fn(() => resolveCollection(ctx)),
     single: vi.fn(() => resolveSingle(ctx)),
     maybeSingle: vi.fn(() => resolveMaybeSingle(ctx)),
+    then: (onFulfilled, onRejected) => resolveCollection(ctx).then(onFulfilled, onRejected),
   };
   return builder;
 };
@@ -254,6 +280,11 @@ beforeEach(() => {
   supabaseState.insertedPost = null;
   supabaseState.materialData = null;
   supabaseState.deleteAttempted = false;
+  supabaseState.classPosts = [];
+  supabaseState.classList = [];
+  supabaseState.classMemberships = [];
+  supabaseState.classMembers = [];
+  supabaseState.classSchedules = [];
   userModel.findById.mockImplementation(async (id) => nguoi_dung[id] || null);
   userModel.findOne.mockResolvedValue(null);
   userModel.comparePassword.mockResolvedValue(false);
@@ -772,6 +803,72 @@ describe('security acceptance matrix', () => {
       .set('Authorization', `Bearer ${tokenFor('outsider')}`);
 
     expect(res.status).toBe(403);
+  });
+
+  it('returns the class overview in one request for a joined student', async () => {
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
+    supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'student' };
+    supabaseState.classPosts = [{
+      id: 'post-1',
+      lop_id: 'class-1',
+      tac_gia_id: 'teacher',
+      type: 'announcement',
+      noi_dung: 'Thông báo mới',
+      cau_hoi: [],
+      created_at: '2026-09-23T10:00:00.000Z',
+      author: { username: 'teacher' },
+    }];
+    supabaseState.classMembers = [{
+      student: {
+        id: 'student',
+        username: 'student',
+        hoat_dong_cuoi_luc: '2026-09-23T10:00:00.000Z',
+        phut_hoat_dong: 15,
+      },
+    }];
+    supabaseState.classSchedules = [{
+      id: 'schedule-1',
+      lop_id: 'class-1',
+      tieu_de: 'Ôn tập',
+      bat_dau_luc: '2026-09-24T10:00:00.000Z',
+    }];
+
+    const res = await request(app)
+      .get('/api/classes/class-1/overview')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(res.status).toBe(200);
+    expect(userModel.findById).toHaveBeenCalledTimes(1);
+    expect(res.body.posts[0]).toMatchObject({ id: 'post-1', content: 'Thông báo mới' });
+    expect(res.body.members[0]).toMatchObject({ id: 'student', active_minutes: 15 });
+    expect(res.body.schedules[0]).toMatchObject({ id: 'schedule-1', title: 'Ôn tập' });
+  });
+
+  it('returns the class list and first overview in one initial request', async () => {
+    supabaseState.classMemberships = [{ lop_id: 'class-1' }];
+    supabaseState.classList = [{
+      id: 'class-1',
+      ten: 'Lớp 6A1',
+      khoi_id: 6,
+      giao_vien_id: 'teacher',
+      teacher: { username: 'teacher' },
+      student_count: [{ count: 1 }],
+    }];
+    supabaseState.classPosts = [];
+    supabaseState.classMembers = [{
+      student: { id: 'student', username: 'student', phut_hoat_dong: 15 },
+    }];
+    supabaseState.classSchedules = [];
+
+    const res = await request(app)
+      .get('/api/classes?includeOverview=first')
+      .set('Authorization', `Bearer ${tokenFor('student')}`);
+
+    expect(res.status).toBe(200);
+    expect(userModel.findById).toHaveBeenCalledTimes(1);
+    expect(res.body.classes[0]).toMatchObject({ id: 'class-1', name: 'Lớp 6A1' });
+    expect(res.body.selectedClassId).toBe('class-1');
+    expect(res.body.overview.members[0]).toMatchObject({ id: 'student' });
   });
 
   it('allows a teacher to delete only their own library material', async () => {

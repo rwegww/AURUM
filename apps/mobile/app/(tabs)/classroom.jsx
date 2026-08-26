@@ -36,9 +36,12 @@ export default function ClassroomTab() {
     const lop = await classApi.list(token).catch(() => []);
     const previews = await Promise.all(
       lop.slice(0, 3).map(async (item) => {
-        const posts = await classApi.posts(token, item.id).catch(() => []);
-        const schedules = await classApi.schedules(token, item.id).catch(() => []);
-        return { classId: item.id, posts, schedules };
+        const overview = await classApi.overview(token, item.id, { include: "posts,schedules" }).catch(() => ({}));
+        return {
+          classId: item.id,
+          posts: overview.posts || [],
+          schedules: overview.schedules || []
+        };
       })
     );
     return { lop, previews };
@@ -315,5 +318,4 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   }
 });
-
 

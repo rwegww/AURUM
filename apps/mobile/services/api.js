@@ -201,6 +201,12 @@ export const classApi = {
       query: { page, limit }
     }),
 
+  overview: (token, classId, { include } = {}) =>
+    apiRequest(`/api/classes/${classId}/overview`, {
+      token,
+      query: { include }
+    }),
+
   schedules: (token, classId) =>
     apiRequest(`/api/classes/${classId}/schedules`, { token }),
 

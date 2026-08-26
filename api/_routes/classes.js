@@ -23,6 +23,22 @@ const MAX_MEETING_URL_LENGTH = 2_048;
 const MAX_ANSWER_PAYLOAD_LENGTH = 100_000;
 const DEFAULT_CLASS_POST_PAGE_SIZE = 20;
 const MAX_CLASS_POST_PAGE_SIZE = 50;
+const DEFAULT_CLASS_MEMBER_PREVIEW_SIZE = 20;
+const DEFAULT_CLASS_SCHEDULE_PREVIEW_SIZE = 6;
+const CLASS_POST_SELECT = [
+  'id',
+  'lop_id',
+  'tac_gia_id',
+  'type',
+  'noi_dung',
+  'media_url',
+  'han_nop',
+  'hoc_sinh_nhan_id',
+  'cau_hoi',
+  'created_at',
+  'author:tac_gia_id(username)',
+  'target:hoc_sinh_nhan_id(username)',
+].join(',');
 
 const getFileExtension = (filename = '') => {
   const dotIndex = filename.lastIndexOf('.');
@@ -518,6 +534,156 @@ const fetchAllRows = async (createQuery, pageSize = 1000) => {
   }
 };
 
+const fetchClassMembers = async (classId, { limit } = {}) => {
+  let query = supabase
+    .from('thanh_vien_lop')
+    .select('student:hoc_sinh_id(id, username, hoat_dong_cuoi_luc, phut_hoat_dong)')
+    .eq('lop_id', classId)
+    .order('tham_gia_luc', { ascending: false });
+
+  if (limit) query = query.range(0, limit);
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const rows = data || [];
+  const hasMore = Boolean(limit && rows.length > limit);
+  const visibleRows = limit ? rows.slice(0, limit) : rows;
+  return {
+    items: visibleRows.map(({ student }) => ({
+      ...student,
+      last_active_at: student?.hoat_dong_cuoi_luc,
+      active_minutes: student?.phut_hoat_dong ?? 0,
+      isOnline: Boolean(student?.hoat_dong_cuoi_luc && new Date(student.hoat_dong_cuoi_luc) > new Date(Date.now() - 5 * 60 * 1000)),
+      hoat_dong_cuoi_luc: undefined,
+      phut_hoat_dong: undefined,
+    })),
+    hasMore,
+  };
+};
+
+const fetchClassSchedules = async (classId, { upcomingOnly = false, limit } = {}) => {
+  let query = supabase
+    .from('lich_lop')
+    .select('id,lop_id,tieu_de,bat_dau_luc,ket_thuc_luc,meet_url,created_at')
+    .eq('lop_id', classId)
+    .order('bat_dau_luc', { ascending: true });
+
+  if (upcomingOnly) query = query.gte('bat_dau_luc', new Date().toISOString());
+  if (limit) query = query.range(0, limit);
+  const { data, error } = await query;
+  if (error) throw error;
+
+  const rows = data || [];
+  const hasMore = Boolean(limit && rows.length > limit);
+  return {
+    items: (limit ? rows.slice(0, limit) : rows).map(normalizeSchedule),
+    hasMore,
+  };
+};
+
+const fetchClassPosts = async (classId, user, pagination, { includeCount = true } = {}) => {
+  let query = supabase
+    .from('bai_dang_lop')
+    .select(CLASS_POST_SELECT, includeCount ? { count: 'exact' } : undefined)
+    .eq('lop_id', classId)
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false });
+
+  if (user.role !== 'teacher' && user.role !== 'admin') {
+    query = query.or(`hoc_sinh_nhan_id.is.null,hoc_sinh_nhan_id.eq.${user.id},tac_gia_id.eq.${user.id}`);
+  }
+
+  const rangeEnd = includeCount ? pagination.to : pagination.to + 1;
+  const { data, error, count } = await query.range(pagination.from, rangeEnd);
+  if (error) throw error;
+
+  let posts = data || [];
+  const hasMore = includeCount
+    ? pagination.page * pagination.limit < (Number(count) || 0)
+    : posts.length > pagination.limit;
+  if (!includeCount && hasMore) posts = posts.slice(0, pagination.limit);
+
+  const assignmentPostIds = posts
+    .filter((post) => post.type === 'assignment')
+    .map((post) => post.id);
+  const lessonIds = [...new Set(posts
+    .filter((post) => post.type === 'assignment' && post.media_url && !isHttpUrl(post.media_url))
+    .map((post) => post.media_url))];
+
+  const submissionsPromise = user.role === 'student' && assignmentPostIds.length > 0
+    ? supabase
+      .from('bai_nop')
+      .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien, nop_luc')
+      .eq('hoc_sinh_id', user.id)
+      .in('bai_dang_id', assignmentPostIds)
+    : Promise.resolve({ data: [], error: null });
+  const lessonsPromise = lessonIds.length > 0
+    ? supabase
+      .from('bai_hoc')
+      .select('id, khoi_id')
+      .in('id', lessonIds)
+    : Promise.resolve({ data: [], error: null });
+
+  const [submissionsResult, lessonsResult] = await Promise.all([submissionsPromise, lessonsPromise]);
+  if (submissionsResult.error) throw submissionsResult.error;
+  if (lessonsResult.error) throw lessonsResult.error;
+
+  const submissionMap = new Map((submissionsResult.data || []).map((submission) => [
+    submission.bai_dang_id,
+    normalizeSubmission(submission),
+  ]));
+  const lessonMap = new Map((lessonsResult.data || []).map((lesson) => [lesson.id, normalizeLessonRef(lesson)]));
+
+  posts = posts.map((post) => ({
+    ...post,
+    ...(user.role === 'student' && post.type === 'assignment' ? {
+      is_completed: submissionMap.has(post.id),
+      user_submission: submissionMap.get(post.id) || null,
+    } : {}),
+    ...(lessonMap.has(post.media_url) ? { lesson: lessonMap.get(post.media_url) } : {}),
+  }));
+
+  return {
+    items: posts.map(normalizePost),
+    total: includeCount ? Number(count) || 0 : null,
+    hasMore,
+  };
+};
+
+const fetchClassOverviewData = async (classId, user, requestedSections = new Set(['posts', 'schedules', 'members'])) => {
+  const tasks = {};
+  if (requestedSections.has('posts')) {
+    tasks.posts = fetchClassPosts(
+      classId,
+      user,
+      parseClassPostPagination({ page: 1, limit: DEFAULT_CLASS_POST_PAGE_SIZE }),
+      { includeCount: false },
+    );
+  }
+  if (requestedSections.has('schedules')) {
+    tasks.schedules = fetchClassSchedules(classId, {
+      upcomingOnly: true,
+      limit: DEFAULT_CLASS_SCHEDULE_PREVIEW_SIZE,
+    });
+  }
+  if (requestedSections.has('members')) {
+    tasks.members = fetchClassMembers(classId, { limit: DEFAULT_CLASS_MEMBER_PREVIEW_SIZE });
+  }
+
+  const entries = Object.entries(tasks);
+  const values = await Promise.all(entries.map(([, task]) => task));
+  const result = Object.fromEntries(entries.map(([key], index) => [key, values[index]]));
+
+  return {
+    posts: result.posts?.items || [],
+    postsHasMore: result.posts?.hasMore || false,
+    schedules: result.schedules?.items || [],
+    schedulesHasMore: result.schedules?.hasMore || false,
+    members: result.members?.items || [],
+    membersHasMore: result.members?.hasMore || false,
+  };
+};
+
 const createClassCode = () => Math.random().toString(36).slice(2, 8).toUpperCase().padEnd(6, '0');
 
 const insertClassWithUniqueCode = async (classInput, maxAttempts = 5) => {
@@ -586,6 +752,7 @@ router.post('/parse-exam-file', auth, parseExamUpload, async (req, res) => {
 // Get all lop for a teacher or student
 router.get('/', auth, async (req, res) => {
   try {
+    const startedAt = Date.now();
     const { role, id } = req.user;
     // Select class properties and count members
     let query = supabase.from('lop')
@@ -610,6 +777,16 @@ router.get('/', auth, async (req, res) => {
         ...normalizeClass(cls),
         student_count: cls.student_count?.[0]?.count || 0
     }));
+
+    if (req.query.includeOverview === 'first' && formattedData.length > 0) {
+      const overview = await fetchClassOverviewData(formattedData[0].id, req.user);
+      res.set('Server-Timing', `class-initial;dur=${Date.now() - startedAt}`);
+      return res.json({
+        classes: formattedData,
+        selectedClassId: formattedData[0].id,
+        overview,
+      });
+    }
 
     res.json(formattedData);
   } catch (err) {
@@ -830,24 +1007,33 @@ router.get('/:id/members', auth, async (req, res) => {
   try {
     const { id } = req.params;
     if (!(await ensureClassAccess(id, req.user, res))) return;
-
-    const { data, error } = await supabase
-      .from('thanh_vien_lop')
-      .select('student:hoc_sinh_id(id, username, hoat_dong_cuoi_luc, phut_hoat_dong)')
-      .eq('lop_id', id);
-
-    if (error) throw error;
-    const formatted = data.map(m => ({
-      ...m.student,
-      last_active_at: m.student?.hoat_dong_cuoi_luc,
-      active_minutes: m.student?.phut_hoat_dong ?? 0,
-      isOnline: m.student?.hoat_dong_cuoi_luc && new Date(m.student.hoat_dong_cuoi_luc) > new Date(Date.now() - 5*60*1000),
-      hoat_dong_cuoi_luc: undefined,
-      phut_hoat_dong: undefined
-    }));
-    res.json(formatted);
+    const members = await fetchClassMembers(id);
+    res.json(members.items);
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Load the student class screen in one authenticated request.
+router.get('/:id/overview', auth, async (req, res) => {
+  try {
+    const startedAt = Date.now();
+    const { id } = req.params;
+    if (!(await ensureClassAccess(id, req.user, res))) return;
+
+    const requestedSections = typeof req.query.include === 'string'
+      ? new Set(req.query.include.split(',').map((value) => value.trim()).filter(Boolean))
+      : new Set(['posts', 'schedules', 'members']);
+    const allowedSections = new Set(['posts', 'schedules', 'members']);
+    if ([...requestedSections].some((section) => !allowedSections.has(section))) {
+      return res.status(400).json({ error: 'Nhóm dữ liệu tổng quan không hợp lệ.' });
+    }
+
+    const overview = await fetchClassOverviewData(id, req.user, requestedSections);
+    res.set('Server-Timing', `class-overview;dur=${Date.now() - startedAt}`);
+    return res.json(overview);
+  } catch (err) {
+    return res.status(err.status || 500).json({ error: err.message });
   }
 });
 
@@ -857,77 +1043,10 @@ router.get('/:id/posts', auth, async (req, res) => {
     const { id } = req.params;
     if (!(await ensureClassAccess(id, req.user, res))) return;
     const pagination = parseClassPostPagination(req.query);
-
-    let query = supabase
-      .from('bai_dang_lop')
-      .select('*, author:tac_gia_id(username), target:hoc_sinh_nhan_id(username)', { count: 'exact' })
-      .eq('lop_id', id)
-      .order('created_at', { ascending: false })
-      .order('id', { ascending: false });
-
-    // If student, only show:
-    // 1. Posts targeted to everyone (null)
-    // 2. Posts targeted specifically to them
-    // 3. Posts AUTHORED by them (even if targeted to teacher)
-    if (req.user.role !== 'teacher' && req.user.role !== 'admin') {
-      query = query.or(`hoc_sinh_nhan_id.is.null,hoc_sinh_nhan_id.eq.${req.user.id},tac_gia_id.eq.${req.user.id}`);
-    } else {
-      // If teacher, they see everything for their class
-    }
-
-    let { data: posts, error: postErr, count } = await query.range(pagination.from, pagination.to);
-    if (postErr) throw postErr;
-    if (!posts) posts = [];
-
-    const assignmentPostIds = posts
-      .filter((post) => post.type === 'assignment')
-      .map((post) => post.id);
-
-    // For students, check completion only against assignments in this response.
-    if (req.user.role === 'student' && assignmentPostIds.length > 0) {
-      const { data: submissions, error: subErr } = await supabase
-        .from('bai_nop')
-        .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien, nop_luc')
-        .eq('hoc_sinh_id', req.user.id)
-        .in('bai_dang_id', assignmentPostIds);
-      if (subErr) throw subErr;
-
-      const submissionMap = {};
-      (submissions || []).forEach(s => {
-        submissionMap[s.bai_dang_id] = normalizeSubmission(s);
-      });
-
-      posts = posts.map(p => ({
-        ...p,
-        is_completed: p.type === 'assignment' && !!submissionMap[p.id],
-        user_submission: p.type === 'assignment' ? submissionMap[p.id] : null
-      }));
-    }
-
-    // Resolve lesson references in one query instead of one round trip per assignment.
-    const lessonIds = [...new Set(posts
-      .filter((post) => post.type === 'assignment' && post.media_url && !isHttpUrl(post.media_url))
-      .map((post) => post.media_url))];
-    const lessonMap = new Map();
-
-    if (lessonIds.length > 0) {
-      const { data: lessons, error: lessonError } = await supabase
-        .from('bai_hoc')
-        .select('id, khoi_id')
-        .in('id', lessonIds);
-      if (lessonError) throw lessonError;
-      (lessons || []).forEach((lesson) => lessonMap.set(lesson.id, normalizeLessonRef(lesson)));
-    }
-
-    const enhancedPosts = posts.map((post) => ({
-      ...post,
-      ...(lessonMap.has(post.media_url) ? { lesson: lessonMap.get(post.media_url) } : {}),
-    }));
-
-    const total = Number(count) || 0;
-    res.set('X-Total-Count', String(total));
-    res.set('X-Has-More', pagination.page * pagination.limit < total ? 'true' : 'false');
-    res.json(enhancedPosts.map(normalizePost));
+    const posts = await fetchClassPosts(id, req.user, pagination);
+    res.set('X-Total-Count', String(posts.total));
+    res.set('X-Has-More', posts.hasMore ? 'true' : 'false');
+    res.json(posts.items);
   } catch (err) {
     res.status(err.status || 500).json({ error: err.message });
   }
@@ -1038,15 +1157,8 @@ router.get('/:id/schedules', auth, async (req, res) => {
   try {
     const { id } = req.params;
     if (!(await ensureClassAccess(id, req.user, res))) return;
-
-    const { data, error } = await supabase
-      .from('lich_lop')
-      .select('*')
-      .eq('lop_id', id)
-      .order('bat_dau_luc', { ascending: true });
-
-    if (error) throw error;
-    res.json((data || []).map(normalizeSchedule));
+    const schedules = await fetchClassSchedules(id);
+    res.json(schedules.items);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

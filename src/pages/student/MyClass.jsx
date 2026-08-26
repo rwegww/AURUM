@@ -12,6 +12,17 @@ const QUESTION_TYPE_LABELS = {
   essay: 'Tự luận',
 };
 const POST_PAGE_SIZE = 20;
+const CLASS_OVERVIEW_CACHE_TTL_MS = 30_000;
+
+const normalizeClassOverview = (data = {}) => ({
+  posts: Array.isArray(data.posts) ? data.posts : [],
+  postsHasMore: Boolean(data.postsHasMore),
+  schedules: Array.isArray(data.schedules) ? data.schedules : [],
+  schedulesHasMore: Boolean(data.schedulesHasMore),
+  members: Array.isArray(data.members) ? data.members : [],
+  membersHasMore: Boolean(data.membersHasMore),
+  loadedAt: Date.now(),
+});
 
 const getQuestionSectionTitle = (question = {}) => {
   const part = Number(question.part);
@@ -34,7 +45,11 @@ const MyClass = () => {
   const [postsHasMore, setPostsHasMore] = useState(false);
   const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [schedules, setSchedules] = useState([]);
+  const [schedulesHasMore, setSchedulesHasMore] = useState(false);
   const [members, setMembers] = useState([]);
+  const [membersHasMore, setMembersHasMore] = useState(false);
+  const [overviewLoading, setOverviewLoading] = useState(false);
+  const [overviewError, setOverviewError] = useState('');
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [privateMessage, setPrivateMessage] = useState('');
   const [sending, setSending] = useState(false);
@@ -46,6 +61,7 @@ const MyClass = () => {
   const [referenceTime, setReferenceTime] = useState(() => Date.now());
   const classDataRequestRef = React.useRef(null);
   const classPostRequestRef = React.useRef(null);
+  const classOverviewCacheRef = React.useRef(new Map());
 
   const markAsRead = useCallback((classId) => {
     const lastReadData = JSON.parse(localStorage.getItem('classroom_last_read') || '{}');
@@ -54,51 +70,71 @@ const MyClass = () => {
     window.dispatchEvent(new Event('classroom_read'));
   }, []);
 
-  const selectClass = useCallback(async (cls) => {
+  const selectClass = useCallback(async (cls, prefetchedOverview = null) => {
     classDataRequestRef.current?.abort();
     classPostRequestRef.current?.abort();
     const controller = new AbortController();
     classDataRequestRef.current = controller;
+    const cached = prefetchedOverview
+      ? normalizeClassOverview(prefetchedOverview)
+      : classOverviewCacheRef.current.get(cls.id);
+    const hasFreshCache = cached && Date.now() - cached.loadedAt < CLASS_OVERVIEW_CACHE_TTL_MS;
     setReferenceTime(Date.now());
     setSelectedClass(cls);
-    setPosts([]);
-    setPostsPage(1);
-    setPostsHasMore(false);
-    setSchedules([]);
-    setMembers([]);
+    setOverviewError('');
+    setOverviewLoading(!hasFreshCache);
+
+    if (hasFreshCache) {
+      setPosts(cached.posts);
+      setPostsPage(1);
+      setPostsHasMore(cached.postsHasMore);
+      setSchedules(cached.schedules);
+      setSchedulesHasMore(cached.schedulesHasMore);
+      setMembers(cached.members);
+      setMembersHasMore(cached.membersHasMore);
+    } else {
+      setPosts([]);
+      setPostsPage(1);
+      setPostsHasMore(false);
+      setSchedules([]);
+      setSchedulesHasMore(false);
+      setMembers([]);
+      setMembersHasMore(false);
+    }
+
     markAsRead(cls.id);
+    if (prefetchedOverview) {
+      classOverviewCacheRef.current.set(cls.id, cached);
+      return;
+    }
+
     const token = localStorage.getItem('token');
 
-    const headers = { 'Authorization': `Bearer ${token}` };
-    const requestOptions = { headers, signal: controller.signal };
-    const [postsResult, schedulesResult, membersResult] = await Promise.allSettled([
-      fetch(`/api/classes/${cls.id}/posts?page=1&limit=${POST_PAGE_SIZE}`, requestOptions),
-      fetch(`/api/classes/${cls.id}/schedules`, requestOptions),
-      fetch(`/api/classes/${cls.id}/members`, requestOptions),
-    ]);
+    try {
+      const response = await fetch(`/api/classes/${cls.id}/overview`, {
+        headers: { 'Authorization': `Bearer ${token}` },
+        signal: controller.signal,
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || 'Không thể tải tổng quan lớp học.');
+      if (controller.signal.aborted || classDataRequestRef.current !== controller) return;
 
-    if (controller.signal.aborted || classDataRequestRef.current !== controller) return;
-
-    const applyResponse = async (result, setter) => {
-      if (result.status !== 'fulfilled' || !result.value.ok) return;
-      const data = await result.value.json().catch(() => []);
-      if (!controller.signal.aborted && classDataRequestRef.current === controller && Array.isArray(data)) setter(data);
-    };
-
-    const applyPostsResponse = async () => {
-      if (postsResult.status !== 'fulfilled' || !postsResult.value.ok) return;
-      const data = await postsResult.value.json().catch(() => []);
-      if (controller.signal.aborted || classDataRequestRef.current !== controller || !Array.isArray(data)) return;
-      setPosts(data);
+      const overview = normalizeClassOverview(data);
+      classOverviewCacheRef.current.set(cls.id, overview);
+      setPosts(overview.posts);
       setPostsPage(1);
-      setPostsHasMore(postsResult.value.headers.get('X-Has-More') === 'true');
-    };
-
-    await Promise.all([
-      applyPostsResponse(),
-      applyResponse(schedulesResult, setSchedules),
-      applyResponse(membersResult, setMembers),
-    ]);
+      setPostsHasMore(overview.postsHasMore);
+      setSchedules(overview.schedules);
+      setSchedulesHasMore(overview.schedulesHasMore);
+      setMembers(overview.members);
+      setMembersHasMore(overview.membersHasMore);
+    } catch (err) {
+      if (err.name !== 'AbortError' && !hasFreshCache) {
+        setOverviewError(err.message || 'Không thể tải tổng quan lớp học.');
+      }
+    } finally {
+      if (classDataRequestRef.current === controller) setOverviewLoading(false);
+    }
   }, [markAsRead]);
 
   const loadMorePosts = useCallback(async () => {
@@ -134,14 +170,17 @@ const MyClass = () => {
   const fetchClasses = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/classes', {
+      const res = await fetch('/api/classes?includeOverview=first', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
-        const data = await res.json();
-        setClasses(data);
-        if (data.length > 0) {
-          selectClass(data[0]);
+        const payload = await res.json();
+        const classes = Array.isArray(payload) ? payload : payload.classes;
+        const classList = Array.isArray(classes) ? classes : [];
+        setClasses(classList);
+        if (classList.length > 0) {
+          const firstClass = classList.find((item) => item.id === payload.selectedClassId) || classList[0];
+          selectClass(firstClass, Array.isArray(payload) ? null : payload.overview);
         }
       }
     } catch (err) {
@@ -450,10 +489,22 @@ const MyClass = () => {
                <p className="text-sm font-medium text-viet-text-light">{selectedClass.description}</p>
             </header>
 
+            {overviewError && (
+              <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-sm font-bold text-red-700" role="alert">
+                {overviewError}
+              </div>
+            )}
+
             <div className="space-y-6">
               <h2 className="text-sm font-black text-viet-text uppercase tracking-widest">{t('my_class.feed.title')}</h2>
               
-              {posts.length === 0 ? (
+              {overviewLoading ? (
+                <div className="space-y-3 rounded-[32px] border border-viet-border bg-white p-6" aria-label="Đang tải bảng tin lớp học">
+                  <div className="h-4 w-32 animate-pulse rounded bg-slate-100" />
+                  <div className="h-3 w-full animate-pulse rounded bg-slate-100" />
+                  <div className="h-3 w-2/3 animate-pulse rounded bg-slate-100" />
+                </div>
+              ) : posts.length === 0 ? (
                 <div className="bg-white border text-center border-viet-border border-dashed p-12 rounded-[32px]">
                    <span className="text-4xl block mb-2 opacity-30">MailX</span>
                    <p className="text-viet-text-light font-bold text-sm">{t('my_class.feed.empty')}</p>
@@ -595,7 +646,12 @@ const MyClass = () => {
                </h3>
                
                <div className="space-y-3">
-                 {schedules.length === 0 ? (
+                 {overviewLoading ? (
+                   <div className="space-y-2" aria-label="Đang tải lịch học">
+                     <div className="h-11 animate-pulse rounded-xl bg-slate-100" />
+                     <div className="h-11 animate-pulse rounded-xl bg-slate-100" />
+                   </div>
+                 ) : schedules.length === 0 ? (
                    <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.schedules.empty')}</p>
                  ) : (
                    schedules.map(sch => (
@@ -612,6 +668,9 @@ const MyClass = () => {
                      </div>
                    ))
                  )}
+                 {schedulesHasMore && !overviewLoading && (
+                   <p className="text-center text-[10px] font-bold text-viet-text-light">Đang hiển thị 6 lịch học gần nhất</p>
+                 )}
                </div>
             </div>
 
@@ -621,7 +680,13 @@ const MyClass = () => {
                </h3>
                
                <div className="space-y-3">
-                 {members.length === 0 ? (
+                 {overviewLoading ? (
+                   <div className="space-y-2" aria-label="Đang tải thành viên lớp">
+                     <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+                     <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+                     <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+                   </div>
+                 ) : members.length === 0 ? (
                    <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
                  ) : (
                    members.map(m => (
@@ -640,6 +705,9 @@ const MyClass = () => {
                         </div>
                      </div>
                    ))
+                 )}
+                 {membersHasMore && !overviewLoading && (
+                   <p className="text-center text-[10px] font-bold text-viet-text-light">Đang hiển thị 20 thành viên mới nhất</p>
                  )}
                </div>
             </div>
