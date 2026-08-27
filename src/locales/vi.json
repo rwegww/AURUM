@@ -732,7 +732,7 @@
             }
         },
         "schedules": {
-            "title": "Lịch học tập sắp tới",
+            "title": "Lịch học tập",
             "empty": "Không có lịch học nào",
             "join_meet": "Tham gia buổi học"
         },
