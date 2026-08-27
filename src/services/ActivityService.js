@@ -1,4 +1,4 @@
-﻿const HISTORY_KEY = 'aurum_user_activity_history';
+const HISTORY_KEY = 'aurum_user_activity_history';
 const MAX_HISTORY_ITEMS = 50;
 
 const getSupabase = async () => {
@@ -26,9 +26,8 @@ class ActivityService {
 
       // 2. Save to Database (if logged in)
       const token = localStorage.getItem('token');
-      const authType = localStorage.getItem('authType');
       
-      if (token && authType === 'custom') {
+      if (token) {
         const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/user/activities`, {
           method: 'POST',
           headers: {
@@ -48,22 +47,6 @@ class ActivityService {
         if (!res.ok) {
            console.warn('DB Log Error: Failed to save activity to backend');
         }
-      } else if (authType === 'supabase') {
-        const supabase = await getSupabase();
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user?.id) {
-          const { error } = await supabase.from('hoat_dong_nguoi_dung').insert([{
-            nguoi_dung_id: session.user.id,
-            loai_hanh_dong: activity.type,
-            mo_ta: activity.description,
-            thong_tin_bo_sung: {
-              label: activity.label,
-              icon: activity.icon,
-              link: activity.link
-            }
-          }]);
-          if (error && error.code !== '42501') console.warn('DB Log Error:', error.message);
-        }
       }
       
       // Dispatch custom event for UI reactivity
@@ -79,9 +62,8 @@ class ActivityService {
   async getHistory() {
     try {
       const token = localStorage.getItem('token');
-      const authType = localStorage.getItem('authType');
 
-      if (token && authType === 'custom') {
+      if (token) {
         const res = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/user/activities`, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -98,29 +80,6 @@ class ActivityService {
             icon: item.metadata?.icon || item.thong_tin_bo_sung?.icon || item.icon || '',
             link: item.metadata?.link || item.thong_tin_bo_sung?.link || item.link || ''
           }));
-        }
-      } else if (authType === 'supabase') {
-        const supabase = await getSupabase();
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user?.id) {
-          const { data, error } = await supabase
-            .from('hoat_dong_nguoi_dung')
-            .select('*')
-            .eq('nguoi_dung_id', session.user.id)
-            .order('created_at', { ascending: false })
-            .limit(MAX_HISTORY_ITEMS);
-
-          if (!error && data) {
-            return data.map(item => ({
-              id: item.id,
-              timestamp: item.created_at,
-              type: item.loai_hanh_dong || item.action_type || item.type,
-              label: item.thong_tin_bo_sung?.label || item.metadata?.label || item.label || '',
-              description: item.mo_ta || item.description,
-              icon: item.thong_tin_bo_sung?.icon || item.metadata?.icon || item.icon || '',
-              link: item.thong_tin_bo_sung?.link || item.metadata?.link || item.link || ''
-            }));
-          }
         }
       }
       
@@ -148,21 +107,14 @@ class ActivityService {
       localStorage.removeItem(HISTORY_KEY);
 
       const token = localStorage.getItem('token');
-      const authType = localStorage.getItem('authType');
 
-      if (token && authType === 'custom') {
+      if (token) {
         await fetch(`${import.meta.env.VITE_API_URL || '/api'}/user/activities`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`
           }
         });
-      } else if (authType === 'supabase') {
-        const supabase = await getSupabase();
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user?.id) {
-          await supabase.from('hoat_dong_nguoi_dung').delete().eq('nguoi_dung_id', session.user.id);
-        }
       }
 
       window.dispatchEvent(new CustomEvent('aurum_activity_cleared'));
