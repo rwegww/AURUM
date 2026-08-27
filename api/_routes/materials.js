@@ -327,6 +327,66 @@ router.get('/:id/preview', async (req, res) => {
   }
 });
 
+// Return the original Word binary through the app origin. DOCX files are then
+// rendered in the browser with their page layout, tables, images and styles.
+router.get('/:id/document', async (req, res) => {
+  try {
+    const { data: material, error } = await supabase
+      .from('hoc_lieu')
+      .select('id,file_url,file_type')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+    if (!material) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
+    }
+
+    const fileType = normalizeFileType(material.file_type);
+    if (fileType !== 'doc' && fileType !== 'docx') {
+      return res.status(415).json({ message: 'Tài liệu này không phải tệp Word.' });
+    }
+
+    if (!isAllowedMaterialPreviewUrl(material.file_url)) {
+      return res.status(400).json({ message: 'Nguồn tệp không được phép dùng để xem trước.' });
+    }
+
+    const upstreamResponse = await fetch(material.file_url, {
+      headers: { 'Accept-Encoding': 'identity' },
+      redirect: 'error',
+      signal: AbortSignal.timeout(PREVIEW_FETCH_TIMEOUT_MS),
+    });
+    if (!upstreamResponse.ok) {
+      return res.status(502).json({ message: 'Tệp Word gốc hiện không còn khả dụng.' });
+    }
+
+    const declaredSize = Number(upstreamResponse.headers.get('content-length'));
+    if (Number.isFinite(declaredSize) && declaredSize > MAX_PREVIEW_FILE_SIZE_BYTES) {
+      return res.status(413).json({ message: 'Tệp quá lớn để tạo bản xem trước trực tiếp.' });
+    }
+
+    const buffer = Buffer.from(await upstreamResponse.arrayBuffer());
+    if (buffer.length > MAX_PREVIEW_FILE_SIZE_BYTES) {
+      return res.status(413).json({ message: 'Tệp quá lớn để tạo bản xem trước trực tiếp.' });
+    }
+
+    const contentType = fileType === 'docx'
+      ? 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      : 'application/msword';
+    res.set('Content-Type', contentType);
+    res.set('Content-Disposition', 'inline');
+    res.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+    res.set('X-Content-Type-Options', 'nosniff');
+    return res.send(buffer);
+  } catch (err) {
+    const status = err.name === 'TimeoutError' ? 504 : 500;
+    const message = status === 504
+      ? 'Tải bản xem trước Word quá thời gian chờ. Vui lòng thử lại.'
+      : 'Không thể tải bản xem trước Word lúc này.';
+    return res.status(status).json({ message, error: err.message });
+  }
+});
+
 // Proxy PDFs through the app origin so browser tracking prevention does not
 // block Cloudinary's embedded viewer storage. Byte ranges keep PDF seeking fast.
 router.get('/:id/pdf', async (req, res) => {

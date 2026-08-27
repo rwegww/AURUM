@@ -1,9 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ExternalLink, FileText, Loader2, TriangleAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getMaterialPdfPreviewUrl, getMaterialPreviewKind } from '../../../shared/materialPreview';
+import {
+  getMaterialDocumentSourceUrl,
+  getMaterialFileType,
+  getMaterialPdfPreviewUrl,
+  getMaterialPreviewKind,
+} from '../../../shared/materialPreview';
 
-const DocumentPreview = ({ material }) => {
+const PreviewError = ({ material, message }) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex min-h-[500px] w-full flex-col items-center justify-center p-10 text-center">
+      <TriangleAlert size={48} className="mb-4 text-amber-500" aria-hidden="true" />
+      <p className="max-w-lg font-bold text-viet-text">{message}</p>
+      <a
+        href={material.file_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-viet-text px-6 py-3 text-sm font-black uppercase text-white"
+      >
+        <ExternalLink size={16} aria-hidden="true" />
+        {t('material_detail.download_to_view')}
+      </a>
+    </div>
+  );
+};
+
+const PreviewLoading = () => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex min-h-[500px] w-full flex-col items-center justify-center gap-4 text-viet-text-light">
+      <Loader2 size={36} className="animate-spin text-viet-green" aria-hidden="true" />
+      <p className="text-sm font-black uppercase tracking-widest">
+        {t('material_detail.preview_loading')}
+      </p>
+    </div>
+  );
+};
+
+const LegacyDocumentPreview = ({ material }) => {
   const { t } = useTranslation();
   const [state, setState] = useState({ loading: true, text: '', truncated: false, error: '' });
 
@@ -43,32 +81,11 @@ const DocumentPreview = ({ material }) => {
   }, [material.id, t]);
 
   if (state.loading) {
-    return (
-      <div className="flex min-h-[500px] w-full flex-col items-center justify-center gap-4 text-viet-text-light">
-        <Loader2 size={36} className="animate-spin text-viet-green" aria-hidden="true" />
-        <p className="text-sm font-black uppercase tracking-widest">
-          {t('material_detail.preview_loading')}
-        </p>
-      </div>
-    );
+    return <PreviewLoading />;
   }
 
   if (state.error) {
-    return (
-      <div className="flex min-h-[500px] w-full flex-col items-center justify-center p-10 text-center">
-        <TriangleAlert size={48} className="mb-4 text-amber-500" aria-hidden="true" />
-        <p className="max-w-lg font-bold text-viet-text">{state.error}</p>
-        <a
-          href={material.file_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-viet-text px-6 py-3 text-sm font-black uppercase text-white"
-        >
-          <ExternalLink size={16} aria-hidden="true" />
-          {t('material_detail.download_to_view')}
-        </a>
-      </div>
-    );
+    return <PreviewError material={material} message={state.error} />;
   }
 
   return (
@@ -89,6 +106,112 @@ const DocumentPreview = ({ material }) => {
           </p>
         )}
       </div>
+    </div>
+  );
+};
+
+const DocxPreview = ({ material }) => {
+  const { t } = useTranslation();
+  const containerRef = useRef(null);
+  const [state, setState] = useState({ loading: true, error: '' });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+    let resizeObserver;
+    const container = containerRef.current;
+
+    const loadPreview = async () => {
+      setState({ loading: true, error: '' });
+      if (container) container.replaceChildren();
+
+      try {
+        const response = await fetch(getMaterialDocumentSourceUrl(material), {
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.message || t('material_detail.preview_error'));
+        }
+
+        const documentBlob = await response.blob();
+        const { renderAsync } = await import('docx-preview');
+        if (!active || !container) return;
+
+        await renderAsync(documentBlob, container, undefined, {
+          className: 'docx',
+          inWrapper: true,
+          ignoreWidth: false,
+          ignoreHeight: false,
+          ignoreFonts: false,
+          breakPages: true,
+          ignoreLastRenderedPageBreak: false,
+          experimental: true,
+          renderHeaders: true,
+          renderFooters: true,
+          renderFootnotes: true,
+          renderEndnotes: true,
+          renderChanges: false,
+          renderComments: false,
+          renderAltChunks: false,
+          useBase64URL: true,
+        });
+
+        container.querySelectorAll('script, iframe, object, embed').forEach((node) => node.remove());
+        container.querySelectorAll('a[href]').forEach((link) => {
+          const href = link.getAttribute('href') || '';
+          if (!/^(?:https?:|mailto:|#)/i.test(href)) link.removeAttribute('href');
+          else {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+          }
+        });
+
+        const fitPagesToContainer = () => {
+          const pages = [...container.querySelectorAll('section.docx')];
+          if (pages.length === 0) return;
+
+          pages.forEach((page) => { page.style.zoom = '1'; });
+          const naturalPageWidth = pages[0].getBoundingClientRect().width;
+          const availableWidth = Math.max(280, container.clientWidth - 24);
+          const scale = naturalPageWidth > 0
+            ? Math.min(1, availableWidth / naturalPageWidth)
+            : 1;
+          pages.forEach((page) => { page.style.zoom = String(scale); });
+        };
+
+        fitPagesToContainer();
+        if (typeof ResizeObserver !== 'undefined') {
+          resizeObserver = new ResizeObserver(fitPagesToContainer);
+          resizeObserver.observe(container);
+        }
+
+        if (active) setState({ loading: false, error: '' });
+      } catch (error) {
+        if (active && error.name !== 'AbortError') {
+          setState({ loading: false, error: error.message || t('material_detail.preview_error') });
+        }
+      }
+    };
+
+    loadPreview();
+    return () => {
+      active = false;
+      controller.abort();
+      resizeObserver?.disconnect();
+      if (container) container.replaceChildren();
+    };
+  }, [material, t]);
+
+  return (
+    <div className="relative h-[720px] w-full overflow-auto rounded-xl bg-slate-200">
+      {state.loading && <div className="absolute inset-0 z-10 bg-gray-100"><PreviewLoading /></div>}
+      {state.error && <div className="absolute inset-0 z-10 bg-gray-100"><PreviewError material={material} message={state.error} /></div>}
+      <div
+        ref={containerRef}
+        className="min-h-full w-full py-6 [&_.docx-wrapper]:bg-transparent [&_section.docx]:shadow-xl"
+        aria-label={t('material_detail.document_preview')}
+      />
     </div>
   );
 };
@@ -118,7 +241,9 @@ const MaterialPreview = ({ material }) => {
   }
 
   if (previewKind === 'document') {
-    return <DocumentPreview material={material} />;
+    return getMaterialFileType(material) === 'docx'
+      ? <DocxPreview material={material} />
+      : <LegacyDocumentPreview material={material} />;
   }
 
   return (

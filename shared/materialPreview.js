@@ -39,6 +39,12 @@ export const getMaterialPdfPreviewUrl = (material) => (
     : ''
 );
 
+export const getMaterialDocumentSourceUrl = (material) => (
+  material?.id
+    ? `/api/materials/${encodeURIComponent(material.id)}/document`
+    : ''
+);
+
 export const isAllowedMaterialPreviewUrl = (value) => {
   try {
     const parsed = new URL(value);

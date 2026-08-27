@@ -66,6 +66,10 @@ export default defineConfig({
             if (normalizedId.includes('katex') || normalizedId.includes('rehype-katex') || normalizedId.includes('remark-math') || normalizedId.includes('react-markdown')) {
               return 'vendor-katex';
             }
+            // Load the Word renderer only when a DOCX preview is opened.
+            if (normalizedId.includes('docx-preview') || normalizedId.includes('jszip')) {
+              return 'vendor-docx-preview';
+            }
             // Keep avatar libraries separate
             if (normalizedId.includes('@dicebear') || normalizedId.includes('multiavatar')) {
               return 'vendor-avatars';

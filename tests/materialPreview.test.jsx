@@ -7,6 +7,7 @@ import { extractMaterialDocumentPreview } from '../api/_lib/materialDocumentPrev
 import RatingStars from '../src/components/library/RatingStars';
 import {
   getMaterialFileType,
+  getMaterialDocumentSourceUrl,
   getMaterialPdfPreviewUrl,
   getMaterialPreviewKind,
   isAllowedMaterialPreviewUrl,
@@ -39,6 +40,16 @@ describe('xem trước học liệu', () => {
     expect(previewUrl).toBe('/api/materials/tai-lieu%2Fco-khoang-trang/pdf');
     expect(previewUrl).not.toContain('cloudinary.com');
     expect(previewUrl).not.toContain('api_key');
+  });
+
+  it('dùng URL cùng tên miền để tải dữ liệu DOCX cho trình dựng bố cục', () => {
+    const material = {
+      id: 'word-01',
+      file_url: 'https://res.cloudinary.com/demo/raw/upload/de-thi.docx',
+      file_type: 'docx',
+    };
+
+    expect(getMaterialDocumentSourceUrl(material)).toBe('/api/materials/word-01/document');
   });
 
   it('chỉ cho máy chủ tải tệp xem trước từ Cloudinary qua HTTPS', () => {
