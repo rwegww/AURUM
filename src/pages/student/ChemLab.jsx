@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { activityService } from '@/services/ActivityService';
-import { Beaker, Hammer, Microscope, Scale, Search } from 'lucide-react';
+import { Beaker, Hammer, Microscope } from 'lucide-react';
 import DiscoveryJournalModal from '@/components/lab/DiscoveryJournalModal';
 
 import { revealGroup as containerVariants, revealItem as itemVariants } from '@/utils/motion';
@@ -58,15 +58,6 @@ const ChemLab = () => {
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-blue-600'
     },
     { 
-      id: 'solver', 
-      label: t('chem_lab.modules.balance.label'),
-      icon: <Search className="w-8 h-8 text-amber-500" />, 
-      desc: t('chem_lab.modules.balance.desc'),
-      path: '/lab/solver',
-      colorClass: 'bg-[#1a1a1a] text-white hover:bg-amber-500'
-    },
-
-    { 
       id: 'molecule', 
       label: t('chem_lab.modules.molecule.label'), 
       icon: <Microscope className="w-8 h-8 text-emerald-500" />, 
@@ -81,14 +72,6 @@ const ChemLab = () => {
       desc: t('chem_lab.modules.craft.desc'),
       path: '/lab/crafting',
       colorClass: 'bg-[#1a1a1a] text-white hover:bg-rose-500'
-    },
-    {
-      id: 'calculator',
-      label: t('chem_lab.modules.calculator.label'),
-      icon: <Scale className="w-8 h-8 text-cyan-500" />,
-      desc: t('chem_lab.modules.calculator.desc'),
-      path: '/calculator',
-      colorClass: 'bg-[#1a1a1a] text-white hover:bg-cyan-500',
     },
   ];
 
