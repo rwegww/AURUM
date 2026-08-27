@@ -248,7 +248,7 @@ const KnowledgeMap = () => {
 
                               const lessonDone = isLessonDone(lesson.lessonId);
                               const isLessonExpanded = expandedLesson === lesson.lessonId;
-                              const shortTitle = lesson.title.replace(/^Bài\s+\d+\s*[.:]\s*/i, '');
+                              const shortTitle = String(lesson.title || '').replace(/^Bài\s+\d+\s*[.:]\s*/i, '');
 
                               return (
                                 <div key={lesson.lessonId} className="flex flex-row items-center relative">
@@ -406,7 +406,7 @@ const KnowledgeMap = () => {
                                                   initial={{ opacity: 0 }}
                                                   animate={{ opacity: 1 }}
                                                   onClick={() => {
-                                                    const orderMatch = lesson.lessonId.match(/bai(\d+)/i);
+                                                    const orderMatch = String(lesson.lessonId || '').match(/bai(\d+)/i);
                                                     const order = Number(lesson.order)
                                                       || (orderMatch ? parseInt(orderMatch[1], 10) : 1);
 
