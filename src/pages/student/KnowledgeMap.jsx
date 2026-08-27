@@ -396,7 +396,7 @@ const KnowledgeMap = () => {
                                                 <motion.button
                                                   initial={{ opacity: 0 }}
                                                   animate={{ opacity: 1 }}
-                                                  onClick={() => navigate(`/bai_hoc/${lesson.classId}/${lesson.lessonId}`)}
+                                                  onClick={() => navigate(`/lectures/${lesson.classId}/${lesson.lessonId}`)}
                                                   className="text-[11px] font-black uppercase tracking-widest px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-500 hover:text-viet-green transition-all shadow-sm"
                                                 >
                                                   Xem lại bài học →

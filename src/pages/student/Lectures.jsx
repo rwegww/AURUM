@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation, Trans } from 'react-i18next';
+import { motion } from 'framer-motion';
 import { BookOpen, Play, Search, Video } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 import {
   formatSgkLessonReference,
   getAurumLessonOrder,
@@ -10,6 +12,7 @@ import {
 
 const Lectures = () => {
   const { t } = useTranslation();
+  const { isLoggedIn } = useAuth();
   const [searchParams] = useSearchParams();
   const queryGrade = searchParams.get('grade');
   
@@ -101,6 +104,22 @@ const Lectures = () => {
           ))}
         </div>
 
+        {/* Story Intro if Logged In */}
+        {selectedGrade && isLoggedIn && t(`bai_hoc.story_parts.${selectedGrade}.name`, { defaultValue: '' }) && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-10 text-center bg-white border border-viet-green/20 rounded-[24px] p-8 max-w-4xl mx-auto shadow-xl shadow-viet-green/5"
+          >
+            <h2 className="text-2xl font-bold text-viet-green mb-3">
+              {t(`bai_hoc.story_parts.${selectedGrade}.name`)}
+            </h2>
+            <p className="text-viet-text-light text-base italic leading-relaxed">
+              "{t(`bai_hoc.story_parts.${selectedGrade}.story`)}"
+            </p>
+          </motion.div>
+        )}
+
         {loading ? (
           <div className="flex flex-col items-center justify-center py-32">
             <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mb-4"></div>
@@ -111,7 +130,7 @@ const Lectures = () => {
             {filteredLessons.map((lesson) => (
               <Link
                 key={lesson.id}
-                to={`/bai_hoc/${selectedGrade}/${lesson.lessonId}?mode=lecture`}
+                to={`/lectures/${selectedGrade}/${lesson.lessonId}`}
                 className="bg-white rounded-[24px] border border-viet-border p-6 hover:shadow-xl hover:shadow-viet-green/5 transition-all group flex flex-col h-full"
               >
                 <div className="flex items-center justify-between mb-4">

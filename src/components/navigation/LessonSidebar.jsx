@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -41,18 +41,21 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
   };
 
   return (
-    <aside className="w-[320px] min-h-[calc(100vh-70px)] bg-white border-r border-viet-border absolute top-0 left-0 z-40 flex flex-col shadow-sm">
+    <aside className="w-[320px] min-h-[calc(100vh-96px)] bg-white border-r border-viet-border absolute top-0 left-0 z-40 flex flex-col shadow-sm">
       {/* Top Header / Context */}
-      <div className="p-6 pb-4 border-b border-viet-border bg-viet-bg/20">
-        <Link to="/bai_hoc" className="flex items-center gap-2 text-viet-green text-[10px] font-black uppercase tracking-widest mb-4 hover:underline">
-          <span>←</span> {t('lesson_page.back_btn')}
+      <div className="p-6 pt-5 pb-4 border-b border-viet-border bg-viet-bg/20">
+        <Link 
+          to="/lectures" 
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-viet-green/10 hover:bg-viet-green text-viet-green hover:text-white text-[11px] font-black uppercase tracking-widest mb-4 transition-all shadow-xs group cursor-pointer"
+        >
+          <span className="transition-transform group-hover:-translate-x-1">←</span> {t('lesson_page.back_btn')}
         </Link>
         
         <label className="text-[10px] font-black text-[#b4bac2] uppercase tracking-[2px] mb-2 block">Lộ trình học tập</label>
         <div className="relative">
           <select 
             value={grade}
-            onChange={(e) => navigate(`/bai_hoc/${e.target.value}`)}
+            onChange={(e) => navigate(`/lectures?grade=${e.target.value}`)}
             className="w-full h-[48px] bg-white border-2 border-viet-border rounded-2xl px-5 text-[14px] font-bold text-viet-text appearance-none cursor-pointer outline-none focus:border-viet-green focus:ring-4 focus:ring-viet-green/5 transition-all"
           >
             {[6, 7, 8, 9, 10, 11, 12].map(g => (
@@ -114,7 +117,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
                         return (
                           <Link
                             key={lesson.lessonId}
-                            to={`/bai_hoc/${grade}/${lesson.lessonId}`}
+                            to={`/lectures/${grade}/${lesson.lessonId}`}
                             className={`group block p-3.5 rounded-[20px] transition-all border-2 relative overflow-hidden ${
                               isActive 
                                 ? 'bg-white border-viet-green shadow-xl shadow-viet-green/5' 

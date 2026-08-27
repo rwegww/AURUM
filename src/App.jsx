@@ -1,5 +1,15 @@
 import React, { lazy, Suspense } from 'react'
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, useParams } from 'react-router-dom'
+
+const RedirectBaiHocGrade = () => {
+  const { grade } = useParams();
+  return <Navigate to={`/lectures?grade=${grade}`} replace />;
+};
+
+const RedirectBaiHocLesson = () => {
+  const { grade, lessonId } = useParams();
+  return <Navigate to={`/lectures/${grade}/${lessonId}`} replace />;
+};
 
 // Common Components (Static - small & frequently used)
 import { AuthProvider } from '@/context/AuthContext'
@@ -130,9 +140,13 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/lectures" element={<Lectures />} />
-          <Route path="/bai_hoc" element={<Lessons />} />
-          <Route path="/bai_hoc/:grade" element={<Lessons />} />
-          <Route path="/bai_hoc/:grade/:lessonId" element={<LessonPage />} />
+          <Route path="/lectures/:grade" element={<RedirectBaiHocGrade />} />
+          <Route path="/lectures/:grade/:lessonId" element={<LessonPage />} />
+          
+          {/* Legacy /bai_hoc route redirects */}
+          <Route path="/bai_hoc" element={<Navigate to="/lectures" replace />} />
+          <Route path="/bai_hoc/:grade" element={<RedirectBaiHocGrade />} />
+          <Route path="/bai_hoc/:grade/:lessonId" element={<RedirectBaiHocLesson />} />
           
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />

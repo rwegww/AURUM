@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BookOpen } from 'lucide-react';
@@ -44,7 +44,7 @@ const LessonPage = () => {
         label: `Học bài: ${lessonData.title}`,
         description: `Đã truy cập bài học ${lessonData.title} (Lớp ${grade})`,
         icon: 'BookOpen',
-        link: `/bai_hoc/${grade}/${lessonId}`
+        link: `/lectures/${grade}/${lessonId}`
       });
 
     } catch (err) {
@@ -66,7 +66,7 @@ const LessonPage = () => {
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-viet-green/20 border-t-viet-green rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-xl font-bold mb-4">{t('lesson_page.loading')}</h2>
-          <Link to="/bai_hoc" className="text-viet-green hover:underline">{t('lesson_page.back_btn')}</Link>
+          <Link to="/lectures" className="text-viet-green hover:underline">{t('lesson_page.back_btn')}</Link>
         </div>
       </div>
     );
@@ -80,7 +80,7 @@ const LessonPage = () => {
   const sgkReference = formatSgkLessonReference(lesson);
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-[70px]">
+    <div className="min-h-screen bg-viet-bg pt-[96px]">
       <div className="flex relative">
         {/* Sidebar - Only show for logged in nguoi_dung or if desired for all */}
         {isLoggedIn && (
