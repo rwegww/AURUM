@@ -242,8 +242,8 @@ const Library = () => {
                   </div>
 
                   <div className="w-full aspect-[4/3] bg-viet-bg rounded-[24px] mb-6 flex items-center justify-center text-4xl overflow-hidden border border-viet-border/50">
-                    {item.file_type === 'pdf' ? <FileText size={42} className="text-viet-green" aria-hidden="true" /> : 
-                     item.file_type?.match(/png|jpg|jpeg|webp/) ? (
+                    {['pdf', 'doc', 'docx'].includes(item.file_type) ? <FileText size={42} className="text-viet-green" aria-hidden="true" /> :
+                     item.file_type?.match(/png|jpg|jpeg|webp|gif/) ? (
                        <img src={item.file_url} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt={item.title} />
                      ) : <Folder size={42} className="text-viet-text-light" aria-hidden="true" />}
                   </div>

@@ -3,7 +3,9 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Download, Eye, Folder, Loader2, Reply, Star } from 'lucide-react';
+import { ArrowLeft, Download, Eye, Loader2, Reply, Star } from 'lucide-react';
+import MaterialPreview from '@/components/library/MaterialPreview';
+import RatingStars from '@/components/library/RatingStars';
 
 const viewedTimeline = {};
 const FEEDBACK_PAGE_SIZE = 10;
@@ -172,9 +174,6 @@ const MaterialDetail = () => {
     </div>
   );
 
-  const isImage = material.file_type?.match(/png|jpg|jpeg|webp/);
-  const isPdf = material.file_type === 'pdf';
-
   return (
     <main className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
@@ -209,32 +208,7 @@ const MaterialDetail = () => {
               </div>
 
               <div className="p-4 bg-gray-100 min-h-[500px] flex items-center justify-center relative group">
-                {isImage && (
-                  <img src={material.file_url} className="max-w-full h-auto rounded-xl shadow-lg" alt={material.title} />
-                )}
-                {isPdf && (
-                  <iframe 
-                    src={`https://docs.google.com/viewer?url=${encodeURIComponent(material.file_url)}&embedded=true`}
-                    className="w-full h-[600px] rounded-xl border-none"
-                    title="PDF Preview"
-                  />
-                )}
-                {!isImage && !isPdf && (
-                  <div className="text-center p-12">
-                    <Folder size={56} className="mx-auto mb-4 text-viet-text-light/40" aria-hidden="true" />
-                    <p className="text-viet-text-light font-bold">
-                      {t('material_detail.unsupported_format', { type: material.file_type })}
-                    </p>
-                    <a 
-                      href={material.file_url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="mt-6 inline-block bg-viet-text text-white px-10 py-4 rounded-2xl font-black uppercase text-sm"
-                    >
-                      {t('material_detail.download_to_view')}
-                    </a>
-                  </div>
-                )}
+                <MaterialPreview material={material} />
               </div>
 
               <div className="p-8 flex items-center justify-between bg-white">
@@ -318,8 +292,8 @@ const MaterialDetail = () => {
                             </p>
                           </div>
                         </div>
-                        <div className="bg-viet-bg px-3 py-1 rounded-full text-[10px] font-black text-viet-green uppercase">
-                           {'Star'.repeat(f.rating)}
+                        <div className="rounded-full bg-viet-bg px-3 py-1 text-viet-green">
+                          <RatingStars rating={f.rating} />
                         </div>
                       </div>
                       <p className="text-viet-text text-sm font-medium pl-13 leading-relaxed">

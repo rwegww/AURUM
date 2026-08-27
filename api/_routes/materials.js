@@ -2,12 +2,16 @@ import express from 'express';
 import { supabase } from '../_lib/supabase.js';
 import { auth, authenticateToken, extractBearerToken } from '../_middleware/auth.js';
 import User from '../_models/User.js';
+import { extractMaterialDocumentPreview } from '../_lib/materialDocumentPreview.js';
+import { isAllowedMaterialPreviewUrl } from '../../shared/materialPreview.js';
 
 
 const router = express.Router();
 const DEFAULT_MATERIAL_PAGE_SIZE = 24;
 const DEFAULT_FEEDBACK_PAGE_SIZE = 10;
 const MAX_PAGE_SIZE = 60;
+const MAX_PREVIEW_FILE_SIZE_BYTES = 20 * 1024 * 1024;
+const PREVIEW_FETCH_TIMEOUT_MS = 15_000;
 const MATERIAL_LIST_COLUMNS = [
   'id',
   'tieu_de',
@@ -262,6 +266,62 @@ router.delete('/:id', auth, async (req, res) => {
     return res.json({ message: 'Đã xóa học liệu.', id: data.id });
   } catch (err) {
     return res.status(500).json({ message: 'Không thể xóa học liệu lúc này.', error: err.message });
+  }
+});
+
+// Extract a safe, inline text preview for Word documents stored in the library.
+router.get('/:id/preview', async (req, res) => {
+  try {
+    const { data: material, error } = await supabase
+      .from('hoc_lieu')
+      .select('id,file_url,file_type')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+    if (!material) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
+    }
+
+    const fileType = normalizeFileType(material.file_type);
+    if (fileType !== 'doc' && fileType !== 'docx') {
+      return res.status(415).json({ message: 'Tài liệu này không cần trình xem trước Word.' });
+    }
+
+    if (!isAllowedMaterialPreviewUrl(material.file_url)) {
+      return res.status(400).json({ message: 'Nguồn tệp không được phép dùng để tạo bản xem trước.' });
+    }
+
+    const upstreamResponse = await fetch(material.file_url, {
+      redirect: 'error',
+      signal: AbortSignal.timeout(PREVIEW_FETCH_TIMEOUT_MS),
+    });
+    if (!upstreamResponse.ok) {
+      return res.status(502).json({ message: 'Tệp gốc hiện không còn khả dụng để xem trước.' });
+    }
+
+    const declaredSize = Number(upstreamResponse.headers.get('content-length'));
+    if (Number.isFinite(declaredSize) && declaredSize > MAX_PREVIEW_FILE_SIZE_BYTES) {
+      return res.status(413).json({ message: 'Tệp quá lớn để tạo bản xem trước trực tiếp.' });
+    }
+
+    const buffer = Buffer.from(await upstreamResponse.arrayBuffer());
+    if (buffer.length > MAX_PREVIEW_FILE_SIZE_BYTES) {
+      return res.status(413).json({ message: 'Tệp quá lớn để tạo bản xem trước trực tiếp.' });
+    }
+
+    const preview = await extractMaterialDocumentPreview(buffer, fileType);
+    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
+    return res.json({
+      ...preview,
+      file_type: fileType,
+    });
+  } catch (err) {
+    const status = err.name === 'TimeoutError' ? 504 : (err.status || 500);
+    const message = status === 504
+      ? 'Tạo bản xem trước quá thời gian chờ. Vui lòng thử lại.'
+      : (err.status ? err.message : 'Không thể tạo bản xem trước cho tài liệu này.');
+    return res.status(status).json({ message, error: err.message });
   }
 });
 
