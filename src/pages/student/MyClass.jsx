@@ -1,9 +1,9 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslation, Trans } from 'react-i18next';
-import { CheckCircle2, Rocket } from 'lucide-react';
+import { CheckCircle2, Rocket, ChevronLeft, ChevronRight, Calendar, Users } from 'lucide-react';
 
 const QUESTION_TYPE_LABELS = {
   multiple_choice: 'Trắc nghiệm',
@@ -46,8 +46,10 @@ const MyClass = () => {
   const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [schedules, setSchedules] = useState([]);
   const [schedulesHasMore, setSchedulesHasMore] = useState(false);
+  const [scheduleIndex, setScheduleIndex] = useState(0);
   const [members, setMembers] = useState([]);
   const [membersHasMore, setMembersHasMore] = useState(false);
+  const [memberPage, setMemberPage] = useState(0);
   const [overviewLoading, setOverviewLoading] = useState(false);
   const [overviewError, setOverviewError] = useState('');
   const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
@@ -83,6 +85,8 @@ const MyClass = () => {
     setSelectedClass(cls);
     setOverviewError('');
     setOverviewLoading(!hasFreshCache);
+    setScheduleIndex(0);
+    setMemberPage(0);
 
     if (hasFreshCache) {
       setPosts(cached.posts);
@@ -442,7 +446,7 @@ const MyClass = () => {
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Lớp Sidebar */}
-        <div className="lg:col-span-3 space-y-4">
+        <div className="lg:col-span-3 space-y-4 lg:sticky lg:top-[96px] lg:self-start lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
           <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">{t('my_class.sidebar.title')}</h2>
           {lop.map(cls => (
             <button
@@ -639,77 +643,160 @@ const MyClass = () => {
 
         {/* Lịch học & Khác (Right Sidebar) */}
         {selectedClass && (
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-[96px] lg:self-start lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
+            {/* Lịch học Widget */}
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
-               <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                {t('my_class.schedules.title')}
-               </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-viet-green" aria-hidden="true" />
+                  {t('my_class.schedules.title')}
+                </h3>
+                {!overviewLoading && schedules.length > 1 && (
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setScheduleIndex((prev) => (prev > 0 ? prev - 1 : schedules.length - 1))}
+                      className="w-7 h-7 rounded-lg border border-viet-border hover:bg-slate-100 flex items-center justify-center text-viet-text transition-colors"
+                      aria-label="Lịch học trước"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <span className="text-[10px] font-extrabold text-viet-text-light px-1">
+                      {scheduleIndex + 1}/{schedules.length}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setScheduleIndex((prev) => (prev < schedules.length - 1 ? prev + 1 : 0))}
+                      className="w-7 h-7 rounded-lg border border-viet-border hover:bg-slate-100 flex items-center justify-center text-viet-text transition-colors"
+                      aria-label="Lịch học tiếp theo"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
                
-               <div className="space-y-3">
-                 {overviewLoading ? (
-                   <div className="space-y-2" aria-label="Đang tải lịch học">
-                     <div className="h-11 animate-pulse rounded-xl bg-slate-100" />
-                     <div className="h-11 animate-pulse rounded-xl bg-slate-100" />
-                   </div>
-                 ) : schedules.length === 0 ? (
-                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.schedules.empty')}</p>
-                 ) : (
-                   schedules.map(sch => (
-                     <div key={sch.id} className="p-3 border border-viet-border rounded-xl hover:border-viet-green transition-colors group">
-                       <p className="text-xs font-black text-viet-text mb-1 truncate">{sch.title}</p>
-                       <p className="text-[10px] font-bold text-viet-green uppercase bg-viet-green/5 px-2 py-1 rounded-md inline-block mb-2">
-                         {new Date(sch.start_time).toLocaleString()}
-                       </p>
-                       {sch.meet_url && (
-                          <a href={sch.meet_url} target="_blank" rel="noreferrer" className="block w-full py-2 bg-viet-text text-white text-[10px] font-black uppercase text-center rounded-lg mt-1 group-hover:bg-viet-green transition-colors">
-                            {t('my_class.schedules.join_meet')}
-                          </a>
-                       )}
-                     </div>
-                   ))
-                 )}
-                 {schedulesHasMore && !overviewLoading && (
-                   <p className="text-center text-[10px] font-bold text-viet-text-light">Đang hiển thị 6 lịch học gần nhất</p>
-                 )}
-               </div>
+              <div>
+                {overviewLoading ? (
+                  <div className="space-y-2" aria-label="Đang tải lịch học">
+                    <div className="h-20 animate-pulse rounded-2xl bg-slate-100" />
+                  </div>
+                ) : schedules.length === 0 ? (
+                  <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.schedules.empty')}</p>
+                ) : (
+                  (() => {
+                    const currentSch = schedules[scheduleIndex] || schedules[0];
+                    return (
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={currentSch.id}
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="p-4 border-2 border-viet-green/20 bg-viet-green/5 rounded-2xl flex flex-col justify-between"
+                        >
+                          <div>
+                            <p className="text-xs font-black text-viet-text mb-2 leading-snug">{currentSch.title}</p>
+                            <p className="text-[10px] font-bold text-viet-green uppercase bg-white px-2 py-1 rounded-md inline-block border border-viet-green/20 shadow-xs mb-3">
+                              {new Date(currentSch.start_time).toLocaleString()}
+                            </p>
+                          </div>
+                          {currentSch.meet_url && (
+                            <a 
+                              href={currentSch.meet_url} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="block w-full py-2 bg-viet-green hover:bg-emerald-600 text-white text-[10px] font-black uppercase text-center rounded-xl transition-all shadow-md shadow-viet-green/20"
+                            >
+                              {t('my_class.schedules.join_meet')}
+                            </a>
+                          )}
+                        </motion.div>
+                      </AnimatePresence>
+                    );
+                  })()
+                )}
+              </div>
             </div>
 
+            {/* Bạn cùng lớp Widget */}
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
-               <h3 className="text-xs font-black text-viet-text uppercase tracking-widest mb-4 flex items-center gap-2">
-                 <span>Users</span> {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
-               </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xs font-black text-viet-text uppercase tracking-widest flex items-center gap-2">
+                  <Users className="w-4 h-4 text-viet-green" aria-hidden="true" />
+                  {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
+                </h3>
+                {!overviewLoading && members.length > 5 && (
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => setMemberPage((prev) => (prev > 0 ? prev - 1 : Math.ceil(members.length / 5) - 1))}
+                      className="w-7 h-7 rounded-lg border border-viet-border hover:bg-slate-100 flex items-center justify-center text-viet-text transition-colors"
+                      aria-label="Trang thành viên trước"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <span className="text-[10px] font-extrabold text-viet-text-light px-1">
+                      {memberPage + 1}/{Math.ceil(members.length / 5)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setMemberPage((prev) => (prev < Math.ceil(members.length / 5) - 1 ? prev + 1 : 0))}
+                      className="w-7 h-7 rounded-lg border border-viet-border hover:bg-slate-100 flex items-center justify-center text-viet-text transition-colors"
+                      aria-label="Trang thành viên tiếp theo"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
                
-               <div className="space-y-3">
-                 {overviewLoading ? (
-                   <div className="space-y-2" aria-label="Đang tải thành viên lớp">
-                     <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
-                     <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
-                     <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
-                   </div>
-                 ) : members.length === 0 ? (
-                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
-                 ) : (
-                   members.map(m => (
-                     <div key={m.id} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-xl transition-colors">
-                        <div className="relative">
-                           <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-black border border-viet-border">
-                              {m.username.substring(0,2).toUpperCase()}
-                           </div>
-                           <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${m.isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
-                        </div>
-                        <div className="flex flex-col">
-                           <span className="text-xs font-bold text-viet-text leading-tight">{m.username}</span>
-                           <span className="text-[9px] font-bold text-viet-text-light/50 uppercase">
-                             {formatActiveTime(m.active_minutes)}
-                           </span>
-                        </div>
-                     </div>
-                   ))
-                 )}
-                 {membersHasMore && !overviewLoading && (
-                   <p className="text-center text-[10px] font-bold text-viet-text-light">Đang hiển thị 20 thành viên mới nhất</p>
-                 )}
-               </div>
+              <div>
+                {overviewLoading ? (
+                  <div className="space-y-2" aria-label="Đang tải thành viên lớp">
+                    <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+                    <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+                    <div className="h-10 animate-pulse rounded-xl bg-slate-100" />
+                  </div>
+                ) : members.length === 0 ? (
+                  <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
+                ) : (
+                  (() => {
+                    const pageSize = 5;
+                    const currentMembers = members.slice(memberPage * pageSize, (memberPage + 1) * pageSize);
+                    return (
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={memberPage}
+                          initial={{ opacity: 0, x: 10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="space-y-2.5"
+                        >
+                          {currentMembers.map(m => (
+                            <div key={m.id} className="flex items-center gap-3 p-2.5 hover:bg-slate-50 rounded-xl transition-colors border border-transparent hover:border-slate-100">
+                              <div className="relative shrink-0">
+                                <div className="w-9 h-9 rounded-xl bg-viet-green/10 text-viet-green flex items-center justify-center text-xs font-black border border-viet-green/20">
+                                  {m.username.substring(0,2).toUpperCase()}
+                                </div>
+                                <div className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${m.isOnline ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+                              </div>
+                              <div className="flex flex-col min-w-0">
+                                <span className="text-xs font-bold text-viet-text truncate leading-tight">{m.username}</span>
+                                <span className="text-[9px] font-bold text-viet-text-light/60 uppercase">
+                                  {formatActiveTime(m.active_minutes)}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </motion.div>
+                      </AnimatePresence>
+                    );
+                  })()
+                )}
+              </div>
             </div>
 
             <div className="bg-gradient-to-br from-viet-green to-emerald-600 p-6 rounded-[32px] shadow-lg shadow-viet-green/20 relative overflow-hidden">
