@@ -43,7 +43,6 @@ const lazyWithRetry = (componentImport) =>
 // Lazy Loaded Student Pages
 const Home = lazyWithRetry(() => import('@/pages/student/Home'));
 const PeriodicTable = lazyWithRetry(() => import('@/pages/student/PeriodicTable'));
-const Lessons = lazyWithRetry(() => import('@/pages/student/Lessons'));
 const LessonPage = lazyWithRetry(() => import('@/pages/student/LessonPage'));
 const Classroom = lazyWithRetry(() => import('@/pages/student/Classroom'));
 const MyClass = lazyWithRetry(() => import('@/pages/student/MyClass'));
