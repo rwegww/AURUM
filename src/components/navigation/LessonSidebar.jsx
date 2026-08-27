@@ -41,7 +41,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
   };
 
   return (
-    <aside className="w-[320px] min-h-[calc(100vh-96px)] bg-white border-r border-viet-border absolute top-0 left-0 z-40 flex flex-col shadow-sm">
+    <aside className="w-[320px] h-[calc(100vh-96px)] sticky top-[96px] shrink-0 bg-white border-r border-viet-border z-40 flex flex-col shadow-sm overflow-hidden">
       {/* Top Header / Context */}
       <div className="p-6 pt-5 pb-4 border-b border-viet-border bg-viet-bg/20">
         <Link 
@@ -71,7 +71,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
 
       </div>
 
-      <div className="flex-1 p-4 pt-6">
+      <div className="flex-1 p-4 pt-6 overflow-y-auto">
         <div className="mb-4 px-2">
           <h3 className="text-[11px] font-black text-[#3f3e3e] uppercase tracking-[2px] opacity-40">Cấu trúc chương trình</h3>
         </div>

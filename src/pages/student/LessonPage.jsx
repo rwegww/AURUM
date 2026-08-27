@@ -81,7 +81,7 @@ const LessonPage = () => {
 
   return (
     <div className="min-h-screen bg-viet-bg pt-[96px]">
-      <div className="flex relative">
+      <div className="flex relative items-start">
         {/* Sidebar - Only show for logged in nguoi_dung or if desired for all */}
         {isLoggedIn && (
           <LessonSidebar 
@@ -91,7 +91,7 @@ const LessonPage = () => {
           />
         )}
 
-        <main className={`flex-1 p-8 max-w-[1200px] ${isLoggedIn ? 'ml-[320px]' : 'mx-auto'}`}>
+        <main className={`flex-1 min-w-0 p-8 max-w-[1200px] ${isLoggedIn ? '' : 'mx-auto'}`}>
           <div className="mb-8">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className="px-3 py-1 bg-viet-green text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
