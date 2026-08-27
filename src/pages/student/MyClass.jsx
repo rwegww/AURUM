@@ -727,22 +727,22 @@ const MyClass = () => {
                   <Users className="w-4 h-4 text-viet-green" aria-hidden="true" />
                   {t('my_class.members.title', { defaultValue: 'Bạn cùng lớp' })}
                 </h3>
-                {!overviewLoading && members.length > 5 && (
+                {!overviewLoading && members.length > 3 && (
                   <div className="flex items-center gap-1">
                     <button
                       type="button"
-                      onClick={() => setMemberPage((prev) => (prev > 0 ? prev - 1 : Math.ceil(members.length / 5) - 1))}
+                      onClick={() => setMemberPage((prev) => (prev > 0 ? prev - 1 : Math.ceil(members.length / 3) - 1))}
                       className="w-7 h-7 rounded-lg border border-viet-border hover:bg-slate-100 flex items-center justify-center text-viet-text transition-colors"
                       aria-label="Trang thành viên trước"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
                     <span className="text-[10px] font-extrabold text-viet-text-light px-1">
-                      {memberPage + 1}/{Math.ceil(members.length / 5)}
+                      {memberPage + 1}/{Math.ceil(members.length / 3)}
                     </span>
                     <button
                       type="button"
-                      onClick={() => setMemberPage((prev) => (prev < Math.ceil(members.length / 5) - 1 ? prev + 1 : 0))}
+                      onClick={() => setMemberPage((prev) => (prev < Math.ceil(members.length / 3) - 1 ? prev + 1 : 0))}
                       className="w-7 h-7 rounded-lg border border-viet-border hover:bg-slate-100 flex items-center justify-center text-viet-text transition-colors"
                       aria-label="Trang thành viên tiếp theo"
                     >
@@ -763,7 +763,7 @@ const MyClass = () => {
                   <p className="text-xs font-medium text-viet-text-light text-center py-4 bg-slate-50 rounded-xl">{t('my_class.members.empty', { defaultValue: 'Chưa có thành viên nào' })}</p>
                 ) : (
                   (() => {
-                    const pageSize = 5;
+                    const pageSize = 3;
                     const currentMembers = members.slice(memberPage * pageSize, (memberPage + 1) * pageSize);
                     return (
                       <AnimatePresence mode="wait">
