@@ -442,11 +442,11 @@ const MyClass = () => {
   }
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-28 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <div className="h-screen bg-viet-bg pt-[96px] overflow-hidden">
+      <div className="max-w-[1400px] h-[calc(100vh-96px)] mx-auto flex items-start gap-6 px-4 sm:px-6 lg:px-8 overflow-hidden">
         
         {/* Lớp Sidebar */}
-        <div className="lg:col-span-3 space-y-4 lg:sticky lg:top-[96px] lg:self-start lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
+        <div className="w-[280px] xl:w-[300px] shrink-0 h-full overflow-y-auto custom-scrollbar pr-1 space-y-4 pb-8">
           <h2 className="text-xs font-black text-viet-text-light uppercase tracking-widest pl-2">{t('my_class.sidebar.title')}</h2>
           {lop.map(cls => (
             <button
@@ -485,7 +485,7 @@ const MyClass = () => {
 
         {/* Nội dung chính */}
         {selectedClass && (
-          <div className="lg:col-span-6 space-y-6">
+          <div className="flex-1 min-w-0 h-full overflow-y-auto custom-scrollbar pr-2 space-y-6 pb-12">
             <header className="bg-white p-8 rounded-[32px] border border-viet-border flex flex-col gap-2 relative overflow-hidden">
                <div className="absolute top-0 right-0 w-32 h-32 bg-viet-green/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
                <span className="px-3 py-1 bg-viet-green/10 text-viet-green text-[10px] font-black tracking-widest uppercase rounded-lg w-max">{t('my_class.header.badge')}</span>
@@ -643,7 +643,7 @@ const MyClass = () => {
 
         {/* Lịch học & Khác (Right Sidebar) */}
         {selectedClass && (
-          <div className="lg:col-span-3 space-y-6 lg:sticky lg:top-[96px] lg:self-start lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
+          <div className="w-[300px] xl:w-[320px] shrink-0 h-full overflow-y-auto custom-scrollbar pr-1 space-y-6 pb-8">
             {/* Lịch học Widget */}
             <div className="bg-white p-6 rounded-[32px] border border-viet-border shadow-sm">
               <div className="flex items-center justify-between mb-4">
