@@ -107,6 +107,30 @@ const FloatingWidget = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Fetch nhiem_vu if logged in
+  const fetchMissions = useCallback(async () => {
+    if (!isLoggedIn) return;
+    setLoadingMissions(true);
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/missions', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMissions(data);
+        const count = data.filter(m => m.isCompleted && !m.isClaimed).length;
+        setClaimableCount(count);
+      }
+    } catch (error) {
+      console.error('Failed to fetch nhiem_vu:', error);
+    } finally {
+      setLoadingMissions(false);
+    }
+  }, [isLoggedIn]);
+
   // Listen to global open & update events
   useEffect(() => {
     const handleOpenMissions = () => {
@@ -131,30 +155,6 @@ const FloatingWidget = () => {
       window.removeEventListener('aurum_missions_updated', handleMissionsUpdated);
     };
   }, [fetchMissions]);
-
-  // Fetch nhiem_vu if logged in
-  const fetchMissions = useCallback(async () => {
-    if (!isLoggedIn) return;
-    setLoadingMissions(true);
-    try {
-      const token = localStorage.getItem('token');
-      const res = await fetch('/api/missions', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setMissions(data);
-        const count = data.filter(m => m.isCompleted && !m.isClaimed).length;
-        setClaimableCount(count);
-      }
-    } catch (error) {
-      console.error('Failed to fetch nhiem_vu:', error);
-    } finally {
-      setLoadingMissions(false);
-    }
-  }, [isLoggedIn]);
 
   useEffect(() => {
     if (isLoggedIn) {
