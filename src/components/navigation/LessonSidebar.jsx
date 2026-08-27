@@ -41,7 +41,7 @@ const LessonSidebar = ({ grade, bai_hoc = [], currentLessonId }) => {
   };
 
   return (
-    <aside className="w-[320px] h-[calc(100vh-96px)] sticky top-[96px] shrink-0 bg-white border-r border-viet-border z-40 flex flex-col shadow-sm overflow-hidden">
+    <aside className="w-[320px] h-full shrink-0 bg-white border-r border-viet-border z-40 flex flex-col shadow-sm overflow-hidden">
       {/* Top Header / Context */}
       <div className="p-6 pt-5 pb-4 border-b border-viet-border bg-viet-bg/20">
         <Link 

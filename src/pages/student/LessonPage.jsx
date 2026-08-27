@@ -80,8 +80,8 @@ const LessonPage = () => {
   const sgkReference = formatSgkLessonReference(lesson);
 
   return (
-    <div className="min-h-screen bg-viet-bg pt-[96px]">
-      <div className="flex relative items-start">
+    <div className="h-screen bg-viet-bg pt-[96px] overflow-hidden">
+      <div className="flex h-[calc(100vh-96px)] relative items-start overflow-hidden">
         {/* Sidebar - Only show for logged in nguoi_dung or if desired for all */}
         {isLoggedIn && (
           <LessonSidebar 
@@ -91,9 +91,10 @@ const LessonPage = () => {
           />
         )}
 
-        <main className={`flex-1 min-w-0 p-8 max-w-[1200px] ${isLoggedIn ? '' : 'mx-auto'}`}>
-          <div className="mb-8">
-            <div className="flex flex-wrap items-center gap-2 mb-4">
+        <main className={`flex-1 min-w-0 h-full flex flex-col p-8 pt-4 pb-8 max-w-[1200px] overflow-hidden ${isLoggedIn ? '' : 'mx-auto'}`}>
+          {/* Header section - FIXED above the scrollable content */}
+          <div className="mb-6 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="px-3 py-1 bg-viet-green text-white text-[11px] font-bold rounded-lg uppercase tracking-wider">
                 {t('lesson_page.grade_label', { grade })}
               </span>
@@ -117,56 +118,57 @@ const LessonPage = () => {
             </h1>
           </div>
 
-          {video?.url && (
-          <div className="viet-card mb-8 aspect-video relative group border-none shadow-xl shadow-viet-green/5">
-             <div className="absolute top-0 left-0 w-full h-[60px] bg-white/90 backdrop-blur px-6 flex items-center gap-3 z-10 border-b border-viet-border rounded-t-[24px]">
-                <div className="w-8 h-8 rounded-full bg-viet-green flex items-center justify-center text-white shrink-0">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
-                    <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
-                  </svg>
-                </div>
-                <div className="flex flex-col">
-                   <h2 className="text-[13px] font-bold text-viet-text leading-none">{displayTitle} | Aurum TV</h2>
-                   <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Aurum</span>
-                </div>
-                <div className="ml-auto flex items-center gap-2">
-                   <span className="text-[10px] text-viet-text-light font-bold">{t('lesson_page.video.powered_by')}</span>
-                   <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
-                </div>
-             </div>
-             {isFileVideo(video.url) ? (
-                 <video 
-                    controls 
-                    className="w-full h-full pt-[60px] rounded-b-[24px] bg-black"
-                    src={video.url}
-                 />
-               ) : (
-                 <iframe 
-                    className="w-full h-full pt-[60px]"
-                    src={getVideoEmbedUrl(video.url)} 
-                    title={video.title}
-                    allowFullScreen
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  />
-             )}
-          </div>
-          )}
+          {/* Scrollable Container (Inside the Blue Box) */}
+          <div className="flex-1 overflow-y-auto pr-2 space-y-8 custom-scrollbar">
+            {video?.url && (
+            <div className="viet-card aspect-video relative group border-none shadow-xl shadow-viet-green/5 shrink-0">
+               <div className="absolute top-0 left-0 w-full h-[60px] bg-white/90 backdrop-blur px-6 flex items-center gap-3 z-10 border-b border-viet-border rounded-t-[24px]">
+                  <div className="w-8 h-8 rounded-full bg-viet-green flex items-center justify-center text-white shrink-0">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                      <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                    </svg>
+                  </div>
+                  <div className="flex flex-col">
+                     <h2 className="text-[13px] font-bold text-viet-text leading-none">{displayTitle} | Aurum TV</h2>
+                     <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Aurum</span>
+                  </div>
+                  <div className="ml-auto flex items-center gap-2">
+                     <span className="text-[10px] text-viet-text-light font-bold">{t('lesson_page.video.powered_by')}</span>
+                     <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
+                  </div>
+               </div>
+               {isFileVideo(video.url) ? (
+                   <video 
+                      controls 
+                      className="w-full h-full pt-[60px] rounded-b-[24px] bg-black"
+                      src={video.url}
+                   />
+                 ) : (
+                   <iframe 
+                      className="w-full h-full pt-[60px]"
+                      src={getVideoEmbedUrl(video.url)} 
+                      title={video.title}
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+               )}
+            </div>
+            )}
 
-
-
-          <div className="mb-12">
-            <div className="viet-card p-8">
-              <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
-                 <h3 className="text-[20px] font-bold">{t('lesson_page.content_title')}</h3>
-              </div>
-              <div className="prose prose-slate max-w-none">
-                <TheoryRenderer modules={lesson.theoryModules} />
+            <div>
+              <div className="viet-card p-8">
+                <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
+                   <h3 className="text-[20px] font-bold">{t('lesson_page.content_title')}</h3>
+                </div>
+                <div className="prose prose-slate max-w-none">
+                  <TheoryRenderer modules={lesson.theoryModules} />
+                </div>
               </div>
             </div>
-          </div>
 
-          <DiscussionBoard lessonId={lesson.lessonId} />
+            <DiscussionBoard lessonId={lesson.lessonId} />
+          </div>
         </main>
       </div>
     </div>
