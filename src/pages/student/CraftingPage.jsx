@@ -358,6 +358,8 @@ const CraftingPage = () => {
       if (tasksRes.ok) {
         setTasks(await tasksRes.json());
       }
+      window.dispatchEvent(new CustomEvent('aurum_missions_updated'));
+      window.dispatchEvent(new CustomEvent('aurum_user_updated'));
       
       // Show reward notification
       const task = tasks.find(t => t.id === taskId);
@@ -376,6 +378,8 @@ const CraftingPage = () => {
       } catch (refreshError) {
         console.warn('Đã nhận thưởng nhưng chưa làm mới được hồ sơ:', refreshError);
       }
+      window.dispatchEvent(new CustomEvent('aurum_missions_updated'));
+      window.dispatchEvent(new CustomEvent('aurum_user_updated'));
     } catch (error) {
       setNotice({ type: 'error', text: error.message });
     } finally {

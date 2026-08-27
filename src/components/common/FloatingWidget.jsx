@@ -107,7 +107,7 @@ const FloatingWidget = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Listen to global open events
+  // Listen to global open & update events
   useEffect(() => {
     const handleOpenMissions = () => {
       setIsExpanded(true);
@@ -117,15 +117,20 @@ const FloatingWidget = () => {
       setIsExpanded(true);
       setActiveTab('phan_hoi');
     };
+    const handleMissionsUpdated = () => {
+      fetchMissions();
+    };
 
     window.addEventListener('aurum_open_nhiem_vu', handleOpenMissions);
     window.addEventListener('aurum_open_phan_hoi', handleOpenFeedback);
+    window.addEventListener('aurum_missions_updated', handleMissionsUpdated);
 
     return () => {
       window.removeEventListener('aurum_open_nhiem_vu', handleOpenMissions);
       window.removeEventListener('aurum_open_phan_hoi', handleOpenFeedback);
+      window.removeEventListener('aurum_missions_updated', handleMissionsUpdated);
     };
-  }, []);
+  }, [fetchMissions]);
 
   // Fetch nhiem_vu if logged in
   const fetchMissions = useCallback(async () => {
@@ -198,6 +203,8 @@ const FloatingWidget = () => {
           } else {
             alert(`Nhận thành công +${data.xpGained || 0} XP!`);
           }
+          window.dispatchEvent(new CustomEvent('aurum_missions_updated'));
+          window.dispatchEvent(new CustomEvent('aurum_user_updated'));
           await fetchMissions();
           await refreshUser?.();
         }
@@ -275,7 +282,7 @@ const FloatingWidget = () => {
     }
   };
 
-  const filteredMissions = sortMissionsByReward(nhiem_vu.filter(m => m.type === nhiem_vuActiveTab));
+  const filteredMissions = sortMissionsByReward(nhiem_vu.filter(m => m.type === nhiem_vuActiveTab && !m.isClaimed));
 
   return (
     <>
