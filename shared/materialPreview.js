@@ -33,6 +33,12 @@ export const getMaterialPreviewKind = (material) => {
   return 'unsupported';
 };
 
+export const getMaterialPdfPreviewUrl = (material) => (
+  material?.id
+    ? `/api/materials/${encodeURIComponent(material.id)}/pdf`
+    : ''
+);
+
 export const isAllowedMaterialPreviewUrl = (value) => {
   try {
     const parsed = new URL(value);
@@ -47,4 +53,3 @@ export const normalizeRating = (value) => {
   if (!Number.isFinite(parsed)) return 0;
   return Math.min(5, Math.max(0, parsed));
 };
-

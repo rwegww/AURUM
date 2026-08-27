@@ -7,6 +7,7 @@ import { extractMaterialDocumentPreview } from '../api/_lib/materialDocumentPrev
 import RatingStars from '../src/components/library/RatingStars';
 import {
   getMaterialFileType,
+  getMaterialPdfPreviewUrl,
   getMaterialPreviewKind,
   isAllowedMaterialPreviewUrl,
   normalizeRating,
@@ -25,6 +26,19 @@ describe('xem trước học liệu', () => {
     const material = { file_url: 'https://res.cloudinary.com/demo/raw/upload/de-thi.DOCX?x=1' };
     expect(getMaterialFileType(material)).toBe('docx');
     expect(getMaterialPreviewKind(material)).toBe('document');
+  });
+
+  it('dùng URL cùng tên miền cho iframe PDF thay vì nhúng Cloudinary', () => {
+    const material = {
+      id: 'tai-lieu/co-khoang-trang',
+      file_url: 'https://api.cloudinary.com/v1_1/demo/raw/download?api_key=secret',
+      file_type: 'pdf',
+    };
+
+    const previewUrl = getMaterialPdfPreviewUrl(material);
+    expect(previewUrl).toBe('/api/materials/tai-lieu%2Fco-khoang-trang/pdf');
+    expect(previewUrl).not.toContain('cloudinary.com');
+    expect(previewUrl).not.toContain('api_key');
   });
 
   it('chỉ cho máy chủ tải tệp xem trước từ Cloudinary qua HTTPS', () => {
@@ -63,4 +77,3 @@ describe('hiển thị đánh giá học liệu', () => {
     expect(normalizeRating('3')).toBe(3);
   });
 });
-

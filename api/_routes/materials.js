@@ -1,4 +1,5 @@
 import express from 'express';
+import { Readable } from 'node:stream';
 import { supabase } from '../_lib/supabase.js';
 import { auth, authenticateToken, extractBearerToken } from '../_middleware/auth.js';
 import User from '../_models/User.js';
@@ -12,6 +13,7 @@ const DEFAULT_FEEDBACK_PAGE_SIZE = 10;
 const MAX_PAGE_SIZE = 60;
 const MAX_PREVIEW_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const PREVIEW_FETCH_TIMEOUT_MS = 15_000;
+const PDF_PROXY_TIMEOUT_MS = 30_000;
 const MATERIAL_LIST_COLUMNS = [
   'id',
   'tieu_de',
@@ -321,6 +323,78 @@ router.get('/:id/preview', async (req, res) => {
     const message = status === 504
       ? 'Tạo bản xem trước quá thời gian chờ. Vui lòng thử lại.'
       : (err.status ? err.message : 'Không thể tạo bản xem trước cho tài liệu này.');
+    return res.status(status).json({ message, error: err.message });
+  }
+});
+
+// Proxy PDFs through the app origin so browser tracking prevention does not
+// block Cloudinary's embedded viewer storage. Byte ranges keep PDF seeking fast.
+router.get('/:id/pdf', async (req, res) => {
+  try {
+    const { data: material, error } = await supabase
+      .from('hoc_lieu')
+      .select('id,file_url,file_type')
+      .eq('id', req.params.id)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error;
+    if (!material) {
+      return res.status(404).json({ message: 'Không tìm thấy tài liệu này.' });
+    }
+
+    if (normalizeFileType(material.file_type) !== 'pdf') {
+      return res.status(415).json({ message: 'Tài liệu này không phải tệp PDF.' });
+    }
+
+    if (!isAllowedMaterialPreviewUrl(material.file_url)) {
+      return res.status(400).json({ message: 'Nguồn tệp không được phép dùng để xem trước.' });
+    }
+
+    const range = normalizeText(req.get('Range'));
+    if (range && (range.length > 80 || !/^bytes=\d*-\d*$/.test(range))) {
+      return res.status(416).json({ message: 'Khoảng byte được yêu cầu không hợp lệ.' });
+    }
+
+    const headers = {
+      Accept: 'application/pdf',
+      'Accept-Encoding': 'identity',
+      ...(range ? { Range: range } : {}),
+    };
+    const upstreamResponse = await fetch(material.file_url, {
+      headers,
+      redirect: 'error',
+      signal: AbortSignal.timeout(PDF_PROXY_TIMEOUT_MS),
+    });
+
+    if (upstreamResponse.status === 416) {
+      const contentRange = upstreamResponse.headers.get('content-range');
+      if (contentRange) res.set('Content-Range', contentRange);
+      return res.status(416).end();
+    }
+    if (!upstreamResponse.ok || !upstreamResponse.body) {
+      return res.status(502).json({ message: 'Tệp PDF gốc hiện không còn khả dụng.' });
+    }
+
+    res.status(upstreamResponse.status);
+    res.set('Content-Type', upstreamResponse.headers.get('content-type') || 'application/pdf');
+    res.set('Content-Disposition', 'inline');
+    res.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+    res.set('X-Content-Type-Options', 'nosniff');
+
+    for (const headerName of ['content-length', 'content-range', 'accept-ranges', 'etag', 'last-modified']) {
+      const value = upstreamResponse.headers.get(headerName);
+      if (value) res.set(headerName, value);
+    }
+
+    const fileStream = Readable.fromWeb(upstreamResponse.body);
+    fileStream.on('error', (streamError) => res.destroy(streamError));
+    fileStream.pipe(res);
+    return undefined;
+  } catch (err) {
+    const status = err.name === 'TimeoutError' ? 504 : 500;
+    const message = status === 504
+      ? 'Tải bản xem trước PDF quá thời gian chờ. Vui lòng thử lại.'
+      : 'Không thể tải bản xem trước PDF lúc này.';
     return res.status(status).json({ message, error: err.message });
   }
 });

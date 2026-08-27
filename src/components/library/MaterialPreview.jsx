@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ExternalLink, FileText, Loader2, TriangleAlert } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { getMaterialPreviewKind } from '../../../shared/materialPreview';
+import { getMaterialPdfPreviewUrl, getMaterialPreviewKind } from '../../../shared/materialPreview';
 
 const DocumentPreview = ({ material }) => {
   const { t } = useTranslation();
@@ -110,7 +110,7 @@ const MaterialPreview = ({ material }) => {
   if (previewKind === 'pdf') {
     return (
       <iframe
-        src={material.file_url}
+        src={getMaterialPdfPreviewUrl(material)}
         className="h-[650px] w-full rounded-xl border-none bg-white"
         title={t('material_detail.pdf_preview_title', { title: material.title })}
       />
@@ -140,4 +140,3 @@ const MaterialPreview = ({ material }) => {
 };
 
 export default MaterialPreview;
-
