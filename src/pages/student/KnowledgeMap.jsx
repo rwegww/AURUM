@@ -1,11 +1,10 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CHEMISTRY_KNOWLEDGE_BASE } from '@/data/theory';
-import { CORE_KNOWLEDGE_LESSONS } from '@/data/coreKnowledge';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { CheckCircle2, Lock, ChevronRight, ArrowLeft, Image as ImageIcon } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Lock, ChevronRight, ArrowLeft, Image as ImageIcon, LoaderCircle } from 'lucide-react';
 import InfographicBook from '@/components/lessons/InfographicBook';
+import { buildKnowledgeMapTree } from '@/utils/knowledgeMapData';
 
 // Grade theme colors
 const GRADE_THEME = {
@@ -25,54 +24,52 @@ const KnowledgeMap = () => {
   const [expandedGrade, setExpandedGrade] = useState(null);
   const [expandedLesson, setExpandedLesson] = useState(null);
   const [selectedInfographicLesson, setSelectedInfographicLesson] = useState(null);
+  const [lessons, setLessons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [reloadKey, setReloadKey] = useState(0);
 
   const unlockedLessons = user?.unlockedLessons || [];
+  const canReviewAllLessons = user?.role === 'admin' || user?.role === 'teacher';
 
-  // Build tree: Grade → Lesson → Knowledge Topics
-  const mindMapTree = useMemo(() => {
-    const lessonToTopics = {};
-    Object.entries(CORE_KNOWLEDGE_LESSONS).forEach(([topicId, bai_hoc]) => {
-      const topicData = CHEMISTRY_KNOWLEDGE_BASE.find(t => t.id === topicId);
-      if (!topicData) return;
-      bai_hoc.forEach(lesson => {
-        const key = `${lesson.classId}_${lesson.lessonId}`;
-        if (!lessonToTopics[key]) {
-          lessonToTopics[key] = {
-            classId: lesson.classId,
-            lessonId: lesson.lessonId,
-            title: lesson.title,
-            topics: []
-          };
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadKnowledgeMap = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const response = await fetch('/api/lessons?view=knowledge', { signal: controller.signal });
+        const data = await response.json().catch(() => []);
+        if (!response.ok || !Array.isArray(data)) {
+          throw new Error('Không thể tải dữ liệu bản đồ tri thức.');
         }
-        if (!lessonToTopics[key].topics.find(t => t.id === topicId)) {
-          lessonToTopics[key].topics.push(topicData);
+        setLessons(data);
+      } catch (loadError) {
+        if (loadError.name !== 'AbortError') {
+          setError(loadError.message || 'Không thể tải dữ liệu bản đồ tri thức.');
         }
-      });
-    });
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    };
 
-    const gradeMap = {};
-    Object.values(lessonToTopics).forEach(lesson => {
-      const g = lesson.classId;
-      if (!gradeMap[g]) gradeMap[g] = [];
-      gradeMap[g].push(lesson);
-    });
+    loadKnowledgeMap();
+    return () => controller.abort();
+  }, [reloadKey]);
 
-    Object.keys(gradeMap).forEach(g => {
-      gradeMap[g].sort((a, b) => a.lessonId.localeCompare(b.lessonId));
-    });
-
-    return gradeMap;
-  }, []);
+  // Build from the same lesson records and theory modules used by the Journey.
+  const mindMapTree = useMemo(() => buildKnowledgeMapTree(lessons), [lessons]);
+  const mapLessons = useMemo(() => Object.values(mindMapTree).flat(), [mindMapTree]);
 
   const grades = [6, 7, 8, 9, 10, 11, 12];
 
-  const totalTopics = CHEMISTRY_KNOWLEDGE_BASE.length;
-  const completedTopics = CHEMISTRY_KNOWLEDGE_BASE.filter(topic => {
-    const bai_hoc = CORE_KNOWLEDGE_LESSONS[topic.id] || [];
-    return bai_hoc.some(l => unlockedLessons.includes(l.lessonId));
-  }).length;
+  const totalTopics = mapLessons.reduce((total, lesson) => total + lesson.topics.length, 0);
+  const completedTopics = mapLessons
+    .filter(lesson => canReviewAllLessons || unlockedLessons.includes(lesson.lessonId))
+    .reduce((total, lesson) => total + lesson.topics.length, 0);
 
-  const isLessonDone = (lessonId) => unlockedLessons.includes(lessonId);
+  const isLessonDone = (lessonId) => canReviewAllLessons || unlockedLessons.includes(lessonId);
 
   const getGradeProgress = (grade) => {
     const bai_hoc = mindMapTree[grade] || [];
@@ -117,6 +114,28 @@ const KnowledgeMap = () => {
 
         {/* ====== HORIZONTAL MIND MAP TREE ====== */}
         <div className="flex-1 overflow-x-auto overflow-y-auto custom-scrollbar bg-white/50 rounded-3xl border-2 border-slate-100 p-8 shadow-inner relative min-h-[600px]">
+          {loading && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 rounded-3xl bg-white/85 text-slate-500 backdrop-blur-sm">
+              <LoaderCircle className="animate-spin text-viet-green" size={30} />
+              <p className="text-sm font-bold">Đang đồng bộ nội dung từ Hành trình...</p>
+            </div>
+          )}
+          {!loading && error && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 rounded-3xl bg-white px-6 text-center">
+              <AlertCircle className="text-red-500" size={34} />
+              <div>
+                <p className="font-black text-slate-800">Chưa tải được bản đồ tri thức</p>
+                <p className="mt-1 text-sm font-medium text-slate-500">{error}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setReloadKey(key => key + 1)}
+                className="rounded-xl bg-viet-green px-5 py-2.5 text-sm font-black text-white transition-transform hover:scale-105"
+              >
+                Thử lại
+              </button>
+            </div>
+          )}
           <div className="flex flex-row items-center min-w-max h-full py-10">
 
             {/* 1. ROOT NODE */}
@@ -229,7 +248,7 @@ const KnowledgeMap = () => {
 
                               const lessonDone = isLessonDone(lesson.lessonId);
                               const isLessonExpanded = expandedLesson === lesson.lessonId;
-                              const shortTitle = lesson.title.replace(/^Bài \d+: /, '');
+                              const shortTitle = lesson.title.replace(/^Bài\s+\d+\s*[.:]\s*/i, '');
 
                               return (
                                 <div key={lesson.lessonId} className="flex flex-row items-center relative">
@@ -310,8 +329,7 @@ const KnowledgeMap = () => {
                                             const isLastTopic = tIdx === lesson.topics.length - 1;
                                             const isOnlyTopic = lesson.topics.length === 1;
 
-                                            const topicLessons = CORE_KNOWLEDGE_LESSONS[topic.id] || [];
-                                            const topicDone = topicLessons.some(l => unlockedLessons.includes(l.lessonId));
+                                            const topicDone = lessonDone;
 
                                             return (
                                               <div key={topic.id} className="flex flex-row items-center relative">
@@ -351,9 +369,14 @@ const KnowledgeMap = () => {
                                                     />
                                                     <div className="flex-1 min-w-0">
                                                       <p className={`text-[12.5px] font-bold leading-snug ${topicDone ? 'text-slate-800' : 'text-slate-500'
-                                                        }`}>
+                                                          }`}>
                                                         {topic.title}
                                                       </p>
+                                                      {topic.description && (
+                                                        <p className="mt-1 line-clamp-2 text-[10px] font-medium leading-relaxed text-slate-400">
+                                                          {topic.description}
+                                                        </p>
+                                                      )}
                                                     </div>
                                                     {topicDone && (
                                                       <CheckCircle2 size={14} className="text-viet-green shrink-0" />
@@ -384,7 +407,8 @@ const KnowledgeMap = () => {
                                                   animate={{ opacity: 1 }}
                                                   onClick={() => {
                                                     const orderMatch = lesson.lessonId.match(/bai(\d+)/i);
-                                                    const order = orderMatch ? parseInt(orderMatch[1], 10) : 1;
+                                                    const order = Number(lesson.order)
+                                                      || (orderMatch ? parseInt(orderMatch[1], 10) : 1);
 
                                                     setSelectedInfographicLesson({
                                                       ...lesson,

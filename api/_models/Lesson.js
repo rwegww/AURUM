@@ -15,6 +15,10 @@ const LESSON_SUMMARY_COLUMN_NAMES = [
   'updated_at',
 ];
 const LESSON_SUMMARY_COLUMNS = LESSON_SUMMARY_COLUMN_NAMES.join(',');
+const LESSON_KNOWLEDGE_COLUMNS = [
+  ...LESSON_SUMMARY_COLUMN_NAMES,
+  'module_ly_thuyet',
+].join(',');
 const LESSON_JOURNEY_COLUMNS = [
   ...LESSON_SUMMARY_COLUMN_NAMES,
   'module_video',
@@ -100,9 +104,11 @@ export const Lesson = {
   async find(query = {}) {
     const columns = query.view === 'summary'
       ? LESSON_SUMMARY_COLUMNS
-      : query.view === 'journey'
-        ? LESSON_JOURNEY_COLUMNS
-        : '*';
+      : query.view === 'knowledge'
+        ? LESSON_KNOWLEDGE_COLUMNS
+        : query.view === 'journey'
+          ? LESSON_JOURNEY_COLUMNS
+          : '*';
     let supabaseQuery = supabase
       .from(LESSON_TABLE)
       .select(columns);

@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     const requestedGradeLevelId = gradeLevelId ?? classId;
     if (requestedGradeLevelId) query.gradeLevelId = parseInt(requestedGradeLevelId);
     if (programId) query.programId = programId;
-    query.view = ['summary', 'journey'].includes(view) ? view : 'full';
+    query.view = ['summary', 'journey', 'knowledge'].includes(view) ? view : 'full';
 
     const bai_hoc = await Lesson.find(query);
     
