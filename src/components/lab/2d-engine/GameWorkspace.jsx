@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useLabStore from '../three/magic-lab/store';
 import Beaker2D from './Beaker2D';
 import PourEffect2D from './PourEffect2D';
+import { getCurrentBeakerDisplay } from '../../../utils/labDisplay';
 
 const GameWorkspace = () => {
   const beakers = useLabStore(state => state.beakers);
@@ -140,41 +141,10 @@ const GameWorkspace = () => {
                 {/* Left Side Display: Chemical Inputs & Reaction Products */}
                 <AnimatePresence>
                   {(() => {
-                    const added = beaker.addedHistory || [];
-                    const yields = beaker.yieldHistory || [];
-                    const contents = beaker.contents || [];
+                    const materialBatches = beaker.materialBatches || [];
+                    if (materialBatches.length === 0) return null;
 
-                    if (added.length === 0 && contents.length === 0 && yields.length === 0) return null;
-
-                    // Aggregate added inputs strictly from addedHistory
-                    const inputMap = new Map();
-                    added.forEach(item => {
-                      const key = `${item.formula}_${item.unit}`;
-                      if (!inputMap.has(key)) {
-                        inputMap.set(key, { formula: item.formula, name: item.name, amount: 0, unit: item.unit });
-                      }
-                      inputMap.get(key).amount += (item.amount || 0);
-                    });
-
-                    // Aggregate yields / products
-                    const yieldMap = new Map();
-                    yields.forEach(item => {
-                      const key = `${item.formula}_${item.unit}`;
-                      if (!yieldMap.has(key)) {
-                        yieldMap.set(key, {
-                          formula: item.formula,
-                          name: item.name,
-                          amount: 0,
-                          unit: item.unit,
-                          state: item.state,
-                          isPrecipitate: item.isPrecipitate,
-                        });
-                      }
-                      yieldMap.get(key).amount += (item.amount || 0);
-                    });
-
-                    const inputList = Array.from(inputMap.values());
-                    const yieldList = Array.from(yieldMap.values());
+                    const { inputList, productList } = getCurrentBeakerDisplay(materialBatches);
 
                     return (
                       <motion.div 
@@ -188,7 +158,7 @@ const GameWorkspace = () => {
                           <div>
                             <div className="flex items-center gap-1.5 mb-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
-                              <span className="text-[9px] font-black uppercase tracking-wider text-blue-400">Đã cho vào</span>
+                              <span className="text-[9px] font-black uppercase tracking-wider text-blue-400">Hiện có trong cốc</span>
                             </div>
                             <div className="space-y-0.5 pl-2.5 border-l border-blue-500/30 text-xs font-medium">
                               {inputList.map((inp, idx) => (
@@ -202,14 +172,14 @@ const GameWorkspace = () => {
                         )}
 
                         {/* Reaction Yields / Products */}
-                        {yieldList.length > 0 && (
+                        {productList.length > 0 && (
                           <div className="pt-1.5 border-t border-white/10">
                             <div className="flex items-center gap-1.5 mb-1">
                               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                               <span className="text-[9px] font-black uppercase tracking-wider text-emerald-400">Sản phẩm thu được</span>
                             </div>
                             <div className="space-y-0.5 pl-2.5 border-l border-emerald-500/30 text-xs font-medium">
-                              {yieldList.map((yd, idx) => (
+                              {productList.map((yd, idx) => (
                                 <div key={idx} className="flex justify-between items-center gap-2">
                                   <span className="font-bold text-emerald-300">
                                     {yd.formula} {yd.state === 'gas' ? '↑' : (yd.isPrecipitate ? '↓' : '')}

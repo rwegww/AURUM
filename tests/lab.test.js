@@ -19,6 +19,7 @@ import {
 } from '../src/data/labInventory.js';
 import useLabStore from '../src/components/lab/three/magic-lab/store.js';
 import { enqueueLabProgressSave } from '../src/utils/labProgress.js';
+import { getCurrentBeakerDisplay } from '../src/utils/labDisplay.js';
 
 afterEach(() => {
   vi.clearAllTimers();
@@ -274,6 +275,31 @@ describe('Magic Lab store integration', () => {
     const beaker = useLabStore.getState().beakers[0];
     expect(beaker.reactionMessage).toContain('Điện phân nước');
     expect(beaker.materialBatches.map(batch => batch.formula).sort()).toEqual(['H2', 'O2']);
+  });
+
+  it('hides poured-out material while retaining it in the operation history', () => {
+    vi.useFakeTimers();
+    useLabStore.getState().resetLabSession(`test-pour-display-${Date.now()}`);
+    useLabStore.getState().setData(chemicals, [], chemicals.map(item => item.formula));
+    useLabStore.getState().addBeaker();
+
+    useLabStore.getState().setActiveBeaker(0);
+    useLabStore.getState().dropToBeaker('H2O');
+    vi.advanceTimersByTime(800);
+    useLabStore.getState().setActiveBeaker(1);
+    useLabStore.getState().dropToBeaker('H2O');
+    vi.advanceTimersByTime(800);
+    useLabStore.getState().pourToBeaker(1, 0);
+
+    const [target, source] = useLabStore.getState().beakers;
+    expect(source.addedHistory).toHaveLength(1);
+    expect(getCurrentBeakerDisplay(source.materialBatches)).toEqual({
+      inputList: [],
+      productList: [],
+    });
+    expect(getCurrentBeakerDisplay(target.materialBatches).inputList).toEqual([
+      expect.objectContaining({ formula: 'H2O', amount: 100, unit: 'ml' }),
+    ]);
   });
 
   it('evaporates only the liquid phase and preserves gas in the vessel', () => {
