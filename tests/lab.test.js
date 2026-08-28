@@ -18,6 +18,7 @@ import {
   getLevelFromXP,
 } from '../src/data/labInventory.js';
 import useLabStore from '../src/components/lab/three/magic-lab/store.js';
+import { enqueueLabProgressSave } from '../src/utils/labProgress.js';
 
 afterEach(() => {
   vi.clearAllTimers();
@@ -234,6 +235,47 @@ describe('Magic Lab store integration', () => {
     expect(batches.find(batch => batch.formula === 'H2O')).toMatchObject({ amount: 0.075, unit: 'g' });
   });
 
+  it('does not request electrolysis when water is only added to a beaker', () => {
+    vi.useFakeTimers();
+    const electrolysis = {
+      id: 'water-electrolysis',
+      name: 'Điện phân nước',
+      reactants: [{ formula: 'H2O', coeff: 2 }],
+      products: [{ formula: 'H2', coeff: 2 }, { formula: 'O2', coeff: 1 }],
+      conditions: 'Điện phân',
+    };
+
+    useLabStore.getState().resetLabSession(`test-water-idle-${Date.now()}`);
+    useLabStore.getState().setData(chemicals, [electrolysis], chemicals.map(item => item.formula));
+    useLabStore.getState().dropToBeaker('H2O');
+    vi.advanceTimersByTime(800);
+
+    const beaker = useLabStore.getState().beakers[0];
+    expect(beaker.reactionMessage).not.toContain('Thiếu điều kiện');
+    expect(beaker.materialBatches.map(batch => batch.formula)).toEqual(['H2O']);
+  });
+
+  it('still electrolyzes water after electrolysis is explicitly enabled', () => {
+    vi.useFakeTimers();
+    const electrolysis = {
+      id: 'water-electrolysis-active',
+      name: 'Điện phân nước',
+      reactants: [{ formula: 'H2O', coeff: 2 }],
+      products: [{ formula: 'H2', coeff: 2 }, { formula: 'O2', coeff: 1 }],
+      conditions: 'Điện phân',
+    };
+
+    useLabStore.getState().resetLabSession(`test-water-active-${Date.now()}`);
+    useLabStore.getState().setData(chemicals, [electrolysis], chemicals.map(item => item.formula));
+    useLabStore.getState().dropToBeaker('H2O');
+    vi.advanceTimersByTime(800);
+    useLabStore.getState().toggleElectrolysis();
+
+    const beaker = useLabStore.getState().beakers[0];
+    expect(beaker.reactionMessage).toContain('Điện phân nước');
+    expect(beaker.materialBatches.map(batch => batch.formula).sort()).toEqual(['H2', 'O2']);
+  });
+
   it('evaporates only the liquid phase and preserves gas in the vessel', () => {
     vi.useFakeTimers();
     useLabStore.getState().resetLabSession(`test-evaporation-${Date.now()}`);
@@ -261,6 +303,32 @@ describe('Magic Lab store integration', () => {
     const current = useLabStore.getState().beakers[0];
     expect(current.contents.map(item => item.formula)).toEqual(['O2']);
     expect(current.materialBatches.map(item => item.formula)).toEqual(['O2']);
+  });
+});
+
+describe('Lab progress save queue', () => {
+  it('waits for the preceding discovery to be saved before saving the next one', async () => {
+    const queueRef = { current: Promise.resolve() };
+    const events = [];
+    let finishFirst;
+
+    const firstSave = enqueueLabProgressSave(queueRef, async () => {
+      events.push('first:start');
+      await new Promise(resolve => { finishFirst = resolve; });
+      events.push('first:end');
+    });
+    const secondSave = enqueueLabProgressSave(queueRef, async () => {
+      events.push('second:start');
+      events.push('second:end');
+    });
+
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(events).toEqual(['first:start']);
+
+    finishFirst();
+    await Promise.all([firstSave, secondSave]);
+    expect(events).toEqual(['first:start', 'first:end', 'second:start', 'second:end']);
   });
 });
 

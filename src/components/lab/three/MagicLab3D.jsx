@@ -11,6 +11,7 @@ import { useAuth } from '@/context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { reactions as staticReactionsData } from '@/data/reactions';
 import DiscoveryJournalModal from '@/components/lab/DiscoveryJournalModal';
+import { enqueueLabProgressSave } from '@/utils/labProgress';
 
 const normalize = (f) => {
   if (!f) return "";
@@ -254,6 +255,7 @@ const MagicLab3D = () => {
   const [dbChemicals, setDbChemicals] = useState([]);
   const [discoveredFormulas, setDiscoveredFormulas] = useState([]);
   const discoveredFormulasRef = useRef([]);
+  const progressSaveQueueRef = useRef(Promise.resolve());
   const [isLoading, setIsLoading] = useState(true);
   const [labLoadError, setLabLoadError] = useState('');
   const [loadVersion, setLoadVersion] = useState(0);
@@ -562,24 +564,31 @@ const MagicLab3D = () => {
       
       if (isLoggedIn) {
         const token = localStorage.getItem('token');
-        void (async () => {
-          try {
-            const response = await fetch('/api/lab/unlock', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-              body: JSON.stringify({ formulas: allNewFormulas }),
-            });
-            const data = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(data.message || 'Không thể lưu khám phá.');
+        const queuedSave = enqueueLabProgressSave(progressSaveQueueRef, async () => {
+          const response = await fetch('/api/lab/unlock', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ formulas: allNewFormulas }),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) throw new Error(data.message || 'Không thể lưu khám phá.');
+          return data;
+        });
+
+        void queuedSave
+          .then(async () => {
+            // Chỉ lần lưu cuối cùng mới đồng bộ hồ sơ để không ghi đè tiến độ lạc hậu.
+            if (progressSaveQueueRef.current !== queuedSave) return;
             try {
               await refreshUser();
             } catch (refreshError) {
               console.warn('Đã lưu khám phá nhưng chưa làm mới được hồ sơ:', refreshError);
             }
-          } catch (error) {
+          })
+          .catch((error) => {
             console.error("Failed to save progress:", error);
             const failedFormulas = new Set(allNewFormulas.map(formula => normalize(formula)));
             const rollback = discoveredFormulasRef.current.filter(formula => (
@@ -590,8 +599,7 @@ const MagicLab3D = () => {
             setUnlocked(rollback);
             setNewDiscovery(null);
             setProgressSaveError(`${error.message} Tiến độ cục bộ đã được hoàn tác.`);
-          }
-        })();
+          });
       } else {
         localStorage.setItem('chem_odyssey_discovered:guest', JSON.stringify(updated));
       }

@@ -40,5 +40,7 @@ scratch/
 backups/
 anh/
 *.zip
+artifacts/
+
 
 

@@ -438,6 +438,9 @@ const useLabStore = create((set, get) => ({
     const uniqueFormulas = Array.from(new Set(formulas.map(normalizeFormula)));
     return reactions.find(rx => {
       const rxReactants = Array.from(new Set((rx.reactants || []).map(r => normalizeFormula(r.formula))));
+      // Phản ứng một chất (ví dụ điện phân H₂O) chỉ nên được gợi ý khi
+      // người dùng chủ động bật thiết bị, không phải ngay lúc vừa cho chất vào cốc.
+      if (rxReactants.length < 2) return false;
       return rxReactants.every(r => uniqueFormulas.includes(r));
     });
   },
