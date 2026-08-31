@@ -161,11 +161,18 @@ export const learningApi = {
       body: { lessonId, level, stars }
     }),
 
-  completePlacement: (token, grade) =>
-    apiRequest("/api/user/placement-pass", {
+  startOptionalPlacement: (token, grade) =>
+    apiRequest("/api/user/placement/optional/start", {
       method: "POST",
       token,
       body: { grade }
+    }),
+
+  completePlacement: (token, { attemptId, answers }) =>
+    apiRequest("/api/user/placement-pass", {
+      method: "POST",
+      token,
+      body: { attemptId, answers }
     }),
 
   startPlacement: (token, grade) =>

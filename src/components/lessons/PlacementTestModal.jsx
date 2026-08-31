@@ -1,255 +1,237 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, Trophy, XCircle, GraduationCap, BookOpen } from 'lucide';
+import { AnimatePresence, motion } from 'framer-motion';
+import { BookOpen, GraduationCap, Trophy } from 'lucide';
 import MorphIcon from '@/components/common/MorphIcon';
-import { useAuth } from '@/context/AuthContext';
 import MathText from '@/components/common/MathText';
+import { useAuth } from '@/context/AuthContext';
 
-const PLACEMENT_TESTS = {
-  9: [
-    { question: "Nguyên tử được cấu tạo từ các loại hạt nào?", options: ["Proton và Neutron", "Proton và Electron", "Proton, Neutron và Electron", "Neutron và Electron"], correctAnswer: 2 },
-    { question: "Hóa trị của Oxy thường là bao nhiêu?", options: ["I", "II", "III", "IV"], correctAnswer: 1 },
-    { question: "Ký hiệu hóa học của Sắt là gì?", options: ["Fe", "Cu", "Ag", "Au"], correctAnswer: 0 },
-    { question: "Phân tử khối của Nước (H2O) là bao nhiêu?", options: ["16", "17", "18", "20"], correctAnswer: 2 },
-    { question: "Hiện tượng nào sau đây là hiện tượng hóa học?", options: ["Nước bay hơi", "Củi cháy thành than", "Hòa tan muối vào nước", "Bẻ gãy thước kẻ"], correctAnswer: 1 },
-    { question: "Axit nào có trong dịch vị dạ dày?", options: ["H2SO4", "HNO3", "HCl", "CH3COOH"], correctAnswer: 2 },
-    { question: "Chất nào làm quỳ tím hóa đỏ?", options: ["Bazơ", "Axit", "Muối", "Nước"], correctAnswer: 1 },
-    { question: "Khí nào duy trì sự cháy?", options: ["Nitơ", "Cacbon đioxit", "Oxy", "Hiđro"], correctAnswer: 2 },
-    { question: "Công thức hóa học của Muối ăn là gì?", options: ["NaOH", "HCl", "NaCl", "KCl"], correctAnswer: 2 },
-    { question: "Đơn vị đo lượng chất trong hóa học là gì?", options: ["Gam", "Lít", "Mol", "Nguyên tử khối"], correctAnswer: 2 },
-    { question: "Thanh kim loại nào dẫn điện tốt nhất?", options: ["Sắt", "Nhôm", "Bạc", "Đồng"], correctAnswer: 2 },
-    { question: "Khí Hiđro nhẹ hơn hay nặng hơn không khí?", options: ["Nặng hơn nhiều", "Nặng hơn một chút", "Nhẹ hơn", "Bằng nhau"], correctAnswer: 2 }
-  ],
-  10: [
-      // Placeholder for G10
-      { question: "Bảng tuần hoàn hiện đại được sắp xếp theo chiều tăng dần của?", options: ["Khối lượng nguyên tử", "Số hiệu nguyên tử", "Số Neutron", "Số khối"], correctAnswer: 1 },
-      { question: "Liên kết trong phân tử NaCl là liên kết gì?", options: ["Liên kết cộng hóa trị", "Liên kết Ion", "Liên kết Kim loại", "Liên kết Hiđro"], correctAnswer: 1 },
-      { question: "Lớp electron ngoài cùng của khí hiếm thường có bao nhiêu electron?", options: ["2 hoặc 8", "4", "6", "1"], correctAnswer: 0 },
-      { question: "Nguyên tố nào có độ âm điện lớn nhất?", options: ["Oxy", "Clo", "Flo", "Nitơ"], correctAnswer: 2 },
-      { question: "Số electron tối đa trong lớp L (n=2) là?", options: ["2", "8", "18", "32"], correctAnswer: 1 },
-      { question: "Phản ứng tỏa nhiệt là phản ứng?", options: ["Hấp thụ năng lượng", "Giải phóng năng lượng", "Không thay đổi năng lượng", "Xảy ra ở nhiệt độ thấp"], correctAnswer: 1 },
-      { question: "Chất oxi hóa là chất?", options: ["Cho electron", "Nhận electron", "Tăng số oxi hóa", "Không tham gia phản ứng"], correctAnswer: 1 },
-      { question: "Cấu hình electron của Neon (Z=10) là?", options: ["1s2 2s2 2p4", "1s2 2s2 2p6", "1s2 2s2 2p5", "1s2 2s2 2p2"], correctAnswer: 1 },
-      { question: "Nguyên tố Halogen thuộc nhóm mấy?", options: ["IA", "VIIA", "VIIIA", "IVA"], correctAnswer: 1 },
-      { question: "Công thức Lewis đại diện cho?", options: ["Tổng số hạt", "Lớp electron vỏ", "Số electron hóa trị", "Hạt nhân nguyên tử"], correctAnswer: 2 }
-  ]
-};
-
-export const AVAILABLE_PLACEMENT_TEST_GRADES = Object.keys(PLACEMENT_TESTS);
+export const AVAILABLE_PLACEMENT_TEST_GRADES = Object.freeze(['9', '10', '11', '12']);
 
 const PlacementTestModal = ({ grade, isOpen, onClose, onPass }) => {
-  const { completePlacementTest } = useAuth();
-  const [step, setStep] = useState('start'); // start, quiz, result
+  const { startOptionalPlacementTest, completePlacementTest } = useAuth();
+  const [step, setStep] = useState('start');
+  const [assessment, setAssessment] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [isCorrect, setIsCorrect] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [result, setResult] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const normalizedGrade = String(grade);
-  const questions = PLACEMENT_TESTS[normalizedGrade] || [];
-  const hasPlacementTest = questions.length > 0;
-  const passingScore = Math.ceil(questions.length * 0.7);
+  const questions = assessment?.questions || [];
+  const question = questions[currentQuestion];
+  const selectedAnswer = question ? answers[question.id] : undefined;
 
-  const handleAnswer = (index) => {
-    if (selectedAnswer !== null || !questions[currentQuestion]) return;
-    setSelectedAnswer(index);
-    const correct = index === questions[currentQuestion].correctAnswer;
-    setIsCorrect(correct);
-    if (correct) setScore(score + 1);
+  const handleStart = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError('');
+    const response = await startOptionalPlacementTest(normalizedGrade);
+    setIsSubmitting(false);
 
-    setTimeout(() => {
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-        setSelectedAnswer(null);
-        setIsCorrect(null);
-      } else {
-        setStep('result');
-      }
-    }, 1000);
+    if (!response.success || !response.assessment?.questions?.length) {
+      setError(response.message || 'Không thể tải bài kiểm tra học vượt.');
+      return;
+    }
+
+    setAssessment(response.assessment);
+    setCurrentQuestion(0);
+    setAnswers({});
+    setResult(null);
+    setStep('quiz');
   };
 
-  const handleFinish = async () => {
-    if (score >= passingScore) {
-      await completePlacementTest(normalizedGrade);
-      onPass();
-    } else {
-      onClose();
+  const handleNext = async () => {
+    if (!question || !Number.isInteger(selectedAnswer) || isSubmitting) return;
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(index => index + 1);
+      setError('');
+      return;
     }
+
+    setIsSubmitting(true);
+    setError('');
+    const response = await completePlacementTest(assessment.attemptId, answers);
+    setIsSubmitting(false);
+
+    if (!response.success || !response.result) {
+      setError(response.message || 'Không thể chấm bài kiểm tra.');
+      return;
+    }
+
+    setResult(response.result);
+    setStep('result');
+  };
+
+  const handleFinish = () => {
+    if (result?.passed) onPass();
+    else onClose();
   };
 
   if (!isOpen) return null;
 
-  if (!hasPlacementTest) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
-      >
-        <div className="w-full max-w-md bg-white rounded-[32px] p-8 text-center shadow-2xl">
-          <h2 className="text-2xl font-black text-viet-text mb-3 uppercase">Chưa có bài kiểm tra</h2>
-          <p className="text-viet-text-light font-bold mb-6">
-            Hệ thống chưa có bài kiểm tra đầu vào cho lớp {normalizedGrade}. Bạn có thể học theo lộ trình đang được mở sẵn.
-          </p>
-          <button onClick={onClose} className="viet-btn-green w-full py-4 text-lg">
-            Quay lại
-          </button>
-        </div>
-      </motion.div>
-    );
-  }
-
   return (
-    <motion.div      initial={{ opacity: 0 }}
+    <motion.div
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl"
     >
       <div className="relative w-full max-w-2xl bg-white rounded-[40px] overflow-hidden shadow-2xl flex flex-col">
-          {/* Header */}
-          <div className="bg-viet-green p-8 text-white relative">
-             <div className="absolute top-4 right-4 text-white/20 text-6xl font-black">TEST</div>
-             <h2 className="text-3xl font-black font-sora italic uppercase">Bài Test Học Vượt</h2>
-             <p className="text-white/80 font-bold">Khám phá tiềm năng hóa học lớp {grade} của bạn</p>
-          </div>
+        <div className="bg-viet-green p-8 text-white relative">
+          <div className="absolute top-4 right-4 text-white/20 text-6xl font-black">TEST</div>
+          <h2 className="text-3xl font-black font-sora italic uppercase">Bài Test Học Vượt</h2>
+          <p className="text-white/80 font-bold">Khám phá tiềm năng hóa học lớp {normalizedGrade} của bạn</p>
+        </div>
 
-          <div className="p-10 flex-1 overflow-y-auto">
-             <AnimatePresence mode="wait">
-                {step === 'start' && (
-                  <motion.div                    key="start"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="text-center py-10"
+        <div className="p-8 md:p-10 flex-1 overflow-y-auto">
+          <AnimatePresence mode="wait">
+            {step === 'start' && (
+              <motion.div
+                key="start"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="text-center py-10"
+              >
+                <div className="mb-6 flex justify-center text-viet-green">
+                  <MorphIcon icon={GraduationCap} size={64} className="w-16 h-16 text-viet-green" />
+                </div>
+                <h3 className="text-2xl font-black text-viet-text mb-4 uppercase">Sẵn sàng thử thách?</h3>
+                <p className="text-viet-text-light font-bold mb-8 leading-relaxed">
+                  Đề thi được tải và chấm trực tiếp trên máy chủ. Đạt tối thiểu 70% để mở khóa chương trình lớp {normalizedGrade} và nhận 500 XP.
+                </p>
+                {error && <p className="mb-5 text-sm font-bold text-red-500" role="alert">{error}</p>}
+                <button
+                  type="button"
+                  onClick={handleStart}
+                  disabled={isSubmitting}
+                  className="viet-btn-green w-full py-4 text-lg disabled:opacity-50"
+                >
+                  {isSubmitting ? 'Đang tải đề...' : 'Bắt đầu ngay ➔'}
+                </button>
+              </motion.div>
+            )}
+
+            {step === 'quiz' && question && (
+              <motion.div
+                key={`quiz-${currentQuestion}`}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-8"
+              >
+                <div className="flex justify-between items-center gap-4">
+                  <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/5 px-4 py-2 rounded-full border border-viet-green/20">
+                    Câu {currentQuestion + 1} / {questions.length}
+                  </span>
+                  <div className="w-32 h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-viet-green transition-all duration-500" style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }} />
+                  </div>
+                </div>
+
+                <h4 className="text-2xl font-bold text-viet-text leading-tight">
+                  <MathText>{question.question || question.content}</MathText>
+                </h4>
+
+                <div className="grid grid-cols-1 gap-3">
+                  {(question.options || []).map((option, index) => (
+                    <button
+                      type="button"
+                      key={`${index}-${option}`}
+                      onClick={() => {
+                        setAnswers(current => ({ ...current, [question.id]: index }));
+                        setError('');
+                      }}
+                      className={`p-5 rounded-3xl border-2 text-left transition-all ${
+                        selectedAnswer === index
+                          ? 'border-viet-green bg-viet-green/5 text-viet-green'
+                          : 'border-gray-100 hover:border-viet-green/40 hover:bg-viet-green/5 text-viet-text'
+                      }`}
+                    >
+                      <span className="font-bold"><MathText>{option}</MathText></span>
+                    </button>
+                  ))}
+                </div>
+
+                {error && <p className="text-sm font-bold text-red-500" role="alert">{error}</p>}
+                <div className="flex items-center justify-between gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentQuestion(index => Math.max(0, index - 1))}
+                    disabled={currentQuestion === 0 || isSubmitting}
+                    className="px-5 py-3 font-black text-sm text-viet-text-light disabled:opacity-30"
                   >
-                     <div className="mb-6 flex justify-center text-viet-green">
-                       <MorphIcon icon={GraduationCap} size={64} className="w-16 h-16 text-viet-green" />
-                     </div>
-                     <h3 className="text-2xl font-black text-viet-text mb-4 uppercase">Sẵn sàng thử thách?</h3>
-                     <p className="text-viet-text-light font-bold mb-8 leading-relaxed">
-                        Bài test gồm {questions.length} câu hỏi tổng hợp kiến thức nền tảng.
-                        Vượt qua {passingScore} câu để mở khóa chương trình Lớp {grade} ngay lập tức!
-                     </p>
-                     <button
-                       onClick={() => setStep('quiz')}
-                       className="viet-btn-green w-full py-4 text-lg"
-                     >
-                       Bắt đầu ngay ➔
-                     </button>
-                  </motion.div>
+                    Quay lại
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    disabled={!Number.isInteger(selectedAnswer) || isSubmitting}
+                    className="viet-btn-green min-w-40 px-6 py-3 disabled:opacity-50"
+                  >
+                    {isSubmitting ? 'Đang chấm...' : currentQuestion === questions.length - 1 ? 'Nộp bài' : 'Tiếp tục'}
+                  </button>
+                </div>
+                <p className="text-center text-[11px] font-bold text-viet-text-light/60">Kết quả chỉ được xác nhận sau khi máy chủ chấm toàn bộ bài.</p>
+              </motion.div>
+            )}
+
+            {step === 'result' && result && (
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-6"
+              >
+                {result.passed ? (
+                  <>
+                    <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[24px] bg-amber-100 text-amber-600">
+                      <MorphIcon icon={Trophy} size={40} className="h-10 w-10" aria-hidden="true" />
+                    </div>
+                    <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">Hành Trình Đã Mở!</h3>
+                    <p className="text-viet-text-light font-bold mb-8">
+                      Máy chủ xác nhận bạn đúng {result.correct}/{result.total} câu ({result.percent}%). Chương trình lớp {result.grade} đã được mở khóa.
+                    </p>
+                    <div className="bg-viet-green/10 p-6 rounded-3xl border border-viet-green/20 mb-8 inline-block">
+                      <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-1">Thưởng Học Vượt</p>
+                      <p className="text-4xl font-black text-viet-green">+500 XP</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="mb-6 flex justify-center text-red-500">
+                      <MorphIcon icon={BookOpen} size={64} className="w-16 h-16 text-red-500" />
+                    </div>
+                    <h3 className="text-3xl font-black text-red-500 mb-2 uppercase italic">Cần Cố Gắng Thêm</h3>
+                    <p className="text-viet-text-light font-bold mb-8">
+                      Bạn đúng {result.correct}/{result.total} câu ({result.percent}%). Hãy ôn tập lại kiến thức trước khi thử lại.
+                    </p>
+                  </>
                 )}
 
-                {step === 'quiz' && (
-                  <motion.div
-                    key="quiz"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    className="space-y-8"
-                  >
-                     <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-black text-viet-green uppercase tracking-widest bg-viet-green/5 px-4 py-2 rounded-full border border-viet-green/20">
-                          Câu {currentQuestion + 1} / {questions.length}
-                        </span>
-                        <div className="w-32 h-2 bg-gray-100 rounded-full overflow-hidden">
-                           <div
-                             className="h-full bg-viet-green transition-all duration-500"
-                             style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
-                           />
-                        </div>
-                     </div>
+                <button type="button" onClick={handleFinish} className="viet-btn-green w-full py-4 text-lg">
+                  {result.passed ? 'Bắt đầu hành trình ➔' : 'Quay lại bản đồ'}
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-                     <h4 className="text-2xl font-bold text-viet-text leading-tight">
-                        <MathText>{questions[currentQuestion].question || questions[currentQuestion].content}</MathText>
-                     </h4>
-
-                     <div className="grid grid-cols-1 gap-3">
-                        {(Array.isArray(questions[currentQuestion].options) ? questions[currentQuestion].options : (questions[currentQuestion].options ? Object.values(questions[currentQuestion].options) : [])).map((option, idx) => (
-                           <button
-                             key={idx}
-                             onClick={() => handleAnswer(idx)}
-                             className={`p-6 rounded-3xl border-2 text-left transition-all flex items-center justify-between group
-                               ${selectedAnswer === idx
-                                 ? isCorrect
-                                   ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                                   : 'border-red-500 bg-red-50 text-red-700'
-                                 : 'border-gray-100 hover:border-viet-green/40 hover:bg-viet-green/5 text-viet-text'
-                               }
-                             `}
-                           >
-                              <span className="font-bold"><MathText>{option}</MathText></span>
-                              {selectedAnswer === idx && (
-                                <MorphIcon
-                                  icon={isCorrect ? CheckCircle2 : XCircle}
-                                  size={24}
-                                  className={`h-6 w-6 shrink-0 ${isCorrect ? 'text-emerald-600' : 'text-red-600'}`}
-                                  aria-hidden="true"
-                                />
-                              )}
-                           </button>
-                        ))}
-                     </div>
-                  </motion.div>
-                )}
-
-                {step === 'result' && (
-                  <motion.div
-                    key="result"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-6"
-                  >
-                     {score >= passingScore ? (
-                       <>
-                         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[24px] bg-amber-100 text-amber-600">
-                           <MorphIcon icon={Trophy} size={40} className="h-10 w-10" aria-hidden="true" />
-                         </div>
-                         <h3 className="text-3xl font-black text-viet-green mb-2 uppercase italic">Hành Trình Đã Mở!</h3>
-                         <p className="text-viet-text-light font-bold mb-8">
-                           Tuyệt vời! Bạn đã đúng {score}/{questions.length} câu.
-                           Chương trình lớp {grade} đã sẵn sàng chờ đón bạn.
-                         </p>
-                         <div className="bg-viet-green/10 p-6 rounded-3xl border border-viet-green/20 mb-8 inline-block">
-                            <p className="text-[10px] font-black text-viet-green uppercase tracking-widest mb-1">Thưởng Học Vượt</p>
-                            <p className="text-4xl font-black text-viet-green">+500 XP</p>
-                         </div>
-                       </>
-                     ) : (
-                       <>
-                         <div className="mb-6 flex justify-center text-red-500">
-                           <MorphIcon icon={BookOpen} size={64} className="w-16 h-16 text-red-500" />
-                         </div>
-                         <h3 className="text-3xl font-black text-red-500 mb-2 uppercase italic">Cần Cố Gắng Thêm</h3>
-                         <p className="text-viet-text-light font-bold mb-8">
-                           Bạn đúng {score}/{questions.length} câu. (Cần tối thiểu {passingScore} câu).
-                           Hãy ôn tập lại kiến thức lớp cũ trước khi thử lại nhé!
-                         </p>
-                       </>
-                     )}
-
-                     <button
-                       onClick={handleFinish}
-                       className="viet-btn-green w-full py-4 text-lg"
-                     >
-                       {score >= passingScore ? "Bắt đầu hành trình ➔" : "Quay lại map"}
-                     </button>
-                  </motion.div>
-                )}
-             </AnimatePresence>
-          </div>
-
+        {step !== 'result' && (
           <button
+            type="button"
             onClick={onClose}
             className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-white/40 hover:text-white transition-colors"
+            aria-label="Đóng bài kiểm tra"
           >
             ✕
           </button>
+        )}
       </div>
     </motion.div>
   );
 };
 
 export default PlacementTestModal;
-

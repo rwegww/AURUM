@@ -222,7 +222,7 @@ const ArenaAnswer = ({ question, disabled, submitting, onSubmit }) => {
   if (question.gameType === "balancing") return <BalancingAnswer question={question} disabled={disabled} submitting={submitting} onSubmit={onSubmit} />;
   if (question.gameType === "atom_match") return <AtomMatchAnswer question={question} disabled={disabled} submitting={submitting} onSubmit={onSubmit} />;
   if (question.gameType === "electron_match") return <ElectronMatchAnswer question={question} disabled={disabled} submitting={submitting} onSubmit={onSubmit} />;
-  return <Text style={styles.unsupportedText}>Phiên bản mobile chưa hỗ trợ loại câu hỏi này.</Text>;
+  return <Text style={styles.unsupportedText}>Dữ liệu loại câu hỏi không hợp lệ. Hãy làm mới phòng để nhận câu khác.</Text>;
 };
 
 export default function ArenaRoom({ token, roomId, initialState, onLeave, onStateChange }) {

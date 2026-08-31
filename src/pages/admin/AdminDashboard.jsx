@@ -7,8 +7,6 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
-  Line,
-  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -18,8 +16,6 @@ import {
 } from 'recharts';
 import {
   AlertTriangle,
-  ArrowDownRight,
-  ArrowUpRight,
   BookOpen,
   ChevronDown,
   FlaskConical,
@@ -35,38 +31,20 @@ import {
 } from 'lucide-react';
 import Avatar from '@/components/common/Avatar';
 
-const FALLBACK_STATS = {
-  totalLessons: 129,
-  totalUsers: 21,
-  unreadFeedback: 24,
-  totalXP: 73710,
-  avgLevel: 6,
-  gradeDistribution: [
-    { name: 'Lớp 8', students: 5, color: '#f43f5e' },
-    { name: 'Lớp 9', students: 4, color: '#f59e0b' },
-    { name: 'Lớp 10', students: 4, color: '#3b82f6' },
-    { name: 'Lớp 11', students: 4, color: '#a855f7' },
-    { name: 'Lớp 12', students: 4, color: '#10b981' },
-  ],
+const EMPTY_STATS = {
+  totalLessons: 0,
+  totalUsers: 0,
+  unreadFeedback: 0,
+  totalXP: 0,
+  avgLevel: 0,
+  gradeDistribution: [],
   feedbackDistribution: [
-    { name: 'Báo lỗi', value: 4, color: '#f43f5e' },
-    { name: 'Góp ý', value: 8, color: '#3b82f6' },
-    { name: 'Khen ngợi', value: 12, color: '#22c55e' },
+    { name: 'Báo lỗi', value: 0, color: '#f43f5e' },
+    { name: 'Góp ý', value: 0, color: '#3b82f6' },
+    { name: 'Khen ngợi', value: 0, color: '#22c55e' },
   ],
-  topXP: [
-    { id: 1, name: 'Sky Zero', level: 6, xp: 5743, avatar: 'Sky Zero' },
-    { id: 2, name: 'Khánh Giao', level: 6, xp: 5280, avatar: 'Khánh Giao' },
-    { id: 3, name: 'Huyền Lưu', level: 6, xp: 5173, avatar: 'Huyền Lưu' },
-    { id: 4, name: 'Lê Thảo My', level: 5, xp: 4890, avatar: 'Lê Thảo My' },
-    { id: 5, name: 'Trí Lương', level: 5, xp: 4817, avatar: 'Trí Lương' },
-  ],
-  topStreak: [
-    { id: 1, name: 'Lê Thảo My', streak: 28, avatar: 'Lê Thảo My' },
-    { id: 2, name: 'Đặng Gia Huy', streak: 21, avatar: 'Đặng Gia Huy' },
-    { id: 3, name: 'Trần Quốc Bảo', streak: 20, avatar: 'Trần Quốc Bảo' },
-    { id: 4, name: 'Sky Zero', streak: 19, avatar: 'Sky Zero' },
-    { id: 5, name: 'Phong Nguyen', streak: 18, avatar: 'Phong Nguyen' },
-  ],
+  topXP: [],
+  topStreak: [],
 };
 
 const toSafeNumber = (value) => {
@@ -90,24 +68,24 @@ const withFeedbackPercentages = (items) => {
 const normalizeStats = (data) => {
   const feedbackSource = Array.isArray(data?.feedbackDistribution) && data.feedbackDistribution.length > 0
     ? data.feedbackDistribution
-    : FALLBACK_STATS.feedbackDistribution;
+    : EMPTY_STATS.feedbackDistribution;
 
   return {
-    totalLessons: data?.totalLessons != null ? toSafeNumber(data.totalLessons) : FALLBACK_STATS.totalLessons,
-    totalUsers: data?.totalUsers != null ? toSafeNumber(data.totalUsers) : FALLBACK_STATS.totalUsers,
-    unreadFeedback: data?.unreadFeedback != null ? toSafeNumber(data.unreadFeedback) : FALLBACK_STATS.unreadFeedback,
-    totalXP: data?.totalXP != null ? toSafeNumber(data.totalXP) : FALLBACK_STATS.totalXP,
-    avgLevel: data?.avgLevel != null ? toSafeNumber(data.avgLevel) : FALLBACK_STATS.avgLevel,
+    totalLessons: data?.totalLessons != null ? toSafeNumber(data.totalLessons) : EMPTY_STATS.totalLessons,
+    totalUsers: data?.totalUsers != null ? toSafeNumber(data.totalUsers) : EMPTY_STATS.totalUsers,
+    unreadFeedback: data?.unreadFeedback != null ? toSafeNumber(data.unreadFeedback) : EMPTY_STATS.unreadFeedback,
+    totalXP: data?.totalXP != null ? toSafeNumber(data.totalXP) : EMPTY_STATS.totalXP,
+    avgLevel: data?.avgLevel != null ? toSafeNumber(data.avgLevel) : EMPTY_STATS.avgLevel,
     gradeDistribution: Array.isArray(data?.gradeDistribution) && data.gradeDistribution.length > 0
       ? data.gradeDistribution
-      : FALLBACK_STATS.gradeDistribution,
+      : EMPTY_STATS.gradeDistribution,
     feedbackDistribution: withFeedbackPercentages(feedbackSource),
-    topXP: Array.isArray(data?.topXP) && data.topXP.length > 0 ? data.topXP : FALLBACK_STATS.topXP,
-    topStreak: Array.isArray(data?.topStreak) && data.topStreak.length > 0 ? data.topStreak : FALLBACK_STATS.topStreak,
+    topXP: Array.isArray(data?.topXP) ? data.topXP : EMPTY_STATS.topXP,
+    topStreak: Array.isArray(data?.topStreak) ? data.topStreak : EMPTY_STATS.topStreak,
   };
 };
 
-const DEFAULT_STATS = normalizeStats(FALLBACK_STATS);
+const DEFAULT_STATS = normalizeStats(EMPTY_STATS);
 
 const PinBarShape = ({ x, y, width, height, fill, value }) => {
   const radius = 15;
@@ -164,6 +142,7 @@ const AdminDashboard = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         setStats(DEFAULT_STATS);
+        setError('Phiên đăng nhập không hợp lệ. Không có dữ liệu quản trị để hiển thị.');
         return;
       }
 
@@ -177,7 +156,7 @@ const AdminDashboard = () => {
     } catch (requestError) {
       if (requestError.name === 'AbortError') return;
       console.error('Lỗi tải thống kê:', requestError);
-      setError('Chưa thể cập nhật số liệu mới nhất. Đang hiển thị dữ liệu gần nhất.');
+      setError('Chưa thể tải số liệu quản trị. Không hiển thị dữ liệu thay thế.');
       setStats(DEFAULT_STATS);
     } finally {
       if (!signal?.aborted) setLoading(false);
@@ -224,12 +203,6 @@ const AdminDashboard = () => {
       icon: <BookOpen className="h-6 w-6" />,
       iconClass: 'bg-blue-50 text-blue-600',
       link: '/admin/bai_hoc',
-      trend: '+12%',
-      trendText: 'so với tháng trước',
-      trendClass: 'text-emerald-600',
-      trendIcon: <ArrowUpRight size={15} />,
-      sparklineColor: '#3b82f6',
-      sparklineData: [30, 20, 45, 35, 70, 55, 90],
     },
     {
       title: 'Tổng học sinh',
@@ -237,12 +210,6 @@ const AdminDashboard = () => {
       icon: <Users className="h-6 w-6" />,
       iconClass: 'bg-emerald-50 text-emerald-600',
       link: '/admin/nguoi_dung',
-      trend: '+5%',
-      trendText: 'so với tháng trước',
-      trendClass: 'text-emerald-600',
-      trendIcon: <ArrowUpRight size={15} />,
-      sparklineColor: '#10b981',
-      sparklineData: [20, 35, 30, 50, 40, 65, 85],
     },
     {
       title: 'Tổng điểm XP',
@@ -250,12 +217,6 @@ const AdminDashboard = () => {
       icon: <Trophy className="h-6 w-6" />,
       iconClass: 'bg-purple-50 text-purple-600',
       link: '/admin/nguoi_dung',
-      trend: '+18%',
-      trendText: 'học sinh đang tích cực',
-      trendClass: 'text-emerald-600',
-      trendIcon: <ArrowUpRight size={15} />,
-      sparklineColor: '#8b5cf6',
-      sparklineData: [40, 30, 60, 45, 80, 70, 95],
     },
     {
       title: 'Phản hồi mới',
@@ -263,12 +224,6 @@ const AdminDashboard = () => {
       icon: <MessageSquare className="h-6 w-6" />,
       iconClass: 'bg-orange-50 text-orange-600',
       link: '/admin/feedback',
-      trend: '-2%',
-      trendText: 'đã được xử lý tốt',
-      trendClass: 'text-rose-500',
-      trendIcon: <ArrowDownRight size={15} />,
-      sparklineColor: '#f97316',
-      sparklineData: [70, 50, 65, 40, 55, 35, 20],
     },
   ];
 
@@ -292,7 +247,7 @@ const AdminDashboard = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.06 }}
-            className={`${panelClass} group relative min-h-[178px] overflow-hidden p-5 transition-transform hover:-translate-y-0.5`}
+            className={`${panelClass} group relative min-h-[150px] overflow-hidden p-5 transition-transform hover:-translate-y-0.5`}
           >
             <Link to={card.link} className="absolute inset-0 z-10 rounded-[22px]" aria-label={`Mở ${card.title.toLowerCase()}`} />
             <div className="flex items-start justify-between">
@@ -304,21 +259,7 @@ const AdminDashboard = () => {
 
             <p className="mt-3 text-sm font-bold text-slate-500">{card.title}</p>
             <p className="text-[32px] font-black leading-tight tracking-tight text-[#071b3f]">{card.value}</p>
-
-            <div className="mt-3 flex items-center gap-1.5 pr-24 text-xs">
-              <span className={`flex items-center gap-0.5 font-black ${card.trendClass}`}>
-                {card.trendIcon} {card.trend}
-              </span>
-              <span className="truncate font-semibold text-slate-400">{card.trendText}</span>
-            </div>
-
-            <div className="pointer-events-none absolute bottom-4 right-4 h-12 w-24 opacity-85">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                <LineChart data={card.sparklineData.map((value) => ({ value }))}>
-                  <Line type="monotone" dataKey="value" stroke={card.sparklineColor} strokeWidth={2.5} dot={false} isAnimationActive={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <p className="mt-2 text-xs font-semibold text-slate-400">Số liệu hiện tại từ hệ thống</p>
           </motion.article>
         ))}
       </section>
@@ -465,6 +406,9 @@ const AdminDashboard = () => {
           </div>
 
           <div className="mt-5 divide-y divide-slate-100">
+            {stats.topStreak.length === 0 && (
+              <p className="py-10 text-center text-sm font-semibold text-slate-400">Chưa có dữ liệu chuỗi học tập.</p>
+            )}
             {stats.topStreak.slice(0, 5).map((student, index) => (
               <div key={student.id || index} className="flex items-center justify-between gap-3 py-2 first:pt-0">
                 <div className="flex min-w-0 items-center gap-3">
@@ -506,6 +450,9 @@ const AdminDashboard = () => {
               <span className="col-span-3 text-right">Điểm XP</span>
             </div>
             <div className="divide-y divide-slate-100">
+              {stats.topXP.length === 0 && (
+                <p className="py-10 text-center text-sm font-semibold text-slate-400">Chưa có dữ liệu xếp hạng XP.</p>
+              )}
               {stats.topXP.slice(0, 5).map((student, index) => (
                 <div key={student.id || index} className="grid grid-cols-12 items-center py-2 text-xs">
                   <span className={`col-span-2 font-black ${index === 0 ? 'text-amber-500' : index === 1 ? 'text-blue-500' : index === 2 ? 'text-orange-500' : 'text-slate-400'}`}>

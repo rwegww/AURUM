@@ -1185,8 +1185,11 @@ router.post('/feedback/submit', async (req, res) => {
       username = user.username;
     }
 
-    const trimmedName = typeof name === 'string' ? name.trim() : '';
-    const trimmedEmail = typeof email === 'string' ? email.trim() : '';
+    const trimmedName = normalizeOptionalText(name, 'Tên người gửi', 200) || '';
+    const trimmedEmail = normalizeOptionalText(email, 'Email người gửi', 320) || '';
+    if (trimmedEmail && !EMAIL_PATTERN.test(trimmedEmail)) {
+      throw httpError(400, 'Email người gửi không hợp lệ.', 'INVALID_EMAIL');
+    }
 
     if (trimmedName && username === 'Ẩn danh') {
       username = trimmedName;

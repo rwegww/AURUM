@@ -30,6 +30,8 @@ const userModel = {
   create: vi.fn(async (data) => ({ id: 'new-user', ...data, xp: 0, level: 1 })),
   update: vi.fn(async (id, data) => ({ ...nguoi_dung[id], ...data })),
   countStudents: vi.fn(async () => 0),
+  countActiveStudents: vi.fn(async () => 0),
+  incrementCraftingTaskProgress: vi.fn(async () => null),
   aggregateStats: vi.fn(async () => ({ totalXP: 0, avgLevel: 1, levelDistribution: {}, gradeDistribution: {}, topXP: [], topStreak: [] })),
   comparePassword: vi.fn(async () => false),
   toggleLock: vi.fn(),
@@ -466,6 +468,85 @@ describe('security acceptance matrix', () => {
     }));
   });
 
+  it('starts an optional placement attempt without exposing correct answers', async () => {
+    const res = await request(app)
+      .post('/api/user/placement/optional/start')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ grade: 9 });
+
+    expect(res.status).toBe(200);
+    expect(res.body.assessment).toMatchObject({ grade: '9', passingPercent: 70 });
+    expect(res.body.assessment.questions).toHaveLength(7);
+    expect(res.body.assessment.questions[0]).not.toHaveProperty('correctAnswer');
+    expect(userModel.update).toHaveBeenCalledWith('student', expect.objectContaining({
+      balancingProgress: expect.objectContaining({
+        optionalPlacement: expect.objectContaining({ grade: '9', attemptId: expect.any(String) }),
+      }),
+    }));
+  });
+
+  it('refuses to unlock an optional grade without a server-issued attempt', async () => {
+    const res = await request(app)
+      .post('/api/user/placement-pass')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({ grade: 9 });
+
+    expect(res.status).toBe(409);
+    expect(userModel.update).not.toHaveBeenCalled();
+  });
+
+  it('unlocks an optional grade only after server-side grading', async () => {
+    userModel.findById.mockImplementation(async (id) => (id === 'student' ? {
+      ...nguoi_dung.student,
+      balancingProgress: {
+        completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {},
+        optionalPlacement: { attemptId: 'optional-attempt-1', grade: '9', startedAt: new Date().toISOString() },
+      },
+    } : nguoi_dung[id] || null));
+
+    const res = await request(app)
+      .post('/api/user/placement-pass')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({
+        attemptId: 'optional-attempt-1',
+        answers: { 'g9-1': 1, 'g9-2': 1, 'g9-3': 0, 'g9-4': 1, 'g9-5': 0, 'g9-6': 0, 'g9-7': 0 },
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.result).toMatchObject({ passed: true, grade: '9', percent: 71 });
+    expect(res.body.xpGained).toBe(500);
+    expect(userModel.update).toHaveBeenCalledWith('student', expect.objectContaining({
+      xp: 500,
+      balancingProgress: expect.objectContaining({ passedGrades: ['9'] }),
+    }));
+  });
+
+  it('does not unlock or award XP when an optional placement attempt fails', async () => {
+    userModel.findById.mockImplementation(async (id) => (id === 'student' ? {
+      ...nguoi_dung.student,
+      balancingProgress: {
+        completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {},
+        optionalPlacement: { attemptId: 'optional-attempt-fail', grade: '9', startedAt: new Date().toISOString() },
+      },
+    } : nguoi_dung[id] || null));
+
+    const res = await request(app)
+      .post('/api/user/placement-pass')
+      .set('Authorization', `Bearer ${tokenFor('student')}`)
+      .send({
+        attemptId: 'optional-attempt-fail',
+        answers: { 'g9-1': 0, 'g9-2': 0, 'g9-3': 1, 'g9-4': 0, 'g9-5': 1, 'g9-6': 0, 'g9-7': 0 },
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.result).toMatchObject({ passed: false, grade: '9', percent: 0 });
+    expect(res.body.xpGained).toBe(0);
+    expect(userModel.update).toHaveBeenCalledWith('student', expect.not.objectContaining({ xp: expect.anything() }));
+    expect(userModel.update).toHaveBeenCalledWith('student', expect.objectContaining({
+      balancingProgress: expect.objectContaining({ passedGrades: [] }),
+    }));
+  });
+
   it('blocks progress writes outside the confirmed placement grade', async () => {
     lessonModel.findById.mockResolvedValueOnce({ id: 'hoa9_bai1', lessonId: 'hoa9_bai1', classId: 9 });
     const res = await request(app)
@@ -728,6 +809,36 @@ describe('security acceptance matrix', () => {
 
     expect(res.status).toBe(400);
     expect(res.body.error).toBe('INVALID_FEEDBACK_TYPE');
+    expect(phan_hoiModel.create).not.toHaveBeenCalled();
+  });
+
+  it('serves real aggregate counters for the public home page', async () => {
+    userModel.countStudents.mockResolvedValueOnce(23);
+    lessonModel.countAll.mockResolvedValueOnce(129);
+    supabaseState.classList = [{ id: 'class-1' }, { id: 'class-2' }];
+
+    const res = await request(app).get('/api/user/public-stats');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ students: 23, classes: 2, lessons: 129 });
+  });
+
+  it('does not invent an online student when nobody is active', async () => {
+    userModel.countActiveStudents.mockResolvedValueOnce(0);
+
+    const res = await request(app).get('/api/user/online-count');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ count: 0 });
+  });
+
+  it('rejects invalid public feedback contact details', async () => {
+    const res = await request(app)
+      .post('/api/admin/feedback/submit')
+      .send({ type: 'other', message: 'Cần hỗ trợ', name: 'Người gửi', email: 'không-phải-email' });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe('INVALID_EMAIL');
     expect(phan_hoiModel.create).not.toHaveBeenCalled();
   });
 

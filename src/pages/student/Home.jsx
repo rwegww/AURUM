@@ -131,26 +131,34 @@ const Home = () => {
   const { t, i18n } = useTranslation();
   const { isLoggedIn } = useAuth();
   const [testimonials, setTestimonials] = React.useState([]);
+  const [platformStats, setPlatformStats] = React.useState(null);
 
   React.useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const res = await fetch('/api/user/public-praises');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        if (data && data.length > 0) {
-          setTestimonials(data);
-        } else {
-          const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
-          setTestimonials(fallback);
-        }
-      } catch {
-        const fallback = t('home.testimonials.reviews', { returnObjects: true }) || [];
-        setTestimonials(fallback);
-      }
+    const fetchPublicHomeData = async () => {
+      const [praisesResult, statsResult] = await Promise.allSettled([
+        fetch('/api/user/public-praises').then(async (response) => {
+          if (!response.ok) throw new Error('Failed to fetch praises');
+          return response.json();
+        }),
+        fetch('/api/user/public-stats').then(async (response) => {
+          if (!response.ok) throw new Error('Failed to fetch public stats');
+          return response.json();
+        }),
+      ]);
+
+      setTestimonials(
+        praisesResult.status === 'fulfilled' && Array.isArray(praisesResult.value)
+          ? praisesResult.value
+          : [],
+      );
+      setPlatformStats(
+        statsResult.status === 'fulfilled' && statsResult.value && typeof statsResult.value === 'object'
+          ? statsResult.value
+          : null,
+      );
     };
-    fetchTestimonials();
-  }, [t, i18n.language]);
+    fetchPublicHomeData();
+  }, [i18n.language]);
 
   return (
     <div className="min-h-screen font-sans bg-[#fbfbfb] selection:bg-viet-green selection:text-white">
@@ -213,13 +221,13 @@ const Home = () => {
       </section>
 
       {/* â”€â”€â”€ STATS BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="bg-white py-10 border-b border-gray-100">
+      {platformStats && <section className="bg-white py-10 border-b border-gray-100">
         <div className="max-w-[900px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-100">
-          <StatItem value={t('home.stats.students_count')} label={t('home.stats.students_label')} />
-          <StatItem value={t('home.stats.schools_count')} label={t('home.stats.schools_label')} />
-          <StatItem value={t('home.stats.bai_hoc_count')} label={t('home.stats.bai_hoc_label')} />
+          <StatItem value={Number(platformStats.students || 0).toLocaleString(i18n.language)} label={t('home.stats.students_label')} />
+          <StatItem value={Number(platformStats.classes || 0).toLocaleString(i18n.language)} label={t('home.stats.schools_label')} />
+          <StatItem value={Number(platformStats.lessons || 0).toLocaleString(i18n.language)} label={t('home.stats.bai_hoc_label')} />
         </div>
-      </section>
+      </section>}
 
       {/* â”€â”€â”€ FEATURE ROWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
 
@@ -293,7 +301,7 @@ const Home = () => {
       />
 
       {/* â”€â”€â”€ TESTIMONIALS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
-      <section className="py-24 bg-[#f8f9fa] overflow-hidden border-t border-gray-100">
+      {testimonials.length > 0 && <section className="py-24 bg-[#f8f9fa] overflow-hidden border-t border-gray-100">
         <div className="max-w-[1100px] mx-auto px-6">
           <div className="text-center mb-14">
             <span className="font-black text-viet-green uppercase tracking-widest text-sm mb-3 block">
@@ -333,7 +341,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* â”€â”€â”€ LEADERBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <LeaderboardSection />

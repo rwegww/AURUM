@@ -448,26 +448,3 @@ export const arenaQuestions = Object.fromEntries(
   ]),
 );
 
-export const mockRooms = [
-  {
-    id: 'RM101',
-    name: 'Đấu rank lớp 8',
-    mode: 'solo',
-    currentPlayers: 1,
-    maxPlayers: 2,
-    difficulty: 'easy',
-    status: 'waiting',
-    host: 'Minh Tuấn',
-  },
-  {
-    id: 'RM102',
-    name: 'Đội tuyển HSG Hóa',
-    mode: '3vs3',
-    currentPlayers: 5,
-    maxPlayers: 6,
-    difficulty: 'hard',
-    status: 'waiting',
-    host: 'Thầy Đức',
-  },
-];
-

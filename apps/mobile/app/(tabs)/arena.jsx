@@ -181,13 +181,13 @@ export default function ArenaTab() {
       arenaApi.leaderboard().catch(() => ({ leaderboard: [] })),
       arenaApi.rooms().catch(() => ({ rooms: [] })),
       token ? arenaApi.myBattles(token).catch(() => ({ battles: [] })) : { battles: [] },
-      publicApi.onlineCount().catch(() => ({ count: 1 }))
+      publicApi.onlineCount().catch(() => ({ count: 0 }))
     ]);
     return {
       leaderboard: leaderboard?.leaderboard || [],
       rooms: rooms?.rooms || [],
       battles: battles?.battles || [],
-      onlineCount: online?.count || 1
+      onlineCount: Number.isFinite(Number(online?.count)) ? Math.max(0, Number(online.count)) : 0
     };
   }, [token]);
 
@@ -342,7 +342,7 @@ export default function ArenaTab() {
         <Panel style={styles.actionPanel}>
           <View style={styles.actionHeading}>
             <View><Text style={styles.panelEyebrow}>Thi đấu nhanh</Text><Text style={styles.sectionTitle}>Tìm đối thủ</Text></View>
-            <View style={styles.onlinePill}><View style={styles.onlineDot} /><Text style={styles.onlineText}>{data.onlineCount || 1} học sinh online</Text></View>
+            <View style={styles.onlinePill}><View style={styles.onlineDot} /><Text style={styles.onlineText}>{data.onlineCount ?? 0} học sinh online</Text></View>
           </View>
           <Text style={styles.fieldLabel}>Chọn thể thức</Text>
           <ModeSelector value={findMode} onChange={setFindMode} disabled={searching} />

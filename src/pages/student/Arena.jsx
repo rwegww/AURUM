@@ -409,7 +409,7 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
   const [joinCode, setJoinCode] = useState('');
   const [showJoinInput, setShowJoinInput] = useState(false);
   const [findMode, setFindMode] = useState('solo');
-  const [onlineCount, setOnlineCount] = useState(1);
+  const [onlineCount, setOnlineCount] = useState(0);
 
   useEffect(() => {
     let active = true;
@@ -417,7 +417,8 @@ const ActionCenter = ({ onFindMatch, isSearching, onCreateRoom, onJoinRoom, onOp
       try {
         const res = await fetch('/api/user/online-count');
         const data = await res.json();
-        if (active && data.count) setOnlineCount(data.count);
+        const count = Number(data.count);
+        if (active && Number.isFinite(count)) setOnlineCount(Math.max(0, count));
       } catch (err) {
         console.warn('Failed to fetch online count:', err.message);
       }

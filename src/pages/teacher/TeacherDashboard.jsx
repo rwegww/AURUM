@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { toNonNegativeInteger } from '@/utils/teacherUi';
-import { BookOpen, Users, FileText, ArrowUpRight, ArrowDownRight, RefreshCcw, Activity, Plus } from 'lucide-react';
-import { ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { BookOpen, Users, FileText, ArrowUpRight, RefreshCcw, Activity, Plus } from 'lucide-react';
 
 const fetchJson = async (url, signal, fallbackMessage) => {
   const token = localStorage.getItem('token');
@@ -61,7 +60,7 @@ const ClassCard = ({ className, id, grade, students, code, delay }) => (
     </div>
 
     <div className="mt-5 pt-3.5 border-t border-slate-100 flex justify-between items-center text-xs">
-      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Trạng thái: Hoạt động</span>
+      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Dữ liệu lớp hiện tại</span>
       <Link
         to={`/teacher/lop/${id}`}
         className="inline-flex items-center gap-1 font-bold text-viet-green hover:underline focus:outline-none"
@@ -196,12 +195,6 @@ const TeacherDashboard = () => {
       icon: <BookOpen className="w-5 h-5 text-blue-600" />,
       bgIcon: 'bg-blue-50 border border-blue-100',
       tag: 'Số lượng',
-      trend: '+12%',
-      isUp: true,
-      trendText: 'So với học kỳ trước',
-      sparklineColor: '#3b82f6',
-      gradientId: 'sparkBlueTeacher',
-      sparklineData: [{ value: 20 }, { value: 35 }, { value: 30 }, { value: 55 }, { value: 45 }, { value: 70 }, { value: 65 }]
     },
     {
       title: 'Tổng học sinh',
@@ -209,12 +202,6 @@ const TeacherDashboard = () => {
       icon: <Users className="w-5 h-5 text-emerald-600" />,
       bgIcon: 'bg-emerald-50 border border-emerald-100',
       tag: 'Quy mô',
-      trend: '+5%',
-      isUp: true,
-      trendText: 'So với tháng trước',
-      sparklineColor: '#10b981',
-      gradientId: 'sparkGreenTeacher',
-      sparklineData: [{ value: 15 }, { value: 25 }, { value: 40 }, { value: 35 }, { value: 60 }, { value: 55 }, { value: 80 }]
     },
     {
       title: 'Bài tập hoạt động',
@@ -222,12 +209,6 @@ const TeacherDashboard = () => {
       icon: <FileText className="w-5 h-5 text-purple-600" />,
       bgIcon: 'bg-purple-50 border border-purple-100',
       tag: 'Tiến độ',
-      trend: '-2%',
-      isUp: false,
-      trendText: 'Tuần này',
-      sparklineColor: '#8b5cf6',
-      gradientId: 'sparkPurpleTeacher',
-      sparklineData: [{ value: 60 }, { value: 50 }, { value: 55 }, { value: 40 }, { value: 45 }, { value: 30 }, { value: 25 }]
     },
   ];
 
@@ -275,34 +256,7 @@ const TeacherDashboard = () => {
               <p className="text-3xl font-black text-slate-800 tracking-tight">{card.value}</p>
             </div>
             
-            <div className="flex items-center gap-2 mt-4 text-xs z-10">
-              <span className={`font-black px-2 py-0.5 rounded-md flex items-center gap-0.5 ${card.isUp ? 'text-emerald-700 bg-emerald-50 border border-emerald-200/60' : 'text-rose-700 bg-rose-50 border border-rose-200/60'}`}>
-                {card.isUp ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />} {card.trend}
-              </span>
-              <span className="text-slate-400 font-medium truncate">{card.trendText}</span>
-            </div>
-
-            {/* Background Sparkline Area */}
-            <div className="absolute -bottom-2 right-0 w-36 h-20 opacity-40 pointer-events-none">
-              <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                <AreaChart data={card.sparklineData}>
-                  <defs>
-                    <linearGradient id={card.gradientId} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor={card.sparklineColor} stopOpacity={0.6} />
-                      <stop offset="100%" stopColor={card.sparklineColor} stopOpacity={0.0} />
-                    </linearGradient>
-                  </defs>
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke={card.sparklineColor}
-                    strokeWidth={2.5}
-                    fill={`url(#${card.gradientId})`}
-                    isAnimationActive={false}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+            <p className="mt-4 text-xs font-medium text-slate-400">Số liệu hiện tại từ hệ thống</p>
           </motion.div>
         ))}
       </section>

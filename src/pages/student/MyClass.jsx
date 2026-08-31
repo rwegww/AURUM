@@ -277,12 +277,12 @@ const MyClass = () => {
   };
 
   const getFileIcon = (url) => {
-    if (!url) return 'Link2';
+    if (!url) return '🔗';
     const lowerUrl = url.toLowerCase();
     if (lowerUrl.endsWith('.pdf') || lowerUrl.includes('/pdf')) return '📕';
     if (lowerUrl.includes('doc') || lowerUrl.includes('word') || lowerUrl.includes('docx')) return '📘';
     if (lowerUrl.includes('xls') || lowerUrl.includes('excel') || lowerUrl.includes('xlsx')) return '📗';
-    return 'Link2';
+    return '🔗';
   };
 
   const getFileLabel = (url) => {
@@ -917,7 +917,7 @@ const MyClass = () => {
                          rel="noreferrer"
                          className="px-6 py-3 bg-white/90 backdrop-blur shadow-xl border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all flex items-center gap-2"
                        >
-                         <span>Link2</span> {t('my_class.viewer.tab_fallback')}
+                         <span aria-hidden="true">↗</span> {t('my_class.viewer.tab_fallback')}
                        </a>
                     </div>
                   )}

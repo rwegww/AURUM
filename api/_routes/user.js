@@ -25,6 +25,7 @@ const DEFAULT_STUDY_PLAN = {
   grade: null,
 };
 const STUDY_REMINDER_INTERVAL_MINUTES = 240;
+const OPTIONAL_PLACEMENT_ATTEMPT_TTL_MS = 2 * 60 * 60 * 1000;
 const PROFILE_UPDATE_FIELDS = new Set(['avatarSeed', 'studyPlan', 'username', 'useGoogleAvatar']);
 const PLACEMENT_GRADES = new Set(['9', '10', '11', '12']);
 const ALL_PLACEMENT_GRADES = new Set(SUPPORTED_PLACEMENT_GRADES);
@@ -142,10 +143,9 @@ const applyLessonStreak = (updateFields, user) => {
 router.get('/online-count', async (req, res) => {
   try {
     const activeCount = await User.countActiveStudents();
-    // Fallback minimum to 1 if we are sure at least the current user is active (though this is public)
-    res.json({ count: Math.max(1, activeCount) });
-  } catch (_err) {
-    res.status(200).json({ count: 1 });
+    res.json({ count: Math.max(0, Number(activeCount) || 0) });
+  } catch (err) {
+    res.status(500).json({ message: 'Lỗi tải số người đang hoạt động', error: err.message });
   }
 });
 
@@ -181,6 +181,25 @@ router.get('/public-praises', async (req, res) => {
     res.json(praises);
   } catch (err) {
     res.status(500).json({ message: 'Lỗi tải lời khen ngợi', error: err.message });
+  }
+});
+
+// Public aggregate counters for the home page. Never substitute marketing data.
+router.get('/public-stats', async (_req, res) => {
+  try {
+    const [students, lessons, classesResult] = await Promise.all([
+      User.countStudents(),
+      Lesson.countAll(),
+      supabase.from('lop').select('id', { count: 'exact', head: true }),
+    ]);
+    if (classesResult.error) throw classesResult.error;
+    return res.json({
+      students: students || 0,
+      classes: classesResult.count || 0,
+      lessons: lessons || 0,
+    });
+  } catch (err) {
+    return res.status(500).json({ message: 'Lỗi tải số liệu công khai', error: err.message });
   }
 });
 
@@ -468,8 +487,11 @@ router.post('/lesson-segment', auth, async (req, res) => {
   }
 });
 
-router.post('/placement-pass', auth, async (req, res) => {
+router.post('/placement/optional/start', auth, async (req, res) => {
   try {
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ message: 'Chỉ tài khoản học sinh mới có thể làm bài học vượt.' });
+    }
     if (req.user.balancingProgress?.placement?.required === true) {
       return res.status(403).json({ message: 'Tài khoản mới phải hoàn thành bài xếp lớp được chấm ở máy chủ.' });
     }
@@ -478,26 +500,99 @@ router.post('/placement-pass', auth, async (req, res) => {
       return res.status(400).json({ message: 'Khối lớp kiểm tra không hợp lệ.' });
     }
 
+    const currentProgress = req.user.balancingProgress || {};
+    const passedGrades = Array.isArray(currentProgress.passedGrades) ? currentProgress.passedGrades : [];
+    if (passedGrades.includes(grade)) {
+      return res.status(409).json({ message: `Bạn đã hoàn thành bài học vượt lớp ${grade}.` });
+    }
+
+    const [assessment, lessons] = await Promise.all([
+      Promise.resolve(getPlacementAssessment(grade)),
+      Lesson.find({ classId: grade, view: 'summary' }),
+    ]);
+    if (!assessment || !lessons[0]) {
+      return res.status(409).json({ message: 'Khối này chưa đủ dữ liệu để kiểm tra học vượt.' });
+    }
+
+    const attemptId = crypto.randomUUID();
+    const optionalPlacement = {
+      attemptId,
+      grade,
+      startedAt: new Date().toISOString(),
+    };
+    const updatedUser = await User.update(req.user.id, {
+      balancingProgress: { ...currentProgress, optionalPlacement },
+    });
+
+    return res.json({
+      success: true,
+      user: toProfileResponse(updatedUser),
+      assessment: { ...assessment, attemptId },
+    });
+  } catch (err) {
+    return res.status(500).json({ message: 'Không thể bắt đầu bài học vượt lúc này.', error: err.message });
+  }
+});
+
+router.post('/placement-pass', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'student') {
+      return res.status(403).json({ message: 'Chỉ tài khoản học sinh mới có thể làm bài học vượt.' });
+    }
+    if (req.user.balancingProgress?.placement?.required === true) {
+      return res.status(403).json({ message: 'Tài khoản mới phải hoàn thành bài xếp lớp được chấm ở máy chủ.' });
+    }
+
     const currentProgress = req.user.balancingProgress || { completedNodeIds: [], completedCount: 0, passedGrades: [], lessonStars: {} };
+    const optionalPlacement = currentProgress.optionalPlacement;
+    const attemptId = String(req.body?.attemptId || '');
+    const startedAt = Date.parse(optionalPlacement?.startedAt || '');
+    if (!optionalPlacement
+      || !attemptId
+      || attemptId !== optionalPlacement.attemptId
+      || !Number.isFinite(startedAt)
+      || Date.now() - startedAt > OPTIONAL_PLACEMENT_ATTEMPT_TTL_MS) {
+      return res.status(409).json({ message: 'Lượt kiểm tra học vượt đã hết hạn. Vui lòng bắt đầu lại.' });
+    }
+
+    const grade = String(optionalPlacement.grade || '');
+    if (!PLACEMENT_GRADES.has(grade)) {
+      return res.status(400).json({ message: 'Khối lớp kiểm tra không hợp lệ.' });
+    }
+    const result = gradePlacementAssessment(grade, req.body?.answers);
+    if (!result) {
+      return res.status(400).json({ message: 'Bạn cần trả lời đầy đủ tất cả câu hỏi.' });
+    }
+
     const passedGrades = Array.isArray(currentProgress.passedGrades) ? currentProgress.passedGrades : [];
     const alreadyPassed = passedGrades.includes(grade);
+    const { optionalPlacement: _completedAttempt, ...progressWithoutAttempt } = currentProgress;
     const updateFields = {
       balancingProgress: {
-        ...currentProgress,
-        passedGrades: alreadyPassed ? passedGrades : [...passedGrades, grade],
+        ...progressWithoutAttempt,
+        passedGrades: result.passed && !alreadyPassed ? [...passedGrades, grade] : passedGrades,
       },
     };
 
-    if (!alreadyPassed) {
+    if (result.passed && !alreadyPassed) {
       const nextXp = (req.user.xp || 0) + 500;
       updateFields.xp = nextXp;
       updateFields.level = Math.floor(nextXp / 1000) + 1;
     }
 
     const updatedUser = await User.update(req.user.id, updateFields);
-    res.json({ success: true, user: toProfileResponse(updatedUser), xpGained: alreadyPassed ? 0 : 500 });
+    return res.json({
+      success: true,
+      user: toProfileResponse(updatedUser),
+      result: {
+        ...result,
+        grade,
+        recommendedGrade: String(Math.max(6, Number(grade) - 1)),
+      },
+      xpGained: result.passed && !alreadyPassed ? 500 : 0,
+    });
   } catch (err) {
-    res.status(500).json({ message: 'Không thể lưu kết quả kiểm tra lúc này.', error: err.message });
+    return res.status(500).json({ message: 'Không thể lưu kết quả kiểm tra lúc này.', error: err.message });
   }
 });
 

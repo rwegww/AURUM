@@ -32,24 +32,11 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
     return () => document.body.classList.remove('no-scroll');
   }, []);
 
-  const fallbackChallenge = useMemo(() => ({
-    type: "image-selection",
-    images: [
-      "/assets/images/lab-equipment/beaker.png",
-      "/assets/images/lab-equipment/test-tube.png",
-      "/assets/images/lab-equipment/graduated-cylinder.png",
-      "/assets/images/lab-equipment/erlenmeyer-flask.png"
-    ],
-    question: t('mission_modal.image_selection.fallback_question', { defaultValue: "Đâu là hình ảnh mô tả đúng nhất về 'Cốc thủy tinh' (Beaker)?" }),
-    correctAnswer: 0,
-    targetType: t('mission_modal.labels.target_type_fallback', { defaultValue: "dụng cụ" }),
-    source: t('mission_modal.source_fallback')
-  }), [t]);
-  const currentChallenge = challenges[currentStep] || fallbackChallenge;
+  const currentChallenge = challenges[currentStep] || null;
 
-  const type = currentChallenge.type || 'multiple-choice';
-  const progress = ((currentStep) / challenges.length) * 100;
-  const isFinalStep = currentStep === challenges.length - 1;
+  const type = currentChallenge?.type || 'multiple-choice';
+  const progress = challenges.length > 0 ? (currentStep / challenges.length) * 100 : 0;
+  const isFinalStep = challenges.length > 0 && currentStep === challenges.length - 1;
   const defaultDragItems = useMemo(
     () => getDragItemsForStep(currentChallenge, currentStep),
     [currentChallenge, currentStep]
@@ -115,6 +102,30 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
     'matching': t('mission_modal.labels.matching'),
     'lab-task': t('mission_modal.labels.lab-task', { defaultValue: 'Chuẩn bị thí nghiệm' })
   };
+
+  if (!currentChallenge) {
+    return (
+      <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-[#fffbf0]/90 backdrop-blur-xl">
+        <motion.div
+          {...dialogMotion}
+          className="max-w-lg w-full bg-white rounded-[32px] border border-viet-border shadow-2xl p-8 text-center"
+        >
+          <FlaskConical className="w-12 h-12 mx-auto mb-4 text-amber-500" />
+          <h2 className="text-xl font-black text-viet-text mb-3">Chưa có thử thách hợp lệ</h2>
+          <p className="text-sm text-viet-text-light mb-6">
+            Bài học này chưa được cấu hình thử thách. Tiến độ sẽ không được mở khóa cho đến khi nội dung được bổ sung.
+          </p>
+          <button
+            type="button"
+            onClick={onCancel}
+            className="w-full py-3 bg-viet-green text-white rounded-2xl font-black text-xs uppercase tracking-widest"
+          >
+            Quay lại bài học
+          </button>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-[110] flex items-start justify-center p-4 py-12 bg-[#fffbf0]/90 backdrop-blur-xl overflow-y-auto">

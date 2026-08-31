@@ -15,13 +15,13 @@ import { EmptyState, ErrorState, Screen } from "../../components/ui/Primitives";
 import PlacementAssessmentModal from "../../components/journey/PlacementAssessmentModal";
 import JourneyNotebookModal from "../../components/journey/JourneyNotebookModal";
 import { spacing, typography } from "../../constants/theme";
-import { JOURNEY_PLACEMENT_TESTS } from "../../constants/journeyPlacementTests";
 import { useAuth } from "../../context/AuthContext";
 import { learningApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
 const GRADES = ["6", "7", "8", "9", "10", "11", "12"];
 const LEVELS = ["level1", "level2", "level3"];
+const OPTIONAL_PLACEMENT_GRADES = new Set(["9", "10", "11", "12"]);
 const MAP_TILE_URI = "https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/public/assets/images/journey-chemistry-map-bg.png";
 
 const CLASS_THEMES = {
@@ -167,10 +167,9 @@ export default function JourneyTab() {
   const completion = lessonsWithStatus.length ? completedCount / lessonsWithStatus.length : 0;
   const canShowJourney = !placementManaged || isPlaced;
   const canOpenNotebook = Boolean(lessonsWithStatus[0]?.isCompleted || ["teacher", "admin"].includes(user?.role));
-  const optionalTestQuestions = JOURNEY_PLACEMENT_TESTS[grade] || [];
   const showOptionalTest = !placementManaged
     && user?.role === "student"
-    && optionalTestQuestions.length > 0
+    && OPTIONAL_PLACEMENT_GRADES.has(grade)
     && lessonsWithStatus.length > 0
     && !user?.balancingProgress?.passedGrades?.includes(grade)
     && !user?.unlockedLessons?.map(String).includes(String(lessonIdOf(lessonsWithStatus[0])));
@@ -194,36 +193,24 @@ export default function JourneyTab() {
     }
   };
 
-  const startOptionalTest = () => {
-    setAssessmentMode("optional");
-    setAssessment({
-      attemptId: `journey-skip-${grade}`,
-      grade,
-      passingPercent: 70,
-      questions: optionalTestQuestions.map((question, index) => ({ ...question, id: `skip-${grade}-${index + 1}` }))
-    });
+  const startOptionalTest = async () => {
+    if (startingAssessment) return;
+    setStartingAssessment(true);
+    try {
+      const response = await learningApi.startOptionalPlacement(token, grade);
+      setAssessmentMode("optional");
+      setAssessment(response.assessment);
+      await refreshProfile();
+    } catch (error) {
+      Alert.alert("Chưa thể bắt đầu bài học vượt", error.message);
+    } finally {
+      setStartingAssessment(false);
+    }
   };
 
   const submitAssessment = async (payload) => {
     if (assessmentMode !== "optional") return learningApi.submitPlacement(token, payload);
-    const questions = optionalTestQuestions;
-    const correct = questions.reduce((total, question, index) => (
-      total + (payload.answers[`skip-${grade}-${index + 1}`] === question.correctAnswer ? 1 : 0)
-    ), 0);
-    const passingScore = Math.ceil(questions.length * 0.7);
-    const passed = correct >= passingScore;
-    if (passed) await learningApi.completePlacement(token, grade);
-    return {
-      success: true,
-      result: {
-        passed,
-        grade,
-        correct,
-        total: questions.length,
-        percent: Math.round((correct / questions.length) * 100),
-        recommendedGrade: String(Math.max(6, Number(grade) - 1))
-      }
-    };
+    return learningApi.completePlacement(token, payload);
   };
 
   return (
@@ -295,7 +282,9 @@ export default function JourneyTab() {
             <Text style={styles.optionalTestTitle}>Mở nhanh lộ trình lớp {grade}</Text>
             <Text style={styles.optionalTestText}>Đạt 70% bài kiểm tra nền tảng để mở chặng đầu tiên và nhận 500 XP.</Text>
           </View>
-          <Pressable onPress={startOptionalTest} style={styles.optionalTestButton}><Text style={styles.optionalTestButtonText}>Làm bài kiểm tra</Text><Ionicons name="arrow-forward" size={18} color="#ffffff" /></Pressable>
+          <Pressable onPress={startOptionalTest} disabled={startingAssessment} style={styles.optionalTestButton}>
+            {startingAssessment ? <ActivityIndicator color="#ffffff" /> : <><Text style={styles.optionalTestButtonText}>Làm bài kiểm tra</Text><Ionicons name="arrow-forward" size={18} color="#ffffff" /></>}
+          </Pressable>
         </View>
       ) : null}
 

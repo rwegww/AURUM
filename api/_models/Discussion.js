@@ -100,30 +100,8 @@ export const Discussion = {
 
   // Like a comment (increment likes)
   async like(id) {
-    // Note: In a production app, we should have a separate 'likes' table to prevent double-liking
-    // For this educational prototype, we'll use a simple counter for now.
     const { data, error } = await supabase.rpc('increment_likes', { row_id: id });
-    
-    if (error) {
-      // Fallback if RPC doesn't exist yet
-      const { data: current, error: getError } = await supabase
-        .from('thao_luan')
-        .select('luot_thich')
-        .eq('id', id)
-        .single();
-      
-      if (getError) throw getError;
-
-      const { data: updated, error: updateError } = await supabase
-        .from('thao_luan')
-        .update({ luot_thich: (current.luot_thich || 0) + 1 })
-        .eq('id', id)
-        .select()
-        .single();
-      
-      if (updateError) throw updateError;
-      return mapDiscussion(updated);
-    }
+    if (error) throw error;
     return mapDiscussion(data);
   }
 };

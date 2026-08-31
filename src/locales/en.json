@@ -34,11 +34,8 @@
  "enter_classroom": "Start the journey",
  "enter_lab": "Enter the lab",
  "stats": {
- "students_count": "10,000+",
  "students_label": "Vietnamese learners",
- "schools_count": "50+",
  "schools_label": "Partner classrooms",
- "bai_hoc_count": "1,000+",
  "bai_hoc_label": "Chemistry lessons"
  },
  "features": {
@@ -124,10 +121,6 @@
  "empty": "The leaderboard is waiting for the first learners...",
  "conquer_btn": "Explore learning paths"
  },
- "social_proof": {
- "text": "10,000+ Vietnamese learners",
- "schools": "50+ partner classrooms"
- },
  "how_it_works": {
  "badge": "How it works",
  "title": "3 Steps to Master Chemistry",
@@ -148,24 +141,7 @@
  },
  "testimonials": {
  "badge": "Stories",
- "title": "What learners and teachers say about Aurum",
- "reviews": [
- {
- "name": "Minh Anh",
- "role": "Grade 9 student",
- "content": "The illustrated lessons make reactions easier to understand, so chemistry exercises feel less intimidating."
- },
- {
- "name": "Gia Bao",
- "role": "Grade 11 student",
- "content": "The virtual lab lets me test different observations before doing practical work in class."
- },
- {
- "name": "Ms. Lan",
- "role": "Chemistry teacher",
- "content": "Aurum works well for short review tasks, and students can follow their progress more independently."
- }
- ]
+ "title": "What learners and teachers say about Aurum"
  },
  "final_cta": {
  "title": "Ready to begin your chemistry journey?",

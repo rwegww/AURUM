@@ -427,7 +427,30 @@ export const AuthProvider = ({ children }) => {
      }
   }, [isLoggedIn, user]);
 
-  const completePlacementTest = useCallback(async (grade) => {
+  const startOptionalPlacementTest = useCallback(async (grade) => {
+    if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/user/placement/optional/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ grade })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Không thể bắt đầu bài kiểm tra');
+      if (mountedRef.current && data.user) setUser(data.user);
+      return { success: true, assessment: data.assessment, user: data.user };
+    } catch (err) {
+      console.error('Lỗi bắt đầu bài kiểm tra học vượt:', err);
+      return { success: false, message: err.message };
+    }
+  }, [isLoggedIn, user]);
+
+  const completePlacementTest = useCallback(async (attemptId, answers) => {
     if (!isLoggedIn || !user) return { success: false, message: 'Vui lòng đăng nhập' };
 
     try {
@@ -438,14 +461,14 @@ export const AuthProvider = ({ children }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ grade })
+        body: JSON.stringify({ attemptId, answers })
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Không thể lưu kết quả test');
+      if (!res.ok) throw new Error(data.message || 'Không thể chấm bài kiểm tra');
       if (mountedRef.current && data.user) setUser(data.user);
-      return { success: true, user: data.user, xpGained: data.xpGained };
+      return { success: true, user: data.user, result: data.result, xpGained: data.xpGained };
     } catch (err) {
-      console.error('Lỗi lưu kết quả test:', err);
+      console.error('Lỗi chấm bài kiểm tra học vượt:', err);
       return { success: false, message: err.message };
     }
   }, [isLoggedIn, user]);
@@ -679,6 +702,7 @@ export const AuthProvider = ({ children }) => {
     linkAccount,
     changePassword,
     completeLessonSegment,
+    startOptionalPlacementTest,
     completePlacementTest,
     startGradePlacement,
     submitGradePlacement,
@@ -686,7 +710,7 @@ export const AuthProvider = ({ children }) => {
     resetStreak,
     authError,
     setAuthError
-  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, completeGoogleLogin, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, completePlacementTest, startGradePlacement, submitGradePlacement, recoverStreak, resetStreak, authError]);
+  }), [user, isLoggedIn, loading, login, magicLogin, loginWithGoogle, completeGoogleLogin, register, registerTeacher, logout, updateProgress, refreshUser, updateUser, linkAccount, changePassword, completeLessonSegment, startOptionalPlacementTest, completePlacementTest, startGradePlacement, submitGradePlacement, recoverStreak, resetStreak, authError]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

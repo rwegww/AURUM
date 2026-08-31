@@ -24,7 +24,8 @@ const configuredOrigins = [
   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
   process.env.URL, // Netlify primary URL
   process.env.DEPLOY_URL, // Netlify deploy preview URL
-  'https://chem-aurum.vercel.app',
+  'https://aurumchemistry.io.vn',
+  'https://aurum-navy.vercel.app',
   ...(process.env.CORS_ORIGINS || '').split(','),
 ].filter(Boolean).map((origin) => origin.trim());
 
@@ -138,19 +139,23 @@ if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
     console.log(`🚀 Aurum API running on http://${HOST}:${PORT}`);
     console.log(`🔗 Health Check: http://${HOST}:${PORT}/api/health`);
     
-    // Local Cron Simulation (runs every 60 seconds to dispatch reminders automatically)
-    console.log('⏰ Local Cron Simulation started (checks every 60 seconds).');
-    setInterval(async () => {
-      try {
-        const response = await fetch(`http://127.0.0.1:${PORT}/api/user/cron-send-reminders`);
-        const result = await response.json();
-        if (result.details && result.details.length > 0) {
-          console.log('[Local Cron] Simulation run completed:', result.message);
+    // Local reminder dispatch is opt-in because this route can send real emails.
+    if (process.env.ENABLE_LOCAL_CRON_SIMULATION === 'true') {
+      console.log('⏰ Local Cron Simulation started (checks every 60 seconds).');
+      setInterval(async () => {
+        try {
+          const response = await fetch(`http://127.0.0.1:${PORT}/api/user/cron-send-reminders`);
+          const result = await response.json();
+          if (result.details && result.details.length > 0) {
+            console.log('[Local Cron] Simulation run completed:', result.message);
+          }
+        } catch (err) {
+          console.error('[Local Cron] Simulation failed to ping route:', err.message);
         }
-      } catch (err) {
-        console.error('[Local Cron] Simulation failed to ping route:', err.message);
-      }
-    }, 60000);
+      }, 60000);
+    } else {
+      console.log('⏰ Local Cron Simulation disabled. Set ENABLE_LOCAL_CRON_SIMULATION=true to enable it.');
+    }
   });
 }
 

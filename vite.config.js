@@ -17,8 +17,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      'lucide-react': path.resolve(__dirname, './src/components/common/MorphIcons.jsx'),
+      '@': path.resolve(import.meta.dirname, './src'),
+      'lucide-react': path.resolve(import.meta.dirname, './src/components/common/MorphIcons.jsx'),
     },
   },
   build: {

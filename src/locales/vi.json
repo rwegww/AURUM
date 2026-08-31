@@ -34,11 +34,8 @@
         "enter_classroom": "Bắt đầu hành trình",
         "enter_lab": "Vào phòng thí nghiệm",
         "stats": {
-            "students_count": "10.000+",
             "students_label": "Học viên Việt Nam",
-            "schools_count": "50+",
             "schools_label": "Lớp học đồng hành",
-            "bai_hoc_count": "1.000+",
             "bai_hoc_label": "Bài học Hóa học"
         },
         "features": {
@@ -124,10 +121,6 @@
             "empty": "Bảng xếp hạng đang chờ những người học đầu tiên...",
             "conquer_btn": "Khám phá lộ trình học"
         },
-        "social_proof": {
-            "text": "10.000+ học viên Việt Nam",
-            "schools": "50+ lớp học đồng hành"
-        },
         "how_it_works": {
             "badge": "Cách hoạt động",
             "title": "3 Bước Chinh Phục Hóa Học",
@@ -148,24 +141,7 @@
         },
         "testimonials": {
             "badge": "Góc chia sẻ",
-            "title": "Học viên và giáo viên nói gì về Aurum?",
-            "reviews": [
-                {
-                    "name": "Minh Anh",
-                    "role": "Học sinh lớp 9",
-                    "content": "Các bài học có hình minh họa rõ ràng nên mình hiểu phản ứng Hóa học nhanh hơn và bớt sợ bài tập."
-                },
-                {
-                    "name": "Gia Bảo",
-                    "role": "Học sinh lớp 11",
-                    "content": "Phòng thí nghiệm ảo giúp mình thử nhiều hiện tượng trước khi làm bài thực hành trên lớp."
-                },
-                {
-                    "name": "Cô Lan",
-                    "role": "Giáo viên Hóa học",
-                    "content": "Aurum phù hợp để giao nhiệm vụ ôn tập ngắn, học sinh dễ theo dõi tiến độ và chủ động luyện tập hơn."
-                }
-            ]
+            "title": "Học viên và giáo viên nói gì về Aurum?"
         },
         "final_cta": {
             "title": "Sẵn sàng bắt đầu hành trình Hóa học?",

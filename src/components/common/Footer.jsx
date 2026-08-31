@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Mail, Phone, MapPin, Facebook, Youtube, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -31,13 +31,6 @@ const Footer = () => {
             <p className="text-[14px] font-medium text-viet-text-light leading-relaxed max-w-[300px]">
               {t('footer.brand_desc')}
             </p>
-            <div className="flex gap-4">
-              {[Facebook, Youtube, Instagram].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-xl bg-slate-50 border border-viet-border flex items-center justify-center text-viet-text-light hover:text-viet-green hover:bg-viet-green/5 hover:border-viet-green/20 transition-all shadow-sm">
-                  <Icon size={18} />
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Explore Column */}
@@ -107,7 +100,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="block text-[10px] font-black text-viet-text-light uppercase tracking-widest mb-1">{t('footer.contact.hotline')}</span>
-                  <a href="tel:+84981234567" className="text-[14px] font-black text-viet-text hover:text-viet-green transition-colors">(+84) 33 468 1752</a>
+                  <a href="tel:+84334681752" className="text-[14px] font-black text-viet-text hover:text-viet-green transition-colors">(+84) 334 681 752</a>
                 </div>
               </div>
               {/* Address */}
