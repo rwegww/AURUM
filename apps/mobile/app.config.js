@@ -34,7 +34,8 @@ module.exports = {
         "expo-build-properties",
         {
           android: {
-            usesCleartextTraffic: true
+            usesCleartextTraffic: true,
+            minSdkVersion: 24
           }
         }
       ]
