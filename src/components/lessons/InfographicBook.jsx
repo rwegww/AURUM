@@ -4,64 +4,7 @@ import InfographicPage from './InfographicPage';
 import { useAuth } from '@/context/AuthContext';
 import { Atom, BookOpen, X, ArrowLeft, ArrowRight } from 'lucide-react';
 
-const GRADE_COVERS = {
-  '6': {
-    gradient: 'from-[#082f49] via-[#0c4a6e] to-[#06202f]',
-    spine: 'bg-sky-950 border-r border-sky-800/30',
-    accent: '#38bdf8',
-    title: 'SỔ TAY KHOA HỌC LỚP 6',
-    subtitle: 'An toàn, đo lường, chất và hỗn hợp',
-    badge: 'LỚP 6'
-  },
-  '7': {
-    gradient: 'from-[#164e63] via-[#0f3460] to-[#071b2c]',
-    spine: 'bg-cyan-950 border-r border-cyan-800/30',
-    accent: '#22d3ee',
-    title: 'SỔ TAY KHOA HỌC LỚP 7',
-    subtitle: 'Nguyên tử, nguyên tố và công thức hóa học',
-    badge: 'LỚP 7'
-  },
-  '8': {
-    gradient: 'from-[#143e18] via-[#0b270e] to-[#041205]',
-    spine: 'bg-emerald-950 border-r border-emerald-800/30',
-    accent: '#76c034',
-    title: 'SỔ TAY SINH TỒN HÓA HỌC 8',
-    subtitle: 'Nền Tảng Chất Và Nguyên Tử',
-    badge: 'LỚP 8'
-  },
-  '9': {
-    gradient: 'from-[#1e1b4b] via-[#111035] to-[#07061b]',
-    spine: 'bg-indigo-950 border-r border-indigo-800/30',
-    accent: '#6366f1',
-    title: 'SỔ TAY SINH TỒN HÓA HỌC 9',
-    subtitle: 'Hợp Chất Vô Cơ & Hữu Cơ',
-    badge: 'LỚP 9'
-  },
-  '10': {
-    gradient: 'from-[#042f2e] via-[#021b1b] to-[#010c0c]',
-    spine: 'bg-teal-950 border-r border-teal-800/30',
-    accent: '#14b8a6',
-    title: 'CẨM NANG HÓA HỌC 10',
-    subtitle: 'Cấu Tạo Nguyên Tử & Liên Kết',
-    badge: 'LỚP 10'
-  },
-  '11': {
-    gradient: 'from-[#4c0519] via-[#2c020d] to-[#120004]',
-    spine: 'bg-rose-950 border-r border-rose-800/30',
-    accent: '#f43f5e',
-    title: 'CẨM NANG HÓA HỌC 11',
-    subtitle: 'Cân Bằng Hóa Học & Hóa Hữu Cơ',
-    badge: 'LỚP 11'
-  },
-  '12': {
-    gradient: 'from-[#451a03] via-[#280f02] to-[#100500]',
-    spine: 'bg-amber-950 border-r border-amber-800/30',
-    accent: '#f59e0b',
-    title: 'CẨM NANG HÓA HỌC 12',
-    subtitle: 'Este, Lipit & Luyện Thi THPT',
-    badge: 'LỚP 12'
-  }
-};
+import { JOURNEY_COVERS as GRADE_COVERS } from '../../../shared/journeyPresentation';
 
 const InfographicBook = ({ isOpen, onClose, bai_hoc, grade, unlockedLessons }) => {
   const { user } = useAuth();

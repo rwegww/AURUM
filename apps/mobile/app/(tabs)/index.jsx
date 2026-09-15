@@ -22,7 +22,7 @@ import { classApi, learningApi, publicApi } from "../../services/api";
 import { useApiResource } from "../../hooks/useApiResource";
 
 const moduleCards = [
-  { title: "Lộ trình", subtitle: "Bài học theo khối 8-12", icon: "map-outline", color: colors.green, href: "/journey" },
+  { title: "Lộ trình", subtitle: "Bài học theo khối 6-12", icon: "map-outline", color: colors.green, href: "/journey" },
   { title: "Công cụ", subtitle: "Gợi ý công thức, máy tính hóa học", icon: "construct-outline", color: colors.green, href: "/lab" },
   { title: "Đấu trường", subtitle: "Đấu nhanh bằng câu hỏi hóa", icon: "trophy-outline", color: colors.green, href: "/arena" },
   { title: "Tài liệu", subtitle: "Thư viện học liệu", icon: "library-outline", color: colors.green, href: "/library" }

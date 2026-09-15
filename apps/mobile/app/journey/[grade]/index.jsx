@@ -1,2 +1,1 @@
-export { default } from "../../(tabs)/journey";
-
+export { default } from "../../../components/journey/JourneyMap";

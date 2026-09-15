@@ -64,7 +64,8 @@ export const apiRequest = async (path, options = {}) => {
     body,
     query,
     headers = {},
-    auth = true
+    auth = true,
+    includeResponse = false
   } = options;
 
   const isFormData = typeof FormData !== "undefined" && body instanceof FormData;
@@ -90,7 +91,19 @@ export const apiRequest = async (path, options = {}) => {
     throw new ApiError(message, response.status, payload);
   }
 
-  return payload;
+  return includeResponse ? { data: payload, headers: response.headers } : payload;
+};
+
+export const discussionApi = {
+  note: (token, lessonId) => apiRequest(`/api/discussions/notes/${encodeURIComponent(lessonId)}`, { token }),
+  saveNote: (token, lessonId, content) => apiRequest('/api/discussions/notes', { token, method: 'POST', body: { lessonId, content } }),
+  comments: async (lessonId, page = 1) => {
+    const response = await apiRequest(`/api/discussions/${encodeURIComponent(lessonId)}`, { auth: false, query: { page, limit: 10 }, includeResponse: true });
+    if (!Array.isArray(response.data)) throw new Error('Dữ liệu thảo luận không hợp lệ.');
+    return { items: response.data, total: Number(response.headers.get('X-Total-Count')) || 0, hasMore: response.headers.get('X-Has-More') === 'true' };
+  },
+  post: (token, lessonId, content, parentId = null) => apiRequest('/api/discussions', { token, method: 'POST', body: { lessonId, content, parentId } }),
+  like: (token, id) => apiRequest(`/api/discussions/${encodeURIComponent(id)}/like`, { token, method: 'POST' }),
 };
 
 export const authApi = {

@@ -3,14 +3,15 @@ import {
   ActivityIndicator,
   Modal,
   Pressable,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View
 } from "react-native";
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from "@expo/vector-icons";
 import { colors, spacing, typography } from "../../constants/theme";
+import MathText from './MathText';
 
 export default function PlacementAssessmentModal({
   assessment,
@@ -18,7 +19,8 @@ export default function PlacementAssessmentModal({
   onClose,
   onSubmit,
   onPassed,
-  onFailed
+  onFailed,
+  mode = 'initial'
 }) {
   const [answers, setAnswers] = React.useState({});
   const [questionIndex, setQuestionIndex] = React.useState(0);
@@ -41,6 +43,7 @@ export default function PlacementAssessmentModal({
   const answeredCount = questions.filter((item) => Number.isInteger(answers[item.id])).length;
 
   const moveNext = async () => {
+    if (submitting) return;
     if (!question || !Number.isInteger(selectedAnswer)) {
       setError("Hãy chọn một đáp án trước khi tiếp tục.");
       return;
@@ -55,7 +58,8 @@ export default function PlacementAssessmentModal({
     setError("");
     try {
       const response = await onSubmit({ attemptId: assessment.attemptId, answers });
-      setResult(response?.result || null);
+      if (!response?.result) throw new Error(response?.message || 'Chưa nhận được kết quả chấm bài. Vui lòng thử lại.');
+      setResult(response.result);
     } catch (submitError) {
       setError(submitError.message || "Chưa thể chấm bài. Vui lòng thử lại.");
     } finally {
@@ -73,12 +77,12 @@ export default function PlacementAssessmentModal({
                 <Ionicons name="school-outline" size={30} color="#ffffff" />
               </View>
               <View style={styles.headerCopy}>
-                <Text style={styles.eyebrow}>Xếp lớp ban đầu</Text>
-                <Text style={styles.title}>Bài đánh giá khối {assessment?.grade}</Text>
+                <Text style={styles.eyebrow}>{mode === 'optional' ? 'Hành trình vượt cấp' : 'Xếp lớp ban đầu'}</Text>
+                <Text style={styles.title}>{mode === 'optional' ? 'Bài Test Học Vượt' : `Bài đánh giá khối ${assessment?.grade}`}</Text>
                 <Text style={styles.subtitle}>Cần đạt từ {assessment?.passingPercent || 70}% để xác nhận khối.</Text>
               </View>
               {!result ? (
-                <Pressable onPress={onClose} style={styles.closeButton} accessibilityLabel="Đóng bài đánh giá">
+                <Pressable onPress={onClose} style={styles.closeButton} accessibilityRole="button" accessibilityLabel="Đóng bài đánh giá">
                   <Ionicons name="close" size={22} color="#ffffff" />
                 </Pressable>
               ) : null}
@@ -95,13 +99,17 @@ export default function PlacementAssessmentModal({
                   </View>
                 </View>
 
-                <Text style={styles.question}>{question.question}</Text>
+                <MathText style={styles.question}>{question.question}</MathText>
                 <View style={styles.optionStack}>
                   {(question.options || []).map((option, index) => {
                     const selected = selectedAnswer === index;
                     return (
                       <Pressable
                         key={`${index}-${option}`}
+                        accessibilityRole="radio"
+                        accessibilityLabel={String(option)}
+                        accessibilityState={{ selected, disabled: submitting }}
+                        disabled={submitting}
                         onPress={() => {
                           setAnswers((current) => ({ ...current, [question.id]: index }));
                           setError("");
@@ -113,7 +121,7 @@ export default function PlacementAssessmentModal({
                             {String.fromCharCode(65 + index)}
                           </Text>
                         </View>
-                        <Text style={[styles.optionText, selected ? styles.optionTextSelected : null]}>{option}</Text>
+                        <View style={{ flex: 1 }}><MathText style={[styles.optionText, selected ? styles.optionTextSelected : null]}>{option}</MathText></View>
                       </Pressable>
                     );
                   })}
@@ -123,6 +131,7 @@ export default function PlacementAssessmentModal({
 
                 <View style={styles.actions}>
                   <Pressable
+                    accessibilityRole="button"
                     disabled={questionIndex === 0 || submitting}
                     onPress={() => setQuestionIndex((current) => Math.max(0, current - 1))}
                     style={[styles.backButton, questionIndex === 0 ? styles.disabled : null]}
@@ -130,7 +139,7 @@ export default function PlacementAssessmentModal({
                     <Ionicons name="arrow-back" size={18} color={colors.muted} />
                     <Text style={styles.backButtonText}>Quay lại</Text>
                   </Pressable>
-                  <Pressable disabled={submitting} onPress={moveNext} style={styles.nextButton}>
+                  <Pressable accessibilityRole="button" disabled={submitting} onPress={moveNext} style={styles.nextButton}>
                     {submitting ? <ActivityIndicator color="#ffffff" /> : (
                       <>
                         <Text style={styles.nextButtonText}>{questionIndex === questions.length - 1 ? "Nộp bài" : "Tiếp tục"}</Text>
@@ -149,15 +158,21 @@ export default function PlacementAssessmentModal({
                   <Ionicons name={result.passed ? "trophy" : "refresh"} size={42} color={result.passed ? "#b45309" : "#b42318"} />
                 </View>
                 <Text style={[styles.resultTitle, result.passed ? styles.resultTitlePassed : null]}>
-                  {result.passed ? `Bạn đã được xếp vào khối ${result.grade}` : `Chưa phù hợp với khối ${result.grade}`}
+                  {result.passed ? (mode === 'optional' ? `Đã mở lộ trình lớp ${result.grade}` : `Bạn đã được xếp vào khối ${result.grade}`) : 'Chưa đạt yêu cầu'}
                 </Text>
                 <Text style={styles.resultText}>
                   Bạn trả lời đúng {result.correct}/{result.total} câu ({result.percent}%). {result.passed
                     ? "Bài học đầu tiên đã sẵn sàng."
-                    : `Hệ thống gợi ý thử khối ${result.recommendedGrade}.`}
+                    : mode === 'optional' ? 'Ôn tập thêm và quay lại thử sức nhé.' : `Hệ thống gợi ý thử khối ${result.recommendedGrade}.`}
                 </Text>
-                <Pressable onPress={() => result.passed ? onPassed(result) : onFailed(result)} style={[styles.resultButton, result.passed ? null : styles.resultButtonFailed]}>
-                  <Text style={styles.resultButtonText}>{result.passed ? "Vào hành trình" : "Chọn lại khối"}</Text>
+                {error ? <Text style={styles.error}>{error}</Text> : null}
+                <Pressable accessibilityRole="button" disabled={submitting} onPress={async () => {
+                  setSubmitting(true);
+                  try { await (result.passed ? onPassed(result) : onFailed(result)); }
+                  catch (failure) { setError(failure.message || 'Chưa thể cập nhật tiến độ. Vui lòng thử lại.'); }
+                  finally { setSubmitting(false); }
+                }} style={[styles.resultButton, result.passed ? null : styles.resultButtonFailed]}>
+                  <Text style={styles.resultButtonText}>{result.passed ? "Vào hành trình" : mode === 'optional' ? "Về lộ trình" : "Chọn lại khối"}</Text>
                   <Ionicons name={result.passed ? "arrow-forward" : "refresh"} size={20} color="#ffffff" />
                 </Pressable>
               </View>
@@ -194,7 +209,7 @@ const styles = StyleSheet.create({
   optionLetterSelected: { backgroundColor: colors.green },
   optionLetterText: { color: "#64748b", fontFamily: typography.bold, fontSize: 13 },
   optionLetterTextSelected: { color: "#ffffff" },
-  optionText: { color: "#334155", flex: 1, fontFamily: typography.bold, fontSize: 14, lineHeight: 20 },
+  optionText: { color: "#334155", fontFamily: typography.bold, fontSize: 14, fontWeight: '700', lineHeight: 20 },
   optionTextSelected: { color: "#14532d" },
   error: { color: "#b42318", fontFamily: typography.bold, fontSize: 13 },
   actions: { alignItems: "center", flexDirection: "row", justifyContent: "space-between" },

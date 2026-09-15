@@ -29,73 +29,12 @@ import {
   getJourneyQuizGroups,
   JOURNEY_LEVELS,
 } from '@/utils/journeyLessonData';
+import { JOURNEY_THEMES } from '../../../shared/journeyPresentation';
+import { getJourneyLessonStatuses, getNextJourneyLevel } from '../../../shared/journeyProgress';
 import './GradeJourney.css';
 
-const CLASS_THEMES = {
-  '6': {
-    titleKey: 'journey.themes.6.title',
-    subtitleKey: 'journey.themes.6.subtitle',
-    primary: '#0ea5e9',
-    primaryDark: '#0369a1',
-    primarySoft: '#e0f2fe',
-    primaryGlow: 'rgba(14, 165, 233, 0.36)',
-    doodleSymbol: 'H₂O',
-  },
-  '7': {
-    titleKey: 'journey.themes.7.title',
-    subtitleKey: 'journey.themes.7.subtitle',
-    primary: '#06b6d4',
-    primaryDark: '#0e7490',
-    primarySoft: '#cffafe',
-    primaryGlow: 'rgba(6, 182, 212, 0.36)',
-    doodleIcon: FlaskConical,
-  },
-  '8': {
-    titleKey: 'journey.themes.8.title',
-    subtitleKey: 'journey.themes.8.subtitle',
-    primary: '#65b82e',
-    primaryDark: '#3f7f1d',
-    primarySoft: '#ecfccb',
-    primaryGlow: 'rgba(101, 184, 46, 0.38)',
-    doodleSymbol: 'O₂',
-  },
-  '9': {
-    titleKey: 'journey.themes.9.title',
-    subtitleKey: 'journey.themes.9.subtitle',
-    primary: '#6366f1',
-    primaryDark: '#4338ca',
-    primarySoft: '#e0e7ff',
-    primaryGlow: 'rgba(99, 102, 241, 0.36)',
-    doodleIcon: Zap,
-  },
-  '10': {
-    titleKey: 'journey.themes.10.title',
-    subtitleKey: 'journey.themes.10.subtitle',
-    primary: '#14b8a6',
-    primaryDark: '#0f766e',
-    primarySoft: '#ccfbf1',
-    primaryGlow: 'rgba(20, 184, 166, 0.36)',
-    doodleIcon: Atom,
-  },
-  '11': {
-    titleKey: 'journey.themes.11.title',
-    subtitleKey: 'journey.themes.11.subtitle',
-    primary: '#f43f5e',
-    primaryDark: '#be123c',
-    primarySoft: '#ffe4e6',
-    primaryGlow: 'rgba(244, 63, 94, 0.34)',
-    doodleIcon: Dna,
-  },
-  '12': {
-    titleKey: 'journey.themes.12.title',
-    subtitleKey: 'journey.themes.12.subtitle',
-    primary: '#f59e0b',
-    primaryDark: '#b45309',
-    primarySoft: '#fef3c7',
-    primaryGlow: 'rgba(245, 158, 11, 0.36)',
-    doodleIcon: Radiation,
-  },
-};
+const THEME_ICONS = { '7': FlaskConical, '9': Zap, '10': Atom, '11': Dna, '12': Radiation };
+const CLASS_THEMES = Object.fromEntries(Object.entries(JOURNEY_THEMES).map(([grade, theme]) => [grade, { ...theme, doodleIcon: THEME_ICONS[grade], doodleSymbol: theme.symbol }]));
 
 const LEVELS = JOURNEY_LEVELS;
 
@@ -284,11 +223,7 @@ const GradeJourney = () => {
     if (isLocked) return;
 
     const lessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
-    let targetLevel = 'level1';
-
-    if (lessonStars.level1 > 0 && lessonStars.level2 === 0) targetLevel = 'level2';
-    else if (lessonStars.level1 > 0 && lessonStars.level2 > 0 && lessonStars.level3 === 0) targetLevel = 'level3';
-    else if (lessonStars.level1 > 0 && lessonStars.level2 > 0 && lessonStars.level3 > 0) targetLevel = 'level3';
+    const targetLevel = getNextJourneyLevel(lessonStars);
 
     if (targetLevel === 'level1') {
       navigate(`/classroom/${grade}/journey/${lesson.lessonId}/intro?order=${index + 1}`);
@@ -316,29 +251,7 @@ const GradeJourney = () => {
     );
   }
 
-  const isFirstLessonDefaultUnlocked = ['6', '7', '8'].includes(grade);
-  const isGradePassed = user?.balancingProgress?.passedGrades?.includes(grade);
-  const assignedPlacementGrade = user?.balancingProgress?.placement?.status === 'placed'
-    ? String(user.balancingProgress.placement.assignedGrade)
-    : null;
-
-  const bai_hocStatus = bai_hoc.map((lesson, index) => {
-    const previousLessonStars = index > 0
-      ? (user?.balancingProgress?.lessonStars?.[bai_hoc[index - 1].lessonId] || { level1: 0, level2: 0, level3: 0 })
-      : null;
-    const previousLessonFullyCompleted = previousLessonStars
-      ? LEVELS.every((level) => previousLessonStars[level] > 0)
-      : false;
-    const currentLessonStars = user?.balancingProgress?.lessonStars?.[lesson.lessonId] || { level1: 0, level2: 0, level3: 0 };
-    const isCompleted = LEVELS.every((level) => currentLessonStars[level] > 0);
-    const isUnlocked = user?.role === 'admin'
-      || user?.role === 'teacher'
-      || (index === 0 && (isFirstLessonDefaultUnlocked || isGradePassed || assignedPlacementGrade === String(grade)))
-      || previousLessonFullyCompleted
-      || isCompleted;
-
-    return { ...lesson, isUnlocked, isCompleted, stars: currentLessonStars };
-  });
+  const bai_hocStatus = getJourneyLessonStatuses(bai_hoc, user, grade);
 
   let highestUnlockedIndex = -1;
   bai_hocStatus.forEach((lesson, index) => {

@@ -1,5 +1,3 @@
-import { Platform } from "react-native";
-
 export const colors = {
   bg: "#fffbf0",
   surface: "#ffffff",
@@ -16,17 +14,12 @@ export const colors = {
   slate: "#263238"
 };
 
-const systemSans = Platform.select({
-  ios: "System",
-  android: "sans-serif",
-  web: "system-ui",
-  default: "system-ui"
-});
-
 export const typography = {
-  regular: systemSans,
-  medium: systemSans,
-  bold: systemSans
+  regular: 'Nunito_400Regular',
+  medium: 'Nunito_600SemiBold',
+  bold: 'Nunito_800ExtraBold',
+  black: 'Nunito_900Black',
+  heading: 'Quicksand_700Bold'
 };
 
 export const spacing = {

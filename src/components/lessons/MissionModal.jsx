@@ -1,3 +1,4 @@
+import { isJourneyAnswerCorrect } from '../../../shared/journeyAnswers';
 import { dialogMotion } from '@/utils/motion';
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
@@ -57,19 +58,7 @@ const MissionModal = ({ challenges = [], lessonTitle, onUnlock, onCancel }) => {
   };
 
   const validateAnswer = (answer) => {
-    let correct = false;
-
-    if (type === 'multiple-choice' || type === 'image-selection') {
-      correct = answer === currentChallenge.correctAnswer;
-    } else if (type === 'lab-task') {
-      correct = answer === true;
-    } else if (type === 'fill-in-the-blank') {
-      const normalizedInput = answer.toLowerCase().trim();
-      const normalizedTarget = (currentChallenge.correctAnswer || "").toLowerCase().trim();
-      correct = normalizedInput === normalizedTarget;
-    } else if (type === 'drag-drop' || type === 'matching') {
-      correct = JSON.stringify(answer.map(i => i.id)) === JSON.stringify(currentChallenge.correctOrder);
-    }
+    const correct = isJourneyAnswerCorrect({ ...currentChallenge, type }, answer);
 
     if (correct) {
       setIsCorrect(true);

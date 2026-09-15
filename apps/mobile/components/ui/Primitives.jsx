@@ -67,6 +67,9 @@ export const PrimaryButton = ({
   <Pressable
     onPress={onPress}
     disabled={disabled}
+    accessibilityRole="button"
+    accessibilityLabel={label}
+    accessibilityState={{ disabled: Boolean(disabled) }}
     style={({ pressed }) => [
       styles.button,
       { backgroundColor: disabled ? "#c8d0c0" : color },
@@ -75,7 +78,7 @@ export const PrimaryButton = ({
     ]}
   >
     {icon ? <Ionicons name={icon} size={18} color={textColor} /> : null}
-    <Text style={[styles.buttonText, { color: textColor }]} numberOfLines={1}>
+    <Text style={[styles.buttonText, { color: textColor, flexShrink: 1, textAlign: 'center' }]}>
       {label}
     </Text>
   </Pressable>
@@ -85,6 +88,9 @@ export const GhostButton = ({ label, icon, onPress, style, color = colors.ink, d
   <Pressable
     onPress={onPress}
     disabled={disabled}
+    accessibilityRole="button"
+    accessibilityLabel={label}
+    accessibilityState={{ disabled: Boolean(disabled) }}
     style={({ pressed }) => [
       styles.ghostButton,
       pressed && !disabled ? styles.ghostPressed : null,
@@ -93,7 +99,7 @@ export const GhostButton = ({ label, icon, onPress, style, color = colors.ink, d
     ]}
   >
     {icon ? <Ionicons name={icon} size={18} color={disabled ? colors.muted : color} /> : null}
-    <Text style={[styles.ghostButtonText, { color: disabled ? colors.muted : color }]} numberOfLines={1}>
+    <Text style={[styles.ghostButtonText, { color: disabled ? colors.muted : color, flexShrink: 1, textAlign: 'center' }]}>
       {label}
     </Text>
   </Pressable>
