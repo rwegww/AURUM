@@ -171,6 +171,13 @@
             "hotline": "HOTLINE",
             "address_title": "TRỤ SỞ CHÍNH",
             "address_value": "ĐH Nguyễn Tất Thành TP.HCM\n3F Nguyễn Hữu Thọ, Tân Hưng"
+        },
+        "mobile_app": {
+            "title": "Ứng dụng Di động",
+            "desc": "Trải nghiệm học Hóa học tương tác ngay trên thiết bị di động Android của bạn.",
+            "button": "Tải APK cho Android",
+            "android_only": "Chỉ áp dụng cho hệ điều hành Android",
+            "detected_android": "Đã nhận diện thiết bị Android"
         }
     },
     "classroom": {

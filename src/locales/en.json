@@ -1,1534 +1,1541 @@
 {
- "nav": {
- "journey": "LEARNING JOURNEY",
- "vault": "BADGE VAULT",
- "arena": "CHEMISTRY ARENA",
- "lectures": "CHEMISTRY RESOURCES",
- "classroom": "LEARNING SPACE",
- "my_class": "MY CLASS",
- "periodic_table": "PERIODIC TABLE",
- "library": "AURUM LIBRARY",
- "lab": "VIRTUAL LAB",
- "arena_link": "ARENA",
- "nhiem_vu": "LEARNING MISSIONS",
- "knowledge_map": "KNOWLEDGE MAP",
- "calculator": "CHEMISTRY CALCULATOR",
- "solver": "FORMULA SOLVER",
- "support": "SUPPORT CHANNEL",
- "profile": "Learner Profile",
- "logout": "Log out",
- "login": "Log in",
- "login_now": "Log in now",
- "teacher_portal": "TEACHER PORTAL",
- "open_menu": "Open main menu",
- "close_menu": "Close main menu",
- "phan_hoi": "Aurum Feedback"
- },
- "home": {
- "hero_title": "JOURNEY OF DISCOVERY",
- "hero_title_highlight": "AND KNOWLEDGE",
- "hero_statement": "Explore interactive features and virtual labs with Aurum through an inspiring learning journey.",
- "hero_image_alt": "An inspiring learning journey",
- "hero_badge_gamification": "Challenge-based learning",
- "hero_badge_safe_lab": "Safe virtual lab",
- "enter_classroom": "Start the journey",
- "enter_lab": "Enter the lab",
- "stats": {
- "students_label": "Vietnamese learners",
- "schools_label": "Partner classrooms",
- "bai_hoc_label": "Chemistry lessons"
- },
- "features": {
- "journey": {
- "badge": "Learning Path",
- "title": "Structured learning path",
- "highlight": "Travel the knowledge map",
- "desc": "From grade 6 to grade 12, each stop opens a clear and memorable chemistry topic.",
- "desc_long": "From grade 6 to grade 12, Aurum guides learners through matter, atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
- "link": "Explore the path",
- "image_alt": "A Vietnam-inspired chemistry knowledge map"
- },
- "lab": {
- "badge": "Practice",
- "title": "Virtual chemistry lab",
- "highlight": "Try reactions safely",
- "desc": "Observe changes, mix solutions, and test ideas in a clear simulation environment.",
- "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom lessons and encourage experimental thinking.",
- "link": "Enter the lab",
- "image_alt": "A safe chemistry lab in a Vietnamese classroom"
- },
- "arena": {
- "badge": "Competition",
- "title": "Knowledge arena",
- "highlight": "Compete in chemistry",
- "desc": "Answer quickly, score points, and sharpen your reflexes with leveled chemistry questions.",
- "desc_long": "Aurum turns practice into a friendly knowledge competition. Learners can test speed, accuracy, and formula application through each challenge round.",
- "link": "Try it now",
- "image_alt": "A friendly chemistry knowledge contest between Vietnamese students"
- },
- "library": {
- "title": "Chemistry reference hub",
- "highlight": "Accurate lookup",
- "desc": "Study materials, the periodic table, and visual resources help learners review quickly.",
- "link": "Open library"
- },
- "map": {
- "badge": "Explore Vietnam",
- "title": "Learning map",
- "highlight": "Conquer each stage",
- "desc": "Track progress on a stylized Vietnam map, unlock topics, and record your learning milestones.",
- "link": "Start the journey",
- "image_alt": "A stylized map of Vietnam with chemistry learning stages"
- },
- "bai_hoc": {
- "badge": "Study Materials",
- "title": "Visual lessons",
- "highlight": "Clear and memorable",
- "desc": "Chemistry theory is presented with visuals, real-life examples, and short interactions.",
- "link": "View lessons",
- "image_alt": "A visual chemistry lesson in Vietnamese folk-art style"
- }
- },
- "leaderboard": {
- "badge": "Leaderboard",
- "title_main": "Meet",
- "title_highlight": "Aurum's top explorers",
- "subtitle": "Rankings are based on the total XP each learner has earned on Aurum.",
- "leader": "Current leader",
- "rank": "Rank",
- "points": "Total XP",
- "study_time": "Study time",
- "next_title": "Next on the leaderboard",
- "next_desc": "Complete lessons and missions to earn more XP.",
- "comparison_label": "Compared with rank 1",
- "leader_comparison": "{{percent}}% of the leader's XP",
- "gold": "Gold",
- "silver": "Silver",
- "copper": "Copper",
- "hour_short": "h",
- "minute_short": "m",
- "no_activity": "Not recorded",
- "load_error": "The leaderboard could not be loaded right now.",
- "retry": "Try again",
- "rank_master": "Rank 1",
- "online": "Online",
- "offline": "Offline",
- "active": "active",
- "level": "Level",
- "activity": "Activity:",
- "disciple": "Aurum learner",
- "transmitting": "Loading leaderboard...",
- "empty": "The leaderboard is waiting for the first learners...",
- "conquer_btn": "Explore learning paths"
- },
- "how_it_works": {
- "badge": "How it works",
- "title": "3 Steps to Master Chemistry",
- "steps": {
- "step1": {
- "title": "Build the foundation",
- "desc": "Study theory through visual explanations and familiar examples."
- },
- "step2": {
- "title": "Practice in the virtual lab",
- "desc": "Observe reactions, test hypotheses, and draw conclusions."
- },
- "step3": {
- "title": "Compete with knowledge",
- "desc": "Train speed, accuracy, and progress through each challenge."
- }
- }
- },
- "testimonials": {
- "badge": "Stories",
- "title": "What learners and teachers say about Aurum"
- },
- "final_cta": {
- "title": "Ready to begin your chemistry journey?",
- "subtitle": "Sign in to follow a personal learning path, save your progress, and keep exploring every day.",
- "button": "Start now"
- }
- },
- "footer": {
- "brand_desc": "Learn Chemistry through interactive games and realistic virtual experiments. A modern technology learning platform for the future generation.",
- "explore": {
- "title": "Explore",
- "learning_center": "Learning Center",
- "chem_tools": "Chemistry Tools",
- "lectures": "Interactive Lectures",
- "virtual_lab": "Virtual Lab",
- "arena": "PK Race"
- },
- "support": {
- "title": "Support",
- "user_guide": "About Us",
- "faq": "Aurum Team",
- "terms_of_service": "Terms & Conditions"
- },
- "contact": {
- "title": "Contact",
- "email": "EMAIL",
- "hotline": "HOTLINE",
- "address_title": "HEADQUARTERS",
- "address_value": "Nguyen Tat Thanh University, HCMC\n3F Nguyen Huu Tho, Tan Hung"
- }
- },
- "classroom": {
- "title": "Start your <1/><2> Chemistry</2> journey",
- "subtitle": "Each grade is a new learning stage, guiding you from foundations to real chemistry applications.",
- "enter_class": "Enter learning space",
- "knowledge_tree": {
- "academic_map": "Knowledge map",
- "title": "Complete Chemistry Knowledge Tree",
- "subtitle": "Systematize chemistry knowledge from basics to advanced topics.",
- "instruction": "Tap each lesson to start practicing.",
- "updating": "Loading lesson materials...",
- "go_journey": "Open Grade {{grade}} path"
- },
- "grades": {
- "6": {
- "title": "Science Foundations (Grade 6)",
- "desc": "Build foundations in lab safety, measurement, substances, materials, and mixtures."
- },
- "7": {
- "title": "Introductory Chemistry (Grade 7)",
- "desc": "Learn about atoms, elements, chemical bonds, and basic chemical reactions."
- },
- "8": {
- "title": "Chemistry Foundations (Grade 8)",
- "desc": "Get familiar with substances, lab tools, and the first observable chemistry phenomena."
- },
- "9": {
- "title": "Reaction Explorer (Grade 9)",
- "desc": "Explore reactions, solutions, and substance transformations through safe experiments."
- },
- "10": {
- "title": "Atomic Structure (Grade 10)",
- "desc": "Study atoms, bonds, periodic trends, and the core rules behind chemistry."
- },
- "11": {
- "title": "Organic Chemistry (Grade 11)",
- "desc": "Explore carbon chains, functional groups, and compounds connected to everyday life."
- },
- "12": {
- "title": "Applied Chemistry (Grade 12)",
- "output": "Master electrochemistry, polymers, metals, and practical exam-ready applications.",
- "desc": "Master electrochemistry, polymers, metals, and practical exam-ready applications."
- }
- }
- },
- "lectures": {
- "title": "Chemistry <1>Resource Library</1>",
- "subtitle": "Look up chemistry theory, videos, and review materials by grade level",
- "search_placeholder": "Search resources...",
- "grade_filter": "Grade {{grade}}",
- "loading": "Loading resources...",
- "no_results": "No matching chemistry resources found",
- "clear_filters": "Clear filters",
- "card": {
- "system_lesson": "AURUM lesson {{order}}"
- },
- "metadata": {
- "video": "1 lesson video",
- "theory": "Notes"
- }
- },
- "about": {
- "mission_badge": "Aurum mission",
- "title": "Igniting a passion for <1/><2> Chemistry</2> in young learners",
- "description": "Aurum is an interactive learning journey that helps students explore atoms, bonds, and reactions. Chemistry becomes easier to understand when it can be observed and practiced safely.",
- "pillars": {
- "safety": {
- "title": "Safe virtual practice",
- "desc": "Simulations help students practice reactions and identify chemicals in a safe learning environment."
- },
- "gamification": {
- "title": "Goal-based practice",
- "desc": "Learning points, badges, and leaderboards help students stay motivated while they practice."
- },
- "visualization": {
- "title": "Molecular visualization",
- "desc": "All abstract chemical bonds and atomic structures are visualized in stunning interactive graphics."
- }
- },
- "team_section": {
- "title": "Aurum team",
- "description": "We bring together chemistry teachers and education product developers. Aurum keeps improving lessons, simulations, and practice tools so students can learn chemistry more clearly.",
- "members": [
- {
- "name": "Huỳnh Vũ Luân",
- "role": "Content Creation & System Balancing",
- "image": "/images/team/luan.jpg",
- "email": "2200002540@nttu.edu.vn"
- },
- {
- "name": "Nguyễn Thanh Tiền",
- "role": "Lead UI/UX Web Designer",
- "image": "/images/team/tien.jpg",
- "email": "2200000601@nttu.edu.vn"
- }
- ]
- }
- },
- "contact": {
- "badge": "Send us a message",
- "title": "Contact the <1/> Aurum team",
- "description": "We are always happy to receive feedback, error reports, or collaboration requests. Reach out through our official channels below.",
- "info": {
- "hotline": "Support channel",
- "address": "Aurum office",
- "google_maps": "View on map →"
- },
- "form": {
- "title": "Send a message",
- "name_label": "Your name",
- "name_placeholder": "Enter your name...",
- "email_label": "Email address",
- "email_placeholder": "chemical_learners@example.com",
- "message_label": "Message",
- "message_placeholder": "What would you like to discuss with Aurum?",
- "submit": "Send message",
- "success": "Message released successfully! ✓"
- }
- },
- "terms": {
- "title": "Terms & <1/> Privacy Policy",
- "last_updated": "Last updated: {{date}}",
- "sections": {
- "acceptance": {
- "title": "1. Acceptance of Terms",
- "p1": "By accessing and using Aurum Chemistry Odyssey, you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, please refrain from using our services.",
- "p2": "We reserve the right to modify or update these terms at any time without prior notice. Your continued use of the platform after changes are posted constitutes your acceptance of the new terms."
- },
- "accounts": {
- "title": "2. User Accounts",
- "p1": "To access certain features, you may need to register for an account. You are responsible for maintaining the confidentiality of your account information and password. All activities that occur under your account are your responsibility.",
- "p2": "Sharing accounts, using cheating tools in the arena, or intentionally disrupting the community is strictly prohibited. We reserve the right to suspend accounts that violate these rules without notice."
- },
- "intellectual": {
- "title": "3. Intellectual Property",
- "p1": "All content on Aurum, including but not limited to lectures, simulations, images, and source code, is owned by Aurum Chemistry Learning Hub or its licensors.",
- "p2": "Any unauthorized copying, distribution, or commercialization of the content without our prior written consent is strictly prohibited and may result in legal action."
- },
- "privacy": {
- "title": "4. Privacy Policy",
- "p1": "We are committed to protecting your personal information. Collected data (such as name, email, and learning progress) is used solely to personalize your learning experience and improve our service quality.",
- "p2": "We never sell or share your personal information with third parties for marketing purposes without your explicit consent."
- },
- "liability": {
- "title": "5. Limitation of Liability",
- "p1": "Lab simulations and knowledge provided on this platform are for educational and reference purposes only. Users should not perform dangerous experiments in real life without expert supervision.",
- "p2": "We are not liable for any direct or indirect damages resulting from the use of information or incorrect practice of instructions found on the platform."
- }
- },
- "footer_question": "Have questions about the terms?<br/>Please <contact>Contact Us</contact>."
- },
- "profile": {
- "not_logged_in": "Not signed in",
- "login_to_view": "Log in to view your learner profile",
- "member_role": "New learner",
- "member_since": "Learning member of Aurum.<1/>Part of the journey since {{date}}",
- "online_status": "Active now",
- "change_avatar": "Change avatar",
- "save_changes": "Save changes",
- "stats": {
- "xp": "XP",
- "level_title": "Learning level",
- "chemicals": "Unlocked chemistry",
- "arena_points": "Arena points",
- "losses": "Losses",
- "win_rate": "Win Rate",
- "challenge_now": "Challenge Now →"
- },
- "collection": {
- "title": "Chemistry & Badge Vault",
- "unlocked_count": "Unlocked: {{current}}/{{total}}",
- "status": "Collected",
- "empty": "Your collection is empty. Complete lessons or missions to unlock badges.",
- "go_to_lab": "Go to Chemistry Lab →"
- },
- "study_plan": {
- "title": "Training Plan",
- "subtitle": "Set daily goals to maintain your study habit",
- "time_label": "Planned Training Time",
- "target_label": "Lesson goal / day",
- "reminders_label": "Training Reminders",
- "save_btn": "Save plan",
- "saving": "Saving...",
- "success": "Training plan updated!",
- "reminder_msg": "🔔 It is time to study. You have not reached today’s goal yet. Open a lesson and keep practicing.",
- "email_reminders": "Email reminders",
- "calendar_reminders": "Schedule Custom Training",
- "calendar": {
- "title": "Personal Training Calendar",
- "prev_month": "Previous month",
- "next_month": "Next month",
- "weekday_sun": "Sun",
- "weekday_mon": "Mon",
- "weekday_tue": "Tue",
- "weekday_wed": "Wed",
- "weekday_thu": "Thu",
- "weekday_fri": "Fri",
- "weekday_sat": "Sat",
- "schedule_modal_title": "Training Day Details",
- "schedule_modal_desc": "Adjust chemistry training time and library targets for this day.",
- "input_title_label": "Chemistry Notes",
- "input_title_placeholder": "e.g., practice equations, review questions...",
- "input_time_label": "Custom Training Time",
- "input_target_label": "Library Target Count",
- "status_completed": "Completed Goal",
- "btn_save": "Save Schedule",
- "btn_delete": "Delete Schedule",
- "btn_cancel": "Cancel",
- "upcoming_title": "Upcoming Custom Training",
- "upcoming_empty": "No custom training schedules planned for this moon. Click any calendar date to schedule your own session!",
- "item_target": "{{count}} lessons",
- "item_time": "At {{time}}"
- }
- },
- "arena_stats": {
- "title": "Challenge statistics",
- "total_matches": "Total Challenges",
- "wins": "Wins",
- "losses": "Losses",
- "win_rate": "Win Rate",
- "challenge_now": "Challenge Now →"
- },
- "history_title": "Training Log",
- "history_subtitle": "Lessons, labs, and tools you recently used.",
- "history_loading": "Loading recent activity...",
- "history_empty": "No activity yet. Start a lesson or open the lab to build your history here.",
- "history_clear": "Clear Log",
- "history_time_ago": "At"
- },
- "nhiem_vu": {
- "badge": "Aurum mission center",
- "title": "Learning <1>Missions</1>",
- "subtitle": "Complete learning challenges to level up and earn valuable badges.",
- "current_level": "Current level",
- "level_val": "Level {{level}}",
- "total_xp": "Total XP",
- "reset_in": "Reset in: <1>{{time}}</1>",
- "tabs": {
- "daily": "Daily",
- "achievement": "Achievements"
- },
- "card": {
- "status": "Status",
- "claimed": "Claimed",
- "completed": "Completed",
- "in_progress": "In Progress",
- "reward": "Reward",
- "claim_btn": "Claim reward ",
- "claiming": "Claiming...",
- "not_reached": "Incomplete"
- },
- "empty": "There are no new missions for today."
- },
- "journey": {
- "badge": "Grade {{grade}} Path",
- "themes": {
- "6": {
- "title": "Matter Around Us",
- "subtitle": "Start with safety, measurement, materials, and mixtures"
- },
- "7": {
- "title": "Nature Explorer",
- "subtitle": "Discover scientific methods and structure of matter"
- },
- "8": {
- "title": "The Initial Journey",
- "subtitle": "Mastering basic elements"
- },
- "9": {
- "title": "The Kingdom of Transition",
- "subtitle": "Secrets of chemical reactions"
- },
- "10": {
- "title": "The Atomic Architect",
- "subtitle": "Building the microscopic world"
- },
- "11": {
- "title": "The Organic World",
- "subtitle": "Explore carbon chains and functional groups"
- },
- "12": {
- "title": "Applied Science Mastery",
- "subtitle": "Bridge chemical theories with practical innovations"
- }
- },
- "test_banner": {
- "bg_text": "PLACEMENT TEST",
- "badge": "Fast-Track Journey",
- "title": "Unlock Grade {{grade}} Potential",
- "description": "Take a placement test to unlock the Grade {{grade}} program when you are ready.",
- "button": "Start test ➔"
- },
- "stage": {
- "label": "Stage {{order}}",
- "mission": "Mission ➔",
- "locked_desc": "This stage is still locked.",
- "default_desc": "Complete the previous stages to continue this lesson."
- },
- "milestone": {
- "book_badge": "NEW",
- "book_label": "Handbook",
- "title": "Journey Notebook",
- "subtitle": "Explore the comprehensive Grade {{grade}} Infographic"
- }
- },
- "arena": {
- "badge": "Learning Learning Hub",
- "title": "CHEMISTRY <1>ARENA</1>",
- "subtitle": "Challenge & Conquer knowledge",
- "online_count": "{{count}} new learners online",
- "ui": {
- "arena_image_alt": "Aurum chemistry arena illustration",
- "profile_panel_title": "Arena profile",
- "avatar_synced": "Synced with profile",
- "edit_profile": "Edit profile",
- "level_label": "Level",
- "grade_label": "Grade",
- "no_grade": "None",
- "streak_label": "Streak",
- "points_label": "Arena points",
- "stats_panel_title": "Performance",
- "leaderboard_panel_title": "Leaderboard",
- "recent_panel_title": "Recent matches",
- "current_rank": "Current rank",
- "next_rank": "{{count}} points to next rank",
- "max_rank": "You are at the highest rank",
- "quick_match": "Quick match",
- "choose_mode": "Choose mode",
- "online_students": "learners online",
- "question_count": "10 questions",
- "time_limit": "30 seconds/question",
- "player_count": "players",
- "open_room_browser": "Room browser",
- "join_code_title": "Room code",
- "room_browser_subtitle": "Choose a waiting room and join immediately.",
- "create_room_subtitle": "Room setup",
- "difficulty_auto": "Auto by grade",
- "phong_dau_id": "Code {{id}}",
- "host_label": "Host",
- "full_room": "Full",
- "waiting_share": "Share this code with classmates to start once the room is full.",
- "ready_count": "Ready status",
- "start_locked": "Waiting for players",
- "battle_unavailable_title": "Match not ready",
- "battle_unavailable_desc": "No matching question set was found for this room. Go back and choose another difficulty.",
- "progress_label": "Progress",
- "points_change": "Point change",
- "moderator_title": "Moderator board",
- "moderator_subtitle": "Show the PIN and monitor room status in real time.",
- "participant_status": "Participant status",
- "room_ready": "Ready",
- "room_waiting": "Waiting"
- },
- "character": {
- "badge": "Your learner character",
- "name_label": "Learner name:",
- "aura_label": "Profile color:",
- "random_btn": "Change style",
- "expand": "↓ More Styles ({{count}} styles)",
- "collapse": "↑ Collapse",
- "presets": {
- "chem_master": "Chemistry Master",
- "lab_wizard": "Lab Explorer",
- "science_hero": "Young Scientist",
- "atom_breaker": "Element Researcher",
- "dna_explorer": "DNA Explorer",
- "ion_storm": "Storm Scholar",
- "thermo_king": "Thermochemistry Expert",
- "crystal_lord": "Crystal Researcher",
- "proton_rush": "Proton Expert",
- "quark_force": "Particle Scholar",
- "neutron_star": "Neutron Expert",
- "plasma_wave": "Plasma Explorer"
- }
- },
- "stats": {
- "badge": "Your Stats",
- "rank_label": "Learner rank",
- "total_matches": "Total Challenges",
- "wins": "Wins",
- "losses": "Losses",
- "win_rate": "Win Rate",
- "total_points": "Total points",
- "history": "Challenge History",
- "empty_history": "No recent challenges",
- "leaderboard_btn": "Hall of Fame",
- "leaderboard_title": "Top Learners",
- "loading_leaderboard": "Loading leaderboard...",
- "empty_leaderboard": "No leaderboard data",
- "history_item": {
- "just_now": "Just now",
- "minutes_ago": "{{count}}m ago",
- "hours_ago": "{{count}}h ago",
- "days_ago": "{{count}}d ago"
- }
- },
- "ranks": {
- "bronze": "New",
- "silver": "Scholar",
- "gold": "Advanced",
- "diamond": "Expert",
- "master": "Master"
- },
- "actions": {
- "find_match": "Find Opponent",
- "cancel_find": "Cancel Challenge",
- "create_room": "Create challenge room",
- "join_pin": "Enter PIN",
- "lobby": "Waiting lobby",
- "pin_placeholder": "ROOM PIN",
- "close": "Close",
- "enter": "Join Challenge →",
- "footer_info": {
- "summary": "Question set",
- "questions": "10 Qs",
- "time": "30s"
- }
- },
- "create_room": {
- "title": "CREATE <1>CHALLENGE ROOM</1>",
- "name_label": "Challenge room name",
- "name_placeholder": "Ex: Grade 8 Chemistry Challenge...",
- "mode_label": "Challenge mode",
- "difficulty_label": "Question set",
- "admin_badge": "MODERATOR",
- "auto_grade": "Auto Grade {{grade}}",
- "submit_btn": "Create Challenge Now →"
- },
- "browser": {
- "title": "ONLINE <1>CHALLENGE ROOMS</1>",
- "refresh": "Refresh rooms",
- "scanning": "Loading rooms...",
- "empty_title": "No rooms yet",
- "empty_desc": "Create the first challenge room",
- "enter_btn": "Enter →"
- },
- "room": {
- "join_error": "Unable to join this room",
- "loading": "Loading...",
- "back_btn": "Back",
- "waiting": {
- "title": "WAITING LOBBY",
- "mode": "Mode",
- "difficulty": "Rank",
- "players": "Learners",
- "exit_btn": "Exit",
- "start_btn": "Start Now"
- },
- "battle": {
- "question": "Question {{current}}/{{total}}",
- "score": "Points",
- "time": "TIME",
- "status": {
- "label": "Status",
- "claimed": "Collected",
- "completed": "Completed",
- "in_progress": "In Progress"
- }
- }
- },
- "moderator": {
- "instruction": "JOIN AT <1>AURUM-APPS.COM</1> WITH PIN:",
- "leaderboard_title": "REAL-TIME LEADERBOARD",
- "live_badge": "Live",
- "server_status": "Chemistry Circuit Running",
- "close_btn": "Close Arena ✕"
- },
- "result": {
- "opponent_default": "Opponent",
- "win": "EXCELLENT!",
- "lose": "SEE YOU AGAIN",
- "win_desc": "You conquered the chemistry arena",
- "lose_desc": "Practice more to improve your result",
- "score": "Score",
- "rank": "Rank",
- "continue_btn": "Continue →"
- },
- "difficulties": {
- "easy": "Easy (New)",
- "medium": "Medium (Scholar)",
- "hard": "Hard (Expert)",
- "super": "Ultimate"
- }
- },
- "common": {
- "grade": "Grade {{grade}}",
- "lesson": "Lesson {{order}}",
- "lesson_count_one": "Lesson",
- "lesson_count_other": "Lessons",
- "loading": "Loading...",
- "back": "Back",
- "continue": "Continue",
- "save": "Save"
- },
- "my_class": {
- "sidebar": {
- "title": "Your classes",
- "join_other": "Join another class",
- "code_placeholder": "Class code",
- "join_btn": "JOIN",
- "grade_label": "Grade {{grade}}",
- "teacher_prefix": "Teacher:"
- },
- "empty": {
- "title": "No classes yet",
- "desc": "You have not joined any classes yet. Enter the class code provided by your teacher to start.",
- "placeholder": "Enter class code (Ex: XYZ1A2)",
- "submit": "Join class"
- },
- "header": {
- "badge": "GENERAL ACTIVITY"
- },
- "feed": {
- "title": "Class feed",
- "empty": "No announcements or chemistry materials from the teacher yet.",
- "author_you": "You",
- "private_badge": " PRIVATE MESSAGE",
- "sent_to_teacher": "Sent to Teacher",
- "type_video": "LESSON VIDEO",
- "type_assignment": "CHEMISTRY CHALLENGE",
- "type_announcement": "CLASS ANNOUNCEMENT",
- "deadline": "Deadline",
- "assignment": {
- "completed": "✓ Challenge Completed",
- "online_label": "Online",
- "result_label": "Your Chemistry Score:",
- "start_online": " Start online quiz ({{count}} questions)",
- "confirm_btn": "Confirm Challenge Completion",
- "file_PDF": "Open PDF Material",
- "file_Word": "Open Word Material",
- "file_Excel": "Open Excel Material",
- "file_Link": "Open link",
- "file_Default": "View Chemistry Material",
- "file_Placeholder": "Paste portal link"
- }
- },
- "schedules": {
- "title": "Upcoming Schedules",
- "empty": "No upcoming schedules",
- "join_meet": "Join class session"
- },
- "support": {
- "title": "Need support?",
- "desc": "Contact your teacher privately for assignment help.",
- "btn": "Send message"
- },
- "message_modal": {
- "title": "Message your teacher",
- "class_prefix": "Class:",
- "placeholder": "Enter your questions or concerns here...",
- "sending": "Sending message...",
- "send_btn": "Send message ➔"
- },
- "viewer": {
- "from": "By Teacher",
- "deadline": "Deadline:",
- "no_deadline": "No limit",
- "download": "Download material",
- "loading": "Loading material...",
- "tab_fallback": "Open in new tab if error occurs"
- },
- "quiz": {
- "badge": "ONLINE QUIZ",
- "progress": "Progress:",
- "count_done": "{{done}} / {{total}} questions answered",
- "submitting": "Submitting...",
- "submit_btn": "Submit Now ➔",
- "essay_placeholder": "Enter your essay answer here...",
- "essay_badge": "Essay section",
- "score_msg": "Quiz section: {{score}}/10 points.\nEssay section will be graded separately by the Teacher.",
- "success_msg": "Challenge submitted successfully! The Teacher will grade your essay section."
- }
- },
- "periodic_table": {
- "title_main": "Periodic",
- "title_sub": " table",
- "title_highlight": " of elements",
- "database_label": "",
- "system_desc": "",
- "categories_title": "Element Classification",
- "tech_manual": "Element database v1.0",
- "quick_guide": {
- "title": "Quick Lookup",
- "desc": "Click elements to view atomic chemistry simulations"
- },
- "legend": {
- "high_boiling": "Extreme Boiling Point",
- "gas_state": "Gas state"
- },
- "categories": {
- "all": "All",
- "metal": "Metals",
- "nonmetal": "Nonmetals",
- "noble-gas": "Noble gases"
- },
- "modal": {
- "atomic_no": "Atomic No.",
- "mass_wt": "Mass Wt.",
- "category_label": "Category:",
- "tabs": {
- "overview": " Overview",
- "discover": " Discovery"
- },
- "bohr_config": "Bohr Shell Configuration",
- "brief_intro": "Brief Introduction",
- "properties": {
- "state": "State",
- "meltingPoint": "Melting Point",
- "boilingPoint": "Boiling Point",
- "density": "Density",
- "electronConfig": "Electron Config"
- },
- "discovery": {
- "title": "Discovery History",
- "year": "Year Discovered",
- "by": "Discovered By",
- "ancient": "Ancient",
- "unknown": "Unknown"
- },
- "media_sample": "Wikipedia Reference Sample",
- "facts": {
- "badge": "Fun Facts",
- "updating": "Updating more information..."
- },
- "applications": {
- "badge": "Real-world Applications",
- "updating": "Updating application list..."
- },
- "wiki_btn": "View Details on Wikipedia"
- }
- },
- "elements": {
- "H": {
- "name": "Hydrogen",
- "desc": "The lightest and most abundant element in the universe. A primary component of water.",
- "facts": [
- "Lightest element in the universe",
- "Makes up 75% of the universe's mass",
- "Solar energy comes from hydrogen fusion",
- "Can become metallic at extreme pressure"
- ],
- "uses": [
- "Rocket fuel",
- "Ammonia production",
- "Fuel cells",
- "Coolant for generators"
- ]
- },
- "He": {
- "name": "Helium",
- "desc": "Inert gas, second lightest after Hydrogen. Discovered on the Sun before being found on Earth.",
- "facts": [
- "Discovered on the Sun before Earth",
- "Name from Helios - Greek sun god",
- "Changes voice pitch when inhaled",
- "Cannot solidify at normal pressure"
- ],
- "uses": [
- "Balloons",
- "Superconducting cooling",
- "Shielding gas for welding",
- "Medical MRI"
- ]
- },
- "Li": {
- "name": "Lithium",
- "desc": "Lightest alkali metal, soft and silvery. Reacts strongly with water.",
- "facts": [
- "Lightest solid metal",
- "Can float on water",
- "Key component in phone/laptop batteries",
- "Name from Greek 'lithos' meaning stone"
- ],
- "uses": [
- "Lithium-ion batteries",
- "Aluminum alloys",
- "Bipolar disorder treatment",
- "Lubricating grease"
- ]
- },
- "Be": {
- "name": "Beryllium",
- "desc": "Light alkaline earth metal with high hardness and melting point.",
- "facts": [
- "Extremely toxic - causes berylliosis",
- "Used in X-ray generator windows",
- "Gives emeralds their green color",
- "Does not react with water at room temp"
- ],
- "uses": [
- "X-ray windows",
- "Aircraft and satellite parts",
- "Telescope mirrors",
- "Copper-beryllium alloys"
- ]
- },
- "B": {
- "name": "Boron",
- "desc": "Hard, black metalloid, semiconductor. Essential for plants.",
- "facts": [
- "Primary component of Pyrex heat-resistant glass",
- "Essential for plant cell growth",
- "Pure boron is very hard, second only to diamond",
- "Can absorb neutrons in nuclear reactors"
- ],
- "uses": [
- "Borosilicate glass",
- "Detergents",
- "Fertilizers",
- "Ceramics",
- "Special alloys"
- ]
- },
- "C": {
- "name": "Carbon",
- "desc": "Basic element of life, can form over 10 million different compounds.",
- "facts": [
- "Can form over 10 million compounds",
- "Diamond and graphite are both pure carbon",
- "Basis of all life on Earth",
- "Can exist as fullerene (C60)"
- ],
- "uses": [
- "Organic compounds",
- "Steel and cast iron",
- "Diamonds and graphite",
- "Pharmaceuticals",
- "Plastics"
- ]
- },
- "N": {
- "name": "Nitrogen",
- "desc": "Gas making up 78% of Earth's atmosphere. Essential for protein and DNA.",
- "facts": [
- "Makes up 78% of air",
- "N≡N triple bond is very stable",
- "Used for cooling and food preservation",
- "Essential for DNA, RNA, and protein"
- ],
- "uses": [
- "Fertilizers",
- "TNT explosives",
- "Refrigeration",
- "Food preservation",
- "Medicine"
- ]
- },
- "O": {
- "name": "Oxygen",
- "desc": "Essential for respiration and combustion. Third most abundant element in the universe.",
- "facts": [
- "Essential for life",
- "Makes up 21% of air",
- "Ozone (O₃) protects Earth from UV",
- "Liquid oxygen is pale blue"
- ],
- "uses": [
- "Respiration",
- "Combustion",
- "Medical",
- "Metal cutting",
- "Water treatment"
- ]
- },
- "F": {
- "name": "Fluorine",
- "desc": "Most reactive halogen, pale yellow gas, extremely toxic and corrosive.",
- "facts": [
- "Most electronegative element (3.98)",
- "Reacts with almost everything, including noble gases",
- "Fluoride helps prevent tooth decay",
- "Can etch glass"
- ],
- "uses": [
- "Toothpaste (fluoride)",
- "Refrigerants (Freon)",
- "Teflon",
- "Uranium enrichment"
- ]
- },
- "Ne": {
- "name": "Neon",
- "desc": "Noble gas, colorless, odorless, used in neon signs.",
- "facts": [
- "Creates signature orange-red light in neon lamps",
- "Fifth most abundant noble gas in the universe",
- "Does not react with any element",
- "Name from Greek 'neos' meaning new"
- ],
- "uses": [
- "Neon lights",
- "TVs, lasers",
- "High voltage indicators",
- "Refrigeration"
- ]
- },
- "Na": {
- "name": "Sodium",
- "desc": "Soft metal, reacts strongly with water creating a yellow flame.",
- "facts": [
- "Explosive reaction with water",
- "Component of table salt (NaCl)",
- "Burns with signature yellow flame",
- "Essential for nerves and muscles"
- ],
- "uses": [
- "Table salt NaCl",
- "Soap",
- "Sodium lamps",
- "Nuclear reactor coolant"
- ]
- },
- "Mg": {
- "name": "Magnesium",
- "desc": "Light metal, burns brightly with a blinding white flame.",
- "facts": [
- "Burns with blinding white flame",
- "Light metal for aerospace industry",
- "Essential for over 300 enzymes in the body",
- "Chlorophyll contains magnesium"
- ],
- "uses": [
- "Light alloys",
- "Fireworks",
- "Diatary supplements",
- "Automotive and aircraft"
- ]
- },
- "Al": {
- "name": "Aluminum",
- "desc": "Light metal, corrosion-resistant, widely used in daily life.",
- "facts": [
- "Most abundant metal in Earth's crust",
- "Once rarer than gold (before electrolysis)",
- "Aluminum cans can be recycled infinitely",
- "Washington Monument cap is made of aluminum"
- ],
- "uses": [
- "Soda cans",
- "Aircraft",
- "Windows",
- "Power lines",
- "Food packaging"
- ]
- },
- "Si": {
- "name": "Silicon",
- "desc": "Metalloid, 2nd most abundant element in Earth's crust, basis of electronic technology.",
- "facts": [
- "Makes up 27.7% of Earth's crust",
- "Basis of semiconductor industry",
- "Silicon Valley is named after it",
- "Beach sand is mostly SiO₂"
- ],
- "uses": [
- "Computer chips",
- "Solar cells",
- "Glass",
- "Ceramics",
- "Silicone"
- ]
- },
- "P": {
- "name": "Phosphorus",
- "desc": "Nonmetal with multiple allotropes, essential for DNA and ATP.",
- "facts": [
- "White phosphorus glows in the dark",
- "Essential for DNA, RNA and ATP",
- "Red phosphorus is safe, used in matches",
- "Discovered from urine"
- ],
- "uses": [
- "Fertilizers",
- "Matches",
- "Detergents",
- "Pesticides",
- "Weapons (white phosphorus)"
- ]
- },
- "S": {
- "name": "Sulfur",
- "desc": "Yellow nonmetal, smells like rotten eggs when combined with hydrogen.",
- "facts": [
- "Rotten egg smell is H₂S containing sulfur",
- "Used for sulfuric acid - #1 industrial chemical",
- "Essential for methionine and cysteine amino acids",
- "Volcanoes erupt sulfur"
- ],
- "uses": [
- "Sulfuric acid H₂SO₄",
- "Matches",
- "Vulcanized rubber",
- "Fertilizers",
- "Medicine"
- ]
- },
- "Cl": {
- "name": "Chlorine",
- "desc": "Greenish-yellow gas, toxic, pungent odor. Used for water disinfection.",
- "facts": [
- "Used as chemical weapon in WWI",
- "Disinfects 98% of world's drinking water",
- "Component of table salt",
- "Signature pungent odor like swimming pools"
- ],
- "uses": [
- "Water disinfection",
- "PVC production",
- "Bleach",
- "HCl production"
- ]
- },
- "Ar": {
- "name": "Argon",
- "desc": "Noble gas making up 0.93% of air, used in welding and light bulbs.",
- "facts": [
- "3rd most abundant gas in air (0.93%)",
- "Name from Greek 'argos' meaning lazy",
- "Used in bulbs to prevent filament evaporation",
- "Completely inert"
- ],
- "uses": [
- "Arc welding",
- "Light bulbs",
- "Lasers",
- "Historic document preservation"
- ]
- },
- "K": {
- "name": "Potassium",
- "desc": "Soft alkali metal, reacts violently with water.",
- "facts": [
- "More explosive reaction with water than sodium",
- "Burns with signature lilac flame",
- "Can be cut with a knife due to softness",
- "Essential for nerve and muscle function"
- ],
- "uses": [
- "Fertilizers",
- "Fireworks (lilac)",
- "Glass",
- "Soap",
- "Medicine"
- ]
- },
- "Ca": {
- "name": "Calcium",
- "desc": "Alkaline earth metal, primary component of bones and teeth.",
- "facts": [
- "Makes up 1.5% of human body (bones, teeth)",
- "Primary component of limestone and marble",
- "Burns with brick-red flame",
- "Calcium metal can be cut with a knife"
- ],
- "uses": [
- "Cement",
- "Gypsum",
- "Vitamin supplements",
- "Steel",
- "Fireworks"
- ]
- },
- "Fe": {
- "name": "Iron",
- "desc": "Most common and important metal for industry and biology.",
- "facts": [
- "Most used metal",
- "Earth's core is mostly molten iron",
- "Essential for human blood (hemoglobin)",
- "Ferromagnetic"
- ],
- "uses": [
- "Steel",
- "Construction",
- "Automotive",
- "Hemoglobin in blood",
- "Engines"
- ]
- },
- "Cu": {
- "name": "Copper",
- "desc": "Reddish metal, second best conductor of electricity and heat after silver.",
- "facts": [
- "2nd best electrical conductor after silver",
- "Natural antimicrobial properties",
- "Used for over 10,000 years",
- "Statue of Liberty is coated in copper"
- ],
- "uses": [
- "Electrical wiring",
- "Plumbing",
- "Coins",
- "Brass alloys",
- "Antimicrobial"
- ]
- },
- "Zn": {
- "name": "Zinc",
- "desc": "Bluish-grey metal, used for galvanizing iron against rust and in batteries.",
- "facts": [
- "Protects iron from rust (galvanization)",
- "Essential for immune system",
- "Component of brass",
- "Used in sunscreen"
- ],
- "uses": [
- "Galvanization",
- "Brass alloys",
- "Batteries",
- "Vitamin and meds",
- "Sunscreen"
- ]
- },
- "Ag": {
- "name": "Silver",
- "desc": "Precious metal with the highest electrical and thermal conductivity.",
- "facts": [
- "Symbol Ag from 'argentum'",
- "Strongest light reflection",
- "Has natural antimicrobial properties"
- ],
- "uses": [
- "Jewelry",
- "Electronics",
- "Mirrors",
- "Medical antimicrobial"
- ]
- },
- "Au": {
- "name": "Gold",
- "desc": "Most ductile and malleable precious metal, does not tarnish.",
- "facts": [
- "Incredibly stable, does not oxidize",
- "One ounce can be drawn into 50 miles of wire",
- "Basis of global financial systems for centuries",
- "Can be eaten (gold leaf)"
- ],
- "uses": [
- "Jewelry",
- "Financial reserves",
- "Electronics",
- "Dentistry",
- "Decoration"
- ]
- }
- },
- "chem_lab": {
- "header": {
- "badge": "Virtual chemistry lab",
- "title_1": "Explore the",
- "title_2": "Chemistry",
- "title_3": "World",
- "desc": "Choose a learning module and start practicing chemistry safely."
- },
- "modules": {
- "reaction": {
- "label": "Lab Chemistry Mixer",
- "desc": "Combine substances and observe visual reactions."
- },
- "balance": {
- "label": "Free-form Balancer",
- "desc": "Enter both sides of an equation to calculate coefficients and verify atoms and electric charge."
- },
- "molecule": {
- "label": "Molecule Model",
- "desc": "View molecular structures and chemical space."
- },
- "solver": {
- "label": "Formula Finder",
- "desc": "Search and look up balanced chemical equations instantly from the database."
- },
- "calculator": {
- "label": "Chemistry Calculator",
- "desc": "Calculate moles, concentration, mass, gas volume, and other common chemistry quantities."
- },
- "discovery": {
- "label": "Discovery Journal",
- "desc": "Track unlocked substances and review the reaction paths you have discovered."
- },
- "craft": {
- "label": "Crafting Workshop",
- "desc": "Use knowledge ingredients with carefully authored crafting recipes."
- },
- "start_btn": "Start"
- },
- "stats": {
- "chemicals": "Chemicals used",
- "reactions": "Discovered Reactions",
- "creativity": "Creative score"
- }
- },
- "material_detail": {
- "back_btn": "Back to library",
- "not_found": "Material does not exist",
- "views": "learners read",
- "downloads": "downloads",
- "unsupported_format": "Format #{{type}} does not support direct preview",
- "download_to_view": "Download material to view",
- "preview_loading": "Preparing preview",
- "preview_error": "A preview could not be generated for this material.",
- "preview_truncated": "This preview was shortened. Download the file to read all content.",
- "document_preview": "Word document preview",
- "pdf_preview_title": "PDF preview: {{title}}",
- "no_desc": "No description available for this material.",
- "download_btn": "Download material (FREE)",
- "downloading_btn": "Downloading...",
- "download_error": "Automatic download failed. The material was opened in a new tab instead.",
- "phan_hoi": {
- "title_main": "Discussion",
- "title_highlight": "Discussion",
- "placeholder": "Leave your thoughts on this material...",
- "submit_btn": "Send post",
- "submitting_btn": "Sending comment...",
- "login_required": "Please log in to join the discussion",
- "login_link": "Go to login page",
- "no_phan_hoi": "No comments yet. Be the first learner!",
- "alert_login": "Please log in to send feedback!",
- "err_fetch": "Error loading material data",
- "err_submit": "Error sending message post",
- "default_user": "New learner"
- },
- "sidebar": {
- "file_info": "Material Info",
- "format": "Edition",
- "posted_date": "Posted date",
- "size": "Material Size",
- "disclaimer": "All chemistry materials at Aurum are provided free of charge to support learning. Commercial use without the Aurum team's consent is strictly prohibited."
- }
- },
- "library": {
- "title": "Chemistry <1>Resource Library</1>",
- "subtitle": "A diverse repository with infographics, mind maps, worksheets, and review materials.",
- "search_placeholder": "Search chemistry materials...",
- "loading": "Loading materials...",
- "categories": {
- "all": "All Materials",
- "infographic_11": "GRADE 11 CHEMISTRY INFOGRAPHICS",
- "infographic_12": "GRADE 12 CHEMISTRY INFOGRAPHICS",
- "mindmap_10": "GRADE 10 MIND MAPS",
- "mindmap_11": "GRADE 11 MIND MAPS",
- "mindmap_12": "GRADE 12 MIND MAPS",
- "worksheet_12": "GRADE 12 WORKSHEETS",
- "comic_10": "GRADE 10 CHEMISTRY COMICS",
- "comic_11": "GRADE 11 CHEMISTRY COMICS",
- "comic_12": "GRADE 12 CHEMISTRY COMICS",
- "worksheet_9": "GRADE 9 WORKSHEETS",
- "mindmap_6": "SCIENCE 6 MIND MAPS",
- "hoa_chung_de_thi": "CHEMISTRY GENERAL - EXAMS",
- "hoa_chung_de_on": "CHEMISTRY GENERAL - REVIEW SETS",
- "hoa_chung_anh": "CHEMISTRY GENERAL - IMAGES",
- "hoa_chung_bai_giang": "CHEMISTRY GENERAL - LECTURES",
- "hoa_8_de_thi": "CHEMISTRY GRADE 8 - EXAMS",
- "hoa_8_de_on": "CHEMISTRY GRADE 8 - REVIEW SETS",
- "hoa_8_anh": "CHEMISTRY GRADE 8 - IMAGES",
- "hoa_8_bai_giang": "CHEMISTRY GRADE 8 - LECTURES",
- "hoa_9_de_thi": "CHEMISTRY GRADE 9 - EXAMS",
- "hoa_9_de_on": "CHEMISTRY GRADE 9 - REVIEW SETS",
- "hoa_9_anh": "CHEMISTRY GRADE 9 - IMAGES",
- "hoa_9_bai_giang": "CHEMISTRY GRADE 9 - LECTURES",
- "hoa_10_de_thi": "CHEMISTRY GRADE 10 - EXAMS",
- "hoa_10_de_on": "CHEMISTRY GRADE 10 - REVIEW SETS",
- "hoa_10_anh": "CHEMISTRY GRADE 10 - IMAGES",
- "hoa_10_bai_giang": "CHEMISTRY GRADE 10 - LECTURES",
- "hoa_11_de_thi": "CHEMISTRY GRADE 11 - EXAMS",
- "hoa_11_de_on": "CHEMISTRY GRADE 11 - REVIEW SETS",
- "hoa_11_anh": "CHEMISTRY GRADE 11 - IMAGES",
- "hoa_11_bai_giang": "CHEMISTRY GRADE 11 - LECTURES",
- "hoa_12_de_thi": "CHEMISTRY GRADE 12 - EXAMS",
- "hoa_12_de_on": "CHEMISTRY GRADE 12 - REVIEW SETS",
- "hoa_12_anh": "CHEMISTRY GRADE 12 - IMAGES",
- "hoa_12_bai_giang": "CHEMISTRY GRADE 12 - LECTURES"
- },
- "card": {
- "view_details": "View Material",
- "default_category": "Material"
- },
- "empty": {
- "title": "No matching materials found",
- "clear_btn": "Clear filters and try again"
- }
- },
- "bai_hoc": {
- "header": {
- "title_journey": "Knowledge Map",
- "title_library": "Resource Library",
- "subtitle_explore": "Practice",
- "subtitle_hoc_lieu": "Materials",
- "desc_logged_in": "Complete each learning stage to strengthen your chemistry knowledge.",
- "desc_guest": "A journey to conquer chemistry from basic to advanced for new learners from grade 6 to 12."
- },
- "grade_labels": {
- "label": "Grade {{grade}}"
- },
- "status": {
- "loading": "Loading materials...",
- "empty_title_logged_in": "Please select a learning stage to start your journey",
- "empty_title_guest": "Please select a grade to show chemistry lessons",
- "empty_desc": "Explore the world of chemistry now",
- "err_fetch": "Error loading lessons"
- },
- "card": {
- "explore_btn": "EXPLORE LESSON"
- },
- "story_parts": {
- "6": {
- "title": "Part 1",
- "name": "Science and Matter Foundations",
- "story": "Start with lab safety, measurement, materials, fuels, and mixtures to build a steady chemistry foundation."
- },
- "7": {
- "title": "Part 2",
- "name": "Atoms and the Language of Chemistry",
- "story": "Explore atoms, elements, molecules, bonds, and chemical formulas at an introductory level."
- },
- "8": {
- "title": "Part 3",
- "name": "Starting With Matter and Atoms",
- "story": "Enter the world of substances and atoms, where chemistry begins. Your mission is to understand matter and the language of formulas."
- },
- "9": {
- "title": "Part 4",
- "name": "The Transformation Journey",
- "story": "Reactions and visible changes reveal how elements and compounds interact."
- },
- "10": {
- "title": "Part 5",
- "name": "Chemical Structure and Patterns",
- "story": "Go deeper into kinetics, equilibrium, and periodic structure while connecting concepts to real chemistry problems."
- },
- "11": {
- "title": "Part 6",
- "name": "The World of Organic Chemistry",
- "story": "Explore carbon chains, functional groups, and organic compounds connected to everyday life. Learn how structure shapes chemical behavior."
- },
- "12": {
- "title": "Part 7",
- "name": "Modern Chemistry Applications",
- "story": "The final stage of high-school chemistry. Study electrochemistry, polymers, and materials to prepare for real applications."
- }
- }
- },
- "lesson_page": {
- "loading": "Loading lesson...",
- "back_btn": "Back to list",
- "grade_label": "CHEMISTRY GRADE {{grade}}",
- "content_title": "Lesson Content",
- "video": {
- "placeholder": "Lesson video is not available",
- "powered_by": "Chemistry link by"
- },
- "error": {
- "fetch": "Error loading lesson data"
- }
- },
- "mission_modal": {
- "labels": {
- "multiple-choice": "Multiple choice",
- "image-selection": "Image recognition",
- "fill-in-the-blank": "Fill in the blank",
- "drag-drop": "Sorting Flow",
- "matching": "Matching",
- "mission": "Learning mission",
- "goal": "Training Goal"
- },
- "narrative_fallback": "Use your knowledge to complete this challenge.",
- "source_fallback": "Reference Material",
- "image_selection": {
- "confirm": "Confirm choice {{label}} ➔",
- "label_prefix": "Choice "
- },
- "fill_blank": {
- "placeholder": "Type your answer...",
- "confirm": "Confirm answer"
- },
- "drag_drop": {
- "instruction": "Drag to reorder questions sequence correctly",
- "confirm": "Confirm Sequence ➔"
- },
- "matching": {
- "instruction": "Column B (drag and drop)",
- "col_a": "Column A",
- "col_b": "Meaning",
- "confirm": "Confirm matches ➔"
- },
- "footer": {
- "cancel": "Suspend Training",
- "correct": " Correct! {{status}}",
- "wrong": " Not quite. Try again!",
- "status_final": "Mission completed!",
- "status_next": "Next..."
- }
- },
- "stage_video": {
- "back_btn": "Back",
- "status": {
- "label": "Lab Status:",
- "ready": "Ready",
- "analyzing": "Processing..."
- },
- "metadata": {
- "source": "Source: Aurum lesson feed 01",
- "format": "Format: 1080p digital feed"
- },
- "action_btn": {
- "ready": "Accept Challenge",
- "processing": "Processing data..."
- },
- "hints": {
- "ready": "Data ready. Continue when you are prepared.",
- "processing": "Hint: Watch closely to prepare for the challenge."
- }
- },
- "arena_modes": {
- "solo": "SOLO DUEL",
- "3vs3": "SQUAD OF 3 LEARNERS",
- "5vs5": "SQUAD OF 5 LEARNERS",
- "1vs100": "LEARNERS BATTLE ROYALE",
- "solo_short": "1 VS 1",
- "3vs3_short": "3 VS 3",
- "5vs5_short": "5 VS 5",
- "br_short": "Battle Royale"
- },
- "widget": {
- "title": "Aurum Assistant",
- "status_active": "Assistant active",
- "minimize": "Dismiss",
- "close": "Close",
- "tooltip": "Aurum Assistant",
- "login_required": "Login required",
- "login_required_desc": "Please log in to track and claim rewards from daily missions.",
- "login_now": "Log in now",
- "level_prefix": "Level",
- "streak": "Training Streak",
- "reset_in": "Chemistry reset in:",
- "reward": "Badge Reward",
- "reward_elements": "Reward elements:",
- "claim": "Claim",
- "claimed": "Claimed ✓",
- "locked": "Locked",
- "no_nhiem_vu": "No learners nhiem_vu available",
- "phan_hoi_type": "Feedback type:",
- "phan_hoi_details": "Details:",
- "type_suggestion": " Suggestion",
- "type_bug": "🐛 Bug report",
- "type_praise": "❤️ Praise",
- "placeholder_suggestion": "Describe your chemistry idea to help improve the lab...",
- "placeholder_bug": "Describe the issue in detail (and press Ctrl+V to paste a screenshot if available)...",
- "placeholder_praise": "Share what you love about the Aurum of Chemistry...",
- "attach_image": "📷 Attach image (or Ctrl+V)",
- "remove": "Remove",
- "attach_hint": "Upload an image file or press Ctrl+V to paste a screenshot directly.",
- "sending": "Sending feedback...",
- "send_suggestion": "Send suggestion ➔",
- "send_bug": "Report issue ➔",
- "send_praise": "Send praise ➔",
- "success_title": "Message Received!",
- "success_desc": "Your feedback has been sent successfully to the Aurum admin team.",
- "send_another": "Send Another Message"
- }
+  "nav": {
+    "journey": "LEARNING JOURNEY",
+    "vault": "BADGE VAULT",
+    "arena": "CHEMISTRY ARENA",
+    "lectures": "CHEMISTRY RESOURCES",
+    "classroom": "LEARNING SPACE",
+    "my_class": "MY CLASS",
+    "periodic_table": "PERIODIC TABLE",
+    "library": "AURUM LIBRARY",
+    "lab": "VIRTUAL LAB",
+    "arena_link": "ARENA",
+    "nhiem_vu": "LEARNING MISSIONS",
+    "knowledge_map": "KNOWLEDGE MAP",
+    "calculator": "CHEMISTRY CALCULATOR",
+    "solver": "FORMULA SOLVER",
+    "support": "SUPPORT CHANNEL",
+    "profile": "Learner Profile",
+    "logout": "Log out",
+    "login": "Log in",
+    "login_now": "Log in now",
+    "teacher_portal": "TEACHER PORTAL",
+    "open_menu": "Open main menu",
+    "close_menu": "Close main menu",
+    "phan_hoi": "Aurum Feedback"
+  },
+  "home": {
+    "hero_title": "JOURNEY OF DISCOVERY",
+    "hero_title_highlight": "AND KNOWLEDGE",
+    "hero_statement": "Explore interactive features and virtual labs with Aurum through an inspiring learning journey.",
+    "hero_image_alt": "An inspiring learning journey",
+    "hero_badge_gamification": "Challenge-based learning",
+    "hero_badge_safe_lab": "Safe virtual lab",
+    "enter_classroom": "Start the journey",
+    "enter_lab": "Enter the lab",
+    "stats": {
+      "students_label": "Vietnamese learners",
+      "schools_label": "Partner classrooms",
+      "bai_hoc_label": "Chemistry lessons"
+    },
+    "features": {
+      "journey": {
+        "badge": "Learning Path",
+        "title": "Structured learning path",
+        "highlight": "Travel the knowledge map",
+        "desc": "From grade 6 to grade 12, each stop opens a clear and memorable chemistry topic.",
+        "desc_long": "From grade 6 to grade 12, Aurum guides learners through matter, atoms, reactions, solutions, organic chemistry, and everyday applications. Each stage uses Vietnam-inspired visuals to make concepts easier to remember.",
+        "link": "Explore the path",
+        "image_alt": "A Vietnam-inspired chemistry knowledge map"
+      },
+      "lab": {
+        "badge": "Practice",
+        "title": "Virtual chemistry lab",
+        "highlight": "Try reactions safely",
+        "desc": "Observe changes, mix solutions, and test ideas in a clear simulation environment.",
+        "desc_long": "The virtual lab helps students practice reactions, identify substances, and observe changes safely. Simulations are designed to support classroom lessons and encourage experimental thinking.",
+        "link": "Enter the lab",
+        "image_alt": "A safe chemistry lab in a Vietnamese classroom"
+      },
+      "arena": {
+        "badge": "Competition",
+        "title": "Knowledge arena",
+        "highlight": "Compete in chemistry",
+        "desc": "Answer quickly, score points, and sharpen your reflexes with leveled chemistry questions.",
+        "desc_long": "Aurum turns practice into a friendly knowledge competition. Learners can test speed, accuracy, and formula application through each challenge round.",
+        "link": "Try it now",
+        "image_alt": "A friendly chemistry knowledge contest between Vietnamese students"
+      },
+      "library": {
+        "title": "Chemistry reference hub",
+        "highlight": "Accurate lookup",
+        "desc": "Study materials, the periodic table, and visual resources help learners review quickly.",
+        "link": "Open library"
+      },
+      "map": {
+        "badge": "Explore Vietnam",
+        "title": "Learning map",
+        "highlight": "Conquer each stage",
+        "desc": "Track progress on a stylized Vietnam map, unlock topics, and record your learning milestones.",
+        "link": "Start the journey",
+        "image_alt": "A stylized map of Vietnam with chemistry learning stages"
+      },
+      "bai_hoc": {
+        "badge": "Study Materials",
+        "title": "Visual lessons",
+        "highlight": "Clear and memorable",
+        "desc": "Chemistry theory is presented with visuals, real-life examples, and short interactions.",
+        "link": "View lessons",
+        "image_alt": "A visual chemistry lesson in Vietnamese folk-art style"
+      }
+    },
+    "leaderboard": {
+      "badge": "Leaderboard",
+      "title_main": "Meet",
+      "title_highlight": "Aurum's top explorers",
+      "subtitle": "Rankings are based on the total XP each learner has earned on Aurum.",
+      "leader": "Current leader",
+      "rank": "Rank",
+      "points": "Total XP",
+      "study_time": "Study time",
+      "next_title": "Next on the leaderboard",
+      "next_desc": "Complete lessons and missions to earn more XP.",
+      "comparison_label": "Compared with rank 1",
+      "leader_comparison": "{{percent}}% of the leader's XP",
+      "gold": "Gold",
+      "silver": "Silver",
+      "copper": "Copper",
+      "hour_short": "h",
+      "minute_short": "m",
+      "no_activity": "Not recorded",
+      "load_error": "The leaderboard could not be loaded right now.",
+      "retry": "Try again",
+      "rank_master": "Rank 1",
+      "online": "Online",
+      "offline": "Offline",
+      "active": "active",
+      "level": "Level",
+      "activity": "Activity:",
+      "disciple": "Aurum learner",
+      "transmitting": "Loading leaderboard...",
+      "empty": "The leaderboard is waiting for the first learners...",
+      "conquer_btn": "Explore learning paths"
+    },
+    "how_it_works": {
+      "badge": "How it works",
+      "title": "3 Steps to Master Chemistry",
+      "steps": {
+        "step1": {
+          "title": "Build the foundation",
+          "desc": "Study theory through visual explanations and familiar examples."
+        },
+        "step2": {
+          "title": "Practice in the virtual lab",
+          "desc": "Observe reactions, test hypotheses, and draw conclusions."
+        },
+        "step3": {
+          "title": "Compete with knowledge",
+          "desc": "Train speed, accuracy, and progress through each challenge."
+        }
+      }
+    },
+    "testimonials": {
+      "badge": "Stories",
+      "title": "What learners and teachers say about Aurum"
+    },
+    "final_cta": {
+      "title": "Ready to begin your chemistry journey?",
+      "subtitle": "Sign in to follow a personal learning path, save your progress, and keep exploring every day.",
+      "button": "Start now"
+    }
+  },
+  "footer": {
+    "brand_desc": "Learn Chemistry through interactive games and realistic virtual experiments. A modern technology learning platform for the future generation.",
+    "explore": {
+      "title": "Explore",
+      "learning_center": "Learning Center",
+      "chem_tools": "Chemistry Tools",
+      "lectures": "Interactive Lectures",
+      "virtual_lab": "Virtual Lab",
+      "arena": "PK Race"
+    },
+    "support": {
+      "title": "Support",
+      "user_guide": "About Us",
+      "faq": "Aurum Team",
+      "terms_of_service": "Terms & Conditions"
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "EMAIL",
+      "hotline": "HOTLINE",
+      "address_title": "HEADQUARTERS",
+      "address_value": "Nguyen Tat Thanh University, HCMC\n3F Nguyen Huu Tho, Tan Hung"
+    },
+    "mobile_app": {
+      "title": "Mobile App",
+      "desc": "Experience interactive Chemistry learning directly on your Android mobile device.",
+      "button": "Download APK (Android)",
+      "android_only": "Only applicable for Android OS",
+      "detected_android": "Android device detected"
+    }
+  },
+  "classroom": {
+    "title": "Start your <1/><2> Chemistry</2> journey",
+    "subtitle": "Each grade is a new learning stage, guiding you from foundations to real chemistry applications.",
+    "enter_class": "Enter learning space",
+    "knowledge_tree": {
+      "academic_map": "Knowledge map",
+      "title": "Complete Chemistry Knowledge Tree",
+      "subtitle": "Systematize chemistry knowledge from basics to advanced topics.",
+      "instruction": "Tap each lesson to start practicing.",
+      "updating": "Loading lesson materials...",
+      "go_journey": "Open Grade {{grade}} path"
+    },
+    "grades": {
+      "6": {
+        "title": "Science Foundations (Grade 6)",
+        "desc": "Build foundations in lab safety, measurement, substances, materials, and mixtures."
+      },
+      "7": {
+        "title": "Introductory Chemistry (Grade 7)",
+        "desc": "Learn about atoms, elements, chemical bonds, and basic chemical reactions."
+      },
+      "8": {
+        "title": "Chemistry Foundations (Grade 8)",
+        "desc": "Get familiar with substances, lab tools, and the first observable chemistry phenomena."
+      },
+      "9": {
+        "title": "Reaction Explorer (Grade 9)",
+        "desc": "Explore reactions, solutions, and substance transformations through safe experiments."
+      },
+      "10": {
+        "title": "Atomic Structure (Grade 10)",
+        "desc": "Study atoms, bonds, periodic trends, and the core rules behind chemistry."
+      },
+      "11": {
+        "title": "Organic Chemistry (Grade 11)",
+        "desc": "Explore carbon chains, functional groups, and compounds connected to everyday life."
+      },
+      "12": {
+        "title": "Applied Chemistry (Grade 12)",
+        "output": "Master electrochemistry, polymers, metals, and practical exam-ready applications.",
+        "desc": "Master electrochemistry, polymers, metals, and practical exam-ready applications."
+      }
+    }
+  },
+  "lectures": {
+    "title": "Chemistry <1>Resource Library</1>",
+    "subtitle": "Look up chemistry theory, videos, and review materials by grade level",
+    "search_placeholder": "Search resources...",
+    "grade_filter": "Grade {{grade}}",
+    "loading": "Loading resources...",
+    "no_results": "No matching chemistry resources found",
+    "clear_filters": "Clear filters",
+    "card": {
+      "system_lesson": "AURUM lesson {{order}}"
+    },
+    "metadata": {
+      "video": "1 lesson video",
+      "theory": "Notes"
+    }
+  },
+  "about": {
+    "mission_badge": "Aurum mission",
+    "title": "Igniting a passion for <1/><2> Chemistry</2> in young learners",
+    "description": "Aurum is an interactive learning journey that helps students explore atoms, bonds, and reactions. Chemistry becomes easier to understand when it can be observed and practiced safely.",
+    "pillars": {
+      "safety": {
+        "title": "Safe virtual practice",
+        "desc": "Simulations help students practice reactions and identify chemicals in a safe learning environment."
+      },
+      "gamification": {
+        "title": "Goal-based practice",
+        "desc": "Learning points, badges, and leaderboards help students stay motivated while they practice."
+      },
+      "visualization": {
+        "title": "Molecular visualization",
+        "desc": "All abstract chemical bonds and atomic structures are visualized in stunning interactive graphics."
+      }
+    },
+    "team_section": {
+      "title": "Aurum team",
+      "description": "We bring together chemistry teachers and education product developers. Aurum keeps improving lessons, simulations, and practice tools so students can learn chemistry more clearly.",
+      "members": [
+        {
+          "name": "Huỳnh Vũ Luân",
+          "role": "Content Creation & System Balancing",
+          "image": "/images/team/luan.jpg",
+          "email": "2200002540@nttu.edu.vn"
+        },
+        {
+          "name": "Nguyễn Thanh Tiền",
+          "role": "Lead UI/UX Web Designer",
+          "image": "/images/team/tien.jpg",
+          "email": "2200000601@nttu.edu.vn"
+        }
+      ]
+    }
+  },
+  "contact": {
+    "badge": "Send us a message",
+    "title": "Contact the <1/> Aurum team",
+    "description": "We are always happy to receive feedback, error reports, or collaboration requests. Reach out through our official channels below.",
+    "info": {
+      "hotline": "Support channel",
+      "address": "Aurum office",
+      "google_maps": "View on map →"
+    },
+    "form": {
+      "title": "Send a message",
+      "name_label": "Your name",
+      "name_placeholder": "Enter your name...",
+      "email_label": "Email address",
+      "email_placeholder": "chemical_learners@example.com",
+      "message_label": "Message",
+      "message_placeholder": "What would you like to discuss with Aurum?",
+      "submit": "Send message",
+      "success": "Message released successfully! ✓"
+    }
+  },
+  "terms": {
+    "title": "Terms & <1/> Privacy Policy",
+    "last_updated": "Last updated: {{date}}",
+    "sections": {
+      "acceptance": {
+        "title": "1. Acceptance of Terms",
+        "p1": "By accessing and using Aurum Chemistry Odyssey, you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, please refrain from using our services.",
+        "p2": "We reserve the right to modify or update these terms at any time without prior notice. Your continued use of the platform after changes are posted constitutes your acceptance of the new terms."
+      },
+      "accounts": {
+        "title": "2. User Accounts",
+        "p1": "To access certain features, you may need to register for an account. You are responsible for maintaining the confidentiality of your account information and password. All activities that occur under your account are your responsibility.",
+        "p2": "Sharing accounts, using cheating tools in the arena, or intentionally disrupting the community is strictly prohibited. We reserve the right to suspend accounts that violate these rules without notice."
+      },
+      "intellectual": {
+        "title": "3. Intellectual Property",
+        "p1": "All content on Aurum, including but not limited to lectures, simulations, images, and source code, is owned by Aurum Chemistry Learning Hub or its licensors.",
+        "p2": "Any unauthorized copying, distribution, or commercialization of the content without our prior written consent is strictly prohibited and may result in legal action."
+      },
+      "privacy": {
+        "title": "4. Privacy Policy",
+        "p1": "We are committed to protecting your personal information. Collected data (such as name, email, and learning progress) is used solely to personalize your learning experience and improve our service quality.",
+        "p2": "We never sell or share your personal information with third parties for marketing purposes without your explicit consent."
+      },
+      "liability": {
+        "title": "5. Limitation of Liability",
+        "p1": "Lab simulations and knowledge provided on this platform are for educational and reference purposes only. Users should not perform dangerous experiments in real life without expert supervision.",
+        "p2": "We are not liable for any direct or indirect damages resulting from the use of information or incorrect practice of instructions found on the platform."
+      }
+    },
+    "footer_question": "Have questions about the terms?<br/>Please <contact>Contact Us</contact>."
+  },
+  "profile": {
+    "not_logged_in": "Not signed in",
+    "login_to_view": "Log in to view your learner profile",
+    "member_role": "New learner",
+    "member_since": "Learning member of Aurum.<1/>Part of the journey since {{date}}",
+    "online_status": "Active now",
+    "change_avatar": "Change avatar",
+    "save_changes": "Save changes",
+    "stats": {
+      "xp": "XP",
+      "level_title": "Learning level",
+      "chemicals": "Unlocked chemistry",
+      "arena_points": "Arena points",
+      "losses": "Losses",
+      "win_rate": "Win Rate",
+      "challenge_now": "Challenge Now →"
+    },
+    "collection": {
+      "title": "Chemistry & Badge Vault",
+      "unlocked_count": "Unlocked: {{current}}/{{total}}",
+      "status": "Collected",
+      "empty": "Your collection is empty. Complete lessons or missions to unlock badges.",
+      "go_to_lab": "Go to Chemistry Lab →"
+    },
+    "study_plan": {
+      "title": "Training Plan",
+      "subtitle": "Set daily goals to maintain your study habit",
+      "time_label": "Planned Training Time",
+      "target_label": "Lesson goal / day",
+      "reminders_label": "Training Reminders",
+      "save_btn": "Save plan",
+      "saving": "Saving...",
+      "success": "Training plan updated!",
+      "reminder_msg": "🔔 It is time to study. You have not reached today’s goal yet. Open a lesson and keep practicing.",
+      "email_reminders": "Email reminders",
+      "calendar_reminders": "Schedule Custom Training",
+      "calendar": {
+        "title": "Personal Training Calendar",
+        "prev_month": "Previous month",
+        "next_month": "Next month",
+        "weekday_sun": "Sun",
+        "weekday_mon": "Mon",
+        "weekday_tue": "Tue",
+        "weekday_wed": "Wed",
+        "weekday_thu": "Thu",
+        "weekday_fri": "Fri",
+        "weekday_sat": "Sat",
+        "schedule_modal_title": "Training Day Details",
+        "schedule_modal_desc": "Adjust chemistry training time and library targets for this day.",
+        "input_title_label": "Chemistry Notes",
+        "input_title_placeholder": "e.g., practice equations, review questions...",
+        "input_time_label": "Custom Training Time",
+        "input_target_label": "Library Target Count",
+        "status_completed": "Completed Goal",
+        "btn_save": "Save Schedule",
+        "btn_delete": "Delete Schedule",
+        "btn_cancel": "Cancel",
+        "upcoming_title": "Upcoming Custom Training",
+        "upcoming_empty": "No custom training schedules planned for this moon. Click any calendar date to schedule your own session!",
+        "item_target": "{{count}} lessons",
+        "item_time": "At {{time}}"
+      }
+    },
+    "arena_stats": {
+      "title": "Challenge statistics",
+      "total_matches": "Total Challenges",
+      "wins": "Wins",
+      "losses": "Losses",
+      "win_rate": "Win Rate",
+      "challenge_now": "Challenge Now →"
+    },
+    "history_title": "Training Log",
+    "history_subtitle": "Lessons, labs, and tools you recently used.",
+    "history_loading": "Loading recent activity...",
+    "history_empty": "No activity yet. Start a lesson or open the lab to build your history here.",
+    "history_clear": "Clear Log",
+    "history_time_ago": "At"
+  },
+  "nhiem_vu": {
+    "badge": "Aurum mission center",
+    "title": "Learning <1>Missions</1>",
+    "subtitle": "Complete learning challenges to level up and earn valuable badges.",
+    "current_level": "Current level",
+    "level_val": "Level {{level}}",
+    "total_xp": "Total XP",
+    "reset_in": "Reset in: <1>{{time}}</1>",
+    "tabs": {
+      "daily": "Daily",
+      "achievement": "Achievements"
+    },
+    "card": {
+      "status": "Status",
+      "claimed": "Claimed",
+      "completed": "Completed",
+      "in_progress": "In Progress",
+      "reward": "Reward",
+      "claim_btn": "Claim reward ",
+      "claiming": "Claiming...",
+      "not_reached": "Incomplete"
+    },
+    "empty": "There are no new missions for today."
+  },
+  "journey": {
+    "badge": "Grade {{grade}} Path",
+    "themes": {
+      "6": {
+        "title": "Matter Around Us",
+        "subtitle": "Start with safety, measurement, materials, and mixtures"
+      },
+      "7": {
+        "title": "Nature Explorer",
+        "subtitle": "Discover scientific methods and structure of matter"
+      },
+      "8": {
+        "title": "The Initial Journey",
+        "subtitle": "Mastering basic elements"
+      },
+      "9": {
+        "title": "The Kingdom of Transition",
+        "subtitle": "Secrets of chemical reactions"
+      },
+      "10": {
+        "title": "The Atomic Architect",
+        "subtitle": "Building the microscopic world"
+      },
+      "11": {
+        "title": "The Organic World",
+        "subtitle": "Explore carbon chains and functional groups"
+      },
+      "12": {
+        "title": "Applied Science Mastery",
+        "subtitle": "Bridge chemical theories with practical innovations"
+      }
+    },
+    "test_banner": {
+      "bg_text": "PLACEMENT TEST",
+      "badge": "Fast-Track Journey",
+      "title": "Unlock Grade {{grade}} Potential",
+      "description": "Take a placement test to unlock the Grade {{grade}} program when you are ready.",
+      "button": "Start test ➔"
+    },
+    "stage": {
+      "label": "Stage {{order}}",
+      "mission": "Mission ➔",
+      "locked_desc": "This stage is still locked.",
+      "default_desc": "Complete the previous stages to continue this lesson."
+    },
+    "milestone": {
+      "book_badge": "NEW",
+      "book_label": "Handbook",
+      "title": "Journey Notebook",
+      "subtitle": "Explore the comprehensive Grade {{grade}} Infographic"
+    }
+  },
+  "arena": {
+    "badge": "Learning Learning Hub",
+    "title": "CHEMISTRY <1>ARENA</1>",
+    "subtitle": "Challenge & Conquer knowledge",
+    "online_count": "{{count}} new learners online",
+    "ui": {
+      "arena_image_alt": "Aurum chemistry arena illustration",
+      "profile_panel_title": "Arena profile",
+      "avatar_synced": "Synced with profile",
+      "edit_profile": "Edit profile",
+      "level_label": "Level",
+      "grade_label": "Grade",
+      "no_grade": "None",
+      "streak_label": "Streak",
+      "points_label": "Arena points",
+      "stats_panel_title": "Performance",
+      "leaderboard_panel_title": "Leaderboard",
+      "recent_panel_title": "Recent matches",
+      "current_rank": "Current rank",
+      "next_rank": "{{count}} points to next rank",
+      "max_rank": "You are at the highest rank",
+      "quick_match": "Quick match",
+      "choose_mode": "Choose mode",
+      "online_students": "learners online",
+      "question_count": "10 questions",
+      "time_limit": "30 seconds/question",
+      "player_count": "players",
+      "open_room_browser": "Room browser",
+      "join_code_title": "Room code",
+      "room_browser_subtitle": "Choose a waiting room and join immediately.",
+      "create_room_subtitle": "Room setup",
+      "difficulty_auto": "Auto by grade",
+      "phong_dau_id": "Code {{id}}",
+      "host_label": "Host",
+      "full_room": "Full",
+      "waiting_share": "Share this code with classmates to start once the room is full.",
+      "ready_count": "Ready status",
+      "start_locked": "Waiting for players",
+      "battle_unavailable_title": "Match not ready",
+      "battle_unavailable_desc": "No matching question set was found for this room. Go back and choose another difficulty.",
+      "progress_label": "Progress",
+      "points_change": "Point change",
+      "moderator_title": "Moderator board",
+      "moderator_subtitle": "Show the PIN and monitor room status in real time.",
+      "participant_status": "Participant status",
+      "room_ready": "Ready",
+      "room_waiting": "Waiting"
+    },
+    "character": {
+      "badge": "Your learner character",
+      "name_label": "Learner name:",
+      "aura_label": "Profile color:",
+      "random_btn": "Change style",
+      "expand": "↓ More Styles ({{count}} styles)",
+      "collapse": "↑ Collapse",
+      "presets": {
+        "chem_master": "Chemistry Master",
+        "lab_wizard": "Lab Explorer",
+        "science_hero": "Young Scientist",
+        "atom_breaker": "Element Researcher",
+        "dna_explorer": "DNA Explorer",
+        "ion_storm": "Storm Scholar",
+        "thermo_king": "Thermochemistry Expert",
+        "crystal_lord": "Crystal Researcher",
+        "proton_rush": "Proton Expert",
+        "quark_force": "Particle Scholar",
+        "neutron_star": "Neutron Expert",
+        "plasma_wave": "Plasma Explorer"
+      }
+    },
+    "stats": {
+      "badge": "Your Stats",
+      "rank_label": "Learner rank",
+      "total_matches": "Total Challenges",
+      "wins": "Wins",
+      "losses": "Losses",
+      "win_rate": "Win Rate",
+      "total_points": "Total points",
+      "history": "Challenge History",
+      "empty_history": "No recent challenges",
+      "leaderboard_btn": "Hall of Fame",
+      "leaderboard_title": "Top Learners",
+      "loading_leaderboard": "Loading leaderboard...",
+      "empty_leaderboard": "No leaderboard data",
+      "history_item": {
+        "just_now": "Just now",
+        "minutes_ago": "{{count}}m ago",
+        "hours_ago": "{{count}}h ago",
+        "days_ago": "{{count}}d ago"
+      }
+    },
+    "ranks": {
+      "bronze": "New",
+      "silver": "Scholar",
+      "gold": "Advanced",
+      "diamond": "Expert",
+      "master": "Master"
+    },
+    "actions": {
+      "find_match": "Find Opponent",
+      "cancel_find": "Cancel Challenge",
+      "create_room": "Create challenge room",
+      "join_pin": "Enter PIN",
+      "lobby": "Waiting lobby",
+      "pin_placeholder": "ROOM PIN",
+      "close": "Close",
+      "enter": "Join Challenge →",
+      "footer_info": {
+        "summary": "Question set",
+        "questions": "10 Qs",
+        "time": "30s"
+      }
+    },
+    "create_room": {
+      "title": "CREATE <1>CHALLENGE ROOM</1>",
+      "name_label": "Challenge room name",
+      "name_placeholder": "Ex: Grade 8 Chemistry Challenge...",
+      "mode_label": "Challenge mode",
+      "difficulty_label": "Question set",
+      "admin_badge": "MODERATOR",
+      "auto_grade": "Auto Grade {{grade}}",
+      "submit_btn": "Create Challenge Now →"
+    },
+    "browser": {
+      "title": "ONLINE <1>CHALLENGE ROOMS</1>",
+      "refresh": "Refresh rooms",
+      "scanning": "Loading rooms...",
+      "empty_title": "No rooms yet",
+      "empty_desc": "Create the first challenge room",
+      "enter_btn": "Enter →"
+    },
+    "room": {
+      "join_error": "Unable to join this room",
+      "loading": "Loading...",
+      "back_btn": "Back",
+      "waiting": {
+        "title": "WAITING LOBBY",
+        "mode": "Mode",
+        "difficulty": "Rank",
+        "players": "Learners",
+        "exit_btn": "Exit",
+        "start_btn": "Start Now"
+      },
+      "battle": {
+        "question": "Question {{current}}/{{total}}",
+        "score": "Points",
+        "time": "TIME",
+        "status": {
+          "label": "Status",
+          "claimed": "Collected",
+          "completed": "Completed",
+          "in_progress": "In Progress"
+        }
+      }
+    },
+    "moderator": {
+      "instruction": "JOIN AT <1>AURUM-APPS.COM</1> WITH PIN:",
+      "leaderboard_title": "REAL-TIME LEADERBOARD",
+      "live_badge": "Live",
+      "server_status": "Chemistry Circuit Running",
+      "close_btn": "Close Arena ✕"
+    },
+    "result": {
+      "opponent_default": "Opponent",
+      "win": "EXCELLENT!",
+      "lose": "SEE YOU AGAIN",
+      "win_desc": "You conquered the chemistry arena",
+      "lose_desc": "Practice more to improve your result",
+      "score": "Score",
+      "rank": "Rank",
+      "continue_btn": "Continue →"
+    },
+    "difficulties": {
+      "easy": "Easy (New)",
+      "medium": "Medium (Scholar)",
+      "hard": "Hard (Expert)",
+      "super": "Ultimate"
+    }
+  },
+  "common": {
+    "grade": "Grade {{grade}}",
+    "lesson": "Lesson {{order}}",
+    "lesson_count_one": "Lesson",
+    "lesson_count_other": "Lessons",
+    "loading": "Loading...",
+    "back": "Back",
+    "continue": "Continue",
+    "save": "Save"
+  },
+  "my_class": {
+    "sidebar": {
+      "title": "Your classes",
+      "join_other": "Join another class",
+      "code_placeholder": "Class code",
+      "join_btn": "JOIN",
+      "grade_label": "Grade {{grade}}",
+      "teacher_prefix": "Teacher:"
+    },
+    "empty": {
+      "title": "No classes yet",
+      "desc": "You have not joined any classes yet. Enter the class code provided by your teacher to start.",
+      "placeholder": "Enter class code (Ex: XYZ1A2)",
+      "submit": "Join class"
+    },
+    "header": {
+      "badge": "GENERAL ACTIVITY"
+    },
+    "feed": {
+      "title": "Class feed",
+      "empty": "No announcements or chemistry materials from the teacher yet.",
+      "author_you": "You",
+      "private_badge": " PRIVATE MESSAGE",
+      "sent_to_teacher": "Sent to Teacher",
+      "type_video": "LESSON VIDEO",
+      "type_assignment": "CHEMISTRY CHALLENGE",
+      "type_announcement": "CLASS ANNOUNCEMENT",
+      "deadline": "Deadline",
+      "assignment": {
+        "completed": "✓ Challenge Completed",
+        "online_label": "Online",
+        "result_label": "Your Chemistry Score:",
+        "start_online": " Start online quiz ({{count}} questions)",
+        "confirm_btn": "Confirm Challenge Completion",
+        "file_PDF": "Open PDF Material",
+        "file_Word": "Open Word Material",
+        "file_Excel": "Open Excel Material",
+        "file_Link": "Open link",
+        "file_Default": "View Chemistry Material",
+        "file_Placeholder": "Paste portal link"
+      }
+    },
+    "schedules": {
+      "title": "Upcoming Schedules",
+      "empty": "No upcoming schedules",
+      "join_meet": "Join class session"
+    },
+    "support": {
+      "title": "Need support?",
+      "desc": "Contact your teacher privately for assignment help.",
+      "btn": "Send message"
+    },
+    "message_modal": {
+      "title": "Message your teacher",
+      "class_prefix": "Class:",
+      "placeholder": "Enter your questions or concerns here...",
+      "sending": "Sending message...",
+      "send_btn": "Send message ➔"
+    },
+    "viewer": {
+      "from": "By Teacher",
+      "deadline": "Deadline:",
+      "no_deadline": "No limit",
+      "download": "Download material",
+      "loading": "Loading material...",
+      "tab_fallback": "Open in new tab if error occurs"
+    },
+    "quiz": {
+      "badge": "ONLINE QUIZ",
+      "progress": "Progress:",
+      "count_done": "{{done}} / {{total}} questions answered",
+      "submitting": "Submitting...",
+      "submit_btn": "Submit Now ➔",
+      "essay_placeholder": "Enter your essay answer here...",
+      "essay_badge": "Essay section",
+      "score_msg": "Quiz section: {{score}}/10 points.\nEssay section will be graded separately by the Teacher.",
+      "success_msg": "Challenge submitted successfully! The Teacher will grade your essay section."
+    }
+  },
+  "periodic_table": {
+    "title_main": "Periodic",
+    "title_sub": " table",
+    "title_highlight": " of elements",
+    "database_label": "",
+    "system_desc": "",
+    "categories_title": "Element Classification",
+    "tech_manual": "Element database v1.0",
+    "quick_guide": {
+      "title": "Quick Lookup",
+      "desc": "Click elements to view atomic chemistry simulations"
+    },
+    "legend": {
+      "high_boiling": "Extreme Boiling Point",
+      "gas_state": "Gas state"
+    },
+    "categories": {
+      "all": "All",
+      "metal": "Metals",
+      "nonmetal": "Nonmetals",
+      "noble-gas": "Noble gases"
+    },
+    "modal": {
+      "atomic_no": "Atomic No.",
+      "mass_wt": "Mass Wt.",
+      "category_label": "Category:",
+      "tabs": {
+        "overview": " Overview",
+        "discover": " Discovery"
+      },
+      "bohr_config": "Bohr Shell Configuration",
+      "brief_intro": "Brief Introduction",
+      "properties": {
+        "state": "State",
+        "meltingPoint": "Melting Point",
+        "boilingPoint": "Boiling Point",
+        "density": "Density",
+        "electronConfig": "Electron Config"
+      },
+      "discovery": {
+        "title": "Discovery History",
+        "year": "Year Discovered",
+        "by": "Discovered By",
+        "ancient": "Ancient",
+        "unknown": "Unknown"
+      },
+      "media_sample": "Wikipedia Reference Sample",
+      "facts": {
+        "badge": "Fun Facts",
+        "updating": "Updating more information..."
+      },
+      "applications": {
+        "badge": "Real-world Applications",
+        "updating": "Updating application list..."
+      },
+      "wiki_btn": "View Details on Wikipedia"
+    }
+  },
+  "elements": {
+    "H": {
+      "name": "Hydrogen",
+      "desc": "The lightest and most abundant element in the universe. A primary component of water.",
+      "facts": [
+        "Lightest element in the universe",
+        "Makes up 75% of the universe's mass",
+        "Solar energy comes from hydrogen fusion",
+        "Can become metallic at extreme pressure"
+      ],
+      "uses": [
+        "Rocket fuel",
+        "Ammonia production",
+        "Fuel cells",
+        "Coolant for generators"
+      ]
+    },
+    "He": {
+      "name": "Helium",
+      "desc": "Inert gas, second lightest after Hydrogen. Discovered on the Sun before being found on Earth.",
+      "facts": [
+        "Discovered on the Sun before Earth",
+        "Name from Helios - Greek sun god",
+        "Changes voice pitch when inhaled",
+        "Cannot solidify at normal pressure"
+      ],
+      "uses": [
+        "Balloons",
+        "Superconducting cooling",
+        "Shielding gas for welding",
+        "Medical MRI"
+      ]
+    },
+    "Li": {
+      "name": "Lithium",
+      "desc": "Lightest alkali metal, soft and silvery. Reacts strongly with water.",
+      "facts": [
+        "Lightest solid metal",
+        "Can float on water",
+        "Key component in phone/laptop batteries",
+        "Name from Greek 'lithos' meaning stone"
+      ],
+      "uses": [
+        "Lithium-ion batteries",
+        "Aluminum alloys",
+        "Bipolar disorder treatment",
+        "Lubricating grease"
+      ]
+    },
+    "Be": {
+      "name": "Beryllium",
+      "desc": "Light alkaline earth metal with high hardness and melting point.",
+      "facts": [
+        "Extremely toxic - causes berylliosis",
+        "Used in X-ray generator windows",
+        "Gives emeralds their green color",
+        "Does not react with water at room temp"
+      ],
+      "uses": [
+        "X-ray windows",
+        "Aircraft and satellite parts",
+        "Telescope mirrors",
+        "Copper-beryllium alloys"
+      ]
+    },
+    "B": {
+      "name": "Boron",
+      "desc": "Hard, black metalloid, semiconductor. Essential for plants.",
+      "facts": [
+        "Primary component of Pyrex heat-resistant glass",
+        "Essential for plant cell growth",
+        "Pure boron is very hard, second only to diamond",
+        "Can absorb neutrons in nuclear reactors"
+      ],
+      "uses": [
+        "Borosilicate glass",
+        "Detergents",
+        "Fertilizers",
+        "Ceramics",
+        "Special alloys"
+      ]
+    },
+    "C": {
+      "name": "Carbon",
+      "desc": "Basic element of life, can form over 10 million different compounds.",
+      "facts": [
+        "Can form over 10 million compounds",
+        "Diamond and graphite are both pure carbon",
+        "Basis of all life on Earth",
+        "Can exist as fullerene (C60)"
+      ],
+      "uses": [
+        "Organic compounds",
+        "Steel and cast iron",
+        "Diamonds and graphite",
+        "Pharmaceuticals",
+        "Plastics"
+      ]
+    },
+    "N": {
+      "name": "Nitrogen",
+      "desc": "Gas making up 78% of Earth's atmosphere. Essential for protein and DNA.",
+      "facts": [
+        "Makes up 78% of air",
+        "N≡N triple bond is very stable",
+        "Used for cooling and food preservation",
+        "Essential for DNA, RNA, and protein"
+      ],
+      "uses": [
+        "Fertilizers",
+        "TNT explosives",
+        "Refrigeration",
+        "Food preservation",
+        "Medicine"
+      ]
+    },
+    "O": {
+      "name": "Oxygen",
+      "desc": "Essential for respiration and combustion. Third most abundant element in the universe.",
+      "facts": [
+        "Essential for life",
+        "Makes up 21% of air",
+        "Ozone (O₃) protects Earth from UV",
+        "Liquid oxygen is pale blue"
+      ],
+      "uses": [
+        "Respiration",
+        "Combustion",
+        "Medical",
+        "Metal cutting",
+        "Water treatment"
+      ]
+    },
+    "F": {
+      "name": "Fluorine",
+      "desc": "Most reactive halogen, pale yellow gas, extremely toxic and corrosive.",
+      "facts": [
+        "Most electronegative element (3.98)",
+        "Reacts with almost everything, including noble gases",
+        "Fluoride helps prevent tooth decay",
+        "Can etch glass"
+      ],
+      "uses": [
+        "Toothpaste (fluoride)",
+        "Refrigerants (Freon)",
+        "Teflon",
+        "Uranium enrichment"
+      ]
+    },
+    "Ne": {
+      "name": "Neon",
+      "desc": "Noble gas, colorless, odorless, used in neon signs.",
+      "facts": [
+        "Creates signature orange-red light in neon lamps",
+        "Fifth most abundant noble gas in the universe",
+        "Does not react with any element",
+        "Name from Greek 'neos' meaning new"
+      ],
+      "uses": [
+        "Neon lights",
+        "TVs, lasers",
+        "High voltage indicators",
+        "Refrigeration"
+      ]
+    },
+    "Na": {
+      "name": "Sodium",
+      "desc": "Soft metal, reacts strongly with water creating a yellow flame.",
+      "facts": [
+        "Explosive reaction with water",
+        "Component of table salt (NaCl)",
+        "Burns with signature yellow flame",
+        "Essential for nerves and muscles"
+      ],
+      "uses": [
+        "Table salt NaCl",
+        "Soap",
+        "Sodium lamps",
+        "Nuclear reactor coolant"
+      ]
+    },
+    "Mg": {
+      "name": "Magnesium",
+      "desc": "Light metal, burns brightly with a blinding white flame.",
+      "facts": [
+        "Burns with blinding white flame",
+        "Light metal for aerospace industry",
+        "Essential for over 300 enzymes in the body",
+        "Chlorophyll contains magnesium"
+      ],
+      "uses": [
+        "Light alloys",
+        "Fireworks",
+        "Diatary supplements",
+        "Automotive and aircraft"
+      ]
+    },
+    "Al": {
+      "name": "Aluminum",
+      "desc": "Light metal, corrosion-resistant, widely used in daily life.",
+      "facts": [
+        "Most abundant metal in Earth's crust",
+        "Once rarer than gold (before electrolysis)",
+        "Aluminum cans can be recycled infinitely",
+        "Washington Monument cap is made of aluminum"
+      ],
+      "uses": [
+        "Soda cans",
+        "Aircraft",
+        "Windows",
+        "Power lines",
+        "Food packaging"
+      ]
+    },
+    "Si": {
+      "name": "Silicon",
+      "desc": "Metalloid, 2nd most abundant element in Earth's crust, basis of electronic technology.",
+      "facts": [
+        "Makes up 27.7% of Earth's crust",
+        "Basis of semiconductor industry",
+        "Silicon Valley is named after it",
+        "Beach sand is mostly SiO₂"
+      ],
+      "uses": [
+        "Computer chips",
+        "Solar cells",
+        "Glass",
+        "Ceramics",
+        "Silicone"
+      ]
+    },
+    "P": {
+      "name": "Phosphorus",
+      "desc": "Nonmetal with multiple allotropes, essential for DNA and ATP.",
+      "facts": [
+        "White phosphorus glows in the dark",
+        "Essential for DNA, RNA and ATP",
+        "Red phosphorus is safe, used in matches",
+        "Discovered from urine"
+      ],
+      "uses": [
+        "Fertilizers",
+        "Matches",
+        "Detergents",
+        "Pesticides",
+        "Weapons (white phosphorus)"
+      ]
+    },
+    "S": {
+      "name": "Sulfur",
+      "desc": "Yellow nonmetal, smells like rotten eggs when combined with hydrogen.",
+      "facts": [
+        "Rotten egg smell is H₂S containing sulfur",
+        "Used for sulfuric acid - #1 industrial chemical",
+        "Essential for methionine and cysteine amino acids",
+        "Volcanoes erupt sulfur"
+      ],
+      "uses": [
+        "Sulfuric acid H₂SO₄",
+        "Matches",
+        "Vulcanized rubber",
+        "Fertilizers",
+        "Medicine"
+      ]
+    },
+    "Cl": {
+      "name": "Chlorine",
+      "desc": "Greenish-yellow gas, toxic, pungent odor. Used for water disinfection.",
+      "facts": [
+        "Used as chemical weapon in WWI",
+        "Disinfects 98% of world's drinking water",
+        "Component of table salt",
+        "Signature pungent odor like swimming pools"
+      ],
+      "uses": [
+        "Water disinfection",
+        "PVC production",
+        "Bleach",
+        "HCl production"
+      ]
+    },
+    "Ar": {
+      "name": "Argon",
+      "desc": "Noble gas making up 0.93% of air, used in welding and light bulbs.",
+      "facts": [
+        "3rd most abundant gas in air (0.93%)",
+        "Name from Greek 'argos' meaning lazy",
+        "Used in bulbs to prevent filament evaporation",
+        "Completely inert"
+      ],
+      "uses": [
+        "Arc welding",
+        "Light bulbs",
+        "Lasers",
+        "Historic document preservation"
+      ]
+    },
+    "K": {
+      "name": "Potassium",
+      "desc": "Soft alkali metal, reacts violently with water.",
+      "facts": [
+        "More explosive reaction with water than sodium",
+        "Burns with signature lilac flame",
+        "Can be cut with a knife due to softness",
+        "Essential for nerve and muscle function"
+      ],
+      "uses": [
+        "Fertilizers",
+        "Fireworks (lilac)",
+        "Glass",
+        "Soap",
+        "Medicine"
+      ]
+    },
+    "Ca": {
+      "name": "Calcium",
+      "desc": "Alkaline earth metal, primary component of bones and teeth.",
+      "facts": [
+        "Makes up 1.5% of human body (bones, teeth)",
+        "Primary component of limestone and marble",
+        "Burns with brick-red flame",
+        "Calcium metal can be cut with a knife"
+      ],
+      "uses": [
+        "Cement",
+        "Gypsum",
+        "Vitamin supplements",
+        "Steel",
+        "Fireworks"
+      ]
+    },
+    "Fe": {
+      "name": "Iron",
+      "desc": "Most common and important metal for industry and biology.",
+      "facts": [
+        "Most used metal",
+        "Earth's core is mostly molten iron",
+        "Essential for human blood (hemoglobin)",
+        "Ferromagnetic"
+      ],
+      "uses": [
+        "Steel",
+        "Construction",
+        "Automotive",
+        "Hemoglobin in blood",
+        "Engines"
+      ]
+    },
+    "Cu": {
+      "name": "Copper",
+      "desc": "Reddish metal, second best conductor of electricity and heat after silver.",
+      "facts": [
+        "2nd best electrical conductor after silver",
+        "Natural antimicrobial properties",
+        "Used for over 10,000 years",
+        "Statue of Liberty is coated in copper"
+      ],
+      "uses": [
+        "Electrical wiring",
+        "Plumbing",
+        "Coins",
+        "Brass alloys",
+        "Antimicrobial"
+      ]
+    },
+    "Zn": {
+      "name": "Zinc",
+      "desc": "Bluish-grey metal, used for galvanizing iron against rust and in batteries.",
+      "facts": [
+        "Protects iron from rust (galvanization)",
+        "Essential for immune system",
+        "Component of brass",
+        "Used in sunscreen"
+      ],
+      "uses": [
+        "Galvanization",
+        "Brass alloys",
+        "Batteries",
+        "Vitamin and meds",
+        "Sunscreen"
+      ]
+    },
+    "Ag": {
+      "name": "Silver",
+      "desc": "Precious metal with the highest electrical and thermal conductivity.",
+      "facts": [
+        "Symbol Ag from 'argentum'",
+        "Strongest light reflection",
+        "Has natural antimicrobial properties"
+      ],
+      "uses": [
+        "Jewelry",
+        "Electronics",
+        "Mirrors",
+        "Medical antimicrobial"
+      ]
+    },
+    "Au": {
+      "name": "Gold",
+      "desc": "Most ductile and malleable precious metal, does not tarnish.",
+      "facts": [
+        "Incredibly stable, does not oxidize",
+        "One ounce can be drawn into 50 miles of wire",
+        "Basis of global financial systems for centuries",
+        "Can be eaten (gold leaf)"
+      ],
+      "uses": [
+        "Jewelry",
+        "Financial reserves",
+        "Electronics",
+        "Dentistry",
+        "Decoration"
+      ]
+    }
+  },
+  "chem_lab": {
+    "header": {
+      "badge": "Virtual chemistry lab",
+      "title_1": "Explore the",
+      "title_2": "Chemistry",
+      "title_3": "World",
+      "desc": "Choose a learning module and start practicing chemistry safely."
+    },
+    "modules": {
+      "reaction": {
+        "label": "Lab Chemistry Mixer",
+        "desc": "Combine substances and observe visual reactions."
+      },
+      "balance": {
+        "label": "Free-form Balancer",
+        "desc": "Enter both sides of an equation to calculate coefficients and verify atoms and electric charge."
+      },
+      "molecule": {
+        "label": "Molecule Model",
+        "desc": "View molecular structures and chemical space."
+      },
+      "solver": {
+        "label": "Formula Finder",
+        "desc": "Search and look up balanced chemical equations instantly from the database."
+      },
+      "calculator": {
+        "label": "Chemistry Calculator",
+        "desc": "Calculate moles, concentration, mass, gas volume, and other common chemistry quantities."
+      },
+      "discovery": {
+        "label": "Discovery Journal",
+        "desc": "Track unlocked substances and review the reaction paths you have discovered."
+      },
+      "craft": {
+        "label": "Crafting Workshop",
+        "desc": "Use knowledge ingredients with carefully authored crafting recipes."
+      },
+      "start_btn": "Start"
+    },
+    "stats": {
+      "chemicals": "Chemicals used",
+      "reactions": "Discovered Reactions",
+      "creativity": "Creative score"
+    }
+  },
+  "material_detail": {
+    "back_btn": "Back to library",
+    "not_found": "Material does not exist",
+    "views": "learners read",
+    "downloads": "downloads",
+    "unsupported_format": "Format #{{type}} does not support direct preview",
+    "download_to_view": "Download material to view",
+    "preview_loading": "Preparing preview",
+    "preview_error": "A preview could not be generated for this material.",
+    "preview_truncated": "This preview was shortened. Download the file to read all content.",
+    "document_preview": "Word document preview",
+    "pdf_preview_title": "PDF preview: {{title}}",
+    "no_desc": "No description available for this material.",
+    "download_btn": "Download material (FREE)",
+    "downloading_btn": "Downloading...",
+    "download_error": "Automatic download failed. The material was opened in a new tab instead.",
+    "phan_hoi": {
+      "title_main": "Discussion",
+      "title_highlight": "Discussion",
+      "placeholder": "Leave your thoughts on this material...",
+      "submit_btn": "Send post",
+      "submitting_btn": "Sending comment...",
+      "login_required": "Please log in to join the discussion",
+      "login_link": "Go to login page",
+      "no_phan_hoi": "No comments yet. Be the first learner!",
+      "alert_login": "Please log in to send feedback!",
+      "err_fetch": "Error loading material data",
+      "err_submit": "Error sending message post",
+      "default_user": "New learner"
+    },
+    "sidebar": {
+      "file_info": "Material Info",
+      "format": "Edition",
+      "posted_date": "Posted date",
+      "size": "Material Size",
+      "disclaimer": "All chemistry materials at Aurum are provided free of charge to support learning. Commercial use without the Aurum team's consent is strictly prohibited."
+    }
+  },
+  "library": {
+    "title": "Chemistry <1>Resource Library</1>",
+    "subtitle": "A diverse repository with infographics, mind maps, worksheets, and review materials.",
+    "search_placeholder": "Search chemistry materials...",
+    "loading": "Loading materials...",
+    "categories": {
+      "all": "All Materials",
+      "infographic_11": "GRADE 11 CHEMISTRY INFOGRAPHICS",
+      "infographic_12": "GRADE 12 CHEMISTRY INFOGRAPHICS",
+      "mindmap_10": "GRADE 10 MIND MAPS",
+      "mindmap_11": "GRADE 11 MIND MAPS",
+      "mindmap_12": "GRADE 12 MIND MAPS",
+      "worksheet_12": "GRADE 12 WORKSHEETS",
+      "comic_10": "GRADE 10 CHEMISTRY COMICS",
+      "comic_11": "GRADE 11 CHEMISTRY COMICS",
+      "comic_12": "GRADE 12 CHEMISTRY COMICS",
+      "worksheet_9": "GRADE 9 WORKSHEETS",
+      "mindmap_6": "SCIENCE 6 MIND MAPS",
+      "hoa_chung_de_thi": "CHEMISTRY GENERAL - EXAMS",
+      "hoa_chung_de_on": "CHEMISTRY GENERAL - REVIEW SETS",
+      "hoa_chung_anh": "CHEMISTRY GENERAL - IMAGES",
+      "hoa_chung_bai_giang": "CHEMISTRY GENERAL - LECTURES",
+      "hoa_8_de_thi": "CHEMISTRY GRADE 8 - EXAMS",
+      "hoa_8_de_on": "CHEMISTRY GRADE 8 - REVIEW SETS",
+      "hoa_8_anh": "CHEMISTRY GRADE 8 - IMAGES",
+      "hoa_8_bai_giang": "CHEMISTRY GRADE 8 - LECTURES",
+      "hoa_9_de_thi": "CHEMISTRY GRADE 9 - EXAMS",
+      "hoa_9_de_on": "CHEMISTRY GRADE 9 - REVIEW SETS",
+      "hoa_9_anh": "CHEMISTRY GRADE 9 - IMAGES",
+      "hoa_9_bai_giang": "CHEMISTRY GRADE 9 - LECTURES",
+      "hoa_10_de_thi": "CHEMISTRY GRADE 10 - EXAMS",
+      "hoa_10_de_on": "CHEMISTRY GRADE 10 - REVIEW SETS",
+      "hoa_10_anh": "CHEMISTRY GRADE 10 - IMAGES",
+      "hoa_10_bai_giang": "CHEMISTRY GRADE 10 - LECTURES",
+      "hoa_11_de_thi": "CHEMISTRY GRADE 11 - EXAMS",
+      "hoa_11_de_on": "CHEMISTRY GRADE 11 - REVIEW SETS",
+      "hoa_11_anh": "CHEMISTRY GRADE 11 - IMAGES",
+      "hoa_11_bai_giang": "CHEMISTRY GRADE 11 - LECTURES",
+      "hoa_12_de_thi": "CHEMISTRY GRADE 12 - EXAMS",
+      "hoa_12_de_on": "CHEMISTRY GRADE 12 - REVIEW SETS",
+      "hoa_12_anh": "CHEMISTRY GRADE 12 - IMAGES",
+      "hoa_12_bai_giang": "CHEMISTRY GRADE 12 - LECTURES"
+    },
+    "card": {
+      "view_details": "View Material",
+      "default_category": "Material"
+    },
+    "empty": {
+      "title": "No matching materials found",
+      "clear_btn": "Clear filters and try again"
+    }
+  },
+  "bai_hoc": {
+    "header": {
+      "title_journey": "Knowledge Map",
+      "title_library": "Resource Library",
+      "subtitle_explore": "Practice",
+      "subtitle_hoc_lieu": "Materials",
+      "desc_logged_in": "Complete each learning stage to strengthen your chemistry knowledge.",
+      "desc_guest": "A journey to conquer chemistry from basic to advanced for new learners from grade 6 to 12."
+    },
+    "grade_labels": {
+      "label": "Grade {{grade}}"
+    },
+    "status": {
+      "loading": "Loading materials...",
+      "empty_title_logged_in": "Please select a learning stage to start your journey",
+      "empty_title_guest": "Please select a grade to show chemistry lessons",
+      "empty_desc": "Explore the world of chemistry now",
+      "err_fetch": "Error loading lessons"
+    },
+    "card": {
+      "explore_btn": "EXPLORE LESSON"
+    },
+    "story_parts": {
+      "6": {
+        "title": "Part 1",
+        "name": "Science and Matter Foundations",
+        "story": "Start with lab safety, measurement, materials, fuels, and mixtures to build a steady chemistry foundation."
+      },
+      "7": {
+        "title": "Part 2",
+        "name": "Atoms and the Language of Chemistry",
+        "story": "Explore atoms, elements, molecules, bonds, and chemical formulas at an introductory level."
+      },
+      "8": {
+        "title": "Part 3",
+        "name": "Starting With Matter and Atoms",
+        "story": "Enter the world of substances and atoms, where chemistry begins. Your mission is to understand matter and the language of formulas."
+      },
+      "9": {
+        "title": "Part 4",
+        "name": "The Transformation Journey",
+        "story": "Reactions and visible changes reveal how elements and compounds interact."
+      },
+      "10": {
+        "title": "Part 5",
+        "name": "Chemical Structure and Patterns",
+        "story": "Go deeper into kinetics, equilibrium, and periodic structure while connecting concepts to real chemistry problems."
+      },
+      "11": {
+        "title": "Part 6",
+        "name": "The World of Organic Chemistry",
+        "story": "Explore carbon chains, functional groups, and organic compounds connected to everyday life. Learn how structure shapes chemical behavior."
+      },
+      "12": {
+        "title": "Part 7",
+        "name": "Modern Chemistry Applications",
+        "story": "The final stage of high-school chemistry. Study electrochemistry, polymers, and materials to prepare for real applications."
+      }
+    }
+  },
+  "lesson_page": {
+    "loading": "Loading lesson...",
+    "back_btn": "Back to list",
+    "grade_label": "CHEMISTRY GRADE {{grade}}",
+    "content_title": "Lesson Content",
+    "video": {
+      "placeholder": "Lesson video is not available",
+      "powered_by": "Chemistry link by"
+    },
+    "error": {
+      "fetch": "Error loading lesson data"
+    }
+  },
+  "mission_modal": {
+    "labels": {
+      "multiple-choice": "Multiple choice",
+      "image-selection": "Image recognition",
+      "fill-in-the-blank": "Fill in the blank",
+      "drag-drop": "Sorting Flow",
+      "matching": "Matching",
+      "mission": "Learning mission",
+      "goal": "Training Goal"
+    },
+    "narrative_fallback": "Use your knowledge to complete this challenge.",
+    "source_fallback": "Reference Material",
+    "image_selection": {
+      "confirm": "Confirm choice {{label}} ➔",
+      "label_prefix": "Choice "
+    },
+    "fill_blank": {
+      "placeholder": "Type your answer...",
+      "confirm": "Confirm answer"
+    },
+    "drag_drop": {
+      "instruction": "Drag to reorder questions sequence correctly",
+      "confirm": "Confirm Sequence ➔"
+    },
+    "matching": {
+      "instruction": "Column B (drag and drop)",
+      "col_a": "Column A",
+      "col_b": "Meaning",
+      "confirm": "Confirm matches ➔"
+    },
+    "footer": {
+      "cancel": "Suspend Training",
+      "correct": " Correct! {{status}}",
+      "wrong": " Not quite. Try again!",
+      "status_final": "Mission completed!",
+      "status_next": "Next..."
+    }
+  },
+  "stage_video": {
+    "back_btn": "Back",
+    "status": {
+      "label": "Lab Status:",
+      "ready": "Ready",
+      "analyzing": "Processing..."
+    },
+    "metadata": {
+      "source": "Source: Aurum lesson feed 01",
+      "format": "Format: 1080p digital feed"
+    },
+    "action_btn": {
+      "ready": "Accept Challenge",
+      "processing": "Processing data..."
+    },
+    "hints": {
+      "ready": "Data ready. Continue when you are prepared.",
+      "processing": "Hint: Watch closely to prepare for the challenge."
+    }
+  },
+  "arena_modes": {
+    "solo": "SOLO DUEL",
+    "3vs3": "SQUAD OF 3 LEARNERS",
+    "5vs5": "SQUAD OF 5 LEARNERS",
+    "1vs100": "LEARNERS BATTLE ROYALE",
+    "solo_short": "1 VS 1",
+    "3vs3_short": "3 VS 3",
+    "5vs5_short": "5 VS 5",
+    "br_short": "Battle Royale"
+  },
+  "widget": {
+    "title": "Aurum Assistant",
+    "status_active": "Assistant active",
+    "minimize": "Dismiss",
+    "close": "Close",
+    "tooltip": "Aurum Assistant",
+    "login_required": "Login required",
+    "login_required_desc": "Please log in to track and claim rewards from daily missions.",
+    "login_now": "Log in now",
+    "level_prefix": "Level",
+    "streak": "Training Streak",
+    "reset_in": "Chemistry reset in:",
+    "reward": "Badge Reward",
+    "reward_elements": "Reward elements:",
+    "claim": "Claim",
+    "claimed": "Claimed ✓",
+    "locked": "Locked",
+    "no_nhiem_vu": "No learners nhiem_vu available",
+    "phan_hoi_type": "Feedback type:",
+    "phan_hoi_details": "Details:",
+    "type_suggestion": " Suggestion",
+    "type_bug": "🐛 Bug report",
+    "type_praise": "❤️ Praise",
+    "placeholder_suggestion": "Describe your chemistry idea to help improve the lab...",
+    "placeholder_bug": "Describe the issue in detail (and press Ctrl+V to paste a screenshot if available)...",
+    "placeholder_praise": "Share what you love about the Aurum of Chemistry...",
+    "attach_image": "📷 Attach image (or Ctrl+V)",
+    "remove": "Remove",
+    "attach_hint": "Upload an image file or press Ctrl+V to paste a screenshot directly.",
+    "sending": "Sending feedback...",
+    "send_suggestion": "Send suggestion ➔",
+    "send_bug": "Report issue ➔",
+    "send_praise": "Send praise ➔",
+    "success_title": "Message Received!",
+    "success_desc": "Your feedback has been sent successfully to the Aurum admin team.",
+    "send_another": "Send Another Message"
+  }
 }
