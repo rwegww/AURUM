@@ -15,6 +15,7 @@ import {
   normalizeJourneyChallenges,
 } from '../src/utils/journeyLessonData.js';
 import { isCloudinaryVideoUrl } from '../src/utils/videoLinks.js';
+import { getLessonInfographicUrl } from '../src/utils/lessonAssets.js';
 
 const allLessons = [
   ...class6Data.ketnoi,
@@ -135,6 +136,34 @@ describe('dữ liệu lộ trình học', () => {
 
     expect(journeyVideoUrls).toHaveLength(72);
     expect(journeyVideoUrls.every(isCloudinaryVideoUrl)).toBe(true);
+  });
+
+  it('dùng infographic Cloudinary cho dữ liệu API lớp 6 và lớp 7 chưa có URL', () => {
+    const infographicOrders = {
+      6: [2, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+      7: [1, 2, 3, 4, 5, 6, 7],
+    };
+
+    Object.entries(infographicOrders).forEach(([classId, orders]) => {
+      orders.forEach((order) => {
+        expect(getLessonInfographicUrl({ classId, order }))
+          .toBe(`https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/curriculum/class${classId}/${classId}-${order}.png`);
+      });
+    });
+  });
+
+  it('thay đường dẫn local lớp 6–7 bị thiếu nhưng vẫn ưu tiên URL tùy chỉnh hợp lệ', () => {
+    expect(getLessonInfographicUrl({
+      classId: 6,
+      order: 6,
+      infographicUrl: '/assets/curriculum/class6/6-6.webp',
+    })).toBe('https://res.cloudinary.com/dpcorzgkm/image/upload/aurum/curriculum/class6/6-6.png');
+
+    expect(getLessonInfographicUrl({
+      classId: 7,
+      order: 2,
+      infographicUrl: 'https://cdn.example.com/custom-7-2.webp',
+    })).toBe('https://cdn.example.com/custom-7-2.webp');
   });
 
   it('vòng 3 luôn chứa đầy đủ câu hỏi của hai vòng trước và không lặp câu', () => {
