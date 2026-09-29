@@ -54,7 +54,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
             <NavLink
               key={item.path || item.label || index}
               to={item.path}
-              end={item.path === '/admin' || item.path === '/teacher'}
+              end={item.path === '/' || item.path === '/admin' || item.path === '/teacher'}
               className={({ isActive }) => `flex items-center gap-3.5 px-4 py-3.5 rounded-2xl transition-all relative font-bold text-sm ${
                 isActive
                   ? 'text-blue-600 bg-blue-50 shadow-sm shadow-blue-500/5'

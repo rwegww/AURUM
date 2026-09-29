@@ -502,6 +502,55 @@ describe('arena mini game backend', () => {
     expect(recovered.body.room.id).toBe(roomId);
   });
 
+  it('allows a teacher to create and recover a practice room as a player', async () => {
+    arenaState.rooms.clear();
+    arenaState.players = [];
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0.3);
+
+    const created = await request(app)
+      .post('/api/arena/create')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`)
+      .send({
+        name: 'Teacher practice',
+        mode: 'solo',
+        difficulty: 'auto',
+        max_players: 1,
+        is_practice: true,
+        as_player: true,
+      });
+
+    random.mockRestore();
+    const roomId = created.body.room?.id;
+
+    expect(created.status).toBe(201);
+    expect(created.body.room).toMatchObject({
+      id: roomId,
+      host_id: 'teacher',
+      current_players: 1,
+      is_practice: true,
+    });
+    expect(arenaState.players).toContainEqual(expect.objectContaining({
+      phong_dau_id: roomId,
+      nguoi_dung_id: 'teacher',
+      status: 'ready',
+    }));
+
+    const recovered = await request(app)
+      .get('/api/arena/active-room')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+    const state = await request(app)
+      .get(`/api/arena/room/${roomId}/state`)
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+
+    expect(recovered.status).toBe(200);
+    expect(recovered.body.room.id).toBe(roomId);
+    expect(state.status).toBe(200);
+    expect(state.body.state.players).toContainEqual(expect.objectContaining({
+      nguoi_dung_id: 'teacher',
+      status: 'ready',
+    }));
+  });
+
   it('keeps both players in the same room from create through refresh and start', async () => {
     arenaState.rooms.clear();
     arenaState.players = [];
@@ -926,5 +975,4 @@ describe('arena mini game backend', () => {
     expect(res.body.message).toContain('Ch');
   });
 });
-
 

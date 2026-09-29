@@ -283,7 +283,8 @@ const Navbar = () => {
                     { path: "/arena", label: t('nav.arena_link'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14.5 17.5 3 6 3 3 6 3 17.5 14.5M13 19 19 13M16 16 20 20M19 21 21 19" /></svg>, requiresAuth: true },
                     { path: "/lab/solver", label: t('nav.solver'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> },
                     { path: "/calculator", label: t('nav.calculator'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/><line x1="12" y1="6" x2="12" y2="18"/></svg> },
-                    { path: "/teacher", label: t('nav.teacher_portal'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>, allowedRoles: ['teacher'] },
+                    { path: "/teacher", label: t('nav.teacher_portal'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg>, allowedRoles: ['teacher', 'admin'] },
+                    { path: "/admin", label: 'QUẢN TRỊ HỆ THỐNG', icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8.7 8 10 4.6-1.3 8-5 8-10V7l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg>, allowedRoles: ['admin'] },
                   ].filter((item) => (
                     (!item.requiresAuth || isLoggedIn)
                     && (!item.allowedRoles || item.allowedRoles.includes(user?.role))
@@ -376,4 +377,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

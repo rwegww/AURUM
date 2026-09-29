@@ -1247,6 +1247,7 @@ const Arena = () => {
           difficulty: 'auto',
           max_players: 1,
           is_practice: true,
+          as_player: true,
         }),
       });
       activateRoom({ ...data.room, isPractice: true });
@@ -1277,6 +1278,7 @@ const Arena = () => {
           mode: formData.mode,
           difficulty: formData.difficulty,
           max_players,
+          as_player: true,
         }),
       });
       activateRoom({ ...data.room, max_players });
@@ -1425,7 +1427,7 @@ const Arena = () => {
         onCreateRoom={() => setIsCreateModalOpen(true)}
         onJoinRoom={handleJoinRoom}
         onOpenBrowser={() => setIsBrowserOpen(true)}
-        onPractice={user?.role === 'teacher' || user?.role === 'admin' ? null : handlePractice}
+        onPractice={handlePractice}
       />
 
       <AnimatePresence>

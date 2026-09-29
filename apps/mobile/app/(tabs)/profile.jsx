@@ -38,7 +38,7 @@ export default function ProfileTab() {
     || null;
 
   React.useEffect(() => {
-    if (!token || user?.role !== 'student') return;
+    if (!token || !user) return;
     classApi.list(token)
       .then(data => setMyClasses(Array.isArray(data) ? data : []))
       .catch(() => {});
@@ -266,4 +266,3 @@ const styles = StyleSheet.create({
     gap: spacing.md
   }
 });
-

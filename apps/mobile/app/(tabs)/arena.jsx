@@ -235,7 +235,14 @@ export default function ArenaTab() {
     if (creating) return;
     setCreating(true);
     try {
-      const created = await arenaApi.createRoom(token, { name: "Luyện tập Arena", mode: "solo", difficulty: "auto", max_players: 1, is_practice: true });
+      const created = await arenaApi.createRoom(token, {
+        name: "Luyện tập Arena",
+        mode: "solo",
+        difficulty: "auto",
+        max_players: 1,
+        is_practice: true,
+        as_player: true,
+      });
       const started = await arenaApi.startRoom(token, created.room.id);
       setActiveState(started.state);
     } catch (error) {
@@ -249,7 +256,13 @@ export default function ArenaTab() {
     if (creating) return;
     setCreating(true);
     try {
-      const created = await arenaApi.createRoom(token, { name, mode, difficulty, max_players: MODES[mode]?.players || 2 });
+      const created = await arenaApi.createRoom(token, {
+        name,
+        mode,
+        difficulty,
+        max_players: MODES[mode]?.players || 2,
+        as_player: true,
+      });
       await activateRoom(created.room.id);
       setCreateModalOpen(false);
     } catch (error) {
@@ -349,7 +362,7 @@ export default function ArenaTab() {
           <ArenaButton label={searching ? "Hủy tìm trận" : "Tìm trận ngay"} icon={searching ? "close" : "search"} onPress={findMatch} color={searching ? colors.red : colors.green} />
           <View style={styles.twoColumns}>
             <ArenaButton label="Tạo phòng" icon="add" outline onPress={() => setCreateModalOpen(true)} style={styles.flexButton} />
-            {!isModerator ? <ArenaButton label={creating ? "Đang tạo..." : "Luyện tập"} icon="flask-outline" outline disabled={creating} onPress={createPractice} style={styles.flexButton} /> : null}
+            <ArenaButton label={creating ? "Đang tạo..." : "Luyện tập"} icon="flask-outline" outline disabled={creating} onPress={createPractice} style={styles.flexButton} />
           </View>
         </Panel>
 

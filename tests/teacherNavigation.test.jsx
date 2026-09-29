@@ -65,6 +65,14 @@ describe('điều hướng cổng giáo viên', () => {
     expect(overviewLinks.every((tag) => !tag.includes('aria-current="page"'))).toBe(true);
   });
 
+  it('cung cấp đầy đủ lối vào các chức năng học sinh', () => {
+    const html = renderTeacherLayout('/teacher');
+
+    for (const href of ['/', '/classroom', '/my-class', '/lab', '/arena', '/library']) {
+      expect(html).toContain(`href="${href}"`);
+    }
+  });
+
   it('không lồng nút đổi trạng thái vào liên kết thông báo', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-09-05T10:00:00+07:00'));

@@ -76,7 +76,8 @@ const parseExamUpload = (req, res, next) => {
 const router = express.Router();
 
 const canManageClasses = (user) => user?.role === 'teacher' || user?.role === 'admin';
-const canUseStudentClassFeatures = (user) => user?.role === 'student';
+const canUseStudentClassFeatures = (user) => ['student', 'teacher', 'admin'].includes(user?.role);
+const usesStudentClassView = (req) => req.user?.role === 'student' || req.query?.view === 'student';
 
 const normalizeCreateClassInput = ({ name, description, khoi_id }) => {
   const normalizedName = typeof name === 'string' ? name.trim() : '';
@@ -489,7 +490,7 @@ const isClassMember = async (classId, userId) => {
   return !!data;
 };
 
-const ensureClassAccess = async (classId, user, res) => {
+const ensureClassAccess = async (classId, user, res, { requireMembership = false } = {}) => {
   const { data: classData, error } = await supabase
     .from('lop')
     .select('id, giao_vien_id')
@@ -500,6 +501,14 @@ const ensureClassAccess = async (classId, user, res) => {
   if (!classData) {
     res.status(404).json({ error: 'Không tìm thấy lớp học.' });
     return null;
+  }
+
+  if (requireMembership) {
+    if (!(await isClassMember(classId, user.id))) {
+      res.status(403).json({ error: 'Bạn chưa tham gia lớp học này.' });
+      return null;
+    }
+    return classData;
   }
 
   if (user.role === 'admin' || classData.giao_vien_id === user.id) {
@@ -581,7 +590,8 @@ const fetchClassSchedules = async (classId, { upcomingOnly = false, limit } = {}
   };
 };
 
-const fetchClassPosts = async (classId, user, pagination, { includeCount = true } = {}) => {
+const fetchClassPosts = async (classId, user, pagination, { includeCount = true, studentView = false } = {}) => {
+  const useStudentPerspective = studentView || user.role === 'student';
   let query = supabase
     .from('bai_dang_lop')
     .select(CLASS_POST_SELECT, includeCount ? { count: 'exact' } : undefined)
@@ -589,7 +599,7 @@ const fetchClassPosts = async (classId, user, pagination, { includeCount = true 
     .order('created_at', { ascending: false })
     .order('id', { ascending: false });
 
-  if (user.role !== 'teacher' && user.role !== 'admin') {
+  if (useStudentPerspective) {
     query = query.or(`hoc_sinh_nhan_id.is.null,hoc_sinh_nhan_id.eq.${user.id},tac_gia_id.eq.${user.id}`);
   }
 
@@ -610,7 +620,7 @@ const fetchClassPosts = async (classId, user, pagination, { includeCount = true 
     .filter((post) => post.type === 'assignment' && post.media_url && !isHttpUrl(post.media_url))
     .map((post) => post.media_url))];
 
-  const submissionsPromise = user.role === 'student' && assignmentPostIds.length > 0
+  const submissionsPromise = useStudentPerspective && assignmentPostIds.length > 0
     ? supabase
       .from('bai_nop')
       .select('bai_dang_id, diem, cau_tra_loi, status, phan_hoi_giao_vien, nop_luc')
@@ -636,7 +646,7 @@ const fetchClassPosts = async (classId, user, pagination, { includeCount = true 
 
   posts = posts.map((post) => ({
     ...post,
-    ...(user.role === 'student' && post.type === 'assignment' ? {
+    ...(useStudentPerspective && post.type === 'assignment' ? {
       is_completed: submissionMap.has(post.id),
       user_submission: submissionMap.get(post.id) || null,
     } : {}),
@@ -650,14 +660,19 @@ const fetchClassPosts = async (classId, user, pagination, { includeCount = true 
   };
 };
 
-const fetchClassOverviewData = async (classId, user, requestedSections = new Set(['posts', 'schedules', 'members'])) => {
+const fetchClassOverviewData = async (
+  classId,
+  user,
+  requestedSections = new Set(['posts', 'schedules', 'members']),
+  { studentView = false } = {},
+) => {
   const tasks = {};
   if (requestedSections.has('posts')) {
     tasks.posts = fetchClassPosts(
       classId,
       user,
       parseClassPostPagination({ page: 1, limit: DEFAULT_CLASS_POST_PAGE_SIZE }),
-      { includeCount: false },
+      { includeCount: false, studentView },
     );
   }
   if (requestedSections.has('schedules')) {
@@ -754,20 +769,24 @@ router.get('/', auth, async (req, res) => {
   try {
     const startedAt = Date.now();
     const { role, id } = req.user;
+    const studentView = usesStudentClassView(req);
     // Select class properties and count members
     let query = supabase.from('lop')
       .select('*, teacher:giao_vien_id(username), student_count:thanh_vien_lop(count)');
 
-    if (role === 'teacher') {
+    if (studentView) {
+      const { data: memberData, error: memberError } = await supabase
+        .from('thanh_vien_lop')
+        .select('lop_id')
+        .eq('hoc_sinh_id', id);
+      if (memberError) throw memberError;
+      const classIds = memberData?.map((member) => member.lop_id) || [];
+      if (classIds.length === 0) return res.json([]);
+      query = query.in('id', classIds);
+    } else if (role === 'teacher') {
       query = query.eq('giao_vien_id', id);
     } else if (role === 'admin') {
       // Admin can inspect all lop.
-    } else {
-      // For student, get lop they joined
-      const { data: memberData } = await supabase.from('thanh_vien_lop').select('lop_id').eq('hoc_sinh_id', id);
-      const classIds = memberData?.map(m => m.lop_id) || [];
-      if (classIds.length === 0) return res.json([]);
-      query = query.in('id', classIds);
     }
 
     const { data, error } = await query;
@@ -779,7 +798,12 @@ router.get('/', auth, async (req, res) => {
     }));
 
     if (req.query.includeOverview === 'first' && formattedData.length > 0) {
-      const overview = await fetchClassOverviewData(formattedData[0].id, req.user);
+      const overview = await fetchClassOverviewData(
+        formattedData[0].id,
+        req.user,
+        undefined,
+        { studentView },
+      );
       res.set('Server-Timing', `class-initial;dur=${Date.now() - startedAt}`);
       return res.json({
         classes: formattedData,
@@ -918,11 +942,11 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-// Join a class (Student)
+// Join a class from the student experience. Privileged roles inherit this capability.
 router.post('/join', auth, async (req, res) => {
   try {
     if (!canUseStudentClassFeatures(req.user)) {
-      return res.status(403).json({ error: 'Chỉ học sinh mới có thể tham gia lớp học.' });
+      return res.status(403).json({ error: 'Tài khoản này không thể tham gia lớp học.' });
     }
 
     const code = typeof req.body?.code === 'string' ? req.body.code.trim().toUpperCase() : '';
@@ -960,7 +984,8 @@ router.post('/join', auth, async (req, res) => {
 router.get('/:id', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    if (!(await ensureClassAccess(id, req.user, res))) return;
+    const studentView = usesStudentClassView(req);
+    if (!(await ensureClassAccess(id, req.user, res, { requireMembership: studentView }))) return;
 
     const { data, error } = await supabase
       .from('lop')
@@ -1006,7 +1031,8 @@ router.delete('/:id', auth, async (req, res) => {
 router.get('/:id/members', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    if (!(await ensureClassAccess(id, req.user, res))) return;
+    const studentView = usesStudentClassView(req);
+    if (!(await ensureClassAccess(id, req.user, res, { requireMembership: studentView }))) return;
     const members = await fetchClassMembers(id);
     res.json(members.items);
   } catch (err) {
@@ -1019,7 +1045,8 @@ router.get('/:id/overview', auth, async (req, res) => {
   try {
     const startedAt = Date.now();
     const { id } = req.params;
-    if (!(await ensureClassAccess(id, req.user, res))) return;
+    const studentView = usesStudentClassView(req);
+    if (!(await ensureClassAccess(id, req.user, res, { requireMembership: studentView }))) return;
 
     const requestedSections = typeof req.query.include === 'string'
       ? new Set(req.query.include.split(',').map((value) => value.trim()).filter(Boolean))
@@ -1029,7 +1056,7 @@ router.get('/:id/overview', auth, async (req, res) => {
       return res.status(400).json({ error: 'Nhóm dữ liệu tổng quan không hợp lệ.' });
     }
 
-    const overview = await fetchClassOverviewData(id, req.user, requestedSections);
+    const overview = await fetchClassOverviewData(id, req.user, requestedSections, { studentView });
     res.set('Server-Timing', `class-overview;dur=${Date.now() - startedAt}`);
     return res.json(overview);
   } catch (err) {
@@ -1041,9 +1068,10 @@ router.get('/:id/overview', auth, async (req, res) => {
 router.get('/:id/posts', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    if (!(await ensureClassAccess(id, req.user, res))) return;
+    const studentView = usesStudentClassView(req);
+    if (!(await ensureClassAccess(id, req.user, res, { requireMembership: studentView }))) return;
     const pagination = parseClassPostPagination(req.query);
-    const posts = await fetchClassPosts(id, req.user, pagination);
+    const posts = await fetchClassPosts(id, req.user, pagination, { studentView });
     res.set('X-Total-Count', String(posts.total));
     res.set('X-Has-More', posts.hasMore ? 'true' : 'false');
     res.json(posts.items);
@@ -1057,10 +1085,10 @@ router.post('/:id/messages', auth, async (req, res) => {
   try {
     const { id } = req.params;
     if (!canUseStudentClassFeatures(req.user)) {
-      return res.status(403).json({ error: 'Chỉ học sinh mới có thể gửi tin nhắn cho giáo viên.' });
+      return res.status(403).json({ error: 'Tài khoản này không thể gửi tin nhắn cho giáo viên.' });
     }
 
-    const classData = await ensureClassAccess(id, req.user, res);
+    const classData = await ensureClassAccess(id, req.user, res, { requireMembership: true });
     if (!classData) return;
 
     const content = typeof req.body?.content === 'string' ? req.body.content.trim() : '';
@@ -1156,7 +1184,8 @@ router.post('/:id/posts', auth, async (req, res) => {
 router.get('/:id/schedules', auth, async (req, res) => {
   try {
     const { id } = req.params;
-    if (!(await ensureClassAccess(id, req.user, res))) return;
+    const studentView = usesStudentClassView(req);
+    if (!(await ensureClassAccess(id, req.user, res, { requireMembership: studentView }))) return;
     const schedules = await fetchClassSchedules(id);
     res.json(schedules.items);
   } catch (err) {
@@ -1281,11 +1310,11 @@ router.get('/assignments/:postId/submissions', auth, async (req, res) => {
   }
 });
 
-// Submit an assignment (Student)
+// Submit an assignment from the student experience. Privileged roles must also be class members.
 router.post('/assignments/:postId/submit', auth, async (req, res) => {
   try {
     if (!canUseStudentClassFeatures(req.user)) {
-      return res.status(403).json({ error: 'Chỉ học sinh mới có thể nộp bài.' });
+      return res.status(403).json({ error: 'Tài khoản này không thể nộp bài.' });
     }
 
     const { postId } = req.params;

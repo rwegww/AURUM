@@ -1098,6 +1098,38 @@ describe('security acceptance matrix', () => {
     });
   });
 
+  it.each(['teacher', 'admin'])('allows %s accounts to join a class from the student experience', async (role) => {
+    supabaseState.classData = { id: 'class-1', ten: 'Lớp Hóa 8', giao_vien_id: 'otherTeacher' };
+
+    const res = await request(app)
+      .post('/api/classes/join')
+      .set('Authorization', `Bearer ${tokenFor(role)}`)
+      .send({ code: 'ABC123' });
+
+    expect(res.status).toBe(200);
+    expect(supabaseState.lastInsertPayload[0]).toEqual({
+      lop_id: 'class-1',
+      hoc_sinh_id: role,
+    });
+  });
+
+  it('uses membership instead of management ownership in the student class view', async () => {
+    supabaseState.classData = { id: 'class-1', giao_vien_id: 'teacher' };
+
+    const blocked = await request(app)
+      .get('/api/classes/class-1/overview?view=student')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+
+    expect(blocked.status).toBe(403);
+
+    supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: 'teacher' };
+    const allowed = await request(app)
+      .get('/api/classes/class-1/overview?view=student')
+      .set('Authorization', `Bearer ${tokenFor('teacher')}`);
+
+    expect(allowed.status).toBe(200);
+  });
+
   it('increments material downloads atomically through the database function', async () => {
     supabase.rpc.mockResolvedValueOnce({ data: 7, error: null });
 
@@ -1245,6 +1277,37 @@ describe('security acceptance matrix', () => {
       correct: 0,
       total: 1,
       needsManualReview: false,
+    });
+  });
+
+  it.each(['teacher', 'admin'])('allows a joined %s account to submit an assignment as a learner', async (role) => {
+    supabaseState.post = {
+      id: 'post-1',
+      lop_id: 'class-1',
+      type: 'assignment',
+      hoc_sinh_nhan_id: null,
+      cau_hoi: [],
+      han_nop: null,
+    };
+    supabaseState.membership = { lop_id: 'class-1', hoc_sinh_id: role };
+    supabaseState.upsertedSubmission = {
+      bai_dang_id: 'post-1',
+      hoc_sinh_id: role,
+      status: 'graded',
+      diem: 0,
+      cau_tra_loi: {},
+    };
+
+    const res = await request(app)
+      .post('/api/classes/assignments/post-1/submit')
+      .set('Authorization', `Bearer ${tokenFor(role)}`)
+      .send({ answers: {} });
+
+    expect(res.status).toBe(200);
+    expect(supabaseState.lastInsertPayload[0]).toMatchObject({
+      bai_dang_id: 'post-1',
+      hoc_sinh_id: role,
+      cau_tra_loi: {},
     });
   });
 

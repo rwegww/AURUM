@@ -263,39 +263,6 @@ const getRoomPlayer = async (roomId, userId, statuses = ACTIVE_PLAYER_STATUSES) 
 
 const getActivePlayer = async (roomId, userId) => getRoomPlayer(roomId, userId);
 
-const demoteModeratorMembership = async (room, user) => {
-  if (!room || !user || !['teacher', 'admin'].includes(user.role) || String(room.host_id) !== String(user.id)) {
-    return room;
-  }
-
-  const membership = await getActivePlayer(room.id, user.id);
-  if (!membership) return room;
-
-  const { error: leaveError } = await supabase
-    .from('nguoi_choi')
-    .update({ status: 'left', xem_cuoi_luc: new Date().toISOString() })
-    .eq('phong_dau_id', room.id)
-    .eq('nguoi_dung_id', user.id)
-    .in('status', ACTIVE_PLAYER_STATUSES);
-  if (leaveError) throw leaveError;
-
-  const players = await getPlayers(room.id);
-  const { data: updatedRoom, error: roomError } = await supabase
-    .from('phong_dau')
-    .update({ so_nguoi_hien_tai: players.length })
-    .eq('id', room.id)
-    .select('*')
-    .single();
-  if (roomError) throw roomError;
-
-  if (room.status === 'playing' && players.length === 1) {
-    await checkAndFinishAbandonedRoom(room.id, players.length);
-    return getRoom(room.id);
-  }
-
-  return normalizeRoomRow(updatedRoom);
-};
-
 const getRoundAnswers = async (roomId, roundIndex) => {
   const { data, error } = await supabase
     .from('tra_loi_vong')
@@ -723,7 +690,14 @@ const maybeAdvanceAfterAnswer = async (room) => {
 
 router.post('/create', auth, async (req, res) => {
   try {
-    const { name, mode = 'solo', difficulty = 'auto', max_players, is_practice = false } = req.body || {};
+    const {
+      name,
+      mode = 'solo',
+      difficulty = 'auto',
+      max_players,
+      is_practice = false,
+      as_player = false,
+    } = req.body || {};
     const roomId = Math.floor(100000 + Math.random() * 900000).toString();
     const maxPlayers = is_practice ? 1 : Math.max(1, Math.min(10, Number(max_players) || MODE_MAX_PLAYERS[mode] || 2));
 
@@ -739,10 +713,10 @@ router.post('/create', auth, async (req, res) => {
       p_is_practice: Boolean(is_practice),
     };
 
-    const isModerator = ['teacher', 'admin'].includes(req.user?.role);
+    const isModeratorOnly = ['teacher', 'admin'].includes(req.user?.role) && as_player !== true;
     let newRoomData, error;
 
-    if (isModerator) {
+    if (isModeratorOnly) {
       const fallback = await supabase
         .from('phong_dau')
         .insert([{
@@ -967,8 +941,8 @@ router.get('/active-room', auth, async (req, res) => {
 
     if (error) throw error;
 
-    let roomId;
-    if (['teacher', 'admin'].includes(req.user?.role)) {
+    let roomId = membership?.phong_dau_id;
+    if (!roomId && ['teacher', 'admin'].includes(req.user?.role)) {
       const { data: hostedRoom, error: hostedRoomError } = await supabase
         .from('phong_dau')
         .select('*')
@@ -980,11 +954,9 @@ router.get('/active-room', auth, async (req, res) => {
       if (hostedRoomError) throw hostedRoomError;
       roomId = hostedRoom?.id;
     }
-    roomId ||= membership?.phong_dau_id;
-
     if (!roomId) return res.json({ success: true, room: null });
 
-    const room = await demoteModeratorMembership(await getRoom(roomId), req.user);
+    const room = await getRoom(roomId);
     if (!['waiting', 'playing'].includes(room.status)) {
       return res.json({ success: true, room: null });
     }
@@ -1001,7 +973,7 @@ router.get('/active-room', auth, async (req, res) => {
 
 router.post('/room/:id/start', auth, async (req, res) => {
   try {
-    const room = await demoteModeratorMembership(await getRoom(req.params.id), req.user);
+    const room = await getRoom(req.params.id);
     if (room.status === 'finished') return res.status(400).json({ success: false, message: 'Trận đã kết thúc.' });
     if (room.status === 'playing') {
       return res.json({ success: true, state: await buildRoomState(room, req.userId) });
@@ -1082,7 +1054,7 @@ router.post('/room/:id/start', auth, async (req, res) => {
 
 router.get('/room/:id/state', auth, async (req, res) => {
   try {
-    const room = await demoteModeratorMembership(await getRoom(req.params.id), req.user);
+    const room = await getRoom(req.params.id);
     const viewer = await getRoomPlayer(room.id, req.userId, [...ACTIVE_PLAYER_STATUSES, 'finished']);
     const canSpectate = ['teacher', 'admin'].includes(req.user?.role);
     if (!viewer && !canSpectate) {
@@ -1097,7 +1069,7 @@ router.get('/room/:id/state', auth, async (req, res) => {
 
 router.post('/room/:id/answer', auth, async (req, res) => {
   try {
-    const room = await demoteModeratorMembership(await getRoom(req.params.id), req.user);
+    const room = await getRoom(req.params.id);
     if (room.status !== 'playing') {
       return res.status(400).json({ success: false, message: 'Phòng chưa ở trạng thái thi đấu.' });
     }
@@ -1444,4 +1416,3 @@ router.get('/rooms', async (req, res) => {
 });
 
 export default router;
-

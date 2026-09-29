@@ -213,22 +213,25 @@ export const learningApi = {
 };
 
 export const classApi = {
-  list: (token) => apiRequest("/api/classes", { token }),
+  list: (token) => apiRequest("/api/classes", { token, query: { view: "student" } }),
 
   posts: (token, classId, { page = 1, limit = 20 } = {}) =>
     apiRequest(`/api/classes/${classId}/posts`, {
       token,
-      query: { page, limit }
+      query: { page, limit, view: "student" }
     }),
 
   overview: (token, classId, { include } = {}) =>
     apiRequest(`/api/classes/${classId}/overview`, {
       token,
-      query: { include }
+      query: { include, view: "student" }
     }),
 
   schedules: (token, classId) =>
-    apiRequest(`/api/classes/${classId}/schedules`, { token }),
+    apiRequest(`/api/classes/${classId}/schedules`, {
+      token,
+      query: { view: "student" }
+    }),
 
   join: (token, code) =>
     apiRequest("/api/classes/join", {

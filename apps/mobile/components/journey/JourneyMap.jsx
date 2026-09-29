@@ -134,7 +134,6 @@ export default function JourneyMap() {
   const canShowJourney = !placementManaged || isPlaced;
   const canOpenNotebook = Boolean(lessonsWithStatus[0]?.isCompleted || ["teacher", "admin"].includes(user?.role));
   const showOptionalTest = !placementManaged
-    && user?.role === "student"
     && OPTIONAL_PLACEMENT_GRADES.has(grade)
     && lessonsWithStatus.length > 0
     && !user?.balancingProgress?.passedGrades?.map(String).includes(grade)

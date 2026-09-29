@@ -115,7 +115,7 @@ const MyClass = () => {
     const token = localStorage.getItem('token');
 
     try {
-      const response = await fetch(`/api/classes/${cls.id}/overview`, {
+      const response = await fetch(`/api/classes/${cls.id}/overview?view=student`, {
         headers: { 'Authorization': `Bearer ${token}` },
         signal: controller.signal,
       });
@@ -150,7 +150,7 @@ const MyClass = () => {
     try {
       const token = localStorage.getItem('token');
       const nextPage = postsPage + 1;
-      const response = await fetch(`/api/classes/${selectedClass.id}/posts?page=${nextPage}&limit=${POST_PAGE_SIZE}`, {
+      const response = await fetch(`/api/classes/${selectedClass.id}/posts?page=${nextPage}&limit=${POST_PAGE_SIZE}&view=student`, {
         headers: { 'Authorization': `Bearer ${token}` },
         signal: controller.signal,
       });
@@ -174,7 +174,7 @@ const MyClass = () => {
   const fetchClasses = useCallback(async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/classes?includeOverview=first', {
+      const res = await fetch('/api/classes?includeOverview=first&view=student', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {

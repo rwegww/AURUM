@@ -106,7 +106,7 @@ const ManagementLayout = ({ menuItems, title }) => {
               <NavLink
                 key={item.path || index}
                 to={item.path}
-                end={item.path === '/admin' || item.path === '/teacher'}
+                end={item.path === '/' || item.path === '/admin' || item.path === '/teacher'}
                 onClick={() => setMobileMenuOpen(false)}
                 className={({ isActive }) => `flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm ${isActive ? 'bg-viet-green/10 text-viet-green' : 'text-viet-text-light hover:bg-slate-50'}`}
               >

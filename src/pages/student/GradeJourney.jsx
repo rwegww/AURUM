@@ -275,8 +275,7 @@ const GradeJourney = () => {
     && AVAILABLE_PLACEMENT_TEST_GRADES.includes(String(grade))
     && bai_hoc.length > 0
     && !user?.balancingProgress?.passedGrades?.includes(grade)
-    && !user?.unlockedLessons?.includes(bai_hoc[0].lessonId)
-    && user?.role === 'student';
+    && !user?.unlockedLessons?.includes(bai_hoc[0].lessonId);
 
   const handleOpenBook = async () => {
     if (!canOpenBook || bookLoading) return;

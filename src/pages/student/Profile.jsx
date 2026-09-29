@@ -34,8 +34,8 @@ const Profile = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if (!token || user?.role !== 'student') return;
-    fetch('/api/classes', {
+    if (!token || !user) return;
+    fetch('/api/classes?view=student', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.ok ? res.json() : [])
