@@ -142,7 +142,7 @@ const LessonPage = () => {
           </div>
 
           {/* Scrollable Container (Inside the Blue Box) */}
-          <div className="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:pr-2 space-y-6 sm:space-y-8 custom-scrollbar">
+          <div data-page-scroll className="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:pr-2 space-y-6 sm:space-y-8 custom-scrollbar">
             {video?.url && (
             <div className="bg-white rounded-3xl overflow-hidden relative group shadow-xl shadow-viet-green/5 shrink-0">
                <div className="min-h-[60px] bg-white/90 backdrop-blur px-3 sm:px-6 py-3 flex items-center gap-3 border-b border-viet-border">

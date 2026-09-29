@@ -130,7 +130,7 @@ const ManagementLayout = ({ menuItems, title }) => {
       )}
       
       {/* Main Content Area */}
-      <main id="management-main-content" tabIndex="-1" className="xl:ml-[242px] min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 xl:pt-0 bg-[#f4f7fb] flex flex-col">
+      <main id="management-main-content" data-page-scroll tabIndex="-1" className="xl:ml-[242px] min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 xl:pt-0 bg-[#f4f7fb] flex flex-col">
          <ManagementHeader title={title} />
          <div className="flex-1 pb-20">
             <Suspense fallback={<LoadingScreen inline />}>

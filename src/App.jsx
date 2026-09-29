@@ -15,6 +15,7 @@ const RedirectBaiHocLesson = () => {
 import { AuthProvider } from '@/context/AuthContext'
 import Navbar from '@/components/navigation/Navbar'
 import FloatingWidget from '@/components/common/FloatingWidget'
+import BackToTop from '@/components/common/BackToTop'
 import ProtectedRoute from '@/components/auth/ProtectedRoute'
 import JourneyPlacementRoute from '@/components/auth/JourneyPlacementRoute'
 import LoadingScreen from '@/components/common/LoadingScreen'
@@ -209,6 +210,7 @@ function AppContent() {
       </Suspense>
       
       {/* Floating Global UI */}
+      {!isAuthPage && !isImmersivePage && <BackToTop key={location.key} hasAssistant={!isManagementPage} />}
       {!isManagementPage && <FloatingWidget />}
     </>
   );
