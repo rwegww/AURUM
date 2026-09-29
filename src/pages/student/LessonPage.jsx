@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BookOpen } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -17,6 +17,7 @@ import {
 const LessonPage = () => {
   const { t } = useTranslation();
   const { grade, lessonId } = useParams();
+  const navigate = useNavigate();
   
   const [lesson, setLesson] = useState(null);
   const [gradeLessons, setGradeLessons] = useState([]);
@@ -80,18 +81,40 @@ const LessonPage = () => {
   const sgkReference = formatSgkLessonReference(lesson);
 
   return (
-    <div className="h-screen bg-viet-bg pt-[96px] overflow-hidden">
-      <div className="flex h-[calc(100vh-96px)] relative items-start overflow-hidden">
+    <div className="min-h-dvh bg-viet-bg pt-[96px] xl:h-dvh xl:overflow-hidden">
+      <div className="flex relative items-start xl:h-[calc(100dvh-96px)] xl:overflow-hidden">
         {/* Sidebar - Only show for logged in nguoi_dung or if desired for all */}
         {isLoggedIn && (
+          <div className="hidden xl:block h-full shrink-0">
           <LessonSidebar 
             grade={grade} 
             bai_hoc={gradeLessons} 
             currentLessonId={lesson.lessonId} 
           />
+          </div>
         )}
 
-        <main className={`flex-1 min-w-0 h-full flex flex-col p-8 pt-4 pb-8 max-w-[1200px] overflow-hidden ${isLoggedIn ? '' : 'mx-auto'}`}>
+        <main className={`flex-1 min-w-0 w-full flex flex-col p-4 sm:p-6 xl:p-8 pt-4 pb-20 max-w-[1200px] xl:h-full xl:overflow-hidden ${isLoggedIn ? 'mx-auto xl:mx-0' : 'mx-auto'}`}>
+          {isLoggedIn && (
+            <div className="xl:hidden mb-5">
+              <Link to={`/lectures?grade=${grade}`} className="inline-flex min-h-11 items-center text-sm font-bold text-viet-green mb-2">
+                ← {t('lesson_page.back_btn')}
+              </Link>
+              <label htmlFor="compact-lesson-select" className="block text-sm font-bold text-viet-text-light mb-2">
+                {t('lesson_page.choose_lesson', { defaultValue: 'Chọn bài học' })}
+              </label>
+              <select
+                id="compact-lesson-select"
+                value={lesson.lessonId}
+                onChange={(event) => navigate(`/lectures/${grade}/${event.target.value}`)}
+                className="w-full min-h-12 min-w-0 rounded-2xl border border-viet-border bg-white px-3 text-base font-bold"
+              >
+                {gradeLessons.map((item) => (
+                  <option key={item.lessonId} value={item.lessonId}>{item.title}</option>
+                ))}
+              </select>
+            </div>
+          )}
           {/* Header section - FIXED above the scrollable content */}
           <div className="mb-6 shrink-0">
             <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -113,27 +136,27 @@ const LessonPage = () => {
                 </span>
               )}
             </div>
-            <h1 className="text-[28px] font-bold text-viet-text leading-tight">
+            <h1 className="text-2xl sm:text-[28px] font-bold text-viet-text leading-tight break-words">
               {displayTitle}
             </h1>
           </div>
 
           {/* Scrollable Container (Inside the Blue Box) */}
-          <div className="flex-1 overflow-y-auto pr-2 space-y-8 custom-scrollbar">
+          <div className="min-w-0 xl:min-h-0 xl:flex-1 xl:overflow-y-auto xl:pr-2 space-y-6 sm:space-y-8 custom-scrollbar">
             {video?.url && (
-            <div className="viet-card aspect-video relative group border-none shadow-xl shadow-viet-green/5 shrink-0">
-               <div className="absolute top-0 left-0 w-full h-[60px] bg-white/90 backdrop-blur px-6 flex items-center gap-3 z-10 border-b border-viet-border rounded-t-[24px]">
+            <div className="bg-white rounded-3xl overflow-hidden relative group shadow-xl shadow-viet-green/5 shrink-0">
+               <div className="min-h-[60px] bg-white/90 backdrop-blur px-3 sm:px-6 py-3 flex items-center gap-3 border-b border-viet-border">
                   <div className="w-8 h-8 rounded-full bg-viet-green flex items-center justify-center text-white shrink-0">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                       <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
                     </svg>
                   </div>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col min-w-0">
                      <h2 className="text-[13px] font-bold text-viet-text leading-none">{displayTitle} | Aurum TV</h2>
                      <span className="text-[10px] text-viet-text-light font-medium uppercase mt-0.5">Aurum</span>
                   </div>
-                  <div className="ml-auto flex items-center gap-2">
+                  <div className="ml-auto hidden sm:flex shrink-0 items-center gap-2">
                      <span className="text-[10px] text-viet-text-light font-bold">{t('lesson_page.video.powered_by')}</span>
                      <span className="text-[14px] font-black text-viet-green italic">Aurum Team</span>
                   </div>
@@ -141,12 +164,12 @@ const LessonPage = () => {
                {isFileVideo(video.url) ? (
                    <video 
                       controls 
-                      className="w-full h-full pt-[60px] rounded-b-[24px] bg-black"
+                      className="w-full aspect-video bg-black"
                       src={video.url}
                    />
                  ) : (
                    <iframe 
-                      className="w-full h-full pt-[60px]"
+                      className="w-full aspect-video"
                       src={getVideoEmbedUrl(video.url)} 
                       title={video.title}
                       allowFullScreen
@@ -157,11 +180,11 @@ const LessonPage = () => {
             )}
 
             <div>
-              <div className="viet-card p-8">
+              <div className="viet-card p-4 sm:p-6 xl:p-8">
                 <div className="flex items-center gap-2 mb-6 text-viet-green border-b border-viet-border pb-4">
                    <h3 className="text-[20px] font-bold">{t('lesson_page.content_title')}</h3>
                 </div>
-                <div className="prose prose-slate max-w-none">
+                <div className="prose prose-slate max-w-none min-w-0 overflow-x-auto">
                   <TheoryRenderer modules={lesson.theoryModules} />
                 </div>
               </div>

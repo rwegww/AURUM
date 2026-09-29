@@ -92,32 +92,32 @@ const PeriodicTable = () => {
         style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/natural-paper.png")' }} />
 
       <div className="max-w-[1600px] mx-auto relative z-10 px-4 md:px-8">
-        <div className="bg-white rounded-[40px] md:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] border border-viet-border/30 overflow-hidden flex flex-col md:flex-row h-auto min-h-[850px]">
+        <div className="bg-white rounded-[40px] xl:rounded-[48px] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.1)] border border-viet-border/30 overflow-hidden flex flex-col xl:flex-row h-auto min-h-0 xl:min-h-[760px]">
 
           {/* Sidebar */}
-          <div className="w-full md:w-72 bg-[#fbf9f2]/50 border-b md:border-b-0 md:border-r border-viet-border/20 p-6 md:p-8 flex flex-col shrink-0">
-            <div className="mb-6 md:mb-10">
+          <div className="w-full xl:w-72 bg-[#fbf9f2]/50 border-b xl:border-b-0 xl:border-r border-viet-border/20 p-6 xl:p-8 flex flex-col shrink-0">
+            <div className="mb-6 xl:mb-10">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
               >
-                <h1 className="text-2xl md:text-3xl font-black text-viet-text leading-none italic uppercase tracking-tighter mb-3 md:mb-4">
-                  {t('periodic_table.title_main')} <br className="hidden md:block" /> {t('periodic_table.title_sub')}
-                  <span className="text-viet-green underline decoration-4 underline-offset-4 md:underline-offset-8">{t('periodic_table.title_highlight')}</span>
+                <h1 className="text-2xl xl:text-3xl font-black text-viet-text leading-none italic uppercase tracking-tighter mb-3 xl:mb-4">
+                  {t('periodic_table.title_main')} <br className="hidden xl:block" /> {t('periodic_table.title_sub')}
+                  <span className="text-viet-green underline decoration-4 underline-offset-4 xl:underline-offset-8">{t('periodic_table.title_highlight')}</span>
                 </h1>
               </motion.div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <h3 className="text-[9px] md:text-[10px] font-black text-viet-text/40 uppercase tracking-[4px] mb-2 md:mb-3 px-2">{t('periodic_table.categories_title')}</h3>
-              <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 px-2 md:px-0 scrollbar-hide">
+              <h3 className="text-[9px] xl:text-[10px] font-black text-viet-text/40 uppercase tracking-[4px] mb-2 xl:mb-3 px-2">{t('periodic_table.categories_title')}</h3>
+              <div className="flex xl:flex-col gap-2 overflow-x-auto xl:overflow-visible pb-4 xl:pb-0 px-2 xl:px-0 scrollbar-hide">
                 {categories.map((cat) => (
                   <button
                     key={cat.id}
                     onClick={() => setFilter(cat.id)}
-                    className={`whitespace-nowrap md:whitespace-normal px-4 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all text-left flex items-center gap-4 md:justify-between group shrink-0
+                    className={`whitespace-nowrap xl:whitespace-normal px-4 py-2.5 xl:py-3 rounded-xl xl:rounded-2xl text-[9px] xl:text-[10px] font-black uppercase tracking-widest transition-all text-left flex items-center gap-4 xl:justify-between group shrink-0
                         ${filter === cat.id
-                        ? 'bg-viet-green text-white shadow-xl shadow-viet-green/20 md:-translate-x-1'
+                        ? 'bg-viet-green text-white shadow-xl shadow-viet-green/20 xl:-translate-x-1'
                         : 'text-viet-text-light hover:bg-white hover:text-viet-green border border-transparent hover:border-viet-border/20'
                       }`}
                   >
@@ -128,7 +128,7 @@ const PeriodicTable = () => {
               </div>
             </div>
 
-            <div className="mt-auto pt-6 border-t border-viet-border/20 hidden md:block">
+            <div className="mt-auto pt-6 border-t border-viet-border/20 hidden xl:block">
               <div className="flex flex-col gap-4 opacity-50">
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 rounded bg-viet-text/10" />
@@ -139,17 +139,20 @@ const PeriodicTable = () => {
           </div>
 
           {/* Main Display Area */}
-          <div className="flex-1 p-4 md:p-6 lg:p-8 flex flex-col bg-[#fafafa]/50 overflow-hidden relative">
+          <div className="flex-1 min-w-0 p-3 sm:p-4 xl:p-6 flex flex-col bg-[#fafafa]/50 overflow-hidden relative">
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none hidden md:block"
               style={{ backgroundImage: 'radial-gradient(#000 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
 
-            <div className="relative flex-1 flex items-center justify-center overflow-x-auto custom-scrollbar overflow-y-hidden">
-              <div className="grid grid-cols-18 gap-1 md:gap-1.5 min-w-[700px] lg:min-w-[900px] xl:min-w-[1000px] p-4 scale-[0.65] sm:scale-[0.73] lg:scale-[0.81] xl:scale-[0.85] 2xl:scale-[0.94] origin-center transition-all duration-500">
+            <p className="mb-3 text-xs font-semibold text-viet-text-light">{t('periodic_table.scroll_hint', { defaultValue: 'Vuốt ngang để xem đầy đủ bảng nguyên tố. Chạm vào một nguyên tố để xem chi tiết.' })}</p>
+            <div className="relative w-full min-w-0 overflow-x-auto overscroll-x-contain pb-3" tabIndex={0} role="region" aria-label={t('nav.periodic_table')}>
+              <div className="grid grid-cols-18 gap-1.5 w-full min-w-[1100px] p-2">
                 {elements.map((el) => {
                   const isActive = filter === 'all' || getSimplifiedCategory(el.category) === filter;
                   const isHighlighted = hoveredElement && hoveredElement.number === el.number;
                   return (
-                    <motion.div
+                    <motion.button
+                      type="button"
+                      aria-label={`${el.number}. ${getElementName(el)} (${el.symbol})`}
                       key={el.symbol}
                       layoutId={`element-${el.symbol}`}
                       onClick={() => handleSelect(el)}
@@ -161,25 +164,25 @@ const PeriodicTable = () => {
                     >
                       <div className={`absolute inset-0 rounded-2xl border bg-gradient-to-br shadow-sm transition-all duration-500 ${getCategoryColor(el.category)} 
                         ${isHighlighted ? 'ring-4 ring-viet-green/30 shadow-2xl z-10 -translate-y-2' : ''}`}>
-                        <div className="p-1 px-1.5 h-full flex flex-col justify-between overflow-hidden">
+                        <div className="p-1 px-1.5 h-full min-h-0 flex flex-col justify-between overflow-hidden">
                           <span className="text-[9px] font-black opacity-40 leading-none">{el.number}</span>
-                          <div className="flex flex-col items-center justify-center flex-1">
+                          <div className="flex min-h-0 flex-col items-center justify-center flex-1">
                             <span className="text-sm font-black leading-none">{el.symbol}</span>
-                            <span className="text-[5px] font-black uppercase opacity-60 truncate w-full text-center mt-1 tracking-tighter">{getElementName(el)}</span>
+                            <span className="text-[7px] font-bold opacity-70 truncate w-full text-center mt-1 tracking-tighter">{getElementName(el)}</span>
                           </div>
-                          <span className="text-[6px] font-black opacity-30 leading-none text-right">
+                          <span className="text-[8px] font-bold opacity-60 leading-none text-right">
                             {parseFloat(el.weight).toFixed(2)}
                           </span>
                         </div>
                       </div>
-                    </motion.div>
+                    </motion.button>
                   );
                 })}
               </div>
             </div>
 
             {/* Bottom Panel / Key */}
-            <div className="mt-auto pt-8 border-t border-viet-border/10 flex items-center justify-between">
+            <div className="mt-4 pt-4 border-t border-viet-border/10 flex flex-wrap gap-4 items-center justify-between">
               <div className="flex items-center gap-8">
                 <div className="flex flex-col">
                   <span className="text-[8px] font-black text-viet-text/40 uppercase tracking-widest mb-1">{t('periodic_table.quick_guide.title')}</span>

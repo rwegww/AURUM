@@ -55,7 +55,7 @@ const Navbar = () => {
     if (!isMenuOpen) return undefined;
 
     const previousOverflow = document.body.style.overflow;
-    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    const desktopQuery = window.matchMedia('(min-width: 1440px)');
     const closeOnEscape = (event) => {
       if (event.key === 'Escape') {
         setIsMenuOpen(false);
@@ -77,23 +77,23 @@ const Navbar = () => {
   }, [isMenuOpen]);
 
   return (
-    <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent h-[90px] flex items-center px-6 lg:px-12">
-      <div className="w-full flex items-center justify-between">
-        <div className="flex items-center gap-12 xl:gap-20">
+    <nav className="absolute top-0 left-0 right-0 z-50 bg-transparent h-[90px] flex items-center px-3 sm:px-6 xl:px-8 2xl:px-12">
+      <div className="w-full flex items-center justify-between gap-4">
+        <div className="flex min-w-0 items-center gap-6 2xl:gap-12">
           <Link to="/" className="flex items-center gap-2 group shrink-0">
-            <div className="w-20 h-20 sm:w-32 sm:h-32 relative flex items-center justify-center shrink-0">
+            <div className="w-16 h-16 sm:w-24 sm:h-24 relative flex items-center justify-center shrink-0">
               <img src="/logo.png" alt="Aurum Logo" className="w-full h-full object-contain scale-125 group-hover:scale-[1.35] transition-transform duration-500" />
             </div>
           </Link>
 
           {/* Logical Grouped Links */}
-          <div className="hidden lg:flex items-center gap-8 xl:gap-12">
+          <div className="hidden min-[1440px]:flex items-center gap-5 2xl:gap-8">
             {/* JOURNEY GROUP */}
             <div className="relative group/nav">
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
                 {t('nav.journey')} <span className="text-[10px] opacity-30">▼</span>
               </button>
-              <div className="absolute top-[80%] left-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+              <div className="absolute top-[80%] left-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto group-focus-within/nav:opacity-100 group-focus-within/nav:translate-y-0 group-focus-within/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lectures" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg> {t('nav.lectures')}
@@ -115,7 +115,7 @@ const Navbar = () => {
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
                 {t('nav.vault')} <span className="text-[10px] opacity-30">▼</span>
               </button>
-              <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+              <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto group-focus-within/nav:opacity-100 group-focus-within/nav:translate-y-0 group-focus-within/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/periodic-table" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)" /><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)" /></svg> {t('nav.periodic_table')}
@@ -134,7 +134,7 @@ const Navbar = () => {
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
                 {t('nav.arena')} <span className="text-[10px] opacity-30">▼</span>
               </button>
-              <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+              <div className="absolute top-[80%] left-1/2 -translate-x-1/2 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto group-focus-within/nav:opacity-100 group-focus-within/nav:translate-y-0 group-focus-within/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lab" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10 2v7.5" /><path d="M14 2v7.5" /><path d="M8.5 2h7" /><path d="M14 9.32a4 4 0 1 1-4 0" /><path d="M8.5 15h7" /></svg> {t('nav.lab')}
@@ -150,7 +150,7 @@ const Navbar = () => {
               <button className="text-[13px] font-black tracking-[1px] uppercase text-viet-text group-hover/nav:text-viet-green transition-all flex items-center gap-1.5 py-6 whitespace-nowrap">
                 {t('nav.support')} <span className="text-[10px] opacity-30">▼</span>
               </button>
-              <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto transition-all z-[110]">
+              <div className="absolute top-[80%] right-0 w-56 bg-white shadow-2xl rounded-2xl border border-viet-border p-2 opacity-0 translate-y-4 pointer-events-none group-hover/nav:opacity-100 group-hover/nav:translate-y-0 group-hover/nav:pointer-events-auto group-focus-within/nav:opacity-100 group-focus-within/nav:translate-y-0 group-focus-within/nav:pointer-events-auto transition-all z-[110]">
                 <div className="absolute -top-4 left-0 right-0 h-4 bg-transparent" />
                 <NavLink to="/lab/solver" className="flex items-center gap-3 p-3 rounded-xl hover:bg-viet-green/5 text-[12px] font-bold text-viet-text hover:text-viet-green transition-all group/item">
                   <svg className="w-4 h-4 text-viet-green" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> {t('nav.solver')}
@@ -174,7 +174,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 xl:gap-6 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-3 2xl:gap-5 shrink-0">
           <StreakBadge />
           <LanguageSwitcher />
 
@@ -191,7 +191,7 @@ const Navbar = () => {
               </Link>
 
               {/* Dropdown Menu */}
-              <div className="absolute top-[85%] right-0 w-48 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover/profile-dropdown:opacity-100 group-hover/profile-dropdown:translate-y-0 group-hover/profile-dropdown:pointer-events-auto transition-all duration-200 z-[120]">
+              <div className="absolute top-[85%] right-0 w-48 pt-3 opacity-0 translate-y-2 pointer-events-none group-hover/profile-dropdown:opacity-100 group-hover/profile-dropdown:translate-y-0 group-hover/profile-dropdown:pointer-events-auto group-focus-within/profile-dropdown:opacity-100 group-focus-within/profile-dropdown:translate-y-0 group-focus-within/profile-dropdown:pointer-events-auto transition-all duration-200 z-[120]">
                 {/* bridge area to prevent mouse leave */}
                 <div className="absolute -top-3 left-0 right-0 h-3 bg-transparent" />
                 <div className="bg-white shadow-2xl rounded-2xl border border-viet-border p-2">
@@ -226,7 +226,7 @@ const Navbar = () => {
           <button
             ref={mobileMenuButtonRef}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white rounded-2xl shadow-sm border border-viet-border relative z-[100]"
+            className="min-[1440px]:hidden w-12 h-12 flex flex-col items-center justify-center gap-1.5 bg-white rounded-2xl shadow-sm border border-viet-border relative z-[100]"
             aria-label={isMenuOpen ? t('nav.close_menu') : t('nav.open_menu')}
             aria-expanded={isMenuOpen}
             aria-controls="main-mobile-navigation"
@@ -258,7 +258,7 @@ const Navbar = () => {
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
               aria-hidden="true"
-              className="fixed inset-0 bg-viet-text/40 backdrop-blur-sm z-[80] lg:hidden"
+              className="fixed inset-0 bg-viet-text/40 backdrop-blur-sm z-[80] min-[1440px]:hidden"
             />
 
             {/* Drawer */}
@@ -268,9 +268,9 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-[min(300px,100vw)] bg-white z-[90] lg:hidden shadow-2xl overflow-y-auto"
+              className="fixed top-0 right-0 bottom-0 w-[min(360px,100vw)] bg-white z-[90] min-[1440px]:hidden shadow-2xl overflow-y-auto"
             >
-              <div className="flex flex-col h-full p-8 pt-24">
+              <div className="flex flex-col min-h-full p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-24">
                 <div className="flex flex-col gap-4 mb-auto">
                   {[
                     { path: "/lectures", label: t('nav.lectures'), icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></svg> },

@@ -752,6 +752,7 @@
         }
     },
     "periodic_table": {
+        "scroll_hint": "Vuốt ngang để xem đầy đủ bảng nguyên tố. Chạm vào một nguyên tố để xem chi tiết.",
         "title_main": "Bảng tuần",
         "title_sub": " hoàn",
         "title_highlight": " nguyên tố hóa học",
@@ -1005,6 +1006,7 @@
         }
     },
     "lesson_page": {
+        "choose_lesson": "Chọn bài học",
         "loading": "Đang tải bài học...",
         "back_btn": "Quay lại danh sách",
         "grade_label": "HÓA HỌC LỚP {{grade}}",

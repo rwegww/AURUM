@@ -54,17 +54,17 @@ const FeatureRow = ({
   imageRight = true,
   bgClass = 'bg-white',
 }) => (
-  <section className={`py-20 ${bgClass} border-b border-gray-100`}>
+  <section className={`py-12 sm:py-16 lg:py-20 ${bgClass} border-b border-gray-100`}>
     <div className="max-w-[1100px] mx-auto px-6">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-60px' }}
         variants={stagger}
-        className={`flex flex-col ${imageRight ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 lg:gap-16`}
+        className={`grid grid-cols-1 md:grid-cols-2 items-center gap-8 lg:gap-12`}
       >
         {/* Text Side */}
-        <div className="w-full lg:w-[55%] lg:flex-none min-w-0">
+        <div className={`min-w-0 ${imageRight ? '' : 'md:order-2'}`}>
           <motion.span
             variants={fadeUp}
             className={`inline-block text-sm font-black uppercase tracking-widest mb-3 ${badgeColor}`}
@@ -101,7 +101,7 @@ const FeatureRow = ({
         {/* Image Side */}
         <motion.div
           variants={fadeUp}
-          className="w-full lg:w-[45%] lg:flex-none min-w-0 max-w-[520px] lg:max-w-none"
+          className="w-full min-w-0 max-w-[520px] mx-auto"
         >
           <div className="relative rounded-[28px] overflow-hidden shadow-2xl group">
             <img
@@ -171,10 +171,10 @@ const Home = () => {
             initial="hidden"
             animate="visible"
             variants={stagger}
-            className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16"
+            className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] items-center gap-8 lg:gap-10"
           >
             {/* Left */}
-            <div className="w-full lg:w-[55%] lg:flex-none text-center min-w-0">
+            <div className="w-full text-center min-w-0">
               <motion.h1
                 variants={fadeUp}
                 className="font-rubik text-[clamp(2.2rem,4.5vw+0.8rem,4rem)] font-black text-[#1a1a1a] leading-[1.08] tracking-tight mb-4 text-balance break-words"
@@ -187,7 +187,7 @@ const Home = () => {
                 {t('home.hero_statement')}
               </motion.p>
 
-              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.div variants={fadeUp} className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
                 <Link
                   to="/classroom"
                   className="bg-viet-green hover:bg-[#65a32e] hover:scale-105 transition-all text-white text-lg font-black px-8 py-4 rounded-[1.5rem] flex items-center justify-center gap-3 shadow-[0_4px_20px_0_rgba(118,192,52,0.4)]"
@@ -206,12 +206,12 @@ const Home = () => {
             </div>
 
             {/* Right — Hero Image */}
-            <motion.div variants={fadeUp} className="w-full lg:w-[45%] lg:flex-none max-w-[520px] lg:max-w-none">
+            <motion.div variants={fadeUp} className="w-full min-w-0 max-w-[520px] mx-auto lg:max-w-none">
               <div className="relative rounded-[32px] overflow-hidden shadow-[0_30px_80px_0_rgba(0,0,0,0.18)] group">
                 <img
                   src="/assets/images/home-viet-journey.png"
                   alt={t('home.hero_image_alt')}
-                  className="w-full h-[360px] lg:h-[420px] object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-[260px] sm:h-[360px] lg:h-[420px] object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent pointer-events-none" />
               </div>

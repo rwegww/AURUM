@@ -33,7 +33,7 @@ const LanguageSwitcher = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-100 transition-all group"
+        className="flex min-h-11 items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-full hover:bg-slate-100 transition-all group"
       >
         <svg 
           className="w-5 h-5 text-viet-text-light group-hover:text-viet-green transition-colors" 

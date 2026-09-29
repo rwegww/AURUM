@@ -75,7 +75,7 @@ const Lectures = () => {
             <p className="text-viet-text-light font-bold">{t('lectures.subtitle')}</p>
           </div>
 
-          <div className="flex bg-white border border-viet-border rounded-[20px] px-4 py-2 w-full md:w-80 shadow-sm focus-within:ring-2 focus-within:ring-viet-green/20 transition-all">
+          <div className="flex bg-white border border-viet-border rounded-[20px] px-4 py-2 w-full md:w-72 lg:w-80 shrink-0 min-h-12 shadow-sm focus-within:ring-2 focus-within:ring-viet-green/20 transition-all">
              <input 
                 type="text" 
                 placeholder={t('lectures.search_placeholder')}
@@ -88,12 +88,12 @@ const Lectures = () => {
         </header>
 
         {/* Grade Filter */}
-        <div className="flex flex-wrap gap-3 mb-10">
+        <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 sm:gap-3 mb-8">
           {[6, 7, 8, 9, 10, 11, 12].map((grade) => (
             <button
               key={grade}
               onClick={() => setSelectedGrade(grade)}
-              className={`px-8 py-3 rounded-[16px] font-black text-[12px] uppercase tracking-widest transition-all ${
+              className={`px-2 sm:px-4 py-3 rounded-[16px] font-black text-[12px] uppercase tracking-widest transition-all ${
                 selectedGrade === grade
                   ? 'bg-viet-green text-white shadow-lg shadow-viet-green/20'
                   : 'bg-white border border-viet-border text-viet-text-light hover:bg-viet-green/5'
@@ -126,7 +126,7 @@ const Lectures = () => {
             <p className="text-viet-text-light font-bold">{t('lectures.loading')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
             {filteredLessons.map((lesson) => (
               <Link
                 key={lesson.id}

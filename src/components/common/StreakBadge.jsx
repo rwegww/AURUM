@@ -72,7 +72,7 @@ const StreakBadge = () => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setShowModal(true)}
-        className={`flex items-center gap-2 px-3 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${isMaintainedToday
+        className={`flex min-h-11 items-center gap-2 px-2 sm:px-3 py-1.5 rounded-full cursor-pointer transition-all duration-300 ${isMaintainedToday
           ? 'bg-orange-500/20 border border-orange-500/50 text-orange-500'
           : 'bg-gray-500/10 border border-gray-500/30 text-gray-400'
           }`}

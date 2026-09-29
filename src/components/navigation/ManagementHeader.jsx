@@ -155,7 +155,7 @@ const ManagementHeader = ({ title }) => {
   const { user } = useAuth();
 
   return (
-    <header className="hidden md:flex min-h-[112px] bg-white/95 backdrop-blur-md px-8 py-5 border-b border-slate-200/60 items-center justify-between sticky top-0 z-30">
+    <header className="hidden xl:flex min-h-[112px] bg-white/95 backdrop-blur-md px-8 py-5 border-b border-slate-200/60 items-center justify-between sticky top-0 z-30">
       
       {/* Title & Greeting */}
       <div>

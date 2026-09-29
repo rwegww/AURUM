@@ -753,6 +753,7 @@
     }
   },
   "periodic_table": {
+    "scroll_hint": "Swipe horizontally to explore the full table. Tap an element for details.",
     "title_main": "Periodic",
     "title_sub": " table",
     "title_highlight": " of elements",
@@ -1421,6 +1422,7 @@
     }
   },
   "lesson_page": {
+    "choose_lesson": "Choose a lesson",
     "loading": "Loading lesson...",
     "back_btn": "Back to list",
     "grade_label": "CHEMISTRY GRADE {{grade}}",

@@ -25,7 +25,7 @@ const ManagementSidebar = ({ menuItems, title }) => {
   return (
     <aside
       aria-label={`Thanh điều hướng ${title}`}
-      className="hidden md:flex w-[242px] h-screen h-dvh fixed top-0 left-0 bg-white border-r border-slate-200/80 flex-col z-40"
+      className="hidden xl:flex w-[242px] h-screen h-dvh fixed top-0 left-0 bg-white border-r border-slate-200/80 flex-col z-40"
     >
       {/* Brand Header */}
       <div className="h-[112px] flex items-center px-6 border-b border-slate-100 shrink-0">

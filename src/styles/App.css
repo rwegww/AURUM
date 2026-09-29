@@ -54,7 +54,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .viet-card {
-  @apply bg-white rounded-[32px] border border-viet-border p-8 transition-all
+  @apply bg-white rounded-[24px] sm:rounded-[32px] border border-viet-border p-4 sm:p-6 xl:p-8 transition-all
          hover:border-viet-green/20;
 }
 

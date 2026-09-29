@@ -42,7 +42,7 @@ const ManagementLayout = ({ menuItems, title }) => {
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    const desktopQuery = window.matchMedia('(min-width: 768px)');
+    const desktopQuery = window.matchMedia('(min-width: 1280px)');
     const closeMenuOnDesktop = (event) => {
       if (event.matches) setMobileMenuOpen(false);
     };
@@ -62,7 +62,7 @@ const ManagementLayout = ({ menuItems, title }) => {
 
       <ManagementSidebar key={user?.id || user?.username || 'management'} menuItems={menuItems} title={title} />
 
-      <header className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-viet-border z-50 flex items-center justify-between px-4">
+      <header className="xl:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-viet-border z-50 flex items-center justify-between px-4">
         <Link
           to="/"
           className={`flex items-center gap-3 min-w-0`}
@@ -76,7 +76,7 @@ const ManagementLayout = ({ menuItems, title }) => {
         </Link>
         <div className="flex items-center gap-2">
           {user?.role === 'teacher' && (
-            <button type="button" className="w-10 h-10 shrink-0 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
+            <button type="button" className="w-11 h-11 shrink-0 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
               <Bell size={18} />
             </button>
           )}
@@ -84,7 +84,7 @@ const ManagementLayout = ({ menuItems, title }) => {
             ref={mobileMenuButtonRef}
             type="button"
             onClick={() => setMobileMenuOpen((value) => !value)}
-            className="w-10 h-10 shrink-0 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
+            className="w-11 h-11 shrink-0 rounded-xl border border-viet-border bg-white flex items-center justify-center text-viet-text"
             aria-label={mobileMenuOpen ? 'Đóng trình đơn' : 'Mở trình đơn'}
             aria-expanded={mobileMenuOpen}
             aria-controls="management-mobile-menu"
@@ -95,7 +95,7 @@ const ManagementLayout = ({ menuItems, title }) => {
       </header>
 
       {mobileMenuOpen && (
-        <div className="aurum-backdrop md:hidden fixed inset-0 z-40 bg-black/30">
+        <div className="aurum-backdrop xl:hidden fixed inset-0 z-40 bg-black/30">
           <nav
             ref={mobileMenuRef}
             id="management-mobile-menu"
@@ -130,7 +130,7 @@ const ManagementLayout = ({ menuItems, title }) => {
       )}
       
       {/* Main Content Area */}
-      <main id="management-main-content" tabIndex="-1" className="md:ml-[242px] min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 md:pt-0 bg-[#f4f7fb] flex flex-col">
+      <main id="management-main-content" tabIndex="-1" className="xl:ml-[242px] min-w-0 flex-1 h-screen h-dvh overflow-y-auto pt-16 xl:pt-0 bg-[#f4f7fb] flex flex-col">
          <ManagementHeader title={title} />
          <div className="flex-1 pb-20">
             <Suspense fallback={<LoadingScreen inline />}>

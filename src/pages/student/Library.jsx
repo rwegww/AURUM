@@ -223,7 +223,7 @@ const Library = () => {
             <p className="text-viet-text-light font-black uppercase tracking-widest animate-pulse">{t('library.loading')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-6">
             {hoc_lieu.map((item, index) => (
               <motion.div
                 key={item.id}

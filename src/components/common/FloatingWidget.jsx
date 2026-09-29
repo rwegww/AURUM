@@ -317,7 +317,7 @@ const FloatingWidget = () => {
       {/* 2. EXPANDED MESSENGER-STYLE CHAT WINDOW */}
       <AnimatePresence>
         {isExpanded && (
-          <div className="fixed bottom-4 right-4 z-50 w-full max-w-[390px] h-[580px] md:h-[620px] bg-white border border-[#e6e2d6] rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden max-sm:w-[calc(100vw-2rem)] max-sm:h-[calc(100vh-2rem)] max-sm:bottom-4 max-sm:right-4 max-sm:left-4">
+          <div className="fixed bottom-4 right-4 z-50 w-full max-w-[390px] h-[580px] md:h-[620px] max-h-[calc(100dvh-2rem)] bg-white border border-[#e6e2d6] rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden max-sm:w-[calc(100vw-2rem)] max-sm:h-[calc(100dvh-2rem)] max-sm:bottom-4 max-sm:right-4 max-sm:left-4">
             
             {/* CHAT HEADER */}
             <div className="bg-viet-green text-white px-5 py-4 flex items-center justify-between border-b border-[#005a35] shrink-0">
