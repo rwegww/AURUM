@@ -81,18 +81,6 @@ const Footer = () => {
                   </Link>
                 </li>
               ))}
-              <li>
-                <a
-                  href={apkDownloadUrl}
-                  download="AURUM-mobile.apk"
-                  className="inline-flex items-center gap-2 text-[14px] font-bold text-emerald-600 hover:text-emerald-700 transition-colors"
-                  title={t('footer.mobile_app.android_only', 'Chỉ áp dụng cho hệ điều hành Android')}
-                >
-                  <Smartphone size={16} />
-                  <span>{t('footer.mobile_app.button', 'Tải APK (Android)')}</span>
-                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-extrabold px-1.5 py-0.5 rounded uppercase">Android</span>
-                </a>
-              </li>
             </ul>
           </div>
 
