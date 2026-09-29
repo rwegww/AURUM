@@ -6,7 +6,7 @@ import { Mail, Phone, MapPin, Smartphone, Download, CheckCircle2 } from 'lucide-
 const Footer = () => {
   const { t } = useTranslation();
   const [isAndroid, setIsAndroid] = useState(false);
-  const apkDownloadUrl = import.meta.env.VITE_MOBILE_APK_URL || 'https://github.com/rwegww/AURUM/releases/download/v1.0.0-android/AURUM-mobile.apk';
+  const apkDownloadUrl = import.meta.env.VITE_MOBILE_APK_URL || 'https://drive.google.com/drive/folders/1EBTGV5AINwSvqpLIlh_WwubN7acP-wAJ?usp=sharing';
 
   useEffect(() => {
     if (typeof navigator !== 'undefined') {
